@@ -18,10 +18,10 @@ cradle:
     - path: "drasil-code/test/Helper.hs"
       component: "drasil-code:exe:codegenTest"
 
-    - path: "drasil-code/test/Observer.hs"
+    - path: "drasil-code/test/GOOL/Observer.hs"
       component: "drasil-code:exe:codegenTest"
 
-    - path: "drasil-code/test/PatternTest.hs"
+    - path: "drasil-code/test/GOOL/PatternTest.hs"
       component: "drasil-code:exe:codegenTest"
 
     - path: "drasil-code/test/VectorTest.hs"
@@ -123,8 +123,8 @@ cradle:
     - path: "drasil-printers/lib"
       component: "drasil-printers:lib"
 
-    - path: "drasil-sysinfo/lib"
-      component: "drasil-sysinfo:lib"
+    - path: "drasil-system/lib"
+      component: "drasil-system:lib"
 
     - path: "drasil-theory/lib"
       component: "drasil-theory:lib"

@@ -5,21 +5,21 @@ import Language.Drasil (Space(..), programName)
 import Language.Drasil.Code (Choices(..), Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
-  ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
+  ConstantRepr(..), CodeConcept(..), matchConcepts, SpaceMatch,
   matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit, 
   Architecture(..), makeData, DataInfo(..), Maps(..), makeMaps, spaceToCodeType,
   makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
   makeOptFeats)
 import Language.Drasil.Generate (genCode)
-import GOOL.Drasil (CodeType(..))
+import Drasil.GOOL (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
 import Drasil.Projectile.Body (fullSI)
-import SysInfo.Drasil (SystemInformation(SI, _sys))
+import Drasil.System (System(SI, _sys))
 
 import Data.List (intercalate)
-import System.Directory (createDirectoryIfMissing, getCurrentDirectory, 
-  setCurrentDirectory)
+import System.Directory (getCurrentDirectory, setCurrentDirectory)
 import Data.Char (toLower)
+import Utils.Drasil (createDirIfMissing)
 
 genCodeWithChoices :: [Choices] -> IO ()
 genCodeWithChoices [] = return ()
@@ -27,7 +27,7 @@ genCodeWithChoices (c:cs) = let dir = map toLower $ codedDirName (getSysName ful
                                 getSysName SI{_sys = sysName} = programName sysName
   in do
     workingDir <- getCurrentDirectory
-    createDirectoryIfMissing False dir
+    createDirIfMissing False dir
     setCurrentDirectory dir
     genCode c (codeSpec fullSI c [])
     setCurrentDirectory workingDir
@@ -45,8 +45,7 @@ codedDirName n Choices {
 
 codedMod :: Modularity -> String
 codedMod Unmodular = "U"
-codedMod (Modular Combined) = "C"
-codedMod (Modular Separated) = "S"
+codedMod Modular = "M"
 
 codedImpTp :: ImplementationType -> String
 codedImpTp Program = "P"
@@ -76,13 +75,17 @@ codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
                                        "Unexpected SpaceMatch for Projectile"
 
 choiceCombos :: [Choices]
-choiceCombos = [baseChoices, 
+choiceCombos = [
   baseChoices {
-    architecture = makeArchit (Modular Combined) Program,
+    lang = [Python, Cpp, CSharp, Java, Swift, Julia]
+  }, 
+  baseChoices {
+    architecture = makeArchit Modular Program,
     dataInfo = makeData Bundled (Store Unbundled) Var
   },
   baseChoices {
-    architecture = makeArchit (Modular Separated) Library,
+    lang = [Python, Cpp, CSharp, Java, Swift, Julia],
+    architecture = makeArchit Modular Library,
     dataInfo = makeData Unbundled (Store Unbundled) Var,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
   },

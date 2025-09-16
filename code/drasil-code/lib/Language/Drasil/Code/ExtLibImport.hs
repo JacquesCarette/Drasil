@@ -4,14 +4,13 @@
 module Language.Drasil.Code.ExtLibImport (ExtLibState(..), auxMods, defs,
   imports, modExports, steps, genExternalLibraryCall) where
 
+import Drasil.Code.CodeExpr (CodeExpr, ($&&), applyWithNamedArgs,
+  msgWithNamedArgs, new, newWithNamedArgs, sy)
 import Language.Drasil (HasSpace(typ), getActorName)
-
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName,
   ccObjVar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
-import Language.Drasil.CodeExpr (CodeExpr, ($&&), applyWithNamedArgs,
-  msgWithNamedArgs, new, newWithNamedArgs, sy)
 import Language.Drasil.Mod (Class, StateVariable, Func(..), Mod, Name,
   Description, packmodRequires, classDef, classImplements, FuncStmt(..),
   funcDefParams, ctorDef)
@@ -211,11 +210,18 @@ genArguments _ _ = error argumentMismatch
 genClassInfo :: CodeVarChunk -> CodeFuncChunk -> Name -> Description ->
   [StateVariable] -> ClassInfo -> ClassInfoFill ->
   State ExtLibState (Class, [String])
-genClassInfo o c n desc svs ci cif = let (mis, mifs, f) = genCI ci cif in
-  if length mis /= length mifs then error methodInfoNumberMismatch else do
-    ms <- zipWithM (genMethodInfo o c) mis mifs
-    modify (if any isConstructor mis then id else addDef (new c []) o)
-    return (f desc svs (map fst ms), concatMap snd ms)
+genClassInfo o c n desc svs ci cif = let 
+  (mis, mifs, f) = genCI ci cif 
+  zMs = zip mis mifs
+  (zCtrs, zMths) = partition (\(mi, _) -> isConstructor mi) zMs
+  (ctrIs, ctrIFs) = unzip zCtrs
+  (mthIs, mthIFs) = unzip zMths 
+  in
+    if length mis /= length mifs then error methodInfoNumberMismatch else do
+      cs <- zipWithM (genMethodInfo o c) ctrIs ctrIFs
+      ms <- zipWithM (genMethodInfo o c) mthIs mthIFs
+      modify (if any isConstructor mis then id else addDef (new c []) o)
+      return (f desc svs (map fst cs) (map fst ms), concatMap snd ms)
   where genCI (Regular mis') (RegularF mifs') = (mis', mifs', classDef n)
         genCI (Implements intn mis') (ImplementsF mifs') = (mis', mifs',
           classImplements n intn)

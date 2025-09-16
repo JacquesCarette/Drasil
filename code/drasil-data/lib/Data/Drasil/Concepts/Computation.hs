@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
   quantity, type_, value, variable)
 import Data.Drasil.Concepts.Math (parameter)
-import Data.Drasil.Domains (compScience)
+import Drasil.Metadata (compScience)
 
 algorithm, absTolerance, relTolerance:: ConceptChunk
 algorithm = dcc "algorithm" (cn' "algorithm")
@@ -21,7 +21,7 @@ modCalcDesc = dccWDS "modCalcDesc" (cn' "calculation")
 
 -- | Collects all computing-related named chunks (not concept-level yet).
 compcon :: [IdeaDict]
-compcon = [application, computer, structure, dataStruct, dataStruct', dataType, dataType', 
+compcon = [application, computer, structure, dataStruct, dataType, 
   inDatum, outDatum, inParam, inVar, inValue, inQty, computerLiteracy, computerApp]
 
 application, computer, structure :: IdeaDict
@@ -35,14 +35,11 @@ structure   = nc   "structure"        (cn' "structure")
 os          = commonIdeaWithDict "os" (cn' "operating system")    "OS"   [compScience]
 
 
-dataStruct, dataStruct', dataType, dataType', 
-  inDatum, outDatum, inParam, inVar, inValue, inQty,
+dataStruct, dataType, inDatum, outDatum, inParam, inVar, inValue, inQty,
   computerLiteracy, computerApp :: IdeaDict
 
 dataStruct       = compoundNCPSPP datum structure
-dataStruct'      = compoundNCPS datum structure
 dataType         = compoundNCPSPP datum type_
-dataType'        = compoundNCPS datum type_
 inDatum          = compoundNC input_ datum
 outDatum         = compoundNC output_ datum
 inParam          = compoundNC input_ parameter

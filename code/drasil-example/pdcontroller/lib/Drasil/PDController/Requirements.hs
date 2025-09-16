@@ -1,9 +1,9 @@
 {-#LANGUAGE PostfixOperators#-}
 module Drasil.PDController.Requirements where
 
-import Data.Drasil.Concepts.Documentation (funcReqDom, nonFuncReqDom, datumConstraint)
+import Data.Drasil.Concepts.Documentation (funcReqDom, datumConstraint)
 import Drasil.DocLang.SRS (datCon)
-import Drasil.DocLang (mkMaintainableNFR)
+import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkVerifiableNFR, mkSecurityNFR)
 
 import Drasil.PDController.Concepts
 import Drasil.PDController.IModel
@@ -44,27 +44,13 @@ nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [portability, security, maintainability, verifiability]
 
 portability :: ConceptInstance
-portability
-  = cic "portability"
-      (S "The code shall be portable to multiple Operating Systems" !.)
-      "Portable"
-      nonFuncReqDom
+portability = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portability"
 
 security :: ConceptInstance
-security
-  = cic "security"
-      (foldlSent
-         [S "The code shall be immune to common security problems such as memory",
-            S "leaks, divide by zero errors, and the square root of negative numbers"])
-      "Secure"
-      nonFuncReqDom
+security = mkSecurityNFR "security" "Security"
 
 maintainability :: ConceptInstance
-maintainability = mkMaintainableNFR "maintainability" 10 "Maintainable"
+maintainability = mkMaintainableNFR "maintainability" 10 "Maintainability"
 
 verifiability :: ConceptInstance
-verifiability
-  = cic "verifiability"
-      (S "The code shall be verifiable against a Verification and Validation plan" !.)
-      "Verifiable"
-      nonFuncReqDom
+verifiability = mkVerifiableNFR "verifiability" "Verifiability"

@@ -32,16 +32,16 @@ flightDurUnc = uq flightDur defaultUncrt
 flightDur, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
 flightDur = constrainedNRV' (uc       C.flightDur (subStr lT "flight") Real second) [gtZeroConstr]
 landPos   = constrainedNRV' (uc       C.landPos   (subStr lP "land"  ) Real metre ) [gtZeroConstr]
-launAngle = constrained'    (ucStaged C.launAngle (autoStage lTheta  ) Real radian) [physc $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)] (sy pi_ $/ exactDbl 4)
+launAngle = constrained'    (ucStaged C.launAngle (autoStage lTheta  ) Real radian) [physRange $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)] (sy pi_ $/ exactDbl 4)
 launSpeed = constrained'    (uc       C.launSpeed (subStr lV "launch") Real velU  ) [gtZeroConstr] (exactDbl 100)
-offset    = constrainedNRV' (uc       C.offset    (subStr lD "offset") Real metre ) [physc $ UpFrom (Exc, neg $ sy targPos)]
+offset    = constrainedNRV' (uc       C.offset    (subStr lD "offset") Real metre ) [physRange $ UpFrom (Exc, neg $ sy targPos)]
 targPos   = constrained'    (uc       C.targPos   (subStr lP "target") Real metre ) [gtZeroConstr] (exactDbl 1000)
 
 ---
 -- The output contains a message, as a string, so it needs to be a quantity
-message :: QuantityDict
-message = vc "message" (cn "output message as a string") lS String
+message :: DefinedQuantityDict
+message = dqdNoUnit (dcc "outputMessage" (cn "output message as a string") "the output message given as a string") lS String
 
 ---
 tol :: ConstQDef
-tol = mkQuantDef (vcSt "tol" (nounPhraseSP "hit tolerance") (autoStage vEpsilon) Real) (perc 2 2)
+tol = mkQuantDef (dqdNoUnit' (dcc "tol" (nounPhraseSP "hit tolerance") "the hit tolerance") (autoStage vEpsilon) Real) (perc 2 2)

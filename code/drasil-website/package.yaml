@@ -6,6 +6,14 @@ synopsis:            Using the Drasil generators to create Drasil's website
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
+language: Haskell2010
+default-extensions:
+- StrictData
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
 extra-source-files: []
 
 dependencies:
@@ -21,7 +29,7 @@ dependencies:
 - drasil-gen
 - drasil-lang
 - drasil-printers
-- drasil-sysinfo
+- drasil-system
 - drasil-theory
 - drasil-utils
 - sglpend
@@ -47,8 +55,6 @@ executables:
     main: Main
     source-dirs: app
     ghc-options:
-    - -Wall
-    - -Wredundant-constraints
     - -threaded
     - -O2
     dependencies:

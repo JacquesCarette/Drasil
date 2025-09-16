@@ -24,11 +24,10 @@ import Control.Lens((^.))
 import Data.Drasil.Constraints (gtZeroConstr)
 
 defSymbols :: [DefinedQuantityDict]
-defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints ++
-  map dqdWr outputConstraints
+defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints
 
 unitSymbs :: [UnitalChunk]
-unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
+unitSymbs = map ucw [iVect, jVect, normalVect,
   force_1, force_2, forcej, mass_1, mass_2,
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massj, posj, accj, angAccj, mTot, velj, torquej, timeC, initRelVel,
@@ -41,35 +40,38 @@ unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
 -- TABLE OF SYMBOLS --
 ----------------------
 
-symbols, symbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
+symbolsAll, inputSymbols, outputSymbols :: [DefinedQuantityDict]
 
-symbolsAll = symbols ++ inputSymbols ++ outputSymbols
+symbolsAll = unitless ++ map dqdWr unitalSymbols ++ [QP.restitutionCoef]
 
-symbols = map qw unitalChunks ++
-  map qw unitless ++
-  map qw inputConstraints
-
-inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation,
+inputSymbols = map dqdWr [QP.position, QP.velocity, QP.force, QM.orientation,
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass,
   QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.fOfGravity, QP.positionVec] ++
-  [qw QP.restitutionCoef]
+  [QP.restitutionCoef]
 
-outputSymbols = map qw [QP.position, QP.velocity, QM.orientation,
+outputSymbols = map dqdWr [QP.position, QP.velocity, QM.orientation,
   QP.angularVelocity, QP.chgMomentum, QP.chgInVelocity]
 
 
-unitalChunks :: [UnitalChunk]
-unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
-  QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement,
-  QP.time, QP.angularDisplacement, posCM, posj, massj, mTot, accj, velj,
-  QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
+unitalSymbols :: [UnitalChunk]
+unitalSymbols = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
+  QP.force, QP.impulseV, QP.impulseS, QP.distance, QP.displacement,
+  QP.time, QP.angularDisplacement, QP.linearDisplacement, QP.linearVelocity,
+  QP.linearAccel, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.height,
+  QP.fOfGravity, QP.positionVec, QP.chgMomentum, QP.gravitationalConst,
+  QP.momentOfInertia, QPP.len, QPP.mass, QP.position, QP.velocity, QP.torque,
+  QP.angularVelocity, QM.orientation] ++ unitalTerms
+
+unitalTerms :: [UnitalChunk]
+unitalTerms = [iVect, jVect, normalVect, posCM, posj, massj, mTot, accj, angAccj, velj,
+  initRelVel, normalLen,
   perpLenA, perpLenB, forcej, torquej, timeC, velA, velB, massA, massB,
   angVelA, angVelB, force_1, force_2, mass_1, mass_2,
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB,
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision,
-  contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
-  QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger, QP.fOfGravity, QP.positionVec, distMass,
-  dVect, QP.chgMomentum,QP.chgInVelocity, time_1, time_2, velo_1, velo_2]
+  contDispK, collisionImpulse, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
+  rRot, mLarger, distMass,
+  dVect]
 
 -----------------------
 -- PARAMETRIZED HACK --
@@ -140,7 +142,7 @@ iVect, jVect, normalVect, force_1, force_2, forcej, mass_1, mass_2,
   momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel,
   velAP, velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger, distMass, dVect :: UnitalChunk
 
-iVect = uc (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
+iVect = uc (dccWDS "unitVectI" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect))
                (eqSymb QM.unitVect) Real metre
 jVect       = uc (dccWDS "unitVectJ" (compoundPhrase' (cn "vertical")
@@ -149,7 +151,7 @@ normalVect  = uc (dccWDS "normalVect" (compoundPhrase (cn "collision") (QM.norma
                  (phrase QM.normalVect))
                    (eqSymb QM.normalVect) (Vect Real) metre
 
-dVect = uc (dccWDS "unitVect"
+dVect = uc (dccWDS "unitVectD"
           (cn "unit vector directed from the center of the large mass to the center of the smaller mass")
                    (phrase QM.unitVect)) (vec (hat lD)) Real metre
 
@@ -298,11 +300,12 @@ lPoint  = label "P"
 -- CHUNKS WITHOUT UNITS --
 --------------------------
 
-unitless :: [QuantityDict]
-unitless = qw QM.pi_ : [numParticles]
+unitless :: [DefinedQuantityDict]
+unitless = QM.pi_ : [numParticles]
 
-numParticles :: QuantityDict
-numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer
+numParticles :: DefinedQuantityDict
+numParticles = dqdNoUnit (dcc "n" (nounPhraseSP "number of particles in a rigid body")
+  "the number of particles in a rigidbody") lN Integer
 
 -----------------------
 -- CONSTRAINT CHUNKS --
@@ -327,11 +330,11 @@ mmntOfInCons   = constrained' QP.momentOfInertia    [gtZeroConstr] (dbl 74.5)
 gravAccelCons  = constrained' QP.gravitationalConst [] (lit $ QP.gravitationalConstValue ^. defnExpr)
 posCons        = constrained' QP.position           [] (dbl 0.412) --FIXME: should be (0.412, 0.502) vector
 veloCons       = constrained' QP.velocity           [] (dbl 2.51)
-orientCons     = constrained' QM.orientation        [sfwrc $ Bounded (Inc, exactDbl 0) (Inc, exactDbl 2 `mulRe` sy QM.pi_)] (half $ sy QM.pi_) -- physical constraint not needed space is radians
+orientCons     = constrained' QM.orientation        [sfwrRange $ Bounded (Inc, exactDbl 0) (Inc, exactDbl 2 $* sy QM.pi_)] (half $ sy QM.pi_) -- physical constraint not needed space is radians
 angVeloCons    = constrained' QP.angularVelocity    [] (dbl 2.1)
 forceCons      = constrained' QP.force              [] (dbl 98.1)
 torqueCons     = constrained' QP.torque             [] (exactDbl 200)
-restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)] (dbl 0.8)
+restCoefCons   = constrained' QP.restitutionCoef    [physRange $ Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)] (dbl 0.8)
 
 posOutCons        = constrained' QP.position           [] (exactDbl 0)
 veloOutCons       = constrained' QP.velocity           [] (exactDbl 0)

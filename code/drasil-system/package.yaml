@@ -1,0 +1,37 @@
+name:                drasil-system
+version:             0.1.1.0
+author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:          "Jacques Carette"
+synopsis:	     A framework for code and document generation for scientific software - System SubPackage
+github:              JacquesCarette/Drasil
+homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+language: Haskell2010
+default-extensions:
+- StrictData
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- pretty
+- lens
+- containers
+- drasil-data
+- drasil-database
+- drasil-lang
+- drasil-metadata
+- drasil-theory
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
+library:
+  source-dirs: lib
+  exposed-modules:
+  - Drasil.System
+  when:
+  - condition: false
+    other-modules: Paths_drasil_system

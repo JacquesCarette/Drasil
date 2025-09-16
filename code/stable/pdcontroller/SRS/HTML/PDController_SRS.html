@@ -209,7 +209,7 @@
                 </tr>
                 <tr>
                   <td><em>k</em></td>
-                  <td>Stiffness coefficient of the spring</td>
+                  <td>Stiffness coefficient</td>
                   <td><em>s</em></td>
                 </tr>
                 <tr>
@@ -365,10 +365,10 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore a simulation of the PD Controller with a Second Order System is created in this project that can be used to tune the gain constants.
+          Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore, a simulation of the PD Controller with a Second Order System is created in this project based on the original, manually created version of <a href="https://github.com/muralidn/CAS741-Fall20/tree/master">PD Controller</a> that can be used to tune the gain constants.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for PD Controller. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for PD Controller. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
@@ -390,7 +390,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of control systems (control theory and controllers) at the fourth-year undergraduate level and engineering mathematics at a second-year undergraduate level. The users of PD Controller can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of control systems (control theory and controllers) at the fourth-year undergraduate level and engineering mathematics at a second-year undergraduate level. The users of <span title="PD Controller">PD Controller</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -398,10 +398,10 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>data definitions</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>data definitions</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
-              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The instance model referred as <a href=#IM:pdEquationIM>IM:pdEquationIM</a> provides an Ordinary Differential Equation (ODE) that models the PD Controller.
+              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The instance model referred as <a href=#IM:pdEquationIM>IM:pdEquationIM</a> provides an Ordinary Differential Equation (<span title="ordinary differential equation">ODE</span>) that models the PD Controller.
             </p>
           </div>
         </div>
@@ -422,7 +422,7 @@
             <div id="Figure:systemContextDiag">
               <figure>
                 <img src="../../../../datafiles/pdcontroller/Fig_SystemContext.png" alt="System Context" >
-                <figcaption>System Context</figcaption>
+                <figcaption>Figure: System Context</figcaption>
               </figure>
             </div>
             <p class="paragraph">
@@ -482,10 +482,10 @@
                   This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
                 </p>
                 <ul class="list">
+                  <li>PD Controller: Proportional-Derivative Controller.</li>
                   <li>
                     PD Control Loop: Closed-Loop control system with PD Controller, Summing Point and Power Plant.
                   </li>
-                  <li>PD Controller: Proportional-Derivative Controller.</li>
                   <li>
                     Summing Point: Control block where the difference between the Set-Point and the Process Variable is computed.
                   </li>
@@ -495,6 +495,30 @@
                   </li>
                   <li>
                     Process Error: Input to the PID controller. Process Error is the difference between the Set-Point and the Process Variable.
+                  </li>
+                  <li>
+                    Proportional control: A linear feedback control system where correction is applied to the controlled variable which is proportional to the difference between desired and measured values.
+                  </li>
+                  <li>
+                    Derivative control: Monitors the rate of change of the error signal and contributes a component of the output signal (proportional to a derivative of the error signal).
+                  </li>
+                  <li>
+                    Frequency domain: The analysis of mathematical functions in terms of frequency, instead of time.
+                  </li>
+                  <li>
+                    Time domain: The analysis of mathematical functions in terms of time.
+                  </li>
+                  <li>
+                    Control Variable: The Control Variable is the output of the PD controller.
+                  </li>
+                  <li>
+                    Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.
+                  </li>
+                  <li>
+                    Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.
+                  </li>
+                  <li>
+                    Stiffness coefficient: Quantity that characterizes a spring's stiffness.
                   </li>
                   <li>
                     Simulation Time: Total execution time of the PD simulation.
@@ -510,35 +534,11 @@
                     Derivative Gain: Gain constant of the derivative controller.
                   </li>
                   <li>
-                    Proportional control: A linear feedback control system where correction is applied to the controlled variable which is proportional to the difference between desired and measured values.
-                  </li>
-                  <li>
-                    Derivative control: Monitors the rate of change of the error signal and contributes a component of the output signal (proportional to a derivative of the error signal).
-                  </li>
-                  <li>
-                    Frequency domain: The analysis of mathematical functions in terms of frequency, instead of time.
-                  </li>
-                  <li>
-                    Time domain: The analysis of mathematical functions in terms of time.
-                  </li>
-                  <li>
                     Laplace transform: An integral transform that converts a function of a real variable t (often time) to a function of a complex variable s (complex frequency).
-                  </li>
-                  <li>
-                    Control Variable: The Control Variable is the output of the PD controller.
                   </li>
                   <li>Step Time: Simulation step time.</li>
                   <li>Absolute Tolerance: Absolute tolerance for the integrator.</li>
                   <li>Relative Tolerance: Relative tolerance for the integrator.</li>
-                  <li>
-                    Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.
-                  </li>
-                  <li>
-                    Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.
-                  </li>
-                  <li>
-                    Stiffness Coefficient: Quantity that characterizes a spring's stiffness.
-                  </li>
                 </ul>
               </div>
             </div>
@@ -546,17 +546,23 @@
               <div class="subsubsection">
                 <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The physical system of PD Controller, as shown in <a href=#Figure:pidSysDiagram>Fig:pidSysDiagram</a>, includes the following elements:
+                  The physical system of <span title="PD Controller">PD Controller</span>, as shown in <a href=#Figure:pidSysDiagram>Fig:pidSysDiagram</a>, includes the following elements:
                 </p>
                 <div class="list">
-                  <p>PS1: The Summing Point.</p>
-                  <p>PS2: The PD Controller.</p>
-                  <p>PS3: The Power Plant.</p>
+                  <p>
+                    <span title="physical system description">PS</span>1: The Summing Point.
+                  </p>
+                  <p>
+                    <span title="physical system description">PS</span>2: The PD Controller.
+                  </p>
+                  <p>
+                    <span title="physical system description">PS</span>3: The Power Plant.
+                  </p>
                 </div>
                 <div id="Figure:pidSysDiagram">
                   <figure>
                     <img src="../../../../datafiles/pdcontroller/Fig_PDController.png" alt="The physical system" width="70.0%" >
-                    <figcaption>The physical system</figcaption>
+                    <figcaption>Figure: The physical system</figcaption>
                   </figure>
                 </div>
               </div>
@@ -569,7 +575,7 @@
                 </p>
                 <div class="list">
                   <p>
-                    <div id="processVariable">
+                    <div id="calculateProcessVariable">
                       Process-Variable: Calculate the output of the Power Plant (Process Variable) over time.
                     </div>
                   </p>
@@ -582,7 +588,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern PD Controller are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern <span title="PD Controller">PD Controller</span> are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -602,7 +608,7 @@
                     </div>
                   </p>
                   <p>
-                    <div id="setPoint">
+                    <div id="setPointConstant">
                       Set-Point: The Set-Point is constant throughout the simulation. (RefBy: <a href=#IM:pdEquationIM>IM:pdEquationIM</a> and <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
                     </div>
                   </p>
@@ -643,7 +649,7 @@
                   </p>
                   <p>
                     <div id="stiffnessCoeffSpring">
-                      Spring Stiffness Coefficient: The Stiffness Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
+                      Spring Stiffness Coefficient: The Stiffness coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
                     </div>
                   </p>
                 </div>
@@ -653,7 +659,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that PD Controller is based on.
+                  This section focuses on the general equations and laws that <span title="PD Controller">PD Controller</span> is based on.
                 </p>
                 <div id="TM:laplaceTransform">
                   <table class="tdefn">
@@ -668,7 +674,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}} e^{-s t}}\,dt\]
+                        \[{F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}}\,e^{-s\,t}}\,dt\]
                       </td>
                     </tr>
                     <tr>
@@ -777,7 +783,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\frac{1}{m s^{2}+c s+k}\]</td>
+                      <td>\[\frac{1}{m\,s^{2}+c\,s+k}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -790,9 +796,7 @@
                           <li>
                             <em>c</em> is the Damping coefficient of the spring (Unitless)
                           </li>
-                          <li>
-                            <em>k</em> is the Stiffness coefficient of the spring (<em>s</em>)
-                          </li>
+                          <li><em>k</em> is the Stiffness coefficient (<em>s</em>)</li>
                         </ul>
                       </td>
                     </tr>
@@ -858,7 +862,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The Transfer Function of the Second Order System (from <a href=#TM:tmSOSystem>TM:tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href=#massSpring>A:Spring Mass</a>), the Damping Coefficient (<em>c</em>) to 1 (from <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>), and the Stiffness Coefficient (<em>k</em>) to 20 (from <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href=#externalDisturb>A:External disturbance</a>).
+                          The Transfer Function of the Second Order System (from <a href=#TM:tmSOSystem>TM:tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href=#massSpring>A:Spring Mass</a>), the Damping Coefficient (<em>c</em>) to 1 (from <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>), and the Stiffness coefficient (<em>k</em>) to 20 (from <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href=#externalDisturb>A:External disturbance</a>).
                         </p>
                       </td>
                     </tr>
@@ -932,7 +936,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The Process Error is the difference between the Set-Point and Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). The Set-Point is assumed to be constant throughout the simulation (from <a href=#setPoint>A:Set-Point</a>). The initial value of the Process Variable is assumed to be zero (from <a href=#initialValue>A:Initial Value</a>).
+                          The Process Error is the difference between the Set-Point and Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). The Set-Point is assumed to be constant throughout the simulation (from <a href=#setPointConstant>A:Set-Point</a>). The initial value of the Process Variable is assumed to be zero (from <a href=#initialValue>A:Initial Value</a>).
                         </p>
                       </td>
                     </tr>
@@ -976,7 +980,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{P_{\text{s}}}={K_{\text{p}}} {E_{\text{s}}}\]</td>
+                      <td>\[{P_{\text{s}}}={K_{\text{p}}}\,{E_{\text{s}}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1036,7 +1040,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{D_{\text{s}}}={K_{\text{d}}} {E_{\text{s}}} s\]</td>
+                      <td>\[{D_{\text{s}}}={K_{\text{d}}}\,{E_{\text{s}}}\,s\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1100,7 +1104,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{C_{\text{s}}}={E_{\text{s}}} \left({K_{\text{p}}}+{K_{\text{d}}} s\right)\]
+                        \[{C_{\text{s}}}={E_{\text{s}}}\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1194,7 +1198,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {{y_{\text{t}}}}={r_{\text{t}}} {K_{\text{p}}}\]
+                        \[\frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{{y_{\text{t}}}}={r_{\text{t}}}\,{K_{\text{p}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1233,19 +1237,19 @@
                     <p class="paragraph">
                       The Process Variable <em>Y<sub>s</sub></em> in a PD Control Loop is the product of the Process Error (from <a href=#DD:ddProcessError>DD:ddProcessError</a>), Control Variable (from <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>), and the Power Plant (from <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>).
                     </p>
-                    \[{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right) \left({K_{\text{p}}}+{K_{\text{d}}} s\right) \frac{1}{s^{2}+s+20}\]
+                    \[{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right)\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)\,\frac{1}{s^{2}+s+20}\]
                     <p class="paragraph">
                       Substituting the values and rearranging the equation.
                     </p>
-                    \[s^{2} {Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right) {Y_{\text{s}}} s+\left(20+{K_{\text{p}}}\right) {Y_{\text{s}}}-{R_{\text{s}}} s {K_{\text{d}}}-{R_{\text{s}}} {K_{\text{p}}}=0\]
+                    \[s^{2}\,{Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right)\,{Y_{\text{s}}}\,s+\left(20+{K_{\text{p}}}\right)\,{Y_{\text{s}}}-{R_{\text{s}}}\,s\,{K_{\text{d}}}-{R_{\text{s}}}\,{K_{\text{p}}}=0\]
                     <p class="paragraph">
                       Computing the Inverse Laplace Transform of a function (from <a href=#TM:invLaplaceTransform>TM:invLaplaceTransform</a>) of the equation.
                     </p>
-                    \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0\]
+                    \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{K_{\text{d}}}\,\frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}}\,{K_{\text{p}}}=0\]
                     <p class="paragraph">
-                      The Set-Point <em>r<sub>t</sub></em> is a step function and a constant (from <a href=#setPoint>A:Set-Point</a>). Therefore the differential of the set point is zero. Hence the equation reduces to
+                      The Set-Point <em>r<sub>t</sub></em> is a step function and a constant (from <a href=#setPointConstant>A:Set-Point</a>). Therefore the differential of the set point is zero. Hence the equation reduces to
                     </p>
-                    \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0\]
+                    \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{r_{\text{t}}}\,{K_{\text{p}}}=0\]
                   </div>
                 </div>
               </div>
@@ -1262,7 +1266,7 @@
                       <th>Var</th>
                       <th>Physical Constraints</th>
                       <th>Typical Value</th>
-                      <th>Uncert.</th>
+                      <th><span title="typical uncertainty">Uncert.</span></th>
                     </tr>
                     <tr>
                       <td><em>K<sub>d</sub></em></td>
@@ -1374,9 +1378,7 @@
                   <td><em>s</em></td>
                 </tr>
               </table>
-              <p class="caption">
-                Required Inputs following <a href=#inputValues>FR:Input-Values</a>
-              </p>
+              <p class="caption">Required Inputs</p>
             </div>
           </div>
         </div>
@@ -1388,23 +1390,23 @@
             </p>
             <div class="list">
               <p>
-                <div id="portability">
-                  Portable: The code shall be portable to multiple Operating Systems.
+                <div id="portable">
+                  Portability: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.
                 </div>
               </p>
               <p>
                 <div id="security">
-                  Secure: The code shall be immune to common security problems such as memory leaks, divide by zero errors, and the square root of negative numbers.
+                  Security: The code shall be immune to common security problems such as memory leaks, divide by zero errors, and the square root of negative numbers.
                 </div>
               </p>
               <p>
                 <div id="maintainability">
-                  Maintainable: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
+                  Maintainability: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
                 </div>
               </p>
               <p>
                 <div id="verifiability">
-                  Verifiable: The code shall be verifiable against a Verification and Validation plan.
+                  Verifiability: The code is tested with complete verification and validation plan.
                 </div>
               </p>
             </div>
@@ -1421,7 +1423,7 @@
         <div class="list">
           <p>
             <div id="likeChgPP">
-              DC Gain and Time Constant: The mass, Damping Coefficient and the Stiffness Coefficient may be changed to be supplied by the user (from <a href=#massSpring>A:Spring Mass</a>, <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>, and <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>).
+              DC Gain and Time Constant: The mass, Damping Coefficient and the Stiffness coefficient may be changed to be supplied by the user (from <a href=#massSpring>A:Spring Mass</a>, <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>, and <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>).
             </div>
           </p>
         </div>
@@ -1439,7 +1441,7 @@
               <th></th>
               <th><a href=#pwrPlant>A:Power plant</a></th>
               <th><a href=#decoupled>A:Decoupled equation</a></th>
-              <th><a href=#setPoint>A:Set-Point</a></th>
+              <th><a href=#setPointConstant>A:Set-Point</a></th>
               <th><a href=#externalDisturb>A:External disturbance</a></th>
               <th><a href=#initialValue>A:Initial Value</a></th>
               <th><a href=#parallelEq>A:Parallel Equation</a></th>
@@ -1482,7 +1484,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#setPoint>A:Set-Point</a></td>
+              <td><a href=#setPointConstant>A:Set-Point</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1622,7 +1624,7 @@
               <th></th>
               <th><a href=#pwrPlant>A:Power plant</a></th>
               <th><a href=#decoupled>A:Decoupled equation</a></th>
-              <th><a href=#setPoint>A:Set-Point</a></th>
+              <th><a href=#setPointConstant>A:Set-Point</a></th>
               <th><a href=#externalDisturb>A:External disturbance</a></th>
               <th><a href=#initialValue>A:Initial Value</a></th>
               <th><a href=#parallelEq>A:Parallel Equation</a></th>
@@ -1763,6 +1765,62 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#portable>NFR:Portability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#security>NFR:Security</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainability>NFR:Maintainability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiability>NFR:Verifiability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#inputValues>FR:Input-Values</a></td>
               <td></td>
               <td></td>
@@ -1806,62 +1864,6 @@
             </tr>
             <tr>
               <td><a href=#outputValues>FR:Output-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#portability>NFR:Portable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#security>NFR:Secure</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#maintainability>NFR:Maintainable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#verifiability>NFR:Verifiable</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2033,17 +2035,97 @@
               <th><a href=#TM:tmSOSystem>TM:tmSOSystem</a></th>
               <th><a href=#GD:gdPowerPlant>GD:gdPowerPlant</a></th>
               <th><a href=#IM:pdEquationIM>IM:pdEquationIM</a></th>
+              <th><a href=#portable>NFR:Portability</a></th>
+              <th><a href=#security>NFR:Security</a></th>
+              <th><a href=#maintainability>NFR:Maintainability</a></th>
+              <th><a href=#verifiability>NFR:Verifiability</a></th>
               <th><a href=#inputValues>FR:Input-Values</a></th>
               <th><a href=#verifyInputs>FR:Verify-Input-Values</a></th>
               <th><a href=#calculateValues>FR:Calculate-Values</a></th>
               <th><a href=#outputValues>FR:Output-Values</a></th>
-              <th><a href=#portability>NFR:Portable</a></th>
-              <th><a href=#security>NFR:Secure</a></th>
-              <th><a href=#maintainability>NFR:Maintainable</a></th>
-              <th><a href=#verifiability>NFR:Verifiable</a></th>
             </tr>
             <tr>
-              <td><a href=#processVariable>GS:Process-Variable</a></td>
+              <td><a href=#calculateProcessVariable>GS:Process-Variable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR:Portability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#security>NFR:Security</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainability>NFR:Maintainability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiability>NFR:Verifiability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2142,86 +2224,6 @@
               <td></td>
               <td></td>
             </tr>
-            <tr>
-              <td><a href=#portability>NFR:Portable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#security>NFR:Secure</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#maintainability>NFR:Maintainable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#verifiability>NFR:Verifiable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
           </table>
           <p class="caption">
             Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items
@@ -2233,31 +2235,31 @@
         <div id="Figure:TraceGraphAvsA">
           <figure>
             <img src="../../../../traceygraphs/pdcontroller/avsa.svg" alt="TraceGraphAvsA" >
-            <figcaption>TraceGraphAvsA</figcaption>
+            <figcaption>Figure: TraceGraphAvsA</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAvsAll">
           <figure>
             <img src="../../../../traceygraphs/pdcontroller/avsall.svg" alt="TraceGraphAvsAll" >
-            <figcaption>TraceGraphAvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAvsAll</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphRefvsRef">
           <figure>
             <img src="../../../../traceygraphs/pdcontroller/refvsref.svg" alt="TraceGraphRefvsRef" >
-            <figcaption>TraceGraphRefvsRef</figcaption>
+            <figcaption>Figure: TraceGraphRefvsRef</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsR">
           <figure>
             <img src="../../../../traceygraphs/pdcontroller/allvsr.svg" alt="TraceGraphAllvsR" >
-            <figcaption>TraceGraphAllvsR</figcaption>
+            <figcaption>Figure: TraceGraphAllvsR</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsAll">
           <figure>
             <img src="../../../../traceygraphs/pdcontroller/allvsall.svg" alt="TraceGraphAllvsAll" >
-            <figcaption>TraceGraphAllvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAllvsAll</figcaption>
           </figure>
         </div>
         <p class="paragraph">
@@ -2285,48 +2287,40 @@
     <div id="Sec:References">
       <div class="section">
         <h1>References</h1>
-        <ul class="hide-list-style">
-          <li>
-            <div id="abbasi2015">
-              [1]: Abbasi, Nasser M. <em>A differential equation view of closed loop control systems</em>. November, 2020. <a href="https://www.12000.org/my_notes/connecting_systems/report.htm">https://www.12000.org/my_notes/connecting_systems/report.htm</a>.
-            </div>
-          </li>
-          <li>
-            <div id="johnson2008">
-              [2]: Johnson, Michael A. and Moradi, Mohammad H. <em>PID Control: New Identification and Design Methods, Chapter 1</em>. Springer Science and Business Media, 2006. Print.
-            </div>
-          </li>
-          <li>
-            <div id="koothoor2013">
-              [3]: Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-            </div>
-          </li>
-          <li>
-            <div id="smithKoothoor2016">
-              [4]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
-            </div>
-          </li>
-          <li>
-            <div id="smithLai2005">
-              [5]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-            </div>
-          </li>
-          <li>
-            <div id="smithEtAl2007">
-              [6]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
-            </div>
-          </li>
-          <li>
-            <div id="laplaceWiki">
-              [7]: Wikipedia Contributors. <em>Laplace transform</em>. November, 2020. <a href="https://en.wikipedia.org/wiki/Laplace_transform">https://en.wikipedia.org/wiki/Laplace_transform</a>.
-            </div>
-          </li>
-          <li>
-            <div id="pidWiki">
-              [8]: Wikipedia Contributors. <em>PID controller</em>. October, 2020. <a href="https://en.wikipedia.org/wiki/PID_controller">https://en.wikipedia.org/wiki/PID_controller</a>.
-            </div>
-          </li>
-        </ul>
+        <dl class="reference-list">
+          <dt id="abbasi2015">[<b>abbasi2015</b>]</dt>
+          <dd>
+            Abbasi, Nasser M. <em>A differential equation view of closed loop control systems</em>. November, 2020. <a href="https://www.12000.org/my_notes/connecting_systems/report.htm">https://www.12000.org/my_notes/connecting_systems/report.htm</a>.
+          </dd>
+          <dt id="johnson2008">[<b>johnson2008</b>]</dt>
+          <dd>
+            Johnson, Michael A. and Moradi, Mohammad H. <em>PID Control: New Identification and Design Methods, Chapter 1</em>. Springer Science and Business Media, 2006. Print.
+          </dd>
+          <dt id="koothoor2013">[<b>koothoor2013</b>]</dt>
+          <dd>
+            Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+          </dd>
+          <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+          </dd>
+          <dt id="smithLai2005">[<b>smithLai2005</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+          </dd>
+          <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
+          <dd>
+            Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
+          </dd>
+          <dt id="laplaceWiki">[<b>laplaceWiki</b>]</dt>
+          <dd>
+            Wikipedia Contributors. <em>Laplace transform</em>. November, 2020. <a href="https://en.wikipedia.org/wiki/Laplace_transform">https://en.wikipedia.org/wiki/Laplace_transform</a>.
+          </dd>
+          <dt id="pidWiki">[<b>pidWiki</b>]</dt>
+          <dd>
+            Wikipedia Contributors. <em>PID controller</em>. October, 2020. <a href="https://en.wikipedia.org/wiki/PID_controller">https://en.wikipedia.org/wiki/PID_controller</a>.
+          </dd>
+        </dl>
       </div>
     </div>
   </body>

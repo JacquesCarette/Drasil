@@ -12,7 +12,8 @@ module Language.Drasil.Reference (
 import Language.Drasil.Label.Type (LblType, HasRefAddress(..))
 import Language.Drasil.ShortName (HasShortName(..), ShortName)
 import Language.Drasil.Sentence (Sentence(Ref, EmptyS), RefInfo(..))
-import Language.Drasil.UID (UID, HasUID(..))
+import Drasil.Database.UID (UID, HasUID(..))
+import Drasil.Database.Chunk (HasChunkRefs(..))
 
 import Control.Lens ((^.), makeLenses, Lens')
 
@@ -28,6 +29,9 @@ makeLenses ''Reference
 class HasReference c where
   -- | Provides a 'Lens' to the 'Reference's.
   getReferences :: Lens' c [Reference]
+
+instance HasChunkRefs Reference where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Equal if 'UID's are equal.
 instance Eq            Reference where a == b = (a ^. uid) == (b ^. uid)

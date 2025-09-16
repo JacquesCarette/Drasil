@@ -13,19 +13,19 @@ import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, fo
   angularFrequency, frequency, period)
 import Data.Drasil.Concepts.Physics (pendulum)
 import Data.Drasil.Concepts.Math as CM (angle, iAngle)
-import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj, pi_)
+import Data.Drasil.Quantities.Math as QM (unitVect, pi_)
 import Drasil.DblPend.Concepts (rod)
 import Drasil.DblPend.Unitals (lRod)
 
 
-symbols:: [QuantityDict]
-symbols = map qw unitalChunks ++ map qw unitless
+symbols:: [DefinedQuantityDict]
+symbols = map dqdWr unitalChunks ++ unitless
 
-inputs :: [QuantityDict]
-inputs = map qw [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
+inputs :: [DefinedQuantityDict]
+inputs = map dqdWr [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
 
-outputs :: [QuantityDict]
-outputs = [qw pendDisplacementAngle]
+outputs :: [DefinedQuantityDict]
+outputs = [dqdWr pendDisplacementAngle]
 
 units :: [UnitalChunk]
 units = map ucw unitalChunks
@@ -34,8 +34,8 @@ unitalChunks :: [UnitalChunk]
 unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
    QP.angularVelocity, QP.angularAccel, QP.gravitationalAccel, QP.tension, QP.acceleration,
    QP.yAccel, QP.xAccel, QP.yVel, QP.xVel, QP.iyPos, QP.time, QP.velocity, QP.position, QP.torque,
-   QP.momentOfInertia, QP.angularDisplacement, QP.angularVelocity, initialPendAngle,
-   QP.angularFrequency, QP.frequency, QP.period, lenRod, pendDisplacementAngle, initialPendAngle]
+   QP.momentOfInertia, QP.angularDisplacement, initialPendAngle,
+   QP.angularFrequency, QP.frequency, QP.period]
 
 lenRod, pendDisplacementAngle, initialPendAngle :: UnitalChunk
 
@@ -53,7 +53,7 @@ initialPendAngle = uc' "initialPendAngle" (cn "initial pendulum angle")
         (sub lTheta lI) Real radian
 
 unitless :: [DefinedQuantityDict]
-unitless = [QM.unitVect, QM.unitVectj, QM.pi_]
+unitless = [QM.unitVect, QM.pi_]
 
 -----------------------
 -- CONSTRAINT CHUNKS --

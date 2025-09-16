@@ -3,6 +3,8 @@ module Utils.Drasil.Lists where
 
 import Data.List
 
+import Data.Containers.ListUtils (nubOrd)
+
 -- | Check if list has at least 2 elements.
 atLeast2 :: [a] -> Bool
 atLeast2 (_:_:_) = True
@@ -21,7 +23,7 @@ xs `subsetOf` ys = all (`elem` ys) xs
 
 -- | Sort a list, removing all duplicates
 nubSort :: Ord a => [a] -> [a]
-nubSort = nub . sort
+nubSort = nubOrd . sort
 
 -- | Interweaves two lists together @[[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]@.
 weave :: [[a]] -> [a]
@@ -46,3 +48,20 @@ foldle1 f g (x:y:xs) = foldle f g (f x y) xs
 -- | Convert "row" of elements into "column" of elements.
 toColumn :: [a] -> [[a]]
 toColumn = map (: [])
+
+{- |
+  Create a table body (not including header row) by applying the given
+  functions to the column elements of the table rows (in order).
+  The first argument is a list of functions to be applied (one per column).
+  This essentially creates the rows.
+  The second argument is a list of elements apply the functions to.
+
+  For example, @mkTable [id, *5] [1,2,3]@ should produce a table:
+  
+  > | 1 |  5 |
+  > | 2 | 10 |
+  > | 3 | 15 |
+  
+-}
+mkTable :: [a -> b] -> [a] -> [[b]]
+mkTable fs = map (\x -> map ($ x) fs)

@@ -5,8 +5,9 @@ module Language.Drasil.Chunk.Concept.Core(
   -- * Concept-related Datatypes
   ConceptChunk(ConDict)
   , ConceptInstance(ConInst)
-  , sDom)
-  where
+  , sDom
+) where
+
 import Language.Drasil.ShortName (HasShortName(..), ShortName)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom))
@@ -14,7 +15,8 @@ import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Label.Type ((+::+), defer, name, raw,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.UID (UID, HasUID(..))
+import Drasil.Database.Chunk (HasChunkRefs(..))
+import Drasil.Database.UID (UID, HasUID(..))
 
 import Control.Lens (makeLenses, (^.), view)
 
@@ -33,6 +35,10 @@ data ConceptChunk = ConDict { _idea :: IdeaDict -- ^ Contains the idea of the co
                             , cdom' :: [UID] -- ^ Domain of the concept.
                             }
 makeLenses ''ConceptChunk
+
+
+instance HasChunkRefs ConceptChunk where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
@@ -54,13 +60,19 @@ instance ConceptDomain ConceptChunk where cdom = cdom'
 -- Ex. Something like the assumption that gravity is 9.81 m/s. When we write our equations,
 -- we can then link this assumption so that we do not have to explicitly define
 -- that assumption when needed to verify our work.
-data ConceptInstance = ConInst { _cc :: ConceptChunk , ra :: String, shnm :: ShortName}
+data ConceptInstance = ConInst { _ciuid :: UID
+                               , _cc :: ConceptChunk
+                               , ra :: String
+                               , shnm :: ShortName}
 makeLenses ''ConceptInstance
+
+instance HasChunkRefs ConceptInstance where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptInstance where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds 'UID' of the 'ConceptChunk' used to make the 'ConceptInstance'.
-instance HasUID        ConceptInstance where uid = cc . idea . uid
+instance HasUID        ConceptInstance where uid = ciuid
 -- | Finds term ('NP') of the 'ConceptChunk' used to make the 'ConceptInstance'.
 instance NamedIdea     ConceptInstance where term = cc . idea . term
 -- | Finds the idea contained in the 'ConceptChunk' used to make the 'ConceptInstance'.

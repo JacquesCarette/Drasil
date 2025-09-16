@@ -1,84 +1,84 @@
 digraph allvsall {
-	wVol -> assumpVCN;
-	wVol -> tankVol;
-	theory:consThermECS -> assumpTEO;
-	theory:sensHeat -> assumpWAL;
-	nwtnCoolingTM -> assumpHTCC;
-	theory:rocTempSimpRC -> assumpCWTAT;
-	theory:rocTempSimpRC -> assumpDWCoW;
-	theory:rocTempSimpRC -> assumpSHECoW;
+	dataDefn:wVol -> instance:assumpVCN;
+	dataDefn:wVol -> dataDefn:tankVol;
+	theory:consThermECS -> instance:assumpTEO;
+	theory:sensHeat -> instance:assumpWAL;
+	theory:nwtnCoolingTM -> instance:assumpHTCC;
+	theory:rocTempSimpRC -> instance:assumpCWTAT;
+	theory:rocTempSimpRC -> instance:assumpDWCoW;
+	theory:rocTempSimpRC -> instance:assumpSHECoW;
 	theory:rocTempSimpRC -> theory:consThermECS;
 	theory:rocTempSimpRC -> theory:rocTempSimpRC;
-	theory:htFluxC -> assumpLCCCW;
-	theory:htFluxC -> assumpTHCCoT;
-	theory:htFluxC -> nwtnCoolingTM;
-	theory:eBalanceOnWtrRC -> assumpWAL;
-	theory:eBalanceOnWtrRC -> assumpPIT;
-	theory:eBalanceOnWtrRC -> assumpNIHGBW;
-	theory:eBalanceOnWtrRC -> tauW;
+	theory:htFluxC -> instance:assumpLCCCW;
+	theory:htFluxC -> instance:assumpTHCCoT;
+	theory:htFluxC -> theory:nwtnCoolingTM;
+	theory:eBalanceOnWtrRC -> instance:assumpWAL;
+	theory:eBalanceOnWtrRC -> instance:assumpPIT;
+	theory:eBalanceOnWtrRC -> instance:assumpNIHGBW;
+	theory:eBalanceOnWtrRC -> dataDefn:tauW;
 	theory:eBalanceOnWtrRC -> theory:rocTempSimpRC;
 	theory:eBalanceOnWtrRC -> theory:htFluxC;
-	heatEInWtrIM -> assumpWAL;
-	heatEInWtrIM -> assumpAPT;
-	heatEInWtrIM -> theory:sensHeat;
-	findMass -> wMass;
-	findMass -> wVol;
-	findMass -> tankVol;
-	findMass -> theory:eBalanceOnWtrRC;
-	findMass -> inputInitVals;
-	outputInputDerivVals -> tauW;
-	outputInputDerivVals -> inputInitVals;
-	outputInputDerivVals -> findMass;
-	calcValues -> theory:eBalanceOnWtrRC;
-	calcValues -> heatEInWtrIM;
-	outputValues -> theory:eBalanceOnWtrRC;
-	outputValues -> heatEInWtrIM;
-	likeChgTCVOD -> assumpTHCCoT;
-	likeChgTCVOL -> assumpTHCCoL;
-	likeChgDT -> assumpCTNTD;
-	likeChgTLH -> assumpPIT;
-	unlikeChgWFS -> assumpWAL;
-	unlikeChgNIHG -> assumpNIHGBW;
-	unlikeChgNIHG -> theory:eBalanceOnWtrRC;
+	theory:heatEInWtrIM -> instance:assumpWAL;
+	theory:heatEInWtrIM -> instance:assumpAPT;
+	theory:heatEInWtrIM -> theory:sensHeat;
+	instance:findMass -> dataDefn:wMass;
+	instance:findMass -> dataDefn:wVol;
+	instance:findMass -> dataDefn:tankVol;
+	instance:findMass -> theory:eBalanceOnWtrRC;
+	instance:findMass -> instance:inputValues;
+	instance:outputInputDerivVals -> dataDefn:tauW;
+	instance:outputInputDerivVals -> instance:inputValues;
+	instance:outputInputDerivVals -> instance:findMass;
+	instance:calcValues -> theory:eBalanceOnWtrRC;
+	instance:calcValues -> theory:heatEInWtrIM;
+	instance:outputValues -> theory:eBalanceOnWtrRC;
+	instance:outputValues -> theory:heatEInWtrIM;
+	instance:likeChgTCVOD -> instance:assumpTHCCoT;
+	instance:likeChgTCVOL -> instance:assumpTHCCoL;
+	instance:likeChgDT -> instance:assumpCTNTD;
+	instance:likeChgTLH -> instance:assumpPIT;
+	instance:unlikeChgWFS -> instance:assumpWAL;
+	instance:unlikeChgNIHG -> instance:assumpNIHGBW;
+	instance:unlikeChgNIHG -> theory:eBalanceOnWtrRC;
 
 
-	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTEO"];
-	assumpHTCC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpHTCC"];
-	assumpCWTAT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCWTAT"];
-	assumpDWCoW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpDWCoW"];
-	assumpSHECoW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSHECoW"];
-	assumpLCCCW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpLCCCW"];
-	assumpTHCCoT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTHCCoT"];
-	assumpTHCCoL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTHCCoL"];
-	assumpCTNTD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCTNTD"];
-	assumpWAL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpWAL"];
-	assumpPIT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpPIT"];
-	assumpNIHGBW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpNIHGBW"];
-	assumpAPT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpAPT"];
-	assumpVCN	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpVCN"];
+	instance:assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTEO"];
+	instance:assumpHTCC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpHTCC"];
+	instance:assumpCWTAT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCWTAT"];
+	instance:assumpDWCoW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpDWCoW"];
+	instance:assumpSHECoW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSHECoW"];
+	instance:assumpLCCCW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpLCCCW"];
+	instance:assumpTHCCoT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTHCCoT"];
+	instance:assumpTHCCoL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTHCCoL"];
+	instance:assumpCTNTD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCTNTD"];
+	instance:assumpWAL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpWAL"];
+	instance:assumpPIT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpPIT"];
+	instance:assumpNIHGBW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpNIHGBW"];
+	instance:assumpAPT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpAPT"];
+	instance:assumpVCN	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpVCN"];
 
 	subgraph A {
 	rank="same"
-	{assumpTEO, assumpHTCC, assumpCWTAT, assumpDWCoW, assumpSHECoW, assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpCTNTD, assumpWAL, assumpPIT, assumpNIHGBW, assumpAPT, assumpVCN}
+	{instance:assumpTEO, instance:assumpHTCC, instance:assumpCWTAT, instance:assumpDWCoW, instance:assumpSHECoW, instance:assumpLCCCW, instance:assumpTHCCoT, instance:assumpTHCCoL, instance:assumpCTNTD, instance:assumpWAL, instance:assumpPIT, instance:assumpNIHGBW, instance:assumpAPT, instance:assumpVCN}
 	}
 
-	wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
-	wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.nopcm"];
-	tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
-	tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
+	dataDefn:wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
+	dataDefn:wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.nopcm"];
+	dataDefn:tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
+	dataDefn:tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
 
 	subgraph DD {
 	rank="same"
-	{wMass, wVol, tankVol, tauW}
+	{dataDefn:wMass, dataDefn:wVol, dataDefn:tankVol, dataDefn:tauW}
 	}
 
 	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	theory:sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
-	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
+	theory:nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{theory:consThermECS, theory:sensHeat, nwtnCoolingTM}
+	{theory:consThermECS, theory:sensHeat, theory:nwtnCoolingTM}
 	}
 
 	theory:rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
@@ -90,48 +90,48 @@ digraph allvsall {
 	}
 
 	theory:eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
-	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
+	theory:heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 
 	subgraph IM {
 	rank="same"
-	{theory:eBalanceOnWtrRC, heatEInWtrIM}
+	{theory:eBalanceOnWtrRC, theory:heatEInWtrIM}
 	}
 
-	inputInitVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputInitVals"];
-	findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:findMass"];
-	checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkWithPhysConsts"];
-	outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputInputDerivVals"];
-	calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
-	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
-	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
-	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
-	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
-	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
-	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
+	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
+	instance:verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
+	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
+	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
+	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:findMass"];
+	instance:checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkWithPhysConsts"];
+	instance:outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputInputDerivVals"];
+	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 
-	subgraph FR {
+	subgraph NFR {
 	rank="same"
-	{inputInitVals, findMass, checkWithPhysConsts, outputInputDerivVals, calcValues, outputValues, correct, verifiable, understandable, reusable, maintainable}
+	{instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:inputValues, instance:findMass, instance:checkWithPhysConsts, instance:outputInputDerivVals, instance:calcValues, instance:outputValues}
 	}
 
-	waterTempGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:waterTempGS"];
-	waterEnergyGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:waterEnergyGS"];
+	instance:waterTempGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:waterTempGS"];
+	instance:waterEnergyGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:waterEnergyGS"];
 
 	subgraph GS {
 	rank="same"
-	{waterTempGS, waterEnergyGS}
+	{instance:waterTempGS, instance:waterEnergyGS}
 	}
 
-	likeChgTCVOD	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgTCVOD"];
-	likeChgTCVOL	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgTCVOL"];
-	likeChgDT	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgDT"];
-	likeChgTLH	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgTLH"];
-	unlikeChgWFS	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC:unlikeChgWFS"];
-	unlikeChgNIHG	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC:unlikeChgNIHG"];
+	instance:likeChgTCVOD	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgTCVOD"];
+	instance:likeChgTCVOL	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgTCVOL"];
+	instance:likeChgDT	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgDT"];
+	instance:likeChgTLH	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgTLH"];
+	instance:unlikeChgWFS	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC:unlikeChgWFS"];
+	instance:unlikeChgNIHG	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC:unlikeChgNIHG"];
 
 	subgraph LC {
 	rank="same"
-	{likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgTLH, unlikeChgWFS, unlikeChgNIHG}
+	{instance:likeChgTCVOD, instance:likeChgTCVOL, instance:likeChgDT, instance:likeChgTLH, instance:unlikeChgWFS, instance:unlikeChgNIHG}
 	}
 
 }

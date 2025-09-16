@@ -54,8 +54,7 @@ if [ -z "$MAKE" ]; then
 fi
 
 DOC_DEST=docs/
-# SRS_DEST needs to be two levels deep for image filepaths to match those of the build folder
-SRS_DEST=SRS/srs
+SRS_DEST=SRS
 DOX_DEST=doxygen/
 EXAMPLE_DEST=examples/
 CUR_DIR="$PWD/"
@@ -91,12 +90,21 @@ copy_examples() {
     # Only copy actual examples
     if [[ "$EXAMPLE_DIRS" == *"$example_name"* ]]; then
       target_srs_dir="./$EXAMPLE_DEST$example_name/$SRS_DEST"
-      mkdir -p "$target_srs_dir"
+      mkdir -p "$target_srs_dir/PDF"
+      mkdir -p "$target_srs_dir/HTML"
+      mkdir -p "$target_srs_dir/mdBook"
+      mkdir -p "$target_srs_dir/Jupyter"
       if [ -d "$example/SRS/PDF" ]; then
-        cp "$example/SRS/PDF/"*.pdf "$target_srs_dir"
+        cp "$example/SRS/PDF/"*.pdf "$target_srs_dir/PDF"
       fi
       if [ -d "$example/SRS/HTML" ]; then
-        cp -r "$example/SRS/HTML/." "$target_srs_dir"
+        cp -r "$example/SRS/HTML/." "$target_srs_dir/HTML"
+      fi
+      if [ -d "$example/SRS/mdBook" ]; then
+        cp -r "$example/SRS/mdBook/book/" "$target_srs_dir/mdBook"
+      fi
+      if [ -d "$example/SRS/Jupyter" ]; then
+        cp -r "$example/SRS/Jupyter/"*.html "$target_srs_dir/Jupyter"
       fi
       if [ -d "$example/src" ]; then
         mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST"
@@ -134,7 +142,7 @@ src_stub() {
   REL_PATH=$(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-)
   # On a real deploy, `deploy` folder is itself a git repo, thus we need to ensure the path lookup is in the outer Drasil repo.
   for p in $REL_PATH; do
-    ls -d "$(cd "$CUR_DIR" && git rev-parse --show-toplevel)/$p"*/ | rev | cut -d/ -f2 | rev | tr '\n' '\0' | xargs -0 printf "$p%s\n" >> "$EXAMPLE_DEST$example_name/src"
+    find "$(cd "$CUR_DIR" && git rev-parse --show-toplevel)" -name "$p*" -type d -print0 | rev | cut -d/ -f2 | rev | tr '\0' '\n' | xargs -0 printf "$p%s\n" >> "$EXAMPLE_DEST$example_name/src"
   done
 }
 
@@ -155,7 +163,7 @@ copy_traceygraphs() {
 }
 
 copy_website() {
-  cd "$CUR_DIR$DEPLOY_FOLDER"
+  cd "$CUR_DIR$DEPLOY_FOLDER" || exit 1
   cp -r "$CUR_DIR$WEBSITE_FOLDER". .
 
   # src stubs were consumed by site generator; safe to delete those.
@@ -163,7 +171,7 @@ copy_website() {
 }
 
 
-cd "$DEPLOY_FOLDER"
+cd "$DEPLOY_FOLDER" || exit 1
 copy_docs
 copy_graphs
 copy_datafiles
@@ -172,4 +180,4 @@ copy_images
 copy_analysis
 copy_traceygraphs
 copy_website
-cd "$CUR_DIR"
+cd "$CUR_DIR" || exit 1

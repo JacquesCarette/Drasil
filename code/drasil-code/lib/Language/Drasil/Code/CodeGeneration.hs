@@ -9,12 +9,13 @@ module Language.Drasil.Code.CodeGeneration (
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..))
 
-import GOOL.Drasil (FileData(..), ModData(modDoc))
+import Drasil.GOOL (FileData(..), ModData(modDoc))
 
 import Text.PrettyPrint.HughesPJ (Doc,render)
-import System.Directory (createDirectoryIfMissing)
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
+
+import Utils.Drasil (createDirIfMissing)
 
 -- | Makes code from 'FileData' ('FilePath's with module data) and 'AuxData' ('FilePath's with auxiliary document information).
 makeCode :: [FileData] -> [AuxData] -> Code
@@ -32,7 +33,7 @@ createCodeFiles (Code cs) = mapM_ createCodeFile cs
 -- | Helper that uses pairs of 'Code' to create a file written with the given document at the given 'FilePath'.
 createCodeFile :: (FilePath, Doc) -> IO ()
 createCodeFile (path, code) = do
-  createDirectoryIfMissing True (takeDirectory path)
+  createDirIfMissing True (takeDirectory path)
   h <- openFile path WriteMode
   hPutStrLn h (render code)
   hClose h

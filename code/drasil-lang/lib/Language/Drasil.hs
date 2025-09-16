@@ -15,7 +15,7 @@ module Language.Drasil (
   , square, half
   , oneHalf, oneThird
   , apply1, apply2
-  , m2x2, vec2D, dgnl2x2, rowVec, columnVec
+  , m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
   , Completeness, Relation
 
   -- ** Literals Language
@@ -26,7 +26,7 @@ module Language.Drasil (
   -- | Defines display-related expression functions. Used in models.
 
   -- Language.Drasil.ModelExpr
-  , ModelExpr
+  , ModelExpr(Spc)
   , DerivType
   , ModelExprC(..)
 
@@ -82,7 +82,7 @@ module Language.Drasil (
   -- Similar types are grouped together.
 
   -- *** Basic types
-  , UID, mkUid, nsUid
+  , UID, mkUid, nsUid, showUID
   -- Language.Drasil.Chunk.NamedIdea
   , (+++), (+++.), (+++!)
   , nc, ncUID, IdeaDict , mkIdea
@@ -90,31 +90,29 @@ module Language.Drasil (
   , CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..)
   , obv, qc, ccf, ccv, listToArray, programName, funcPrefix, DefiningCodeExpr(..)
   -- Language.Drasil.Chunk.CommonIdea
-  , CI, commonIdea, getAcc, commonIdeaWithDict, prependAbrv
+  , CI, commonIdea, commonIdeaWithDict, prependAbrv
 
   -- *** Concepts
   -- Language.Drasil.Chunk.Concept.Core
   , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
-  , dcc, dccWDS, cc, cc', ccs, cw, cic
+  , dcc, dccAWDS, dccA, dccWDS, cc, cc', ccs, cw, cic
   -- Language.Drasil.Chunk.Relation
-  , RelationConcept, makeRC, addRelToCC
+  , RelationConcept, makeRC
   -- Language.Drasil.Chunk.DifferentialModel
-  , DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..), ($^^),($*), ($+)
+  , DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..), ($^^),($**), ($++)
   , makeAODESolverFormat, makeAIVP, formEquations, makeASystemDE, makeASingleDE
 
   -- *** Quantities and Units
-  -- Language.Drasil.Chunk.Quantity
-  , QuantityDict, DefinesQuantity(defLhs), qw, mkQuant, mkQuant'
-  , codeVC, implVar, implVar', implVarUID, implVarUID' , vc, vc'', vcSt, vcUnit
   -- Language.Drasil.Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
-  , mkFuncDef, mkFuncDef', mkFuncDefByQ
+  , mkFuncDef, mkFuncDef', mkFuncDefByQ 
   -- Language.Drasil.Chunk.Unitary
-  , Unitary(..), UnitaryChunk, unitary, unitary', mkUnitary, unit_symb
+  , unit_symb
   -- Language.Drasil.Chunk.DefinedQuantity
-  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
+  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdNoUnit', dqdQd, dqdWr
+  , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
   -- Language.Drasil.Chunk.Unital
   , UnitalChunk(..), uc, uc', ucStaged, ucStaged', ucuc, ucw
   -- Language.Drasil.Chunk.UnitDefn
@@ -129,14 +127,13 @@ module Language.Drasil (
   -- *** Constrained and Uncertain Values
   -- Language.Drasil.Constraint
   , ConstraintReason(..), Constraint(..), ConstraintE
-  , physc, sfwrc, isPhysC, isSfwrC
+  , physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
   -- Language.Drasil.Chunk.Constrained
-  , ConstrainedChunk(..), ConstrConcept(..)
-  , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
-  , cnstrw, cnstrw'
+  , ConstrConcept(..)
+  , constrained', cuc', cuc'', cucNoUnit', constrainedNRV'
+  , cnstrw'
   -- Language.Drasil.Chunk.UncertainQuantity
-  , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
-  , uncrtnw
+  , UncertQ, uq, uqc, uqcND
   -- Language.Drasil.Uncertainty
   , Uncertainty, uncty, HasUncertainty(..)
   , defaultUncrt, uncVal, uncPrec, exact
@@ -166,6 +163,7 @@ module Language.Drasil (
   , Month(..)
   -- Language.Drasil.Data.Citation; should be moved to Language.Drasil.Development
   , CiteField(..), HP(..), CitationKind(..)
+  , compareAuthYearTitle
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor
@@ -226,10 +224,10 @@ module Language.Drasil (
   -- Language.Drasil.Document
   , Document(..), ShowTableOfContents(..), DType(..), Section(..)
   , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
-  , LabelledContent(..), UnlabelledContent(..), extractSection
+  , LabelledContent(..), UnlabelledContent(..), HasCaption(..)
   , mkParagraph, mkRawLC, checkToC
   , llcc, ulcc
-  , section, fig, figWithWidth
+  , section, fig, figNoCap, figWithWidth, figNoCapWithWidth
   , MaxWidthPercent
   , HasContents(accessContents)
   , RawContent(..)
@@ -253,7 +251,7 @@ module Language.Drasil (
 
   -- ** Sentence-related functions
   -- | See Reference-related functions as well.
-  , addPercent, displayStrConstrntsAsSet, displayDblConstrntsAsSet
+  , addPercent
   , eqN, checkValidStr, getTandS, maybeChanged, maybeExpanded
   , maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn
   , unwrap, fterms
@@ -277,8 +275,6 @@ module Language.Drasil (
   , Decoration, Symbol
   -- Language.Drasil.UnitLang
   , USymb(US)
-  -- Language.Drasil.Misc
-  , mkTable
   -- Language.Drasil.Stages
   , Stage(Equational,Implementation)
   -- Language.Drasil.Symbol.Helpers
@@ -301,39 +297,43 @@ module Language.Drasil (
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 
+import Drasil.Code.Classes (Callable, IsArgumentName)
+import Drasil.Code.CodeVar (CodeIdea(..), CodeChunk(..), 
+  CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
+  listToArray, programName, funcPrefix, DefiningCodeExpr(..))
+import Drasil.Code.CodeExpr.Lang (CodeExpr)
+import Drasil.Code.CodeExpr.Class (CodeExprC(..))
+
 import Language.Drasil.WellTyped (RequiresChecking(..), Typed(..), TypingContext,
   TypeError, inferFromContext, temporaryIndent)
 
 import Language.Drasil.Expr.Class (ExprC(..),
   frac, recip_, square, half, oneHalf, oneThird, apply1, apply2,
-  m2x2, vec2D, dgnl2x2, rowVec, columnVec)
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet)
 import Language.Drasil.Expr.Lang (Expr, Completeness, Relation)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
-import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType)
-import Language.Drasil.CodeExpr.Lang (CodeExpr)
-import Language.Drasil.CodeExpr.Class (CodeExprC(..))
-import Language.Drasil.Document (section, fig, figWithWidth
+import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType, ModelExpr(Spc))
+import Language.Drasil.Document (section, fig, figNoCap, figWithWidth, figNoCapWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
+  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC
   , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
   , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI')
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
-  , LabelledContent(..), UnlabelledContent(..) )
+  , LabelledContent(..), UnlabelledContent(..), HasCaption(..))
 import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr, unlbldCode
   , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD)
 import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
-import Language.Drasil.UID
-    (UID, HasUID(..), (+++), (+++.), (+++!), mkUid, nsUid)
+import Drasil.Database.UID
+    (UID, HasUID(..), (+++), (+++.), (+++!), mkUid, nsUid, showUID)
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
-  HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity, Callable,
-  IsArgumentName, Express(..))
+  HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity, Express(..))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader, MayHaveDerivation(..))
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
@@ -344,37 +344,31 @@ import Language.Drasil.Chunk.Citation (
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished)
-import Language.Drasil.Chunk.CodeVar (CodeIdea(..), CodeChunk(..), 
-  CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
-  listToArray, programName, funcPrefix, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Concept.Core (sDom) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Chunk.Constrained
-import Language.Drasil.Constraint (physc, sfwrc, isPhysC, isSfwrC,
+import Language.Drasil.Constraint (physRange, sfwrRange, physElem, sfwrElem, isSfwrC, isPhysC,
   Constraint(..), ConstraintE, ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
   mkFuncDef, mkFuncDef', mkFuncDefByQ)
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, addRelToCC)
+import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.DifferentialModel(DifferentialModel(..), ODESolverFormat(..),
-  InitialValueProblem(..), ($^^), ($*), ($+), makeAODESolverFormat, makeAIVP, makeASystemDE, 
+  InitialValueProblem(..), ($^^), ($**), ($++), makeAODESolverFormat, makeAIVP, makeASystemDE, 
   makeASingleDE, formEquations)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), uc, uc', ucStaged, ucStaged',
   ucuc, ucw)
-import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , HasFields(getFields)
   , author, editor
   , address, bookTitle, howPublished, howPublishedU, institution, journal, note
   , organization, publisher, school, series, title, typeField
-  , chapter, edition, number, volume, year
-  , pages
-  , month)
+  , chapter, edition, number, volume, year, month, pages
+  , compareAuthYearTitle)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
@@ -390,7 +384,6 @@ import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
   label, variable)
 import Language.Drasil.Synonyms (ConstQDef, SimpleQDef, ModelQDef, PExpr)
 import Language.Drasil.Stages (Stage(..))
-import Language.Drasil.Misc (mkTable)
 import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, name, nameStr, rendPersLFM,
   rendPersLFM', rendPersLFM'', comparePeople)
@@ -407,3 +400,4 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.Unitary (unit_symb)

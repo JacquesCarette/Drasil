@@ -35,7 +35,7 @@ gdPowerPlantRC
 
 gdPowerPlantEqn :: Expr
 gdPowerPlantEqn
-  = recip_ (square (sy qdFreqDomain) `addRe` sy qdFreqDomain `addRe` exactDbl 20)
+  = recip_ (square (sy dqdFreqDomain) $+ sy dqdFreqDomain $+ exactDbl 20)
 
 gdPowerPlantNote :: Sentence
 gdPowerPlantNote
@@ -48,7 +48,7 @@ gdPowerPlantNote
          S "to 1", fromSource aDampingCoeff `sC` EmptyS
          `S.andThe` phrase ccStiffCoeff, sParen (P symStifnessCoeff),
          S "to 20" +:+. fromSource aStiffnessCoeff,
-       atStartNP (the equation), S "is converted to the", phrase ccFrequencyDomain,
+       atStartNP (the equation) `S.is` S "converted" `S.toThe` phrase ccFrequencyDomain,
          S "by applying the", atStart ccLaplaceTransform +:+. fromSource tmLaplace,
-       S "Additionally, there are no external disturbances to the power plant",
+       S "Additionally, there" `S.are` S "no external disturbances" `S.toThe` S "power plant",
          fromSource aExtDisturb]

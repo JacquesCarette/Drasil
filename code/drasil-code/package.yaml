@@ -7,6 +7,10 @@ github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
+language: Haskell2010
+default-extensions:
+- StrictData
+
 extra-source-files: []
 
 dependencies:
@@ -24,9 +28,10 @@ dependencies:
 - drasil-lang
 - drasil-metadata
 - drasil-printers
-- drasil-sysinfo
+- drasil-system
 - drasil-theory
 - drasil-utils
+- deriving-compat
 
 ghc-options:
 - -Wall
@@ -51,6 +56,7 @@ library:
     - Language.Drasil.Code.ExternalLibraryCall
     - Language.Drasil.Code.ExtLibImport
     - Language.Drasil.Code.Lang
+    - Language.Drasil.Code.Imperative.ReadMe.Import
     - Language.Drasil.Code.Imperative.Build.AST
     - Language.Drasil.Code.Imperative.Build.Import
     - Language.Drasil.Code.Imperative.ConceptMatch
@@ -67,6 +73,7 @@ library:
     - Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer
     - Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer
     - Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer
+    - Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer
     - Language.Drasil.Code.Imperative.GOOL.ClassInterface
     - Language.Drasil.Code.Imperative.Comments
     - Language.Drasil.Code.Imperative.Descriptions
@@ -98,8 +105,8 @@ executables:
     - FileTests
     - HelloWorld
     - Helper
-    - Observer
-    - PatternTest
+    - GOOL.Observer
+    - GOOL.PatternTest
     - VectorTest
     - NameGenTest
     ghc-options:

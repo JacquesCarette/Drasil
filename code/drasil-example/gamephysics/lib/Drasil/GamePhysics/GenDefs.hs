@@ -16,6 +16,7 @@ import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
 import Data.Drasil.Concepts.Math as CM (line, cartesian)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Drasil.GamePhysics.TMods (newtonLUG)
+import Drasil.GamePhysics.References (accelGravitySrc, impulseSrc)
 
 ----- General Models -----
 
@@ -69,19 +70,14 @@ accelGravityQD :: ModelQDef
 accelGravityQD = mkQuantDef' QP.gravitationalAccel (nounPhraseSP "Acceleration due to gravity") accelGravityExpr
 
 accelGravityDesc :: Sentence
-accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much larger than the other" `sC`
+accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass `S.is` S "much larger than the other" `sC`
   (S "it is convenient to define a gravitational field around the larger mass as shown above" !.),
-  S "The negative sign in the equation indicates that the", phrase QP.force, S "is an attractive",
+  S "The negative sign" `S.inThe` S "equation indicates that the", phrase QP.force, S "is an attractive",
   phrase QP.force]
 
 accelGravityExpr :: PExpr
-accelGravityExpr = neg ((sy QP.gravitationalConst `mulRe` sy mLarger $/
-  square (sy dispNorm)) `mulRe` sy dVect)
-
-accelGravitySrc :: Reference
-accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
-  shortname' $ S "Definition of Gravitational Acceleration"
-
+accelGravityExpr = neg ((sy QP.gravitationalConst $* sy mLarger $/
+  square (sy dispNorm)) $* sy dVect)
 accelGravityDeriv :: Derivation
 accelGravityDeriv = mkDerivName (phrase QP.gravitationalAccel)
                       (weave [accelGravityDerivSentences, map eS accelGravityDerivEqns])
@@ -92,7 +88,8 @@ accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1,
  accelGravityDerivSentence5]
 
 accelGravityDerivSentence1 :: [Sentence]
-accelGravityDerivSentence1 = [S "From", namedRef newtonLUG (S "Newton's law of universal gravitation") `sC` S "we have"]
+accelGravityDerivSentence1 = [S "From", 
+        namedRef newtonLUG (S "Newton's law" `S.of_` S "universal gravitation") `sC` S "we have"]
 
 
 accelGravityDerivSentence2 :: [Sentence]
@@ -102,7 +99,7 @@ accelGravityDerivSentence2 = [(S "The above equation governs the gravitational a
         S "the massive body",
         (S "exerts on the lighter body" !.), S "Further" `sC` S "suppose that the", phrase cartesian `S.is`
         S "chosen such that this", phrase QP.force, S "acts on a", phrase line,
-        (S "which lies along one of the principal axes" !.),
+        (S "which lies along one" `S.ofThe` S "principal axes" !.),
         S "Then our", getTandS dVect, S "for the x or y axes is"]
 
 accelGravityDerivSentence3 :: [Sentence]
@@ -120,22 +117,22 @@ accelGravityDerivSentence5 = [S "and thus the negative sign indicates that the",
                                S "an attractive", phrase QP.force]
 
 accelGravityDerivEqn1 :: PExpr
-accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2) $/
-                        sy sqrDist) `mulRe` sy dVect
+accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst $* (sy mass_1 $* sy mass_2) $/
+                        sy sqrDist) $* sy dVect
 
 accelGravityDerivEqn2 :: PExpr
 accelGravityDerivEqn2 = sy dVect $= (sy distMass $/ sy dispNorm)
 
 accelGravityDerivEqn3 :: PExpr
-accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst `mulRe`
-                         (sy mLarger `mulRe` sy QPP.mass $/ sy sqrDist) `mulRe` sy dVect
-                         $= sy QPP.mass `mulRe` sy QP.gravitationalAccel
+accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst $* 
+                         (sy mLarger $* sy QPP.mass $/ sy sqrDist) $* sy dVect
+                         $= sy QPP.mass $* sy QP.gravitationalAccel
 
 accelGravityDerivEqn4 :: PExpr
-accelGravityDerivEqn4 = sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist) `mulRe` sy dVect $= sy QP.gravitationalAccel
+accelGravityDerivEqn4 = sy QP.gravitationalConst $* (sy mLarger $/ sy sqrDist) $* sy dVect $= sy QP.gravitationalAccel
 
 accelGravityDerivEqn5 :: PExpr
-accelGravityDerivEqn5 = sy QP.gravitationalAccel $= neg (sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist)) `mulRe` sy dVect
+accelGravityDerivEqn5 = sy QP.gravitationalAccel $= neg (sy QP.gravitationalConst $* (sy mLarger $/ sy sqrDist)) $* sy dVect
 
 accelGravityDerivEqns :: (ExprC r, LiteralC r) => [r]
 accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGravityDerivEqn3,
@@ -153,12 +150,8 @@ impulseQD :: ModelQDef
 impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") impulseExpr
 
 impulseExpr :: PExpr
-impulseExpr = (neg (exactDbl 1 `addRe` sy QP.restitutionCoef) `mulRe` sy initRelVel $.
-  sy normalVect) $/ ((recip_ (sy massA) `addRe` recip_ (sy massB)) `mulRe`
-  square (sy normalLen) `addRe`
-  (square (sy perpLenA) $/ sy momtInertA) `addRe`
+impulseExpr = (neg (exactDbl 1 $+ sy QP.restitutionCoef) $* sy initRelVel $.
+  sy normalVect) $/ ((recip_ (sy massA) $+ recip_ (sy massB)) $* 
+  square (sy normalLen) $+
+  (square (sy perpLenA) $/ sy momtInertA) $+
   (square (sy perpLenB) $/ sy momtInertB))
-
-impulseSrc :: Reference
-impulseSrc = makeURI "impulseSrc" "http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf" $
-  shortname' $ S "Impulse for Collision Ref"

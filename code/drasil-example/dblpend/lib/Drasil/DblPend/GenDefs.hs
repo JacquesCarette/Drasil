@@ -176,10 +176,10 @@ accelXGD_2 = gdNoRefs (equationalModel' accelXQD_2) (getUnit acceleration) (Just
 accelXQD_2 :: ModelQDef
 accelXQD_2 = mkQuantDef' xAccel_2 (the xComp `NP.of_` (acceleration `ofThe` secondObject)) E.accelXExpr_2
 
-accelXDeriv_2:: Derivation
+accelXDeriv_2 :: Derivation
 accelXDeriv_2 = mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelXDerivSents_2, accelXDerivEqns_2])
 
-accelXDerivSents_2:: [Sentence]
+accelXDerivSents_2 :: [Sentence]
 accelXDerivSents_2 = [accelDerivSent1, accelXDerivSent2_2, accelDerivSent3, accelDerivSent4]
 
 accelXDerivEqns_2 :: [Sentence]
@@ -197,10 +197,10 @@ accelYGD_2 = gdNoRefs (equationalModel' accelYQD_2) (getUnit acceleration) (Just
 accelYQD_2 :: ModelQDef
 accelYQD_2 = mkQuantDef' yAccel_2 (the yComp `NP.of_` (acceleration `ofThe` secondObject)) E.accelYExpr_2
 
-accelYDeriv_2:: Derivation
+accelYDeriv_2 :: Derivation
 accelYDeriv_2 = mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelYDerivSents_2, accelYDerivEqns_2])
 
-accelYDerivSents_2:: [Sentence]
+accelYDerivSents_2 :: [Sentence]
 accelYDerivSents_2 = [accelDerivSent1, accelYDerivSent2_2, accelDerivSent3, accelDerivSent4]
 
 accelYDerivEqns_2 :: [Sentence]
@@ -218,8 +218,9 @@ xForceGD_1 = gdNoRefs (equationalRealmU "xForce1" xForceMD_1)
 
 xForceMD_1 :: MultiDefn ModelExpr
 xForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
-    where quant = mkQuant' "force" (horizontalForce `onThe` firstObject)
-                    Nothing Real (symbol force) (getUnit force)
+    where quant = dqd' (dccA "force" (horizontalForce `onThe` firstObject)
+                    "the horizontal force acting on the first object"
+                    Nothing) (symbol force) Real (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass1"
                       [] EmptyS $ express $ forceGQD ^. defnExpr,
@@ -238,8 +239,9 @@ yForceGD_1 = gdNoRefs (equationalRealmU "yForce1" yForceMD_1)
 
 yForceMD_1 :: MultiDefn ModelExpr
 yForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
-    where quant = mkQuant' "force" (verticalForce `onThe` firstObject)
-                    Nothing Real (symbol force) (getUnit force)
+    where quant = dqd' (dccA "force" (verticalForce `onThe` firstObject)
+                    "the vertical force acting on the first object"
+                    Nothing) (symbol force) Real (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass1"
                       [] EmptyS $ express $ forceGQD ^. defnExpr,
@@ -258,8 +260,9 @@ xForceGD_2 = gdNoRefs (equationalRealmU "xForce2" xForceMD_2)
 
 xForceMD_2 :: MultiDefn ModelExpr
 xForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
-    where quant = mkQuant' "force" (horizontalForce `onThe` secondObject)
-                    Nothing Real (symbol force) (getUnit force)
+    where quant = dqd' (dccA "force" (horizontalForce `onThe` secondObject)
+                    "the horizontal force acting on the second object"
+                    Nothing) (symbol force) Real (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass2"
                       [] EmptyS $ express $ forceGQD ^. defnExpr,
@@ -278,8 +281,9 @@ yForceGD_2 = gdNoRefs (equationalRealmU "yForce2" yForceMD_2)
 
 yForceMD_2 :: MultiDefn ModelExpr
 yForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
-    where quant = mkQuant' "force" (verticalForce `onThe` secondObject)
-                    Nothing Real (symbol force) (getUnit force)
+    where quant = dqd' (dccA "force" (verticalForce `onThe` secondObject)
+                    "the vertical force acting on the second object"
+                    Nothing) (symbol force) Real (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass2"
                       [] EmptyS $ express $ forceGQD ^. defnExpr,

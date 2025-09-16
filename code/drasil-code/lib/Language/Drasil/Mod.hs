@@ -7,9 +7,9 @@ module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..),
   funcDefParams, packmod, packmodRequires
 ) where
 
-import Language.Drasil (Space, MayHaveUnit, Quantity, CodeExpr, LiteralC(..))
+import Language.Drasil (Space, MayHaveUnit, Quantity, CodeExpr, LiteralC(..), Concept)
 import Database.Drasil (ChunkDB)
-import GOOL.Drasil (ScopeTag(..))
+import Drasil.GOOL (VisibilityTag(..))
 
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
   codevars', quantvar)
@@ -47,11 +47,12 @@ data Class = ClassDef {
   implements :: Maybe Name,
   classDesc :: Description,
   stateVars :: [StateVariable],
+  constructors :: [Func],
   methods :: [Func]}
 
--- | State variables hold attach a 'ScopeTag' to a 'CodeVarChunk'.
+-- | State variables hold attach a 'VisibilityTag' to a 'CodeVarChunk'.
 data StateVariable = SV {
-  svScope :: ScopeTag,
+  svVisibility :: VisibilityTag,
   stVar :: CodeVarChunk}
 
 -- | Define a public state variable based on the given 'CodeVarChunk'.
@@ -64,13 +65,13 @@ privStateVar = SV Priv
 
 -- | Define a class with the given 'Name', 'Description', state variables, and
 -- methods.
-classDef :: Name -> Description -> [StateVariable] -> [Func] -> Class
+classDef :: Name -> Description -> [StateVariable] -> [Func] -> [Func] -> Class
 classDef n = ClassDef n Nothing
 
 -- | Define a class that implements an interface. 1st 'Name' is class name, 2nd is
 -- interface name.
 classImplements :: Name -> Name -> Description -> [StateVariable] -> [Func] ->
-  Class
+  [Func] -> Class
 classImplements n i = ClassDef n (Just i)
 
 -- | Holds a function definition or function data.
@@ -85,7 +86,7 @@ funcData n desc d = FData $ FuncData (toPlainName n) desc d
 -- | Define a function by providing the 'FuncStmt's for its body. Other
 -- parameters are function name, description, list of parameters, space of the
 -- returned value, and description of the returned value.
-funcDef :: (Quantity c, MayHaveUnit c) => Name -> Description -> [c] ->
+funcDef :: (Quantity c, MayHaveUnit c, Concept c) => Name -> Description -> [c] ->
   Space -> Maybe Description -> [FuncStmt] -> Func
 funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc
   (map (pcAuto . quantvar) i) t returnDesc fs
@@ -138,24 +139,24 @@ data FuncStmt where
   FAppend   :: CodeExpr -> CodeExpr -> FuncStmt
 
 -- | Define an assignment statement.
-($:=) :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
+($:=) :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeExpr -> FuncStmt
 v $:= e = FAsg (quantvar v) e
 
 -- | Define a for-loop. 'Quantity' is for the iteration variable, 'CodeExpr' is the
 -- upper bound at that variable (the variable will start with a value of 0).
 -- ['FuncStmt'] is for the loop body.
-ffor :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> [FuncStmt] -> FuncStmt
+ffor :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeExpr -> [FuncStmt] -> FuncStmt
 ffor v end = fforRange v (int 0) end (int 1)
 
 -- | Define a for-loop. 'Quantity' is for the iteration variable, and 3 'CodeExpr's
 -- for the start, stop, step numbers.
 -- ['FuncStmt'] is for the loop body.
-fforRange :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> CodeExpr
+fforRange :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeExpr -> CodeExpr
   -> CodeExpr -> [FuncStmt] -> FuncStmt
 fforRange v = FFor (quantvar v)
 
 -- | Define a declare-define statement.
-fDecDef :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
+fDecDef :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeExpr -> FuncStmt
 fDecDef v  = FDecDef (quantvar v)
 
 -- | Returns the list of 'CodeVarChunk's that are used in the list of 'FuncStmt's

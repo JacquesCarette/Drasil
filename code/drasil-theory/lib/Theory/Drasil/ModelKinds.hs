@@ -10,7 +10,7 @@ module Theory.Drasil.ModelKinds (
   newDEModel', deModel', equationalConstraints', equationalModel', equationalRealm', othModel',
   equationalModelU, equationalModelN, equationalRealmU, equationalRealmN,
   -- * Lenses
-  setMk, elimMk, lensMk,
+  setMk, elimMk, lensMk, getterMk,
   -- * Functions
   getEqModQds
   ) where
@@ -58,9 +58,12 @@ makeLenses ''ModelKind
 modelNs :: UID -> UID
 modelNs = nsUid "theory"
 
+mkUid' :: String -> UID
+mkUid' = modelNs . mkUid
+
 -- | Smart constructor for 'NewDEModel's
 newDEModel :: String -> NP -> DifferentialModel -> ModelKind e
-newDEModel u n dm = MK (NewDEModel dm) (mkUid u) n
+newDEModel u n dm = MK (NewDEModel dm) (mkUid' u) n
 
 -- | Smart constructor for 'NewDEModel's, deriving UID+Term from the 'DifferentialModel'
 newDEModel' :: DifferentialModel -> ModelKind e
@@ -68,7 +71,7 @@ newDEModel' dm = MK (NewDEModel dm) (modelNs $ dm ^. uid) (dm ^. term)
 
 -- | Smart constructor for 'DEModel's
 deModel :: String -> NP -> RelationConcept -> ModelKind e
-deModel u n rc = MK (DEModel rc) (mkUid u) n
+deModel u n rc = MK (DEModel rc) (mkUid' u) n
 
 -- | Smart constructor for 'DEModel's, deriving UID+Term from the 'RelationConcept'
 deModel' :: RelationConcept -> ModelKind e
@@ -84,7 +87,7 @@ equationalConstraints' qs = MK (EquationalConstraints qs) (modelNs $ qs ^. uid) 
 
 -- | Smart constructor for 'EquationalModel's
 equationalModel :: String -> NP -> QDefinition e -> ModelKind e
-equationalModel u n qd = MK (EquationalModel qd) (mkUid u) n
+equationalModel u n qd = MK (EquationalModel qd) (mkUid' u) n
 
 -- | Smart constructor for 'EquationalModel's, deriving UID+Term from the 'QDefinition'
 equationalModel' :: QDefinition e -> ModelKind e
@@ -92,7 +95,7 @@ equationalModel' qd = MK (EquationalModel qd) (modelNs $ qd ^. uid) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving Term from the 'QDefinition'
 equationalModelU :: String -> QDefinition e -> ModelKind e
-equationalModelU u qd = MK (EquationalModel qd) (mkUid u) (qd ^. term)
+equationalModelU u qd = MK (EquationalModel qd) (mkUid' u) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving UID from the 'QDefinition'
 equationalModelN :: NP -> QDefinition e -> ModelKind e
@@ -100,7 +103,7 @@ equationalModelN n qd = MK (EquationalModel qd) (modelNs $ qd ^. uid) n
 
 -- | Smart constructor for 'EquationalRealm's
 equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
-equationalRealm u n md = MK (EquationalRealm md) (mkUid u) n
+equationalRealm u n md = MK (EquationalRealm md) (mkUid' u) n
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID+Term from the 'MultiDefn'
 equationalRealm' :: MultiDefn e -> ModelKind e
@@ -108,7 +111,7 @@ equationalRealm' md = MK (EquationalRealm md) (modelNs $ md ^. uid) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's
 equationalRealmU :: String -> MultiDefn e -> ModelKind e
-equationalRealmU u md = MK (EquationalRealm md) (mkUid u) (md ^. term)
+equationalRealmU u md = MK (EquationalRealm md) (mkUid' u) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID from the 'MultiDefn'
 equationalRealmN :: NP -> MultiDefn e -> ModelKind e
@@ -116,14 +119,14 @@ equationalRealmN n md = MK (EquationalRealm md) (modelNs $ md ^. uid) n
 
 -- | Smart constructor for 'OthModel's
 othModel :: String -> NP -> RelationConcept -> ModelKind Expr
-othModel u n rc = MK (OthModel rc) (mkUid u) n
+othModel u n rc = MK (OthModel rc) (mkUid' u) n
 
 -- | Smart constructor for 'OthModel's, deriving UID+Term from the 'RelationConcept'
 othModel' :: RelationConcept -> ModelKind e
 othModel' rc = MK (OthModel rc) (modelNs $ rc ^. uid) (rc ^. term)
 
 -- | Finds the 'UID' of the 'ModelKinds'.
-instance HasUID        (ModelKinds e) where uid     = lensMk uid uid uid uid uid
+instance HasUID        (ModelKinds e) where uid     = getterMk uid uid uid uid uid
 -- | Finds the term ('NP') of the 'ModelKinds'.
 instance NamedIdea     (ModelKinds e) where term    = lensMk term term term term term
 -- | Finds the idea of the 'ModelKinds'.
@@ -201,6 +204,17 @@ lensMk ld lr lcs lq lmd = lens g s
           g = elimMk ld lr lcs lq lmd
           s :: ModelKinds e -> a -> ModelKinds e
           s mk_ = setMk mk_ ld lr lcs lq lmd
+
+-- | Make a 'Getter' for 'ModelKinds'.
+getterMk :: forall e a.
+     Getter DifferentialModel a
+  -> Getter RelationConcept a 
+  -> Getter (ConstraintSet e) a 
+  -> Getter (QDefinition e) a 
+  -> Getter (MultiDefn e) a
+  -> Getter (ModelKinds e) a
+getterMk gd gr gcs gq gmd = to $ \modelKinds ->
+    elimMk gd gr gcs gq gmd modelKinds
 
 -- | Extract a list of 'QDefinition's from a list of 'ModelKinds'.
 getEqModQds :: [ModelKind e] -> [QDefinition e]

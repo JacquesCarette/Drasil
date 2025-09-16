@@ -11,7 +11,7 @@ main = do
   setLocaleEncoding utf8
   dumpEverything fullSI printSetting ".drasil/"
   typeCheckSI fullSI
-  gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "HGHC_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) "HGHC_SRS") srs printSetting
   -- When ready to generate code, uncomment this file and Choices.hs
   --genCode thisChoices thisCode
   -- When ready to generate traceability graphs, uncomment this and import genDot and fullSI:

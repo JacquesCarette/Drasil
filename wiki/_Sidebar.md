@@ -24,7 +24,7 @@
   * [Quantifying Productivity and Ease of Use](Quantifying-Productivity-and-Ease-of-Use)
 * Design
   * [Attributes and Chunks](Attributes-and-Chunks)
-    * [June 7th, 2023 Meeting Notes](Attributes-and-Chunks%3a-Meeting-June-7th,-2023)
+    * [June 7th, 2023 Meeting Notes](Attributes-and-Chunks,-Meeting-June-7th,-2023)
     * [Investigation of Abbreviation Functions](Investigation-of-Abbreviation-Functions)
   * [Attributes of Datatypes](Attributes-of-Data-Types)
   * [Code Generation](Code-Generation)
@@ -71,7 +71,6 @@
       * [How Should We Handle Abbreviations?](How-Should-We-Handle-Abbreviations?)
     * [DefinedQuantityDict](DefinedQuantityDict)
     * [Concept Chunk (and Related Chunks)](Concept-Chunk-(and-Related-Chunks))
-    * [UnitalChunk](UnitalChunk)
   * [Refined Theories Version of Drasil](Refined-Theories-version-of-Drasil)
   * [Idealized Process](Idealized-Process)
   * [Chunk Redesign 2024](Chunk-Redesign-2024)

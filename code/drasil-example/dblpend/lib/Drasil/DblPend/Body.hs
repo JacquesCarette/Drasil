@@ -3,9 +3,11 @@ module Drasil.DblPend.Body where
 
 import Control.Lens ((^.))
 
+import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -13,45 +15,43 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (dong)
-import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
-import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
+import Data.Drasil.Concepts.Computation (inDatum)
+import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
-  physical, sysCont, software, softwareConstraint, softwareSys, srsDomains,
-  system, user, doccon, doccon', analysis)
-import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon, )
-import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
-import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
-import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
-import Data.Drasil.Concepts.Software (program, errMsg)
-import Data.Drasil.Quantities.Physics (physicscon)
-import Data.Drasil.Quantities.Math (unitVect, unitVectj)
-import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newtonSLR)
-import Data.Drasil.TheoryConcepts (inModel)
+  physical, sysCont, software, softwareConstraint, softwareSys,
+  system, user, analysis)
+import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
+import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
+import Data.Drasil.Concepts.Physics (gravity, physicCon', pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
+import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
+import Data.Drasil.Quantities.PhysicalProperties (len)
+import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
-import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
 import Drasil.DblPend.Assumptions (assumpDouble)
-import Drasil.DblPend.Concepts (rod, concepts, pendMotion, progName, firstRod, secondRod, firstObject, secondObject)
+import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject)
 import Drasil.DblPend.Goals (goals, goalsInputs)
 import Drasil.DblPend.DataDefs (dataDefs)
 import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
+import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
+import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
-  inConstraints, outConstraints, acronyms, pendDisAngle, constants)
+  inConstraints, outConstraints, acronyms, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
-  osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar)
-import Language.Drasil.Code (quantvar)
+  osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar, diffCodeChunk)
+import Language.Drasil.Code (ODEInfo (..))
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -60,11 +60,11 @@ printSetting = piSys fullSI Equational defaultConfiguration
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
   RefSec $      --This creates the Reference section of the SRS
-    RefProg intro      -- This add the introduction blob to the reference section  
+    RefProg intro      -- This add the introduction blob to the reference section
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-      , TAandA         -- Add table of abbreviation and acronym section
+      , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
@@ -100,58 +100,72 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [],  -- Adds Auxilliary constraint section
-  Bibliography                    -- Adds reference section
+     AuxConsProg progName [], -- Adds Auxilliary constraint section
+  Bibliography                -- Adds reference section
   ]
 
-si :: SystemInformation
-si = SI {
-  _sys         = progName, 
-  _kind        = Doc.srs,
-  _authors     = [dong],
-  _purpose     = [purp],
-  _background  = [], 
-  _quants      = symbolsAll,
-  _concepts    = [] :: [DefinedQuantityDict],
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = inputs,
-  _outputs     = outputs,
-  _defSequence = [] :: [Block SimpleQDef],
-  _constraints = inConstraints,
-  _constants   = constants,
-  _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
-}
+si :: System
+si = mkSystem progName Specification [dong]
+  [purp] [background] [scope] [motivation]
+  symbolsAll
+  tMods genDefns dataDefs iMods
+  []
+  inputs outputs inConstraints
+  constants
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
 
-symbolsAll :: [QuantityDict]
+motivation :: Sentence
+motivation = foldlSent_ [S "To simulate", phraseNP (motion `the_ofThe` pendulum),
+  S "and exhibit its chaotic characteristics"]
+
+background :: Sentence
+background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
+  S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
+  S "highly sensitive to initial conditions"]
+
+-- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is added to symbolsAll as it is used to create new chunks with pendDisAngle's UID suffixed in ODELibraries.hs.
+-- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
+symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ map qw [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo]
+  ++ map dqdWr [listToArray dp, arrayVecDepVar dblPenODEInfo, diffCodeChunk dp,
+  listToArray $ diffCodeChunk dp]
+  where dp = depVar dblPenODEInfo
+
+ideaDicts :: [IdeaDict]
+ideaDicts = 
+  -- Actual IdeaDicts
+  concepts ++
+  -- CIs
+  nw progName : map nw mathcon' ++ map nw physicCon'
+
+abbreviationsList :: [IdeaDict]
+abbreviationsList = 
+  -- DefinedQuantityDict abbreviations
+  map nw symbols ++
+  -- Other acronyms/abbreviations
+  nw progName : map nw acronyms
+
+conceptChunks :: [ConceptChunk]
+conceptChunks = 
+  -- ConceptChunks
+  physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
+  gravitationalConst, gravity] ++
+  -- UnitalChunks
+  [cw len]
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
-  (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
-    : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
-   map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++
-   map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
-   [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
-  (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz])
-  dataDefs iMods genDefns tMods concIns [] [] ([] :: [Reference])
+symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
+  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
 
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef]
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
-refDB :: ReferenceDB
-refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
 concIns = assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs
@@ -166,8 +180,14 @@ justification prog = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` p
                             (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate", phraseNP (motion
                             `the_ofThe` pendulum), (S "to exhibit its chaotic characteristics" !.),
-                            atStartNP (the program), S "documented here is called", phrase prog]
-
+                            S "The document describes the program called", phrase prog,
+                            S ", which is based on the original, manually created version of" +:+
+                            namedRef externalLinkRef (S "Double Pendulum")]
+                            
+externalLinkRef :: Reference
+externalLinkRef = makeURI "DblPendSRSLink" 
+  "https://github.com/Zhang-Zhi-ZZ/CAS741Project/tree/master/Double%20Pendulum" 
+  (shortname' $ S "DblPendSRSLink")                            
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------
@@ -178,7 +198,7 @@ justification prog = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` p
 ---------------------------------
 scope :: Sentence
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
-  sParen (getAcc twoD), phrase pendMotion, phrase problem,
+  sParen (short twoD), phrase pendMotion, phrase problem,
                    S "with various initial conditions"]
 
 ----------------------------------------------
@@ -206,24 +226,24 @@ charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
 sysCtxIntro :: CI -> Contents
 sysCtxIntro prog = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
-   S "A circle represents an entity external to the", phrase software
+   S "A circle represents an entity external" `S.toThe` phrase software
    `sC` phraseNP (the user), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", sParen (short prog) +:+. EmptyS,
-   S "Arrows are used to show the data flow between the", phraseNP (system
+   S "Arrows" `S.are` S "used to show the data flow between the", phraseNP (system
    `andIts` environment)]
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
    `andThe` user), S "is through an application programming" +:+.
-   phrase interface, S "The responsibilities of the", phraseNP (user 
+   phrase interface, S "The responsibilities" `S.ofThe` phraseNP (user 
    `andThe` system), S "are as follows"]
 
 sysCtxUsrResp :: CI -> [Sentence]
 sysCtxUsrResp prog = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
-  physical) +:+ S "state of the" +:+ phrase motion +:+ S "and the" +:+ plural inDatum +:+ S "related to the" +:+
+  physical) +:+ S "state" `S.ofThe` phrase motion +:+ S "and the" +:+ plural inDatum +:+ S "related to the" +:+
   phrase prog `sC` S "ensuring no errors in the" +:+
   plural datum +:+. S "entry",
-  S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ Doc.variable),
+  S "Ensure that consistent units" `S.are` S "used for" +:+. pluralNP (combineNINI input_ Doc.variable),
   S "Ensure required" +:+
   namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
   S "are appropriate for any particular" +:+
@@ -231,7 +251,7 @@ sysCtxUsrResp prog = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
 
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
-  phrase input_ +:+. S "instead of a floating point number",
+  phrase input_ +:+. (S "instead" `S.ofA` S "floating point number"),
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
   pluralNP (physical `and_` softwareConstraint),
   S "Calculate the required" +:+. plural output_, 

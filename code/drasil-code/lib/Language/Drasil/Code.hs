@@ -1,17 +1,16 @@
 -- | Re-export code-related smart constructors for external code writing and generation.
 module Language.Drasil.Code (
   makeCode, createCodeFiles,
-  generator, generateCode,
+  generator, generateCode, generateCodeProc,
   readWithDataDesc, sampleInputDD,
   Choices(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), makeArchit,
   Architecture(..), DataInfo(..), makeData, Maps(..), makeMaps, spaceToCodeType,
   makeConstraints, makeODE, makeDocConfig, makeLogConfig, LogConfig(..),
   OptionalFeatures(..), makeOptFeats, ExtLib(..), ImplementationType(..), Logging(..),
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..),
-  InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces,
-  AuxFile(..), getSampleData, Visibility(..), defaultChoices,
-  CodeSpec(..), funcUID, asVC, codeSpec,
-  ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar,
+  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..),
+  getSampleData, Visibility(..), defaultChoices, CodeSpec(..), OldCodeSpec(..), codeSpec,
+  HasOldCodeSpec(..), funcUID, asVC, ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar,
   privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
   ExternalLibrary, Step, FunctionInterface, Argument, externalLib, choiceSteps,
@@ -42,14 +41,17 @@ module Language.Drasil.Code (
   field,
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..),
   ODELibPckg(..), mkODELib, mkODELibNoPath,
-  unPP, unJP, unCSP, unCPPP, unSP
+  unPP, unJP, unCSP, unCPPP, unSP, unJLP
   -- Language.Drasil.Chunk.NamedArgument
   , NamedArgument, narg
+  -- Language.Drasil.Code.CodeQuantityDicts
+  , codeDQDs
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
 
-import Language.Drasil.Code.Imperative.Generator (generator, generateCode)
+import Language.Drasil.Code.Imperative.Generator (generator, generateCode,
+  generateCodeProc)
 
 import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc,
   sampleInputDD)
@@ -86,30 +88,25 @@ import Language.Drasil.Code.Lang (Lang(..))
 
 import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   ConstraintBehaviour(..), ImplementationType(..), Logging(..), Modularity(..),
-  Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..),
-  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..),
-  getSampleData, Visibility(..), defaultChoices, makeArchit, Architecture(..),
-  DataInfo(..), makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints,
-  makeODE, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
+  Structure(..), ConstantStructure(..), ConstantRepr(..), CodeConcept(..),
+  matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), getSampleData,
+  Visibility(..), defaultChoices, makeArchit, Architecture(..), DataInfo(..),
+  makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints, makeODE,
+  makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
   makeOptFeats, ExtLib(..))
 
-import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, asVC, codeSpec)
+import Drasil.Code.CodeExpr (field)
 
+import Language.Drasil.CodeSpec (CodeSpec(..), OldCodeSpec(..), HasOldCodeSpec(..), 
+  codeSpec, funcUID, asVC)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..),
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
-
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
   AuxiliarySym(..))
-
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), PackData(..))
-
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeFuncChunk,
   quantvar, quantfunc, ccObjVar, listToArray)
-
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
-
-import Language.Drasil.CodeExpr (field)
-
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, odeInfo', ODEOptions(..),
   odeOptions, ODEMethod(..))
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib,
@@ -120,3 +117,6 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (unCSP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (unCPPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (unSP)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (unJLP)
+
+import Language.Drasil.Code.CodeQuantityDicts (codeDQDs)

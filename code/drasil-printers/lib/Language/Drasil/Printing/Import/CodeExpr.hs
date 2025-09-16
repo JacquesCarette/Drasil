@@ -3,10 +3,11 @@
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 
+import Drasil.Code.CodeExpr.Development
+
 import Language.Drasil (DomainDesc(..), Inclusive(..),
   RTopology(..), RealInterval(..), UID, LiteralC (int))
-import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.CodeExpr.Development
+import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development
 
 import qualified Language.Drasil.Printing.AST as P
@@ -40,8 +41,7 @@ neg' (Lit (Dbl _))          = True
 neg' (Lit (Int _))          = True
 neg' (Lit (ExactDbl _))     = True
 neg' Operator{}             = True
-neg' (AssocA MulI _)        = True
-neg' (AssocA MulRe _)       = True
+neg' (AssocA Mul _)        = True
 neg' (LABinaryOp Index _ _) = True
 neg' (UnaryOp _ _)          = True
 neg' (UnaryOpB _ _)         = True
@@ -59,12 +59,12 @@ indx sm (C c) i = f s
   where
     i' = codeExpr i sm
     s = lookupC (sm ^. stg) (sm ^. ckdb) c
-    f (Corners [] [] [] [b] e) =
+    f (S.Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
       P.Row [P.Row [e', P.Sub (P.Row [b', P.MO P.Comma, i'])]] -- FIXME, extra Row
-    f a@(Variable _) = P.Row [symbol a, P.Sub i']
-    f a@(Label _)    = P.Row [symbol a, P.Sub i']
+    f a@(S.Variable _) = P.Row [symbol a, P.Sub i']
+    f a@(S.Label _)    = P.Row [symbol a, P.Sub i']
 --    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
     f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [codeExpr a sm], P.Sub $ codeExpr i sm]
@@ -101,20 +101,17 @@ eopMuls _ (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Int
 
 -- | Helper function for translating 'EOperator's.
 eop :: PrintingInformation -> AssocArithOper -> DomainDesc t CodeExpr CodeExpr -> CodeExpr -> P.Expr
-eop sm AddI = eopAdds sm
-eop sm AddRe = eopAdds sm
-eop sm MulI = eopMuls sm
-eop sm MulRe = eopMuls sm
+eop sm Add = eopAdds sm
+eop sm Mul = eopMuls sm
 
 -- | Translate 'CodeExpr's to printable layout AST 'Expr's.
 codeExpr :: CodeExpr -> PrintingInformation -> P.Expr
 codeExpr (Lit l)                  sm = literal l sm
 codeExpr (AssocB And l)           sm = assocExpr P.And (precB And) l sm
 codeExpr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
-codeExpr (AssocA AddI l)          sm = P.Row $ addExpr l AddI sm
-codeExpr (AssocA AddRe l)         sm = P.Row $ addExpr l AddRe sm
-codeExpr (AssocA MulI l)          sm = P.Row $ mulExpr l MulI sm
-codeExpr (AssocA MulRe l)         sm = P.Row $ mulExpr l MulRe sm
+codeExpr (AssocA Add l)           sm = P.Row $ addExpr l Add sm
+codeExpr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
+codeExpr (AssocC SUnion l)        sm = P.Row $ mulExpr l Mul sm
 codeExpr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 codeExpr (FCall f [x] [])         sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ codeExpr x sm]
@@ -128,45 +125,51 @@ codeExpr (Case _ ps)              sm =
   if length ps < 2
     then error "Attempting to use multi-case codeExpr incorrectly"
     else P.Case (zip (map (flip codeExpr sm . fst) ps) (map (flip codeExpr sm . snd) ps))
-codeExpr (Matrix a)               sm = P.Mtx $ map (map (`codeExpr` sm)) a
-codeExpr (UnaryOp Log u)          sm = mkCall sm P.Log u
-codeExpr (UnaryOp Ln u)           sm = mkCall sm P.Ln u
-codeExpr (UnaryOp Sin u)          sm = mkCall sm P.Sin u
-codeExpr (UnaryOp Cos u)          sm = mkCall sm P.Cos u
-codeExpr (UnaryOp Tan u)          sm = mkCall sm P.Tan u
-codeExpr (UnaryOp Sec u)          sm = mkCall sm P.Sec u
-codeExpr (UnaryOp Csc u)          sm = mkCall sm P.Csc u
-codeExpr (UnaryOp Cot u)          sm = mkCall sm P.Cot u
-codeExpr (UnaryOp Arcsin u)       sm = mkCall sm P.Arcsin u
-codeExpr (UnaryOp Arccos u)       sm = mkCall sm P.Arccos u
-codeExpr (UnaryOp Arctan u)       sm = mkCall sm P.Arctan u
-codeExpr (UnaryOp Exp u)          sm = P.Row [P.MO P.Exp, P.Sup $ codeExpr u sm]
-codeExpr (UnaryOp Abs u)          sm = P.Fenced P.Abs P.Abs $ codeExpr u sm
-codeExpr (UnaryOpB Not u)         sm = P.Row [P.MO P.Not, codeExpr u sm]
-codeExpr (UnaryOpVN Norm u)       sm = P.Fenced P.Norm P.Norm $ codeExpr u sm
-codeExpr (UnaryOpVN Dim u)        sm = mkCall sm P.Dim u
-codeExpr (UnaryOp Sqrt u)         sm = P.Sqrt $ codeExpr u sm
-codeExpr (UnaryOp Neg u)          sm = neg sm u
-codeExpr (UnaryOpVV NegV u)       sm = neg sm u
-codeExpr (ArithBinaryOp Frac a b) sm = P.Div (codeExpr a sm) (codeExpr b sm)
-codeExpr (ArithBinaryOp Pow a b)  sm = pow sm a b
-codeExpr (ArithBinaryOp Subt a b) sm = P.Row [codeExpr a sm, P.MO P.Subt, codeExpr b sm]
-codeExpr (BoolBinaryOp Impl a b)  sm = mkBOp sm P.Impl a b
-codeExpr (BoolBinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
-codeExpr (EqBinaryOp Eq a b)      sm = mkBOp sm P.Eq a b
-codeExpr (EqBinaryOp NEq a b)     sm = mkBOp sm P.NEq a b
-codeExpr (LABinaryOp Index a b)   sm = indx sm a b
-codeExpr (OrdBinaryOp Lt a b)     sm = mkBOp sm P.Lt a b
-codeExpr (OrdBinaryOp Gt a b)     sm = mkBOp sm P.Gt a b
-codeExpr (OrdBinaryOp LEq a b)    sm = mkBOp sm P.LEq a b
-codeExpr (OrdBinaryOp GEq a b)    sm = mkBOp sm P.GEq a b
-codeExpr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
-codeExpr (VVVBinaryOp Cross a b)  sm = mkBOp sm P.Cross a b
-codeExpr (VVVBinaryOp VAdd a b)   sm = mkBOp sm P.VAdd a b
-codeExpr (VVVBinaryOp VSub a b)   sm = mkBOp sm P.VSub a b
-codeExpr (NVVBinaryOp Scale a b)  sm = mkBOp sm P.Scale a b
-codeExpr (Operator o d e)         sm = eop sm o d e
-codeExpr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
+codeExpr (Matrix a)                  sm = P.Mtx $ map (map (`codeExpr` sm)) a
+codeExpr (Set _ a)                   sm = P.Row $ map (`codeExpr` sm) a
+codeExpr (Variable _ l)              sm = codeExpr l sm
+codeExpr (UnaryOp Log u)             sm = mkCall sm P.Log u
+codeExpr (UnaryOp Ln u)              sm = mkCall sm P.Ln u
+codeExpr (UnaryOp Sin u)             sm = mkCall sm P.Sin u
+codeExpr (UnaryOp Cos u)             sm = mkCall sm P.Cos u
+codeExpr (UnaryOp Tan u)             sm = mkCall sm P.Tan u
+codeExpr (UnaryOp Sec u)             sm = mkCall sm P.Sec u
+codeExpr (UnaryOp Csc u)             sm = mkCall sm P.Csc u
+codeExpr (UnaryOp Cot u)             sm = mkCall sm P.Cot u
+codeExpr (UnaryOp Arcsin u)          sm = mkCall sm P.Arcsin u
+codeExpr (UnaryOp Arccos u)          sm = mkCall sm P.Arccos u
+codeExpr (UnaryOp Arctan u)          sm = mkCall sm P.Arctan u
+codeExpr (UnaryOp Exp u)             sm = P.Row [P.MO P.Exp, P.Sup $ codeExpr u sm]
+codeExpr (UnaryOp Abs u)             sm = P.Fenced P.Abs P.Abs $ codeExpr u sm
+codeExpr (UnaryOpB Not u)            sm = P.Row [P.MO P.Not, codeExpr u sm]
+codeExpr (UnaryOpVN Norm u)          sm = P.Fenced P.Norm P.Norm $ codeExpr u sm
+codeExpr (UnaryOpVN Dim u)           sm = mkCall sm P.Dim u
+codeExpr (UnaryOp Sqrt u)            sm = P.Sqrt $ codeExpr u sm
+codeExpr (UnaryOp Neg u)             sm = neg sm u
+codeExpr (UnaryOpVV NegV u)          sm = neg sm u
+codeExpr (ArithBinaryOp Frac a b)    sm = P.Div (codeExpr a sm) (codeExpr b sm)
+codeExpr (ArithBinaryOp Pow a b)     sm = pow sm a b
+codeExpr (ArithBinaryOp Subt a b)    sm = P.Row [codeExpr a sm, P.MO P.Subt, codeExpr b sm]
+codeExpr (BoolBinaryOp Impl a b)     sm = mkBOp sm P.Impl a b
+codeExpr (BoolBinaryOp Iff a b)      sm = mkBOp sm P.Iff a b
+codeExpr (EqBinaryOp Eq a b)         sm = mkBOp sm P.Eq a b
+codeExpr (EqBinaryOp NEq a b)        sm = mkBOp sm P.NEq a b
+codeExpr (LABinaryOp Index a b)      sm = indx sm a b
+codeExpr (LABinaryOp IndexOf a b)    sm = indx sm a b
+codeExpr (OrdBinaryOp Lt a b)        sm = mkBOp sm P.Lt a b
+codeExpr (OrdBinaryOp Gt a b)        sm = mkBOp sm P.Gt a b
+codeExpr (OrdBinaryOp LEq a b)       sm = mkBOp sm P.LEq a b
+codeExpr (OrdBinaryOp GEq a b)       sm = mkBOp sm P.GEq a b
+codeExpr (VVNBinaryOp Dot a b)       sm = mkBOp sm P.Dot a b
+codeExpr (VVVBinaryOp Cross a b)     sm = mkBOp sm P.Cross a b
+codeExpr (VVVBinaryOp VAdd a b)      sm = mkBOp sm P.VAdd a b
+codeExpr (VVVBinaryOp VSub a b)      sm = mkBOp sm P.VSub a b
+codeExpr (NVVBinaryOp Scale a b)     sm = mkBOp sm P.Scale a b
+codeExpr (ESSBinaryOp SAdd a b)      sm = mkBOp sm P.SAdd a b
+codeExpr (ESSBinaryOp SRemove a b)   sm = mkBOp sm P.SRemove a b
+codeExpr (ESBBinaryOp SContains a b) sm = mkBOp sm P.SContains a b
+codeExpr (Operator o d e)            sm = eop sm o d e
+codeExpr (RealI c ri)                sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri
 
 -- | Common method of converting associative operations into printable layout AST.
@@ -202,17 +205,15 @@ withParens prI a b = P.Row [parens (codeExpr a prI), P.Sup (codeExpr b prI)]
 
 -- | Helper for properly rendering exponents.
 pow :: PrintingInformation -> CodeExpr -> CodeExpr -> P.Expr
-pow prI a@(AssocA AddI _)          b = withParens prI a b
-pow prI a@(AssocA AddRe _)         b = withParens prI a b
-pow prI a@(AssocA MulI _)          b = withParens prI a b
-pow prI a@(AssocA MulRe _)         b = withParens prI a b
+pow prI a@(AssocA Add _)          b = withParens prI a b
+pow prI a@(AssocA Mul _)         b = withParens prI a b
 pow prI a@(ArithBinaryOp Subt _ _) b = withParens prI a b
 pow prI a@(ArithBinaryOp Frac _ _) b = withParens prI a b
 pow prI a@(ArithBinaryOp Pow _ _)  b = withParens prI a b
 pow prI a                          b = P.Row [codeExpr a prI, P.Sup (codeExpr b prI)]
 
 -- | Print a 'RealInterval'.
-renderRealInt :: PrintingInformation -> Symbol -> RealInterval CodeExpr CodeExpr -> P.Expr
+renderRealInt :: PrintingInformation -> S.Symbol -> RealInterval CodeExpr CodeExpr -> P.Expr
 renderRealInt st s (Bounded (Inc,a) (Inc,b)) =
   P.Row [codeExpr a st, P.MO P.LEq, symbol s, P.MO P.LEq, codeExpr b st]
 renderRealInt st s (Bounded (Inc,a) (Exc,b)) =

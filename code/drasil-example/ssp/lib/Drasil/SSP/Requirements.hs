@@ -4,13 +4,15 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.DocLang (mkInputPropsTable, mkMaintainableNFR)
+import Drasil.DocLang (mkInputPropsTable, mkMaintainableNFR, mkCorrectNFR,
+  mkUnderstandableNFR, mkReusableNFR)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
 
+import Utils.Drasil (mkTable)
+
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (code,
-  datum, funcReqDom, input_, mg, mis, name_, nonFuncReqDom,
-  output_, physicalConstraint, property, symbol_, user, value, propOfCorSol)
+import Data.Drasil.Concepts.Documentation (datum, funcReqDom, input_, name_,
+  output_, physicalConstraint, symbol_, user, value, propOfCorSol)
 import Data.Drasil.Concepts.Physics (twoD)
 
 import Drasil.SSP.Defs (crtSlpSrf, slope, slpSrf)
@@ -90,7 +92,7 @@ usingIMs = foldlList Comma List $ map refS [fctSfty, nrmShrFor, intsliceFs]
 
 ------------------
 inputDataTable :: LabelledContent
-inputDataTable = mkInputPropsTable (dqdWr coords : map dqdWr inputs) readAndStore
+inputDataTable = mkInputPropsTable (dqdWr coords : map dqdWr inputs)
   --FIXME: this has to be seperate since coords is a different type
 
 inputsToOutput :: [DefinedQuantityDict]
@@ -100,27 +102,20 @@ inputsToOutput = constF : map dqdWr [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip,
 inputsToOutputTable :: LabelledContent
 inputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
   Table [titleize symbol_, titleize name_] (mkTable [ch, phrase] inputsToOutput)
-  (atStart' input_ +:+ S "to be Returned as" +:+ titleize output_ `follows`
-    displayInput) True
+  (atStart' input_ +:+ S "to be Returned as" +:+ titleize output_) True
 
 {-Nonfunctional Requirements-}
 nonFuncReqs :: [ConceptInstance]
 nonFuncReqs = [correct, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
-correct = cic "correct" (foldlSent [
-  atStartNP' (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", refS (propCorSol [] [])
-  ]) "Correct" nonFuncReqDom
+correct = mkCorrectNFR "correct" "Correctness"
 
 understandable :: ConceptInstance
-understandable = cic "understandable" (foldlSent [
-  atStartNP (the code), S "is modularized with complete",
-  phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
+understandable = mkUnderstandableNFR "understandable" "Understandability"
 
 reusable :: ConceptInstance
-reusable = cic "reusable" (foldlSent [
-  atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
+reusable = mkReusableNFR "reusable" "Reusability"
 
 maintainable :: ConceptInstance
-maintainable = mkMaintainableNFR "maintainable" 10 "Maintainable"
+maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"

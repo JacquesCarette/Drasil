@@ -7,11 +7,16 @@ github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
+language: Haskell2010
+default-extensions:
+- StrictData
+
 extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
 - lens
+- drasil-database
 - drasil-lang
 - drasil-metadata
 
@@ -23,7 +28,6 @@ library:
   source-dirs: lib
   exposed-modules:
   - Theory.Drasil
-  - Data.Drasil.TheoryConcepts
   when:
   - condition: false
     other-modules: Paths_drasil_theory

@@ -13,7 +13,9 @@
 \usepackage{caption}
 \usepackage{graphics}
 \usepackage{svg}
+\usepackage{float}
 \usepackage{enumitem}
+\usepackage{adjustbox}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -22,6 +24,9 @@
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
+}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Single Pendulum}
 \author{Olu Owojaiye}
@@ -161,7 +166,7 @@ Uncert. & Typical Uncertainty
 \end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
-A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The program documented here is called Single Pendulum.
+A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The document describes the program called Single Pendulum , which is based on the original, manually created version of \hyperref{https://github.com/Zhang-Zhi-ZZ/CAS741Project/tree/master/Double%20Pendulum}{}{}{Double Pendulum}.
 
 The following section provides an overview of the Software Requirements Specification (SRS) for Single Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
@@ -193,7 +198,7 @@ This section provides general information about the system. It identifies the in
 \label{Sec:SysContext}
 \hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (SglPend). Arrows are used to show the data flow between the system and its environment.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../../../../datafiles/sglpend/SystemContextFigure.png}
 \caption{System Context}
@@ -245,11 +250,11 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:PhysSyst}
 The physical system of SglPend, as shown in \hyperref[Figure:sglpend]{Fig:sglpend}, includes the following elements:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[PS1:]{The rod.}
 \item[PS2:]{The mass.}
-\end{itemize}
-\begin{figure}
+\end{description}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../../../../datafiles/sglpend/sglpend.jpg}
 \caption{The physical system}
@@ -260,9 +265,9 @@ The physical system of SglPend, as shown in \hyperref[Figure:sglpend]{Fig:sglpen
 \label{Sec:GoalStmt}
 Given the mass and length of the rod, initial angle of the mass and the gravitational constant, the goal statement is:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Motion-of-the-mass:\phantomsection\label{motionMass}]{Calculate the motion of the mass.}
-\end{itemize}
+\end{description}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern SglPend are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
@@ -271,13 +276,12 @@ The instance models that govern SglPend are presented in the \hyperref[Sec:IMs]{
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[twoDMotion:\phantomsection\label{twoDMotion}]{The pendulum motion is two-dimensional (2D).}
 \item[cartSys:\phantomsection\label{cartSys}]{A Cartesian coordinate system is used.}
 \item[cartSysR:\phantomsection\label{cartSysR}]{The Cartesian coordinate system is right-handed where positive $x$-axis and $y$-axis point right up.}
 \item[yAxisDir:\phantomsection\label{yAxisDir}]{The direction of the $y$-axis is directed opposite to gravity.}
-\item[startOrigin:\phantomsection\label{startOrigin}]{The pendulum is attached to the origin.}
-\end{itemize}
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that SglPend is based on.
@@ -294,7 +298,7 @@ Label & Acceleration
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
+           \resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -323,7 +327,7 @@ Label & Velocity
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
+           \resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -352,7 +356,7 @@ Label & Newton's second law of motion
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}\text{(}t\text{)}
+           \resizeExpression{\symbf{F}=m\,\symbf{a}\text{(}t\text{)}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -384,7 +388,7 @@ Label & Newton's second law for rotational motion
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{τ}=\symbf{I} α
+           \resizeExpression{\symbf{τ}=\symbf{I}\,α}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -424,7 +428,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+           \resizeExpression{{v_{\text{x}}}=ω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -447,27 +451,27 @@ RefBy &
 At a given point in time, velocity may be defined as
 
 \begin{displaymath}
-\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
+\resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 We also know the horizontal position
 
 \begin{displaymath}
-{p_{\text{x}}}={L_{\text{rod}}} \sin\left({θ_{p}}\right)
+\resizeExpression{{p_{\text{x}}}={L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}
 \end{displaymath}
 Applying this,
 
 \begin{displaymath}
-{v_{\text{x}}}=\frac{\,d{L_{\text{rod}}} \sin\left({θ_{p}}\right)}{\,dt}
+\resizeExpression{{v_{\text{x}}}=\frac{\,d{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}{\,dt}}
 \end{displaymath}
 ${L_{\text{rod}}}$ is constant with respect to time, so
 
 \begin{displaymath}
-{v_{\text{x}}}={L_{\text{rod}}} \frac{\,d\sin\left({θ_{p}}\right)}{\,dt}
+\resizeExpression{{v_{\text{x}}}={L_{\text{rod}}}\,\frac{\,d\sin\left({θ_{p}}\right)}{\,dt}}
 \end{displaymath}
 Therefore, using the chain rule,
 
 \begin{displaymath}
-{v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+\resizeExpression{{v_{\text{x}}}=ω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -484,7 +488,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+           \resizeExpression{{v_{\text{y}}}=ω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -507,27 +511,27 @@ RefBy &
 At a given point in time, velocity may be defined as
 
 \begin{displaymath}
-\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
+\resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 We also know the vertical position
 
 \begin{displaymath}
-{p_{\text{y}}}=-{L_{\text{rod}}} \cos\left({θ_{p}}\right)
+\resizeExpression{{p_{\text{y}}}=-{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}
 \end{displaymath}
 Applying this,
 
 \begin{displaymath}
-{v_{\text{y}}}=-\left(\frac{\,d{L_{\text{rod}}} \cos\left({θ_{p}}\right)}{\,dt}\right)
+\resizeExpression{{v_{\text{y}}}=-\left(\frac{\,d{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}{\,dt}\right)}
 \end{displaymath}
 ${L_{\text{rod}}}$ is constant with respect to time, so
 
 \begin{displaymath}
-{v_{\text{y}}}=-{L_{\text{rod}}} \frac{\,d\cos\left({θ_{p}}\right)}{\,dt}
+\resizeExpression{{v_{\text{y}}}=-{L_{\text{rod}}}\,\frac{\,d\cos\left({θ_{p}}\right)}{\,dt}}
 \end{displaymath}
 Therefore, using the chain rule,
 
 \begin{displaymath}
-{v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+\resizeExpression{{v_{\text{y}}}=ω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -544,7 +548,7 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {a_{\text{x}}}=-ω^{2} {L_{\text{rod}}} \sin\left({θ_{p}}\right)+α {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+           \resizeExpression{{a_{\text{x}}}=-ω^{2}\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)+α\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -568,27 +572,27 @@ RefBy &
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
+\resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 Earlier, we found the horizontal velocity to be
 
 \begin{displaymath}
-{v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+\resizeExpression{{v_{\text{x}}}=ω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}
 \end{displaymath}
 Applying this to our equation for acceleration
 
 \begin{displaymath}
-{a_{\text{x}}}=\frac{\,dω {L_{\text{rod}}} \cos\left({θ_{p}}\right)}{\,dt}
+\resizeExpression{{a_{\text{x}}}=\frac{\,dω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}{\,dt}}
 \end{displaymath}
 By the product and chain rules, we find
 
 \begin{displaymath}
-{a_{\text{x}}}=\frac{\,dω}{\,dt} {L_{\text{rod}}} \cos\left({θ_{p}}\right)-ω {L_{\text{rod}}} \sin\left({θ_{p}}\right) \frac{\,d{θ_{p}}}{\,dt}
+\resizeExpression{{a_{\text{x}}}=\frac{\,dω}{\,dt}\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)-ω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)\,\frac{\,d{θ_{p}}}{\,dt}}
 \end{displaymath}
 Simplifying,
 
 \begin{displaymath}
-{a_{\text{x}}}=-ω^{2} {L_{\text{rod}}} \sin\left({θ_{p}}\right)+α {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+\resizeExpression{{a_{\text{x}}}=-ω^{2}\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)+α\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -605,7 +609,7 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {a_{\text{y}}}=ω^{2} {L_{\text{rod}}} \cos\left({θ_{p}}\right)+α {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+           \resizeExpression{{a_{\text{y}}}=ω^{2}\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)+α\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -629,27 +633,27 @@ RefBy &
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
+\resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 Earlier, we found the vertical velocity to be
 
 \begin{displaymath}
-{v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+\resizeExpression{{v_{\text{y}}}=ω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}
 \end{displaymath}
 Applying this to our equation for acceleration
 
 \begin{displaymath}
-{a_{\text{y}}}=\frac{\,dω {L_{\text{rod}}} \sin\left({θ_{p}}\right)}{\,dt}
+\resizeExpression{{a_{\text{y}}}=\frac{\,dω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}{\,dt}}
 \end{displaymath}
 By the product and chain rules, we find
 
 \begin{displaymath}
-{a_{\text{y}}}=\frac{\,dω}{\,dt} {L_{\text{rod}}} \sin\left({θ_{p}}\right)+ω {L_{\text{rod}}} \cos\left({θ_{p}}\right) \frac{\,d{θ_{p}}}{\,dt}
+\resizeExpression{{a_{\text{y}}}=\frac{\,dω}{\,dt}\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)+ω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)\,\frac{\,d{θ_{p}}}{\,dt}}
 \end{displaymath}
 Simplifying,
 
 \begin{displaymath}
-{a_{\text{y}}}=ω^{2} {L_{\text{rod}}} \cos\left({θ_{p}}\right)+α {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+\resizeExpression{{a_{\text{y}}}=ω^{2}\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)+α\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -666,7 +670,7 @@ Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{F}=m {a_{\text{x}}}=-\symbf{T} \sin\left({θ_{p}}\right)
+           \resizeExpression{\symbf{F}=m\,{a_{\text{x}}}=-\symbf{T}\,\sin\left({θ_{p}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -688,7 +692,7 @@ RefBy &
 \paragraph{Detailed derivation of force on the pendulum:}
 \label{GD:hForceOnPendulumDeriv}
 \begin{displaymath}
-\symbf{F}=m {a_{\text{x}}}=-\symbf{T} \sin\left({θ_{p}}\right)
+\resizeExpression{\symbf{F}=m\,{a_{\text{x}}}=-\symbf{T}\,\sin\left({θ_{p}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -705,7 +709,7 @@ Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{F}=m {a_{\text{y}}}=\symbf{T} \cos\left({θ_{p}}\right)-m \symbf{g}
+           \resizeExpression{\symbf{F}=m\,{a_{\text{y}}}=\symbf{T}\,\cos\left({θ_{p}}\right)-m\,\symbf{g}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -728,7 +732,7 @@ RefBy &
 \paragraph{Detailed derivation of force on the pendulum:}
 \label{GD:vForceOnPendulumDeriv}
 \begin{displaymath}
-\symbf{F}=m {a_{\text{y}}}=\symbf{T} \cos\left({θ_{p}}\right)-m \symbf{g}
+\resizeExpression{\symbf{F}=m\,{a_{\text{y}}}=\symbf{T}\,\cos\left({θ_{p}}\right)-m\,\symbf{g}}
 \end{displaymath}
 \medskip
 \noindent
@@ -745,7 +749,7 @@ Units & ${\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}
+           \resizeExpression{Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -771,37 +775,37 @@ RefBy & \hyperref[GD:periodPend]{GD:periodPend} and \hyperref[IM:calOfAngularDis
 Consider the torque on a pendulum defined in \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}. The force providing the restoring torque is the component of weight of the pendulum bob that acts along the arc length. The torque is the length of the string ${L_{\text{rod}}}$ multiplied by the component of the net force that is perpendicular to the radius of the arc. The minus sign indicates the torque acts in the opposite direction of the angular displacement:
 
 \begin{displaymath}
-\symbf{τ}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)
+\resizeExpression{\symbf{τ}=-{L_{\text{rod}}}\,m\,\symbf{g}\,\sin\left({θ_{p}}\right)}
 \end{displaymath}
 So then
 
 \begin{displaymath}
-\symbf{I} α=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)
+\resizeExpression{\symbf{I}\,α=-{L_{\text{rod}}}\,m\,\symbf{g}\,\sin\left({θ_{p}}\right)}
 \end{displaymath}
 Therefore,
 
 \begin{displaymath}
-\symbf{I} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)
+\resizeExpression{\symbf{I}\,\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}}\,m\,\symbf{g}\,\sin\left({θ_{p}}\right)}
 \end{displaymath}
 Substituting for $\symbf{I}$
 
 \begin{displaymath}
-m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)
+\resizeExpression{m\,{L_{\text{rod}}}^{2}\,\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}}\,m\,\symbf{g}\,\sin\left({θ_{p}}\right)}
 \end{displaymath}
 Crossing out $m$ and ${L_{\text{rod}}}$ we have
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right) \sin\left({θ_{p}}\right)
+\resizeExpression{\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right)\,\sin\left({θ_{p}}\right)}
 \end{displaymath}
 For small angles, we approximate sin ${θ_{p}}$ to ${θ_{p}}$
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right) {θ_{p}}
+\resizeExpression{\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right)\,{θ_{p}}}
 \end{displaymath}
 Because this equation, has the same form as the equation for simple harmonic motion the solution is easy to find.  The angular frequency
 
 \begin{displaymath}
-Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}
+\resizeExpression{Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}}
 \end{displaymath}
 \medskip
 \noindent
@@ -818,7 +822,7 @@ Units & ${\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}
+           \resizeExpression{T=2\,π\,\sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -844,12 +848,12 @@ RefBy &
 The period of the pendulum can be defined from the general definition for the equation of \hyperref[GD:angFrequencyGD]{angular frequency}
 
 \begin{displaymath}
-Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}
+\resizeExpression{Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}}
 \end{displaymath}
 Therefore from the data definition of the equation for \hyperref[DD:angFrequencyDD]{angular frequency}, we have
 
 \begin{displaymath}
-T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}
+\resizeExpression{T=2\,π\,\sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}}
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -873,7 +877,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {{p_{\text{x}}}^{\text{i}}}={L_{\text{rod}}} \sin\left({θ_{i}}\right)
+           \resizeExpression{{{p_{\text{x}}}^{\text{i}}}={L_{\text{rod}}}\,\sin\left({θ_{i}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -913,7 +917,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {{p_{\text{y}}}^{\text{i}}}=-{L_{\text{rod}}} \cos\left({θ_{i}}\right)
+           \resizeExpression{{{p_{\text{y}}}^{\text{i}}}=-{L_{\text{rod}}}\,\cos\left({θ_{i}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -953,7 +957,7 @@ Units & ${\text{Hz}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           f=\frac{1}{T}
+           \resizeExpression{f=\frac{1}{T}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -967,7 +971,7 @@ Notes & $f$ is the number of back and forth swings in one second
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[GD:periodPend]{GD:periodPend}, \hyperref[DD:periodSHMDD]{DD:periodSHMDD}, and \hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}
+RefBy & \hyperref[GD:periodPend]{GD:periodPend}, \hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}, and \hyperref[DD:periodSHMDD]{DD:periodSHMDD}
         
 \\ \bottomrule
 \end{tabular}
@@ -991,7 +995,7 @@ Units & ${\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           Ω=\frac{2 π}{T}
+           \resizeExpression{Ω=\frac{2\,π}{T}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1030,7 +1034,7 @@ Units & ${\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           T=\frac{1}{f}
+           \resizeExpression{T=\frac{1}{f}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1072,21 +1076,21 @@ Output & ${θ_{p}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    {L_{\text{rod}}}\gt{}0
+                    \resizeExpression{{L_{\text{rod}}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    {θ_{i}}\gt{}0
+                    \resizeExpression{{θ_{i}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \symbf{g}\gt{}0
+                    \resizeExpression{\symbf{g}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     {θ_{p}}\gt{}0
+                     \resizeExpression{{θ_{p}}\gt{}0}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           {θ_{p}}\left(t\right)={θ_{i}} \cos\left(Ω t\right)
+           \resizeExpression{{θ_{p}}\left(t\right)={θ_{i}}\,\cos\left(Ω\,t\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1113,27 +1117,27 @@ RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calcAngPos]{FR:C
 When the pendulum is displaced to an initial angle and released, the pendulum swings back and forth with periodic motion. By applying \hyperref[TM:NewtonSecLawRotMot]{Newton's second law for rotational motion}, the equation of motion for the pendulum may be obtained:
 
 \begin{displaymath}
-\symbf{τ}=\symbf{I} α
+\resizeExpression{\symbf{τ}=\symbf{I}\,α}
 \end{displaymath}
 Where $\symbf{τ}$ denotes the torque, $\symbf{I}$ denotes the moment of inertia and $α$ denotes the angular acceleration. This implies:
 
 \begin{displaymath}
--m \symbf{g} \sin\left({θ_{p}}\right) {L_{\text{rod}}}=m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}
+\resizeExpression{-m\,\symbf{g}\,\sin\left({θ_{p}}\right)\,{L_{\text{rod}}}=m\,{L_{\text{rod}}}^{2}\,\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}}
 \end{displaymath}
 And rearranged as:
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}} \sin\left({θ_{p}}\right)=0
+\resizeExpression{\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}}\,\sin\left({θ_{p}}\right)=0}
 \end{displaymath}
 If the amplitude of angular displacement is small enough, we can approximate $\sin\left({θ_{p}}\right)={θ_{p}}$ for the purpose of a simple pendulum at very small angles. Then the equation of motion reduces to the equation of simple harmonic motion:
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}} {θ_{p}}=0
+\resizeExpression{\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}}\,{θ_{p}}=0}
 \end{displaymath}
 Thus the simple harmonic motion is:
 
 \begin{displaymath}
-{θ_{p}}\left(t\right)={θ_{i}} \cos\left(Ω t\right)
+\resizeExpression{{θ_{p}}\left(t\right)={θ_{i}}\,\cos\left(Ω\,t\right)}
 \end{displaymath}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
@@ -1171,14 +1175,14 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInptVals}]{Check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
 \item[Calculate-Angular-Position-Of-Mass:\phantomsection\label{calcAngPos}]{Calculate the following values: $θ$ and ${θ_{p}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}).}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output ${L_{\text{rod}}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}).}
-\end{itemize}
+\end{description}
 \begin{longtblr}
-[caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
+[caption={Required Inputs}]
 {colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
@@ -1197,82 +1201,80 @@ ${θ_{p}}$ & Displacement angle of the pendulum & ${\text{rad}}$
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
-\begin{itemize}
-\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the \hyperref[Sec:CorSolProps]{properties of a correct solution}.}
-\item[Portable:\phantomsection\label{portable}]{The code is able to be run in different environments.}
-\end{itemize}
+\begin{description}[font=\normalfont]
+\item[Correctness:\phantomsection\label{correct}]{The outputs of the code have the \hyperref[Sec:CorSolProps]{properties of a correct solution}.}
+\item[Portability:\phantomsection\label{portable}]{The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.}
+\end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
 
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
-{colspec={l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin]{A:startOrigin}}
+{colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}}
 \\
-\hyperref[twoDMotion]{A:twoDMotion} &  &  &  &  & 
+\hyperref[twoDMotion]{A:twoDMotion} &  &  &  & 
 \\
-\hyperref[cartSys]{A:cartSys} &  &  &  &  & 
+\hyperref[cartSys]{A:cartSys} &  &  &  & 
 \\
-\hyperref[cartSysR]{A:cartSysR} &  &  &  &  & 
+\hyperref[cartSysR]{A:cartSysR} &  &  &  & 
 \\
-\hyperref[yAxisDir]{A:yAxisDir} &  &  &  &  & 
-\\
-\hyperref[startOrigin]{A:startOrigin} &  &  &  &  & 
+\hyperref[yAxisDir]{A:yAxisDir} &  &  &  & 
 \label{Table:TraceMatAvsA}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
-{colspec={l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin]{A:startOrigin}}
+{colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}}
 \\
-\hyperref[DD:positionIX]{DD:positionIX} &  &  &  &  & 
+\hyperref[DD:positionIX]{DD:positionIX} &  &  &  & 
 \\
-\hyperref[DD:positionIY]{DD:positionIY} &  &  &  &  & 
+\hyperref[DD:positionIY]{DD:positionIY} &  &  &  & 
 \\
-\hyperref[DD:frequencyDD]{DD:frequencyDD} &  &  &  &  & 
+\hyperref[DD:frequencyDD]{DD:frequencyDD} &  &  &  & 
 \\
-\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD} &  &  &  &  & 
+\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD} &  &  &  & 
 \\
-\hyperref[DD:periodSHMDD]{DD:periodSHMDD} &  &  &  &  & 
+\hyperref[DD:periodSHMDD]{DD:periodSHMDD} &  &  &  & 
 \\
-\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  & 
+\hyperref[TM:acceleration]{TM:acceleration} &  &  &  & 
 \\
-\hyperref[TM:velocity]{TM:velocity} &  &  &  &  & 
+\hyperref[TM:velocity]{TM:velocity} &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  & 
+\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} &  &  &  &  & 
+\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} &  &  &  & 
 \\
-\hyperref[GD:velocityIX]{GD:velocityIX} &  &  &  &  & 
+\hyperref[GD:velocityIX]{GD:velocityIX} &  &  &  & 
 \\
-\hyperref[GD:velocityIY]{GD:velocityIY} &  &  &  &  & 
+\hyperref[GD:velocityIY]{GD:velocityIY} &  &  &  & 
 \\
-\hyperref[GD:accelerationIX]{GD:accelerationIX} &  &  &  &  & 
+\hyperref[GD:accelerationIX]{GD:accelerationIX} &  &  &  & 
 \\
-\hyperref[GD:accelerationIY]{GD:accelerationIY} &  &  &  &  & 
+\hyperref[GD:accelerationIY]{GD:accelerationIY} &  &  &  & 
 \\
-\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum} &  &  &  &  & 
+\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum} &  &  &  & 
 \\
-\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum} &  &  &  &  & 
+\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum} &  &  &  & 
 \\
-\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD} &  &  &  &  & 
+\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD} &  &  &  & 
 \\
-\hyperref[GD:periodPend]{GD:periodPend} &  &  &  &  & 
+\hyperref[GD:periodPend]{GD:periodPend} &  &  &  & 
 \\
-\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement} &  &  &  &  & 
+\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement} &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  & 
+\hyperref[correct]{NFR:Correctness} &  &  &  & 
 \\
-\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  & 
+\hyperref[portable]{NFR:Portability} &  &  &  & 
 \\
-\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  & 
+\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correct} &  &  &  &  & 
+\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  & 
 \\
-\hyperref[portable]{NFR:Portable} &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  & 
 \label{Table:TraceMatAvsAll}
 \end{longtblr}
 \begin{longtblr}
@@ -1320,9 +1322,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:positionIX]{DD:positionIX}} & \textbf{\hyperref[DD:positionIY]{DD:positionIY}} & \textbf{\hyperref[DD:frequencyDD]{DD:frequencyDD}} & \textbf{\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD}} & \textbf{\hyperref[DD:periodSHMDD]{DD:periodSHMDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD:velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD:velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD:accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD:accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}} & \textbf{\hyperref[GD:periodPend]{GD:periodPend}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[portable]{NFR:Portable}}
+\textbf{} & \textbf{\hyperref[DD:positionIX]{DD:positionIX}} & \textbf{\hyperref[DD:positionIY]{DD:positionIY}} & \textbf{\hyperref[DD:frequencyDD]{DD:frequencyDD}} & \textbf{\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD}} & \textbf{\hyperref[DD:periodSHMDD]{DD:periodSHMDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD:velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD:velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD:accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD:accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}} & \textbf{\hyperref[GD:periodPend]{GD:periodPend}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[portable]{NFR:Portability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
 \\
 \hyperref[motionMass]{GS:Motion-of-the-mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1331,43 +1337,39 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
-\\
-\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/allvsall}
 \caption{TraceGraphAllvsAll}
@@ -1414,7 +1416,7 @@ address={Washington, USA}}
 @article{smithKoothoor2016,
 author={Smith, W. Spencer and Koothoor, Nirmitha},
 title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},
-journal={ Nuclear Engineering and Technology},
+journal={Nuclear Engineering and Technology},
 year={2016},
 month=apr,
 volume={48},

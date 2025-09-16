@@ -398,19 +398,19 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The program documented here is called Single Pendulum.
+          A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The document describes the program called Single Pendulum , which is based on the original, manually created version of <a href="https://github.com/Zhang-Zhi-ZZ/CAS741Project/tree/master/Double%20Pendulum">Double Pendulum</a>.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for Single Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for Single Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of SglPend. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SglPend. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of <span title="Single Pendulum">SglPend</span>. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of <span title="Single Pendulum">SglPend</span>. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this <span title="software requirements specification">SRS</span> will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
-              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the <span title="software requirements specification">SRS</span> fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
             </p>
           </div>
         </div>
@@ -418,7 +418,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes the analysis of a two-dimensional (2D) pendulum motion problem with various initial conditions.
+              The scope of the requirements includes the analysis of a two-dimensional (<span title="two-dimensional">2D</span>) pendulum motion problem with various initial conditions.
             </p>
           </div>
         </div>
@@ -426,7 +426,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of SglPend can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of <span title="Single Pendulum">SglPend</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -434,7 +434,7 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
               The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>.
@@ -453,12 +453,12 @@
           <div class="subsection">
             <h2>System Context</h2>
             <p class="paragraph">
-              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (SglPend). Arrows are used to show the data flow between the system and its environment.
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (<span title="Single Pendulum">SglPend</span>). Arrows are used to show the data flow between the system and its environment.
             </p>
             <div id="Figure:sysCtxDiag">
               <figure>
                 <img src="../../../../datafiles/sglpend/SystemContextFigure.png" alt="System Context" >
-                <figcaption>System Context</figcaption>
+                <figcaption>Figure: System Context</figcaption>
               </figure>
             </div>
             <p class="paragraph">
@@ -478,7 +478,7 @@
                 </ul>
               </li>
               <li>
-                SglPend Responsibilities
+                <span title="Single Pendulum">SglPend</span> Responsibilities
                 <ul class="list">
                   <li>
                     Detect data type mismatch, such as a string of characters input instead of a floating point number.
@@ -497,7 +497,7 @@
           <div class="subsection">
             <h2>User Characteristics</h2>
             <p class="paragraph">
-              The end user of SglPend should have an understanding of high school physics, high school calculus and ordinary differential equations.
+              The end user of <span title="Single Pendulum">SglPend</span> should have an understanding of high school physics, high school calculus and ordinary differential equations.
             </p>
           </div>
         </div>
@@ -541,16 +541,20 @@
               <div class="subsubsection">
                 <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The physical system of SglPend, as shown in <a href=#Figure:sglpend>Fig:sglpend</a>, includes the following elements:
+                  The physical system of <span title="Single Pendulum">SglPend</span>, as shown in <a href=#Figure:sglpend>Fig:sglpend</a>, includes the following elements:
                 </p>
                 <div class="list">
-                  <p>PS1: The rod.</p>
-                  <p>PS2: The mass.</p>
+                  <p>
+                    <span title="physical system description">PS</span>1: The rod.
+                  </p>
+                  <p>
+                    <span title="physical system description">PS</span>2: The mass.
+                  </p>
                 </div>
                 <div id="Figure:sglpend">
                   <figure>
                     <img src="../../../../datafiles/sglpend/sglpend.jpg" alt="The physical system" width="70.0%" >
-                    <figcaption>The physical system</figcaption>
+                    <figcaption>Figure: The physical system</figcaption>
                   </figure>
                 </div>
               </div>
@@ -576,7 +580,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern SglPend are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern <span title="Single Pendulum">SglPend</span> are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -587,7 +591,7 @@
                 <div class="list">
                   <p>
                     <div id="twoDMotion">
-                      twoDMotion: The pendulum motion is two-dimensional (2D).
+                      twoDMotion: The pendulum motion is two-dimensional (<span title="two-dimensional">2D</span>).
                     </div>
                   </p>
                   <p>
@@ -605,11 +609,6 @@
                       yAxisDir: The direction of the <em>y</em>-axis is directed opposite to gravity.
                     </div>
                   </p>
-                  <p>
-                    <div id="startOrigin">
-                      startOrigin: The pendulum is attached to the origin.
-                    </div>
-                  </p>
                 </div>
               </div>
             </div>
@@ -617,7 +616,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that SglPend is based on.
+                  This section focuses on the general equations and laws that <span title="Single Pendulum">SglPend</span> is based on.
                 </p>
                 <div id="TM:acceleration">
                   <table class="tdefn">
@@ -715,7 +714,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{F}=m \symbf{a}\text{(}t\text{)}\]</td>
+                      <td>\[\symbf{F}=m\,\symbf{a}\text{(}t\text{)}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -761,7 +760,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{τ}=\symbf{I} α\]</td>
+                      <td>\[\symbf{τ}=\symbf{I}\,α\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -830,7 +829,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)\]
+                        \[{v_{\text{x}}}=ω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -872,15 +871,15 @@
                     </p>
                     \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">We also know the horizontal position</p>
-                    \[{p_{\text{x}}}={L_{\text{rod}}} \sin\left({θ_{p}}\right)\]
+                    \[{p_{\text{x}}}={L_{\text{rod}}}\,\sin\left({θ_{p}}\right)\]
                     <p class="paragraph">Applying this,</p>
-                    \[{v_{\text{x}}}=\frac{\,d{L_{\text{rod}}} \sin\left({θ_{p}}\right)}{\,dt}\]
+                    \[{v_{\text{x}}}=\frac{\,d{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}{\,dt}\]
                     <p class="paragraph">
                       <em>L<sub>rod</sub></em> is constant with respect to time, so
                     </p>
-                    \[{v_{\text{x}}}={L_{\text{rod}}} \frac{\,d\sin\left({θ_{p}}\right)}{\,dt}\]
+                    \[{v_{\text{x}}}={L_{\text{rod}}}\,\frac{\,d\sin\left({θ_{p}}\right)}{\,dt}\]
                     <p class="paragraph">Therefore, using the chain rule,</p>
-                    \[{v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)\]
+                    \[{v_{\text{x}}}=ω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)\]
                   </div>
                 </div>
                 <div id="GD:velocityIY">
@@ -906,7 +905,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)\]
+                        \[{v_{\text{y}}}=ω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -948,15 +947,15 @@
                     </p>
                     \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">We also know the vertical position</p>
-                    \[{p_{\text{y}}}=-{L_{\text{rod}}} \cos\left({θ_{p}}\right)\]
+                    \[{p_{\text{y}}}=-{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)\]
                     <p class="paragraph">Applying this,</p>
-                    \[{v_{\text{y}}}=-\left(\frac{\,d{L_{\text{rod}}} \cos\left({θ_{p}}\right)}{\,dt}\right)\]
+                    \[{v_{\text{y}}}=-\left(\frac{\,d{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}{\,dt}\right)\]
                     <p class="paragraph">
                       <em>L<sub>rod</sub></em> is constant with respect to time, so
                     </p>
-                    \[{v_{\text{y}}}=-{L_{\text{rod}}} \frac{\,d\cos\left({θ_{p}}\right)}{\,dt}\]
+                    \[{v_{\text{y}}}=-{L_{\text{rod}}}\,\frac{\,d\cos\left({θ_{p}}\right)}{\,dt}\]
                     <p class="paragraph">Therefore, using the chain rule,</p>
-                    \[{v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)\]
+                    \[{v_{\text{y}}}=ω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)\]
                   </div>
                 </div>
                 <div id="GD:accelerationIX">
@@ -982,7 +981,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{a_{\text{x}}}=-ω^{2} {L_{\text{rod}}} \sin\left({θ_{p}}\right)+α {L_{\text{rod}}} \cos\left({θ_{p}}\right)\]
+                        \[{a_{\text{x}}}=-ω^{2}\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)+α\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1027,15 +1026,15 @@
                     <p class="paragraph">
                       Earlier, we found the horizontal velocity to be
                     </p>
-                    \[{v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)\]
+                    \[{v_{\text{x}}}=ω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)\]
                     <p class="paragraph">
                       Applying this to our equation for acceleration
                     </p>
-                    \[{a_{\text{x}}}=\frac{\,dω {L_{\text{rod}}} \cos\left({θ_{p}}\right)}{\,dt}\]
+                    \[{a_{\text{x}}}=\frac{\,dω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}{\,dt}\]
                     <p class="paragraph">By the product and chain rules, we find</p>
-                    \[{a_{\text{x}}}=\frac{\,dω}{\,dt} {L_{\text{rod}}} \cos\left({θ_{p}}\right)-ω {L_{\text{rod}}} \sin\left({θ_{p}}\right) \frac{\,d{θ_{p}}}{\,dt}\]
+                    \[{a_{\text{x}}}=\frac{\,dω}{\,dt}\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)-ω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)\,\frac{\,d{θ_{p}}}{\,dt}\]
                     <p class="paragraph">Simplifying,</p>
-                    \[{a_{\text{x}}}=-ω^{2} {L_{\text{rod}}} \sin\left({θ_{p}}\right)+α {L_{\text{rod}}} \cos\left({θ_{p}}\right)\]
+                    \[{a_{\text{x}}}=-ω^{2}\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)+α\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)\]
                   </div>
                 </div>
                 <div id="GD:accelerationIY">
@@ -1061,7 +1060,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{a_{\text{y}}}=ω^{2} {L_{\text{rod}}} \cos\left({θ_{p}}\right)+α {L_{\text{rod}}} \sin\left({θ_{p}}\right)\]
+                        \[{a_{\text{y}}}=ω^{2}\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)+α\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1106,15 +1105,15 @@
                     <p class="paragraph">
                       Earlier, we found the vertical velocity to be
                     </p>
-                    \[{v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)\]
+                    \[{v_{\text{y}}}=ω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)\]
                     <p class="paragraph">
                       Applying this to our equation for acceleration
                     </p>
-                    \[{a_{\text{y}}}=\frac{\,dω {L_{\text{rod}}} \sin\left({θ_{p}}\right)}{\,dt}\]
+                    \[{a_{\text{y}}}=\frac{\,dω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}{\,dt}\]
                     <p class="paragraph">By the product and chain rules, we find</p>
-                    \[{a_{\text{y}}}=\frac{\,dω}{\,dt} {L_{\text{rod}}} \sin\left({θ_{p}}\right)+ω {L_{\text{rod}}} \cos\left({θ_{p}}\right) \frac{\,d{θ_{p}}}{\,dt}\]
+                    \[{a_{\text{y}}}=\frac{\,dω}{\,dt}\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)+ω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)\,\frac{\,d{θ_{p}}}{\,dt}\]
                     <p class="paragraph">Simplifying,</p>
-                    \[{a_{\text{y}}}=ω^{2} {L_{\text{rod}}} \cos\left({θ_{p}}\right)+α {L_{\text{rod}}} \sin\left({θ_{p}}\right)\]
+                    \[{a_{\text{y}}}=ω^{2}\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)+α\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)\]
                   </div>
                 </div>
                 <div id="GD:hForceOnPendulum">
@@ -1134,7 +1133,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m {a_{\text{x}}}=-\symbf{T} \sin\left({θ_{p}}\right)\]
+                        \[\symbf{F}=m\,{a_{\text{x}}}=-\symbf{T}\,\sin\left({θ_{p}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1166,7 +1165,7 @@
                 <div id="GD:hForceOnPendulumDeriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the pendulum:</h4>
-                    \[\symbf{F}=m {a_{\text{x}}}=-\symbf{T} \sin\left({θ_{p}}\right)\]
+                    \[\symbf{F}=m\,{a_{\text{x}}}=-\symbf{T}\,\sin\left({θ_{p}}\right)\]
                   </div>
                 </div>
                 <div id="GD:vForceOnPendulum">
@@ -1186,7 +1185,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m {a_{\text{y}}}=\symbf{T} \cos\left({θ_{p}}\right)-m \symbf{g}\]
+                        \[\symbf{F}=m\,{a_{\text{y}}}=\symbf{T}\,\cos\left({θ_{p}}\right)-m\,\symbf{g}\]
                       </td>
                     </tr>
                     <tr>
@@ -1221,7 +1220,7 @@
                 <div id="GD:vForceOnPendulumDeriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the pendulum:</h4>
-                    \[\symbf{F}=m {a_{\text{y}}}=\symbf{T} \cos\left({θ_{p}}\right)-m \symbf{g}\]
+                    \[\symbf{F}=m\,{a_{\text{y}}}=\symbf{T}\,\cos\left({θ_{p}}\right)-m\,\symbf{g}\]
                   </div>
                 </div>
                 <div id="GD:angFrequencyGD">
@@ -1288,21 +1287,21 @@
                     <p class="paragraph">
                       Consider the torque on a pendulum defined in <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>. The force providing the restoring torque is the component of weight of the pendulum bob that acts along the arc length. The torque is the length of the string <em>L<sub>rod</sub></em> multiplied by the component of the net force that is perpendicular to the radius of the arc. The minus sign indicates the torque acts in the opposite direction of the angular displacement:
                     </p>
-                    \[\symbf{τ}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)\]
+                    \[\symbf{τ}=-{L_{\text{rod}}}\,m\,\symbf{g}\,\sin\left({θ_{p}}\right)\]
                     <p class="paragraph">So then</p>
-                    \[\symbf{I} α=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)\]
+                    \[\symbf{I}\,α=-{L_{\text{rod}}}\,m\,\symbf{g}\,\sin\left({θ_{p}}\right)\]
                     <p class="paragraph">Therefore,</p>
-                    \[\symbf{I} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)\]
+                    \[\symbf{I}\,\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}}\,m\,\symbf{g}\,\sin\left({θ_{p}}\right)\]
                     <p class="paragraph">Substituting for <em><b>I</b></em></p>
-                    \[m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)\]
+                    \[m\,{L_{\text{rod}}}^{2}\,\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}}\,m\,\symbf{g}\,\sin\left({θ_{p}}\right)\]
                     <p class="paragraph">
                       Crossing out <em>m</em> and <em>L<sub>rod</sub></em> we have
                     </p>
-                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right) \sin\left({θ_{p}}\right)\]
+                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right)\,\sin\left({θ_{p}}\right)\]
                     <p class="paragraph">
                       For small angles, we approximate sin <em>θ<sub>p</sub></em> to <em>θ<sub>p</sub></em>
                     </p>
-                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right) {θ_{p}}\]
+                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right)\,{θ_{p}}\]
                     <p class="paragraph">
                       Because this equation, has the same form as the equation for simple harmonic motion the solution is easy to find.  The angular frequency
                     </p>
@@ -1325,7 +1324,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}\]</td>
+                      <td>\[T=2\,π\,\sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1372,7 +1371,7 @@
                     <p class="paragraph">
                       Therefore from the data definition of the equation for <a href=#DD:angFrequencyDD>angular frequency</a>, we have
                     </p>
-                    \[T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}\]
+                    \[T=2\,π\,\sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}\]
                   </div>
                 </div>
               </div>
@@ -1408,7 +1407,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{{p_{\text{x}}}^{\text{i}}}={L_{\text{rod}}} \sin\left({θ_{i}}\right)\]
+                        \[{{p_{\text{x}}}^{\text{i}}}={L_{\text{rod}}}\,\sin\left({θ_{i}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1473,7 +1472,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{{p_{\text{y}}}^{\text{i}}}=-{L_{\text{rod}}} \cos\left({θ_{i}}\right)\]
+                        \[{{p_{\text{y}}}^{\text{i}}}=-{L_{\text{rod}}}\,\cos\left({θ_{i}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1560,7 +1559,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#GD:periodPend>GD:periodPend</a>, <a href=#DD:periodSHMDD>DD:periodSHMDD</a>, and <a href=#GD:angFrequencyGD>GD:angFrequencyGD</a>
+                          <a href=#GD:periodPend>GD:periodPend</a>, <a href=#GD:angFrequencyGD>GD:angFrequencyGD</a>, and <a href=#DD:periodSHMDD>DD:periodSHMDD</a>
                         </p>
                       </td>
                     </tr>
@@ -1586,7 +1585,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[Ω=\frac{2 π}{T}\]</td>
+                      <td>\[Ω=\frac{2\,π}{T}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1719,7 +1718,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{θ_{p}}\left(t\right)={θ_{i}} \cos\left(Ω t\right)\]</td>
+                      <td>\[{θ_{p}}\left(t\right)={θ_{i}}\,\cos\left(Ω\,t\right)\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1764,19 +1763,19 @@
                     <p class="paragraph">
                       When the pendulum is displaced to an initial angle and released, the pendulum swings back and forth with periodic motion. By applying <a href=#TM:NewtonSecLawRotMot>Newton's second law for rotational motion</a>, the equation of motion for the pendulum may be obtained:
                     </p>
-                    \[\symbf{τ}=\symbf{I} α\]
+                    \[\symbf{τ}=\symbf{I}\,α\]
                     <p class="paragraph">
                       Where <em><b>τ</b></em> denotes the torque, <em><b>I</b></em> denotes the moment of inertia and <em>α</em> denotes the angular acceleration. This implies:
                     </p>
-                    \[-m \symbf{g} \sin\left({θ_{p}}\right) {L_{\text{rod}}}=m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}\]
+                    \[-m\,\symbf{g}\,\sin\left({θ_{p}}\right)\,{L_{\text{rod}}}=m\,{L_{\text{rod}}}^{2}\,\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}\]
                     <p class="paragraph">And rearranged as:</p>
-                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}} \sin\left({θ_{p}}\right)=0\]
+                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}}\,\sin\left({θ_{p}}\right)=0\]
                     <p class="paragraph">
                       If the amplitude of angular displacement is small enough, we can approximate <em>sin(θ<sub>p</sub>) = θ<sub>p</sub></em> for the purpose of a simple pendulum at very small angles. Then the equation of motion reduces to the equation of simple harmonic motion:
                     </p>
-                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}} {θ_{p}}=0\]
+                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}}\,{θ_{p}}=0\]
                     <p class="paragraph">Thus the simple harmonic motion is:</p>
-                    \[{θ_{p}}\left(t\right)={θ_{i}} \cos\left(Ω t\right)\]
+                    \[{θ_{p}}\left(t\right)={θ_{i}}\,\cos\left(Ω\,t\right)\]
                   </div>
                 </div>
               </div>
@@ -1793,7 +1792,7 @@
                       <th>Var</th>
                       <th>Physical Constraints</th>
                       <th>Typical Value</th>
-                      <th>Uncert.</th>
+                      <th><span title="typical uncertainty">Uncert.</span></th>
                     </tr>
                     <tr>
                       <td><em>L<sub>rod</sub></em></td>
@@ -1908,9 +1907,7 @@
                   <td><em>rad</em></td>
                 </tr>
               </table>
-              <p class="caption">
-                Required Inputs following <a href=#inputValues>FR:Input-Values</a>
-              </p>
+              <p class="caption">Required Inputs</p>
             </div>
           </div>
         </div>
@@ -1923,12 +1920,12 @@
             <div class="list">
               <p>
                 <div id="correct">
-                  Correct: The outputs of the code have the <a href=#Sec:CorSolProps>properties of a correct solution</a>.
+                  Correctness: The outputs of the code have the <a href=#Sec:CorSolProps>properties of a correct solution</a>.
                 </div>
               </p>
               <p>
                 <div id="portable">
-                  Portable: The code is able to be run in different environments.
+                  Portability: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.
                 </div>
               </p>
             </div>
@@ -1950,11 +1947,9 @@
               <th><a href=#cartSys>A:cartSys</a></th>
               <th><a href=#cartSysR>A:cartSysR</a></th>
               <th><a href=#yAxisDir>A:yAxisDir</a></th>
-              <th><a href=#startOrigin>A:startOrigin</a></th>
             </tr>
             <tr>
               <td><a href=#twoDMotion>A:twoDMotion</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1966,7 +1961,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#cartSysR>A:cartSysR</a></td>
@@ -1974,19 +1968,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#yAxisDir>A:yAxisDir</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#startOrigin>A:startOrigin</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2005,11 +1989,9 @@
               <th><a href=#cartSys>A:cartSys</a></th>
               <th><a href=#cartSysR>A:cartSysR</a></th>
               <th><a href=#yAxisDir>A:yAxisDir</a></th>
-              <th><a href=#startOrigin>A:startOrigin</a></th>
             </tr>
             <tr>
               <td><a href=#DD:positionIX>DD:positionIX</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2021,11 +2003,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:frequencyDD>DD:frequencyDD</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2037,11 +2017,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:periodSHMDD>DD:periodSHMDD</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2053,11 +2031,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:velocity>TM:velocity</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2069,11 +2045,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2085,11 +2059,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:velocityIY>GD:velocityIY</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2101,11 +2073,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:accelerationIY>GD:accelerationIY</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2117,11 +2087,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:vForceOnPendulum>GD:vForceOnPendulum</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2133,11 +2101,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:periodPend>GD:periodPend</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2151,6 +2117,19 @@
               <td></td>
               <td></td>
               <td></td>
+            </tr>
+            <tr>
+              <td><a href=#correct>NFR:Correctness</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR:Portability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
             </tr>
             <tr>
@@ -2159,11 +2138,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#verifyInptVals>FR:Verify-Input-Values</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2177,27 +2154,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#outputValues>FR:Output-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#correct>NFR:Correct</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#portable>NFR:Portable</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2642,17 +2601,71 @@
               <th>
                 <a href=#IM:calOfAngularDisplacement>IM:calOfAngularDisplacement</a>
               </th>
+              <th><a href=#correct>NFR:Correctness</a></th>
+              <th><a href=#portable>NFR:Portability</a></th>
               <th><a href=#inputValues>FR:Input-Values</a></th>
               <th><a href=#verifyInptVals>FR:Verify-Input-Values</a></th>
               <th>
                 <a href=#calcAngPos>FR:Calculate-Angular-Position-Of-Mass</a>
               </th>
               <th><a href=#outputValues>FR:Output-Values</a></th>
-              <th><a href=#correct>NFR:Correct</a></th>
-              <th><a href=#portable>NFR:Portable</a></th>
             </tr>
             <tr>
               <td><a href=#motionMass>GS:Motion-of-the-mass</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#correct>NFR:Correctness</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR:Portability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2788,60 +2801,6 @@
               <td></td>
               <td></td>
             </tr>
-            <tr>
-              <td><a href=#correct>NFR:Correct</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#portable>NFR:Portable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
           </table>
           <p class="caption">
             Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items
@@ -2853,31 +2812,31 @@
         <div id="Figure:TraceGraphAvsA">
           <figure>
             <img src="../../../../traceygraphs/sglpend/avsa.svg" alt="TraceGraphAvsA" >
-            <figcaption>TraceGraphAvsA</figcaption>
+            <figcaption>Figure: TraceGraphAvsA</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAvsAll">
           <figure>
             <img src="../../../../traceygraphs/sglpend/avsall.svg" alt="TraceGraphAvsAll" >
-            <figcaption>TraceGraphAvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAvsAll</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphRefvsRef">
           <figure>
             <img src="../../../../traceygraphs/sglpend/refvsref.svg" alt="TraceGraphRefvsRef" >
-            <figcaption>TraceGraphRefvsRef</figcaption>
+            <figcaption>Figure: TraceGraphRefvsRef</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsR">
           <figure>
             <img src="../../../../traceygraphs/sglpend/allvsr.svg" alt="TraceGraphAllvsR" >
-            <figcaption>TraceGraphAllvsR</figcaption>
+            <figcaption>Figure: TraceGraphAllvsR</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsAll">
           <figure>
             <img src="../../../../traceygraphs/sglpend/allvsall.svg" alt="TraceGraphAllvsAll" >
-            <figcaption>TraceGraphAllvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAllvsAll</figcaption>
           </figure>
         </div>
         <p class="paragraph">
@@ -2911,53 +2870,44 @@
     <div id="Sec:References">
       <div class="section">
         <h1>References</h1>
-        <ul class="hide-list-style">
-          <li>
-            <div id="hibbeler2004">
-              [1]: Hibbeler, R. C. <em>Engineering Mechanics: Dynamics</em>. Pearson Prentice Hall, 2004. Print.
-            </div>
-          </li>
-          <li>
-            <div id="koothoor2013">
-              [2]: Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-            </div>
-          </li>
-          <li>
-            <div id="parnasClements1986">
-              [3]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
-            </div>
-          </li>
-          <li>
-            <div id="smithKoothoor2016">
-              [4]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
-            </div>
-          </li>
-          <li>
-            <div id="smithLai2005">
-              [5]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-            </div>
-          </li>
-          <li>
-            <div id="smithEtAl2007">
-              [6]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
-            </div>
-          </li>
-          <li>
-            <div id="accelerationWiki">
-              [7]: Wikipedia Contributors. <em>Acceleration</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Acceleration">https://en.wikipedia.org/wiki/Acceleration</a>.
-            </div>
-          </li>
-          <li>
-            <div id="cartesianWiki">
-              [8]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
-            </div>
-          </li>
-          <li>
-            <div id="velocityWiki">
-              [9]: Wikipedia Contributors. <em>Velocity</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Velocity">https://en.wikipedia.org/wiki/Velocity</a>.
-            </div>
-          </li>
-        </ul>
+        <dl class="reference-list">
+          <dt id="hibbeler2004">[<b>hibbeler2004</b>]</dt>
+          <dd>
+            Hibbeler, R. C. <em>Engineering Mechanics: Dynamics</em>. Pearson Prentice Hall, 2004. Print.
+          </dd>
+          <dt id="koothoor2013">[<b>koothoor2013</b>]</dt>
+          <dd>
+            Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+          </dd>
+          <dt id="parnasClements1986">[<b>parnasClements1986</b>]</dt>
+          <dd>
+            Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+          </dd>
+          <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+          </dd>
+          <dt id="smithLai2005">[<b>smithLai2005</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+          </dd>
+          <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
+          <dd>
+            Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
+          </dd>
+          <dt id="accelerationWiki">[<b>accelerationWiki</b>]</dt>
+          <dd>
+            Wikipedia Contributors. <em>Acceleration</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Acceleration">https://en.wikipedia.org/wiki/Acceleration</a>.
+          </dd>
+          <dt id="cartesianWiki">[<b>cartesianWiki</b>]</dt>
+          <dd>
+            Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
+          </dd>
+          <dt id="velocityWiki">[<b>velocityWiki</b>]</dt>
+          <dd>
+            Wikipedia Contributors. <em>Velocity</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Velocity">https://en.wikipedia.org/wiki/Velocity</a>.
+          </dd>
+        </dl>
       </div>
     </div>
   </body>

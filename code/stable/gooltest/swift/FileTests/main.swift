@@ -50,12 +50,12 @@ do {
     throw "Error reading from file."
 }
 var fileLine: String
-var goolLine: [String]
-goolLine = [Int](stride(from: 0, to: goolContents[0].count, by: 1)).map({(i: Int) -> String in goolContents[0][i]})
-fileLine = goolLine.joined(separator: " ")
+fileLine = goolContents[0][0]
+assert( fileLine != "" , "First line should not be empty.")
 var fileContents: [String] = []
 
-goolContents = [Int](stride(from: 3, to: goolContents.count, by: 1)).map({(i: Int) -> [String] in goolContents[i]})
+goolContents = [Int](stride(from: 2, to: goolContents.count, by: 1)).map({(i: Int) -> [String] in goolContents[i]})
 fileContents = goolContents.map({(l: [String]) -> String in l.joined(separator: " ")})
 
 print(fileContents)
+assert( fileContents.count > 0 , "fileContents should not be empty.")

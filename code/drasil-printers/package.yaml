@@ -7,6 +7,10 @@ github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
+language: Haskell2010
+default-extensions:
+- StrictData
+
 extra-source-files: []
 
 dependencies:
@@ -14,11 +18,13 @@ dependencies:
 - lens
 - pretty
 - containers
+- MissingH
+- filepath
 - directory
 - drasil-data
 - drasil-database
 - drasil-lang
-- drasil-sysinfo
+- drasil-system
 - drasil-theory
 - drasil-utils
 - split
@@ -30,6 +36,7 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
+  - Drasil.Database.SearchTools
   - Language.Drasil.Printers
   when:
   - condition: false

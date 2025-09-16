@@ -43,7 +43,7 @@ ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
 -- FIXME (variable "i") is a horrible hack
 ctrOfMassEqn :: ModelExpr
-ctrOfMassEqn = sumAll (variable "j") (sy massj `mulRe` sy posj) $/ sy mTot
+ctrOfMassEqn = sumAll (variable "j") (sy massj $* sy posj) $/ sy mTot
 
 -- DD2 : Linear displacement --
 
@@ -199,7 +199,7 @@ chasles = mkQuantDef' velB (nounPhraseSP "Chasles' theorem") chaslesEqn
 
 -- The last two terms in the denominator should be cross products.
 chaslesEqn :: Expr
-chaslesEqn = sy velO `addRe` cross (sy  QP.angularVelocity) (sy rOB)
+chaslesEqn = sy velO $+ cross (sy  QP.angularVelocity) (sy rOB)
 
 chaslesThmNote :: Sentence
 chaslesThmNote = foldlSent [atStartNP (the QP.linearVelocity),
@@ -218,7 +218,7 @@ impulseV :: SimpleQDef
 impulseV = mkQuantDef QP.impulseV impulseVEqn
 
 impulseVEqn :: Expr
-impulseVEqn = sy QPP.mass `mulRe` sy QP.chgInVelocity
+impulseVEqn = sy QPP.mass $* sy QP.chgInVelocity
 
 impulseVDesc :: Sentence
 impulseVDesc = foldlSent [S "An", getTandS QP.impulseV, S "occurs when a",
@@ -275,11 +275,11 @@ coeffRestitutionEqn = neg $ sy finRelVel $.
 
 coeffRestitutionDesc :: Sentence
 coeffRestitutionDesc = foldlSent [S "The", getTandS QP.restitutionCoef,
-  S "determines the elasticity of a collision between two" +:+. plural rigidBody,
+  S "determines the elasticity" `S.ofA` S "collision between two" +:+. plural rigidBody,
   foldlList Comma List [
-  eS (sy QP.restitutionCoef $= exactDbl 1) +:+ S "results in an elastic collision",
-  eS (sy QP.restitutionCoef $< exactDbl 1) +:+ S "results in an inelastic collision",
-  eS (sy QP.restitutionCoef $= exactDbl 0) +:+ S "results in a totally inelastic collision"]]
+  eS (sy QP.restitutionCoef $= exactDbl 1) +:+ S "results" `S.in_` S "an elastic collision",
+  eS (sy QP.restitutionCoef $< exactDbl 1) +:+ S "results" `S.in_` S "an inelastic collision",
+  eS (sy QP.restitutionCoef $= exactDbl 0) +:+ S "results" `S.in_` S "a totally inelastic collision"]]
 -----------------------DD15 Kinetic Energy--------------------------------  
 kEnergyDD :: DataDefinition
 kEnergyDD = ddENoRefs kEnergy Nothing "kEnergy"
@@ -289,7 +289,7 @@ kEnergy :: SimpleQDef
 kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
 
 kEnergyEqn :: Expr
-kEnergyEqn = sy QPP.mass `mulRe` half (square (norm (sy QP.velocity)))
+kEnergyEqn = sy QPP.mass $* half (square (norm (sy QP.velocity)))
 
 kEnergyDesc :: Sentence
 kEnergyDesc = foldlSent [atStart QP.kEnergy `S.is` (QP.kEnergy ^. defn)]
@@ -303,12 +303,12 @@ momentOfInertia :: ModelQDef
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: ModelExpr
-momentOfInertiaEqn = sumAll (variable "j") $ sy massj `mulRe` square (sy rRot)
+momentOfInertiaEqn = sumAll (variable "j") $ sy massj $* square (sy rRot)
 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,
  S "of a body measures how much", phrase QP.torque,
- S "is needed for the body to achieve angular acceleration about the axis of rotation"]
+ S "is needed" `S.for` S "the body to achieve angular acceleration about the axis of rotation"]
 
 ---------------------------DD17 Potential Energy-------------------------------------------
 
@@ -320,7 +320,7 @@ potEnergy :: SimpleQDef
 potEnergy = mkQuantDef QP.potEnergy potEnergyEqn
 
 potEnergyEqn :: Expr
-potEnergyEqn = sy QPP.mass `mulRe` sy QP.gravitationalAccel `mulRe` sy QP.height
+potEnergyEqn = sy QPP.mass $* sy QP.gravitationalAccel $* sy QP.height
 
 potEnergyDesc :: Sentence
 potEnergyDesc = foldlSent [atStartNP (the QP.potEnergy) `S.of_`
@@ -330,7 +330,7 @@ potEnergyDesc = foldlSent [atStartNP (the QP.potEnergy) `S.of_`
 ---
 
 collisionAssump, noDampingAssump, rightHandAssump, rigidBodyAssump, rigidTwoDAssump :: Sentence
-collisionAssump = S "All collisions are vertex-to-edge" +:+. fromSource assumpCT
+collisionAssump = S "All collisions" `S.are` S "vertex-to-edge" +:+. fromSource assumpCT
 noDampingAssump = S "No damping occurs during the simulation" +:+. fromSource assumpDI
 rightHandAssump = S "A" +:+ phrase rightHand `S.is` S "used" +:+. fromSource assumpAD
 rigidBodyAssump = S "All bodies are assumed to be rigid" +:+. fromSource assumpOT

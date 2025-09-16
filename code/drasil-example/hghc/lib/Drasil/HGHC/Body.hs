@@ -1,50 +1,37 @@
 module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
 
+import Drasil.System (mkSystem, SystemKind(Specification))
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
+import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
+import Drasil.HGHC.MetaConcepts (progName)
 
-import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
-import Data.Drasil.Concepts.Documentation (doccon, doccon')
-import Data.Drasil.Concepts.Math (mathcon)
-import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)  
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-  
+import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
+
 srs :: Document
 srs = mkDoc mkSRS S.forT si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
-si :: SystemInformation
-si = SI {
-  _sys         = hghc,
-  _kind        = Doc.srs,
-  _authors     = [spencerSmith],
-  _quants      = symbols,
-  _purpose     = [purp],
-  _background  = [],
-  _concepts    = [] :: [UnitalChunk],
-  _instModels  = [], -- FIXME; empty _instModels
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = htInputs,
-  _outputs     = htOutputs,
-  _defSequence = [] :: [Block SimpleQDef],
-  _constraints = [] :: [ConstrainedChunk],
-  _constants   = [],
-  _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = rdb [] [] -- FIXME?
-}
-  
+si :: System
+si = mkSystem
+  progName Specification [spencerSmith]
+  [purp] [] [] []
+  symbols
+  [] [] dataDefs [] []
+  htInputs htOutputs ([] :: [ConstrConcept]) []
+  symbMap
+
+
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
     RefSec $
@@ -59,15 +46,15 @@ mkSRS = [TableOfContents,
       ]]]
 
 purp :: Sentence
-purp = foldlSent [S "describes", phrase CT.heatTrans, S "coefficients related to clad"]
+purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to clad"]
+
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  [fp, nuclearPhys] ++
+  -- CIs
+  [nw progName]
 
 symbMap :: ChunkDB
-symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
-  ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon' ++ map nw mathcon)
-  ([] :: [ConceptChunk])-- FIXME: Fill in concepts
-  siUnits dataDefs [] [] [] [] [] [] []
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn])
-           [] [] [] [] [] [] [] ([] :: [Reference])
+symbMap = cdb symbols ideaDicts ([] :: [ConceptChunk])
+  ([] :: [UnitDefn]) dataDefs [] [] [] [] [] [] []

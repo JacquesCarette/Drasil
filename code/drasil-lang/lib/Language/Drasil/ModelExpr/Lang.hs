@@ -8,7 +8,7 @@ import Prelude hiding (sqrt)
 import Language.Drasil.Expr.Lang (Completeness)
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
-import Language.Drasil.UID (UID)
+import Drasil.Database.UID (UID)
 import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- Binary functions
@@ -27,7 +27,7 @@ data BoolBinOp = Impl | Iff
   deriving Eq
 
 -- | Index operator.
-data LABinOp = Index
+data LABinOp = Index | IndexOf
   deriving Eq
 
 -- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).
@@ -46,8 +46,19 @@ data VVNBinOp = Dot
 data NVVBinOp = Scale
   deriving Eq
 
+-- | Element + Set -> Set
+data ESSBinOp = SAdd | SRemove
+  deriving Eq
+
+-- | Element + Set -> Bool
+data ESBBinOp = SContains
+  deriving Eq
+
+data AssocConcatOper = SUnion
+  deriving Eq
+
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
-data AssocArithOper = AddI | AddRe | MulI | MulRe
+data AssocArithOper = Add | Mul
   deriving Eq
 
 -- | Associative boolean operators (and, or).
@@ -97,6 +108,8 @@ data ModelExpr where
   AssocA    :: AssocArithOper -> [ModelExpr] -> ModelExpr
   -- | Takes an associative boolean operator with a list of expressions.
   AssocB    :: AssocBoolOper  -> [ModelExpr] -> ModelExpr
+
+  AssocC   :: AssocConcatOper -> [ModelExpr] -> ModelExpr
   -- | Derivative syntax is:
   --   Type ('Part'ial or 'Total') -> principal part of change -> with respect to
   --   For example: Deriv Part y x1 would be (dy/dx1).
@@ -110,7 +123,10 @@ data ModelExpr where
   Case      :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
   -- | Represents a matrix of expressions.
   Matrix    :: [[ModelExpr]] -> ModelExpr
-  
+  -- | Represents a set of expressions
+  Set       :: Space -> [ModelExpr] -> ModelExpr
+  -- | used to refernce the (name + type = variable )
+  Variable :: String -> ModelExpr -> ModelExpr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> ModelExpr -> ModelExpr
   -- | Unary operation for @Bool -> Bool@ operations.
@@ -140,6 +156,10 @@ data ModelExpr where
   VVNBinaryOp   :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
   NVVBinaryOp   :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Set operator for Element + Set -> Set
+  ESSBinaryOp :: ESSBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Set operator for Element + Set -> Bool
+  ESBBinaryOp :: ESBBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
@@ -198,6 +218,8 @@ instance Eq ModelExpr where
   LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
   VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
   VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
+  ESSBinaryOp o a b   == ESSBinaryOp p c d   =   o == p && a == c && b == d
+  ESBBinaryOp o a b   == ESBBinaryOp p c d   =   o == p && a == c && b == d
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
 

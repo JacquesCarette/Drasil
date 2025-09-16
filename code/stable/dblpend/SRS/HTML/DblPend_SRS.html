@@ -428,19 +428,19 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The program documented here is called Double Pendulum.
+          A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The document describes the program called Double Pendulum , which is based on the original, manually created version of <a href="https://github.com/Zhang-Zhi-ZZ/CAS741Project/tree/master/Double%20Pendulum">Double Pendulum</a>.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for Double Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for Double Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of DblPend. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of DblPend. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of <span title="Double Pendulum">DblPend</span>. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of <span title="Double Pendulum">DblPend</span>. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this <span title="software requirements specification">SRS</span> will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
-              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the <span title="software requirements specification">SRS</span> fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
             </p>
           </div>
         </div>
@@ -448,7 +448,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes the analysis of a two-dimensional (2D) pendulum motion problem with various initial conditions.
+              The scope of the requirements includes the analysis of a two-dimensional (<span title="two-dimensional">2D</span>) pendulum motion problem with various initial conditions.
             </p>
           </div>
         </div>
@@ -456,7 +456,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of DblPend can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of <span title="Double Pendulum">DblPend</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -464,7 +464,7 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
               The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>.
@@ -483,12 +483,12 @@
           <div class="subsection">
             <h2>System Context</h2>
             <p class="paragraph">
-              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (DblPend). Arrows are used to show the data flow between the system and its environment.
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (<span title="Double Pendulum">DblPend</span>). Arrows are used to show the data flow between the system and its environment.
             </p>
             <div id="Figure:sysCtxDiag">
               <figure>
                 <img src="../../../../datafiles/dblpend/SystemContextFigure.png" alt="System Context" >
-                <figcaption>System Context</figcaption>
+                <figcaption>Figure: System Context</figcaption>
               </figure>
             </div>
             <p class="paragraph">
@@ -508,7 +508,7 @@
                 </ul>
               </li>
               <li>
-                DblPend Responsibilities
+                <span title="Double Pendulum">DblPend</span> Responsibilities
                 <ul class="list">
                   <li>
                     Detect data type mismatch, such as a string of characters input instead of a floating point number.
@@ -527,7 +527,7 @@
           <div class="subsection">
             <h2>User Characteristics</h2>
             <p class="paragraph">
-              The end user of DblPend should have an understanding of high school physics, high school calculus and ordinary differential equations.
+              The end user of <span title="Double Pendulum">DblPend</span> should have an understanding of high school physics, high school calculus and ordinary differential equations.
             </p>
           </div>
         </div>
@@ -571,22 +571,26 @@
               <div class="subsubsection">
                 <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The physical system of DblPend, as shown in <a href=#Figure:dblpend>Fig:dblpend</a>, includes the following elements:
+                  The physical system of <span title="Double Pendulum">DblPend</span>, as shown in <a href=#Figure:dblpend>Fig:dblpend</a>, includes the following elements:
                 </p>
                 <div class="list">
                   <p>
-                    PS1: The first rod (with length of the first rod <em>L<sub>1</sub></em>).
+                    <span title="physical system description">PS</span>1: The first rod (with length of the first rod <em>L<sub>1</sub></em>).
                   </p>
                   <p>
-                    PS2: The second rod (with length of the second rod <em>L<sub>2</sub></em>).
+                    <span title="physical system description">PS</span>2: The second rod (with length of the second rod <em>L<sub>2</sub></em>).
                   </p>
-                  <p>PS3: The first object.</p>
-                  <p>PS4: The second object.</p>
+                  <p>
+                    <span title="physical system description">PS</span>3: The first object.
+                  </p>
+                  <p>
+                    <span title="physical system description">PS</span>4: The second object.
+                  </p>
                 </div>
                 <div id="Figure:dblpend">
                   <figure>
                     <img src="../../../../datafiles/dblpend/dblpend.png" alt="The physical system" width="60.0%" >
-                    <figcaption>The physical system</figcaption>
+                    <figcaption>Figure: The physical system</figcaption>
                   </figure>
                 </div>
               </div>
@@ -612,7 +616,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern DblPend are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern <span title="Double Pendulum">DblPend</span> are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -623,7 +627,7 @@
                 <div class="list">
                   <p>
                     <div id="twoDMotion">
-                      twoDMotion: The pendulum motion is two-dimensional (2D).
+                      twoDMotion: The pendulum motion is two-dimensional (<span title="two-dimensional">2D</span>).
                     </div>
                   </p>
                   <p>
@@ -641,21 +645,6 @@
                       yAxisDir: The direction of the <em>y</em>-axis is directed opposite to gravity.
                     </div>
                   </p>
-                  <p>
-                    <div id="startOrigin">
-                      startOrigin: The first rod is attached to the origin.
-                    </div>
-                  </p>
-                  <p>
-                    <div id="firstPend">
-                      firstPend: The first rod has two sides. One side attaches to the origin. Another side attaches to the first object.
-                    </div>
-                  </p>
-                  <p>
-                    <div id="secondPend">
-                      secondPend: The second rod has two sides. One side attaches to the first object. Another side attaches to the second object.
-                    </div>
-                  </p>
                 </div>
               </div>
             </div>
@@ -663,7 +652,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that DblPend is based on.
+                  This section focuses on the general equations and laws that <span title="Double Pendulum">DblPend</span> is based on.
                 </p>
                 <div id="TM:acceleration">
                   <table class="tdefn">
@@ -761,7 +750,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{F}=m \symbf{a}\text{(}t\text{)}\]</td>
+                      <td>\[\symbf{F}=m\,\symbf{a}\text{(}t\text{)}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -824,7 +813,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{v_{\text{x}1}}={w_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]
+                        \[{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -868,15 +857,15 @@
                     <p class="paragraph">
                       We also know the horizontal position that is defined in <a href=#DD:positionXDD1>DD:positionXDD1</a>
                     </p>
-                    \[{p_{\text{x}1}}={L_{1}} \sin\left({θ_{1}}\right)\]
+                    \[{p_{\text{x}1}}={L_{1}}\,\sin\left({θ_{1}}\right)\]
                     <p class="paragraph">Applying this,</p>
-                    \[{v_{\text{x}1}}=\frac{\,d{L_{1}} \sin\left({θ_{1}}\right)}{\,dt}\]
+                    \[{v_{\text{x}1}}=\frac{\,d{L_{1}}\,\sin\left({θ_{1}}\right)}{\,dt}\]
                     <p class="paragraph">
                       <em>L<sub>1</sub></em> is constant with respect to time, so
                     </p>
-                    \[{v_{\text{x}1}}={L_{1}} \frac{\,d\sin\left({θ_{1}}\right)}{\,dt}\]
+                    \[{v_{\text{x}1}}={L_{1}}\,\frac{\,d\sin\left({θ_{1}}\right)}{\,dt}\]
                     <p class="paragraph">Therefore, using the chain rule,</p>
-                    \[{v_{\text{x}1}}={w_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]
+                    \[{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]
                   </div>
                 </div>
                 <div id="GD:velocityY1">
@@ -902,7 +891,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{v_{\text{y}1}}={w_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]
+                        \[{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -946,15 +935,15 @@
                     <p class="paragraph">
                       We also know the vertical position that is defined in <a href=#DD:positionYDD1>DD:positionYDD1</a>
                     </p>
-                    \[{p_{\text{y}1}}=-{L_{1}} \cos\left({θ_{1}}\right)\]
+                    \[{p_{\text{y}1}}=-{L_{1}}\,\cos\left({θ_{1}}\right)\]
                     <p class="paragraph">Applying this,</p>
-                    \[{v_{\text{y}1}}=-\left(\frac{\,d{L_{1}} \cos\left({θ_{1}}\right)}{\,dt}\right)\]
+                    \[{v_{\text{y}1}}=-\left(\frac{\,d{L_{1}}\,\cos\left({θ_{1}}\right)}{\,dt}\right)\]
                     <p class="paragraph">
                       <em>L<sub>1</sub></em> is constant with respect to time, so
                     </p>
-                    \[{v_{\text{y}1}}=-{L_{1}} \frac{\,d\cos\left({θ_{1}}\right)}{\,dt}\]
+                    \[{v_{\text{y}1}}=-{L_{1}}\,\frac{\,d\cos\left({θ_{1}}\right)}{\,dt}\]
                     <p class="paragraph">Therefore, using the chain rule,</p>
-                    \[{v_{\text{y}1}}={w_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]
+                    \[{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]
                   </div>
                 </div>
                 <div id="GD:velocityX2">
@@ -980,7 +969,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]
+                        \[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1027,13 +1016,13 @@
                     <p class="paragraph">
                       We also know the horizontal position that is defined in <a href=#DD:positionXDD2>DD:positionXDD2</a>
                     </p>
-                    \[{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}} \sin\left({θ_{2}}\right)\]
+                    \[{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)\]
                     <p class="paragraph">Applying this,</p>
-                    \[{v_{\text{x}2}}=\frac{\,d{p_{\text{x}1}}+{L_{2}} \sin\left({θ_{2}}\right)}{\,dt}\]
+                    \[{v_{\text{x}2}}=\frac{\,d{p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)}{\,dt}\]
                     <p class="paragraph">
                       <em>L<sub>1</sub></em> is constant with respect to time, so
                     </p>
-                    \[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]
+                    \[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]
                   </div>
                 </div>
                 <div id="GD:velocityY2">
@@ -1059,7 +1048,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]
+                        \[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1106,11 +1095,11 @@
                     <p class="paragraph">
                       We also know the vertical position that is defined in <a href=#DD:positionYDD2>DD:positionYDD2</a>
                     </p>
-                    \[{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}} \cos\left({θ_{2}}\right)\]
+                    \[{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)\]
                     <p class="paragraph">Applying this,</p>
-                    \[{v_{\text{y}2}}=-\left(\frac{\,d{p_{\text{y}1}}-{L_{2}} \cos\left({θ_{2}}\right)}{\,dt}\right)\]
+                    \[{v_{\text{y}2}}=-\left(\frac{\,d{p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)}{\,dt}\right)\]
                     <p class="paragraph">Therefore, using the chain rule,</p>
-                    \[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]
+                    \[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]
                   </div>
                 </div>
                 <div id="GD:accelerationX1">
@@ -1136,7 +1125,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{a_{\text{x}1}}=-{w_{1}}^{2} {L_{1}} \sin\left({θ_{1}}\right)+{α_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]
+                        \[{a_{\text{x}1}}=-{w_{1}}^{2}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1183,15 +1172,15 @@
                     <p class="paragraph">
                       Earlier, we found the horizontal velocity to be
                     </p>
-                    \[{v_{\text{x}1}}={w_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]
+                    \[{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]
                     <p class="paragraph">
                       Applying this to our equation for acceleration
                     </p>
-                    \[{a_{\text{x}1}}=\frac{\,d{w_{1}} {L_{1}} \cos\left({θ_{1}}\right)}{\,dt}\]
+                    \[{a_{\text{x}1}}=\frac{\,d{w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)}{\,dt}\]
                     <p class="paragraph">By the product and chain rules, we find</p>
-                    \[{a_{\text{x}1}}=\frac{\,d{w_{1}}}{\,dt} {L_{1}} \cos\left({θ_{1}}\right)-{w_{1}} {L_{1}} \sin\left({θ_{1}}\right) \frac{\,d{θ_{1}}}{\,dt}\]
+                    \[{a_{\text{x}1}}=\frac{\,d{w_{1}}}{\,dt}\,{L_{1}}\,\cos\left({θ_{1}}\right)-{w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\,\frac{\,d{θ_{1}}}{\,dt}\]
                     <p class="paragraph">Simplifying,</p>
-                    \[{a_{\text{x}1}}=-{w_{1}}^{2} {L_{1}} \sin\left({θ_{1}}\right)+{α_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]
+                    \[{a_{\text{x}1}}=-{w_{1}}^{2}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]
                   </div>
                 </div>
                 <div id="GD:accelerationY1">
@@ -1217,7 +1206,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{a_{\text{y}1}}={w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}\right)+{α_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]
+                        \[{a_{\text{y}1}}={w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1264,15 +1253,15 @@
                     <p class="paragraph">
                       Earlier, we found the vertical velocity to be
                     </p>
-                    \[{v_{\text{y}1}}={w_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]
+                    \[{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]
                     <p class="paragraph">
                       Applying this to our equation for acceleration
                     </p>
-                    \[{a_{\text{y}1}}=\frac{\,d{w_{1}} {L_{1}} \sin\left({θ_{1}}\right)}{\,dt}\]
+                    \[{a_{\text{y}1}}=\frac{\,d{w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)}{\,dt}\]
                     <p class="paragraph">By the product and chain rules, we find</p>
-                    \[{a_{\text{y}1}}=\frac{\,d{w_{1}}}{\,dt} {L_{1}} \sin\left({θ_{1}}\right)+{w_{1}} {L_{1}} \cos\left({θ_{1}}\right) \frac{\,d{θ_{1}}}{\,dt}\]
+                    \[{a_{\text{y}1}}=\frac{\,d{w_{1}}}{\,dt}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\,\frac{\,d{θ_{1}}}{\,dt}\]
                     <p class="paragraph">Simplifying,</p>
-                    \[{a_{\text{y}1}}={w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}\right)+{α_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]
+                    \[{a_{\text{y}1}}={w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]
                   </div>
                 </div>
                 <div id="GD:accelerationX2">
@@ -1298,7 +1287,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2} {L_{2}} \sin\left({θ_{2}}\right)+{α_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]
+                        \[{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2}\,{L_{2}}\,\sin\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1348,13 +1337,13 @@
                     <p class="paragraph">
                       Earlier, we found the horizontal velocity to be
                     </p>
-                    \[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]
+                    \[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]
                     <p class="paragraph">
                       Applying this to our equation for acceleration
                     </p>
-                    \[{a_{\text{x}2}}=\frac{\,d{v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)}{\,dt}\]
+                    \[{a_{\text{x}2}}=\frac{\,d{v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)}{\,dt}\]
                     <p class="paragraph">By the product and chain rules, we find</p>
-                    \[{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2} {L_{2}} \sin\left({θ_{2}}\right)+{α_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]
+                    \[{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2}\,{L_{2}}\,\sin\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]
                   </div>
                 </div>
                 <div id="GD:accelerationY2">
@@ -1380,7 +1369,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2} {L_{2}} \cos\left({θ_{2}}\right)+{α_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]
+                        \[{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2}\,{L_{2}}\,\cos\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1430,13 +1419,13 @@
                     <p class="paragraph">
                       Earlier, we found the horizontal velocity to be
                     </p>
-                    \[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]
+                    \[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]
                     <p class="paragraph">
                       Applying this to our equation for acceleration
                     </p>
-                    \[{a_{\text{y}2}}=\frac{\,d{v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)}{\,dt}\]
+                    \[{a_{\text{y}2}}=\frac{\,d{v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)}{\,dt}\]
                     <p class="paragraph">By the product and chain rules, we find</p>
-                    \[{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2} {L_{2}} \cos\left({θ_{2}}\right)+{α_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]
+                    \[{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2}\,{L_{2}}\,\cos\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]
                   </div>
                 </div>
                 <div id="GD:xForce1">
@@ -1458,7 +1447,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)\]
+                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)+{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1500,7 +1489,7 @@
                 <div id="GD:xForce1Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the first object:</h4>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)\]
+                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)+{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
                   </div>
                 </div>
                 <div id="GD:yForce1">
@@ -1522,7 +1511,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}\]
+                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\symbf{g}\]
                       </td>
                     </tr>
                     <tr>
@@ -1570,7 +1559,7 @@
                 <div id="GD:yForce1Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the first object:</h4>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}\]
+                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\symbf{g}\]
                   </div>
                 </div>
                 <div id="GD:xForce2">
@@ -1592,7 +1581,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)\]
+                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1628,7 +1617,7 @@
                 <div id="GD:xForce2Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the second object:</h4>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)\]
+                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
                   </div>
                 </div>
                 <div id="GD:yForce2">
@@ -1650,7 +1639,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}\]
+                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\symbf{g}\]
                       </td>
                     </tr>
                     <tr>
@@ -1692,7 +1681,7 @@
                 <div id="GD:yForce2Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the second object:</h4>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}\]
+                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\symbf{g}\]
                   </div>
                 </div>
               </div>
@@ -1777,7 +1766,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{p_{\text{x}1}}={L_{1}} \sin\left({θ_{1}}\right)\]</td>
+                      <td>\[{p_{\text{x}1}}={L_{1}}\,\sin\left({θ_{1}}\right)\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1840,7 +1829,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{p_{\text{y}1}}=-{L_{1}} \cos\left({θ_{1}}\right)\]</td>
+                      <td>\[{p_{\text{y}1}}=-{L_{1}}\,\cos\left({θ_{1}}\right)\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1904,7 +1893,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}} \sin\left({θ_{2}}\right)\]
+                        \[{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1972,7 +1961,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}} \cos\left({θ_{2}}\right)\]
+                        \[{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -2157,7 +2146,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-g \left(2 {m_{1}}+{m_{2}}\right) \sin\left({θ_{1}}\right)-{m_{2}} g \sin\left({θ_{1}}-2 {θ_{2}}\right)-2 \sin\left({θ_{1}}-{θ_{2}}\right) {m_{2}} \left({w_{2}}^{2} {L_{2}}+{w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}\]
+                        \[{α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-g\,\left(2\,{m_{1}}+{m_{2}}\right)\,\sin\left({θ_{1}}\right)-{m_{2}}\,g\,\sin\left({θ_{1}}-2\,{θ_{2}}\right)-2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,{m_{2}}\,\left({w_{2}}^{2}\,{L_{2}}+{w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}\]
                       </td>
                     </tr>
                     <tr>
@@ -2201,7 +2190,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>θ<sub>1</sub></em> is calculated by solving the ODE here together with the initial conditions and <a href=#IM:calOfAngle2>IM:calOfAngle2</a>.
+                          <em>θ<sub>1</sub></em> is calculated by solving the <span title="ordinary differential equation">ODE</span> here together with the initial conditions and <a href=#IM:calOfAngle2>IM:calOfAngle2</a>.
                         </p>
                       </td>
                     </tr>
@@ -2213,7 +2202,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR:Output-Values</a>, <a href=#calcAng>FR:Calculate-Angle-Of-Rod</a>, and <a href=#IM:calOfAngle2>IM:calOfAngle2</a>
+                          <a href=#IM:calOfAngle2>IM:calOfAngle2</a>, <a href=#outputValues>FR:Output-Values</a>, and <a href=#calcAng>FR:Calculate-Angle-Of-Rod</a>
                         </p>
                       </td>
                     </tr>
@@ -2259,7 +2248,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{α_{2}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{2 \sin\left({θ_{1}}-{θ_{2}}\right) \left({w_{1}}^{2} {L_{1}} \left({m_{1}}+{m_{2}}\right)+g \left({m_{1}}+{m_{2}}\right) \cos\left({θ_{1}}\right)+{w_{2}}^{2} {L_{2}} {m_{2}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}\]
+                        \[{α_{2}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,\left({w_{1}}^{2}\,{L_{1}}\,\left({m_{1}}+{m_{2}}\right)+g\,\left({m_{1}}+{m_{2}}\right)\,\cos\left({θ_{1}}\right)+{w_{2}}^{2}\,{L_{2}}\,{m_{2}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}\]
                       </td>
                     </tr>
                     <tr>
@@ -2303,7 +2292,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>θ<sub>2</sub></em> is calculated by solving the ODE here together with the initial conditions and <a href=#IM:calOfAngle1>IM:calOfAngle1</a>.
+                          <em>θ<sub>2</sub></em> is calculated by solving the <span title="ordinary differential equation">ODE</span> here together with the initial conditions and <a href=#IM:calOfAngle1>IM:calOfAngle1</a>.
                         </p>
                       </td>
                     </tr>
@@ -2315,7 +2304,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR:Output-Values</a>, <a href=#calcAng>FR:Calculate-Angle-Of-Rod</a>, <a href=#IM:calOfAngle2>IM:calOfAngle2</a>, and <a href=#IM:calOfAngle1>IM:calOfAngle1</a>
+                          <a href=#IM:calOfAngle2>IM:calOfAngle2</a>, <a href=#IM:calOfAngle1>IM:calOfAngle1</a>, <a href=#outputValues>FR:Output-Values</a>, and <a href=#calcAng>FR:Calculate-Angle-Of-Rod</a>
                         </p>
                       </td>
                     </tr>
@@ -2325,27 +2314,27 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of angle of the second rod:</h4>
                     <p class="paragraph">
-                      By solving equations <a href=#GD:xForce2>GD:xForce2</a> and <a href=#GD:yForce2>GD:yForce2</a> for <em><b>T</b><sub>2</sub>&#8239;sin(θ<sub>2</sub>)</em> and <em><b>T</b><sub>2</sub>&#8239;cos(θ<sub>2</sub>)</em> and then substituting into equation <a href=#GD:xForce1>GD:xForce1</a> and <a href=#GD:yForce1>GD:yForce1</a> , We can get equations 1 and 2:
+                      By solving equations <a href=#GD:xForce2>GD:xForce2</a> and <a href=#GD:yForce2>GD:yForce2</a> for <em><b>T</b><sub>2</sub>&#8239;sin(θ<sub>2</sub>)</em> and <em><b>T</b><sub>2</sub>&#8239;cos(θ<sub>2</sub>)</em> and then substituting into equation <a href=#GD:xForce1>GD:xForce1</a> and <a href=#GD:yForce1>GD:yForce1</a> , we can get equations 1 and 2:
                     </p>
-                    \[{m_{1}} {a_{\text{x}1}}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)-{m_{2}} {a_{\text{x}2}}\]
+                    \[{m_{1}}\,{a_{\text{x}1}}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)-{m_{2}}\,{a_{\text{x}2}}\]
                     <p class="paragraph"></p>
-                    \[{m_{1}} {a_{\text{y}1}}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{m_{2}} {a_{\text{y}2}}-{m_{2}} g-{m_{1}} g\]
+                    \[{m_{1}}\,{a_{\text{y}1}}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{m_{2}}\,{a_{\text{y}2}}-{m_{2}}\,g-{m_{1}}\,g\]
                     <p class="paragraph">
                       Multiply the equation 1 by <em>cos(θ<sub>1</sub>)</em> and the equation 2 by <em>sin(θ<sub>1</sub>)</em> and rearrange to get:
                     </p>
-                    \[{\symbf{T}_{1}} \sin\left({θ_{1}}\right) \cos\left({θ_{1}}\right)=-\cos\left({θ_{1}}\right) \left({m_{1}} {a_{\text{x}1}}+{m_{2}} {a_{\text{x}2}}\right)\]
+                    \[{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{x}1}}+{m_{2}}\,{a_{\text{x}2}}\right)\]
                     <p class="paragraph"></p>
-                    \[{\symbf{T}_{1}} \sin\left({θ_{1}}\right) \cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right) \left({m_{1}} {a_{\text{y}1}}+{m_{2}} {a_{\text{y}2}}+{m_{2}} g+{m_{1}} g\right)\]
+                    \[{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{y}1}}+{m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g+{m_{1}}\,g\right)\]
                     <p class="paragraph">This leads to the equation 3</p>
-                    \[\sin\left({θ_{1}}\right) \left({m_{1}} {a_{\text{y}1}}+{m_{2}} {a_{\text{y}2}}+{m_{2}} g+{m_{1}} g\right)=-\cos\left({θ_{1}}\right) \left({m_{1}} {a_{\text{x}1}}+{m_{2}} {a_{\text{x}2}}\right)\]
+                    \[\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{y}1}}+{m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g+{m_{1}}\,g\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{x}1}}+{m_{2}}\,{a_{\text{x}2}}\right)\]
                     <p class="paragraph">
                       Next, multiply equation <a href=#GD:xForce2>GD:xForce2</a> by <em>cos(θ<sub>2</sub>)</em> and equation <a href=#GD:yForce2>GD:yForce2</a> by <em>sin(θ<sub>2</sub>)</em> and rearrange to get:
                     </p>
-                    \[{\symbf{T}_{2}} \sin\left({θ_{2}}\right) \cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right) {m_{2}} {a_{\text{x}2}}\]
+                    \[{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{\text{x}2}}\]
                     <p class="paragraph"></p>
-                    \[{\symbf{T}_{1}} \sin\left({θ_{2}}\right) \cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} g\right)\]
+                    \[{\symbf{T}_{1}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g\right)\]
                     <p class="paragraph">which leads to equation 4</p>
-                    \[\sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} g\right)=-\cos\left({θ_{2}}\right) {m_{2}} {a_{\text{x}2}}\]
+                    \[\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{\text{x}2}}\]
                     <p class="paragraph">
                       By giving equations <a href=#GD:accelerationX1>GD:accelerationX1</a> and <a href=#GD:accelerationX2>GD:accelerationX2</a> and <a href=#GD:accelerationY1>GD:accelerationY1</a> and <a href=#GD:accelerationY2>GD:accelerationY2</a> plus additional two equations, 3 and 4, we can get <a href=#IM:calOfAngle1>IM:calOfAngle1</a> and <a href=#IM:calOfAngle2>IM:calOfAngle2</a> via a computer algebra program:
                     </p>
@@ -2365,7 +2354,7 @@
                       <th>Var</th>
                       <th>Physical Constraints</th>
                       <th>Typical Value</th>
-                      <th>Uncert.</th>
+                      <th><span title="typical uncertainty">Uncert.</span></th>
                     </tr>
                     <tr>
                       <td><em>L<sub>1</sub></em></td>
@@ -2487,9 +2476,7 @@
                   <td><em>kg</em></td>
                 </tr>
               </table>
-              <p class="caption">
-                Required Inputs following <a href=#inputValues>FR:Input-Values</a>
-              </p>
+              <p class="caption">Required Inputs</p>
             </div>
           </div>
         </div>
@@ -2502,12 +2489,12 @@
             <div class="list">
               <p>
                 <div id="correct">
-                  Correct: The outputs of the code have the <a href=#Sec:CorSolProps>properties of a correct solution</a>.
+                  Correctness: The outputs of the code have the <a href=#Sec:CorSolProps>properties of a correct solution</a>.
                 </div>
               </p>
               <p>
                 <div id="portable">
-                  Portable: The code is able to be run in different environments.
+                  Portability: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.
                 </div>
               </p>
             </div>
@@ -2529,15 +2516,9 @@
               <th><a href=#cartSys>A:cartSys</a></th>
               <th><a href=#cartSysR>A:cartSysR</a></th>
               <th><a href=#yAxisDir>A:yAxisDir</a></th>
-              <th><a href=#startOrigin>A:startOrigin</a></th>
-              <th><a href=#firstPend>A:firstPend</a></th>
-              <th><a href=#secondPend>A:secondPend</a></th>
             </tr>
             <tr>
               <td><a href=#twoDMotion>A:twoDMotion</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2549,9 +2530,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#cartSysR>A:cartSysR</a></td>
@@ -2559,45 +2537,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#yAxisDir>A:yAxisDir</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#startOrigin>A:startOrigin</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#firstPend>A:firstPend</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#secondPend>A:secondPend</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2616,15 +2558,9 @@
               <th><a href=#cartSys>A:cartSys</a></th>
               <th><a href=#cartSysR>A:cartSysR</a></th>
               <th><a href=#yAxisDir>A:yAxisDir</a></th>
-              <th><a href=#startOrigin>A:startOrigin</a></th>
-              <th><a href=#firstPend>A:firstPend</a></th>
-              <th><a href=#secondPend>A:secondPend</a></th>
             </tr>
             <tr>
               <td><a href=#DD:positionGDD>DD:positionGDD</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2636,15 +2572,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:positionYDD1>DD:positionYDD1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2656,15 +2586,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:positionYDD2>DD:positionYDD2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2676,15 +2600,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:forceGDD>DD:forceGDD</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2696,15 +2614,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:velocity>TM:velocity</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2716,15 +2628,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:velocityX1>GD:velocityX1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2736,15 +2642,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:velocityX2>GD:velocityX2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2756,15 +2656,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:accelerationX1>GD:accelerationX1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2776,15 +2670,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:accelerationX2>GD:accelerationX2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2796,15 +2684,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:xForce1>GD:xForce1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2816,15 +2698,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:xForce2>GD:xForce2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2836,15 +2712,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:calOfAngle1>IM:calOfAngle1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2856,15 +2726,23 @@
               <td></td>
               <td></td>
               <td></td>
+            </tr>
+            <tr>
+              <td><a href=#correct>NFR:Correctness</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR:Portability</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
               <td><a href=#inputValues>FR:Input-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2876,9 +2754,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#calcAng>FR:Calculate-Angle-Of-Rod</a></td>
@@ -2886,35 +2761,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#outputValues>FR:Output-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#correct>NFR:Correct</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#portable>NFR:Portable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3635,15 +3484,81 @@
               <th><a href=#GD:yForce2>GD:yForce2</a></th>
               <th><a href=#IM:calOfAngle1>IM:calOfAngle1</a></th>
               <th><a href=#IM:calOfAngle2>IM:calOfAngle2</a></th>
+              <th><a href=#correct>NFR:Correctness</a></th>
+              <th><a href=#portable>NFR:Portability</a></th>
               <th><a href=#inputValues>FR:Input-Values</a></th>
               <th><a href=#verifyInptVals>FR:Verify-Input-Values</a></th>
               <th><a href=#calcAng>FR:Calculate-Angle-Of-Rod</a></th>
               <th><a href=#outputValues>FR:Output-Values</a></th>
-              <th><a href=#correct>NFR:Correct</a></th>
-              <th><a href=#portable>NFR:Portable</a></th>
             </tr>
             <tr>
               <td><a href=#motionMass>GS:motionMass</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#correct>NFR:Correctness</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR:Portability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3807,72 +3722,6 @@
               <td></td>
               <td></td>
             </tr>
-            <tr>
-              <td><a href=#correct>NFR:Correct</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#portable>NFR:Portable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
           </table>
           <p class="caption">
             Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items
@@ -3884,31 +3733,31 @@
         <div id="Figure:TraceGraphAvsA">
           <figure>
             <img src="../../../../traceygraphs/dblpend/avsa.svg" alt="TraceGraphAvsA" >
-            <figcaption>TraceGraphAvsA</figcaption>
+            <figcaption>Figure: TraceGraphAvsA</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAvsAll">
           <figure>
             <img src="../../../../traceygraphs/dblpend/avsall.svg" alt="TraceGraphAvsAll" >
-            <figcaption>TraceGraphAvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAvsAll</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphRefvsRef">
           <figure>
             <img src="../../../../traceygraphs/dblpend/refvsref.svg" alt="TraceGraphRefvsRef" >
-            <figcaption>TraceGraphRefvsRef</figcaption>
+            <figcaption>Figure: TraceGraphRefvsRef</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsR">
           <figure>
             <img src="../../../../traceygraphs/dblpend/allvsr.svg" alt="TraceGraphAllvsR" >
-            <figcaption>TraceGraphAllvsR</figcaption>
+            <figcaption>Figure: TraceGraphAllvsR</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsAll">
           <figure>
             <img src="../../../../traceygraphs/dblpend/allvsall.svg" alt="TraceGraphAllvsAll" >
-            <figcaption>TraceGraphAllvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAllvsAll</figcaption>
           </figure>
         </div>
         <p class="paragraph">
@@ -3942,53 +3791,44 @@
     <div id="Sec:References">
       <div class="section">
         <h1>References</h1>
-        <ul class="hide-list-style">
-          <li>
-            <div id="hibbeler2004">
-              [1]: Hibbeler, R. C. <em>Engineering Mechanics: Dynamics</em>. Pearson Prentice Hall, 2004. Print.
-            </div>
-          </li>
-          <li>
-            <div id="koothoor2013">
-              [2]: Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-            </div>
-          </li>
-          <li>
-            <div id="parnasClements1986">
-              [3]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
-            </div>
-          </li>
-          <li>
-            <div id="smithKoothoor2016">
-              [4]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
-            </div>
-          </li>
-          <li>
-            <div id="smithLai2005">
-              [5]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-            </div>
-          </li>
-          <li>
-            <div id="smithEtAl2007">
-              [6]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
-            </div>
-          </li>
-          <li>
-            <div id="accelerationWiki">
-              [7]: Wikipedia Contributors. <em>Acceleration</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Acceleration">https://en.wikipedia.org/wiki/Acceleration</a>.
-            </div>
-          </li>
-          <li>
-            <div id="cartesianWiki">
-              [8]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
-            </div>
-          </li>
-          <li>
-            <div id="velocityWiki">
-              [9]: Wikipedia Contributors. <em>Velocity</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Velocity">https://en.wikipedia.org/wiki/Velocity</a>.
-            </div>
-          </li>
-        </ul>
+        <dl class="reference-list">
+          <dt id="hibbeler2004">[<b>hibbeler2004</b>]</dt>
+          <dd>
+            Hibbeler, R. C. <em>Engineering Mechanics: Dynamics</em>. Pearson Prentice Hall, 2004. Print.
+          </dd>
+          <dt id="koothoor2013">[<b>koothoor2013</b>]</dt>
+          <dd>
+            Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+          </dd>
+          <dt id="parnasClements1986">[<b>parnasClements1986</b>]</dt>
+          <dd>
+            Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+          </dd>
+          <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+          </dd>
+          <dt id="smithLai2005">[<b>smithLai2005</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+          </dd>
+          <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
+          <dd>
+            Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
+          </dd>
+          <dt id="accelerationWiki">[<b>accelerationWiki</b>]</dt>
+          <dd>
+            Wikipedia Contributors. <em>Acceleration</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Acceleration">https://en.wikipedia.org/wiki/Acceleration</a>.
+          </dd>
+          <dt id="cartesianWiki">[<b>cartesianWiki</b>]</dt>
+          <dd>
+            Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
+          </dd>
+          <dt id="velocityWiki">[<b>velocityWiki</b>]</dt>
+          <dd>
+            Wikipedia Contributors. <em>Velocity</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Velocity">https://en.wikipedia.org/wiki/Velocity</a>.
+          </dd>
+        </dl>
       </div>
     </div>
   </body>

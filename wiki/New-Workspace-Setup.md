@@ -12,6 +12,9 @@ In order, you should be installing:
 
 Optionally, some functions will be limited without:
 1. [Doxygen](#doxygen)
+2. [ShellCheck](#shellcheck)
+3. [mdBook](#mdBook)
+4. [Jupyter](#jupyter)
 
 **Notes**: 
 1. It is [**recommended**](https://github.com/JacquesCarette/Drasil/issues/2913#issuecomment-987300398) for Windows users to install the following tools using Linux on Windows/Windows WSL. If you choose to install using Windows WSL, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). From experience, installations with Windows WSL over native installations provide better tools, quicker installs, and an overall smoother experience.
@@ -46,7 +49,7 @@ If you would like to install more *nix tools through Cygwin, you can use the [cy
 The rest of the steps in this guide will assume that you are using Cygwin as your preferred Windows terminal. Git Bash is also very safe to use, but you will need to download [util-linux-ng](https://gnuwin32.sourceforge.net/packages/util-linux-ng.htm), which includes various system utilities (one of our scripts uses `rev`), and add its **bin/** to your PATH.
 
 ##### Unicode Support (Important)
-Unfortunately, it seems that Cygwin, Git Bash, and Windows still have issues with UTF-8 encoding, resulting in odd errors in development and empty characters appearing in the Cygwin/Git Bash shell windows. To resolve this issue, each time you open up Cygwin/Git Bash, you will need to run `chcp.com 65001` or `chcp 65001` so as to change the encoding of the terminal to UTF-8.
+Unfortunately, it seems that Cygwin, Git Bash, and Windows still have issues with UTF-8 encoding, resulting in odd errors in development and empty characters appearing in the Cygwin/Git Bash shell windows. To resolve this issue, follow the steps outlined [here](https://stackoverflow.com/a/57134096). Open a fresh terminal window and run `chcp.com` or `chcp` and check that the active code page is `65001`. If that does not resolve the issue, you can also edit the `.bashrc` file(found either at `C:/Users/YOU/cygwin64/home/YOU` for Cygwin or `C:/Users/YOU` for Git Bash) and add the following to end: `chcp.com 65001 > /dev/null` or `chcp.com 65001 > /dev/null`. This simply runs the required command each time the terminal is opened. If you choose not to do either of these, then each time you open up Cygwin/Git Bash, you will need to run `chcp.com 65001` or `chcp 65001` so as to change the encoding of the terminal to UTF-8.
 
 ##### 7-Zip
 If you are using Git Bash you will need [7-Zip](https://www.7-zip.org/). Download and run the installer from their website.
@@ -119,6 +122,8 @@ You can read more on GitHub's [About SSH](https://docs.github.com/en/github/auth
 ##### Creating an SSH key
 
 Please follow GitHub's official documentation on [generating a new SSH key](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
+
+If you are using Cygwin, copy the SSH key from the default directory (commonly `C:/Users/YOU/.ssh`), navigate to `C:/cygwin64/home/YOU/.ssh` (you may need to create the .ssh folder) and paste it there. 
 
 ##### Registering your SSH key with GitHub
 
@@ -222,6 +227,8 @@ Please download the binary related to your operating system from the [Official V
 <summary><h4>Windows</h4></summary>
 
 Please run the executable from the above download link and follow the on-screen steps. You will need to just accept their EULA. Please leave all of the options along the installation default.
+
+If you would like to use Cygwin in the integrated terminal of VSCode, navigate to settings `Manage (bottom left corner)>Settings` search for `terminal.integrated.profiles.windows`. Edit the `settings.json` from here, and add the code snippet found at [this stackoverflow answer](https://stackoverflow.com/a/70437350) and follow the instructions to open Cygwin.
 
 </details>
 
@@ -495,6 +502,115 @@ The [Doxygen download page](https://www.doxygen.nl/download.html) has a Windows 
 The [Doxygen download page](https://www.doxygen.nl/download.html) has a disk image download for Mac OS. Open it and follow the on-screen instructions.
 
 </details>
+
+## ShellCheck
+
+ShellCheck is integrated into our GitHub CI pipeline, providing static analysis of shell scripts. ShellCheck is required to execute the `make shellcheck` target in our primary `Makefile` to statically analyze shell scripts locally.
+
+### Installation Instructions
+
+Please visit the [ShellCheck GitHub](https://github.com/koalaman/shellcheck?tab=readme-ov-file#installing) for more detailed instructions. For convenience, we have a summary for some Linux distributions, Windows, and Mac below.
+
+<details>
+
+<summary><h4>Linux</h4></summary>
+
+For Ubuntu and Debian, you can use the following command to install ShellCheck:
+```
+sudo apt install shellcheck
+```
+
+</details>
+
+<details>
+
+<summary><h4>Windows</h4></summary>
+
+You can download pre-compiled binaries for the latest release here: [Windows, x86](https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.zip).
+
+Alternatively, if you have [`chocolatey`](https://chocolatey.org/install) installed, you can open up a new command line as an administrator and run the following command:
+```
+choco install shellcheck
+```
+
+</details>
+
+<details>
+
+<summary><h4>Mac</h4></summary>
+
+If you use [homebrew](https://brew.sh/), you can install via the following command:
+```
+brew install shellcheck
+```
+Or, you can use [MacPorts](https://www.macports.org/):
+```
+sudo port install shellcheck
+```
+
+</details>
+
+## mdBook
+
+mdBook is a command line tool designed for creating books with Markdown. Drasil currently generates mdBook projects as a format for the SRS documentation. The installation of mdBook is a prerequisite for locally executing and building the mdBook projects that have been generated.
+
+### Installation Instructions
+Please visit the [mdBook website](https://rust-lang.github.io/mdBook/guide/installation.html) for more detailed instructions. For convenience, we have a summary for Linux, Windows, and Mac below.
+
+<details>
+
+<summary><h4>Mac & Linux, with Rust & Cargo</h4></summary>
+
+Install Rust and Cargo using the following command:
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+Once you have installed Rust, the following command can be used to build and install mdBook:
+```
+cargo install mdbook
+```
+
+</details>
+
+<details>
+
+<summary><h4>Mac, with homebrew</h4></summary>
+
+Install via the following command:
+```
+brew install mdbook
+```
+
+</details>
+
+<details>
+
+<summary><h4>Windows</h4></summary>
+
+Follow the instructions on the [Rust website](https://www.rust-lang.org/tools/install) to install Rust.
+
+Once you have installed Rust, the following command can be used to build and install mdBook:
+```
+cargo install mdbook
+```
+
+</details>
+
+## Jupyter
+
+[Jupyter(Lab)](https://jupyter.org/) is a web-based integrated development environment for developing computational documents, well-suited for researchers and students. We do not necessarily use Jupyter ourselves in Drasil's development, but we currently generate Jupyter documents (including lesson plans) and intend to generate more.
+
+### Installation Instructions
+
+Installing Jupyter is fairly straightforward using Python's package manager, `pip`. You only need to run the following command:
+
+```
+pip install jupyter
+```
+
+Alternatively, you can use copies of Jupyter from other package managers (e.g., via Homebrew: `brew install jupyter`, via `apt`: `sudo apt-get install jupyter`, etc.). For more information, please see the official Jupyter [installation documentation](https://jupyter.org/install).
+
+To test that your installation is working, you should be able to run `jupyter --help` and see basic usage information.
 
 # Working with Drasil
 Congratulations! Now that you've successfully setup your workspace, you should move on to our [Contributer's Guide](https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide).

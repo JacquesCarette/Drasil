@@ -1,5 +1,5 @@
 -- | Defines .json printers to generate jupyter notebooks. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.JSON.Print.html).
-module Language.Drasil.JSON.Print(genJSON) where
+module Language.Drasil.JSON.Print(genJupyter) where
 
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
@@ -7,11 +7,11 @@ import Numeric (showEFloat)
 
 import qualified Language.Drasil as L
 
-import Language.Drasil.Format (DocType(Jupyter))
+import Language.Drasil.Format (DocType(Lesson))
 
 import Language.Drasil.Printing.Import (makeDocument)
-import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
-  ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
+import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
+  ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
   Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
   Fonts(Bold), OverSymb(Hat), Label, LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (BibRef)
@@ -23,7 +23,8 @@ import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (th, bold, reflinkInfo)
-import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence)
+import Language.Drasil.HTML.Print (renderCite, OpenClose(Open, Close), fence,
+  htmlBibFormatter)
 
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, codeformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv, 
@@ -32,9 +33,9 @@ import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, co
 -- | Generate a python notebook document (using json).
 -- build : build the SRS document in JSON format
 -- build': build the general Jupyter Notbook document
-genJSON :: PrintingInformation -> DocType -> L.Document -> Doc
-genJSON sm Jupyter doc = build (makeDocument sm doc)
-genJSON sm _       doc = build' (makeDocument sm doc)
+genJupyter :: PrintingInformation -> DocType -> L.Document -> Doc
+genJupyter sm Lesson doc = build  (makeDocument sm doc)
+genJupyter sm _      doc = build' (makeDocument sm doc)
 
 -- | Build the JSON Document, called by genJSON
 build :: Document -> Doc
@@ -80,7 +81,7 @@ printLO (EqnBlock contents)              = nbformat mathEqn
 printLO (Table _ rows r _ _)            = nbformat empty $$ makeTable rows (pSpec r)
 printLO (Definition dt ssPs l)          = nbformat (text "<br>") $$ makeDefn dt ssPs (pSpec l)
 printLO (List t)                        = nbformat empty $$ makeList t False
-printLO (Figure r c f wp)               = makeFigure (pSpec r) (pSpec c) (text f) wp
+printLO (Figure r c f wp)               = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
 printLO (Bib bib)                       = makeBib bib
 printLO Graph{}                         = empty 
 printLO CodeBlock {}                    = empty
@@ -100,7 +101,7 @@ printLO' (EqnBlock contents)              = nbformat mathEqn
 printLO' (Table _ rows r _ _)            = markdownCell $ makeTable rows (pSpec r)
 printLO' Definition {}                   = empty
 printLO' (List t)                        = markdownCell $ makeList t False
-printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (pSpec c) (text f) wp
+printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (fmap pSpec c) (text f) wp
 printLO' (Bib bib)                       = markdownCell $ makeBib bib
 printLO' Graph{}                         = empty 
 printLO' (CodeBlock contents)            = codeCell $ codeformat $ cSpec contents
@@ -124,6 +125,7 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
+pSpec (Tooltip _ s) = pSpec s
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = empty
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
@@ -144,6 +146,7 @@ pExpr (Int i)        = text $ show i
 pExpr (Str s)        = doubleQuotes $ text s
 pExpr (Div n d)      = mkDiv "frac" (pExpr n) (pExpr d)
 pExpr (Row l)        = hcat $ map pExpr l
+pExpr (Set l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
 pExpr (Label s)      = text s
 pExpr (Spec s)       = text $ unPH $ L.special s
@@ -163,57 +166,60 @@ pExpr e              = printMath $ toMath $ TeX.pExpr e
 
 -- TODO: edit all operations in markdown format
 pOps :: Ops -> String
-pOps IsIn     = "&thinsp;&isin;&thinsp;"
-pOps Integer  = "&#8484;"
-pOps Rational = "&#8474;"
-pOps Real     = "&#8477;"
-pOps Natural  = "&#8469;"
-pOps Boolean  = "&#120121;"
-pOps Comma    = ","
-pOps Prime    = "&prime;"
-pOps Log      = "log"
-pOps Ln       = "ln"
-pOps Sin      = "sin"
-pOps Cos      = "cos"
-pOps Tan      = "tan"
-pOps Sec      = "sec"
-pOps Csc      = "csc"
-pOps Cot      = "cot"
-pOps Arcsin   = "arcsin"
-pOps Arccos   = "arccos"
-pOps Arctan   = "arctan"
-pOps Not      = "&not;"
-pOps Dim      = "dim"
-pOps Exp      = "e"
-pOps Neg      = "-"
-pOps Cross    = "&#10799;"
-pOps VAdd     = " + "
-pOps VSub     = " - "
-pOps Dot      = "&sdot;"
-pOps Scale    = "" -- same as Mul
-pOps Eq       = " = " -- with spaces?
-pOps NEq      = "&ne;"
-pOps Lt       = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
-pOps Gt       = "&thinsp;&gt;&thinsp;"
-pOps LEq      = "&thinsp;&le;&thinsp;"
-pOps GEq      = "&thinsp;&ge;&thinsp;"
-pOps Impl     = " &rArr; "
-pOps Iff      = " &hArr; "
-pOps Subt     = " - "
-pOps And      = " &and; "
-pOps Or       = " &or; "
-pOps Add      = " + "
-pOps Mul      = ""
-pOps Summ     = "&sum"
-pOps Inte     = "&int;"
-pOps Prod     = "&prod;"
-pOps Point    = "."
-pOps Perc     = "%"
-pOps LArrow   = " &larr; "
-pOps RArrow   = " &rarr; "
-pOps ForAll   = " ForAll "
-pOps Partial  = "&part;"
-
+pOps IsIn       = "&thinsp;&isin;&thinsp;"
+pOps Integer    = "&#8484;"
+pOps Rational   = "&#8474;"
+pOps Real       = "&#8477;"
+pOps Natural    = "&#8469;"
+pOps Boolean    = "&#120121;"
+pOps Comma      = ","
+pOps Prime      = "&prime;"
+pOps Log        = "log"
+pOps Ln         = "ln"
+pOps Sin        = "sin"
+pOps Cos        = "cos"
+pOps Tan        = "tan"
+pOps Sec        = "sec"
+pOps Csc        = "csc"
+pOps Cot        = "cot"
+pOps Arcsin     = "arcsin"
+pOps Arccos     = "arccos"
+pOps Arctan     = "arctan"
+pOps Not        = "&not;"
+pOps Dim        = "dim"
+pOps Exp        = "e"
+pOps Neg        = "-"
+pOps Cross      = "&#10799;"
+pOps VAdd       = " + "
+pOps VSub       = " - "
+pOps Dot        = "&sdot;"
+pOps Scale      = "" -- same as Mul
+pOps Eq         = " = " -- with spaces?
+pOps NEq        = "&ne;"
+pOps Lt         = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
+pOps Gt         = "&thinsp;&gt;&thinsp;"
+pOps LEq        = "&thinsp;&le;&thinsp;"
+pOps GEq        = "&thinsp;&ge;&thinsp;"
+pOps Impl       = " &rArr; "
+pOps Iff        = " &hArr; "
+pOps Subt       = " - "
+pOps And        = " &and; "
+pOps Or         = " &or; "
+pOps Add        = " + "
+pOps Mul        = ""
+pOps Summ       = "&sum"
+pOps Inte       = "&int;"
+pOps Prod       = "&prod;"
+pOps Point      = "."
+pOps Perc       = "%"
+pOps LArrow     = " &larr; "
+pOps RArrow     = " &rarr; "
+pOps ForAll     = " ForAll "
+pOps Partial    = "&part;"
+pOps SAdd       = " + "
+pOps SRemove    = " - "
+pOps SContains  = " in "
+pOps SUnion     = " and "
 
 -- | Renders Markdown table, called by 'printLO'
 makeTable :: [[Spec]] -> Doc -> Doc
@@ -285,7 +291,7 @@ sItem (Flat s)     = pSpec s
 sItem (Nested s l) = vcat [pSpec s, makeList l False]
 
 -- | Renders figures in HTML
-makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
+makeFigure :: Doc -> Maybe Doc -> Doc -> L.MaxWidthPercent -> Doc
 makeFigure r c f wp = refID r $$ image f c wp
 
 -- | Renders assumptions, requirements, likely changes
@@ -295,4 +301,4 @@ makeRefList a l i = refID l $$ nbformat (i <> text ": " <> a)
 makeBib :: BibRef -> Doc
 makeBib = vcat .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map renderCite
+  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite htmlBibFormatter)

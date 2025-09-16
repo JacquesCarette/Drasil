@@ -24,17 +24,17 @@ fi
 
 GEN_NAME_SUFFIX=_SRS
 
-cd "$BUILD_FOLDER$EDIR"/SRS/PDF
+cd "$BUILD_FOLDER$EDIR"/SRS/PDF || exit 1
 "$MAKE" TEXFLAGS="-interaction=$IMODE --shell-escape" BIBTEXFLAGS="$BIFLAGS"
 RET=$?
 
 if [ "$SUMMARIZE_TEX" = "yes" ]; then
-  echo "\n\n\033[0;33m$EDIR TeX Summary\033[0m:"
+  printf "\n\n\033[0;33m%s TeX Summary\033[0m:" "$EDIR"
   if [ "$RET" -eq 0 ]; then
     # Approximate error gathering from TeX logs.
-    cat "$EDIR$GEN_NAME_SUFFIX".log | grep -E "erfull|Warning"
-    cat "$EDIR$GEN_NAME_SUFFIX".blg | grep -B3 -E "Error"
-    BIBERRS=$(cat "$EDIR$GEN_NAME_SUFFIX".blg | grep -E "Error" | wc -l)
+    grep -E "erfull|Warning" "$EDIR$GEN_NAME_SUFFIX".log
+    grep -B3 -E "Error" "$EDIR$GEN_NAME_SUFFIX".blg
+    BIBERRS=$(grep -c -E "Error" "$EDIR$GEN_NAME_SUFFIX".blg)
     if [ "$BIBERRS" -gt 0 ]; then
       # This conditional is due to the current way TeX makefiles are generated.
       # BibTeX return value is ignored (specifically with HGHC having no

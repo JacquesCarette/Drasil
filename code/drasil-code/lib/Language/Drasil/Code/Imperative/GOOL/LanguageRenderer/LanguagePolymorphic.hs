@@ -8,7 +8,7 @@ import Language.Drasil (Expr)
 
 import Database.Drasil (ChunkDB)
 
-import GOOL.Drasil (ProgData, GOOLState)
+import Drasil.GOOL (ProgData, GOOLState)
 
 import Language.Drasil.Choices (Comments, ImplementationType(..), Verbosity)
 import Language.Drasil.Code.DataDesc (DataDesc)
@@ -21,9 +21,9 @@ import Language.Drasil.Code.Imperative.WriteReadMe (makeReadMe)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName,
   makefileName, sampleInputName, readMeName)
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface ( ReadMeInfo(..),
-  AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
-
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
+import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+  
 -- | Defines a Doxygen configuration file.
 doxConfig :: (AuxiliarySym r) => r (AuxHelper r) -> String ->
   GOOLState -> Verbosity -> r (Auxiliary r)

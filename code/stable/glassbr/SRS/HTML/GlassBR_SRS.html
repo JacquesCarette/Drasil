@@ -389,7 +389,7 @@
                 <tr>
                   <td><em>t</em></td>
                   <td>
-                    Nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em>
+                    Nominal thickness t is in <em>{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em>
                   </td>
                   <td><em>mm</em></td>
                 </tr>
@@ -552,19 +552,19 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          Explosions in downtown areas are dangerous from the blast itself and also potentially from the secondary effect of falling glass. Therefore, software is needed to predict whether a glass slab can withstand a blast under given conditions. For example, we might wish to know whether a pane of glass fails from a gas main explosion or from a small fertilizer truck bomb. The program documented here is called GlassBR.
+          Explosions in downtown areas are dangerous from the blast itself and also potentially from the secondary effect of falling glass. Therefore, software is needed to predict whether a glass slab can withstand a blast under given conditions. For example, we might wish to know whether a pane of glass fails from a gas main explosion or from a small fertilizer truck bomb. The document describes the program called <span title="GlassBR">GlassBR</span> , which is based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass">GlassBR</a>.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for <span title="GlassBR">GlassBR</span>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of GlassBR. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of GlassBR. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of <span title="GlassBR">GlassBR</span>. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of <span title="GlassBR">GlassBR</span>. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this <span title="software requirements specification">SRS</span> will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
-              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the <span title="software requirements specification">SRS</span> fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
             </p>
           </div>
         </div>
@@ -580,7 +580,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of second year calculus, structural mechanics, glass breakage, blast risk, computer applications in civil engineering, and applicable standards for constructions using glass from <a href=#astm2009>astm2009</a>, <a href=#astm2012>astm2012</a>, and <a href=#astm2016>astm2016</a> in <a href=#Sec:References>references</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of second year calculus, structural mechanics, glass breakage, blast risk, computer applications in civil engineering, and applicable standards for constructions using glass from <a href=#astm2009>astm2009</a>, <a href=#astm2012>astm2012</a>, and <a href=#astm2016>astm2016</a> in <a href=#Sec:References>references</a>. The users of <span title="GlassBR">GlassBR</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -588,7 +588,7 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>data definitions</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>data definitions</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
               The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The data definitions are used to support the definitions of the different models.
@@ -607,14 +607,16 @@
           <div class="subsection">
             <h2>The Client</h2>
             <p class="paragraph">
-              The client for GlassBR is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
+              The client for <span title="GlassBR">GlassBR</span> is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
             </p>
           </div>
         </div>
         <div id="Sec:Customer">
           <div class="subsection">
             <h2>The Customer</h2>
-            <p class="paragraph">The customers are the end user of GlassBR.</p>
+            <p class="paragraph">
+              The customers are the end user of <span title="GlassBR">GlassBR</span>.
+            </p>
           </div>
         </div>
       </div>
@@ -629,12 +631,12 @@
           <div class="subsection">
             <h2>System Context</h2>
             <p class="paragraph">
-              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (GlassBR). Arrows are used to show the data flow between the system and its environment.
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (<span title="GlassBR">GlassBR</span>). Arrows are used to show the data flow between the system and its environment.
             </p>
             <div id="Figure:sysCtxDiag">
               <figure>
                 <img src="../../../../datafiles/glassbr/SystemContextFigure.png" alt="System Context" >
-                <figcaption>System Context</figcaption>
+                <figcaption>Figure: System Context</figcaption>
               </figure>
             </div>
             <p class="paragraph">
@@ -654,7 +656,7 @@
                 </ul>
               </li>
               <li>
-                GlassBR Responsibilities
+                <span title="GlassBR">GlassBR</span> Responsibilities
                 <ul class="list">
                   <li>
                     Detect data type mismatch, such as a string of characters input instead of a floating point number.
@@ -731,13 +733,13 @@
                     Glass Type:
                     <ul class="list">
                       <li>
-                        Annealed (AN) - A flat, monolithic, glass lite which has uniform thickness where the residual surface stresses are almost zero, as defined in <a href=#astm2016>astm2016</a>.
+                        Annealed (<span title="annealed">AN</span>) - A flat, monolithic, glass lite which has uniform thickness where the residual surface stresses are almost zero, as defined in <a href=#astm2016>astm2016</a>.
                       </li>
                       <li>
-                        Fully tempered (FT) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in <a href=#astm2012>astm2012</a>.
+                        Fully tempered (<span title="fully tempered">FT</span>) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in <a href=#astm2012>astm2012</a>.
                       </li>
                       <li>
-                        Heat strengthened (HS) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in <a href=#astm2012>astm2012</a>.
+                        Heat strengthened (<span title="heat strengthened">HS</span>) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in <a href=#astm2012>astm2012</a>.
                       </li>
                     </ul>
                   </li>
@@ -745,10 +747,10 @@
                     Applied load (demand) or pressure - A uniformly distributed lateral pressure.
                     <ul class="list">
                       <li>
-                        Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in <a href=#astm2009>astm2009</a> (pp. 1 and 53).
+                        Load resistance (<span title="load resistance">LR</span>) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in <a href=#astm2009>astm2009</a> (pp. 1 and 53).
                       </li>
                       <li>
-                        Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.
+                        Non-factored load (<span title="non-factored load">NFL</span>) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic <span title="annealed">AN</span> glass.
                       </li>
                       <li>
                         Glass weight load - The dead load component of the glass weight.
@@ -763,16 +765,16 @@
                     </ul>
                   </li>
                   <li>
-                    Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>).
+                    Stand off distance (<span title="stand off distance">SD</span>) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge.
                   </li>
                   <li>
-                    Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thicknesses and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.
+                    Load share factor (<span title="load share factor">LSF</span>) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thicknesses and types (including the layered behaviour of <span title="laminated glass">LG</span> under long duration loads), in a sealed <span title="insulating glass">IG</span> unit.
                   </li>
                   <li>
-                    Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.
+                    Glass type factor (<span title="glass type factor">GTF</span>) - A multiplying factor for adjusting the <span title="load resistance">LR</span> of different glass type, that is, <span title="annealed">AN</span>, <span title="fully tempered">FT</span>, or <span title="heat strengthened">HS</span>, in monolithic glass, <span title="laminated glass">LG</span> (Laminated Glass), or <span title="insulating glass">IG</span> (Insulating Glass) constructions.
                   </li>
                   <li>
-                    Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.
+                    Aspect ratio (<span title="aspect ratio">AR</span>) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.
                   </li>
                   <li>
                     Probability of breakage (<em>P<sub>b</sub></em>) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (<a href=#astm2016>astm2016</a>).
@@ -784,18 +786,20 @@
               <div class="subsubsection">
                 <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The physical system of GlassBR, as shown in <a href=#Figure:physSystImage>Fig:physSystImage</a>, includes the following elements:
+                  The physical system of <span title="GlassBR">GlassBR</span>, as shown in <a href=#Figure:physSystImage>Fig:physSystImage</a>, includes the following elements:
                 </p>
                 <div class="list">
-                  <p>PS1: The glass slab.</p>
                   <p>
-                    PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
+                    <span title="physical system description">PS</span>1: The glass slab.
+                  </p>
+                  <p>
+                    <span title="physical system description">PS</span>2: The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
                   </p>
                 </div>
                 <div id="Figure:physSystImage">
                   <figure>
                     <img src="../../../../datafiles/glassbr/physicalsystimage.png" alt="The physical system" width="30.0%" >
-                    <figcaption>The physical system</figcaption>
+                    <figcaption>Figure: The physical system</figcaption>
                   </figure>
                 </div>
               </div>
@@ -821,7 +825,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern GlassBR are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern <span title="GlassBR">GlassBR</span> are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -847,12 +851,12 @@
                   </p>
                   <p>
                     <div id="assumpSV">
-                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#DD:loadDurFactor>DD:loadDurFactor</a>, and <a href=#assumpLDFC>A:ldfConstant</a>.)
+                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#assumpLDFC>A:ldfConstant</a>, and <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpGL">
-                      glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: <a href=#accMoreThanSingleLite>LC:Accomodate-More-than-Single-Lite</a>.)
+                      glassLite: Glass under consideration is assumed to be a single lite; hence, the value of <span title="load share factor">LSF</span> is equal to 1 for all calculations in <span title="GlassBR">GlassBR</span>. (RefBy: <a href=#accMoreThanSingleLite>LC:Accomodate-More-than-Single-Lite</a>.)
                     </div>
                   </p>
                   <p>
@@ -862,12 +866,12 @@
                   </p>
                   <p>
                     <div id="assumpRT">
-                      responseType: The response type considered in GlassBR is flexural. (RefBy: <a href=#considerMoreThanFlexGlass>LC:Consider-More-than-Flexure-Glass</a>.)
+                      responseType: The response type considered in <span title="GlassBR">GlassBR</span> is flexural. (RefBy: <a href=#considerMoreThanFlexGlass>LC:Consider-More-than-Flexure-Glass</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpLDFC">
-                      ldfConstant: With reference to <a href=#assumpSV>A:standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. (RefBy: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a> and <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.)
+                      ldfConstant: With reference to <a href=#assumpSV>A:standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in <span title="GlassBR">GlassBR</span>. (RefBy: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a> and <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.)
                     </div>
                   </p>
                 </div>
@@ -877,7 +881,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that GlassBR is based on.
+                  This section focuses on the general equations and laws that <span title="GlassBR">GlassBR</span> is based on.
                 </p>
                 <div id="TM:isSafeProb">
                   <table class="tdefn">
@@ -1014,20 +1018,20 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[h=\frac{1}{1000} \begin{cases}
-                                           2.16, & t=2.5\\
-                                           2.59, & t=2.7\\
-                                           2.92, & t=3.0\\
-                                           3.78, & t=4.0\\
-                                           4.57, & t=5.0\\
-                                           5.56, & t=6.0\\
-                                           7.42, & t=8.0\\
-                                           9.02, & t=10.0\\
-                                           11.91, & t=12.0\\
-                                           15.09, & t=16.0\\
-                                           18.26, & t=19.0\\
-                                           21.44, & t=22.0
-                                           \end{cases}\]
+                        \[h=\frac{1}{1000}\,\begin{cases}
+                                            2.16, & t=2.5\\
+                                            2.59, & t=2.7\\
+                                            2.92, & t=3.0\\
+                                            3.78, & t=4.0\\
+                                            4.57, & t=5.0\\
+                                            5.56, & t=6.0\\
+                                            7.42, & t=8.0\\
+                                            9.02, & t=10.0\\
+                                            11.91, & t=12.0\\
+                                            15.09, & t=16.0\\
+                                            18.26, & t=19.0\\
+                                            21.44, & t=22.0
+                                            \end{cases}\]
                       </td>
                     </tr>
                     <tr>
@@ -1036,7 +1040,7 @@
                         <ul class="hide-list-style-no-indent">
                           <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
                           <li>
-                            <em>t</em> is the nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em> (<em>mm</em>)
+                            <em>t</em> is the nominal thickness t is in <em>{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em> (<em>mm</em>)
                           </li>
                         </ul>
                       </td>
@@ -1166,9 +1170,15 @@
                     <tr>
                       <th>Notes</th>
                       <td>
-                        <p class="paragraph">AN is annealed glass.</p>
-                        <p class="paragraph">FT is fully tempered glass.</p>
-                        <p class="paragraph">HS is heat strengthened glass.</p>
+                        <p class="paragraph">
+                          <span title="annealed">AN</span> is annealed glass.
+                        </p>
+                        <p class="paragraph">
+                          <span title="fully tempered">FT</span> is fully tempered glass.
+                        </p>
+                        <p class="paragraph">
+                          <span title="heat strengthened">HS</span> is heat strengthened glass.
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1316,7 +1326,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{w_{\mathit{TNT}}}=w \mathit{TNT}\]</td>
+                      <td>\[{w_{\mathit{TNT}}}=w\,\mathit{TNT}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1448,7 +1458,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} \mathit{LDF} e^{J}\]
+                        \[B=\frac{k}{\left(a\,b\right)^{m-1}}\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}\,e^{J}\]
                       </td>
                     </tr>
                     <tr>
@@ -1621,7 +1631,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}\]
+                        \[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}}\,E\,h^{4}}{\left(a\,b\right)^{2}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1712,7 +1722,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} \mathit{GTF}}\]
+                        \[\hat{q}=\frac{q\,\left(a\,b\right)^{2}}{E\,h^{4}\,\mathit{GTF}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1885,7 +1895,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} \mathit{LDF}}\right)\]
+                        \[{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right)\,\frac{\left(a\,b\right)^{m-1}}{k\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -2045,7 +2055,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathit{LR}=\mathit{NFL} \mathit{GTF} \mathit{LSF}\]</td>
+                      <td>\[\mathit{LR}=\mathit{NFL}\,\mathit{GTF}\,\mathit{LSF}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2253,7 +2263,7 @@
                       <th>Physical Constraints</th>
                       <th>Software Constraints</th>
                       <th>Typical Value</th>
-                      <th>Uncert.</th>
+                      <th><span title="typical uncertainty">Uncert.</span></th>
                     </tr>
                     <tr>
                       <td><em>a</em></td>
@@ -2443,7 +2453,7 @@
                 <tr>
                   <td><em>t</em></td>
                   <td>
-                    Nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em>
+                    Nominal thickness t is in <em>{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em>
                   </td>
                   <td><em>mm</em></td>
                 </tr>
@@ -2458,9 +2468,7 @@
                   <td><em>kg</em></td>
                 </tr>
               </table>
-              <p class="caption">
-                Required Inputs following <a href=#inputValues>FR:Input-Values</a>
-              </p>
+              <p class="caption">Required Inputs</p>
             </div>
             <div id="Table:ReqAssignments">
               <table class="table">
@@ -2531,9 +2539,7 @@
                   <td><em>s</em></td>
                 </tr>
               </table>
-              <p class="caption">
-                Required Assignments following <a href=#sysSetValsFollowingAssumps>FR:System-Set-Values-Following-Assumptions</a>
-              </p>
+              <p class="caption">Required Assignments</p>
             </div>
             <div id="Table:ReqOutputs">
               <table class="table">
@@ -2622,9 +2628,7 @@
                   <td>--</td>
                 </tr>
               </table>
-              <p class="caption">
-                Required Outputs following <a href=#outputValues>FR:Output-Values</a>
-              </p>
+              <p class="caption">Required Outputs</p>
             </div>
           </div>
         </div>
@@ -2637,28 +2641,30 @@
             <div class="list">
               <p>
                 <div id="correct">
-                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Sec:Properties of a Correct Solution</a>.
+                  Correctness: The outputs of the code have the <a href=#Sec:CorSolProps>properties of a correct solution</a>.
                 </div>
               </p>
               <p>
                 <div id="verifiable">
-                  Verifiable: The code is tested with complete verification and validation plan.
+                  Verifiability: The code is tested with complete verification and validation plan.
                 </div>
               </p>
               <p>
                 <div id="understandable">
-                  Understandable: The code is modularized with complete module guide and module interface specification.
+                  Understandability: The code is modularized with complete module guide and module interface specification.
                 </div>
               </p>
-              <p><div id="reusable">Reusable: The code is modularized.</div></p>
+              <p>
+                <div id="reusable">Reusability: The code is modularized.</div>
+              </p>
               <p>
                 <div id="maintainable">
-                  Maintainable: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
+                  Maintainability: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
                 </div>
               </p>
               <p>
                 <div id="portable">
-                  Portable: The code is able to be run in different environments.
+                  Portablity: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.
                 </div>
               </p>
             </div>
@@ -3056,6 +3062,72 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#correct>NFR:Correctness</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiable>NFR:Verifiability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#understandable>NFR:Understandability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#reusable>NFR:Reusability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainable>NFR:Maintainability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR:Portablity</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#inputValues>FR:Input-Values</a></td>
               <td></td>
               <td></td>
@@ -3118,72 +3190,6 @@
             </tr>
             <tr>
               <td><a href=#outputValues>FR:Output-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#correct>NFR:Correct</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#verifiable>NFR:Verifiable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#understandable>NFR:Understandable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#reusable>NFR:Reusable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#maintainable>NFR:Maintainable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#portable>NFR:Portable</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3755,6 +3761,12 @@
               <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>
               <th><a href=#IM:isSafeLR>IM:isSafeLR</a></th>
+              <th><a href=#correct>NFR:Correctness</a></th>
+              <th><a href=#verifiable>NFR:Verifiability</a></th>
+              <th><a href=#understandable>NFR:Understandability</a></th>
+              <th><a href=#reusable>NFR:Reusability</a></th>
+              <th><a href=#maintainable>NFR:Maintainability</a></th>
+              <th><a href=#portable>NFR:Portablity</a></th>
               <th><a href=#inputValues>FR:Input-Values</a></th>
               <th>
                 <a href=#sysSetValsFollowingAssumps>FR:System-Set-Values-Following-Assumptions</a>
@@ -3767,17 +3779,215 @@
               </th>
               <th><a href=#checkGlassSafety>FR:Check-Glass-Safety</a></th>
               <th><a href=#outputValues>FR:Output-Values</a></th>
-              <th><a href=#correct>NFR:Correct</a></th>
-              <th><a href=#verifiable>NFR:Verifiable</a></th>
-              <th><a href=#understandable>NFR:Understandable</a></th>
-              <th><a href=#reusable>NFR:Reusable</a></th>
-              <th><a href=#maintainable>NFR:Maintainable</a></th>
-              <th><a href=#portable>NFR:Portable</a></th>
             </tr>
             <tr>
               <td>
                 <a href=#willBreakGS>GS:Predict-Glass-Withstands-Explosion</a>
               </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#correct>NFR:Correctness</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiable>NFR:Verifiability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#understandable>NFR:Understandability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#reusable>NFR:Reusability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainable>NFR:Maintainability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR:Portablity</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3939,14 +4149,14 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4020,210 +4230,6 @@
               <td></td>
               <td></td>
             </tr>
-            <tr>
-              <td><a href=#correct>NFR:Correct</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#verifiable>NFR:Verifiable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#understandable>NFR:Understandable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#reusable>NFR:Reusable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#maintainable>NFR:Maintainable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#portable>NFR:Portable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
           </table>
           <p class="caption">
             Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items
@@ -4235,31 +4241,31 @@
         <div id="Figure:TraceGraphAvsA">
           <figure>
             <img src="../../../../traceygraphs/glassbr/avsa.svg" alt="TraceGraphAvsA" >
-            <figcaption>TraceGraphAvsA</figcaption>
+            <figcaption>Figure: TraceGraphAvsA</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAvsAll">
           <figure>
             <img src="../../../../traceygraphs/glassbr/avsall.svg" alt="TraceGraphAvsAll" >
-            <figcaption>TraceGraphAvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAvsAll</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphRefvsRef">
           <figure>
             <img src="../../../../traceygraphs/glassbr/refvsref.svg" alt="TraceGraphRefvsRef" >
-            <figcaption>TraceGraphRefvsRef</figcaption>
+            <figcaption>Figure: TraceGraphRefvsRef</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsR">
           <figure>
             <img src="../../../../traceygraphs/glassbr/allvsr.svg" alt="TraceGraphAllvsR" >
-            <figcaption>TraceGraphAllvsR</figcaption>
+            <figcaption>Figure: TraceGraphAllvsR</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsAll">
           <figure>
             <img src="../../../../traceygraphs/glassbr/allvsall.svg" alt="TraceGraphAllvsAll" >
-            <figcaption>TraceGraphAllvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAllvsAll</figcaption>
           </figure>
         </div>
         <p class="paragraph">
@@ -4288,7 +4294,7 @@
       <div class="section">
         <h1>Values of Auxiliary Constants</h1>
         <p class="paragraph">
-          This section contains the standard values that are used for calculations in GlassBR.
+          This section contains the standard values that are used for calculations in <span title="GlassBR">GlassBR</span>.
         </p>
         <div id="Table:TAuxConsts">
           <table class="table">
@@ -4390,58 +4396,48 @@
     <div id="Sec:References">
       <div class="section">
         <h1>References</h1>
-        <ul class="hide-list-style">
-          <li>
-            <div id="astm2009">
-              [1]: ASTM. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. <a href="https://www.astm.org">https://www.astm.org</a>.
-            </div>
-          </li>
-          <li>
-            <div id="astm2012">
-              [2]: ASTM. <em>Standard Specification for Heat-Strengthened and Fully Tempered Flat Glass</em>. West Conshohocken, PA: ASTM International, 2012. <a href="https://doi.org/10.1520/C1048-12E01">https://doi.org/10.1520/C1048-12E01</a>.
-            </div>
-          </li>
-          <li>
-            <div id="astm2016">
-              [3]: ASTM. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. <a href="https://doi.org/10.1520/C1036-16">https://doi.org/10.1520/C1036-16</a>.
-            </div>
-          </li>
-          <li>
-            <div id="beasonEtAl1998">
-              [4]: Beason, W. Lynn, Kohutek, Terry L., and Bracci, Joseph M. <em>Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts</em>. <em>ASCE Library</em>. February, 1998. <a href="https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)">https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)</a>.
-            </div>
-          </li>
-          <li>
-            <div id="campidelli">
-              [5]: Campidelli, Manuel. "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading."
-            </div>
-          </li>
-          <li>
-            <div id="koothoor2013">
-              [6]: Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-            </div>
-          </li>
-          <li>
-            <div id="parnasClements1986">
-              [7]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
-            </div>
-          </li>
-          <li>
-            <div id="smithKoothoor2016">
-              [8]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
-            </div>
-          </li>
-          <li>
-            <div id="smithLai2005">
-              [9]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-            </div>
-          </li>
-          <li>
-            <div id="smithEtAl2007">
-              [10]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
-            </div>
-          </li>
-        </ul>
+        <dl class="reference-list">
+          <dt id="astm2009">[<b>astm2009</b>]</dt>
+          <dd>
+            ASTM. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. <a href="https://www.astm.org">https://www.astm.org</a>.
+          </dd>
+          <dt id="astm2012">[<b>astm2012</b>]</dt>
+          <dd>
+            ASTM. <em>Standard Specification for Heat-Strengthened and Fully Tempered Flat Glass</em>. West Conshohocken, PA: ASTM International, 2012. <a href="https://doi.org/10.1520/C1048-12E01">https://doi.org/10.1520/C1048-12E01</a>.
+          </dd>
+          <dt id="astm2016">[<b>astm2016</b>]</dt>
+          <dd>
+            ASTM. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. <a href="https://doi.org/10.1520/C1036-16">https://doi.org/10.1520/C1036-16</a>.
+          </dd>
+          <dt id="beasonEtAl1998">[<b>beasonEtAl1998</b>]</dt>
+          <dd>
+            Beason, W. Lynn, Kohutek, Terry L., and Bracci, Joseph M. <em>Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts</em>. <em>ASCE Library</em>. February, 1998. <a href="https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)">https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)</a>.
+          </dd>
+          <dt id="campidelli">[<b>campidelli</b>]</dt>
+          <dd>
+            Campidelli, Manuel. "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading."
+          </dd>
+          <dt id="koothoor2013">[<b>koothoor2013</b>]</dt>
+          <dd>
+            Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+          </dd>
+          <dt id="parnasClements1986">[<b>parnasClements1986</b>]</dt>
+          <dd>
+            Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+          </dd>
+          <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+          </dd>
+          <dt id="smithLai2005">[<b>smithLai2005</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+          </dd>
+          <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
+          <dd>
+            Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
+          </dd>
+        </dl>
       </div>
     </div>
     <div id="Sec:Appendix">
@@ -4452,17 +4448,17 @@
         </p>
         <div id="Figure:demandVSsod">
           <figure>
-            <img src="../../../../datafiles/glassbr/ASTM_F2248-09.png" alt="3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>w</em>)" >
+            <img src="../../../../datafiles/glassbr/ASTM_F2248-09.png" alt="3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (<span title="stand off distance">SD</span>) versus Charge weight (<em>w</em>)" >
             <figcaption>
-              3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>w</em>)
+              Figure: 3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (<span title="stand off distance">SD</span>) versus Charge weight (<em>w</em>)
             </figcaption>
           </figure>
         </div>
         <div id="Figure:dimlessloadVSaspect">
           <figure>
-            <img src="../../../../datafiles/glassbr/ASTM_F2248-09_BeasonEtAl.png" alt="Non dimensional lateral applied load (demand) or pressure (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)" >
+            <img src="../../../../datafiles/glassbr/ASTM_F2248-09_BeasonEtAl.png" alt="Non dimensional lateral applied load (demand) or pressure (<em>q&#770;</em>) versus Aspect Ratio (<span title="aspect ratio">AR</span>) versus Stress distribution factor (Function) (<em>J</em>)" >
             <figcaption>
-              Non dimensional lateral applied load (demand) or pressure (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)
+              Figure: Non dimensional lateral applied load (demand) or pressure (<em>q&#770;</em>) versus Aspect Ratio (<span title="aspect ratio">AR</span>) versus Stress distribution factor (Function) (<em>J</em>)
             </figcaption>
           </figure>
         </div>

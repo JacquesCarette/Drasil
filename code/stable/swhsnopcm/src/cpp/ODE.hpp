@@ -16,12 +16,12 @@ using std::vector;
 class ODE {
     public:
         /** \brief Constructor for ODE objects
-            \param tau_W ODE parameter for water related to decay time: derived parameter based on rate of change of temperature of water (s)
-            \param T_C temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
+            \param tau_W ODE parameter for water related to decay time (s)
+            \param T_C temperature of the heating coil (degreeC)
         */
         ODE(double tau_W, double T_C);
         /** \brief function representation of ODE system
-            \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
+            \param T_W temperature of the water (degreeC)
             \param dT_W change in temperature of the water (degreeC)
             \param t current independent variable value in ODE solution
         */

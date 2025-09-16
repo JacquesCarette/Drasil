@@ -14,12 +14,12 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   returnExprList, fixedReturn, fixedReturn', initSolWithVal
 ) where
 
+import Drasil.Code.CodeExpr.Development
+import Drasil.Code.CodeExpr
 import Language.Drasil (Space, HasSpace(typ))
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
-import Language.Drasil.CodeExpr.Development
-import Language.Drasil.CodeExpr
 import Language.Drasil.Mod (FuncStmt(..), Description)
 
 import Control.Lens ((^.))

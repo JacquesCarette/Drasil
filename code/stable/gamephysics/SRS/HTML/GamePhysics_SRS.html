@@ -2,7 +2,9 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="GamePhysics_SRS.css">
-    <title>Software Requirements Specification for GamePhysics</title>
+    <title>
+      Software Requirements Specification for <span title="GamePhysics">GamePhysics</span>
+    </title>
     <meta charset="utf-8">
     <script>
     MathJax = {
@@ -21,7 +23,9 @@
   </head>
   <body>
     <div class="title">
-      <h1>Software Requirements Specification for GamePhysics</h1>
+      <h1>
+        Software Requirements Specification for <span title="GamePhysics">GamePhysics</span>
+      </h1>
     </div>
     <div class="author">
       <h2>Alex Halliwushka, Luthfi Mawarid, and Olu Owojaiye</h2>
@@ -607,19 +611,19 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
+          Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products. The document describes the program  based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/blob/master/CaseStudies/gamephys">GamePhysics</a>.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for GamePhysics. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for <span title="GamePhysics">GamePhysics</span>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of GamePhysics. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of GamePhysics. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of <span title="GamePhysics">GamePhysics</span>. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of <span title="GamePhysics">GamePhysics</span>. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this <span title="software requirements specification">SRS</span> will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
-              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the <span title="software requirements specification">SRS</span> fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
             </p>
           </div>
         </div>
@@ -627,7 +631,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces.
+              The scope of the requirements includes the physical simulation of <span title="two-dimensional">2D</span> rigid bodies acted on by forces.
             </p>
           </div>
         </div>
@@ -635,7 +639,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of GamePhysics can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of <span title="GamePhysics">GamePhysics</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -643,7 +647,7 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
               The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>.
@@ -662,12 +666,12 @@
           <div class="subsection">
             <h2>System Context</h2>
             <p class="paragraph">
-              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (GamePhysics). Arrows are used to show the data flow between the system and its environment.
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (<span title="GamePhysics">GamePhysics</span>). Arrows are used to show the data flow between the system and its environment.
             </p>
             <div id="Figure:sysCtxDiag">
               <figure>
                 <img src="../../../../datafiles/gamephysics/sysctx.png" alt="System Context" >
-                <figcaption>System Context</figcaption>
+                <figcaption>Figure: System Context</figcaption>
               </figure>
             </div>
             <p class="paragraph">
@@ -689,7 +693,7 @@
                 </ul>
               </li>
               <li>
-                GamePhysics Responsibilities
+                <span title="GamePhysics">GamePhysics</span> Responsibilities
                 <ul class="list">
                   <li>
                     Determine if the inputs and simulation state satisfy the required <a href=#Sec:DataConstraints>physical and system constraints</a>.
@@ -709,7 +713,7 @@
           <div class="subsection">
             <h2>User Characteristics</h2>
             <p class="paragraph">
-              The end user of GamePhysics should have an understanding of first year programming concepts and an understanding of high school physics.
+              The end user of <span title="GamePhysics">GamePhysics</span> should have an understanding of first year programming concepts and an understanding of high school physics.
             </p>
           </div>
         </div>
@@ -731,7 +735,7 @@
           <div class="subsection">
             <h2>Problem Description</h2>
             <p class="paragraph">
-              A system is needed to simulate 2D rigid body physics for use in game development in a simple, lightweight, fast, and portable manner, which will allow for the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality <a href=#Sec:offShelfSolns>physics libraries</a> available to be used for consumer products.
+              A system is needed to simulate <span title="two-dimensional">2D</span> rigid body physics for use in game development in a simple, lightweight, fast, and portable manner, which will allow for the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality <a href=#Sec:offShelfSolns>physics libraries</a> available to be used for consumer products.
             </p>
             <div id="Sec:TermDefs">
               <div class="subsubsection">
@@ -753,7 +757,7 @@
                     Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from <a href=#cartesianWiki>cartesianWiki</a>).
                   </li>
                   <li>
-                    Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen..
+                    Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.
                   </li>
                   <li>
                     line: An interval between two points (from <a href=#lineSource>lineSource</a>).
@@ -793,7 +797,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern GamePhysics are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern <span title="GamePhysics">GamePhysics</span> are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -804,12 +808,12 @@
                 <div class="list">
                   <p>
                     <div id="assumpOT">
-                      objectTy: All objects are rigid bodies. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
+                      objectTy: All objects are rigid bodies. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpOD">
-                      objectDimension: All objects are 2D. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
+                      objectDimension: All objects are <span title="two-dimensional">2D</span>. (RefBy: <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
                     </div>
                   </p>
                   <p>
@@ -819,22 +823,22 @@
                   </p>
                   <p>
                     <div id="assumpAD">
-                      axesDefined: The axes are defined using right-handed coordinate system. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:rotMot>IM:rotMot</a>, and <a href=#IM:col2D>IM:col2D</a>.)
+                      axesDefined: The axes are defined using right-handed coordinate system. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#IM:rotMot>IM:rotMot</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCT">
-                      collisionType: All rigid bodies collisions are vertex-to-edge collisions. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#lcEC>LC:Expanded-Collisions</a>, and <a href=#IM:col2D>IM:col2D</a>.)
+                      collisionType: All rigid bodies collisions are vertex-to-edge collisions. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#lcEC>LC:Expanded-Collisions</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpDI">
-                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#lcID>LC:Include-Dampening</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, and <a href=#IM:col2D>IM:col2D</a>.)
+                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#lcID>LC:Include-Dampening</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, and <a href=#DD:kEnergy>DD:kEnergy</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCAJI">
-                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: <a href=#IM:transMot>IM:transMot</a>, <a href=#lcIJC>LC:Include-Joints-Constraints</a>, and <a href=#IM:col2D>IM:col2D</a>.)
+                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:transMot>IM:transMot</a>, and <a href=#lcIJC>LC:Include-Joints-Constraints</a>.)
                     </div>
                   </p>
                 </div>
@@ -844,7 +848,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that GamePhysics is based on.
+                  This section focuses on the general equations and laws that <span title="GamePhysics">GamePhysics</span> is based on.
                 </p>
                 <div id="TM:NewtonSecLawMot">
                   <table class="tdefn">
@@ -858,7 +862,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{F}=m \symbf{a}\text{(}t\text{)}\]</td>
+                      <td>\[\symbf{F}=m\,\symbf{a}\text{(}t\text{)}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -952,7 +956,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=G \frac{{m_{1}} {m_{2}}}{\|\symbf{d}\|^{2}} \symbf{\hat{d}}=G \frac{{m_{1}} {m_{2}}}{\|\symbf{d}\|^{2}} \frac{\symbf{d}}{\|\symbf{d}\|}\]
+                        \[\symbf{F}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\symbf{\hat{d}}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\frac{\symbf{d}}{\|\symbf{d}\|}\]
                       </td>
                     </tr>
                     <tr>
@@ -1017,7 +1021,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{τ}=\symbf{I} α\]</td>
+                      <td>\[\symbf{τ}=\symbf{I}\,α\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1081,7 +1085,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{g}=-\frac{G M}{\|\symbf{d}\|^{2}} \symbf{\hat{d}}\]
+                        \[\symbf{g}=-\frac{G\,M}{\|\symbf{d}\|^{2}}\,\symbf{\hat{d}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1136,7 +1140,7 @@
                     <p class="paragraph">
                       From <a href=#TM:UniversalGravLaw>Newton's law of universal gravitation</a>, we have:
                     </p>
-                    \[\symbf{F}=\frac{G {m_{1}} {m_{2}}}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}\]
+                    \[\symbf{F}=\frac{G\,{m_{1}}\,{m_{2}}}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}\]
                     <p class="paragraph">
                       The above equation governs the gravitational attraction between two bodies. Suppose that one of the bodies is significantly more massive than the other, so that we concern ourselves with the force the massive body exerts on the lighter body. Further, suppose that the Cartesian coordinate system is chosen such that this force acts on a line which lies along one of the principal axes. Then our unit vector directed from the center of the large mass to the center of the smaller mass <em><b>d&#770;</b></em> for the x or y axes is:
                     </p>
@@ -1144,15 +1148,15 @@
                     <p class="paragraph">
                       Given the above assumptions, let <em>M</em> and <em>m</em> be the mass of the massive and light body respectively. Equating <em><b>F</b></em> above with Newton's second law for the force experienced by the light body, we get:
                     </p>
-                    \[{\symbf{F}_{\symbf{g}}}=G \frac{M m}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}=m \symbf{g}\]
+                    \[{\symbf{F}_{\symbf{g}}}=G\,\frac{M\,m}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}=m\,\symbf{g}\]
                     <p class="paragraph">
                       where <em><b>g</b></em> is the gravitational acceleration. Dividing the above equation by <em>m</em>,  we have:
                     </p>
-                    \[G \frac{M}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}=\symbf{g}\]
+                    \[G\,\frac{M}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}=\symbf{g}\]
                     <p class="paragraph">
                       and thus the negative sign indicates that the force is an attractive force:
                     </p>
-                    \[\symbf{g}=-G \frac{M}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}\]
+                    \[\symbf{g}=-G\,\frac{M}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}\]
                   </div>
                 </div>
                 <div id="GD:impulse">
@@ -1172,7 +1176,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[j=\frac{-\left(1+{C_{\text{R}}}\right) {{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}\]
+                        \[j=\frac{-\left(1+{C_{\text{R}}}\right)\,{{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right)\,\|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1270,7 +1274,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{p}\text{(}t\text{)}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\symbf{p}\text{(}t\text{)}_{j}}}}{{m_{T}}}\]
+                        \[{\symbf{p}\text{(}t\text{)}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}}\,{\symbf{p}\text{(}t\text{)}_{j}}}}{{m_{T}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1308,7 +1312,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:transMot>IM:transMot</a> and <a href=#IM:col2D>IM:col2D</a>
+                          <a href=#IM:col2D>IM:col2D</a> and <a href=#IM:transMot>IM:transMot</a>
                         </p>
                       </td>
                     </tr>
@@ -1786,7 +1790,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[KE=m \frac{\|\symbf{v}\text{(}t\text{)}\|^{2}}{2}\]</td>
+                      <td>\[KE=m\,\frac{\|\symbf{v}\text{(}t\text{)}\|^{2}}{2}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1976,7 +1980,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{J}=m Δ\symbf{v}\]</td>
+                      <td>\[\symbf{J}=m\,Δ\symbf{v}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2015,11 +2019,11 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of impulse (vector):</h4>
                     <p class="paragraph">Newton's second law of motion states:</p>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=m \frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
+                    \[\symbf{F}=m\,\symbf{a}\text{(}t\text{)}=m\,\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">Rearranging:</p>
-                    \[\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m \left(\int_{{\symbf{v}\text{(}t\text{)}_{1}}}^{{\symbf{v}\text{(}t\text{)}_{2}}}{1}\,d\symbf{v}\text{(}t\text{)}\right)\]
+                    \[\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m\,\left(\int_{{\symbf{v}\text{(}t\text{)}_{1}}}^{{\symbf{v}\text{(}t\text{)}_{2}}}{1}\,d\symbf{v}\text{(}t\text{)}\right)\]
                     <p class="paragraph">Integrating the right hand side:</p>
-                    \[\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m {\symbf{v}\text{(}t\text{)}_{2}}-m {\symbf{v}\text{(}t\text{)}_{1}}=m Δ\symbf{v}\]
+                    \[\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m\,{\symbf{v}\text{(}t\text{)}_{2}}-m\,{\symbf{v}\text{(}t\text{)}_{1}}=m\,Δ\symbf{v}\]
                   </div>
                 </div>
                 <div id="DD:potEnergy">
@@ -2042,7 +2046,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[PE=m \symbf{g} h\]</td>
+                      <td>\[PE=m\,\symbf{g}\,h\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2101,7 +2105,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{I}=\displaystyle\sum{{m_{j}} {d_{j}}^{2}}\]</td>
+                      <td>\[\symbf{I}=\displaystyle\sum{{m_{j}}\,{d_{j}}^{2}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2220,7 +2224,7 @@
                           The above equation expresses the total acceleration of the rigid body <em>j</em> as the sum of gravitational acceleration (from <a href=#GD:accelGravity>GD:accelGravity</a>) and acceleration due to applied force <em><b>F</b><sub>j</sub>(t)</em> (from <a href=#TM:NewtonSecLawMot>TM:NewtonSecLawMot</a>). The resultant outputs are then obtained from this equation using <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linVel>DD:linVel</a>, and <a href=#DD:linAcc>DD:linAcc</a>.
                         </p>
                         <p class="paragraph">
-                          The output of the instance model will be the functions of position and velocity over time that satisfy the ODE for the acceleration, with the given initial conditions for position and velocity. The motion is translational, so the position and velocity functions are for the centre of mass (from <a href=#DD:ctrOfMass>DD:ctrOfMass</a>).
+                          The output of the instance model will be the functions of position and velocity over time that satisfy the <span title="ordinary differential equation">ODE</span> for the acceleration, with the given initial conditions for position and velocity. The motion is translational, so the position and velocity functions are for the centre of mass (from <a href=#DD:ctrOfMass>DD:ctrOfMass</a>).
                         </p>
                         <p class="paragraph">
                           All bodies are assumed to be rigid (from <a href=#assumpOT>A:objectTy</a>) and two-dimensional (from <a href=#assumpOD>A:objectDimension</a>).
@@ -2382,7 +2386,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{v}\text{(}t\text{)}_{\text{A}}}\left({t_{\text{c}}}\right)={\symbf{v}\text{(}t\text{)}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}} \symbf{n}\]
+                        \[{\symbf{v}\text{(}t\text{)}_{\text{A}}}\left({t_{\text{c}}}\right)={\symbf{v}\text{(}t\text{)}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}}\,\symbf{n}\]
                       </td>
                     </tr>
                     <tr>
@@ -2454,7 +2458,7 @@
                       <th>Physical Constraints</th>
                       <th>Software Constraints</th>
                       <th>Typical Value</th>
-                      <th>Uncert.</th>
+                      <th><span title="typical uncertainty">Uncert.</span></th>
                     </tr>
                     <tr>
                       <td><em>C<sub>R</sub></em></td>
@@ -2601,12 +2605,12 @@
               </p>
               <p>
                 <div id="calcTransOverTime">
-                  Calculate-Translation-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
+                  Calculate-Translation-Over-Time: Determine the positions and velocities over a period of time of the <span title="two-dimensional">2D</span> rigid bodies acted upon by a force.
                 </div>
               </p>
               <p>
                 <div id="calcRotOverTime">
-                  Calculate-Rotation-Over-Time: Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.
+                  Calculate-Rotation-Over-Time: Determine the orientations and angular velocities over a period of time of the <span title="two-dimensional">2D</span> rigid bodies.
                 </div>
               </p>
               <p>
@@ -2616,7 +2620,7 @@
               </p>
               <p>
                 <div id="deterCollRespOverTime">
-                  Determine-Collision-Response-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
+                  Determine-Collision-Response-Over-Time: Determine the positions and velocities over a period of time of the <span title="two-dimensional">2D</span> rigid bodies that have undergone a collision.
                 </div>
               </p>
             </div>
@@ -2636,7 +2640,7 @@
               </p>
               <p>
                 <div id="correctness">
-                  Correctness: The output of simulation results shall be compared to an existing implementation like Pymunk (please refer to: http://www.pymunk.org/en/latest/).
+                  Correctness: The output of simulation results shall be compared to an existing implementation like <a href="http://www.pymunk.org/en/latest/">Pymunk</a>.
                 </div>
               </p>
               <p>
@@ -2668,7 +2672,7 @@
         <div class="list">
           <p>
             <div id="lcVODES">
-              Variable-ODE-Solver: The internal ODE-solving algorithm used by the library may be changed in the future.
+              Variable-ODE-Solver: The internal <span title="ordinary differential equation">ODE</span>-solving algorithm used by the library may be changed in the future.
             </div>
           </p>
           <p>
@@ -2723,19 +2727,21 @@
       <div class="section">
         <h1>Off-The-Shelf Solutions</h1>
         <p class="paragraph">
-          As mentioned in the <a href=#Sec:ProbDesc>problem description</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
+          As mentioned in the <a href=#Sec:ProbDesc>problem description</a>, there already exist free open source game physics libraries. Similar <span title="two-dimensional">2D</span> physics libraries are:
         </p>
         <ul class="list">
-          <li>Box2D: http://box2d.org/</li>
-          <li>Nape Physics Engine: http://napephys.com/</li>
+          <li><a href="http://box2d.org/">Box2D</a></li>
+          <li><a href="http://napephys.com/">Nape Physics Engine</a></li>
         </ul>
         <p class="paragraph">
-          Free open source 3D game physics libraries include:
+          Free open source <span title="three-dimensional">3D</span> game physics libraries include:
         </p>
         <ul class="list">
-          <li>Bullet: http://bulletphysics.org/</li>
-          <li>Open Dynamics Engine: http://www.ode.org/</li>
-          <li>Newton Game Dynamics: http://newtondynamics.com/</li>
+          <li><a href="http://bulletphysics.org/">Bullet</a></li>
+          <li><a href="http://www.ode.org/">Open Dynamics Engine</a></li>
+          <li>
+            <a href="http://newtondynamics.com/">Newton Game Dynamics</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -4652,31 +4658,31 @@
         <div id="Figure:TraceGraphAvsA">
           <figure>
             <img src="../../../../traceygraphs/gamephysics/avsa.svg" alt="TraceGraphAvsA" >
-            <figcaption>TraceGraphAvsA</figcaption>
+            <figcaption>Figure: TraceGraphAvsA</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAvsAll">
           <figure>
             <img src="../../../../traceygraphs/gamephysics/avsall.svg" alt="TraceGraphAvsAll" >
-            <figcaption>TraceGraphAvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAvsAll</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphRefvsRef">
           <figure>
             <img src="../../../../traceygraphs/gamephysics/refvsref.svg" alt="TraceGraphRefvsRef" >
-            <figcaption>TraceGraphRefvsRef</figcaption>
+            <figcaption>Figure: TraceGraphRefvsRef</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsR">
           <figure>
             <img src="../../../../traceygraphs/gamephysics/allvsr.svg" alt="TraceGraphAllvsR" >
-            <figcaption>TraceGraphAllvsR</figcaption>
+            <figcaption>Figure: TraceGraphAllvsR</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsAll">
           <figure>
             <img src="../../../../traceygraphs/gamephysics/allvsall.svg" alt="TraceGraphAllvsAll" >
-            <figcaption>TraceGraphAllvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAllvsAll</figcaption>
           </figure>
         </div>
         <p class="paragraph">
@@ -4710,73 +4716,60 @@
     <div id="Sec:References">
       <div class="section">
         <h1>References</h1>
-        <ul class="hide-list-style">
-          <li>
-            <div id="jfBeucheIntro">
-              [1]: Bueche, J. Frederick. <em>Introduction to Physics for Scientists, Fourth Edition</em>. Mcgraw-Hill College, 1986.
-            </div>
-          </li>
-          <li>
-            <div id="koothoor2013">
-              [2]: Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-            </div>
-          </li>
-          <li>
-            <div id="parnas1978">
-              [3]: Parnas, David L. "Designing Software for Ease of Extension and Contraction." <em>ICSE '78: Proceedings of the 3rd international conference on Software engineering</em>. 1978. pp. 264&ndash;277.
-            </div>
-          </li>
-          <li>
-            <div id="parnasClements1986">
-              [4]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
-            </div>
-          </li>
-          <li>
-            <div id="pointSource">
-              [5]: Pierce, Rod. <em>Point</em>. May, 2017. <a href="https://www.mathsisfun.com/geometry/point.html">https://www.mathsisfun.com/geometry/point.html</a>.
-            </div>
-          </li>
-          <li>
-            <div id="smithKoothoor2016">
-              [6]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
-            </div>
-          </li>
-          <li>
-            <div id="smithLai2005">
-              [7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-            </div>
-          </li>
-          <li>
-            <div id="smithEtAl2007">
-              [8]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
-            </div>
-          </li>
-          <li>
-            <div id="lineSource">
-              [9]: The Editors of Encyclopaedia Britannica. <em>Line</em>. June, 2019. <a href="https://www.britannica.com/science/line-mathematics">https://www.britannica.com/science/line-mathematics</a>.
-            </div>
-          </li>
-          <li>
-            <div id="chaslesWiki">
-              [10]: Wikipedia Contributors. <em>Chasles' theorem (kinematics)</em>. November, 2018. <a href="https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)">https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)</a>.
-            </div>
-          </li>
-          <li>
-            <div id="cartesianWiki">
-              [11]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
-            </div>
-          </li>
-          <li>
-            <div id="dampingSource">
-              [12]: Wikipedia Contributors. <em>Damping</em>. July, 2019. <a href="https://en.wikipedia.org/wiki/Damping_ratio">https://en.wikipedia.org/wiki/Damping_ratio</a>.
-            </div>
-          </li>
-          <li>
-            <div id="sciComp2013">
-              [13]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
-            </div>
-          </li>
-        </ul>
+        <dl class="reference-list">
+          <dt id="jfBeucheIntro">[<b>jfBeucheIntro</b>]</dt>
+          <dd>
+            Bueche, J. Frederick. <em>Introduction to Physics for Scientists, Fourth Edition</em>. Mcgraw-Hill College, 1986.
+          </dd>
+          <dt id="koothoor2013">[<b>koothoor2013</b>]</dt>
+          <dd>
+            Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+          </dd>
+          <dt id="parnas1978">[<b>parnas1978</b>]</dt>
+          <dd>
+            Parnas, David L. "Designing Software for Ease of Extension and Contraction." <em>ICSE '78: Proceedings of the 3rd international conference on Software engineering</em>. 1978. pp. 264&ndash;277.
+          </dd>
+          <dt id="parnasClements1986">[<b>parnasClements1986</b>]</dt>
+          <dd>
+            Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+          </dd>
+          <dt id="pointSource">[<b>pointSource</b>]</dt>
+          <dd>
+            Pierce, Rod. <em>Point</em>. May, 2017. <a href="https://www.mathsisfun.com/geometry/point.html">https://www.mathsisfun.com/geometry/point.html</a>.
+          </dd>
+          <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+          </dd>
+          <dt id="smithLai2005">[<b>smithLai2005</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+          </dd>
+          <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
+          <dd>
+            Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
+          </dd>
+          <dt id="lineSource">[<b>lineSource</b>]</dt>
+          <dd>
+            The Editors of Encyclopaedia Britannica. <em>Line</em>. June, 2019. <a href="https://www.britannica.com/science/line-mathematics">https://www.britannica.com/science/line-mathematics</a>.
+          </dd>
+          <dt id="chaslesWiki">[<b>chaslesWiki</b>]</dt>
+          <dd>
+            Wikipedia Contributors. <em>Chasles' theorem (kinematics)</em>. November, 2018. <a href="https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)">https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)</a>.
+          </dd>
+          <dt id="cartesianWiki">[<b>cartesianWiki</b>]</dt>
+          <dd>
+            Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
+          </dd>
+          <dt id="dampingSource">[<b>dampingSource</b>]</dt>
+          <dd>
+            Wikipedia Contributors. <em>Damping</em>. July, 2019. <a href="https://en.wikipedia.org/wiki/Damping_ratio">https://en.wikipedia.org/wiki/Damping_ratio</a>.
+          </dd>
+          <dt id="sciComp2013">[<b>sciComp2013</b>]</dt>
+          <dd>
+            Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
+          </dd>
+        </dl>
       </div>
     </div>
   </body>

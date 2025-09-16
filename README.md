@@ -21,7 +21,7 @@ Generate all the Things! Visit [our website](https://jacquescarette.github.io/Dr
 
 ## What is Drasil?
 
-For well understood domains, building software ought to be a matter of engineering, based on solid scientific foundations. The ultimate test of "well understood" is being able to teach the domain language to a computer.  Drasil is a framework for generating all of the software artifacts for (well understood) research software, from the natural knowledge base of the domain.
+For well understood domains, building software ought to be a matter of engineering, based on solid scientific foundations. The ultimate test of "well understood" is being able to teach the domain language to a computer. Drasil is a framework for generating all of the software artifacts for [(well understood) research software](https://github.com/JacquesCarette/Drasil/blob/master/Papers/WellUnderstood/wu.pdf), from the natural knowledge base of the domain.
 
 We take advantage of the inherent duplication of knowledge present in software artifacts (code, specification, tests, etc). More precisely, we capture the information present in software artifacts so that the particular *view* of that information in the artifacts can be reproduced by Drasil. For example, the equation *`F = ma`* will *look* different when rendered in documentation and in Java or Python, although it will mean the same thing. In this way, we obtain *traceability*: we know the exact relationship between information in the specification document and in the code and, furthermore, we know that they are coherent by construction.
 
@@ -33,7 +33,7 @@ Drasil is based on a combination of the following ideas:
 4. the most important information in crafting software are the design decisions and their rationale
 5. a lot of software lives for a very long time (10+ years, often as long as 40 years), which needs a different approach
 
-To better understand the requirements for Drasil, we follow an example-driven approach, based on a set of [case studies](https://github.com/smiths/caseStudies). This is akin to test-driven engineering, but at the system level.  The [currently generated examples](https://jacquescarette.github.io/Drasil/) serve as a good introduction to what we mean.
+To better understand the requirements for Drasil, we follow an example-driven approach, based on a set of [case studies](https://github.com/smiths/caseStudies). This is akin to test-driven engineering but at the system level. The [currently generated examples](https://jacquescarette.github.io/Drasil/) serve as a good introduction to what we mean.
 
 We wrote a [position paper](https://github.com/JacquesCarette/Drasil/blob/main/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf) detailing our original ideas - but this is getting somewhat obsolete now. You can also take a look at [a poster](https://github.com/JacquesCarette/Drasil/blob/main/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf). For more information on the details of Drasil, please see the [Drasil Wiki](https://github.com/JacquesCarette/Drasil/wiki). A collection of Drasil-related papers can be found [here](https://github.com/JacquesCarette/Drasil/wiki/Drasil-Papers-and-Documents). To contribute to this project, visit the [Contributor's Guide](https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide).
 
@@ -48,7 +48,7 @@ If you are on Windows, we recommend you use [Cygwin](https://cygwin.com/install.
     - If Windows Security deletes the executable, simply reinstall it
     - This issue was encountered in Windows 10
 3. Run `stack setup` while in **./code/**
-    - Remember to  change your working directory to **./code/** first
+    - Remember to change your working directory to **./code/** first
     - Use `cd` to change working directory, `pwd` to print your current working directory
     - Refer to [File Directory](https://swcarpentry.github.io/shell-novice/02-filedir/index.html) for further help regarding file directory commands
     - e.g. **./Users/.../GitHub/Drasil/code** (on MacOS)
@@ -101,7 +101,7 @@ sglpend | Single Pendulum
 This runs the examples manually from the .stack-work folder after building, and the generated docs will
 appear in this folder (i.e. in the SRS folders). Due to this placement, these generated
 versions will not be subject to automated tests. The tex files are generated,
-but they are not automatically compiled.  To compile the tex files, use the
+but they are not automatically compiled. To compile the tex files, use the
 generated Makefile (in the same folder as the tex file).
 
 ## Finding / Building the Haddock Documentation

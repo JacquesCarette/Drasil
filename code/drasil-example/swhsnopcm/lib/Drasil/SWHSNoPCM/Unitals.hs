@@ -10,10 +10,10 @@ import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTC, coilHTCMax,
   relTol, tankLength, tankLengthMax, tankLengthMin, tempC, timeFinal,
   timeFinalMax, timeStep, wDensity, wDensityMax, wDensityMin)
 
-inputs :: [QuantityDict]
-inputs = map qw constrained ++ map qw unconstrained
+inputs :: [DefinedQuantityDict]
+inputs = map dqdWr constrained ++ map dqdWr unconstrained
 
-unconstrained :: [UncertainChunk]
+unconstrained :: [UncertQ]
 unconstrained = [absTol, relTol]
 
 constrained :: [UncertQ]
@@ -25,7 +25,7 @@ tempInit :: UncertQ
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
   "the temperature at the beginning of the simulation"
   (sub (eqSymb temp) lInit) centigrade Real
-  [physc $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)] (exactDbl 40) defaultUncrt
+  [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)] (exactDbl 40) defaultUncrt
 
 specParamValList :: [ConstQDef]
 specParamValList = [tankLengthMin, tankLengthMax,

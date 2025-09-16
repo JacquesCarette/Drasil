@@ -13,7 +13,9 @@
 \usepackage{caption}
 \usepackage{graphics}
 \usepackage{svg}
+\usepackage{float}
 \usepackage{enumitem}
+\usepackage{adjustbox}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -22,6 +24,9 @@
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
+}
 \bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR}
 \author{Nikitha Krithnan and W. Spencer Smith}
@@ -146,7 +151,7 @@ ${\mathit{SD}_{\text{y}}}$ & Stand off distance ($y$-component) & ${\text{m}}$
 \\
 ${\mathit{SD}_{\text{z}}}$ & Stand off distance ($z$-component) & ${\text{m}}$
 \\
-$t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & ${\text{mm}}$
+$t$ & Nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & ${\text{mm}}$
 \\
 ${t_{\text{d}}}$ & Duration of load & ${\text{s}}$
 \\
@@ -223,7 +228,7 @@ Uncert. & Typical Uncertainty
 \end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
-Explosions in downtown areas are dangerous from the blast itself and also potentially from the secondary effect of falling glass. Therefore, software is needed to predict whether a glass slab can withstand a blast under given conditions. For example, we might wish to know whether a pane of glass fails from a gas main explosion or from a small fertilizer truck bomb. The program documented here is called GlassBR.
+Explosions in downtown areas are dangerous from the blast itself and also potentially from the secondary effect of falling glass. Therefore, software is needed to predict whether a glass slab can withstand a blast under given conditions. For example, we might wish to know whether a pane of glass fails from a gas main explosion or from a small fertilizer truck bomb. The document describes the program called GlassBR , which is based on the original, manually created version of \hyperref{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}{}{}{GlassBR}.
 
 The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
@@ -267,7 +272,7 @@ This section provides general information about the system. It identifies the in
 \label{Sec:SysContext}
 \hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (GlassBR). Arrows are used to show the data flow between the system and its environment.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../../../../datafiles/glassbr/SystemContextFigure.png}
 \caption{System Context}
@@ -335,7 +340,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Specified design load - The magnitude in Pa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
 \item{Long duration load - Any load lasting approximately 30 days.}
 \end{itemize}
-\item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (${\mathit{SD}_{\text{x}}}$, ${\mathit{SD}_{\text{y}}}$, ${\mathit{SD}_{\text{z}}}$).}
+\item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge.}
 \item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thicknesses and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
 \item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
 \item{Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.}
@@ -345,11 +350,11 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:PhysSyst}
 The physical system of GlassBR, as shown in \hyperref[Figure:physSystImage]{Fig:physSystImage}, includes the following elements:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[PS1:]{The glass slab.}
 \item[PS2:]{The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.}
-\end{itemize}
-\begin{figure}
+\end{description}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.3\textwidth]{../../../../datafiles/glassbr/physicalsystimage.png}
 \caption{The physical system}
@@ -360,9 +365,9 @@ The physical system of GlassBR, as shown in \hyperref[Figure:physSystImage]{Fig:
 \label{Sec:GoalStmt}
 Given the dimensions of the glass plane, the glass type, the characteristics of the explosion, and the tolerable probability of breakage, the goal statement is:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Predict-Glass-Withstands-Explosion:\phantomsection\label{willBreakGS}]{Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.}
-\end{itemize}
+\end{description}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern GlassBR are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
@@ -371,16 +376,16 @@ The instance models that govern GlassBR are presented in the \hyperref[Sec:IMs]{
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[glassType:\phantomsection\label{assumpGT}]{The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.}
 \item[glassCondition:\phantomsection\label{assumpGC}]{Following \cite[(pg. 1)]{astm2009}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: \hyperref[accAlteredGlass]{UC:Accommodate-Altered-Glass}.)}
 \item[explainScenario:\phantomsection\label{assumpES}]{This system only considers the external explosion scenario for its calculations. (RefBy: \hyperref[calcInternalBlastRisk]{LC:Calculate-Internal-Blast-Risk}.)}
-\item[standardValues:\phantomsection\label{assumpSV}]{The values provided in \hyperref[Sec:AuxConstants]{Sec:Values of Auxiliary Constants} are assumed for the duration of load (${t_{\text{d}}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[IM:sdfTol]{IM:sdfTol}, \hyperref[IM:nFL]{IM:nFL}, \hyperref[IM:dimlessLoad]{IM:dimlessLoad}, \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E}, \hyperref[DD:loadDurFactor]{DD:loadDurFactor}, and \hyperref[assumpLDFC]{A:ldfConstant}.)}
+\item[standardValues:\phantomsection\label{assumpSV}]{The values provided in \hyperref[Sec:AuxConstants]{Sec:Values of Auxiliary Constants} are assumed for the duration of load (${t_{\text{d}}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[IM:sdfTol]{IM:sdfTol}, \hyperref[IM:nFL]{IM:nFL}, \hyperref[IM:dimlessLoad]{IM:dimlessLoad}, \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E}, \hyperref[assumpLDFC]{A:ldfConstant}, and \hyperref[DD:loadDurFactor]{DD:loadDurFactor}.)}
 \item[glassLite:\phantomsection\label{assumpGL}]{Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[accMoreThanSingleLite]{LC:Accomodate-More-than-Single-Lite}.)}
 \item[boundaryConditions:\phantomsection\label{assumpBC}]{Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: \hyperref[accMoreBoundaryConditions]{LC:Accomodate-More-Boundary-Conditions}.)}
 \item[responseType:\phantomsection\label{assumpRT}]{The response type considered in GlassBR is flexural. (RefBy: \hyperref[considerMoreThanFlexGlass]{LC:Consider-More-than-Flexure-Glass}.)}
 \item[ldfConstant:\phantomsection\label{assumpLDFC}]{With reference to \hyperref[assumpSV]{A:standardValues}, the value of load duration factor ($\mathit{LDF}$) is a constant in GlassBR. (RefBy: \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E} and \hyperref[DD:loadDurFactor]{DD:loadDurFactor}.)}
-\end{itemize}
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that GlassBR is based on.
@@ -397,7 +402,7 @@ Label & Safety Probability
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{isSafeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}
+           \resizeExpression{\mathit{isSafeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -429,7 +434,7 @@ Label & Safety Load
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{isSafeLoad}=\mathit{capacity}\gt{}\mathit{Load}
+           \resizeExpression{\mathit{isSafeLoad}=\mathit{capacity}\gt{}\mathit{Load}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -475,25 +480,25 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           h=\frac{1}{1000} \begin{cases}
-                            2.16, & t=2.5\\
-                            2.59, & t=2.7\\
-                            2.92, & t=3.0\\
-                            3.78, & t=4.0\\
-                            4.57, & t=5.0\\
-                            5.56, & t=6.0\\
-                            7.42, & t=8.0\\
-                            9.02, & t=10.0\\
-                            11.91, & t=12.0\\
-                            15.09, & t=16.0\\
-                            18.26, & t=19.0\\
-                            21.44, & t=22.0
-                            \end{cases}
+           \resizeExpression{h=\frac{1}{1000}\,\begin{cases}
+                                               2.16, & t=2.5\\
+                                               2.59, & t=2.7\\
+                                               2.92, & t=3.0\\
+                                               3.78, & t=4.0\\
+                                               4.57, & t=5.0\\
+                                               5.56, & t=6.0\\
+                                               7.42, & t=8.0\\
+                                               9.02, & t=10.0\\
+                                               11.91, & t=12.0\\
+                                               15.09, & t=16.0\\
+                                               18.26, & t=19.0\\
+                                               21.44, & t=22.0
+                                               \end{cases}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$h$ is the minimum thickness (${\text{m}}$)}
-              \item{$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (${\text{mm}}$)}
+              \item{$t$ is the nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (${\text{mm}}$)}
               \end{symbDescription}
 \\ \midrule
 Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
@@ -526,7 +531,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{LDF}=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}
+           \resizeExpression{\mathit{LDF}=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -567,11 +572,11 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{GTF}=\begin{cases}
-                        1, & g=\text{``AN''}\\
-                        4, & g=\text{``FT''}\\
-                        2, & g=\text{``HS''}
-                        \end{cases}
+           \resizeExpression{\mathit{GTF}=\begin{cases}
+                                          1, & g=\text{``AN''}\\
+                                          4, & g=\text{``FT''}\\
+                                          2, & g=\text{``HS''}
+                                          \end{cases}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -613,7 +618,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{SD}=\sqrt{{\mathit{SD}_{\text{x}}}^{2}+{\mathit{SD}_{\text{y}}}^{2}+{\mathit{SD}_{\text{z}}}^{2}}
+           \resizeExpression{\mathit{SD}=\sqrt{{\mathit{SD}_{\text{x}}}^{2}+{\mathit{SD}_{\text{y}}}^{2}+{\mathit{SD}_{\text{z}}}^{2}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -650,7 +655,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{AR}=\frac{a}{b}
+           \resizeExpression{\mathit{AR}=\frac{a}{b}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -689,7 +694,7 @@ Units & ${\text{kg}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {w_{\mathit{TNT}}}=w \mathit{TNT}
+           \resizeExpression{{w_{\mathit{TNT}}}=w\,\mathit{TNT}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -725,7 +730,7 @@ Units & ${\text{Pa}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           q=\mathit{interpY}\left(\text{``TSD.txt''},\mathit{SD},{w_{\mathit{TNT}}}\right)
+           \resizeExpression{q=\mathit{interpY}\left(\text{``TSD.txt''},\mathit{SD},{w_{\mathit{TNT}}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -771,16 +776,16 @@ Output & $B$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    a\gt{}0
+                    \resizeExpression{a\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}b\leq{}a
+                    \resizeExpression{0\lt{}b\leq{}a}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} \mathit{LDF} e^{J}
+           \resizeExpression{B=\frac{k}{\left(a\,b\right)^{m-1}}\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}\,e^{J}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -831,15 +836,15 @@ Output & $J$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \mathit{AR}\geq{}1
+                    \resizeExpression{\mathit{AR}\geq{}1}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     {J_{\text{min}}}\leq{}J\leq{}{J_{\text{max}}}
+                     \resizeExpression{{J_{\text{min}}}\leq{}J\leq{}{J_{\text{max}}}}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           J=\mathit{interpZ}\left(\text{``SDF.txt''},\mathit{AR},\hat{q}\right)
+           \resizeExpression{J=\mathit{interpZ}\left(\text{``SDF.txt''},\mathit{AR},\hat{q}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -883,16 +888,16 @@ Output & $\mathit{NFL}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    a\gt{}0
+                    \resizeExpression{a\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}b\leq{}a
+                    \resizeExpression{0\lt{}b\leq{}a}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{NFL}=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}
+           \resizeExpression{\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}}\,E\,h^{4}}{\left(a\,b\right)^{2}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -940,16 +945,16 @@ Output & $\hat{q}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    a\gt{}0
+                    \resizeExpression{a\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}b\leq{}a
+                    \resizeExpression{0\lt{}b\leq{}a}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} \mathit{GTF}}
+           \resizeExpression{\hat{q}=\frac{q\,\left(a\,b\right)^{2}}{E\,h^{4}\,\mathit{GTF}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1000,13 +1005,13 @@ Output & ${\hat{q}_{\text{tol}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \mathit{AR}\geq{}1
+                    \resizeExpression{\mathit{AR}\geq{}1}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           {\hat{q}_{\text{tol}}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},{J_{\text{tol}}}\right)
+           \resizeExpression{{\hat{q}_{\text{tol}}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},{J_{\text{tol}}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1050,19 +1055,19 @@ Output & ${J_{\text{tol}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    0\leq{}{P_{\text{b}\text{tol}}}\leq{}1
+                    \resizeExpression{0\leq{}{P_{\text{b}\text{tol}}}\leq{}1}
                     \end{displaymath}
                     \begin{displaymath}
-                    a\gt{}0
+                    \resizeExpression{a\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}b\leq{}a
+                    \resizeExpression{0\lt{}b\leq{}a}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           {J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} \mathit{LDF}}\right)
+           \resizeExpression{{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right)\,\frac{\left(a\,b\right)^{m-1}}{k\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1117,11 +1122,11 @@ Output & ${P_{\text{b}}}$
 Input Constraints & 
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     0\leq{}{P_{\text{b}}}\leq{}1
+                     \resizeExpression{0\leq{}{P_{\text{b}}}\leq{}1}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           {P_{\text{b}}}=1-e^{-B}
+           \resizeExpression{{P_{\text{b}}}=1-e^{-B}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1163,7 +1168,7 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{LR}=\mathit{NFL} \mathit{GTF} \mathit{LSF}
+           \resizeExpression{\mathit{LR}=\mathit{NFL}\,\mathit{GTF}\,\mathit{LSF}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1207,16 +1212,16 @@ Output & $\mathit{isSafePb}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    0\leq{}{P_{\text{b}}}\leq{}1
+                    \resizeExpression{0\leq{}{P_{\text{b}}}\leq{}1}
                     \end{displaymath}
                     \begin{displaymath}
-                    0\leq{}{P_{\text{b}\text{tol}}}\leq{}1
+                    \resizeExpression{0\leq{}{P_{\text{b}\text{tol}}}\leq{}1}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{isSafePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}
+           \resizeExpression{\mathit{isSafePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1259,16 +1264,16 @@ Output & $\mathit{isSafeLR}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \mathit{LR}\gt{}0
+                    \resizeExpression{\mathit{LR}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    q\gt{}0
+                    \resizeExpression{q\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{isSafeLR}=\mathit{LR}\gt{}q
+           \resizeExpression{\mathit{isSafeLR}=\mathit{LR}\gt{}q}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1339,16 +1344,16 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.}
 \item[System-Set-Values-Following-Assumptions:\phantomsection\label{sysSetValsFollowingAssumps}]{The system shall set the known values as described in the table for \hyperref[Table:ReqAssignments]{Required Assignments}.}
 \item[Check-Input-with-Data\_Constraints:\phantomsection\label{checkInputWithDataCons}]{The system shall check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
 \item[Output-Values-and-Known-Values:\phantomsection\label{outputValsAndKnownValues}]{Output the input values from \hyperref[inputValues]{FR:Input-Values} and the known values from \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}.}
 \item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]{If $\mathit{isSafePb}\land{}\mathit{isSafeLR}$ (from \hyperref[IM:isSafePb]{IM:isSafePb} and \hyperref[IM:isSafeLR]{IM:isSafeLR}), output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output the values from the table for \hyperref[Table:ReqOutputs]{Required Outputs}.}
-\end{itemize}
+\end{description}
 \begin{longtblr}
-[caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
+[caption={Required Inputs}]
 {colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
@@ -1366,7 +1371,7 @@ ${\mathit{SD}_{\text{y}}}$ & Stand off distance ($y$-component) & ${\text{m}}$
 \\
 ${\mathit{SD}_{\text{z}}}$ & Stand off distance ($z$-component) & ${\text{m}}$
 \\
-$t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & ${\text{mm}}$
+$t$ & Nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & ${\text{mm}}$
 \\
 $\mathit{TNT}$ & TNT equivalent factor & --
 \\
@@ -1374,7 +1379,7 @@ $w$ & Charge weight & ${\text{kg}}$
 \label{Table:ReqInputs}
 \end{longtblr}
 \begin{longtblr}
-[caption={Required Assignments following \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}}]
+[caption={Required Assignments}]
 {colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
@@ -1400,7 +1405,7 @@ ${t_{\text{d}}}$ & Duration of load & \hyperref[assumpSV]{A:standardValues} & ${
 \label{Table:ReqAssignments}
 \end{longtblr}
 \begin{longtblr}
-[caption={Required Outputs following \hyperref[outputValues]{FR:Output-Values}}]
+[caption={Required Outputs}]
 {colspec={l X[l] l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
@@ -1435,33 +1440,33 @@ ${\hat{q}_{\text{tol}}}$ & Tolerable load & \hyperref[IM:tolLoad]{IM:tolLoad} & 
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
-\begin{itemize}
-\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}.}
-\item[Verifiable:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
-\item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
-\item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
-\item[Maintainable:\phantomsection\label{maintainable}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
-\item[Portable:\phantomsection\label{portable}]{The code is able to be run in different environments.}
-\end{itemize}
+\begin{description}[font=\normalfont]
+\item[Correctness:\phantomsection\label{correct}]{The outputs of the code have the \hyperref[Sec:CorSolProps]{properties of a correct solution}.}
+\item[Verifiability:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
+\item[Understandability:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
+\item[Reusability:\phantomsection\label{reusable}]{The code is modularized.}
+\item[Maintainability:\phantomsection\label{maintainable}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
+\item[Portablity:\phantomsection\label{portable}]{The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.}
+\end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
 This section lists the likely changes to be made to the software.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Calculate-Internal-Blast-Risk:\phantomsection\label{calcInternalBlastRisk}]{\hyperref[assumpES]{A:explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.}
 \item[Variable-Values-of-m,k,E:\phantomsection\label{varValsOfmkE}]{\hyperref[assumpSV]{A:standardValues}, \hyperref[assumpLDFC]{A:ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.}
 \item[Accomodate-More-than-Single-Lite:\phantomsection\label{accMoreThanSingleLite}]{\hyperref[assumpGL]{A:glassLite} - The software may be changed to accommodate more than a single lite.}
 \item[Accomodate-More-Boundary-Conditions:\phantomsection\label{accMoreBoundaryConditions}]{\hyperref[assumpBC]{A:boundaryConditions} - The software may be changed to accommodate more boundary conditions than 4-sided support.}
 \item[Consider-More-than-Flexure-Glass:\phantomsection\label{considerMoreThanFlexGlass}]{\hyperref[assumpRT]{A:responseType} - The software may be changed to consider more than just flexure of the glass.}
-\end{itemize}
+\end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 This section lists the unlikely changes to be made to the software.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Predict-Withstanding-of-Certain-Degree:\phantomsection\label{predictWithstandOfCertDeg}]{The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.}
 \item[Accommodate-Altered-Glass:\phantomsection\label{accAlteredGlass}]{\hyperref[assumpGC]{A:glassCondition} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.}
-\end{itemize}
+\end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
@@ -1531,6 +1536,18 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:isSafeLR]{IM:isSafeLR} &  &  &  &  &  &  &  & 
 \\
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR:Portablity} &  &  &  &  &  &  &  & 
+\\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  & 
 \\
 \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  & 
@@ -1542,18 +1559,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[checkGlassSafety]{FR:Check-Glass-Safety} &  &  &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  & 
-\\
-\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  & 
-\\
-\hyperref[verifiable]{NFR:Verifiable} &  &  &  &  &  &  &  & 
-\\
-\hyperref[understandable]{NFR:Understandable} &  &  &  &  &  &  &  & 
-\\
-\hyperref[reusable]{NFR:Reusable} &  &  &  &  &  &  &  & 
-\\
-\hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  & 
-\\
-\hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcInternalBlastRisk]{LC:Calculate-Internal-Blast-Risk} &  &  & X &  &  &  &  & 
 \\
@@ -1617,9 +1622,21 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:riskFun]{IM:riskFun}} & \textbf{\hyperref[IM:stressDistFac]{IM:stressDistFac}} & \textbf{\hyperref[IM:nFL]{IM:nFL}} & \textbf{\hyperref[IM:dimlessLoad]{IM:dimlessLoad}} & \textbf{\hyperref[IM:tolLoad]{IM:tolLoad}} & \textbf{\hyperref[IM:sdfTol]{IM:sdfTol}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:calofCapacity]{IM:calofCapacity}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values}} & \textbf{\hyperref[checkGlassSafety]{FR:Check-Glass-Safety}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}} & \textbf{\hyperref[portable]{NFR:Portable}}
+\textbf{} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:riskFun]{IM:riskFun}} & \textbf{\hyperref[IM:stressDistFac]{IM:stressDistFac}} & \textbf{\hyperref[IM:nFL]{IM:nFL}} & \textbf{\hyperref[IM:dimlessLoad]{IM:dimlessLoad}} & \textbf{\hyperref[IM:tolLoad]{IM:tolLoad}} & \textbf{\hyperref[IM:sdfTol]{IM:sdfTol}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:calofCapacity]{IM:calofCapacity}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[verifiable]{NFR:Verifiability}} & \textbf{\hyperref[understandable]{NFR:Understandability}} & \textbf{\hyperref[reusable]{NFR:Reusability}} & \textbf{\hyperref[maintainable]{NFR:Maintainability}} & \textbf{\hyperref[portable]{NFR:Portablity}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values}} & \textbf{\hyperref[checkGlassSafety]{FR:Check-Glass-Safety}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
 \\
 \hyperref[willBreakGS]{GS:Predict-Glass-Withstands-Explosion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR:Portablity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1627,56 +1644,44 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
 \\
 \hyperref[checkGlassSafety]{FR:Check-Glass-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[verifiable]{NFR:Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[understandable]{NFR:Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[reusable]{NFR:Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/glassbr/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/glassbr/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/glassbr/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/glassbr/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/glassbr/allvsall}
 \caption{TraceGraphAllvsAll}
@@ -1783,7 +1788,7 @@ address={Washington, USA}}
 @article{smithKoothoor2016,
 author={Smith, W. Spencer and Koothoor, Nirmitha},
 title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},
-journal={ Nuclear Engineering and Technology},
+journal={Nuclear Engineering and Technology},
 year={2016},
 month=apr,
 volume={48},
@@ -1817,14 +1822,14 @@ howpublished={\url{https://doi.org/10.1007/s11155-006-9020-7}}}
 \label{Sec:Appendix}
 This appendix holds the graphs (\hyperref[Figure:demandVSsod]{Fig:demandVSsod} and \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}) used for interpolating values needed in the models.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../../../../datafiles/glassbr/ASTM_F2248-09.png}
 \caption{3 second duration equivalent pressure ($q$) versus Stand off distance (SD) versus Charge weight ($w$)}
 \label{Figure:demandVSsod}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../../../../datafiles/glassbr/ASTM_F2248-09_BeasonEtAl.png}
 \caption{Non dimensional lateral applied load (demand) or pressure ($\hat{q}$) versus Aspect Ratio (AR) versus Stress distribution factor (Function) ($J$)}

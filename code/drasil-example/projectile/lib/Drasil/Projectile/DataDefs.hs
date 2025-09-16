@@ -9,7 +9,7 @@ import Theory.Drasil (DataDefinition, ddENoRefs)
 import Data.Drasil.Quantities.Physics (iSpeed, ixVel, iyVel)
 import Data.Drasil.Theories.Physics (vecMag)
 
-import Drasil.Projectile.Figures (figLaunch)
+import Drasil.Projectile.LabelledContent (figLaunch)
 import Drasil.Projectile.Unitals (launAngle)
 
 dataDefs :: [DataDefinition]
@@ -21,8 +21,8 @@ speedIX = ddENoRefs speedIXQD Nothing "speedIX" [speedRef, figRef]
 speedIY = ddENoRefs speedIYQD Nothing "speedIY" [speedRef, figRef]
 
 speedIXQD, speedIYQD :: SimpleQDef
-speedIXQD = mkQuantDef ixVel $ sy iSpeed `mulRe` cos (sy launAngle)
-speedIYQD = mkQuantDef iyVel $ sy iSpeed `mulRe` sin (sy launAngle)
+speedIXQD = mkQuantDef ixVel $ sy iSpeed $* cos (sy launAngle)
+speedIYQD = mkQuantDef iyVel $ sy iSpeed $* sin (sy launAngle)
 
 ----------
 speedRef :: Sentence

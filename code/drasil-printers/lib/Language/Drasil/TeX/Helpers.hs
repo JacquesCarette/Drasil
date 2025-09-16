@@ -25,10 +25,7 @@ import Data.List (isSuffixOf)
 -- | Helper for adding fencing symbols.
 br, sq, parens, quote :: D -> D
 -- | Curly braces.
-br x = lb <> x <> rb
-  where
-  lb = pure $ text "{"
-  rb = pure $ text "}"
+br x = lbrace <> x <> rbrace
 -- | Square brackets.
 sq x = ls <> x <> rs
   where
@@ -44,6 +41,12 @@ quote x = lq <> x <> rq
   where
   lq = pure $ text "``"
   rq = pure $ text "''"
+
+lbrace, rbrace :: D
+-- | Helper for opening curly brace.
+lbrace = pure $ text "{"
+-- | Helper for closing curly brace.
+rbrace = pure $ text "}"
 
 -- | 0-argument command.
 command0 :: String -> D
@@ -90,10 +93,10 @@ command3 :: String -> String -> String -> String -> D
 command3 s a0 a1 a2 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1 TP.<> H.br a2
 
 -- | Encapsulate environments.
-mkEnv :: String -> D -> D
-mkEnv nm d =
-  pure (text ("\\begin" ++ H.brace nm)) $+$ 
-  d $+$
+mkEnv :: String -> (D -> D -> D) -> D -> D
+mkEnv nm cat d =
+  pure (text ("\\begin" ++ H.brace nm)) `cat`
+  d `cat`
   pure (text ("\\end" ++ H.brace nm))
 
 -- | Encapsulate environments with argument with braces.
@@ -200,17 +203,18 @@ newpage   = command0 "newpage"
 centering = command0 "centering"
 
 -- | Common commands and formatting options for a LaTeX document.
-code, itemize, enumerate, description, figure, center, document, 
-  equation, symbDescription :: D -> D
-code        = mkEnv "lstlisting"
-itemize     = mkEnv "itemize"
-enumerate   = mkEnv "enumerate"
-description = mkEnv "description"
-figure      = mkEnv "figure"
-center      = mkEnv "center"
-document    = mkEnv "document"
-equation    = mkEnv "displaymath" --displays math
-symbDescription = mkEnv "symbDescription"
+code, itemize, enumerate, description, description', figure, 
+  center, document, equation, symbDescription :: D -> D
+code         = mkEnv "lstlisting" ($+$)
+itemize      = mkEnv "itemize" ($+$)
+enumerate    = mkEnv "enumerate" ($+$)
+description  = mkEnv "description" ($+$)
+description' = mkEnvArgSq "description" "font=\\normalfont"
+figure       = mkEnvArgSq "figure" "H"
+center       = mkEnv "center" ($+$)
+document     = mkEnv "document" ($+$)
+equation     = mkEnv "displaymath" ($+$) --displays math
+symbDescription = mkEnv "symbDescription" ($+$)
 
 -- | Command for the document class.
 docclass :: String -> String -> D
@@ -275,9 +279,9 @@ useTikz = usepackage "luatex85" $+$ command0 "def" <>
 -- on Monad...
 
 -- | toEqn is special; it switches to 'Math', but inserts an equation environment.
+-- Uses resizeExpression macro (defined in Preamble.hs) to prevent page overflow.
 toEqn :: D -> D
-toEqn (PL g) = equation $ PL (\_ -> g Math)
-
+toEqn (PL g) = equation $ commandD "resizeExpression" $ PL (\_ -> g Math)
 -----------------------------------------------------------------------------
 -- | Helper(s) for String-Printing in TeX where it varies from HTML/Plaintext.
 paren, sqbrac :: String -> String

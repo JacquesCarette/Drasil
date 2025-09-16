@@ -8,13 +8,13 @@ module Language.Drasil.Plain.Print (
 ) where
 
 import Database.Drasil (ChunkDB)
+import qualified Drasil.Code.CodeExpr.Development as C (CodeExpr)
 import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
 import qualified Language.Drasil as L (Expr, HasSymbol(..))
-import qualified Language.Drasil.CodeExpr.Development as C (CodeExpr)
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
 import Language.Drasil.Printing.Import (expr, codeExpr, spec, symbol)
-import Language.Drasil.Printing.PrintingInformation (PrintingConfiguration(..), 
+import Language.Drasil.Printing.PrintingInformation (PrintingConfiguration(..),
   PrintingInformation(..), Notation(Scientific))
 
 import Utils.Drasil (toPlainName)
@@ -56,6 +56,7 @@ pExprDoc _ (Str s) = text s
 pExprDoc f (Case cs) = caseDoc f cs
 pExprDoc f (Mtx rs) = mtxDoc f rs
 pExprDoc f (Row es) = hcat $ map (pExprDoc f) es
+pExprDoc f (Set es) = hcat $ map (pExprDoc f) es
 pExprDoc _ (Ident s) = text $ toPlainName s
 pExprDoc _ (Label s) = text $ toPlainName s
 pExprDoc _ (Spec s) = specialDoc s
@@ -74,6 +75,7 @@ pExprDoc _ (Spc Thin) = space
 specDoc :: SingleLine -> Spec -> Doc
 specDoc f (E e) = pExprDoc f e
 specDoc _ (S s) = text s
+specDoc f (Tooltip _ s) = specDoc f s
 specDoc _ (Sp s) = specialDoc s
 specDoc f (Ref (Cite2 n) r _) = specDoc f n <+> text ("Ref: " ++ r)
 specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r) --may need to change?
@@ -160,6 +162,10 @@ opsDoc Subt = text " - "
 opsDoc And = text " && "
 opsDoc Or = text " || "
 opsDoc Add = text " + "
+opsDoc SAdd = text " + "
+opsDoc SRemove = text " - "
+opsDoc SContains = text " in "
+opsDoc SUnion = text "+"
 opsDoc Mul = text " * "
 opsDoc Summ = text "sum "
 opsDoc Inte = text "integral "

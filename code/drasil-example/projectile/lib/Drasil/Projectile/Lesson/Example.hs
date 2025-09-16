@@ -11,9 +11,9 @@ exampleContent :: [Contents]
 exampleContent = [exampleContextP1, codeC1, exampleContextP2, codeC2, exampleContextP3, codeC3]
 
 exampleContextP1, exampleContextP2, exampleContextP3 :: Contents
-exampleContextP1 = foldlSP_ [S "A sack slides off the ramp, shown in Figure.",
-    S "We can ignore the physics of the sack sliding down the ramp and just focus on its exit", phrase velocity +:+. S "from the ramp",
-    S "There is initially no vertical component of", phrase velocity `S.andThe` S "horizontal", phrase velocity, S "is:"]
+exampleContextP1 = foldlSP_ [S "A sack slides off the ramp" `sC` S "shown in Figure.",
+    S "We can ignore the physics" `S.ofThe` S "sack sliding down the ramp and just focus on its exit", phrase velocity +:+. S "from the ramp",
+    S "There is initially no vertical component" `S.of_` phrase velocity `S.andThe` S "horizontal", phrase velocity, S "is:"]
 exampleContextP2 = foldlSP_ [S "The", phrase height `S.ofThe` S "ramp from the floor is"]
 exampleContextP3 = foldlSP_ [S "Task: Determine the", phrase time, S "needed for the sack to strike the floor and the range", 
     P cR +:+. S "where sacks begin to pile up",

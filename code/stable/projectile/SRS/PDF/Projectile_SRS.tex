@@ -13,7 +13,9 @@
 \usepackage{caption}
 \usepackage{graphics}
 \usepackage{svg}
+\usepackage{float}
 \usepackage{enumitem}
+\usepackage{adjustbox}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -22,6 +24,9 @@
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
+}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Projectile}
 \author{Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith}
@@ -169,7 +174,7 @@ Uncert. & Typical Uncertainty
 \end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
-Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. Common examples of projectile motion include ballistics problems (missiles, bullets, etc.) and the flight of balls in various sports (baseball, golf, football, etc.). The program documented here is called Projectile.
+Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. Common examples of projectile motion include ballistics problems (missiles, bullets, etc.) and the flight of balls in various sports (baseball, golf, football, etc.). The document describes the program called Projectile , which is based on the original, manually created version of \hyperref{https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile}{}{}{Projectile}.
 
 The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
@@ -201,7 +206,7 @@ This section provides general information about the system. It identifies the in
 \label{Sec:SysContext}
 \hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (Projectile). Arrows are used to show the data flow between the system and its environment.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../../../../datafiles/projectile/SystemContextFigure.png}
 \caption{System Context}
@@ -256,12 +261,12 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:PhysSyst}
 The physical system of Projectile, as shown in \hyperref[Figure:Launch]{Fig:Launch}, includes the following elements:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[PS1:]{The launcher.}
 \item[PS2:]{The projectile (with initial velocity ${\symbf{v}^{\text{i}}}$ and launch angle $θ$).}
 \item[PS3:]{The target.}
-\end{itemize}
-\begin{figure}
+\end{description}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../../../../datafiles/projectile/Launch.jpg}
 \caption{The physical system}
@@ -272,9 +277,9 @@ The physical system of Projectile, as shown in \hyperref[Figure:Launch]{Fig:Laun
 \label{Sec:GoalStmt}
 Given the initial velocity vector of the projectile and the geometric layout of the launcher and target, the goal statement is:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[targetHit:\phantomsection\label{targetHit}]{Determine if the projectile hits the target.}
-\end{itemize}
+\end{description}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern Projectile are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
@@ -283,13 +288,13 @@ The instance models that govern Projectile are presented in the \hyperref[Sec:IM
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[twoDMotion:\phantomsection\label{twoDMotion}]{The projectile motion is two-dimensional (2D). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
 \item[cartSyst:\phantomsection\label{cartSyst}]{A Cartesian coordinate system is used (from \hyperref[neglectCurv]{A:neglectCurv}). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
 \item[yAxisGravity:\phantomsection\label{yAxisGravity}]{The direction of the $y$-axis is directed opposite to gravity. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}, and \hyperref[accelYGravity]{A:accelYGravity}.)}
 \item[launchOrigin:\phantomsection\label{launchOrigin}]{The launcher is coincident with the origin. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[targetXAxis:\phantomsection\label{targetXAxis}]{The target lies on the $x$-axis (from \hyperref[neglectCurv]{A:neglectCurv}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
-\item[posXDirection:\phantomsection\label{posXDirection}]{The positive $x$-direction is from the launcher to the target. (RefBy: \hyperref[IM:offsetIM]{IM:offsetIM}, \hyperref[IM:messageIM]{IM:messageIM}, \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
+\item[posXDirection:\phantomsection\label{posXDirection}]{The positive $x$-direction is from the launcher to the target. (RefBy: \hyperref[IM:messageIM]{IM:messageIM}, \hyperref[IM:offsetIM]{IM:offsetIM}, \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[constAccel:\phantomsection\label{constAccel}]{The acceleration is constant (from \hyperref[accelXZero]{A:accelXZero}, \hyperref[accelYGravity]{A:accelYGravity}, \hyperref[neglectDrag]{A:neglectDrag}, and \hyperref[freeFlight]{A:freeFlight}). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
 \item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[constAccel]{A:constAccel}.)}
 \item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A:yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} and \hyperref[constAccel]{A:constAccel}.)}
@@ -299,7 +304,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: \hyperref[targetXAxis]{A:targetXAxis} and \hyperref[cartSyst]{A:cartSyst}.)}
 \item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD:velVec}, \hyperref[GD:rectVel]{GD:rectVel}, \hyperref[GD:rectPos]{GD:rectPos}, \hyperref[GD:posVec]{GD:posVec}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[gravAccelValue:\phantomsection\label{gravAccelValue}]{The acceleration due to gravity is assumed to have the value provided in the section for \hyperref[Sec:AuxConstants]{Values of Auxiliary Constants}. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
-\end{itemize}
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that Projectile is based on.
@@ -316,7 +321,7 @@ Label & Acceleration
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
+           \resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -346,7 +351,7 @@ Label & Velocity
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
+           \resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -383,7 +388,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t
+           \resizeExpression{v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}}\,t}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -407,17 +412,17 @@ RefBy & \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:rectPos]{GD:rectPos}
 Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A:pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM:acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A:timeStartZero}) is represented by ${v^{\text{i}}}$. From \hyperref[TM:acceleration]{TM:acceleration} in 1D, and using the above symbols we have:
 
 \begin{displaymath}
-{a^{c}}=\frac{\,dv}{\,dt}
+\resizeExpression{{a^{c}}=\frac{\,dv}{\,dt}}
 \end{displaymath}
 Rearranging and integrating, we have:
 
 \begin{displaymath}
-\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt
+\resizeExpression{\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt}
 \end{displaymath}
 Performing the integration, we have the required equation:
 
 \begin{displaymath}
-v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t
+\resizeExpression{v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}}\,t}
 \end{displaymath}
 \medskip
 \noindent
@@ -434,7 +439,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}
+           \resizeExpression{p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}}\,t+\frac{{a^{c}}\,t^{2}}{2}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -459,22 +464,22 @@ RefBy & \hyperref[GD:posVec]{GD:posVec}
 Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A:pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM:velocity} is now one-dimensional. The initial position (at $t=0$, from \hyperref[timeStartZero]{A:timeStartZero}) is represented by ${p^{\text{i}}}$. From \hyperref[TM:velocity]{TM:velocity} in 1D, and using the above symbols we have:
 
 \begin{displaymath}
-v=\frac{\,dp}{\,dt}
+\resizeExpression{v=\frac{\,dp}{\,dt}}
 \end{displaymath}
 Rearranging and integrating, we have:
 
 \begin{displaymath}
-\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt
+\resizeExpression{\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt}
 \end{displaymath}
 From \hyperref[GD:rectVel]{GD:rectVel}, we can replace $v$:
 
 \begin{displaymath}
-\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt
+\resizeExpression{\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}}\,t}\,dt}
 \end{displaymath}
 Performing the integration, we have the required equation:
 
 \begin{displaymath}
-p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}
+\resizeExpression{p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}}\,t+\frac{{a^{c}}\,t^{2}}{2}}
 \end{displaymath}
 \medskip
 \noindent
@@ -491,10 +496,10 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{v}\text{(}t\text{)}=\begin{bmatrix}
-                                      {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
-                                      {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
-                                      \end{bmatrix}
+           \resizeExpression{\symbf{v}\text{(}t\text{)}=\begin{bmatrix}
+                                                        {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}}\,t\\
+                                                        {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}}\,t
+                                                        \end{bmatrix}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -531,10 +536,10 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A:twoDM
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectVel]{GD:rectVel} can be applied to each coordinate of the velocity vector to yield the required equation:
 
 \begin{displaymath}
-\symbf{v}\text{(}t\text{)}=\begin{bmatrix}
-                           {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
-                           {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
-                           \end{bmatrix}
+\resizeExpression{\symbf{v}\text{(}t\text{)}=\begin{bmatrix}
+                                             {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}}\,t\\
+                                             {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}}\,t
+                                             \end{bmatrix}}
 \end{displaymath}
 \medskip
 \noindent
@@ -551,10 +556,10 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{p}\text{(}t\text{)}=\begin{bmatrix}
-                                      {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
-                                      {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
-                                      \end{bmatrix}
+           \resizeExpression{\symbf{p}\text{(}t\text{)}=\begin{bmatrix}
+                                                        {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}}\,t+\frac{{{a_{\text{x}}}^{\text{c}}}\,t^{2}}{2}\\
+                                                        {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}}\,t+\frac{{{a_{\text{y}}}^{\text{c}}}\,t^{2}}{2}
+                                                        \end{bmatrix}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -597,10 +602,10 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A:twoDM
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectPos]{GD:rectPos} can be applied to each coordinate of the position vector to yield the required equation:
 
 \begin{displaymath}
-\symbf{p}\text{(}t\text{)}=\begin{bmatrix}
-                           {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
-                           {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
-                           \end{bmatrix}
+\resizeExpression{\symbf{p}\text{(}t\text{)}=\begin{bmatrix}
+                                             {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}}\,t+\frac{{{a_{\text{x}}}^{\text{c}}}\,t^{2}}{2}\\
+                                             {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}}\,t+\frac{{{a_{\text{y}}}^{\text{c}}}\,t^{2}}{2}
+                                             \end{bmatrix}}
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -624,7 +629,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           v=\|\symbf{v}\text{(}t\text{)}\|
+           \resizeExpression{v=\|\symbf{v}\text{(}t\text{)}\|}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -662,7 +667,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {{v_{\text{x}}}^{\text{i}}}={v^{\text{i}}} \cos\left(θ\right)
+           \resizeExpression{{{v_{\text{x}}}^{\text{i}}}={v^{\text{i}}}\,\cos\left(θ\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -703,7 +708,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {{v_{\text{y}}}^{\text{i}}}={v^{\text{i}}} \sin\left(θ\right)
+           \resizeExpression{{{v_{\text{y}}}^{\text{i}}}={v^{\text{i}}}\,\sin\left(θ\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -748,18 +753,18 @@ Output & ${t_{\text{flight}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    {v_{\text{launch}}}\gt{}0
+                    \resizeExpression{{v_{\text{launch}}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}θ\lt{}\frac{π}{2}
+                    \resizeExpression{0\lt{}θ\lt{}\frac{π}{2}}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     {t_{\text{flight}}}\gt{}0
+                     \resizeExpression{{t_{\text{flight}}}\gt{}0}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           {t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
+           \resizeExpression{{t_{\text{flight}}}=\frac{2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -790,27 +795,27 @@ RefBy & \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, \hyperref[outputVal
 We know that ${{p_{\text{y}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A:launchOrigin}) and ${{a_{\text{y}}}^{\text{c}}}=-g$ (\hyperref[accelYGravity]{A:accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD:posVec} gives us:
 
 \begin{displaymath}
-{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{g t^{2}}{2}
+\resizeExpression{{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}}\,t-\frac{g\,t^{2}}{2}}
 \end{displaymath}
 To find the time that the projectile lands, we want to find the $t$ value (${t_{\text{flight}}}$) where ${p_{\text{y}}}=0$ (since the target is on the $x$-axis from \hyperref[targetXAxis]{A:targetXAxis}). From the equation above we get:
 
 \begin{displaymath}
-{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{g {t_{\text{flight}}}^{2}}{2}=0
+\resizeExpression{{{v_{\text{y}}}^{\text{i}}}\,{t_{\text{flight}}}-\frac{g\,{t_{\text{flight}}}^{2}}{2}=0}
 \end{displaymath}
 Dividing by ${t_{\text{flight}}}$ (with the constraint ${t_{\text{flight}}}\gt{}0$) gives us:
 
 \begin{displaymath}
-{{v_{\text{y}}}^{\text{i}}}-\frac{g {t_{\text{flight}}}}{2}=0
+\resizeExpression{{{v_{\text{y}}}^{\text{i}}}-\frac{g\,{t_{\text{flight}}}}{2}=0}
 \end{displaymath}
 Solving for ${t_{\text{flight}}}$ gives us:
 
 \begin{displaymath}
-{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{g}
+\resizeExpression{{t_{\text{flight}}}=\frac{2\,{{v_{\text{y}}}^{\text{i}}}}{g}}
 \end{displaymath}
 From \hyperref[DD:speedIY]{DD:speedIY} (with ${v^{\text{i}}}={v_{\text{launch}}}$) we can replace ${{v_{\text{y}}}^{\text{i}}}$:
 
 \begin{displaymath}
-{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
+\resizeExpression{{t_{\text{flight}}}=\frac{2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}}
 \end{displaymath}
 \medskip
 \noindent
@@ -830,18 +835,18 @@ Output & ${p_{\text{land}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    {v_{\text{launch}}}\gt{}0
+                    \resizeExpression{{v_{\text{launch}}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}θ\lt{}\frac{π}{2}
+                    \resizeExpression{0\lt{}θ\lt{}\frac{π}{2}}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     {p_{\text{land}}}\gt{}0
+                     \resizeExpression{{p_{\text{land}}}\gt{}0}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           {p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
+           \resizeExpression{{p_{\text{land}}}=\frac{2\,{v_{\text{launch}}}^{2}\,\sin\left(θ\right)\,\cos\left(θ\right)}{g}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -872,22 +877,22 @@ RefBy & \hyperref[IM:offsetIM]{IM:offsetIM} and \hyperref[calcValues]{FR:Calcula
 We know that ${{p_{\text{x}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A:launchOrigin}) and ${{a_{\text{x}}}^{\text{c}}}=0$ (\hyperref[accelXZero]{A:accelXZero}). Substituting these values into the x-direction of \hyperref[GD:posVec]{GD:posVec} gives us:
 
 \begin{displaymath}
-{p_{\text{x}}}={{v_{\text{x}}}^{\text{i}}} t
+\resizeExpression{{p_{\text{x}}}={{v_{\text{x}}}^{\text{i}}}\,t}
 \end{displaymath}
 To find the landing position, we want to find the ${p_{\text{x}}}$ value (${p_{\text{land}}}$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}):
 
 \begin{displaymath}
-{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
+\resizeExpression{{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}}
 \end{displaymath}
 From \hyperref[DD:speedIX]{DD:speedIX} (with ${v^{\text{i}}}={v_{\text{launch}}}$) we can replace ${{v_{\text{x}}}^{\text{i}}}$:
 
 \begin{displaymath}
-{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
+\resizeExpression{{p_{\text{land}}}=\frac{{v_{\text{launch}}}\,\cos\left(θ\right)\cdot{}2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}}
 \end{displaymath}
 Rearranging this gives us the required equation:
 
 \begin{displaymath}
-{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
+\resizeExpression{{p_{\text{land}}}=\frac{2\,{v_{\text{launch}}}^{2}\,\sin\left(θ\right)\,\cos\left(θ\right)}{g}}
 \end{displaymath}
 \medskip
 \noindent
@@ -907,16 +912,16 @@ Output & ${d_{\text{offset}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    {p_{\text{land}}}\gt{}0
+                    \resizeExpression{{p_{\text{land}}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    {p_{\text{target}}}\gt{}0
+                    \resizeExpression{{p_{\text{target}}}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           {d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}
+           \resizeExpression{{d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -957,20 +962,20 @@ Output & $s$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    {d_{\text{offset}}}\gt{}-{p_{\text{target}}}
+                    \resizeExpression{{d_{\text{offset}}}\gt{}-{p_{\text{target}}}}
                     \end{displaymath}
                     \begin{displaymath}
-                    {p_{\text{target}}}\gt{}0
+                    \resizeExpression{{p_{\text{target}}}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           s=\begin{cases}
-             \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
-             \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
-             \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
-             \end{cases}
+           \resizeExpression{s=\begin{cases}
+                               \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
+                               \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
+                               \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
+                               \end{cases}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1038,14 +1043,14 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInVals}]{Check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
 \item[Calculate-Values:\phantomsection\label{calcValues}]{Calculate the following values: ${t_{\text{flight}}}$ (from \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}), ${p_{\text{land}}}$ (from \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}), ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM:offsetIM}), and $s$ (from \hyperref[IM:messageIM]{IM:messageIM}).}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output ${t_{\text{flight}}}$ (from \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}), $s$ (from \hyperref[IM:messageIM]{IM:messageIM}), and ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM:offsetIM}).}
-\end{itemize}
+\end{description}
 \begin{longtblr}
-[caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
+[caption={Required Inputs}]
 {colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
@@ -1060,14 +1065,14 @@ $θ$ & Launch angle & ${\text{rad}}$
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
-\begin{itemize}
-\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Properties of a Correct Solution}.}
-\item[Verifiable:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
-\item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
-\item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
-\item[Maintainable:\phantomsection\label{maintainable}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
-\item[Portable:\phantomsection\label{portable}]{The code is able to be run in different environments.}
-\end{itemize}
+\begin{description}[font=\normalfont]
+\item[Correctness:\phantomsection\label{correct}]{The outputs of the code have the \hyperref[Sec:CorSolProps]{properties of a correct solution}.}
+\item[Verifiability:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
+\item[Understandability:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
+\item[Reusability:\phantomsection\label{reusable}]{The code is modularized.}
+\item[Maintainability:\phantomsection\label{maintainable}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
+\item[Portability:\phantomsection\label{portable}]{The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.}
+\end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
@@ -1139,6 +1144,18 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:messageIM]{IM:messageIM} &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[verifyInVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1146,18 +1163,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[verifiable]{NFR:Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[understandable]{NFR:Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[reusable]{NFR:Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAvsAll}
 \end{longtblr}
 \begin{longtblr}
@@ -1195,9 +1200,21 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:vecMag]{DD:vecMag}} & \textbf{\hyperref[DD:speedIX]{DD:speedIX}} & \textbf{\hyperref[DD:speedIY]{DD:speedIY}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[GD:rectVel]{GD:rectVel}} & \textbf{\hyperref[GD:rectPos]{GD:rectPos}} & \textbf{\hyperref[GD:velVec]{GD:velVec}} & \textbf{\hyperref[GD:posVec]{GD:posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM:offsetIM}} & \textbf{\hyperref[IM:messageIM]{IM:messageIM}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}} & \textbf{\hyperref[portable]{NFR:Portable}}
+\textbf{} & \textbf{\hyperref[DD:vecMag]{DD:vecMag}} & \textbf{\hyperref[DD:speedIX]{DD:speedIX}} & \textbf{\hyperref[DD:speedIY]{DD:speedIY}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[GD:rectVel]{GD:rectVel}} & \textbf{\hyperref[GD:rectPos]{GD:rectPos}} & \textbf{\hyperref[GD:velVec]{GD:velVec}} & \textbf{\hyperref[GD:posVec]{GD:posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM:offsetIM}} & \textbf{\hyperref[IM:messageIM]{IM:messageIM}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[verifiable]{NFR:Verifiability}} & \textbf{\hyperref[understandable]{NFR:Understandability}} & \textbf{\hyperref[reusable]{NFR:Reusability}} & \textbf{\hyperref[maintainable]{NFR:Maintainability}} & \textbf{\hyperref[portable]{NFR:Portability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
 \\
 \hyperref[targetHit]{GS:targetHit} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1206,51 +1223,39 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  & X &  & X & X &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[verifiable]{NFR:Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[understandable]{NFR:Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[reusable]{NFR:Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/allvsall}
 \caption{TraceGraphAllvsAll}
@@ -1309,7 +1314,7 @@ address={Washington, USA}}
 @article{smithKoothoor2016,
 author={Smith, W. Spencer and Koothoor, Nirmitha},
 title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},
-journal={ Nuclear Engineering and Technology},
+journal={Nuclear Engineering and Technology},
 year={2016},
 month=apr,
 volume={48},

@@ -9,6 +9,7 @@ import Control.Lens ((^.))
 import Data.List (sortBy)
 import Data.Function (on)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Utils.Drasil (mkTable)
 
 -- | Helper function that gets the acronym out of an 'Idea'.
 select :: (Idea s) => [s] -> [(String, s)]
@@ -31,5 +32,3 @@ tableAbbAccGen ls = let chunks = sortBy (compare `on` fst) $ select ls in
 -- | Table of abbreviations and acronyms reference.
 tableAbbAccRef :: Reference
 tableAbbAccRef = makeTabRef' $ abbAcc ^. uid
-
-

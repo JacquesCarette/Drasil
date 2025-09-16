@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.DifferentialModel (
   -- * Export Data Type
   DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..),
   -- * Input Language
-  ($^^), ($*), ($+),
+  ($^^), ($**), ($++),
   -- * Constructors
   makeAODESolverFormat, makeAIVP, makeASystemDE, makeASingleDE,
   formEquations
@@ -13,7 +13,7 @@ module Language.Drasil.Chunk.DifferentialModel (
 
 import Control.Lens (makeLenses, (^.), view)
 import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
-import Language.Drasil.UID (HasUID(uid))
+import Drasil.Database.UID (HasUID(uid))
 import Language.Drasil.Classes (Express(..),
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
@@ -24,11 +24,11 @@ import Language.Drasil.Chunk.Unital (UnitalChunk)
 import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
 import Language.Drasil.Expr.Class (ExprC(..), columnVec)
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
-import Language.Drasil.Chunk.Quantity (qw)
 import Language.Drasil.Literal.Class (LiteralC(exactDbl, int))
 import Data.List (find)
 import Language.Drasil.WellTyped (RequiresChecking (requiredChecks))
 import Language.Drasil.Space (Space, HasSpace (..))
+import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 
 -- | Unknown is nth order of the dependent variable 
 type Unknown = Integer
@@ -59,18 +59,18 @@ type LHS = [Term]
   exactDbl 1 is the the coefficient, 
   (opProcessVariable $^^ 2) is the 2rd order of opProcessVariable
 -}
-($*) :: Expr -> Unknown -> Term
-($*) = T
+($**) :: Expr -> Unknown -> Term
+($**) = T
 
 -- | Operation represent plus (collection Terms)
 {-
   e.g. [exactDbl 1 $* (opProcessVariable $^^ 2)]
-       $+ (exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1))
+       $+ (exactDbl 1 $+ sy qdDerivGain $* (opProcessVariable $^^ 1))
   [exactDbl 1 $* (opProcessVariable $^^ 2)] is a collection with a single Term, 
-  (exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1)) is the appended element
+  (exactDbl 1 $+ sy qdDerivGain $* (opProcessVariable $^^ 1)) is the appended element
 -}
-($+) :: [Term] -> Term -> LHS
-($+) xs x  = xs ++ [x]
+($++) :: [Term] -> Term -> LHS
+($++) xs x  = xs ++ [x]
 
 -- | Describe the structural content of a system of linear ODEs with six necessary fields
 data DifferentialModel = SystemOfLinearODEs {
@@ -142,7 +142,7 @@ formStdODE d
 -- | Set the single ODE to a flat equation form, "left hand side" = "right hand side"
 formASingleODE :: [Expr] -> [ModelExpr] -> [Expr] -> ModelExpr
 formASingleODE coeffs unks consts = equiv (lhs : rhs)
-  where lhs = foldl1 addRe (map (\x-> express (fst x) `mulRe` snd x) $ filterZeroCoeff coeffs unks)
+  where lhs = foldl1 ($+) (map (\x-> express (fst x) $* snd x) $ filterZeroCoeff coeffs unks)
         rhs = map express consts
 
 -- | Remove zero coefficients for the displaying purpose
@@ -155,7 +155,7 @@ formAllUnknown unks dep ind = map (\x -> formAUnknown x dep ind) unks
 
 -- | Form a derivative for the displaying purpose
 formAUnknown :: Unknown -> ConstrConcept-> UnitalChunk -> ModelExpr
-formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy (qw dep))
+formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy (dqdWr dep))
 
 -- |   Create a 'DifferentialModel' by giving a independent variable, a dependent variable a canonical matrix form, and conceptChuck.
 {-
@@ -297,11 +297,11 @@ formEquations [] _ _ _ = []
 formEquations _ [] _ _ = []
 formEquations _ _ [] _ = []
 formEquations (ex:exs) unks (y:ys) depVa =
-  (if y == exactDbl 0 then finalExpr else finalExpr `addRe` y) : formEquations exs unks ys depVa
+  (if y == exactDbl 0 then finalExpr else finalExpr $+ y) : formEquations exs unks ys depVa
   where indexUnks = map (idx (sy depVa) . int) unks -- create X
         filteredExprs = filter (\x -> fst x /= exactDbl 0) (zip ex indexUnks) -- remove zero coefficients
-        termExprs = map (uncurry mulRe) filteredExprs -- multiple coefficient with depend variables
-        finalExpr = foldl1 addRe termExprs -- add terms together
+        termExprs = map (uncurry ($*)) filteredExprs -- multiple coefficient with depend variables
+        finalExpr = foldl1 ($+) termExprs -- add terms together
 
 -- Construct an InitialValueProblem.
 {-

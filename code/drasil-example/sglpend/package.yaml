@@ -7,6 +7,14 @@ github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
+language: Haskell2010
+default-extensions:
+- StrictData
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
 extra-source-files: []
 
 dependencies:
@@ -22,6 +30,7 @@ dependencies:
 - drasil-lang
 - drasil-metadata
 - drasil-printers
+- drasil-system
 - drasil-theory
 - drasil-utils
 - dblpend
@@ -37,8 +46,6 @@ executables:
     main: Main
     source-dirs: app 
     ghc-options:
-    - -Wall
-    - -Wredundant-constraints
     - -threaded
     - -O2
     dependencies:

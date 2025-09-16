@@ -6,47 +6,47 @@
 import math
 import sys
 
-## \brief Calculates flight duration: the time when the projectile lands (s)
-# \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
-# \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
+## \brief Calculates flight duration (s)
+# \param v_launch launch speed (m/s)
+# \param theta launch angle (rad)
 # \param g magnitude of gravitational acceleration (m/s^2)
-# \return flight duration: the time when the projectile lands (s)
+# \return flight duration (s)
 def func_t_flight(v_launch, theta, g):
     return 2.0 * v_launch * math.sin(theta) / g
 
-## \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
-# \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
-# \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
+## \brief Calculates landing position (m)
+# \param v_launch launch speed (m/s)
+# \param theta launch angle (rad)
 # \param g magnitude of gravitational acceleration (m/s^2)
-# \return landing position: the distance from the launcher to the final position of the projectile (m)
+# \return landing position (m)
 def func_p_land(v_launch, theta, g):
     return 2.0 * v_launch ** 2.0 * math.sin(theta) * math.cos(theta) / g
 
-## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
-# \param p_target target position: the distance from the launcher to the target (m)
-# \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
-# \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
+## \brief Calculates distance between the target position and the landing position (m)
+# \param p_target target position (m)
+# \param p_land landing position (m)
+# \return distance between the target position and the landing position (m)
 def func_d_offset(p_target, p_land):
     return p_land - p_target
 
 ## \brief Calculates output message as a string
-# \param p_target target position: the distance from the launcher to the target (m)
+# \param p_target target position (m)
 # \param epsilon hit tolerance
-# \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+# \param d_offset distance between the target position and the landing position (m)
 # \return output message as a string
 def func_s(p_target, epsilon, d_offset):
-    if (math.fabs(d_offset / p_target) < epsilon):
+    if math.fabs(d_offset / p_target) < epsilon:
         return "The target was hit."
-    elif (d_offset < 0.0):
+    elif d_offset < 0.0:
         return "The projectile fell short."
     else:
         return "The projectile went long."
 
 ## \brief Reads input from a file with the given file name
 # \param filename name of the input file
-# \return launch speed: the initial speed of the projectile when launched (m/s)
-# \return launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-# \return target position: the distance from the launcher to the target (m)
+# \return launch speed (m/s)
+# \return launch angle (rad)
+# \return target position (m)
 def get_input(filename):
     infile = open(filename, "r")
     infile.readline()
@@ -60,11 +60,11 @@ def get_input(filename):
     return v_launch, theta, p_target
 
 ## \brief Verifies that input values satisfy the physical constraints
-# \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
-# \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-# \param p_target target position: the distance from the launcher to the target (m)
+# \param v_launch launch speed (m/s)
+# \param theta launch angle (rad)
+# \param p_target target position (m)
 def input_constraints(v_launch, theta, p_target):
-    if (not(v_launch > 0.0)):
+    if not(v_launch > 0.0):
         print("Warning: ", end="")
         print("v_launch has value ", end="")
         print(v_launch, end="")
@@ -72,7 +72,7 @@ def input_constraints(v_launch, theta, p_target):
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(0.0 < theta and theta < math.pi / 2.0)):
+    if not(0.0 < theta and theta < math.pi / 2.0):
         print("Warning: ", end="")
         print("theta has value ", end="")
         print(theta, end="")
@@ -83,7 +83,7 @@ def input_constraints(v_launch, theta, p_target):
         print(math.pi / 2.0, end="")
         print(" ((pi)/(2))", end="")
         print(".")
-    if (not(p_target > 0.0)):
+    if not(p_target > 0.0):
         print("Warning: ", end="")
         print("p_target has value ", end="")
         print(p_target, end="")
@@ -94,8 +94,8 @@ def input_constraints(v_launch, theta, p_target):
 
 ## \brief Writes the output values to output.txt
 # \param s output message as a string
-# \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
-# \param t_flight flight duration: the time when the projectile lands (s)
+# \param d_offset distance between the target position and the landing position (m)
+# \param t_flight flight duration (s)
 def write_output(s, d_offset, t_flight):
     outputfile = open("output.txt", "w")
     print("s = ", end="", file=outputfile)

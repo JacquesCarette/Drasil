@@ -6,7 +6,7 @@ module Language.Drasil.Code.Code (
 
 import qualified Language.Drasil as S (Space(..))
 
-import GOOL.Drasil (CodeType(..))
+import Drasil.GOOL (CodeType(..))
 
 import Text.PrettyPrint.HughesPJ (Doc)
 import Data.List.NonEmpty (toList)
@@ -25,10 +25,9 @@ spaceToCodeType S.Char           = [Char]
 spaceToCodeType S.String         = [String]
 spaceToCodeType (S.Vect s)       = map List (spaceToCodeType s)
 spaceToCodeType (S.Matrix _ _ s) = map (List . List) (spaceToCodeType s)
+spaceToCodeType (S.Set s)        = map List (spaceToCodeType s)
 spaceToCodeType (S.Array s)      = map Array (spaceToCodeType s)
 spaceToCodeType (S.Actor s)      = [Object s]
-spaceToCodeType (S.DiscreteD _)  = map List (spaceToCodeType S.Rational)
-spaceToCodeType (S.DiscreteS _)  = map List (spaceToCodeType S.String)
 spaceToCodeType S.Void           = [Void]
 spaceToCodeType (S.Function i t) = [Func is ts | is <- ins, ts <- trgs]
     where trgs = spaceToCodeType t

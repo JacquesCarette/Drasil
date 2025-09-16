@@ -1,6 +1,6 @@
 #!/usr/bin/env stack
 {- stack script
-   --resolver lts-20.26
+   --resolver lts-22.31
    --package split
    --package directory,filepath
    --package text
@@ -27,6 +27,7 @@ import Data.List.Split (splitOn)
 import DataPrinters.Dot
 import DataPrinters.HTML
 
+import Data.Containers.ListUtils (nubOrd)
 
 ------------
 -- Data types used in the generation of dependency tables and graphs
@@ -210,8 +211,8 @@ mkEntryPack = map $ \(n, es) -> makeEntryPack n $ filter isEntryEmpty $ map entr
     -- only take the information needed to construct a graph from a full entry
     entryToSmallEntry :: Entry -> SmallEntry
     entryToSmallEntry Entry{dataTypes = dts, newtypes = nts, classes = clss, classInstances = clsinst} = 
-      makeSmallEntry (dts ++ nts) (nub $ map className clss)
-      (nub $ concatMap snd (mkPkgEdges clsinst) \\ map className clss) $ mkPkgEdges clsinst
+      makeSmallEntry (dts ++ nts) (nubOrd $ map className clss)
+      (nubOrd $ concatMap snd (mkPkgEdges clsinst) \\ map className clss) $ mkPkgEdges clsinst
 
 -- Cleanup function to get rid of empty SmallEntries
 isEntryEmpty :: SmallEntry -> Bool

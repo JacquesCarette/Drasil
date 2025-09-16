@@ -123,7 +123,18 @@ makeCSS _ = vcat [
     text "ul.hide-list-style-no-indent {",
     text "  list-style-type: none;",
     text "padding: 0;}"
-    ] 
+    ],
+  vcat [
+    text "dl.reference-list {",
+    text "  display: grid;",
+    text "  grid-template-columns: auto 1fr;",
+    text "  gap: 20px;",
+    text "  align-items: start;}"
+    ],
+  vcat [
+    text "dd {",
+    text "  margin: 0;}"
+    ]
   ]
 
 -- | Create the link to the necessary CSS file.

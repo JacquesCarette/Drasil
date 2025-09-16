@@ -12,7 +12,7 @@ data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime 
   | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin | Arccos | Arctan | Not
   | Dim | Exp | Neg | Cross | Dot | Scale | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff
   | Subt | And | Or | Add | Mul | Summ | Inte | Prod | Point | Perc | LArrow | RArrow | ForAll
-  | VAdd | VSub | Partial
+  | VAdd | VSub | Partial | SAdd | SRemove | SUnion | SContains deriving Eq
 
 -- | Holds the type of "text fencing" ("(), {}, |, ||").
 data Fence = Paren | Curly | Norm | Abs
@@ -31,6 +31,7 @@ data Expr = Dbl    Double
           | Str    String
           | Case   [(Expr, Expr)] -- ^ Case expressions
           | Mtx    [[Expr]] -- ^ Matrix.
+          | Set    [Expr]
           | Row    [Expr]
           | Ident  String
           | Label  String
@@ -49,7 +50,8 @@ infixr 5 :+:
 
 -- | Redefine the 'Sentence' type from Language.Drasil to be more suitable to printing.
 data Spec = E Expr                   -- ^ Holds an expression.
-          | S String                 -- ^ Holds a String.
+          | S String                 -- ^ Holds a string.  
+          | Tooltip Spec Spec        -- ^ Tooltip (1) supplements body (2) with optionally displayable content, e.g., on hover for HTML.
           | Spec :+: Spec            -- ^ Concatenation.
           | Sp Special               -- ^ Special characters.
           | Ref LinkType String Spec -- ^ Holds the actual reference of form 'LinkType', reference address, and display name

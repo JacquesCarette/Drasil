@@ -6,9 +6,9 @@ import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (second)
 import Theory.Drasil (DataDefinition, ddENoRefs)
-import Drasil.SglPend.Figures (figMotion)
 import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos,
       frequency, period, angularFrequency)
+import Drasil.SglPend.LabelledContent (figMotion)
 import Drasil.SglPend.Unitals (lenRod, initialPendAngle)
 --import Data.Drasil.Concepts.Physics (pendulum)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
@@ -27,7 +27,7 @@ positionIXQD :: SimpleQDef
 positionIXQD = mkQuantDef QP.ixPos positionIXEqn
 
 positionIXEqn :: Expr
-positionIXEqn = sy lenRod `mulRe` sin (sy initialPendAngle)
+positionIXEqn = sy lenRod $* sin (sy initialPendAngle)
 
 figRef :: Sentence
 figRef = ch QP.ixPos `S.is` S "shown in" +:+. refS figMotion
@@ -43,7 +43,7 @@ positionIYQD :: SimpleQDef
 positionIYQD = mkQuantDef QP.iyPos positionIYEqn
 
 positionIYEqn :: Expr
-positionIYEqn = neg (sy lenRod `mulRe` cos (sy initialPendAngle))
+positionIYEqn = neg (sy lenRod $* cos (sy initialPendAngle))
 
 figReff :: Sentence
 figReff = ch QP.iyPos `S.is` S "shown in" +:+. refS figMotion
@@ -75,7 +75,7 @@ angFrequencyDDQD :: SimpleQDef
 angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
 
 angFrequencyDDEqn :: Expr
-angFrequencyDDEqn = exactDbl 2 `mulRe` sy QM.pi_ $/ sy QP.period
+angFrequencyDDEqn = exactDbl 2 $* sy QM.pi_ $/ sy QP.period
 
 angFrequencyRef :: Sentence
 angFrequencyRef = ch QP.period `S.is` S "from" +:+ refS periodSHMDD

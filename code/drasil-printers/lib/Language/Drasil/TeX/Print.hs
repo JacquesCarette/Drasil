@@ -1,5 +1,6 @@
 -- | Defines main LaTeX printer functions. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.TeX.Print.html).
-module Language.Drasil.TeX.Print(genTeX, pExpr, pUnit, spec) where
+module Language.Drasil.TeX.Print(genTeX, pExpr, pUnit, spec, fence, OpenClose(..),
+  pMatrix, cases) where
 
 import Prelude hiding (print)
 import Data.Bifunctor (bimap)
@@ -13,11 +14,11 @@ import qualified Language.Drasil as L
 import qualified Language.Drasil.Display as LD
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
-import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
-  ListType(Ordered, Unordered, Desc, Definitions, Simple), 
-  Spec(Quote, EmptyS, Ref, S, Sp, HARDNL, E, (:+:)), 
-  Fence(Norm, Abs, Curly, Paren), Expr, 
-  Ops(..), Spacing(Thin), Fonts(Emph, Bold), 
+import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Nested, Flat),
+  ListType(Ordered, Unordered, Desc, Definitions, Simple),
+  Spec(Quote, EmptyS, Ref, S, Sp, HARDNL, E, (:+:)),
+  Fence(Norm, Abs, Curly, Paren), Expr,
+  Ops(..), Spacing(Thin), Fonts(Emph, Bold),
   Expr(..), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
@@ -28,8 +29,8 @@ import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (br, paren, sq, sqbrac)
 import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
-  cite, command, command0, commandD, command2D, description, document, empty,
-  enumerate, externalref, figure, fraction, includegraphics, item, item',
+  cite, command, command0, commandD, command2D, description, description', document, 
+  empty, enumerate, externalref, figure, fraction, includegraphics, item, item',
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgBr, mkEnvArgSq,
   mkMinipage, newline, newpage, parens, quote, sec, snref, sq, superscript,
   symbDescription, texSym, title, toEqn)
@@ -65,7 +66,7 @@ lo (EqnBlock contents)    _ = makeEquation contents
 lo (Table _ rows r bl t)  _ = toText $ makeTable rows (spec r) bl (spec t)
 lo (Definition _ ssPs l) sm = toText $ makeDefn sm ssPs $ spec l
 lo (List l)               _ = toText $ makeList l
-lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (spec c) f wp
+lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (maybe empty spec c) f wp
 lo (Bib bib)             sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)    _  = toText $ makeGraph
   (map (bimap spec spec) ps)
@@ -104,10 +105,11 @@ pExpr (Dbl d)        = pure . text $ showEFloat Nothing d ""
 pExpr (Int i)        = pure (integer i)
 pExpr (Str s)        = toText . quote . pure $ text s
 pExpr (Div n d)      = command2D "frac" (pExpr n) (pExpr d)
-pExpr (Case ps)      = mkEnv "cases" (cases ps)
-pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)
+pExpr (Case ps)      = mkEnv "cases" ($+$) (cases ps vpunctuate dbs pExpr)
+pExpr (Mtx a)        = mkEnv "bmatrix" ($+$) (pMatrix a vpunctuate dbs pExpr)
 pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
+pExpr (Set l)        = foldl1 (<>) (map pExpr l)
 pExpr (Ident s@[_])  = pure . text . escapeIdentSymbols $ s
 pExpr (Ident s)      = commandD "mathit" (pure . text . escapeIdentSymbols $ s)
 pExpr (Label s)      = command "text" s
@@ -164,8 +166,12 @@ pOps Iff      = commandD "iff" empty
 pOps Subt     = pure hyph
 pOps And      = commandD "land" empty
 pOps Or       = commandD "lor" empty
+pOps SAdd     = pure pls
+pOps SRemove  = pure hyph
+pOps SContains = commandD " in " empty
+pOps SUnion   = commandD "+" empty
 pOps Add      = pure pls
-pOps Mul      = pure $ text " "
+pOps Mul      = pure $ text "\\,"
 pOps Summ     = command0 "displaystyle" <> command0 "sum"
 pOps Prod     = command0 "displaystyle" <> command0 "prod"
 pOps Inte     = texSym "int"
@@ -186,15 +192,15 @@ fence _ Abs       = pure $ text "|"
 fence _ Norm      = pure $ text "\\|"
 
 -- | For printing a Matrix.
-pMatrix :: [[Expr]] -> D
-pMatrix e = vpunctuate dbs (map pIn e)
-  where pIn x = hpunctuate (text " & ") (map pExpr x)
+pMatrix :: [[Expr]] -> (TP.Doc -> [D] -> D) -> TP.Doc -> (Expr -> D) -> D
+pMatrix e catf esc f = catf esc (map pIn e)
+  where pIn x = hpunctuate (text " & ") (map f x)
 
 -- | Helper for printing case expression.
-cases :: [(Expr,Expr)] -> D
-cases [] = error "Attempt to create case expression without cases"
-cases e  = vpunctuate dbs (map _case e)
-  where _case (x, y) = hpunctuate (text ", & ") (map pExpr [x, y])
+cases :: [(Expr,Expr)] -> (TP.Doc -> [D] -> D) -> TP.Doc -> (Expr -> D) -> D
+cases [] _ _ _ = error "Attempt to create case expression without cases"
+cases e catf esc f = catf esc (map _case e)
+  where _case (x, y) = hpunctuate (text ", & ") (map f [x, y])
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
@@ -205,7 +211,7 @@ cases e  = vpunctuate dbs (map _case e)
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable [] _ _ _ = error "Completely empty table (not even header)"
 makeTable [_] _ _ _ = empty -- table with no actual contents... don't error
-makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" $
+makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" ($+$) $
   (if bool then sq $ pure (text "caption=") <> br t else empty)
   %% br (pure (text "colspec=") <> br (pure $ text $ unwords $ anyBig lls)
     <> pure (text ", rowhead=1, hline{1,Z}=\\heavyrulewidth, hline{2}=\\lightrulewidth"))
@@ -223,6 +229,7 @@ makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" $
 specLength :: Spec -> Int
 specLength (E x)       = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
 specLength (S x)       = length x
+specLength (Tooltip _ s) = specLength s
 specLength (a :+: b)   = specLength a + specLength b
 specLength (Sp _)      = 1
 specLength (Ref Internal r _) = length r
@@ -253,14 +260,15 @@ makeColumns ls = hpunctuate (text " & ") $ map spec ls
 
 -- | Helper that determines the printing context based on the kind of 'Spec'.
 needs :: Spec -> MathContext
-needs (a :+: b) = needs a `lub` needs b
-needs (S _)     = Text
-needs (E _)     = Math
-needs (Sp _)    = Math
-needs HARDNL    = Text
-needs Ref{}     = Text
-needs EmptyS    = Text
-needs (Quote _) = Text
+needs (a :+: b)     = needs a `lub` needs b
+needs (S _)         = Text
+needs (Tooltip _ s) = needs s
+needs (E _)         = Math
+needs (Sp _)        = Math
+needs HARDNL        = Text
+needs Ref{}         = Text
+needs EmptyS        = Text
+needs (Quote _)     = Text
 
 -- | Prints all 'Spec's.
 spec :: Spec -> D
@@ -276,6 +284,7 @@ spec (S s)  = either error (pure . text . concatMap escapeChars) $ L.checkValidS
     escapeChars '_' = "\\_"
     escapeChars '&' = "\\&"
     escapeChars c = [c]
+spec (Tooltip _ s) = spec s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = command0 "newline"
 spec (Ref Internal r sn) = snref r (spec sn)
@@ -344,9 +353,10 @@ makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\a
 
 -- | Helper that makes the rows of a definition table.
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
-makeDRows _  []         = error "No fields to create Defn table"
-makeDRows sm ls    = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d) ls
-  where dBoilerplate = pure $ dbs <+> text "\\midrule"
+makeDRows _  []      = error "No fields to create Defn table"
+makeDRows sm ls      = foldl1 (%%) $ map (\(f, d) -> 
+  pure (dbs <+> text "\\midrule") %% 
+  pure (text (f ++ " & ")) <> print sm d) ls
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------
@@ -354,7 +364,7 @@ makeDRows sm ls    = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %%  pure (text (
 
 -- | Prints an equation.
 makeEquation :: Spec -> D
-makeEquation contents = toEqn (spec contents)
+makeEquation contents = toEqn $ spec contents
 
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
   --  on chunk (i.e. "eq:h_g" for h_g = ...
@@ -373,10 +383,10 @@ makeList (Desc []   )        = empty
 makeList (Unordered []   )   = empty
 makeList (Ordered []   )     = empty
 makeList (Definitions []   ) = empty
-makeList (Simple items)      = itemize     $ vcat $ simItem items
-makeList (Desc items)        = description $ vcat $ simItem items
-makeList (Unordered items)   = itemize     $ vcat $ map plItem items
-makeList (Ordered items)     = enumerate   $ vcat $ map plItem items
+makeList (Simple items)      = description' $ vcat $ simItem items
+makeList (Desc items)        = description  $ vcat $ simItem items
+makeList (Unordered items)   = itemize      $ vcat $ map plItem items
+makeList (Ordered items)     = enumerate    $ vcat $ map plItem items
 makeList (Definitions items) = symbDescription $ vcat $ defItem items
 
 -- | Helper that renders items in 'makeList'.
@@ -429,7 +439,7 @@ makeFigure r c f wp =
 -- | Prints graphs.
 makeGraph :: [(D,D)] -> D -> D -> D -> D -> D
 makeGraph ps w h c l =
-  mkEnv "figure" $ centering %%
+  mkEnv "figure" ($+$) $ centering %%
   mkEnvArgBr "adjustbox" "max width=\\textwidth" (
   mkEnvArgSq "tikzpicture" ">=latex,line join=bevel" (
   vcat [command "tikzstyle" "n" <> pure (text " = ") <> sq (

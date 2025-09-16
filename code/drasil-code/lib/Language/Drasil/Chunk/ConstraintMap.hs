@@ -4,9 +4,9 @@ module Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE,
 
 import Control.Lens ((^.))
 
+import Drasil.Code.CodeExpr.Development (CodeExpr, constraint)
 import Language.Drasil (Constraint, HasUID(..), UID, Constrained(..),
   isPhysC, isSfwrC)
-import Language.Drasil.CodeExpr.Development (CodeExpr, constraint)
 import qualified Data.Map as Map
 
 -- | Type synonym for 'Constraint CodeExpr'

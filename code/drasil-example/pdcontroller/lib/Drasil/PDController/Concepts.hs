@@ -1,20 +1,18 @@
 module Drasil.PDController.Concepts where
 
+import Drasil.Metadata
+import Language.Drasil
+
 import Data.Drasil.Concepts.Documentation
        (assumption, goalStmt, physSyst, requirement, refBy, refName, srs, typUnc)
-import Data.Drasil.TheoryConcepts
-import Language.Drasil
 
 acronyms :: [CI]
 acronyms
   = [assumption, dataDefn, genDefn, goalStmt, inModel, physSyst, requirement, refBy, 
      refName, srs, thModel, typUnc, pdControllerCI, proportionalCI, derivativeCI,
      integralCI, pidCI]
+pdControllerCI, proportionalCI, derivativeCI, integralCI, pidCI :: CI
 
-pdControllerApp, pdControllerCI, proportionalCI, derivativeCI, integralCI,
-                     pidCI :: CI
-
-pdControllerApp = commonIdeaWithDict "pdControllerApp" (pn "PD Controller")                    "PD Controller" []
 pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "proportional derivative")          "PD"            []
 proportionalCI  = commonIdeaWithDict "proportionalCI"  (pn "proportional")                     "P"             []
 derivativeCI    = commonIdeaWithDict "derivativeCI"    (pn "derivative")                       "D"             []
@@ -91,7 +89,7 @@ derControl
       "of the output signal (proportional to a derivative of the error signal)")
 
 simulation
-  = dcc "simulation" (nounPhraseSP "simulation") 
+  = dcc "simulation" (cn' "simulation") 
       "Simulation of the PD controller"
 
 ccFrequencyDomain
@@ -126,18 +124,20 @@ ccDampingCoeff
       "Quantity that characterizes a second order system's oscillatory response"
 
 ccStiffCoeff
-  = dcc "stiffnessCoeff" (nounPhraseSP "Stiffness Coefficient")
+  = dcc "ccStiffnessCoeff" (nounPhraseSP "Stiffness coefficient")
       "Quantity that characterizes a spring's stiffness"
 
 concepts :: [IdeaDict]
-concepts = map nw defs
+concepts = map nw termDefs
 
 defs :: [ConceptChunk]
 defs
-  = [pidCL, pidC, summingPt, powerPlant, secondOrderSystem, processError,
-     simulationTime, processVariable, setPoint, propGain, derGain, propControl,
-    derControl, ccFrequencyDomain, ccTimeDomain, ccLaplaceTransform, controlVariable, stepTime,
-     ccAbsTolerance, ccRelTolerance, ccTransferFxn, ccDampingCoeff,
-     ccStiffCoeff]
+  = termDefs ++ [simulationTime, processVariable, setPoint, propGain, derGain,
+     ccLaplaceTransform, stepTime,
+     ccAbsTolerance, ccRelTolerance]
 
-
+termDefs :: [ConceptChunk]
+termDefs
+  = [pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
+     propControl, derControl, ccFrequencyDomain, ccTimeDomain,
+     controlVariable, ccTransferFxn, ccDampingCoeff, ccStiffCoeff]

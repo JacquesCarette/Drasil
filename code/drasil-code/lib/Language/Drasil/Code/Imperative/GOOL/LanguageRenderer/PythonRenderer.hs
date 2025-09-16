@@ -5,8 +5,9 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
   PythonProject(..)
 ) where
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),PackageSym(..),
-  AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
@@ -16,7 +17,7 @@ import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
-import GOOL.Drasil (onCodeList, pyName, pyVersion)
+import Drasil.GOOL (onCodeList, pyName, pyVersion)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)

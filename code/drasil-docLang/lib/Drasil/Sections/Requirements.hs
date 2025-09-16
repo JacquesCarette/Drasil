@@ -5,11 +5,14 @@ module Drasil.Sections.Requirements (
   -- * Functional Requirements
   fReqF,
   -- ** Input Requirements
-  fullReqs, fullTables, inReq, inTable,
+  fullReqs, fullTables, inReq,
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- * Non-functional Requirements
-  nfReqF, mkMaintainableNFR
+  nfReqF, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR, 
+  mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR
   ) where
+
+import Utils.Drasil (stringList, mkTable)
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -18,8 +21,8 @@ import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import Theory.Drasil (HasOutput(output))
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom, nonFuncReqDom,
-  functionalRequirement, input_, nonfunctionalRequirement, {-output_,-} section_,
-  software, symbol_, value, reqInput)
+  functionalRequirement, input_, nonfunctionalRequirement, output_, section_,
+  software, symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -29,6 +32,7 @@ import Data.List (nub)
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
 
+
 -- | Wrapper for 'reqIntro'.
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
@@ -37,18 +41,12 @@ reqF = SRS.require [reqIntro]
 -- For listing input requirements.
 fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> [ConceptInstance] -> [ConceptInstance]
 fullReqs [] _ _ = []
-fullReqs i d r = nub $ inReq (inReqDesc (inTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
+fullReqs i d r = nub $ inReq (inReqDesc (mkInputPropsTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
 
 -- | Prepends given LabelledContent to an input-value table.
 fullTables :: (Quantity i, MayHaveUnit i) => [i] -> [LabelledContent] -> [LabelledContent]
 fullTables [] _ = []
-fullTables i t = inTable i : t
-
--- | Creates a generalized input-value table for the Requirements section.
-inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
-inTable i = mkInputPropsTable i (inReq EmptyS) -- passes empty Sentence to make stub of inReq
---outTable    = mkValsSourceTable o "ReqOutputs" (S "Required" +:+ titleize' output_ `follows` (outReq EmptyS))
-                                                -- passes empty Sentence to make stub of outReq
+fullTables i t = mkInputPropsTable i : t
 
 -- | Creates a Sentence from a Referable and possible description. Output is of the form
 -- "Inputs the values from @reference@, which define @description@". If no description is given,
@@ -111,28 +109,68 @@ mkMaintainableNFR refAddress percent lbl = cic refAddress (foldlSent [
   S "assuming the same development resources are available"
   ]) lbl nonFuncReqDom
 
+-- | Common Non-Functional Requirement for Portability.
+mkPortableNFR :: String -> [String] -> String -> ConceptInstance
+mkPortableNFR _ [] _ = error "No operating systems specified; cannot create a requirement."
+mkPortableNFR refAddress [os] lbl = cic refAddress (S $ "The code shall be portable to " ++ os) lbl nonFuncReqDom
+mkPortableNFR refAddress osList lbl = cic refAddress (foldlSent [
+  S "The code shall be portable to multiple environments, particularly",
+  S $ stringList osList
+  ]) lbl nonFuncReqDom
+
+-- | Common Non-Functional Requirement for Correctness.
+mkCorrectNFR :: String -> String -> ConceptInstance
+mkCorrectNFR refAddress lbl = cic refAddress (foldlSent [
+  atStartNP' (output_ `the_ofThePS` code), S "have the",
+  namedRef (SRS.propCorSol [] []) (plural propOfCorSol)
+  ]) lbl nonFuncReqDom
+
+-- | Common Non-Functional Requirement for Verifiability.
+mkVerifiableNFR :: String -> String -> ConceptInstance
+mkVerifiableNFR refAddress lbl = cic refAddress (foldlSent [
+  atStartNP (the code), S "is tested with complete",
+  phrase vavPlan]) lbl nonFuncReqDom
+
+-- | Common Non-Functional Requirement for Understandability.
+mkUnderstandableNFR :: String -> String -> ConceptInstance
+mkUnderstandableNFR refAddress lbl = cic refAddress (foldlSent [
+  atStartNP (the code), S "is modularized with complete",
+  phrase mg `S.and_` phrase mis]) lbl nonFuncReqDom
+
+-- | Common Non-Functional Requirement for Reusability.
+mkReusableNFR :: String -> String -> ConceptInstance
+mkReusableNFR refAddress lbl = cic refAddress (foldlSent [
+  atStartNP (the code), S "is modularized"]) lbl nonFuncReqDom
+
+-- | Common Non-Functional Requirement for Security.
+mkSecurityNFR :: String -> String -> ConceptInstance
+mkSecurityNFR refAddress lbl = cic refAddress (foldlSent [
+  S "The code shall be immune to common security problems such as memory",
+  S "leaks, divide by zero errors, and the square root of negative numbers"
+  ]) lbl nonFuncReqDom
+
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
-mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 
-                          [i] -> r -> LabelledContent
-mkInputPropsTable []        _   = llcc reqInputsRef $ Paragraph EmptyS
-mkInputPropsTable reqInputs req = llcc reqInputsRef $ 
+mkInputPropsTable :: (Quantity i, MayHaveUnit i) => 
+                          [i] -> LabelledContent
+mkInputPropsTable []        = llcc reqInputsRef $ Paragraph EmptyS
+mkInputPropsTable reqInputs = llcc reqInputsRef $ 
   Table [atStart symbol_, atStart description, atStart' unit_]
   (mkTable [ch, atStart, toSentence] $ sortBySymbol reqInputs)
-  (titleize' reqInput `follows` req) True
+  (titleize' reqInput) True
 
 -- | Reference for the Required Inputs table.
 reqInputsRef :: Reference
 reqInputsRef = makeTabRef' (reqInput ^. uid)
 
 -- | Creates a table for use in the Functional Requirments section. Takes a list of tuples containing variables and sources, a label, and a caption. 
-mkValsSourceTable :: (Quantity i, MayHaveUnit i) => 
+mkValsSourceTable :: (Quantity i, MayHaveUnit i, Concept i) => 
                           [(i, Sentence)] -> String -> Sentence -> LabelledContent
 mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $ 
   Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 
-mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(DefinedQuantityDict, Sentence)]
 mkQRTuple = map (\c -> (c ^. output, refS c))
 
-mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
-mkQRTupleRef = zipWith (curry (bimap qw refS))
+mkQRTupleRef :: (Quantity i, MayHaveUnit i, Concept i, HasShortName r, Referable r) => [i] -> [r] -> [(DefinedQuantityDict, Sentence)]
+mkQRTupleRef = zipWith (curry (bimap dqdWr refS))

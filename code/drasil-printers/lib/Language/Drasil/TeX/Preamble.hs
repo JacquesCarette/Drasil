@@ -4,9 +4,10 @@ module Language.Drasil.TeX.Preamble (genPreamble) where
 import Data.List (nub)
 
 import Language.Drasil.Printing.LayoutObj (LayoutObj(..))
-import Language.Drasil.TeX.Monad (D, vcat, (%%))
+import Language.Drasil.TeX.Monad (D, vcat, (%%), nest)
 import Language.Drasil.TeX.Helpers (docclass, command, command1o, command2, command3,
-  usepackage)
+  usepackage, lbrace, rbrace)
+import Language.Drasil.Printing.Helpers (sq)
 
 import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
 
@@ -34,6 +35,7 @@ data Package = AMSMath      -- ^ Improves information structure for mathematical
              | Unicode      -- ^ For unicode-math in lualatex.
              | EnumItem     -- ^ Contol basic list environments.
              | SVG          -- ^ For rendering svg diagrams.
+             | Float        -- ^ For enhanced control over placement of figures and tables.
              deriving Eq
 
 -- | Adds a 'Package' to the LaTeX document.
@@ -64,6 +66,7 @@ addPackage FontSpec  = usepackage "fontspec"
 addPackage Unicode   = usepackage "unicode-math"
 addPackage EnumItem  = usepackage "enumitem"
 addPackage SVG       = usepackage "svg"
+addPackage Float     = usepackage "float"
 
 -- | Common LaTeX commands.
 data Def = Bibliography
@@ -72,6 +75,7 @@ data Def = Bibliography
          | SetMathFont
          | SymbDescriptionP1
          | SymbDescriptionP2
+         | ResizeExpr
          deriving Eq
 
 -- | Define common LaTeX commands.
@@ -82,6 +86,11 @@ addDef LessThan      = command2 "newcommand" "\\lt" "\\ensuremath <"
 addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
 addDef SymbDescriptionP1 = command3 "newlist" "symbDescription" "description" "1"
 addDef SymbDescriptionP2 = command1o "setlist" (Just "symbDescription") "noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt"
+addDef ResizeExpr = vcat [
+    command "newcommand" "\\resizeExpression" <> pure (sq "1") <> lbrace,
+    nest 2 $ command2 "adjustbox" "max width=\\linewidth" "$#1$",
+    rbrace
+  ]
 
 -- | Generates LaTeX document preamble.
 genPreamble :: [LayoutObj] -> D
@@ -109,12 +118,12 @@ parseDoc los' =
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in
       (Tabularray:TabularX:BookTabs:pp,SymbDescriptionP1:SymbDescriptionP2:dd)
-    parseDoc' Figure{}     = ([Graphics,Caption, SVG],[])
+    parseDoc' Figure{}     = ([Graphics,Caption, SVG, Float],[])
     parseDoc' Graph{}      = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
     parseDoc' Bib{}        = ([FileContents,BibLaTeX,URL],[Bibliography])
     parseDoc' Header{}     = ([], [])
     parseDoc' Paragraph{}  = ([], [])
     parseDoc' List{}       = ([EnumItem], [])
-    parseDoc' EqnBlock{}   = ([], [])
+    parseDoc' EqnBlock{}   = ([AdjustBox], [ResizeExpr])
     parseDoc' Cell{}       = ([], [])
     parseDoc' CodeBlock{}  = ([], [])

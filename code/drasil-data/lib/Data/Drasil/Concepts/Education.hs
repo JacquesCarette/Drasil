@@ -4,13 +4,14 @@ module Data.Drasil.Concepts.Education where
 import Language.Drasil hiding (year)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Data.Drasil.Concepts.Documentation (first, physics, second_, year)
+import Data.Drasil.Concepts.Documentation (first, physics, physical,
+  second_, year)
 import Data.Drasil.Concepts.PhysicalProperties (solid)
 
 -- | Collects all education-related concepts.
 educon :: [IdeaDict]
 educon = [calculus, civil, degree_, engineering, structural, mechanics,
-  undergraduate, highSchool, physical_, chemistry, undergradDegree,
+  undergraduate, highSchool, chemistry, undergradDegree,
   scndYrCalculus, solidMechanics, secondYear, structuralEng,
   structuralMechanics, civilEng, highSchoolCalculus, highSchoolPhysics,
   frstYr, physChem]
@@ -18,25 +19,24 @@ educon = [calculus, civil, degree_, engineering, structural, mechanics,
 -- * Educational Concepts
 
 calculus, civil, degree_, engineering, structural, mechanics,
-  undergraduate, highSchool, physical_, chemistry :: IdeaDict
+  undergraduate, highSchool, chemistry :: IdeaDict
 
 calculus      = nc "calculus"       (cn   "calculus"     )
 civil         = nc "civil"          (cn'  "civil"        )--FIXME: Adjective
-degree_       = nc "degree"         (cn'  "degree"       )
+degree_       = nc "edu_degree"     (cn'  "degree"       )
 engineering   = nc "engineering"    (cn'  "engineering"  )
 mechanics     = nc "mechanics"      (cn   "mechanics"    )
 structural    = nc "structural"     (cn'  "structural"   )--FIXME: Adjective
 undergraduate = nc "undergraduate"  (cn'  "undergraduate")--FIXME: Functions as adjective
 highSchool    = nc "highSchool"     (cn'  "high school"  )--FIXME: Functions as adjective
 chemistry     = nc "chemistry"      (cn'  "chemistry"    )
-physical_     = nc "physical"       (cn'  "physical"     )--FIXME: Adjective
 
 undergradDegree, scndYrCalculus, solidMechanics, secondYear, structuralEng,
   structuralMechanics, civilEng, highSchoolCalculus, highSchoolPhysics,
   frstYr, physChem :: IdeaDict
 
 civilEng            = compoundNC civil engineering
-physChem            = compoundNC physical_ chemistry
+physChem            = compoundNC physical chemistry
 highSchoolCalculus  = compoundNC highSchool calculus
 highSchoolPhysics   = compoundNC highSchool physics
 scndYrCalculus      = compoundNC secondYear calculus

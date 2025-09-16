@@ -3,17 +3,17 @@ module Data.Drasil.Concepts.Math where
 
 import Language.Drasil hiding (number, norm, matrix)
 import Language.Drasil.ShortHands (lX, lY, lZ)
-import Data.Drasil.Domains (mathematics)
+import Drasil.Metadata (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 -- | Collects all math-related concepts.
 mathcon :: [ConceptChunk]
-mathcon = [amplitude, angle, area, axis, calculation, cartesian, centre, change, component,
-  constraint, diameter, direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix,
-  norm, normal, normalV, number, orient, origin, parameter, perp, perpV, pi_, negInf, posInf, positive, negative,
-  point, probability, rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, 
+mathcon = [amplitude, angle, axis, calculation, cartesian, centre, change, component,
+  constraint, direction, equation, euclidSpace, graph, laplaceTransform, law, line, matrix,
+  norm, normal, number, origin, parameter, perp, positive, negative,
+  point, probability, rOfChng, rate, rightHand, shape, unit_, vector, 
   xAxis, xCoord, xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
 
 -- | Collects all math-related common ideas (like a concept, but with no definition).
@@ -40,9 +40,9 @@ cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coor
                                                                   fromSource cartesianWiki
 centre       = dcc "centre"       (cn' "centre")                  "the middle point of an object"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
-component    = dcc "component"    (nounPhrase "component" "components") ("The scalar quantity defining the contribution " ++
+component    = dcc "mathComponent"    (nounPhrase "component" "components") ("The scalar quantity defining the contribution " ++
                                                                   "of a vector in one of the coordinate directions")
-constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"
+constraint   = dcc "mathConstraint" (cn' "constraint")              "A condition that the solution must satisfy"
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++
                                                                   "and whose endpoints lie on the circle.")
 direction    = dcc "direction"    (cn' "direction")               "'which way' a vector points, extending from the tail to the tip"
@@ -75,7 +75,7 @@ point        = dccWDS "point"     (pn' "point")                   $ S "An exact 
                                                                   fromSource pointSource
 probability  = dcc "probability"  (cnIES "probability")          "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                   "Ratio that compares two quantities having different units of measure"
-rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen."
+rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen"
 shape        = dcc "shape"        (cn' "shape")                  "The outline of an area or figure"
 surface      = dcc "surface"      (cn' "surface")                "The outer or topmost boundary of an object"
 unit_        = dcc "unit"         (cn' "unit")                   "Identity element"

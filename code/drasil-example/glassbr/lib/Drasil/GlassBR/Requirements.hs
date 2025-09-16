@@ -3,24 +3,26 @@ module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfunc
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable, mkMaintainableNFR)
-import Drasil.DocLang.SRS (datCon, propCorSol)
+import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable, 
+  mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR, 
+  mkUnderstandableNFR, mkReusableNFR)
+import Drasil.DocLang.SRS (datCon)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (DataDefinition)
 
 import Data.Drasil.Concepts.Computation (inValue)
-import Data.Drasil.Concepts.Documentation (characteristic, code,
-  condition, datumConstraint, environment, funcReqDom, message, mg,
-  mis, nonFuncReqDom, output_, property, system, type_, value, vavPlan)
+import Data.Drasil.Concepts.Documentation (characteristic, condition, 
+  datumConstraint, funcReqDom, message, output_, system, 
+  type_, value)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass)
-import Drasil.GlassBR.DataDefs (aspRat, glaTyFac, hFromt, loadDF, standOffDis)
+import Drasil.GlassBR.DataDefs (aspRat, glaTyFac, hFromt, loadDFDD, standOffDis)
 import Drasil.GlassBR.IMods (iMods, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
   pbTolfail, safeMessage)
@@ -52,12 +54,15 @@ sysSetValsFollowingAssumpsDesc = foldlSent [atStartNP (the system), S "shall set
     plural value, S "as described in the table for", namedRef sysSetValsFollowingAssumpsTable (S "Required Assignments")]
 
 sysSetValsFollowingAssumpsTable :: LabelledContent
-sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs) "ReqAssignments"
-                                  (S "Required Assignments" `follows` sysSetValsFollowingAssumps)
+sysSetValsFollowingAssumpsTable = 
+  mkValsSourceTable 
+    (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs)
+    "ReqAssignments"
+    (S "Required Assignments")
   where
-    r2AQs = qw loadSF : map qw (take 4 assumptionConstants)
+    r2AQs = loadSF : map dqdWr (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
-    r2DDs = [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
+    r2DDs = [loadDFDD, hFromt, glaTyFac, standOffDis, aspRat]
 
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)
@@ -82,7 +87,7 @@ outputValuesDesc = foldlSent [titleize output_, pluralNP (the value), S "from th
 
 outputValuesTable :: LabelledContent
 outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
-                              (S "Required" +:+ titleize' output_ `follows` outputValues)
+                              (S "Required" +:+ titleize' output_)
   where
     r6DDs :: [DataDefinition]
     r6DDs = [glaTyFac, hFromt, aspRat]
@@ -93,29 +98,19 @@ nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, portable]
 
 correct :: ConceptInstance
-correct = cic "correct" (foldlSent [
-  atStartNP' (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", refS (propCorSol [] [])
-  ]) "Correct" nonFuncReqDom
+correct = mkCorrectNFR "correct" "Correctness"
  
 verifiable :: ConceptInstance
-verifiable = cic "verifiable" (foldlSent [
-  atStartNP (the code), S "is tested with complete",
-  phrase vavPlan]) "Verifiable" nonFuncReqDom
+verifiable = mkVerifiableNFR "verifiable" "Verifiability"
 
 understandable :: ConceptInstance
-understandable = cic "understandable" (foldlSent [
-  atStartNP (the code), S "is modularized with complete",
-  phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
+understandable = mkUnderstandableNFR "understandable" "Understandability"
 
 reusable :: ConceptInstance
-reusable = cic "reusable" (foldlSent [
-  atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
+reusable = mkReusableNFR "reusable" "Reusability"
 
 maintainable :: ConceptInstance
-maintainable = mkMaintainableNFR "maintainable" 10 "Maintainable"
+maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"
 
 portable :: ConceptInstance
-portable = cic "portable" (foldlSent [
-  atStartNP (the code), S "is able to be run in different", plural environment])
-  "Portable" nonFuncReqDom  
+portable = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portablity"

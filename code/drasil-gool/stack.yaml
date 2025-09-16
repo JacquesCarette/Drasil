@@ -17,7 +17,7 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
-resolver: lts-20.26
+resolver: lts-22.31
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -31,6 +31,8 @@ resolver: lts-20.26
 packages:
 - .
 - ../drasil-codeLang
+- ../drasil-lang
+- ../drasil-metadata
 - ../drasil-utils
 
 # Dependency packages to be pulled from upstream that are not in the resolver.

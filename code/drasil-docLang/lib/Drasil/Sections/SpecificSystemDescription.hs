@@ -23,7 +23,6 @@ module Drasil.Sections.SpecificSystemDescription (
   ) where
 
 import Language.Drasil hiding (variable)
-import Language.Drasil.Development (showUID)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -38,8 +37,8 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
-import Data.Drasil.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
-import SysInfo.Drasil (SystemInformation)
+import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
+import Drasil.System (System)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -300,7 +299,7 @@ outputTableSent = foldlSent [S "The", namedRef (outDataConstTbl ([] :: [UncertQ]
 
 -- | Helper for making a 'ConceptInstance' with a reference to the system information.
 -- Used to find where a particular assumption is referenced.
-helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
+helperCI :: ConceptInstance -> System -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
   where
     refby EmptyS = EmptyS

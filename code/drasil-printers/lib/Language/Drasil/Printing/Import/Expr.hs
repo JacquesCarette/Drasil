@@ -3,12 +3,12 @@
 -- | Defines functions for printing expressions.
 module Language.Drasil.Printing.Import.Expr (expr) where
 
-import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix)
-import Language.Drasil.Display (Symbol(..))
+import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix, Set)
+import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   AssocBoolOper(..), BoolBinOp(..), EqBinOp(..), Expr(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..),
-  VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), eprec, precA, precB)
+  VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocConcatOper(..), eprec, precA, precB, precC)
 import Language.Drasil.Literal.Development (Literal(..))
 
 import qualified Language.Drasil.Printing.AST as P
@@ -41,8 +41,7 @@ neg' (Lit (Dbl _))          = True
 neg' (Lit (Int _))          = True
 neg' (Lit (ExactDbl _))     = True
 neg' Operator{}             = True
-neg' (AssocA MulI _)        = True
-neg' (AssocA MulRe _)       = True
+neg' (AssocA Mul _)       = True
 neg' (LABinaryOp Index _ _) = True
 neg' (UnaryOp _ _)          = True
 neg' (UnaryOpB _ _)         = True
@@ -60,12 +59,12 @@ indx sm (C c) i = f s
   where
     i' = expr i sm
     s = lookupC (sm ^. stg) (sm ^. ckdb) c
-    f (Corners [] [] [] [b] e) =
+    f (S.Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
       P.Row [P.Row [e', P.Sub (P.Row [b', P.MO P.Comma, i'])]] -- FIXME, extra Row
-    f a@(Variable _) = P.Row [symbol a, P.Sub i']
-    f a@(Label _)    = P.Row [symbol a, P.Sub i']
+    f a@(S.Variable _) = P.Row [symbol a, P.Sub i']
+    f a@(S.Label _)    = P.Row [symbol a, P.Sub i']
 --    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
     f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
@@ -102,10 +101,8 @@ eopMuls _ (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Int
 
 -- | Helper function for translating 'EOperator's.
 eop :: PrintingInformation -> AssocArithOper -> DomainDesc t Expr Expr -> Expr -> P.Expr
-eop sm AddI = eopAdds sm
-eop sm AddRe = eopAdds sm
-eop sm MulI = eopMuls sm
-eop sm MulRe = eopMuls sm
+eop sm Add = eopAdds sm
+eop sm Mul = eopMuls sm
 
 
 -- | Translate Exprs to printable layout AST.
@@ -113,10 +110,9 @@ expr :: Expr -> PrintingInformation -> P.Expr
 expr (Lit l)                  sm = literal l sm
 expr (AssocB And l)           sm = assocExpr P.And (precB And) l sm
 expr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
-expr (AssocA AddI l)          sm = P.Row $ addExpr l AddI sm
-expr (AssocA AddRe l)         sm = P.Row $ addExpr l AddRe sm
-expr (AssocA MulI l)          sm = P.Row $ mulExpr l MulI sm
-expr (AssocA MulRe l)         sm = P.Row $ mulExpr l MulRe sm
+expr (AssocA Add l)           sm = P.Row $ addExpr l Add sm
+expr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
+expr (AssocC SUnion l)        sm = assocExpr P.SUnion (precC SUnion) l sm
 expr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 expr (FCall f [x])            sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ expr x sm]
@@ -126,6 +122,8 @@ expr (Case _ ps)              sm =
     then error "Attempting to use multi-case expr incorrectly"
     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)               sm = P.Mtx $ map (map (`expr` sm)) a
+expr (Set _ a)                sm = P.Set $ map (`expr` sm) a
+expr (Variable _ l)           sm = expr l sm
 expr (UnaryOp Log u)          sm = mkCall sm P.Log u
 expr (UnaryOp Ln u)           sm = mkCall sm P.Ln u
 expr (UnaryOp Sin u)          sm = mkCall sm P.Sin u
@@ -153,6 +151,7 @@ expr (BoolBinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
 expr (EqBinaryOp Eq a b)      sm = mkBOp sm P.Eq a b
 expr (EqBinaryOp NEq a b)     sm = mkBOp sm P.NEq a b
 expr (LABinaryOp Index a b)   sm = indx sm a b
+expr (LABinaryOp IndexOf a b) sm = indx sm a b
 expr (OrdBinaryOp Lt a b)     sm = mkBOp sm P.Lt a b
 expr (OrdBinaryOp Gt a b)     sm = mkBOp sm P.Gt a b
 expr (OrdBinaryOp LEq a b)    sm = mkBOp sm P.LEq a b
@@ -162,6 +161,9 @@ expr (VVVBinaryOp VAdd a b)   sm = mkBOp sm P.VAdd a b
 expr (VVVBinaryOp VSub a b)   sm = mkBOp sm P.VSub a b
 expr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
 expr (NVVBinaryOp Scale a b)  sm = mkBOp sm P.Scale a b
+expr (ESSBinaryOp SAdd a b)   sm = mkBOp sm P.SAdd a b
+expr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
+expr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
 expr (Operator o d e)         sm = eop sm o d e
 expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri
@@ -199,10 +201,8 @@ withParens prI a b = P.Row [parens (expr a prI), P.Sup (expr b prI)]
 
 -- | Helper for properly rendering exponents.
 pow :: PrintingInformation -> Expr -> Expr -> P.Expr
-pow prI a@(AssocA AddI _)          b = withParens prI a b
-pow prI a@(AssocA AddRe _)         b = withParens prI a b
-pow prI a@(AssocA MulI _)          b = withParens prI a b
-pow prI a@(AssocA MulRe _)         b = withParens prI a b
+pow prI a@(AssocA Add _)          b = withParens prI a b
+pow prI a@(AssocA Mul _)         b = withParens prI a b
 pow prI a@(ArithBinaryOp Subt _ _) b = withParens prI a b
 pow prI a@(ArithBinaryOp Frac _ _) b = withParens prI a b
 pow prI a@(ArithBinaryOp Pow _ _)  b = withParens prI a b

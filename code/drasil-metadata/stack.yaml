@@ -15,7 +15,7 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
-resolver: lts-20.26
+resolver: lts-22.31
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -29,6 +29,7 @@ resolver: lts-20.26
 packages:
 - .
 - ../drasil-lang/
+- ../drasil-utils/
 
 extra-deps: 
 - unicode-names-3.2.0.0@sha256:fef7241d93170e26265e84553090253a5e8ee207645d47cf271816f5834d07d2,470

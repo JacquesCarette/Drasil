@@ -7,6 +7,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Control.Lens ((^.))
 
+import Data.Drasil.Citations (koothoor2013)
 import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
@@ -18,7 +19,6 @@ import Drasil.SWHS.Concepts (water)
 import Drasil.SWHS.DataDefs (balanceDecayRate)
 import Drasil.SWHS.GenDefs (htFluxWaterFromCoil)
 import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc3, heatEInWtr)
-import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, htCapW, htFluxC, tauW, tempC,
   tempInit, tempW, timeFinal, wMass)
 
@@ -37,7 +37,7 @@ eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im (newDEModel' eBalanceOnWtrRC)
   [qwC tempC $ UpFrom (Inc, sy tempInit)
   , qwUC tempInit, qwUC timeFinal, qwUC coilSA, qwUC coilHTC, qwUC htCapW, qwUC wMass]
-  (qw tempW) []
+  (dqdWr tempW) []
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
   [dRefInfo koothoor2013 $ RefNote "with PCM removed"]
   (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrNotes
@@ -55,7 +55,7 @@ eBalanceOnWtrRC =
     (tempW ^. defn)
     where coeffs = [[exactDbl 1, recip_ (sy tauW)]]
           unknowns = [1, 0]
-          constants = [recip_ (sy tauW) `mulRe` sy tempC]
+          constants = [recip_ (sy tauW) $* sy tempC]
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [

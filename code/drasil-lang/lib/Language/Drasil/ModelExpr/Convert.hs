@@ -10,14 +10,15 @@ import qualified Language.Drasil.Expr.Lang as E
 import Language.Drasil.ModelExpr.Lang
 
 assocArithOper :: E.AssocArithOper -> AssocArithOper 
-assocArithOper E.AddI  = AddI
-assocArithOper E.AddRe = AddRe
-assocArithOper E.MulI  = MulI
-assocArithOper E.MulRe = MulRe
+assocArithOper E.Add  = Add
+assocArithOper E.Mul  = Mul
 
 assocBoolOper :: E.AssocBoolOper -> AssocBoolOper
 assocBoolOper E.And = And
 assocBoolOper E.Or  = Or
+
+assocConcatOper :: E.AssocConcatOper -> AssocConcatOper 
+assocConcatOper E.SUnion  = SUnion
 
 uFunc :: E.UFunc -> UFunc
 uFunc E.Abs    = Abs
@@ -61,6 +62,7 @@ eqBinOp E.NEq = NEq
 
 laBinOp :: E.LABinOp -> LABinOp
 laBinOp E.Index = Index
+laBinOp E.IndexOf = IndexOf
 
 ordBinOp :: E.OrdBinOp -> OrdBinOp
 ordBinOp E.Lt  = Lt
@@ -79,14 +81,24 @@ vvnBinOp E.Dot = Dot
 nvvBinOp :: E.NVVBinOp -> NVVBinOp
 nvvBinOp E.Scale = Scale
 
+essBinOp :: E.ESSBinOp -> ESSBinOp
+essBinOp E.SAdd = SAdd
+essBinOp E.SRemove = SRemove
+
+esbBinOp :: E.ESBBinOp -> ESBBinOp
+esbBinOp E.SContains = SContains
+
 expr :: E.Expr -> ModelExpr
 expr (E.Lit a)               = Lit a
 expr (E.AssocA ao es)        = AssocA (assocArithOper ao) $ map expr es
 expr (E.AssocB bo es)        = AssocB (assocBoolOper bo) $ map expr es
+expr (E.AssocC ao es)        = AssocC (assocConcatOper ao) $ map expr es
 expr (E.C u)                 = C u
 expr (E.FCall u es)          = FCall u (map expr es)
 expr (E.Case c ces)          = Case c (map (bimap expr expr) ces)
 expr (E.Matrix es)           = Matrix $ map (map expr) es
+expr (E.Set s e)             = Set s $ map expr e
+expr (E.Variable s e)        = Variable s $ expr e
 expr (E.UnaryOp u e)         = UnaryOp (uFunc u) (expr e)
 expr (E.UnaryOpB u e)        = UnaryOpB (uFuncB u) (expr e)
 expr (E.UnaryOpVV u e)       = UnaryOpVV (uFuncVV u) (expr e)
@@ -99,6 +111,8 @@ expr (E.OrdBinaryOp o l r)   = OrdBinaryOp (ordBinOp o) (expr l) (expr r)
 expr (E.VVVBinaryOp v l r)   = VVVBinaryOp (vvvBinOp v) (expr l) (expr r)
 expr (E.VVNBinaryOp v l r)   = VVNBinaryOp (vvnBinOp v) (expr l) (expr r)
 expr (E.NVVBinaryOp v l r)   = NVVBinaryOp (nvvBinOp v) (expr l) (expr r)
+expr (E.ESSBinaryOp o l r)   = ESSBinaryOp (essBinOp o) (expr l) (expr r)
+expr (E.ESBBinaryOp o l r)   = ESBBinaryOp (esbBinOp o) (expr l) (expr r)
 expr (E.Operator ao dd e)    = Operator (assocArithOper ao) (domainDesc dd) (expr e)
 expr (E.RealI u ri)          = RealI u (realInterval ri)
 

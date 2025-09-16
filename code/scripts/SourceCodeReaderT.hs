@@ -12,6 +12,8 @@ import Data.Char (isUpper)
 
 import DirectoryController as DC (FileName)
 
+import Data.Containers.ListUtils (nubOrd)
+
 -- Synonyms for clarity
 type DataName = String
 type NewtypeName = String
@@ -199,7 +201,7 @@ isDataRec dataRecs = isDataRecAux dataRecs False
 --        , record2 = [a]
 --        , record3 = Type3
 --        } -> Type 
--- This is used in the CodeSpec and SystemInformation types.
+-- This is used in the CodeSpec and System types.
 useConstructFormRec :: Bool -> [String]  -> [String]
 useConstructFormRec _ [] = []
 useConstructFormRec isSameRec (l1:l2:ls) 
@@ -316,7 +318,7 @@ getTypes = map (\l -> TD {tdName = filterName $ fst l, tdContent = filterContent
 
 -- Combines multiple filter functions. For type contents.
 filterContents :: [String] -> [String]
-filterContents = nub . filter (not . null) . map filterName
+filterContents = nubOrd . filter (not . null) . map filterName
 
 -- Combines the below three filter functions. For type names.
 filterName :: String -> String

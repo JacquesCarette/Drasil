@@ -893,19 +893,19 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in significant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
+          A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in significant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety..
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (SSP). This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (<span title="Slope Stability analysis Program">SSP</span>) based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp">SSP</a>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of SSP. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SSP. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of <span title="Slope Stability analysis Program">SSP</span>. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of <span title="Slope Stability analysis Program">SSP</span>. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this <span title="software requirements specification">SRS</span> will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
-              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the <span title="software requirements specification">SRS</span> fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
             </p>
           </div>
         </div>
@@ -913,7 +913,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes stability analysis of a two-dimensional (2D) soil mass, composed of a single homogeneous layer with constant material properties. The soil mass is assumed to extend infinitely in the third dimension. The analysis will be at an instant in time; factors that may change the soil properties over time will not be considered.
+              The scope of the requirements includes stability analysis of a two-dimensional (<span title="two-dimensional">2D</span>) soil mass, composed of a single homogeneous layer with constant material properties. The soil mass is assumed to extend infinitely in the third dimension. The analysis will be at an instant in time; factors that may change the soil properties over time will not be considered.
             </p>
           </div>
         </div>
@@ -921,7 +921,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. It would be an asset to understand soil mechanics. The users of SSP can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. It would be an asset to understand soil mechanics. The users of <span title="Slope Stability analysis Program">SSP</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -929,7 +929,7 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
               The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The instance models provide the set of algebraic equations that must be solved.
@@ -948,12 +948,12 @@
           <div class="subsection">
             <h2>System Context</h2>
             <p class="paragraph">
-              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software. A rectangle represents the software system itself (<span title="Slope Stability analysis Program">SSP</span>). Arrows are used to show the data flow between the system and its environment.
             </p>
             <div id="Figure:sysCtxDiag">
               <figure>
                 <img src="../../../../datafiles/ssp/SystemContextFigure.png" alt="System Context" >
-                <figcaption>System Context</figcaption>
+                <figcaption>Figure: System Context</figcaption>
               </figure>
             </div>
             <p class="paragraph">
@@ -964,7 +964,7 @@
                 User Responsibilities
                 <ul class="list">
                   <li>
-                    Provide the input data related to the soil layer(s) and water table (if applicable), ensuring conformation to input data format required by SSP
+                    Provide the input data related to the soil layer(s) and water table (if applicable), ensuring conformation to input data format required by <span title="Slope Stability analysis Program">SSP</span>
                   </li>
                   <li>Ensure that consistent units are used for input variables</li>
                   <li>
@@ -973,7 +973,7 @@
                 </ul>
               </li>
               <li>
-                SSP Responsibilities
+                <span title="Slope Stability analysis Program">SSP</span> Responsibilities
                 <ul class="list">
                   <li>
                     Detect data type mismatch, such as a string of characters input instead of a floating point number
@@ -997,7 +997,7 @@
           <div class="subsection">
             <h2>User Characteristics</h2>
             <p class="paragraph">
-              The end user of SSP should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties, specifically effective cohesion, effective angle of friction, and unit weight.
+              The end user of <span title="Slope Stability analysis Program">SSP</span> should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties, specifically effective cohesion, effective angle of friction, and unit weight.
             </p>
           </div>
         </div>
@@ -1070,7 +1070,7 @@
                     Isotropy: A condition where the value of a property is independent of the direction in which it is measured.
                   </li>
                   <li>
-                    Plane strain: A condition where the resultant stresses in one of the directions of a  three-dimensional material can be approximated as zero. This condition results when a body is constrained to not deform in one direction, or when the length of one dimension of the body dominates the others, to the point where it can be assumed as infinite. Stresses in the direction of the dominant dimension can be approximated as zero.
+                    Plane strain: A condition where the resultant stresses in one of the directions of a three-dimensional material can be approximated as zero. This condition results when a body is constrained to not deform in one direction, or when the length of one dimension of the body dominates the others, to the point where it can be assumed as infinite. Stresses in the direction of the dominant dimension can be approximated as zero.
                   </li>
                 </ul>
               </div>
@@ -1079,17 +1079,21 @@
               <div class="subsubsection">
                 <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The physical system of SSP, as shown in <a href=#Figure:PhysicalSystem>Fig:PhysicalSystem</a>, includes the following elements:
+                  The physical system of <span title="Slope Stability analysis Program">SSP</span>, as shown in <a href=#Figure:PhysicalSystem>Fig:PhysicalSystem</a>, includes the following elements:
                 </p>
                 <div class="list">
-                  <p>PS1: A slope comprised of one soil layer.</p>
-                  <p>PS2: A water table, which may or may not exist.</p>
+                  <p>
+                    <span title="physical system description">PS</span>1: A slope comprised of one soil layer.
+                  </p>
+                  <p>
+                    <span title="physical system description">PS</span>2: A water table, which may or may not exist.
+                  </p>
                 </div>
                 <div id="Figure:PhysicalSystem">
                   <figure>
-                    <img src="../../../../datafiles/ssp/PhysSyst.png" alt="An example slope for analysis by SSP, where the dashed line represents the water table" >
+                    <img src="../../../../datafiles/ssp/PhysSyst.png" alt="An example slope for analysis by <span title="Slope Stability analysis Program">SSP</span>, where the dashed line represents the water table" >
                     <figcaption>
-                      An example slope for analysis by SSP, where the dashed line represents the water table
+                      Figure: An example slope for analysis by <span title="Slope Stability analysis Program">SSP</span>, where the dashed line represents the water table
                     </figcaption>
                   </figure>
                 </div>
@@ -1100,7 +1104,7 @@
                   <figure>
                     <img src="../../../../datafiles/ssp/IndexConvention.png" alt="Index convention for slice and interslice values" >
                     <figcaption>
-                      Index convention for slice and interslice values
+                      Figure: Index convention for slice and interslice values
                     </figcaption>
                   </figure>
                 </div>
@@ -1111,7 +1115,7 @@
                   <figure>
                     <img src="../../../../datafiles/ssp/ForceDiagram.png" alt="Free body diagram of forces acting on a slice" >
                     <figcaption>
-                      Free body diagram of forces acting on a slice
+                      Figure: Free body diagram of forces acting on a slice
                     </figcaption>
                   </figure>
                 </div>
@@ -1148,7 +1152,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern SSP are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern <span title="Slope Stability analysis Program">SSP</span> are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -1184,12 +1188,12 @@
                   </p>
                   <p>
                     <div id="assumpINSFL">
-                      Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. (RefBy: <a href=#GD:normShrR>GD:normShrR</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, and <a href=#UC_normshearlinear>UC:Normal-And-Shear-Linear-Only</a>.)
+                      Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. (RefBy: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#GD:normShrR>GD:normShrR</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, and <a href=#UC_normshearlinear>UC:Normal-And-Shear-Linear-Only</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpPSC">
-                      Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making 2D analysis appropriate. (RefBy: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#GD:resShr>GD:resShr</a>, <a href=#GD:effNormF>GD:effNormF</a>, and <a href=#GD:baseWtrF>GD:baseWtrF</a>.)
+                      Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making <span title="two-dimensional">2D</span> analysis appropriate. (RefBy: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#GD:resShr>GD:resShr</a>, <a href=#GD:effNormF>GD:effNormF</a>, and <a href=#GD:baseWtrF>GD:baseWtrF</a>.)
                     </div>
                   </p>
                   <p>
@@ -1199,22 +1203,22 @@
                   </p>
                   <p>
                     <div id="assumpSBSBISL">
-                      Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. (RefBy: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#GD:baseWtrF>GD:baseWtrF</a>, <a href=#TM:mcShrStrgth>TM:mcShrStrgth</a>, <a href=#DD:slcHeight>DD:slcHeight</a>, <a href=#DD:angleB>DD:angleB</a>, and <a href=#DD:angleA>DD:angleA</a>.)
+                      Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. (RefBy: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#TM:mcShrStrgth>TM:mcShrStrgth</a>, <a href=#GD:baseWtrF>GD:baseWtrF</a>, <a href=#DD:slcHeight>DD:slcHeight</a>, <a href=#DD:angleB>DD:angleB</a>, and <a href=#DD:angleA>DD:angleA</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpES">
-                      Edge-Slices: The interslice forces at the 0th and <em>n</em>th interslice interfaces are zero. (RefBy: <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, and <a href=#IM:nrmShrFor>IM:nrmShrFor</a>.)
+                      Edge-Slices: The interslice forces at the 0th and <em>n</em>th interslice interfaces are zero. (RefBy: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:intsliceFs>IM:intsliceFs</a>, and <a href=#IM:fctSfty>IM:fctSfty</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSF">
-                      Seismic-Force: There is no seismic force acting on the slope. (RefBy: <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, and <a href=#LC_seismic>LC:Calculate-Seismic-Force</a>.)
+                      Seismic-Force: There is no seismic force acting on the slope. (RefBy: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, and <a href=#LC_seismic>LC:Calculate-Seismic-Force</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSL">
-                      Surface-Load: There is no imposed surface load, and therefore no external forces, acting on the slope. (RefBy: <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, and <a href=#LC_external>LC:Calculate-External-Force</a>.)
+                      Surface-Load: There is no imposed surface load, and therefore no external forces, acting on the slope. (RefBy: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, and <a href=#LC_external>LC:Calculate-External-Force</a>.)
                     </div>
                   </p>
                   <p>
@@ -1244,7 +1248,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that SSP is based on.
+                  This section focuses on the general equations and laws that <span title="Slope Stability analysis Program">SSP</span> is based on.
                 </p>
                 <div id="TM:factOfSafety">
                   <table class="tdefn">
@@ -1354,7 +1358,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{τ^{\text{f}}}={σ_{N}}' \tan\left(φ'\right)+c'\]</td>
+                      <td>\[{τ^{\text{f}}}={σ_{N}}'\,\tan\left(φ'\right)+c'\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1449,7 +1453,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{F}=m \symbf{a}\text{(}t\text{)}\]</td>
+                      <td>\[\symbf{F}=m\,\symbf{a}\text{(}t\text{)}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1508,7 +1512,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{N}}_{i}=\left({\symbf{W}}_{i}-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}+{\symbf{U}_{\text{g},i}} \cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \cos\left({\symbf{ω}}_{i}\right)\right) \cos\left({\symbf{α}}_{i}\right)+\left(-{K_{\text{c}}} {\symbf{W}}_{i}-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right)\right) \sin\left({\symbf{α}}_{i}\right)\]
+                        \[{\symbf{N}}_{i}=\left({\symbf{W}}_{i}-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}+{\symbf{U}_{\text{g},i}}\,\cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\cos\left({\symbf{ω}}_{i}\right)\right)\,\cos\left({\symbf{α}}_{i}\right)+\left(-{K_{\text{c}}}\,{\symbf{W}}_{i}-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\right)\,\sin\left({\symbf{α}}_{i}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1595,7 +1599,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{S}}_{i}=\left({\symbf{W}}_{i}-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}+{\symbf{U}_{\text{g},i}} \cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \cos\left({\symbf{ω}}_{i}\right)\right) \sin\left({\symbf{α}}_{i}\right)-\left(-{K_{\text{c}}} {\symbf{W}}_{i}-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right)\right) \cos\left({\symbf{α}}_{i}\right)\]
+                        \[{\symbf{S}}_{i}=\left({\symbf{W}}_{i}-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}+{\symbf{U}_{\text{g},i}}\,\cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\cos\left({\symbf{ω}}_{i}\right)\right)\,\sin\left({\symbf{α}}_{i}\right)-\left(-{K_{\text{c}}}\,{\symbf{W}}_{i}-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\right)\,\cos\left({\symbf{α}}_{i}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1682,7 +1686,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{P}}_{i}={\symbf{N'}}_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} {\symbf{L}_{b,i}}\]
+                        \[{\symbf{P}}_{i}={\symbf{N'}}_{i}\,\tan\left({φ'}_{i}\right)+{c'}_{i}\,{\symbf{L}_{b,i}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1751,7 +1755,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{S}}_{i}=\frac{{\symbf{P}}_{i}}{{F_{\text{S}}}}=\frac{{\symbf{N'}}_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} {\symbf{L}_{b,i}}}{{F_{\text{S}}}}\]
+                        \[{\symbf{S}}_{i}=\frac{{\symbf{P}}_{i}}{{F_{\text{S}}}}=\frac{{\symbf{N'}}_{i}\,\tan\left({φ'}_{i}\right)+{c'}_{i}\,{\symbf{L}_{b,i}}}{{F_{\text{S}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1895,7 +1899,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{R}}_{i}=\left(\left({\symbf{W}}_{i}+{\symbf{U}_{\text{g},i}} \cos\left({\symbf{β}}_{i}\right)\right) \cos\left({\symbf{α}}_{i}\right)+\left(-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)\right) \sin\left({\symbf{α}}_{i}\right)-{\symbf{U}_{\text{b},i}}\right) \tan\left({φ'}_{i}\right)+{c'}_{i} {\symbf{L}_{b,i}}\]
+                        \[{\symbf{R}}_{i}=\left(\left({\symbf{W}}_{i}+{\symbf{U}_{\text{g},i}}\,\cos\left({\symbf{β}}_{i}\right)\right)\,\cos\left({\symbf{α}}_{i}\right)+\left(-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)\right)\,\sin\left({\symbf{α}}_{i}\right)-{\symbf{U}_{\text{b},i}}\right)\,\tan\left({φ'}_{i}\right)+{c'}_{i}\,{\symbf{L}_{b,i}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1979,7 +1983,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{T}}_{i}=\left({\symbf{W}}_{i}+{\symbf{U}_{\text{g},i}} \cos\left({\symbf{β}}_{i}\right)\right) \sin\left({\symbf{α}}_{i}\right)-\left(-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)\right) \cos\left({\symbf{α}}_{i}\right)\]
+                        \[{\symbf{T}}_{i}=\left({\symbf{W}}_{i}+{\symbf{U}_{\text{g},i}}\,\cos\left({\symbf{β}}_{i}\right)\right)\,\sin\left({\symbf{α}}_{i}\right)-\left(-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)\right)\,\cos\left({\symbf{α}}_{i}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -2048,7 +2052,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{X}=λ \symbf{f} \symbf{G}\]</td>
+                      <td>\[\symbf{X}=λ\,\symbf{f}\,\symbf{G}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2083,7 +2087,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:fctSfty>IM:fctSfty</a> and <a href=#IM:nrmShrFor>IM:nrmShrFor</a>
+                          <a href=#IM:nrmShrFor>IM:nrmShrFor</a> and <a href=#IM:fctSfty>IM:fctSfty</a>
                         </p>
                       </td>
                     </tr>
@@ -2106,7 +2110,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[0=-{\symbf{G}}_{i} \left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{G}}_{i-1} \left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)-{\symbf{H}}_{i} \left(\frac{1}{3} {\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{H}}_{i-1} \left(\frac{1}{3} {\symbf{h}_{\text{z,w},i-1}}-\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+\frac{{\symbf{b}}_{i}}{2} \left({\symbf{X}}_{i}+{\symbf{X}}_{i-1}\right)+\frac{-{K_{\text{c}}} {\symbf{W}}_{i} {\symbf{h}}_{i}}{2}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right) {\symbf{h}}_{i}+{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right) {\symbf{h}}_{i}\]
+                        \[0=-{\symbf{G}}_{i}\,\left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{G}}_{i-1}\,\left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)-{\symbf{H}}_{i}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{H}}_{i-1}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+\frac{{\symbf{b}}_{i}}{2}\,\left({\symbf{X}}_{i}+{\symbf{X}}_{i-1}\right)+\frac{-{K_{\text{c}}}\,{\symbf{W}}_{i}\,{\symbf{h}}_{i}}{2}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)\,{\symbf{h}}_{i}+{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\,{\symbf{h}}_{i}\]
                       </td>
                     </tr>
                     <tr>
@@ -2183,53 +2187,53 @@
                     <p class="paragraph">
                       Considering one dimension, with moments in the clockwise direction as positive and moments in the counterclockwise direction as negative, and replacing the torque symbol with the moment symbol, the equation simplifies to:
                     </p>
-                    \[M={F_{\text{rot}}} r\]
+                    \[M={F_{\text{rot}}}\,r\]
                     <p class="paragraph">
                       where <em>F<sub>rot</sub></em> is the force causing rotation and <em>r</em> is the length of the moment arm, or the distance between the force and the axis about which the rotation acts. To represent the moment equilibrium, the moments from each force acting on a slice must be considered and added together. The forces acting on a slice are all shown in <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a>. The midpoint of the base of a slice is considered as the axis of rotation, from which the length of the moment arm is measured. Considering first the interslice normal force acting on slice interface <em>i</em>, the moment is negative because the force tends to rotate the slice in a counterclockwise direction, and the length of the moment arm is the height of the force plus the difference in height between the base at slice interface <em>i</em> and the base at the midpoint of slice <em>i</em>. Thus, the moment is expressed as:
                     </p>
-                    \[-{\symbf{G}}_{i} \left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)\]
+                    \[-{\symbf{G}}_{i}\,\left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)\]
                     <p class="paragraph">
                       For the <em>i&minus;1</em>th slice interface, the moment is similar but in the opposite direction:
                     </p>
-                    \[{\symbf{G}}_{i-1} \left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)\]
+                    \[{\symbf{G}}_{i-1}\,\left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)\]
                     <p class="paragraph">
                       Next, the interslice normal water force is considered. This force is zero at the height of the water table, then increases linearly towards the base of the slice due to the increasing water pressure. For such a triangular distribution, the resultant force acts at one-third of the height. Thus, for the interslice normal water force acting on slice interface <em>i</em>, the moment is:
                     </p>
-                    \[-{\symbf{H}}_{i} \left(\frac{1}{3} {\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)\]
+                    \[-{\symbf{H}}_{i}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)\]
                     <p class="paragraph">
                       The moment for the interslice normal water force acting on slice interface <em>i&minus;1</em> is:
                     </p>
-                    \[{\symbf{H}}_{i-1} \left(\frac{1}{3} {\symbf{h}_{\text{z,w},i-1}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)\]
+                    \[{\symbf{H}}_{i-1}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i-1}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)\]
                     <p class="paragraph">
                       The interslice shear force at slice interface <em>i</em> tends to rotate in the clockwise direction, and the length of the moment arm is the length from the slice edge to the slice midpoint, equivalent to half of the width of the slice, so the moment is:
                     </p>
-                    \[{\symbf{X}}_{i} \frac{{\symbf{b}}_{i}}{2}\]
+                    \[{\symbf{X}}_{i}\,\frac{{\symbf{b}}_{i}}{2}\]
                     <p class="paragraph">
                       The interslice shear force at slice interface <em>i&minus;1</em> also tends to rotate in the clockwise direction, and has the same length of the moment arm, so the moment is:
                     </p>
-                    \[{\symbf{X}}_{i-1} \frac{{\symbf{b}}_{i}}{2}\]
+                    \[{\symbf{X}}_{i-1}\,\frac{{\symbf{b}}_{i}}{2}\]
                     <p class="paragraph">
                       Seismic forces act over the entire height of the slice. For each horizontal segment of the slice, the seismic force is <em>K<sub>c</sub>&#8239;<b>W</b><sub>i</sub></em> where <em><b>W</b><sub>i</sub></em> can be expressed as <em>γ&#8239;<b>b</b><sub>i</sub>&#8239;y</em> using <a href=#GD:weight>GD:weight</a> where <em>y</em> is the height of the segment under consideration. The corresponding length of the moment arm is <em>y</em>, the height from the base of the slice to the segment under consideration. In reality, the forces near the surface of the soil mass are slightly different due to the slope of the surface, but this difference is assumed to be negligible (<a href=#assumpNESSS>A:Negligible-Effect-Surface-Slope-Seismic</a>). The resultant moment from the forces on all of the segments with an equivalent resultant length of the moment arm is determined by taking the integral over the slice height. The forces tend to rotate in the counterclockwise direction, so the moment is negative:
                     </p>
-                    \[-\int_{0}^{{\symbf{h}}_{i}}{{K_{\text{c}}} γ {\symbf{b}}_{i} y}\,dy\]
+                    \[-\int_{0}^{{\symbf{h}}_{i}}{{K_{\text{c}}}\,γ\,{\symbf{b}}_{i}\,y}\,dy\]
                     <p class="paragraph">Solving the definite integral yields:</p>
-                    \[-{K_{\text{c}}} γ {\symbf{b}}_{i} \frac{{\symbf{h}}_{i}^{2}}{2}\]
+                    \[-{K_{\text{c}}}\,γ\,{\symbf{b}}_{i}\,\frac{{\symbf{h}}_{i}^{2}}{2}\]
                     <p class="paragraph">
                       Using <a href=#GD:weight>GD:weight</a> again to express <em>γ&#8239;<b>b</b><sub>i</sub>&#8239;<b>h</b><sub>i</sub></em> as <em><b>W</b><sub>i</sub></em>, the moment is:
                     </p>
-                    \[-{K_{\text{c}}} {\symbf{W}}_{i} \frac{{\symbf{h}}_{i}}{2}\]
+                    \[-{K_{\text{c}}}\,{\symbf{W}}_{i}\,\frac{{\symbf{h}}_{i}}{2}\]
                     <p class="paragraph">
                       The surface hydrostatic force acts into the midpoint of the surface of the slice (<a href=#assumpHFSM>A:Hydrostatic-Force-Slice-Midpoint</a>). Thus, the vertical component of the force acts directly towards the point of rotation, and has a moment of zero. The horizontal component of the force tends to rotate in a clockwise direction and the length of the moment arm is the entire height of the slice. Thus, the moment is:
                     </p>
-                    \[{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right) {\symbf{h}}_{i}\]
+                    \[{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)\,{\symbf{h}}_{i}\]
                     <p class="paragraph">
                       The external force again acts into the midpoint of the slice surface, so the vertical component does not contribute to the moment, and the length of the moment arm is again the entire height of the slice. The moment is:
                     </p>
-                    \[{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right) {\symbf{h}}_{i}\]
+                    \[{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\,{\symbf{h}}_{i}\]
                     <p class="paragraph">
                       The base hydrostatic force and slice weight both act in the direction of the point of rotation (<a href=#assumpHFSM>A:Hydrostatic-Force-Slice-Midpoint</a>), therefore both have moments of zero. Thus, all of the moments have been determined. The moment equilibrium is then represented by the sum of all moments:
                     </p>
-                    \[0=-{\symbf{G}}_{i} \left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{G}}_{i-1} \left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)-{\symbf{H}}_{i} \left(\frac{1}{3} {\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{H}}_{i-1} \left(\frac{1}{3} {\symbf{h}_{\text{z,w},i-1}}-\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+\frac{{\symbf{b}}_{i}}{2} \left({\symbf{X}}_{i}+{\symbf{X}}_{i-1}\right)+\frac{-{K_{\text{c}}} {\symbf{W}}_{i} {\symbf{h}}_{i}}{2}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right) {\symbf{h}}_{i}+{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right) {\symbf{h}}_{i}\]
+                    \[0=-{\symbf{G}}_{i}\,\left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{G}}_{i-1}\,\left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)-{\symbf{H}}_{i}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{H}}_{i-1}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+\frac{{\symbf{b}}_{i}}{2}\,\left({\symbf{X}}_{i}+{\symbf{X}}_{i-1}\right)+\frac{-{K_{\text{c}}}\,{\symbf{W}}_{i}\,{\symbf{h}}_{i}}{2}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)\,{\symbf{h}}_{i}+{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\,{\symbf{h}}_{i}\]
                   </div>
                 </div>
                 <div id="GD:weight">
@@ -2248,7 +2252,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[W=V γ\]</td>
+                      <td>\[W=V\,γ\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2284,24 +2288,24 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of weight:</h4>
                     <p class="paragraph">
-                      Under the influence of gravity, and assuming a 2D Cartesian coordinate system with down as positive, an object has an acceleration vector of:
+                      Under the influence of gravity, and assuming a <span title="two-dimensional">2D</span> Cartesian coordinate system with down as positive, an object has an acceleration vector of:
                     </p>
                     \[\symbf{a}\text{(}t\text{)}=\begin{bmatrix}
                                                  0\\
-                                                 \symbf{g} \symbf{\hat{j}}
+                                                 \symbf{g}\,\symbf{\hat{j}}
                                                  \end{bmatrix}\]
                     <p class="paragraph">
                       Since there is only one non-zero vector component, the scalar value <em>W</em> will be used for the weight. In this scenario, Newton's second law of motion from <a href=#TM:NewtonSecLawMot>TM:NewtonSecLawMot</a> can be expressed as:
                     </p>
-                    \[W=m \symbf{g}\]
+                    \[W=m\,\symbf{g}\]
                     <p class="paragraph">
                       Mass can be expressed as density multiplied by volume, resulting in:
                     </p>
-                    \[W=ρ V \symbf{g}\]
+                    \[W=ρ\,V\,\symbf{g}\]
                     <p class="paragraph">
                       Substituting specific weight as the product of density and gravitational acceleration yields:
                     </p>
-                    \[W=V γ\]
+                    \[W=V\,γ\]
                   </div>
                 </div>
                 <div id="GD:sliceWght">
@@ -2323,11 +2327,11 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{W}}_{i}={\symbf{b}}_{i} \frac{1}{2} \begin{cases}
-                                                                      \left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{slope},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}, & {\symbf{y}_{\text{wt},i}}\gt{}{\symbf{y}_{\text{slope},i}}\lor{}{\symbf{y}_{\text{wt},i-1}}\gt{}{\symbf{y}_{\text{slope},i-1}}\\
-                                                                      \left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{wt},i}}+{\symbf{y}_{\text{slope},i-1}}-{\symbf{y}_{\text{wt},i-1}}\right) {γ_{\text{dry}}}+\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}, & {\symbf{y}_{\text{slope},i}}\geq{}{\symbf{y}_{\text{wt},i}}\geq{}{\symbf{y}_{\text{slip},i}}\land{}{\symbf{y}_{\text{slope},i-1}}\geq{}{\symbf{y}_{\text{wt},i-1}}\geq{}{\symbf{y}_{\text{slip},i-1}}\\
-                                                                      \left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{slope},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right) {γ_{\text{dry}}}, & {\symbf{y}_{\text{wt},i}}\lt{}{\symbf{y}_{\text{slip},i}}\lor{}{\symbf{y}_{\text{wt},i-1}}\lt{}{\symbf{y}_{\text{slip},i-1}}
-                                                                      \end{cases}\]
+                        \[{\symbf{W}}_{i}={\symbf{b}}_{i}\,\frac{1}{2}\,\begin{cases}
+                                                                        \left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{slope},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right)\,{γ_{\text{sat}}}, & {\symbf{y}_{\text{wt},i}}\gt{}{\symbf{y}_{\text{slope},i}}\lor{}{\symbf{y}_{\text{wt},i-1}}\gt{}{\symbf{y}_{\text{slope},i-1}}\\
+                                                                        \left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{wt},i}}+{\symbf{y}_{\text{slope},i-1}}-{\symbf{y}_{\text{wt},i-1}}\right)\,{γ_{\text{dry}}}+\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right)\,{γ_{\text{sat}}}, & {\symbf{y}_{\text{slope},i}}\geq{}{\symbf{y}_{\text{wt},i}}\geq{}{\symbf{y}_{\text{slip},i}}\land{}{\symbf{y}_{\text{slope},i-1}}\geq{}{\symbf{y}_{\text{wt},i-1}}\geq{}{\symbf{y}_{\text{slip},i-1}}\\
+                                                                        \left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{slope},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right)\,{γ_{\text{dry}}}, & {\symbf{y}_{\text{wt},i}}\lt{}{\symbf{y}_{\text{slip},i}}\lor{}{\symbf{y}_{\text{wt},i-1}}\lt{}{\symbf{y}_{\text{slip},i-1}}
+                                                                        \end{cases}\]
                       </td>
                     </tr>
                     <tr>
@@ -2387,27 +2391,27 @@
                     <p class="paragraph">
                       For the case where the water table is above the slope surface, the weights come from the weight of the saturated soil. Substituting values for saturated soil into the equation for weight from <a href=#GD:weight>GD:weight</a> yields:
                     </p>
-                    \[{\symbf{W}}_{i}={\symbf{V}_{\text{sat},i}} {γ_{\text{sat}}}\]
+                    \[{\symbf{W}}_{i}={\symbf{V}_{\text{sat},i}}\,{γ_{\text{sat}}}\]
                     <p class="paragraph">
                       Due to <a href=#assumpPSC>A:Plane-Strain-Conditions</a>, only two dimensions are considered, so the areas of saturated soil are considered instead of the volumes of saturated soil. Any given slice has a trapezoidal shape. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the interslice edges and the length between them is the width of the slice. Thus, the weights are defined as:
                     </p>
-                    \[{\symbf{W}}_{i}={\symbf{b}}_{i} \frac{1}{2} \left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{slope},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}\]
+                    \[{\symbf{W}}_{i}={\symbf{b}}_{i}\,\frac{1}{2}\,\left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{slope},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right)\,{γ_{\text{sat}}}\]
                     <p class="paragraph">
                       For the case where the water table is below the slip surface, the weights come from the weight of the dry soil. Substituting values for dry soil into the equation for weight from <a href=#GD:weight>GD:weight</a> yields:
                     </p>
-                    \[{\symbf{W}}_{i}={\symbf{V}_{\text{dry},i}} {γ_{\text{dry}}}\]
+                    \[{\symbf{W}}_{i}={\symbf{V}_{\text{dry},i}}\,{γ_{\text{dry}}}\]
                     <p class="paragraph">
                       <a href=#assumpPSC>A:Plane-Strain-Conditions</a> again allows for two-dimensional analysis so the areas of dry soil are considered instead of the volumes of dry soil. The trapezoidal slice shape is the same as in the previous case, so the weights are defined as:
                     </p>
-                    \[{\symbf{W}}_{i}={\symbf{b}}_{i} \frac{1}{2} \left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{slope},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right) {γ_{\text{dry}}}\]
+                    \[{\symbf{W}}_{i}={\symbf{b}}_{i}\,\frac{1}{2}\,\left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{slope},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right)\,{γ_{\text{dry}}}\]
                     <p class="paragraph">
                       For the case where the water table is between the slope surface and slip surface, the weights are the sums of the weights of the dry portions and weights of the saturated portions of the soil. Substituting values for dry and saturated soil into the equation for weight from <a href=#GD:weight>GD:weight</a> and adding them together yields:
                     </p>
-                    \[{\symbf{W}}_{i}={\symbf{V}_{\text{dry},i}} {γ_{\text{dry}}}+{\symbf{V}_{\text{sat},i}} {γ_{\text{sat}}}\]
+                    \[{\symbf{W}}_{i}={\symbf{V}_{\text{dry},i}}\,{γ_{\text{dry}}}+{\symbf{V}_{\text{sat},i}}\,{γ_{\text{sat}}}\]
                     <p class="paragraph">
                       <a href=#assumpPSC>A:Plane-Strain-Conditions</a> again allows for two-dimensional analysis so the areas of dry soil and areas of saturated soil are considered instead of the volumes of dry soil and volumes of saturated soil. The water table is assumed to only intersect a slice surface or base at a slice edge (<a href=#assumpWISE>A:Water-Intersects-Surface-Edge</a>, <a href=#assumpWIBE>A:Water-Intersects-Base-Edge</a>), so the dry and saturated portions each have trapezoidal shape. For the dry portion, the parallel sides of the trapezoid are the lengths between the slope surface and water table at the slice edges. For the saturated portion, the parallel sides of the trapezoid are the lengths between the water table and slip surface at the slice edges. Thus, the weights are defined as:
                     </p>
-                    \[{\symbf{W}}_{i}={\symbf{b}}_{i} \frac{1}{2} \left(\left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{wt},i}}+{\symbf{y}_{\text{slope},i-1}}-{\symbf{y}_{\text{wt},i-1}}\right) {γ_{\text{dry}}}+\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}\right)\]
+                    \[{\symbf{W}}_{i}={\symbf{b}}_{i}\,\frac{1}{2}\,\left(\left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{wt},i}}+{\symbf{y}_{\text{slope},i-1}}-{\symbf{y}_{\text{wt},i-1}}\right)\,{γ_{\text{dry}}}+\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right)\,{γ_{\text{sat}}}\right)\]
                   </div>
                 </div>
                 <div id="GD:hsPressure">
@@ -2426,7 +2430,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[p=γ h\]</td>
+                      <td>\[p=γ\,h\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2485,10 +2489,10 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{U}_{\text{b},i}}={\symbf{L}_{b,i}} {γ_{w}} \frac{1}{2} \begin{cases}
-                                                                                         {\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slip},i-1}}, & {\symbf{y}_{\text{wt},i}}\gt{}{\symbf{y}_{\text{slip},i}}\lor{}{\symbf{y}_{\text{wt},i-1}}\gt{}{\symbf{y}_{\text{slip},i-1}}\\
-                                                                                         0, & {\symbf{y}_{\text{wt},i}}\leq{}{\symbf{y}_{\text{slip},i}}\land{}{\symbf{y}_{\text{wt},i-1}}\leq{}{\symbf{y}_{\text{slip},i-1}}
-                                                                                         \end{cases}\]
+                        \[{\symbf{U}_{\text{b},i}}={\symbf{L}_{b,i}}\,{γ_{w}}\,\frac{1}{2}\,\begin{cases}
+                                                                                            {\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slip},i-1}}, & {\symbf{y}_{\text{wt},i}}\gt{}{\symbf{y}_{\text{slip},i}}\lor{}{\symbf{y}_{\text{wt},i-1}}\gt{}{\symbf{y}_{\text{slip},i-1}}\\
+                                                                                            0, & {\symbf{y}_{\text{wt},i}}\leq{}{\symbf{y}_{\text{slip},i}}\land{}{\symbf{y}_{\text{wt},i-1}}\leq{}{\symbf{y}_{\text{slip},i-1}}
+                                                                                            \end{cases}\]
                       </td>
                     </tr>
                     <tr>
@@ -2544,15 +2548,15 @@
                     <p class="paragraph">
                       The base hydrostatic forces come from the hydrostatic pressure exerted by the water above the base of each slice. The equation for hydrostatic pressure from <a href=#GD:hsPressure>GD:hsPressure</a> is:
                     </p>
-                    \[p=γ h\]
+                    \[p=γ\,h\]
                     <p class="paragraph">
                       The specific weight in this case is the unit weight of water <em>γ<sub>w</sub></em>. The height in this case is the height from the slice base to the water table. This height is measured from the midpoint of the slice because the resultant hydrostatic force is assumed to act at the slice midpoint (<a href=#assumpHFSM>A:Hydrostatic-Force-Slice-Midpoint</a>). The height at the midpoint is the average of the height at slice interface <em>i</em> and the height at slice interface <em>i&minus;1</em>:
                     </p>
-                    \[\frac{1}{2} \left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right)\]
+                    \[\frac{1}{2}\,\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right)\]
                     <p class="paragraph">
                       Due to <a href=#assumpPSC>A:Plane-Strain-Conditions</a>, only two dimensions are considered, so the base hydrostatic forces are expressed as forces per meter. The pressures acting on the slices can thus be converted to base hydrostatic forces by multiplying by the corresponding length of the slice base <em><b>L</b><sub>b,i</sub></em>, assuming the water table does not intersect a slice base except at a slice edge (<a href=#assumpWIBE>A:Water-Intersects-Base-Edge</a>). Thus, in the case where the height of the water table is above the height of the slip surface, the base hydrostatic forces are defined as:
                     </p>
-                    \[{\symbf{U}_{\text{b},i}}={\symbf{L}_{b,i}} {γ_{w}} \frac{1}{2} \left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right)\]
+                    \[{\symbf{U}_{\text{b},i}}={\symbf{L}_{b,i}}\,{γ_{w}}\,\frac{1}{2}\,\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right)\]
                     <p class="paragraph">
                       This equation is the non-zero case of <a href=#GD:baseWtrF>GD:baseWtrF</a>. The zero case is when the height of the water table is below the height of the slip surface, so there is no hydrostatic force.
                     </p>
@@ -2577,10 +2581,10 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{U}_{\text{g},i}}={\symbf{L}_{s,i}} {γ_{w}} \frac{1}{2} \begin{cases}
-                                                                                         {\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slope},i-1}}, & {\symbf{y}_{\text{wt},i}}\gt{}{\symbf{y}_{\text{slope},i}}\lor{}{\symbf{y}_{\text{wt},i-1}}\gt{}{\symbf{y}_{\text{slope},i-1}}\\
-                                                                                         0, & {\symbf{y}_{\text{wt},i}}\leq{}{\symbf{y}_{\text{slope},i}}\land{}{\symbf{y}_{\text{wt},i-1}}\leq{}{\symbf{y}_{\text{slope},i-1}}
-                                                                                         \end{cases}\]
+                        \[{\symbf{U}_{\text{g},i}}={\symbf{L}_{s,i}}\,{γ_{w}}\,\frac{1}{2}\,\begin{cases}
+                                                                                            {\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slope},i-1}}, & {\symbf{y}_{\text{wt},i}}\gt{}{\symbf{y}_{\text{slope},i}}\lor{}{\symbf{y}_{\text{wt},i-1}}\gt{}{\symbf{y}_{\text{slope},i-1}}\\
+                                                                                            0, & {\symbf{y}_{\text{wt},i}}\leq{}{\symbf{y}_{\text{slope},i}}\land{}{\symbf{y}_{\text{wt},i-1}}\leq{}{\symbf{y}_{\text{slope},i-1}}
+                                                                                            \end{cases}\]
                       </td>
                     </tr>
                     <tr>
@@ -2636,15 +2640,15 @@
                     <p class="paragraph">
                       The surface hydrostatic forces come from the hydrostatic pressure exerted by the water above the surface of each slice. The equation for hydrostatic pressure from <a href=#GD:hsPressure>GD:hsPressure</a> is:
                     </p>
-                    \[p=γ h\]
+                    \[p=γ\,h\]
                     <p class="paragraph">
                       The specific weight in this case is the unit weight of water <em>γ<sub>w</sub></em>. The height in this case is the height from the slice surface to the water table. This height is measured from the midpoint of the slice because the resultant hydrostatic force is assumed to act at the slice midpoint (<a href=#assumpHFSM>A:Hydrostatic-Force-Slice-Midpoint</a>). The height at the midpoint is the average of the height at slice interface <em>i</em> and the height at slice interface <em>i&minus;1</em>:
                     </p>
-                    \[\frac{1}{2} \left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slope},i-1}}\right)\]
+                    \[\frac{1}{2}\,\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slope},i-1}}\right)\]
                     <p class="paragraph">
                       Due to <a href=#assumpPSC>A:Plane-Strain-Conditions</a>, only two dimensions are considered, so the surface hydrostatic forces are expressed as forces per meter. The pressures acting on the slices can thus be converted to surface hydrostatic forces by multiplying by the corresponding length of the slice surface <em><b>L</b><sub>s,i</sub></em>, assuming the water table does not intersect a slice surface except at a slice edge (<a href=#assumpWISE>A:Water-Intersects-Surface-Edge</a>). Thus, in the case where the height of the water table is above the height of the slope surface, the surface hydrostatic forces are defined as:
                     </p>
-                    \[{\symbf{U}_{\text{g},i}}={\symbf{L}_{s,i}} {γ_{w}} \frac{1}{2} \left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slope},i-1}}\right)\]
+                    \[{\symbf{U}_{\text{g},i}}={\symbf{L}_{s,i}}\,{γ_{w}}\,\frac{1}{2}\,\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slope},i-1}}\right)\]
                     <p class="paragraph">
                       This equation is the non-zero case of <a href=#GD:srfWtrF>GD:srfWtrF</a>. The zero case is when the height of the water table is below the height of the slope surface, so there is no hydrostatic force.
                     </p>
@@ -2682,8 +2686,8 @@
                       <th>Equation</th>
                       <td>
                         \[\symbf{H}=\begin{cases}
-                                    \frac{\left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}+\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}\right)^{2} {γ_{w}}, & {\symbf{y}_{\text{wt},i}}\geq{}{\symbf{y}_{\text{slope},i}}\\
-                                    \frac{\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}, & {\symbf{y}_{\text{slope},i}}\gt{}{\symbf{y}_{\text{wt},i}}\land{}{\symbf{y}_{\text{wt},i}}\gt{}{\symbf{y}_{\text{slip},i}}\\
+                                    \frac{\left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{slip},i}}\right)^{2}}{2}\,{γ_{w}}+\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}\right)^{2}\,{γ_{w}}, & {\symbf{y}_{\text{wt},i}}\geq{}{\symbf{y}_{\text{slope},i}}\\
+                                    \frac{\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}\right)^{2}}{2}\,{γ_{w}}, & {\symbf{y}_{\text{slope},i}}\gt{}{\symbf{y}_{\text{wt},i}}\land{}{\symbf{y}_{\text{wt},i}}\gt{}{\symbf{y}_{\text{slip},i}}\\
                                     0, & {\symbf{y}_{\text{wt},i}}\leq{}{\symbf{y}_{\text{slip},i}}
                                     \end{cases}\]
                       </td>
@@ -2926,7 +2930,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{L}_{b}}={\symbf{b}}_{i} \sec\left({\symbf{α}}_{i}\right)\]
+                        \[{\symbf{L}_{b}}={\symbf{b}}_{i}\,\sec\left({\symbf{α}}_{i}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -2987,7 +2991,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{L}_{s}}={\symbf{b}}_{i} \sec\left({\symbf{β}}_{i}\right)\]
+                        \[{\symbf{L}_{s}}={\symbf{b}}_{i}\,\sec\left({\symbf{β}}_{i}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -3048,7 +3052,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{h}=\frac{1}{2} \left({{\symbf{h}^{\text{R}}}}_{i}+{{\symbf{h}^{\text{L}}}}_{i}\right)\]
+                        \[\symbf{h}=\frac{1}{2}\,\left({{\symbf{h}^{\text{R}}}}_{i}+{{\symbf{h}^{\text{L}}}}_{i}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -3139,7 +3143,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#GD:resShr>GD:resShr</a>, <a href=#GD:effNormF>GD:effNormF</a>, and <a href=#TM:effStress>TM:effStress</a>
+                          <a href=#GD:resShr>GD:resShr</a>, <a href=#TM:effStress>TM:effStress</a>, and <a href=#GD:effNormF>GD:effNormF</a>
                         </p>
                       </td>
                     </tr>
@@ -3270,7 +3274,7 @@
                       <td>
                         \[\symbf{f}=\begin{cases}
                                     1, & \mathit{const\_f}\\
-                                    \sin\left(π \frac{{\symbf{x}_{\text{slip},i}}-{\symbf{x}_{\text{slip},0}}}{{\symbf{x}_{\text{slip},n}}-{\symbf{x}_{\text{slip},0}}}\right), & \neg{}\mathit{const\_f}
+                                    \sin\left(π\,\frac{{\symbf{x}_{\text{slip},i}}-{\symbf{x}_{\text{slip},0}}}{{\symbf{x}_{\text{slip},n}}-{\symbf{x}_{\text{slip},0}}}\right), & \neg{}\mathit{const\_f}
                                     \end{cases}\]
                       </td>
                     </tr>
@@ -3334,7 +3338,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{Φ}=\left(λ {\symbf{f}}_{i} \cos\left({\symbf{α}}_{i}\right)-\sin\left({\symbf{α}}_{i}\right)\right) \tan\left(φ'\right)-\left(λ {\symbf{f}}_{i} \sin\left({\symbf{α}}_{i}\right)+\cos\left({\symbf{α}}_{i}\right)\right) {F_{\text{S}}}\]
+                        \[\symbf{Φ}=\left(λ\,{\symbf{f}}_{i}\,\cos\left({\symbf{α}}_{i}\right)-\sin\left({\symbf{α}}_{i}\right)\right)\,\tan\left(φ'\right)-\left(λ\,{\symbf{f}}_{i}\,\sin\left({\symbf{α}}_{i}\right)+\cos\left({\symbf{α}}_{i}\right)\right)\,{F_{\text{S}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -3408,7 +3412,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{Ψ}=\frac{\left(λ {\symbf{f}}_{i} \cos\left({\symbf{α}}_{i}\right)-\sin\left({\symbf{α}}_{i}\right)\right) \tan\left(φ'\right)-\left(λ {\symbf{f}}_{i} \sin\left({\symbf{α}}_{i}\right)+\cos\left({\symbf{α}}_{i}\right)\right) {F_{\text{S}}}}{{\symbf{Φ}}_{i-1}}\]
+                        \[\symbf{Ψ}=\frac{\left(λ\,{\symbf{f}}_{i}\,\cos\left({\symbf{α}}_{i}\right)-\sin\left({\symbf{α}}_{i}\right)\right)\,\tan\left(φ'\right)-\left(λ\,{\symbf{f}}_{i}\,\sin\left({\symbf{α}}_{i}\right)+\cos\left({\symbf{α}}_{i}\right)\right)\,{F_{\text{S}}}}{{\symbf{Φ}}_{i-1}}\]
                       </td>
                     </tr>
                     <tr>
@@ -3729,7 +3733,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{F_{\text{S}}}=\frac{\displaystyle\sum_{i=1}^{n-1}{{\symbf{R}}_{i} \displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{R}}_{n}}{\displaystyle\sum_{i=1}^{n-1}{{\symbf{T}}_{i} \displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{T}}_{n}}\]
+                        \[{F_{\text{S}}}=\frac{\displaystyle\sum_{i=1}^{n-1}{{\symbf{R}}_{i}\,\displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{R}}_{n}}{\displaystyle\sum_{i=1}^{n-1}{{\symbf{T}}_{i}\,\displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{T}}_{n}}\]
                       </td>
                     </tr>
                     <tr>
@@ -3772,7 +3776,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, and <a href=#determineCritSlip>FR:Determine-Critical-Slip-Surface</a>
+                          <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, and <a href=#determineCritSlip>FR:Determine-Critical-Slip-Surface</a>
                         </p>
                       </td>
                     </tr>
@@ -3784,83 +3788,83 @@
                     <p class="paragraph">
                       The mobilized shear force defined in <a href=#GD:bsShrFEq>GD:bsShrFEq</a> can be substituted into the definition of mobilized shear force based on the factor of safety, from <a href=#GD:mobShr>GD:mobShr</a> yielding Equation (1) below:
                     </p>
-                    \[\left({\symbf{W}}_{i}-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}+{\symbf{U}_{\text{g},i}} \cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \cos\left({\symbf{ω}}_{i}\right)\right) \sin\left({\symbf{α}}_{i}\right)-\left(-{K_{\text{c}}} {\symbf{W}}_{i}-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right)\right) \cos\left({\symbf{α}}_{i}\right)=\frac{{\symbf{N'}}_{i} \tan\left(φ'\right)+c' {\symbf{L}_{b,i}}}{{F_{\text{S}}}}\]
+                    \[\left({\symbf{W}}_{i}-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}+{\symbf{U}_{\text{g},i}}\,\cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\cos\left({\symbf{ω}}_{i}\right)\right)\,\sin\left({\symbf{α}}_{i}\right)-\left(-{K_{\text{c}}}\,{\symbf{W}}_{i}-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\right)\,\cos\left({\symbf{α}}_{i}\right)=\frac{{\symbf{N'}}_{i}\,\tan\left(φ'\right)+c'\,{\symbf{L}_{b,i}}}{{F_{\text{S}}}}\]
                     <p class="paragraph">
                       An expression for the effective normal forces, <em><b>N&prime;</b></em>, can be derived by substituting the normal forces equilibrium from <a href=#GD:normForcEq>GD:normForcEq</a> into the definition for effective normal forces from <a href=#GD:resShearWO>GD:resShearWO</a>. This results in Equation (2):
                     </p>
-                    \[{\symbf{N'}}_{i}=\left({\symbf{W}}_{i}-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}+{\symbf{U}_{\text{g},i}} \cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \cos\left({\symbf{ω}}_{i}\right)\right) \cos\left({\symbf{α}}_{i}\right)+\left(-{K_{\text{c}}} {\symbf{W}}_{i}-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right)\right) \sin\left({\symbf{α}}_{i}\right)-{\symbf{U}_{\text{b},i}}\]
+                    \[{\symbf{N'}}_{i}=\left({\symbf{W}}_{i}-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}+{\symbf{U}_{\text{g},i}}\,\cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\cos\left({\symbf{ω}}_{i}\right)\right)\,\cos\left({\symbf{α}}_{i}\right)+\left(-{K_{\text{c}}}\,{\symbf{W}}_{i}-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\right)\,\sin\left({\symbf{α}}_{i}\right)-{\symbf{U}_{\text{b},i}}\]
                     <p class="paragraph">
                       Substituting Equation (2) into Equation (1) gives:
                     </p>
-                    \[\left({\symbf{W}}_{i}-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}+{\symbf{U}_{\text{g},i}} \cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \cos\left({\symbf{ω}}_{i}\right)\right) \sin\left({\symbf{α}}_{i}\right)-\left(-{K_{\text{c}}} {\symbf{W}}_{i}-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right)\right) \cos\left({\symbf{α}}_{i}\right)=\frac{\left(\left({\symbf{W}}_{i}-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}+{\symbf{U}_{\text{g},i}} \cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \cos\left({\symbf{ω}}_{i}\right)\right) \cos\left({\symbf{α}}_{i}\right)+\left(-{K_{\text{c}}} {\symbf{W}}_{i}-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right)\right) \sin\left({\symbf{α}}_{i}\right)-{\symbf{U}_{\text{b},i}}\right) \tan\left(φ'\right)+c' {\symbf{L}_{b,i}}}{{F_{\text{S}}}}\]
+                    \[\left({\symbf{W}}_{i}-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}+{\symbf{U}_{\text{g},i}}\,\cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\cos\left({\symbf{ω}}_{i}\right)\right)\,\sin\left({\symbf{α}}_{i}\right)-\left(-{K_{\text{c}}}\,{\symbf{W}}_{i}-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\right)\,\cos\left({\symbf{α}}_{i}\right)=\frac{\left(\left({\symbf{W}}_{i}-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}+{\symbf{U}_{\text{g},i}}\,\cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\cos\left({\symbf{ω}}_{i}\right)\right)\,\cos\left({\symbf{α}}_{i}\right)+\left(-{K_{\text{c}}}\,{\symbf{W}}_{i}-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\right)\,\sin\left({\symbf{α}}_{i}\right)-{\symbf{U}_{\text{b},i}}\right)\,\tan\left(φ'\right)+c'\,{\symbf{L}_{b,i}}}{{F_{\text{S}}}}\]
                     <p class="paragraph">
                       Since the interslice shear forces <em><b>X</b></em> and interslice normal forces <em><b>G</b></em> are unknown, they are separated from the other terms as follows:
                     </p>
-                    \[\left({\symbf{W}}_{i}+{\symbf{U}_{\text{g},i}} \cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \cos\left({\symbf{ω}}_{i}\right)\right) \sin\left({\symbf{α}}_{i}\right)-\left(-{K_{\text{c}}} {\symbf{W}}_{i}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right)\right) \cos\left({\symbf{α}}_{i}\right)-\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right) \cos\left({\symbf{α}}_{i}\right)+\left(-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}\right) \sin\left({\symbf{α}}_{i}\right)=\frac{\left(\left({\symbf{W}}_{i}+{\symbf{U}_{\text{g},i}} \cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \cos\left({\symbf{ω}}_{i}\right)\right) \cos\left({\symbf{α}}_{i}\right)+\left(-{K_{\text{c}}} {\symbf{W}}_{i}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right)\right) \sin\left({\symbf{α}}_{i}\right)+\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right) \sin\left({\symbf{α}}_{i}\right)+\left(-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}\right) \cos\left({\symbf{α}}_{i}\right)-{\symbf{U}_{\text{b},i}}\right) \tan\left(φ'\right)+c' {\symbf{L}_{b,i}}}{{F_{\text{S}}}}\]
+                    \[\left({\symbf{W}}_{i}+{\symbf{U}_{\text{g},i}}\,\cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\cos\left({\symbf{ω}}_{i}\right)\right)\,\sin\left({\symbf{α}}_{i}\right)-\left(-{K_{\text{c}}}\,{\symbf{W}}_{i}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\right)\,\cos\left({\symbf{α}}_{i}\right)-\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right)\,\cos\left({\symbf{α}}_{i}\right)+\left(-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}\right)\,\sin\left({\symbf{α}}_{i}\right)=\frac{\left(\left({\symbf{W}}_{i}+{\symbf{U}_{\text{g},i}}\,\cos\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\cos\left({\symbf{ω}}_{i}\right)\right)\,\cos\left({\symbf{α}}_{i}\right)+\left(-{K_{\text{c}}}\,{\symbf{W}}_{i}-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)+{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\right)\,\sin\left({\symbf{α}}_{i}\right)+\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right)\,\sin\left({\symbf{α}}_{i}\right)+\left(-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}\right)\,\cos\left({\symbf{α}}_{i}\right)-{\symbf{U}_{\text{b},i}}\right)\,\tan\left(φ'\right)+c'\,{\symbf{L}_{b,i}}}{{F_{\text{S}}}}\]
                     <p class="paragraph">
                       Applying assumptions <a href=#assumpSF>A:Seismic-Force</a> and <a href=#assumpSL>A:Surface-Load</a>, which state that the seismic coefficient and the external forces, respectively, are zero, allows for further simplification as shown below:
                     </p>
-                    \[\left({\symbf{W}}_{i}+{\symbf{U}_{\text{g},i}} \cos\left({\symbf{β}}_{i}\right)\right) \sin\left({\symbf{α}}_{i}\right)-\left(-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)\right) \cos\left({\symbf{α}}_{i}\right)-\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right) \cos\left({\symbf{α}}_{i}\right)+\left(-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}\right) \sin\left({\symbf{α}}_{i}\right)=\frac{\left(\left({\symbf{W}}_{i}+{\symbf{U}_{\text{g},i}} \cos\left({\symbf{β}}_{i}\right)\right) \cos\left({\symbf{α}}_{i}\right)+\left(-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)\right) \sin\left({\symbf{α}}_{i}\right)+\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right) \sin\left({\symbf{α}}_{i}\right)+\left(-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}\right) \cos\left({\symbf{α}}_{i}\right)-{\symbf{U}_{\text{b},i}}\right) \tan\left(φ'\right)+c' {\symbf{L}_{b,i}}}{{F_{\text{S}}}}\]
+                    \[\left({\symbf{W}}_{i}+{\symbf{U}_{\text{g},i}}\,\cos\left({\symbf{β}}_{i}\right)\right)\,\sin\left({\symbf{α}}_{i}\right)-\left(-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)\right)\,\cos\left({\symbf{α}}_{i}\right)-\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right)\,\cos\left({\symbf{α}}_{i}\right)+\left(-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}\right)\,\sin\left({\symbf{α}}_{i}\right)=\frac{\left(\left({\symbf{W}}_{i}+{\symbf{U}_{\text{g},i}}\,\cos\left({\symbf{β}}_{i}\right)\right)\,\cos\left({\symbf{α}}_{i}\right)+\left(-{\symbf{H}}_{i}+{\symbf{H}}_{i-1}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)\right)\,\sin\left({\symbf{α}}_{i}\right)+\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right)\,\sin\left({\symbf{α}}_{i}\right)+\left(-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}\right)\,\cos\left({\symbf{α}}_{i}\right)-{\symbf{U}_{\text{b},i}}\right)\,\tan\left(φ'\right)+c'\,{\symbf{L}_{b,i}}}{{F_{\text{S}}}}\]
                     <p class="paragraph">
                       The definitions of <a href=#GD:resShearWO>GD:resShearWO</a> and <a href=#GD:mobShearWO>GD:mobShearWO</a> are present in this equation, and thus can be replaced by <em><b>R</b><sub>i</sub></em> and <em><b>T</b><sub>i</sub></em>, respectively:
                     </p>
-                    \[{\symbf{T}}_{i}+\left(-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}\right) \sin\left({\symbf{α}}_{i}\right)-\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right) \cos\left({\symbf{α}}_{i}\right)=\frac{{\symbf{R}}_{i}+\left(\left(-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}\right) \cos\left({\symbf{α}}_{i}\right)+\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right) \sin\left({\symbf{α}}_{i}\right)\right) \tan\left(φ'\right)}{{F_{\text{S}}}}\]
+                    \[{\symbf{T}}_{i}+\left(-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}\right)\,\sin\left({\symbf{α}}_{i}\right)-\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right)\,\cos\left({\symbf{α}}_{i}\right)=\frac{{\symbf{R}}_{i}+\left(\left(-{\symbf{X}}_{i-1}+{\symbf{X}}_{i}\right)\,\cos\left({\symbf{α}}_{i}\right)+\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right)\,\sin\left({\symbf{α}}_{i}\right)\right)\,\tan\left(φ'\right)}{{F_{\text{S}}}}\]
                     <p class="paragraph">
                       The interslice shear forces <em><b>X</b></em> can be expressed in terms of the interslice normal forces <em><b>G</b></em> using <a href=#assumpINSFL>A:Interslice-Norm-Shear-Forces-Linear</a> and <a href=#GD:normShrR>GD:normShrR</a>, resulting in:
                     </p>
-                    \[{\symbf{T}}_{i}+\left(-λ {\symbf{f}}_{i-1} {\symbf{G}}_{i-1}+λ {\symbf{f}}_{i} {\symbf{G}}_{i}\right) \sin\left({\symbf{α}}_{i}\right)-\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right) \cos\left({\symbf{α}}_{i}\right)=\frac{{\symbf{R}}_{i}+\left(\left(-λ {\symbf{f}}_{i-1} {\symbf{G}}_{i-1}+λ {\symbf{f}}_{i} {\symbf{G}}_{i}\right) \cos\left({\symbf{α}}_{i}\right)+\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right) \sin\left({\symbf{α}}_{i}\right)\right) \tan\left(φ'\right)}{{F_{\text{S}}}}\]
+                    \[{\symbf{T}}_{i}+\left(-λ\,{\symbf{f}}_{i-1}\,{\symbf{G}}_{i-1}+λ\,{\symbf{f}}_{i}\,{\symbf{G}}_{i}\right)\,\sin\left({\symbf{α}}_{i}\right)-\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right)\,\cos\left({\symbf{α}}_{i}\right)=\frac{{\symbf{R}}_{i}+\left(\left(-λ\,{\symbf{f}}_{i-1}\,{\symbf{G}}_{i-1}+λ\,{\symbf{f}}_{i}\,{\symbf{G}}_{i}\right)\,\cos\left({\symbf{α}}_{i}\right)+\left(-{\symbf{G}}_{i}+{\symbf{G}}_{i-1}\right)\,\sin\left({\symbf{α}}_{i}\right)\right)\,\tan\left(φ'\right)}{{F_{\text{S}}}}\]
                     <p class="paragraph">Rearranging yields the following:</p>
-                    \[{\symbf{G}}_{i} \left(\left(λ {\symbf{f}}_{i} \cos\left({\symbf{α}}_{i}\right)-\sin\left({\symbf{α}}_{i}\right)\right) \tan\left(φ'\right)-\left(λ {\symbf{f}}_{i} \sin\left({\symbf{α}}_{i}\right)+\cos\left({\symbf{α}}_{i}\right)\right) {F_{\text{S}}}\right)={\symbf{G}}_{i-1} \left(\left(λ {\symbf{f}}_{i-1} \cos\left({\symbf{α}}_{i}\right)-\sin\left({\symbf{α}}_{i}\right)\right) \tan\left(φ'\right)-\left(λ {\symbf{f}}_{i-1} \sin\left({\symbf{α}}_{i}\right)+\cos\left({\symbf{α}}_{i}\right)\right) {F_{\text{S}}}\right)+{F_{\text{S}}} {\symbf{T}}_{i}-{\symbf{R}}_{i}\]
+                    \[{\symbf{G}}_{i}\,\left(\left(λ\,{\symbf{f}}_{i}\,\cos\left({\symbf{α}}_{i}\right)-\sin\left({\symbf{α}}_{i}\right)\right)\,\tan\left(φ'\right)-\left(λ\,{\symbf{f}}_{i}\,\sin\left({\symbf{α}}_{i}\right)+\cos\left({\symbf{α}}_{i}\right)\right)\,{F_{\text{S}}}\right)={\symbf{G}}_{i-1}\,\left(\left(λ\,{\symbf{f}}_{i-1}\,\cos\left({\symbf{α}}_{i}\right)-\sin\left({\symbf{α}}_{i}\right)\right)\,\tan\left(φ'\right)-\left(λ\,{\symbf{f}}_{i-1}\,\sin\left({\symbf{α}}_{i}\right)+\cos\left({\symbf{α}}_{i}\right)\right)\,{F_{\text{S}}}\right)+{F_{\text{S}}}\,{\symbf{T}}_{i}-{\symbf{R}}_{i}\]
                     <p class="paragraph">
                       The definitions for <em><b>Φ</b></em> and <em><b>Ψ</b></em> from <a href=#DD:convertFunc1>DD:convertFunc1</a> and <a href=#DD:convertFunc2>DD:convertFunc2</a> simplify the above to Equation (3):
                     </p>
-                    \[{\symbf{G}}_{i} {\symbf{Φ}}_{i}={\symbf{Ψ}}_{i-1} {\symbf{G}}_{i-1} {\symbf{Φ}}_{i-1}+{F_{\text{S}}} {\symbf{T}}_{i}-{\symbf{R}}_{i}\]
+                    \[{\symbf{G}}_{i}\,{\symbf{Φ}}_{i}={\symbf{Ψ}}_{i-1}\,{\symbf{G}}_{i-1}\,{\symbf{Φ}}_{i-1}+{F_{\text{S}}}\,{\symbf{T}}_{i}-{\symbf{R}}_{i}\]
                     <p class="paragraph">
                       Versions of Equation (3) instantiated for slices 1 to <em>n</em> are shown below:
                     </p>
-                    \[{\symbf{G}}_{1} {\symbf{Φ}}_{1}={\symbf{Ψ}}_{0} {\symbf{G}}_{0} {\symbf{Φ}}_{0}+{F_{\text{S}}} {\symbf{T}}_{1}-{\symbf{R}}_{1}\]
-                    \[{\symbf{G}}_{2} {\symbf{Φ}}_{2}={\symbf{Ψ}}_{1} {\symbf{G}}_{1} {\symbf{Φ}}_{1}+{F_{\text{S}}} {\symbf{T}}_{2}-{\symbf{R}}_{2}\]
-                    \[{\symbf{G}}_{3} {\symbf{Φ}}_{3}={\symbf{Ψ}}_{2} {\symbf{G}}_{2} {\symbf{Φ}}_{2}+{F_{\text{S}}} {\symbf{T}}_{3}-{\symbf{R}}_{3}\]
+                    \[{\symbf{G}}_{1}\,{\symbf{Φ}}_{1}={\symbf{Ψ}}_{0}\,{\symbf{G}}_{0}\,{\symbf{Φ}}_{0}+{F_{\text{S}}}\,{\symbf{T}}_{1}-{\symbf{R}}_{1}\]
+                    \[{\symbf{G}}_{2}\,{\symbf{Φ}}_{2}={\symbf{Ψ}}_{1}\,{\symbf{G}}_{1}\,{\symbf{Φ}}_{1}+{F_{\text{S}}}\,{\symbf{T}}_{2}-{\symbf{R}}_{2}\]
+                    \[{\symbf{G}}_{3}\,{\symbf{Φ}}_{3}={\symbf{Ψ}}_{2}\,{\symbf{G}}_{2}\,{\symbf{Φ}}_{2}+{F_{\text{S}}}\,{\symbf{T}}_{3}-{\symbf{R}}_{3}\]
                     <p class="paragraph">...</p>
-                    \[{\symbf{G}}_{n-2} {\symbf{Φ}}_{n-2}={\symbf{Ψ}}_{n-3} {\symbf{G}}_{n-3} {\symbf{Φ}}_{n-3}+{F_{\text{S}}} {\symbf{T}}_{n-2}-{\symbf{R}}_{n-2}\]
-                    \[{\symbf{G}}_{n-1} {\symbf{Φ}}_{n-1}={\symbf{Ψ}}_{n-2} {\symbf{G}}_{n-2} {\symbf{Φ}}_{n-2}+{F_{\text{S}}} {\symbf{T}}_{n-1}-{\symbf{R}}_{n-1}\]
-                    \[{\symbf{G}}_{n} {\symbf{Φ}}_{n}={\symbf{Ψ}}_{n-1} {\symbf{G}}_{n-1} {\symbf{Φ}}_{n-1}+{F_{\text{S}}} {\symbf{T}}_{n}-{\symbf{R}}_{n}\]
+                    \[{\symbf{G}}_{n-2}\,{\symbf{Φ}}_{n-2}={\symbf{Ψ}}_{n-3}\,{\symbf{G}}_{n-3}\,{\symbf{Φ}}_{n-3}+{F_{\text{S}}}\,{\symbf{T}}_{n-2}-{\symbf{R}}_{n-2}\]
+                    \[{\symbf{G}}_{n-1}\,{\symbf{Φ}}_{n-1}={\symbf{Ψ}}_{n-2}\,{\symbf{G}}_{n-2}\,{\symbf{Φ}}_{n-2}+{F_{\text{S}}}\,{\symbf{T}}_{n-1}-{\symbf{R}}_{n-1}\]
+                    \[{\symbf{G}}_{n}\,{\symbf{Φ}}_{n}={\symbf{Ψ}}_{n-1}\,{\symbf{G}}_{n-1}\,{\symbf{Φ}}_{n-1}+{F_{\text{S}}}\,{\symbf{T}}_{n}-{\symbf{R}}_{n}\]
                     <p class="paragraph">
                       Applying <a href=#assumpES>A:Edge-Slices</a>, which says that <em><b>G</b><sub>0</sub></em> and <em><b>G</b><sub>n</sub></em> are zero, results in the following special cases: Equation (8) for the first slice:
                     </p>
-                    \[{\symbf{G}}_{1} {\symbf{Φ}}_{1}={F_{\text{S}}} {\symbf{T}}_{1}-{\symbf{R}}_{1}\]
+                    \[{\symbf{G}}_{1}\,{\symbf{Φ}}_{1}={F_{\text{S}}}\,{\symbf{T}}_{1}-{\symbf{R}}_{1}\]
                     <p class="paragraph">
                       and Equation (9) for the <em>n</em>th slice:
                     </p>
-                    \[-\left(\frac{{F_{\text{S}}} {\symbf{T}}_{n}-{\symbf{R}}_{n}}{{\symbf{Ψ}}_{n-1}}\right)={\symbf{G}}_{n-1} {\symbf{Φ}}_{n-1}\]
+                    \[-\left(\frac{{F_{\text{S}}}\,{\symbf{T}}_{n}-{\symbf{R}}_{n}}{{\symbf{Ψ}}_{n-1}}\right)={\symbf{G}}_{n-1}\,{\symbf{Φ}}_{n-1}\]
                     <p class="paragraph">
                       Substituting Equation (8) into Equation (4) yields Equation (10):
                     </p>
-                    \[{\symbf{G}}_{2} {\symbf{Φ}}_{2}={\symbf{Ψ}}_{1} \left({F_{\text{S}}} {\symbf{T}}_{1}-{\symbf{R}}_{1}\right)+{F_{\text{S}}} {\symbf{T}}_{2}-{\symbf{R}}_{2}\]
+                    \[{\symbf{G}}_{2}\,{\symbf{Φ}}_{2}={\symbf{Ψ}}_{1}\,\left({F_{\text{S}}}\,{\symbf{T}}_{1}-{\symbf{R}}_{1}\right)+{F_{\text{S}}}\,{\symbf{T}}_{2}-{\symbf{R}}_{2}\]
                     <p class="paragraph">
                       which can be substituted into Equation (5) to get Equation (11):
                     </p>
-                    \[{\symbf{G}}_{3} {\symbf{Φ}}_{3}={\symbf{Ψ}}_{2} \left({\symbf{Ψ}}_{1} \left({F_{\text{S}}} {\symbf{T}}_{1}-{\symbf{R}}_{1}\right)+{F_{\text{S}}} {\symbf{T}}_{2}-{\symbf{R}}_{2}\right)+{F_{\text{S}}} {\symbf{T}}_{3}-{\symbf{R}}_{3}\]
+                    \[{\symbf{G}}_{3}\,{\symbf{Φ}}_{3}={\symbf{Ψ}}_{2}\,\left({\symbf{Ψ}}_{1}\,\left({F_{\text{S}}}\,{\symbf{T}}_{1}-{\symbf{R}}_{1}\right)+{F_{\text{S}}}\,{\symbf{T}}_{2}-{\symbf{R}}_{2}\right)+{F_{\text{S}}}\,{\symbf{T}}_{3}-{\symbf{R}}_{3}\]
                     <p class="paragraph">
                       and so on until Equation (12) is obtained from Equation (7):
                     </p>
-                    \[{\symbf{G}}_{n-1} {\symbf{Φ}}_{n-1}={\symbf{Ψ}}_{n-2} \left({\symbf{Ψ}}_{n-3} \left({\symbf{Ψ}}_{1} \left({F_{\text{S}}} {\symbf{T}}_{1}-{\symbf{R}}_{1}\right)+{F_{\text{S}}} {\symbf{T}}_{2}-{\symbf{R}}_{2}\right)+{F_{\text{S}}} {\symbf{T}}_{n-2}-{\symbf{R}}_{n-2}\right)+{F_{\text{S}}} {\symbf{T}}_{n-1}-{\symbf{R}}_{n-1}\]
+                    \[{\symbf{G}}_{n-1}\,{\symbf{Φ}}_{n-1}={\symbf{Ψ}}_{n-2}\,\left({\symbf{Ψ}}_{n-3}\,\left({\symbf{Ψ}}_{1}\,\left({F_{\text{S}}}\,{\symbf{T}}_{1}-{\symbf{R}}_{1}\right)+{F_{\text{S}}}\,{\symbf{T}}_{2}-{\symbf{R}}_{2}\right)+{F_{\text{S}}}\,{\symbf{T}}_{n-2}-{\symbf{R}}_{n-2}\right)+{F_{\text{S}}}\,{\symbf{T}}_{n-1}-{\symbf{R}}_{n-1}\]
                     <p class="paragraph">
                       Equation (9) can then be substituted into the left-hand side of Equation (12), resulting in:
                     </p>
-                    \[-\left(\frac{{F_{\text{S}}} {\symbf{T}}_{n}-{\symbf{R}}_{n}}{{\symbf{Ψ}}_{n-1}}\right)={\symbf{Ψ}}_{n-2} \left({\symbf{Ψ}}_{n-3} \left({\symbf{Ψ}}_{1} \left({F_{\text{S}}} {\symbf{T}}_{1}-{\symbf{R}}_{1}\right)+{F_{\text{S}}} {\symbf{T}}_{2}-{\symbf{R}}_{2}\right)+{F_{\text{S}}} {\symbf{T}}_{n-2}-{\symbf{R}}_{n-2}\right)+{F_{\text{S}}} {\symbf{T}}_{n-1}-{\symbf{R}}_{n-1}\]
+                    \[-\left(\frac{{F_{\text{S}}}\,{\symbf{T}}_{n}-{\symbf{R}}_{n}}{{\symbf{Ψ}}_{n-1}}\right)={\symbf{Ψ}}_{n-2}\,\left({\symbf{Ψ}}_{n-3}\,\left({\symbf{Ψ}}_{1}\,\left({F_{\text{S}}}\,{\symbf{T}}_{1}-{\symbf{R}}_{1}\right)+{F_{\text{S}}}\,{\symbf{T}}_{2}-{\symbf{R}}_{2}\right)+{F_{\text{S}}}\,{\symbf{T}}_{n-2}-{\symbf{R}}_{n-2}\right)+{F_{\text{S}}}\,{\symbf{T}}_{n-1}-{\symbf{R}}_{n-1}\]
                     <p class="paragraph">
                       This can be rearranged by multiplying both sides by <em><b>Ψ</b><sub>n&minus;1</sub></em> and then distributing the multiplication of each <em><b>Ψ</b></em> over addition to obtain:
                     </p>
-                    \[-\left({F_{\text{S}}} {\symbf{T}}_{n}-{\symbf{R}}_{n}\right)={\symbf{Ψ}}_{n-1} {\symbf{Ψ}}_{n-2} {\symbf{Ψ}}_{1} \left({F_{\text{S}}} {\symbf{T}}_{1}-{\symbf{R}}_{1}\right)+{\symbf{Ψ}}_{n-1} {\symbf{Ψ}}_{n-2} {\symbf{Ψ}}_{2} \left({F_{\text{S}}} {\symbf{T}}_{2}-{\symbf{R}}_{2}\right)+{\symbf{Ψ}}_{n-1} \left({F_{\text{S}}} {\symbf{T}}_{n-1}-{\symbf{R}}_{n-1}\right)\]
+                    \[-\left({F_{\text{S}}}\,{\symbf{T}}_{n}-{\symbf{R}}_{n}\right)={\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{1}\,\left({F_{\text{S}}}\,{\symbf{T}}_{1}-{\symbf{R}}_{1}\right)+{\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{2}\,\left({F_{\text{S}}}\,{\symbf{T}}_{2}-{\symbf{R}}_{2}\right)+{\symbf{Ψ}}_{n-1}\,\left({F_{\text{S}}}\,{\symbf{T}}_{n-1}-{\symbf{R}}_{n-1}\right)\]
                     <p class="paragraph">
                       The multiplication of the <em><b>Ψ</b></em> terms can be further distributed over the subtractions, resulting in the equation having terms that each either contain an <em><b>R</b></em> or a <em><b>T</b></em>. The equation can then be rearranged so terms containing an <em><b>R</b></em> are on one side of the equality, and terms containing a <em><b>T</b></em> are on the other. The multiplication by the factor of safety is common to all of the <em><b>T</b></em> terms, and thus can be factored out, resulting in:
                     </p>
-                    \[{F_{\text{S}}} \left({\symbf{Ψ}}_{n-1} {\symbf{Ψ}}_{n-2} {\symbf{Ψ}}_{1} {\symbf{T}}_{1}+{\symbf{Ψ}}_{n-1} {\symbf{Ψ}}_{n-2} {\symbf{Ψ}}_{2} {\symbf{T}}_{2}+{\symbf{Ψ}}_{n-1} {\symbf{T}}_{n-1}+{\symbf{T}}_{n}\right)={\symbf{Ψ}}_{n-1} {\symbf{Ψ}}_{n-2} {\symbf{Ψ}}_{1} {\symbf{R}}_{1}+{\symbf{Ψ}}_{n-1} {\symbf{Ψ}}_{n-2} {\symbf{Ψ}}_{2} {\symbf{R}}_{2}+{\symbf{Ψ}}_{n-1} {\symbf{R}}_{n-1}+{\symbf{R}}_{n}\]
+                    \[{F_{\text{S}}}\,\left({\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{1}\,{\symbf{T}}_{1}+{\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{2}\,{\symbf{T}}_{2}+{\symbf{Ψ}}_{n-1}\,{\symbf{T}}_{n-1}+{\symbf{T}}_{n}\right)={\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{1}\,{\symbf{R}}_{1}+{\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{2}\,{\symbf{R}}_{2}+{\symbf{Ψ}}_{n-1}\,{\symbf{R}}_{n-1}+{\symbf{R}}_{n}\]
                     <p class="paragraph">
                       Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13), which can also be seen in <a href=#IM:fctSfty>IM:fctSfty</a>:
                     </p>
-                    \[{F_{\text{S}}}=\frac{\displaystyle\sum_{i=1}^{n-1}{{\symbf{R}}_{i} \displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{R}}_{n}}{\displaystyle\sum_{i=1}^{n-1}{{\symbf{T}}_{i} \displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{T}}_{n}}\]
+                    \[{F_{\text{S}}}=\frac{\displaystyle\sum_{i=1}^{n-1}{{\symbf{R}}_{i}\,\displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{R}}_{n}}{\displaystyle\sum_{i=1}^{n-1}{{\symbf{T}}_{i}\,\displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{T}}_{n}}\]
                     <p class="paragraph">
                       <em>F<sub>S</sub></em> depends on the unknowns <em>λ</em> (<a href=#IM:nrmShrFor>IM:nrmShrFor</a>) and <em><b>G</b></em> (<a href=#IM:intsliceFs>IM:intsliceFs</a>).
                     </p>
@@ -3941,7 +3945,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:nrmShrForNum>IM:nrmShrForNum</a>, <a href=#IM:nrmShrForDen>IM:nrmShrForDen</a>, <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, and <a href=#determineCritSlip>FR:Determine-Critical-Slip-Surface</a>
+                          <a href=#IM:nrmShrForNum>IM:nrmShrForNum</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:nrmShrForDen>IM:nrmShrForDen</a>, <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, and <a href=#determineCritSlip>FR:Determine-Critical-Slip-Surface</a>
                         </p>
                       </td>
                     </tr>
@@ -3953,19 +3957,19 @@
                     <p class="paragraph">
                       From the moment equilibrium of <a href=#GD:momentEql>GD:momentEql</a> with the primary assumption for the Morgenstern-Price method of <a href=#assumpINSFL>A:Interslice-Norm-Shear-Forces-Linear</a> and associated definition <a href=#GD:normShrR>GD:normShrR</a>, Equation (14) can be derived:
                     </p>
-                    \[0=-{\symbf{G}}_{i} \left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{G}}_{i-1} \left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)-{\symbf{H}}_{i} \left(\frac{1}{3} {\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{H}}_{i-1} \left(\frac{1}{3} {\symbf{h}_{\text{z,w},i-1}}-\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+λ \frac{{\symbf{b}}_{i}}{2} \left({\symbf{G}}_{i} {\symbf{f}}_{i}+{\symbf{G}}_{i-1} {\symbf{f}}_{i-1}\right)+\frac{-{K_{\text{c}}} {\symbf{W}}_{i} {\symbf{h}}_{i}}{2}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right) {\symbf{h}}_{i}+{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right) {\symbf{h}}_{i}\]
+                    \[0=-{\symbf{G}}_{i}\,\left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{G}}_{i-1}\,\left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)-{\symbf{H}}_{i}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{H}}_{i-1}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+λ\,\frac{{\symbf{b}}_{i}}{2}\,\left({\symbf{G}}_{i}\,{\symbf{f}}_{i}+{\symbf{G}}_{i-1}\,{\symbf{f}}_{i-1}\right)+\frac{-{K_{\text{c}}}\,{\symbf{W}}_{i}\,{\symbf{h}}_{i}}{2}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)\,{\symbf{h}}_{i}+{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\,{\symbf{h}}_{i}\]
                     <p class="paragraph">
                       Rearranging the equation in terms of <em>λ</em> leads to Equation (15):
                     </p>
-                    \[λ=\frac{-{\symbf{G}}_{i} \left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{G}}_{i-1} \left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)-{\symbf{H}}_{i} \left(\frac{1}{3} {\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{H}}_{i-1} \left(\frac{1}{3} {\symbf{h}_{\text{z,w},i-1}}-\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+\frac{-{K_{\text{c}}} {\symbf{W}}_{i} {\symbf{h}}_{i}}{2}+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right) {\symbf{h}}_{i}+{\symbf{Q}}_{i} \sin\left({\symbf{ω}}_{i}\right) {\symbf{h}}_{i}}{-\frac{{\symbf{b}}_{i}}{2} \left({\symbf{G}}_{i} {\symbf{f}}_{i}+{\symbf{G}}_{i-1} {\symbf{f}}_{i-1}\right)}\]
+                    \[λ=\frac{-{\symbf{G}}_{i}\,\left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{G}}_{i-1}\,\left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)-{\symbf{H}}_{i}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{H}}_{i-1}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+\frac{-{K_{\text{c}}}\,{\symbf{W}}_{i}\,{\symbf{h}}_{i}}{2}+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)\,{\symbf{h}}_{i}+{\symbf{Q}}_{i}\,\sin\left({\symbf{ω}}_{i}\right)\,{\symbf{h}}_{i}}{-\frac{{\symbf{b}}_{i}}{2}\,\left({\symbf{G}}_{i}\,{\symbf{f}}_{i}+{\symbf{G}}_{i-1}\,{\symbf{f}}_{i-1}\right)}\]
                     <p class="paragraph">
                       This equation can be simplified by applying assumptions <a href=#assumpSF>A:Seismic-Force</a> and <a href=#assumpSL>A:Surface-Load</a>, which state that the seismic and external forces, respectively, are zero:
                     </p>
-                    \[λ=\frac{-{\symbf{G}}_{i} \left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{G}}_{i-1} \left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)-{\symbf{H}}_{i} \left(\frac{1}{3} {\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{H}}_{i-1} \left(\frac{1}{3} {\symbf{h}_{\text{z,w},i-1}}-\frac{{\symbf{b}}_{i}}{2} \tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right) {\symbf{h}}_{i}}{-\frac{{\symbf{b}}_{i}}{2} \left({\symbf{G}}_{i} {\symbf{f}}_{i}+{\symbf{G}}_{i-1} {\symbf{f}}_{i-1}\right)}\]
+                    \[λ=\frac{-{\symbf{G}}_{i}\,\left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{G}}_{i-1}\,\left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)-{\symbf{H}}_{i}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{H}}_{i-1}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)\,{\symbf{h}}_{i}}{-\frac{{\symbf{b}}_{i}}{2}\,\left({\symbf{G}}_{i}\,{\symbf{f}}_{i}+{\symbf{G}}_{i-1}\,{\symbf{f}}_{i-1}\right)}\]
                     <p class="paragraph">
                       Taking the summation of all slices, and applying <a href=#assumpES>A:Edge-Slices</a> to set <em><b>G</b><sub>0</sub></em>, <em><b>G</b><sub>n</sub></em>, <em><b>H</b><sub>0</sub></em>, and <em><b>H</b><sub>n</sub></em> equal to zero, a general equation for the proportionality constant <em>λ</em> is developed in Equation (16), which combines <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:nrmShrForNum>IM:nrmShrForNum</a>, and <a href=#IM:nrmShrForDen>IM:nrmShrForDen</a>:
                     </p>
-                    \[λ=\frac{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i} \left({{\symbf{F}_{\text{x}}}^{\text{G}}}+{{\symbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\symbf{α}}_{i}\right)+{\symbf{h}}_{i} -2 {\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i} \left({\symbf{G}}_{i} {\symbf{f}}_{i}+{\symbf{G}}_{i-1} {\symbf{f}}_{i-1}\right)}}\]
+                    \[λ=\frac{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({{\symbf{F}_{\text{x}}}^{\text{G}}}+{{\symbf{F}_{\text{x}}}^{\text{H}}}\right)\,\tan\left({\symbf{α}}_{i}\right)+{\symbf{h}}_{i}\,-2\,{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({\symbf{G}}_{i}\,{\symbf{f}}_{i}+{\symbf{G}}_{i-1}\,{\symbf{f}}_{i-1}\right)}}\]
                     <p class="paragraph">
                       Equation (16) for <em>λ</em> is a function of the unknown interslice normal forces <em><b>G</b></em> (<a href=#IM:intsliceFs>IM:intsliceFs</a>) which itself depends on the unknown factor of safety <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM:fctSfty</a>).
                     </p>
@@ -4009,9 +4013,9 @@
                       <th>Equation</th>
                       <td>
                         \[{\symbf{C}_{\text{num},i}}=\begin{cases}
-                                                     {\symbf{b}}_{1} \left({\symbf{G}}_{1}+{\symbf{H}}_{1}\right) \tan\left({\symbf{α}}_{1}\right), & i=1\\
-                                                     {\symbf{b}}_{i} \left({{\symbf{F}_{\text{x}}}^{\text{G}}}+{{\symbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\symbf{α}}_{i}\right)+\symbf{h} -2 {\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
-                                                     {\symbf{b}}_{n} \left({\symbf{G}}_{n-1}+{\symbf{H}}_{n-1}\right) \tan\left({\symbf{α}}_{n-1}\right), & i=n
+                                                     {\symbf{b}}_{1}\,\left({\symbf{G}}_{1}+{\symbf{H}}_{1}\right)\,\tan\left({\symbf{α}}_{1}\right), & i=1\\
+                                                     {\symbf{b}}_{i}\,\left({{\symbf{F}_{\text{x}}}^{\text{G}}}+{{\symbf{F}_{\text{x}}}^{\text{H}}}\right)\,\tan\left({\symbf{α}}_{i}\right)+\symbf{h}\,-2\,{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
+                                                     {\symbf{b}}_{n}\,\left({\symbf{G}}_{n-1}+{\symbf{H}}_{n-1}\right)\,\tan\left({\symbf{α}}_{n-1}\right), & i=n
                                                      \end{cases}\]
                       </td>
                     </tr>
@@ -4118,9 +4122,9 @@
                       <th>Equation</th>
                       <td>
                         \[{\symbf{C}_{\text{den},i}}=\begin{cases}
-                                                     {\symbf{b}}_{1} {\symbf{f}}_{1} {\symbf{G}}_{1}, & i=1\\
-                                                     {\symbf{b}}_{i} \left({\symbf{f}}_{i} {\symbf{G}}_{i}+{\symbf{f}}_{i-1} {\symbf{G}}_{i-1}\right), & 2\leq{}i\leq{}n-1\\
-                                                     {\symbf{b}}_{n} {\symbf{G}}_{n-1} {\symbf{f}}_{n-1}, & i=n
+                                                     {\symbf{b}}_{1}\,{\symbf{f}}_{1}\,{\symbf{G}}_{1}, & i=1\\
+                                                     {\symbf{b}}_{i}\,\left({\symbf{f}}_{i}\,{\symbf{G}}_{i}+{\symbf{f}}_{i-1}\,{\symbf{G}}_{i-1}\right), & 2\leq{}i\leq{}n-1\\
+                                                     {\symbf{b}}_{n}\,{\symbf{G}}_{n-1}\,{\symbf{f}}_{n-1}, & i=n
                                                      \end{cases}\]
                       </td>
                     </tr>
@@ -4209,8 +4213,8 @@
                       <th>Equation</th>
                       <td>
                         \[{\symbf{G}}_{i}=\begin{cases}
-                                          \frac{{F_{\text{S}}} {\symbf{T}}_{1}-{\symbf{R}}_{1}}{{\symbf{Φ}}_{1}}, & i=1\\
-                                          \frac{{\symbf{Ψ}}_{i-1} {\symbf{G}}_{i-1}+{F_{\text{S}}} {\symbf{T}}_{i}-{\symbf{R}}_{i}}{{\symbf{Φ}}_{i}}, & 2\leq{}i\leq{}n-1\\
+                                          \frac{{F_{\text{S}}}\,{\symbf{T}}_{1}-{\symbf{R}}_{1}}{{\symbf{Φ}}_{1}}, & i=1\\
+                                          \frac{{\symbf{Ψ}}_{i-1}\,{\symbf{G}}_{i-1}+{F_{\text{S}}}\,{\symbf{T}}_{i}-{\symbf{R}}_{i}}{{\symbf{Φ}}_{i}}, & 2\leq{}i\leq{}n-1\\
                                           0, & i=0\lor{}i=n
                                           \end{cases}\]
                       </td>
@@ -4256,7 +4260,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, and <a href=#determineCritSlip>FR:Determine-Critical-Slip-Surface</a>
+                          <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, and <a href=#determineCritSlip>FR:Determine-Critical-Slip-Surface</a>
                         </p>
                       </td>
                     </tr>
@@ -4268,11 +4272,11 @@
                     <p class="paragraph">
                       This derivation is identical to the derivation for <a href=#IM:fctSfty>IM:fctSfty</a> up until Equation (3) shown again below:
                     </p>
-                    \[{\symbf{G}}_{i} {\symbf{Φ}}_{i}={\symbf{Ψ}}_{i-1} {\symbf{G}}_{i-1} {\symbf{Φ}}_{i-1}+{F_{\text{S}}} {\symbf{T}}_{i}-{\symbf{R}}_{i}\]
+                    \[{\symbf{G}}_{i}\,{\symbf{Φ}}_{i}={\symbf{Ψ}}_{i-1}\,{\symbf{G}}_{i-1}\,{\symbf{Φ}}_{i-1}+{F_{\text{S}}}\,{\symbf{T}}_{i}-{\symbf{R}}_{i}\]
                     <p class="paragraph">
                       A simple rearrangement of Equation (3) leads to Equation (17), also seen in <a href=#IM:intsliceFs>IM:intsliceFs</a>:
                     </p>
-                    \[{\symbf{G}}_{i}=\frac{{\symbf{Ψ}}_{i-1} {\symbf{G}}_{i-1}+{F_{\text{S}}} {\symbf{T}}_{i}-{\symbf{R}}_{i}}{{\symbf{Φ}}_{i}}\]
+                    \[{\symbf{G}}_{i}=\frac{{\symbf{Ψ}}_{i-1}\,{\symbf{G}}_{i-1}+{F_{\text{S}}}\,{\symbf{T}}_{i}-{\symbf{R}}_{i}}{{\symbf{Φ}}_{i}}\]
                     <p class="paragraph">
                       The cases shown in <a href=#IM:intsliceFs>IM:intsliceFs</a> for when <em>i = 0</em>, <em>i = 1</em>, or <em>i = n</em> are derived by applying <a href=#assumpES>A:Edge-Slices</a>, which says that <em><b>G</b><sub>0</sub></em> and <em><b>G</b><sub>n</sub></em> are zero, to Equation (17). <em><b>G</b></em> depends on the unknowns <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM:fctSfty</a>) and <em>λ</em> (<a href=#IM:nrmShrFor>IM:nrmShrFor</a>).
                     </p>
@@ -4365,7 +4369,7 @@
                       <th>Var</th>
                       <th>Physical Constraints</th>
                       <th>Typical Value</th>
-                      <th>Uncert.</th>
+                      <th><span title="typical uncertainty">Uncert.</span></th>
                     </tr>
                     <tr>
                       <td><em>c&prime;</em></td>
@@ -4529,7 +4533,7 @@
               </p>
               <p>
                 <div id="displayGraph">
-                  Display-Graph: Display the critical slip surface of the 2D slope, as determined from <a href=#IM:crtSlpId>IM:crtSlpId</a>, graphically.
+                  Display-Graph: Display the critical slip surface of the <span title="two-dimensional">2D</span> slope, as determined from <a href=#IM:crtSlpId>IM:crtSlpId</a>, graphically.
                 </div>
               </p>
               <p>
@@ -4646,9 +4650,7 @@
                   <td><em>&deg;</em></td>
                 </tr>
               </table>
-              <p class="caption">
-                Required Inputs following <a href=#readAndStore>FR:Read-and-Store</a>
-              </p>
+              <p class="caption">Required Inputs</p>
             </div>
             <div id="Table:inputsToOutputTable">
               <table class="table">
@@ -4685,9 +4687,7 @@
                   <td>minimum <em>y</em>-coordinate</td>
                 </tr>
               </table>
-              <p class="caption">
-                Inputs to be Returned as Output following <a href=#displayInput>FR:Display-Input</a>
-              </p>
+              <p class="caption">Inputs to be Returned as Output</p>
             </div>
           </div>
         </div>
@@ -4700,18 +4700,20 @@
             <div class="list">
               <p>
                 <div id="correct">
-                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Sec:Properties of a Correct Solution</a>.
+                  Correctness: The outputs of the code have the <a href=#Sec:CorSolProps>properties of a correct solution</a>.
                 </div>
               </p>
               <p>
                 <div id="understandable">
-                  Understandable: The code is modularized with complete module guide and module interface specification.
+                  Understandability: The code is modularized with complete module guide and module interface specification.
                 </div>
               </p>
-              <p><div id="reusable">Reusable: The code is modularized.</div></p>
+              <p>
+                <div id="reusable">Reusability: The code is modularized.</div>
+              </p>
               <p>
                 <div id="maintainable">
-                  Maintainable: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
+                  Maintainability: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
                 </div>
               </p>
             </div>
@@ -4758,7 +4760,7 @@
           </p>
           <p>
             <div id="UC_2donly">
-              2D-Analysis-Only: <a href=#assumpENSL>A:Effective-Norm-Stress-Large</a> allows for 2D analysis with these models only because stress along the <em>z</em>-direction is zero. These models do not take into account stress in the <em>z</em>-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.
+              2D-Analysis-Only: <a href=#assumpENSL>A:Effective-Norm-Stress-Large</a> allows for <span title="two-dimensional">2D</span> analysis with these models only because stress along the <em>z</em>-direction is zero. These models do not take into account stress in the <em>z</em>-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.
             </div>
           </p>
         </div>
@@ -6134,7 +6136,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#correct>NFR:Correct</a></td>
+              <td><a href=#correct>NFR:Correctness</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6153,7 +6155,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#understandable>NFR:Understandable</a></td>
+              <td><a href=#understandable>NFR:Understandability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6172,7 +6174,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#reusable>NFR:Reusable</a></td>
+              <td><a href=#reusable>NFR:Reusability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6191,7 +6193,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#maintainable>NFR:Maintainable</a></td>
+              <td><a href=#maintainable>NFR:Maintainability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8317,10 +8319,10 @@
                 <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>
               </th>
               <th><a href=#writeToFile>FR:Write-Results-To-File</a></th>
-              <th><a href=#correct>NFR:Correct</a></th>
-              <th><a href=#understandable>NFR:Understandable</a></th>
-              <th><a href=#reusable>NFR:Reusable</a></th>
-              <th><a href=#maintainable>NFR:Maintainable</a></th>
+              <th><a href=#correct>NFR:Correctness</a></th>
+              <th><a href=#understandable>NFR:Understandability</a></th>
+              <th><a href=#reusable>NFR:Reusability</a></th>
+              <th><a href=#maintainable>NFR:Maintainability</a></th>
             </tr>
             <tr>
               <td><a href=#identifyCritAndFS>GS:Identify-Crit-and-FS</a></td>
@@ -9096,7 +9098,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#correct>NFR:Correct</a></td>
+              <td><a href=#correct>NFR:Correctness</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -9155,7 +9157,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#understandable>NFR:Understandable</a></td>
+              <td><a href=#understandable>NFR:Understandability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -9214,7 +9216,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#reusable>NFR:Reusable</a></td>
+              <td><a href=#reusable>NFR:Reusability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -9273,7 +9275,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#maintainable>NFR:Maintainable</a></td>
+              <td><a href=#maintainable>NFR:Maintainability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -9342,31 +9344,31 @@
         <div id="Figure:TraceGraphAvsA">
           <figure>
             <img src="../../../../traceygraphs/ssp/avsa.svg" alt="TraceGraphAvsA" >
-            <figcaption>TraceGraphAvsA</figcaption>
+            <figcaption>Figure: TraceGraphAvsA</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAvsAll">
           <figure>
             <img src="../../../../traceygraphs/ssp/avsall.svg" alt="TraceGraphAvsAll" >
-            <figcaption>TraceGraphAvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAvsAll</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphRefvsRef">
           <figure>
             <img src="../../../../traceygraphs/ssp/refvsref.svg" alt="TraceGraphRefvsRef" >
-            <figcaption>TraceGraphRefvsRef</figcaption>
+            <figcaption>Figure: TraceGraphRefvsRef</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsR">
           <figure>
             <img src="../../../../traceygraphs/ssp/allvsr.svg" alt="TraceGraphAllvsR" >
-            <figcaption>TraceGraphAllvsR</figcaption>
+            <figcaption>Figure: TraceGraphAllvsR</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsAll">
           <figure>
             <img src="../../../../traceygraphs/ssp/allvsall.svg" alt="TraceGraphAllvsAll" >
-            <figcaption>TraceGraphAllvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAllvsAll</figcaption>
           </figure>
         </div>
         <p class="paragraph">
@@ -9400,63 +9402,52 @@
     <div id="Sec:References">
       <div class="section">
         <h1>References</h1>
-        <ul class="hide-list-style">
-          <li>
-            <div id="fredlund1977">
-              [1]: Fredlund, D. G. and Krahn, J. "Comparison of slope stability methods of analysis." <em>Canadian Geotechnical Journal</em>, vol. 14, no. 3, April, 1977. pp. 429&ndash;439. Print.
-            </div>
-          </li>
-          <li>
-            <div id="huston2008">
-              [2]: Huston, Ronald and Josephs, Harold. <em>Practical stress analysis in engineering design</em>. 3rd. ed., CRC Press, 2008. Print.
-            </div>
-          </li>
-          <li>
-            <div id="karchewski2012">
-              [3]: Canadian Geotechnical Society, Karchewski, Brandon, Guo, Peijun, and Stolle, Dieter. "Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis." <em>Proceedings of the 65th annual Canadian GeoTechnical Conference</em>. Winnipeg, MB, Canada: 2012.
-            </div>
-          </li>
-          <li>
-            <div id="koothoor2013">
-              [4]: Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-            </div>
-          </li>
-          <li>
-            <div id="morgenstern1965">
-              [5]: Morgenstern, N. R. and Price, P. E. "The analysis of the stability of general slip surfaces." <em>Géotechnique</em>, no. 15, January, 1965. pp. 79&ndash;93. Print.
-            </div>
-          </li>
-          <li>
-            <div id="parnasClements1986">
-              [6]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
-            </div>
-          </li>
-          <li>
-            <div id="chen2005">
-              [7]: Qian, Q. H., Zhu, D. Y., Lee, C. F., and Chen, G. R. "A concise algorithm for computing the factor of safety using the morgenstern price method." <em>Canadian Geotechnical Journal</em>, vol. 42, no. 1, February, 2005. pp. 272&ndash;278. Print.
-            </div>
-          </li>
-          <li>
-            <div id="smithKoothoor2016">
-              [8]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
-            </div>
-          </li>
-          <li>
-            <div id="smithLai2005">
-              [9]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-            </div>
-          </li>
-          <li>
-            <div id="smithEtAl2007">
-              [10]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
-            </div>
-          </li>
-          <li>
-            <div id="li2010">
-              [11]: Yu-Chao, Li, Yun-Min, Chen, Zhan, Tony L. T., Sao-Sheng, Ling, and Cleall, Peter John. "An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm." <em>Canadian Geotechnical Journal</em>, vol. 47, no. 7, June, 2010. pp. 806&ndash;820. Print.
-            </div>
-          </li>
-        </ul>
+        <dl class="reference-list">
+          <dt id="fredlund1977">[<b>fredlund1977</b>]</dt>
+          <dd>
+            Fredlund, D. G. and Krahn, J. "Comparison of slope stability methods of analysis." <em>Canadian Geotechnical Journal</em>, vol. 14, no. 3, April, 1977. pp. 429&ndash;439. Print.
+          </dd>
+          <dt id="huston2008">[<b>huston2008</b>]</dt>
+          <dd>
+            Huston, Ronald and Josephs, Harold. <em>Practical stress analysis in engineering design</em>. 3rd. ed., CRC Press, 2008. Print.
+          </dd>
+          <dt id="karchewski2012">[<b>karchewski2012</b>]</dt>
+          <dd>
+            Canadian Geotechnical Society, Karchewski, Brandon, Guo, Peijun, and Stolle, Dieter. "Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis." <em>Proceedings of the 65th annual Canadian GeoTechnical Conference</em>. Winnipeg, MB, Canada: 2012.
+          </dd>
+          <dt id="koothoor2013">[<b>koothoor2013</b>]</dt>
+          <dd>
+            Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+          </dd>
+          <dt id="morgenstern1965">[<b>morgenstern1965</b>]</dt>
+          <dd>
+            Morgenstern, N. R. and Price, P. E. "The analysis of the stability of general slip surfaces." <em>Géotechnique</em>, no. 15, January, 1965. pp. 79&ndash;93. Print.
+          </dd>
+          <dt id="parnasClements1986">[<b>parnasClements1986</b>]</dt>
+          <dd>
+            Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+          </dd>
+          <dt id="chen2005">[<b>chen2005</b>]</dt>
+          <dd>
+            Qian, Q. H., Zhu, D. Y., Lee, C. F., and Chen, G. R. "A concise algorithm for computing the factor of safety using the morgenstern price method." <em>Canadian Geotechnical Journal</em>, vol. 42, no. 1, February, 2005. pp. 272&ndash;278. Print.
+          </dd>
+          <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+          </dd>
+          <dt id="smithLai2005">[<b>smithLai2005</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+          </dd>
+          <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
+          <dd>
+            Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
+          </dd>
+          <dt id="li2010">[<b>li2010</b>]</dt>
+          <dd>
+            Yu-Chao, Li, Yun-Min, Chen, Zhan, Tony L. T., Sao-Sheng, Ling, and Cleall, Peter John. "An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm." <em>Canadian Geotechnical Journal</em>, vol. 47, no. 7, June, 2010. pp. 806&ndash;820. Print.
+          </dd>
+        </dl>
       </div>
     </div>
   </body>

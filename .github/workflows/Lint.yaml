@@ -1,7 +1,8 @@
 on:
   pull_request:
     branches: main
-    paths: 'code/drasil-**'
+  workflow_dispatch:
+    paths: [code/drasil-**, .github/workflows/Lint.yaml, code/scripts/**]
 name: Linter
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -12,9 +13,40 @@ defaults:
     working-directory: code
 jobs:
   linter:
-    name: "HLint"
-    runs-on: ubuntu-22.04
+    name: "Linter"
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: "HLint"
-        run: make hot_hlint
+      - uses: actions/checkout@v5
+
+      # Prepare more specific paths filters
+      - uses: dorny/paths-filter@v3.0.2
+        id: filter
+        with:
+           filters: |
+            hs:
+              - '**/*.hs'
+              - '**/*.lhs'
+            sh:
+              - '**/*.sh'
+
+      # If a [l]hs file was edited, then run HLint
+      - name: 'Set up HLint'
+        if: ${{ steps.filter.outputs.hs == 'true' }}
+        uses: haskell-actions/hlint-setup@v2
+        with: # DO NOT MODIFY THE BELOW LINE MANUALLY -- code/scripts/update_default_stackage.sh is in charge of this!
+          version: '3.6.1' # HLINT VERSION TIED TO CURRENT TARGET (LTS-22.31)
+
+      - name: 'Run HLint'
+        if: ${{ steps.filter.outputs.hs == 'true' }}
+        uses: haskell-actions/hlint-run@v2
+        with: # The custom hlint-bin is necessary because we need to inject options to hlint, since hlint-run does not support it yet, see: https://github.com/haskell-actions/hlint-run/issues/20
+          hlint-bin: hlint --hint=code/.hlint.yaml
+          path: code/
+          fail-on: status
+
+      # If a sh script was edited, then run shellcheck
+      - name: "Run ShellCheck"
+        if: ${{ steps.filter.outputs.sh == 'true' }}
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: './code/scripts'

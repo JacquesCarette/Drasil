@@ -27,7 +27,8 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - GOOL.Drasil
+  - Drasil.GOOL
+  - Drasil.GProc
   when:
   - condition: false
     other-modules: Paths_drasil_gool

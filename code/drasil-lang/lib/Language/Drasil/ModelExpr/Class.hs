@@ -5,7 +5,7 @@ import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 
 import Control.Lens ((^.))
 
-import Language.Drasil.UID (HasUID(..))
+import Drasil.Database.UID (HasUID(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..), DerivType(..),
   SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..), AssocArithOper(..))
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), Space)
@@ -75,8 +75,8 @@ instance ModelExprC ModelExpr where
  
   -- TODO: All of the below only allow for Reals! Will be easier to fix while we add typing.
   -- | Integrate over some expression (∫).
-  intAll v = Operator AddRe (AllDD v Continuous)
+  intAll v = Operator Add (AllDD v Continuous)
   -- | Sum over some expression (∑).
-  sumAll v = Operator AddRe (AllDD v Discrete)
+  sumAll v = Operator Add (AllDD v Discrete)
   -- | Product over some expression (∏).
-  prodAll v = Operator MulRe (AllDD v Discrete)
+  prodAll v = Operator Mul (AllDD v Discrete)

@@ -4,9 +4,9 @@
 module Drasil.Website.CaseStudy where
 
 import Language.Drasil hiding (E, Var)
-import Language.Drasil.Code
-import SysInfo.Drasil
-import GOOL.Drasil (CodeType(..))
+import Language.Drasil.Code hiding (CS)
+import Drasil.System
+import Drasil.GOOL (CodeType(..))
 
 import Drasil.Website.Example (examples, Example(..))
 import qualified Drasil.Projectile.Choices as Projectile (codedDirName)
@@ -31,7 +31,7 @@ caseStudiesDesc = "Drasil allows some design decisions to be made by the user wh
   \study, followed by a guide giving the meaning of the short-forms used in the \
   \table:"
 -- | Introduce the Case Study Table Legend as a list.
-legendIntro = "The legend for the Case Studies Table is listed below according to column header:"
+legendIntro = "The legend for the Case Studies Table is listed below according to the column header:"
 
 -- | Creates the Case Study Table
 mkCaseTable :: RawContent
@@ -48,7 +48,7 @@ mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ examples "" "
 -- but it is still nice to keep around for now.
 data CaseStudy = CS {
   -- | Each case study needs a name, so use system information. 
-  sysInfoCS :: SystemInformation,
+  systemCS :: System,
   -- | A case study may have different program names for the same example (ex. Projectile).
   progName :: Sentence,
   -- | Each case study has code that is generated from a set of choices.
@@ -59,8 +59,8 @@ data CaseStudy = CS {
 -- so we take the naming scheme from there.
 mkCaseStudy :: Example -> [CaseStudy]
 mkCaseStudy E{choicesE = []} = []
-mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = [x]} = [CS{sysInfoCS = si, progName = S $ programName sys, choicesCS = x}]
-mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{sysInfoCS = si, progName = S $ Projectile.codedDirName (programName sys) x, choicesCS = x}) xs
+mkCaseStudy E{systemE = si@SI{_sys = sys}, choicesE = [x]} = [CS{systemCS = si, progName = S $ programName sys, choicesCS = x}]
+mkCaseStudy E{systemE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{systemCS = si, progName = S $ Projectile.codedDirName (programName sys) x, choicesCS = x}) xs
 
 -- * Display 'CaseStudy' Information as a Table
 --
@@ -140,8 +140,7 @@ modularityLegend :: CSLegend
 modularityLegend = CSL{
   ttle = modularityTitle,
   symbAndDefs = [ ("U", "Unmodular"),
-                  ("C", "Modular with Combined input module"),
-                  ("S", "Modular with Separated input module")]
+                  ("M", "Modular")]
 }
 
 -- | Software implementation type.
@@ -203,8 +202,7 @@ realNumRepLegend = CSL {
 
 getMod :: Modularity -> Sentence
 getMod Unmodular = S "U"
-getMod (Modular Combined) = S "C"
-getMod (Modular Separated) = S "S"
+getMod Modular   = S "M"
 
 getImp :: ImplementationType -> Sentence
 getImp Program = S "P"

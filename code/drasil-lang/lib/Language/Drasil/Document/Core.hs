@@ -4,10 +4,11 @@ module Language.Drasil.Document.Core where
 
 import Language.Drasil.Chunk.Citation (BibRef)
 
-import Language.Drasil.UID (HasUID(..))
+import Drasil.Database.Chunk (HasChunkRefs(..))
+import Drasil.Database.UID (HasUID(..))
+import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Reference (Reference)
@@ -21,7 +22,7 @@ import Control.Lens ((^.), makeLenses, Lens', set, view)
 data ListType = Bullet      [(ItemType, Maybe String)] -- ^ Bulleted list.
               | Numeric     [(ItemType, Maybe String)] -- ^ Enumerated list.
               | Simple      [ListTuple] -- ^ Simple list with items denoted by @:@. Renders as "Title: Item"
-              | Desc        [ListTuple] -- ^ Descriptive list, renders as "__Title: Item__" (see 'ListTuple').
+              | Desc        [ListTuple] -- ^ Descriptive list, renders as "__Title__: Item" (see 'ListTuple').
               | Definitions [ListTuple] -- ^ Renders a list of "@'Title'@ is the @Item@".
 
 -- | Denotes how something should behave in a list ('ListType').
@@ -62,6 +63,10 @@ data DType = General
            | Theory
            | Data
 
+-- | Indicates whether a figure has a caption or not.
+data HasCaption = NoCaption | WithCaption
+  deriving (Eq) 
+
 -- | Types of layout objects we deal with explicitly.
 data RawContent =
     Table [Sentence] [[Sentence]] Title Bool -- ^ table has: header-row, data(rows), label/caption, and a bool that determines whether or not to show label.
@@ -70,7 +75,8 @@ data RawContent =
   | DerivBlock Sentence [RawContent]         -- ^ Grants the ability to label a group of 'RawContent'.
   | Enumeration ListType                     -- ^ For enumerated lists.
   | Defini DType [(Identifier, [Contents])]  -- ^ Defines something with a type, identifier, and 'Contents'.
-  | Figure Lbl Filepath MaxWidthPercent      -- ^ For creating figures in a document. Should use relative file path.
+  | Figure Lbl Filepath MaxWidthPercent HasCaption
+                                             -- ^ For creating figures in a document includes whether the figure has a caption.
   | Bib BibRef                               -- ^ Grants the ability to reference something.
   | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl -- ^ Contain a graph with coordinates ('Sentence's), maybe a width and height, and a label ('Sentence').
   | CodeBlock CodeExpr                       -- ^ Block for codes
@@ -95,6 +101,9 @@ makeLenses ''UnlabelledContent
 class HasContents c where
   -- | Provides a 'Lens' to the 'RawContent'.
   accessContents :: Lens' c RawContent
+
+instance HasChunkRefs LabelledContent where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds 'UID' of the 'LabelledContent'.
 instance HasUID        LabelledContent where uid = ref . uid

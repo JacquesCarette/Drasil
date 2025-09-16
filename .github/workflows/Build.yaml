@@ -1,9 +1,9 @@
 on:
   push:
-    paths: [code/**]
+    paths: [code/**, .github/workflows/Build.yaml]
   pull_request:
     branches: main
-    paths: [code/**]
+    paths: [code/**, .github/workflows/Build.yaml]
   workflow_dispatch:
 name: Build
 defaults:
@@ -29,7 +29,7 @@ jobs:
     name: "Build & Deploy"
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: "Update apt package list"
         run: |
@@ -42,9 +42,20 @@ jobs:
           filters: |
             tex:
               - 'code/stable/**/*.tex'
+            md:
+              - code/stable/**/*.md
+              - code/stable/**/book.toml
 
       - name: "Install system requirements"
-        run: sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
+        run: |
+          sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          cargo install mdbook
+
+      - name: "Update PATH"
+        run: |
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "$HOME/.swift/usr/bin" >> $GITHUB_PATH
 
       - name: "Install Stack"
         uses: haskell-actions/setup@v2
@@ -54,7 +65,7 @@ jobs:
           stack-version: 'latest'
 
       - name: "Cache dependencies"
-        uses: actions/cache@v4.0.2
+        uses: actions/cache@v4.2.4
         with:
           path: |
             ~/.stack
@@ -67,11 +78,6 @@ jobs:
 
       - name: "Clean previous run"
         run: make clean
-
-      - name: "Update PATH"
-        run: |
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          echo "$HOME/.swift/usr/bin" >> $GITHUB_PATH
 
       - name: "Install dependencies"
         run: make stackArgs="--no-terminal" deps
@@ -86,8 +92,8 @@ jobs:
         run: make codegenTest
 
       - name: "Compile generated TeX artifacts"
-        run: make tex SUMMARIZE_TEX=yes
-        if: steps.changes.tex.src == 'true'
+        run: make -j tex SUMMARIZE_TEX=yes
+        if: ${{ steps.changes.outputs.tex == 'true' || fromJSON(env.is_deployment) }}
 
       - name: "Compile generated software artifacts"
         run: make gool
@@ -113,6 +119,20 @@ jobs:
         run: make convertAnalyzed
         if: ${{ fromJSON(env.is_deployment) }}
 
+      - name: "Build trace graphs" # only needed in deployments, not required for tests
+        run: make tracegraphs
+        if: ${{ fromJSON(env.is_deployment) }}
+
+      - name: "Build mdBook Examples"
+        run: make mdbook_build
+        if: ${{ steps.changes.outputs.md == 'true' || fromJSON(env.is_deployment) }}
+
+      - name: "Extract HTML copies of Jupyter Notebooks"
+        run: |
+          sudo apt-get install -y --fix-missing jupyter
+          make jupyter_html
+        if: ${{ steps.changes.outputs.md == 'true' || fromJSON(env.is_deployment) }}
+
       - name: "Build website generator"
         run: make website
 
@@ -124,7 +144,7 @@ jobs:
 
       - name: "Deploy 🚀"
         if: ${{ fromJSON(env.is_deployment) }}
-        uses: JamesIves/github-pages-deploy-action@v4.6.1
+        uses: JamesIves/github-pages-deploy-action@v4.7.3
         with:
           git-config-name: ${{ secrets.BOT_NAME }}
           git-config-email: ${{ secrets.BOT_EMAIL }}

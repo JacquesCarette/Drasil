@@ -68,7 +68,7 @@ smithEtAl2007 = cArticle [spencerSmith, lLai, rKhedri]
 smithKoothoor2016 = cArticle [spencerSmith, nKoothoor]
   ("A Document-Driven Method for Certifying Scientific Computing Software for Use" ++ 
     " in Nuclear Safety Analysis")
-  " Nuclear Engineering and Technology" 2016
+  "Nuclear Engineering and Technology" 2016
   [month Apr, volume 48, number 2, pages[404..418], 
     howPublishedU "http://www.sciencedirect.com/science/article/pii/S1738573315002582"]
   "smithKoothoor2016"

@@ -4,6 +4,14 @@
 > Purpose: Predict whether a glass slab can withstand a blast under given conditions.
 
 ------------------------------------------------------------
+## What 
+ 
+
+> Background: Explosion in downtown areas are dangerous from the blast itself and also potentially from the secondary effect of falling glass.
+
+> Scope: Determining the safety of a glass slab under a blast loading following the ASTM standard (Ref: astm2009).
+
+------------------------------------------------------------
 ## Making Examples 
  How to Run the Program:
 In your terminal command line, enter the same directory as this README file. Then enter the following line:

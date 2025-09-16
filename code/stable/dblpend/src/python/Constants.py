@@ -5,4 +5,4 @@
 
 ## \brief Structure for holding the constant values
 class Constants:
-    g = 9.8
+    G = 9.8

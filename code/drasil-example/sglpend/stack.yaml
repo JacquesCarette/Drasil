@@ -1,9 +1,10 @@
-resolver: lts-20.26
+resolver: lts-22.31
 
 packages:
 - .
 - ../../drasil-build
 - ../../drasil-code
+- ../../drasil-codeLang
 - ../../drasil-data
 - ../../drasil-database
 - ../../drasil-docLang
@@ -12,8 +13,10 @@ packages:
 - ../../drasil-lang
 - ../../drasil-metadata
 - ../../drasil-printers
+- ../../drasil-system
 - ../../drasil-theory
 - ../../drasil-utils
+- ../dblpend
 
 extra-deps:
 - unicode-names-3.2.0.0@sha256:fef7241d93170e26265e84553090253a5e8ee207645d47cf271816f5834d07d2,470

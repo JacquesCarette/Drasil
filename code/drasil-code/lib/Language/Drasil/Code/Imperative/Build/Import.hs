@@ -6,19 +6,20 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, DocConfig(..),
   BuildConfig(BuildConfig), BuildDependencies(..), Ext(..), includeExt,
   NameOpts, nameOpts, packSep, Runnable(Runnable), BuildName(..), RunType(..))
 
-import GOOL.Drasil (FileData(..), ProgData(..), GOOLState(..), headers, sources,
+import Drasil.GOOL (FileData(..), ProgData(..), GOOLState(..), headers, sources,
   mainMod)
 
 import Build.Drasil (Annotation, (+:+), genMake, makeS, MakeString, mkFile, mkRule,
   mkCheckedCommand, mkFreeVar, RuleTransformer(makeRule))
 
+import Data.Containers.ListUtils (nubOrd)
+
 import Control.Lens ((^.))
 import Data.Maybe (maybeToList)
-import Data.List (nub)
 import System.FilePath.Posix (takeExtension, takeBaseName)
 import Text.PrettyPrint.HughesPJ (Doc)
 import Utils.Drasil (capitalize)
-import Metadata.Drasil.DrasilMetaCall (watermark)
+import Drasil.Metadata (watermark)
 
 -- | Holds all the needed information to run a program.
 data CodeHarness = Ch {
@@ -82,7 +83,7 @@ getCompilerInput (BcSingle n) s p = [renderBuildName s p nameOpts n]
 
 -- | Helper that retrieves commented files.
 getCommentedFiles :: GOOLState -> [MakeString]
-getCommentedFiles s = map makeS (nub (s ^. headers ++
+getCommentedFiles s = map makeS (nubOrd (s ^. headers ++
   maybeToList (s ^. mainMod)))
 
 -- | Helper that builds and runs a target.

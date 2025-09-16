@@ -14,6 +14,7 @@ If you are new to GitHub, a summer student, or want more in-depth instructions, 
   - [Issue Tracking](#issue-tracking)
   - [Coding Style](#coding-style)
   - [Workflow](#workflow)
+  - [Git Best Practices](#git-best-practices)
   - [Editing this Wiki](#editing-this-wiki)
   - [Important Notes (Windows Users read this!)](#important-notes-windows-users-read-this)
 - [In-Depth Guide to Drasil](#in-depth-guide-to-drasil)
@@ -76,7 +77,7 @@ If you are new to GitHub, a summer student, or want more in-depth instructions, 
     - It should be bumped up whenever a major change is (or multiple minor changes are) made to interfaces, such as any change to `Language/Drasil.hs`, or a change to the signature of any function that is exported there.
     - Please then also bump up the dependencies of the other packages, so that they will pick up the new version.
 - Leave a single trailing newline character at the end of each file.
-- We use Haddock to generate code documentation. Haddock has a specific format to change Haskell's comments into a Haddock document. For example, the syntax `-- |`. The [website](https://haskell-haddock.readthedocs.io/en/latest/markup.html), gives examples and instructions.
+- We use Haddock to generate code documentation. Haddock has a specific format to change Haskell's comments into a Haddock document. For example, the syntax `-- |`. The [website](https://haskell-haddock.readthedocs.io/latest/markup.html#markup), gives examples and instructions.
 
 ## Workflow
 This section will serve as a roadmap for the [Workflow](Workflow) article. Please view it for more details and specifics regarding the workflow of Drasil. The below paragraph will detail the sections of that article for easy reference. This information is also included on the self-examined [Contributor's Test](https://github.com/JacquesCarette/Drasil/blob/main/doc/Contributor's%20Test/ContributorTest.pdf) to check all the required skills and knowledge for working with Drasil.
@@ -84,6 +85,41 @@ This section will serve as a roadmap for the [Workflow](Workflow) article. Pleas
 In the [Workflow](Workflow) article, there is a section detailing the [GitHub Workflow](https://github.com/JacquesCarette/Drasil/wiki/Workflow#github-workflow) including branches, pull requests, and merging to `main`. There are also some notes about [Continuous Integration (CI)](https://github.com/JacquesCarette/Drasil/wiki/Workflow#continuous-integration-ci---github-actions--builds--tests) as a system for automating checks on GitHub to make sure Drasil compiles after any changes. In addition, the article details the process of [making changes](https://github.com/JacquesCarette/Drasil/wiki/Workflow#making-changes) to the Drasil repo, and [updating the stable folder](https://github.com/JacquesCarette/Drasil/wiki/Workflow#updating-stable-folder) to reflect any changes in generated artifacts. 
 
 Note: If changes are made that intentionally modify the generated documentation/code, it is imperative to [update the stable folder](https://github.com/JacquesCarette/Drasil/wiki/Workflow#updating-stable-folder) in order to prevent any CI errors.
+
+## Git Best Practices
+To maintain a clean, understandable project history and improve collaboration, please follow these guidelines when contributing code:
+- Structure commits and pull requests thoughtfully
+  - Group related changes into the same commit making them easier to track. Ask yourself if the changes you are committing serve the same coherent purpose. If so, try to commit them all together.
+  - Do not group unrelated items in a single pull request. Smaller pull requests are much more manageable and highly preferred
+  - Pull requests, unless trivial, should get at least 2 reviews before being merged
+  - Even if GitHub gives you permission to, do not merge your own pull requests
+- Clear, concise commit messages
+  - When committing changes, avoid using `auto` commits and provide meaningful messages that assist reviewers in understanding what was changed and why. Ex.,
+    - Good:
+      1. Website: Fix typos in homepage text
+      2. README.md: Add a link to the Well-Understood paper
+    - Avoid:
+      1. Fix stuff
+      2. Update
+      3. more edits
+  - Of course, these messages should line up with what was actually changed
+- *Acknowledge your co-authors!* Each commit declares who submitted the work. For example, [130e76](https://github.com/JacquesCarette/Drasil/commit/130e76ed4246989765cf1b7440ccadb7f226df2b.patch) shows that Jason wrote the commit (see the “From” field). Normally, we assume that Jason wrote this code himself as well. For situations where this isn't true, such as in [8deb7c](https://github.com/JacquesCarette/Drasil/commit/8deb7caf8442b90a1fa56f1926e2d44a378230a4.patch), we should note each contributor by appending a new line in the format "Co-Authored-By: X <X's email>" to the end of the commit message. If multiple authors exist, you should append one new line in that format for each contributor.
+- Properly syncing with `main`
+  - Syncing with `main` regularly can be a very good thing due to the existance of stable artifacts checked into the repo, when done correctly
+    1. Avoid using `merge`, it results in many merge commits making the commit history very "noisy"
+    2. It's better to use `rebase` as the commit history is cleaner (no merge commits). Use this as much as you like
+  - Syncing with `main` is required when a merge conflict occurs in order for a PR to be accepted. It is also a particularly good idea to sync when a PR author notices someone merged a feature branch that alters `stable/`. This avoids CI errors that happen when `stable/` differs from the updated code.
+- Regarding squashing commits
+  - For PRs with long and/or "messy" commit histories, multiple commits should try to be squashed into a more consice set. This should be done especially in scenarios where you have a longer commit history that gradually works on the same piece of code. Ex., Let's say you have the following commits:
+    1. Create evaluator for `Expr`
+    2. Create pretty printer for `Expr`
+    3. `Expr` Evaluator: Fix evaluation of list of numbers (one was accidentally ignored)
+    4. `Expr` Pretty Printer: Remove excessive parentheses around literals
+  - It would be a good idea to squash (1) and (3) together, and also (2) and (4). These pairs of commits both work on the same piece of code, and could easily be part of the same commit with no confusion.
+  - These are some helpful resources related to commit squashing
+    - Lots of the information in this was gathered from a [comment by @balacij](https://github.com/JacquesCarette/Drasil/pull/4065#issuecomment-2885125379), more details about squashing commits can be found there
+    -  For a good example to understand the value of squashing [this comment](https://github.com/JacquesCarette/Drasil/pull/3705#issuecomment-2148869719) provides some good feedback in the context of a PR
+    - **Important:** This [blog post](https://dev.to/the_real_stacie/git-are-you-an-over-committer-squash-those-commits-2klk) contains useful information on how to squash commits
 
 ## Editing this Wiki
 We do not use the same web-based workflow that most GitHub repositories follow. Rather, we carry a copy of our wiki _in_ our repo. Specifically, in the `./wiki/` folder. **To edit this wiki, please use the standard "commit and PR" workflow we follow, as with everything else in the repo.** The benefit of this approach is that we can review wiki changes through the PR workflow and tie them to tickets filed about the wiki.
@@ -96,7 +132,7 @@ Make sure you fully read through the above [Contributor's Guide](#contributors-g
 
 To get an idea of what Drasil can do, have a look through the [Drasil website](https://jacquescarette.github.io/Drasil/). The website contains links to Software Requirement Specification (SRS) documents, both in an HTML and PDF format. There are also some links to generated code along with a case studies table to demonstrate the variety of choices that can be made by the user at the time of code generation. There are links to documentation within Drasil, as well as a section analyzing Drasil (we'll get to these last two sections later). All of the examples, example code, and the website itself are artifacts generated by Drasil. You can see their source code in the `drasil-example` and `drasil-website` folders respectively. 
 
-One of the most important things in working with Drasil is having a solid foundation for using GitHub. Read through [Git2Know](Git2Know) to learn more about branching, pull requests, merging, and anything else git or Github related. Also take a look at the [Makefile documentation](Makefile), since that will be the primary way you compile and use Drasil. More optionally, you may want to take a brief look through [Creating Your Project in Drasil](Creating-Your-Project-in-Drasil), and some [tips for debugging](Debugging-in-Drasil).
+One of the most important things in working with Drasil is having a solid foundation for using GitHub. Read through [Git2Know](Git2Know-for-Drasil) to learn more about branching, pull requests, merging, and anything else git or Github related. Also take a look at the [Makefile documentation](Makefile), since that will be the primary way you compile and use Drasil. More optionally, you may want to take a brief look through [Creating Your Project in Drasil](Creating-Your-Project-in-Drasil), and some [tips for debugging](Debugging-in-Drasil).
 
 Drasil is primarily built upon the programming language [Haskell](https://www.haskell.org/). Rather than an Object Oriented language like C++, Java, Python, etc.), Haskell is purely a functional programming language. All this really means is that if you like math, you are in luck! Creating a program in a functional language like Haskell is very similar to creating a series of mathematical functions that take an input and give the desired output. You will definitely want to read this great introduction to Haskell for more details: [Learn You a Haskell for Great Good](http://learnyouahaskell.com/). There are also some great sources for learning LaTeX in the [New Workspace Setup](New-Workspace-Setup#latex) that will be worth taking a look at.
 

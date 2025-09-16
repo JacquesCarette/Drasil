@@ -1,7 +1,8 @@
 module Drasil.SSP.Defs where --export all of this file
 
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
+
 import Language.Drasil
-import Data.Drasil.Domains (civilEng)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -13,23 +14,19 @@ import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, len)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,shearRes)
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
-  physSyst, requirement, refBy, refName, srs, ssp, thModel, typUnc, unlikelyChg]
-
-ssp :: CI
-ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP" [civilEng]
+  physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 defs :: [IdeaDict]
-defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
+defs = [factor, soil, intrslce, layer, slip, slope, slice, morPrice,
   soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
   stabAnalysis, ssa]
 
 defs' :: [ConceptChunk]
-defs' = [slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable]
+defs' = [slpSrf, crtSlpSrf, plnStrn, waterTable]
 
 ----Other Common Phrases----
 soil, layer, material, intrslce, slip, slope, slice, stability,
@@ -74,13 +71,13 @@ slpSrf = dccWDS "slip surface" (cn' "slip surface")
 --FIXME: move to Concepts/soldMechanics.hs? They are too specific though
 plnStrn = dccWDS "plane strain" (cn' "plane strain") 
   (S "A condition where the resultant" +:+ plural stress +:+ S "in one of" +:+
-  S "the directions of a " +:+ phrase threeD +:+ S "material can be" +:+
+  S "the directions" `S.ofA` phrase threeD +:+ S "material can be" +:+
   S "approximated as zero. This condition results when a body is" +:+ 
   S "constrained to not deform in one direction, or when the" +:+ 
-  phrase len +:+ S "of one" +:+ phrase dimension +:+ S "of the body" +:+
-  S "dominates the others, to the point where it can be assumed as" +:+.
-  S "infinite" +:+ atStart' stress +:+ S "in the direction of the" +:+
-  S "dominant" +:+ phrase dimension +:+ S "can be approximated as zero")
+  phrase len +:+ S "of one" +:+ phrase dimension `S.ofThe` S "body" +:+
+  S "dominates the others" `sC` S "to the point where it can be assumed as" +:+.
+  S "infinite" +:+ atStart' stress +:+ S "in the direction" `S.ofThe` S "dominant" +:+ 
+  phrase dimension +:+ S "can be approximated as zero")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
   (atStartNP (slpSrf `ofThe` slope) +:+
@@ -89,7 +86,7 @@ crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface")
 
 fsConcept = dccWDS "FS" factorOfSafety
   (S "The global stability metric" `S.ofA` phraseNP (slpSrf `ofA` slope) `sC` 
-  S "defined as the ratio of" +:+ phrase shearRes +:+ 
+  S "defined as the ratio" `S.of_` phrase shearRes +:+ 
   S "to" +:+ phrase mobShear)
 -- OLD DEFN: Stability metric. How likely a slip surface is to
 -- experience failure through slipping.

@@ -7,8 +7,8 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
 ) where
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
-  PackageSym(..), AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
@@ -19,7 +19,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, nativeBinary, osClassDefault, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
-import GOOL.Drasil (onCodeList, csName, csVersion)
+import Drasil.GOOL (onCodeList, csName, csVersion)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))

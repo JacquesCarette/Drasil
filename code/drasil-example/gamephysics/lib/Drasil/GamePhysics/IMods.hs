@@ -1,6 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
+import Drasil.Metadata (inModel)
 import Language.Drasil
 import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil
@@ -20,7 +21,6 @@ import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
 import Drasil.GamePhysics.Unitals (accj, forcej, massA, massj, normalVect,
   timeC, torquej, velA, velj, angAccj)
 
-import Data.Drasil.TheoryConcepts (inModel)
 
 import Data.Drasil.Concepts.Documentation (condition, goal, output_)
 import Data.Drasil.Concepts.Math (equation, ode)
@@ -41,7 +41,7 @@ transMot = imNoRefs (equationalModel' transMotQD)
   , qwC forcej             $ UpFrom (Exc, exactDbl 0)
   , qwC massj              $ UpFrom (Exc, exactDbl 0)
   ]
-  (qw accj) [] (Just transMotDeriv)
+  (dqdWr accj) [] (Just transMotDeriv)
   "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
 transMotQD :: SimpleQDef
@@ -57,7 +57,7 @@ transMotDesc = foldlSent [S "The above", phrase equation, S "expresses the total
   foldlList Comma List (map refS [linDispDD, linVelDD, linAccDD])]
 transMotOutputs = foldlSent [atStartNP (output_ `the_ofThe` inModel),
  S "will be the functions" `S.of_` phraseNP (position `and_` velocity),
- S "over time that satisfy the", getAcc ode `S.for` phraseNP (the acceleration) `sC`
+ S "over time that satisfy the", short ode `S.for` phraseNP (the acceleration) `sC`
  S "with the given initial", (plural condition `S.for` phraseNP (position `and_`
  velocity) !.), atStartNP (the motion), S "is translational" `sC` S "so the",
  phraseNP (position `and_` velocity), S "functions are for the",
@@ -69,8 +69,8 @@ transMotDeriv = mkDerivName (phrase transMot)
 
 transMotDerivStmts :: [Sentence]
 transMotDerivStmts = [
-    foldlSent [S "We may calculate the total acceleration of rigid body", 
-      P lJ, S "by calculating the derivative of it's velocity with respect to time", fromSource linAccDD],
+    foldlSent [S "We may calculate the total acceleration" `S.of_` S "rigid body", 
+      P lJ, S "by calculating the derivative" `S.of_` S "it's velocity with respect to time", fromSource linAccDD],
     S "Performing the derivative, we obtain:"
   ]
 
@@ -86,7 +86,7 @@ rotMot = imNoRefs (equationalModel' rotMotQD)
   , qwC torquej         $ UpFrom (Exc, exactDbl 0)
   , qwC momentOfInertia $ UpFrom (Exc, exactDbl 0)
   ]
-  (qw angAccj) [UpFrom (Exc, exactDbl 0)] 
+  (dqdWr angAccj) [UpFrom (Exc, exactDbl 0)] 
   (Just rotMotDeriv) "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
@@ -106,8 +106,8 @@ rotMotDeriv = mkDerivName (phrase rotMot)
 
 rotMotDerivStmts :: [Sentence]
 rotMotDerivStmts = [
-    foldlSent [S "We may calculate the total angular acceleration of rigid body", 
-      P lJ, S "by calculating the derivative of its angular velocity with respect to time", fromSource angAccelDD],
+    foldlSent [S "We may calculate the total angular acceleration" `S.of_` S "rigid body", 
+      P lJ, S "by calculating the derivative" `S.of_` S "its angular velocity with respect to time", fromSource angAccelDD],
     S "Performing the derivative, we obtain:"
   ]
 
@@ -125,7 +125,7 @@ col2D = imNoDerivNoRefs (equationalModel "col2DIM" col2DNP col2DFD)
   ]
   -- why a constraint on velA if velA is not an output?
   -- (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"
-  (qw timeC) [UpFrom (Exc, exactDbl 0)] "col2D"
+  (dqdWr timeC) [UpFrom (Exc, exactDbl 0)] "col2D"
   [col2DOutputs, rigidTwoDAssump, rightHandAssump, collisionAssump,
     noDampConsAssumps, impulseNote]
 
@@ -136,8 +136,8 @@ col2DNP :: NP
 col2DNP = nounPhraseSP "Collisions on 2D rigid bodies"
 
 col2DExpr {-, im3Rel2, im3Rel3, im3Rel4 -} :: Expr -- FIXME: add proper equation
-col2DExpr = apply1 velA time `addRe`
-  ((sy impulseS $/ sy massA) `mulRe` sy normalVect)
+col2DExpr = apply1 velA time $+
+  ((sy impulseS $/ sy massA) $* sy normalVect)
 
 
 col2DOutputs, impulseNote :: Sentence

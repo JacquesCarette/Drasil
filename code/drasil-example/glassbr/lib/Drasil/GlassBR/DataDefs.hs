@@ -1,5 +1,5 @@
 module Drasil.GlassBR.DataDefs (dataDefs, aspRat, glaTyFac, glaTyFacQD, gtfRef,
-  hFromt, hFromtQD, loadDF, standOffDis, eqTNTWDD, calofDemand, aGrtrThanB,
+  hFromt, hFromtQD, loadDFDD, standOffDis, eqTNTWDD, calofDemand, aGrtrThanB,
   arRef, hRef, configFp, stdVals) where
 
 import Control.Lens ((^.))
@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC)
 import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
-import Drasil.GlassBR.Figures (demandVsSDFig)
+import Drasil.GlassBR.LabelledContent (demandVsSDFig)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals
 
@@ -22,12 +22,12 @@ import Drasil.GlassBR.Unitals
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [hFromt, loadDF, glaTyFac, standOffDis, aspRat, eqTNTWDD, calofDemand]
+dataDefs = [hFromt, loadDFDD, glaTyFac, standOffDis, aspRat, eqTNTWDD, calofDemand]
 
 {--}
 
 hFromtEq :: Relation
-hFromtEq = frac 1 1000 `mulRe` incompleteCase (zipWith hFromtHelper
+hFromtEq = frac 1 1000 $* incompleteCase (zipWith hFromtHelper
   actualThicknesses nominalThicknesses)
 
 hFromtHelper :: Double -> Double -> (Expr, Relation)
@@ -45,10 +45,10 @@ loadDFEq :: Expr
 loadDFEq = (sy loadDur $/ exactDbl 60) $^ (sy sflawParamM $/ exactDbl 16)
 
 loadDFQD :: SimpleQDef
-loadDFQD = mkQuantDef lDurFac loadDFEq
+loadDFQD = mkQuantDef loadDF loadDFEq
 
-loadDF :: DataDefinition
-loadDF = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
+loadDFDD :: DataDefinition
+loadDFDD = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
   [stdVals [loadDur, sflawParamM], ldfConst]
 
 {--}
@@ -69,7 +69,7 @@ glaTyFac = ddE glaTyFacQD [dRef astm2009] Nothing "gTF"
 {--}
 
 standOffDisEq :: Expr
-standOffDisEq = sqrt (square (sy sdx) `addRe` square (sy sdy) `addRe` square (sy sdz))
+standOffDisEq = sqrt (square (sy sdx) $+ square (sy sdy) $+ square (sy sdz))
 
 standOffDisQD :: SimpleQDef
 standOffDisQD = mkQuantDef standOffDist standOffDisEq
@@ -91,7 +91,7 @@ aspRat = ddE aspRatQD [dRef astm2009] Nothing "aspectRatio" [aGrtrThanB]
 {--}
 
 eqTNTWEq :: Expr
-eqTNTWEq = mulRe (sy charWeight) (sy tNT)
+eqTNTWEq = sy charWeight $* sy tNT
 
 eqTNTWQD :: SimpleQDef
 eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq
@@ -122,7 +122,7 @@ ftGlass = glassTypeHelper fullyT
 hsGlass = glassTypeHelper heatS
 
 glassTypeHelper :: CI -> Sentence
-glassTypeHelper t = getAcc t `S.is` phrase t +:+. phrase glass
+glassTypeHelper t = short t `S.is` phrase t +:+. phrase glass
 
 calofDemandDesc :: Sentence
 calofDemandDesc =
@@ -138,7 +138,7 @@ hMin = ch nomThick `S.is` S "a function that maps from the nominal thickness"
   +:+. (sParen (ch minThick) `S.toThe` phrase minThick)
 
 ldfConst :: Sentence
-ldfConst = ch lDurFac `S.is` S "assumed to be constant" +:+. fromSource assumpLDFC
+ldfConst = ch loadDF `S.is` S "assumed to be constant" +:+. fromSource assumpLDFC
 
 arRef, gtfRef, hRef :: Sentence
 arRef  = definedIn  aspRat

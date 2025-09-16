@@ -4,17 +4,17 @@ module Language.Drasil.Chunk.Relation (
   -- * Chunk Type
   RelationConcept,
   -- * Constructors
-  makeRC, addRelToCC) where
+  makeRC) where
 
-import Control.Lens (makeLenses, (^.), view, set)
+import Control.Lens (makeLenses, (^.), view)
 
-import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS, cw)
-import Language.Drasil.Classes (Express(..), Concept,
+import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
+import Language.Drasil.Classes (Express(..),
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.UID (HasUID(..), mkUid)
+import Drasil.Database.UID (HasUID(..))
 
 -- | For a concept ('ConceptChunk') that also has a 'Relation' ('ModelExpr') attached.
 --
@@ -43,7 +43,3 @@ instance Express       RelationConcept where express = (^. rel)
 makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
 makeRC rID rTerm rDefn = RC (dccWDS rID rTerm rDefn) . express
 
--- FIXME: Doesn't check UIDs. See TODOs in NamedIdea.hs
--- | Create a new 'RelationConcept' from an old 'Concept'. Takes a 'Concept', new 'UID' and relation.
-addRelToCC :: (Express e, Concept c) => c -> String -> e -> RelationConcept
-addRelToCC c rID = RC (set uid (mkUid rID) (cw c)) . express

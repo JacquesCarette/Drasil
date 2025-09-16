@@ -76,6 +76,9 @@ BC_E_SUFFIX = _build_clean
 TRACE_GRAPH_SUFFIX = _trace_graph
 INSTALL_E_SUFFIX = _install
 DEBUG_E_SUFFIX = _debug
+MDBOOK_BUILD_E_SUFFIX = _mdbook_build
+MDBOOK_SERVER_E_SUFFIX = _mdbook_server
+JUPYTER_HTML_E_SUFFIX = _juphtml
 
 # add example names with the appropriate suffixes to create per-example targets
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
@@ -88,6 +91,9 @@ BC_EXAMPLES = $(addsuffix $(BC_E_SUFFIX), $(EXAMPLES))
 TRACE_GRAPH_EXAMPLES = $(addsuffix $(TRACE_GRAPH_SUFFIX), $(EXAMPLES))
 INSTALL_EXAMPLES = $(addsuffix $(INSTALL_E_SUFFIX), $(EXAMPLES))
 DEBUG_EXAMPLES = $(addsuffix $(DEBUG_E_SUFFIX), $(EXAMPLES))
+MDBOOK_BUILD_EXAMPLES = $(addsuffix $(MDBOOK_BUILD_E_SUFFIX), $(EXAMPLES))
+MDBOOK_SERVER_EXAMPLES = $(addsuffix $(MDBOOK_SERVER_E_SUFFIX), $(EXAMPLES))
+JUPYTER_HTML_EXAMPLES = $(addsuffix $(JUPYTER_HTML_E_SUFFIX), $(EXAMPLES))
 
 # Website names with appropriate suffixes.
 TEST_WEBSITE = $(addsuffix $(TEST_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
@@ -108,7 +114,15 @@ ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(f
 #-------------------------------#
 
 # make variables/configuration
-DIFF = diff --strip-trailing-cr -r -X ../.gitignore
+DIFF = diff --strip-trailing-cr -r -X ../.gitignore --exclude='*.prof' --exclude='.drasil' # Excludes are to ignore the data the 'debug'-related targets generate.
+DIFF_PREFIX ?=
+
+# Run diff and capture both stdout and stderr into a log file. Redirecting
+# stderr to stdout to populate logs when issues with performing the diff occurs
+# (e.g., when `stable/` does not exist).
+# $1: stable path, $2: build path, $3: log path
+DO_DIFF = $(DIFF_PREFIX)$(DIFF) "$1" "$2" > "$3" 2>&1
+
 LOG_SUFFIX = _log.log
 MIN_STACK_VER = 2.3.1  # Match stack.yaml see PR #2142 for more info.
 CACHED_MSV_FILE = .drasil-min-stack-ver
@@ -152,8 +166,8 @@ WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
 FULL ?= 0
 
 # GHC debug options
-PROFALL = --profile
-PROFEXEC = --profile --rts-options '-xc -P'
+PROFALL := --profile
+PROFEXEC := --profile --rts-options '-xc -P'
 
 # GHC build options
 GHCTHREADS ?= 2
@@ -162,8 +176,9 @@ override GHCFLAGS += -Wall -j$(GHCTHREADS)
 override stackArgs += --ghc-options="$(GHCFLAGS)"
 
 # When running 'stack exec', the following stack arguments should be passed.
-STACK_EXEC_ARGS := --no-nix-pure
-STACK_EXEC := stack exec $(STACK_EXEC_ARGS)
+STACK_EXEC_ARGS = --no-nix-pure
+
+STACK_EXEC = stack exec $(STACK_EXEC_ARGS)
 
 # Output amount control
 NOISY ?= no
@@ -180,22 +195,26 @@ BATCHTERM=dumb
 
 # Default `make` will just run examples and test them against stable. See `test`
 # target for more details.
-all: test test_website ##@Examples Run examples and test against stable.
+all: test test_website codegenTest_diff ##@Examples Run examples and test against stable.
+#^ Must be the first target, otherwise it won't be run by default.
 
 install: ##@Examples Install all example project binaries into your local binary path (see $(stack path) for local-bin-path).
 	stack install $(stackArgs)
 
-%debug: stackArgs += $(PROFALL)
-%debug: STACK_EXEC += $(PROFEXEC)
-%debug: export DEBUG_ENV=1
-debug: test ##@Examples Run test target with better debugging tools.
+# Debugging changes the arguments passed to 'stack exec' slightly.
+setup_debug_vars:
+	$(eval override stackArgs += $(PROFALL))
+	$(eval STACK_EXEC_ARGS += $(PROFEXEC))
+	$(eval export DEBUG_ENV = 1)
+
+debug: setup_debug_vars test ##@Examples Run test target with better debugging tools.
 
 # Debugging individual examples
-$(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): %$(TEST_E_SUFFIX)
+$(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): setup_debug_vars %$(TEST_E_SUFFIX)
 
-pr_ready: all hot_hlint ##@General Check if your current work is ready to for a PR via `all` and `hot_hlint`.
-	- echo "Your build/ and stable/ match, and your code currently passes HLint tests."
-	- echo "Feel free to create a PR for your code if you feel it's ready."
+pr_ready: all stan hlint ##@General Check if your current work is ready to for a PR via `all` and `hlint` and stan.
+	@echo "Your build/ and stable/ match, and your code currently passes HLint tests."
+	@echo "Feel free to create a PR for your code if you feel it's ready."
 
 #----------------------#
 #--- Initial checks ---#
@@ -232,12 +251,15 @@ examples: $(GEN_EXAMPLES) ##@Examples Run all examples (no traceability graphs).
 # First build all the Drasil packages, then run all examples and generate graphs for them.
 tracegraphs: $(TRACE_GRAPH_EXAMPLES) ##@Examples Run examples with traceability graphs.
 
-# First build all the Drasil packages, run all examples (no traceability graphs),
-# and then test the generated contents with those in the stable folder.
-test: $(TEST_EXAMPLES) ##@Examples Run all examples and compare against the stable folder examples.
-	@echo ----------------------------
-	@echo Make complete, checking logs
-	@echo ----------------------------
+# Build all the Drasil packages (via 'code' dep.), run all examples, and then
+# test generated artifacts with stable/. Defer 'diff' exit codes to the log
+# checking script.
+test: code ##@Examples Test examples en masse against stable, only failing at the end if there were diffs.
+	@echo "Running tests (ignoring diff exit codes)..."
+	@$(MAKE) DIFF_PREFIX=- $(TEST_EXAMPLES)
+	@echo ---------------------------------------
+	@echo Tests complete, checking logs
+	@echo ---------------------------------------
 	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
 # First builds the website and then tests the generated contenst with those in
@@ -274,6 +296,12 @@ packagedeps: graphmod check_dot
 	@echo ----------------------------
 	@stack dot --prune dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,projectile,sglpend,ssp,swhs,template,drasil-website | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
 
+# First build all the Drasil packages, run all examples (no traceability graphs),
+# and then build the generated mdBook projects.
+mdbook_build: $(MDBOOK_BUILD_EXAMPLES) ##@Examples Build all generated mdBook projects.
+
+jupyter_html: $(JUPYTER_HTML_EXAMPLES) ##@Examples Extract HTML copies from all Jupyter SRS Notebooks.
+
 #--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#
 #--------------------------------------------------------------#
@@ -281,8 +309,8 @@ packagedeps: graphmod check_dot
 # with an appended suffix (first argument of filter).
 
 # Variables needed to create individual example targets using filter.
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX) %$(JUPYTER_HTML_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX) %$(JUPYTER_HTML_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 
 # Build individual Drasil packages. Each package will have the target packageName_build.
@@ -300,9 +328,16 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
 $(GOOLTEST)$(GEN_E_SUFFIX):
+	rm -rf "./$(BUILD_FOLDER)$(GOOLTEST_DIR)"
 	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
 	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && $(STACK_EXEC) -- "$(GOOLTEST_EXE)"
+	
+
+$(GOOLTEST)$(TEST_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX) $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME)
+	@mkdir -p "$(LOG_FOLDER)"
+	$(call DO_DIFF,$(STABLE_FOLDER)$(GOOLTEST_DIR)/,$(BUILD_FOLDER)$(GOOLTEST_DIR)/,$(LOG_FOLDER)$(GOOLTEST_DIR)$(LOG_SUFFIX))
+	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
 # Install individual Drasil examples
 $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
@@ -330,37 +365,44 @@ $(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX
 # to those in the stable folder. Targets will have the form exampleName_diff.
 $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX)
 	@mkdir -p "$(LOG_FOLDER)"
-	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)/" > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)"
+	$(call DO_DIFF,$(STABLE_FOLDER)$*/,$(BUILD_FOLDER)$(EDIR)/,$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX))
 
 # Website diff tests. First builds the website and then compares the generated
 # contents in the Website folder to those in the stable-website folder. 
 # Target will have the form Website_diff.
 $(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) website
 	@mkdir -p "$(LOG_FOLDER)"
-	- $(DIFF) "$(STABLE_WEBSITE_FOLDER)" "$(WEBSITE_FOLDER)" > "$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX)"
+	$(call DO_DIFF,$(STABLE_WEBSITE_FOLDER),$(WEBSITE_FOLDER),$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX))
 
 # Individual example build cleans. Removes a specific example from the build folder.
 # Targets will have the form exampleName_build_clean.
 $(filter %$(BC_E_SUFFIX), $(BC_EXAMPLES)): %$(BC_E_SUFFIX):
-	- rm -rf "$(BUILD_FOLDER)$(EDIR)"
+	rm -rf "./$(BUILD_FOLDER)$(EDIR)"
 
 # The website build cleans. 
 # Target will have the form Website_build_clean
 $(filter %$(BC_E_SUFFIX), $(BC_WEBSITE)): %$(BC_E_SUFFIX):
-	- rm -rf "$(WEBSITE_FOLDER)"
+	rm -rf "./$(WEBSITE_FOLDER)"
 
 # Individual example stabilization. First builds all Drasil packages,
 # runs all examples, and then copies contents from the build folder into stable.
 # Targets will have the form exampleName_stabilize.
 $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) %$(GEN_E_SUFFIX)
-	- rm -rf "$(STABLE_FOLDER)$*/"
+	rm -rf "./$(STABLE_FOLDER)$*/"
+	@mkdir -p "$(STABLE_FOLDER)"
 	- cp -r "$(BUILD_FOLDER)$(EDIR)" "$(STABLE_FOLDER)$*/"
+
+$(GOOLTEST)$(STABILIZE_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX)
+	rm -rf "./$(STABLE_FOLDER)$(GOOLTEST_DIR)/"
+	@mkdir -p "$(STABLE_FOLDER)"
+	- cp -r "$(BUILD_FOLDER)$(GOOLTEST_DIR)/" "$(STABLE_FOLDER)$(GOOLTEST_DIR)"
 
 # The website stabilization. First builds the website, and then copies the
 # contents from the website folder into stable-website.
 # Target will have the form Website_stabilize.
 $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_WEBSITE)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) website
-	- rm -rf "$(STABLE_WEBSITE_FOLDER)"
+	rm -rf "./$(STABLE_WEBSITE_FOLDER)"
+	@mkdir -p "$(STABLE_WEBSITE_FOLDER)"
 	- cp -r "$(WEBSITE_FOLDER)" "$(STABLE_WEBSITE_FOLDER)"
 
 # Generate individual example pdfs. Needs Graphviz to work.
@@ -371,12 +413,28 @@ $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_WEBSITE)): %$(STABILIZE_E_SUFFIX): 
 $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SUFFIX)
 	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" TERM="$(BATCHTERM)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh
 
+# Build individual example mdBook SRSs.
+# Targets will have the form exampleName_mdBook_build.
+$(filter %$(MDBOOK_BUILD_E_SUFFIX), $(MDBOOK_BUILD_EXAMPLES)): %$(MDBOOK_BUILD_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX)
+	- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
+	mdbook build "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
+
+# Launch local server for individual example mdBook SRSs.
+# Targets will have the form exampleName_mdBook_server.
+$(filter %$(MDBOOK_SERVER_E_SUFFIX), $(MDBOOK_SERVER_EXAMPLES)): %$(MDBOOK_SERVER_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX)
+	- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
+	mdbook serve --open "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
+
+# Targets will have the form exampleName_juphtml.
+$(filter %$(JUPYTER_HTML_E_SUFFIX), $(JUPYTER_HTML_EXAMPLES)): %$(JUPYTER_HTML_E_SUFFIX): %$(GEN_E_SUFFIX)
+	jupyter nbconvert --to html "$(BUILD_FOLDER)$(EDIR)/SRS/Jupyter/*.ipynb"
+
 #----------------------------------------------------------------------------------#
 #--- Generate analysis of module, class, datatype, and class instance structure ---#
 #----------------------------------------------------------------------------------#
 
 graphs: $(GRAPH_PACKAGES) packagedeps ##@Analysis Generate all module dependency graphs.
-	- echo "Graphs generated in local '$(GRAPH_FOLDER)' folder."
+	@echo "Graphs generated in local '$(GRAPH_FOLDER)' folder."
 	
 # Generate individual package module dependency graphs.
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
@@ -388,7 +446,7 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 # We also add example to these variables so that we can still
 # make the graphs for that folder (although it's technically not a package itself).
 analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasil's class, datatype, and instance structures.
-	- rm -rf "$(ANALYSIS_FOLDER)"
+	rm -rf "./$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack ClassInstDepGen.hs
 	cd $(SCRIPT_FOLDER) && stack TypeDepGen.hs
@@ -407,15 +465,18 @@ convertAnalyzed: ##@Analysis Convert analyzed dot graphs into SVGs.
 	@echo "Dependency graphs built, check your '$(TYPEGRAPH_FOLDER)' and '$(CLASSINST_GRAPH_FOLDER)' folders."
 
 #---------------------------------------#
-#--- HLint and Haddock Documentation ---#
+#-- Linters and Haddock Documentation --#
 #---------------------------------------#
 
-hlint: check_stack ##@HLint Run HLint through the drasil packages. Uses a local HLint installation.
+hlint: check_stack ##@Linters Run HLint through the drasil packages. Uses a local HLint installation.
 	stack install hlint
 	hlint .
 
-hot_hlint: ##@HLint Run HLint through the drasil packages. Uses the latest HLint version, downloading the binary each time.
+hot_hlint: ##@Linters Run HLint through the drasil packages. Uses the latest HLint version, downloading the binary each time.
 	curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+
+shellcheck: ##@Linters Run ShellCheck static analyzer on all shell script files.
+	find . -type f -name '*.sh' -exec shellcheck {} +
 
 docs: check_stack ##@Documentation Create Haddock documentation of all Drasil modules. Set FULL=1 if you want to additionally test Haddock generation for website deployment.
 	FULL="$(FULL)" DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
@@ -434,7 +495,7 @@ $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFI
 	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)code_build.sh"
 
 # GOOL testing for examples that generate code.
-$(GOOLTEST): $(GOOLTEST)$(GEN_E_SUFFIX)
+$(GOOLTEST): $(GOOLTEST)$(TEST_E_SUFFIX)
 	@EDIR="$(GOOLTEST_DIR)" BUILD_FOLDER="$(BUILD_FOLDER)" TARGET=$(TARGET) \
 	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)gooltest_build.sh"
 
@@ -511,6 +572,14 @@ clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, 
 #--- Help & Information ---#
 #--------------------------#
 
+stan: ##@Stan Run Stan static analysis tool on the Drasil packages.
+	find . -type d -name 'drasil-*' -exec sh -c 'cd {} && stan > stan.log' \;
+	cat drasil-*/stan.log
+#use to display stan logs, cat drasil-*/stan.log
+
+weeder:
+	weeder
+
 # Credits to "nowox" from StackOverflow: https://stackoverflow.com/a/30796664/16760741
 HELP_FUN = \
 	%help; while(<>){push@{$$help{$$2//'options'}},[$$1,$$3] \
@@ -538,6 +607,9 @@ help:  ##@Help Show this help.
 	@echo "  X$(BC_E_SUFFIX)       Remove specific example from the build folder."
 	@echo "  X$(CODE_E_SUFFIX)              Generate individual example code."
 	@echo "  X$(DCP_E_SUFFIX)  Get all generated code file paths in the example."
+	@echo "  X$(MDBOOK_BUILD_E_SUFFIX)      Build the mdBook SRS of an individual example."
+	@echo "  X$(MDBOOK_SERVER_E_SUFFIX)     Launch local server for the mdBook SRS of an individual example."
+	@echo "  X$(JUPYTER_HTML_E_SUFFIX)           Extract an HTML copy out of a Juypter Notebook."
 	@echo ""
 	@echo "Set a 'DEBUG_ENV' environment variable to 'true' if you want to check out the list of chunks in a Drasil run."
 	@echo ""
@@ -555,4 +627,4 @@ help_packages: ##@Help Lists all packages.
 		echo "  $$package"; \
 	done
 
-.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: help setup_debug_vars clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install examples tracegraphs doxygen shellcheck mdbook_build jupyter_html $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

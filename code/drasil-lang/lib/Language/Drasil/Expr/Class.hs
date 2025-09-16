@@ -5,21 +5,21 @@ module Language.Drasil.Expr.Class (
   square, half,
   oneHalf, oneThird,
   apply1, apply2,
-  m2x2, vec2D, dgnl2x2, rowVec, columnVec
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 
 import Control.Lens ((^.))
 
+import Drasil.Database.UID (HasUID(..))
+import qualified Drasil.Code.CodeExpr.Lang as C
 import Language.Drasil.Symbol
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Literal.Lang
-import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval)
+import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval, Space)
 import qualified Language.Drasil.ModelExpr.Lang as M
-import qualified Language.Drasil.CodeExpr.Lang as C
 import Language.Drasil.Literal.Class (LiteralC(..))
-import Language.Drasil.UID (HasUID(..))
 
 import Utils.Drasil (toColumn)
 
@@ -64,6 +64,9 @@ apply2 f a b = apply f [sy a, sy b]
 m2x2 :: ExprC r => r -> r -> r -> r -> r
 m2x2 a b c d = matrix [[a,b],[c,d]]
 
+mkSet :: ExprC r => Space -> [r] -> r
+mkSet = set'
+
 -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
 vec2D :: ExprC r => r -> r -> r
 vec2D a b = matrix [[a],[b]]
@@ -90,7 +93,6 @@ class ExprC r where
   infixr 4 $=
   infixr 9 $&&
   infixr 9 $||
-  
   lit :: Literal -> r
 
   -- * Binary Operators
@@ -103,24 +105,21 @@ class ExprC r where
   -- | Smart constructor for the dot product of two equations.
   ($.) :: r -> r -> r
   
-  -- | Add two expressions (Integers).
-  addI :: r -> r -> r
+  -- | Add two expressions.
+  ($+) :: r -> r -> r
   
-  -- | Add two expressions (Real numbers).
-  addRe :: r -> r -> r
-  
-  -- | Multiply two expressions (Integers).
-  mulI :: r -> r -> r
-  
-  -- | Multiply two expressions (Real numbers).
-  mulRe :: r -> r -> r
-  
+  -- | Multiply two expressions.
+  ($*) :: r -> r -> r
+
   ($-), ($/), ($^) :: r -> r -> r
   
   ($=>), ($<=>) :: r -> r -> r
   
   ($&&), ($||) :: r -> r -> r
-  
+
+  -- | Smart constructor for set-theoretic membership relation. Added ' to avoid conflict.
+  in' :: r -> r -> r
+
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ :: r -> r
   
@@ -180,13 +179,16 @@ class ExprC r where
   
   -- | Smart constructor for indexing.
   idx :: r -> r -> r
-  
+
+  -- | Smart constructor for indexOf. Finds the index of the first occurrence of a value in a list.
+  idxOf :: r -> r -> r
+
   -- | Smart constructor for the summation, product, and integral functions over an interval.
   defint, defsum, defprod :: Symbol -> r -> r -> r -> r
   
   -- | Smart constructor for 'real interval' membership.
   realInterval :: HasUID c => c -> RealInterval r r -> r
-  
+
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
   euclidean :: [r] -> r
   
@@ -210,6 +212,9 @@ class ExprC r where
   
   -- | Create a matrix.
   matrix :: [[r]] -> r
+
+  -- | Create a Set.
+  set' :: Space -> [r] -> r
 
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
@@ -239,42 +244,30 @@ instance ExprC Expr where
   -- | Smart constructor for the dot product of two equations.
   ($.) = VVNBinaryOp Dot
   
-  -- | Add two expressions (Integers).
-  addI l (Lit (Int 0)) = l
-  addI (Lit (Int 0)) r = r
-  addI (AssocA AddI l) (AssocA AddI r) = AssocA AddI (l ++ r)
-  addI (AssocA AddI l) r = AssocA AddI (l ++ [r])
-  addI l (AssocA AddI r) = AssocA AddI (l : r)
-  addI l r = AssocA AddI [l, r]
-  
-  -- | Add two expressions (Real numbers).
-  addRe l (Lit (Dbl 0))= l
-  addRe (Lit(Dbl 0)) r      = r
-  addRe l (Lit (ExactDbl 0)) = l
-  addRe (Lit (ExactDbl 0)) r = r
-  addRe (AssocA AddRe l) (AssocA AddRe r) = AssocA AddRe (l ++ r)
-  addRe (AssocA AddRe l) r = AssocA AddRe (l ++ [r])
-  addRe l (AssocA AddRe r) = AssocA AddRe (l : r)
-  addRe l r = AssocA AddRe [l, r]
-  
-  -- | Multiply two expressions (Integers).
-  mulI l (Lit (Int 1)) = l
-  mulI (Lit (Int 1)) r = r
-  mulI (AssocA MulI l) (AssocA MulI r) = AssocA MulI (l ++ r)
-  mulI (AssocA MulI l) r = AssocA MulI (l ++ [r])
-  mulI l (AssocA MulI r) = AssocA MulI (l : r)
-  mulI l r = AssocA MulI [l, r]
-  
-  -- | Multiply two expressions (Real numbers).
-  mulRe l (Lit (Dbl 1))      = l
-  mulRe (Lit (Dbl 1)) r      = r
-  mulRe l (Lit (ExactDbl 1)) = l
-  mulRe (Lit (ExactDbl 1)) r = r
-  mulRe (AssocA MulRe l) (AssocA MulRe r) = AssocA MulRe (l ++ r)
-  mulRe (AssocA MulRe l) r = AssocA MulRe (l ++ [r])
-  mulRe l (AssocA MulRe r) = AssocA MulRe (l : r)
-  mulRe l r = AssocA MulRe [l, r]
-  
+  -- | Add two expressions.
+  ($+) (Lit (Int 0)) r = r
+  ($+) l (Lit (Int 0)) = l
+  ($+) (Lit (Dbl 0)) r = r
+  ($+) l (Lit (Dbl 0)) = l
+  ($+) l (Lit (ExactDbl 0)) = l
+  ($+) (Lit (ExactDbl 0)) r = r
+  ($+) (AssocA Add l) (AssocA Add r) = AssocA Add (l ++ r)
+  ($+) (AssocA Add l) r = AssocA Add (l ++ [r])
+  ($+) l (AssocA Add r) = AssocA Add (l : r)
+  ($+) l r = AssocA Add [l, r]
+
+  -- | Multiply two expressions.
+  ($*) (Lit (Int 1)) r = r
+  ($*) l (Lit (Int 1)) = l
+  ($*) (Lit (Dbl 1.0)) r = r
+  ($*) l (Lit (Dbl 1.0)) = l
+  ($*) l (Lit (ExactDbl 1)) = l
+  ($*) (Lit (ExactDbl 1)) r = r
+  ($*) (AssocA Mul l) (AssocA Mul r) = AssocA Mul (l ++ r)
+  ($*) (AssocA Mul l) r = AssocA Mul (l ++ [r])
+  ($*) l (AssocA Mul r) = AssocA Mul (l : r)
+  ($*) l r = AssocA Mul [l, r]
+
   -- | Smart constructor for subtracting two expressions.
   ($-) = ArithBinaryOp Subt
   -- | Smart constructor for dividing two expressions.
@@ -291,7 +284,9 @@ instance ExprC Expr where
   a $&& b = AssocB And [a, b]
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = AssocB Or  [a, b]
-  
+
+  in' = ESBBinaryOp SContains
+
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = UnaryOp Abs
   
@@ -354,21 +349,22 @@ instance ExprC Expr where
   -- | Smart constructor for indexing.
   idx = LABinaryOp Index
   
+  idxOf = LABinaryOp IndexOf
   -- | Integrate over some expression with bounds (∫).
-  defint v low high = Operator AddRe (BoundedDD v Continuous low high)
+  defint v low high = Operator Add (BoundedDD v Continuous low high)
   
   -- | Sum over some expression with bounds (∑).
-  defsum v low high = Operator AddRe (BoundedDD v Discrete low high)
+  defsum v low high = Operator Add (BoundedDD v Discrete low high)
   
   -- | Product over some expression with bounds (∏).
-  defprod v low high = Operator MulRe (BoundedDD v Discrete low high)
+  defprod v low high = Operator Mul (BoundedDD v Discrete low high)
   
   -- | Smart constructor for 'real interval' membership.
   realInterval c = RealI (c ^. uid)
   
   -- TODO: Move euclidean to smart constructor
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 addRe . map square
+  euclidean = sqrt . foldr1 ($+) . map square
   
   -- | Smart constructor to cross product two expressions.
   cross = VVVBinaryOp Cross
@@ -385,6 +381,7 @@ instance ExprC Expr where
   
   matrix = Matrix
 
+  set' = Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = FCall (f ^. uid) ps
@@ -413,42 +410,29 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for the dot product of two equations.
   ($.) = M.VVNBinaryOp M.Dot
 
-  -- | Add two expressions (Integers).
-  addI l (M.Lit (Int 0)) = l
-  addI (M.Lit (Int 0)) r = r
-  addI (M.AssocA M.AddI l) (M.AssocA M.AddI r) = M.AssocA M.AddI (l ++ r)
-  addI (M.AssocA M.AddI l) r = M.AssocA M.AddI (l ++ [r])
-  addI l (M.AssocA M.AddI r) = M.AssocA M.AddI (l : r)
-  addI l r = M.AssocA M.AddI [l, r]
+  -- | Add two expressions.
+  ($+) (M.Lit (Int 0)) r = r
+  ($+) l (M.Lit (Int 0)) = l
+  ($+) (M.Lit (Dbl 0)) r = r
+  ($+) l (M.Lit (Dbl 0)) = l
+  ($+) l (M.Lit (ExactDbl 0)) = l
+  ($+) (M.Lit (ExactDbl 0)) r = r
+  ($+) (M.AssocA M.Add l) (M.AssocA M.Add r) = M.AssocA M.Add (l ++ r)
+  ($+) (M.AssocA M.Add l) r = M.AssocA M.Add (l ++ [r])
+  ($+) l (M.AssocA M.Add r) = M.AssocA M.Add (l : r)
+  ($+) l r = M.AssocA M.Add [l, r]
 
-  -- | Add two expressions (Real numbers).
-  addRe l (M.Lit (Dbl 0))      = l
-  addRe (M.Lit (Dbl 0)) r      = r
-  addRe l (M.Lit (ExactDbl 0)) = l
-  addRe (M.Lit (ExactDbl 0)) r = r
-  addRe (M.AssocA M.AddRe l) (M.AssocA M.AddRe r) = M.AssocA M.AddRe (l ++ r)
-  addRe (M.AssocA M.AddRe l) r = M.AssocA M.AddRe (l ++ [r])
-  addRe l (M.AssocA M.AddRe r) = M.AssocA M.AddRe (l : r)
-  addRe l r = M.AssocA M.AddRe [l, r]
-
-  -- | Multiply two expressions (Integers).
-  mulI l (M.Lit (Int 1)) = l
-  mulI (M.Lit (Int 1)) r = r
-  mulI (M.AssocA M.MulI l) (M.AssocA M.MulI r) = M.AssocA M.MulI (l ++ r)
-  mulI (M.AssocA M.MulI l) r = M.AssocA M.MulI (l ++ [r])
-  mulI l (M.AssocA M.MulI r) = M.AssocA M.MulI (l : r)
-  mulI l r = M.AssocA M.MulI [l, r]
-
-  -- | Multiply two expressions (Real numbers).
-  mulRe l (M.Lit (Dbl 1))      = l
-  mulRe (M.Lit (Dbl 1)) r      = r
-  mulRe l (M.Lit (ExactDbl 1)) = l
-  mulRe (M.Lit (ExactDbl 1)) r = r
-  mulRe (M.AssocA M.MulRe l) (M.AssocA M.MulRe r) = M.AssocA M.MulRe (l ++ r)
-  mulRe (M.AssocA M.MulRe l) r = M.AssocA M.MulRe (l ++ [r])
-  mulRe l (M.AssocA M.MulRe r) = M.AssocA M.MulRe (l : r)
-  mulRe l r = M.AssocA M.MulRe [l, r]
-
+  -- | Multiply two expressions.
+  ($*) (M.Lit (Int 1)) r = r
+  ($*) l (M.Lit (Int 1)) = l
+  ($*) (M.Lit (Dbl 1.0)) r = r
+  ($*) l (M.Lit (Dbl 1.0)) = l
+  ($*) l (M.Lit (ExactDbl 1)) = l
+  ($*) (M.Lit (ExactDbl 1)) r = r
+  ($*) (M.AssocA M.Mul l) (M.AssocA M.Mul r) = M.AssocA M.Mul (l ++ r)
+  ($*) (M.AssocA M.Mul l) r = M.AssocA M.Mul (l ++ [r])
+  ($*) l (M.AssocA M.Mul r) = M.AssocA M.Mul (l : r)
+  ($*) l r = M.AssocA M.Mul [l,r]
   -- | Smart constructor for subtracting two expressions.
   ($-) = M.ArithBinaryOp M.Subt
   -- | Smart constructor for dividing two expressions.
@@ -465,6 +449,8 @@ instance ExprC M.ModelExpr where
   a $&& b = M.AssocB M.And [a, b]
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = M.AssocB M.Or  [a, b]
+
+  in' = M.ESBBinaryOp M.SContains
 
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = M.UnaryOp M.Abs
@@ -528,20 +514,23 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for indexing.
   idx = M.LABinaryOp M.Index
 
+  -- | Smart constructor for indexing.
+  idxOf = M.LABinaryOp M.IndexOf
+
   -- | Integrate over some expression with bounds (∫).
-  defint v low high = M.Operator M.AddRe (BoundedDD v Continuous low high)
+  defint v low high = M.Operator M.Add (BoundedDD v Continuous low high)
 
   -- | Sum over some expression with bounds (∑).
-  defsum v low high = M.Operator M.AddRe (BoundedDD v Discrete low high)
+  defsum v low high = M.Operator M.Add (BoundedDD v Discrete low high)
 
   -- | Product over some expression with bounds (∏).
-  defprod v low high = M.Operator M.MulRe (BoundedDD v Discrete low high)
+  defprod v low high = M.Operator M.Mul (BoundedDD v Discrete low high)
 
   -- | Smart constructor for 'real interval' membership.
   realInterval c = M.RealI (c ^. uid)
 
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 addRe . map square
+  euclidean = sqrt . foldr1 ($+) . map square
 
   -- | Smart constructor to cross product two expressions.
   cross = M.VVVBinaryOp M.Cross
@@ -559,6 +548,7 @@ instance ExprC M.ModelExpr where
 
   matrix = M.Matrix
 
+  set' = M.Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = M.FCall (f ^. uid) ps
@@ -588,41 +578,29 @@ instance ExprC C.CodeExpr where
   -- | Smart constructor for the dot product of two equations.
   ($.) = C.VVNBinaryOp C.Dot
   
-  -- | Add two expressions (Integers).
-  addI l (C.Lit (Int 0)) = l
-  addI (C.Lit (Int 0)) r = r
-  addI (C.AssocA C.AddI l) (C.AssocA C.AddI r) = C.AssocA C.AddI (l ++ r)
-  addI (C.AssocA C.AddI l) r = C.AssocA C.AddI (l ++ [r])
-  addI l (C.AssocA C.AddI r) = C.AssocA C.AddI (l : r)
-  addI l r = C.AssocA C.AddI [l, r]
-  
-  -- | Add two expressions (Real numbers).
-  addRe l (C.Lit (Dbl 0))= l
-  addRe (C.Lit(Dbl 0)) r      = r
-  addRe l (C.Lit (ExactDbl 0)) = l
-  addRe (C.Lit (ExactDbl 0)) r = r
-  addRe (C.AssocA C.AddRe l) (C.AssocA C.AddRe r) = C.AssocA C.AddRe (l ++ r)
-  addRe (C.AssocA C.AddRe l) r = C.AssocA C.AddRe (l ++ [r])
-  addRe l (C.AssocA C.AddRe r) = C.AssocA C.AddRe (l : r)
-  addRe l r = C.AssocA C.AddRe [l, r]
-  
-  -- | Multiply two expressions (Integers).
-  mulI l (C.Lit (Int 1)) = l
-  mulI (C.Lit (Int 1)) r = r
-  mulI (C.AssocA C.MulI l) (C.AssocA C.MulI r) = C.AssocA C.MulI (l ++ r)
-  mulI (C.AssocA C.MulI l) r = C.AssocA C.MulI (l ++ [r])
-  mulI l (C.AssocA C.MulI r) = C.AssocA C.MulI (l : r)
-  mulI l r = C.AssocA C.MulI [l, r]
-  
-  -- | Multiply two expressions (Real numbers).
-  mulRe l (C.Lit (Dbl 1))      = l
-  mulRe (C.Lit (Dbl 1)) r      = r
-  mulRe l (C.Lit (ExactDbl 1)) = l
-  mulRe (C.Lit (ExactDbl 1)) r = r
-  mulRe (C.AssocA C.MulRe l) (C.AssocA C.MulRe r) = C.AssocA C.MulRe (l ++ r)
-  mulRe (C.AssocA C.MulRe l) r = C.AssocA C.MulRe (l ++ [r])
-  mulRe l (C.AssocA C.MulRe r) = C.AssocA C.MulRe (l : r)
-  mulRe l r = C.AssocA C.MulRe [l, r]
+  -- | Add two expressions.
+  ($+) (C.Lit (Int 0)) r = r
+  ($+) l (C.Lit (Int 0)) = l
+  ($+) (C.Lit (Dbl 0)) r = r
+  ($+) l (C.Lit (Dbl 0)) = l
+  ($+) l (C.Lit (ExactDbl 0)) = l
+  ($+) (C.Lit (ExactDbl 0)) r = r
+  ($+) (C.AssocA C.Add l) (C.AssocA C.Add r) = C.AssocA C.Add (l ++ r)
+  ($+) (C.AssocA C.Add l) r = C.AssocA C.Add (l ++ [r])
+  ($+) l (C.AssocA C.Add r) = C.AssocA C.Add (l : r)
+  ($+) l r = C.AssocA C.Add [l, r]
+
+  -- | Multiply two expressions.
+  ($*) (C.Lit (Int 1)) r = r
+  ($*) l (C.Lit (Int 1)) = l
+  ($*) (C.Lit (Dbl 1.0)) r = r
+  ($*) l (C.Lit (Dbl 1.0)) = l
+  ($*) l (C.Lit (ExactDbl 1)) = l
+  ($*) (C.Lit (ExactDbl 1)) r = r
+  ($*) (C.AssocA C.Mul l) (C.AssocA C.Mul r) = C.AssocA C.Mul (l ++ r)
+  ($*) (C.AssocA C.Mul l) r = C.AssocA C.Mul (l ++ [r])
+  ($*) l (C.AssocA C.Mul r) = C.AssocA C.Mul (l : r)
+  ($*) l r = C.AssocA C.Mul [l,r]
   
   -- | Smart constructor for subtracting two expressions.
   ($-) = C.ArithBinaryOp C.Subt
@@ -641,6 +619,8 @@ instance ExprC C.CodeExpr where
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = C.AssocB C.Or  [a, b]
   
+  in' = C.ESBBinaryOp C.SContains
+
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = C.UnaryOp C.Abs
   
@@ -703,20 +683,21 @@ instance ExprC C.CodeExpr where
   -- | Smart constructor for indexing.
   idx = C.LABinaryOp C.Index
   
+  idxOf = C.LABinaryOp C.IndexOf
   -- | Integrate over some expression with bounds (∫).
-  defint v low high = C.Operator C.AddRe (BoundedDD v Continuous low high)
+  defint v low high = C.Operator C.Add (BoundedDD v Continuous low high)
   
   -- | Sum over some expression with bounds (∑).
-  defsum v low high = C.Operator C.AddRe (BoundedDD v Discrete low high)
+  defsum v low high = C.Operator C.Add (BoundedDD v Discrete low high)
   
   -- | Product over some expression with bounds (∏).
-  defprod v low high = C.Operator C.MulRe (BoundedDD v Discrete low high)
+  defprod v low high = C.Operator C.Mul (BoundedDD v Discrete low high)
   
   -- | Smart constructor for 'real interval' membership.
   realInterval c = C.RealI (c ^. uid)
   
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 addRe . map square
+  euclidean = sqrt . foldr1 ($+) . map square
   
   -- | Smart constructor to cross product two expressions.
   cross = C.VVVBinaryOp C.Cross
@@ -734,6 +715,7 @@ instance ExprC C.CodeExpr where
   
   matrix = C.Matrix
 
+  set' = C.Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = C.FCall (f ^. uid) ps []

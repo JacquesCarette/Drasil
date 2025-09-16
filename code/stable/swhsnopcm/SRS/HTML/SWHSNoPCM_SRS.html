@@ -547,16 +547,16 @@
           Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar Water Heating System with no Phase Change Material provide a novel way of storing energy.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems with no phase change material. The developed program will be referred to as Solar Water Heating System With No Phase Change Material (SWHSNoPCM). This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for solar water heating systems with no phase change material The developed program will be referred to as Solar Water Heating System With No Phase Change Material (<span title="solar water heating system with no phase change material">SWHSNoPCM</span>) based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/blob/master/CaseStudies/noPCM">SWHSNoPCM</a>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of SWHSNoPCM. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SWHSNoPCM. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of <span title="solar water heating system with no phase change material">SWHSNoPCM</span>. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of <span title="solar water heating system with no phase change material">SWHSNoPCM</span>. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this <span title="software requirements specification">SRS</span> will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
-              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the <span title="software requirements specification">SRS</span> fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
             </p>
           </div>
         </div>
@@ -572,7 +572,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of heat transfer theory from level 3 or 4 mechanical engineering and differential equations from level 1 and 2 calculus. The users of SWHSNoPCM can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of heat transfer theory from level 3 or 4 mechanical engineering and differential equations from level 1 and 2 calculus. The users of <span title="Solar Water Heating Systems">SWHSNoPCM</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -580,10 +580,10 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
-              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The instance model to be solved is referred to as <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>. The instance model provides the Ordinary Differential Equation (ODE) that models the solar water heating system with no phase change material. SWHSNoPCM solves this ODE.
+              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The instance model to be solved is referred to as <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>. The instance model provides the Ordinary Differential Equation (<span title="ordinary differential equation">ODE</span>) that models the solar water heating system with no phase change material. <span title="solar water heating system with no phase change material">SWHSNoPCM</span> solves this <span title="ordinary differential equation">ODE</span>.
             </p>
           </div>
         </div>
@@ -599,18 +599,16 @@
           <div class="subsection">
             <h2>System Context</h2>
             <p class="paragraph">
-              <a href=#Figure:SysCon>Fig:SysCon</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHSNoPCM). Arrows are used to show the data flow between the system and its environment.
+              <a href=#Figure:SysCon>Fig:SysCon</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (<span title="solar water heating system with no phase change material">SWHSNoPCM</span>). Arrows are used to show the data flow between the system and its environment.
             </p>
             <div id="Figure:SysCon">
               <figure>
-                <img src="../../../../datafiles/swhsnopcm/SystemContextFigure.png" alt="<a href=#Figure:SysCon>Fig:SysCon</a>: System Context" >
-                <figcaption>
-                  <a href=#Figure:SysCon>Fig:SysCon</a>: System Context
-                </figcaption>
+                <img src="../../../../datafiles/swhsnopcm/SystemContextFigure.png" alt="System Context" >
+                <figcaption>Figure: System Context</figcaption>
               </figure>
             </div>
             <p class="paragraph">
-              SWHSNoPCM is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
+              <span title="solar water heating system with no phase change material">SWHSNoPCM</span> is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
             </p>
             <ul class="list">
               <li>
@@ -625,7 +623,7 @@
                 </ul>
               </li>
               <li>
-                SWHSNoPCM Responsibilities:
+                <span title="solar water heating system with no phase change material">SWHSNoPCM</span> Responsibilities:
                 <ul class="list">
                   <li>
                     Detect data type mismatch, such as a string of characters instead of a floating point number
@@ -643,7 +641,7 @@
           <div class="subsection">
             <h2>User Characteristics</h2>
             <p class="paragraph">
-              The end user of SWHSNoPCM should have an understanding of undergraduate Level 1 Calculus and Physics.
+              The end user of <span title="solar water heating system with no phase change material">SWHSNoPCM</span> should have an understanding of undergraduate Level 1 Calculus and Physics.
             </p>
           </div>
         </div>
@@ -691,19 +689,21 @@
               <div class="subsubsection">
                 <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The physical system of SWHSNoPCM, as shown in <a href=#Figure:Tank>Fig:Tank</a>, includes the following elements:
+                  The physical system of <span title="solar water heating system with no phase change material">SWHSNoPCM</span>, as shown in <a href=#Figure:Tank>Fig:Tank</a>, includes the following elements:
                 </p>
                 <div class="list">
-                  <p>PS1: Tank containing water.</p>
                   <p>
-                    PS2: Heating coil at bottom of tank. (<em>q<sub>C</sub></em> represents the heat flux into the water from the coil.)
+                    <span title="physical system description">PS</span>1: Tank containing water.
+                  </p>
+                  <p>
+                    <span title="physical system description">PS</span>2: Heating coil at bottom of tank. (<em>q<sub>C</sub></em> represents the heat flux into the water from the coil.)
                   </p>
                 </div>
                 <div id="Figure:Tank">
                   <figure>
                     <img src="../../../../datafiles/swhsnopcm/TankWaterOnly.png" alt="Solar water heating tank, with heat flux from heating coil of <em>q<sub>C</sub></em>" >
                     <figcaption>
-                      Solar water heating tank, with heat flux from heating coil of <em>q<sub>C</sub></em>
+                      Figure: Solar water heating tank, with heat flux from heating coil of <em>q<sub>C</sub></em>
                     </figcaption>
                   </figure>
                 </div>
@@ -735,7 +735,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern SWHSNoPCM are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern <span title="Solar Water Heating Systems">SWHSNoPCM</span> are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -791,7 +791,7 @@
                   </p>
                   <p>
                     <div id="assumpWAL">
-                      Water-Always-Liquid: The operating temperature range of the system is such that the material (water in this case) is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: <a href=#TM:sensHtE>TM:sensHtE</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#unlikeChgWFS>UC:Water-Fixed-States</a>, and <a href=#IM:heatEInWtr>IM:heatEInWtr</a>.)
+                      Water-Always-Liquid: The operating temperature range of the system is such that the material (water in this case) is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: <a href=#TM:sensHtE>TM:sensHtE</a>, <a href=#IM:heatEInWtr>IM:heatEInWtr</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, and <a href=#unlikeChgWFS>UC:Water-Fixed-States</a>.)
                     </div>
                   </p>
                   <p>
@@ -821,7 +821,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that SWHSNoPCM is based on.
+                  This section focuses on the general equations and laws that <span title="Solar Water Heating Systems">SWHSNoPCM</span> is based on.
                 </p>
                 <div id="TM:consThermE">
                   <table class="tdefn">
@@ -836,7 +836,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[-∇\cdot{}\symbf{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}\]
+                        \[-∇\cdot{}\symbf{q}+g=ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}\]
                       </td>
                     </tr>
                     <tr>
@@ -902,7 +902,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[E={C^{\text{L}}} m ΔT\]</td>
+                      <td>\[E={C^{\text{L}}}\,m\,ΔT\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -953,7 +953,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[q\left(t\right)=h ΔT\left(t\right)\]</td>
+                      <td>\[q\left(t\right)=h\,ΔT\left(t\right)\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1025,7 +1025,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                        \[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
                       </td>
                     </tr>
                     <tr>
@@ -1079,23 +1079,23 @@
                     <p class="paragraph">
                       Integrating <a href=#TM:consThermE>TM:consThermE</a> over a volume (<em>V</em>), we have:
                     </p>
-                    \[-\int_{V}{∇\cdot{}\symbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
+                    \[-\int_{V}{∇\cdot{}\symbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
                     <p class="paragraph">
                       Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
                     </p>
-                    \[-\int_{S}{\symbf{q}\cdot{}\symbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
+                    \[-\int_{S}{\symbf{q}\cdot{}\symbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
                     <p class="paragraph">
                       We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
                     </p>
-                    \[{q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
+                    \[{q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
                     <p class="paragraph">
                       Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD:rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A:Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A:Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A:Specific-Heat-Energy-Constant-over-Volume</a>, we have:
                     </p>
-                    \[ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                    \[ρ\,C\,V\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
                     <p class="paragraph">
                       Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, Equation (2) can be written as:
                     </p>
-                    \[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                    \[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
                   </div>
                 </div>
                 <div id="GD:htFluxWaterFromCoil">
@@ -1119,7 +1119,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{q_{\text{C}}}={h_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]
+                        \[{q_{\text{C}}}={h_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1197,7 +1197,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}\]</td>
+                      <td>\[{m_{\text{W}}}={V_{\text{W}}}\,{ρ_{\text{W}}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1300,7 +1300,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L\]</td>
+                      <td>\[{V_{\text{tank}}}=π\,\left(\frac{D}{2}\right)^{2}\,L\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1325,7 +1325,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:waterVolume.nopcm>DD:waterVolume_nopcm</a> and <a href=#findMass>FR:Find-Mass</a>
+                          <a href=#findMass>FR:Find-Mass</a> and <a href=#DD:waterVolume.nopcm>DD:waterVolume_nopcm</a>
                         </p>
                       </td>
                     </tr>
@@ -1356,7 +1356,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{τ_{\text{W}}}=\frac{{m_{\text{W}}} {C_{\text{W}}}}{{h_{\text{C}}} {A_{\text{C}}}}\]
+                        \[{τ_{\text{W}}}=\frac{{m_{\text{W}}}\,{C_{\text{W}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1443,7 +1443,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\frac{\,d{T_{\text{W}}}}{\,dt}+\frac{1}{{τ_{\text{W}}}} {{T_{\text{W}}}}=\frac{1}{{τ_{\text{W}}}} {T_{\text{C}}}\]
+                        \[\frac{\,d{T_{\text{W}}}}{\,dt}+\frac{1}{{τ_{\text{W}}}}\,{{T_{\text{W}}}}=\frac{1}{{τ_{\text{W}}}}\,{T_{\text{C}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1498,19 +1498,19 @@
                     <p class="paragraph">
                       To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>), over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A:Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBW>A:No-Internal-Heat-Generation-By-Water</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD:rocTempSimp</a> can be written as:
                     </p>
-                    \[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}\]
+                    \[{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}}\,{A_{\text{C}}}\]
                     <p class="paragraph">
                       Using <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a> for <em>q<sub>C</sub></em>, this can be written as:
                     </p>
-                    \[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
+                    \[{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}}\,{A_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
                     <p class="paragraph">
                       Dividing Equation (2) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
                     <p class="paragraph">
                       By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD:balanceDecayRate</a>), this can be written as:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
                   </div>
                 </div>
                 <div id="IM:heatEInWtr">
@@ -1546,7 +1546,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]
+                        \[{E_{\text{W}}}\left(t\right)={C_{\text{W}}}\,{m_{\text{W}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1615,7 +1615,7 @@
                       <th>Physical Constraints</th>
                       <th>Software Constraints</th>
                       <th>Typical Value</th>
-                      <th>Uncert.</th>
+                      <th><span title="typical uncertainty">Uncert.</span></th>
                     </tr>
                     <tr>
                       <td><em>A<sub>C</sub></em></td>
@@ -1761,13 +1761,13 @@
             </p>
             <div class="list">
               <p>
-                <div id="inputInitVals">
-                  Input-Initial-Values: Input the following values described in the table for <a href=#Table:ReqInputs>Required Inputs</a>, which define the tank parameters, material properties, and initial conditions.
+                <div id="inputValues">
+                  Input-Values: Input the values from <a href=#Table:ReqInputs>Tab:ReqInputs</a>, which define the tank parameters, material properties, and initial conditions.
                 </div>
               </p>
               <p>
                 <div id="findMass">
-                  Find-Mass: Use the inputs in <a href=#inputInitVals>FR:Input-Initial-Values</a> to find the mass needed for <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, using <a href=#DD:waterMass>DD:waterMass</a>, <a href=#DD:waterVolume.nopcm>DD:waterVolume_nopcm</a>, and <a href=#DD:tankVolume>DD:tankVolume</a>.
+                  Find-Mass: Use the inputs in <a href=#inputValues>FR:Input-Values</a> to find the mass needed for <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, using <a href=#DD:waterMass>DD:waterMass</a>, <a href=#DD:waterVolume.nopcm>DD:waterVolume_nopcm</a>, and <a href=#DD:tankVolume>DD:tankVolume</a>.
                 </div>
               </p>
               <p>
@@ -1777,7 +1777,7 @@
               </p>
               <p>
                 <div id="outputInputDerivVals">
-                  Output-Input-Derived-Values: Output the input values and derived values in the following list: the values (from <a href=#inputInitVals>FR:Input-Initial-Values</a>), the mass (from <a href=#findMass>FR:Find-Mass</a>), and <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD:balanceDecayRate</a>).
+                  Output-Input-Derived-Values: Output the input values and derived values in the following list: the values (from <a href=#inputValues>FR:Input-Values</a>), the mass (from <a href=#findMass>FR:Find-Mass</a>), and <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD:balanceDecayRate</a>).
                 </div>
               </p>
               <p>
@@ -1817,6 +1817,11 @@
                   <td><em>D</em></td>
                   <td>Diameter of tank</td>
                   <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em>E<sub>W</sub></em></td>
+                  <td>Change in heat energy in the water</td>
+                  <td><em>J</em></td>
                 </tr>
                 <tr>
                   <td><em>h<sub>C</sub></em></td>
@@ -1863,9 +1868,7 @@
                   <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
                 </tr>
               </table>
-              <p class="caption">
-                Required Inputs following <a href=#inputInitVals>FR:Input-Initial-Values</a>
-              </p>
+              <p class="caption">Required Inputs</p>
             </div>
           </div>
         </div>
@@ -1878,23 +1881,25 @@
             <div class="list">
               <p>
                 <div id="correct">
-                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Properties of a Correct Solution</a>.
+                  Correctness: The outputs of the code have the <a href=#Sec:CorSolProps>properties of a correct solution</a>.
                 </div>
               </p>
               <p>
                 <div id="verifiable">
-                  Verifiable: The code is tested with complete verification and validation plan.
+                  Verifiability: The code is tested with complete verification and validation plan.
                 </div>
               </p>
               <p>
                 <div id="understandable">
-                  Understandable: The code is modularized with complete module guide and module interface specification.
+                  Understandability: The code is modularized with complete module guide and module interface specification.
                 </div>
               </p>
-              <p><div id="reusable">Reusable: The code is modularized.</div></p>
+              <p>
+                <div id="reusable">Reusability: The code is modularized.</div>
+              </p>
               <p>
                 <div id="maintainable">
-                  Maintainable: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
+                  Maintainability: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
                 </div>
               </p>
             </div>
@@ -2463,7 +2468,92 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#inputInitVals>FR:Input-Initial-Values</a></td>
+              <td><a href=#correct>NFR:Correctness</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiable>NFR:Verifiability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#understandable>NFR:Understandability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#reusable>NFR:Reusability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainable>NFR:Maintainability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#inputValues>FR:Input-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2553,91 +2643,6 @@
             </tr>
             <tr>
               <td><a href=#outputValues>FR:Output-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#correct>NFR:Correct</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#verifiable>NFR:Verifiable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#understandable>NFR:Understandable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#reusable>NFR:Reusable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#maintainable>NFR:Maintainable</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2954,7 +2959,12 @@
               <th><a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a></th>
               <th><a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a></th>
               <th><a href=#IM:heatEInWtr>IM:heatEInWtr</a></th>
-              <th><a href=#inputInitVals>FR:Input-Initial-Values</a></th>
+              <th><a href=#correct>NFR:Correctness</a></th>
+              <th><a href=#verifiable>NFR:Verifiability</a></th>
+              <th><a href=#understandable>NFR:Understandability</a></th>
+              <th><a href=#reusable>NFR:Reusability</a></th>
+              <th><a href=#maintainable>NFR:Maintainability</a></th>
+              <th><a href=#inputValues>FR:Input-Values</a></th>
               <th><a href=#findMass>FR:Find-Mass</a></th>
               <th>
                 <a href=#checkWithPhysConsts>FR:Check-Input-with-Physical_Constraints</a>
@@ -2964,11 +2974,6 @@
               </th>
               <th><a href=#calcValues>FR:Calculate-Values</a></th>
               <th><a href=#outputValues>FR:Output-Values</a></th>
-              <th><a href=#correct>NFR:Correct</a></th>
-              <th><a href=#verifiable>NFR:Verifiable</a></th>
-              <th><a href=#understandable>NFR:Understandable</a></th>
-              <th><a href=#reusable>NFR:Reusable</a></th>
-              <th><a href=#maintainable>NFR:Maintainable</a></th>
             </tr>
             <tr>
               <td><a href=#waterTempGS>GS:Predict-Water-Temperature</a></td>
@@ -3021,7 +3026,132 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#inputInitVals>FR:Input-Initial-Values</a></td>
+              <td><a href=#correct>NFR:Correctness</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiable>NFR:Verifiability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#understandable>NFR:Understandability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#reusable>NFR:Reusability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainable>NFR:Maintainability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#inputValues>FR:Input-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3058,12 +3188,12 @@
               <td></td>
               <td>X</td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3112,13 +3242,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3174,131 +3304,6 @@
               <td></td>
               <td></td>
             </tr>
-            <tr>
-              <td><a href=#correct>NFR:Correct</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#verifiable>NFR:Verifiable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#understandable>NFR:Understandable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#reusable>NFR:Reusable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#maintainable>NFR:Maintainable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
           </table>
           <p class="caption">
             Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items
@@ -3310,31 +3315,31 @@
         <div id="Figure:TraceGraphAvsA">
           <figure>
             <img src="../../../../traceygraphs/swhsnopcm/avsa.svg" alt="TraceGraphAvsA" >
-            <figcaption>TraceGraphAvsA</figcaption>
+            <figcaption>Figure: TraceGraphAvsA</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAvsAll">
           <figure>
             <img src="../../../../traceygraphs/swhsnopcm/avsall.svg" alt="TraceGraphAvsAll" >
-            <figcaption>TraceGraphAvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAvsAll</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphRefvsRef">
           <figure>
             <img src="../../../../traceygraphs/swhsnopcm/refvsref.svg" alt="TraceGraphRefvsRef" >
-            <figcaption>TraceGraphRefvsRef</figcaption>
+            <figcaption>Figure: TraceGraphRefvsRef</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsR">
           <figure>
             <img src="../../../../traceygraphs/swhsnopcm/allvsr.svg" alt="TraceGraphAllvsR" >
-            <figcaption>TraceGraphAllvsR</figcaption>
+            <figcaption>Figure: TraceGraphAllvsR</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsAll">
           <figure>
             <img src="../../../../traceygraphs/swhsnopcm/allvsall.svg" alt="TraceGraphAllvsAll" >
-            <figcaption>TraceGraphAllvsAll</figcaption>
+            <figcaption>Figure: TraceGraphAllvsAll</figcaption>
           </figure>
         </div>
         <p class="paragraph">
@@ -3363,7 +3368,7 @@
       <div class="section">
         <h1>Values of Auxiliary Constants</h1>
         <p class="paragraph">
-          This section contains the standard values that are used for calculations in SWHSNoPCM.
+          This section contains the standard values that are used for calculations in <span title="solar water heating system with no phase change material">SWHSNoPCM</span>.
         </p>
         <div id="Table:TAuxConsts">
           <table class="table">
@@ -3461,43 +3466,36 @@
     <div id="Sec:References">
       <div class="section">
         <h1>References</h1>
-        <ul class="hide-list-style">
-          <li>
-            <div id="incroperaEtAl2007">
-              [1]: Incropera, F. P., Dewitt, D. P., Bergman, T. L., and Lavine, A. S. <em>Fundamentals of Heat and Mass Transfer</em>. 6th. ed., Hoboken, New Jersey: John Wiley and Sons, 2007. Print.
-            </div>
-          </li>
-          <li>
-            <div id="koothoor2013">
-              [2]: Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-            </div>
-          </li>
-          <li>
-            <div id="lightstone2012">
-              [3]: Lightstone, Marilyn. <em>Derivation of tank/pcm model</em>. 2012. From Marilyn Lightstone's Personal Notes
-            </div>
-          </li>
-          <li>
-            <div id="parnasClements1986">
-              [4]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
-            </div>
-          </li>
-          <li>
-            <div id="smithKoothoor2016">
-              [5]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
-            </div>
-          </li>
-          <li>
-            <div id="smithLai2005">
-              [6]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-            </div>
-          </li>
-          <li>
-            <div id="smithEtAl2007">
-              [7]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
-            </div>
-          </li>
-        </ul>
+        <dl class="reference-list">
+          <dt id="incroperaEtAl2007">[<b>incroperaEtAl2007</b>]</dt>
+          <dd>
+            Incropera, F. P., Dewitt, D. P., Bergman, T. L., and Lavine, A. S. <em>Fundamentals of Heat and Mass Transfer</em>. 6th. ed., Hoboken, New Jersey: John Wiley and Sons, 2007. Print.
+          </dd>
+          <dt id="koothoor2013">[<b>koothoor2013</b>]</dt>
+          <dd>
+            Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+          </dd>
+          <dt id="lightstone2012">[<b>lightstone2012</b>]</dt>
+          <dd>
+            Lightstone, Marilyn. <em>Derivation of tank/pcm model</em>. 2012. From Marilyn Lightstone's Personal Notes
+          </dd>
+          <dt id="parnasClements1986">[<b>parnasClements1986</b>]</dt>
+          <dd>
+            Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+          </dd>
+          <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+          </dd>
+          <dt id="smithLai2005">[<b>smithLai2005</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+          </dd>
+          <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
+          <dd>
+            Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
+          </dd>
+        </dl>
       </div>
     </div>
   </body>

@@ -9,7 +9,7 @@ import Foundation
 /** Writes the output values to output.txt
     - Parameter isSafePb: probability of glass breakage safety requirement
     - Parameter isSafeLR: 3 second load equivalent resistance safety requirement
-    - Parameter P_b: probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
+    - Parameter P_b: probability of breakage
     - Parameter J: stress distribution factor (Function)
 */
 func write_output(_ isSafePb: Bool, _ isSafeLR: Bool, _ P_b: Double, _ J: Double) throws -> Void {

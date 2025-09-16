@@ -30,7 +30,8 @@ import Language.Drasil.NounPhrase (cn,cn',NP)
 import Language.Drasil.Symbol (Symbol(Label))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), 
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))
-import Language.Drasil.UID (UID, HasUID(..), mkUid)
+import Drasil.Database.Chunk (HasChunkRefs(..))
+import Drasil.Database.UID (UID, HasUID(..), mkUid)
 
 -- | For defining units.
 -- It has a 'ConceptChunk' (that defines what kind of unit it is),
@@ -43,6 +44,9 @@ data UnitDefn = UD { _vc :: ConceptChunk
                    , _cas :: UnitSymbol
                    , _cu :: [UID] }
 makeLenses ''UnitDefn
+
+instance HasChunkRefs UnitDefn where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds 'UID' of the 'ConceptChunk' used to make the 'UnitDefn'.
 instance HasUID        UnitDefn where uid = vc . uid
@@ -189,11 +193,13 @@ newUnit s = makeDerU (unitCon s)
 
 -- | Smart constructor for a "fundamental" unit.
 fund :: String -> String -> String -> UnitDefn
-fund nam desc sym = UD (dcc nam (cn' nam) desc) (BaseSI $ US [(Label sym, 1)]) [mkUid nam]
+fund nam desc sym = UD (dcc name (cn' nam) desc) (BaseSI $ US [(Label sym, 1)]) [mkUid name]
+  where name = "unit:" ++ nam
 
 -- | Variant of the 'fund', useful for degree.
 fund' :: String -> String -> Symbol -> UnitDefn
-fund' nam desc sym = UD (dcc nam (cn' nam) desc) (BaseSI $ US [(sym, 1)]) [mkUid nam]
+fund' nam desc sym = UD (dcc name (cn' nam) desc) (BaseSI $ US [(sym, 1)]) [mkUid name]
+  where name = "unit:" ++ nam
 
 -- | We don't want an Ord on units, but this still allows us to compare them.
 compUnitDefn :: UnitDefn -> UnitDefn -> Ordering

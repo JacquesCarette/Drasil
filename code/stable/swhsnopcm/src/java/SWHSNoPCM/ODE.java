@@ -15,8 +15,8 @@ public class ODE implements FirstOrderDifferentialEquations {
     private double T_C;
     
     /** \brief Constructor for ODE objects
-        \param tau_W ODE parameter for water related to decay time: derived parameter based on rate of change of temperature of water (s)
-        \param T_C temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
+        \param tau_W ODE parameter for water related to decay time (s)
+        \param T_C temperature of the heating coil (degreeC)
     */
     public ODE(double tau_W, double T_C) {
         this.tau_W = tau_W;

@@ -1,53 +1,49 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
-import Control.Lens ((^.))
+import Prelude hiding (sin, cos, tan)
 
+import Drasil.System (SystemKind(Specification), mkSystem)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
-import Theory.Drasil (qdEFromDD, output)
+import Drasil.Metadata (inModel)
 
-import Prelude hiding (sin, cos, tan)
-import Data.Maybe (mapMaybe)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, effect, endUser, environment, input_, interest, loss, method_,
-  physical, physics, problem, software, softwareSys, srsDomains, symbol_,
-  sysCont, system, type_, user, value, variable, doccon, doccon',
-  datumConstraint)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.TheoryConcepts as Doc (inModel)
-import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
-import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
+  physical, physics, problem, software, softwareSys, symbol_,
+  sysCont, system, type_, user, value, variable, datumConstraint)
+import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
+import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon',
   number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
+import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
-  strain, stress, time, twoD, physicCon)
+  strain, stress, time, twoD, physicCon', distance, friction, linear, velocity, position)
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
-import Data.Drasil.Concepts.Computation (compcon, algorithm)
-import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Theories.Physics (physicsTMs)
+import Data.Drasil.Theories.Physics (weightSrc, hsPressureSrc)
 
 import Data.Drasil.People (brooks, henryFrankis)
-import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
+import Data.Drasil.SI_Units (degree)
 
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
-import qualified Drasil.SSP.DataDefs as SSP (dataDefs)
+import Drasil.SSP.DataDefs (dataDefs)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil,
-  soilLyr, soilMechanics, soilPrpty, ssa, ssp, stabAnalysis, waterTable)
+  soilLyr, soilMechanics, soilPrpty, ssa, stabAnalysis, waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (goals)
-import Drasil.SSP.IMods (instModIntro)
-import qualified Drasil.SSP.IMods as SSP (iMods)
+import Drasil.SSP.MetaConcepts (progName)
+import Drasil.SSP.IMods (instModIntro, iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
 import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
 import Drasil.SSP.TMods (tMods)
@@ -62,40 +58,28 @@ srs = mkDoc mkSRS S.forT si
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
 
-si :: SystemInformation
-si = SI {
-  _sys         = ssp, 
-  _kind        = Doc.srs, 
-  _authors     = [henryFrankis, brooks],
-  _purpose     = [purp],
-  _background  = [],
-  _quants      = symbols,
-  _concepts    = [] :: [DefinedQuantityDict],
-  _instModels  = SSP.iMods,
-  _datadefs    = SSP.dataDefs,
-  _configFiles = [],
-  _inputs      = map qw inputs,
-  _outputs     = map qw outputs,
-  _defSequence = [(\x -> Parallel (head x) (tail x)) $ mapMaybe qdEFromDD SSP.dataDefs],
-  _constraints = constrained,
-  _constants   = [],
-  _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
-}
+si :: System
+si = mkSystem
+  progName Specification [henryFrankis, brooks]
+  [purp] [] [] []
+  symbols
+  tMods generalDefinitions dataDefs iMods
+  []
+  inputs outputs constrained []
+  symbMap
   
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
-  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
+  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA abbreviationsList],
   IntroSec $ IntroProg startIntro kSent
-    [ IPurpose $ purpDoc ssp Verbose
+    [ IPurpose $ purpDoc progName Verbose
     , IScope scope
     , IChar []
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
@@ -112,7 +96,7 @@ mkSRS = [TableOfContents,
     SSDProg
       [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
-        , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
+        , PhySysDesc progName physSystParts figPhysSyst physSystContents 
         , Goals goalsInputs]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -131,7 +115,7 @@ mkSRS = [TableOfContents,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-  AuxConstntSec $ AuxConsProg ssp [],
+  AuxConstntSec $ AuxConsProg progName [],
   Bibliography]
 
 purp :: Sentence
@@ -140,39 +124,48 @@ purp = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
   S "as well as the", phrase intrslce, phraseNP (normForce `and_` shearForce),
   S "along the", phrase crtSlpSrf]
 
-units :: [UnitDefn]
-units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
-
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
-section :: [Section]
-section = extractSection srs
-
 labCon :: [LabelledContent]
-labCon = [figPhysSyst, figIndexConv, figForceActing] ++ funcReqTables
+labCon = [figPhysSyst, figIndexConv, figForceActing, sysCtxFig1] ++ funcReqTables
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
--- SYMBOL MAP HELPERS --
+ideaDicts :: [IdeaDict]
+ideaDicts = 
+  -- Actual IdeaDicts
+  defs ++
+  -- CIs
+  nw progName : map nw mathcon' ++ map nw physicCon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks =
+  -- ConceptChunks
+  defs' ++ softwarecon ++ solidcon ++ physicalcon ++
+  [distance, friction, linear, velocity, gravity, stress, fbd, position] ++
+  -- DefinedQuantityDicts
+  [cw len] ++
+  -- UnitalChunks
+  map cw [time, surface]
+
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
-  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw SSP.iMods
-  ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
-  ++ map nw physicsTMs
-  ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
-  ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
-  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
-  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
-  generalDefinitions tMods concIns section labCon []
+symbMap = cdb symbols ideaDicts conceptChunks
+  [degree] dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
 
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+abbreviationsList :: [IdeaDict]
+abbreviationsList =
+  -- CIs
+  map nw acronyms ++
+  -- ConceptChunks
+  nw progName :
+  -- DefinedQuantityDicts
+  map nw symbols
 
-refDB :: ReferenceDB
-refDB = rdb citations concIns
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef, weightSrc, hsPressureSrc]
 
 -- SECTION 1 --
 --automatically generated in mkSRS -
@@ -185,7 +178,7 @@ refDB = rdb citations concIns
 tableOfSymbIntro :: [TSIntro]
 tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
   [S "a subscript", ch index, S "indicates that the", phrase value, 
-  S "will be taken at, and analyzed at, a", phrase slice `S.or_` phrase slice, 
+  S "will be taken at" `sC` S "and analyzed at, a", phrase slice `S.or_` phrase slice, 
   S "interface composing the total slip", phrase mass]], VectorUnits]
 
 -- SECTION 1.3 --
@@ -195,25 +188,32 @@ tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
 startIntro, kSent :: Sentence
 startIntro = foldlSent [atStartNP (a_ slope), S "of geological",
   phrase mass `sC` S "composed of", phrase soil, S "and rock and sometimes",
-  S "water, is subject to the influence" `S.of_` (phraseNP (gravity `onThe` mass) !.),
-  S "This can cause instability in the form" `S.of_` phrase soil +:+.
+  S "water" `sC` S "is subject" `S.toThe` S "influence" `S.of_` (phraseNP (gravity `onThe` mass) !.),
+  S "This can cause instability" `S.inThe` S "form" `S.of_` phrase soil +:+.
   S "or rock movement", atStartNP' (NP.the (effect `of_PS` soil)),
   S "or rock movement can range from inconvenient to",
-  S "seriously hazardous, resulting in significant life and economic" +:+.
+  S "seriously hazardous" `sC` S "resulting in significant life and economic" +:+.
   plural loss, atStart slope, S "stability is of", phrase interest,
   S "both when analysing natural", plural slope `sC`
   S "and when designing an excavated" +:+. phrase slope, atStart ssa `S.isThe`
-  S "assessment" `S.ofThe` S "safety of a" +:+ phrase slope `sC`
+  S "assessment" `S.ofThe` S "safety" `S.ofA` phrase slope `sC`
   S "identifying the", phrase surface,
   S "most likely to experience", phrase slip `S.and_`
-  S "an index of its relative stability known as the", phrase fs]
+  S "an index" `S.of_` S "its relative stability known as the" +:+. phrase fs]
 
-kSent = keySent ssa ssp
+kSent = keySent ssa progName
 
 keySent :: (Idea a, Idea b) => a -> b -> Sentence
 keySent probType pname = foldlSent_ [(phraseNP (NP.a_ (combineNINI probType problem)) !.),
   S "The developed", phrase program, S "will be referred to as the",
-  introduceAbb pname]
+  introduceAbb pname,
+  S "based on the original, manually created version of" +:+
+  namedRef externalLinkRef (S "SSP")]
+
+externalLinkRef :: Reference
+externalLinkRef = makeURI "SSP" 
+  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp" 
+  (shortname' $ S "SSP")
   
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in IPurpose
@@ -222,7 +222,7 @@ keySent probType pname = foldlSent_ [(phraseNP (NP.a_ (combineNINI probType prob
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope
 scope :: Sentence
-scope = foldlSent_ [phraseNP (stabAnalysis `ofA` twoD), sParen (getAcc twoD),
+scope = foldlSent_ [phraseNP (stabAnalysis `ofA` twoD), sParen (short twoD),
   phraseNP (combineNINI soil mass) `sC` S "composed of a single homogeneous", phrase layer,
   S "with" +:+. pluralNP (combineNINI constant mtrlPrpty), atStartNP (NP.the (combineNINI soil mass))
   `S.is` S "assumed to extend infinitely in the third" +:+.
@@ -246,7 +246,7 @@ sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+. phrase software, S "A rectangle represents the",
-   phrase softwareSys, S "itself" +:+. sParen (short ssp),
+   phrase softwareSys, S "itself" +:+. sParen (short progName),
    S "Arrows are used to show the data flow between the" +:+ phraseNP (system
    `andIts` environment)]
    
@@ -255,14 +255,14 @@ sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) (resourcePa
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
-  [S "The responsibilities of the", phraseNP (user `andThe` system),
+  [S "The responsibilities" `S.ofThe` phraseNP (user `andThe` system),
    S "are as follows"]
    
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide" +:+ phraseNP (the input_) +:+ S "data related to" +:+
   phraseNP (the soilLyr) :+: S "(s) and water table (if applicable)" `sC`
   S "ensuring conformation to" +:+ phrase input_ +:+ S "data format" +:+
-  S "required by" +:+ short ssp,
+  S "required by" +:+ short progName,
   S "Ensure that consistent units are used for" +:+ pluralNP (combineNINI input_ variable),
   S "Ensure required" +:+ namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption)) 
   +:+ S "are" +:+ S "appropriate for the" +:+ phrase problem +:+ S "to which the" +:+ 
@@ -281,7 +281,7 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short ssp +:+ S "Responsibilities"]
+  short progName +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
@@ -292,14 +292,14 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 -- userContraints intro below
 
 userCharIntro :: Contents
-userCharIntro = userChar ssp [S "Calculus", titleize Doc.physics]
+userCharIntro = userChar progName [S "Calculus", titleize Doc.physics]
   [phrase soil, plural mtrlPrpty] [phrase effCohesion, phrase fricAngle, 
   S "unit weight"]
 
 userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
 userChar pname understandings familiarities specifics = foldlSP [
   atStartNP (the endUser) `S.of_` short pname,
-  S "should have an understanding of undergraduate Level 1",
+  S "should have an understanding" `S.of_` S "undergraduate Level 1",
   foldlList Comma List understandings `sC`
   S "and be familiar with", foldlList Comma List familiarities `sC` 
   S "specifically", foldlList Comma List specifics]
@@ -340,7 +340,7 @@ physSystParts = map foldlSent [
 figPhysSyst :: LabelledContent
 figPhysSyst = llcc (makeFigRef "PhysicalSystem") $
   fig (foldlSent_ [S "An example", phraseNP (slope `for` analysis),
-  S "by", short ssp `sC` S "where the dashed line represents the",
+  S "by", short progName `sC` S "where the dashed line represents the",
   phrase waterTable]) (resourcePath ++ "PhysSyst.png")
 
 physSystContents :: [Contents]
@@ -351,10 +351,10 @@ physSysConv = foldlSP [atStart morPrice, phrase analysis, refS morgenstern1965
   `S.ofThe` phrase slope, S "involves representing the", phrase slope,
   S "as a series of vertical" +:+. plural slice, S "As shown in",
   refS figIndexConv `sC` phraseNP (the index), ch index, S "is used to denote a",
-  phrase value, S "for a single", phrase slice `sC` S "and an", phrase intrslce, 
+  phrase value `S.for` S "a single", phrase slice `sC` S "and an", phrase intrslce, 
   phrase value, S "at a given", phrase index, ch index, S "refers to the",
   phrase value, S "between", phrase slice, ch index `S.and_` S "adjacent", phrase slice,
-  eS $ sy index `addI` int 1]
+  eS $ sy index $+ int 1]
 
 figIndexConv :: LabelledContent
 figIndexConv = llcc (makeFigRef "IndexConvention") $ 

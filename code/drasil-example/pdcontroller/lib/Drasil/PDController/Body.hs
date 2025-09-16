@@ -1,47 +1,44 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
 import Language.Drasil
+import Language.Drasil.Code (ODEInfo(..))
+import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
-import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Software.Products (sciCompS)
+import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
-        scipyODESymbols)
-import qualified Data.Drasil.TheoryConcepts as IDict (dataDefn)
+        scipyODESymbols, diffCodeChunk)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.SI_Units (second, kilogram)
 import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pdControllerApp,
-  pidC, concepts, defs)
+import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
+import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
+import Drasil.PDController.MetaConcepts (progName)
 import Drasil.PDController.GenSysDesc
-       (gsdSysContextFig, gsdSysContextList, gsdSysContextP1, gsdSysContextP2,
-        gsduserCharacteristics)
+       (gsdSysContextList, gsdSysContextP1, gsdSysContextP2, gsduserCharacteristics)
 import Drasil.PDController.IModel (instanceModels, imPD)
-import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc,
-       introUserChar1, introUserChar2, introscopeOfReq)
+import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc, externalLinkRef,
+       introUserChar1, introUserChar2, introscopeOfReq, scope)
 import Drasil.PDController.References (citations)
 import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
-import Drasil.PDController.SpSysDesc (goals, sysFigure, sysGoalInput, sysParts)
+import Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
-  inpConstrained, pidConstants, pidDqdConstants, opProcessVariable)
+  inpConstrained, pidConstants)
 import Drasil.PDController.ODEs (pidODEInfo)
-import Language.Drasil.Code (quantvar)
+
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
@@ -49,7 +46,7 @@ naveen = person "Naveen Ganesh" "Muralidharan"
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -58,12 +55,12 @@ printSetting = piSys fullSI Equational defaultConfiguration
 mkSRS :: SRSDecl
 mkSRS
   = [TableOfContents,
-    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
+    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
      IntroSec $
-       IntroProg introPara (phrase pdControllerApp)
+       IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec IDict.dataDefn (SRS.inModel [] [])
+          IOrgSec dataDefn (SRS.inModel [] [])
             (S "The instance model referred as" +:+ refS imPD +:+
                S "provides an"
                +:+ titleize ode +:+ sParen (short ode)
@@ -80,7 +77,7 @@ mkSRS
          [SSDProblem $
             PDProg purp []
               [TermsAndDefs Nothing defs,
-               PhySysDesc pdControllerApp sysParts sysFigure [],
+               PhySysDesc progName sysParts sysFigure [],
                Goals sysGoalInput],
           SSDSolChSpec $
             SCSProg
@@ -96,69 +93,75 @@ mkSRS
      ReqrmntSec $ ReqsProg [FReqsSub EmptyS [], NonFReqsSub], LCsSec,
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
-si :: SystemInformation
-si = SI {
-  _sys = pdControllerApp,
-  _kind = Doc.srs,
-  _authors = [naveen],
-  _purpose = [purp],
-  _background = [],
-  _quants = symbolsAll,
-  _concepts = [] :: [DefinedQuantityDict],
-  _datadefs = dataDefinitions,
-  _instModels = instanceModels,
-  _configFiles = [],
-  _inputs = inputs,
-  _outputs = outputs,
-  _defSequence = [] :: [Block SimpleQDef],
-  _constraints = map cnstrw inpConstrained,
-  _constants = pidConstants,
-  _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = refDB}
+si :: System
+si = mkSystem
+  progName Specification [naveen]
+  [purp] [background] [scope] [motivation]
+  symbolsAll
+  theoreticalModels genDefns dataDefinitions instanceModels
+  []
+  inputs outputs (map cnstrw' inpConstrained)
+  pidConstants symbMap
 
 purp :: Sentence
-purp = foldlSent_ [S "provide a model of a", phrase pidC,
-         S "that can be used for the tuning of the gain constants before",
-         S "the deployment of the controller"]
+purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,
+         S "that can be used for the tuning" `S.ofThe` S "gain constants before",
+         S "the deployment" `S.ofThe` S "controller"]
 
-symbolsAll :: [QuantityDict]
-symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
-  ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
+motivation :: Sentence
+motivation = foldlSent_ [S "The gains of a controller in an application" +:+
+              S "must be tuned before the controller is ready for production"]
+
+background :: Sentence
+background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD/PID) is used",
+              S "in a variety of applications such as thermostats, automobile",
+              S "cruise-control, etc"]
+
+-- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is added to symbolsAll as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
+-- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
+symbolsAll :: [DefinedQuantityDict]
+symbolsAll = symbols ++ map dqdWr pidConstants
+  ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
+  ++ map dqdWr [listToArray dp, arrayVecDepVar pidODEInfo,
+  listToArray $ diffCodeChunk dp, diffCodeChunk dp]
+  where dp = depVar pidODEInfo
+
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  concepts ++
+  -- CIs
+  nw progName : map nw mathcon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks =
+  -- ConceptChunks
+  physicalcon ++ [linear, angular]
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
-  (nw pdControllerApp : [nw program, nw angular, nw linear] ++ [nw sciCompS]
-  ++ map nw doccon ++ map nw doccon' ++ concepts ++ map nw mathcon
-  ++ map nw mathcon' ++ map nw [second, kilogram] ++ map nw symbols 
-  ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)
-  (map cw inpConstrained ++ srsDomains)
-  (map unitWrapper [second, kilogram])
+symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, dqdWr negInf])
+  ideaDicts
+  conceptChunks
+  ([] :: [UnitDefn])
   dataDefinitions
   instanceModels
   genDefns
   theoreticalModels
   conceptInstances
-  ([] :: [Section])
-  ([] :: [LabelledContent])
-  ([] :: [Reference])
+  labelledContent
+  allRefs
+  citations
 
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
-  ([] :: [ConceptChunk])
-  ([] :: [UnitDefn])
-  ([] :: [DataDefinition])
-  ([] :: [InstanceModel])
-  ([] :: [GenDefn])
-  ([] :: [TheoryModel])
-  ([] :: [ConceptInstance])
-  ([] :: [Section])
-  ([] :: [LabelledContent])
-  ([] :: [Reference])
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef]
 
-refDB :: ReferenceDB
-refDB = rdb citations conceptInstances
+abbreviationsList  :: [IdeaDict]
+abbreviationsList  =
+  -- CIs
+  map nw acronyms ++
+  -- QuantityDicts
+  map nw symbolsAll
 
 conceptInstances :: [ConceptInstance]
 conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs

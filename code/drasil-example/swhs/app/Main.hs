@@ -12,7 +12,7 @@ main =
     setLocaleEncoding utf8
     dumpEverything fullSI printSetting ".drasil/"
     typeCheckSI fullSI
-    gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "SWHS_SRS") srs printSetting
+    gen (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) "SWHS_SRS") srs printSetting
     genDot fullSI
     -- When ready to generate code from SWHS, uncomment this file and Choices
     -- genCode choices code

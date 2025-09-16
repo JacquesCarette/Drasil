@@ -4,14 +4,15 @@ module Language.Drasil.Document where
 
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
-  LabelledContent(LblC), RawContent(Figure, Paragraph),
+  LabelledContent(LblC), HasCaption(..), RawContent(Figure, Paragraph),
   Contents(..), Lbl, Filepath, Author, Title, MaxWidthPercent )
 import Language.Drasil.Label.Type (getAdd, prepend, LblType(..),
   Referable(..), HasRefAddress(..) )
-import Language.Drasil.Misc (repUnd)
 import Language.Drasil.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))
-import Language.Drasil.UID (UID, HasUID(..), (+++.), mkUid, nsUid)
+import Drasil.Database.UID (UID, HasUID(..), (+++.), mkUid, nsUid)
+
+import Utils.Drasil (repUnd)
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -118,27 +119,21 @@ mkRawLC x lb = llcc lb x
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
 section title intro secs = Section title (map Con intro ++ map Sub secs)
 
--- | Smart constructor for retrieving the contents ('Section's) from a 'Document'.
-extractSection :: Document -> [Section]
-extractSection (Document _ _ _ sec) = concatMap getSec sec
-extractSection (Notebook _ _ sec)   = concatMap getSec sec
-
--- | Smart constructor for retrieving the subsections ('Section's) within a 'Section'.
-getSec :: Section -> [Section]
-getSec t@(Section _ sc _) = t : concatMap getSecCons sc
-
--- | Helper to retrieve subsections ('Section's) from section contents ('SecCons').
-getSecCons :: SecCons -> [Section]
-getSecCons (Sub sec) = getSec sec
-getSecCons (Con _)   = []
-
--- | 'Figure' smart constructor with a 'Lbl' and a 'Filepath'. Assumes 100% of page width as max width.
+-- | 'Figure' smart constructor with a 'Lbl' and a 'Filepath'. Assumes 100% of page width as max width. Defaults to 'WithCaption'.
 fig :: Lbl -> Filepath -> RawContent
-fig l f = Figure l f 100
+fig l f = Figure l f 100 WithCaption
 
--- | 'Figure' smart constructor that allows for customized max widths.
+-- | 'Figure' smart constructor without a caption.
+figNoCap :: Lbl -> Filepath -> RawContent
+figNoCap l f = Figure l f 100 NoCaption
+
+-- | 'Figure' smart constructor that allows for customized max widths. Defaults to 'WithCaption'.
 figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
-figWithWidth = Figure
+figWithWidth l f wp = Figure l f wp WithCaption
+
+-- | 'Figure' smart constructor with customized max widths and no caption.
+figNoCapWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+figNoCapWithWidth l f wp = Figure l f wp NoCaption
 
 ---------------------------------------------------------------------------
 -- * Reference Constructors

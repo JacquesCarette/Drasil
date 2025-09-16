@@ -13,11 +13,12 @@ import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
-import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, glassBR, 
+import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, 
   lShareFac, plane, responseTy)
+import Drasil.GlassBR.MetaConcepts (progName)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constantK, constantLoadDur, 
-  constantLoadSF, constantM, constantModElas, explosion, lateral, lDurFac,
+  constantLoadSF, constantM, constantModElas, explosion, lateral, loadDF,
   loadDur)
 
 assumptions :: [ConceptInstance]
@@ -36,7 +37,7 @@ assumpSV           = cic "assumpSV"   (standardValuesDesc loadDur)      "standar
 assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom
 assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
 assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
-assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc lDurFac)         "ldfConstant"         Doc.assumpDom
+assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc loadDF)         "ldfConstant"         Doc.assumpDom
 
 glassTypeDesc :: Sentence
 glassTypeDesc = foldlSent [S "The standard E1300-09a for",
@@ -62,7 +63,7 @@ explainScenarioDesc :: Sentence
 explainScenarioDesc = foldlSent [S "This", phrase system, S "only considers the external", 
   phraseNP (combineNINI explosion scenario), S "for its", plural calculation]
 
-standardValuesDesc :: UnitaryChunk -> Sentence
+standardValuesDesc :: UnitalChunk -> Sentence
 standardValuesDesc mainIdea = foldlSent [atStartNP' (the value), S "provided in",
   refS $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase mainIdea, 
   sParen (ch mainIdea) `sC` S "and the", plural materialProprty `S.of_` 
@@ -71,7 +72,7 @@ standardValuesDesc mainIdea = foldlSent [atStartNP' (the value), S "provided in"
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [atStart glass, S "under consideration is assumed to be a single", 
   S "lite; hence, the", phrase value `S.of_` short lShareFac, S "is equal to 1 for all",
-  plural calculation `S.in_` short glassBR]
+  plural calculation `S.in_` short progName]
 
 boundaryConditionsDesc :: Sentence
 boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
@@ -80,10 +81,10 @@ boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
 
 responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [atStartNP (the responseTy), S "considered in",
-  short glassBR, S "is flexural"]
+  short progName, S "is flexural"]
 
-ldfConstantDesc :: QuantityDict -> Sentence
+ldfConstantDesc :: (HasSymbol c, NamedIdea c) => c -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
   refS assumpSV `sC` phraseNP (NP.the (value `of_`
   mainConcept)), sParen (ch mainConcept) `S.is` phraseNP (a_ constant)
-  `S.in_` short glassBR]
+  `S.in_` short progName]

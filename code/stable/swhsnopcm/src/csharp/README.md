@@ -1,7 +1,17 @@
 # SWHSNoPCM 
 > Author: Thulasi Jegatheesan
 
+> Motivation: The demand is high for renewable energy sources and energy storage technology.
+
 > Purpose: Investigate the heating of water in a solar water heating tank.
+
+------------------------------------------------------------
+## What 
+ 
+
+> Background: Solar Water Heating System with no Phase Change Material provide a novel way of storing energy..
+
+> Scope: Thermal analysis of a single solar water heating tank.
 
 ------------------------------------------------------------
 ## Making Examples 

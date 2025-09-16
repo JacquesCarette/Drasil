@@ -13,7 +13,9 @@
 \usepackage{caption}
 \usepackage{graphics}
 \usepackage{svg}
+\usepackage{float}
 \usepackage{enumitem}
+\usepackage{adjustbox}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -22,6 +24,9 @@
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
+}
 \bibliography{bibfile}
 \title{Software Requirements Specification for PD Controller}
 \author{Naveen Ganesh Muralidharan}
@@ -80,7 +85,7 @@ ${K_{\text{d}}}$ & Derivative Gain & --
 \\
 ${K_{\text{p}}}$ & Proportional Gain & --
 \\
-$k$ & Stiffness coefficient of the spring & ${\text{s}}$
+$k$ & Stiffness coefficient & ${\text{s}}$
 \\
 $\mathit{L⁻¹[F(s)]}$ & Inverse Laplace Transform of a function & --
 \\
@@ -151,7 +156,7 @@ Uncert. & Typical Uncertainty
 \end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
-Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore a simulation of the PD Controller with a Second Order System is created in this project that can be used to tune the gain constants.
+Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore, a simulation of the PD Controller with a Second Order System is created in this project based on the original, manually created version of \hyperref{https://github.com/muralidn/CAS741-Fall20/tree/master}{}{}{PD Controller} that can be used to tune the gain constants.
 
 The following section provides an overview of the Software Requirements Specification (SRS) for PD Controller. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
@@ -181,7 +186,7 @@ This section provides general information about the system. It identifies the in
 \label{Sec:SysContext}
 \hyperref[Figure:systemContextDiag]{Fig:systemContextDiag} shows the system context. The circle represents an external entity outside the software, the user in this case. The rectangle represents the software system itself, PD Controller in this case. Arrows are used to show the data flow between the system and its environment.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../../../../datafiles/pdcontroller/Fig_SystemContext.png}
 \caption{System Context}
@@ -224,40 +229,40 @@ A system is needed to provide a model of a PD Controller that can be used for th
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 
 \begin{itemize}
-\item{PD Control Loop: Closed-Loop control system with PD Controller, Summing Point and Power Plant.}
 \item{PD Controller: Proportional-Derivative Controller.}
+\item{PD Control Loop: Closed-Loop control system with PD Controller, Summing Point and Power Plant.}
 \item{Summing Point: Control block where the difference between the Set-Point and the Process Variable is computed.}
 \item{Power Plant: A second order system to be controlled.}
 \item{Second Order System: A system whose input-output relationship is denoted by a second-order differential equation.}
 \item{Process Error: Input to the PID controller. Process Error is the difference between the Set-Point and the Process Variable.}
+\item{Proportional control: A linear feedback control system where correction is applied to the controlled variable which is proportional to the difference between desired and measured values.}
+\item{Derivative control: Monitors the rate of change of the error signal and contributes a component of the output signal (proportional to a derivative of the error signal).}
+\item{Frequency domain: The analysis of mathematical functions in terms of frequency, instead of time.}
+\item{Time domain: The analysis of mathematical functions in terms of time.}
+\item{Control Variable: The Control Variable is the output of the PD controller.}
+\item{Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.}
+\item{Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.}
+\item{Stiffness coefficient: Quantity that characterizes a spring's stiffness.}
 \item{Simulation Time: Total execution time of the PD simulation.}
 \item{Process Variable: The output value from the power plant.}
 \item{Set-Point: The desired value that the control system must reach. This also knows as the reference variable.}
 \item{Proportional Gain: Gain constant of the proportional controller.}
 \item{Derivative Gain: Gain constant of the derivative controller.}
-\item{Proportional control: A linear feedback control system where correction is applied to the controlled variable which is proportional to the difference between desired and measured values.}
-\item{Derivative control: Monitors the rate of change of the error signal and contributes a component of the output signal (proportional to a derivative of the error signal).}
-\item{Frequency domain: The analysis of mathematical functions in terms of frequency, instead of time.}
-\item{Time domain: The analysis of mathematical functions in terms of time.}
 \item{Laplace transform: An integral transform that converts a function of a real variable t (often time) to a function of a complex variable s (complex frequency).}
-\item{Control Variable: The Control Variable is the output of the PD controller.}
 \item{Step Time: Simulation step time.}
 \item{Absolute Tolerance: Absolute tolerance for the integrator.}
 \item{Relative Tolerance: Relative tolerance for the integrator.}
-\item{Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.}
-\item{Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.}
-\item{Stiffness Coefficient: Quantity that characterizes a spring's stiffness.}
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
 The physical system of PD Controller, as shown in \hyperref[Figure:pidSysDiagram]{Fig:pidSysDiagram}, includes the following elements:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[PS1:]{The Summing Point.}
 \item[PS2:]{The PD Controller.}
 \item[PS3:]{The Power Plant.}
-\end{itemize}
-\begin{figure}
+\end{description}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../../../../datafiles/pdcontroller/Fig_PDController.png}
 \caption{The physical system}
@@ -268,9 +273,9 @@ The physical system of PD Controller, as shown in \hyperref[Figure:pidSysDiagram
 \label{Sec:GoalStmt}
 Given Set-Point, Simulation Time, Proportional Gain, Derivative Gain, and Step Time, the goal statement is:
 
-\begin{itemize}
-\item[Process-Variable:\phantomsection\label{processVariable}]{Calculate the output of the Power Plant (Process Variable) over time.}
-\end{itemize}
+\begin{description}[font=\normalfont]
+\item[Process-Variable:\phantomsection\label{calculateProcessVariable}]{Calculate the output of the Power Plant (Process Variable) over time.}
+\end{description}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern PD Controller are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
@@ -279,10 +284,10 @@ The instance models that govern PD Controller are presented in the \hyperref[Sec
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Power plant:\phantomsection\label{pwrPlant}]{The Power Plant and the Sensor are coupled as a single unit. (RefBy: \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}, \hyperref[pwrPlantTxFnx]{A:Transfer Function}, \hyperref[massSpring]{A:Spring Mass}, and \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}.)}
 \item[Decoupled equation:\phantomsection\label{decoupled}]{The decoupled form of the PD Controller equation used in this simulation. (RefBy: \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}.)}
-\item[Set-Point:\phantomsection\label{setPoint}]{The Set-Point is constant throughout the simulation. (RefBy: \hyperref[IM:pdEquationIM]{IM:pdEquationIM} and \hyperref[DD:ddProcessError]{DD:ddProcessError}.)}
+\item[Set-Point:\phantomsection\label{setPointConstant}]{The Set-Point is constant throughout the simulation. (RefBy: \hyperref[IM:pdEquationIM]{IM:pdEquationIM} and \hyperref[DD:ddProcessError]{DD:ddProcessError}.)}
 \item[External disturbance:\phantomsection\label{externalDisturb}]{There are no external disturbances to the Power Plant during the simulation. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}.)}
 \item[Initial Value:\phantomsection\label{initialValue}]{The initial value of the Process Variable is assumed to be zero. (RefBy: \hyperref[DD:ddProcessError]{DD:ddProcessError}.)}
 \item[Parallel Equation:\phantomsection\label{parallelEq}]{The Parallel form of the equation is used for the PD Controller. (RefBy: \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}.)}
@@ -290,8 +295,8 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Transfer Function:\phantomsection\label{pwrPlantTxFnx}]{The combined Power Plant and Sensor (\hyperref[pwrPlant]{A:Power plant}) are characterized by a Second Order mass-spring-damper System. (RefBy: \hyperref[TM:tmSOSystem]{TM:tmSOSystem}.)}
 \item[Spring Mass:\phantomsection\label{massSpring}]{The mass of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1 kilogram. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
 \item[Spring Damping Coefficient:\phantomsection\label{dampingCoeffSpring}]{The Damping Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
-\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 20. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
-\end{itemize}
+\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 20. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that PD Controller is based on.
@@ -308,7 +313,7 @@ Label & Laplace Transform
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}} e^{-s t}}\,dt
+           \resizeExpression{{F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}}\,e^{-s\,t}}\,dt}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -342,7 +347,7 @@ Label & Inverse Laplace Transform
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {f_{\text{t}}}=\mathit{L⁻¹[F(s)]}
+           \resizeExpression{{f_{\text{t}}}=\mathit{L⁻¹[F(s)]}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -374,14 +379,14 @@ Label & Second Order Mass-Spring-Damper System
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \frac{1}{m s^{2}+c s+k}
+           \resizeExpression{\frac{1}{m\,s^{2}+c\,s+k}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \item{$c$ is the Damping coefficient of the spring (Unitless)}
-              \item{$k$ is the Stiffness coefficient of the spring (${\text{s}}$)}
+              \item{$k$ is the Stiffness coefficient (${\text{s}}$)}
               \end{symbDescription}
 \\ \midrule
 Notes & The Transfer Function (from \hyperref[pwrPlantTxFnx]{A:Transfer Function}) of a Second Order System (mass-spring-damper) is characterized by this equation.
@@ -412,14 +417,14 @@ Label & The Transfer Function of the Power Plant
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \frac{1}{s^{2}+s+20}
+           \resizeExpression{\frac{1}{s^{2}+s+20}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \end{symbDescription}
 \\ \midrule
-Notes & The Transfer Function of the Second Order System (from \hyperref[TM:tmSOSystem]{TM:tmSOSystem}) is reduced to this equation by substituting the mass (m) to 1 Kg (from \hyperref[massSpring]{A:Spring Mass}), the Damping Coefficient ($c$) to 1 (from \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}), and the Stiffness Coefficient ($k$) to 20 (from \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM:laplaceTransform}). Additionally, there are no external disturbances to the power plant (from \hyperref[externalDisturb]{A:External disturbance}).
+Notes & The Transfer Function of the Second Order System (from \hyperref[TM:tmSOSystem]{TM:tmSOSystem}) is reduced to this equation by substituting the mass (m) to 1 Kg (from \hyperref[massSpring]{A:Spring Mass}), the Damping Coefficient ($c$) to 1 (from \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}), and the Stiffness coefficient ($k$) to 20 (from \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM:laplaceTransform}). Additionally, there are no external disturbances to the power plant (from \hyperref[externalDisturb]{A:External disturbance}).
         
 \\ \midrule
 Source & \cite{pidWiki} and \cite{abbasi2015}
@@ -453,7 +458,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {E_{\text{s}}}={R_{\text{s}}}-{Y_{\text{s}}}
+           \resizeExpression{{E_{\text{s}}}={R_{\text{s}}}-{Y_{\text{s}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -462,7 +467,7 @@ Description & \begin{symbDescription}
               \item{${Y_{\text{s}}}$ is the Process Variable in the frequency domain (Unitless)}
               \end{symbDescription}
 \\ \midrule
-Notes & The Process Error is the difference between the Set-Point and Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM:laplaceTransform}). The Set-Point is assumed to be constant throughout the simulation (from \hyperref[setPoint]{A:Set-Point}). The initial value of the Process Variable is assumed to be zero (from \hyperref[initialValue]{A:Initial Value}).
+Notes & The Process Error is the difference between the Set-Point and Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM:laplaceTransform}). The Set-Point is assumed to be constant throughout the simulation (from \hyperref[setPointConstant]{A:Set-Point}). The initial value of the Process Variable is assumed to be zero (from \hyperref[initialValue]{A:Initial Value}).
         
 \\ \midrule
 Source & \cite{johnson2008}
@@ -492,7 +497,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {P_{\text{s}}}={K_{\text{p}}} {E_{\text{s}}}
+           \resizeExpression{{P_{\text{s}}}={K_{\text{p}}}\,{E_{\text{s}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -531,7 +536,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {D_{\text{s}}}={K_{\text{d}}} {E_{\text{s}}} s
+           \resizeExpression{{D_{\text{s}}}={K_{\text{d}}}\,{E_{\text{s}}}\,s}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -571,7 +576,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {C_{\text{s}}}={E_{\text{s}}} \left({K_{\text{p}}}+{K_{\text{d}}} s\right)
+           \resizeExpression{{C_{\text{s}}}={E_{\text{s}}}\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -616,21 +621,21 @@ Output & ${y_{\text{t}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    {r_{\text{t}}}\gt{}0
+                    \resizeExpression{{r_{\text{t}}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    {K_{\text{p}}}\gt{}0
+                    \resizeExpression{{K_{\text{p}}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    {K_{\text{d}}}\gt{}0
+                    \resizeExpression{{K_{\text{d}}}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     {y_{\text{t}}}\gt{}0
+                     \resizeExpression{{y_{\text{t}}}\gt{}0}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           \frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {{y_{\text{t}}}}={r_{\text{t}}} {K_{\text{p}}}
+           \resizeExpression{\frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{{y_{\text{t}}}}={r_{\text{t}}}\,{K_{\text{p}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -655,22 +660,22 @@ RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calculateValues]
 The Process Variable ${Y_{\text{s}}}$ in a PD Control Loop is the product of the Process Error (from \hyperref[DD:ddProcessError]{DD:ddProcessError}), Control Variable (from \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}), and the Power Plant (from \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}).
 
 \begin{displaymath}
-{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right) \left({K_{\text{p}}}+{K_{\text{d}}} s\right) \frac{1}{s^{2}+s+20}
+\resizeExpression{{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right)\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)\,\frac{1}{s^{2}+s+20}}
 \end{displaymath}
 Substituting the values and rearranging the equation.
 
 \begin{displaymath}
-s^{2} {Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right) {Y_{\text{s}}} s+\left(20+{K_{\text{p}}}\right) {Y_{\text{s}}}-{R_{\text{s}}} s {K_{\text{d}}}-{R_{\text{s}}} {K_{\text{p}}}=0
+\resizeExpression{s^{2}\,{Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right)\,{Y_{\text{s}}}\,s+\left(20+{K_{\text{p}}}\right)\,{Y_{\text{s}}}-{R_{\text{s}}}\,s\,{K_{\text{d}}}-{R_{\text{s}}}\,{K_{\text{p}}}=0}
 \end{displaymath}
 Computing the Inverse Laplace Transform of a function (from \hyperref[TM:invLaplaceTransform]{TM:invLaplaceTransform}) of the equation.
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0
+\resizeExpression{\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{K_{\text{d}}}\,\frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}}\,{K_{\text{p}}}=0}
 \end{displaymath}
-The Set-Point ${r_{\text{t}}}$ is a step function and a constant (from \hyperref[setPoint]{A:Set-Point}). Therefore the differential of the set point is zero. Hence the equation reduces to
+The Set-Point ${r_{\text{t}}}$ is a step function and a constant (from \hyperref[setPointConstant]{A:Set-Point}). Therefore the differential of the set point is zero. Hence the equation reduces to
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0
+\resizeExpression{\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{r_{\text{t}}}\,{K_{\text{p}}}=0}
 \end{displaymath}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
@@ -700,14 +705,14 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInputs}]{Ensure that the input values are within the limits specified in the \hyperref[Sec:DataConstraints]{data constraints}.}
 \item[Calculate-Values:\phantomsection\label{calculateValues}]{Calculate the Process Variable (from \hyperref[IM:pdEquationIM]{IM:pdEquationIM}) over the simulation time.}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output the Process Variable (from \hyperref[IM:pdEquationIM]{IM:pdEquationIM}) over the simulation time.}
-\end{itemize}
+\end{description}
 \begin{longtblr}
-[caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
+[caption={Required Inputs}]
 {colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
@@ -726,19 +731,19 @@ ${t_{\text{step}}}$ & Step Time & ${\text{s}}$
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
-\begin{itemize}
-\item[Portable:\phantomsection\label{portability}]{The code shall be portable to multiple Operating Systems.}
-\item[Secure:\phantomsection\label{security}]{The code shall be immune to common security problems such as memory leaks, divide by zero errors, and the square root of negative numbers.}
-\item[Maintainable:\phantomsection\label{maintainability}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
-\item[Verifiable:\phantomsection\label{verifiability}]{The code shall be verifiable against a Verification and Validation plan.}
-\end{itemize}
+\begin{description}[font=\normalfont]
+\item[Portability:\phantomsection\label{portable}]{The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.}
+\item[Security:\phantomsection\label{security}]{The code shall be immune to common security problems such as memory leaks, divide by zero errors, and the square root of negative numbers.}
+\item[Maintainability:\phantomsection\label{maintainability}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
+\item[Verifiability:\phantomsection\label{verifiability}]{The code is tested with complete verification and validation plan.}
+\end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
 This section lists the likely changes to be made to the software.
 
-\begin{itemize}
-\item[DC Gain and Time Constant:\phantomsection\label{likeChgPP}]{The mass, Damping Coefficient and the Stiffness Coefficient may be changed to be supplied by the user (from \hyperref[massSpring]{A:Spring Mass}, \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}, and \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}).}
-\end{itemize}
+\begin{description}[font=\normalfont]
+\item[DC Gain and Time Constant:\phantomsection\label{likeChgPP}]{The mass, Damping Coefficient and the Stiffness coefficient may be changed to be supplied by the user (from \hyperref[massSpring]{A:Spring Mass}, \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}, and \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}).}
+\end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
@@ -746,13 +751,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
 {colspec={l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[pwrPlant]{A:Power plant}} & \textbf{\hyperref[decoupled]{A:Decoupled equation}} & \textbf{\hyperref[setPoint]{A:Set-Point}} & \textbf{\hyperref[externalDisturb]{A:External disturbance}} & \textbf{\hyperref[initialValue]{A:Initial Value}} & \textbf{\hyperref[parallelEq]{A:Parallel Equation}} & \textbf{\hyperref[unfilteredDerivative]{A:Unfiltered Derivative}} & \textbf{\hyperref[pwrPlantTxFnx]{A:Transfer Function}} & \textbf{\hyperref[massSpring]{A:Spring Mass}} & \textbf{\hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}} & \textbf{\hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}}
+\textbf{} & \textbf{\hyperref[pwrPlant]{A:Power plant}} & \textbf{\hyperref[decoupled]{A:Decoupled equation}} & \textbf{\hyperref[setPointConstant]{A:Set-Point}} & \textbf{\hyperref[externalDisturb]{A:External disturbance}} & \textbf{\hyperref[initialValue]{A:Initial Value}} & \textbf{\hyperref[parallelEq]{A:Parallel Equation}} & \textbf{\hyperref[unfilteredDerivative]{A:Unfiltered Derivative}} & \textbf{\hyperref[pwrPlantTxFnx]{A:Transfer Function}} & \textbf{\hyperref[massSpring]{A:Spring Mass}} & \textbf{\hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}} & \textbf{\hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}}
 \\
 \hyperref[pwrPlant]{A:Power plant} &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[decoupled]{A:Decoupled equation} &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[setPoint]{A:Set-Point} &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[setPointConstant]{A:Set-Point} &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[externalDisturb]{A:External disturbance} &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -774,7 +779,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
 {colspec={l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[pwrPlant]{A:Power plant}} & \textbf{\hyperref[decoupled]{A:Decoupled equation}} & \textbf{\hyperref[setPoint]{A:Set-Point}} & \textbf{\hyperref[externalDisturb]{A:External disturbance}} & \textbf{\hyperref[initialValue]{A:Initial Value}} & \textbf{\hyperref[parallelEq]{A:Parallel Equation}} & \textbf{\hyperref[unfilteredDerivative]{A:Unfiltered Derivative}} & \textbf{\hyperref[pwrPlantTxFnx]{A:Transfer Function}} & \textbf{\hyperref[massSpring]{A:Spring Mass}} & \textbf{\hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}} & \textbf{\hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}}
+\textbf{} & \textbf{\hyperref[pwrPlant]{A:Power plant}} & \textbf{\hyperref[decoupled]{A:Decoupled equation}} & \textbf{\hyperref[setPointConstant]{A:Set-Point}} & \textbf{\hyperref[externalDisturb]{A:External disturbance}} & \textbf{\hyperref[initialValue]{A:Initial Value}} & \textbf{\hyperref[parallelEq]{A:Parallel Equation}} & \textbf{\hyperref[unfilteredDerivative]{A:Unfiltered Derivative}} & \textbf{\hyperref[pwrPlantTxFnx]{A:Transfer Function}} & \textbf{\hyperref[massSpring]{A:Spring Mass}} & \textbf{\hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}} & \textbf{\hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}}
 \\
 \hyperref[DD:ddProcessError]{DD:ddProcessError} &  &  & X &  & X &  &  &  &  &  & 
 \\
@@ -794,6 +799,14 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:pdEquationIM]{IM:pdEquationIM} &  &  & X &  &  &  &  &  &  &  & 
 \\
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[security]{NFR:Security} &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainability]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiability]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  & 
+\\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[verifyInputs]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  & 
@@ -801,14 +814,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[calculateValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[portability]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[security]{NFR:Secure} &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[maintainability]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[verifiability]{NFR:Verifiable} &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[likeChgPP]{LC:DC Gain and Time Constant} &  &  &  &  &  &  &  &  & X & X & X
 \label{Table:TraceMatAvsAll}
@@ -840,9 +845,17 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:ddProcessError]{DD:ddProcessError}} & \textbf{\hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}} & \textbf{\hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}} & \textbf{\hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}} & \textbf{\hyperref[TM:laplaceTransform]{TM:laplaceTransform}} & \textbf{\hyperref[TM:invLaplaceTransform]{TM:invLaplaceTransform}} & \textbf{\hyperref[TM:tmSOSystem]{TM:tmSOSystem}} & \textbf{\hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}} & \textbf{\hyperref[IM:pdEquationIM]{IM:pdEquationIM}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInputs]{FR:Verify-Input-Values}} & \textbf{\hyperref[calculateValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[portability]{NFR:Portable}} & \textbf{\hyperref[security]{NFR:Secure}} & \textbf{\hyperref[maintainability]{NFR:Maintainable}} & \textbf{\hyperref[verifiability]{NFR:Verifiable}}
+\textbf{} & \textbf{\hyperref[DD:ddProcessError]{DD:ddProcessError}} & \textbf{\hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}} & \textbf{\hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}} & \textbf{\hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}} & \textbf{\hyperref[TM:laplaceTransform]{TM:laplaceTransform}} & \textbf{\hyperref[TM:invLaplaceTransform]{TM:invLaplaceTransform}} & \textbf{\hyperref[TM:tmSOSystem]{TM:tmSOSystem}} & \textbf{\hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}} & \textbf{\hyperref[IM:pdEquationIM]{IM:pdEquationIM}} & \textbf{\hyperref[portable]{NFR:Portability}} & \textbf{\hyperref[security]{NFR:Security}} & \textbf{\hyperref[maintainability]{NFR:Maintainability}} & \textbf{\hyperref[verifiability]{NFR:Verifiability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInputs]{FR:Verify-Input-Values}} & \textbf{\hyperref[calculateValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
 \\
-\hyperref[processVariable]{GS:Process-Variable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calculateProcessVariable]{GS:Process-Variable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[security]{NFR:Security} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainability]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiability]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -851,47 +864,39 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[calculateValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
-\\
-\hyperref[portability]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[security]{NFR:Secure} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[maintainability]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[verifiability]{NFR:Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/pdcontroller/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/pdcontroller/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/pdcontroller/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/pdcontroller/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/pdcontroller/allvsall}
 \caption{TraceGraphAllvsAll}
@@ -930,7 +935,7 @@ address={Hamilton, ON, Canada}}
 @article{smithKoothoor2016,
 author={Smith, W. Spencer and Koothoor, Nirmitha},
 title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},
-journal={ Nuclear Engineering and Technology},
+journal={Nuclear Engineering and Technology},
 year={2016},
 month=apr,
 volume={48},

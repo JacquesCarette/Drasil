@@ -7,25 +7,27 @@ module Drasil.Sections.TraceabilityMandGs (
   -- * Helpers
   tvAssumps, tvDataDefns, tvGenDefns, tvTheoryModels,
   tvInsModels, tvGoals, tvReqs, tvChanges
-  ) where
+) where
+
+import Data.Foldable (foldl')
 
 import Drasil.DocumentLanguage.Core (TraceConfig(TraceConfig))
 import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
   traceMReferrers, traceView, traceViewCC, TraceViewCat)
-
 import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   goalStmt, goalStmtDom, requirement, reqDom, item, section_, likelyChg,
   unlikelyChg)
-import qualified Data.Drasil.TheoryConcepts as Doc (genDefn, dataDefn, inModel, thModel)
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Database.Drasil
-import SysInfo.Drasil
+import Drasil.Database.SearchTools
+import Drasil.System
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
 import Language.Drasil.Sentence.Combinators as S
-import Data.Foldable (foldl')
+
 
 -- | Makes a Traceability Table/Matrix that contains Items of Different Sections.
-generateTraceTable :: SystemInformation -> LabelledContent
+generateTraceTable :: System -> LabelledContent
 generateTraceTable = generateTraceTableView (mkUid "Tracey")
   (titleize' item +:+ S "of Different" +:+ titleize' section_) [tvEverything] [tvEverything]
 
@@ -39,19 +41,19 @@ tvAssumps = traceViewCC assumpDom
 
 -- | Traceability viewing data definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvDataDefns :: TraceViewCat
-tvDataDefns = traceView dataDefnTable
+tvDataDefns = traceView findAllDataDefns
 
 -- | Traceability viewing general definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGenDefns :: TraceViewCat
-tvGenDefns = traceView gendefTable
+tvGenDefns = traceView findAllGenDefns
 
 -- | Traceability viewing theory models. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvTheoryModels :: TraceViewCat
-tvTheoryModels = traceView theoryModelTable
+tvTheoryModels = traceView findAllTheoryMods
 
 -- | Traceability viewing instance models. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvInsModels :: TraceViewCat
-tvInsModels = traceView insmodelTable
+tvInsModels = traceView findAllInstMods
 
 -- | Traceability viewing goals. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGoals :: TraceViewCat
@@ -73,29 +75,29 @@ traceMatAssumpAssump = TraceConfig (mkUid "TraceMatAvsA") [plural assumption
 
 -- | Other assumptions of the traceability matrix
 traceMatAssumpOther :: TraceConfig
-traceMatAssumpOther = TraceConfig (mkUid "TraceMatAvsAll") [plural Doc.dataDefn,
-  plural Doc.thModel, plural Doc.genDefn, plural Doc.inModel, plural requirement,
+traceMatAssumpOther = TraceConfig (mkUid "TraceMatAvsAll") [plural dataDefn,
+  plural thModel, plural genDefn, plural inModel, plural requirement,
   plural likelyChg, pluralNP (unlikelyChg `NC.onThePP` assumption)]
   (titleize' assumption +:+ S "and Other" +:+ titleize' item) [tvAssumps]
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvChanges]
 
 -- | Refinement of the traceability matrix.
 traceMatRefinement :: TraceConfig
-traceMatRefinement = TraceConfig (mkUid "TraceMatRefvsRef") [plural Doc.dataDefn,
-  plural Doc.thModel, plural Doc.genDefn, plural Doc.inModel +:+
+traceMatRefinement = TraceConfig (mkUid "TraceMatRefvsRef") [plural dataDefn,
+  plural thModel, plural genDefn, plural inModel +:+
   S "on each other"] (titleize' item +:+ S "and Other" +:+ titleize' section_)
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
 
--- | Records other requirements. Converts the 'SystemInformation' into a 'TraceConfig'.
-traceMatOtherReq :: SystemInformation -> TraceConfig
+-- | Records other requirements. Converts the 'System' into a 'TraceConfig'.
+traceMatOtherReq :: System -> TraceConfig
 traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
-  `S.and_` pluralNP (goalStmt `NC.onThePP` Doc.dataDefn), plural Doc.thModel, 
-  plural Doc.genDefn, plural Doc.inModel] (x titleize' +:+ S "and Other" +:+ 
+  `S.and_` pluralNP (goalStmt `NC.onThePP` dataDefn), plural thModel, 
+  plural genDefn, plural inModel] (x titleize' +:+ S "and Other" +:+ 
   titleize' item) [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs] 
   [tvGoals, tvReqs] where
-    x g = foldl' (\a (f,t) -> a `sC'` case traceMReferrers (flip f $ _sysinfodb si) $
-      _sysinfodb si of
+    x g = foldl' (\a (f,t) -> a `sC'` case traceMReferrers (flip f $ _systemdb si) $
+      _systemdb si of
       [] -> mempty
       _ -> g t) mempty [(tvReqs, requirement), (tvGoals, goalStmt)]
     sC' EmptyS b = b
@@ -106,6 +108,6 @@ traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
 
 
 -- | Contains traceability matrix assumptions, other assumptions, refinement, and other requirements.
-traceMatStandard :: SystemInformation -> [TraceConfig]
+traceMatStandard :: System -> [TraceConfig]
 traceMatStandard s = map ($ s) [const traceMatAssumpAssump, const traceMatAssumpOther, const traceMatRefinement,
   traceMatOtherReq]

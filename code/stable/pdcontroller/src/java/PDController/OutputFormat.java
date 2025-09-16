@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class OutputFormat {
     
     /** \brief Writes the output values to output.txt
-        \param y_t Process Variable: The output value from the power plant
+        \param y_t Process Variable
     */
     public static void write_output(ArrayList<Double> y_t) throws IOException {
         PrintWriter outputfile;

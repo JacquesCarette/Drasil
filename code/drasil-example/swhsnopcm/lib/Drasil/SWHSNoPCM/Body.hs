@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
-  arrayVecDepVar, apacheODESymbols, odeintSymbols, diffCodeChunk)
+  apacheODESymbols, odeintSymbols, odeInfoChunks)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
@@ -83,14 +83,10 @@ symbols = map dqdWr concepts ++ map dqdWr constrained
 symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
--- FIXME: the dependent variable of noPCMODEInfo (tempW) is added to symbolsAll as it is used to create new chunks with tempW's UID suffixed in ODELibraries.hs.
--- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll = [gradient, pi_, uNormalVect, dqdWr surface] ++ symbols ++
   map dqdWr symbolConcepts ++ map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
-  map dqdWr [listToArray dp, arrayVecDepVar noPCMODEInfo, 
-  diffCodeChunk dp, listToArray $ diffCodeChunk dp]
-  where dp = depVar noPCMODEInfo
+  odeInfoChunks noPCMODEInfo
 
 concepts :: [UnitalChunk]
 concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,

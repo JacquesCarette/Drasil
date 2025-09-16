@@ -7,74 +7,66 @@ module Language.Drasil.Development.Sentence (
   -- * Capitalize First Word
   atStart, atStart',
   -- * Capitalize All Words
-  titleize, titleize',
-  -- * from NPStruct to Sentence
-  toSent,
+  titleize, titleize', introduceAbb, introduceAbbPlrl,
   -- * Short Form (lowercase)
-  short, introduceAbb
+  short
 ) where
 
 import Control.Lens ((^.))
 
-import Drasil.Database (HasUID(..))
-
 import Language.Drasil.Classes (NamedIdea(term), Idea)
-import Language.Drasil.Sentence ((+:+), sParen, sentenceTerm,
+import Language.Drasil.Sentence ((+:+), Sentence((:+:), S), sParen, sentenceTerm,
   sentencePlural, sentenceShort)
-import qualified Language.Drasil.Sentence as S
 import qualified Language.Drasil.NounPhrase as NP
-import Language.Drasil.NounPhrase.Core (NPStruct(..))
-
--- | Translate from NPStruct to Sentence
-toSent :: NPStruct -> S.Sentence
-toSent (S s) = S.S s
-toSent (s1 :-: s2) = toSent s1 S.:+: toSent s2 -- no space between noun phases
-toSent (s1 :+: s2) = toSent s1 S.+:+ toSent s2 -- insert space between noun phrases
-toSent (P p) = S.P p
+import Drasil.Database.UID (HasUID(..))
 
 -- | Get short form (if it exists), else get term of an 'Idea'.
 -- Uses the UID of the 'Idea' in a 'Ch' Sentence constructor to get the short
 -- form using getA. getA may return Nothing, in which case lookupS uses the
 -- term, where lookupS is the main helper for looking up the short form of a
 -- 'Ch' Sentence.
-short :: Idea c => c -> S.Sentence
+short :: Idea c => c -> Sentence
 short c = sentenceShort (c ^. uid)
 
--- | Helper for common pattern of introducing the title-case version of a
--- noun phrase (from an Idea)
--- followed by its abbreviation in parentheses.
+-- | Introduce title-case version of a noun phrase followed by its
+-- (parenthesized) abbreviation.
 introduceAbb :: Idea n => n -> Sentence
 -- introduceAbb n = sentenceTerm (n ^. uid) +:+ sParen (short n)
 introduceAbb n = NP.titleizeNP (n ^. term) +:+ sParen (short n)
 
--- | Helper function for getting the sentence case of a noun phrase from a
--- 'NamedIdea'.
-atStart, atStart' :: NamedIdea n => n -> S.Sentence
--- | Singular sentence case.
-atStart  n = toSent $ NP.atStartNP (n ^. term)
--- | Plural sentence case.
-atStart' n = toSent $ NP.atStartNP' (n ^. term)
+-- | Introduce plural title-case version of a noun phrase followed by its
+-- (parenthesized) abbreviation.
+introduceAbbPlrl :: Idea n => n -> Sentence
+introduceAbbPlrl n = NP.titleizeNP' (n ^. term) +:+ sParen (short n)
 
--- | Helper function for getting the title case of a noun phrase from a
+-- | Helper function for getting the sentence case of a noun phrase from a 
 -- 'NamedIdea'.
-titleize, titleize' :: NamedIdea n => n -> S.Sentence
+atStart, atStart' :: NamedIdea n => n -> Sentence
+-- | Singular sentence case.
+atStart  n = NP.atStartNP (n ^. term)
+-- | Plural sentence case.
+atStart' n = NP.atStartNP' (n ^. term)
+
+-- | Helper function for getting the title case of a noun phrase from a 
+-- 'NamedIdea'.
+titleize, titleize' :: NamedIdea n => n -> Sentence
 -- | Singular title case.
-titleize  n = toSent $ NP.titleizeNP (n ^. term)
+titleize  n = NP.titleizeNP (n ^. term)
 -- | Plural title case.
-titleize' n = toSent $ NP.titleizeNP' (n ^. term)
+titleize' n = NP.titleizeNP' (n ^. term)
 
 -- | Helper for getting the phrase from a 'NamedIdea' using it's UID.
-phrase :: NamedIdea n => n -> S.Sentence
+phrase :: NamedIdea n => n -> Sentence
 phrase n = sentenceTerm (n ^. uid)
 
 -- | Helper for getting the plural of a phrase from a 'NamedIdea'.
-plural :: NamedIdea n => n -> S.Sentence
+plural :: NamedIdea n => n -> Sentence
 plural n = sentencePlural (n ^. uid)
 --plural n = NP.plural (n ^. term)
 
 -- | Helper for getting the possesive cases from the term of a 'NamedIdea'.
-phrasePoss, pluralPoss :: NamedIdea n => n -> S.Sentence
+phrasePoss, pluralPoss :: NamedIdea n => n -> Sentence
 -- | Singular possesive function
-phrasePoss a = phrase a S.:+: S.S "'s"
+phrasePoss a = phrase a :+: S "'s"
 -- | Plural possesive function
-pluralPoss a = plural a S.:+: S.S "'"
+pluralPoss a = plural a :+: S "'"

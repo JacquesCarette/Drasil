@@ -16,6 +16,7 @@
 |HS          |Heat Strengthened                  |
 |IG          |Insulating Glass                   |
 |IM          |Instance Model                     |
+|LC          |Likely Change                      |
 |LG          |Laminated Glass                    |
 |LR          |Load Resistance                    |
 |LSF         |Load Share Factor                  |
@@ -26,6 +27,7 @@
 |SD          |Stand Off Distance                 |
 |SRS         |Software Requirements Specification|
 |TM          |Theoretical Model                  |
+|UC          |Unlikely Change                    |
 |Uncert.     |Typical Uncertainty                |
 
 **<p align="center">Abbreviations and Acronyms</p>**

@@ -12,12 +12,14 @@
 |GS          |Goal Statement                     |
 |GamePhysics |GamePhysics                        |
 |IM          |Instance Model                     |
+|LC          |Likely Change                      |
 |ODE         |Ordinary Differential Equation     |
 |PS          |Physical System Description        |
 |R           |Requirement                        |
 |RefBy       |Referenced by                      |
 |SRS         |Software Requirements Specification|
 |TM          |Theoretical Model                  |
+|UC          |Unlikely Change                    |
 |Uncert.     |Typical Uncertainty                |
 
 **<p align="center">Abbreviations and Acronyms</p>**

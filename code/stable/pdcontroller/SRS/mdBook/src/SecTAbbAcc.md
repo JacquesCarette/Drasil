@@ -9,6 +9,7 @@
 |GD           |General Definition                 |
 |GS           |Goal Statement                     |
 |IM           |Instance Model                     |
+|LC           |Likely Change                      |
 |ODE          |Ordinary Differential Equation     |
 |PD Controller|PD Controller                      |
 |PS           |Physical System Description        |

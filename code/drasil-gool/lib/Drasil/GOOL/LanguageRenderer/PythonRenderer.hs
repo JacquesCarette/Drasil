@@ -85,10 +85,6 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
--- import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
-  -- addLangImportVS, getLangImports, addLibImportVS, getLibImports, addModuleImport,
-  -- addModuleImportVS, getModuleImports, setFileType, getClassName, setCurrMain,
-  -- getClassMap, getMainDoc, genLoopIndex, varNameAvailable)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe, isNothing)
@@ -107,10 +103,8 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import Control.Lens ((^.), Lens')
 import qualified Control.Lens as L (makeLenses, lens, set, over, at, _2, both)
--- import Drasil.Shared.State (GOOLState)
 
-
--- State Stuff!?
+-- State Stuff
 data GOOLState = GS {
   _headers :: [FilePath], -- Used by Drasil for doxygen config gen
   _sources :: [FilePath], -- Used by Drasil for doxygen config and Makefile gen
@@ -133,8 +127,7 @@ data FileState = FS {
   _libImports :: [String],
   _moduleImports :: [String],
   
-  -- Only used for Python and Swift
-  _mainDoc :: Doc  -- To print Python/Swift's "main" last
+  _mainDoc :: Doc  -- To print Python's "main" last
 }
 L.makeLenses ''FileState
 

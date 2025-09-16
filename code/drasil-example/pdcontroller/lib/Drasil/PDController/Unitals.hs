@@ -132,7 +132,7 @@ dqdProcessVariableFD = dqdNoUnit (dcc "dqdProcessVariableFD"
 
 dqdProcessErrorTD
   = dqdNoUnit (dcc "dqdProcessErrorTD"
-      (nounPhraseSent (S "Process Error in the time domain"))
+      (pn "Process Error in the time domain")
       "the process error in the time domain") symET Real
 
 dqdProcessErrorFD = dqdNoUnit (dcc "dqdProcessErrorFD" (processError `inThe`
@@ -168,7 +168,7 @@ dqdFreqDomain
       "the complex frequency-domain parameter")
       syms
       Real
-      
+
 dqdFxnTDomain
   = dqdNoUnit (dcc "dqdFxnTDomain" (nounPhraseSent (S "Function in the time domain"))
       "a function in the time domain") symFt

@@ -184,7 +184,7 @@ flowDiscussion extraSentence = [
                       [goalStmt, thModel, inModel]
                       [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]) -- FIXME: This abuses `SRS.goalStmt` etc.
       , extraSentence] 
-  , foldlSP [S "The" +:+ plural goalStmt +:+ sParen (short goalStmt) +:+ S "are systematically refined into the" +:+ 
+  , foldlSP_ [S "The" +:+ plural goalStmt +:+ sParen (short goalStmt) +:+ S "are systematically refined into the" +:+ 
       plural thModel +:+ sParen (short thModel) `sC` S "which in turn are refined into the" +:+ 
       plural inModel +:+ sParen (short inModel) +:+. EmptyS +:+
       S "This refinement process is guided by the" +:+ plural assumption +:+ sParen (short assumption) +:+ 

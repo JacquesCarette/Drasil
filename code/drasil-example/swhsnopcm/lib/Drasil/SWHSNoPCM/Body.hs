@@ -9,8 +9,6 @@ import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Language.Drasil.Code (ODEInfo (depVar))
-
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 

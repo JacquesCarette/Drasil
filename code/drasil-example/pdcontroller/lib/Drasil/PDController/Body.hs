@@ -1,7 +1,6 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
 import Language.Drasil
-import Language.Drasil.Code (ODEInfo(..))
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
 import Database.Drasil.ChunkDB (cdb)

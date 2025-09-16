@@ -11,7 +11,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({A\_{\text{in}}}\\)                                |Surface area over which heat is transferred in                     |\\({\text{m}^{2}}\\)                                 |
 |\\({A\_{\text{out}}}\\)                               |Surface area over which heat is transferred out                    |\\({\text{m}^{2}}\\)                                 |
 |\\({A\_{\text{P}}}\\)                                 |Phase change material surface area                                 |\\({\text{m}^{2}}\\)                                 |
-|\\({A\_{\text{tol}}}\\)                               |Absolute tolerance                                                 |--                                                   |
 |\\(\mathit{AR}\\)                                     |Aspect ratio                                                       |--                                                   |
 |\\({\mathit{AR}\_{\text{max}}}\\)                     |Maximum aspect ratio                                               |--                                                   |
 |\\({\mathit{AR}\_{\text{min}}}\\)                     |Minimum aspect ratio                                               |--                                                   |
@@ -62,7 +61,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({q\_{\text{out}}}\\)                               |Heat flux output                                                   |\\(\frac{\text{W}}{\text{m}^{2}}\\)                  |
 |\\({q\_{\text{P}}}\\)                                 |Heat flux into the PCM from water                                  |\\(\frac{\text{W}}{\text{m}^{2}}\\)                  |
 |\\(\boldsymbol{q}\\)                                  |Thermal flux vector                                                |\\(\frac{\text{W}}{\text{m}^{2}}\\)                  |
-|\\({R\_{\text{tol}}}\\)                               |Relative tolerance                                                 |--                                                   |
 |\\(S\\)                                               |Surface                                                            |\\({\text{m}^{2}}\\)                                 |
 |\\(T\\)                                               |Temperature                                                        |\\({{}^{\circ}\text{C}}\\)                           |
 |\\(ΔT\\)                                              |Change in temperature                                              |\\({{}^{\circ}\text{C}}\\)                           |

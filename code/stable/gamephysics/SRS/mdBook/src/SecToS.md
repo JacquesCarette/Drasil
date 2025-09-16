@@ -68,7 +68,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\(α\\)                                                                 |Angular acceleration                                                                    |\\(\frac{\text{rad}}{\text{s}^{2}}\\)           |
 |\\({α\_{j}}\\)                                                          |J-Th Body's Angular Acceleration                                                        |\\(\frac{\text{rad}}{\text{s}^{2}}\\)           |
 |\\(θ\\)                                                                 |Angular displacement                                                                    |\\({\text{rad}}\\)                              |
-|\\(π\\)                                                                 |Ratio of circumference to diameter for any circle                                       |--                                              |
 |\\(\boldsymbol{τ}\\)                                                    |Torque                                                                                  |\\(\text{N}\text{m}\\)                          |
 |\\({\boldsymbol{τ}\_{j}}\\)                                             |Torque applied to the j-th body                                                         |\\(\text{N}\text{m}\\)                          |
 |\\(ω\\)                                                                 |Angular velocity                                                                        |\\(\frac{\text{rad}}{\text{s}}\\)               |

@@ -9,13 +9,14 @@ module Drasil.ExtractDocDesc (
 ) where
 
 import Control.Lens((^.))
+import Data.Functor.Constant (Constant(Constant))
+import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
+import Data.List (transpose)
+
 import Drasil.DocumentLanguage.Core
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 import Language.Drasil hiding (Manual, Verb)
 import Theory.Drasil
-
-import Data.Functor.Constant (Constant(Constant))
-import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -192,7 +193,7 @@ getCon' = getCon . (^. accessContents)
 
 -- | Extracts 'Sentence's from raw content.
 getCon :: RawContent -> [Sentence]
-getCon (Table s1 s2 t _)   = t : s1 ++ concat s2 -- isVar (s1, transpose s2) ++ [t]
+getCon (Table s1 s2 t _)   = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s)       = [s]
 getCon EqnBlock{}          = []
 getCon CodeBlock{}         = []

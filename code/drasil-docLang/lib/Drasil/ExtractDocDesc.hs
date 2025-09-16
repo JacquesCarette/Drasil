@@ -9,13 +9,14 @@ module Drasil.ExtractDocDesc (
 ) where
 
 import Control.Lens((^.))
+import Data.Functor.Constant (Constant(Constant))
+import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
+import Data.List (transpose)
+
 import Drasil.DocumentLanguage.Core
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 import Language.Drasil hiding (Manual, Verb)
 import Theory.Drasil
-
-import Data.Functor.Constant (Constant(Constant))
-import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -39,6 +40,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
     (CorrSolnPpties c cs) -> mCon [outDataConstTbl c] `mappend` mCon cs
     _ -> mempty,
   reqSub = Constant <$> \case
+    (FReqsSub' _ c) -> mCon c
     (FReqsSub _ c) -> mCon c
     (NonFReqsSub _) -> mempty,
   offShelfSec = Constant <$> \(OffShelfSolnsProg c) -> mCon c,
@@ -191,26 +193,7 @@ getCon' = getCon . (^. accessContents)
 
 -- | Extracts 'Sentence's from raw content.
 getCon :: RawContent -> [Sentence]
-<<<<<<< HEAD
-<<<<<<< HEAD
-getCon (Table s1 s2 t _)        = isVar (s1, transpose s2) ++ [t]
-getCon (Paragraph s)            = [s]
-getCon EqnBlock{}               = []
-getCon CodeBlock{}              = []
-getCon (DerivBlock h d)         = h : concatMap getCon d
-getCon (Enumeration lst)        = getLT lst
-getCon (Figure l _ _ _)         = [l]
-getCon (Bib bref)               = getBib bref
->>>>>>> 4af33a2816 (dig deeper when looking for abbreviations)
-getCon (Graph [(s1, s2)] _ _ l) = [s1, s2, l]
-getCon Graph{}                  = []
-getCon (Defini _ [])            = []
-getCon (Defini dt (hd:fs))      = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
-=======
 getCon (Table s1 s2 t _)   = isVar (s1, transpose s2) ++ [t]
-=======
-getCon (Table s1 s2 t _)   = t : s1 ++ concat s2 -- isVar (s1, transpose s2) ++ [t]
->>>>>>> cecbd9d999 (Move to 2 layer document section rendering)
 getCon (Paragraph s)       = [s]
 getCon EqnBlock{}          = []
 getCon CodeBlock{}         = []
@@ -220,11 +203,6 @@ getCon (Figure l _ _ _)    = [l]
 getCon (Bib bref)          = getBib bref
 getCon (Graph sss _ _ l)   = let (ls, rs) = unzip sss
                              in l : ls ++ rs
-<<<<<<< HEAD
-getCon (Defini _ [])       = []
-getCon (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
->>>>>>> 0ec56d8903 (dig even deeper when looking for abbreviations)
-=======
 getCon (Defini _ ics)      = concatMap (concatMap getCon' . snd) ics
 
 -- | This function is used in collecting 'Sentence's from a table. Since only
@@ -237,7 +215,6 @@ isVar (S "Var" : _, hd1 : _) = hd1
 isVar (_ : tl, _ : tl1) = isVar (tl, tl1)
 isVar ([], _) = []
 isVar (_, []) = []
->>>>>>> cecbd9d999 (Move to 2 layer document section rendering)
 
 -- | Get the bibliography from something that has a field.
 getBib :: (HasFields c) => [c] -> [Sentence]
@@ -284,7 +261,7 @@ getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
 
--- ciPlate is not currently used.
+-- ciPlate is not currently used. 
 -- | A common idea plate.
 -- ciPlate :: DLPlate (Constant [CI])
 -- ciPlate = preorderFold $ purePlate {

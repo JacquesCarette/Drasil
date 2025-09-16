@@ -17,6 +17,7 @@
 |IG          |Insulating Glass                   |
 |IM          |Instance Model                     |
 |LC          |Likely Change                      |
+|LDF         |Load Duration Factor               |
 |LG          |Laminated Glass                    |
 |LR          |Load Resistance                    |
 |LSF         |Load Share Factor                  |

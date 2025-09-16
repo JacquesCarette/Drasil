@@ -20,7 +20,7 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (pidC, concepts, defs)
+import Drasil.PDController.Concepts (pidC, concepts, defs, pidCI, proportionalCI, acronyms, pdControllerCI)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
@@ -113,9 +113,11 @@ motivation = foldlSent_ [S "The gains of a controller in an application" +:+
               S "must be tuned before the controller is ready for production"]
 
 background :: Sentence
-background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD/PID) is used",
-              S "in a variety of applications such as thermostats, automobile",
-              S "cruise-control, etc"]
+background = foldlSent_ [
+  S "Automatic process control with a controller ("
+    :+: short proportionalCI :+: S "/PI/" :+: short pdControllerCI :+: S "/" :+: short pidCI :+: S ") is used",
+  S "in a variety of applications such as thermostats, automobile",
+  S "cruise-control, etc"]
 
 -- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is added to symbolsAll as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
@@ -131,7 +133,7 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : map nw mathcon'
+  nw progName : map nw mathcon' ++ map nw acronyms
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

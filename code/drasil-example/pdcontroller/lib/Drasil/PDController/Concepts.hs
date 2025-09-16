@@ -1,16 +1,11 @@
 module Drasil.PDController.Concepts where
 
-import Drasil.Metadata
 import Language.Drasil
-
-import Data.Drasil.Concepts.Documentation
-       (assumption, goalStmt, physSyst, requirement, refBy, refName, srs, typUnc)
 
 acronyms :: [CI]
 acronyms
-  = [assumption, dataDefn, genDefn, goalStmt, inModel, physSyst, requirement, refBy, 
-     refName, srs, thModel, typUnc, pdControllerCI, proportionalCI, derivativeCI,
-     integralCI, pidCI]
+  = [pdControllerCI, proportionalCI, derivativeCI, integralCI, pidCI]
+
 pdControllerCI, proportionalCI, derivativeCI, integralCI, pidCI :: CI
 
 pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "proportional derivative")          "PD"            []

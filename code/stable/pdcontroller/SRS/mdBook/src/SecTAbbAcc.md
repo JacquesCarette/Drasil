@@ -11,7 +11,10 @@
 |IM           |Instance Model                     |
 |LC           |Likely Change                      |
 |ODE          |Ordinary Differential Equation     |
+|P            |proportional                       |
+|PD           |proportional derivative            |
 |PD Controller|PD Controller                      |
+|PID          |proportional integral derivative   |
 |PS           |Physical System Description        |
 |R            |Requirement                        |
 |RefBy        |Referenced by                      |

@@ -2,7 +2,11 @@ module Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat,
   vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   onCodeList, onStateList, on2StateLists, getInnerType, on2StateWrapped,
-  getNestDegree
+  getNestDegree,
+  -- * Applicative Helpers
+  liftA4,
+  -- * Sequencing Operators
+  sequence1_, sequence2_, sequence3_, sequence4_, unzipA2_
 ) where
 
 import Utils.Drasil (blank)
@@ -14,6 +18,7 @@ import Control.Applicative (liftA3)
 import Control.Monad (liftM2, liftM3)
 import Control.Monad.State (State)
 import Data.List (intersperse)
+import Data.Foldable (traverse_)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
   (<>), empty, isEmpty)
 
@@ -95,3 +100,44 @@ getInnerType _ = error "Attempt to extract inner type from a non-nested type"
 getNestDegree :: Integer -> C.CodeType -> Integer
 getNestDegree n (C.List t) = getNestDegree (n+1) t
 getNestDegree n _ = n
+
+-------------------------------
+-- Applicative Helpers
+
+liftA4 :: (Applicative f) => (a -> b -> c -> d -> e) -> f a -> f b -> f c -> f d -> f e
+liftA4 f a b c d = f <$> a <*> b <*> c <*> d
+
+-------------------------------
+-- Sequencing Operators
+--
+-- A lot of instances for classes in InterfaceCommon use @State s@
+-- as the underlying representation type. Moreover, instance that end
+-- up ignoring some info (EG: CodeInfoOO) still need to thread effects
+-- through in their instances. This leads to some silly-looking code like
+--
+-- @
+-- instance Comparison CodeInfoOO where
+--   x ?< y  = x *> y
+--   x ?<= y = x *> y
+-- @
+--
+-- This works for unary and binary operators, but ternary and above get 
+-- a bit ugly. The following functions provide a consistent API for implementing
+-- such instances.
+
+sequence1_ :: f () -> f ()
+sequence1_ = id
+
+sequence2_ :: Applicative f => f () -> f () -> f ()
+sequence2_ = (*>)
+
+sequence3_ :: Applicative f => f () -> f () -> f () -> f ()
+sequence3_ = liftA3 (\ _ _ _ -> ())
+
+sequence4_ :: Applicative f => f () -> f () -> f () -> f () -> f ()
+sequence4_ = liftA4 (\_ _ _ _ -> ())
+
+-- | Given a list of pairs of effectful values, perform all of the
+-- effects of the first components, followed by the second.
+unzipA2_ :: (Applicative f) => [(f a, f b)] -> f ()
+unzipA2_ xs = traverse_ fst xs *> traverse_ snd xs

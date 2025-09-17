@@ -11,7 +11,7 @@
 </span><span id="line-11"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-12"></span><span>
 </span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../deepseq-1.4.8.1/src/Control.DeepSeq.html#/Control.DeepSeq.html"><span class="hs-identifier">Control.DeepSeq</span></a></span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/Data.Data.html#/Data.Data.html"><span class="hs-identifier">Data.Data</span></a></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/Data.Data.html#/Data.Data.html"><span class="hs-identifier">Data.Data</span></a></span><span>
 </span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Time.Calendar.Days.html"><span class="hs-identifier">Data.Time.Calendar.Days</span></a></span><span>
 </span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Time.Clock.Internal.DiffTime.html"><span class="hs-identifier">Data.Time.Clock.Internal.DiffTime</span></a></span><span>
 </span><span id="line-17"></span><span>
@@ -229,7 +229,7 @@ MonadPlus m =&gt;
 gmapMo :: forall (m :: * -&gt; *).
 MonadPlus m =&gt;
 (forall d. Data d =&gt; d -&gt; m d) -&gt; AbsoluteTime -&gt; m AbsoluteTime
-</span><a href="../../base-4.18.2.1/src/Data.Data.html#Data/Data.Data.html#Data"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Data</span></a></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/Data.Typeable.Internal.html#Typeable/Data.Typeable.Internal.html#Typeable"><span class="hs-identifier hs-type">Typeable</span></a></span><span class="hs-special">)</span><span>
+</span><a href="../../base-4.18.3.0/src/Data.Data.html#Data/Data.Data.html#Data"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Data</span></a></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/Data.Typeable.Internal.html#Typeable/Data.Typeable.Internal.html#Typeable"><span class="hs-identifier hs-type">Typeable</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-22"></span><span>
 </span><span id="line-23"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="../../deepseq-1.4.8.1/src/Control.DeepSeq.html#NFData/Control.DeepSeq.html#NFData"><span class="hs-identifier hs-type">NFData</span></a></span><span> </span><span class="annot"><a href="Data.Time.Clock.Internal.AbsoluteTime.html#AbsoluteTime"><span class="hs-identifier hs-type">AbsoluteTime</span></a></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-24"></span><span>    </span><span id="local-6989586621679076121"><span class="annot"><span class="annottext">rnf :: AbsoluteTime -&gt; ()
@@ -252,15 +252,15 @@ forall a. NFData a =&gt; a -&gt; ()
 </span><a href="#local-6989586621679076124"><span class="hs-identifier hs-var">day</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DiffTime -&gt; AbsoluteTime
 </span><a href="Data.Time.Clock.Internal.AbsoluteTime.html#MkAbsoluteTime"><span class="hs-identifier hs-var">MkAbsoluteTime</span></a></span><span> </span><span class="annot"><span class="annottext">(DiffTime -&gt; AbsoluteTime) -&gt; DiffTime -&gt; AbsoluteTime
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; DiffTime
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; DiffTime
 forall a b. (Real a, Fractional b) =&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Real.html#realToFrac/GHC.Real.html#realToFrac"><span class="hs-identifier hs-var">realToFrac</span></a></span><span> </span><span class="annot"><span class="annottext">(Integer -&gt; DiffTime) -&gt; Integer -&gt; DiffTime
+</span><a href="../../base-4.18.3.0/src/GHC.Real.html#realToFrac/GHC.Real.html#realToFrac"><span class="hs-identifier hs-var">realToFrac</span></a></span><span> </span><span class="annot"><span class="annottext">(Integer -&gt; DiffTime) -&gt; Integer -&gt; DiffTime
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Day -&gt; Integer
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Day -&gt; Integer
 </span><a href="Data.Time.Calendar.Days.html#toModifiedJulianDay"><span class="hs-identifier hs-var">toModifiedJulianDay</span></a></span><span> </span><span class="annot"><span class="annottext">Day
 </span><a href="#local-6989586621679076124"><span class="hs-identifier hs-var">day</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">86400</span></span><span>
 </span><span id="line-32"></span><span>
 </span><span id="line-33"></span><span class="annot"><span class="hs-comment">-- | addAbsoluteTime a b = a + b</span></span><span>
@@ -272,7 +272,7 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="Data.Time.Clock.Internal.AbsoluteTime.html#MkAbsoluteTime"><span class="hs-identifier hs-var">MkAbsoluteTime</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DiffTime
 </span><a href="#local-6989586621679076128"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">DiffTime -&gt; DiffTime -&gt; DiffTime
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">DiffTime
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">DiffTime
 </span><a href="#local-6989586621679076127"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-36"></span><span>
 </span><span id="line-37"></span><span class="annot"><span class="hs-comment">-- | diffAbsoluteTime a b = a - b</span></span><span>
@@ -283,6 +283,6 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="#local-6989586621679076131"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DiffTime
 </span><a href="#local-6989586621679076130"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">DiffTime -&gt; DiffTime -&gt; DiffTime
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">DiffTime
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">DiffTime
 </span><a href="#local-6989586621679076131"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-40"></span></pre></body></html>

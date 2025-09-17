@@ -6,7 +6,7 @@
 </span><span id="line-6"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-7"></span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../deepseq-1.4.8.1/src/Control.DeepSeq.html#/Control.DeepSeq.html"><span class="hs-identifier">Control.DeepSeq</span></a></span><span>
-</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/Data.Data.html#/Data.Data.html"><span class="hs-identifier">Data.Data</span></a></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/Data.Data.html#/Data.Data.html"><span class="hs-identifier">Data.Data</span></a></span><span>
 </span><span id="line-10"></span><span>
 </span><span id="line-11"></span><span class="hs-keyword">data</span><span> </span><span id="CalendarDiffDays"><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-var">CalendarDiffDays</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="CalendarDiffDays"><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-var">CalendarDiffDays</span></a></span></span><span>
 </span><span id="line-12"></span><span>    </span><span class="hs-special">{</span><span> </span><span id="cdMonths"><span class="annot"><span class="annottext">CalendarDiffDays -&gt; Integer
@@ -211,9 +211,9 @@ gmapMo :: forall (m :: * -&gt; *).
 MonadPlus m =&gt;
 (forall d. Data d =&gt; d -&gt; m d)
 -&gt; CalendarDiffDays -&gt; m CalendarDiffDays
-</span><a href="../../base-4.18.2.1/src/Data.Data.html#Data/Data.Data.html#Data"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Data</span></a></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span>
+</span><a href="../../base-4.18.3.0/src/Data.Data.html#Data/Data.Data.html#Data"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Data</span></a></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span>
 </span><span id="line-19"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-comment">-- | @since 1.9.2</span></span><span>
-</span><span id="line-20"></span><span>          </span><span class="annot"><a href="../../base-4.18.2.1/src/Data.Typeable.Internal.html#Typeable/Data.Typeable.Internal.html#Typeable"><span class="hs-identifier hs-type">Typeable</span></a></span><span>
+</span><span id="line-20"></span><span>          </span><span class="annot"><a href="../../base-4.18.3.0/src/Data.Typeable.Internal.html#Typeable/Data.Typeable.Internal.html#Typeable"><span class="hs-identifier hs-type">Typeable</span></a></span><span>
 </span><span id="line-21"></span><span>        </span><span class="hs-special">)</span><span>
 </span><span id="line-22"></span><span>
 </span><span id="line-23"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="../../deepseq-1.4.8.1/src/Control.DeepSeq.html#NFData/Control.DeepSeq.html#NFData"><span class="hs-identifier hs-type">NFData</span></a></span><span> </span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-type">CalendarDiffDays</span></a></span><span> </span><span class="hs-keyword">where</span><span>
@@ -233,56 +233,56 @@ forall a b. a -&gt; b -&gt; b
 </span><span class="hs-operator hs-var">`seq`</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-25"></span><span>
 </span><span id="line-26"></span><span class="annot"><span class="hs-comment">-- | Additive</span></span><span>
-</span><span id="line-27"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679071654"><span id="local-6989586621679071658"><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Base.html#Semigroup/GHC.Base.html#Semigroup"><span class="hs-identifier hs-type">Semigroup</span></a></span><span> </span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-type">CalendarDiffDays</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-27"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679071654"><span id="local-6989586621679071658"><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Base.html#Semigroup/GHC.Base.html#Semigroup"><span class="hs-identifier hs-type">Semigroup</span></a></span><span> </span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-type">CalendarDiffDays</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-28"></span><span>    </span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-type">CalendarDiffDays</span></a></span><span> </span><span id="local-6989586621679071665"><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071665"><span class="hs-identifier hs-var">m1</span></a></span></span><span> </span><span id="local-6989586621679071666"><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071666"><span class="hs-identifier hs-var">d1</span></a></span></span><span> </span><span id="local-6989586621679071667"><span class="annot"><span class="annottext">&lt;&gt; :: CalendarDiffDays -&gt; CalendarDiffDays -&gt; CalendarDiffDays
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%3C%3E/GHC.Base.html#%3C%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;&gt;</span></a></span></span><span> </span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-type">CalendarDiffDays</span></a></span><span> </span><span id="local-6989586621679071668"><span class="annot"><span class="annottext">Integer
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%3C%3E/GHC.Base.html#%3C%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;&gt;</span></a></span></span><span> </span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-type">CalendarDiffDays</span></a></span><span> </span><span id="local-6989586621679071668"><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071668"><span class="hs-identifier hs-var">m2</span></a></span></span><span> </span><span id="local-6989586621679071669"><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071669"><span class="hs-identifier hs-var">d2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; CalendarDiffDays
 </span><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-var">CalendarDiffDays</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071665"><span class="hs-identifier hs-var">m1</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071668"><span class="hs-identifier hs-var">m2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071666"><span class="hs-identifier hs-var">d1</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071669"><span class="hs-identifier hs-var">d2</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-29"></span><span>
 </span><span id="line-30"></span><span class="annot"><span class="hs-comment">-- | Additive</span></span><span>
-</span><span id="line-31"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679071676"><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Base.html#Monoid/GHC.Base.html#Monoid"><span class="hs-identifier hs-type">Monoid</span></a></span><span> </span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-type">CalendarDiffDays</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-31"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679071676"><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Base.html#Monoid/GHC.Base.html#Monoid"><span class="hs-identifier hs-type">Monoid</span></a></span><span> </span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-type">CalendarDiffDays</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-32"></span><span>    </span><span id="local-6989586621679071680"><span class="annot"><span class="annottext">mempty :: CalendarDiffDays
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#mempty/GHC.Base.html#mempty"><span class="hs-identifier hs-var hs-var hs-var hs-var">mempty</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; CalendarDiffDays
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#mempty/GHC.Base.html#mempty"><span class="hs-identifier hs-var hs-var hs-var hs-var">mempty</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; CalendarDiffDays
 </span><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-var">CalendarDiffDays</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span>
 </span><span id="line-33"></span><span>    </span><span id="local-6989586621679071682"><span class="annot"><span class="annottext">mappend :: CalendarDiffDays -&gt; CalendarDiffDays -&gt; CalendarDiffDays
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#mappend/GHC.Base.html#mappend"><span class="hs-identifier hs-var hs-var hs-var hs-var">mappend</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CalendarDiffDays -&gt; CalendarDiffDays -&gt; CalendarDiffDays
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#mappend/GHC.Base.html#mappend"><span class="hs-identifier hs-var hs-var hs-var hs-var">mappend</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CalendarDiffDays -&gt; CalendarDiffDays -&gt; CalendarDiffDays
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%3C%3E/GHC.Base.html#%3C%3E"><span class="hs-operator hs-var">(&lt;&gt;)</span></a></span><span>
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%3C%3E/GHC.Base.html#%3C%3E"><span class="hs-operator hs-var">(&lt;&gt;)</span></a></span><span>
 </span><span id="line-34"></span><span>
-</span><span id="line-35"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679071684"><span id="local-6989586621679071689"><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Show.html#Show/GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a></span><span> </span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-type">CalendarDiffDays</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-35"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679071684"><span id="local-6989586621679071689"><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Show.html#Show/GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a></span><span> </span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-type">CalendarDiffDays</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-36"></span><span>    </span><span id="local-6989586621679071695"><span class="annot"><span class="annottext">show :: CalendarDiffDays -&gt; String
 </span><a href="#local-6989586621679071695"><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-type">CalendarDiffDays</span></a></span><span> </span><span id="local-6989586621679071697"><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071697"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679071698"><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071698"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;P&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; String
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; String
 forall a. Show a =&gt; a -&gt; String
-</span><a href="../../base-4.18.2.1/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><a href="../../base-4.18.3.0/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071697"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;M&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; String
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; String
 forall a. Show a =&gt; a -&gt; String
-</span><a href="../../base-4.18.2.1/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><a href="../../base-4.18.3.0/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071698"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;D&quot;</span></span><span>
 </span><span id="line-37"></span><span>
 </span><span id="line-38"></span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#calendarDay"><span class="hs-identifier hs-type">calendarDay</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-type">CalendarDiffDays</span></a></span><span>
@@ -323,10 +323,10 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-var">CalendarDiffDays</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071704"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071705"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071704"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><a href="#local-6989586621679071706"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-53"></span></pre></body></html>

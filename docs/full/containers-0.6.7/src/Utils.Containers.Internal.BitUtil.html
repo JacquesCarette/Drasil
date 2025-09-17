@@ -38,8 +38,8 @@
 </span><span id="line-38"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Containers.Internal.BitUtil.html#wordSize"><span class="hs-identifier">wordSize</span></a></span><span>
 </span><span id="line-39"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-40"></span><span>
-</span><span id="line-41"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/Data.Bits.html#/Data.Bits.html"><span class="hs-identifier">Data.Bits</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Bits.html#popCount/GHC.Bits.html#popCount"><span class="hs-identifier">popCount</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Bits.html#unsafeShiftL/GHC.Bits.html#unsafeShiftL"><span class="hs-identifier">unsafeShiftL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Bits.html#unsafeShiftR/GHC.Bits.html#unsafeShiftR"><span class="hs-identifier">unsafeShiftR</span></a></span><span>
-</span><span id="line-42"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Bits.html#countLeadingZeros/GHC.Bits.html#countLeadingZeros"><span class="hs-identifier">countLeadingZeros</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Bits.html#finiteBitSize/GHC.Bits.html#finiteBitSize"><span class="hs-identifier">finiteBitSize</span></a></span><span>
+</span><span id="line-41"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/Data.Bits.html#/Data.Bits.html"><span class="hs-identifier">Data.Bits</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Bits.html#popCount/GHC.Bits.html#popCount"><span class="hs-identifier">popCount</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Bits.html#unsafeShiftL/GHC.Bits.html#unsafeShiftL"><span class="hs-identifier">unsafeShiftL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Bits.html#unsafeShiftR/GHC.Bits.html#unsafeShiftR"><span class="hs-identifier">unsafeShiftR</span></a></span><span>
+</span><span id="line-42"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Bits.html#countLeadingZeros/GHC.Bits.html#countLeadingZeros"><span class="hs-identifier">countLeadingZeros</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Bits.html#finiteBitSize/GHC.Bits.html#finiteBitSize"><span class="hs-identifier">finiteBitSize</span></a></span><span>
 </span><span id="line-43"></span><span>    </span><span class="hs-special">)</span><span>
 </span><span id="line-44"></span><span>
 </span><span id="line-45"></span><span>
@@ -57,15 +57,15 @@
 </span><span id="line-57"></span><span>
 </span><span id="line-58"></span><span class="annot"><a href="Utils.Containers.Internal.BitUtil.html#bitcount"><span class="hs-identifier hs-type">bitcount</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Word</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
 </span><span id="line-59"></span><span id="bitcount"><span class="annot"><span class="annottext">bitcount :: Int -&gt; Word -&gt; Int
-</span><a href="Utils.Containers.Internal.BitUtil.html#bitcount"><span class="hs-identifier hs-var hs-var">bitcount</span></a></span></span><span> </span><span id="local-6989586621679175481"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679175481"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679175482"><span class="annot"><span class="annottext">Word
-</span><a href="#local-6989586621679175482"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679175481"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="Utils.Containers.Internal.BitUtil.html#bitcount"><span class="hs-identifier hs-var hs-var">bitcount</span></a></span></span><span> </span><span id="local-6989586621679175495"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679175495"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679175496"><span class="annot"><span class="annottext">Word
+</span><a href="#local-6989586621679175496"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679175495"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">Word -&gt; Int
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">Word -&gt; Int
 forall a. Bits a =&gt; a -&gt; Int
-</span><a href="../../base-4.18.2.1/src/GHC.Bits.html#popCount/GHC.Bits.html#popCount"><span class="hs-identifier hs-var">popCount</span></a></span><span> </span><span class="annot"><span class="annottext">Word
-</span><a href="#local-6989586621679175482"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><a href="../../base-4.18.3.0/src/GHC.Bits.html#popCount/GHC.Bits.html#popCount"><span class="hs-identifier hs-var">popCount</span></a></span><span> </span><span class="annot"><span class="annottext">Word
+</span><a href="#local-6989586621679175496"><span class="hs-identifier hs-var">x</span></a></span><span>
 </span><span id="line-60"></span><span class="hs-pragma">{-# INLINE</span><span> </span><span class="annot"><a href="Utils.Containers.Internal.BitUtil.html#bitcount"><span class="hs-pragma hs-type">bitcount</span></a></span><span> </span><span class="hs-pragma">#-}</span><span>
 </span><span id="line-61"></span><span>
 </span><span id="line-62"></span><span class="hs-comment">-- The highestBitMask implementation is based on</span><span>
@@ -75,19 +75,19 @@ forall a. Bits a =&gt; a -&gt; Int
 </span><span id="line-66"></span><span class="annot"><span class="hs-comment">-- | Return a word where only the highest bit is set.</span></span><span>
 </span><span id="line-67"></span><span class="annot"><a href="Utils.Containers.Internal.BitUtil.html#highestBitMask"><span class="hs-identifier hs-type">highestBitMask</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Word</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Word</span></span><span>
 </span><span id="line-68"></span><span id="highestBitMask"><span class="annot"><span class="annottext">highestBitMask :: Word -&gt; Word
-</span><a href="Utils.Containers.Internal.BitUtil.html#highestBitMask"><span class="hs-identifier hs-var hs-var">highestBitMask</span></a></span></span><span> </span><span id="local-6989586621679175484"><span class="annot"><span class="annottext">Word
-</span><a href="#local-6989586621679175484"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Word -&gt; Int -&gt; Word
+</span><a href="Utils.Containers.Internal.BitUtil.html#highestBitMask"><span class="hs-identifier hs-var hs-var">highestBitMask</span></a></span></span><span> </span><span id="local-6989586621679175498"><span class="annot"><span class="annottext">Word
+</span><a href="#local-6989586621679175498"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Word -&gt; Int -&gt; Word
 </span><a href="Utils.Containers.Internal.BitUtil.html#shiftLL"><span class="hs-identifier hs-var">shiftLL</span></a></span><span> </span><span class="annot"><span class="annottext">Word
 </span><span class="hs-number">1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
 </span><a href="Utils.Containers.Internal.BitUtil.html#wordSize"><span class="hs-identifier hs-var">wordSize</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Word -&gt; Int
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Word -&gt; Int
 forall b. FiniteBits b =&gt; b -&gt; Int
-</span><a href="../../base-4.18.2.1/src/GHC.Bits.html#countLeadingZeros/GHC.Bits.html#countLeadingZeros"><span class="hs-identifier hs-var">countLeadingZeros</span></a></span><span> </span><span class="annot"><span class="annottext">Word
-</span><a href="#local-6989586621679175484"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">)</span><span>
+</span><a href="../../base-4.18.3.0/src/GHC.Bits.html#countLeadingZeros/GHC.Bits.html#countLeadingZeros"><span class="hs-identifier hs-var">countLeadingZeros</span></a></span><span> </span><span class="annot"><span class="annottext">Word
+</span><a href="#local-6989586621679175498"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-69"></span><span class="hs-pragma">{-# INLINE</span><span> </span><span class="annot"><a href="Utils.Containers.Internal.BitUtil.html#highestBitMask"><span class="hs-pragma hs-type">highestBitMask</span></a></span><span> </span><span class="hs-pragma">#-}</span><span>
 </span><span id="line-70"></span><span>
 </span><span id="line-71"></span><span class="hs-comment">-- Right and left logical shifts.</span><span>
@@ -95,17 +95,17 @@ forall b. FiniteBits b =&gt; b -&gt; Int
 </span><span id="line-73"></span><span id="shiftRL"><span class="annot"><span class="annottext">shiftRL :: Word -&gt; Int -&gt; Word
 </span><a href="Utils.Containers.Internal.BitUtil.html#shiftRL"><span class="hs-identifier hs-var hs-var">shiftRL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Word -&gt; Int -&gt; Word
 forall a. Bits a =&gt; a -&gt; Int -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Bits.html#unsafeShiftR/GHC.Bits.html#unsafeShiftR"><span class="hs-identifier hs-var">unsafeShiftR</span></a></span><span>
+</span><a href="../../base-4.18.3.0/src/GHC.Bits.html#unsafeShiftR/GHC.Bits.html#unsafeShiftR"><span class="hs-identifier hs-var">unsafeShiftR</span></a></span><span>
 </span><span id="line-74"></span><span id="shiftLL"><span class="annot"><span class="annottext">shiftLL :: Word -&gt; Int -&gt; Word
 </span><a href="Utils.Containers.Internal.BitUtil.html#shiftLL"><span class="hs-identifier hs-var hs-var">shiftLL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Word -&gt; Int -&gt; Word
 forall a. Bits a =&gt; a -&gt; Int -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Bits.html#unsafeShiftL/GHC.Bits.html#unsafeShiftL"><span class="hs-identifier hs-var">unsafeShiftL</span></a></span><span>
+</span><a href="../../base-4.18.3.0/src/GHC.Bits.html#unsafeShiftL/GHC.Bits.html#unsafeShiftL"><span class="hs-identifier hs-var">unsafeShiftL</span></a></span><span>
 </span><span id="line-75"></span><span>
 </span><span id="line-76"></span><span class="hs-pragma">{-# INLINE</span><span> </span><span class="annot"><a href="Utils.Containers.Internal.BitUtil.html#wordSize"><span class="hs-pragma hs-type">wordSize</span></a></span><span> </span><span class="hs-pragma">#-}</span><span>
 </span><span id="line-77"></span><span class="annot"><a href="Utils.Containers.Internal.BitUtil.html#wordSize"><span class="hs-identifier hs-type">wordSize</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
 </span><span id="line-78"></span><span id="wordSize"><span class="annot"><span class="annottext">wordSize :: Int
 </span><a href="Utils.Containers.Internal.BitUtil.html#wordSize"><span class="hs-identifier hs-var hs-var">wordSize</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Word -&gt; Int
 forall b. FiniteBits b =&gt; b -&gt; Int
-</span><a href="../../base-4.18.2.1/src/GHC.Bits.html#finiteBitSize/GHC.Bits.html#finiteBitSize"><span class="hs-identifier hs-var">finiteBitSize</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Word
+</span><a href="../../base-4.18.3.0/src/GHC.Bits.html#finiteBitSize/GHC.Bits.html#finiteBitSize"><span class="hs-identifier hs-var">finiteBitSize</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Word
 </span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Word</span></span><span class="hs-special">)</span><span>
 </span><span id="line-79"></span></pre></body></html>

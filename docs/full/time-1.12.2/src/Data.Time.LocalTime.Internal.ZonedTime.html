@@ -11,7 +11,7 @@
 </span><span id="line-11"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-12"></span><span>
 </span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../deepseq-1.4.8.1/src/Control.DeepSeq.html#/Control.DeepSeq.html"><span class="hs-identifier">Control.DeepSeq</span></a></span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/Data.Data.html#/Data.Data.html"><span class="hs-identifier">Data.Data</span></a></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/Data.Data.html#/Data.Data.html"><span class="hs-identifier">Data.Data</span></a></span><span>
 </span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Time.Clock.Internal.UTCTime.html"><span class="hs-identifier">Data.Time.Clock.Internal.UTCTime</span></a></span><span>
 </span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Time.Clock.POSIX.html"><span class="hs-identifier">Data.Time.Clock.POSIX</span></a></span><span>
 </span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Time.LocalTime.Internal.LocalTime.html"><span class="hs-identifier">Data.Time.LocalTime.Internal.LocalTime</span></a></span><span>
@@ -190,7 +190,7 @@ MonadPlus m =&gt;
 gmapMo :: forall (m :: * -&gt; *).
 MonadPlus m =&gt;
 (forall d. Data d =&gt; d -&gt; m d) -&gt; ZonedTime -&gt; m ZonedTime
-</span><a href="../../base-4.18.2.1/src/Data.Data.html#Data/Data.Data.html#Data"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Data</span></a></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/Data.Typeable.Internal.html#Typeable/Data.Typeable.Internal.html#Typeable"><span class="hs-identifier hs-type">Typeable</span></a></span><span class="hs-special">)</span><span>
+</span><a href="../../base-4.18.3.0/src/Data.Data.html#Data/Data.Data.html#Data"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Data</span></a></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/Data.Typeable.Internal.html#Typeable/Data.Typeable.Internal.html#Typeable"><span class="hs-identifier hs-type">Typeable</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-30"></span><span>
 </span><span id="line-31"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="../../deepseq-1.4.8.1/src/Control.DeepSeq.html#NFData/Control.DeepSeq.html#NFData"><span class="hs-identifier hs-type">NFData</span></a></span><span> </span><span class="annot"><a href="Data.Time.LocalTime.Internal.ZonedTime.html#ZonedTime"><span class="hs-identifier hs-type">ZonedTime</span></a></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-32"></span><span>    </span><span id="local-6989586621679079935"><span class="annot"><span class="annottext">rnf :: ZonedTime -&gt; ()
@@ -229,30 +229,30 @@ forall a b. a -&gt; b -&gt; b
 </span><a href="#local-6989586621679079942"><span class="hs-identifier hs-var">t</span></a></span><span>
 </span><span id="line-39"></span><span>
 </span><span id="line-40"></span><span class="annot"><span class="hs-comment">-- | For the time zone, this only shows the name, or offset if the name is empty.</span></span><span>
-</span><span id="line-41"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679079946"><span id="local-6989586621679079951"><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Show.html#Show/GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a></span><span> </span><span class="annot"><a href="Data.Time.LocalTime.Internal.ZonedTime.html#ZonedTime"><span class="hs-identifier hs-type">ZonedTime</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-41"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679079946"><span id="local-6989586621679079951"><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Show.html#Show/GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a></span><span> </span><span class="annot"><a href="Data.Time.LocalTime.Internal.ZonedTime.html#ZonedTime"><span class="hs-identifier hs-type">ZonedTime</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-42"></span><span>    </span><span id="local-6989586621679079958"><span class="annot"><span class="annottext">show :: ZonedTime -&gt; String
 </span><a href="#local-6989586621679079958"><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Time.LocalTime.Internal.ZonedTime.html#ZonedTime"><span class="hs-identifier hs-type">ZonedTime</span></a></span><span> </span><span id="local-6989586621679079960"><span class="annot"><span class="annottext">LocalTime
 </span><a href="#local-6989586621679079960"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679079961"><span class="annot"><span class="annottext">TimeZone
 </span><a href="#local-6989586621679079961"><span class="hs-identifier hs-var">zone</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">LocalTime -&gt; String
 forall a. Show a =&gt; a -&gt; String
-</span><a href="../../base-4.18.2.1/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span> </span><span class="annot"><span class="annottext">LocalTime
+</span><a href="../../base-4.18.3.0/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span> </span><span class="annot"><span class="annottext">LocalTime
 </span><a href="#local-6989586621679079960"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">TimeZone -&gt; String
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">TimeZone -&gt; String
 forall a. Show a =&gt; a -&gt; String
-</span><a href="../../base-4.18.2.1/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span> </span><span class="annot"><span class="annottext">TimeZone
+</span><a href="../../base-4.18.3.0/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span> </span><span class="annot"><span class="annottext">TimeZone
 </span><a href="#local-6989586621679079961"><span class="hs-identifier hs-var">zone</span></a></span><span>
 </span><span id="line-43"></span><span>
 </span><span id="line-44"></span><span class="hs-comment">-- orphan instance</span><span>
-</span><span id="line-45"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679079963"><span id="local-6989586621679079968"><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Show.html#Show/GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a></span><span> </span><span class="annot"><a href="Data.Time.Clock.Internal.UTCTime.html#UTCTime"><span class="hs-identifier hs-type">UTCTime</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-45"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679079963"><span id="local-6989586621679079968"><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Show.html#Show/GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a></span><span> </span><span class="annot"><a href="Data.Time.Clock.Internal.UTCTime.html#UTCTime"><span class="hs-identifier hs-type">UTCTime</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-46"></span><span>    </span><span id="local-6989586621679079971"><span class="annot"><span class="annottext">show :: UTCTime -&gt; String
-</span><a href="../../base-4.18.2.1/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></a></span></span><span> </span><span id="local-6989586621679079972"><span class="annot"><span class="annottext">UTCTime
+</span><a href="../../base-4.18.3.0/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></a></span></span><span> </span><span id="local-6989586621679079972"><span class="annot"><span class="annottext">UTCTime
 </span><a href="#local-6989586621679079972"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ZonedTime -&gt; String
 forall a. Show a =&gt; a -&gt; String
-</span><a href="../../base-4.18.2.1/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TimeZone -&gt; UTCTime -&gt; ZonedTime
+</span><a href="../../base-4.18.3.0/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TimeZone -&gt; UTCTime -&gt; ZonedTime
 </span><a href="Data.Time.LocalTime.Internal.ZonedTime.html#utcToZonedTime"><span class="hs-identifier hs-var">utcToZonedTime</span></a></span><span> </span><span class="annot"><span class="annottext">TimeZone
 </span><a href="Data.Time.LocalTime.Internal.TimeZone.html#utc"><span class="hs-identifier hs-var">utc</span></a></span><span> </span><span class="annot"><span class="annottext">UTCTime
 </span><a href="#local-6989586621679079972"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span>
@@ -270,7 +270,7 @@ forall a. Show a =&gt; a -&gt; String
 </span><span id="line-52"></span><span>    </span><span class="annot"><span class="annottext">ZonedTime -&gt; IO ZonedTime
 forall a. a -&gt; IO a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#return/GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TimeZone -&gt; UTCTime -&gt; ZonedTime
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#return/GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TimeZone -&gt; UTCTime -&gt; ZonedTime
 </span><a href="Data.Time.LocalTime.Internal.ZonedTime.html#utcToZonedTime"><span class="hs-identifier hs-var">utcToZonedTime</span></a></span><span> </span><span class="annot"><span class="annottext">TimeZone
 </span><a href="#local-6989586621679079976"><span class="hs-identifier hs-var">zone</span></a></span><span> </span><span class="annot"><span class="annottext">UTCTime
 </span><a href="#local-6989586621679079974"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span>
@@ -286,7 +286,7 @@ forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span id="line-57"></span><span>    </span><span class="annot"><span class="annottext">ZonedTime -&gt; IO ZonedTime
 forall a. a -&gt; IO a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#return/GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TimeZone -&gt; UTCTime -&gt; ZonedTime
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#return/GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TimeZone -&gt; UTCTime -&gt; ZonedTime
 </span><a href="Data.Time.LocalTime.Internal.ZonedTime.html#utcToZonedTime"><span class="hs-identifier hs-var">utcToZonedTime</span></a></span><span> </span><span class="annot"><span class="annottext">TimeZone
 </span><a href="#local-6989586621679079979"><span class="hs-identifier hs-var">zone</span></a></span><span> </span><span class="annot"><span class="annottext">UTCTime
 </span><a href="#local-6989586621679079978"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span>

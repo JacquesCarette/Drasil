@@ -95,7 +95,7 @@ $cshow :: PrettyLevel -&gt; String
 show :: PrettyLevel -&gt; String
 $cshowList :: [PrettyLevel] -&gt; ShowS
 showList :: [PrettyLevel] -&gt; ShowS
-</span><a href="../../base-4.18.2.1/src/GHC.Show.html#Show/GHC.Show.html#Show"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></a></span></span></span></span><span class="hs-special">)</span><span>
+</span><a href="../../base-4.18.3.0/src/GHC.Show.html#Show/GHC.Show.html#Show"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></a></span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-39"></span><span>
 </span><span id="line-40"></span><span class="annot"><span class="hs-comment">-- | The &quot;normal&quot; (Level 0) of detail.</span></span><span>
 </span><span id="line-41"></span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#prettyNormal"><span class="hs-identifier hs-type">prettyNormal</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#PrettyLevel"><span class="hs-identifier hs-type">PrettyLevel</span></a></span><span>
@@ -108,7 +108,7 @@ showList :: [PrettyLevel] -&gt; ShowS
 </span><span id="line-45"></span><span class="hs-comment">-- the 'Show' class. Minimal complete definition is either 'pPrintPrec' or</span><span>
 </span><span id="line-46"></span><span class="hs-comment">-- 'pPrint'.</span><span>
 </span><span id="line-47"></span><span class="hs-keyword">class</span><span> </span><span id="Pretty"><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-var">Pretty</span></a></span></span><span> </span><span id="local-6989586621679050556"><span class="annot"><a href="#local-6989586621679050556"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-48"></span><span>  </span><span id="pPrintPrec"><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#pPrintPrec"><span class="hs-identifier hs-type">pPrintPrec</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#PrettyLevel"><span class="hs-identifier hs-type">PrettyLevel</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Real.html#Rational/GHC.Real.html#Rational"><span class="hs-identifier hs-type">Rational</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679050556"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Text.PrettyPrint.HughesPJ.html#Doc"><span class="hs-identifier hs-type">Doc</span></a></span><span>
+</span><span id="line-48"></span><span>  </span><span id="pPrintPrec"><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#pPrintPrec"><span class="hs-identifier hs-type">pPrintPrec</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#PrettyLevel"><span class="hs-identifier hs-type">PrettyLevel</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Real.html#Rational/GHC.Real.html#Rational"><span class="hs-identifier hs-type">Rational</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679050556"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Text.PrettyPrint.HughesPJ.html#Doc"><span class="hs-identifier hs-type">Doc</span></a></span><span>
 </span><span id="line-49"></span><span>  </span><span id="local-6989586621679050720"><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#pPrintPrec"><span class="hs-identifier hs-var hs-var">pPrintPrec</span></a></span><span> </span><span class="annot"><span class="annottext">PrettyLevel
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Rational
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Doc
@@ -127,16 +127,16 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; Rational -&gt; a -&gt; Doc
 </span><a href="#local-6989586621679050729"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#brackets"><span class="hs-identifier hs-var">brackets</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; ([a] -&gt; Doc) -&gt; [a] -&gt; Doc
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#fsep"><span class="hs-identifier hs-var">fsep</span></a></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; ([a] -&gt; [Doc]) -&gt; [a] -&gt; Doc
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 </span><a href="Text.PrettyPrint.HughesPJ.html#punctuate"><span class="hs-identifier hs-var">punctuate</span></a></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#comma"><span class="hs-identifier hs-var">comma</span></a></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; [Doc]) -&gt; ([a] -&gt; [Doc]) -&gt; [a] -&gt; [Doc]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Doc) -&gt; [a] -&gt; [Doc]
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Doc) -&gt; [a] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#map/GHC.Base.html#map"><span class="hs-identifier hs-var">map</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrettyLevel -&gt; Rational -&gt; a -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#map/GHC.Base.html#map"><span class="hs-identifier hs-var">map</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrettyLevel -&gt; Rational -&gt; a -&gt; Doc
 forall a. Pretty a =&gt; PrettyLevel -&gt; Rational -&gt; a -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJClass.html#pPrintPrec"><span class="hs-identifier hs-var">pPrintPrec</span></a></span><span> </span><span class="annot"><span class="annottext">PrettyLevel
 </span><a href="#local-6989586621679050729"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Rational
@@ -147,12 +147,12 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; Rational -&gt; a -&gt; Doc
 #endif
 </span><span>
 </span><span id="line-61"></span><span class="annot"><span class="hs-comment">-- | Pretty print a value with the 'prettyNormal' level.</span></span><span>
-</span><span id="line-62"></span><span id="local-6989586621679050564"><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#prettyShow"><span class="hs-identifier hs-type">prettyShow</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050564"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679050564"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Base.html#String/GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span></span><span>
+</span><span id="line-62"></span><span id="local-6989586621679050564"><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#prettyShow"><span class="hs-identifier hs-type">prettyShow</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050564"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679050564"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Base.html#String/GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span></span><span>
 </span><span id="line-63"></span><span id="prettyShow"><span class="annot"><span class="annottext">prettyShow :: forall a. Pretty a =&gt; a -&gt; String
 </span><a href="Text.PrettyPrint.HughesPJClass.html#prettyShow"><span class="hs-identifier hs-var hs-var">prettyShow</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; String
 </span><a href="Text.PrettyPrint.HughesPJ.html#render"><span class="hs-identifier hs-var">render</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; String) -&gt; (a -&gt; Doc) -&gt; a -&gt; String
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; Doc
 forall a. Pretty a =&gt; a -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJClass.html#pPrint"><span class="hs-identifier hs-var">pPrint</span></a></span><span>
 </span><span id="line-64"></span><span>
@@ -165,7 +165,7 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; Rational -&gt; a -&gt; Doc
 </span><a href="#local-6989586621679050742"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Rational
 </span><span class="hs-number">0</span></span><span>
 </span><span id="line-67"></span><span>
-</span><span id="line-68"></span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#appPrec"><span class="hs-identifier hs-type">appPrec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Real.html#Rational/GHC.Real.html#Rational"><span class="hs-identifier hs-type">Rational</span></a></span><span>
+</span><span id="line-68"></span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#appPrec"><span class="hs-identifier hs-type">appPrec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Real.html#Rational/GHC.Real.html#Rational"><span class="hs-identifier hs-type">Rational</span></a></span><span>
 </span><span id="line-69"></span><span id="appPrec"><span class="annot"><span class="annottext">appPrec :: Rational
 </span><a href="Text.PrettyPrint.HughesPJClass.html#appPrec"><span class="hs-identifier hs-var hs-var">appPrec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Rational
 </span><span class="hs-number">10</span></span><span>
@@ -204,17 +204,17 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; Rational -&gt; a -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJClass.html#pPrint"><span class="hs-identifier hs-var hs-var hs-var hs-var">pPrint</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#text"><span class="hs-identifier hs-var">text</span></a></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; (Bool -&gt; String) -&gt; Bool -&gt; Doc
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; String
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; String
 forall a. Show a =&gt; a -&gt; String
-</span><a href="../../base-4.18.2.1/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span>
+</span><a href="../../base-4.18.3.0/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span>
 </span><span id="line-88"></span><span>
 </span><span id="line-89"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679050809"><span id="local-6989586621679050814"><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="annot"><a href="../../ghc-prim-0.10.0/src/GHC.Types.html#Ordering/GHC.Types.html#Ordering"><span class="hs-identifier hs-type">Ordering</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679050818"><span class="annot"><span class="annottext">pPrint :: Ordering -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJClass.html#pPrint"><span class="hs-identifier hs-var hs-var hs-var hs-var">pPrint</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#text"><span class="hs-identifier hs-var">text</span></a></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; (Ordering -&gt; String) -&gt; Ordering -&gt; Doc
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">Ordering -&gt; String
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">Ordering -&gt; String
 forall a. Show a =&gt; a -&gt; String
-</span><a href="../../base-4.18.2.1/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span>
+</span><a href="../../base-4.18.3.0/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span>
 </span><span id="line-90"></span><span>
 </span><span id="line-91"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679050820"><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="annot"><a href="../../ghc-prim-0.10.0/src/GHC.Types.html#Char/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-92"></span><span>  </span><span id="local-6989586621679050825"><span class="annot"><span class="annottext">pPrint :: Char -&gt; Doc
@@ -225,21 +225,21 @@ forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#text"><span class="hs-identifier hs-var">text</span></a></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; ShowS -&gt; String -&gt; Doc
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">ShowS
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#./GHC.Base.html#."><span class="hs-operator hs-var">.</span></a></span><span> </span><span class="annot"><span class="annottext">ShowS
 forall a. Show a =&gt; a -&gt; String
-</span><a href="../../base-4.18.2.1/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span>
+</span><a href="../../base-4.18.3.0/src/GHC.Show.html#show/GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a></span><span>
 </span><span id="line-94"></span><span>
-</span><span id="line-95"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679050570"><span id="local-6989586621679050835"><span id="local-6989586621679050839"><span class="hs-special">(</span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050570"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Maybe.html#Maybe/GHC.Maybe.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050570"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-95"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679050570"><span id="local-6989586621679050835"><span id="local-6989586621679050839"><span class="hs-special">(</span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050570"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Maybe.html#Maybe/GHC.Maybe.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050570"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-96"></span><span>  </span><span id="local-6989586621679050846"><span class="annot"><span class="annottext">pPrintPrec :: PrettyLevel -&gt; Rational -&gt; Maybe a -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJClass.html#pPrintPrec"><span class="hs-identifier hs-var hs-var hs-var hs-var">pPrintPrec</span></a></span></span><span> </span><span class="annot"><span class="annottext">PrettyLevel
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Rational
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Maybe a
-</span><a href="../../base-4.18.2.1/src/GHC.Maybe.html#Nothing/GHC.Maybe.html#Nothing"><span class="hs-identifier hs-var">Nothing</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Maybe.html#Nothing/GHC.Maybe.html#Nothing"><span class="hs-identifier hs-var">Nothing</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#text"><span class="hs-identifier hs-var">text</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Nothing&quot;</span></span><span>
 </span><span id="line-97"></span><span>  </span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#pPrintPrec"><span class="hs-identifier hs-var">pPrintPrec</span></a></span><span> </span><span id="local-6989586621679050847"><span class="annot"><span class="annottext">PrettyLevel
 </span><a href="#local-6989586621679050847"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679050848"><span class="annot"><span class="annottext">Rational
-</span><a href="#local-6989586621679050848"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Maybe.html#Just/GHC.Maybe.html#Just"><span class="hs-identifier hs-type">Just</span></a></span><span> </span><span id="local-6989586621679050849"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679050848"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Maybe.html#Just/GHC.Maybe.html#Just"><span class="hs-identifier hs-type">Just</span></a></span><span> </span><span id="local-6989586621679050849"><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679050849"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-98"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJClass.html#prettyParen"><span class="hs-identifier hs-var">prettyParen</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Rational
@@ -248,7 +248,7 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.10.0/src/GHC.Classes.html#%3E/GHC.Classes.html#%3E"><span class="hs-operator hs-var">&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Rational
 </span><a href="Text.PrettyPrint.HughesPJClass.html#appPrec"><span class="hs-identifier hs-var">appPrec</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#text"><span class="hs-identifier hs-var">text</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Just&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#%3C%2B%3E"><span class="hs-operator hs-var">&lt;+&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">PrettyLevel -&gt; Rational -&gt; a -&gt; Doc
@@ -257,15 +257,15 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; Rational -&gt; a -&gt; Doc
 </span><a href="#local-6989586621679050847"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Rational
 </span><a href="Text.PrettyPrint.HughesPJClass.html#appPrec"><span class="hs-identifier hs-var">appPrec</span></a></span><span class="annot"><span class="annottext">Rational -&gt; Rational -&gt; Rational
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Rational
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Rational
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679050849"><span class="hs-identifier hs-var">x</span></a></span><span>
 </span><span id="line-99"></span><span>
-</span><span id="line-100"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679050578"><span id="local-6989586621679050579"><span id="local-6989586621679050857"><span id="local-6989586621679050861"><span class="hs-special">(</span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050578"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050579"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../base-4.18.2.1/src/Data.Either.html#Either/Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050578"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050579"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-100"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679050578"><span id="local-6989586621679050579"><span id="local-6989586621679050857"><span id="local-6989586621679050861"><span class="hs-special">(</span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050578"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050579"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#Pretty"><span class="hs-identifier hs-type">Pretty</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../base-4.18.3.0/src/Data.Either.html#Either/Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050578"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679050579"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-101"></span><span>  </span><span id="local-6989586621679050871"><span class="annot"><span class="annottext">pPrintPrec :: PrettyLevel -&gt; Rational -&gt; Either a b -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJClass.html#pPrintPrec"><span class="hs-identifier hs-var hs-var hs-var hs-var">pPrintPrec</span></a></span></span><span> </span><span id="local-6989586621679050872"><span class="annot"><span class="annottext">PrettyLevel
 </span><a href="#local-6989586621679050872"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679050873"><span class="annot"><span class="annottext">Rational
-</span><a href="#local-6989586621679050873"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../base-4.18.2.1/src/Data.Either.html#Left/Data.Either.html#Left"><span class="hs-identifier hs-type">Left</span></a></span><span> </span><span id="local-6989586621679050874"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679050873"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../base-4.18.3.0/src/Data.Either.html#Left/Data.Either.html#Left"><span class="hs-identifier hs-type">Left</span></a></span><span> </span><span id="local-6989586621679050874"><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679050874"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-102"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJClass.html#prettyParen"><span class="hs-identifier hs-var">prettyParen</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Rational
@@ -274,7 +274,7 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.10.0/src/GHC.Classes.html#%3E/GHC.Classes.html#%3E"><span class="hs-operator hs-var">&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Rational
 </span><a href="Text.PrettyPrint.HughesPJClass.html#appPrec"><span class="hs-identifier hs-var">appPrec</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#text"><span class="hs-identifier hs-var">text</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Left&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#%3C%2B%3E"><span class="hs-operator hs-var">&lt;+&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">PrettyLevel -&gt; Rational -&gt; a -&gt; Doc
@@ -283,12 +283,12 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; Rational -&gt; a -&gt; Doc
 </span><a href="#local-6989586621679050872"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Rational
 </span><a href="Text.PrettyPrint.HughesPJClass.html#appPrec"><span class="hs-identifier hs-var">appPrec</span></a></span><span class="annot"><span class="annottext">Rational -&gt; Rational -&gt; Rational
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Rational
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Rational
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679050874"><span class="hs-identifier hs-var">x</span></a></span><span>
 </span><span id="line-103"></span><span>  </span><span class="annot"><a href="Text.PrettyPrint.HughesPJClass.html#pPrintPrec"><span class="hs-identifier hs-var">pPrintPrec</span></a></span><span> </span><span id="local-6989586621679050875"><span class="annot"><span class="annottext">PrettyLevel
 </span><a href="#local-6989586621679050875"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679050876"><span class="annot"><span class="annottext">Rational
-</span><a href="#local-6989586621679050876"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../base-4.18.2.1/src/Data.Either.html#Right/Data.Either.html#Right"><span class="hs-identifier hs-type">Right</span></a></span><span> </span><span id="local-6989586621679050877"><span class="annot"><span class="annottext">b
+</span><a href="#local-6989586621679050876"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../base-4.18.3.0/src/Data.Either.html#Right/Data.Either.html#Right"><span class="hs-identifier hs-type">Right</span></a></span><span> </span><span id="local-6989586621679050877"><span class="annot"><span class="annottext">b
 </span><a href="#local-6989586621679050877"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-104"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJClass.html#prettyParen"><span class="hs-identifier hs-var">prettyParen</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Rational
@@ -297,7 +297,7 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.10.0/src/GHC.Classes.html#%3E/GHC.Classes.html#%3E"><span class="hs-operator hs-var">&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Rational
 </span><a href="Text.PrettyPrint.HughesPJClass.html#appPrec"><span class="hs-identifier hs-var">appPrec</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#text"><span class="hs-identifier hs-var">text</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Right&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#%3C%2B%3E"><span class="hs-operator hs-var">&lt;+&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">PrettyLevel -&gt; Rational -&gt; b -&gt; Doc
@@ -306,7 +306,7 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; Rational -&gt; a -&gt; Doc
 </span><a href="#local-6989586621679050875"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Rational
 </span><a href="Text.PrettyPrint.HughesPJClass.html#appPrec"><span class="hs-identifier hs-var">appPrec</span></a></span><span class="annot"><span class="annottext">Rational -&gt; Rational -&gt; Rational
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Rational
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Rational
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">b
 </span><a href="#local-6989586621679050877"><span class="hs-identifier hs-var">x</span></a></span><span>
 </span><span id="line-105"></span><span>
@@ -329,10 +329,10 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; [a] -&gt; Doc
 </span><span id="line-111"></span><span>    </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#parens"><span class="hs-identifier hs-var">parens</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#fsep"><span class="hs-identifier hs-var">fsep</span></a></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; [Doc] -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 </span><a href="Text.PrettyPrint.HughesPJ.html#punctuate"><span class="hs-identifier hs-var">punctuate</span></a></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#comma"><span class="hs-identifier hs-var">comma</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">PrettyLevel -&gt; a -&gt; Doc
 forall a. Pretty a =&gt; PrettyLevel -&gt; a -&gt; Doc
@@ -355,10 +355,10 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; a -&gt; Doc
 </span><span id="line-115"></span><span>    </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#parens"><span class="hs-identifier hs-var">parens</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#fsep"><span class="hs-identifier hs-var">fsep</span></a></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; [Doc] -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 </span><a href="Text.PrettyPrint.HughesPJ.html#punctuate"><span class="hs-identifier hs-var">punctuate</span></a></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#comma"><span class="hs-identifier hs-var">comma</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">PrettyLevel -&gt; a -&gt; Doc
 forall a. Pretty a =&gt; PrettyLevel -&gt; a -&gt; Doc
@@ -386,10 +386,10 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; a -&gt; Doc
 </span><span id="line-119"></span><span>    </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#parens"><span class="hs-identifier hs-var">parens</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#fsep"><span class="hs-identifier hs-var">fsep</span></a></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; [Doc] -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 </span><a href="Text.PrettyPrint.HughesPJ.html#punctuate"><span class="hs-identifier hs-var">punctuate</span></a></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#comma"><span class="hs-identifier hs-var">comma</span></a></span><span>
 </span><span id="line-120"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">PrettyLevel -&gt; a -&gt; Doc
@@ -423,10 +423,10 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; a -&gt; Doc
 </span><span id="line-124"></span><span>    </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#parens"><span class="hs-identifier hs-var">parens</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#fsep"><span class="hs-identifier hs-var">fsep</span></a></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; [Doc] -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 </span><a href="Text.PrettyPrint.HughesPJ.html#punctuate"><span class="hs-identifier hs-var">punctuate</span></a></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#comma"><span class="hs-identifier hs-var">comma</span></a></span><span>
 </span><span id="line-125"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">PrettyLevel -&gt; a -&gt; Doc
@@ -465,10 +465,10 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; a -&gt; Doc
 </span><span id="line-129"></span><span>    </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#parens"><span class="hs-identifier hs-var">parens</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#fsep"><span class="hs-identifier hs-var">fsep</span></a></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; [Doc] -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 </span><a href="Text.PrettyPrint.HughesPJ.html#punctuate"><span class="hs-identifier hs-var">punctuate</span></a></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#comma"><span class="hs-identifier hs-var">comma</span></a></span><span>
 </span><span id="line-130"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">PrettyLevel -&gt; a -&gt; Doc
@@ -514,10 +514,10 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; a -&gt; Doc
 </span><span id="line-136"></span><span>    </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#parens"><span class="hs-identifier hs-var">parens</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#fsep"><span class="hs-identifier hs-var">fsep</span></a></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; [Doc] -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 </span><a href="Text.PrettyPrint.HughesPJ.html#punctuate"><span class="hs-identifier hs-var">punctuate</span></a></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#comma"><span class="hs-identifier hs-var">comma</span></a></span><span>
 </span><span id="line-137"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">PrettyLevel -&gt; a -&gt; Doc
@@ -568,10 +568,10 @@ forall a. Pretty a =&gt; PrettyLevel -&gt; a -&gt; Doc
 </span><span id="line-143"></span><span>    </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#parens"><span class="hs-identifier hs-var">parens</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#fsep"><span class="hs-identifier hs-var">fsep</span></a></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; [Doc] -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 </span><a href="Text.PrettyPrint.HughesPJ.html#punctuate"><span class="hs-identifier hs-var">punctuate</span></a></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Text.PrettyPrint.HughesPJ.html#comma"><span class="hs-identifier hs-var">comma</span></a></span><span>
 </span><span id="line-144"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">PrettyLevel -&gt; a -&gt; Doc

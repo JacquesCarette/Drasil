@@ -17,7 +17,7 @@
 </span><span id="line-17"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#lookup"><span class="hs-identifier">Language.Haskell.TH.Lib.Map.lookup</span></a></span><span>
 </span><span id="line-18"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/Prelude.html#/Prelude.html"><span class="hs-identifier">Prelude</span></a></span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/Prelude.html#/Prelude.html"><span class="hs-identifier">Prelude</span></a></span><span>
 </span><span id="line-21"></span><span>
 </span><span id="line-22"></span><span class="hs-keyword">data</span><span> </span><span id="Map"><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#Map"><span class="hs-identifier hs-var">Map</span></a></span></span><span> </span><span id="local-6989586621679165629"><span class="annot"><a href="#local-6989586621679165629"><span class="hs-identifier hs-type">k</span></a></span></span><span> </span><span id="local-6989586621679165630"><span class="annot"><a href="#local-6989586621679165630"><span class="hs-identifier hs-type">a</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="Bin"><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span></span><span> </span><span class="hs-pragma">{-# UNPACK</span><span> </span><span class="hs-pragma">#-}</span><span> </span><span class="hs-glyph">!</span><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#Size"><span class="hs-identifier hs-type">Size</span></a></span><span> </span><span class="hs-glyph">!</span><span class="annot"><a href="#local-6989586621679165629"><span class="hs-identifier hs-type">k</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165630"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">!</span><span class="hs-special">(</span><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#Map"><span class="hs-identifier hs-type">Map</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165629"><span class="hs-identifier hs-type">k</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165630"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">!</span><span class="hs-special">(</span><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#Map"><span class="hs-identifier hs-type">Map</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165629"><span class="hs-identifier hs-type">k</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165630"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-23"></span><span>              </span><span class="hs-glyph">|</span><span> </span><span id="Tip"><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#Tip"><span class="hs-identifier hs-var">Tip</span></a></span></span><span>
@@ -61,7 +61,7 @@ forall k a. Map k a
 </span><a href="#local-6989586621679165668"><span class="hs-identifier hs-var">sz</span></a></span><span>
 </span><span id="line-38"></span><span class="hs-pragma">{-# INLINE</span><span> </span><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#size"><span class="hs-pragma hs-type">size</span></a></span><span> </span><span class="hs-pragma">#-}</span><span>
 </span><span id="line-39"></span><span>
-</span><span id="line-40"></span><span id="local-6989586621679165635"><span id="local-6989586621679165636"><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#lookup"><span class="hs-identifier hs-type">lookup</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.10.0/src/GHC.Classes.html#Ord/GHC.Classes.html#Ord"><span class="hs-identifier hs-type">Ord</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165635"><span class="hs-identifier hs-type">k</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679165635"><span class="hs-identifier hs-type">k</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#Map"><span class="hs-identifier hs-type">Map</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165635"><span class="hs-identifier hs-type">k</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165636"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Maybe.html#Maybe/GHC.Maybe.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165636"><span class="hs-identifier hs-type">a</span></a></span></span></span><span>
+</span><span id="line-40"></span><span id="local-6989586621679165635"><span id="local-6989586621679165636"><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#lookup"><span class="hs-identifier hs-type">lookup</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.10.0/src/GHC.Classes.html#Ord/GHC.Classes.html#Ord"><span class="hs-identifier hs-type">Ord</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165635"><span class="hs-identifier hs-type">k</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679165635"><span class="hs-identifier hs-type">k</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#Map"><span class="hs-identifier hs-type">Map</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165635"><span class="hs-identifier hs-type">k</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165636"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Maybe.html#Maybe/GHC.Maybe.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679165636"><span class="hs-identifier hs-type">a</span></a></span></span></span><span>
 </span><span id="line-41"></span><span id="lookup"><span class="annot"><span class="annottext">lookup :: forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><a href="Language.Haskell.TH.Lib.Map.html#lookup"><span class="hs-identifier hs-var hs-var">lookup</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">k -&gt; Map k a -&gt; Maybe a
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
@@ -72,7 +72,7 @@ forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Map t a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Tip"><span class="hs-identifier hs-var">Tip</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe a
 forall a. Maybe a
-</span><a href="../../base-4.18.2.1/src/GHC.Maybe.html#Nothing/GHC.Maybe.html#Nothing"><span class="hs-identifier hs-var">Nothing</span></a></span><span>
+</span><a href="../../base-4.18.3.0/src/GHC.Maybe.html#Nothing/GHC.Maybe.html#Nothing"><span class="hs-identifier hs-var">Nothing</span></a></span><span>
 </span><span id="line-44"></span><span>    </span><span class="annot"><a href="#local-6989586621679165671"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="hs-glyph">!</span><span id="local-6989586621679165677"><span class="annot"><span class="annottext">t
 </span><a href="#local-6989586621679165677"><span class="hs-identifier hs-var">k</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-type">Bin</span></a></span><span> </span><span class="annot"><span class="annottext">Size
 </span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679165678"><span class="annot"><span class="annottext">t
@@ -97,7 +97,7 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Ordering
 </span><span id="line-47"></span><span>      </span><span class="annot"><span class="annottext">Ordering
 </span><a href="../../ghc-prim-0.10.0/src/GHC.Types.html#EQ/GHC.Types.html#EQ"><span class="hs-identifier hs-var">EQ</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">a -&gt; Maybe a
 forall a. a -&gt; Maybe a
-</span><a href="../../base-4.18.2.1/src/GHC.Maybe.html#Just/GHC.Maybe.html#Just"><span class="hs-identifier hs-var">Just</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="../../base-4.18.3.0/src/GHC.Maybe.html#Just/GHC.Maybe.html#Just"><span class="hs-identifier hs-var">Just</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165679"><span class="hs-identifier hs-var">x</span></a></span><span>
 </span><span id="line-48"></span><span class="hs-pragma">{-# INLINABLE</span><span> </span><span class="annot"><a href="Language.Haskell.TH.Lib.Map.html#lookup"><span class="hs-pragma hs-type">lookup</span></a></span><span> </span><span class="hs-pragma">#-}</span><span>
 </span><span id="line-49"></span><span>
@@ -283,13 +283,13 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.10.0/src/GHC.Classes.html#%3C/GHC.Classes.html#%3C"><span class="hs-operator hs-var">&lt;</span></a></span><span> </span><span class="annot"><span class="annottext">Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#ratio"><span class="hs-identifier hs-var">ratio</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165759"><span class="hs-identifier hs-var">lls</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165755"><span class="hs-identifier hs-var">ls</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165756"><span class="hs-identifier hs-var">lk</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165757"><span class="hs-identifier hs-var">lx</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
@@ -298,7 +298,7 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165761"><span class="hs-identifier hs-var">lrs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165744"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165745"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
@@ -306,12 +306,12 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 forall k a. Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Tip"><span class="hs-identifier hs-var">Tip</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-72"></span><span>             </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#otherwise/GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#otherwise/GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165755"><span class="hs-identifier hs-var">ls</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165762"><span class="hs-identifier hs-var">lrk</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165763"><span class="hs-identifier hs-var">lrx</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
@@ -319,10 +319,10 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165759"><span class="hs-identifier hs-var">lls</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
 forall k a. Map k a -&gt; Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#size"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165764"><span class="hs-identifier hs-var">lrl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
@@ -334,7 +334,7 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
 forall k a. Map k a -&gt; Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#size"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165765"><span class="hs-identifier hs-var">lrr</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
@@ -357,7 +357,7 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165770"><span class="hs-identifier hs-var">rs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165744"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165745"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
@@ -377,7 +377,7 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.10.0/src/GHC.Classes.html#%3E/GHC.Classes.html#%3E"><span class="hs-operator hs-var">&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#delta"><span class="hs-identifier hs-var">delta</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165770"><span class="hs-identifier hs-var">rs</span></a></span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165774"><span class="hs-identifier hs-var">ll</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165775"><span class="hs-identifier hs-var">lr</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
@@ -398,16 +398,16 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.10.0/src/GHC.Classes.html#%3C/GHC.Classes.html#%3C"><span class="hs-operator hs-var">&lt;</span></a></span><span> </span><span class="annot"><span class="annottext">Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#ratio"><span class="hs-identifier hs-var">ratio</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165778"><span class="hs-identifier hs-var">lls</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165771"><span class="hs-identifier hs-var">ls</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165770"><span class="hs-identifier hs-var">rs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165772"><span class="hs-identifier hs-var">lk</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165773"><span class="hs-identifier hs-var">lx</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
@@ -416,25 +416,25 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165770"><span class="hs-identifier hs-var">rs</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165779"><span class="hs-identifier hs-var">lrs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165744"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165745"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165775"><span class="hs-identifier hs-var">lr</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165747"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-81"></span><span>                     </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#otherwise/GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#otherwise/GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165771"><span class="hs-identifier hs-var">ls</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165770"><span class="hs-identifier hs-var">rs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165780"><span class="hs-identifier hs-var">lrk</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165781"><span class="hs-identifier hs-var">lrx</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
@@ -442,10 +442,10 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165778"><span class="hs-identifier hs-var">lls</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
 forall k a. Map k a -&gt; Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#size"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165782"><span class="hs-identifier hs-var">lrl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
@@ -457,10 +457,10 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165770"><span class="hs-identifier hs-var">rs</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
 forall k a. Map k a -&gt; Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#size"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165783"><span class="hs-identifier hs-var">lrr</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
@@ -472,18 +472,18 @@ forall k a. Map k a -&gt; Size
 </span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Map k a
 forall a. HasCallStack =&gt; [Char] -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Err.html#error/GHC.Err.html#error"><span class="hs-identifier hs-var">error</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="../../base-4.18.3.0/src/GHC.Err.html#error/GHC.Err.html#error"><span class="hs-identifier hs-var">error</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;Failure in Data.Map.balanceL&quot;</span></span><span>
 </span><span id="line-83"></span><span>              </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#otherwise/GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#otherwise/GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165771"><span class="hs-identifier hs-var">ls</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165770"><span class="hs-identifier hs-var">rs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165744"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165745"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
@@ -608,13 +608,13 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.10.0/src/GHC.Classes.html#%3C/GHC.Classes.html#%3C"><span class="hs-operator hs-var">&lt;</span></a></span><span> </span><span class="annot"><span class="annottext">Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#ratio"><span class="hs-identifier hs-var">ratio</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165847"><span class="hs-identifier hs-var">rrs</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165837"><span class="hs-identifier hs-var">rs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165838"><span class="hs-identifier hs-var">rk</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165839"><span class="hs-identifier hs-var">rx</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
@@ -622,7 +622,7 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165841"><span class="hs-identifier hs-var">rls</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165826"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165827"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
@@ -631,12 +631,12 @@ forall k a. Map k a
 </span><a href="#local-6989586621679165840"><span class="hs-identifier hs-var">rl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165846"><span class="hs-identifier hs-var">rr</span></a></span><span>
 </span><span id="line-95"></span><span>             </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#otherwise/GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#otherwise/GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165837"><span class="hs-identifier hs-var">rs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165842"><span class="hs-identifier hs-var">rlk</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165843"><span class="hs-identifier hs-var">rlx</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
@@ -644,7 +644,7 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
 forall k a. Map k a -&gt; Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#size"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165844"><span class="hs-identifier hs-var">rll</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
@@ -657,10 +657,10 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165847"><span class="hs-identifier hs-var">rrs</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
 forall k a. Map k a -&gt; Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#size"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165845"><span class="hs-identifier hs-var">rlr</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
@@ -682,7 +682,7 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165848"><span class="hs-identifier hs-var">ls</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165826"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165827"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
@@ -702,7 +702,7 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.10.0/src/GHC.Classes.html#%3E/GHC.Classes.html#%3E"><span class="hs-operator hs-var">&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#delta"><span class="hs-identifier hs-var">delta</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165848"><span class="hs-identifier hs-var">ls</span></a></span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165852"><span class="hs-identifier hs-var">rl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165853"><span class="hs-identifier hs-var">rr</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
@@ -723,16 +723,16 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.10.0/src/GHC.Classes.html#%3C/GHC.Classes.html#%3C"><span class="hs-operator hs-var">&lt;</span></a></span><span> </span><span class="annot"><span class="annottext">Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#ratio"><span class="hs-identifier hs-var">ratio</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165859"><span class="hs-identifier hs-var">rrs</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165848"><span class="hs-identifier hs-var">ls</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165849"><span class="hs-identifier hs-var">rs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165850"><span class="hs-identifier hs-var">rk</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165851"><span class="hs-identifier hs-var">rx</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
@@ -740,10 +740,10 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165848"><span class="hs-identifier hs-var">ls</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165854"><span class="hs-identifier hs-var">rls</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165826"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165827"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
@@ -751,15 +751,15 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="#local-6989586621679165852"><span class="hs-identifier hs-var">rl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165853"><span class="hs-identifier hs-var">rr</span></a></span><span>
 </span><span id="line-104"></span><span>                     </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#otherwise/GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#otherwise/GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165848"><span class="hs-identifier hs-var">ls</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165849"><span class="hs-identifier hs-var">rs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165855"><span class="hs-identifier hs-var">rlk</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165856"><span class="hs-identifier hs-var">rlx</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
@@ -767,10 +767,10 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165848"><span class="hs-identifier hs-var">ls</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
 forall k a. Map k a -&gt; Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#size"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165857"><span class="hs-identifier hs-var">rll</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
@@ -782,10 +782,10 @@ forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165859"><span class="hs-identifier hs-var">rrs</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Map k a -&gt; Size
 forall k a. Map k a -&gt; Size
 </span><a href="Language.Haskell.TH.Lib.Map.html#size"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><a href="#local-6989586621679165858"><span class="hs-identifier hs-var">rlr</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
@@ -797,18 +797,18 @@ forall k a. Map k a -&gt; Size
 </span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Map k a
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Map k a
 forall a. HasCallStack =&gt; [Char] -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Err.html#error/GHC.Err.html#error"><span class="hs-identifier hs-var">error</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="../../base-4.18.3.0/src/GHC.Err.html#error/GHC.Err.html#error"><span class="hs-identifier hs-var">error</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;Failure in Data.Map.balanceR&quot;</span></span><span>
 </span><span id="line-106"></span><span>              </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#otherwise/GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#otherwise/GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 forall k a. Size -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a -&gt; Map k a
 </span><a href="Language.Haskell.TH.Lib.Map.html#Bin"><span class="hs-identifier hs-var">Bin</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Size
 </span><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165848"><span class="hs-identifier hs-var">ls</span></a></span><span class="annot"><span class="annottext">Size -&gt; Size -&gt; Size
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Size
 </span><a href="#local-6989586621679165849"><span class="hs-identifier hs-var">rs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">k
 </span><a href="#local-6989586621679165826"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679165827"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Map k a

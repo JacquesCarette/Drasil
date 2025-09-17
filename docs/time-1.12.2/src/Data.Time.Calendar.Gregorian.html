@@ -112,7 +112,7 @@ $bYearMonthDay :: Year -&gt; MonthOfYear -&gt; MonthOfYear -&gt; Day
 </span><span id="line-75"></span><span>
 </span><span id="line-76"></span><span class="hs-comment">-- | Convert from proleptic Gregorian calendar.</span><span>
 </span><span id="line-77"></span><span class="hs-comment">-- Invalid values will return Nothing</span><span>
-</span><span id="line-78"></span><span class="annot"><a href="Data.Time.Calendar.Gregorian.html#fromGregorianValid"><span class="hs-identifier hs-type">fromGregorianValid</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Data.Time.Calendar.Types.html#Year"><span class="hs-identifier hs-type">Year</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Data.Time.Calendar.Types.html#MonthOfYear"><span class="hs-identifier hs-type">MonthOfYear</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Data.Time.Calendar.Types.html#DayOfMonth"><span class="hs-identifier hs-type">DayOfMonth</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Maybe.html#Maybe/GHC.Maybe.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a></span><span> </span><span class="annot"><a href="Data.Time.Calendar.Days.html#Day"><span class="hs-identifier hs-type">Day</span></a></span><span>
+</span><span id="line-78"></span><span class="annot"><a href="Data.Time.Calendar.Gregorian.html#fromGregorianValid"><span class="hs-identifier hs-type">fromGregorianValid</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Data.Time.Calendar.Types.html#Year"><span class="hs-identifier hs-type">Year</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Data.Time.Calendar.Types.html#MonthOfYear"><span class="hs-identifier hs-type">MonthOfYear</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Data.Time.Calendar.Types.html#DayOfMonth"><span class="hs-identifier hs-type">DayOfMonth</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Maybe.html#Maybe/GHC.Maybe.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a></span><span> </span><span class="annot"><a href="Data.Time.Calendar.Days.html#Day"><span class="hs-identifier hs-type">Day</span></a></span><span>
 </span><span id="line-79"></span><span id="fromGregorianValid"><span class="annot"><span class="annottext">fromGregorianValid :: Year -&gt; MonthOfYear -&gt; MonthOfYear -&gt; Maybe Day
 </span><a href="Data.Time.Calendar.Gregorian.html#fromGregorianValid"><span class="hs-identifier hs-var hs-var">fromGregorianValid</span></a></span></span><span> </span><span id="local-6989586621679073373"><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073373"><span class="hs-identifier hs-var">year</span></a></span></span><span> </span><span id="local-6989586621679073374"><span class="annot"><span class="annottext">MonthOfYear
@@ -131,7 +131,7 @@ $bYearMonthDay :: Year -&gt; MonthOfYear -&gt; MonthOfYear -&gt; Day
 </span><a href="#local-6989586621679073376"><span class="hs-identifier hs-var">doy</span></a></span><span>
 </span><span id="line-82"></span><span>
 </span><span id="line-83"></span><span class="annot"><span class="hs-comment">-- | Show in ISO 8601 format (yyyy-mm-dd)</span></span><span>
-</span><span id="line-84"></span><span class="annot"><a href="Data.Time.Calendar.Gregorian.html#showGregorian"><span class="hs-identifier hs-type">showGregorian</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Data.Time.Calendar.Days.html#Day"><span class="hs-identifier hs-type">Day</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Base.html#String/GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span>
+</span><span id="line-84"></span><span class="annot"><a href="Data.Time.Calendar.Gregorian.html#showGregorian"><span class="hs-identifier hs-type">showGregorian</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Data.Time.Calendar.Days.html#Day"><span class="hs-identifier hs-type">Day</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Base.html#String/GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span>
 </span><span id="line-85"></span><span id="showGregorian"><span class="annot"><span class="annottext">showGregorian :: Day -&gt; String
 </span><a href="Data.Time.Calendar.Gregorian.html#showGregorian"><span class="hs-identifier hs-var hs-var">showGregorian</span></a></span></span><span> </span><span id="local-6989586621679073379"><span class="annot"><span class="annottext">Day
 </span><a href="#local-6989586621679073379"><span class="hs-identifier hs-var">date</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year -&gt; String
@@ -139,18 +139,18 @@ forall t. ShowPadded t =&gt; t -&gt; String
 </span><a href="Data.Time.Calendar.Private.html#show4"><span class="hs-identifier hs-var">show4</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073381"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;-&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MonthOfYear -&gt; String
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MonthOfYear -&gt; String
 forall t. ShowPadded t =&gt; t -&gt; String
 </span><a href="Data.Time.Calendar.Private.html#show2"><span class="hs-identifier hs-var">show2</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
 </span><a href="#local-6989586621679073383"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;-&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MonthOfYear -&gt; String
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%2B%2B/GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MonthOfYear -&gt; String
 forall t. ShowPadded t =&gt; t -&gt; String
 </span><a href="Data.Time.Calendar.Private.html#show2"><span class="hs-identifier hs-var">show2</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
 </span><a href="#local-6989586621679073384"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span>
@@ -178,25 +178,25 @@ forall t. ShowPadded t =&gt; t -&gt; String
 </span><a href="#local-6989586621679073389"><span class="hs-identifier hs-var">m</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073388"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Integral a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Real.html#div/GHC.Real.html#div"><span class="hs-identifier hs-var">div</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Real.html#div/GHC.Real.html#div"><span class="hs-identifier hs-var">div</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073389"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">12</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Year -&gt; MonthOfYear
 forall a b. (Integral a, Num b) =&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Real.html#fromIntegral/GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
+</span><a href="../../base-4.18.3.0/src/GHC.Real.html#fromIntegral/GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Integral a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Real.html#mod/GHC.Real.html#mod"><span class="hs-identifier hs-var">mod</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Real.html#mod/GHC.Real.html#mod"><span class="hs-identifier hs-var">mod</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073389"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">12</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MonthOfYear -&gt; MonthOfYear -&gt; MonthOfYear
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
 </span><span id="line-95"></span><span>
 </span><span id="line-96"></span><span class="annot"><a href="Data.Time.Calendar.Gregorian.html#addGregorianMonths"><span class="hs-identifier hs-type">addGregorianMonths</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Data.Time.Calendar.Days.html#Day"><span class="hs-identifier hs-type">Day</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Time.Calendar.Types.html#Year"><span class="hs-identifier hs-type">Year</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Time.Calendar.Types.html#MonthOfYear"><span class="hs-identifier hs-type">MonthOfYear</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Time.Calendar.Types.html#DayOfMonth"><span class="hs-identifier hs-type">DayOfMonth</span></a></span><span class="hs-special">)</span><span>
@@ -220,10 +220,10 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="Data.Time.Calendar.Gregorian.html#rolloverMonths"><span class="hs-identifier hs-var">rolloverMonths</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073399"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">MonthOfYear -&gt; Year
 forall a b. (Integral a, Num b) =&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Real.html#fromIntegral/GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
+</span><a href="../../base-4.18.3.0/src/GHC.Real.html#fromIntegral/GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
 </span><a href="#local-6989586621679073400"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073394"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-101"></span><span>
 </span><span id="line-102"></span><span class="hs-comment">-- | Add months, with days past the last day of the month clipped to the last day.</span><span>
@@ -255,10 +255,10 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="#local-6989586621679073410"><span class="hs-identifier hs-var">day</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Year -&gt; Day -&gt; Day
 </span><a href="Data.Time.Calendar.Days.html#addDays"><span class="hs-identifier hs-var">addDays</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MonthOfYear -&gt; Year
 forall a b. (Integral a, Num b) =&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Real.html#fromIntegral/GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
+</span><a href="../../base-4.18.3.0/src/GHC.Real.html#fromIntegral/GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
 </span><a href="#local-6989586621679073412"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year -&gt; MonthOfYear -&gt; MonthOfYear -&gt; Day
 </span><a href="Data.Time.Calendar.Gregorian.html#fromGregorian"><span class="hs-identifier hs-var">fromGregorian</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073413"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
@@ -282,7 +282,7 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="Data.Time.Calendar.Gregorian.html#addGregorianMonthsClip"><span class="hs-identifier hs-var">addGregorianMonthsClip</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073415"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">12</span></span><span class="hs-special">)</span><span>
 </span><span id="line-120"></span><span>
 </span><span id="line-121"></span><span class="hs-comment">-- | Add years, matching month and day, with Feb 29th rolled over to Mar 1st if necessary.</span><span>
@@ -294,7 +294,7 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="Data.Time.Calendar.Gregorian.html#addGregorianMonthsRollOver"><span class="hs-identifier hs-var">addGregorianMonthsRollOver</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073417"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">12</span></span><span class="hs-special">)</span><span>
 </span><span id="line-125"></span><span>
 </span><span id="line-126"></span><span class="annot"><span class="hs-comment">-- | Add months (clipped to last day), then add days</span></span><span>
@@ -307,7 +307,7 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="Data.Time.Calendar.Days.html#addDays"><span class="hs-identifier hs-var">addDays</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073420"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">(Day -&gt; Day) -&gt; Day -&gt; Day
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Day -&gt; Day
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Day -&gt; Day
 </span><a href="Data.Time.Calendar.Gregorian.html#addGregorianMonthsClip"><span class="hs-identifier hs-var">addGregorianMonthsClip</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073419"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">Day
 </span><a href="#local-6989586621679073421"><span class="hs-identifier hs-var">day</span></a></span><span>
@@ -322,7 +322,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Data.Time.Calendar.Days.html#addDays"><span class="hs-identifier hs-var">addDays</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073423"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">(Day -&gt; Day) -&gt; Day -&gt; Day
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Day -&gt; Day
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Day -&gt; Day
 </span><a href="Data.Time.Calendar.Gregorian.html#addGregorianMonthsRollOver"><span class="hs-identifier hs-var">addGregorianMonthsRollOver</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073422"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">Day
 </span><a href="#local-6989586621679073424"><span class="hs-identifier hs-var">day</span></a></span><span>
@@ -349,29 +349,29 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="#local-6989586621679073437"><span class="hs-identifier hs-var hs-var">ym1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073427"><span class="hs-identifier hs-var">y1</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">12</span></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear -&gt; Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear -&gt; Year
 forall a. Integral a =&gt; a -&gt; Year
-</span><a href="../../base-4.18.2.1/src/GHC.Real.html#toInteger/GHC.Real.html#toInteger"><span class="hs-identifier hs-var">toInteger</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
+</span><a href="../../base-4.18.3.0/src/GHC.Real.html#toInteger/GHC.Real.html#toInteger"><span class="hs-identifier hs-var">toInteger</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
 </span><a href="#local-6989586621679073428"><span class="hs-identifier hs-var">m1</span></a></span><span>
 </span><span id="line-140"></span><span>    </span><span id="local-6989586621679073442"><span class="annot"><span class="annottext">ym2 :: Year
 </span><a href="#local-6989586621679073442"><span class="hs-identifier hs-var hs-var">ym2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073430"><span class="hs-identifier hs-var">y2</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">12</span></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear -&gt; Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear -&gt; Year
 forall a. Integral a =&gt; a -&gt; Year
-</span><a href="../../base-4.18.2.1/src/GHC.Real.html#toInteger/GHC.Real.html#toInteger"><span class="hs-identifier hs-var">toInteger</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
+</span><a href="../../base-4.18.3.0/src/GHC.Real.html#toInteger/GHC.Real.html#toInteger"><span class="hs-identifier hs-var">toInteger</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
 </span><a href="#local-6989586621679073431"><span class="hs-identifier hs-var">m2</span></a></span><span>
 </span><span id="line-141"></span><span>    </span><span id="local-6989586621679073444"><span class="annot"><span class="annottext">ymdiff :: Year
 </span><a href="#local-6989586621679073444"><span class="hs-identifier hs-var hs-var">ymdiff</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073442"><span class="hs-identifier hs-var">ym2</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073437"><span class="hs-identifier hs-var">ym1</span></a></span><span>
 </span><span id="line-142"></span><span>    </span><span id="local-6989586621679073454"><span class="annot"><span class="annottext">ymAllowed :: Year
 </span><a href="#local-6989586621679073454"><span class="hs-identifier hs-var hs-var">ymAllowed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
@@ -391,7 +391,7 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span id="line-147"></span><span>                    </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073444"><span class="hs-identifier hs-var">ymdiff</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">1</span></span><span>
 </span><span id="line-148"></span><span>            </span><span class="hs-keyword">else</span><span>
 </span><span id="line-149"></span><span>                </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">MonthOfYear
@@ -404,7 +404,7 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span id="line-151"></span><span>                    </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073444"><span class="hs-identifier hs-var">ymdiff</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">1</span></span><span>
 </span><span id="line-152"></span><span>    </span><span id="local-6989586621679073456"><span class="annot"><span class="annottext">dayAllowed :: Day
 </span><a href="#local-6989586621679073456"><span class="hs-identifier hs-var hs-var">dayAllowed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CalendarDiffDays -&gt; Day -&gt; Day
@@ -417,7 +417,7 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-var">CalendarDiffDays</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073454"><span class="hs-identifier hs-var">ymAllowed</span></a></span><span> </span><span class="annot"><span class="annottext">(Year -&gt; CalendarDiffDays) -&gt; Year -&gt; CalendarDiffDays
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Day -&gt; Day -&gt; Year
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Day -&gt; Day -&gt; Year
 </span><a href="Data.Time.Calendar.Days.html#diffDays"><span class="hs-identifier hs-var">diffDays</span></a></span><span> </span><span class="annot"><span class="annottext">Day
 </span><a href="#local-6989586621679073425"><span class="hs-identifier hs-var">day2</span></a></span><span> </span><span class="annot"><span class="annottext">Day
 </span><a href="#local-6989586621679073456"><span class="hs-identifier hs-var">dayAllowed</span></a></span><span>
@@ -445,29 +445,29 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="#local-6989586621679073470"><span class="hs-identifier hs-var hs-var">ym1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073460"><span class="hs-identifier hs-var">y1</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">12</span></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear -&gt; Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear -&gt; Year
 forall a. Integral a =&gt; a -&gt; Year
-</span><a href="../../base-4.18.2.1/src/GHC.Real.html#toInteger/GHC.Real.html#toInteger"><span class="hs-identifier hs-var">toInteger</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
+</span><a href="../../base-4.18.3.0/src/GHC.Real.html#toInteger/GHC.Real.html#toInteger"><span class="hs-identifier hs-var">toInteger</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
 </span><a href="#local-6989586621679073461"><span class="hs-identifier hs-var">m1</span></a></span><span>
 </span><span id="line-162"></span><span>    </span><span id="local-6989586621679073475"><span class="annot"><span class="annottext">ym2 :: Year
 </span><a href="#local-6989586621679073475"><span class="hs-identifier hs-var hs-var">ym2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073463"><span class="hs-identifier hs-var">y2</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2A/GHC.Num.html#%2A"><span class="hs-operator hs-var">*</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">12</span></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear -&gt; Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear -&gt; Year
 forall a. Integral a =&gt; a -&gt; Year
-</span><a href="../../base-4.18.2.1/src/GHC.Real.html#toInteger/GHC.Real.html#toInteger"><span class="hs-identifier hs-var">toInteger</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
+</span><a href="../../base-4.18.3.0/src/GHC.Real.html#toInteger/GHC.Real.html#toInteger"><span class="hs-identifier hs-var">toInteger</span></a></span><span> </span><span class="annot"><span class="annottext">MonthOfYear
 </span><a href="#local-6989586621679073464"><span class="hs-identifier hs-var">m2</span></a></span><span>
 </span><span id="line-163"></span><span>    </span><span id="local-6989586621679073477"><span class="annot"><span class="annottext">ymdiff :: Year
 </span><a href="#local-6989586621679073477"><span class="hs-identifier hs-var hs-var">ymdiff</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073475"><span class="hs-identifier hs-var">ym2</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073470"><span class="hs-identifier hs-var">ym1</span></a></span><span>
 </span><span id="line-164"></span><span>    </span><span id="local-6989586621679073485"><span class="annot"><span class="annottext">ymAllowed :: Year
 </span><a href="#local-6989586621679073485"><span class="hs-identifier hs-var hs-var">ymAllowed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
@@ -487,7 +487,7 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span id="line-169"></span><span>                    </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073477"><span class="hs-identifier hs-var">ymdiff</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#-/GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">1</span></span><span>
 </span><span id="line-170"></span><span>            </span><span class="hs-keyword">else</span><span>
 </span><span id="line-171"></span><span>                </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">MonthOfYear
@@ -500,7 +500,7 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span id="line-173"></span><span>                    </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073477"><span class="hs-identifier hs-var">ymdiff</span></a></span><span> </span><span class="annot"><span class="annottext">Year -&gt; Year -&gt; Year
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><a href="../../base-4.18.2.1/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">Year
+</span><a href="../../base-4.18.3.0/src/GHC.Num.html#%2B/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><span class="hs-number">1</span></span><span>
 </span><span id="line-174"></span><span>    </span><span id="local-6989586621679073486"><span class="annot"><span class="annottext">dayAllowed :: Day
 </span><a href="#local-6989586621679073486"><span class="hs-identifier hs-var hs-var">dayAllowed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CalendarDiffDays -&gt; Day -&gt; Day
@@ -513,13 +513,13 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="Data.Time.Calendar.CalendarDiffDays.html#CalendarDiffDays"><span class="hs-identifier hs-var">CalendarDiffDays</span></a></span><span> </span><span class="annot"><span class="annottext">Year
 </span><a href="#local-6989586621679073485"><span class="hs-identifier hs-var">ymAllowed</span></a></span><span> </span><span class="annot"><span class="annottext">(Year -&gt; CalendarDiffDays) -&gt; Year -&gt; CalendarDiffDays
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="../../base-4.18.2.1/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Day -&gt; Day -&gt; Year
+</span><a href="../../base-4.18.3.0/src/GHC.Base.html#%24/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Day -&gt; Day -&gt; Year
 </span><a href="Data.Time.Calendar.Days.html#diffDays"><span class="hs-identifier hs-var">diffDays</span></a></span><span> </span><span class="annot"><span class="annottext">Day
 </span><a href="#local-6989586621679073458"><span class="hs-identifier hs-var">day2</span></a></span><span> </span><span class="annot"><span class="annottext">Day
 </span><a href="#local-6989586621679073486"><span class="hs-identifier hs-var">dayAllowed</span></a></span><span>
 </span><span id="line-176"></span><span>
 </span><span id="line-177"></span><span class="hs-comment">-- orphan instance</span><span>
-</span><span id="line-178"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679073488"><span id="local-6989586621679073493"><span class="annot"><a href="../../base-4.18.2.1/src/GHC.Show.html#Show/GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a></span><span> </span><span class="annot"><a href="Data.Time.Calendar.Days.html#Day"><span class="hs-identifier hs-type">Day</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-178"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679073488"><span id="local-6989586621679073493"><span class="annot"><a href="../../base-4.18.3.0/src/GHC.Show.html#Show/GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a></span><span> </span><span class="annot"><a href="Data.Time.Calendar.Days.html#Day"><span class="hs-identifier hs-type">Day</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-179"></span><span>    </span><span id="local-6989586621679073496"><span class="annot"><span class="annottext">show :: Day -&gt; String
 </span><a href="#local-6989586621679073496"><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Day -&gt; String
 </span><a href="Data.Time.Calendar.Gregorian.html#showGregorian"><span class="hs-identifier hs-var">showGregorian</span></a></span><span>

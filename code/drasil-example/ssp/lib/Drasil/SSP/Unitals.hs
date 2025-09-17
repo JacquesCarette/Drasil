@@ -1,5 +1,7 @@
 module Drasil.SSP.Unitals where --export all of it
 
+import Control.Lens ((^.))
+
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
@@ -98,52 +100,65 @@ slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip,
 --FIXME: add constraints to coordinate unitals when that is possible (constraints currently in the Notes section of the crtSlpId IM instead)
 
 slopeDist = uq (constrained' (uc' "x_slope,i"
-  (nounPhraseSent $ plural xCoord `S.of_` S "the slope")
+  -- nounPhrase'' is just as bad as nounPhraseSent... but one step at a time!
+  (nounPhrase'' ss ss CapFirst CapWords)
   (plural xCoord `S.of_` S "points on the soil slope")
   (sub (vec lX) lSlope) (Vect Real) metre) [] (exactDbl 0)) defaultUncrt
+  where ss = plural xCoord `S.of_` S "the slope"
 
 slopeHght = uq (constrained' (uc' "y_slope,i"
-  (nounPhraseSent $ plural yCoord `S.of_` S "the slope")
+  (nounPhrase'' ss ss CapFirst CapWords)
   (plural yCoord `S.of_` S "points on the soil slope")
   (sub (vec lY) lSlope) (Vect Real) metre) [] (exactDbl 0)) defaultUncrt
+  where ss = plural yCoord `S.of_` S "the slope"
 
-waterDist = uqc "x_wt,i" (nounPhraseSent $ plural xCoord `S.of_` S "the water table")
+waterDist = uqc "x_wt,i" 
+  (nounPhrase'' ss ss CapFirst CapWords)
   "x-positions of the water table"
   (sub (vec lX) lWatTab) metre (Vect Real) [] (exactDbl 0) defaultUncrt
+  where ss = plural xCoord `S.of_` S "the water table"
 
-waterHght = uqc "y_wt,i" (nounPhraseSent $ plural yCoord `S.of_` S "the water table")
+waterHght = uqc "y_wt,i" 
+  (nounPhrase'' ss ss CapFirst CapWords)
   "heights of the water table"
   (sub (vec lY) lWatTab) metre (Vect Real) [] (exactDbl 0) defaultUncrt
+  where ss = plural yCoord `S.of_` S "the water table"
 
 xMaxExtSlip = uq (constrained' (uc' "x_slip^maxExt"
-  (nounPhraseSent $ S "maximum exit" +:+ phrase xCoord)
+  (nounPhrase'' ss ss CapFirst CapWords)
   (S "the maximum potential" +:+ phrase xCoord `S.for` S "the exit point" `S.ofA` S "slip surface")
   (sup (sub lX lSlip) lMaxExt) Real metre) [] (exactDbl 100)) defaultUncrt
+  where ss = S "maximum exit" +:+ phrase xCoord
 
 xMaxEtrSlip = uq (constrained' (uc' "x_slip^maxEtr" 
-  (nounPhraseSent $ S "maximum entry" +:+ phrase xCoord)
+  (nounPhrase'' ss ss CapFirst CapWords)
   (S "the maximum potential" +:+ phrase xCoord `S.for` S "the entry point" `S.ofA` S "slip surface")
   (sup (sub lX lSlip) lMaxEtr) Real metre) [] (exactDbl 20)) defaultUncrt
+  where ss = S "maximum entry" +:+ phrase xCoord
   
 xMinExtSlip = uq (constrained' (uc' "x_slip^minExt"
-  (nounPhraseSent $ S "minimum exit" +:+ phrase xCoord)
+  (nounPhrase'' ss ss CapFirst CapWords)
   (S "the minimum potential" +:+ phrase xCoord `S.for` S "the exit point" `S.ofA` S "slip surface")
   (sup (sub lX lSlip) lMinExt) Real metre) [] (exactDbl 50)) defaultUncrt
+  where ss = S "minimum exit" +:+ phrase xCoord
 
 xMinEtrSlip = uq (constrained' (uc' "x_slip^minEtr"
-  (nounPhraseSent $ S "minimum entry" +:+ phrase xCoord)
+  (nounPhrase'' ss ss CapFirst CapWords)
   (S "the minimum potential" +:+ phrase xCoord `S.for` S "the entry point" `S.ofA` S "slip surface")
   (sup (sub lX lSlip) lMinEtr) Real metre) [] (exactDbl 0)) defaultUncrt
+  where ss = S "minimum entry" +:+ phrase xCoord
 
 yMaxSlip = uq (constrained' (uc' "y_slip^max"
-  (nounPhraseSent $ S "maximum" +:+ phrase yCoord)
+  (nounPhrase'' ss ss CapFirst CapWords)
   (S "the maximum potential" +:+ phrase yCoord `S.of_` S "a point on a slip surface")
   (supMax (sub lY lSlip)) Real metre) [] (exactDbl 30)) defaultUncrt
+  where ss = S "maximum" +:+ phrase yCoord
 
 yMinSlip = uq (constrained' (uc' "y_slip^min"
-  (nounPhraseSent $ S "minimum" +:+ phrase yCoord)
+  (nounPhrase'' ss ss CapFirst CapWords)
   (S "the minimum potential" +:+ phrase yCoord `S.of_` S "a point on a slip surface")
   (supMin (sub lY lSlip)) Real metre) [] (exactDbl 0)) defaultUncrt
+  where ss = S "minimum" +:+ phrase yCoord
 
 effCohesion = uqc "c'" (cn "effective cohesion")
   "the internal pressure that sticks particles of soil together"
@@ -227,21 +242,28 @@ intNormForce = uc' "G_i" (cn "interslice normal forces")
    S "exerted between each pair" `S.of_` S "adjacent slices")
   (vec cG) (Vect Real) forcePerMeterU
 
-slipHght = uc' "y_slip,i" (nounPhraseSent $ plural yCoord `S.ofThe` S "slip surface")
+slipHght = uc' "y_slip,i" 
+  (nounPhrase'' ss ss CapFirst CapWords)
   (S "heights of the slip surface")
   (sub (vec lY) lSlip) (Vect Real) metre
+  where ss = plural yCoord `S.ofThe` S "slip surface"
 
-slipDist = uc' "x_slip,i" (nounPhraseSent $ plural xCoord `S.ofThe` S "slip surface")
+slipDist = uc' "x_slip,i" 
+  (nounPhrase'' ss ss CapFirst CapWords)
   (plural xCoord `S.of_` S "points on the slip surface")
   (sub (vec lX) lSlip) (Vect Real) metre
+  where ss = plural xCoord `S.ofThe` S "slip surface"
 
-xi = uc' "x_i" (nounPhraseSent $ phrase xCoord)
+xi = uc' "x_i" 
+  (xCoord ^. term)
   (phraseNP (NP.the (xCoord `inThe` cartesian))) lX Real metre
 
-yi = uc' "y_i" (nounPhraseSent $ phrase yCoord)
+yi = uc' "y_i" 
+  (yCoord ^. term)
   (phraseNP (NP.the (yCoord `inThe` cartesian))) lY Real metre
 
-zcoord = uc' "z" (nounPhraseSent $ phrase zCoord)
+zcoord = uc' "z" 
+  (zCoord ^. term)
   (phraseNP (NP.the (zCoord `inThe` cartesian))) lZ Real metre
 
 -- FIXME: the 'symbol' for this should not have { and } embedded in it.
@@ -348,10 +370,12 @@ surfLngth = uc' "l_s,i" (cn "surface lengths of slices")
   (S "the lengths" `S.of_` S "each slice" `S.inThe` S "direction parallel" `S.toThe` S "slope" `S.ofThe` S "surface")
   (sub (vec cL) lS) (Vect Real) metre
 
-midpntHght = uc' "h_i" (nounPhraseSent $ phrase yDir +:+ S "heights" `S.of_` S "slices")
+midpntHght = uc' "h_i" 
+  (nounPhrase'' ss ss CapFirst CapWords)
   (S "the heights" `S.inThe` phrase yDir +:+ S "from the base" `S.of_` S "each slice" `S.toThe`
    S "slope surface" `sC` S "at the" +:+ phrase xDir +:+ S "midpoint" `S.ofThe` S "slice")
   (vec lH) (Vect Real) metre
+  where ss = phrase yDir +:+ S "heights" `S.of_` S "slices"
 
 porePressure = uc' "u" (cn "pore pressure")
   (S "the pressure that comes from water within the soil") lU Real pascal
@@ -377,11 +401,15 @@ nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) lDen) (Vect Real) newton
 
-fx = uc' "fx" (nounPhraseSent $ phrase xCoord `S.ofThe` S "force")
+fx = uc' "fx" 
+  (nounPhrase'' ss ss CapFirst CapWords)
   (S "the force acting" `S.inThe` phrase xDir) (subX cF) Real newton
+  where ss = phrase xCoord `S.ofThe` S "force"
 
-fy = uc' "fy" (nounPhraseSent $ phrase yCoord `S.ofThe` S "force")
+fy = uc' "fy" 
+  (nounPhrase'' ss ss CapFirst CapWords)
   (S "the force acting" `S.inThe` phrase yDir) (subY cF) Real newton
+  where ss = phrase yCoord `S.ofThe` S "force"
 
 fn = uc' "F_n" (cn "total normal force") (S "component" `S.ofA` S "force" `S.inThe` S "normal direction")
   (sub cF (label "n")) Real newton

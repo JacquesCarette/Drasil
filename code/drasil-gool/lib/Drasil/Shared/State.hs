@@ -2,15 +2,14 @@
 
 module Drasil.Shared.State (
   -- Types
-  GS, GOOLState(..), FS, CS, MS, VS, 
+  GS, GOOLState(..), FileState, MethodState, ValueState, ClassState,
+  FS, CS, MS, VS, 
   -- Lenses
   lensFStoGS, lensGStoFS, lensMStoGS, lensFStoCS, lensFStoMS, lensFStoVS, 
   lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, 
   lensVStoMS, lensCStoFS, headers, sources, mainMod, currMain, currFileType, currParameters,
   -- Initial states
-  initialState, initialFS, 
-  -- State helpers
-  modifyReturn, modifyReturnFunc, modifyReturnList, 
+  initialState, initialFS,
   -- State modifiers
   revFiles, addFile, addCombinedHeaderSource, addHeader, addSource, 
   addProgNameToPaths, setMainMod, addLangImport, addLangImportVS, 
@@ -278,28 +277,6 @@ initialVS :: ValueState
 initialVS = VS {
   _methodState = initialMS
 }
-
--------------------------------
-------- State Patterns -------
--------------------------------
-
-modifyReturn :: (s -> s) -> a -> State s a
-modifyReturn sf v = do
-  modify sf
-  return v
-
-modifyReturnFunc :: (b -> s -> s) -> (b -> a) -> State s b -> State s a
-modifyReturnFunc sf vf st = do
-  v <- st
-  modify $ sf v
-  return $ vf v
-
-modifyReturnList :: [State s b] -> (s -> s) -> 
-  ([b] -> a) -> State s a
-modifyReturnList l sf vf = do
-  v <- sequence l
-  modify sf
-  return $ vf v
 
 -------------------------------
 ------- State Modifiers -------

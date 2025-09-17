@@ -81,8 +81,9 @@ class TypeSym r where
   void          :: Type r
 
 class (TypeSym r) => TypeElim r where
+  type TypeName r = t | t -> r
   getType :: Type r -> CodeType
-  getTypeString :: Type r -> String
+  getTypeString :: Type r -> TypeName r
 
 class ScopeSym r where
   type Scope r = t | t -> r
@@ -462,7 +463,7 @@ class VisibilitySym r where
   public  :: Visibility r
 
 class (VariableSym r) => ParameterSym r where
-  type Parameter r
+  type Parameter r = t | t -> r
   param :: Variable r -> Parameter r
   pointerParam :: Variable r -> Parameter r
 

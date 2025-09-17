@@ -502,8 +502,7 @@ addExternalConstructorCall l ot = do
   tp <- ot
   addExternalCall l tp
 
-currModCall :: String -> [VS ()] ->
-  [(VS (), VS ())] -> VS ()
+currModCall :: String -> [VS ()] -> [(VS (), VS ())] -> VS ()
 currModCall n ps ns = do
   sequence_ ps
   unzipA2_ ns

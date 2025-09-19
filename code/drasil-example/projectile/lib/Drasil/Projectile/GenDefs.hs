@@ -35,7 +35,7 @@ rectVelGD = gd (equationalModel' rectVelQD) (getUnit projSpeed) (Just rectVelDer
 
 rectVelQD :: ModelQDef
 rectVelQD = mkQuantDef' projSpeed 
-  (cn "rectilinear (1D) velocity as a function of time for constant acceleration")
+  (cn "rectilinear velocity as a function of time for constant acceleration")
   -- (nounPhraseSent $ foldlSent_ 
   --           [atStart rectilinear, sParen $ short oneD, phrase velocity,
   --             S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
@@ -61,7 +61,7 @@ rectPosGD = gd (equationalModel' rectPosQD) (getUnit projPos) (Just rectPosDeriv
 
 rectPosQD :: ModelQDef
 rectPosQD = mkQuantDef' projPos 
-  (cn "rectilinear (1D) position as a function of time for constant acceleration")
+  (cn "rectilinear position as a function of time for constant acceleration")
   -- (nounPhraseSent $ foldlSent_ 
   --       [atStart rectilinear, sParen $ short oneD, phrase position,
   --        S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])

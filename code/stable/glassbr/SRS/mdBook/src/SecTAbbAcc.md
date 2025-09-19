@@ -19,7 +19,6 @@
 |LG          |Laminated Glass                    |
 |LR          |Load Resistance                    |
 |LSF         |Load Share Factor                  |
-|N/A         |Not Applicable                     |
 |NFL         |Non-Factored Load                  |
 |PS          |Physical System Description        |
 |R           |Requirement                        |

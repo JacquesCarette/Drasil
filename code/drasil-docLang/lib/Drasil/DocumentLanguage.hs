@@ -10,7 +10,7 @@ module Drasil.DocumentLanguage where
 
 import Control.Lens ((^.), set)
 import Data.Function (on)
-import Data.List (nub, sortBy, nubBy)
+import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe, isJust)
 import qualified Data.Map as Map (elems, assocs, keys)
 
@@ -285,7 +285,7 @@ mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map (mkSubRef si) l)
 
     mkSubRef SI {_systemdb = cdb} TAandA =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ nubBy (\a b -> shortForm a == shortForm b) (collectDocumentAbbreviations renderedSecs cdb)]
+        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations renderedSecs cdb]
         []
 
 -- | Extracts abbreviations/acronyms found in the document        

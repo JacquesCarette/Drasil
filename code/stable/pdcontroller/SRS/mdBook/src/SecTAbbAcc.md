@@ -9,7 +9,6 @@
 |DD          |Data Definition                    |
 |GD          |General Definition                 |
 |GS          |Goal Statement                     |
-|I           |integral                           |
 |IM          |Instance Model                     |
 |P           |proportional                       |
 |PD          |proportional derivative            |

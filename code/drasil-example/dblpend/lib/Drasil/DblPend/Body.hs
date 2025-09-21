@@ -125,6 +125,8 @@ background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mas
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
   S "highly sensitive to initial conditions"]
 
+-- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is currently added to symbolsAll automatically as it is used to create new chunks with pendDisAngle's UID suffixed in ODELibraries.hs.
+-- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
   ++ odeInfoChunks dblPenODEInfo

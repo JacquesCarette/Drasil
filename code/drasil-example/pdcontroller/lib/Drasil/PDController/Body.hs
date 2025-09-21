@@ -116,6 +116,8 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
               S "in a variety of applications such as thermostats, automobile",
               S "cruise-control, etc"]
 
+-- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is currently added to symbolsAll automatically as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
+-- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ map dqdWr pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols

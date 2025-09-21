@@ -70,6 +70,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
 
 -- * Main Function
+
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
 mkDoc dd comb si@SI {_sys = sys, _authors = docauthors} =

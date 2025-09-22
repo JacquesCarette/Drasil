@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
-import Database.Drasil.ChunkDB (cdb)
+import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators

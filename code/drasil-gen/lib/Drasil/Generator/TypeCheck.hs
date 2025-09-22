@@ -1,5 +1,8 @@
 {-# LANGUAGE FlexibleContexts #-}
-module Language.Drasil.TypeCheck where
+module Drasil.Generator.TypeCheck (
+  -- * Type check a Drasil 'System'
+  typeCheckSI
+) where
 
 import Control.Lens ((^.))
 import Data.Bifunctor (second)

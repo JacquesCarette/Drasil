@@ -2,7 +2,7 @@
 language = "en"
 multilingual = false
 src = "src"
-title = "Software Requirements Specification for Solar Water Heating Systems"
+title = "Software Requirements Specification for Solar Water Heating System With No Phase Change Material"
 [output.html]
 smart-punctuation = true
 mathjax-support = true

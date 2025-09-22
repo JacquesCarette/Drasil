@@ -1822,7 +1822,17 @@ digraph alltypes {
 	}
 	subgraph body {
 	}
-	subgraph cunkdbh {
+	subgraph baecunkdbhs {
+	}
+	subgraph cunkdumph {
+		subgraph path{
+		Path	[shape=oval, color=red2, label="Path"];
+		Path -> String;
+		}
+		subgraph targetfile{
+		TargetFile	[shape=oval, color=red2, label="TargetFile"];
+		TargetFile -> String;
+		}
 	}
 	subgraph formats {
 		subgraph docchoices{
@@ -1854,19 +1864,11 @@ digraph alltypes {
 		Filename -> String;
 		}
 	}
-	subgraph dump {
-		subgraph path{
-		Path	[shape=oval, color=red2, label="Path"];
-		Path -> String;
-		}
-		subgraph targetfile{
-		TargetFile	[shape=oval, color=red2, label="TargetFile"];
-		TargetFile -> String;
-		}
-	}
 	subgraph generate {
 	}
 	subgraph typececkh {
+	}
+	subgraph generator {
 	}
 	subgraph csarprendererh {
 		subgraph csharpcodea{

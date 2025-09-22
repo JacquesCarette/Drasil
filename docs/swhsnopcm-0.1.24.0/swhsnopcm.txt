@@ -34,7 +34,6 @@ waterVolume :: DataDefinition
 
 module Drasil.SWHSNoPCM.Definitions
 htTrans :: IdeaDict
-srsSWHS :: CI
 
 module Drasil.SWHSNoPCM.Derivations
 eBalanceOnWtrDerivEqns :: [ModelExpr]

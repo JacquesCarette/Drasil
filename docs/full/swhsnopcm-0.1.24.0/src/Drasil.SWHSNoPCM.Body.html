@@ -3,7 +3,7 @@
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">section</span></span><span class="hs-special">)</span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Metadata</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">inModel</span></span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SRSDocument</span></span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil.ChunkDB</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cdb</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Generator</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cdb</span></span><span class="hs-special">)</span><span>
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang.SRS</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">SRS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">inModel</span></span><span class="hs-special">)</span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">TheoryModel</span></span><span class="hs-special">)</span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
@@ -51,7 +51,7 @@
 </span><span id="line-51"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.Assumptions.html"><span class="hs-identifier">Drasil.SWHSNoPCM.Assumptions</span></a></span><span>
 </span><span id="line-52"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.Changes.html"><span class="hs-identifier">Drasil.SWHSNoPCM.Changes</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHSNoPCM.Changes.html#likelyChgs"><span class="hs-identifier">likelyChgs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.Changes.html#unlikelyChgs"><span class="hs-identifier">unlikelyChgs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-53"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.DataDefs.html"><span class="hs-identifier">Drasil.SWHSNoPCM.DataDefs</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">NoPCM</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHSNoPCM.DataDefs.html#dataDefs"><span class="hs-identifier">dataDefs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-54"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.Definitions.html"><span class="hs-identifier">Drasil.SWHSNoPCM.Definitions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHSNoPCM.Definitions.html#srsSWHS"><span class="hs-identifier">srsSWHS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.Definitions.html#htTrans"><span class="hs-identifier">htTrans</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-54"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.Definitions.html"><span class="hs-identifier">Drasil.SWHSNoPCM.Definitions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHSNoPCM.Definitions.html#htTrans"><span class="hs-identifier">htTrans</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-55"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.GenDefs.html"><span class="hs-identifier">Drasil.SWHSNoPCM.GenDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHSNoPCM.GenDefs.html#genDefs"><span class="hs-identifier">genDefs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-56"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.Goals.html"><span class="hs-identifier">Drasil.SWHSNoPCM.Goals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHSNoPCM.Goals.html#goals"><span class="hs-identifier">goals</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-57"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.IMods.html"><span class="hs-identifier">Drasil.SWHSNoPCM.IMods</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHSNoPCM.IMods.html#eBalanceOnWtr"><span class="hs-identifier">eBalanceOnWtr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.IMods.html#instModIntro"><span class="hs-identifier">instModIntro</span></a></span><span class="hs-special">)</span><span>
@@ -210,19 +210,19 @@ forall c.
 c -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">listToArray</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679072060"><span class="hs-identifier hs-var">dp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ODEInfo -&gt; CodeVarChunk
+</span><a href="#local-6989586621679072553"><span class="hs-identifier hs-var">dp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ODEInfo -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">arrayVecDepVar</span></span><span> </span><span class="annot"><span class="annottext">ODEInfo
 </span><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier hs-var">noPCMODEInfo</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-92"></span><span>  </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">diffCodeChunk</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679072060"><span class="hs-identifier hs-var">dp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeVarChunk
+</span><a href="#local-6989586621679072553"><span class="hs-identifier hs-var">dp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">listToArray</span></span><span> </span><span class="annot"><span class="annottext">(CodeVarChunk -&gt; CodeVarChunk) -&gt; CodeVarChunk -&gt; CodeVarChunk
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">diffCodeChunk</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679072060"><span class="hs-identifier hs-var">dp</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-93"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679072060"><span class="annot"><span class="annottext">dp :: CodeVarChunk
-</span><a href="#local-6989586621679072060"><span class="hs-identifier hs-var hs-var">dp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ODEInfo -&gt; CodeVarChunk
+</span><a href="#local-6989586621679072553"><span class="hs-identifier hs-var">dp</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-93"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679072553"><span class="annot"><span class="annottext">dp :: CodeVarChunk
+</span><a href="#local-6989586621679072553"><span class="hs-identifier hs-var hs-var">dp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ODEInfo -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">depVar</span></span><span> </span><span class="annot"><span class="annottext">ODEInfo
 </span><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier hs-var">noPCMODEInfo</span></a></span><span>
 </span><span id="line-94"></span><span>
@@ -572,7 +572,7 @@ a
 -&gt; System
 </span><span class="hs-identifier hs-var">mkSystem</span></span><span>
 </span><span id="line-165"></span><span>  </span><span class="annot"><span class="annottext">CI
-</span><a href="Drasil.SWHSNoPCM.Definitions.html#srsSWHS"><span class="hs-identifier hs-var">srsSWHS</span></a></span><span> </span><span class="annot"><span class="annottext">SystemKind
+</span><a href="Drasil.SWHSNoPCM.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">SystemKind
 </span><span class="hs-identifier hs-var">Specification</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
 </span><span class="hs-identifier hs-var">thulasi</span></span><span class="hs-special">]</span><span>
 </span><span id="line-166"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
@@ -679,7 +679,6 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI
-</span><a href="Drasil.SWHSNoPCM.Definitions.html#srsSWHS"><span class="hs-identifier hs-var">srsSWHS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SWHSNoPCM.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">phsChgMtrl</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
@@ -821,11 +820,11 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-218"></span><span>
 </span><span id="line-219"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Body.html#introEnd"><span class="hs-identifier hs-type">introEnd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-220"></span><span id="introEnd"><span class="annot"><span class="annottext">introEnd :: Sentence -&gt; CI -&gt; Sentence
-</span><a href="Drasil.SWHSNoPCM.Body.html#introEnd"><span class="hs-identifier hs-var hs-var">introEnd</span></a></span></span><span> </span><span id="local-6989586621679072163"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679072163"><span class="hs-identifier hs-var">progSent</span></a></span></span><span> </span><span id="local-6989586621679072164"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679072164"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.SWHSNoPCM.Body.html#introEnd"><span class="hs-identifier hs-var hs-var">introEnd</span></a></span></span><span> </span><span id="local-6989586621679072656"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679072656"><span class="hs-identifier hs-var">progSent</span></a></span></span><span> </span><span id="local-6989586621679072657"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679072657"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679072163"><span class="hs-identifier hs-var">progSent</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679072656"><span class="hs-identifier hs-var">progSent</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The developed program&quot;</span></span><span class="hs-special">,</span><span>
@@ -834,11 +833,11 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-string">&quot;will be referred to as&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679072164"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="#local-6989586621679072657"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679072164"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679072657"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-222"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;based on the original&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence

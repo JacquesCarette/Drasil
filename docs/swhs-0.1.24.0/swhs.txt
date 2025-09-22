@@ -28,7 +28,6 @@ transient :: ConceptChunk
 water :: ConceptChunk
 sWHT :: ConceptChunk
 tankParam :: ConceptChunk
-swhsPCM :: CI
 
 module Drasil.SWHS.MetaConcepts
 progName :: CI

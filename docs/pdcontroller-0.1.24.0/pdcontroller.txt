@@ -14,7 +14,6 @@ acronyms :: [CI]
 pdControllerCI :: CI
 proportionalCI :: CI
 derivativeCI :: CI
-integralCI :: CI
 pidCI :: CI
 pidC :: ConceptChunk
 pidCL :: ConceptChunk

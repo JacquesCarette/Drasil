@@ -9,19 +9,13 @@
 @package drasil-gen
 @version 0.1.3.0
 
-module Database.Drasil.ChunkDB
+module Drasil.Generator
 cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
-
-
--- | Defines Drasil generator functions.
-module Language.Drasil.Generate
-dumpTo :: ToJSON a => a -> TargetFile -> IO ()
 
 -- | For debugging purposes, if the system has a <tt>DEBUG_ENV</tt>
 --   environment variable set to anything, we can dump the chunk maps in a
 --   system to the host system.
 dumpEverything :: System -> PrintingInformation -> Path -> IO ()
-typeCheckSI :: System -> IO ()
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -60,3 +54,4 @@ MDBook :: Format
 
 -- | Constructor for users to choose their document options
 docChoices :: DocType -> [Format] -> DocChoices
+typeCheckSI :: System -> IO ()

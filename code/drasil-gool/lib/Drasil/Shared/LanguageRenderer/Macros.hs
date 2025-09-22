@@ -2,22 +2,24 @@
 
 -- | Language-polymorphic functions that are defined by GOOL code
 module Drasil.Shared.LanguageRenderer.Macros (
-  ifExists, decrement1, increment, increment1, runStrategy, 
+  ifExists, decrement1, increment, increment1, runStrategy,
   listSlice, makeSetterVal, stringListVals, stringListLists, forRange, notifyObservers,
   notifyObservers'
 ) where
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
-  SVariable, SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
-  VariableElim(..), listOf, ValueSym(valueType), 
-  NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
-  BooleanExpression((?&&), (?||)), at, StatementSym(multi),
+import Drasil.Shared.InterfaceCommon (Label, bodyStatements, oneLiner,
+  TypeElim(getType), VariableElim(..), listOf, ValueSym(Value, valueType),
+  BodySym(Body), BlockSym(Block), VariableSym(Variable), TypeSym(Type),
+  FunctionSym(Function), NumericExpression((#+), (#-), (#*), (#/)),
+  Comparison(..), BooleanExpression((?&&), (?||)), at,
+  StatementSym(Statement, multi),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
-import qualified Drasil.Shared.InterfaceCommon as IC (BlockSym(block), 
-  TypeSym(int, listInnerType), VariableSym(var), ScopeSym(..), Literal(litInt),
-  VariableValue(valueOf), ValueExpression(notNull), List(listSize, listAppend,
-  listAccess, intToIndex), StatementSym(valStmt, emptyStmt), AssignStatement(assign),
+import qualified Drasil.Shared.InterfaceCommon as IC (BlockSym(block),
+  TypeSym(int, listInnerType), VariableSym(var), ScopeSym(..),
+  Literal(litInt), VariableValue(valueOf), ValueExpression(notNull),
+  List(listSize, listAppend, listAccess, intToIndex),
+  StatementSym(valStmt, emptyStmt), AssignStatement(assign),
   DeclStatement(varDecDef, listDec),  ControlStatement(ifCond, for, forRange),
   ValueExpression(inlineIf))
 import Drasil.GOOL.InterfaceGOOL (($.), observerListName)
@@ -28,7 +30,7 @@ import qualified Drasil.Shared.RendererClassesCommon as S (
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym)
-import Drasil.Shared.Helpers (toCode, onStateValue, on2StateValues)
+import Drasil.Shared.Helpers (toCode)
 import Drasil.Shared.State (MS, lensMStoVS, genVarName, genLoopIndex,
   genVarNameIf, getVarScope)
 
@@ -37,34 +39,33 @@ import Data.Functor ((<&>))
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)
 
-ifExists :: (CommonRenderSym r) => SValue r -> MSBody r -> MSBody r -> MSStatement r
+ifExists :: (CommonRenderSym r) => Value r -> Body r -> Body r -> Statement r
 ifExists v ifBody = IC.ifCond [(IC.notNull v, ifBody)]
 
-decrement1 :: (CommonRenderSym r) => SVariable r -> MSStatement r
+decrement1 :: (CommonRenderSym r) => Variable r -> Statement r
 decrement1 v = v &-= IC.litInt 1
 
-increment :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+increment :: (CommonRenderSym r) => Variable r -> Value r -> Statement r
 increment vr vl = vr &= IC.valueOf vr #+ vl
 
-increment1 :: (CommonRenderSym r) => SVariable r -> MSStatement r
+increment1 :: (CommonRenderSym r) => Variable r -> Statement r
 increment1 vr = vr &+= IC.litInt 1
 
-strat :: (CommonRenderSym r, Monad r) => MSStatement r -> MSBody r -> MS (r Doc)
-strat = on2StateValues (\result b -> toCode $ vcat [RC.body b, 
-  RC.statement result])
+strat :: (CommonRenderSym r) => Statement r -> Body r -> MS Doc
+strat result b = toCode $ vcat [RC.body b, RC.statement result]
 
-runStrategy :: (CommonRenderSym r, Monad r) => Label -> [(Label, MSBody r)] -> 
-  Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
+runStrategy :: (CommonRenderSym r) => Label -> [(Label, Body r)] ->
+  Maybe (Value r) -> Maybe (Variable r) -> MS Doc
 runStrategy l strats rv av = maybe
-  (strError l "RunStrategy called on non-existent strategy") 
+  (strError l "RunStrategy called on non-existent strategy")
   (strat (S.stmt resultState)) (lookup l strats)
   where resultState = maybe IC.emptyStmt asgState av
-        asgState v = maybe (strError l 
+        asgState v = maybe (strError l
           "Attempt to assign null return to a Value") (v &=) rv
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
-listSlice :: (CommonRenderSym r) => Maybe (SValue r) -> Maybe (SValue r) -> 
-  Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
+listSlice :: (CommonRenderSym r) => Maybe (Value r) -> Maybe (Value r) ->
+  Maybe (Value r) -> Variable r -> Value r -> Block r
 listSlice beg end step vnew vold = do
   
   l_temp <- genVarName [] "temp"
@@ -101,11 +102,11 @@ listSlice beg end step vnew vold = do
               Nothing -> case (mbBegV, mbEndV) of
                 -- If both bounds are litInt's, do a two-sided check.
                 -- Also, make sure step is in same direction as check.
-                (Just b, Just e) -> if e >= b 
+                (Just b, Just e) -> if e >= b
                     then begVal ?<= v_i ?&& v_i ?< endVal ?&& step' ?> IC.litInt 0
                     else endVal ?< v_i ?&& v_i ?<= begVal ?&& step' ?< IC.litInt 0
                 -- If bounds are not litInt's, do both two-sided checks
-                _ ->  begVal ?<= v_i ?&& v_i ?< endVal ?&& step' ?> IC.litInt 0 ?|| 
+                _ ->  begVal ?<= v_i ?&& v_i ?< endVal ?&& step' ?> IC.litInt 0 ?||
                       endVal ?< v_i ?&& v_i ?<= begVal ?&& step' ?< IC.litInt 0
 
   IC.block [
@@ -120,15 +121,15 @@ listSlice beg end step vnew vold = do
 -- | Gets the expression and code for setting bounds in a list slice
 --   Input: 
 --   - String: Variable name for bound (to be created if necessary),
---   - SValue: step value
+--   - Value: step value
 --   - Maybe Integer: literal value of step, if exists
---   - Maybe SValue: given value of bound
---   - SValue: value of bound if bound not given and step is positive
---   - SValue: value of bound if bound not given and step is negative
---   Output: (MSStatement, SValue): (setter, value) of bound
-makeSetterVal :: (CommonRenderSym r) => Label -> SValue r -> Maybe Integer ->
-  Maybe (SValue r) -> SValue r -> SValue r -> r (IC.Scope r) ->
-  (MSStatement r, SValue r)
+--   - Maybe Value: given value of bound
+--   - Value: value of bound if bound not given and step is positive
+--   - Value: value of bound if bound not given and step is negative
+--   Output: (Statement, Value): (setter, value) of bound
+makeSetterVal :: (CommonRenderSym r) => Label -> Value r -> Maybe Integer ->
+  Maybe (Value r) -> Value r -> Value r -> IC.Scope r ->
+  (Statement r, Value r)
 makeSetterVal _     _    _      (Just v) _  _  _   = (IC.emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb _   = (IC.emptyStmt, if s > 0 then lb else rb)
 makeSetterVal vName step _       _       lb rb  scp =
@@ -136,17 +137,17 @@ makeSetterVal vName step _       _       lb rb  scp =
       theSetter = IC.varDecDef theVar scp $ IC.inlineIf (step ?> IC.litInt 0) lb rb
   in (theSetter, IC.intToIndex $ IC.valueOf theVar)
 
-stringListVals :: (CommonRenderSym r) => [SVariable r] -> SValue r -> MSStatement r
-stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList 
+stringListVals :: (CommonRenderSym r) => [Variable r] -> Value r -> Statement r
+stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
   (getType $ valueType slst))
   where checkList (List String) = assignVals vars 0
-        checkList _ = error 
+        checkList _ = error
           "Value passed to stringListVals must be a list of strings"
         assignVals [] _ = []
         assignVals (v:vs) n = IC.assign v (cast (onStateValue variableType v) 
           (IC.listAccess sl (IC.litInt n))) : assignVals vs (n+1)
 
-stringListLists :: (CommonRenderSym r) => [SVariable r] -> SValue r -> MSStatement r
+stringListLists :: (CommonRenderSym r) => [Variable r] -> Value r -> Statement r
 stringListLists lsts sl = do
   slst <- zoom lensMStoVS sl
   l_i <- genLoopIndex
@@ -171,29 +172,29 @@ stringListLists lsts sl = do
     v_i = IC.valueOf var_i
   checkList (getType $ valueType slst)
 
-forRange :: (CommonRenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r -> 
-  MSBody r -> MSStatement r
+forRange :: (CommonRenderSym r) => Variable r -> Value r -> Value r -> Value r ->
+  Body r -> Statement r
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
   (IC.valueOf i ?< finalv) (i &+= stepv)
 
-observerIndex :: (CommonRenderSym r) => SVariable r
+observerIndex :: (CommonRenderSym r) => Variable r
 observerIndex = IC.var "observerIndex" IC.int
 
-observerIdxVal :: (CommonRenderSym r) => SValue r
+observerIdxVal :: (CommonRenderSym r) => Value r
 observerIdxVal = IC.valueOf observerIndex
 
-obsList :: (CommonRenderSym r) => VSType r -> SValue r
+obsList :: (CommonRenderSym r) => Type r -> Value r
 obsList t = IC.valueOf $ listOf observerListName t
 
-notify :: (OORenderSym r) => VSType r -> VSFunction r -> MSBody r
+notify :: (OORenderSym r) => Type r -> Function r -> Body r
 notify t f = oneLiner $ IC.valStmt $ at (obsList t) observerIdxVal $. f
 
-notifyObservers :: (OORenderSym r) => VSFunction r -> VSType r -> MSStatement r
+notifyObservers :: (OORenderSym r) => Function r -> Type r -> Statement r
 notifyObservers f t = IC.for initv (observerIdxVal ?< IC.listSize (obsList t))
   (observerIndex &++) (notify t f)
   where initv = IC.varDecDef observerIndex IC.local $ IC.litInt 0
 
-notifyObservers' :: (OORenderSym r) => VSFunction r -> VSType r -> MSStatement r
+notifyObservers' :: (OORenderSym r) => Function r -> Type r -> Statement r
 notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t )
     (IC.litInt 1) (notify t f)
     where initv = IC.litInt 0

@@ -2,7 +2,7 @@ module Main (main) where
 
 import GHC.IO.Encoding
 
-import Language.Drasil.Generate (gen, typeCheckSI, genDot, 
+import Drasil.Generator (gen, typeCheckSI, genDot, 
   DocSpec(DocSpec), DocType(SRS), Format(..), docChoices, dumpEverything)
 import Drasil.SglPend.Body (srs, printSetting, fullSI)
 

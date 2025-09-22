@@ -4,7 +4,7 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
-  notApp, physSyst, response, requirement, refBy, refName, srs, type_, typUnc, 
+  physSyst, response, requirement, refBy, refName, srs, type_, typUnc, 
   unlikelyChg)
 import Drasil.Metadata (dataDefn, inModel, thModel)
 
@@ -25,7 +25,7 @@ con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
 acronyms :: [CI]
 acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt, 
   glassTypeFac, heatS, iGlass, inModel, likelyChg, lDurFac, 
-  lGlass, lResistance, lShareFac, notApp, nFL, physSyst, requirement, 
+  lGlass, lResistance, lShareFac, nFL, physSyst, requirement, 
   refBy, refName, stdOffDist, srs, thModel, typUnc, unlikelyChg]
 
 annealed, aR, fullyT, glassTypeFac, heatS, lDurFac, iGlass, lGlass, 

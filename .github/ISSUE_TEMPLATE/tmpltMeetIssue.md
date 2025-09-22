@@ -8,15 +8,19 @@ assignees:
  - JacquesCarette
  - smiths
  - sarrasoussia
- - jackwyand
+ - B-rando1
+ - Xinlu-Y
+ - JoeZZG
+ 
 
 ---
 
 **Agenda**
 
 1. Blockers for @sarrasoussia
-
-2. Blockers for @jackwyand
+2. Blockers for @B-rando1 
+3. Blockers for @Xinlu-Y 
+4. Blockers for @JoeZZG 
 
 Regrets:
 

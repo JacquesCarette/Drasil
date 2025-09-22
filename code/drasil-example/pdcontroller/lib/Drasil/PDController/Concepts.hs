@@ -4,14 +4,13 @@ import Language.Drasil
 
 acronyms :: [CI]
 acronyms
-  = [pdControllerCI, proportionalCI, derivativeCI, integralCI, pidCI]
+  = [pdControllerCI, proportionalCI, derivativeCI, pidCI]
 
-pdControllerCI, proportionalCI, derivativeCI, integralCI, pidCI :: CI
+pdControllerCI, proportionalCI, derivativeCI, pidCI :: CI
 
 pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "proportional derivative")          "PD"            []
 proportionalCI  = commonIdeaWithDict "proportionalCI"  (pn "proportional")                     "P"             []
 derivativeCI    = commonIdeaWithDict "derivativeCI"    (pn "derivative")                       "D"             []
-integralCI      = commonIdeaWithDict "integralCI"      (pn "integral")                         "I"             []
 pidCI           = commonIdeaWithDict "pidCI"           (pn "proportional integral derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,

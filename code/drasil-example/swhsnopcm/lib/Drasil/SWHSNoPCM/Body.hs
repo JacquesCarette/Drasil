@@ -51,7 +51,7 @@ import Drasil.SWHS.References (uriReferences)
 import Drasil.SWHSNoPCM.Assumptions
 import Drasil.SWHSNoPCM.Changes (likelyChgs, unlikelyChgs)
 import qualified Drasil.SWHSNoPCM.DataDefs as NoPCM (dataDefs)
-import Drasil.SWHSNoPCM.Definitions (srsSWHS, htTrans)
+import Drasil.SWHSNoPCM.Definitions (htTrans)
 import Drasil.SWHSNoPCM.GenDefs (genDefs)
 import Drasil.SWHSNoPCM.Goals (goals)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
@@ -162,7 +162,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 si :: System
 si = mkSystem
-  srsSWHS Specification [thulasi]
+  progName Specification [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
@@ -182,7 +182,7 @@ ideaDicts =
   -- Actual IdeaDicts
   [htTrans, materialProprty] ++
   -- CIs
-  map nw [srsSWHS, progName, phsChgMtrl] ++
+  map nw [progName, phsChgMtrl] ++
   map nw CP.physicCon' ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]

@@ -16,7 +16,6 @@
 |RefBy       |Referenced by                                           |
 |SRS         |Software Requirements Specification                     |
 |SWHSNoPCM   |Solar Water Heating System With No Phase Change Material|
-|SWHSNoPCM   |Solar Water Heating Systems                             |
 |TM          |Theoretical Model                                       |
 |UC          |Unlikely Change                                         |
 |Uncert.     |Typical Uncertainty                                     |

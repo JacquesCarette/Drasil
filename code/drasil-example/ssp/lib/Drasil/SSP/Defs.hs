@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,shearR
 
 ----Acronyms-----
 acronyms :: [CI]
-acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
+acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
   physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 defs :: [IdeaDict]

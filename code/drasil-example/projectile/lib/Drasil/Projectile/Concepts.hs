@@ -17,7 +17,7 @@ durationNC, flightDurNC, landingPosNC, launchNC, launchAngleNC, launchSpeedNC, o
   rectVel :: IdeaDict
 durationNC   = nc "duration" (nounPhraseSP "duration")
 launchNC     = nc "launch"   (nounPhraseSP "launch")
-offsetNC     = nc "offset"   (nounPhraseSent $ S "distance between the" +:+ phraseNP (targetPosNC `andThe` landingPosNC))
+offsetNC     = nc "offset"   (compoundPhrase (cn "distance between the") (targetPosNC `andThe` landingPosNC))
 
 flightDurNC   = compoundNC (nc "flight"  (nounPhraseSP "flight" )) durationNC
 landingPosNC  = compoundNC (nc "landing" (nounPhraseSP "landing")) position

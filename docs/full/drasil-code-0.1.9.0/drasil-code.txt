@@ -3521,3 +3521,6 @@ odeintSymbols :: [DefinedQuantityDict]
 -- | Change in <tt>X</tt> chunk constructor (where <tt>X</tt> is a given
 --   argument).
 diffCodeChunk :: CodeVarChunk -> CodeVarChunk
+
+-- | Collect all chunks related to a specific ODE
+odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]

@@ -9,13 +9,11 @@ import Data.Drasil.Concepts.Documentation
 acronyms :: [CI]
 acronyms
   = [assumption, dataDefn, genDefn, goalStmt, inModel, physSyst, requirement, refBy, 
-     refName, srs, thModel, typUnc, pdControllerCI, proportionalCI, derivativeCI,
-     pidCI]
-pdControllerCI, proportionalCI, derivativeCI, pidCI :: CI
+     refName, srs, thModel, typUnc, pdControllerCI, proportionalCI, pidCI]
+pdControllerCI, proportionalCI, pidCI :: CI
 
 pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "proportional derivative")          "PD"            []
 proportionalCI  = commonIdeaWithDict "proportionalCI"  (pn "proportional")                     "P"             []
-derivativeCI    = commonIdeaWithDict "derivativeCI"    (pn "derivative")                       "D"             []
 pidCI           = commonIdeaWithDict "pidCI"           (pn "proportional integral derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,

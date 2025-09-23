@@ -5,7 +5,6 @@
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
 |A           |Assumption                         |
-|D           |derivative                         |
 |DD          |Data Definition                    |
 |GD          |General Definition                 |
 |GS          |Goal Statement                     |

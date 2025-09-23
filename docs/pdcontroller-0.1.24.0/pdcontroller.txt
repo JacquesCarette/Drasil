@@ -13,7 +13,6 @@ module Drasil.PDController.Concepts
 acronyms :: [CI]
 pdControllerCI :: CI
 proportionalCI :: CI
-derivativeCI :: CI
 pidCI :: CI
 pidC :: ConceptChunk
 pidCL :: ConceptChunk

@@ -1,9 +1,14 @@
-module Drasil.Projectile.Figures (figLaunch, sysCtxFig1) where
+module Drasil.Projectile.LabelledContent (
+  labelledContent, figLaunch, sysCtxFig1
+) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 
 import Data.Drasil.Concepts.Documentation (physicalSystem, sysCont)
+
+labelledContent :: [LabelledContent]
+labelledContent = [figLaunch, sysCtxFig1]
 
 resourcePath :: String
 resourcePath = "../../../../datafiles/projectile/"

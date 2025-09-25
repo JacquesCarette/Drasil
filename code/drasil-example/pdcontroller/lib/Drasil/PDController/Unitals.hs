@@ -6,6 +6,7 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.PDController.Concepts
+import Control.Lens ((^.))
 
 syms, symFS, symFt, syminvLaplace, symKd, symKp,
        symYT, symYS, symYrT, symYrS, symET, symES, symPS, symDS, symHS,
@@ -131,7 +132,7 @@ dqdProcessVariableFD = dqdNoUnit (dcc "dqdProcessVariableFD"
 
 dqdProcessErrorTD
   = dqdNoUnit (dcc "dqdProcessErrorTD"
-      (nounPhraseSent (S "Process Error in the time domain"))
+      (pn "Process Error in the time domain")
       "the process error in the time domain") symET Real
 
 dqdProcessErrorFD = dqdNoUnit (dcc "dqdProcessErrorFD" (processError `inThe`
@@ -147,7 +148,7 @@ dqdTransferFunctionFD = dqdNoUnit (dcc "dqdTransferFunctionFD" (ccTransferFxn `i
   ccFrequencyDomain) "the transfer function ") symHS Real
 
 dqdCtrlVarTD
-  = dqdNoUnit (dcc "dqdCtrlVarTD" (nounPhraseSent (S "Control Variable in the time domain"))
+  = dqdNoUnit (dcc "dqdCtrlVarTD" (pn "Control Variable in the time domain")
       "the control variable in the time domain")
       symCT
       Real
@@ -157,31 +158,31 @@ dqdCtrlVarFD = dqdNoUnit (dcc "dqdCtrlVarFD" (controlVariable `inThe`
 
 dqdLaplaceTransform
   = dqdNoUnit (dcc "dqdLaplaceTransform"
-      (nounPhraseSent (S "Laplace Transform of a function"))
+      (pn "Laplace Transform of a function")
       "the laplace transform of a function")
       symFS
       Real
 
 dqdFreqDomain
-  = dqdNoUnit (dcc "dqdFreqDomain" (nounPhraseSent (S "Complex frequency-domain parameter"))
+  = dqdNoUnit (dcc "dqdFreqDomain" (pn "Complex frequency-domain parameter")
       "the complex frequency-domain parameter")
       syms
       Real
-      
+
 dqdFxnTDomain
-  = dqdNoUnit (dcc "dqdFxnTDomain" (nounPhraseSent (S "Function in the time domain"))
+  = dqdNoUnit (dcc "dqdFxnTDomain" (pn "Function in the time domain")
       "a function in the time domain") symFt
       Real
 
 dqdInvLaplaceTransform
   = dqdNoUnit (dcc "dqdInvLaplaceTransform"
-      (nounPhraseSent (S "Inverse Laplace Transform of a function"))
+      (pn "Inverse Laplace Transform of a function")
       "the inverse Laplace transform of a function")
       syminvLaplace
       Real
 
 dqdDampingCoeff
-  = dqdNoUnit (dcc "dqdDampingCoeff" (nounPhraseSent (S "Damping coefficient of the spring"))
+  = dqdNoUnit (dcc "dqdDampingCoeff" (pn "Damping coefficient of the spring")
       "the damping coefficient of the spring")
       symDampingCoeff
       Real
@@ -189,7 +190,7 @@ dqdDampingCoeff
 -- TODO: Create a separate description for the stiffness coefficient to state
 -- that it is the "stiffness coefficient of the spring" (#4275)
 dqdStiffnessCoeff
-  = dqd ccStiffCoeff
+  = dqd (dccWDS "dqdStiffnessCoeff" (ccStiffCoeff ^. term) (ccStiffCoeff ^. defn))
       symStifnessCoeff
       Real
       second

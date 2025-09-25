@@ -3,7 +3,7 @@ module Drasil.GamePhysics.Body where
 import Language.Drasil hiding (organization, section)
 import Drasil.Metadata (dataDefn, inModel)
 import Drasil.SRSDocument
-import Database.Drasil.ChunkDB (cdb)
+import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -21,10 +21,11 @@ import Data.Drasil.People (alex, luthfi, olu)
 import Data.Drasil.Software.Products (openSource, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon,
-  physicCon', rigidBody, collision, damping)
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity,
+  physicCon', rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
   mathcon', rightHand, line, point)
+import Data.Drasil.Quantities.Math (normalVect, perpVect, surface)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
@@ -32,13 +33,14 @@ import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GamePhysics.Concepts (acronyms, threeD, twoD, centreMass)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
+import Drasil.GamePhysics.LabelledContent (labelledContent, sysCtxFig1)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
 import Drasil.GamePhysics.MetaConcepts (progName)
 import Drasil.GamePhysics.References (citations, uriReferences)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
-  inputSymbols, outputSymbols, inputConstraints, defSymbols)
+  inputSymbols, outputSymbols, inputConstraints)
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
@@ -51,9 +53,6 @@ fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
-
-resourcePath :: String
-resourcePath = "../../../../datafiles/gamephysics/"
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -129,13 +128,17 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
-  softwarecon ++ CP.physicCon ++
+  softwarecon ++ [CP.angular, CP.linear, CP.rigidBody, CP.collision,
+  CP.damping, CP.friction, CP.joint, CP.energy, CP.motion, CP.space,
+  CP.elasticity] ++
   -- DefinedQuantityDicts
-  map cw defSymbols
+  map cw [normalVect, perpVect] ++
+  -- UnitalChunks
+  [cw surface]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks
-  ([] :: [UnitDefn]) dataDefs iMods generalDefns tMods concIns [] allRefs citations
+symbMap = cdb symbolsAll ideaDicts conceptChunks [] dataDefs iMods generalDefns
+  tMods concIns labelledContent allRefs citations
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
@@ -219,10 +222,6 @@ sysCtxIntro = foldlSP
    phrase softwareSys, S "itself", sParen (short progName) +:+. EmptyS,
    S "Arrows are used to show the data flow between the", phraseNP (system
    `andIts` environment)]
-
-sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) 
-  (resourcePath ++ "sysctx.png")
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_

@@ -8,9 +8,9 @@ module InputParameters
 
 """ Reads input from a file with the given file name
     - Parameter filename: name of the input file
-    - Returns: launch speed: the initial speed of the projectile when launched (m/s)
-    - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Returns: target position: the distance from the launcher to the target (m)
+    - Returns: launch speed (m/s)
+    - Returns: launch angle (rad)
+    - Returns: target position (m)
 """
 function get_input(filename::String)
     infile = open(filename, "r")
@@ -26,9 +26,9 @@ function get_input(filename::String)
 end
 
 """ Verifies that input values satisfy the physical constraints
-    - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
-    - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter p_target: target position: the distance from the launcher to the target (m)
+    - Parameter v_launch: launch speed (m/s)
+    - Parameter theta: launch angle (rad)
+    - Parameter p_target: target position (m)
 """
 function input_constraints(v_launch::Float32, theta::Float32, p_target::Float32)
     if !(v_launch > Float32(0.0))

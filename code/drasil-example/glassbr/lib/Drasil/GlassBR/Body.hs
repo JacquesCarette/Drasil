@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
-import Database.Drasil.ChunkDB (cdb)
+import Drasil.Generator (cdb)
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -19,6 +19,7 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   system, term_, user, value, variable, reference, definition)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, mathcon')
+import Data.Drasil.Quantities.Math (mathquants, mathunitals)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
@@ -32,7 +33,7 @@ import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab,
   ptOfExplsn, con', glass, iGlass, lGlass)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
-import Drasil.GlassBR.Figures
+import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
@@ -46,6 +47,7 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
 import Drasil.System (SystemKind(RunnableSoftware), mkSystem)
+import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -127,7 +129,11 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
-  distance : concepts ++ softwarecon ++ physicalcon
+  distance : concepts ++ softwarecon ++ physicalcon ++
+  -- Unital Chunks
+  map cw mathunitals ++ map cw physicalquants ++
+  -- DefinedQuantityDicts
+  map cw mathquants
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList = 
@@ -146,7 +152,7 @@ concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
 
 labCon :: [LabelledContent]
-labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
+labCon = funcReqsTables ++ figures
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

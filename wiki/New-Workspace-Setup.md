@@ -14,6 +14,7 @@ Optionally, some functions will be limited without:
 1. [Doxygen](#doxygen)
 2. [ShellCheck](#shellcheck)
 3. [mdBook](#mdBook)
+4. [Jupyter](#jupyter)
 
 **Notes**: 
 1. It is [**recommended**](https://github.com/JacquesCarette/Drasil/issues/2913#issuecomment-987300398) for Windows users to install the following tools using Linux on Windows/Windows WSL. If you choose to install using Windows WSL, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). From experience, installations with Windows WSL over native installations provide better tools, quicker installs, and an overall smoother experience.
@@ -594,6 +595,22 @@ cargo install mdbook
 ```
 
 </details>
+
+## Jupyter
+
+[Jupyter(Lab)](https://jupyter.org/) is a web-based integrated development environment for developing computational documents, well-suited for researchers and students. We do not necessarily use Jupyter ourselves in Drasil's development, but we currently generate Jupyter documents (including lesson plans) and intend to generate more.
+
+### Installation Instructions
+
+Installing Jupyter is fairly straightforward using Python's package manager, `pip`. You only need to run the following command:
+
+```
+pip install jupyter
+```
+
+Alternatively, you can use copies of Jupyter from other package managers (e.g., via Homebrew: `brew install jupyter`, via `apt`: `sudo apt-get install jupyter`, etc.). For more information, please see the official Jupyter [installation documentation](https://jupyter.org/install).
+
+To test that your installation is working, you should be able to run `jupyter --help` and see basic usage information.
 
 # Working with Drasil
 Congratulations! Now that you've successfully setup your workspace, you should move on to our [Contributer's Guide](https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide).

@@ -3,7 +3,7 @@ module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
 import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Language.Drasil
 import Drasil.SRSDocument
-import Database.Drasil.ChunkDB (cdb)
+import Drasil.Generator (cdb)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -18,8 +18,8 @@ import Data.Drasil.Concepts.Documentation (analysis, physics,
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon',
-  rectilinear, oneD, twoD, motion)
+import Data.Drasil.Concepts.Physics (gravity, physicCon',
+  rectilinear, oneD, twoD, motion, distance, collision, positionVec)
 import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
@@ -36,10 +36,10 @@ import Data.Drasil.Concepts.Education(calculus, undergraduate,
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (launcher, projectile, target, defs, projMotion, rectVel)
 import Drasil.Projectile.DataDefs (dataDefs)
-import Drasil.Projectile.Figures (figLaunch, sysCtxFig1)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
+import Drasil.Projectile.LabelledContent (figLaunch, sysCtxFig1, labelledContent)
 import Drasil.Projectile.MetaConcepts (progName)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
@@ -176,13 +176,12 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  [mass] ++ physicCon ++ defs ++
-  -- ConstrConcepts
-  map cw constrained
+  [mass] ++ defs ++ [distance, motion, gravity, collision, rectilinear,
+  positionVec]
 
 symbMap :: ChunkDB
 symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
-  dataDefs iMods genDefns tMods concIns [] allRefs citations
+  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
 
 abbreviationsList  :: [IdeaDict]
 abbreviationsList  =

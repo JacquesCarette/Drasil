@@ -14,7 +14,7 @@ import Drasil.Code.CodeExpr.Development
 
 import Language.Drasil (Constraint(..), RealInterval(..),
   HasUID(uid), Stage(..))
-import Language.Drasil.Code.Imperative.Comments (getComment)
+import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   constModDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc,
   inputConstructorDesc, inputParametersDesc, modDesc, outputFormatDesc,
@@ -551,11 +551,12 @@ genCalcFunc cdef = do
                      block stepStmts,
                      block [returnStmt $ valueOf v]])
                  (Map.lookup nm (extLibMap g))
-  desc <- getComment cdef
+  calcDesc <- getCommentBrief cdef
+  desc <- getCommentBrief cdef
   publicFunc
     nm
     (convTypeOO tp)
-    ("Calculates " ++ desc)
+    ("Calculates " ++ calcDesc)
     (map pcAuto parms)
     (Just desc)
     blcks
@@ -785,11 +786,12 @@ genCalcFuncProc cdef = do
                      block stepStmts,
                      block [returnStmt $ valueOf v]])
                  (Map.lookup nm (extLibMap g))
-  desc <- getComment cdef
+  calcDesc <- getCommentBrief cdef
+  desc <- getCommentBrief cdef
   publicFuncProc
     nm
     (convType tp)
-    ("Calculates " ++ desc)
+    ("Calculates " ++ calcDesc)
     (map pcAuto parms)
     (Just desc)
     blcks
@@ -915,10 +917,15 @@ physCBodyProc cs = do
 chooseConstrProc :: (SharedProg r) => ConstraintBehaviour ->
   [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
 chooseConstrProc cb cs = do
+  let ch = concatMap (\(s, ns) -> [(s, n) | n <- ns]) cs
+  -- Generate variable declarations based on constraints
+  varDecs <- mapM (\case
+    (q, Elem _ e) -> constrVarDecProc q e
+    _             -> return emptyStmt) ch
   conds <- mapM (\(q,cns) -> mapM (convExprProc . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
-  return $ concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)]))
-    conds bods
+  let bodies = concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)])) conds bods
+  return $ interleave varDecs bodies
   where chooseCB Warning = constrWarnProc
         chooseCB Exception = constrExcProc
 
@@ -943,6 +950,15 @@ constrExcProc c = do
       cs = snd c
   msgs <- mapM (constraintViolatedMsgProc q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
+
+-- | Generate a set variable dec
+constrVarDecProc :: (SharedProg r) => CodeVarChunk -> CodeExpr ->
+  GenState (MSStatement r)
+constrVarDecProc v e = do
+  lb <- convExprProc e
+  t <- codeType v
+  let mkValue = var ("set_" ++ showHasSymbImpl v) (setType (convType t))
+  return (setDecDef mkValue local lb)
 
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a

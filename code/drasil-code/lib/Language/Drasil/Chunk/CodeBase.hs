@@ -1,6 +1,6 @@
 module Language.Drasil.Chunk.CodeBase where
 
-import Database.Drasil (ChunkDB, symbResolve)
+import Database.Drasil (ChunkDB, findOrErr)
 import Drasil.Code.CodeExpr.Development
 import Language.Drasil
 
@@ -22,8 +22,8 @@ codevars' e m = map (varResolve m) $ eDep' e
 
 -- | Make a 'CodeVarChunk' from a 'UID' in the 'ChunkDB'.
 varResolve :: ChunkDB -> UID -> CodeVarChunk
-varResolve  m x = quantvar $ symbResolve m x
+varResolve  m x = quantvar (findOrErr x m :: DefinedQuantityDict)
 
 -- | Make a 'CodeFuncChunk' from a 'UID' in the 'ChunkDB'.
 funcResolve :: ChunkDB -> UID -> CodeFuncChunk
-funcResolve m x = quantfunc $ symbResolve m x
+funcResolve m x = quantfunc (findOrErr x m :: DefinedQuantityDict)

@@ -3,7 +3,7 @@
 module Main where
 
 import GHC.IO.Encoding
-import Language.Drasil.Generate (gen, DocSpec(DocSpec), DocType(Website), Format(..), docChoices)
+import Drasil.Generator (gen, DocSpec(DocSpec), DocType(Website), Format(..), docChoices)
 import Drasil.Website.Body (mkWebsite, printSetting, FolderLocation(..))
 import System.Environment (getEnv, lookupEnv)
 import Data.Maybe (fromMaybe)

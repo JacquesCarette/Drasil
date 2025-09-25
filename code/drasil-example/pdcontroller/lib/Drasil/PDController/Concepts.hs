@@ -9,14 +9,11 @@ import Data.Drasil.Concepts.Documentation
 acronyms :: [CI]
 acronyms
   = [assumption, dataDefn, genDefn, goalStmt, inModel, physSyst, requirement, refBy, 
-     refName, srs, thModel, typUnc, pdControllerCI, proportionalCI, derivativeCI,
-     integralCI, pidCI]
-pdControllerCI, proportionalCI, derivativeCI, integralCI, pidCI :: CI
+     refName, srs, thModel, typUnc, pdControllerCI, proportionalCI, pidCI]
+pdControllerCI, proportionalCI, pidCI :: CI
 
 pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "proportional derivative")          "PD"            []
 proportionalCI  = commonIdeaWithDict "proportionalCI"  (pn "proportional")                     "P"             []
-derivativeCI    = commonIdeaWithDict "derivativeCI"    (pn "derivative")                       "D"             []
-integralCI      = commonIdeaWithDict "integralCI"      (pn "integral")                         "I"             []
 pidCI           = commonIdeaWithDict "pidCI"           (pn "proportional integral derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
@@ -124,7 +121,7 @@ ccDampingCoeff
       "Quantity that characterizes a second order system's oscillatory response"
 
 ccStiffCoeff
-  = dcc "stiffnessCoeff" (nounPhraseSP "Stiffness coefficient")
+  = dcc "ccStiffnessCoeff" (nounPhraseSP "Stiffness coefficient")
       "Quantity that characterizes a spring's stiffness"
 
 concepts :: [IdeaDict]

@@ -10,14 +10,14 @@ import Data.Drasil.Concepts.Physics (oneD, position, speed, motion, distance, iS
   rectilinear, velocity, acceleration)
 
 concepts :: [IdeaDict]
-concepts = nw projMotion : map nw [landingPosNC, launchNC, launchAngleNC, launchSpeedNC, offsetNC, targetPosNC,
+concepts = projMotion : map nw [landingPosNC, launchNC, launchAngleNC, launchSpeedNC, offsetNC, targetPosNC,
   rectVel] ++ map nw defs
 
 durationNC, flightDurNC, landingPosNC, launchNC, launchAngleNC, launchSpeedNC, offsetNC, targetPosNC,
   rectVel :: IdeaDict
 durationNC   = nc "duration" (nounPhraseSP "duration")
 launchNC     = nc "launch"   (nounPhraseSP "launch")
-offsetNC     = nc "offset"   (nounPhraseSent $ S "distance between the" +:+ phraseNP (targetPosNC `andThe` landingPosNC))
+offsetNC     = nc "offset"   (compoundPhrase (cn "distance between the") (targetPosNC `andThe` landingPosNC))
 
 flightDurNC   = compoundNC (nc "flight"  (nounPhraseSP "flight" )) durationNC
 landingPosNC  = compoundNC (nc "landing" (nounPhraseSP "landing")) position
@@ -31,7 +31,7 @@ projMotion = compoundNC projectile motion
 ---
 
 defs :: [ConceptChunk]
-defs = [launcher, projectile, target, projSpeed, projPos]
+defs = [launcher, projectile, target]
 
 launcher, projectile, target, projSpeed, projPos :: ConceptChunk
 launcher   = dcc "launcher"   (nounPhraseSP "launcher")  ("where the projectile is launched from " ++

@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,shearR
 
 ----Acronyms-----
 acronyms :: [CI]
-acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
+acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
   physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 defs :: [IdeaDict]
@@ -26,7 +26,7 @@ defs = [factor, soil, intrslce, layer, slip, slope, slice, morPrice,
   stabAnalysis, ssa]
 
 defs' :: [ConceptChunk]
-defs' = [slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable]
+defs' = [slpSrf, crtSlpSrf, plnStrn, waterTable]
 
 ----Other Common Phrases----
 soil, layer, material, intrslce, slip, slope, slice, stability,

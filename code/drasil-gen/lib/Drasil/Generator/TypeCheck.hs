@@ -1,15 +1,18 @@
 {-# LANGUAGE FlexibleContexts #-}
-module Language.Drasil.TypeCheck where
+module Drasil.Generator.TypeCheck (
+  -- * Type check a Drasil 'System'
+  typeCheckSI
+) where
 
+import Control.Lens ((^.))
+import Data.Bifunctor (second)
+import Data.Either (isLeft, lefts)
+import Data.List (partition)
 import qualified Data.Map.Strict as M
 
 import Language.Drasil
-import Database.Drasil (symbolTable)
-import Data.Either (isRight, rights)
-import Control.Lens ((^.))
-import Data.Bifunctor (second)
-import Data.List (partition)
 import Drasil.System (System, HasSystem (instModels, dataDefns, systemdb))
+import Drasil.Database.SearchTools (findAllDefinedQuantities)
 
 typeCheckSI :: System -> IO ()
 typeCheckSI sys = do
@@ -17,7 +20,7 @@ typeCheckSI sys = do
         dds = sys ^. dataDefns
         chks = sys ^. systemdb
     -- build a variable context (a map of UIDs to "Space"s [types])
-    let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)
+    let cxt = M.fromList $ map (\x -> (x ^. uid, x ^. typ)) $ findAllDefinedQuantities chks
 
     -- dump out the list of variables
     putStr "Symbol Table: "
@@ -44,11 +47,11 @@ typeCheckSI sys = do
     let chkdd = map (second (map (uncurry (check cxt)))) chkd
 
     -- format 'ok' messages and 'type error' messages, as applicable
-    let formattedChkd :: [Either [Char] ([Char], [Either Space TypeError])]
+    let formattedChkd :: [Either (String, [Either TypeError Space]) String]
         formattedChkd = map 
-                          (\(t, tcs) -> if any isRight tcs
-                            then Right ("`" ++ show t ++ "` exposes ill-typed expressions!", filter isRight tcs)
-                            else Left $ "`" ++ show t ++ "` OK!") 
+                          (\(t, tcs) -> if any isLeft tcs
+                            then Left ("`" ++ show t ++ "` exposes ill-typed expressions!", filter isLeft tcs)
+                            else pure $ "`" ++ show t ++ "` OK!") 
                           chkdd
 
     let errConsumer s = do 
@@ -56,11 +59,11 @@ typeCheckSI sys = do
           putStrLn $ temporaryIndent "  " s
 
     mapM_ (either
-            putStrLn
             (\(tMsg, tcs) -> do
               putStrLn tMsg
-              mapM_ errConsumer (rights tcs)
+              mapM_ errConsumer (lefts tcs)
             )
+            putStrLn
       ) formattedChkd
     putStrLn "=====[ Finished type checking ]====="
 

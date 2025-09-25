@@ -4,6 +4,9 @@ Original,Copy
 ../../../../traceygraphs/glassbr/avsa.svg,src/assets/avsa.svg
 ../../../../traceygraphs/glassbr/avsall.svg,src/assets/avsall.svg
 ../../../../traceygraphs/glassbr/refvsref.svg,src/assets/refvsref.svg
+../../../../datafiles/glassbr/ATrace.png,src/assets/ATrace.png
+../../../../datafiles/glassbr/Trace.png,src/assets/Trace.png
+../../../../datafiles/glassbr/RTrace.png,src/assets/RTrace.png
 ../../../../datafiles/glassbr/ASTM_F2248-09.png,src/assets/ASTM_F2248-09.png
 ../../../../datafiles/glassbr/ASTM_F2248-09_BeasonEtAl.png,src/assets/ASTM_F2248-09_BeasonEtAl.png
 ../../../../datafiles/glassbr/physicalsystimage.png,src/assets/physicalsystimage.png

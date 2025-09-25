@@ -10,7 +10,6 @@ module Drasil.DocumentLanguage.Definitions (
   -- * Helpers
   helperRefs, helpToRefField) where
 
-import Data.Map (member)
 import Data.List (nub)
 import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
@@ -112,20 +111,20 @@ mkTMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
 
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
 helperRefs :: HasUID t => t -> System -> Sentence
-helperRefs t s = foldlList Comma List $ map (`helpToRefField` s) $ nub $
-  refbyLookup (t ^. uid) (_systemdb s ^. refbyTable)
+helperRefs t s = foldlList Comma List $ map (`helpToRefField` (s ^. systemdb)) $ nub $
+  refbyLookup (t ^. uid) (refbyTable $ s ^. systemdb)
 
--- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of the possible data sets contained in the 'System' database.
-helpToRefField :: UID -> System -> Sentence
-helpToRefField t si
-  | member t (s ^. dataDefnTable)        = refS $ datadefnLookup    t (s ^. dataDefnTable)
-  | member t (s ^. insmodelTable)        = refS $ insmodelLookup    t (s ^. insmodelTable)
-  | member t (s ^. gendefTable)          = refS $ gendefLookup      t (s ^. gendefTable)
-  | member t (s ^. theoryModelTable)     = refS $ theoryModelLookup t (s ^. theoryModelTable)
-  | member t (s ^. conceptinsTable)      = refS $ conceptinsLookup  t (s ^. conceptinsTable)
-  | member t (s ^. citationTable)        = EmptyS
-  | otherwise = error $ show t ++ "Caught."
-  where s = _systemdb si
+-- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of
+-- the possible data sets contained in the 'System' database.
+helpToRefField :: UID -> ChunkDB -> Sentence
+helpToRefField trg db
+  | (Just c) <- find trg db :: Maybe DataDefinition  = refS c
+  | (Just c) <- find trg db :: Maybe InstanceModel   = refS c
+  | (Just c) <- find trg db :: Maybe GenDefn         = refS c
+  | (Just c) <- find trg db :: Maybe TheoryModel     = refS c
+  | (Just c) <- find trg db :: Maybe ConceptInstance = refS c
+  | (Just _) <- find trg db :: Maybe Citation        = EmptyS
+  | otherwise = error $ show trg ++ "Caught."
 
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.
 helperSources :: [DecRef] -> [Contents]

@@ -17,7 +17,7 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
-resolver: lts-22.31
+resolver: lts-22.44
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -30,6 +30,7 @@ resolver: lts-22.31
 #   - wai
 packages:
 - .
+- ../drasil-database
 - ../drasil-lang
 - ../drasil-metadata
 

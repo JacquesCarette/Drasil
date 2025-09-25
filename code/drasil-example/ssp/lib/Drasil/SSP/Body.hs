@@ -3,15 +3,12 @@ module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
 import Prelude hiding (sin, cos, tan)
 
-import Control.Lens ((^.))
-
 import Drasil.System (SystemKind(Specification), mkSystem)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
-import Database.Drasil.ChunkDB (cdb)
+import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
-import Theory.Drasil (output)
 import Drasil.Metadata (inModel)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -26,8 +23,9 @@ import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon',
   number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
+import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
-  strain, stress, time, twoD, physicCon, physicCon')
+  strain, stress, time, twoD, physicCon', distance, friction, linear, velocity, position, threeD)
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
@@ -130,7 +128,7 @@ concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
 labCon :: [LabelledContent]
-labCon = [figPhysSyst, figIndexConv, figForceActing] ++ funcReqTables
+labCon = [figPhysSyst, figIndexConv, figForceActing, sysCtxFig1] ++ funcReqTables
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -140,19 +138,20 @@ ideaDicts =
   -- Actual IdeaDicts
   defs ++
   -- CIs
-  nw progName : map nw mathcon' ++ map nw physicCon'
+  nw progName : nw threeD : map nw mathcon' ++ map nw physicCon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  defs' ++ softwarecon ++ physicCon ++ 
-  solidcon ++ physicalcon ++
+  defs' ++ softwarecon ++ solidcon ++ physicalcon ++
+  [distance, friction, linear, velocity, gravity, stress, fbd, position] ++
   -- DefinedQuantityDicts
-  map cw symbols
-
+  [cw len] ++
+  -- UnitalChunks
+  map cw [time, surface]
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks
+symbMap = cdb symbols ideaDicts conceptChunks
   [degree] dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
 
 abbreviationsList :: [IdeaDict]

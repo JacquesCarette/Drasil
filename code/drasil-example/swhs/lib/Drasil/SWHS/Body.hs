@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
-import Database.Drasil.ChunkDB (cdb)
+import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -20,13 +20,13 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
 import Data.Drasil.Concepts.Education (calculus, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import Data.Drasil.Concepts.Physics (physicCon)
+import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
   understandability, reusability, maintainability, verifiability)
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans, htFlux,
   htTransTheo, lawConsEnergy, thermalAnalysis, thermalConduction, thermalEnergy,
   thermocon)
-import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect)
+import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect, area)
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat)
@@ -42,6 +42,7 @@ import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
+import Drasil.SWHS.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHS.MetaConcepts (progName, progName')
 import Drasil.SWHS.References (citations, uriReferences)
 import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements,
@@ -64,9 +65,6 @@ fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
-
-resourcePath :: String
-resourcePath = "../../../../datafiles/swhs/"
 
 si :: System
 si = mkSystem
@@ -97,16 +95,14 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  thermocon ++ softwarecon ++ physicCon ++
-  physicalcon ++ con ++
-  -- DefinedQuantityDicts
-  map cw symbols ++
-  -- ConstQDefs
-  map cw specParamValList
+  thermocon ++ softwarecon ++ physicalcon ++ con ++ [CP.energy,
+  CP.mechEnergy, CP.pressure] ++
+  -- UnitalChunks
+  map cw [surArea, area]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks
-  ([] :: [UnitDefn]) SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
+symbMap = cdb symbolsAll ideaDicts conceptChunks [] SWHS.dataDefs insModel
+  genDefs tMods concIns labelledContent allRefs citations
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
@@ -301,11 +297,6 @@ sysCntxtDesc pro = foldlSP [refS sysCntxtFig, S "shows the" +:+.
   sParen (short pro), S "Arrows" `S.are` S "used to show the", plural datum,
   S "flow between the", phraseNP (system `andIts` environment)]
 
-sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon")
-  $ fig (titleize sysCont)
-  $ resourcePath ++ "SystemContextFigure.png"
-
 sysCntxtRespIntro :: CI -> Contents
 sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
   S "The only external interaction" `S.is` S "through the", phrase user +:+.
@@ -388,12 +379,6 @@ physSyst2 co ta hfc = [atStart co, S "at bottom of" +:+. phrase ta,
 
 -- Structure of list would be same between examples but content is completely
 -- different
-
-figTank :: LabelledContent
-figTank = llcc (makeFigRef "Tank") $ fig (
-  foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC `S.of_`
-  ch htFluxC `S.and_` phrase htFluxP `S.of_` ch htFluxP])
-  $ resourcePath ++ "Tank.png"
 
 -----------------------------
 -- 4.1.3 : Goal Statements --

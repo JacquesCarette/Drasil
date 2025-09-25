@@ -16,7 +16,7 @@ using std::vector;
 class Populate {
     public:
         /** \brief Constructor for Populate objects
-            \param y_t Process Variable: The output value from the power plant
+            \param y_t Process Variable
         */
         Populate(vector<double> &y_t);
         /** \brief appends solution point for current ODE solution step

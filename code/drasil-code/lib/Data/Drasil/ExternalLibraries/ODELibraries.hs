@@ -7,13 +7,14 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
   -- * Apache Commons (Java)
   apacheODEPckg, apacheODESymbols,
   -- * Odeint (C++)
-  odeintPckg, odeintSymbols
+  odeintPckg, odeintSymbols, diffCodeChunk,
+  odeInfoChunks
 ) where
 
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
   HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar, implVar',
   compoundPhrase, nounPhrase, nounPhraseSP, label, sub, Idea(getA), NamedIdea(term), Stage(..),
-  (+++), dccAWDS, dqd', Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr)
+  (+++), Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
@@ -630,10 +631,10 @@ odeMethodUnavailable = "Chosen ODE solving method is not available" ++
 
 -- | Change in @X@ chunk constructor (where @X@ is a given argument).
 diffCodeChunk :: CodeVarChunk -> CodeVarChunk
-diffCodeChunk c = quantvar $ dqd' (dccAWDS (show $ c +++ "d" )
+diffCodeChunk c = quantvar $ implVarAU' (show $ c +++ "d" )
   (compoundPhrase (nounPhraseSP "change in") (c ^. term)) 
-  (S "the change in" +:+ (c ^. defn)) (getA c)) 
-  (const (Concat [label "d", symbol c Implementation])) (c ^. typ) (getUnit c)
+  (S "the change in" +:+ (c ^. defn)) (getA c) 
+  (c ^. typ) (Concat [label "d", symbol c Implementation]) (getUnit c)
 
 -- FIXME: This is surely a hack, but I can't think of a better way right now.
 -- | Some libraries use an array instead of a list to internally represent the ODE.
@@ -674,3 +675,14 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (Operator ao dd e)      = Operator ao dd $ replaceDepVar e
     replaceDepVar e = e
+
+-- | Collect all chunks related to a specific ODE
+odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]
+odeInfoChunks info =
+  let dv = depVar info
+  in map dqdWr [ dv
+               , listToArray dv
+               , arrayVecDepVar info
+               , diffCodeChunk dv
+               , listToArray $ diffCodeChunk dv
+               ] 

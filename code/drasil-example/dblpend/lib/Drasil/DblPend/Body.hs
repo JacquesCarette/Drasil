@@ -45,7 +45,7 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols, odeInfoChunks)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(RunnableSoftware), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -104,7 +104,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 si :: System
-si = mkSystem progName Specification [dong]
+si = mkSystem progName RunnableSoftware [dong]
   [purp] [background] [scope] [motivation]
   symbolsAll
   tMods genDefns dataDefs iMods

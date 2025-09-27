@@ -22,7 +22,7 @@ import Theory.Drasil (HasOutput(output))
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom, nonFuncReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, output_, section_,
-  software, symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis)
+  software, symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis, likelyChg)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -103,7 +103,7 @@ nfReqIntro _  = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 -- and a label ('String').
 mkMaintainableNFR :: String -> Integer -> String -> ConceptInstance
 mkMaintainableNFR refAddress percent lbl = cic refAddress (foldlSent [
-  S "If a likely change is made" `S.toThe` 
+  S "If a", phrase likelyChg, S "is made" `S.toThe`
   S "finished software, it will take at most", addPercent percent `S.ofThe`
   S "original development time,",
   S "assuming the same development resources are available"

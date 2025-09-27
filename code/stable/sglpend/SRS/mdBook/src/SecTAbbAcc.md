@@ -12,8 +12,6 @@
 |IM          |Instance Model                     |
 |PS          |Physical System Description        |
 |R           |Requirement                        |
-|RefBy       |Referenced by                      |
-|Refname     |Reference Name                     |
 |SRS         |Software Requirements Specification|
 |SglPend     |Single Pendulum                    |
 |TM          |Theoretical Model                  |

@@ -19,7 +19,7 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs)
+import Drasil.PDController.Concepts (pidC, concepts, defs, pidCI, proportionalCI, acronyms, pdControllerCI)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
@@ -54,7 +54,7 @@ printSetting = piSys fullSI Equational defaultConfiguration
 mkSRS :: SRSDecl
 mkSRS
   = [TableOfContents,
-    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
+    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA ],
      IntroSec $
        IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
@@ -112,9 +112,11 @@ motivation = foldlSent_ [S "The gains of a controller in an application" +:+
               S "must be tuned before the controller is ready for production"]
 
 background :: Sentence
-background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD/PID) is used",
-              S "in a variety of applications such as thermostats, automobile",
-              S "cruise-control, etc"]
+background = foldlSent_ [
+  S "Automatic process control with a controller ("
+    :+: short proportionalCI :+: S "/PI/" :+: short pdControllerCI :+: S "/" :+: short pidCI :+: S ") is used",
+  S "in a variety of applications such as thermostats, automobile",
+  S "cruise-control, etc"]
 
 -- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is currently added to symbolsAll automatically as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
@@ -128,7 +130,7 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : map nw mathcon'
+  nw progName : map nw mathcon' ++ map nw acronyms
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
@@ -152,13 +154,6 @@ symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
-
-abbreviationsList  :: [IdeaDict]
-abbreviationsList  =
-  -- CIs
-  map nw acronyms ++
-  -- QuantityDicts
-  map nw symbolsAll
 
 conceptInstances :: [ConceptInstance]
 conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs

@@ -11,10 +11,9 @@
 |GD          |General Definition                 |
 |GS          |Goal Statement                     |
 |IM          |Instance Model                     |
+|ODE         |Ordinary Differential Equation     |
 |PS          |Physical System Description        |
 |R           |Requirement                        |
-|RefBy       |Referenced by                      |
-|Refname     |Reference Name                     |
 |SRS         |Software Requirements Specification|
 |TM          |Theoretical Model                  |
 |Uncert.     |Typical Uncertainty                |

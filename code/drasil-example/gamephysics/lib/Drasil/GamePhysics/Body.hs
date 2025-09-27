@@ -30,7 +30,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GamePhysics.Concepts (acronyms, threeD, twoD, centreMass)
+import Drasil.GamePhysics.Concepts (threeD, twoD, centreMass)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.LabelledContent (labelledContent, sysCtxFig1)
@@ -56,7 +56,7 @@ printSetting = piSys fullSI Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA abbreviationsList],
+  RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA ],
   IntroSec $ IntroProg para1_introduction_intro (short progName)
   [IPurpose $ purpDoc progName Verbose,
    IScope scope,
@@ -139,13 +139,6 @@ conceptChunks =
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks [] dataDefs iMods generalDefns
   tMods concIns labelledContent allRefs citations
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- QuantityDicts
-  map nw symbolsAll ++
-  -- CIs
-  map nw acronyms
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

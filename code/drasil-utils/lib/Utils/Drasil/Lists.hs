@@ -5,11 +5,26 @@ import Data.List
 
 import Data.Containers.ListUtils (nubOrd)
 
+splitAtAll :: (a -> Bool) -> [a] -> ([[a]], [a])
+splitAtAll = go [] [] []
+  where
+    go :: [a] -> [[a]] -> [a] -> (a -> Bool) -> [a] -> ([[a]], [a])
+    go []   gacc as _ []     = (gacc, reverse as)
+    go lacc gacc as _ []     = (gacc ++ [reverse lacc], reverse as)
+    -- go lacc gacc as _ []     = (gacc ++ [lacc], reverse as)
+    go lacc gacc as p (x:xs)
+      | p x = go [] (gacc ++ [reverse lacc]) (x:as) p xs
+      | otherwise = go (x:lacc) gacc as p xs
+
+mergeAll :: [[a]] -> [a] -> [a]
+mergeAll [] rs = rs
+mergeAll (l:ls) (r:rs) = l ++ r : mergeAll ls rs
+mergeAll ls _ = concat ls
+
 -- | Check if list has at least 2 elements.
 atLeast2 :: [a] -> Bool
 atLeast2 (_:_:_) = True
 atLeast2 _       = False
-
 -- | Replaces all elements of a target list that belong to a provided "bad"
 --   input list.
 replaceAll :: Eq a => [a] -> a -> [a] -> [a]

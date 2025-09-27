@@ -1,17 +1,22 @@
 {-# LANGUAGE LambdaCase, Rank2Types #-}
+{-# OPTIONS_GHC -Wno-unused-top-binds #-}
 -- | Defines functions to extract certain kinds of information from a document.
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
-module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, sentencePlate) where
+module Drasil.ExtractDocDesc (
+  getDocDesc, egetDocDesc,
+  sentencePlate,
+  getSec
+) where
 
 import Control.Lens((^.))
+import Data.Functor.Constant (Constant(Constant))
+import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
+import Data.List (transpose)
+
 import Drasil.DocumentLanguage.Core
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 import Language.Drasil hiding (Manual, Verb)
 import Theory.Drasil
-import Data.List(transpose)
-
-import Data.Functor.Constant (Constant(Constant))
-import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -21,8 +26,6 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   introSub = Constant <$> \case
     (IOrgSec _ s _) -> mSec [s]
     _ -> mempty,
-  --gsdSec = Constant <$> \case
-  --  (GSDProg _) -> mempty,
   gsdSub = Constant <$> \case
     (SysCntxt c) -> mCon c
     (UsrChars c) -> mCon c
@@ -102,20 +105,20 @@ egetCon _ = []
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
 sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatMap getSec) $
   preorderFold $ purePlate {
-    introSec = Constant . f <$> \(IntroProg s1 s2 _) -> [s1, s2],
+    introSec = Constant . f <$> \(IntroProg s1 s2 s3) -> [s1, s2] ++ concatMap getIntroSub s3,
     introSub = Constant . f <$> \case
       (IPurpose s) -> s
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec _ _ s1) -> [s1],
+      (IOrgSec _ s1 s2) -> s2 : getSec s1,
     stkSub = Constant . f <$> \case
       (Client _ s) -> [s]
       (Cstmr _) -> [],
-    pdSec = Constant . f <$> \(PDProg s _ _) -> [s],
+    pdSec = Constant . f <$> \(PDProg s secs pds) -> s : concatMap getSec secs ++ concatMap getPDSub pds,
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs
       (TermsAndDefs (Just s) cs) -> s : def cs
-      (PhySysDesc _ s _ _) -> s
+      (PhySysDesc _ s lc cs) -> s ++ getLC lc ++ getC cs
       (Goals s c) -> s ++ def c,
     scsSub = Constant . f <$> \case
       (Assumptions c) -> def c
@@ -126,10 +129,10 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (GDs s _ d _) -> def d ++ s ++ der d ++ notes d
       (IMs s _ d _) -> s ++ der d ++ notes d
       (Constraints s _) -> [s]
-      (CorrSolnPpties _ _) -> [],
+      (CorrSolnPpties _ cs) -> getC cs,
     reqSub = Constant . f <$> \case
-      (FReqsSub' c _) -> def c
-      (FReqsSub c _) -> def c
+      (FReqsSub' c lcs) -> def c ++ concatMap getLC lcs
+      (FReqsSub c lcs) -> def c ++ concatMap getLC lcs
       (NonFReqsSub c) -> def c,
     lcsSec = Constant . f <$> \(LCsProg c) -> def c,
     ucsSec = Constant . f <$> \(UCsProg c) -> def c,
@@ -139,17 +142,41 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
   } where
     def :: Definition a => [a] -> [Sentence]
     def = map (^. defn)
+
+    getIntroSub :: IntroSub -> [Sentence]
+    getIntroSub (IPurpose ss) = ss
+    getIntroSub (IScope s) = [s]
+    getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
+    getIntroSub (IOrgSec _ s1 s2) = s2 : getSec s1
+
     der :: MayHaveDerivation a => [a] -> [Sentence]
     der = concatMap (getDerivSent . (^. derivations))
+
     getDerivSent :: Maybe Derivation -> [Sentence]
     getDerivSent Nothing = []
     getDerivSent (Just (Derivation h s)) = h : s
+
     notes :: HasAdditionalNotes a => [a] -> [Sentence]
     notes = concatMap (^. getNotes)
 
+    getPDSub :: PDSub -> [Sentence]
+    getPDSub (TermsAndDefs ms c) = def c ++ maybe [] pure ms
+    getPDSub (PhySysDesc _ s lc cs) = s ++ getLC lc ++ getC cs
+    getPDSub (Goals s c) = s ++ def c
+
+    getC :: [Contents] -> [Sentence]
+    getC = concatMap getCon'
+
+    getLC :: LabelledContent -> [Sentence]
+    getLC = getCon . (^. accessContents)
+
 -- | Extracts 'Sentence's from a document description.
 getDocDesc :: DocDesc -> [Sentence]
-getDocDesc = fmGetDocDesc (sentencePlate id)
+getDocDesc = fmGetDocDesc (sentencePlate id) 
+-- ^ FIXME: We want all Sentences from a document (not necessarily a document
+-- description), so we use this function. But 'sentencePlate' does not include
+-- all 'Sentence's! Some only appear when rendering (at least, after
+-- `mkSections` is used on a `DocDesc` to create `[Section]`).
 
 -- | Extracts 'Sentence's from a 'Section'.
 getSec :: Section -> [Sentence]
@@ -166,7 +193,7 @@ getCon' = getCon . (^. accessContents)
 
 -- | Extracts 'Sentence's from raw content.
 getCon :: RawContent -> [Sentence]
-getCon (Table s1 s2 t _) = isVar (s1, transpose s2) ++ [t]
+getCon (Table s1 s2 t _)   = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s)       = [s]
 getCon EqnBlock{}          = []
 getCon CodeBlock{}         = []
@@ -174,14 +201,15 @@ getCon (DerivBlock h d)    = h : concatMap getCon d
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _ _)    = [l]
 getCon (Bib bref)          = getBib bref
-getCon (Graph [(s1, s2)] _ _ l) = [s1, s2, l]
-getCon Graph{}             = []
-getCon (Defini _ [])       = []
-getCon (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
+getCon (Graph sss _ _ l)   = let (ls, rs) = unzip sss
+                             in l : ls ++ rs
+getCon (Defini _ ics)      = concatMap (concatMap getCon' . snd) ics
 
--- | This function is used in collecting 'Sentence's from a table.
--- Since only the table's first Column titled "Var" should be collected,
--- this function is used to filter out only the first column of 'Sentence's.
+-- | This function is used in collecting 'Sentence's from a table. Since only
+-- the table's first Column titled "Var" should be collected, this function is
+-- used to filter out only the first column of 'Sentence's.
+--
+-- FIXME: Avoid pattern matching on S "Var".
 isVar :: ([Sentence], [[Sentence]]) -> [Sentence]
 isVar (S "Var" : _, hd1 : _) = hd1
 isVar (_ : tl, _ : tl1) = isVar (tl, tl1)
@@ -218,10 +246,10 @@ getField Year{} = EmptyS
 
 -- | Translates different types of lists into a 'Sentence' form.
 getLT :: ListType -> [Sentence]
-getLT (Bullet it) = concatMap (getIL . fst) it
-getLT (Numeric it) = concatMap (getIL . fst) it
-getLT (Simple lp) = concatMap getLP lp
-getLT (Desc lp) = concatMap getLP lp
+getLT (Bullet it)      = concatMap (getIL . fst) it
+getLT (Numeric it)     = concatMap (getIL . fst) it
+getLT (Simple lp)      = concatMap getLP lp
+getLT (Desc lp)        = concatMap getLP lp
 getLT (Definitions lp) = concatMap getLP lp
 
 -- | Translates a 'ListTuple' into 'Sentence's.

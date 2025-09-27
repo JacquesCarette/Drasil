@@ -90,7 +90,7 @@ data LabelledContent = LblC { _ref :: Reference
                             , _ctype :: RawContent
                             }
 
--- | Only contains 'RawContent'.                         
+-- | Only contains 'RawContent'.
 newtype UnlabelledContent = UnlblC { _cntnts :: RawContent }
 
 makeLenses ''LabelledContent

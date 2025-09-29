@@ -27,81 +27,81 @@
 forall a. a -&gt; IO a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
-</span><span id="line-26"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#genCodeWithChoices"><span class="hs-identifier hs-var">genCodeWithChoices</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679073575"><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679073575"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679073576"><span class="annot"><span class="annottext">[Choices]
-</span><a href="#local-6989586621679073576"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679073577"><span class="annot"><span class="annottext">dir :: [Char]
-</span><a href="#local-6989586621679073577"><span class="hs-identifier hs-var hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Char -&gt; Char) -&gt; [Char] -&gt; [Char]
+</span><span id="line-26"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#genCodeWithChoices"><span class="hs-identifier hs-var">genCodeWithChoices</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679073574"><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679073574"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679073575"><span class="annot"><span class="annottext">[Choices]
+</span><a href="#local-6989586621679073575"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679073576"><span class="annot"><span class="annottext">dir :: [Char]
+</span><a href="#local-6989586621679073576"><span class="hs-identifier hs-var hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Char -&gt; Char) -&gt; [Char] -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char
 </span><span class="hs-identifier hs-var">toLower</span></span><span> </span><span class="annot"><span class="annottext">([Char] -&gt; [Char]) -&gt; [Char] -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Choices -&gt; [Char]
 </span><a href="Drasil.Projectile.Choices.html#codedDirName"><span class="hs-identifier hs-var">codedDirName</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System -&gt; [Char]
-</span><a href="#local-6989586621679073579"><span class="hs-identifier hs-var">getSysName</span></a></span><span> </span><span class="annot"><span class="annottext">System
+</span><a href="#local-6989586621679073578"><span class="hs-identifier hs-var">getSysName</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="Drasil.Projectile.Body.html#fullSI"><span class="hs-identifier hs-var">fullSI</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679073575"><span class="hs-identifier hs-var">c</span></a></span><span>
-</span><span id="line-27"></span><span>                                </span><span id="local-6989586621679073579"><span class="annot"><span class="annottext">getSysName :: System -&gt; [Char]
-</span><a href="#local-6989586621679073579"><span class="hs-identifier hs-var hs-var">getSysName</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span class="hs-special">{</span><span class="annot"><span class="annottext">_sys :: ()
-</span><span class="hs-identifier hs-var">_sys</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679073595"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679073595"><span class="hs-identifier hs-var">sysName</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; [Char]
+</span><a href="#local-6989586621679073574"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><span id="line-27"></span><span>                                </span><span id="local-6989586621679073578"><span class="annot"><span class="annottext">getSysName :: System -&gt; [Char]
+</span><a href="#local-6989586621679073578"><span class="hs-identifier hs-var hs-var">getSysName</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span class="hs-special">{</span><span class="annot"><span class="annottext">_sys :: ()
+</span><span class="hs-identifier hs-var">_sys</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679073594"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679073594"><span class="hs-identifier hs-var">sysName</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; [Char]
 forall c. CommonIdea c =&gt; c -&gt; [Char]
 </span><span class="hs-identifier hs-var">programName</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679073595"><span class="hs-identifier hs-var">sysName</span></a></span><span>
+</span><a href="#local-6989586621679073594"><span class="hs-identifier hs-var">sysName</span></a></span><span>
 </span><span id="line-28"></span><span>  </span><span class="hs-keyword">in</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-29"></span><span>    </span><span id="local-6989586621679073596"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679073596"><span class="hs-identifier hs-var">workingDir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Char]
+</span><span id="line-29"></span><span>    </span><span id="local-6989586621679073595"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679073595"><span class="hs-identifier hs-var">workingDir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Char]
 </span><span class="hs-identifier hs-var">getCurrentDirectory</span></span><span>
 </span><span id="line-30"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; [Char] -&gt; IO ()
 </span><span class="hs-identifier hs-var">createDirIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679073577"><span class="hs-identifier hs-var">dir</span></a></span><span>
+</span><a href="#local-6989586621679073576"><span class="hs-identifier hs-var">dir</span></a></span><span>
 </span><span id="line-31"></span><span>    </span><span class="annot"><span class="annottext">[Char] -&gt; IO ()
 </span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679073577"><span class="hs-identifier hs-var">dir</span></a></span><span>
+</span><a href="#local-6989586621679073576"><span class="hs-identifier hs-var">dir</span></a></span><span>
 </span><span id="line-32"></span><span>    </span><span class="annot"><span class="annottext">Choices -&gt; CodeSpec -&gt; IO ()
 </span><span class="hs-identifier hs-var">genCode</span></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679073575"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System -&gt; Choices -&gt; [Mod] -&gt; CodeSpec
+</span><a href="#local-6989586621679073574"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System -&gt; Choices -&gt; [Mod] -&gt; CodeSpec
 </span><span class="hs-identifier hs-var">codeSpec</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="Drasil.Projectile.Body.html#fullSI"><span class="hs-identifier hs-var">fullSI</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679073575"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679073574"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-33"></span><span>    </span><span class="annot"><span class="annottext">[Char] -&gt; IO ()
 </span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679073596"><span class="hs-identifier hs-var">workingDir</span></a></span><span>
+</span><a href="#local-6989586621679073595"><span class="hs-identifier hs-var">workingDir</span></a></span><span>
 </span><span id="line-34"></span><span>    </span><span class="annot"><span class="annottext">[Choices] -&gt; IO ()
 </span><a href="Drasil.Projectile.Choices.html#genCodeWithChoices"><span class="hs-identifier hs-var">genCodeWithChoices</span></a></span><span> </span><span class="annot"><span class="annottext">[Choices]
-</span><a href="#local-6989586621679073576"><span class="hs-identifier hs-var">cs</span></a></span><span>
+</span><a href="#local-6989586621679073575"><span class="hs-identifier hs-var">cs</span></a></span><span>
 </span><span id="line-35"></span><span>
 </span><span id="line-36"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedDirName"><span class="hs-identifier hs-type">codedDirName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-37"></span><span id="codedDirName"><span class="annot"><span class="annottext">codedDirName :: [Char] -&gt; Choices -&gt; [Char]
-</span><a href="Drasil.Projectile.Choices.html#codedDirName"><span class="hs-identifier hs-var hs-var">codedDirName</span></a></span></span><span> </span><span id="local-6989586621679073597"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679073597"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span> </span><span class="hs-special">{</span><span>
+</span><a href="Drasil.Projectile.Choices.html#codedDirName"><span class="hs-identifier hs-var hs-var">codedDirName</span></a></span></span><span> </span><span id="local-6989586621679073596"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679073596"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span> </span><span class="hs-special">{</span><span>
 </span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">architecture :: Choices -&gt; Architecture
-</span><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679073600"><span class="annot"><span class="annottext">Architecture
-</span><a href="#local-6989586621679073600"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679073599"><span class="annot"><span class="annottext">Architecture
+</span><a href="#local-6989586621679073599"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">optFeats :: Choices -&gt; OptionalFeatures
-</span><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679073602"><span class="annot"><span class="annottext">OptionalFeatures
-</span><a href="#local-6989586621679073602"><span class="hs-identifier hs-var">o</span></a></span></span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679073601"><span class="annot"><span class="annottext">OptionalFeatures
+</span><a href="#local-6989586621679073601"><span class="hs-identifier hs-var">o</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">dataInfo :: Choices -&gt; DataInfo
-</span><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679073604"><span class="annot"><span class="annottext">DataInfo
-</span><a href="#local-6989586621679073604"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679073603"><span class="annot"><span class="annottext">DataInfo
+</span><a href="#local-6989586621679073603"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-41"></span><span>  </span><span class="annot"><span class="annottext">maps :: Choices -&gt; Maps
-</span><span class="hs-identifier hs-var">maps</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679073606"><span class="annot"><span class="annottext">Maps
-</span><a href="#local-6989586621679073606"><span class="hs-identifier hs-var">m</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span class="hs-identifier hs-var">maps</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679073605"><span class="annot"><span class="annottext">Maps
+</span><a href="#local-6989586621679073605"><span class="hs-identifier hs-var">m</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span>
 </span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; [Char]
 forall a. [a] -&gt; [[a]] -&gt; [a]
 </span><span class="hs-identifier hs-var">intercalate</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;_&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679073597"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Modularity -&gt; [Char]
+</span><a href="#local-6989586621679073596"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Modularity -&gt; [Char]
 </span><a href="Drasil.Projectile.Choices.html#codedMod"><span class="hs-identifier hs-var">codedMod</span></a></span><span> </span><span class="annot"><span class="annottext">(Modularity -&gt; [Char]) -&gt; Modularity -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Architecture -&gt; Modularity
 </span><span class="hs-identifier hs-var">modularity</span></span><span> </span><span class="annot"><span class="annottext">Architecture
-</span><a href="#local-6989586621679073600"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ImplementationType -&gt; [Char]
+</span><a href="#local-6989586621679073599"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ImplementationType -&gt; [Char]
 </span><a href="Drasil.Projectile.Choices.html#codedImpTp"><span class="hs-identifier hs-var">codedImpTp</span></a></span><span> </span><span class="annot"><span class="annottext">(ImplementationType -&gt; [Char]) -&gt; ImplementationType -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Architecture -&gt; ImplementationType
 </span><span class="hs-identifier hs-var">impType</span></span><span> </span><span class="annot"><span class="annottext">Architecture
-</span><a href="#local-6989586621679073600"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Logging] -&gt; [Char]
+</span><a href="#local-6989586621679073599"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Logging] -&gt; [Char]
 </span><a href="Drasil.Projectile.Choices.html#codedLog"><span class="hs-identifier hs-var">codedLog</span></a></span><span> </span><span class="annot"><span class="annottext">([Logging] -&gt; [Char]) -&gt; [Logging] -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">LogConfig -&gt; [Logging]
@@ -109,29 +109,29 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">OptionalFeatures -&gt; LogConfig
 </span><span class="hs-identifier hs-var">logConfig</span></span><span> </span><span class="annot"><span class="annottext">OptionalFeatures
-</span><a href="#local-6989586621679073602"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="#local-6989586621679073601"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-43"></span><span>    </span><span class="annot"><span class="annottext">Structure -&gt; [Char]
 </span><a href="Drasil.Projectile.Choices.html#codedStruct"><span class="hs-identifier hs-var">codedStruct</span></a></span><span> </span><span class="annot"><span class="annottext">(Structure -&gt; [Char]) -&gt; Structure -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataInfo -&gt; Structure
 </span><span class="hs-identifier hs-var">inputStructure</span></span><span> </span><span class="annot"><span class="annottext">DataInfo
-</span><a href="#local-6989586621679073604"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstantStructure -&gt; [Char]
+</span><a href="#local-6989586621679073603"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstantStructure -&gt; [Char]
 </span><a href="Drasil.Projectile.Choices.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="annot"><span class="annottext">(ConstantStructure -&gt; [Char]) -&gt; ConstantStructure -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataInfo -&gt; ConstantStructure
 </span><span class="hs-identifier hs-var">constStructure</span></span><span> </span><span class="annot"><span class="annottext">DataInfo
-</span><a href="#local-6989586621679073604"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="#local-6989586621679073603"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-44"></span><span>    </span><span class="annot"><span class="annottext">ConstantRepr -&gt; [Char]
 </span><a href="Drasil.Projectile.Choices.html#codedConRepr"><span class="hs-identifier hs-var">codedConRepr</span></a></span><span> </span><span class="annot"><span class="annottext">(ConstantRepr -&gt; [Char]) -&gt; ConstantRepr -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataInfo -&gt; ConstantRepr
 </span><span class="hs-identifier hs-var">constRepr</span></span><span> </span><span class="annot"><span class="annottext">DataInfo
-</span><a href="#local-6989586621679073604"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SpaceMatch -&gt; [Char]
+</span><a href="#local-6989586621679073603"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SpaceMatch -&gt; [Char]
 </span><a href="Drasil.Projectile.Choices.html#codedSpaceMatch"><span class="hs-identifier hs-var">codedSpaceMatch</span></a></span><span> </span><span class="annot"><span class="annottext">(SpaceMatch -&gt; [Char]) -&gt; SpaceMatch -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Maps -&gt; SpaceMatch
 </span><span class="hs-identifier hs-var">spaceMatch</span></span><span> </span><span class="annot"><span class="annottext">Maps
-</span><a href="#local-6989586621679073606"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679073605"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-45"></span><span>
 </span><span id="line-46"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedMod"><span class="hs-identifier hs-type">codedMod</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Modularity</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-47"></span><span id="codedMod"><span class="annot"><span class="annottext">codedMod :: Modularity -&gt; [Char]
@@ -176,10 +176,10 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-64"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="annot"><span class="annottext">ConstantStructure
 </span><span class="hs-identifier hs-var">WithInputs</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;WI&quot;</span></span><span>
-</span><span id="line-65"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Store</span></span><span> </span><span id="local-6989586621679073631"><span class="annot"><span class="annottext">Structure
-</span><a href="#local-6989586621679073631"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; [Char]
+</span><span id="line-65"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Store</span></span><span> </span><span id="local-6989586621679073630"><span class="annot"><span class="annottext">Structure
+</span><a href="#local-6989586621679073630"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; [Char]
 </span><a href="Drasil.Projectile.Choices.html#codedStruct"><span class="hs-identifier hs-var">codedStruct</span></a></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><a href="#local-6989586621679073631"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679073630"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-66"></span><span>
 </span><span id="line-67"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedConRepr"><span class="hs-identifier hs-type">codedConRepr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstantRepr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-68"></span><span id="codedConRepr"><span class="annot"><span class="annottext">codedConRepr :: ConstantRepr -&gt; [Char]
@@ -192,9 +192,9 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-70"></span><span>
 </span><span id="line-71"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedSpaceMatch"><span class="hs-identifier hs-type">codedSpaceMatch</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SpaceMatch</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-72"></span><span id="codedSpaceMatch"><span class="annot"><span class="annottext">codedSpaceMatch :: SpaceMatch -&gt; [Char]
-</span><a href="Drasil.Projectile.Choices.html#codedSpaceMatch"><span class="hs-identifier hs-var hs-var">codedSpaceMatch</span></a></span></span><span> </span><span id="local-6989586621679073634"><span class="annot"><span class="annottext">SpaceMatch
-</span><a href="#local-6989586621679073634"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">SpaceMatch
-</span><a href="#local-6989586621679073634"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="Drasil.Projectile.Choices.html#codedSpaceMatch"><span class="hs-identifier hs-var hs-var">codedSpaceMatch</span></a></span></span><span> </span><span id="local-6989586621679073633"><span class="annot"><span class="annottext">SpaceMatch
+</span><a href="#local-6989586621679073633"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">SpaceMatch
+</span><a href="#local-6989586621679073633"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-keyword">of</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeType
 </span><span class="hs-identifier hs-var">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CodeType
 </span><span class="hs-identifier hs-var">Float</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char]

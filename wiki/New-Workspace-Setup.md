@@ -137,6 +137,41 @@ To copy/clone `Drasil`'s software on your machine, please open up your terminal 
 
 If you use GPG, you can also protect your commits by [signing them with GPG](https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification/signing-commits).
 
+## Install Haskell toolchain with GHCup (all operating systems)
+
+We recommend installing **GHC**, **Haskell Language Server (HLS)**, and **Stack** using
+[GHCup](https://www.haskell.org/ghcup/) on **macOS, Linux, and Windows**..
+
+### Quick install
+
+**macOS / Linux**
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+
+ghcup install ghc recommended && ghcup set ghc recommended
+ghcup install hls recommended && ghcup set hls recommended
+ghcup install stack recommended
+```
+
+**Windows**
+- Download and run the installer from https://www.haskell.org/ghcup/.
+- In the installer, select GHC, HLS, and Stack.
+
+### Verify PATH and versions
+```bash
+ghc --version
+haskell-language-server-wrapper --version
+stack --version
+```
+
+### After installing
+From the repository root:
+```bash
+cd code
+stack setup
+stack build
+```
+
 ## Stack
 
 Stack is an easy to use toolkit for building, executing, testing, and benchmarking your Haskell software, including tooling for isolated GHC installations and dependency management (similar to Python's `virtualenv` using a [curated listed of packages](https://www.stackage.org/)).
@@ -146,6 +181,19 @@ Stack has an amazing document repository available on their [Read the Docs Offic
 ### Installation
 
 Please follow the related instructions to your operating system.
+
+#### Install Haskell toolchain via GHCup (all OS)
+
+Use **GHCup** to install and manage matching versions of **GHC**, **Stack**, and **Haskell Language Server (HLS)**. 
+```
+curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+ghcup install ghc recommended
+ghcup install stack
+ghcup install hls latest
+
+# Ensure ghcup shims are first on PATH (open a new shell after install)
+ghc --version && hls --version && stack --version
+```
 
 <details>
 

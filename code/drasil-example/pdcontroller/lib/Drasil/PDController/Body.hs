@@ -57,7 +57,7 @@ mkSRS
   = [TableOfContents,
     RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
      IntroSec $
-       IntroProg introPara (phrase progName)
+       IntroProg introPara (introduceAbb progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
           IOrgSec dataDefn (SRS.inModel [] [])

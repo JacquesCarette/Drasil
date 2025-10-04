@@ -36,7 +36,7 @@ class (BlockCommentSym r) => RenderFile r where
   top :: IG.Module r -> Block r 
   bottom :: Block r
 
-  commentedMod :: IG.File r -> FS (BlockComment r) -> IG.File r
+  commentedMod :: IG.File r -> BlockComment r -> IG.File r
 
   fileFromData :: FilePath -> IG.Module r -> IG.File r
 

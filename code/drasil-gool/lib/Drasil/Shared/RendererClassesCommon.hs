@@ -209,7 +209,7 @@ class BlockCommentSym r where
   type BlockComment r = t | t -> r
   blockComment :: [String] -> BlockComment r
   -- | Converts a list of strings into a block comment
-  docComment :: State a [String] -> State a (BlockComment r)
+  docComment :: [String] -> BlockComment r
 
 class BlockCommentElim r where
   blockComment' :: BlockComment r -> Doc

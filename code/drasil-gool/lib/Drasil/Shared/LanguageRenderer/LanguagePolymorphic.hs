@@ -1,6 +1,5 @@
-{-# LANGUAGE PostfixOperators #-}
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Redundant return" #-}
+{-# LANGUAGE BlockArguments, PostfixOperators, TypeOperators #-}
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas, #-}
 
 -- | Implementations defined here are valid for any language renderer.
 module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
@@ -82,7 +81,7 @@ import Drasil.Shared.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
 
 import Prelude hiding (print,sin,cos,tan,(<>))
 import Data.Maybe (fromMaybe, maybeToList)
-import Control.Monad.State (modify)
+import Control.Monad.State (State, modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
@@ -92,15 +91,15 @@ import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 -- Bodies --
 
 multiBody :: (CommonRenderSym r) => [Body r] -> Method r
-multiBody bs = onStateList (toCode . vibcat) $ map (onStateValue RC.body) bs
+multiBody bs = undefined {-onStateList (toCode . vibcat) $ map (onStateValue RC.body) bs-}
 
 -- Blocks --
 
 block :: (CommonRenderSym r) => [Statement r] -> Method r
-block sts = onStateList (toCode . R.block . map RC.statement) (map S.stmt sts)
+block sts = undefined{-} onStateList (toCode . R.block . map RC.statement) (map S.stmt sts)-}
 
 multiBlock :: (CommonRenderSym r) => [Block r] -> Method r
-multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
+multiBlock bs = undefined{-} onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs-}
 
 -- Types --
 
@@ -257,9 +256,9 @@ selfFuncAppMixedArgs :: (CommonRenderSym r) => Doc -> Variable r -> MixedCall r
 selfFuncAppMixedArgs d slf = S.call Nothing (Just $ RC.variable slf <> d)
 
 newObjMixedArgs :: (CommonRenderSym r) => String -> MixedCtorCall r
-newObjMixedArgs s tp vs ns = do
+newObjMixedArgs s tp vs ns = undefined{-} do
   t <- tp
-  S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns
+  S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns-}
 
 lambda :: (CommonRenderSym r) => ([Variable r] -> Value r -> Doc) ->
   [Variable r] -> Value r -> Value r
@@ -445,12 +444,12 @@ construct n = typeFromData (Object n) n empty
 
 param :: (CommonRenderSym r) => (Variable r -> Doc) -> Variable r ->
   Parameter r
-param f v' = do
+param f v' =undefined{-} do
   v <- zoom lensMStoVS v'
   let n = variableName v
   modify $ addParameter n
   modify $ useVarName n
-  paramFromData v' $ f v
+  paramFromData v' $ f v-}
 
 method :: (OORenderSym r) => Label -> Visibility r -> Permanence r -> Type r
   -> [Parameter r] -> Body r -> Method r
@@ -475,8 +474,8 @@ function n s t = S.intFunc False n s static (mType t)
 
 docFuncRepr :: (CommonRenderSym r) => FuncDocRenderer -> String -> [String] ->
   [String] -> Method r -> Method r
-docFuncRepr f desc pComms rComms = commentedFunc (docComment $ onStateValue
-  (\ps -> f desc (zip ps pComms) rComms) getParameters)
+docFuncRepr f desc pComms rComms = undefined{-} commentedFunc (docComment $ onStateValue
+  (\ps -> f desc (zip ps pComms) rComms) getParameters)-}
 
 docFunc :: (CommonRenderSym r) => FuncDocRenderer -> String -> [String] ->
   Maybe String -> Method r -> Method r
@@ -486,38 +485,38 @@ docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 buildClass :: (OORenderSym r) =>  Maybe Label -> [StateVar r] ->
   [Method r] -> [Method r] -> Class r
-buildClass p stVars constructors methods = do
+buildClass p stVars constructors methods = undefined{-} do
   n <- zoom lensCStoFS getModuleName
-  S.intClass n public (inherit p) stVars constructors methods
+  S.intClass n public (inherit p) stVars constructors methods-}
 
 implementingClass :: (OORenderSym r) => Label -> [Label] -> [StateVar r] ->
   [Method r] -> [Method r] -> Class r
 implementingClass n is = S.intClass n public (implements is)
 
 docClass :: (OORenderSym r) => ClassDocRenderer -> String -> Class r -> Class r
-docClass cdr d = S.commentedClass (docComment $ toState $ cdr d)
+docClass cdr d = undefined{-} S.commentedClass (docComment $ toState $ cdr d)-}
 
 commentedClass :: (OORenderSym r) => CS (BlockComment r) -> Class r
   -> Class r
-commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
-  (RC.blockComment' cmt) (RC.class' cs))
+commentedClass = undefined{-} on2StateValues (\cmt cs -> toCode $ R.commentedItem
+  (RC.blockComment' cmt) (RC.class' cs))-}
 
 -- Modules --
 
 modFromData :: Label -> (Doc -> Module r) -> FS Doc -> Module r
-modFromData n f d = modify (setModuleName n) >> onStateValue f d
+modFromData n f d = undefined{-} modify (setModuleName n) >> onStateValue f d-}
 
 -- Files --
 
 fileDoc :: (OORenderSym r) => String -> (Module r -> Block r) ->
   Block r -> Module r -> File r
-fileDoc ext topb botb mdl = do
+fileDoc ext topb botb mdl = undefined{-} do
   m <- mdl
   nm <- getModuleName
   let fp = addExt ext nm
       updm = updateModuleDoc (\d -> emptyIfEmpty d
         (R.file (RC.block $ topb m) d (RC.block botb))) m
-  S.fileFromData fp (toState updm)
+  S.fileFromData fp (toState updm)-}
 
 -- | Generates a file for a documented module.
 --   mdr is a function that takes description, author, and module name and 
@@ -529,22 +528,27 @@ fileDoc ext topb botb mdl = do
 --   fl is the file
 docMod :: (OORenderSym r) => ModuleDocRenderer -> String -> String ->
   [String] -> String -> File r -> File r
-docMod mdr e d a dt fl = commentedMod fl (docComment $ mdr d a dt . addExt e
-  <$> getModuleName)
+docMod mdr e d a dt fl = undefined{-} commentedMod fl (docComment $ mdr d a dt . addExt e
+  <$> getModuleName)-}
 
-fileFromData :: (OORenderSym r) => (FilePath -> Module r -> File r)
+fileFromData 
+  :: (OORenderSym r, Module r ~ State s mod, File r ~ State s file) 
+  => (FilePath -> Module r -> File r)
   -> FilePath -> Module r -> File r
-fileFromData f fpath mdl' = do
+fileFromData f fpath mdl' = undefined{-do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'
-  modify (\s -> if isEmpty (RC.module' mdl)
-    then s
-    else over lensFStoGS (addFile (s ^. currFileType) fpath) $
+  modify \s -> 
+    if __ then -- (\s -> if isEmpty (RC.module' mdl)
+      s
+    else 
+      over lensFStoGS (addFile (s ^. currFileType) fpath) $
       -- If this is the main source file, set it as the main module in the state
-      if s ^. currMain && isSource (s ^. currFileType)
-        then over lensFStoGS (setMainMod fpath) s
-        else s)
-  return $ f fpath mdl
+      if s ^. currMain && isSource (s ^. currFileType) then 
+        over lensFStoGS (setMainMod fpath) s
+      else 
+        s
+  return $ f fpath mdl-}
 
 -- Helper functions
 

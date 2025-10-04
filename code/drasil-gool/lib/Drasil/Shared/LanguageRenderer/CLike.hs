@@ -68,12 +68,12 @@ char :: (CommonRenderSym r) => Type r
 char = typeFromData Char charRender (text charRender)
 
 listType :: (CommonRenderSym r) => String -> Type r -> Type r
-listType lst t' = typeFromData (List (getType t')) (lst
-    `containing` getTypeString t') $ text lst <> angles (RC.type' t')
+listType lst t' = undefined{-typeFromData (List (getType t')) (lst
+    `containing` getTypeString t') $ text lst <> angles (RC.type' t')-}
 
 setType :: (OORenderSym r) => String -> Type r -> Type r
-setType lst t' = typeFromData (Set (getType t')) (lst
-    `containing` getTypeString t') $ text lst <> angles (RC.type' t')
+setType lst t' = undefined{-typeFromData (Set (getType t')) (lst
+    `containing` getTypeString t') $ text lst <> angles (RC.type' t')-}
 
 void :: (CommonRenderSym r) => Type r
 void = typeFromData Void voidRender (text voidRender)
@@ -81,21 +81,21 @@ void = typeFromData Void voidRender (text voidRender)
 -- Unary Operators --
 
 notOp :: UnaryOp r
-notOp = unOpPrec "!"
+notOp = undefined {-unOpPrec "!"-}
 
 -- Binary Operators --
 
 andOp :: BinaryOp r
-andOp = andPrec "&&"
+andOp = undefined{-andPrec "&&"-}
 
 orOp :: BinaryOp r
-orOp = orPrec "||"
+orOp = undefined{-orPrec "||"-}
 -- Variables --
 
 self :: (OORenderSym r) => Variable r
-self = do
+self = undefined{-do
   l <- zoom lensVStoMS getClassName
-  mkStateVar R.this (IG.obj l) R.this'
+  mkStateVar R.this (IG.obj l) R.this'-}
 
 -- Values --
 
@@ -114,12 +114,12 @@ inlineIf c' v1' v2' = valFromData (prec c') Nothing (valueType v1')
   where prec cd = valuePrec cd <|> Just 0
 
 libFuncAppMixedArgs :: (CommonRenderSym r) => Library -> MixedCall r
-libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >>
-  IC.funcAppMixedArgs n t vs ns
+libFuncAppMixedArgs l n t vs ns = undefined{-modify (addLibImportVS l) >>
+  IC.funcAppMixedArgs n t vs ns-}
 
 libNewObjMixedArgs :: (OORenderSym r) => Library -> MixedCtorCall r
-libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
-  IG.newObjMixedArgs tp vs ns
+libNewObjMixedArgs l tp vs ns = undefined{-modify (addLibImportVS l) >>
+  IG.newObjMixedArgs tp vs ns-}
 
 -- Functions --
 
@@ -136,7 +136,7 @@ decrement1 = mkStmt . R.decrement
 
 varDec :: (OORenderSym r) => Permanence r -> Permanence r -> Doc ->
   Variable r -> Scope r -> Statement r
-varDec s d pdoc v' scp = do
+varDec s d pdoc v' scp = undefined{-do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
@@ -147,37 +147,37 @@ varDec s d pdoc v' scp = do
         bind Dynamic = d
         ptrdoc (List _) = pdoc
         ptrdoc (Set _) = pdoc
-        ptrdoc _ = empty
+        ptrdoc _ = empty-}
 
 varDecDef :: (CommonRenderSym r) => Terminator -> Variable r -> Scope r ->
   Value r -> Statement r
-varDecDef t vr scp vl' = do
+varDecDef t vr scp vl' = undefined{-do
   vd <- IC.varDec vr scp
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt
-  stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
+  stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)-}
 
 setDecDef :: (CommonRenderSym r) => Terminator -> Variable r -> Scope r -> Value r ->
   Statement r
-setDecDef t vr scp vl' = do
+setDecDef t vr scp vl' = undefined{-do
   vd <- IC.setDec vr scp
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt
-  stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
+  stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)-}
 
 listDec :: (CommonRenderSym r) => (Value r -> Doc) -> Value r ->
   Variable r -> Scope r -> Statement r
-listDec f vl v scp = do
+listDec f vl v scp = undefined{-do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
-  mkStmt (RC.statement vd <> f sz)
+  mkStmt (RC.statement vd <> f sz)-}
 
 extObjDecNew :: (OORenderSym r) => Library -> Variable r -> Scope r ->
   [Value r] -> Statement r
-extObjDecNew l v scp vs = IC.varDecDef v scp
-  (extNewObj l (onStateValue variableType v) vs)
+extObjDecNew l v scp vs = undefined{-IC.varDecDef v scp
+  (extNewObj l (onStateValue variableType v) vs)-}
 
 -- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)
 -- 2nd parameter is a statement to end every case with

@@ -9,7 +9,6 @@ import Drasil.Shared.InterfaceCommon (Label, Method, Parameter,
   Body, BlockSym(..), VisibilitySym(..))
 import qualified Drasil.GProc.InterfaceProc as IP (File, Module, FileSym(..),
   ModuleSym(..))
-import Drasil.Shared.State (FS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -29,12 +28,12 @@ class (BlockCommentSym r) => RenderFile r where
   top :: IP.Module r -> Block r 
   bottom :: Block r
 
-  commentedMod :: IP.File r -> FS (BlockComment r) -> IP.File r
+  commentedMod :: IP.File r -> BlockComment r -> IP.File r
 
   fileFromData :: FilePath -> IP.Module r -> IP.File r
 
 class RenderMod r where
-  modFromData :: String -> FS Doc -> IP.Module r
+  modFromData :: String -> Doc -> IP.Module r
   updateModuleDoc :: (Doc -> Doc) -> IP.Module r -> IP.Module r
   
 class ModuleElim r where

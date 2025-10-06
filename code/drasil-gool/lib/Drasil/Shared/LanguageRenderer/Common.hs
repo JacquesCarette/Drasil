@@ -61,14 +61,14 @@ forEach' f i' v' b' = mkStmtNoEnd (f i' v' b')
 
 varDecDef :: (CommonRenderSym r) => Variable r -> Scope r -> Maybe (Value r)
   -> Statement r
-varDecDef v scp e = do
+varDecDef v scp e = undefined {-do
   v' <- zoom lensMStoVS v
   modify $ useVarName (variableName v')
   modify $ setVarScope (variableName v') (scopeData scp)
   def e
   where
     def Nothing = IC.emptyStmt
-    def (Just d) = IC.assign v d
+    def (Just d) = IC.assign v d-}
 
 
 -- Python, Julia, and MATLAB --

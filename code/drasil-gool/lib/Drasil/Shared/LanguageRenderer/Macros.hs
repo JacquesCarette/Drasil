@@ -66,7 +66,7 @@ runStrategy l strats rv av = maybe
 
 listSlice :: (CommonRenderSym r) => Maybe (Value r) -> Maybe (Value r) ->
   Maybe (Value r) -> Variable r -> Value r -> Block r
-listSlice beg end step vnew vold = do
+listSlice beg end step vnew vold = undefined{-do
   
   l_temp <- genVarName [] "temp"
   l_i <- genLoopIndex
@@ -115,7 +115,7 @@ listSlice beg end step vnew vold = do
     IC.for (IC.varDecDef var_i IC.local begVal) cond
       (maybe (var_i &++) (var_i &+=) step)
       (oneLiner $ IC.valStmt $ IC.listAppend v_temp (IC.listAccess vold v_i)),
-    vnew &= v_temp]
+    vnew &= v_temp]-}
 
 -- Java, C#, C++, and Swift --
 -- | Gets the expression and code for setting bounds in a list slice
@@ -138,17 +138,17 @@ makeSetterVal vName step _       _       lb rb  scp =
   in (theSetter, IC.intToIndex $ IC.valueOf theVar)
 
 stringListVals :: (CommonRenderSym r) => [Variable r] -> Value r -> Statement r
-stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
+stringListVals vars sl = undefined{-} zoom lensMStoVS sl >>= (\slst -> multi $ checkList
   (getType $ valueType slst))
   where checkList (List String) = assignVals vars 0
         checkList _ = error
           "Value passed to stringListVals must be a list of strings"
         assignVals [] _ = []
         assignVals (v:vs) n = IC.assign v (cast (onStateValue variableType v) 
-          (IC.listAccess sl (IC.litInt n))) : assignVals vs (n+1)
+          (IC.listAccess sl (IC.litInt n))) : assignVals vs (n+1)-}
 
 stringListLists :: (CommonRenderSym r) => [Variable r] -> Value r -> Statement r
-stringListLists lsts sl = do
+stringListLists lsts sl = undefined{-} do
   slst <- zoom lensMStoVS sl
   l_i <- genLoopIndex
   let
@@ -170,7 +170,7 @@ stringListLists lsts sl = do
     numLists = IC.litInt (toInteger $ length lsts)
     var_i = IC.var l_i IC.int
     v_i = IC.valueOf var_i
-  checkList (getType $ valueType slst)
+  checkList (getType $ valueType slst)-}
 
 forRange :: (CommonRenderSym r) => Variable r -> Value r -> Value r -> Value r ->
   Body r -> Statement r

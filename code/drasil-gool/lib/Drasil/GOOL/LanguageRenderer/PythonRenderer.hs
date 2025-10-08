@@ -9,19 +9,18 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (blank, indent, nubSort)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
-import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
-  VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VisibilitySym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
-  MethodSym(..))
+import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, 
+  MixedCtorCall, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
+  Set(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -49,9 +48,9 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
-import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
+import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
-  argv, printLabel, listSep, piLabel, access, functionDox, variableList, 
+  argv, printLabel, listSep, piLabel, access, functionDox, variableList,
   parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10, 
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, 
@@ -66,17 +65,17 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, listAppend, 
-  listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, 
-  assign, subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
+  lambda, func, get, set, listAdd, listAppend,
+  listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt,
+  assign, subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod,
   function, buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, local)
-import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP 
-import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, 
-  decrement1, increment1, runStrategy, stringListVals, stringListLists, 
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
+import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
+  decrement1, increment1, runStrategy, stringListVals, stringListLists,
   notifyObservers')
-import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD, 
+import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
@@ -126,7 +125,7 @@ data FileState = FS {
   _langImports :: [String],
   _libImports :: [String],
   _moduleImports :: [String],
-  
+
   _mainDoc :: Doc  -- To print Python's "main" last
 }
 L.makeLenses ''FileState
@@ -207,7 +206,7 @@ initialFS = FS {
   _langImports = [],
   _libImports = [],
   _moduleImports = [],
-  
+
   _mainDoc = empty
 }
 
@@ -237,7 +236,7 @@ revFiles = L.over headers reverse . L.over sources reverse
 
 addLangImport :: String -> MethodState -> MethodState
 addLangImport i = L.over (lensMStoFS . langImports) (\is -> nubSort $ i:is)
-  
+
 addLangImportVS :: String -> ValueState -> ValueState
 addLangImportVS i = L.over methodState (addLangImport i)
 
@@ -421,7 +420,7 @@ instance UnaryOpSym PythonCode where
   asinOp = pyAsinOp
   acosOp = pyAcosOp
   atanOp = pyAtanOp
-  floorOp = pyFloorOp 
+  floorOp = pyFloorOp
   ceilOp = pyCeilOp
 
 instance BinaryOpSym PythonCode where
@@ -599,10 +598,10 @@ instance RenderValue PythonCode where
   printLnFunc = mkStateVal void empty
   printFileFunc _ = mkStateVal void empty
   printFileLnFunc _ = mkStateVal void empty
-  
+
   cast = on2StateWrapped (\t v-> mkVal t . R.castObj (RC.type' t) 
     $ RC.value v)
-  
+
   call = G.call pyNamedArgSep
 
   valFromData p i t' d = do 
@@ -696,7 +695,7 @@ instance VectorExpression PythonCode where
 
 instance RenderFunction PythonCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
-  
+
 instance FunctionElim PythonCode where
   functionType = onCodeValue fType
   function = funcDoc . unPC
@@ -721,7 +720,7 @@ instance StatementElim PythonCode where
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
-  type Statement PythonCode = (Doc, Terminator)
+  type Statement PythonCode = State MethodState (Doc, Terminator)
   valStmt = G.valStmt Empty
   emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
@@ -783,7 +782,7 @@ instance IOStatement PythonCode where
   getFileInputLine = getFileInput
   discardFileLine = CP.discardFileLine pyReadline
   getFileInputAll f v = v &= readlines f
-  
+
 instance StringStatement PythonCode where
   stringSplit d vnew s = assign vnew (objAccess s (splitFunc d))
 
@@ -848,7 +847,7 @@ instance VisibilityElim PythonCode where
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
   mType = zoom lensMStoVS
-  
+
 instance OOMethodTypeSym PythonCode where
   construct = G.construct
 
@@ -861,7 +860,7 @@ instance RenderParam PythonCode where
   paramFromData v' d = do 
     v <- zoom lensMStoVS v'
     toState $ on2CodeValues pd v (toCode d)
-  
+
 instance ParamElim PythonCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
@@ -889,7 +888,7 @@ instance OOMethodSym PythonCode where
 instance RenderMethod PythonCode where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
-    
+
   mthdFromData _ d = toState $ toCode $ mthd d
 
 instance OORenderMethod PythonCode where
@@ -904,7 +903,7 @@ instance OORenderMethod PythonCode where
     pms <- sequence ps
     pure $ toCode $ mthd $ pyFunction n pms bd
   destructor _ = error $ CP.destructorError pyName
-  
+
 instance MethodElim PythonCode where
   method = mthdDoc . unPC
 
@@ -914,7 +913,7 @@ instance StateVarSym PythonCode where
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm 
     (static :: PythonCode (Permanence PythonCode)))
-  
+
 instance StateVarElim PythonCode where
   stateVar = unPC
 
@@ -942,7 +941,8 @@ instance RenderClass PythonCode where
   implements is = toCode $ parens (text $ intercalate listSep is)
 
   commentedClass = G.commentedClass
-  
+
+
 instance ClassElim PythonCode where
   class' = unPC
 
@@ -953,19 +953,19 @@ instance ModuleSym PythonCode where
     libis <- getLibImports
     mis <- getModuleImports
     pure $ vibcat [
-      vcat (map (RC.import' . 
-        (langImport :: Label -> PythonCode (Import PythonCode))) lis),
-      vcat (map (RC.import' . 
-        (langImport :: Label -> PythonCode (Import PythonCode))) (sort $ is ++ 
+      vcat (map (RC.import' .
+        (langImport :: Label -> Import PythonCode)) lis),
+      vcat (map (RC.import' .
+        (langImport :: Label -> Import PythonCode)) (sort $ is ++
         libis)),
-      vcat (map (RC.import' . 
-        (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
+      vcat (map (RC.import' .
+        (modImport :: Label -> Import PythonCode)) mis)])
     (pure empty) getMainDoc
 
 instance RenderMod PythonCode where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
-  
+
 instance ModuleElim PythonCode where
   module' = modDoc . unPC
 
@@ -1022,7 +1022,7 @@ pyInputFunc, pyPrintFunc :: Doc
 pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
-pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyClose, 
+pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyClose,
   pySplit, pyRange, pyRstrip, pyMath, pyIn, pyAdd, pyRemove, pyUnion :: String
 pyListSize = "len"
 pyIndex = "index"
@@ -1224,7 +1224,7 @@ pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
 
 pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty
-pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . 
+pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid .
   text) lns
 
 toConstName :: String -> String

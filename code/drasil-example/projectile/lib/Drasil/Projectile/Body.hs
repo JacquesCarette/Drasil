@@ -8,6 +8,8 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
+import Theory.Drasil (TheoryModel)
+import Drasil.System (SystemKind(RunnableSoftware), mkSystem)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics,
@@ -44,10 +46,6 @@ import Drasil.Projectile.MetaConcepts (progName)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
 import Drasil.Projectile.Unitals
-
-import Theory.Drasil (TheoryModel)
-
-import Drasil.System (SystemKind(RunnableSoftware))
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -130,26 +128,13 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
   S "etc.")]
 
 si :: System
-si = SI {
-  _sys          = progName,
-  _kind         = RunnableSoftware,
-  _authors      = [samCrawford, brooks, spencerSmith],
-  _purpose      = [purp],
-  _background   = [background],
-  _motivation   = [motivation],
-  _scope        = [scope],
-  _quants       = symbols,
-  _theoryModels = tMods,
-  _genDefns     = genDefns,
-  _instModels   = iMods,
-  _dataDefns    = dataDefs,
-  _configFiles  = [],
-  _inputs       = inputs,
-  _outputs      = outputs,
-  _constraints  = map cnstrw' constrained,
-  _constants    = constants,
-  _systemdb     = symbMap
-}
+si = mkSystem progName RunnableSoftware
+  [samCrawford, brooks, spencerSmith]
+  [purp] [background] [scope] [motivation]
+  symbols tMods genDefns dataDefs iMods
+  []
+  inputs outputs (map cnstrw' constrained) constants
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]

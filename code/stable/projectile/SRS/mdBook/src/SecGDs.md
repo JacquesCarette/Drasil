@@ -4,13 +4,13 @@ This section collects the laws and equations that will be used to build the inst
 
 <div align="center">
 
-## Rectilinear (1D) velocity as a function of time for constant acceleration {#GD:rectVel}
+## Rectilinear velocity as a function of time for constant acceleration {#GD:rectVel}
 
 </div>
 
 |Refname    |GD:rectVel                                                                                                                                                                                                                                                                                                              |
 |:----------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Label      |Rectilinear (1D) velocity as a function of time for constant acceleration                                                                                                                                                                                                                                               |
+|Label      |Rectilinear velocity as a function of time for constant acceleration                                                                                                                                                                                                                                                    |
 |Units      |\\(\frac{\text{m}}{\text{s}}\\)                                                                                                                                                                                                                                                                                         |
 |Equation   |\\[v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}}\\,t\\]                                                                                                                                                                                                                                                                     |
 |Description|<ul><li>\\(v\text{(}t\text{)}\\) is the 1D speed (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\({v^{\text{i}}}\\) is the initial speed (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\({a^{c}}\\) is the constant acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\(t\\) is the time (\\({\text{s}}\\))</li></ul>|
@@ -33,13 +33,13 @@ Performing the integration, we have the required equation:
 
 <div align="center">
 
-## Rectilinear (1D) position as a function of time for constant acceleration {#GD:rectPos}
+## Rectilinear position as a function of time for constant acceleration {#GD:rectPos}
 
 </div>
 
 |Refname    |GD:rectPos                                                                                                                                                                                                                                                                                                                                                                          |
 |:----------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Label      |Rectilinear (1D) position as a function of time for constant acceleration                                                                                                                                                                                                                                                                                                           |
+|Label      |Rectilinear position as a function of time for constant acceleration                                                                                                                                                                                                                                                                                                                |
 |Units      |\\({\text{m}}\\)                                                                                                                                                                                                                                                                                                                                                                    |
 |Equation   |\\[p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}}\\,t+\frac{{a^{c}}\\,t^{2}}{2}\\]                                                                                                                                                                                                                                                                                                |
 |Description|<ul><li>\\(p\text{(}t\text{)}\\) is the 1D position (\\({\text{m}}\\))</li><li>\\({p^{\text{i}}}\\) is the initial position (\\({\text{m}}\\))</li><li>\\({v^{\text{i}}}\\) is the initial speed (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\(t\\) is the time (\\({\text{s}}\\))</li><li>\\({a^{c}}\\) is the constant acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li></ul>|

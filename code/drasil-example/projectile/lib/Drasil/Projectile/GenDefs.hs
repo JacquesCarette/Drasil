@@ -34,9 +34,9 @@ rectVelGD = gd (equationalModel' rectVelQD) (getUnit projSpeed) (Just rectVelDer
   [dRefInfo hibbeler2004 $ Page [8]] "rectVel" [{-Notes-}]
 
 rectVelQD :: ModelQDef
-rectVelQD = mkQuantDef' projSpeed (nounPhraseSent $ foldlSent_ 
-            [atStart rectilinear, sParen $ short oneD, phrase velocity,
-             S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
+rectVelQD = mkQuantDef' projSpeed
+  -- TODO: make this into a proper phrase
+  (cn "rectilinear velocity as a function of time for constant acceleration")
             E.speed'
 
 rectVelDeriv :: Derivation
@@ -58,9 +58,9 @@ rectPosGD = gd (equationalModel' rectPosQD) (getUnit projPos) (Just rectPosDeriv
   [dRefInfo hibbeler2004 $ Page [8]] "rectPos" [{-Notes-}]
 
 rectPosQD :: ModelQDef
-rectPosQD = mkQuantDef' projPos (nounPhraseSent $ foldlSent_ 
-            [atStart rectilinear, sParen $ short oneD, phrase position,
-             S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
+rectPosQD = mkQuantDef' projPos
+  -- TODO: make this into a proper phrase
+  (cn "rectilinear position as a function of time for constant acceleration")
             E.scalarPos'
 
 rectPosDeriv :: Derivation
@@ -82,12 +82,13 @@ velVecGD = gdNoRefs (equationalModel' velVecQD) (getUnit velocity)
            (Just velVecDeriv) "velVec" [{-Notes-}]
 
 velVecQD :: ModelQDef
-velVecQD = mkQuantDef' velocity (nounPhraseSent $ foldlSent_ 
-           [atStart velocity, S "vector as a function" `S.of_` phrase time `S.for`
-            short twoD, S "motion under", phrase QP.constAccel]) E.velVecExpr
+velVecQD = mkQuantDef' velocity
+  -- TODO: make this into a proper phrase
+  (cn "velocity vector as a function of time for 2D motion under constant acceleration")
+    E.velVecExpr
 
 velVecDeriv :: Derivation
-velVecDeriv = mkDerivName (phrase velocity +:+ phrase vector) [velVecDerivSent, 
+velVecDeriv = mkDerivName (phrase velocity +:+ phrase vector) [velVecDerivSent,
   E $ defines (sy velocity) E.velVecExpr]
 
 velVecDerivSent :: Sentence
@@ -95,11 +96,11 @@ velVecDerivSent = vecDeriv [(velocity, E.velocityXY), (acceleration, E.accelerat
 
 ----------
 posVecGD :: GenDefn
-posVecGD = gdNoRefs (equationalModel' posVecQD) (getUnit position) 
+posVecGD = gdNoRefs (equationalModel' posVecQD) (getUnit position)
            (Just posVecDeriv) "posVec" [{-Notes-}]
 
 posVecQD :: ModelQDef
-posVecQD = mkQuantDef' position (nounPhraseSent $ foldlSent_ 
+posVecQD = mkQuantDef' position (nounPhraseSent $ foldlSent_
   [atStart position, S "vector as a function" `S.of_` phrase time `S.for`
    short twoD, S "motion under", phrase QP.constAccel])
   E.posVecExpr
@@ -138,12 +139,12 @@ performIntSent  = S "Performing the integration" `sC` S "we have the required" +
 vecDeriv :: [(UnitalChunk, ModelExpr)] -> GenDefn -> Sentence
 vecDeriv vecs gdef = foldlSentCol [
   S "For a", phraseNP (combineNINI twoD cartesian), sParen (refS twoDMotion `S.and_` refS cartSyst) `sC`
-  S "we can represent" +:+. foldlList Comma List 
+  S "we can represent" +:+. foldlList Comma List
   (map (\(c, e) -> foldlSent_ [phraseNP (the c), phrase vector, S "as", eS e]) vecs),
   atStartNP (the acceleration) `S.is` S "assumed to be constant", sParen (refS constAccel) `S.andThe`
-  phrase constAccelV `S.is` S "represented as" +:+. eS E.constAccelXY, 
+  phrase constAccelV `S.is` S "represented as" +:+. eS E.constAccelXY,
   atStartNP (the iVel) +:+ sParen (S "at" +:+ eS (sy time $= exactDbl 0) `sC` S "from" +:+ refS timeStartZero) `S.is`
-  S "represented by" +:+. eS (sy iVel $= vec2D (sy ixVel) (sy iyVel)), 
+  S "represented by" +:+. eS (sy iVel $= vec2D (sy ixVel) (sy iyVel)),
   S "Since we have a",
   phrase cartesian `sC` refS gdef, S "can be applied to each", phraseNP (coordinate `ofThe`
   (fst . head) vecs), phrase vector, S "to yield the required", phrase equation]

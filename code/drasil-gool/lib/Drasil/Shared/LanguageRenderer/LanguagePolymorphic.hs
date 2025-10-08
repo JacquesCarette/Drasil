@@ -208,8 +208,8 @@ arrayElem i' v' =
   in mkStateVar vName vType vRender
 
 -- Scope --
-local :: (Monad r) => r ScopeData
-local = toCode $ sd Local
+local :: ScopeData
+local = sd Local
 
 -- Values --
 

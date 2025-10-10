@@ -1,4 +1,3 @@
-#!/usr/bin/env stack
 {- stack script
    --resolver lts-22.31
    --package split

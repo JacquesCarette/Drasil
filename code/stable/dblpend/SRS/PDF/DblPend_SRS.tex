@@ -206,13 +206,13 @@ The scope of the requirements includes the analysis of a two-dimensional (2D) pe
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, ordinary differential equations, and basic understanding of and multivector. The users of DblPend can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
+Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of DblPend can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
 
-The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. This document demonstrates a novel approach to modeling the double pendulum using The traditional vector-based approach is enhanced by representing physical quantities as multivector in a unified geometric framework. Section 4.2.3 presents general definitions that showcase how velocity, acceleration, and force are naturally expressed using operations such as the geometric product and basis vector representations..
+The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. This document demonstrates a novel approach to modeling the double pendulum. The traditional vector-based approach is used to represent physical quantities. Section 4.2.3 presents general definitions that showcase how velocity, acceleration, and force are expressed using standard vector operations...
 
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -269,11 +269,6 @@ This subsection provides a list of terms that are used in the subsequent section
 \begin{itemize}
 \item{Gravity: The force that attracts one physical body with mass to another.}
 \item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from \cite{cartesianWiki}).}
-\item{Multivector: A generalization of scalars, vectors, and higher-grade elements in Clifford algebra that can represent rotations and reflections.}
-\item{Geometric product: The fundamental operation in Clifford algebra that combines the dot product and wedge product of vectors.}
-\item{Basis vector: Fundamental unit vectors (e₁, e₂) that span the 2D Clifford space and satisfy the relations e₁² = e₂² = 1.}
-\item{Clifford space: The geometric algebra space Cl(2,0) where multivectors exist, characterized by basis vectors e₁, e₂ with signature (+,+).}
-\item{Bivector: A grade-2 multivector element e₁∧e₂ representing oriented area and rotations in the plane.}
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
@@ -284,7 +279,7 @@ The physical system of DblPend, as shown in \hyperref[Figure:dblpend]{Fig:dblpen
 \item[PS2:]{The second rod (with length of the second rod ${L_{2}}$).}
 \item[PS3:]{The first object.}
 \item[PS4:]{The second object.}
-\item[PS5:]{Each object's motion is described using multivector in 2D space Cl(2,0).}
+\item[PS5:]{Each object's motion is described using vectors in 2D space Cl(2,0).}
 \item[PS6:]{Physical quantities (velocity, acceleration, force) are unified as geometric entities with basis vectors e₁ and e₂.}
 \end{description}
 \begin{figure}[H]

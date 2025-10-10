@@ -486,7 +486,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, ordinary differential equations, and basic understanding of and multivector. The users of <span title="Double Pendulum">DblPend</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of <span title="Double Pendulum">DblPend</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -497,7 +497,7 @@
               The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
-              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. This document demonstrates a novel approach to modeling the double pendulum using The traditional vector-based approach is enhanced by representing physical quantities as multivector in a unified geometric framework. Section 4.2.3 presents general definitions that showcase how velocity, acceleration, and force are naturally expressed using operations such as the geometric product and basis vector representations..
+              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. This document demonstrates a novel approach to modeling the double pendulum. The traditional vector-based approach is used to represent physical quantities. Section 4.2.3 presents general definitions that showcase how velocity, acceleration, and force are expressed using standard vector operations...
             </p>
           </div>
         </div>
@@ -594,21 +594,6 @@
                   <li>
                     Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from <a href=#cartesianWiki>cartesianWiki</a>).
                   </li>
-                  <li>
-                    Multivector: A generalization of scalars, vectors, and higher-grade elements in Clifford algebra that can represent rotations and reflections.
-                  </li>
-                  <li>
-                    Geometric product: The fundamental operation in Clifford algebra that combines the dot product and wedge product of vectors.
-                  </li>
-                  <li>
-                    Basis vector: Fundamental unit vectors (e₁, e₂) that span the 2D Clifford space and satisfy the relations e₁² = e₂² = 1.
-                  </li>
-                  <li>
-                    Clifford space: The geometric algebra space Cl(2,0) where multivectors exist, characterized by basis vectors e₁, e₂ with signature (+,+).
-                  </li>
-                  <li>
-                    Bivector: A grade-2 multivector element e₁∧e₂ representing oriented area and rotations in the plane.
-                  </li>
                 </ul>
               </div>
             </div>
@@ -632,7 +617,7 @@
                     <span title="physical system description">PS</span>4: The second object.
                   </p>
                   <p>
-                    <span title="physical system description">PS</span>5: Each object's motion is described using multivector in 2D space Cl(2,0).
+                    <span title="physical system description">PS</span>5: Each object's motion is described using vectors in 2D space Cl(2,0).
                   </p>
                   <p>
                     <span title="physical system description">PS</span>6: Physical quantities (velocity, acceleration, force) are unified as geometric entities with basis vectors e₁ and e₂.

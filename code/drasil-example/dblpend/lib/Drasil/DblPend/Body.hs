@@ -33,9 +33,7 @@ import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
 import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1)
 import Drasil.DblPend.Assumptions (assumpDouble)
-import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject,
-  multivectorDef, geometricProductDef, 
-  basisVectorDef, cliffordSpace, bivectorDef)
+import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject)
 import Drasil.DblPend.Goals (goals, goalsInputs)
 import Drasil.DblPend.DataDefs (dataDefs)
 import Drasil.DblPend.IMods (iMods)
@@ -75,14 +73,12 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) (foldlSent [
-         S "This document demonstrates a novel approach to modeling the double pendulum using",
-         EmptyS,
-         S "The traditional vector-based approach is enhanced by representing physical quantities as",
-         plural multivectorDef `S.in_` S "a unified geometric framework" +:+. EmptyS,
-         S "Section 4.2.3 presents", plural genDefn, S "that showcase how velocity, acceleration, and force",
-         S "are naturally expressed using", S "operations such as the",
-         phrase geometricProductDef `S.and_` S "basis vector representations"
+  IOrgSec inModel (SRS.inModel [] []) (foldlSent [
+   S "This document demonstrates a novel approach to modeling the double pendulum.",
+   EmptyS,
+   S "The traditional vector-based approach is used to represent physical quantities.",
+   S "Section 4.2.3 presents", plural genDefn, S "that showcase how velocity, acceleration, and force",
+   S "are expressed using standard vector operations."
        ])],
   GSDSec $ 
     GSDProg [
@@ -137,10 +133,7 @@ motivation = foldlSent_ [S "To simulate", phraseNP (motion `the_ofThe` pendulum)
 background :: Sentence
 background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
-  S "highly sensitive to initial conditions" +:+. EmptyS,
-  S "This analysis uses", S "to represent",
-  S "velocities, accelerations, and forces as", plural multivectorDef,
-  S "providing a unified geometric framework"]
+  S "highly sensitive to initial conditions" ]
 
 -- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is added to symbolsAll as it is used to create new chunks with pendDisAngle's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
@@ -228,8 +221,7 @@ scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
 charsOfReader :: [Sentence]
 charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
                  phrase undergraduate +:+ S "level 1" +:+ phrase calculus,
-                 plural ode,
-                 S "basic understanding of" +:+ S "and" +:+ plural multivectorDef]
+                 plural ode]
 
 -------------------------------------
 -- 2.4 : Organization of Documents --
@@ -316,8 +308,7 @@ userCharacteristicsIntro prog = foldlSP
 -- 4.1.1 Terminology and Definitions --
 ---------------------------------
 terms :: [ConceptChunk]
-terms = [gravity, cartesian, multivectorDef, geometricProductDef, basisVectorDef,
-         cliffordSpace, bivectorDef]
+terms = [gravity, cartesian]
 
 -----------------------------------
 -- 4.1.2 Physical System Description --
@@ -328,7 +319,7 @@ physSystParts = map (!.)
    atStartNP (the secondRod) +:+ sParen (S "with" +:+ getTandS lenRod_2),
    atStartNP (the firstObject),
    atStartNP (the secondObject),
-   S "Each object's motion is described using" +:+ plural multivectorDef +:+ S "in 2D" +:+ S "space Cl(2,0)",
+   S "Each object's motion is described using vectors in 2D" +:+ S "space Cl(2,0)",
    S "Physical quantities (velocity, acceleration, force) are unified as geometric entities with basis vectors e₁ and e₂"]
 
 -----------------------------

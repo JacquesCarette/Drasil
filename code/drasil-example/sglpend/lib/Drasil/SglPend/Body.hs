@@ -7,7 +7,7 @@ import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator.BaseChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -23,16 +23,16 @@ import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro)
 import qualified Drasil.DblPend.Body as DPD (tMods)
-import Drasil.DblPend.Concepts (rod)
+import Drasil.DblPend.Concepts (concepts, rod, arcLen)
 import Drasil.DblPend.Requirements (nonFuncReqs)
 import Drasil.DblPend.Unitals (acronyms)
 import Drasil.DblPend.References (citations)
 
 import Drasil.SglPend.Assumptions (assumpSingle)
+import Drasil.SglPend.LabelledContent (figMotion, sysCtxFig1)
 import Drasil.SglPend.Goals (goals, goalsInputs)
 import Drasil.SglPend.DataDefs (dataDefs)
 import Drasil.SglPend.IMods (iMods)
-import Drasil.SglPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.SglPend.MetaConcepts (progName)
 import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
@@ -110,6 +110,8 @@ purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pen
 
 ideaDicts :: [IdeaDict]
 ideaDicts = 
+  -- Actual IdeaDicts
+  concepts ++
   -- CIs
   nw progName : map nw mathcon' ++ map nw physicCon'
 
@@ -117,7 +119,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   physicalcon ++ [angular, displacement, iPos, pendulum, motion,
-  gravitationalConst, gravity, rigidBody, weight, shm] ++
+  gravitationalConst, gravity, rigidBody, weight, shm, arcLen] ++
   -- Unital Chunks
   [cw len]
 
@@ -129,8 +131,8 @@ abbreviationsList =
   map nw symbols
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
+symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks
+  ([] :: [UnitDefn]) dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

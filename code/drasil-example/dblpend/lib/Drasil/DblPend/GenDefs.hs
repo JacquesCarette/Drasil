@@ -19,24 +19,24 @@ genDefns = [mvVelGD_1, mvVelGD_2, mvAccelGD_1, mvAccelGD_2, mvForceGD_1, mvForce
 -- Multivector Velocity for First Object    --
 -----------------------------------------------
 mvVelGD_1 :: GenDefn
-mvVelGD_1 = gdNoRefs (equationalModel' mvVelQD_1) (getUnit velocity) (Just mvVelDeriv_1) "multivectorVelocity1" []
+mvVelGD_1 = gdNoRefs (equationalModel' mvVelQD_1) (getUnit velocity) (Just mvVelDeriv_1) "velocityVector1" []
 
 mvVelQD_1 :: ModelQDef  
-mvVelQD_1 = mkQuantDef' mvVel_1 (nounPhraseSP "multivector velocity of the first object") E.mvVelExpr_1
+mvVelQD_1 = mkQuantDef' mvVel_1 (nounPhraseSP "velocity vector of the first object") E.mvVelExpr_1
 
 mvVelDeriv_1 :: Derivation
 mvVelDeriv_1 = mkDerivName (phrase velocity +:+ S "of the first object") (weave [mvVelDerivSents_1, mvVelDerivEqns_1])
 
 mvVelDerivSents_1 :: [Sentence]
-mvVelDerivSents_1 = [S "The multivector velocity in Clifford algebra represents both magnitude and direction as a unified geometric entity.",
-                     S "Using the 2D Clifford space Cl(2,0), the velocity is expressed as a vector multivector with components in the e₁ and e₂ basis directions.",
+mvVelDerivSents_1 = [S "The velocity vector in Clifford algebra represents both magnitude and direction as a unified geometric entity.",
+                     S "Using the 2D Clifford space Cl(2,0), the velocity is expressed as a vector with components in the e₁ and e₂ basis directions.",
                      S "This approach provides a natural geometric representation that preserves rotational relationships.",
-                     S "The angular velocity ω₁ and rod length L₁ combine with the direction vector to form the complete velocity multivector.",
+                     S "The angular velocity ω₁ and rod length L₁ combine with the direction vector to form the complete velocity vector.",
                      S "Unlike traditional component-wise vector addition, this geometric product maintains the intrinsic geometric structure."]
 
 mvVelDerivEqns_1 :: [Sentence]  
 mvVelDerivEqns_1 = [eS $ sy mvVel_1 $= E.mvVelExpr_1,
-                    S "where the velocity multivector combines angular velocity and rod length in Clifford space",
+                    S "where the velocity vector combines angular velocity and rod length in Clifford space",
                     S "Direction vector = cos(θ₁)e₁ + sin(θ₁)e₂ using basis vectors e₁, e₂",
                     S "The geometric product preserves both magnitude and geometric orientation"]
 
@@ -44,18 +44,18 @@ mvVelDerivEqns_1 = [eS $ sy mvVel_1 $= E.mvVelExpr_1,
 -- Multivector Velocity for Second Object   --
 -----------------------------------------------
 mvVelGD_2 :: GenDefn
-mvVelGD_2 = gdNoRefs (equationalModel' mvVelQD_2) (getUnit velocity) (Just mvVelDeriv_2) "multivectorVelocity2" []
+mvVelGD_2 = gdNoRefs (equationalModel' mvVelQD_2) (getUnit velocity) (Just mvVelDeriv_2) "velocityVector2" []
 
 mvVelQD_2 :: ModelQDef
-mvVelQD_2 = mkQuantDef' mvVel_2 (nounPhraseSP "multivector velocity of the second object") E.mvVelExpr_2
+mvVelQD_2 = mkQuantDef' mvVel_2 (nounPhraseSP "velocity vector of the second object") E.mvVelExpr_2
 
 mvVelDeriv_2 :: Derivation
 mvVelDeriv_2 = mkDerivName (phrase velocity +:+ S "of the second object") (weave [mvVelDerivSents_2, mvVelDerivEqns_2])
 
 mvVelDerivSents_2 :: [Sentence]
-mvVelDerivSents_2 = [S "The multivector velocity for the second object combines the velocity from the first pendulum with its own rotational motion.",
+mvVelDerivSents_2 = [S "The velocity vector for the second object combines the velocity from the first pendulum with its own rotational motion.",
                      S "In Clifford algebra, this vector addition preserves the geometric relationships between the two connected pendulums.",
-                     S "The total velocity is expressed as the sum of two vector multivectors in the same geometric space."]
+                     S "The total velocity is expressed as the sum of two vectors in the same geometric space."]
 
 mvVelDerivEqns_2 :: [Sentence]
 mvVelDerivEqns_2 = [eS $ sy mvVel_2 $= E.mvVelExpr_2,
@@ -65,18 +65,18 @@ mvVelDerivEqns_2 = [eS $ sy mvVel_2 $= E.mvVelExpr_2,
 -- Multivector Acceleration for First Object--
 -----------------------------------------------
 mvAccelGD_1 :: GenDefn
-mvAccelGD_1 = gdNoRefs (equationalModel' mvAccelQD_1) (getUnit acceleration) (Just mvAccelDeriv_1) "multivectorAcceleration1" []
+mvAccelGD_1 = gdNoRefs (equationalModel' mvAccelQD_1) (getUnit acceleration) (Just mvAccelDeriv_1) "accelerationVector1" []
 
 mvAccelQD_1 :: ModelQDef
-mvAccelQD_1 = mkQuantDef' mvAccel_1 (nounPhraseSP "multivector acceleration of the first object") E.mvAccelExpr_1
+mvAccelQD_1 = mkQuantDef' mvAccel_1 (nounPhraseSP "acceleration vector of the first object") E.mvAccelExpr_1
 
 mvAccelDeriv_1 :: Derivation
 mvAccelDeriv_1 = mkDerivName (phrase acceleration +:+ S "of the first object") (weave [mvAccelDerivSents_1, mvAccelDerivEqns_1])
 
 mvAccelDerivSents_1 :: [Sentence]
-mvAccelDerivSents_1 = [S "The multivector acceleration in Clifford algebra combines centripetal and tangential acceleration components.",
+mvAccelDerivSents_1 = [S "The acceleration vector in Clifford algebra combines centripetal and tangential acceleration components.",
                        S "The centripetal acceleration points radially inward, while tangential acceleration is perpendicular to the rod.",
-                       S "Both components are naturally expressed as vector multivectors and added using Clifford geometric operations.",
+                       S "Both components are naturally expressed as vector and added using Clifford geometric operations.",
                        S "Centripetal component: -ω₁²L₁ × direction_vector (radial inward)",
                        S "Tangential component: α₁L₁ × perpendicular_direction_vector (tangential)",
                        S "The geometric sum preserves the underlying geometric relationships without component-wise decomposition."]
@@ -84,17 +84,17 @@ mvAccelDerivSents_1 = [S "The multivector acceleration in Clifford algebra combi
 mvAccelDerivEqns_1 :: [Sentence]
 mvAccelDerivEqns_1 = [eS $ sy mvAccel_1 $= E.mvAccelExpr_1,
                       S "where the acceleration combines centripetal and tangential components in Clifford space",
-                      S "= centripetal_multivector + tangential_multivector",
+                      S "= centripetal_vector + tangential_vector",
                       S "Both terms maintain their geometric significance through the Clifford algebra representation"]
 
 -----------------------------------------------
 -- Multivector Acceleration for Second Object--
 -----------------------------------------------
-mvAccelGD_2 :: GenDefn  
-mvAccelGD_2 = gdNoRefs (equationalModel' mvAccelQD_2) (getUnit acceleration) (Just mvAccelDeriv_2) "multivectorAcceleration2" []
+mvAccelGD_2 :: GenDefn
+mvAccelGD_2 = gdNoRefs (equationalModel' mvAccelQD_2) (getUnit acceleration) (Just mvAccelDeriv_2) "accelerationVector2" []
 
 mvAccelQD_2 :: ModelQDef
-mvAccelQD_2 = mkQuantDef' mvAccel_2 (nounPhraseSP "multivector acceleration of the second object") E.mvAccelExpr_2
+mvAccelQD_2 = mkQuantDef' mvAccel_2 (nounPhraseSP "acceleration vector of the second object") E.mvAccelExpr_2
 
 mvAccelDeriv_2 :: Derivation
 mvAccelDeriv_2 = mkDerivName (phrase acceleration +:+ S "of the second object") (weave [mvAccelDerivSents_2, mvAccelDerivEqns_2])
@@ -112,18 +112,18 @@ mvAccelDerivEqns_2 = [eS $ sy mvAccel_2 $= E.mvAccelExpr_2,
 -- Multivector Force for First Object       --
 -----------------------------------------------
 mvForceGD_1 :: GenDefn
-mvForceGD_1 = gdNoRefs (equationalModel' mvForceQD_1) (getUnit force) (Just mvForceDeriv_1) "multivectorForce1" []
+mvForceGD_1 = gdNoRefs (equationalModel' mvForceQD_1) (getUnit force) (Just mvForceDeriv_1) "forceVector1" []
 
 mvForceQD_1 :: ModelQDef
-mvForceQD_1 = mkQuantDef' mvForce_1 (nounPhraseSP "multivector force on the first object") E.mvForceExpr_1
+mvForceQD_1 = mkQuantDef' mvForce_1 (nounPhraseSP "force vector on the first object") E.mvForceExpr_1
 
 mvForceDeriv_1 :: Derivation
 mvForceDeriv_1 = mkDerivName (phrase force +:+ S "on the first object") (weave [mvForceDerivSents_1, mvForceDerivEqns_1])
 
 mvForceDerivSents_1 :: [Sentence]
-mvForceDerivSents_1 = [S "The multivector force in Clifford algebra combines inertial and gravitational forces as vector multivectors.",
-                       S "The inertial force is proportional to the multivector acceleration, preserving Newton's second law in geometric form.",
-                       S "Gravitational force acts vertically downward and is naturally represented as a vector multivector."]
+mvForceDerivSents_1 = [S "The force vector in Clifford algebra combines inertial and gravitational forces as vectors.",
+                       S "The inertial force is proportional to the force vector, preserving Newton's second law in geometric form.",
+                       S "Gravitational force acts vertically downward and is naturally represented as a vector."]
 
 mvForceDerivEqns_1 :: [Sentence]
 mvForceDerivEqns_1 = [eS $ sy mvForce_1 $= E.mvForceExpr_1,
@@ -133,10 +133,10 @@ mvForceDerivEqns_1 = [eS $ sy mvForce_1 $= E.mvForceExpr_1,
 -- Multivector Force for Second Object      --
 -----------------------------------------------
 mvForceGD_2 :: GenDefn
-mvForceGD_2 = gdNoRefs (equationalModel' mvForceQD_2) (getUnit force) (Just mvForceDeriv_2) "multivectorForce2" []
+mvForceGD_2 = gdNoRefs (equationalModel' mvForceQD_2) (getUnit force) (Just mvForceDeriv_2) "forceVector2" []
 
 mvForceQD_2 :: ModelQDef
-mvForceQD_2 = mkQuantDef' mvForce_2 (nounPhraseSP "multivector force on the second object") E.mvForceExpr_2
+mvForceQD_2 = mkQuantDef' mvForce_2 (nounPhraseSP "force vector on the second object") E.mvForceExpr_2
 
 mvForceDeriv_2 :: Derivation
 mvForceDeriv_2 = mkDerivName (phrase force +:+ S "on the second object") (weave [mvForceDerivSents_2, mvForceDerivEqns_2])

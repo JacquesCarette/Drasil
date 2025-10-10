@@ -42,36 +42,36 @@ This section transforms the problem defined in the [problem description](./SecPr
 
 #### Detailed derivation of angle of the second rod: {#IM:calOfAngle2Deriv}
 
-By solving equations [GD:xForce2](./SecGDs.md#GD:xForce2) and [GD:yForce2](./SecGDs.md#GD:yForce2) for \\({\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\) and \\({\boldsymbol{T}\_{2}}\\,\cos\left({θ\_{2}}\right)\\) and then substituting into equation [GD:xForce1](./SecGDs.md#GD:xForce1) and [GD:yForce1](./SecGDs.md#GD:yForce1) , we can get equations 1 and 2:
+By solving multivector force equations [GD:multivectorForce1](./SecGDs.md#GD:multivectorForce1) and [GD:multivectorForce2](./SecGDs.md#GD:multivectorForce2) for \\({f\_{1}}\\) and \\({f\_{2}}\\) and then substituting into the Clifford algebra force equations , we can get equations 1 and 2:
 
-\\[{m\_{1}}\\,{a\_{\text{x}1}}=-{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)-{m\_{2}}\\,{a\_{\text{x}2}}\\]
+\\[{m\_{1}}\\,{a\_{1}}=-{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)-{m\_{2}}\\,{a\_{2}}\\]
 
 
 
-\\[{m\_{1}}\\,{a\_{\text{y}1}}={\boldsymbol{T}\_{1}}\\,\cos\left({θ\_{1}}\right)-{m\_{2}}\\,{a\_{\text{y}2}}-{m\_{2}}\\,g-{m\_{1}}\\,g\\]
+\\[{m\_{1}}\\,{a\_{1}}={\boldsymbol{T}\_{1}}\\,\cos\left({θ\_{1}}\right)-{m\_{2}}\\,{a\_{2}}-{m\_{2}}\\,g-{m\_{1}}\\,g\\]
 
 Multiply the equation 1 by \\(\cos\left({θ\_{1}}\right)\\) and the equation 2 by \\(\sin\left({θ\_{1}}\right)\\) and rearrange to get:
 
-\\[{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)\\,\cos\left({θ\_{1}}\right)=-\cos\left({θ\_{1}}\right)\\,\left({m\_{1}}\\,{a\_{\text{x}1}}+{m\_{2}}\\,{a\_{\text{x}2}}\right)\\]
+\\[{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)\\,\cos\left({θ\_{1}}\right)=-\cos\left({θ\_{1}}\right)\\,\left({m\_{1}}\\,{a\_{1}}+{m\_{2}}\\,{a\_{2}}\right)\\]
 
 
 
-\\[{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)\\,\cos\left({θ\_{1}}\right)=\sin\left({θ\_{1}}\right)\\,\left({m\_{1}}\\,{a\_{\text{y}1}}+{m\_{2}}\\,{a\_{\text{y}2}}+{m\_{2}}\\,g+{m\_{1}}\\,g\right)\\]
+\\[{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)\\,\cos\left({θ\_{1}}\right)=\sin\left({θ\_{1}}\right)\\,\left({m\_{1}}\\,{a\_{1}}+{m\_{2}}\\,{a\_{2}}+{m\_{2}}\\,g+{m\_{1}}\\,g\right)\\]
 
 This leads to the equation 3
 
-\\[\sin\left({θ\_{1}}\right)\\,\left({m\_{1}}\\,{a\_{\text{y}1}}+{m\_{2}}\\,{a\_{\text{y}2}}+{m\_{2}}\\,g+{m\_{1}}\\,g\right)=-\cos\left({θ\_{1}}\right)\\,\left({m\_{1}}\\,{a\_{\text{x}1}}+{m\_{2}}\\,{a\_{\text{x}2}}\right)\\]
+\\[\sin\left({θ\_{1}}\right)\\,\left({m\_{1}}\\,{a\_{1}}+{m\_{2}}\\,{a\_{2}}+{m\_{2}}\\,g+{m\_{1}}\\,g\right)=-\cos\left({θ\_{1}}\right)\\,\left({m\_{1}}\\,{a\_{1}}+{m\_{2}}\\,{a\_{2}}\right)\\]
 
-Next, multiply equation [GD:xForce2](./SecGDs.md#GD:xForce2) by \\(\cos\left({θ\_{2}}\right)\\) and equation [GD:yForce2](./SecGDs.md#GD:yForce2) by \\(\sin\left({θ\_{2}}\right)\\) and rearrange to get:
+Next, multiply multivector force equation [GD:multivectorForce2](./SecGDs.md#GD:multivectorForce2) by \\(\cos\left({θ\_{2}}\right)\\) and the Clifford force equation by \\(\sin\left({θ\_{2}}\right)\\) and rearrange to get:
 
-\\[{\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\,\cos\left({θ\_{2}}\right)=-\cos\left({θ\_{2}}\right)\\,{m\_{2}}\\,{a\_{\text{x}2}}\\]
+\\[{\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\,\cos\left({θ\_{2}}\right)=-\cos\left({θ\_{2}}\right)\\,{m\_{2}}\\,{a\_{2}}\\]
 
 
 
-\\[{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{2}}\right)\\,\cos\left({θ\_{2}}\right)=\sin\left({θ\_{2}}\right)\\,\left({m\_{2}}\\,{a\_{\text{y}2}}+{m\_{2}}\\,g\right)\\]
+\\[{\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\,\cos\left({θ\_{2}}\right)=\sin\left({θ\_{2}}\right)\\,\left({m\_{2}}\\,{a\_{2}}+{m\_{2}}\\,g\right)\\]
 
 which leads to equation 4
 
-\\[\sin\left({θ\_{2}}\right)\\,\left({m\_{2}}\\,{a\_{\text{y}2}}+{m\_{2}}\\,g\right)=-\cos\left({θ\_{2}}\right)\\,{m\_{2}}\\,{a\_{\text{x}2}}\\]
+\\[\sin\left({θ\_{2}}\right)\\,\left({m\_{2}}\\,{a\_{2}}+{m\_{2}}\\,g\right)=-\cos\left({θ\_{2}}\right)\\,{m\_{2}}\\,{a\_{2}}\\]
 
-By giving equations [GD:accelerationX1](./SecGDs.md#GD:accelerationX1) and [GD:accelerationX2](./SecGDs.md#GD:accelerationX2) and [GD:accelerationY1](./SecGDs.md#GD:accelerationY1) and [GD:accelerationY2](./SecGDs.md#GD:accelerationY2) plus additional two equations, 3 and 4, we can get [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2) via a computer algebra program:
+By giving multivector acceleration equations [GD:multivectorAcceleration1](./SecGDs.md#GD:multivectorAcceleration1) and [GD:multivectorAcceleration2](./SecGDs.md#GD:multivectorAcceleration2) and plus Clifford algebra equations plus additional two equations, 3 and 4, we can get [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2) via a computer algebra program:

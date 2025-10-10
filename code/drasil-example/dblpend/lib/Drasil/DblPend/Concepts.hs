@@ -12,6 +12,20 @@ concepts = map nw [rod, horizontal, vertical,
   verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject] 
   ++ map nw defs
 
+-- IdeaDict copies for GA terms (same UIDs as ConceptChunks) for external consumers (e.g., sglpend)
+gaIdeaDicts :: [IdeaDict]
+gaIdeaDicts = [ nc "dblpend_multivector" (cn "multivector")
+              , nc "dblpend_cliffordAlgebra" (cn "Clifford algebra")
+              , nc "dblpend_geometric_product" (cn "geometric product")
+              , nc "dblpend_basis_vector" (cn "basis vector")
+              , nc "dblpend_Clifford_space" (cn "Clifford space")
+              , nc "dblpend_bivector" (cn "bivector")
+              ]
+
+-- Full concepts for examples that need GA terms as IdeaDicts
+conceptsWithGA :: [IdeaDict]
+conceptsWithGA = concepts ++ gaIdeaDicts
+
 rod, horizontal, vertical :: IdeaDict
 rod = nc "rod" (cn' "rod")
 horizontal = nc "horizontal" (cn "horizontal") 
@@ -38,3 +52,27 @@ defs = [arcLen]
 
 arcLen :: ConceptChunk
 arcLen = dcc "arc length" (nounPhraseSP "arc length") "the distance between two points on a curve"
+
+multivectorDef :: ConceptChunk
+multivectorDef = dcc "dblpend_multivector" (nounPhraseSP "multivector") 
+  "a generalization of scalars, vectors, and higher-grade elements in Clifford algebra that can represent rotations and reflections"
+
+cliffordAlgebraDef :: ConceptChunk
+cliffordAlgebraDef = dcc "dblpend_cliffordAlgebra" (nounPhraseSP "Clifford algebra")
+  "a unification of real numbers, complex numbers, quaternions, and several other hypercomplex number systems into a single mathematical framework"
+
+geometricProductDef :: ConceptChunk
+geometricProductDef = dcc "dblpend_geometric_product" (nounPhraseSP "geometric product")
+  "the fundamental operation in Clifford algebra that combines the dot product and wedge product of vectors"
+
+basisVectorDef :: ConceptChunk
+basisVectorDef = dcc "dblpend_basis_vector" (nounPhraseSP "basis vector")
+  "fundamental unit vectors (e₁, e₂) that span the 2D Clifford space and satisfy the relations e₁² = e₂² = 1"
+
+cliffordSpace :: ConceptChunk  
+cliffordSpace = dcc "dblpend_Clifford_space" (nounPhraseSP "Clifford space")
+  "the geometric algebra space Cl(2,0) where multivectors exist, characterized by basis vectors e₁, e₂ with signature (+,+)"
+
+bivectorDef :: ConceptChunk
+bivectorDef = dcc "dblpend_bivector" (nounPhraseSP "bivector")
+  "a grade-2 multivector element e₁∧e₂ representing oriented area and rotations in the plane"

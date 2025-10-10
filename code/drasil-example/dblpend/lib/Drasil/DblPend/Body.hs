@@ -3,11 +3,12 @@ module Drasil.DblPend.Body where
 
 import Control.Lens ((^.))
 
-import Drasil.Metadata (inModel)
+import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator.BaseChunkDB (cdb)
+import Data.Drasil.SI_Units (siUnits)
 import qualified Drasil.DocLang.SRS as SRS
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -20,29 +21,33 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
   physical, sysCont, software, softwareConstraint, softwareSys,
-  system, user, analysis)
+  system, user, analysis, goalStmt, physSyst, requirement)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
 import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon', pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
+
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
 import Drasil.DblPend.Assumptions (assumpDouble)
-import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject)
+import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject,
+  multivectorDef, cliffordAlgebraDef, geometricProductDef, 
+  basisVectorDef, cliffordSpace, bivectorDef)
 import Drasil.DblPend.Goals (goals, goalsInputs)
 import Drasil.DblPend.DataDefs (dataDefs)
 import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
-import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
+import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
-  osloSymbols, apacheODESymbols, odeintSymbols, odeInfoChunks)
+  osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar, diffCodeChunk)
+import Language.Drasil.Code (ODEInfo (..))
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
@@ -70,7 +75,15 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) EmptyS],
+       IOrgSec inModel (SRS.inModel [] []) (foldlSent [
+         S "This document demonstrates a novel approach to modeling the double pendulum using",
+         phrase cliffordAlgebraDef +:+. EmptyS,
+         S "The traditional vector-based approach is enhanced by representing physical quantities as",
+         plural multivectorDef `S.in_` S "a unified geometric framework" +:+. EmptyS,
+         S "Section 4.2.3 presents", plural genDefn, S "that showcase how velocity, acceleration, and force",
+         S "are naturally expressed using", phrase cliffordAlgebraDef, S "operations such as the",
+         phrase geometricProductDef `S.and_` S "basis vector representations"
+       ])],
   GSDSec $ 
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
@@ -107,29 +120,36 @@ si :: System
 si = mkSystem progName Specification [dong]
   [purp] [background] [scope] [motivation]
   symbolsAll
-  tMods genDefns dataDefs iMods
-  []
+  tMods genDefns dataDefs iMods  -- Re-enabled genDefns to show Clifford algebra content
+  []  -- assumptions as strings
   inputs outputs inConstraints
   constants
   symbMap
 
 purp :: Sentence
-purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
+purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum,
+  S "using", phrase cliffordAlgebraDef, S "formulation"]
 
 motivation :: Sentence
 motivation = foldlSent_ [S "To simulate", phraseNP (motion `the_ofThe` pendulum),
-  S "and exhibit its chaotic characteristics"]
+  S "and exhibit its chaotic characteristics using", phrase cliffordAlgebraDef,
+  S "for geometric representation"]
 
 background :: Sentence
 background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
-  S "highly sensitive to initial conditions"]
+  S "highly sensitive to initial conditions" +:+. EmptyS,
+  S "This analysis uses", phrase cliffordAlgebraDef, S "to represent",
+  S "velocities, accelerations, and forces as", plural multivectorDef,
+  S "providing a unified geometric framework"]
 
--- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is currently added to symbolsAll automatically as it is used to create new chunks with pendDisAngle's UID suffixed in ODELibraries.hs.
+-- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is added to symbolsAll as it is used to create new chunks with pendDisAngle's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ odeInfoChunks dblPenODEInfo
+  ++ map dqdWr [listToArray dp, arrayVecDepVar dblPenODEInfo, diffCodeChunk dp,
+  listToArray $ diffCodeChunk dp]
+  where dp = depVar dblPenODEInfo
 
 ideaDicts :: [IdeaDict]
 ideaDicts = 
@@ -142,6 +162,8 @@ abbreviationsList :: [IdeaDict]
 abbreviationsList = 
   -- DefinedQuantityDict abbreviations
   map nw symbols ++
+  -- Document structure abbreviations
+  map nw [goalStmt, thModel, inModel, assumption, genDefn, dataDefn, requirement, physSyst] ++
   -- Other acronyms/abbreviations
   nw progName : map nw acronyms
 
@@ -149,13 +171,18 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
   physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
-  gravitationalConst, gravity] ++
+  gravitationalConst, gravity] ++ terms ++
   -- UnitalChunks
   [cw len]
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
+symbMap = cdb (map (^. output) iMods ++ map dqdWr symbolsAll)
+  ideaDicts conceptChunks siUnits
+  dataDefs iMods genDefns tMods concIns [] allRefs citations  -- Re-enabled genDefns to show Clifford algebra content
+
+-- symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
+--   dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
+
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -196,7 +223,8 @@ externalLinkRef = makeURI "DblPendSRSLink"
 scope :: Sentence
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
   sParen (short twoD), phrase pendMotion, phrase problem,
-                   S "with various initial conditions"]
+  S "with various initial conditions using", phrase cliffordAlgebraDef,
+  S "for geometric representation of physical quantities"]
 
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --
@@ -205,7 +233,7 @@ charsOfReader :: [Sentence]
 charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
                  phrase undergraduate +:+ S "level 1" +:+ phrase calculus,
                  plural ode]
-
+                 
 -------------------------------------
 -- 2.4 : Organization of Documents --
 -------------------------------------
@@ -291,7 +319,8 @@ userCharacteristicsIntro prog = foldlSP
 -- 4.1.1 Terminology and Definitions --
 ---------------------------------
 terms :: [ConceptChunk]
-terms = [gravity, cartesian]
+terms = [gravity, cartesian, multivectorDef, cliffordAlgebraDef, geometricProductDef, basisVectorDef,
+         cliffordSpace, bivectorDef]
 
 -----------------------------------
 -- 4.1.2 Physical System Description --
@@ -301,7 +330,9 @@ physSystParts = map (!.)
   [atStartNP (the firstRod) +:+ sParen (S "with" +:+ getTandS lenRod_1),
    atStartNP (the secondRod) +:+ sParen (S "with" +:+ getTandS lenRod_2),
    atStartNP (the firstObject),
-   atStartNP (the secondObject)]
+   atStartNP (the secondObject),
+   S "Each object's motion is described using" +:+ plural multivectorDef +:+ S "in 2D" +:+ phrase cliffordAlgebraDef +:+ S "space Cl(2,0)",
+   S "Physical quantities (velocity, acceleration, force) are unified as geometric entities with basis vectors e₁ and e₂"]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -323,9 +354,9 @@ physSystParts = map (!.)
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM, newtonSL]
 
----------------------------------
+------------------------------
 -- 4.2.3 : General Definitions --
----------------------------------
+------------------------------
 -- General Definitions defined in GDs
 
 ------------------------------

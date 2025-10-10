@@ -6,17 +6,40 @@ import Language.Drasil (ModelExprC(..), ExprC(..),
   Express(..), ModelExpr, DefiningExpr(..))
 
 import Data.Drasil.Quantities.Physics(velocity, acceleration, gravitationalMagnitude, time)
-import Drasil.DblPend.DataDefs
-import Drasil.DblPend.Expressions (velXExpr_2, velYExpr_2)
-import Drasil.DblPend.Unitals (lenRod_1, massObj_1, massObj_2,
-  xPos_1, xPos_2, yPos_1, yPos_2, xVel_1, xVel_2, yVel_1, yVel_2, xAccel_1, xAccel_2,
-  yAccel_1, yAccel_2, tension_1, tension_2, angularVel_1, pendDisAngle_1, pendDisAngle_2)
+import Drasil.DblPend.DataDefs (velocityGQD, accelGQD, positionYQD_1, positionXQD_2, positionYQD_2,
+  positionXEqn_1, positionXEqn_2, positionYEqn_2)
+import Drasil.DblPend.Unitals (massObj_1, massObj_2, lenRod_1, pendDisAngle_1, pendDisAngle_2,
+  xPos_1, yPos_1, xPos_2, yPos_2, xVel_1, yVel_1, xVel_2, yVel_2, 
+  xAccel_1, yAccel_1, xAccel_2, yAccel_2, angularVel_1,
+  tension_1, tension_2, posVec_1, posVec_2, mvVel_1, mvVel_2, mvAccel_1, mvAccel_2) 
 import Control.Lens ((^.))
+import Drasil.DblPend.Expressions(vector)
 
+
+-- Vector-based derivations using Clifford algebra
+
+-- Vector Position Derivatives (First Object)
+posVecDerivEqn1_1, posVecDerivEqn2_1 :: ModelExpr
+posVecDerivEqn1_1 = sy posVec_1 $= vector (sy lenRod_1 $* sin (sy pendDisAngle_1)) 
+                                         (neg (sy lenRod_1 $* cos (sy pendDisAngle_1)))
+posVecDerivEqn2_1 = sy mvVel_1 $= deriv (sy posVec_1) time
+
+-- Vector Position Derivatives (Second Object)  
+posVecDerivEqn1_2, posVecDerivEqn2_2 :: ModelExpr
+posVecDerivEqn1_2 = sy posVec_2 $= vector (sy xPos_2) (sy yPos_2)  -- Using scalar components for clarity
+posVecDerivEqn2_2 = sy mvVel_2 $= deriv (sy posVec_2) time
+
+-- Vector Velocity Derivatives (Acceleration)
+velVecDerivEqn1_1, velVecDerivEqn1_2 :: ModelExpr
+velVecDerivEqn1_1 = sy mvAccel_1 $= deriv (sy mvVel_1) time
+velVecDerivEqn1_2 = sy mvAccel_2 $= deriv (sy mvVel_2) time
+
+
+-- Scalar component derivations (for detailed analysis)
 
 -- Velocity X/Y First Object
 velDerivEqn1, velXDerivEqn2_1, velXDerivEqn3_1, velXDerivEqn4_1 :: ModelExpr
-velDerivEqn1    = sy velocity $= positionGQD ^. defnExpr
+velDerivEqn1    = sy velocity $= velocityGQD ^. defnExpr
 velXDerivEqn2_1 = sy xPos_1 $= positionXEqn_1
 velXDerivEqn3_1 = sy xVel_1 $= deriv positionXEqn_1 time
 velXDerivEqn4_1 = sy xVel_1 $= sy lenRod_1 $* deriv (sin (sy pendDisAngle_1)) time
@@ -50,45 +73,45 @@ accelYDerivEqn4_1 = sy yAccel_1 $= deriv (sy angularVel_1) time $* sy lenRod_1 $
 
 -- Acceleration X/Y Second Object
 accelXDerivEqn3_2 :: ModelExpr
-accelXDerivEqn3_2 = sy xAccel_2 $= deriv velXExpr_2 time
+accelXDerivEqn3_2 = sy xAccel_2 $= deriv (sy xVel_2) time
 
 accelYDerivEqn3_2 :: ModelExpr
-accelYDerivEqn3_2 = sy yAccel_2 $= deriv velYExpr_2 time
+accelYDerivEqn3_2 = sy yAccel_2 $= deriv (sy yVel_2) time
 
 
--- Angular acceleration explanation in IM
+-- Angular acceleration explanation in IM (using vector forces)
 angularAccelDerivEqns :: [ModelExpr]
 angularAccelDerivEqns = [angularAccelDerivEqn1, angularAccelDerivEqn2, angularAccelDerivEqn3, angularAccelDerivEqn4,
                        angularAccelDerivEqn5, angularAccelDerivEqn6, angularAccelDerivEqn7, angularAccelDerivEqn8]
 
 angularAccelDerivEqn1, angularAccelDerivEqn2, angularAccelDerivEqn3, angularAccelDerivEqn4,
   angularAccelDerivEqn5, angularAccelDerivEqn6, angularAccelDerivEqn7, angularAccelDerivEqn8 :: ModelExpr
-angularAccelDerivEqn1 = sy massObj_1 $* sy xAccel_1 $=
-                      neg (sy tension_1) $* sin (sy pendDisAngle_1) $- (sy massObj_2 $* sy xAccel_2)
-angularAccelDerivEqn2 = sy massObj_1 $* sy yAccel_1 $=
-                      sy tension_1 $* cos (sy pendDisAngle_1) $- (sy massObj_2 $* sy yAccel_2) $-
+angularAccelDerivEqn1 = sy massObj_1 $* sy mvAccel_1 $=
+                      neg (sy tension_1) $* sin (sy pendDisAngle_1) $- (sy massObj_2 $* sy mvAccel_2)
+angularAccelDerivEqn2 = sy massObj_1 $* sy mvAccel_1 $=
+                      sy tension_1 $* cos (sy pendDisAngle_1) $- (sy massObj_2 $* sy mvAccel_2) $-
                       (sy massObj_2 $* sy gravitationalMagnitude) $- (sy massObj_1 $* sy gravitationalMagnitude)
 angularAccelDerivEqn3 = sy tension_1 $* sin (sy pendDisAngle_1) $* cos (sy pendDisAngle_1) $=
                       neg (cos (sy pendDisAngle_1)) $* 
-                      ((sy massObj_1 $* sy xAccel_1) $+ (sy massObj_2 $* sy xAccel_2))
+                      ((sy massObj_1 $* sy mvAccel_1) $+ (sy massObj_2 $* sy mvAccel_2))
 angularAccelDerivEqn4 = sy tension_1 $* sin (sy pendDisAngle_1) $* cos (sy pendDisAngle_1) $=
                       sin (sy pendDisAngle_1) $* 
                       (
-                          (sy massObj_1 $* sy yAccel_1) $+ (sy massObj_2 $* sy yAccel_2) $+
+                          (sy massObj_1 $* sy mvAccel_1) $+ (sy massObj_2 $* sy mvAccel_2) $+
                           (sy massObj_2 $* sy gravitationalMagnitude) $+ (sy massObj_1 $* sy gravitationalMagnitude)
                       )
 angularAccelDerivEqn5 = sin (sy pendDisAngle_1) $* 
                       (
-                          (sy massObj_1 $* sy yAccel_1) $+ (sy massObj_2 $* sy yAccel_2) $+
+                          (sy massObj_1 $* sy mvAccel_1) $+ (sy massObj_2 $* sy mvAccel_2) $+
                           (sy massObj_2 $* sy gravitationalMagnitude) $+ (sy massObj_1 $* sy gravitationalMagnitude)
                       ) $=
                       neg (cos (sy pendDisAngle_1)) $* 
-                      ((sy massObj_1 $* sy xAccel_1) $+ (sy massObj_2 $* sy xAccel_2))
+                      ((sy massObj_1 $* sy mvAccel_1) $+ (sy massObj_2 $* sy mvAccel_2))
 angularAccelDerivEqn6 = sy tension_2 $* sin(sy pendDisAngle_2) $* cos (sy pendDisAngle_2) $=
-                      neg (cos (sy pendDisAngle_2)) $* sy massObj_2 $* sy xAccel_2
-angularAccelDerivEqn7 = sy tension_1 $* sin (sy pendDisAngle_2 ) $* cos (sy pendDisAngle_2) $=
+                      neg (cos (sy pendDisAngle_2)) $* sy massObj_2 $* sy mvAccel_2
+angularAccelDerivEqn7 = sy tension_2 $* sin (sy pendDisAngle_2 ) $* cos (sy pendDisAngle_2) $=
                       sin (sy pendDisAngle_2) $* 
-                      ((sy massObj_2 $* sy yAccel_2) $+ (sy massObj_2 $* sy gravitationalMagnitude))
+                      ((sy massObj_2 $* sy mvAccel_2) $+ (sy massObj_2 $* sy gravitationalMagnitude))
 angularAccelDerivEqn8 = sin (sy pendDisAngle_2) $* 
-                      ((sy massObj_2 $* sy yAccel_2) $+ (sy massObj_2 $* sy gravitationalMagnitude)) $=
-                      neg (cos (sy pendDisAngle_2)) $* sy massObj_2 $* sy xAccel_2
+                      ((sy massObj_2 $* sy mvAccel_2) $+ (sy massObj_2 $* sy gravitationalMagnitude)) $=
+                      neg (cos (sy pendDisAngle_2)) $* sy massObj_2 $* sy mvAccel_2

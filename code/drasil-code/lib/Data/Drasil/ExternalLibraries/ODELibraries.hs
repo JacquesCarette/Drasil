@@ -7,14 +7,11 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
   -- * Apache Commons (Java)
   apacheODEPckg, apacheODESymbols,
   -- * Odeint (C++)
-  odeintPckg, odeintSymbols, diffCodeChunk,
-  odeInfoChunks
+  odeintPckg, odeintSymbols, diffCodeChunk
 ) where
+import Language.Drasil hiding (dim)
+import Language.Drasil.Space (ClifKind(..))
 
-import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar, implVar',
-  compoundPhrase, nounPhrase, nounPhraseSP, label, sub, Idea(getA), NamedIdea(term), Stage(..),
-  (+++), Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
@@ -35,13 +32,12 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   appendCurrSolFill, populateSolListFill, assignArrayIndexFill,
   assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill,
   solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill',
-  CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, listToArray,
+  quantvar, quantfunc,
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
   mkODELibNoPath, pubStateVar, privStateVar,
   NamedArgument, narg)
 
-import Drasil.Code.CodeExpr
-import Drasil.Code.CodeExpr.Development
+import qualified Drasil.Code.CodeExpr.Development as CE
 
 import Control.Lens ((^.), _1, _2, over)
 
@@ -475,6 +471,11 @@ computeDerivatives = quantfunc $ implVar "computeDerivatives_apache" (nounPhrase
 odeintPckg :: ODELibPckg
 odeintPckg = mkODELib "odeint" "v2" odeint odeintCall "." [Cpp]
 
+-- | Symbolic dimension used for vector-valued ODE variables.
+-- Allows examples to specialize this to "2", "3", etc., while keeping library code generic.
+dim :: String
+dim = "n"
+
 odeint :: ExternalLibrary
 odeint = externalLib [
   choiceSteps [
@@ -488,15 +489,20 @@ odeint = externalLib [
       customObjArg [] "Class representing an ODE system" ode odeCtor
         (customClass [constructorInfo odeCtor [] [],
           methodInfoNoReturn odeOp "function representation of ODE system"
-            [unnamedParam (Vect Real), unnamedParam (Vect Real), lockedParam t]
+          -- | ODE parameters: generalized for vectors of symbolic dimension 'dim'.
+          -- TODO: Once ClifS is integrated, revisit this to allow symbolic vectors as parameter types.
+          -- Likely replacement: ClifS dim Real instead of ClifS (VDim dim) Vector Real.
+            [unnamedParam (ClifS (VDim dim) Vector Real), unnamedParam (ClifS (VDim dim) Vector Real), lockedParam t]
             [assignArrayIndex]]),
+            -- [unnamedParam (ClifS (VDim dim) Vector Real), unnamedParam (ClifS (VDim dim) Vector Real), lockedParam t]
+            -- [assignArrayIndex]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
       preDefinedArg odeintCurrVals,
       inlineArg Real, inlineArg Real, inlineArg Real,
       customObjArg []
         "Class for populating a list during an ODE solution process"
-        pop popCtor (customClass [
-          constructorInfo popCtor [unnamedParam (Vect Real)] [],
+        pop popCtor        (customClass [
+          constructorInfo popCtor [unnamedParam (ClifS (VDim dim) Vector Real)] [],
           methodInfoNoReturn popOp
             "appends solution point for current ODE solution step"
             [lockedParam y, lockedParam t] [appendCurrSol (sy y)]])]]
@@ -541,8 +547,9 @@ odeintCurrVals, rk, stepper, pop :: CodeVarChunk
 odeintCurrVals = quantvar $ implVar "currVals_odeint" (nounPhrase
   "vector holding ODE solution values for the current step"
   "vectors holding ODE solution values for the current step")
-  "the vector holding the ODE solution values for the current step"
-  (Vect Real) (label "currVals")
+  "the vector holding ODE solution values for the current step"
+  (ClifS (VDim dim) Vector Real) (label "currVals")
+
 rk = quantvar $ implVar "rk_odeint" (nounPhrase
   "stepper for solving ODE system using Runge-Kutta-Dopri5 method"
   "steppers for solving ODE system using Runge-Kutta-Dopri5 method")
@@ -612,7 +619,7 @@ y = quantvar $ implVar "y_ode" (nounPhrase
   "current dependent variable value in ODE solution"
   "current dependent variable value in ODE solution")
   "the current dependent variable value in the ODE solution"
-  (Vect Real) (label "y")
+  (ClifS (VDim dim) Vector Real) (label "y")
 
 -- | ODE object constructor.
 odeCtor :: CodeFuncChunk
@@ -643,46 +650,36 @@ diffCodeChunk c = quantvar $ implVarAU' (show $ c +++ "d" )
 modifiedODESyst :: String -> ODEInfo -> [CodeExpr]
 modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
   where
-    replaceDepVar cc@(C c) | c == depVar info ^. uid = C $ depVar info +++ ("_" ++ sufx)
-                           | otherwise               = cc
-    replaceDepVar (AssocA a es)           = AssocA a (map replaceDepVar es)
-    replaceDepVar (AssocB b es)           = AssocB b (map replaceDepVar es)
-    replaceDepVar (FCall u es nes)        = FCall u (map replaceDepVar es)
+    replaceDepVar cExpr@(CE.C c) | c == depVar info ^. uid = CE.C $ depVar info +++ ("_" ++ sufx)
+                                | otherwise               = cExpr
+    replaceDepVar (CE.AssocA a es)           = CE.AssocA a (map replaceDepVar es)
+    replaceDepVar (CE.AssocB b es)           = CE.AssocB b (map replaceDepVar es)
+    replaceDepVar (CE.FCall u es nes)        = CE.FCall u (map replaceDepVar es)
       (map (over _2 replaceDepVar) nes)
-    replaceDepVar (New u es nes)          = New u (map replaceDepVar es)
+    replaceDepVar (CE.New u es nes)          = CE.New u (map replaceDepVar es)
       (map (over _2 replaceDepVar) nes)
-    replaceDepVar (Message au mu es nes)  = Message au mu (map replaceDepVar es)
+    replaceDepVar (CE.Message au mu es nes)  = CE.Message au mu (map replaceDepVar es)
       (map (over _2 replaceDepVar) nes)
-    replaceDepVar (Case c cs)             = Case c (map (over _1 replaceDepVar) cs)
-    replaceDepVar (Matrix es)             = Matrix $ map (map replaceDepVar) es
-    replaceDepVar (UnaryOp u e)           = UnaryOp u $ replaceDepVar e
-    replaceDepVar (UnaryOpB u e)          = UnaryOpB u $ replaceDepVar e
-    replaceDepVar (UnaryOpVV u e)         = UnaryOpVV u $ replaceDepVar e
-    replaceDepVar (UnaryOpVN u e)         = UnaryOpVN u $ replaceDepVar e
-    replaceDepVar (ArithBinaryOp b e1 e2) = ArithBinaryOp b
+    replaceDepVar (CE.Case c cs)             = CE.Case c (map (over _1 replaceDepVar) cs)
+    replaceDepVar (CE.Matrix es)             = CE.Matrix $ map (map replaceDepVar) es
+    replaceDepVar (CE.UnaryOp u e)           = CE.UnaryOp u $ replaceDepVar e
+    replaceDepVar (CE.UnaryOpB u e)          = CE.UnaryOpB u $ replaceDepVar e
+    -- TODO: When ClifS or multivectors are introduced, add support for UnaryOpCC and UnaryOpCN here.
+    replaceDepVar (CE.UnaryOpCC u e)         = CE.UnaryOpCC u $ replaceDepVar e
+    replaceDepVar (CE.UnaryOpCN u e)         = CE.UnaryOpCN u $ replaceDepVar e
+    replaceDepVar (CE.ArithBinaryOp b e1 e2) = CE.ArithBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (BoolBinaryOp b e1 e2)  = BoolBinaryOp b
+    replaceDepVar (CE.BoolBinaryOp b e1 e2)  = CE.BoolBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (EqBinaryOp b e1 e2)    = EqBinaryOp b
+    replaceDepVar (CE.EqBinaryOp b e1 e2)    = CE.EqBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (LABinaryOp b e1 e2)    = LABinaryOp b
+    replaceDepVar (CE.LABinaryOp b e1 e2)    = CE.LABinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (OrdBinaryOp b e1 e2)   = OrdBinaryOp b
+    replaceDepVar (CE.OrdBinaryOp b e1 e2)   = CE.OrdBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (VVNBinaryOp b e1 e2)   = VVNBinaryOp b
+    replaceDepVar (CE.CCNBinaryOp b e1 e2)   = CE.CCNBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (VVVBinaryOp b e1 e2)   = VVVBinaryOp b
+    replaceDepVar (CE.CCCBinaryOp b e1 e2)   = CE.CCCBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (Operator ao dd e)      = Operator ao dd $ replaceDepVar e
+    replaceDepVar (CE.Operator ao dd e)      = CE.Operator ao dd $ replaceDepVar e
     replaceDepVar e = e
-
--- | Collect all chunks related to a specific ODE
-odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]
-odeInfoChunks info =
-  let dv = depVar info
-  in map dqdWr [ dv
-               , listToArray dv
-               , arrayVecDepVar info
-               , diffCodeChunk dv
-               , listToArray $ diffCodeChunk dv
-               ] 

@@ -70,6 +70,7 @@ pExprDoc f (Font Emph e) = text "_" <> pExprDoc f e <> text "_"
 pExprDoc f (Div n d) = parens (pExprDoc f n) <> text "/" <> parens (pExprDoc f d)
 pExprDoc f (Sqrt e) = text "sqrt" <> parens (pExprDoc f e)
 pExprDoc _ (Spc Thin) = space
+pExprDoc _ (Clif _ _) = error "Plain text printer cannot render Clifford algebra expressions"
 
 -- | Helper for printing sentences ('Spec's) in 'Doc' format.
 specDoc :: SingleLine -> Spec -> Doc
@@ -146,8 +147,8 @@ opsDoc Dim = text "dim"
 opsDoc Exp = text "exp"
 opsDoc Neg = text "-"
 opsDoc Cross = text " cross "
-opsDoc VAdd = text " + "
-opsDoc VSub = text " - "
+opsDoc CAdd = text " + "
+opsDoc CSub = text " - "
 opsDoc Dot = text " dot "
 opsDoc Scale = text " * "
 opsDoc Eq = text " == "
@@ -176,6 +177,9 @@ opsDoc LArrow = text " <- "
 opsDoc RArrow = text " -> "
 opsDoc ForAll = text " ForAll "
 opsDoc Partial = text "partial"
+opsDoc WedgeProd = text " ^ "
+opsDoc GeometricProd = text " * "
+opsDoc Grade = text "grade"
 
 -- | Helper for printing the left side of some characters "(, {, \\|, |".
 fenceDocL :: Fence -> Doc

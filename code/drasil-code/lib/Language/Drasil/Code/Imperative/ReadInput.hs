@@ -4,6 +4,7 @@ module Language.Drasil.Code.Imperative.ReadInput (
 ) where
 
 import Language.Drasil hiding (Data, Matrix, CodeVarChunk)
+import Language.Drasil.Space (ClifKind(..))
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..),
   Delimiter, dataDesc, junk, list, singleton')
 import Language.Drasil.Chunk.Code (CodeVarChunk)
@@ -28,13 +29,13 @@ readWithDataDesc fp ddsc = do
       readData (Datum d) s = [readDataItem d s]
       readData (Data dis 0 d) s = zipWith readDataItem (toList dis) (splitOn d s)
       readData (Data ((DI c [dlm1]):|_) 1 dlm2) s = map ((Matrix . (:[])) .
-        map (strAsExpr (getInnerSpace $ c ^. typ))) $ transpose $
+        map (strAsExpr (getInnerType $ c ^. typ))) $ transpose $
         map (splitOn dlm2) $ splitOn dlm1 s
       readData (Data ((DI c [dlm1, dlm3]):|_) 1 dlm2) s = map (Matrix .
-        map (map (strAsExpr (getInnerSpace $ c ^. typ)))) $ transpose $
+        map (map (strAsExpr (getInnerType $ c ^. typ)))) $ transpose $
         map (map (splitOn dlm3) . splitOn dlm2) $ splitOn dlm1 s
       readData (Data ((DI c [dlm1, dlm2]):|_) 2 dlm3) s = map (Matrix .
-        map (map (strAsExpr (getInnerSpace $ c ^. typ))) . transpose) $
+        map (map (strAsExpr (getInnerType $ c ^. typ))) . transpose) $
         transpose $ map (map (splitOn dlm3) . splitOn dlm2) $ splitOn dlm1 s
       readData _ _ = error "Invalid degree of intermixing in DataDesc or list with more than 2 dimensions (not yet supported)"
       -- Below match is an attempt at a generic match for Data, but it doesn't
@@ -66,7 +67,7 @@ readWithDataDesc fp ddsc = do
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
 sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
   where toData d = toData' (d ^. typ) d
-        toData' t@(Vect _) d = list d
+        toData' t@(ClifS _ Vector _) d = list d
           (take (getDimension t) ([", ", "; "] ++ iterate (':':) ":"))
         toData' _ d = singleton' d
 
@@ -83,7 +84,8 @@ strAsExpr _        _ = error "strAsExpr should only be numeric space or string"
 
 -- | Gets the dimension of a 'Space'.
 getDimension :: Space -> Int
-getDimension (Vect t) = 1 + getDimension t
+getDimension (ClifS (Fixed n) Vector _) = fromIntegral n
+getDimension (ClifS _ Vector t) = 1 + getDimension t
 getDimension _ = 0
 
 -- | Splits a string at the first (and only the first) occurrence of a delimiter.
@@ -100,10 +102,10 @@ splitAtFirst = splitAtFirst' []
 
 -- | Converts a list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strListAsExpr :: Space -> [String] -> Expr
-strListAsExpr (Vect t) ss = Matrix [map (strAsExpr t) ss]
+strListAsExpr (ClifS _ Vector t) ss = Matrix [map (strAsExpr t) ss]
 strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
 
 -- | Converts a 2D list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strList2DAsExpr :: Space -> [[String]] -> Expr
-strList2DAsExpr (Vect (Vect t)) sss = Matrix $ map (map (strAsExpr t)) sss
+strList2DAsExpr (ClifS _ Vector (ClifS _ Vector t)) sss = Matrix $ map (map (strAsExpr t)) sss
 strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"

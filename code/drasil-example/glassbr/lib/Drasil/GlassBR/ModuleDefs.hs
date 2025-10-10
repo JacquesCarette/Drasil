@@ -5,8 +5,9 @@
 module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Drasil.Code.CodeExpr (CodeExpr, LiteralC(int))
-import Language.Drasil (Space(..), nounPhraseSP,
-  label, sub, HasSymbol(..), HasUID, Symbol, ExprC(..), DefinedQuantityDict, implVar)
+import Language.Drasil (DefinedQuantityDict, Space(..), implVar, nounPhraseSP, vect3DS,
+  label, sub, HasSymbol(..), HasUID, Symbol, ExprC(..))
+
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
@@ -22,7 +23,7 @@ allMods = [readTableMod, interpMod]
 -- It's a bit odd that this has to be explicitly built here...
 implVars :: [DefinedQuantityDict]
 implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
-  i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename,
+  i, j, k, z, zvect3DSor, yMatrix, xMatrix, y, arr, filename,
   y_2, y_1, x_2, x_1, x]
 
 --from TSD.txt:
@@ -34,7 +35,7 @@ readTableMod = packmod "ReadTable"
 readTable :: Func
 readTable = funcData "read_table"
   "Reads glass ASTM data from a file with the given file name"
-  [ singleLine (repeated [quantvar zVector]) ',',
+  [ singleLine (repeated [quantvar zvect3DSor]) ',',
     multiLine (repeated (map quantvar [xMatrix, yMatrix])) ','
   ]
 
@@ -60,39 +61,36 @@ x    = var "x"  "x-coordinate to interpolate at"
   "the x-coordinate to interpolate at" lX Real -- = params.wtnt from mainFun.py
 
 v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
-  i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename :: DefinedQuantityDict
+  i, j, k, z, zvect3DSor, yMatrix, xMatrix, y, arr, filename :: DefinedQuantityDict
 i = var "i" "index" "the index" lI Natural
 j = var "j" "index" "the index" lJ Natural
 k = var "k" "index" "the index" (sub lK two) Natural     
-v = var "v" "value whose index will be found"
-  "the value whose index will be found" lV Real
-y = var "y" "y-coordinate to interpolate at"
-  "the y-coordinate to interpolate at" lY Real
-z = var "z" "z-coordinate to interpolate at"
-  "the z-coordinate to interpolate at" lZ Real
+v = var "v" "value whose index will be found" "the value whose index will be found" lV Real
+y = var "y" "y-coordinate to interpolate at" "the y-coordinate to interpolate at" lY Real
+z = var "z" "z-coordinate to interpolate at" "the z-coordinate to interpolate at" lZ Real
 
-zVector = var "zVector" "list of z values" 
-  "the list of z values" (sub lZ (label "vector")) (Vect Real)               
-yMatrix = var "yMatrix" "lists of y values at different z values" 
-  "the lists of y values at different z values" (sub lY (label "matrix")) (Vect $ Vect Real)
-xMatrix = var "xMatrix" "lists of x values at different z values" 
-  "the lists of x values at different z values" (sub lX (label "matrix")) (Vect $ Vect Real)        
-arr     = var "arr" "array in which value should be found"
-  "the array in which a value should be found" (label "arr") (Vect Real)  --FIXME: temporary variable for findCT?
-x_z_1   = var "x_z_1" "list of x values at a specific z value"
-  "the list of x values at a specific z value" (sub lX (sub lZ one)) (Vect Real)
-y_z_1   = var "y_z_1" "list of y values at a specific z value"
-  "the list of y values at a specific z value" (sub lY (sub lZ one)) (Vect Real)   
-x_z_2   = var "x_z_2" "list of x values at a specific z value"
-  "the list of x values at a specific z value" (sub lX (sub lZ two)) (Vect Real)
-y_z_2   = var "y_z_2" "list of y values at a specific z value"
-  "the list of y values at a specific z value" (sub lY (sub lZ two)) (Vect Real)
-mat     = var "mat" "matrix from which column will be extracted"
-  "the matrix from which columns will be extracted" (label "mat") (Vect $ Vect Real)
-col     = var "col" "extracted column"
-  "the extracted column" (label "col") (Vect Real)
-filename = var "filename" "name of file with x y and z data"
-  "the name of the file with x, y, and z data" (label "filename") String
+zvect3DSor = var "zvect3DSor" "list of z values" "the list of z values"
+  (sub lZ (label "vect3DSor")) (vect3DS Real)               
+yMatrix = var "yMatrix" "lists of y values at different z values" "the lists of y values at different z values"
+  (sub lY (label "matrix")) (vect3DS $ vect3DS Real)        
+xMatrix = var "xMatrix" "lists of x values at different z values" "the lists of x values at different z values"
+  (sub lX (label "matrix")) (vect3DS $ vect3DS Real)        
+arr     = var "arr"     "array in which value should be found" "the array in which value should be found"
+  (label "arr")             (vect3DS Real)  --FIXME: temporary variable for findCT?
+x_z_1   = var "x_z_1"   "list of x values at a specific z value" "the list of x values at a specific z value"
+  (sub lX (sub lZ one))      (vect3DS Real)
+y_z_1   = var "y_z_1"   "list of y values at a specific z value" "the list of y values at a specific z value"
+  (sub lY (sub lZ one))      (vect3DS Real)   
+x_z_2   = var "x_z_2"   "list of x values at a specific z value" "the list of x values at a specific z value"
+  (sub lX (sub lZ two))      (vect3DS Real)
+y_z_2   = var "y_z_2"   "list of y values at a specific z value" "the list of y values at a specific z value"
+  (sub lY (sub lZ two))      (vect3DS Real)
+mat     = var "mat"     "matrix from which column will be extracted" "the matrix from which column will be extracted"
+  (label "mat")             (vect3DS $ vect3DS Real)
+col     = var "col"     "extracted column" "the extracted column"
+  (label "col")             (vect3DS Real)               
+filename = var "filename" "name of file with x y and z data" "the name of file with x y and z data"
+  (label "filename")        String
 
 ------------------------------------------------------------------------------------------
 --
@@ -160,7 +158,7 @@ findCT = funcDef "find"
 
 extractColumnCT :: Func
 extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
-  [mat, j] (Vect Real) (Just "column of the given matrix at the given index")
+  [mat, j] (vect3DS Real) (Just "column of the given matrix at the given index")
   [
     fDecDef col (matrix [[]]),
     --
@@ -177,11 +175,11 @@ interpY = funcDef (showHasSymbImpl U.interpY)
   -- hack
   fDecDef xMatrix (matrix [[]]),
   fDecDef yMatrix (matrix [[]]),
-  fDecDef zVector (matrix [[]]),
+  fDecDef zvect3DSor (matrix [[]]),
   --
-  call readTable [filename, zVector, xMatrix, yMatrix],
+  call readTable [filename, zvect3DSor, xMatrix, yMatrix],
   -- endhack
-    i     $:= find zVector z,
+    i     $:= find zvect3DSor z,
     x_z_1 $:= getCol xMatrix i (int 0),
     y_z_1 $:= getCol yMatrix i (int 0),
     x_z_2 $:= getCol xMatrix i (int 1),
@@ -192,7 +190,7 @@ interpY = funcDef (showHasSymbImpl U.interpY)
       [ FThrow "Interpolation of y failed" ],
     y_1 $:= linInterp (interpOver x_z_1 y_z_1 j x),
     y_2 $:= linInterp (interpOver x_z_2 y_z_2 k x),
-    FRet $ linInterp [ vLook zVector i (int 0), sy y_1, vLook zVector i (int 1), sy y_2, sy z ]
+    FRet $ linInterp [ vLook zvect3DSor i (int 0), sy y_1, vLook zvect3DSor i (int 1), sy y_2, sy z ]
   ]
 
 interpZ :: Func
@@ -203,11 +201,11 @@ interpZ = funcDef (showHasSymbImpl U.interpZ)
     -- hack
   fDecDef xMatrix (matrix [[]]),
   fDecDef yMatrix (matrix [[]]),
-  fDecDef zVector (matrix [[]]),
+  fDecDef zvect3DSor (matrix [[]]),
   --
-  call readTable [filename, zVector, xMatrix, yMatrix],
+  call readTable [filename, zvect3DSor, xMatrix, yMatrix],
   -- endhack
-    ffor i (dim (sy zVector) $- int 1)
+    ffor i (dim (sy zvect3DSor) $- int 1)
       [
         x_z_1 $:= getCol xMatrix i (int 0),
         y_z_1 $:= getCol yMatrix i (int 0),
@@ -220,7 +218,7 @@ interpZ = funcDef (showHasSymbImpl U.interpZ)
         y_1 $:= linInterp (interpOver x_z_1 y_z_1 j x),
         y_2 $:= linInterp (interpOver x_z_2 y_z_2 k x),
         FCond ((sy y_1 $<= sy y) $&& (sy y $<= sy y_2))
-          [ FRet $ linInterp [ sy y_1, vLook zVector i (int 0), sy y_2, vLook zVector i (int 1), sy y ]
+          [ FRet $ linInterp [ sy y_1, vLook zvect3DSor i (int 0), sy y_2, vLook zvect3DSor i (int 1), sy y ]
           ] []
       ],
     FThrow "Interpolation of z failed"

@@ -3,11 +3,13 @@ module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 import Language.Drasil hiding (section)
 import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator.BaseChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+
+import Language.Drasil.Code (ODEInfo (depVar))
 
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
@@ -21,7 +23,7 @@ import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
-  apacheODESymbols, odeintSymbols, odeInfoChunks)
+  arrayVecDepVar, apacheODESymbols, odeintSymbols, diffCodeChunk)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
@@ -49,7 +51,7 @@ import Drasil.SWHS.References (uriReferences)
 import Drasil.SWHSNoPCM.Assumptions
 import Drasil.SWHSNoPCM.Changes (likelyChgs, unlikelyChgs)
 import qualified Drasil.SWHSNoPCM.DataDefs as NoPCM (dataDefs)
-import Drasil.SWHSNoPCM.Definitions (htTrans)
+import Drasil.SWHSNoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.SWHSNoPCM.GenDefs (genDefs)
 import Drasil.SWHSNoPCM.Goals (goals)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
@@ -81,12 +83,14 @@ symbols = map dqdWr concepts ++ map dqdWr constrained
 symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
--- FIXME: the dependent variable of noPCMODEInfo (tempW) is currently added to symbolsAll automatically as it is used to create new chunks with tempW's UID suffixed in ODELibraries.hs.
+-- FIXME: the dependent variable of noPCMODEInfo (tempW) is added to symbolsAll as it is used to create new chunks with tempW's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll = [gradient, pi_, uNormalVect, dqdWr surface] ++ symbols ++
   map dqdWr symbolConcepts ++ map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
-  odeInfoChunks noPCMODEInfo
+  map dqdWr [listToArray dp, arrayVecDepVar noPCMODEInfo, 
+  diffCodeChunk dp, listToArray $ diffCodeChunk dp]
+  where dp = depVar noPCMODEInfo
 
 concepts :: [UnitalChunk]
 concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
@@ -158,7 +162,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 si :: System
 si = mkSystem
-  progName Specification [thulasi]
+  srsSWHS Specification [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
@@ -178,7 +182,7 @@ ideaDicts =
   -- Actual IdeaDicts
   [htTrans, materialProprty] ++
   -- CIs
-  map nw [progName, phsChgMtrl] ++
+  map nw [srsSWHS, progName, phsChgMtrl] ++
   map nw CP.physicCon' ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]

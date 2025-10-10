@@ -1,8 +1,8 @@
 module Language.Drasil.Expr.Development (
   -- Expr
-    Expr(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..)
+    Expr(..), UFunc(..), UFuncB(..), UFuncCC(..), UFuncCN(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..)
-  , VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..)
+  , CCCBinOp(..), CCNBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..)
   , AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..)
   , Completeness(..), Relation
   -- Expr.Extract

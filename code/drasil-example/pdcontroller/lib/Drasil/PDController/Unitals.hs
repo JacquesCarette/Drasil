@@ -2,11 +2,17 @@ module Drasil.PDController.Unitals where
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (second)
+import Data.Drasil.Quantities.Physics (vecDim)
 import Language.Drasil
+import Language.Drasil.Space (ClifKind(..))
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.PDController.Concepts
 import Control.Lens ((^.))
+
+-- | Helper function to create Clifford vector spaces of a given dimension
+realVect :: Dimension -> Space
+realVect d = ClifS d Vector Real
 
 syms, symFS, symFt, syminvLaplace, symKd, symKp,
        symYT, symYS, symYrT, symYrS, symET, symES, symPS, symDS, symHS,
@@ -118,7 +124,7 @@ odeAbsTolConst = mkQuantDef dqdAbsTol (dbl 1.0e-10)
 odeRelTolConst = mkQuantDef dqdRelTol (dbl 1.0e-10)
 
 opProcessVariable
-  = constrained' (dqdNoUnit processVariable symYT (Vect Real))
+  = constrained' (dqdNoUnit processVariable symYT (realVect vecDim))
       [gtZeroConstr]
       (exactDbl 1)
 dqdProcessVariableTD = dqdWr opProcessVariable
@@ -132,7 +138,7 @@ dqdProcessVariableFD = dqdNoUnit (dcc "dqdProcessVariableFD"
 
 dqdProcessErrorTD
   = dqdNoUnit (dcc "dqdProcessErrorTD"
-      (pn "Process Error in the time domain")
+      (nounPhraseSent (S "Process Error in the time domain"))
       "the process error in the time domain") symET Real
 
 dqdProcessErrorFD = dqdNoUnit (dcc "dqdProcessErrorFD" (processError `inThe`
@@ -148,7 +154,7 @@ dqdTransferFunctionFD = dqdNoUnit (dcc "dqdTransferFunctionFD" (ccTransferFxn `i
   ccFrequencyDomain) "the transfer function ") symHS Real
 
 dqdCtrlVarTD
-  = dqdNoUnit (dcc "dqdCtrlVarTD" (pn "Control Variable in the time domain")
+  = dqdNoUnit (dcc "dqdCtrlVarTD" (nounPhraseSent (S "Control Variable in the time domain"))
       "the control variable in the time domain")
       symCT
       Real
@@ -158,31 +164,31 @@ dqdCtrlVarFD = dqdNoUnit (dcc "dqdCtrlVarFD" (controlVariable `inThe`
 
 dqdLaplaceTransform
   = dqdNoUnit (dcc "dqdLaplaceTransform"
-      (pn "Laplace Transform of a function")
+      (nounPhraseSent (S "Laplace Transform of a function"))
       "the laplace transform of a function")
       symFS
       Real
 
 dqdFreqDomain
-  = dqdNoUnit (dcc "dqdFreqDomain" (pn "Complex frequency-domain parameter")
+  = dqdNoUnit (dcc "dqdFreqDomain" (nounPhraseSent (S "Complex frequency-domain parameter"))
       "the complex frequency-domain parameter")
       syms
       Real
-
+      
 dqdFxnTDomain
-  = dqdNoUnit (dcc "dqdFxnTDomain" (pn "Function in the time domain")
+  = dqdNoUnit (dcc "dqdFxnTDomain" (nounPhraseSent (S "Function in the time domain"))
       "a function in the time domain") symFt
       Real
 
 dqdInvLaplaceTransform
   = dqdNoUnit (dcc "dqdInvLaplaceTransform"
-      (pn "Inverse Laplace Transform of a function")
+      (nounPhraseSent (S "Inverse Laplace Transform of a function"))
       "the inverse Laplace transform of a function")
       syminvLaplace
       Real
 
 dqdDampingCoeff
-  = dqdNoUnit (dcc "dqdDampingCoeff" (pn "Damping coefficient of the spring")
+  = dqdNoUnit (dcc "dqdDampingCoeff" (nounPhraseSent (S "Damping coefficient of the spring"))
       "the damping coefficient of the spring")
       symDampingCoeff
       Real

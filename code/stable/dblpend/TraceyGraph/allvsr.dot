@@ -37,12 +37,12 @@ digraph allvsr {
 	{theory:accelerationTM, theory:velocityTM, theory:newtonSL}
 	}
 
-	theory:v_mv1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:multivectorVelocity1"];
-	theory:v_mv2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:multivectorVelocity2"];
-	theory:a_mv1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:multivectorAcceleration1"];
-	theory:a_mv2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:multivectorAcceleration2"];
-	theory:F_mv1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:multivectorForce1"];
-	theory:F_mv2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:multivectorForce2"];
+	theory:v_mv1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityVector1"];
+	theory:v_mv2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityVector2"];
+	theory:a_mv1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationVector1"];
+	theory:a_mv2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationVector2"];
+	theory:F_mv1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:forceVector1"];
+	theory:F_mv2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:forceVector2"];
 
 	subgraph GD {
 	rank="same"

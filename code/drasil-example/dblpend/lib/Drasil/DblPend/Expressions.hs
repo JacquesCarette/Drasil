@@ -21,19 +21,17 @@ sinAngleExpr2 = sin (sy pendDisAngle_2)
 vector :: PExpr -> PExpr -> PExpr
 vector x y = vect [x, y]
 
--- directionVector should be TANGENTIAL vector [cosθ, sinθ]
+-- directionVector is the RADIAL / position unit vector [cosθ, sinθ]
 directionVector_1 :: PExpr
 directionVector_1 = vector cosAngleExpr1 sinAngleExpr1
 
--- perpDirectionVector should be RADIAL vector [-sinθ, cosθ]
+-- perpDirectionVector is the TANGENTIAL unit vector [-sinθ, cosθ]
 perpDirectionVector_1 :: PExpr
 perpDirectionVector_1 = vector (neg sinAngleExpr1) cosAngleExpr1
 
--- directionVector should be TANGENTIAL vector [cosθ, sinθ]
 directionVector_2 :: PExpr
 directionVector_2 = vector cosAngleExpr2 sinAngleExpr2
 
--- perpDirectionVector should be RADIAL vector [-sinθ, cosθ]
 perpDirectionVector_2 :: PExpr
 perpDirectionVector_2 = vector (neg sinAngleExpr2) cosAngleExpr2
 
@@ -126,37 +124,28 @@ forceDerivExpr1 = sy massObj_1 `cScale` mvAccelExpr_1
 forceDerivExpr2 :: PExpr
 forceDerivExpr2 = sy massObj_2 `cScale` mvAccelExpr_2
 
--- Angular acceleration expressions 
+-- Angular acceleration θ̈₁
 angularAccelExpr_1 :: PExpr
-angularAccelExpr_1 = neg(sy gravitationalMagnitude) $* 
-                   (exactDbl 2 $* sy massObj_1 $+ sy massObj_2) $* sin (sy pendDisAngle_1 ) $-
-                   (sy massObj_2 $* sy gravitationalMagnitude $* 
-                   sin (sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2))) $-
-                   ((exactDbl 2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2 )) $* sy massObj_2 $* 
-                   (
-                       square (sy angularVel_2) $* sy lenRod_2 $+ 
-                       (square (sy angularVel_1) $* sy lenRod_1 $* cos (sy pendDisAngle_1 $- sy pendDisAngle_2))
-                   ))
-                   $/
-                   sy lenRod_1 $* 
-                   (
-                       exactDbl 2 $* sy massObj_1 $+ sy massObj_2 $- 
-                       (sy massObj_2 $* 
-                       cos (exactDbl 2 $* sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2)))
-                   )
+angularAccelExpr_1 =
+  let
+    num = neg (sy gravitationalMagnitude)
+            $* ((exactDbl 2 $* sy massObj_1 $+ sy massObj_2) $* sin (sy pendDisAngle_1))
+          $+ neg (sy massObj_2 $* sy gravitationalMagnitude $* sin (sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2)))
+          $- (exactDbl 2 $* sy massObj_2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2)
+              $* ((square (sy angularVel_2) $* sy lenRod_2)
+                   $+ (square (sy angularVel_1) $* sy lenRod_1 $* cos (sy pendDisAngle_1 $- sy pendDisAngle_2))))
+    denom = sy lenRod_1 $* ((exactDbl 2 $* sy massObj_1 $+ sy massObj_2)
+              $- (sy massObj_2 $* cos (exactDbl 2 $* sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2))))
+  in num $/ denom
 
+-- Angular acceleration θ̈₂
 angularAccelExpr_2 :: PExpr
-angularAccelExpr_2 = exactDbl 2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2) $* 
-                   (
-                       square (sy angularVel_1) $* sy lenRod_1 $* (sy massObj_1 $+ sy massObj_2 ) $+
-                       (sy gravitationalMagnitude $* (sy massObj_1 $+ sy massObj_2 ) $* cos (sy pendDisAngle_1)) $+
-                       (square (sy angularVel_2) $* sy lenRod_2 $* sy massObj_2 $* 
-                       cos (sy pendDisAngle_1 $- sy pendDisAngle_2 ))
-                   )
-                   $/
-                   sy lenRod_2 $* 
-                   (
-                       exactDbl 2 $* sy massObj_1 $+ sy massObj_2 $- 
-                       (sy massObj_2 $* 
-                       cos (exactDbl 2 $* sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2)))
-                   )
+angularAccelExpr_2 =
+  let
+    num = exactDbl 2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2)
+          $* ((square (sy angularVel_1) $* sy lenRod_1 $* (sy massObj_1 $+ sy massObj_2))
+              $+ (sy gravitationalMagnitude $* (sy massObj_1 $+ sy massObj_2) $* cos (sy pendDisAngle_1))
+              $+ (square (sy angularVel_2) $* sy lenRod_2 $* sy massObj_2 $* cos (sy pendDisAngle_1 $- sy pendDisAngle_2)))
+    denom = sy lenRod_2 $* ((exactDbl 2 $* sy massObj_1 $+ sy massObj_2)
+              $- (sy massObj_2 $* cos (exactDbl 2 $* sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2))))
+  in num $/ denom

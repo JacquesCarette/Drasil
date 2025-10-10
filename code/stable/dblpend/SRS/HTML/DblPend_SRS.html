@@ -844,16 +844,16 @@
                 <p class="paragraph">
                   This section collects the laws and equations that will be used to build the instance models.
                 </p>
-                <div id="GD:multivectorVelocity1">
+                <div id="GD:velocityVector1">
                   <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:multivectorVelocity1</b></td>
+                      <td><b>GD:velocityVector1</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph">Multivector velocity of the first object</p>
+                        <p class="paragraph">Velocity vector of the first object</p>
                       </td>
                     </tr>
                     <tr>
@@ -900,21 +900,21 @@
                     </tr>
                   </table>
                 </div>
-                <div id="GD:multivectorVelocity1Deriv">
+                <div id="GD:velocityVector1Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of velocity of the first object:</h4>
                     <p class="paragraph">
-                      The multivector velocity in Clifford algebra represents both magnitude and direction as a unified geometric entity.
+                      The velocity vector in Clifford algebra represents both magnitude and direction as a unified geometric entity.
                     </p>
                     \[{v_{1}}={w_{1}}\,{L_{1}} \begin{bmatrix}
                                                \cos\left({θ_{1}}\right)\\
                                                \sin\left({θ_{1}}\right)
                                                \end{bmatrix}\]
                     <p class="paragraph">
-                      Using the 2D Clifford space Cl(2,0), the velocity is expressed as a vector multivector with components in the e₁ and e₂ basis directions.
+                      Using the 2D Clifford space Cl(2,0), the velocity is expressed as a vector with components in the e₁ and e₂ basis directions.
                     </p>
                     <p class="paragraph">
-                      where the velocity multivector combines angular velocity and rod length in Clifford space
+                      where the velocity vector combines angular velocity and rod length in Clifford space
                     </p>
                     <p class="paragraph">
                       This approach provides a natural geometric representation that preserves rotational relationships.
@@ -923,7 +923,7 @@
                       Direction vector = cos(θ₁)e₁ + sin(θ₁)e₂ using basis vectors e₁, e₂
                     </p>
                     <p class="paragraph">
-                      The angular velocity ω₁ and rod length L₁ combine with the direction vector to form the complete velocity multivector.
+                      The angular velocity ω₁ and rod length L₁ combine with the direction vector to form the complete velocity vector.
                     </p>
                     <p class="paragraph">
                       The geometric product preserves both magnitude and geometric orientation
@@ -933,16 +933,16 @@
                     </p>
                   </div>
                 </div>
-                <div id="GD:multivectorVelocity2">
+                <div id="GD:velocityVector2">
                   <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:multivectorVelocity2</b></td>
+                      <td><b>GD:velocityVector2</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph">Multivector velocity of the second object</p>
+                        <p class="paragraph">Velocity vector of the second object</p>
                       </td>
                     </tr>
                     <tr>
@@ -1001,11 +1001,11 @@
                     </tr>
                   </table>
                 </div>
-                <div id="GD:multivectorVelocity2Deriv">
+                <div id="GD:velocityVector2Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of velocity of the second object:</h4>
                     <p class="paragraph">
-                      The multivector velocity for the second object combines the velocity from the first pendulum with its own rotational motion.
+                      The velocity vector for the second object combines the velocity from the first pendulum with its own rotational motion.
                     </p>
                     \[{v_{2}}={w_{1}}\,{L_{1}} \begin{bmatrix}
                                                \cos\left({θ_{1}}\right)\\
@@ -1021,22 +1021,20 @@
                       This represents the geometric sum of the first pendulum's velocity and the second pendulum's relative velocity
                     </p>
                     <p class="paragraph">
-                      The total velocity is expressed as the sum of two vector multivectors in the same geometric space.
+                      The total velocity is expressed as the sum of two vectors in the same geometric space.
                     </p>
                   </div>
                 </div>
-                <div id="GD:multivectorAcceleration1">
+                <div id="GD:accelerationVector1">
                   <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:multivectorAcceleration1</b></td>
+                      <td><b>GD:accelerationVector1</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph">
-                          Multivector acceleration of the first object
-                        </p>
+                        <p class="paragraph">Acceleration vector of the first object</p>
                       </td>
                     </tr>
                     <tr>
@@ -1091,11 +1089,11 @@
                     </tr>
                   </table>
                 </div>
-                <div id="GD:multivectorAcceleration1Deriv">
+                <div id="GD:accelerationVector1Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of acceleration of the first object:</h4>
                     <p class="paragraph">
-                      The multivector acceleration in Clifford algebra combines centripetal and tangential acceleration components.
+                      The acceleration vector in Clifford algebra combines centripetal and tangential acceleration components.
                     </p>
                     \[{a_{1}}={w_{1}}^{2}\,{L_{1}} \begin{bmatrix}
                                                    -\sin\left({θ_{1}}\right)\\
@@ -1111,11 +1109,9 @@
                       where the acceleration combines centripetal and tangential components in Clifford space
                     </p>
                     <p class="paragraph">
-                      Both components are naturally expressed as vector multivectors and added using Clifford geometric operations.
+                      Both components are naturally expressed as vector and added using Clifford geometric operations.
                     </p>
-                    <p class="paragraph">
-                      = centripetal_multivector + tangential_multivector
-                    </p>
+                    <p class="paragraph">= centripetal_vector + tangential_vector</p>
                     <p class="paragraph">
                       Centripetal component: -ω₁²L₁ × direction_vector (radial inward)
                     </p>
@@ -1130,18 +1126,16 @@
                     </p>
                   </div>
                 </div>
-                <div id="GD:multivectorAcceleration2">
+                <div id="GD:accelerationVector2">
                   <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:multivectorAcceleration2</b></td>
+                      <td><b>GD:accelerationVector2</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph">
-                          Multivector acceleration of the second object
-                        </p>
+                        <p class="paragraph">Acceleration vector of the second object</p>
                       </td>
                     </tr>
                     <tr>
@@ -1214,7 +1208,7 @@
                     </tr>
                   </table>
                 </div>
-                <div id="GD:multivectorAcceleration2Deriv">
+                <div id="GD:accelerationVector2Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of acceleration of the second object:</h4>
                     <p class="paragraph">
@@ -1244,17 +1238,15 @@
                     </p>
                   </div>
                 </div>
-                <div id="GD:multivectorForce1">
+                <div id="GD:forceVector1">
                   <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:multivectorForce1</b></td>
+                      <td><b>GD:forceVector1</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td>
-                        <p class="paragraph">Multivector force on the first object</p>
-                      </td>
+                      <td><p class="paragraph">Force vector on the first object</p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -1315,11 +1307,11 @@
                     </tr>
                   </table>
                 </div>
-                <div id="GD:multivectorForce1Deriv">
+                <div id="GD:forceVector1Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the first object:</h4>
                     <p class="paragraph">
-                      The multivector force in Clifford algebra combines inertial and gravitational forces as vector multivectors.
+                      The force vector in Clifford algebra combines inertial and gravitational forces as vectors.
                     </p>
                     \[{f_{1}}={\symbf{T}_{1}} \begin{bmatrix}
                                               -\sin\left({θ_{1}}\right)\\
@@ -1332,27 +1324,25 @@
                                                                                                         -{m_{1}}\,g
                                                                                                         \end{bmatrix}\]
                     <p class="paragraph">
-                      The inertial force is proportional to the multivector acceleration, preserving Newton's second law in geometric form.
+                      The inertial force is proportional to the force vector, preserving Newton's second law in geometric form.
                     </p>
                     <p class="paragraph">
                       where force equals mass times acceleration plus gravitational force in vector form
                     </p>
                     <p class="paragraph">
-                      Gravitational force acts vertically downward and is naturally represented as a vector multivector.
+                      Gravitational force acts vertically downward and is naturally represented as a vector.
                     </p>
                   </div>
                 </div>
-                <div id="GD:multivectorForce2">
+                <div id="GD:forceVector2">
                   <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:multivectorForce2</b></td>
+                      <td><b>GD:forceVector2</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td>
-                        <p class="paragraph">Multivector force on the second object</p>
-                      </td>
+                      <td><p class="paragraph">Force vector on the second object</p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -1404,7 +1394,7 @@
                     </tr>
                   </table>
                 </div>
-                <div id="GD:multivectorForce2Deriv">
+                <div id="GD:forceVector2Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the second object:</h4>
                     <p class="paragraph">
@@ -1893,7 +1883,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-g\,\left(2\,{m_{1}}+{m_{2}}\right)\,\sin\left({θ_{1}}\right)-{m_{2}}\,g\,\sin\left({θ_{1}}-2\,{θ_{2}}\right)-2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,{m_{2}}\,\left({w_{2}}^{2}\,{L_{2}}+{w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}\]
+                        \[{α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-g\,\left(2\,{m_{1}}+{m_{2}}\right)\,\sin\left({θ_{1}}\right)-{m_{2}}\,g\,\sin\left({θ_{1}}-2\,{θ_{2}}\right)-2\,{m_{2}}\,\sin\left({θ_{1}}-{θ_{2}}\right)\,\left({w_{2}}^{2}\,{L_{2}}+{w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}\]
                       </td>
                     </tr>
                     <tr>
@@ -2061,7 +2051,7 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of angle of the second rod:</h4>
                     <p class="paragraph">
-                      By solving multivector force equations <a href=#GD:multivectorForce1>GD:multivectorForce1</a> and <a href=#GD:multivectorForce2>GD:multivectorForce2</a> for <em>f<sub>1</sub></em> and <em>f<sub>2</sub></em> and then substituting into the Clifford algebra force equations , we can get equations 1 and 2:
+                      By solving multivector force equations <a href=#GD:forceVector1>GD:forceVector1</a> and <a href=#GD:forceVector2>GD:forceVector2</a> for <em>f<sub>1</sub></em> and <em>f<sub>2</sub></em> and then substituting into the Clifford algebra force equations , we can get equations 1 and 2:
                     </p>
                     \[{m_{1}}\,{a_{1}}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)-{m_{2}}\,{a_{2}}\]
                     <p class="paragraph"></p>
@@ -2075,7 +2065,7 @@
                     <p class="paragraph">This leads to the equation 3</p>
                     \[\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}+{m_{2}}\,g+{m_{1}}\,g\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}\right)\]
                     <p class="paragraph">
-                      Next, multiply multivector force equation <a href=#GD:multivectorForce2>GD:multivectorForce2</a> by <em>cos(θ<sub>2</sub>)</em> and the Clifford force equation by <em>sin(θ<sub>2</sub>)</em> and rearrange to get:
+                      Next, multiply multivector force equation <a href=#GD:forceVector2>GD:forceVector2</a> by <em>cos(θ<sub>2</sub>)</em> and the Clifford force equation by <em>sin(θ<sub>2</sub>)</em> and rearrange to get:
                     </p>
                     \[{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{2}}\]
                     <p class="paragraph"></p>
@@ -2083,7 +2073,7 @@
                     <p class="paragraph">which leads to equation 4</p>
                     \[\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{2}}+{m_{2}}\,g\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{2}}\]
                     <p class="paragraph">
-                      By giving multivector acceleration equations <a href=#GD:multivectorAcceleration1>GD:multivectorAcceleration1</a> and <a href=#GD:multivectorAcceleration2>GD:multivectorAcceleration2</a> and plus Clifford algebra equations plus additional two equations, 3 and 4, we can get <a href=#IM:calOfAngle1>IM:calOfAngle1</a> and <a href=#IM:calOfAngle2>IM:calOfAngle2</a> via a computer algebra program:
+                      By giving multivector acceleration equations <a href=#GD:accelerationVector1>GD:accelerationVector1</a> and <a href=#GD:accelerationVector2>GD:accelerationVector2</a> and plus Clifford algebra equations plus additional two equations, 3 and 4, we can get <a href=#IM:calOfAngle1>IM:calOfAngle1</a> and <a href=#IM:calOfAngle2>IM:calOfAngle2</a> via a computer algebra program:
                     </p>
                   </div>
                 </div>
@@ -2387,50 +2377,42 @@
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#GD:multivectorVelocity1>GD:multivectorVelocity1</a>
-              </td>
+              <td><a href=#GD:velocityVector1>GD:velocityVector1</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#GD:multivectorVelocity2>GD:multivectorVelocity2</a>
-              </td>
+              <td><a href=#GD:velocityVector2>GD:velocityVector2</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#GD:multivectorAcceleration1>GD:multivectorAcceleration1</a>
-              </td>
+              <td><a href=#GD:accelerationVector1>GD:accelerationVector1</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#GD:multivectorAcceleration2>GD:multivectorAcceleration2</a>
-              </td>
+              <td><a href=#GD:accelerationVector2>GD:accelerationVector2</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:multivectorForce1>GD:multivectorForce1</a></td>
+              <td><a href=#GD:forceVector1>GD:forceVector1</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:multivectorForce2>GD:multivectorForce2</a></td>
+              <td><a href=#GD:forceVector2>GD:forceVector2</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2511,20 +2493,12 @@
               <th><a href=#TM:acceleration>TM:acceleration</a></th>
               <th><a href=#TM:velocity>TM:velocity</a></th>
               <th><a href=#TM:NewtonSecLawMot>TM:NewtonSecLawMot</a></th>
-              <th>
-                <a href=#GD:multivectorVelocity1>GD:multivectorVelocity1</a>
-              </th>
-              <th>
-                <a href=#GD:multivectorVelocity2>GD:multivectorVelocity2</a>
-              </th>
-              <th>
-                <a href=#GD:multivectorAcceleration1>GD:multivectorAcceleration1</a>
-              </th>
-              <th>
-                <a href=#GD:multivectorAcceleration2>GD:multivectorAcceleration2</a>
-              </th>
-              <th><a href=#GD:multivectorForce1>GD:multivectorForce1</a></th>
-              <th><a href=#GD:multivectorForce2>GD:multivectorForce2</a></th>
+              <th><a href=#GD:velocityVector1>GD:velocityVector1</a></th>
+              <th><a href=#GD:velocityVector2>GD:velocityVector2</a></th>
+              <th><a href=#GD:accelerationVector1>GD:accelerationVector1</a></th>
+              <th><a href=#GD:accelerationVector2>GD:accelerationVector2</a></th>
+              <th><a href=#GD:forceVector1>GD:forceVector1</a></th>
+              <th><a href=#GD:forceVector2>GD:forceVector2</a></th>
               <th><a href=#IM:calOfAngle1>IM:calOfAngle1</a></th>
               <th><a href=#IM:calOfAngle2>IM:calOfAngle2</a></th>
             </tr>
@@ -2739,9 +2713,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#GD:multivectorVelocity1>GD:multivectorVelocity1</a>
-              </td>
+              <td><a href=#GD:velocityVector1>GD:velocityVector1</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2762,9 +2734,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#GD:multivectorVelocity2>GD:multivectorVelocity2</a>
-              </td>
+              <td><a href=#GD:velocityVector2>GD:velocityVector2</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2785,9 +2755,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#GD:multivectorAcceleration1>GD:multivectorAcceleration1</a>
-              </td>
+              <td><a href=#GD:accelerationVector1>GD:accelerationVector1</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2808,9 +2776,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#GD:multivectorAcceleration2>GD:multivectorAcceleration2</a>
-              </td>
+              <td><a href=#GD:accelerationVector2>GD:accelerationVector2</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2831,7 +2797,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:multivectorForce1>GD:multivectorForce1</a></td>
+              <td><a href=#GD:forceVector1>GD:forceVector1</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2852,7 +2818,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:multivectorForce2>GD:multivectorForce2</a></td>
+              <td><a href=#GD:forceVector2>GD:forceVector2</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2933,20 +2899,12 @@
               <th><a href=#TM:acceleration>TM:acceleration</a></th>
               <th><a href=#TM:velocity>TM:velocity</a></th>
               <th><a href=#TM:NewtonSecLawMot>TM:NewtonSecLawMot</a></th>
-              <th>
-                <a href=#GD:multivectorVelocity1>GD:multivectorVelocity1</a>
-              </th>
-              <th>
-                <a href=#GD:multivectorVelocity2>GD:multivectorVelocity2</a>
-              </th>
-              <th>
-                <a href=#GD:multivectorAcceleration1>GD:multivectorAcceleration1</a>
-              </th>
-              <th>
-                <a href=#GD:multivectorAcceleration2>GD:multivectorAcceleration2</a>
-              </th>
-              <th><a href=#GD:multivectorForce1>GD:multivectorForce1</a></th>
-              <th><a href=#GD:multivectorForce2>GD:multivectorForce2</a></th>
+              <th><a href=#GD:velocityVector1>GD:velocityVector1</a></th>
+              <th><a href=#GD:velocityVector2>GD:velocityVector2</a></th>
+              <th><a href=#GD:accelerationVector1>GD:accelerationVector1</a></th>
+              <th><a href=#GD:accelerationVector2>GD:accelerationVector2</a></th>
+              <th><a href=#GD:forceVector1>GD:forceVector1</a></th>
+              <th><a href=#GD:forceVector2>GD:forceVector2</a></th>
               <th><a href=#IM:calOfAngle1>IM:calOfAngle1</a></th>
               <th><a href=#IM:calOfAngle2>IM:calOfAngle2</a></th>
               <th><a href=#correct>NFR:Correctness</a></th>

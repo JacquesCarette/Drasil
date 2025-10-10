@@ -23,7 +23,7 @@ import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro)
 import qualified Drasil.DblPend.Body as DPD (tMods)
-import Drasil.DblPend.Concepts (conceptsWithGA, rod)
+import Drasil.DblPend.Concepts (rod)
 import Drasil.DblPend.Requirements (nonFuncReqs)
 import Drasil.DblPend.Unitals (acronyms)
 import Drasil.DblPend.References (citations)
@@ -110,8 +110,6 @@ purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pen
 
 ideaDicts :: [IdeaDict]
 ideaDicts = 
-  -- Actual IdeaDicts (include GA terms from dblpend)
-  conceptsWithGA ++
   -- CIs
   nw progName : map nw mathcon' ++ map nw physicCon'
 

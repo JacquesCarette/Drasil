@@ -10,7 +10,7 @@ PS3: The first object.
 
 PS4: The second object.
 
-PS5: Each object's motion is described using multivector in 2D Clifford algebra space Cl(2,0).
+PS5: Each object's motion is described using multivector in 2D space Cl(2,0).
 
 PS6: Physical quantities (velocity, acceleration, force) are unified as geometric entities with basis vectors e₁ and e₂.
 

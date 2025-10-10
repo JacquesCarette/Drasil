@@ -1,3 +1,4 @@
+-- | Directory controller for SourceCodeReader.hs and SourceCodeReaderTypes.hs.
 module DirectoryController (createFolder, createFile, finder, getDirectories,
   DrasilPack, FileName, FolderName, File(..), Folder(..)) where
 

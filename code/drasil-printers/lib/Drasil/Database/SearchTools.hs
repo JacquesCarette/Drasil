@@ -22,7 +22,7 @@ termResolve f db trg
   | (Just c) <- find trg db :: Maybe GenDefn             = go f c
   | (Just c) <- find trg db :: Maybe TheoryModel         = go f c
   | (Just c) <- find trg db :: Maybe ConceptInstance     = go f c
-  | otherwise = error $ "Term: " ++ show trg ++ " not found in TermMap"
+  | otherwise = f (nounPhrase (show trg) (show trg)) Nothing
   where
     go :: Idea t => (NP -> Maybe String -> c) -> t -> c
     go f' c = f' (c ^. term) (getA c)
@@ -44,7 +44,7 @@ defResolve f db trg
   | (Just c) <- find trg db :: Maybe GenDefn             = go f c
   | (Just c) <- find trg db :: Maybe TheoryModel         = go f c
   | (Just c) <- find trg db :: Maybe ConceptInstance     = go f c
-  | otherwise = error $ "Definition: " ++ show trg ++ " not found in ConceptMap"
+  | otherwise = f [] (S (show trg))
   where
     go :: Concept c => ([UID] -> Sentence -> r) -> c -> r
     go f' c = f' (cdom c) (c ^. defn)

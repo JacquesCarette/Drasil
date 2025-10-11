@@ -44,34 +44,26 @@ This section transforms the problem defined in the [problem description](./SecPr
 
 By solving multivector force equations [GD:forceVector1](./SecGDs.md#GD:forceVector1) and [GD:forceVector2](./SecGDs.md#GD:forceVector2) for \\({f\_{1}}\\) and \\({f\_{2}}\\) and then substituting into the Clifford algebra force equations , we can get equations 1 and 2:
 
-\\[{m\_{1}}\\,{a\_{1}}=-{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)-{m\_{2}}\\,{a\_{2}}\\]
+\\[{m\_{1}}\\,{a\_{1}}=-{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)\\]
 
 
 
-\\[{m\_{1}}\\,{a\_{1}}={\boldsymbol{T}\_{1}}\\,\cos\left({θ\_{1}}\right)-{m\_{2}}\\,{a\_{2}}-{m\_{2}}\\,g-{m\_{1}}\\,g\\]
+\\[{m\_{1}}\\,{a\_{1}}={\boldsymbol{T}\_{1}}\\,\cos\left({θ\_{1}}\right)-{m\_{1}}\\,g\\]
 
 Multiply the equation 1 by \\(\cos\left({θ\_{1}}\right)\\) and the equation 2 by \\(\sin\left({θ\_{1}}\right)\\) and rearrange to get:
 
-\\[{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)\\,\cos\left({θ\_{1}}\right)=-\cos\left({θ\_{1}}\right)\\,\left({m\_{1}}\\,{a\_{1}}+{m\_{2}}\\,{a\_{2}}\right)\\]
+\\[{m\_{2}}\\,{a\_{2}}=-{\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\]
 
 
 
-\\[{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)\\,\cos\left({θ\_{1}}\right)=\sin\left({θ\_{1}}\right)\\,\left({m\_{1}}\\,{a\_{1}}+{m\_{2}}\\,{a\_{2}}+{m\_{2}}\\,g+{m\_{1}}\\,g\right)\\]
+\\[{m\_{2}}\\,{a\_{2}}={\boldsymbol{T}\_{2}}\\,\cos\left({θ\_{2}}\right)-{m\_{2}}\\,g\\]
 
 This leads to the equation 3
 
-\\[\sin\left({θ\_{1}}\right)\\,\left({m\_{1}}\\,{a\_{1}}+{m\_{2}}\\,{a\_{2}}+{m\_{2}}\\,g+{m\_{1}}\\,g\right)=-\cos\left({θ\_{1}}\right)\\,\left({m\_{1}}\\,{a\_{1}}+{m\_{2}}\\,{a\_{2}}\right)\\]
-
 Next, multiply multivector force equation [GD:forceVector2](./SecGDs.md#GD:forceVector2) by \\(\cos\left({θ\_{2}}\right)\\) and the Clifford force equation by \\(\sin\left({θ\_{2}}\right)\\) and rearrange to get:
 
-\\[{\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\,\cos\left({θ\_{2}}\right)=-\cos\left({θ\_{2}}\right)\\,{m\_{2}}\\,{a\_{2}}\\]
 
-
-
-\\[{\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\,\cos\left({θ\_{2}}\right)=\sin\left({θ\_{2}}\right)\\,\left({m\_{2}}\\,{a\_{2}}+{m\_{2}}\\,g\right)\\]
 
 which leads to equation 4
-
-\\[\sin\left({θ\_{2}}\right)\\,\left({m\_{2}}\\,{a\_{2}}+{m\_{2}}\\,g\right)=-\cos\left({θ\_{2}}\right)\\,{m\_{2}}\\,{a\_{2}}\\]
 
 By giving multivector acceleration equations [GD:accelerationVector1](./SecGDs.md#GD:accelerationVector1) and [GD:accelerationVector2](./SecGDs.md#GD:accelerationVector2) and plus Clifford algebra equations plus additional two equations, 3 and 4, we can get [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2) via a computer algebra program:

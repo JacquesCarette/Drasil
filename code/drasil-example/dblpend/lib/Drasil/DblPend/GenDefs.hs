@@ -38,7 +38,7 @@ mvVelDerivEqns_1 :: [Sentence]
 mvVelDerivEqns_1 = [eS $ sy mvVel_1 $= E.mvVelExpr_1,
                     S "where the velocity vector combines angular velocity and rod length in Clifford space",
                     S "Direction vector = cos(θ₁)e₁ + sin(θ₁)e₂ using basis vectors e₁, e₂",
-                    S "The geometric product preserves both magnitude and geometric orientation"]
+                    S "The geometric product preserves both magnitude and geometric orientation."]
 
 -----------------------------------------------
 -- Multivector Velocity for Second Object   --

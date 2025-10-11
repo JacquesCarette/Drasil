@@ -71,14 +71,6 @@ ${a_{1}}$ & Acceleration of the first object & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 ${a_{2}}$ & Acceleration of the second object & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${a_{\text{x}1}}$ & Horizontal acceleration of the first object & $\frac{\text{m}}{\text{s}^{2}}$
-\\
-${a_{\text{x}2}}$ & Horizontal acceleration of the second object & $\frac{\text{m}}{\text{s}^{2}}$
-\\
-${a_{\text{y}1}}$ & Vertical acceleration of the first object & $\frac{\text{m}}{\text{s}^{2}}$
-\\
-${a_{\text{y}2}}$ & Vertical acceleration of the second object & $\frac{\text{m}}{\text{s}^{2}}$
-\\
 $\symbf{a}\text{(}t\text{)}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{F}$ & Force & ${\text{N}}$
@@ -103,15 +95,11 @@ ${m_{1}}$ & Mass of the first object & ${\text{kg}}$
 \\
 ${m_{2}}$ & Mass of the second object & ${\text{kg}}$
 \\
-${p_{\text{x}1}}$ & Horizontal position of the first object & ${\text{m}}$
-\\
-${p_{\text{x}2}}$ & Horizontal position of the second object & ${\text{m}}$
-\\
-${p_{\text{y}1}}$ & Vertical position of the first object & ${\text{m}}$
-\\
-${p_{\text{y}2}}$ & Vertical position of the second object & ${\text{m}}$
-\\
 $\symbf{p}\text{(}t\text{)}$ & Position & ${\text{m}}$
+\\
+${\symbf{p}_{1}}$ & Position of the first object & ${\text{m}}$
+\\
+${\symbf{p}_{2}}$ & Position of the second object & ${\text{m}}$
 \\
 $\symbf{T}$ & Tension & ${\text{N}}$
 \\
@@ -121,19 +109,9 @@ ${\symbf{T}_{2}}$ & Tension of the second rod & ${\text{N}}$
 \\
 $t$ & Time & ${\text{s}}$
 \\
-$\text{theta}$ & Dependent variables & ${\text{rad}}$
-\\
 ${v_{1}}$ & Velocity of the first object & $\frac{\text{m}}{\text{s}}$
 \\
 ${v_{2}}$ & Velocity of the second object & $\frac{\text{m}}{\text{s}}$
-\\
-${v_{\text{x}1}}$ & Horizontal velocity of the first object & $\frac{\text{m}}{\text{s}}$
-\\
-${v_{\text{x}2}}$ & Horizontal velocity of the second object & $\frac{\text{m}}{\text{s}}$
-\\
-${v_{\text{y}1}}$ & Vertical velocity of the first object & $\frac{\text{m}}{\text{s}}$
-\\
-${v_{\text{y}2}}$ & Vertical velocity of the second object & $\frac{\text{m}}{\text{s}}$
 \\
 $\symbf{v}\text{(}t\text{)}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
@@ -144,6 +122,8 @@ ${w_{2}}$ & Angular velocity of the second object & $\frac{\text{rad}}{\text{s}}
 ${α_{1}}$ & Angular acceleration of the first object & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
 ${α_{2}}$ & Angular acceleration of the second object & $\frac{\text{rad}}{\text{s}^{2}}$
+\\
+$θ$ & Dependent variables & ${\text{rad}}$
 \\
 ${θ_{1}}$ & Angle of the first rod & ${\text{rad}}$
 \\
@@ -464,7 +444,7 @@ Direction vector = cos(θ₁)e₁ + sin(θ₁)e₂ using basis vectors e₁, e�
 
 The angular velocity ω₁ and rod length L₁ combine with the direction vector to form the complete velocity vector.
 
-The geometric product preserves both magnitude and geometric orientation
+The geometric product preserves both magnitude and geometric orientation.
 
 Unlike traditional component-wise vector addition, this geometric product maintains the intrinsic geometric structure.
 
@@ -821,27 +801,110 @@ This section collects and defines all the data needed to build the instance mode
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:velocityGDD}
+\toprule \textbf{Refname} & \textbf{DD:positionVecDD1}
 \phantomsection 
-\label{DD:velocityGDD}
+\label{DD:positionVecDD1}
 \\ \midrule
-Label & Velocity
+Label & Position of the first object
         
 \\ \midrule
-Symbol & $\symbf{v}\text{(}t\text{)}$
+Symbol & ${\symbf{p}_{1}}$
+         
+\\ \midrule
+Units & ${\text{m}}$
+        
+\\ \midrule
+Equation & \begin{displaymath}
+           \resizeExpression{{\symbf{p}_{1}}={L_{1}}\,\begin{bmatrix}
+                                                      \sin\left({θ_{1}}\right)\\
+                                                      -\cos\left({θ_{1}}\right)
+                                                      \end{bmatrix}}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{${\symbf{p}_{1}}$ is the position of the first object (${\text{m}}$)}
+              \item{${L_{1}}$ is the length of the first rod (${\text{m}}$)}
+              \item{${θ_{1}}$ is the angle of the first rod (${\text{rad}}$)}
+              \end{symbDescription}
+\\ \midrule
+Notes & ${\symbf{p}_{1}}$ is the pendulum position \hyperref[Figure:dblpend]{Fig:dblpend}.
+        
+\\ \midrule
+Source & --
+         
+\\ \midrule
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\medskip
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:positionVecDD2}
+\phantomsection 
+\label{DD:positionVecDD2}
+\\ \midrule
+Label & Position of the second object
+        
+\\ \midrule
+Symbol & ${\symbf{p}_{2}}$
+         
+\\ \midrule
+Units & ${\text{m}}$
+        
+\\ \midrule
+Equation & \begin{displaymath}
+           \resizeExpression{{\symbf{p}_{2}}={\symbf{p}_{1}}+{L_{2}}\,\begin{bmatrix}
+                                                                      \sin\left({θ_{2}}\right)\\
+                                                                      -\cos\left({θ_{2}}\right)
+                                                                      \end{bmatrix}}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{${\symbf{p}_{2}}$ is the position of the second object (${\text{m}}$)}
+              \item{${\symbf{p}_{1}}$ is the position of the first object (${\text{m}}$)}
+              \item{${L_{2}}$ is the length of the second rod (${\text{m}}$)}
+              \item{${θ_{2}}$ is the angle of the second rod (${\text{rad}}$)}
+              \end{symbDescription}
+\\ \midrule
+Notes & ${\symbf{p}_{2}}$ is the pendulum position \hyperref[Figure:dblpend]{Fig:dblpend}.
+        
+\\ \midrule
+Source & --
+         
+\\ \midrule
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\medskip
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:velocityVecDD1}
+\phantomsection 
+\label{DD:velocityVecDD1}
+\\ \midrule
+Label & Velocity of the first object
+        
+\\ \midrule
+Symbol & ${v_{1}}$
          
 \\ \midrule
 Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}
+           \resizeExpression{{v_{1}}=\frac{\,d{\symbf{p}_{1}}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v_{1}}$ is the velocity of the first object ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{p}\text{(}t\text{)}$ is the position (${\text{m}}$)}
+              \item{${\symbf{p}_{1}}$ is the position of the first object (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule
 Source & --
@@ -856,33 +919,28 @@ RefBy &
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:positionXDD1}
+\toprule \textbf{Refname} & \textbf{DD:velocityVecDD2}
 \phantomsection 
-\label{DD:positionXDD1}
+\label{DD:velocityVecDD2}
 \\ \midrule
-Label & Horizontal position of the first object
+Label & Velocity of the second object
         
 \\ \midrule
-Symbol & ${p_{\text{x}1}}$
+Symbol & ${v_{2}}$
          
 \\ \midrule
-Units & ${\text{m}}$
+Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{p_{\text{x}1}}={L_{1}}\,\sin\left({θ_{1}}\right)}
+           \resizeExpression{{v_{2}}=\frac{\,d{\symbf{p}_{2}}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${p_{\text{x}1}}$ is the horizontal position of the first object (${\text{m}}$)}
-              \item{${L_{1}}$ is the length of the first rod (${\text{m}}$)}
-              \item{${θ_{1}}$ is the angle of the first rod (${\text{rad}}$)}
+              \item{${v_{2}}$ is the velocity of the second object ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{${\symbf{p}_{2}}$ is the position of the second object (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule
-Notes & ${p_{\text{x}1}}$ is the horizontal position
-        
-        ${p_{\text{x}1}}$ is shown in \hyperref[Figure:dblpend]{Fig:dblpend}.
-        
 \\ \midrule
 Source & --
          
@@ -896,149 +954,27 @@ RefBy &
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:positionYDD1}
+\toprule \textbf{Refname} & \textbf{DD:accelVecDD1}
 \phantomsection 
-\label{DD:positionYDD1}
+\label{DD:accelVecDD1}
 \\ \midrule
-Label & Vertical position of the first object
+Label & Acceleration of the first object
         
 \\ \midrule
-Symbol & ${p_{\text{y}1}}$
-         
-\\ \midrule
-Units & ${\text{m}}$
-        
-\\ \midrule
-Equation & \begin{displaymath}
-           \resizeExpression{{p_{\text{y}1}}=-{L_{1}}\,\cos\left({θ_{1}}\right)}
-           \end{displaymath}
-\\ \midrule
-Description & \begin{symbDescription}
-              \item{${p_{\text{y}1}}$ is the vertical position of the first object (${\text{m}}$)}
-              \item{${L_{1}}$ is the length of the first rod (${\text{m}}$)}
-              \item{${θ_{1}}$ is the angle of the first rod (${\text{rad}}$)}
-              \end{symbDescription}
-\\ \midrule
-Notes & ${p_{\text{y}1}}$ is the vertical position
-        
-        ${p_{\text{y}1}}$ is shown in \hyperref[Figure:dblpend]{Fig:dblpend}.
-        
-\\ \midrule
-Source & --
-         
-\\ \midrule
-RefBy & 
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\medskip
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:positionXDD2}
-\phantomsection 
-\label{DD:positionXDD2}
-\\ \midrule
-Label & Horizontal position of the second object
-        
-\\ \midrule
-Symbol & ${p_{\text{x}2}}$
-         
-\\ \midrule
-Units & ${\text{m}}$
-        
-\\ \midrule
-Equation & \begin{displaymath}
-           \resizeExpression{{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)}
-           \end{displaymath}
-\\ \midrule
-Description & \begin{symbDescription}
-              \item{${p_{\text{x}2}}$ is the horizontal position of the second object (${\text{m}}$)}
-              \item{${p_{\text{x}1}}$ is the horizontal position of the first object (${\text{m}}$)}
-              \item{${L_{2}}$ is the length of the second rod (${\text{m}}$)}
-              \item{${θ_{2}}$ is the angle of the second rod (${\text{rad}}$)}
-              \end{symbDescription}
-\\ \midrule
-Notes & ${p_{\text{x}2}}$ is the horizontal position
-        
-        ${p_{\text{x}2}}$ is shown in \hyperref[Figure:dblpend]{Fig:dblpend}.
-        
-\\ \midrule
-Source & --
-         
-\\ \midrule
-RefBy & 
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\medskip
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:positionYDD2}
-\phantomsection 
-\label{DD:positionYDD2}
-\\ \midrule
-Label & Vertical position of the second object
-        
-\\ \midrule
-Symbol & ${p_{\text{y}2}}$
-         
-\\ \midrule
-Units & ${\text{m}}$
-        
-\\ \midrule
-Equation & \begin{displaymath}
-           \resizeExpression{{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)}
-           \end{displaymath}
-\\ \midrule
-Description & \begin{symbDescription}
-              \item{${p_{\text{y}2}}$ is the vertical position of the second object (${\text{m}}$)}
-              \item{${p_{\text{y}1}}$ is the vertical position of the first object (${\text{m}}$)}
-              \item{${L_{2}}$ is the length of the second rod (${\text{m}}$)}
-              \item{${θ_{2}}$ is the angle of the second rod (${\text{rad}}$)}
-              \end{symbDescription}
-\\ \midrule
-Notes & ${p_{\text{y}2}}$ is the vertical position
-        
-        ${p_{\text{y}2}}$ is shown in \hyperref[Figure:dblpend]{Fig:dblpend}.
-        
-\\ \midrule
-Source & --
-         
-\\ \midrule
-RefBy & 
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\medskip
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:accelerationGDD}
-\phantomsection 
-\label{DD:accelerationGDD}
-\\ \midrule
-Label & Acceleration
-        
-\\ \midrule
-Symbol & $\symbf{a}\text{(}t\text{)}$
+Symbol & ${a_{1}}$
          
 \\ \midrule
 Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
+           \resizeExpression{{a_{1}}=\frac{\,d{v_{1}}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${a_{1}}$ is the acceleration of the first object ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v_{1}}$ is the velocity of the first object ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule
 Source & --
@@ -1053,27 +989,97 @@ RefBy &
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:forceGDD}
+\toprule \textbf{Refname} & \textbf{DD:accelVecDD2}
 \phantomsection 
-\label{DD:forceGDD}
+\label{DD:accelVecDD2}
 \\ \midrule
-Label & Force
+Label & Acceleration of the second object
         
 \\ \midrule
-Symbol & $\symbf{F}$
+Symbol & ${a_{2}}$
+         
+\\ \midrule
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+        
+\\ \midrule
+Equation & \begin{displaymath}
+           \resizeExpression{{a_{2}}=\frac{\,d{v_{2}}}{\,dt}}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{${a_{2}}$ is the acceleration of the second object ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{${v_{2}}$ is the velocity of the second object ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule
+Source & --
+         
+\\ \midrule
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\medskip
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:forceVecDD1}
+\phantomsection 
+\label{DD:forceVecDD1}
+\\ \midrule
+Label & Force of the first object
+        
+\\ \midrule
+Symbol & ${f_{1}}$
          
 \\ \midrule
 Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{F}=m \symbf{a}\text{(}t\text{)}}
+           \resizeExpression{{f_{1}}=m\,{a_{1}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{$\symbf{F}$ is the force (${\text{N}}$)}
+              \item{${f_{1}}$ is the force of the first object (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${a_{1}}$ is the acceleration of the first object ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule
+Source & --
+         
+\\ \midrule
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\medskip
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:forceVecDD2}
+\phantomsection 
+\label{DD:forceVecDD2}
+\\ \midrule
+Label & Force of the second object
+        
+\\ \midrule
+Symbol & ${f_{2}}$
+         
+\\ \midrule
+Units & ${\text{N}}$
+        
+\\ \midrule
+Equation & \begin{displaymath}
+           \resizeExpression{{f_{2}}=m\,{a_{2}}}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{${f_{2}}$ is the force of the second object (${\text{N}}$)}
+              \item{$m$ is the mass (${\text{kg}}$)}
+              \item{${a_{2}}$ is the acceleration of the second object ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule
 Source & --
@@ -1215,40 +1221,28 @@ RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}, \hyperref[IM:calOfAngle1]{IM:
 By solving multivector force equations \hyperref[GD:forceVector1]{GD:forceVector1} and \hyperref[GD:forceVector2]{GD:forceVector2} for ${f_{1}}$ and ${f_{2}}$ and then substituting into the Clifford algebra force equations , we can get equations 1 and 2:
 
 \begin{displaymath}
-\resizeExpression{{m_{1}}\,{a_{1}}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)-{m_{2}}\,{a_{2}}}
+\resizeExpression{{m_{1}}\,{a_{1}}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)}
 \end{displaymath}
 
 \begin{displaymath}
-\resizeExpression{{m_{1}}\,{a_{1}}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{m_{2}}\,{a_{2}}-{m_{2}}\,g-{m_{1}}\,g}
+\resizeExpression{{m_{1}}\,{a_{1}}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{m_{1}}\,g}
 \end{displaymath}
 Multiply the equation 1 by $\cos\left({θ_{1}}\right)$ and the equation 2 by $\sin\left({θ_{1}}\right)$ and rearrange to get:
 
 \begin{displaymath}
-\resizeExpression{{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}\right)}
+\resizeExpression{{m_{2}}\,{a_{2}}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)}
 \end{displaymath}
 
 \begin{displaymath}
-\resizeExpression{{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}+{m_{2}}\,g+{m_{1}}\,g\right)}
+\resizeExpression{{m_{2}}\,{a_{2}}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,g}
 \end{displaymath}
 This leads to the equation 3
 
-\begin{displaymath}
-\resizeExpression{\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}+{m_{2}}\,g+{m_{1}}\,g\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}\right)}
-\end{displaymath}
 Next, multiply multivector force equation \hyperref[GD:forceVector2]{GD:forceVector2} by $\cos\left({θ_{2}}\right)$ and the Clifford force equation by $\sin\left({θ_{2}}\right)$ and rearrange to get:
 
-\begin{displaymath}
-\resizeExpression{{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{2}}}
-\end{displaymath}
 
-\begin{displaymath}
-\resizeExpression{{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{2}}+{m_{2}}\,g\right)}
-\end{displaymath}
 which leads to equation 4
 
-\begin{displaymath}
-\resizeExpression{\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{2}}+{m_{2}}\,g\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{2}}}
-\end{displaymath}
 By giving multivector acceleration equations \hyperref[GD:accelerationVector1]{GD:accelerationVector1} and \hyperref[GD:accelerationVector2]{GD:accelerationVector2} and plus Clifford algebra equations plus additional two equations, 3 and 4, we can get \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2} via a computer algebra program:
 
 \subsubsection{Data Constraints}
@@ -1346,19 +1340,21 @@ The purpose of the traceability matrices is to provide easy references on what h
 {colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}}
 \\
-\hyperref[DD:velocityGDD]{DD:velocityGDD} &  &  &  & 
+\hyperref[DD:positionVecDD1]{DD:positionVecDD1} &  &  &  & 
 \\
-\hyperref[DD:positionXDD1]{DD:positionXDD1} &  &  &  & 
+\hyperref[DD:positionVecDD2]{DD:positionVecDD2} &  &  &  & 
 \\
-\hyperref[DD:positionYDD1]{DD:positionYDD1} &  &  &  & 
+\hyperref[DD:velocityVecDD1]{DD:velocityVecDD1} &  &  &  & 
 \\
-\hyperref[DD:positionXDD2]{DD:positionXDD2} &  &  &  & 
+\hyperref[DD:velocityVecDD2]{DD:velocityVecDD2} &  &  &  & 
 \\
-\hyperref[DD:positionYDD2]{DD:positionYDD2} &  &  &  & 
+\hyperref[DD:accelVecDD1]{DD:accelVecDD1} &  &  &  & 
 \\
-\hyperref[DD:accelerationGDD]{DD:accelerationGDD} &  &  &  & 
+\hyperref[DD:accelVecDD2]{DD:accelVecDD2} &  &  &  & 
 \\
-\hyperref[DD:forceGDD]{DD:forceGDD} &  &  &  & 
+\hyperref[DD:forceVecDD1]{DD:forceVecDD1} &  &  &  & 
+\\
+\hyperref[DD:forceVecDD2]{DD:forceVecDD2} &  &  &  & 
 \\
 \hyperref[TM:acceleration]{TM:acceleration} &  &  &  & 
 \\
@@ -1397,64 +1393,66 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
-{colspec={l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:velocityGDD]{DD:velocityGDD}} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:accelerationGDD]{DD:accelerationGDD}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityVector1]{GD:velocityVector1}} & \textbf{\hyperref[GD:velocityVector2]{GD:velocityVector2}} & \textbf{\hyperref[GD:accelerationVector1]{GD:accelerationVector1}} & \textbf{\hyperref[GD:accelerationVector2]{GD:accelerationVector2}} & \textbf{\hyperref[GD:forceVector1]{GD:forceVector1}} & \textbf{\hyperref[GD:forceVector2]{GD:forceVector2}} & \textbf{\hyperref[IM:calOfAngle1]{IM:calOfAngle1}} & \textbf{\hyperref[IM:calOfAngle2]{IM:calOfAngle2}}
+{colspec={l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:positionVecDD1]{DD:positionVecDD1}} & \textbf{\hyperref[DD:positionVecDD2]{DD:positionVecDD2}} & \textbf{\hyperref[DD:velocityVecDD1]{DD:velocityVecDD1}} & \textbf{\hyperref[DD:velocityVecDD2]{DD:velocityVecDD2}} & \textbf{\hyperref[DD:accelVecDD1]{DD:accelVecDD1}} & \textbf{\hyperref[DD:accelVecDD2]{DD:accelVecDD2}} & \textbf{\hyperref[DD:forceVecDD1]{DD:forceVecDD1}} & \textbf{\hyperref[DD:forceVecDD2]{DD:forceVecDD2}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityVector1]{GD:velocityVector1}} & \textbf{\hyperref[GD:velocityVector2]{GD:velocityVector2}} & \textbf{\hyperref[GD:accelerationVector1]{GD:accelerationVector1}} & \textbf{\hyperref[GD:accelerationVector2]{GD:accelerationVector2}} & \textbf{\hyperref[GD:forceVector1]{GD:forceVector1}} & \textbf{\hyperref[GD:forceVector2]{GD:forceVector2}} & \textbf{\hyperref[IM:calOfAngle1]{IM:calOfAngle1}} & \textbf{\hyperref[IM:calOfAngle2]{IM:calOfAngle2}}
 \\
-\hyperref[DD:velocityGDD]{DD:velocityGDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionVecDD1]{DD:positionVecDD1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionXDD1]{DD:positionXDD1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionVecDD2]{DD:positionVecDD2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionYDD1]{DD:positionYDD1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:velocityVecDD1]{DD:velocityVecDD1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionXDD2]{DD:positionXDD2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:velocityVecDD2]{DD:velocityVecDD2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionYDD2]{DD:positionYDD2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:accelVecDD1]{DD:accelVecDD1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:accelerationGDD]{DD:accelerationGDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:accelVecDD2]{DD:accelVecDD2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:forceGDD]{DD:forceGDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:forceVecDD1]{DD:forceVecDD1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:forceVecDD2]{DD:forceVecDD2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityVector1]{GD:velocityVector1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityVector2]{GD:velocityVector2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityVector1]{GD:velocityVector1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationVector1]{GD:accelerationVector1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityVector2]{GD:velocityVector2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationVector2]{GD:accelerationVector2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationVector1]{GD:accelerationVector1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:forceVector1]{GD:forceVector1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationVector2]{GD:accelerationVector2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:forceVector2]{GD:forceVector2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:forceVector1]{GD:forceVector1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calOfAngle1]{IM:calOfAngle1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
+\hyperref[GD:forceVector2]{GD:forceVector2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calOfAngle2]{IM:calOfAngle2} &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X & X
+\hyperref[IM:calOfAngle1]{IM:calOfAngle1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
+\\
+\hyperref[IM:calOfAngle2]{IM:calOfAngle2} &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X & X
 \label{Table:TraceMatRefvsRef}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
-{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:velocityGDD]{DD:velocityGDD}} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:accelerationGDD]{DD:accelerationGDD}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityVector1]{GD:velocityVector1}} & \textbf{\hyperref[GD:velocityVector2]{GD:velocityVector2}} & \textbf{\hyperref[GD:accelerationVector1]{GD:accelerationVector1}} & \textbf{\hyperref[GD:accelerationVector2]{GD:accelerationVector2}} & \textbf{\hyperref[GD:forceVector1]{GD:forceVector1}} & \textbf{\hyperref[GD:forceVector2]{GD:forceVector2}} & \textbf{\hyperref[IM:calOfAngle1]{IM:calOfAngle1}} & \textbf{\hyperref[IM:calOfAngle2]{IM:calOfAngle2}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[portable]{NFR:Portability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAng]{FR:Calculate-Angle-Of-Rod}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
+{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:positionVecDD1]{DD:positionVecDD1}} & \textbf{\hyperref[DD:positionVecDD2]{DD:positionVecDD2}} & \textbf{\hyperref[DD:velocityVecDD1]{DD:velocityVecDD1}} & \textbf{\hyperref[DD:velocityVecDD2]{DD:velocityVecDD2}} & \textbf{\hyperref[DD:accelVecDD1]{DD:accelVecDD1}} & \textbf{\hyperref[DD:accelVecDD2]{DD:accelVecDD2}} & \textbf{\hyperref[DD:forceVecDD1]{DD:forceVecDD1}} & \textbf{\hyperref[DD:forceVecDD2]{DD:forceVecDD2}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityVector1]{GD:velocityVector1}} & \textbf{\hyperref[GD:velocityVector2]{GD:velocityVector2}} & \textbf{\hyperref[GD:accelerationVector1]{GD:accelerationVector1}} & \textbf{\hyperref[GD:accelerationVector2]{GD:accelerationVector2}} & \textbf{\hyperref[GD:forceVector1]{GD:forceVector1}} & \textbf{\hyperref[GD:forceVector2]{GD:forceVector2}} & \textbf{\hyperref[IM:calOfAngle1]{IM:calOfAngle1}} & \textbf{\hyperref[IM:calOfAngle2]{IM:calOfAngle2}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[portable]{NFR:Portability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAng]{FR:Calculate-Angle-Of-Rod}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
 \\
-\hyperref[motionMass]{GS:motionMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[motionMass]{GS:motionMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcAng]{FR:Calculate-Angle-Of-Rod} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
+\hyperref[calcAng]{FR:Calculate-Angle-Of-Rod} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.

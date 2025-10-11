@@ -1,128 +1,153 @@
+{-# LANGUAGE PostfixOperators #-}
+
 module Drasil.DblPend.DataDefs where
 
-import Control.Lens ((^.))
-
+-- import Control.Lens ((^.))
 import Prelude hiding (sin, cos, sqrt)
+
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
-import Theory.Drasil (DataDefinition, ddENoRefs, ddMENoRefs)
+import Theory.Drasil (DataDefinition, ddMENoRefs, ddENoRefs)
 
 import Drasil.DblPend.LabelledContent (figMotion)
-import Drasil.DblPend.Unitals (pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2)
+import Drasil.DblPend.Unitals
+  ( pendDisAngle_1, pendDisAngle_2
+  , lenRod_1, lenRod_2
+  , posVec_1, posVec_2
+  , mvVel_1, mvVel_2
+  , mvAccel_1, mvAccel_2
+  , mvForce_1, mvForce_2
+  )
 
-import Drasil.DblPend.Concepts (horizontalPos, verticalPos)
-import Data.Drasil.Quantities.Physics (velocity, position, time, acceleration, force)
+import Drasil.DblPend.Concepts (pendulumPos)
+import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
+------------------------------------------------------
+-- Full List of Data Definitions (GA-based only)
+------------------------------------------------------
 dataDefs :: [DataDefinition]
-dataDefs = [velocityGDD, positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, accelGDD, forceGDD] -- Full list including Clifford algebra content
+dataDefs =
+  [ positionVecDD_1
+  , positionVecDD_2
+  , velocityVecDD_1
+  , velocityVecDD_2
+  , accelVecDD_1
+  , accelVecDD_2
+  , forceVecDD_1
+  , forceVecDD_2
+  ]
 
-------------------------
--- Velocity in General--
-------------------------
-velocityGDD :: DataDefinition
-velocityGDD = ddMENoRefs velocityGQD Nothing "velocityGDD" []
+--------------------------------------------
+-- Position Vectors for Each Pendulum Bob --
+--------------------------------------------
 
-velocityGQD :: ModelQDef
-velocityGQD = mkQuantDef velocity velocityGEqn
+positionVecDD_1 :: DataDefinition
+positionVecDD_1 =
+  ddENoRefs positionVecQD_1 Nothing "positionVecDD1" [posVecRef_1]
 
-velocityGEqn :: ModelExpr
-velocityGEqn = deriv (sy position) time
+positionVecQD_1 :: SimpleQDef
+positionVecQD_1 = mkQuantDef posVec_1 positionVecEqn_1
 
--------------------------------------------------
--- Position in X Direction in the First Object --
--------------------------------------------------
-positionXDD_1 :: DataDefinition
-positionXDD_1 = ddENoRefs positionXQD_1 Nothing "positionXDD1" [positionXRef_1, positionXFigRef_1]
+-- r₁ = l₁ * (sin θ₁ e₁ - cos θ₁ e₂)
+positionVecEqn_1 :: PExpr
+positionVecEqn_1 = sy lenRod_1 $* vec2D (sin (sy pendDisAngle_1)) (neg (cos (sy pendDisAngle_1)))
 
-positionXQD_1 :: SimpleQDef
-positionXQD_1 = mkQuantDef xPos_1 positionXEqn_1
+posVecRef_1 :: Sentence
+posVecRef_1 = ch posVec_1 `S.isThe` phrase pendulumPos +:+. refS figMotion
 
-positionXEqn_1 :: PExpr
-positionXEqn_1 = sy lenRod_1 $* sin (sy pendDisAngle_1)
+--------------------------------------------
 
-positionXFigRef_1 :: Sentence
-positionXFigRef_1 = ch xPos_1 `S.is` S "shown in" +:+. refS figMotion
+positionVecDD_2 :: DataDefinition
+positionVecDD_2 =
+  ddENoRefs positionVecQD_2 Nothing "positionVecDD2" [posVecRef_2]
 
-positionXRef_1 :: Sentence
-positionXRef_1 = ch xPos_1 `S.isThe` phrase horizontalPos
+positionVecQD_2 :: SimpleQDef
+positionVecQD_2 = mkQuantDef posVec_2 positionVecEqn_2
 
-------------------------------------------------
--- Position in Y Direction in the First Object --
-------------------------------------------------
-positionYDD_1 :: DataDefinition
-positionYDD_1 = ddENoRefs positionYQD_1 Nothing "positionYDD1" [positionYRef_1, positionYFigRef_1]
+-- r₂ = r₁ + l₂ * (sin θ₂ e₁ - cos θ₂ e₂)
+positionVecEqn_2 :: PExpr
+positionVecEqn_2 = sy posVec_1 $+ (sy lenRod_2 $* vec2D (sin (sy pendDisAngle_2)) (neg (cos (sy pendDisAngle_2))))
 
-positionYQD_1 :: SimpleQDef
-positionYQD_1 = mkQuantDef yPos_1 positionYEqn_1
+posVecRef_2 :: Sentence
+posVecRef_2 = ch posVec_2 `S.isThe` phrase pendulumPos +:+. refS figMotion
 
-positionYEqn_1 :: PExpr
-positionYEqn_1 = neg (sy lenRod_1 $* cos (sy pendDisAngle_1))
+--------------------------------------------
+-- Velocity Vectors --
+--------------------------------------------
 
-positionYFigRef_1 :: Sentence
-positionYFigRef_1 = ch yPos_1 `S.is` S "shown in" +:+. refS figMotion
+velocityVecDD_1 :: DataDefinition
+velocityVecDD_1 =
+  ddMENoRefs velocityVecQD_1 Nothing "velocityVecDD1" []
 
-positionYRef_1 :: Sentence
-positionYRef_1 = ch yPos_1 `S.isThe` phrase verticalPos
+velocityVecQD_1 :: ModelQDef
+velocityVecQD_1 = mkQuantDef mvVel_1 velocityVecEqn_1
 
------------------------------------------------
--- Position in X Direction in the Second Object--
------------------------------------------------
-positionXDD_2 :: DataDefinition
-positionXDD_2 = ddENoRefs positionXQD_2 Nothing "positionXDD2" [positionXRef_2, positionXFigRef_2]
+velocityVecEqn_1 :: ModelExpr
+velocityVecEqn_1 = deriv (sy posVec_1) time
 
-positionXQD_2 :: SimpleQDef
-positionXQD_2 = mkQuantDef xPos_2 positionXEqn_2
+--------------------------------------------
 
-positionXEqn_2 :: PExpr
-positionXEqn_2 = sy (positionXDD_1 ^. defLhs) $+ (sy lenRod_2 $* sin (sy pendDisAngle_2))
+velocityVecDD_2 :: DataDefinition
+velocityVecDD_2 =
+  ddMENoRefs velocityVecQD_2 Nothing "velocityVecDD2" []
 
-positionXFigRef_2 :: Sentence
-positionXFigRef_2 = ch xPos_2 `S.is` S "shown in" +:+. refS figMotion
+velocityVecQD_2 :: ModelQDef
+velocityVecQD_2 = mkQuantDef mvVel_2 velocityVecEqn_2
 
-positionXRef_2 :: Sentence
-positionXRef_2 = ch xPos_2 `S.isThe` phrase horizontalPos
+velocityVecEqn_2 :: ModelExpr
+velocityVecEqn_2 = deriv (sy posVec_2) time
 
------------------------------------------------
--- Position in Y Direction in the Second Object--
------------------------------------------------
-positionYDD_2 :: DataDefinition
-positionYDD_2 = ddENoRefs positionYQD_2 Nothing "positionYDD2" [positionYRef_2, positionYFigRef_2]
+--------------------------------------------
+-- Acceleration Vectors --
+--------------------------------------------
 
-positionYQD_2 :: SimpleQDef
-positionYQD_2 = mkQuantDef yPos_2 positionYEqn_2
+accelVecDD_1 :: DataDefinition
+accelVecDD_1 =
+  ddMENoRefs accelVecQD_1 Nothing "accelVecDD1" []
 
-positionYEqn_2 :: PExpr
-positionYEqn_2 = sy (positionYDD_1 ^. defLhs) $+ neg (sy lenRod_2 $* cos (sy pendDisAngle_2))
+accelVecQD_1 :: ModelQDef
+accelVecQD_1 = mkQuantDef mvAccel_1 accelVecEqn_1
 
-positionYFigRef_2 :: Sentence
-positionYFigRef_2 = ch yPos_2 `S.is` S "shown in" +:+. refS figMotion
+accelVecEqn_1 :: ModelExpr
+accelVecEqn_1 = deriv (sy mvVel_1) time
 
-positionYRef_2 :: Sentence
-positionYRef_2 = ch yPos_2 `S.isThe` phrase verticalPos
+--------------------------------------------
 
----------------------------
--- Acceleration in General--
----------------------------
-accelGDD :: DataDefinition
-accelGDD = ddMENoRefs accelGQD Nothing "accelerationGDD" []
+accelVecDD_2 :: DataDefinition
+accelVecDD_2 =
+  ddMENoRefs accelVecQD_2 Nothing "accelVecDD2" []
 
-accelGQD :: ModelQDef
-accelGQD = mkQuantDef acceleration accelGEqn
+accelVecQD_2 :: ModelQDef
+accelVecQD_2 = mkQuantDef mvAccel_2 accelVecEqn_2
 
-accelGEqn :: ModelExpr
-accelGEqn = deriv (sy velocity) time 
+accelVecEqn_2 :: ModelExpr
+accelVecEqn_2 = deriv (sy mvVel_2) time
 
----------------------------
--- Force in General--
----------------------------
-forceGDD :: DataDefinition
-forceGDD = ddENoRefs forceGQD Nothing "forceGDD" []
+--------------------------------------------
+-- Force Vectors --
+--------------------------------------------
 
-forceGQD :: SimpleQDef
-forceGQD = mkQuantDef force forceGEqn
--- forceGQD = mkQuantDef mvForce_1 forceGEqn  -- Use specific Clifford force quantity
+forceVecDD_1 :: DataDefinition
+forceVecDD_1 =
+  ddMENoRefs forceVecQD_1 Nothing "forceVecDD1" []
 
-forceGEqn :: PExpr
-forceGEqn = vScale (sy mass) (sy acceleration)
--- forceGEqn = sy mvForce_1  -- Simplified to avoid type issues for now
+forceVecQD_1 :: ModelQDef
+forceVecQD_1 = mkQuantDef mvForce_1 forceVecEqn_1
+
+-- F₁ = m₁ * a₁
+forceVecEqn_1 :: ModelExpr
+forceVecEqn_1 = sy mass $* sy mvAccel_1
+
+--------------------------------------------
+
+forceVecDD_2 :: DataDefinition
+forceVecDD_2 =
+  ddMENoRefs forceVecQD_2 Nothing "forceVecDD2" []
+
+forceVecQD_2 :: ModelQDef
+forceVecQD_2 = mkQuantDef mvForce_2 forceVecEqn_2
+
+-- F₂ = m₂ * a₂
+forceVecEqn_2 :: ModelExpr
+forceVecEqn_2 = sy mass $* sy mvAccel_2

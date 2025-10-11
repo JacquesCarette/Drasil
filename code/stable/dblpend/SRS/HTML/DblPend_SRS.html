@@ -178,26 +178,6 @@
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em>a<sub>x1</sub></em></td>
-                  <td>Horizontal acceleration of the first object</td>
-                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
-                </tr>
-                <tr>
-                  <td><em>a<sub>x2</sub></em></td>
-                  <td>Horizontal acceleration of the second object</td>
-                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
-                </tr>
-                <tr>
-                  <td><em>a<sub>y1</sub></em></td>
-                  <td>Vertical acceleration of the first object</td>
-                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
-                </tr>
-                <tr>
-                  <td><em>a<sub>y2</sub></em></td>
-                  <td>Vertical acceleration of the second object</td>
-                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
-                </tr>
-                <tr>
                   <td><em><b>a</b>(t)</em></td>
                   <td>Acceleration</td>
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
@@ -258,28 +238,18 @@
                   <td><em>kg</em></td>
                 </tr>
                 <tr>
-                  <td><em>p<sub>x1</sub></em></td>
-                  <td>Horizontal position of the first object</td>
-                  <td><em>m</em></td>
-                </tr>
-                <tr>
-                  <td><em>p<sub>x2</sub></em></td>
-                  <td>Horizontal position of the second object</td>
-                  <td><em>m</em></td>
-                </tr>
-                <tr>
-                  <td><em>p<sub>y1</sub></em></td>
-                  <td>Vertical position of the first object</td>
-                  <td><em>m</em></td>
-                </tr>
-                <tr>
-                  <td><em>p<sub>y2</sub></em></td>
-                  <td>Vertical position of the second object</td>
-                  <td><em>m</em></td>
-                </tr>
-                <tr>
                   <td><em><b>p</b>(t)</em></td>
                   <td>Position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em><b>p</b><sub>1</sub></em></td>
+                  <td>Position of the first object</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em><b>p</b><sub>2</sub></em></td>
+                  <td>Position of the second object</td>
                   <td><em>m</em></td>
                 </tr>
                 <tr>
@@ -303,11 +273,6 @@
                   <td><em>s</em></td>
                 </tr>
                 <tr>
-                  <td><em>theta</em></td>
-                  <td>Dependent variables</td>
-                  <td><em>rad</em></td>
-                </tr>
-                <tr>
                   <td><em>v<sub>1</sub></em></td>
                   <td>Velocity of the first object</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
@@ -315,26 +280,6 @@
                 <tr>
                   <td><em>v<sub>2</sub></em></td>
                   <td>Velocity of the second object</td>
-                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
-                </tr>
-                <tr>
-                  <td><em>v<sub>x1</sub></em></td>
-                  <td>Horizontal velocity of the first object</td>
-                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
-                </tr>
-                <tr>
-                  <td><em>v<sub>x2</sub></em></td>
-                  <td>Horizontal velocity of the second object</td>
-                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
-                </tr>
-                <tr>
-                  <td><em>v<sub>y1</sub></em></td>
-                  <td>Vertical velocity of the first object</td>
-                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
-                </tr>
-                <tr>
-                  <td><em>v<sub>y2</sub></em></td>
-                  <td>Vertical velocity of the second object</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
@@ -361,6 +306,11 @@
                   <td><em>α<sub>2</sub></em></td>
                   <td>Angular acceleration of the second object</td>
                   <td><em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>θ</em></td>
+                  <td>Dependent variables</td>
+                  <td><em>rad</em></td>
                 </tr>
                 <tr>
                   <td><em>θ<sub>1</sub></em></td>
@@ -908,7 +858,7 @@
                       The angular velocity ω₁ and rod length L₁ combine with the direction vector to form the complete velocity vector.
                     </p>
                     <p class="paragraph">
-                      The geometric product preserves both magnitude and geometric orientation
+                      The geometric product preserves both magnitude and geometric orientation.
                     </p>
                     <p class="paragraph">
                       Unlike traditional component-wise vector addition, this geometric product maintains the intrinsic geometric structure.
@@ -1423,19 +1373,144 @@
                 <p class="paragraph">
                   This section collects and defines all the data needed to build the instance models.
                 </p>
-                <div id="DD:velocityGDD">
+                <div id="DD:positionVecDD1">
                   <table class="ddefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>DD:velocityGDD</b></td>
+                      <td><b>DD:positionVecDD1</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Velocity</p></td>
+                      <td><p class="paragraph">Position of the first object</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
-                      <td><p class="paragraph"><em><b>v</b>(t)</em></p></td>
+                      <td><p class="paragraph"><em><b>p</b><sub>1</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>m</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{\symbf{p}_{1}}={L_{1}}\,\begin{bmatrix}
+                                                   \sin\left({θ_{1}}\right)\\
+                                                   -\cos\left({θ_{1}}\right)
+                                                   \end{bmatrix}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em><b>p</b><sub>1</sub></em> is the position of the first object (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>θ<sub>1</sub></em> is the angle of the first rod (<em>rad</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em><b>p</b><sub>1</sub></em> is the pendulum position <a href=#Figure:dblpend>Fig:dblpend</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="DD:positionVecDD2">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:positionVecDD2</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Position of the second object</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em><b>p</b><sub>2</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>m</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{\symbf{p}_{2}}={\symbf{p}_{1}}+{L_{2}}\,\begin{bmatrix}
+                                                                   \sin\left({θ_{2}}\right)\\
+                                                                   -\cos\left({θ_{2}}\right)
+                                                                   \end{bmatrix}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em><b>p</b><sub>2</sub></em> is the position of the second object (<em>m</em>)
+                          </li>
+                          <li>
+                            <em><b>p</b><sub>1</sub></em> is the position of the first object (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>L<sub>2</sub></em> is the length of the second rod (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em><b>p</b><sub>2</sub></em> is the pendulum position <a href=#Figure:dblpend>Fig:dblpend</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="DD:velocityVecDD1">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:velocityVecDD1</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Velocity of the first object</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>v<sub>1</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -1445,19 +1520,19 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
-                      </td>
+                      <td>\[{v_{1}}=\frac{\,d{\symbf{p}_{1}}}{\,dt}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em>v<sub>1</sub></em> is the velocity of the first object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
-                          <li><em><b>p</b>(t)</em> is the position (<em>m</em>)</li>
+                          <li>
+                            <em><b>p</b><sub>1</sub></em> is the position of the first object (<em>m</em>)
+                          </li>
                         </ul>
                       </td>
                     </tr>
@@ -1471,55 +1546,42 @@
                     </tr>
                   </table>
                 </div>
-                <div id="DD:positionXDD1">
+                <div id="DD:velocityVecDD2">
                   <table class="ddefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>DD:positionXDD1</b></td>
+                      <td><b>DD:velocityVecDD2</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td>
-                        <p class="paragraph">Horizontal position of the first object</p>
-                      </td>
+                      <td><p class="paragraph">Velocity of the second object</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
-                      <td><p class="paragraph"><em>p<sub>x1</sub></em></p></td>
+                      <td><p class="paragraph"><em>v<sub>2</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
-                      <td><p class="paragraph"><em>m</em></p></td>
+                      <td>
+                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}}\)</em></p>
+                      </td>
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{p_{\text{x}1}}={L_{1}}\,\sin\left({θ_{1}}\right)\]</td>
+                      <td>\[{v_{2}}=\frac{\,d{\symbf{p}_{2}}}{\,dt}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>p<sub>x1</sub></em> is the horizontal position of the first object (<em>m</em>)
+                            <em>v<sub>2</sub></em> is the velocity of the second object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
                           <li>
-                            <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>1</sub></em> is the angle of the first rod (<em>rad</em>)
+                            <em><b>p</b><sub>2</sub></em> is the position of the second object (<em>m</em>)
                           </li>
                         </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>p<sub>x1</sub></em> is the horizontal position
-                        </p>
-                        <p class="paragraph">
-                          <em>p<sub>x1</sub></em> is shown in <a href=#Figure:dblpend>Fig:dblpend</a>.
-                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1532,212 +1594,19 @@
                     </tr>
                   </table>
                 </div>
-                <div id="DD:positionYDD1">
+                <div id="DD:accelVecDD1">
                   <table class="ddefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>DD:positionYDD1</b></td>
+                      <td><b>DD:accelVecDD1</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td>
-                        <p class="paragraph">Vertical position of the first object</p>
-                      </td>
+                      <td><p class="paragraph">Acceleration of the first object</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
-                      <td><p class="paragraph"><em>p<sub>y1</sub></em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph"><em>m</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>\[{p_{\text{y}1}}=-{L_{1}}\,\cos\left({θ_{1}}\right)\]</td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>p<sub>y1</sub></em> is the vertical position of the first object (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>1</sub></em> is the angle of the first rod (<em>rad</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>p<sub>y1</sub></em> is the vertical position
-                        </p>
-                        <p class="paragraph">
-                          <em>p<sub>y1</sub></em> is shown in <a href=#Figure:dblpend>Fig:dblpend</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:positionXDD2">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:positionXDD2</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td>
-                        <p class="paragraph">Horizontal position of the second object</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>p<sub>x2</sub></em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph"><em>m</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>p<sub>x2</sub></em> is the horizontal position of the second object (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>p<sub>x1</sub></em> is the horizontal position of the first object (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>L<sub>2</sub></em> is the length of the second rod (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>p<sub>x2</sub></em> is the horizontal position
-                        </p>
-                        <p class="paragraph">
-                          <em>p<sub>x2</sub></em> is shown in <a href=#Figure:dblpend>Fig:dblpend</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:positionYDD2">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:positionYDD2</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td>
-                        <p class="paragraph">Vertical position of the second object</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>p<sub>y2</sub></em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph"><em>m</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>p<sub>y2</sub></em> is the vertical position of the second object (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>p<sub>y1</sub></em> is the vertical position of the first object (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>L<sub>2</sub></em> is the length of the second rod (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>p<sub>y2</sub></em> is the vertical position
-                        </p>
-                        <p class="paragraph">
-                          <em>p<sub>y2</sub></em> is shown in <a href=#Figure:dblpend>Fig:dblpend</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:accelerationGDD">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:accelerationGDD</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Acceleration</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em><b>a</b>(t)</em></p></td>
+                      <td><p class="paragraph"><em>a<sub>1</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -1747,20 +1616,18 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
-                      </td>
+                      <td>\[{a_{1}}=\frac{\,d{v_{1}}}{\,dt}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em>a<sub>1</sub></em> is the acceleration of the first object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
                           <li>
-                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em>v<sub>1</sub></em> is the velocity of the first object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -1775,19 +1642,67 @@
                     </tr>
                   </table>
                 </div>
-                <div id="DD:forceGDD">
+                <div id="DD:accelVecDD2">
                   <table class="ddefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>DD:forceGDD</b></td>
+                      <td><b>DD:accelVecDD2</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Force</p></td>
+                      <td><p class="paragraph">Acceleration of the second object</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
-                      <td><p class="paragraph"><em><b>F</b></em></p></td>
+                      <td><p class="paragraph"><em>a<sub>2</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td>
+                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{a_{2}}=\frac{\,d{v_{2}}}{\,dt}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>a<sub>2</sub></em> is the acceleration of the second object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li>
+                            <em>v<sub>2</sub></em> is the velocity of the second object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="DD:forceVecDD1">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:forceVecDD1</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Force of the first object</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>f<sub>1</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -1795,16 +1710,64 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{F}=m \symbf{a}\text{(}t\text{)}\]</td>
+                      <td>\[{f_{1}}=m\,{a_{1}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
+                          <li>
+                            <em>f<sub>1</sub></em> is the force of the first object (<em>N</em>)
+                          </li>
                           <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
-                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em>a<sub>1</sub></em> is the acceleration of the first object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="DD:forceVecDD2">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:forceVecDD2</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Force of the second object</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>f<sub>2</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>N</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{f_{2}}=m\,{a_{2}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>f<sub>2</sub></em> is the force of the second object (<em>N</em>)
+                          </li>
+                          <li><em>m</em> is the mass (<em>kg</em>)</li>
+                          <li>
+                            <em>a<sub>2</sub></em> is the acceleration of the second object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -2035,25 +1998,21 @@
                     <p class="paragraph">
                       By solving multivector force equations <a href=#GD:forceVector1>GD:forceVector1</a> and <a href=#GD:forceVector2>GD:forceVector2</a> for <em>f<sub>1</sub></em> and <em>f<sub>2</sub></em> and then substituting into the Clifford algebra force equations , we can get equations 1 and 2:
                     </p>
-                    \[{m_{1}}\,{a_{1}}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)-{m_{2}}\,{a_{2}}\]
+                    \[{m_{1}}\,{a_{1}}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\]
                     <p class="paragraph"></p>
-                    \[{m_{1}}\,{a_{1}}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{m_{2}}\,{a_{2}}-{m_{2}}\,g-{m_{1}}\,g\]
+                    \[{m_{1}}\,{a_{1}}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{m_{1}}\,g\]
                     <p class="paragraph">
                       Multiply the equation 1 by <em>cos(θ<sub>1</sub>)</em> and the equation 2 by <em>sin(θ<sub>1</sub>)</em> and rearrange to get:
                     </p>
-                    \[{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}\right)\]
+                    \[{m_{2}}\,{a_{2}}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
                     <p class="paragraph"></p>
-                    \[{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}+{m_{2}}\,g+{m_{1}}\,g\right)\]
+                    \[{m_{2}}\,{a_{2}}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,g\]
                     <p class="paragraph">This leads to the equation 3</p>
-                    \[\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}+{m_{2}}\,g+{m_{1}}\,g\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}\right)\]
                     <p class="paragraph">
                       Next, multiply multivector force equation <a href=#GD:forceVector2>GD:forceVector2</a> by <em>cos(θ<sub>2</sub>)</em> and the Clifford force equation by <em>sin(θ<sub>2</sub>)</em> and rearrange to get:
                     </p>
-                    \[{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{2}}\]
                     <p class="paragraph"></p>
-                    \[{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{2}}+{m_{2}}\,g\right)\]
                     <p class="paragraph">which leads to equation 4</p>
-                    \[\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{2}}+{m_{2}}\,g\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{2}}\]
                     <p class="paragraph">
                       By giving multivector acceleration equations <a href=#GD:accelerationVector1>GD:accelerationVector1</a> and <a href=#GD:accelerationVector2>GD:accelerationVector2</a> and plus Clifford algebra equations plus additional two equations, 3 and 4, we can get <a href=#IM:calOfAngle1>IM:calOfAngle1</a> and <a href=#IM:calOfAngle2>IM:calOfAngle2</a> via a computer algebra program:
                     </p>
@@ -2289,49 +2248,56 @@
               <th><a href=#yAxisDir>A:yAxisDir</a></th>
             </tr>
             <tr>
-              <td><a href=#DD:velocityGDD>DD:velocityGDD</a></td>
+              <td><a href=#DD:positionVecDD1>DD:positionVecDD1</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:positionXDD1>DD:positionXDD1</a></td>
+              <td><a href=#DD:positionVecDD2>DD:positionVecDD2</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:positionYDD1>DD:positionYDD1</a></td>
+              <td><a href=#DD:velocityVecDD1>DD:velocityVecDD1</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:positionXDD2>DD:positionXDD2</a></td>
+              <td><a href=#DD:velocityVecDD2>DD:velocityVecDD2</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:positionYDD2>DD:positionYDD2</a></td>
+              <td><a href=#DD:accelVecDD1>DD:accelVecDD1</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:accelerationGDD>DD:accelerationGDD</a></td>
+              <td><a href=#DD:accelVecDD2>DD:accelVecDD2</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:forceGDD>DD:forceGDD</a></td>
+              <td><a href=#DD:forceVecDD1>DD:forceVecDD1</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:forceVecDD2>DD:forceVecDD2</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2465,13 +2431,14 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:velocityGDD>DD:velocityGDD</a></th>
-              <th><a href=#DD:positionXDD1>DD:positionXDD1</a></th>
-              <th><a href=#DD:positionYDD1>DD:positionYDD1</a></th>
-              <th><a href=#DD:positionXDD2>DD:positionXDD2</a></th>
-              <th><a href=#DD:positionYDD2>DD:positionYDD2</a></th>
-              <th><a href=#DD:accelerationGDD>DD:accelerationGDD</a></th>
-              <th><a href=#DD:forceGDD>DD:forceGDD</a></th>
+              <th><a href=#DD:positionVecDD1>DD:positionVecDD1</a></th>
+              <th><a href=#DD:positionVecDD2>DD:positionVecDD2</a></th>
+              <th><a href=#DD:velocityVecDD1>DD:velocityVecDD1</a></th>
+              <th><a href=#DD:velocityVecDD2>DD:velocityVecDD2</a></th>
+              <th><a href=#DD:accelVecDD1>DD:accelVecDD1</a></th>
+              <th><a href=#DD:accelVecDD2>DD:accelVecDD2</a></th>
+              <th><a href=#DD:forceVecDD1>DD:forceVecDD1</a></th>
+              <th><a href=#DD:forceVecDD2>DD:forceVecDD2</a></th>
               <th><a href=#TM:acceleration>TM:acceleration</a></th>
               <th><a href=#TM:velocity>TM:velocity</a></th>
               <th><a href=#TM:NewtonSecLawMot>TM:NewtonSecLawMot</a></th>
@@ -2485,28 +2452,8 @@
               <th><a href=#IM:calOfAngle2>IM:calOfAngle2</a></th>
             </tr>
             <tr>
-              <td><a href=#DD:velocityGDD>DD:velocityGDD</a></td>
+              <td><a href=#DD:positionVecDD1>DD:positionVecDD1</a></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:positionXDD1>DD:positionXDD1</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2527,28 +2474,8 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:positionYDD1>DD:positionYDD1</a></td>
+              <td><a href=#DD:positionVecDD2>DD:positionVecDD2</a></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:positionXDD2>DD:positionXDD2</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2569,28 +2496,8 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:positionYDD2>DD:positionYDD2</a></td>
+              <td><a href=#DD:velocityVecDD1>DD:velocityVecDD1</a></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:accelerationGDD>DD:accelerationGDD</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2611,7 +2518,96 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:forceGDD>DD:forceGDD</a></td>
+              <td><a href=#DD:velocityVecDD2>DD:velocityVecDD2</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:accelVecDD1>DD:accelVecDD1</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:accelVecDD2>DD:accelVecDD2</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:forceVecDD1>DD:forceVecDD1</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:forceVecDD2>DD:forceVecDD2</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2651,9 +2647,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:velocity>TM:velocity</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2693,9 +2691,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:velocityVector1>GD:velocityVector1</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2735,9 +2735,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:accelerationVector1>GD:accelerationVector1</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2777,9 +2779,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:forceVector1>GD:forceVector1</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2819,9 +2823,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:calOfAngle1>IM:calOfAngle1</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2855,6 +2861,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
               <td>X</td>
@@ -2871,13 +2878,14 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:velocityGDD>DD:velocityGDD</a></th>
-              <th><a href=#DD:positionXDD1>DD:positionXDD1</a></th>
-              <th><a href=#DD:positionYDD1>DD:positionYDD1</a></th>
-              <th><a href=#DD:positionXDD2>DD:positionXDD2</a></th>
-              <th><a href=#DD:positionYDD2>DD:positionYDD2</a></th>
-              <th><a href=#DD:accelerationGDD>DD:accelerationGDD</a></th>
-              <th><a href=#DD:forceGDD>DD:forceGDD</a></th>
+              <th><a href=#DD:positionVecDD1>DD:positionVecDD1</a></th>
+              <th><a href=#DD:positionVecDD2>DD:positionVecDD2</a></th>
+              <th><a href=#DD:velocityVecDD1>DD:velocityVecDD1</a></th>
+              <th><a href=#DD:velocityVecDD2>DD:velocityVecDD2</a></th>
+              <th><a href=#DD:accelVecDD1>DD:accelVecDD1</a></th>
+              <th><a href=#DD:accelVecDD2>DD:accelVecDD2</a></th>
+              <th><a href=#DD:forceVecDD1>DD:forceVecDD1</a></th>
+              <th><a href=#DD:forceVecDD2>DD:forceVecDD2</a></th>
               <th><a href=#TM:acceleration>TM:acceleration</a></th>
               <th><a href=#TM:velocity>TM:velocity</a></th>
               <th><a href=#TM:NewtonSecLawMot>TM:NewtonSecLawMot</a></th>
@@ -2898,6 +2906,7 @@
             </tr>
             <tr>
               <td><a href=#motionMass>GS:motionMass</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2949,9 +2958,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#portable>NFR:Portability</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3003,9 +3014,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifyInptVals>FR:Verify-Input-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3049,6 +3062,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
               <td></td>
@@ -3060,6 +3074,7 @@
             </tr>
             <tr>
               <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

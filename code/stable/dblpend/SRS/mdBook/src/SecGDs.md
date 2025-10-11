@@ -33,7 +33,7 @@ Direction vector = cos(θ₁)e₁ + sin(θ₁)e₂ using basis vectors e₁, e�
 
 The angular velocity ω₁ and rod length L₁ combine with the direction vector to form the complete velocity vector.
 
-The geometric product preserves both magnitude and geometric orientation
+The geometric product preserves both magnitude and geometric orientation.
 
 Unlike traditional component-wise vector addition, this geometric product maintains the intrinsic geometric structure.
 

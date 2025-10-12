@@ -111,7 +111,7 @@ posVec_2 = uc' "p_2" (QP.position `ofThe` secondObject)
   (phraseNP (QP.position `the_ofThe` secondObject))
   (vec lP `sub` label2) (realVect vecDim) metre
 
--- Clifford velocities
+-- Clifford velocities (placeholders for code generation)
 mvVel_1, mvVel_2 :: UnitalChunk
 mvVel_1 = uc' "v_mv1" (QP.velocity `ofThe` firstObject)
   (phraseNP (QP.velocity `the_ofThe` firstObject))
@@ -121,7 +121,7 @@ mvVel_2 = uc' "v_mv2" (QP.velocity `ofThe` secondObject)
   (phraseNP (QP.velocity `the_ofThe` secondObject))
   (vec lV `sub` label2) (realVect vecDim) velU
 
--- Clifford accelerations
+-- Clifford accelerations (placeholders)
 mvAccel_1, mvAccel_2 :: UnitalChunk
 mvAccel_1 = uc' "a_mv1" (QP.acceleration `ofThe` firstObject)
   (phraseNP (QP.acceleration `the_ofThe` firstObject))
@@ -131,7 +131,7 @@ mvAccel_2 = uc' "a_mv2" (QP.acceleration `ofThe` secondObject)
   (phraseNP (QP.acceleration `the_ofThe` secondObject))
   (vec lA `sub` label2) (realVect vecDim) accelU
 
--- Clifford forces
+-- Clifford forces (placeholders)
 mvForce_1, mvForce_2 :: UnitalChunk
 mvForce_1 = uc' "F_mv1" (QP.force `ofThe` firstObject)
   (phraseNP (QP.force `the_ofThe` firstObject))

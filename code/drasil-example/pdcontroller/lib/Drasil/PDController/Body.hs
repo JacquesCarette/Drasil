@@ -10,7 +10,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, odeintSymbols, osloSymbols,
-        scipyODESymbols, odeInfoChunks)
+        scipyODESymbols)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
@@ -34,7 +34,7 @@ import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
 import Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
-  inpConstrained, pidConstants)
+  inpConstrained, pidConstants, collectODEInternalChunks)
 import Drasil.PDController.ODEs (pidODEInfo)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
@@ -121,7 +121,7 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ map dqdWr pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
-  ++ odeInfoChunks pidODEInfo
+  ++ collectODEInternalChunks
 
 ideaDicts :: [IdeaDict]
 ideaDicts =

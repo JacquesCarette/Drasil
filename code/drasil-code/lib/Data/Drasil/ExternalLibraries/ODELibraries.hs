@@ -7,8 +7,7 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
   -- * Apache Commons (Java)
   apacheODEPckg, apacheODESymbols,
   -- * Odeint (C++)
-  odeintPckg, odeintSymbols, diffCodeChunk,
-  odeInfoChunks
+  odeintPckg, odeintSymbols, diffCodeChunk
 ) where
 
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
@@ -675,14 +674,3 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (Operator ao dd e)      = Operator ao dd $ replaceDepVar e
     replaceDepVar e = e
-
--- | Collect all chunks related to a specific ODE
-odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]
-odeInfoChunks info =
-  let dv = depVar info
-  in map dqdWr [ dv
-               , listToArray dv
-               , arrayVecDepVar info
-               , diffCodeChunk dv
-               , listToArray $ diffCodeChunk dv
-               ] 

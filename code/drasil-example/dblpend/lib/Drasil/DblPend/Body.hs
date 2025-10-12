@@ -38,11 +38,11 @@ import Drasil.DblPend.GenDefs (genDefns)
 import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
-  inConstraints, outConstraints, acronyms, constants)
+  inConstraints, outConstraints, acronyms, constants, collectODEInternalChunks)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
-  osloSymbols, apacheODESymbols, odeintSymbols, odeInfoChunks)
+  osloSymbols, apacheODESymbols, odeintSymbols)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
@@ -129,7 +129,7 @@ background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mas
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ odeInfoChunks dblPenODEInfo
+  ++ collectODEInternalChunks
 
 ideaDicts :: [IdeaDict]
 ideaDicts = 

@@ -43,7 +43,6 @@ import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols)
-import Drasil.DblPend.ODEs (dblPenODEInfo)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
 

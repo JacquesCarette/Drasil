@@ -21,7 +21,7 @@ import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
-  apacheODESymbols, odeintSymbols, odeInfoChunks)
+  apacheODESymbols, odeintSymbols)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
@@ -60,7 +60,7 @@ import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
-  specParamValList)
+  specParamValList, collectODEInternalChunks)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
 
@@ -86,7 +86,7 @@ symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
 symbolsAll = [gradient, pi_, uNormalVect, dqdWr surface] ++ symbols ++
   map dqdWr symbolConcepts ++ map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
-  odeInfoChunks noPCMODEInfo
+  collectODEInternalChunks
 
 concepts :: [UnitalChunk]
 concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,

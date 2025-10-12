@@ -39,7 +39,7 @@ public class ODE implements FirstOrderDifferentialEquations {
         \param dy_t change in Process Variable
     */
     public void computeDerivatives(double t, double[] y_t, double[] dy_t) {
-        dy_t[0] = y_t[1];
-        dy_t[1] = -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p;
+        dy_t[0] = processVariable_array[1];
+        dy_t[1] = -(1.0 + K_d) * processVariable_array[1] + -(20.0 + K_p) * processVariable_array[0] + r_t * K_p;
     }
 }

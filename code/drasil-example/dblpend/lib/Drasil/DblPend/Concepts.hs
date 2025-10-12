@@ -73,5 +73,3 @@ concepts =
 arcLen :: ConceptChunk
 arcLen = dcc "arc length" (nounPhraseSP "arc length")
   "the distance between two points on a curve"
-
-

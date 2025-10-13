@@ -21,7 +21,7 @@ public class Calculations {
     public static List<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
         List<double> y_t;
         Func<double, Vector, Vector> f = (t, y_t_vec) => {
-            return new Vector(processVariable_arrayvec[1], -(1.0 + K_d) * processVariable_arrayvec[1] + -(20.0 + K_p) * processVariable_arrayvec[0] + r_t * K_p);
+            return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
         };
         Options opts = new Options();
         opts.AbsoluteTolerance = Constants.AbsTol;

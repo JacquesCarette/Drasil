@@ -42,9 +42,9 @@ public class ODE implements FirstOrderDifferentialEquations {
         \param dtheta change in dependent variables (rad)
     */
     public void computeDerivatives(double t, double[] theta, double[] dtheta) {
-        dtheta[0] = pendDisAngle_array[1];
-        dtheta[1] = (-9.8 * (2.0 * m_1 + m_2) * Math.sin(pendDisAngle_array[0]) - m_2 * 9.8 * Math.sin(pendDisAngle_array[0] - 2.0 * pendDisAngle_array[2]) - 2.0 * Math.sin(pendDisAngle_array[0] - pendDisAngle_array[2]) * m_2 * (Math.pow(pendDisAngle_array[3], 2.0) * L_2 + Math.pow(pendDisAngle_array[1], 2.0) * L_1 * Math.cos(pendDisAngle_array[0] - pendDisAngle_array[2]))) / (L_1 * (2.0 * m_1 + m_2 - m_2 * Math.cos(2.0 * pendDisAngle_array[0] - 2.0 * pendDisAngle_array[2])));
-        dtheta[2] = pendDisAngle_array[3];
-        dtheta[3] = 2.0 * Math.sin(pendDisAngle_array[0] - pendDisAngle_array[2]) * (Math.pow(pendDisAngle_array[1], 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * Math.cos(pendDisAngle_array[0]) + Math.pow(pendDisAngle_array[3], 2.0) * L_2 * m_2 * Math.cos(pendDisAngle_array[0] - pendDisAngle_array[2])) / (L_2 * (2.0 * m_1 + m_2 - m_2 * Math.cos(2.0 * pendDisAngle_array[0] - 2.0 * pendDisAngle_array[2])));
+        dtheta[0] = theta[1];
+        dtheta[1] = (-9.8 * (2.0 * m_1 + m_2) * Math.sin(theta[0]) - m_2 * 9.8 * Math.sin(theta[0] - 2.0 * theta[2]) - 2.0 * Math.sin(theta[0] - theta[2]) * m_2 * (Math.pow(theta[3], 2.0) * L_2 + Math.pow(theta[1], 2.0) * L_1 * Math.cos(theta[0] - theta[2]))) / (L_1 * (2.0 * m_1 + m_2 - m_2 * Math.cos(2.0 * theta[0] - 2.0 * theta[2])));
+        dtheta[2] = theta[3];
+        dtheta[3] = 2.0 * Math.sin(theta[0] - theta[2]) * (Math.pow(theta[1], 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * Math.cos(theta[0]) + Math.pow(theta[3], 2.0) * L_2 * m_2 * Math.cos(theta[0] - theta[2])) / (L_2 * (2.0 * m_1 + m_2 - m_2 * Math.cos(2.0 * theta[0] - 2.0 * theta[2])));
     }
 }

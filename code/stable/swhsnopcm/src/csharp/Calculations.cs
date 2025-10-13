@@ -51,7 +51,7 @@ public class Calculations {
     public static List<double> func_T_W(double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W) {
         List<double> T_W;
         Func<double, Vector, Vector> f = (t, T_W_vec) => {
-            return new Vector(-(1.0 / tau_W) * tempW_arrayvec[0] + 1.0 / tau_W * T_C);
+            return new Vector(-(1.0 / tau_W) * T_W_vec[0] + 1.0 / tau_W * T_C);
         };
         Options opts = new Options();
         opts.AbsoluteTolerance = A_tol;

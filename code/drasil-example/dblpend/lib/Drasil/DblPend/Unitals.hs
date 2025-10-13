@@ -121,31 +121,31 @@ posVec_2 = uc' "p_2" (QP.position `ofThe` secondObject)
 mvVel_1, mvVel_2 :: UnitalChunk
 mvVel_1 = uc' "v_mv1" (QP.velocity `ofThe` firstObject)
   (phraseNP (QP.velocity `the_ofThe` firstObject))
-  (sub lV label1) realVect velU
+  (vec lV `sub` label1) realVect velU
 
 mvVel_2 = uc' "v_mv2" (QP.velocity `ofThe` secondObject)
   (phraseNP (QP.velocity `the_ofThe` secondObject))
-  (sub lV label2) realVect velU
+  (vec lV `sub` label2) realVect velU
 
 -- Clifford accelerations
 mvAccel_1, mvAccel_2 :: UnitalChunk
 mvAccel_1 = uc' "a_mv1" (QP.acceleration `ofThe` firstObject)
   (phraseNP (QP.acceleration `the_ofThe` firstObject))
-  (sub lA label1) realVect accelU
+  (vec lA `sub` label1) realVect accelU
 
 mvAccel_2 = uc' "a_mv2" (QP.acceleration `ofThe` secondObject)
   (phraseNP (QP.acceleration `the_ofThe` secondObject))
-  (sub lA label2) realVect accelU
+  (vec lA `sub` label2) realVect accelU
 
 -- Clifford forces
 mvForce_1, mvForce_2 :: UnitalChunk
 mvForce_1 = uc' "F_mv1" (QP.force `ofThe` firstObject)
   (phraseNP (QP.force `the_ofThe` firstObject))
-  (sub lF label1) realVect newton
+  (vec lF `sub` label1) realVect newton
 
 mvForce_2 = uc' "F_mv2" (QP.force `ofThe` secondObject)
   (phraseNP (QP.force `the_ofThe` secondObject))
-  (sub lF label2) realVect newton
+  (vec lF `sub` label2) realVect newton
 
 -- Angular velocity / acceleration
 angularVel_1, angularVel_2, angularAccel_1, angularAccel_2 :: UnitalChunk
@@ -169,11 +169,11 @@ angularAccel_2 = uc' "alpha_2" (QP.angularAccel `ofThe` secondObject)
 tension_1, tension_2 :: UnitalChunk
 tension_1 = uc' "T_1" (QP.tension `ofThe` firstRod)
   (phraseNP (QP.tension `the_ofThe` firstRod))
-  (sub (vec cT) label1) Real newton
+  (sub cT label1) Real newton
 
 tension_2 = uc' "T_2" (QP.tension `ofThe` secondRod)
   (phraseNP (QP.tension `the_ofThe` secondRod))
-  (sub (vec cT) label2) Real newton
+  (sub cT label2) Real newton
 
 ----------------------------------------
 -- UNITLESS, SYMBOLS

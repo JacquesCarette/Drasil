@@ -121,7 +121,7 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ map dqdWr pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
-  ++ collectODEInternalChunks
+  ++ collectODEInternalChunks pidODEInfo
 
 ideaDicts :: [IdeaDict]
 ideaDicts =

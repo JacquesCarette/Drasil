@@ -9,6 +9,9 @@ import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTC, coilHTCMax,
   coilHTCMin, coilSA, coilSAMax, diam, htCapW, htCapWMax, htCapWMin, lInit,
   relTol, tankLength, tankLengthMax, tankLengthMin, tempC, timeFinal,
   timeFinalMax, timeStep, wDensity, wDensityMax, wDensityMin)
+import Data.Drasil.ExternalLibraries.ODELibraries
+  (arrayVecDepVar, diffCodeChunk)
+import Language.Drasil.Code (ODEInfo(..))
 
 inputs :: [DefinedQuantityDict]
 inputs = map dqdWr constrained ++ map dqdWr unconstrained
@@ -32,42 +35,13 @@ specParamValList = [tankLengthMin, tankLengthMax,
   wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax, 
   coilHTCMin, coilHTCMax, timeFinalMax, arMin, arMax]
 
--- | Auto-generated internal variables for ODE solving
-tempW_array, tempW_arrayvec, tempWd, tempWd_array :: DefinedQuantityDict
-
-tempW_array = implVar
-  "tempW_array"
-  (nounPhraseSP "water temperature array")
-  "auto-generated placeholder for ODE internal variable"
-  (Array Real)
-  (label "tempW_array")
-
-tempW_arrayvec = implVar
-  "tempW_arrayvec"
-  (nounPhraseSP "water temperature array vector")
-  "auto-generated placeholder for ODE internal variable"
-  (Vect Real)
-  (label "tempW_arrayvec")
-
-tempWd = implVar
-  "tempWd"
-  (nounPhraseSP "water temperature derivative")
-  "auto-generated placeholder for ODE internal variable"
-  Real
-  (label "tempWd")
-
-tempWd_array = implVar
-  "tempWd_array"
-  (nounPhraseSP "water temperature derivative array")
-  "auto-generated placeholder for ODE internal variable"
-  (Array Real)
-  (label "tempWd_array")
-
--- | Collect all manually defined ODE internal variables
-collectODEInternalChunks :: [DefinedQuantityDict]
-collectODEInternalChunks =
-  [ tempW_array
-  , tempW_arrayvec
-  , tempWd
-  , tempWd_array
-  ]
+-- | Collect all defined ODE internal variables
+collectODEInternalChunks :: ODEInfo -> [DefinedQuantityDict]
+collectODEInternalChunks info =
+  let dv = depVar info
+  in map dqdWr
+      [ listToArray dv
+      , arrayVecDepVar info
+      , diffCodeChunk dv
+      , listToArray (diffCodeChunk dv)
+      ]

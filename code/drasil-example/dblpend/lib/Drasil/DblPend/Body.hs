@@ -43,7 +43,7 @@ import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols)
-
+import Drasil.DblPend.ODEs (dblPenODEInfo)
 import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
@@ -128,7 +128,7 @@ background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mas
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ collectODEInternalChunks
+  ++ collectODEInternalChunks dblPenODEInfo
 
 ideaDicts :: [IdeaDict]
 ideaDicts = 

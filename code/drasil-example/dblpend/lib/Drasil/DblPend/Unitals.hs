@@ -21,7 +21,9 @@ import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject, 
   verticalPos, horizontalVel, verticalVel, horizontalAccel, verticalAccel)
 import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
-
+import Data.Drasil.ExternalLibraries.ODELibraries
+  (arrayVecDepVar, diffCodeChunk)
+import Language.Drasil.Code (ODEInfo(..))
 
 symbols:: [DefinedQuantityDict]
 symbols = map dqdWr unitalChunks ++ unitless ++ [dqdWr pendDisAngle] ++ map dqdWr constants
@@ -149,38 +151,16 @@ pendDisAngle_2 = uc' "theta_2" (angle `ofThe` secondRod)
         (phraseNP (angle `the_ofThe` secondRod))
         (sub lTheta label2) Real radian
 
--- | Auto-generated internal variables for ODE solving
-pendDisAngle_array, pendDisAngle_arrayvec, pendDisAngled, pendDisAngled_array
- :: DefinedQuantityDict
-
-pendDisAngle_array     = implVar "pendDisAngle_array"
-  (nounPhraseSP "dependent variable array")
-  "auto-generated placeholder for ODE internal variable"
-  (Array Real) (label "pendDisAngle_array")
-
-pendDisAngle_arrayvec  = implVar "pendDisAngle_arrayvec"
-  (nounPhraseSP "dependent variable array vector")
-  "auto-generated placeholder for ODE internal variable"
-  (Vect Real) (label "pendDisAngle_arrayvec")
-
-pendDisAngled          = implVar "pendDisAngled"
-  (nounPhraseSP "derivative of dependent variable")
-  "auto-generated placeholder for ODE internal variable"
-  Real (label "pendDisAngled")
-
-pendDisAngled_array    = implVar "pendDisAngled_array"
-  (nounPhraseSP "derivative array of dependent variable")
-  "auto-generated placeholder for ODE internal variable"
-  (Array Real) (label "pendDisAngled_array")
-
--- | Collect all manually defined ODE internal variables
-collectODEInternalChunks :: [DefinedQuantityDict]
-collectODEInternalChunks = 
-  [ pendDisAngle_array
-  , pendDisAngle_arrayvec
-  , pendDisAngled
-  , pendDisAngled_array
-  ]
+-- | Collect all defined ODE internal variables
+collectODEInternalChunks :: ODEInfo -> [DefinedQuantityDict]
+collectODEInternalChunks info =
+  let dv = depVar info
+  in map dqdWr
+      [ listToArray dv
+      , arrayVecDepVar info
+      , diffCodeChunk dv
+      , listToArray (diffCodeChunk dv)
+      ]
 
 unitless :: [DefinedQuantityDict]
 unitless = [QM.unitVect, QM.pi_]

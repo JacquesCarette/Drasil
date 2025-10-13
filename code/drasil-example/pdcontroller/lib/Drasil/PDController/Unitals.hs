@@ -7,6 +7,9 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.PDController.Concepts
 import Control.Lens ((^.))
+import Data.Drasil.ExternalLibraries.ODELibraries
+  (arrayVecDepVar, diffCodeChunk)
+import Language.Drasil.Code (ODEInfo(..))
 
 syms, symFS, symFt, syminvLaplace, symKd, symKp,
        symYT, symYS, symYrT, symYrS, symET, symES, symPS, symDS, symHS,
@@ -195,43 +198,14 @@ dqdStiffnessCoeff
       Real
       second
 
--- | Auto-generated internal variables for ODE solving
-processVariable_array, processVariable_arrayvec, processVariabled, processVariabled_array :: DefinedQuantityDict
-
-processVariable_array = implVar
-  "processVariable_array"
-  (nounPhraseSP "dependent variable array")
-  "auto-generated placeholder for ODE internal variable"
-  (Array Real)
-  (label "processVariable_array")
-
-processVariable_arrayvec = implVar
-  "processVariable_arrayvec"
-  (nounPhraseSP "dependent variable array vector")
-  "auto-generated placeholder for ODE internal variable"
-  (Vect Real)
-  (label "processVariable_arrayvec")
-
-processVariabled = implVar
-  "processVariabled"
-  (nounPhraseSP "derivative of dependent variable")
-  "auto-generated placeholder for ODE internal variable"
-  Real
-  (label "processVariabled")
-
-processVariabled_array = implVar
-  "processVariabled_array"
-  (nounPhraseSP "derivative array of dependent variable")
-  "auto-generated placeholder for ODE internal variable"
-  (Array Real)
-  (label "processVariabled_array")
-
--- | Collect all manually defined ODE internal variables
-collectODEInternalChunks :: [DefinedQuantityDict]
-collectODEInternalChunks = 
-  [ processVariable_array
-  , processVariable_arrayvec
-  , processVariabled
-  , processVariabled_array
-  ]
+-- | Collect all defined ODE internal variables
+collectODEInternalChunks :: ODEInfo -> [DefinedQuantityDict]
+collectODEInternalChunks info =
+  let dv = depVar info
+  in map dqdWr
+      [ listToArray dv
+      , arrayVecDepVar info
+      , diffCodeChunk dv
+      , listToArray (diffCodeChunk dv)
+      ]
 

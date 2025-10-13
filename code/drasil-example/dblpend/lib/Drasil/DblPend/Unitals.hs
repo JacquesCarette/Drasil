@@ -163,11 +163,11 @@ angularAccel_2 = uc' "alpha_2" (QP.angularAccel `ofThe` secondObject)
 tension_1, tension_2 :: UnitalChunk
 tension_1 = uc' "T_1" (nounPhraseSent (S "magnitude" `S.the_ofThe` phraseNP (QP.tension `inThe` firstRod)))
   (phraseNP (QP.tension `the_ofThe` firstRod))
-  (sub (vec cT) label1) Real newton
+  (sub cT label1) Real newton
 
 tension_2 = uc' "T_2" (nounPhraseSent (S "magnitude" `S.the_ofThe` phraseNP (QP.tension `inThe` secondRod)))
   (phraseNP (QP.tension `the_ofThe` secondRod))
-  (sub (vec cT) label2) Real newton
+  (sub cT label2) Real newton
 
 ----------------------------------------
 -- UNITLESS, SYMBOLS

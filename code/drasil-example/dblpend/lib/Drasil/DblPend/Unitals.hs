@@ -8,7 +8,6 @@ import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
     ( lM, lP, lV, lA, lF, lW, lAlpha, lTheta, cL, cT )
-import Language.Drasil.Space (ClifKind(Vector))
 import qualified Language.Drasil.Space as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Data.Drasil.Constraints (gtZeroConstr)
@@ -18,44 +17,53 @@ import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,
-  angularVelocity, angularAccel, gravitationalAccel, acceleration, tension, time)
+  angularVelocity, angularAccel, gravitationalAccel, acceleration, tension, time, gravitationalAccelConst)
 import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.Concepts.Math as CM (angle)
 import Data.Drasil.Quantities.Math as QM (unitVect, pi_)
 import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject)
 import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
-import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
 
 ----------------------------------------
 -- ACRONYMS, SYMBOLS, INPUTS, OUTPUTS
 ----------------------------------------
 
 symbols :: [DefinedQuantityDict]
-symbols = map dqdWr unitalChunks ++ unitless ++ [dqdWr pendDisAngle] ++ map dqdWr constants
+symbols = map dqdWr unitalChunks ++ unitless ++ map dqdWr constants
 
 acronyms :: [CI]
 acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, refBy, refName, srs, thModel, typUnc]
 
+-- USER-PROVIDED INPUTS
 inputs :: [DefinedQuantityDict]
 inputs = map dqdWr
-  [lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisAngle_1, pendDisAngle_2]
+  [ lenRod_1, lenRod_2
+  , massObj_1, massObj_2
+  , pendDisAngle_1, pendDisAngle_2
+  , angularVel_1, angularVel_2
+  ]
 
+-- SOFTWARE-COMPUTED OUTPUTS
 outputs :: [DefinedQuantityDict]
-outputs = map dqdWr [posVec_1, posVec_2, mvVel_1, mvVel_2, mvAccel_1, mvAccel_2, mvForce_1, mvForce_2]
+outputs = map dqdWr
+  [ posVec_1, posVec_2
+  , mvVel_1, mvVel_2
+  , mvAccel_1, mvAccel_2
+  , mvForce_1, mvForce_2
+  , angularAccel_1, angularAccel_2
+  , tension_1, tension_2
+  ]
 
 constants :: [ConstQDef]
-constants = [gravitationalAccelConst]
+constants = [QP.gravitationalAccelConst]
 
 ----------------------------------------
 -- CLIFFORD (GEOMETRIC) ALGEBRA HELPERS
 ----------------------------------------
 
-vecDim :: S.Dimension
-vecDim = S.Fixed 2
-
-realVect :: S.Dimension -> Space
-realVect d = S.ClifS d S.Vector Real
+realVect :: Space
+realVect = S.ClifS (S.Fixed 2) S.Vector Real
 
 ----------------------------------------
 -- UNITAL CHUNKS
@@ -66,16 +74,17 @@ unitalChunks =
   [ lenRod_1, lenRod_2
   , massObj_1, massObj_2
   , pendDisAngle_1, pendDisAngle_2
+  , angularVel_1, angularVel_2
   , posVec_1, posVec_2
   , mvVel_1, mvVel_2
   , mvAccel_1, mvAccel_2
   , mvForce_1, mvForce_2
-  , angularVel_1, angularVel_2
   , angularAccel_1, angularAccel_2
   , tension_1, tension_2
   , QPP.mass, QP.force, QP.gravitationalAccel
   , QP.acceleration, QP.time, QP.velocity, QP.position, QP.tension
   ]
+
 
 -- Rod lengths
 lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisAngle_1, pendDisAngle_2 :: UnitalChunk
@@ -102,41 +111,41 @@ pendDisAngle_2 = uc' "theta_2" (CM.angle `ofThe` secondRod)
 posVec_1, posVec_2 :: UnitalChunk
 posVec_1 = uc' "p_1" (QP.position `ofThe` firstObject)
   (phraseNP (QP.position `the_ofThe` firstObject))
-  (vec lP `sub` label1) (realVect vecDim) metre
+  (vec lP `sub` label1) realVect metre
 
 posVec_2 = uc' "p_2" (QP.position `ofThe` secondObject)
   (phraseNP (QP.position `the_ofThe` secondObject))
-  (vec lP `sub` label2) (realVect vecDim) metre
+  (vec lP `sub` label2) realVect metre
 
 -- Clifford velocities
 mvVel_1, mvVel_2 :: UnitalChunk
 mvVel_1 = uc' "v_mv1" (QP.velocity `ofThe` firstObject)
   (phraseNP (QP.velocity `the_ofThe` firstObject))
-  (sub lV label1) (realVect vecDim) velU
+  (vec lV `sub` label1) realVect velU
 
 mvVel_2 = uc' "v_mv2" (QP.velocity `ofThe` secondObject)
   (phraseNP (QP.velocity `the_ofThe` secondObject))
-  (sub lV label2) (realVect vecDim) velU
+  (vec lV `sub` label2) realVect velU
 
 -- Clifford accelerations
 mvAccel_1, mvAccel_2 :: UnitalChunk
 mvAccel_1 = uc' "a_mv1" (QP.acceleration `ofThe` firstObject)
   (phraseNP (QP.acceleration `the_ofThe` firstObject))
-  (sub lA label1) (realVect vecDim) accelU
+  (vec lA `sub` label1) realVect accelU
 
 mvAccel_2 = uc' "a_mv2" (QP.acceleration `ofThe` secondObject)
   (phraseNP (QP.acceleration `the_ofThe` secondObject))
-  (sub lA label2) (realVect vecDim) accelU
+  (vec lA `sub` label2) realVect accelU
 
 -- Clifford forces
 mvForce_1, mvForce_2 :: UnitalChunk
 mvForce_1 = uc' "F_mv1" (QP.force `ofThe` firstObject)
   (phraseNP (QP.force `the_ofThe` firstObject))
-  (sub lF label1) (realVect vecDim) newton
+  (vec lF `sub` label1) realVect newton
 
 mvForce_2 = uc' "F_mv2" (QP.force `ofThe` secondObject)
   (phraseNP (QP.force `the_ofThe` secondObject))
-  (sub lF label2) (realVect vecDim) newton
+  (vec lF `sub` label2) realVect newton
 
 -- Angular velocity / acceleration
 angularVel_1, angularVel_2, angularAccel_1, angularAccel_2 :: UnitalChunk
@@ -160,11 +169,11 @@ angularAccel_2 = uc' "alpha_2" (QP.angularAccel `ofThe` secondObject)
 tension_1, tension_2 :: UnitalChunk
 tension_1 = uc' "T_1" (QP.tension `ofThe` firstRod)
   (phraseNP (QP.tension `the_ofThe` firstRod))
-  (sub (vec cT) label1) Real newton
+  (sub cT label1) Real newton
 
 tension_2 = uc' "T_2" (QP.tension `ofThe` secondRod)
   (phraseNP (QP.tension `the_ofThe` secondRod))
-  (sub (vec cT) label2) Real newton
+  (sub cT label2) Real newton
 
 ----------------------------------------
 -- UNITLESS, SYMBOLS
@@ -201,5 +210,5 @@ pendDisAngle :: ConstrConcept
 pendDisAngle = cuc' "pendDisAngle"
   (nounPhraseSP "dependent variables")
   "column vector of displacement of rods with its derivatives"
-  lTheta radian (ClifS (VDim "2") Vector Real)
+  lTheta radian realVect
   [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)

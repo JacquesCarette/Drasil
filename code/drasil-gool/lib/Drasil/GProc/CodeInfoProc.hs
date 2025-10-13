@@ -96,7 +96,6 @@ instance VariableSym CodeInfoProc where
   arrayElem _ _ = noInfo
 
 instance VariableElim CodeInfoProc where
-  variableName _ = ""
   variableType _ = toCode ""
 
 instance ValueSym CodeInfoProc where

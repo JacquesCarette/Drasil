@@ -44,6 +44,10 @@ class PermElim r where
   perm :: IG.Permanence r -> Doc
   binding :: IG.Permanence r -> Binding
 
+-- [FIXME: Reed M, 09/10/25] This is a dubious class!
+-- We use it to build getter/setter names, but I don't see why
+-- this should be a class as opposed to just some operations on docs done
+-- on a per-language basis.
 class InternalGetSet r where
   getFunc :: Variable r -> Function r
   setFunc :: Type r -> Variable r -> Value r -> Function r

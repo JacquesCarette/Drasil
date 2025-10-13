@@ -1,4 +1,7 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies, TupleSections #-}
+{-# LANGUAGE PartialTypeSignatures #-}
+{-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE LambdaCase #-}
 
 -- | The logic to render Python code is contained in this module
 module Drasil.GOOL.LanguageRenderer.PythonRenderer (
@@ -62,7 +65,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, staticVar,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend,
@@ -92,6 +95,7 @@ import Control.Monad (join)
 import Control.Monad.State (State, modify, gets)
 import Data.List (intercalate, sort)
 import Data.Char (toUpper, isUpper, isLower, isDigit)
+import Data.Foldable (for_)
 import qualified Data.Map as Map (Map, lookup, empty)
 import Text.Read (readMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
@@ -101,6 +105,7 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import Control.Lens ((^.), Lens')
 import qualified Control.Lens as L (makeLenses, lens, set, over, at, _2, both)
+import Control.Exception.Lens (AsAllocationLimitExceeded(__AllocationLimitExceeded))
 
 -- State Stuff
 data GOOLState = GS {
@@ -326,9 +331,10 @@ instance OOProg PythonCode
 instance ProgramSym PythonCode where
   type Program PythonCode = State GOOLState ProgData
   prog n st files = do
-    fs <- mapM (zoom lensGStoFS) files
+    fs <- traverse (zoom lensGStoFS) files
+    -- [Reed M: 02/10/25]: Why are we reversing here?
     modify revFiles
-    pure $ onCodeList (progD n st) fs
+    pure $ progD n st fs
 
 instance CommonRenderSym PythonCode
 instance OORenderSym PythonCode
@@ -345,7 +351,7 @@ instance RenderFile PythonCode where
   top _ = toCode empty
   bottom = toCode empty
 
-  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
+  commentedMod file blockCmnt = liftA2 R.commentedMod file (zoom lensFStoVS blockCmnt)
 
   fileFromData = G.fileFromData (onCodeValue .  fileD)
 
@@ -368,6 +374,10 @@ instance PermElim PythonCode where
 
 instance BodySym PythonCode where
   type Body PythonCode = State () Doc
+  body blocks = do
+    a <- __
+    pure __
+    --onStateList (onCodeList R.body)
 
   addComments s = onCodeValue (R.addComments s pyCommentStart)
 
@@ -481,14 +491,16 @@ instance OOVariableSym PythonCode where
                           else G.staticVar n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVar = CP.classVar R.classVar
-  extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify .
-    addModuleImportVS) (Map.lookup (getTypeString t) cm) $
-    CP.classVar pyClassVar t v) (return c) getClassMap
+
+  extClassVar t v = do
+    className <- Map.lookup <$> _ <*> getClassMap
+    for_ className $ \nm ->
+      modify (addModuleImportVS nm)
+    CP.classVar pyClassVar t v
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
 
 instance VariableElim PythonCode where
-  variableName = varName . unPC
   variableType = onCodeValue varType
 
 instance InternalVarElim PythonCode where
@@ -739,7 +751,10 @@ instance AssignStatement PythonCode where
   (&--) = M.decrement1
 
 instance DeclStatement PythonCode where
-  varDec v scp = CS.varDecDef v scp Nothing
+  varDec v scp = do
+    modify $ useVarName (variableName v)
+    modify $ setVarScope (variableName v) (scopeData scp) IC.emptyStmt
+
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
   setDecDef = varDecDef
@@ -856,8 +871,7 @@ instance ParameterSym PythonCode where
   pointerParam = param
 
 instance RenderParam PythonCode where
-  paramFromData v' d = do 
-    v <- zoom lensMStoVS v'
+  paramFromData v d = do
     toState $ on2CodeValues pd v (toCode d)
 
 instance ParamElim PythonCode where
@@ -885,7 +899,7 @@ instance OOMethodSym PythonCode where
   docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
 
 instance RenderMethod PythonCode where
-  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
+  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
   mthdFromData _ = mthd
@@ -910,8 +924,8 @@ instance StateVarSym PythonCode where
   type StateVar PythonCode = State () Doc
   stateVar _ _ _ = return empty
   stateVarDef = CP.stateVarDef
-  constVar = CP.constVar (RC.perm 
-    (static :: PythonCode (Permanence PythonCode)))
+  constVar = CP.constVar (RC.perm
+    (static :: (Permanence PythonCode)))
 
 instance StateVarElim PythonCode where
   stateVar = unPC
@@ -959,6 +973,20 @@ instance ModuleSym PythonCode where
       vcat (map (RC.import' .
         (modImport :: Label -> Import PythonCode)) mis)])
     (pure empty) getMainDoc
+
+-- Parameters: Module name, Doc for imports, Doc to put at top of module (but 
+-- after imports), Doc to put at bottom of module, methods, classes
+-- Renamed top to topDoc to fix shadowing error with RendererClassesOO top
+buildModule' :: (OORenderSym r) => Label -> FS Doc -> FS Doc -> FS Doc ->
+  [Method r] -> [Class r] -> Module r
+buildModule' n imps topDoc bot fs cs = S.modFromData n (do
+  cls <- mapM (zoom lensFStoCS) cs
+  fns <- mapM (zoom lensFStoMS) fs
+  is <- imps
+  tp <- topDoc
+  bt <- bot
+  return $ R.module' is (vibcat (tp : map RC.class' cls))
+    (vibcat (map RC.method fns ++ [bt])))
 
 instance RenderMod PythonCode where
   modFromData n = G.modFromData n (toCode . md n)

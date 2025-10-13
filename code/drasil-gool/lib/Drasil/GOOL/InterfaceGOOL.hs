@@ -123,11 +123,28 @@ class (ValueSym r, OOTypeSym r) => OOValueSym r
 class (VariableSym r, OOTypeSym r) => OOVariableSym r where
   -- Bool: False for variable, True for constant.  Required by the Python renderer.
   staticVar'    :: Bool -> Label -> Type r -> Variable r
+  -- [FIXME: Reed M, 09/10/25]
+  -- @self@ should not be an lvalue on its own, as it's a bit bogus to write
+  --
+  -- @
+  -- this = 7
+  -- @
+  --
+  -- We can fix this by changing the type to @Variable r -> Variable r@, which
+  -- would basically force you to write @this.whatever := ...@. There are still
+  -- some minor issues here (@this[1] := ...@) but these are *probably* fine?
   self         :: Variable r
   classVar     :: Type r -> Variable r -> Variable r
   extClassVar  :: Type r -> Variable r -> Variable r
   objVar       :: Variable r -> Variable r -> Variable r
   objVarSelf   :: Variable r -> Variable r
+
+class (OOTypeSym r) => OOFieldSym r where
+  type Field r = t | t -> r
+  staticConstField :: Label -> Type r -> Field r
+  staticMutField   :: Label -> Type r -> Field r
+  constField :: Label -> Type r -> Field r
+  mutField :: Label -> Type r -> Field r
 
 staticVar :: (OOVariableSym r) => Label -> Type r -> Variable r
 staticVar = staticVar' False

@@ -19,4 +19,4 @@ data CodeType = Boolean
               | Array CodeType
               | Object ClassName
               | Func [CodeType] CodeType
-              | Void deriving (Eq, Show)
+              | Void deriving (Eq, Ord, Show)

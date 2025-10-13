@@ -115,7 +115,6 @@ instance OOVariableSym CodeInfoOO where
   objVarSelf  _     = noInfo
 
 instance VariableElim CodeInfoOO where
-  variableName _ = ""
   variableType _ = toCode ""
 
 instance ValueSym CodeInfoOO where

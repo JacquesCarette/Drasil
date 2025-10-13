@@ -91,15 +91,19 @@ class ScopeSym r where
   mainFn :: Scope r -- Main program - either main function or global scope
   local  :: Scope r -- Definite local scope
 
+
+-- [FIXME: Reed M. 09/10/2025] Rename VariableSym to LValue.
 class (TypeSym r) => VariableSym r where
   type Variable r = t | t -> r
   var       :: Label -> Type r -> Variable r
   constant  :: Label -> Type r -> Variable r
   extVar    :: Library -> Label -> Type r -> Variable r
+  -- [FIXME: Reed M. 09/10/2025] We should allow array lvalues to have Expr valued indices.
+  -- The current grammar does not let us write @x[i + 1] := ...@
   arrayElem :: Integer -> Variable r -> Variable r
 
+
 class (VariableSym r) => VariableElim r where
-  variableName :: Variable r -> String
   variableType :: Variable r -> Type r
 
 listVar :: (VariableSym r) => Label -> Type r -> Variable r

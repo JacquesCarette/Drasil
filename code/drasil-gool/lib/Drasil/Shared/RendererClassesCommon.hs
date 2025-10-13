@@ -28,6 +28,7 @@ import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData)
 
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
+import qualified GHC.Arr as CLike
 
 class (AssignStatement r, DeclStatement r, IOStatement r, 
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement
@@ -124,9 +125,29 @@ class ScopeElim r where
   
 class RenderVariable r where
   varFromData :: Binding -> String -> Type r -> Doc -> Variable r
-    
+  
+-- This seemingly only gets used when we are 
 class InternalVarElim r where
+  -- [FIXME: Reed M, 09/10/25]
+  -- We use @variableBind@ when building some lvalue helper functions in
+  -- CommonPseudoOO and CLike. In particular, we need to be able to distinguish
+  -- between assignments to static and non-static variables. Instead, we should
+  -- either track the difference as part of the representation types by delaying
+  -- our rendering choice, or just directly at the type level by adding two
+  -- associated types @Field r@ and @StaticField r@ to a putative class like
+  --
+  -- @
+  -- class (OOTypeSym r) => OOFieldSym r where
+  --   type Field r = t | t -> r
+  --   type StaticField r = t | t -> r
+  --   staticConstField :: Label -> Type r -> StaticField r
+  --   staticMutField   :: Label -> Type r -> StaticField r
+  --   constField :: Label -> Type r -> Field r
+  --   mutField :: Label -> Type r -> Field r
+  -- @
   variableBind :: Variable r -> Binding
+  -- [FIXME: Reed M, 09/10/25]
+  -- This just needs to get banished
   variable  :: Variable r -> Doc
 
 class RenderValue r where

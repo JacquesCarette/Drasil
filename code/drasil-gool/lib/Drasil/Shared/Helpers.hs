@@ -49,6 +49,7 @@ emptyIfEmpty ifDoc elseDoc = if isEmpty ifDoc then empty else elseDoc
 emptyIfNull :: [a] -> Doc -> Doc
 emptyIfNull lst elseDoc = if null lst then empty else elseDoc
 
+-- FIXME: Banish this to the shadow realm
 toCode :: (Monad r) => a -> r a
 toCode = return
 
@@ -65,6 +66,7 @@ on2CodeValues :: (Applicative r) => (a -> b -> c) -> r a -> r b ->
   r c
 on2CodeValues = liftA2
 
+-- FIXME: Delete this!
 on2StateValues :: (a -> b -> c) -> State s a -> State s b -> State s c
 on2StateValues = liftM2
 

@@ -5,8 +5,8 @@
 module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec,
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
-  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
-  classVarCheckStatic, arrayElem, local, litChar, litDouble, litInt, litString,
+  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar,
+  local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs,
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd,
   listAppend, listAccess, listSet, getFunc, setFunc,
@@ -25,8 +25,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, NamedArgs, MixedCall,
   MixedCtorCall, BodySym(Body), StatementSym(Statement), MethodSym(Method),
   FunctionSym(Function), ParameterSym(Parameter), bodyStatements, oneLiner,
   BlockSym(Block), TypeSym(Type), TypeElim(getType, getTypeString),
-  VariableSym(Variable), VisibilitySym(..), VariableElim(variableName,
-  variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
+  VariableSym(Variable), VisibilitySym(..), VariableElim(variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
   sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
   printFileStr, printFileStrLn), ifNoElse, ScopeSym(Scope), convType)
@@ -181,31 +180,6 @@ var n t = mkStateVar n t (R.var n)
 
 staticVar :: (CommonRenderSym r) => Label -> Type r -> Variable r
 staticVar n t = mkStaticVar n t (R.var n)
-
--- | To be used in classVar implementations. Throws an error if the variable is 
--- not static since classVar is for accessing static variables from a class
-classVarCheckStatic :: (CommonRenderSym r) => Variable r -> Variable r
-classVarCheckStatic v = classVarCS (variableBind v)
-  where classVarCS Dynamic = error
-          "classVar can only be used to access static variables"
-        classVarCS Static = v
-
-objVar :: (CommonRenderSym r) => Variable r -> Variable r -> Variable r
-objVar o' v' =
-  let objVar' Static = error
-        "Cannot access static variables through an object, use classVar instead"
-      objVar' Dynamic = mkVar (variableName o' `access` variableName v')
-        (variableType v') (R.objVar (RC.variable o') (RC.variable v'))
-  in objVar' (variableBind v')
-
-arrayElem :: (OORenderSym r) => Value r -> Variable r -> Variable r
-arrayElem i' v' =
-  let
-    i = IC.intToIndex i'
-    vName = variableName v' ++ "[" ++ render (RC.value i) ++ "]"
-    vType = listInnerType $ variableType v'
-    vRender = RC.variable v' <> brackets (RC.value i)
-  in mkStateVar vName vType vRender
 
 -- Scope --
 local :: ScopeData

@@ -20,7 +20,7 @@ import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (varDecDef, bool, extFuncAppMixedArgs,
   funcType, extVar, Label, Library, Value, MixedCall, bodyStatements, oneLiner,
   TypeSym(Type, infile, outfile, listInnerType), TypeElim(getType, getTypeString),
-  VariableElim(variableName, variableType), ValueSym(valueType),
+  VariableElim(variableType), ValueSym(valueType),
   Comparison(..), (&=), ControlStatement(returnStmt), ParameterSym(Parameter),
   VisibilitySym(..), MethodSym(Method, function), funcApp, ScopeSym(Scope), listSize,
   BodySym(Body), FunctionSym(Function), StatementSym(Statement),
@@ -72,7 +72,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (self, self', module',
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, mkVal, mkVal)
 
-import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
+import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   call, initStmts, docFunc, docFuncRepr, docClass, docMod, smartAdd, smartSub)
 
 import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd)
@@ -197,7 +197,7 @@ arrayType :: (CommonRenderSym r) => Type r -> Type r
 arrayType t' = undefined{- do
   t <- t'
   typeFromData (Array (getType t))
-    (getTypeString t ++ array) (RC.type' t <> brackets empty)-}
+    (getTypeString t ++ a/rray) (RC.type' t <> brackets empty)-}
 
 pi :: (CommonRenderSym r) => Value r
 pi = mkStateVal IC.double (text $ mathFunc "PI")

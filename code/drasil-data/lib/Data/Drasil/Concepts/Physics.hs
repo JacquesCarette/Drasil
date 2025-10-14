@@ -4,7 +4,6 @@ module Data.Drasil.Concepts.Physics where
 --  up with a better one.
 import Language.Drasil hiding (space)
 import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Language.Drasil.NounPhrase.Combinators as NP
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.Metadata (mathematics, physics)
@@ -20,8 +19,8 @@ physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity,
   cohesion, collision, compression, constAccel, constAccelV, damping, dampingCoeff,
   displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
-  friction, gravity, gravitationalAccel, gravitationalConst, gravitationalMagnitude, height, 
-  iPos, iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, 
+  friction, gravity, gravitationalAccel, gravitationalConst, gravitationalMagnitude, height,
+  iPos, iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos,
   iyVel, joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
   rigidBody, scalarAccel, scalarPos, shm, space, speed, stiffCoeff, strain, stress, tension,
@@ -42,9 +41,9 @@ physicCon' = [oneD, twoD, threeD]
 acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohesion,
   collision, compression, constAccel, constAccelV, damping, dampingCoeff, displacement,
   distance, elasticity, energy, fSpeed, fVel, fbd, force, friction, gravity,
-  gravitationalAccel, gravitationalConst, gravitationalMagnitude, height, iPos, iSpeed, 
-  iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, iyVel, joint, 
-  kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position, 
+  gravitationalAccel, gravitationalConst, gravitationalMagnitude, height, iPos, iSpeed,
+  iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, iyVel, joint,
+  kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
   potEnergy, pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos, shm,
   space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
@@ -66,7 +65,7 @@ chgInVelocity = dccWDS "chgInVelocity" (cn desc)
   (S "the " +:+ S desc +:+ phrase rigidBody)
   where desc = "change in velocity" -- TODO: This is a hack to avoid an infinite loop should we enable strict data.
 chgMomentum = dccWDS "chgMomentum" (cn' "change in momentum")
-  (S "The rate of change of a body's" +:+ phrase impulseV)  
+  (S "The rate of change of a body's" +:+ phrase impulseV)
 collision = dcc "collision" (cn' "collision")
   "an encounter between particles resulting in an exchange or transformation of energy"
 cohesion = dccWDS "cohesion" (cn "cohesion")
@@ -110,14 +109,14 @@ height = dccWDS "height" (cn' "height")
 horizontalMotion = dccWDS "horizontalMotion" (cn "horizontal motion")
   (S "the result of the tendency of any object in motion to remain in motion at constant velocity")
 isotropy = dccWDS "isotropy" (cn "isotropy")
-  (S "a condition where the" +:+ phraseNP (value `ofA` property) `S.is`
+  (S "a condition where the" +:+ (phrase value `S.ofA` phrase property) `S.is`
    S "independent of the direction in which it is measured")
 joint = dcc "joint" (cn' "joint")
   "a connection between two rigid bodies which allows movement with one or more degrees of freedom"
 kEnergy = dccWDS "kEnergy" (cn "kinetic energy")
   (S "measure" `S.the_ofThe` phrase energy +:+ S "a body possesses due to its motion")
 kinematics = dccWDS "kinematics" (cn "kinematics")
-  (S "branch" `S.of_` phrase mechanics +:+ S "that describes the motion" `S.of_` 
+  (S "branch" `S.of_` phrase mechanics +:+ S "that describes the motion" `S.of_`
     S "objects without reference to the causes of motion")
 linear = dcc "linear" (cn' "linear")
   "arranged in or extending along a straight or nearly straight line"
@@ -125,7 +124,7 @@ mechEnergy = dcc "mechEnergy" (cn "mechanical energy")
   "the energy that comes from motion and position"
 momentum = dccWDS "momentum" (cn "momentum")
   ( S "the quantity of motion" `S.of_` S "a moving body, measured as a product" `S.of_`
-  phraseNP (QPP.mass `and_` velocity))
+  (phrase QPP.mass `S.and_` phrase velocity))
 moment = dccWDS "moment" (cn' "moment")
   (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `S.or_` phrase axis)
 moment2D = dccWDS "moment2D" (cn' "moment")
@@ -135,7 +134,7 @@ motion = dccWDS "motion" (cn "motion")
 period = dccWDS "period" (cn' "period")
    (S "the" +:+ phrase time +:+ S "required for one complete cycle of vibration to pass a given point.")
 pendulum = dccWDS "pendulum" (cn "pendulum")
- (S "a body suspended from a fixed support so that it swings freely back and forth under the influence" 
+ (S "a body suspended from a fixed support so that it swings freely back and forth under the influence"
        `S.of_` phrase gravity)
 position = dcc "position" (cn' "position")
   "an object's location relative to a reference point"
@@ -156,14 +155,14 @@ scalarAccel = dccWDS "scalarAccel" (cn' "scalar acceleration")
   (S "magnitude" `S.the_ofThe` phrase acceleration +:+ S "vector")
 scalarPos = dccWDS "scalarPos" (cn' "scalar position")
   (S "magnitude" `S.the_ofThe` phrase position +:+ S "vector")
-shm = dcc "SHM" (nounPhraseSP "simple harmonic motion") ("Periodic motion through an equilibrium position. " ++ 
-                                                        "The motion is sinusoidal in time and demonstrates a" ++ 
-                                                        " single resonant frequency") -- source: Wikipedia 
+shm = dcc "SHM" (nounPhraseSP "simple harmonic motion") ("Periodic motion through an equilibrium position. " ++
+                                                        "The motion is sinusoidal in time and demonstrates a" ++
+                                                        " single resonant frequency") -- source: Wikipedia
 speed = dccWDS "speed" (cn' "speed")
   (S "magnitude" `S.the_ofThe` phrase velocity +:+ S "vector")
-stiffCoeff = dcc "stiffnessCoeff" (cn' "stiffness coefficient") 
+stiffCoeff = dcc "stiffnessCoeff" (cn' "stiffness coefficient")
  "Quantity that characterizes a spring's stiffness"
-strain = dccWDS "strain" (cn' "strain") 
+strain = dccWDS "strain" (cn' "strain")
   (S "a measure of deformation representing the" +:+ phrase displacement +:+
    S "between particles in the body relative to a reference length")
   --definition of strain used in SSP, can be made clearer
@@ -188,36 +187,36 @@ weight = dcc "weight" (cn' "weight")
 -- FIXME: Complete all variants?
 -- FIXME: Pull out commonalities?
 
-xDist = dccWDS "xDist" (distance `inThe` xDir) (atStartNP $ distance `inThe` xDir)
-yDist = dccWDS "yDist" (distance `inThe` yDir) (atStartNP $ distance `inThe` yDir)
+xDist = dccWDS "xDist" (distance `inThe` xDir) (titleize distance `S.inThe` phrase xDir)
+yDist = dccWDS "yDist" (distance `inThe` yDir) (titleize distance `S.inThe` phrase yDir)
 
 iPos = dccWDS "iPos" (cn "initial position") (S "The" +:+ phrase position +:+ S "at the body's initial point")
-xPos = dccWDS "xPos" (xComp `of_` position) (atStartNP $ NP.the $ xComp `of_` position)
-yPos = dccWDS "yPos" (yComp `of_` position) (atStartNP $ NP.the $ yComp `of_` position)
+xPos = dccWDS "xPos" (xComp `of_` position) (S "The" +:+ (NP $ xComp `of_` position))
+yPos = dccWDS "yPos" (yComp `of_` position) (S "The" +:+ (NP $ yComp `of_` position))
 
-ixPos = dccWDS "ixPos" (xComp `of_` iPos) (atStartNP $ NP.the $ xComp `of_` iPos)
-iyPos = dccWDS "iyPos" (yComp `of_` iPos) (atStartNP $ NP.the $ yComp `of_` iPos)
+ixPos = dccWDS "ixPos" (xComp `of_` iPos) (S "The" +:+ (NP $ xComp `of_` iPos))
+iyPos = dccWDS "iyPos" (yComp `of_` iPos) (S "The" +:+ (NP $ yComp `of_` iPos))
 
 fSpeed = dccWDS "fSpeed" (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
 iSpeed = dccWDS "iSpeed" (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
 
-ixSpeed = dccWDS "ixSpeed" (xComp `of_` iSpeed) (atStartNP $ NP.the $ xComp `of_` iSpeed)
-iySpeed = dccWDS "iySpeed" (yComp `of_` iSpeed) (atStartNP $ NP.the $ yComp `of_` iSpeed)
+ixSpeed = dccWDS "ixSpeed" (xComp `of_` iSpeed) (S "The" +:+ (NP $ xComp `of_` iSpeed))
+iySpeed = dccWDS "iySpeed" (yComp `of_` iSpeed) (S "The" +:+ (NP $ yComp `of_` iSpeed))
 
 fVel = dccWDS "fVel" (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
 iVel = dccWDS "iVel" (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
-xVel = dccWDS "xVel" (xComp `of_` velocity) (atStartNP $ NP.the $ xComp `of_` velocity)
-yVel = dccWDS "yVel" (yComp `of_` velocity) (atStartNP $ NP.the $ yComp `of_` velocity)
+xVel = dccWDS "xVel" (xComp `of_` velocity) (S "The" +:+ (NP $ xComp `of_` velocity))
+yVel = dccWDS "yVel" (yComp `of_` velocity) (S "The" +:+ (NP $ yComp `of_` velocity))
 
-ixVel = dccWDS "ixVel" (xComp `of_` iVel) (atStartNP $ NP.the $ xComp `of_` iVel)
-iyVel = dccWDS "iyVel" (yComp `of_` iVel) (atStartNP $ NP.the $ yComp `of_` iVel)
+ixVel = dccWDS "ixVel" (xComp `of_` iVel) (S "The" +:+ (NP $ xComp `of_` iVel))
+iyVel = dccWDS "iyVel" (yComp `of_` iVel) (S "The" +:+ (NP $ yComp `of_` iVel))
 
-xAccel = dccWDS "xScalAcc" (xComp `of_` acceleration) (atStartNP $ NP.the $ xComp `of_` acceleration)
-yAccel = dccWDS "yScalAcc" (yComp `of_` acceleration) (atStartNP $ NP.the $ yComp `of_` acceleration)
+xAccel = dccWDS "xScalAcc" (xComp `of_` acceleration) (S "The" +:+ (NP $ xComp `of_` acceleration))
+yAccel = dccWDS "yScalAcc" (yComp `of_` acceleration) (S "The" +:+ (NP $ yComp `of_` acceleration))
 
 constAccelV = dccWDS "constAccelV" (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
-xConstAccel = dccWDS "xConstAccel" (xComp `of_` constAccel) (atStartNP $ NP.the $ xComp `of_` constAccel)
-yConstAccel = dccWDS "yConstAccel" (yComp `of_` constAccel) (atStartNP $ NP.the $ yComp `of_` constAccel)
+xConstAccel = dccWDS "xConstAccel" (xComp `of_` constAccel) (S "The" +:+ (NP $ xComp `of_` constAccel))
+yConstAccel = dccWDS "yConstAccel" (yComp `of_` constAccel) (S "The" +:+ (NP $ yComp `of_` constAccel))
 
 
 --FIXME: COMBINATION HACK (for all below)
@@ -230,15 +229,15 @@ angAccel = dcc "angularAcceleration" (combineNINI angular acceleration)
   "the rate of change of angular velocity"
 constAccel = dcc "constantAcceleration" (cn "constant acceleration")
   "a one-dimensional acceleration that is constant"
-linDisp = dcc "linearDisplacement" (combineNINI linear displacement) 
+linDisp = dcc "linearDisplacement" (combineNINI linear displacement)
   "movement in one direction along a single axis"
-linVelo = dcc "linearVelocity" (combineNINI linear velocity) 
+linVelo = dcc "linearVelocity" (combineNINI linear velocity)
   "the speed of a moving object, dependent on the perspective taken"
-linAccel = dcc "linearAcceleration" (combineNINI linear acceleration) 
+linAccel = dcc "linearAcceleration" (combineNINI linear acceleration)
   "the rate of change of velocity without a change in direction"
 
 -- The following feel like they're missing something/need to be more
--- descriptive. See issue tracker for details.  
+-- descriptive. See issue tracker for details.
 -- FIXME: plurals below?
 restitutionCoef = dcc "restitutionCoef" (cn "coefficient of restitution")
   "a measure of the restitution of a collision between two objects"
@@ -248,6 +247,6 @@ angFreq = dcc "angularFrequency" (cn "angular frequency")
   "the frequency of a periodic process, wave system etc, per unit time."
 --FIXME: These two should be built off "impulse"
 impulseV = dcc "impulseV" (cn "impulse (vector)")
-  "a force acting briefly on a body and producing a finite change of momentum in a given direction" 
+  "a force acting briefly on a body and producing a finite change of momentum in a given direction"
 impulseS = dcc "impulseS" (cn "impulse (scalar)")
-  "a force acting briefly on a body and producing a finite change of momentum" 
+  "a force acting briefly on a body and producing a finite change of momentum"

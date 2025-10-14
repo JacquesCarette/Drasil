@@ -78,12 +78,10 @@ unopCN Dim = listSize
 unopCN Norm = error "Norm operation not yet implemented"
 unopCN Grade = error "Grade operation not yet implemented"
 
--- TODO: Clifford algebra unary operations for UFuncCC will be re-implemented
--- | Similar to 'unop', but for vectors.
+-- | Unary operations on Clifford algebra values (Clif -> Clif).
+-- Currently only negation is defined in UFuncCC.
 unopCC :: (SharedProg r) => UFuncCC -> (SValue r -> SValue r)
-unopCC _ = error "Clifford algebra unary operations not yet implemented"
--- TODO: Re-enable after proper library integration
--- unopVV NegC = \mv -> funcApp (func "negate" (listType double)) (listType double) [mv]
+unopCC NegC = (#~)  -- Negation using GOOL's unary negation operator
 
 -- | Gets a chunk's 'CodeType', by checking which 'CodeType' the user has chosen to
 -- match the chunk's 'Space' to.
@@ -397,17 +395,14 @@ convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
   g <- get
   convExpr $ renderRealInt (lookupC g c) ri
-convExpr (NatCCBinaryOp {}) = error "NatCCBinaryOp not yet implemented"
-convExpr (Clif _ _) = error "Clif not yet implemented"
--- TODO: Re-enable Clifford algebra code generation after fixing type issues
--- convExpr (NatCCBinaryOp GradeSelect n e) = do
---   -- Grade selection: extract grade n from multivector e
---   eVal <- convExpr e
---   return $ gradeSelectVal n eVal
--- convExpr (Clif dim blades) = do
---   -- Multivector construction from basis blades
---   bladeExprs <- mapM convExpr (OM.elems blades)
---   return $ multivectorConstruct dim bladeExprs
+convExpr (NatCCBinaryOp _op _n _e) = 
+  -- NatCCBinaryOp operations like GradeSelect are not yet implemented
+  -- These require full Clifford algebra library integration
+  error "NatCCBinaryOp (grade selection) not yet implemented"
+convExpr (Clif _dim _blades) = 
+  -- Clifford algebra multivector construction is not yet implemented
+  error "Clifford algebra multivector construction not yet implemented"
+
 
 -- | Generates a function/method call, based on the 'UID' of the chunk representing
 -- the function, the list of argument 'Expr's, the list of named argument 'Expr's,
@@ -505,17 +500,19 @@ ordBfunc Lt  = (?<)
 ordBfunc LEq = (?<=)
 ordBfunc GEq = (?>=)
 
--- Maps a 'CCCBinOp' to it's corresponding GOOL binary function.
+-- Maps a 'CCCBinOp' to its corresponding GOOL binary function.
+-- For Clifford algebra operations on vectors/multivectors returning vectors/multivectors.
 vecVecVecBfunc :: (SharedProg r) => CCCBinOp -> (SValue r -> SValue r -> SValue r)
-vecVecVecBfunc Cross = error "bfunc: Cross product not implemented" -- TODO: Implement cross product
+vecVecVecBfunc Cross = error "Cross product not yet implemented - requires external library"
 vecVecVecBfunc CAdd = (#+)  -- Vector addition using GOOL addition operator
 vecVecVecBfunc CSub = (#-)  -- Vector subtraction using GOOL subtraction operator
-vecVecVecBfunc WedgeProd = error "bfunc: WedgeProd not implemented" -- TODO: Implement wedge product
-vecVecVecBfunc GeometricProd = error "bfunc: GeometricProd not implemented" -- TODO: Implement geometric product
+vecVecVecBfunc WedgeProd = error "Wedge product not yet implemented - requires external library"
+vecVecVecBfunc GeometricProd = error "Geometric product not yet implemented - requires external library"
 
--- Maps a 'CCNBinOp' to it's corresponding GOOL binary function.
-vecVecNumBfunc :: CCNBinOp -> (SValue r -> SValue r -> SValue r)
-vecVecNumBfunc Dot = error "convExpr DotProduct"
+-- Maps a 'CCNBinOp' to its corresponding GOOL binary function.
+-- For Clifford algebra operations on vectors returning a scalar.
+vecVecNumBfunc :: (SharedProg r) => CCNBinOp -> (SValue r -> SValue r -> SValue r)
+vecVecNumBfunc Dot = error "Dot product not yet implemented - requires componentwise multiplication and sum"
 
 -- Maps a 'NCCBinOp' to it's corresponding GOOL binary function.
 numVecVecBfunc :: (SharedProg r) => NCCBinOp -> (SValue r -> SValue r -> SValue r)

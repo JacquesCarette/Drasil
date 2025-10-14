@@ -57,8 +57,8 @@ sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
   where
     toData d = toData' (d ^. typ) d
 
-    toData' t@(ClifS (Fixed 2) Vector _) d = list d [", ", "; "]  -- 2D vectors
-    toData' t@(ClifS _ Vector _) d = list d [", "]                 -- general vector fallback
+    toData' (ClifS (Fixed 2) Vector _) d = list d [", ", "; "]  -- 2D vectors
+    toData' (ClifS _ Vector _) d = list d [", "]                 -- general vector fallback
     toData' _ d = singleton' d                                     -- scalar
 
 --------------------------------------------------------------------------------
@@ -74,11 +74,12 @@ strAsExpr _        _ = error "strAsExpr: unsupported space type"
 
 --------------------------------------------------------------------------------
 -- | Gets the dimension of a 'Space'.
+-- TODO: This function is currently unused but may be needed for future vector operations
 --------------------------------------------------------------------------------
-getDimension :: Space -> Int
-getDimension (ClifS (Fixed n) Vector _) = fromIntegral n
-getDimension (ClifS _ Vector t) = 1 + getDimension t
-getDimension _ = 0
+-- getDimension :: Space -> Int
+-- getDimension (ClifS (Fixed n) Vector _) = fromIntegral n
+-- getDimension (ClifS _ Vector t) = 1 + getDimension t
+-- getDimension _ = 0
 
 --------------------------------------------------------------------------------
 -- | Splits a string at the first occurrence of a delimiter.

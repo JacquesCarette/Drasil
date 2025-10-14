@@ -9,16 +9,13 @@ import Drasil.PDController.MetaConcepts (progName)
 introPara, introPurposeOfDoc, introscopeOfReq :: Sentence
 
 -- template
-background1, background2, background3 :: Sentence
-background1 = S "Automatic process control with a controller (P/PI/PD/PID) is used"
-background2 = S "in a variety of applications such as thermostats and automobile"
-background3 = S "cruise-control."
+background :: Sentence
+background = S "Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats and automobile cruise-control."
 longProgramName, shortProgramName :: Sentence
 longProgramName  = phrase progName
 shortProgramName = sParen (S "PDC")
-
-originalArtifactClause, goal :: Sentence
-originalArtifactClause =
+origin, goal :: Sentence
+origin =
   S ", which is based on the original, manually created version of"
   +:+ namedRef externalLinkRef (S "PD Controller")
 goal =
@@ -27,13 +24,11 @@ goal =
   +:+ S "that can be used to tune the gain constants before deployment"
 
 introPara = foldlSent
-  [ background1
-  , background2
-  , background3
+  [ background
   , S "This document describes the requirements of a program called"
       +:+ longProgramName
       +:+ shortProgramName
-      +:+ originalArtifactClause
+      +:+ origin
       +:+ goal
   ]
 

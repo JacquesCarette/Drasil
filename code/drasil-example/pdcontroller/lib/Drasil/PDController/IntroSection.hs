@@ -4,19 +4,38 @@ import Drasil.PDController.Concepts
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.PDController.MetaConcepts (progName)
 
 introPara, introPurposeOfDoc, introscopeOfReq :: Sentence
-introPara
-  = foldlSent
-      [S "Automatic process control with a controller (P/PI/PD/PID) is used",
-         S "in a variety of applications such as thermostats, automobile",
-         S "cruise-control, etc. The gains" `S.ofA` S "controller in an application" +:+. 
-         S "must be tuned before the controller is ready for production",
-         S "Therefore, a simulation" `S.ofThe` phrase pidC, S "with a",
-         phrase secondOrderSystem,
-         S "is created in this project based" `S.onThe` S "original, manually created version of" +:+
-         namedRef externalLinkRef (S "PD Controller"),
-         S "that can be used to tune the gain constants"]
+
+-- template
+background1, background2, background3 :: Sentence
+background1 = S "Automatic process control with a controller (P/PI/PD/PID) is used"
+background2 = S "in a variety of applications such as thermostats and automobile"
+background3 = S "cruise-control."
+longProgramName, shortProgramName :: Sentence
+longProgramName  = phrase progName
+shortProgramName = sParen (S "PDC")
+
+originalArtifactClause, goal :: Sentence
+originalArtifactClause =
+  S ", which is based on the original, manually created version of"
+  +:+ namedRef externalLinkRef (S "PD Controller")
+goal =
+  S ", whose goal is to provide a model of a"
+  +:+ phrase pidC
+  +:+ S "that can be used to tune the gain constants before deployment"
+
+introPara = foldlSent
+  [ background1
+  , background2
+  , background3
+  , S "This document describes the requirements of a program called"
+      +:+ longProgramName
+      +:+ shortProgramName
+      +:+ originalArtifactClause
+      +:+ goal
+  ]
 
 externalLinkRef :: Reference
 externalLinkRef = makeURI "PD_Controller_SRSLink" 

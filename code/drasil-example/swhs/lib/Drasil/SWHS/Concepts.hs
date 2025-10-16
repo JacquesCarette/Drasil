@@ -3,7 +3,6 @@ module Drasil.SWHS.Concepts where --all of this file is exported
 import Control.Lens ((^.))
 
 import Language.Drasil
-import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt,

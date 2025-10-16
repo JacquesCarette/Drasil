@@ -280,6 +280,6 @@ doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",
 
 surroundNPStruct :: String -> String -> NPStruct -> NPStruct
 surroundNPStruct l r (S s)       = S $ l ++ s ++ r
-surroundNPStruct l r (s1 :+: s2) = (surroundNPStruct l "" s1) :+: (surroundNPStruct "" r s2)
-surroundNPStruct l r (s1 :-: s2) = (surroundNPStruct l "" s1) :-: (surroundNPStruct "" r s2)
+surroundNPStruct l r (s1 :+: s2) = surroundNPStruct l "" s1 :+: surroundNPStruct "" r s2
+surroundNPStruct l r (s1 :-: s2) = surroundNPStruct l "" s1 :-: surroundNPStruct "" r s2
 surroundNPStruct l r (P p)       = S l :-: P p :-: S r

@@ -102,8 +102,8 @@ posVecGD = gdNoRefs (equationalModel' posVecQD) (getUnit position)
 
 -- TODO: this has gotten 'inlined' too much, need to re-use combinators
 posVecQD :: ModelQDef
-posVecQD = mkQuantDef' position (nounPhraseSent (D.S "Position vector as a function of time for two dimensions"
-  D.:+: D.S "motion under constant acceleration"))
+posVecQD = mkQuantDef' position (nounPhraseSent
+  (D.S "Position vector as a function of time for two dimensional motion under constant acceleration"))
   E.posVecExpr
 
 posVecDeriv :: Derivation
@@ -116,7 +116,7 @@ posVecDerivSent =
 -- Helper for making rectilinear derivations
 rectDeriv :: UnitalChunk -> UnitalChunk -> Sentence -> UnitalChunk -> TheoryModel -> Sentence
 rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
-  S "Assume we have", (D.toSent $ phraseNP (combineNINI rectilinear motion)) `S.ofA` S "particle",
+  S "Assume we have", D.toSent (phraseNP (combineNINI rectilinear motion)) `S.ofA` S "particle",
   sParen (S "of negligible size" `S.and_` S "shape" `sC` S "from" +:+ refS pointMass) :+:
   S ";" +:+. (S "that is" `sC` S "motion" `S.in_` S "a straight line"),
   (D.toSent (atStartNP (the c1)) `S.is` getScalar c1 `S.andThe` phrase c2 `S.is` getScalar c2 !.), motSent,

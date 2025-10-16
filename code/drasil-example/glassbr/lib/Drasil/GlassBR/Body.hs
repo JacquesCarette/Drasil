@@ -82,7 +82,7 @@ mkSRS = [TableOfContents,
      IOrgSec M.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
   StkhldrSec $
     StkhldrProg
-      [Client progName $ (D.toSent $ phraseNP (a_ company))
+      [Client progName $ D.toSent (phraseNP (a_ company))
         +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (name mCampidelli),
       Cstmr progName],
   GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
@@ -237,7 +237,7 @@ scope = foldlSent_ [S "determining the safety" `S.ofA` phrase glaSlab,
 {--Organization of Document--}
 
 orgOfDocIntroEnd :: Sentence
-orgOfDocIntroEnd = foldlSent_ [(D.toSent $ atStartNP' (the dataDefn)) `S.are`
+orgOfDocIntroEnd = foldlSent_ [D.toSent (atStartNP' (the dataDefn)) `S.are`
   S "used to support", plural definition `S.the_ofThe` S "different", plural model]
 
 {--STAKEHOLDERS--}
@@ -253,7 +253,7 @@ sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
-   `sC` (D.toSent (phraseNP (the user))), S "in this case. A rectangle represents the",
+   `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", (sParen (short progName) !.),
    S "Arrows are used to show the data flow between the" +:+ D.toSent (phraseNP (system
    `andIts` environment))]
@@ -262,13 +262,13 @@ sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
   [S "The interaction between the", D.toSent $ phraseNP (product_ `andThe` user),
    S "is through a user" +:+. phrase interface,
-   S "The responsibilities" `S.ofThe` (D.toSent $ phraseNP (user `andThe` system)),
+   S "The responsibilities" `S.ofThe` D.toSent (phraseNP (user `andThe` system)),
    S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
   D.toSent (phraseNP (glaSlab `and_` blastTy)) `sC` S "ensuring no errors" `S.inThe` plural datum +:+. S "entry",
-  S "Ensure that consistent units are used for" +:+. (D.toSent $ pluralNP (combineNINI input_ variable)),
+  S "Ensure that consistent units are used for" +:+. D.toSent (pluralNP (combineNINI input_ variable)),
   S "Ensure required" +:+
   namedRef (SRS.assumpt [] []) (D.toSent $ pluralNP (combineNINI software assumption))
     +:+ S "are appropriate for any particular" +:+
@@ -320,8 +320,8 @@ termsAndDesc = termDefnF' (Just (S "All of the" +:+ plural term_ +:+
 physSystParts :: [Sentence]
 physSystParts = [(D.toSent (atStartNP (the glaSlab))!.),
   foldlSent [(D.toSent (atStartNP (the ptOfExplsn)) !.), S "Where the", phrase bomb `sC`
-  S "or", (blast ^. defn) `sC` (S "is located" !.), (D.toSent $ atStartNP (the sD)) `S.isThe`
-  phrase distance, S "between the", phrase ptOfExplsn `S.and_` (D.toSent $ phraseNP (the glass))]]
+  S "or", (blast ^. defn) `sC` (S "is located" !.), D.toSent (atStartNP (the sD)) `S.isThe`
+  phrase distance, S "between the", phrase ptOfExplsn `S.and_` D.toSent (phraseNP (the glass))]]
 
 {--Goal Statements--}
 

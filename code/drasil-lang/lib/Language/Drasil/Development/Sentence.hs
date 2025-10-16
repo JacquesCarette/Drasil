@@ -42,7 +42,7 @@ short c = sentenceShort (c ^. uid)
 -- noun phrase (from an Idea)
 -- followed by its abbreviation in parentheses.
 introduceAbb :: Idea n => n -> S.Sentence
-introduceAbb n = (toSent $ NP.titleizeNP (n ^. term)) +:+ sParen (short n)
+introduceAbb n = toSent (NP.titleizeNP (n ^. term)) +:+ sParen (short n)
 
 -- | Helper function for getting the sentence case of a noun phrase from a
 -- 'NamedIdea'.

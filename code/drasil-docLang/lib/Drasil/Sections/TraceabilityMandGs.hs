@@ -93,7 +93,7 @@ traceMatRefinement = TraceConfig (mkUid "TraceMatRefvsRef") [plural dataDefn,
 -- | Records other requirements. Converts the 'System' into a 'TraceConfig'.
 traceMatOtherReq :: System -> TraceConfig
 traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
-  `S.and_` (D.toSent $ pluralNP (goalStmt `NC.onThePP` dataDefn)), plural thModel,
+  `S.and_` D.toSent (pluralNP (goalStmt `NC.onThePP` dataDefn)), plural thModel,
   plural genDefn, plural inModel] (x titleize' +:+ S "and Other" +:+
   titleize' item) [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs]
   [tvGoals, tvReqs] where

@@ -77,7 +77,7 @@ balWtrDesc = map foldlSent [
   [S "The", short ode, S "applies as long as the", phrase water `S.is` EmptyS `S.in_`
    phrase liquid, S "form" `sC` eS (realInterval tempW (Bounded (Exc, exactDbl 0) (Exc, exactDbl 100))),
    sParen (unwrap $ getUnit tempW), S "where", eS (exactDbl 0), sParen (unwrap $ getUnit tempW) `S.and_`
-   eS (exactDbl 100), sParen (unwrap $ getUnit tempW) `S.are` (D.toSent $ pluralNP (NP.the ((melting `and_`
+   eS (exactDbl 100), sParen (unwrap $ getUnit tempW) `S.are` D.toSent (pluralNP (NP.the ((melting `and_`
    boilPt) `of_PSNPNI` water))) `sC` S "respectively",
    fromSources [assumpWAL, assumpAPT]]]
 
@@ -332,7 +332,7 @@ htPCMNotes = map foldlSent [
    sParen (unwrap $ getUnit htCapSP) `S.andThe` phrase change `S.inThe`
    short phsChgMtrl, phrase temp, S "from the", phrase tempInit, sParen (unwrap $ getUnit tempInit)],
   [ch pcmE, S "for the melted", short phsChgMtrl, sParen (eS (sy tempPCM $> sy pcmInitMltE)),
-   S "is found using", refS sensHtE `S.for` (D.toSent (phraseNP (sensHeat `ofThe` liquid))),
+   S "is found using", refS sensHtE `S.for` D.toSent (phraseNP (sensHeat `ofThe` liquid)),
    short phsChgMtrl, S "plus the", phrase energy, S "when", phrase melting, S "starts" `sC`
    S "plus", (phrase energy +:+ S "required to melt all") `S.the_ofThe` short phsChgMtrl],
   [D.toSent (atStartNP (the energy)), S "required to melt all" `S.ofThe` short phsChgMtrl `S.is`

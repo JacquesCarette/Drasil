@@ -100,19 +100,19 @@ slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip,
 --FIXME: add (x,y) when we can index or make related unitals
 --FIXME: add constraints to coordinate unitals when that is possible (constraints currently in the Notes section of the crtSlpId IM instead)
 
-slopeDist = uq (constrained' (uc' "x_slope,i" ((xCoords ^. term) `NP.of_` (the slope))
+slopeDist = uq (constrained' (uc' "x_slope,i" (xCoords ^. term `NP.of_` the slope)
   (plural xCoord `S.of_` S "points on the soil slope")
   (sub (vec lX) lSlope) (Vect Real) metre) [] (exactDbl 0)) defaultUncrt
 
-slopeHght = uq (constrained' (uc' "y_slope,i" ((yCoords ^. term) `NP.of_` (the slope))
+slopeHght = uq (constrained' (uc' "y_slope,i" (yCoords ^. term `NP.of_` the slope)
   (plural yCoord `S.of_` S "points on the soil slope")
   (sub (vec lY) lSlope) (Vect Real) metre) [] (exactDbl 0)) defaultUncrt
 
-waterDist = uqc "x_wt,i" ((xCoords ^. term) `NP.of_` (the waterTable))
+waterDist = uqc "x_wt,i" ((xCoords ^. term) `NP.of_` the waterTable)
   "x-positions of the water table"
   (sub (vec lX) lWatTab) metre (Vect Real) [] (exactDbl 0) defaultUncrt
 
-waterHght = uqc "y_wt,i" ((yCoords ^. term) `NP.of_` (the waterTable))
+waterHght = uqc "y_wt,i" ((yCoords ^. term) `NP.of_` the waterTable)
   "heights of the water table"
   (sub (vec lY) lWatTab) metre (Vect Real) [] (exactDbl 0) defaultUncrt
 

@@ -109,7 +109,7 @@ of_ t1 t2 = NP.insertString "of" (t1 ^. term) (t2 ^. term)
 
 -- | Same as 'of_' but second argument is NP.
 of_NINP :: (NamedIdea c) => c -> NP -> NP
-of_NINP t1 t2 = NP.insertString "of" (t1 ^. term) t2
+of_NINP t1 = NP.insertString "of" (t1 ^. term)
 
 -- | Same as 'of_' but first argument is a `NounPhrase`
 -- and pluralNP case is @(pluralNP t1) "of" (phraseNP t2)@.

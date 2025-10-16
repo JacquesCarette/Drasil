@@ -47,15 +47,15 @@ projPos    = dccWDS "projPos"   (nounPhraseSP "1D position")
 
 landPos, launAngle, launSpeed, offset, targPos, flightDur :: ConceptChunk
 landPos = cc' landingPosNC
-  (foldlSent_ [(D.toSent $ phraseNP (the distance)) `S.fromThe` phrase launcher `S.toThe`
+  (foldlSent_ [D.toSent (phraseNP (the distance)) `S.fromThe` phrase launcher `S.toThe`
             S "final", D.toSent $ phraseNP (position `ofThe` projectile)])
 
 launAngle = cc' launchAngleNC
   (foldlSent_ [D.toSent $ phraseNP (the angle), S "between the", phrase launcher `S.and_` S "a straight line"
-             `S.fromThe` (D.toSent $ phraseNP (launcher `toThe` target))])
+             `S.fromThe` D.toSent (phraseNP (launcher `toThe` target))])
 
-launSpeed = cc' launchSpeedNC ((D.toSent $ phraseNP (iSpeed `the_ofThe` projectile)) +:+ S "when launched")
-offset = cc' offsetNC (S "the offset between the" +:+ (D.toSent $ phraseNP (targetPosNC `andThe` landingPosNC)))
+launSpeed = cc' launchSpeedNC (D.toSent (phraseNP (iSpeed `the_ofThe` projectile)) +:+ S "when launched")
+offset = cc' offsetNC (S "the offset between the" +:+ D.toSent (phraseNP (targetPosNC `andThe` landingPosNC)))
 targPos = cc' targetPosNC (D.toSent (phraseNP (the distance)) `S.fromThe` D.toSent (phraseNP (launcher `toThe` target)))
 flightDur = cc' flightDurNC (foldlSent_ [D.toSent $ phraseNP (the time), S "when the", phrase projectile, S "lands"])
 

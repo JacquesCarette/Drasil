@@ -108,7 +108,7 @@ mkSRS = [TableOfContents,
 
 justification, scope :: Sentence
 justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:+.
-  (D.toSent $ phraseNP (problem `in_` physics)), S "Therefore" `sC` S "it is useful to have a",
+  D.toSent (phraseNP (problem `in_` physics)), S "Therefore" `sC` S "it is useful to have a",
   phrase program, S "to solve and model these types of" +:+. plural problem,
   S "Common", plural example `S.of_` D.toSent (phraseNP (combineNINI projectile motion)),
   S "include" +:+. foldlList Comma List projectileExamples,
@@ -144,7 +144,7 @@ purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits it
 
 motivation :: Sentence
 motivation = foldlSent_ [phrase projectile, phrase motion, S "is a common" +:+
-  (D.toSent $ phraseNP (problem `in_` physics))]
+  D.toSent (phraseNP (problem `in_` physics))]
 
 background :: Sentence
 background = foldlSent_ [S "Common examples of", phrase projectile, phrase motion, S "include",
@@ -212,7 +212,7 @@ sysCtxIntro = foldlSP
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol [S "The interaction between the", D.toSent $ phraseNP (product_
    `andThe` user), S "is through an application programming" +:+.
-   phrase interface, S "responsibilities" `S.the_ofTheC` (D.toSent $ phraseNP (user
+   phrase interface, S "responsibilities" `S.the_ofTheC` D.toSent (phraseNP (user
    `andThe` system)), S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]

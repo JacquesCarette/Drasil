@@ -191,32 +191,32 @@ xDist = dccWDS "xDist" (distance `inThe` xDir) (titleize distance `S.inThe` phra
 yDist = dccWDS "yDist" (distance `inThe` yDir) (titleize distance `S.inThe` phrase yDir)
 
 iPos = dccWDS "iPos" (cn "initial position") (S "The" +:+ phrase position +:+ S "at the body's initial point")
-xPos = dccWDS "xPos" (xComp `of_` position) (S "The" +:+ (NP $ xComp `of_` position))
-yPos = dccWDS "yPos" (yComp `of_` position) (S "The" +:+ (NP $ yComp `of_` position))
+xPos = dccWDS "xPos" (xComp `of_` position) (S "The" +:+ NP (xComp `of_` position))
+yPos = dccWDS "yPos" (yComp `of_` position) (S "The" +:+ NP (yComp `of_` position))
 
-ixPos = dccWDS "ixPos" (xComp `of_` iPos) (S "The" +:+ (NP $ xComp `of_` iPos))
-iyPos = dccWDS "iyPos" (yComp `of_` iPos) (S "The" +:+ (NP $ yComp `of_` iPos))
+ixPos = dccWDS "ixPos" (xComp `of_` iPos) (S "The" +:+ NP (xComp `of_` iPos))
+iyPos = dccWDS "iyPos" (yComp `of_` iPos) (S "The" +:+ NP (yComp `of_` iPos))
 
 fSpeed = dccWDS "fSpeed" (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
 iSpeed = dccWDS "iSpeed" (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
 
-ixSpeed = dccWDS "ixSpeed" (xComp `of_` iSpeed) (S "The" +:+ (NP $ xComp `of_` iSpeed))
-iySpeed = dccWDS "iySpeed" (yComp `of_` iSpeed) (S "The" +:+ (NP $ yComp `of_` iSpeed))
+ixSpeed = dccWDS "ixSpeed" (xComp `of_` iSpeed) (S "The" +:+ NP (xComp `of_` iSpeed))
+iySpeed = dccWDS "iySpeed" (yComp `of_` iSpeed) (S "The" +:+ NP (yComp `of_` iSpeed))
 
 fVel = dccWDS "fVel" (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
 iVel = dccWDS "iVel" (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
-xVel = dccWDS "xVel" (xComp `of_` velocity) (S "The" +:+ (NP $ xComp `of_` velocity))
-yVel = dccWDS "yVel" (yComp `of_` velocity) (S "The" +:+ (NP $ yComp `of_` velocity))
+xVel = dccWDS "xVel" (xComp `of_` velocity) (S "The" +:+ NP (xComp `of_` velocity))
+yVel = dccWDS "yVel" (yComp `of_` velocity) (S "The" +:+ NP (yComp `of_` velocity))
 
-ixVel = dccWDS "ixVel" (xComp `of_` iVel) (S "The" +:+ (NP $ xComp `of_` iVel))
-iyVel = dccWDS "iyVel" (yComp `of_` iVel) (S "The" +:+ (NP $ yComp `of_` iVel))
+ixVel = dccWDS "ixVel" (xComp `of_` iVel) (S "The" +:+ NP (xComp `of_` iVel))
+iyVel = dccWDS "iyVel" (yComp `of_` iVel) (S "The" +:+ NP (yComp `of_` iVel))
 
-xAccel = dccWDS "xScalAcc" (xComp `of_` acceleration) (S "The" +:+ (NP $ xComp `of_` acceleration))
-yAccel = dccWDS "yScalAcc" (yComp `of_` acceleration) (S "The" +:+ (NP $ yComp `of_` acceleration))
+xAccel = dccWDS "xScalAcc" (xComp `of_` acceleration) (S "The" +:+ NP (xComp `of_` acceleration))
+yAccel = dccWDS "yScalAcc" (yComp `of_` acceleration) (S "The" +:+ NP (yComp `of_` acceleration))
 
 constAccelV = dccWDS "constAccelV" (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
-xConstAccel = dccWDS "xConstAccel" (xComp `of_` constAccel) (S "The" +:+ (NP $ xComp `of_` constAccel))
-yConstAccel = dccWDS "yConstAccel" (yComp `of_` constAccel) (S "The" +:+ (NP $ yComp `of_` constAccel))
+xConstAccel = dccWDS "xConstAccel" (xComp `of_` constAccel) (S "The" +:+ NP (xComp `of_` constAccel))
+yConstAccel = dccWDS "yConstAccel" (yComp `of_` constAccel) (S "The" +:+ NP (yComp `of_` constAccel))
 
 
 --FIXME: COMBINATION HACK (for all below)

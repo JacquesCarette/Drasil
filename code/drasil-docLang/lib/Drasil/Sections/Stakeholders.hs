@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Documentation (client, customer, endUser, interest,
 stakeholderIntro :: Contents
 stakeholderIntro = foldlSP [S "This", phrase section_,
             S "describes the" +: plural stakeholder, S "the people who have an",
-            phrase interest `S.in_` (D.toSent $ phraseNP (the product_))]
+            phrase interest `S.in_` D.toSent (phraseNP (the product_))]
 
 -- | Constructor for making a client. Takes in the system name and details regarding the client for the specific program.
 tClientF :: (Idea a) => a -> Sentence ->  Section

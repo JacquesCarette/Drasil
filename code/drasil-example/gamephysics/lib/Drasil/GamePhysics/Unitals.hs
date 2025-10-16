@@ -195,7 +195,7 @@ angAccj = uc (dccWDS "angAccj" (nounPhrase'' n n CapWords CapWords) (phrase QP.a
                (sub (eqSymb QP.angularAccel) lJ) Real angAccelU
   where
     n :: D.NPStruct
-    n = D.S "j-th body's" D.:+: (phraseNP $ QP.angularAccel ^. term)
+    n = D.S "j-th body's" D.:+: phraseNP (QP.angularAccel ^. term)
 
 velj = uc (dccWDS "velj" (compoundPhrase' (QP.velocity ^. term)
                (cn "of the j-th body")) (phrase QP.velocity))

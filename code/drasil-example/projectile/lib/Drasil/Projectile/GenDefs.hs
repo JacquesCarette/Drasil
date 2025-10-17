@@ -103,7 +103,7 @@ posVecGD = gdNoRefs (equationalModel' posVecQD) (getUnit position)
 -- TODO: this has gotten 'inlined' too much, need to re-use combinators
 posVecQD :: ModelQDef
 posVecQD = mkQuantDef' position (nounPhraseSent
-  (D.S "Position vector as a function of time for two dimensional motion under constant acceleration"))
+  (D.S "Position vector as a function of time for two-dimensional motion under constant acceleration"))
   E.posVecExpr
 
 posVecDeriv :: Derivation

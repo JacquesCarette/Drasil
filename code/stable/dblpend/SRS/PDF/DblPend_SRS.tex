@@ -190,7 +190,7 @@ Reviewers of this documentation should have an understanding of undergraduate le
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
 
-The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. This document demonstrates a novel approach to modeling the double pendulum. The traditional vector-based approach is used to represent physical quantities. Section 4.2.3 presents general definitions that showcase how velocity, acceleration, and force are expressed using standard vector operations...
+The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}.
 
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -1348,20 +1348,20 @@ RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}, \hyperref[IM:calOfAngle1]{IM:
 By solving multivector force equations \hyperref[GD:forceVector1]{GD:forceVector1} and \hyperref[GD:forceVector2]{GD:forceVector2} for ${\symbf{F}_{1}}$ and ${\symbf{F}_{2}}$ , we can get equations 1 and 2:
 
 \begin{displaymath}
-\resizeExpression{{m_{1}}\,{\symbf{a}_{1}}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)}
+\resizeExpression{{m_{1}} {\symbf{a}_{1}}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)}
 \end{displaymath}
 
 \begin{displaymath}
-\resizeExpression{{m_{1}}\,{\symbf{a}_{1}}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{m_{1}}\,g}
+\resizeExpression{{m_{1}} {\symbf{a}_{1}}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{m_{1}} g}
 \end{displaymath}
 Multiply the equation 1 by $\cos\left({θ_{1}}\right)$ and the equation 2 by $\sin\left({θ_{1}}\right)$ and rearrange to get:
 
 \begin{displaymath}
-\resizeExpression{{m_{2}}\,{\symbf{a}_{2}}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)}
+\resizeExpression{{m_{2}} {\symbf{a}_{2}}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)}
 \end{displaymath}
 
 \begin{displaymath}
-\resizeExpression{{m_{2}}\,{\symbf{a}_{2}}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,g}
+\resizeExpression{{m_{2}} {\symbf{a}_{2}}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} g}
 \end{displaymath}
 This leads to the equation 3
 

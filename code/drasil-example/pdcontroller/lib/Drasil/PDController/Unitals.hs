@@ -2,17 +2,12 @@ module Drasil.PDController.Unitals where
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (second)
-import Data.Drasil.Quantities.Physics (vecDim)
 import Language.Drasil
-import Language.Drasil.Space (ClifKind(..))
+import Language.Drasil.Space (realVect, vecDim)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.PDController.Concepts
 import Control.Lens ((^.))
-
--- | Helper function to create Clifford vector spaces of a given dimension
-realVect :: Dimension -> Space
-realVect d = ClifS d Vector Real
 
 syms, symFS, symFt, syminvLaplace, symKd, symKp,
        symYT, symYS, symYrT, symYrS, symET, symES, symPS, symDS, symHS,

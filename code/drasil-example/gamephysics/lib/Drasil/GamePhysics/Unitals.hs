@@ -24,10 +24,6 @@ import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU,
 import Control.Lens((^.))
 import Data.Drasil.Constraints (gtZeroConstr)
 
--- | Helper function to create Clifford vector spaces of a given dimension
-realVect :: Dimension -> Space
-realVect d = ClifS d Vector Real
-
 defSymbols :: [DefinedQuantityDict]
 defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints
 

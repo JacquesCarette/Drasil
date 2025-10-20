@@ -3,7 +3,6 @@ module Data.Drasil.Quantities.Physics where
 
 import Language.Drasil
 import Language.Drasil.Display
-import qualified Language.Drasil.Space as S
 import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   angDisp, angVelo, chgInVelocity, constAccel, constAccelV, displacement,
@@ -18,6 +17,8 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second, hertz)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
+import Language.Drasil.Space (realVect, vecDim)
+
 
 restitutionCoef :: DefinedQuantityDict
 restitutionCoef = dqdNoUnit CP.restitutionCoef (sub cC (label "R")) Real
@@ -45,13 +46,6 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, yPos, 
   yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, 
   period, frequency, chgMomentum :: UnitalChunk
-
-vecDim :: S.Dimension
-vecDim = S.Fixed 2
-
--- | Helper function to create Clifford vector spaces of a given dimension
-realVect :: S.Dimension -> Space
-realVect d = S.ClifS d S.Vector Real
 
 acceleration           = uc CP.acceleration           (Concat [vec lA, label "(", lT, label ")"])(realVect vecDim)                                    accelU
 angularAccel           = uc CP.angAccel               lAlpha                                      Real                                                angAccelU

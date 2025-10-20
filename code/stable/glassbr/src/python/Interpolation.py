@@ -95,9 +95,9 @@ def interpY(filename, x, z):
     
     x_matrix = []
     y_matrix = []
-    z_vect3DSor = []
-    ReadTable.read_table(filename, z_vect3DSor, x_matrix, y_matrix)
-    i = find(z_vect3DSor, z)
+    z_vector = []
+    ReadTable.read_table(filename, z_vector, x_matrix, y_matrix)
+    i = find(z_vector, z)
     outfile = open("log.txt", "a")
     print("var 'i' assigned ", end="", file=outfile)
     print(i, end="", file=outfile)
@@ -154,7 +154,7 @@ def interpY(filename, x, z):
     print(y_2, end="", file=outfile)
     print(" in module Interpolation", file=outfile)
     outfile.close()
-    return lin_interp(z_vect3DSor[i], y_1, z_vect3DSor[i + 1], y_2, z)
+    return lin_interp(z_vector[i], y_1, z_vector[i + 1], y_2, z)
 
 ## \brief Linearly interpolates a z value at given x and y values
 # \param filename name of file with x y and z data
@@ -177,9 +177,9 @@ def interpZ(filename, x, y):
     
     x_matrix = []
     y_matrix = []
-    z_vect3DSor = []
-    ReadTable.read_table(filename, z_vect3DSor, x_matrix, y_matrix)
-    for i in range(0, len(z_vect3DSor) - 1, 1):
+    z_vector = []
+    ReadTable.read_table(filename, z_vector, x_matrix, y_matrix)
+    for i in range(0, len(z_vector) - 1, 1):
         x_z_1 = extractColumn(x_matrix, i)
         outfile = open("log.txt", "a")
         print("var 'x_z_1' assigned ", end="", file=outfile)
@@ -232,5 +232,5 @@ def interpZ(filename, x, y):
         print(" in module Interpolation", file=outfile)
         outfile.close()
         if y_1 <= y and y <= y_2:
-            return lin_interp(y_1, z_vect3DSor[i], y_2, z_vect3DSor[i + 1], y)
+            return lin_interp(y_1, z_vector[i], y_2, z_vector[i + 1], y)
     raise Exception("Interpolation of z failed")

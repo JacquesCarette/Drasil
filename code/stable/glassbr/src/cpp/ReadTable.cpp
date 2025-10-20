@@ -11,21 +11,21 @@ using std::ofstream;
 using std::string;
 using std::vector;
 
-void read_table(string filename, vector<double> &z_vect3DSor, vector<vector<double>> &x_matrix, vector<vector<double>> &y_matrix) {
+void read_table(string filename, vector<double> &z_vector, vector<vector<double>> &x_matrix, vector<vector<double>> &y_matrix) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function read_table called with inputs: {" << std::endl;
     outfile << "  filename = ";
     outfile << filename;
     outfile << ", " << std::endl;
-    outfile << "  z_vect3DSor = ";
+    outfile << "  z_vector = ";
     outfile << "[";
-    for (int list_i1 = 0; list_i1 < (int)(z_vect3DSor.size()) - 1; list_i1++) {
-        outfile << z_vect3DSor.at(list_i1);
+    for (int list_i1 = 0; list_i1 < (int)(z_vector.size()) - 1; list_i1++) {
+        outfile << z_vector.at(list_i1);
         outfile << ", ";
     }
-    if ((int)(z_vect3DSor.size()) > 0) {
-        outfile << z_vect3DSor.at((int)(z_vect3DSor.size()) - 1);
+    if ((int)(z_vector.size()) > 0) {
+        outfile << z_vector.at((int)(z_vector.size()) - 1);
     }
     outfile << "]";
     outfile << ", " << std::endl;
@@ -99,17 +99,17 @@ void read_table(string filename, vector<double> &z_vect3DSor, vector<vector<doub
         linetokens.push_back(word);
     }
     for (int i = 0; i < (int)(linetokens.size()) / 1; i += 1) {
-        z_vect3DSor.push_back(std::stod(linetokens.at(i * 1 + 0)));
+        z_vector.push_back(std::stod(linetokens.at(i * 1 + 0)));
     }
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'z_vect3DSor' assigned ";
+    outfile << "var 'z_vector' assigned ";
     outfile << "[";
-    for (int list_i1 = 0; list_i1 < (int)(z_vect3DSor.size()) - 1; list_i1++) {
-        outfile << z_vect3DSor.at(list_i1);
+    for (int list_i1 = 0; list_i1 < (int)(z_vector.size()) - 1; list_i1++) {
+        outfile << z_vector.at(list_i1);
         outfile << ", ";
     }
-    if ((int)(z_vect3DSor.size()) > 0) {
-        outfile << z_vect3DSor.at((int)(z_vect3DSor.size()) - 1);
+    if ((int)(z_vector.size()) > 0) {
+        outfile << z_vector.at((int)(z_vector.size()) - 1);
     }
     outfile << "]";
     outfile << " in module ReadTable" << std::endl;

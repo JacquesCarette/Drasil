@@ -10,8 +10,8 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({\boldsymbol{a}\_{1}}\\)          |Acceleration of the first object                 |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\({\boldsymbol{a}\_{2}}\\)          |Acceleration of the second object                |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{F}\\)                 |Force                                            |\\({\text{N}}\\)                     |
-|\\({\boldsymbol{f}\_{1}}\\)          |Force of the first object                        |\\({\text{N}}\\)                     |
-|\\({\boldsymbol{f}\_{2}}\\)          |Force of the second object                       |\\({\text{N}}\\)                     |
+|\\({\boldsymbol{F}\_{1}}\\)          |Force of the first object                        |\\({\text{N}}\\)                     |
+|\\({\boldsymbol{F}\_{2}}\\)          |Force of the second object                       |\\({\text{N}}\\)                     |
 |\\(g\\)                              |Magnitude of gravitational acceleration          |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{g}\\)                 |Gravitational acceleration                       |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{\hat{i}}\\)           |Unit vector                                      |--                                   |
@@ -23,9 +23,9 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\(\boldsymbol{p}\text{(}t\text{)}\\)|Position                                         |\\({\text{m}}\\)                     |
 |\\({\boldsymbol{p}\_{1}}\\)          |Position of the first object                     |\\({\text{m}}\\)                     |
 |\\({\boldsymbol{p}\_{2}}\\)          |Position of the second object                    |\\({\text{m}}\\)                     |
-|\\({T\_{1}}\\)                       |Tension of the first rod                         |\\({\text{N}}\\)                     |
-|\\({T\_{2}}\\)                       |Tension of the second rod                        |\\({\text{N}}\\)                     |
 |\\(\boldsymbol{T}\\)                 |Tension                                          |\\({\text{N}}\\)                     |
+|\\({\boldsymbol{T}\_{1}}\\)          |The magnitude of the tension in the first rod    |\\({\text{N}}\\)                     |
+|\\({\boldsymbol{T}\_{2}}\\)          |The magnitude of the tension in the second rod   |\\({\text{N}}\\)                     |
 |\\(t\\)                              |Time                                             |\\({\text{s}}\\)                     |
 |\\(\boldsymbol{v}\text{(}t\text{)}\\)|Velocity                                         |\\(\frac{\text{m}}{\text{s}}\\)      |
 |\\({\boldsymbol{v}\_{1}}\\)          |Velocity of the first object                     |\\(\frac{\text{m}}{\text{s}}\\)      |

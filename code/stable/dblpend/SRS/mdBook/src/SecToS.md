@@ -24,8 +24,8 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({\boldsymbol{p}\_{1}}\\)          |Position of the first object                     |\\({\text{m}}\\)                     |
 |\\({\boldsymbol{p}\_{2}}\\)          |Position of the second object                    |\\({\text{m}}\\)                     |
 |\\(\boldsymbol{T}\\)                 |Tension                                          |\\({\text{N}}\\)                     |
-|\\({\boldsymbol{T}\_{1}}\\)          |The magnitude of the tension in the first rod    |\\({\text{N}}\\)                     |
-|\\({\boldsymbol{T}\_{2}}\\)          |The magnitude of the tension in the second rod   |\\({\text{N}}\\)                     |
+|\\({\boldsymbol{T}\_{1}}\\)          |Magnitude of the tension in the first rod        |\\({\text{N}}\\)                     |
+|\\({\boldsymbol{T}\_{2}}\\)          |Magnitude of the tension in the second rod       |\\({\text{N}}\\)                     |
 |\\(t\\)                              |Time                                             |\\({\text{s}}\\)                     |
 |\\(\boldsymbol{v}\text{(}t\text{)}\\)|Velocity                                         |\\(\frac{\text{m}}{\text{s}}\\)      |
 |\\({\boldsymbol{v}\_{1}}\\)          |Velocity of the first object                     |\\(\frac{\text{m}}{\text{s}}\\)      |

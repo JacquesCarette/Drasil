@@ -21,7 +21,7 @@
   * [Printing Information](Printing-Information-Guide)
   * [Sub-packages](SubPackages)
   * [Folders](Folder-layout)
-    * [GOOL/GProc Overview](GOOL-GProc%20Overview.md)
+    * [GOOL/GProc Overview](GOOL-GProc%20Overview)
   * [Quantifying Productivity and Ease of Use](Quantifying-Productivity-and-Ease-of-Use)
 * Design
   * [Attributes and Chunks](Attributes-and-Chunks)

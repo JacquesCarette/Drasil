@@ -73,13 +73,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-  IOrgSec inModel (SRS.inModel [] []) (foldlSent [
-   S "This document demonstrates a novel approach to modeling the double pendulum.",
-   EmptyS,
-   S "The traditional vector-based approach is used to represent physical quantities.",
-   S "Section 4.2.3 presents", plural genDefn, S "that showcase how velocity, acceleration, and force",
-   S "are expressed using standard vector operations."
-       ])],
+       IOrgSec inModel (SRS.inModel [] []) EmptyS],
   GSDSec $ 
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],

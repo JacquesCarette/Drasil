@@ -17,7 +17,8 @@ code = codeSpec fullSI choices []
 
 choices :: Choices
 choices = defaultChoices {
-  lang = [Python, Cpp, CSharp, Java],
+  -- lang = [Python, Cpp, CSharp, Java],
+  lang = [Python],
   architecture = makeArchit Modular Program,
   dataInfo = makeData Unbundled (Store Bundled) Const,
   optFeats = makeOptFeats

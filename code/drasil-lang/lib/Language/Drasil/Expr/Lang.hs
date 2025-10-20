@@ -9,16 +9,41 @@ import Drasil.Database.UID (UID)
 
 import Language.Drasil.Literal.Class (LiteralC (..))
 import Language.Drasil.Literal.Lang (Literal (..))
-import Language.Drasil.Space (DiscreteDomainDesc, RealInterval, Space,
-  assertVector, assertNumericVector, assertNumeric, assertFunction,
-  assertNonNatNumVector, assertRealVector, assertEquivNumeric, assertNonNatNumeric,
-  assertIndexLike, assertSet, assertReal, assertBoolean)
+import Language.Drasil.Space (DiscreteDomainDesc, RealInterval, Space)
 import qualified Language.Drasil.Space as S
 import Language.Drasil.WellTyped
 
 import Data.Either (fromRight, rights)
 import qualified Data.Foldable as NE
 import Data.List (nub)
+
+import Numeric.Natural (Natural)
+import Data.Map.Ordered (OrderedMap)
+
+import qualified Data.Map.Ordered as OM
+
+-- * Helper Functions for Type Checking
+
+-- | Helper function to check that all expressions have the same expected type
+allOfType :: TypingContext Space -> [Expr] -> Space -> Space -> String -> Either TypeError Space
+allOfType cxt exs expected returnType errorMsg
+  | null exs = Right returnType
+  | otherwise = 
+    let types = map (infer cxt) exs
+        successes = rights types
+    in if all (== expected) successes && length successes == length types
+        then Right returnType
+        else Left $ errorMsg ++ " Expected " ++ show expected ++ " but found: " ++ show types
+
+-- | Helper function to assert that a space is a function and extract its parameters and return type
+assertFunction :: Space -> (String -> String) -> Either TypeError ([Space], Space)
+assertFunction (S.Function params ret) _ = Right (NE.toList params, ret)
+assertFunction space mkError = Left $ mkError (show space)
+
+-- | Helper function to assert that a space is Real
+assertReal :: Space -> (String -> String) -> Either TypeError ()
+assertReal S.Real _ = Right ()
+assertReal space mkError = Left $ mkError (show space)
 
 -- * Expression Types
 
@@ -52,16 +77,20 @@ data LABinOp = Index | IndexOf
 data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
--- | @Vector x Vector -> Vector@ binary operations (cross product, addition, subtraction).
-data VVVBinOp = Cross | VAdd | VSub
+-- | @Clif x Clif -> Clif@ binary operations (cross product, addition, subtraction).
+data CCCBinOp = Cross | CAdd | CSub | WedgeProd | GeometricProd
   deriving Eq
 
--- | @Vector x Vector -> Number@ binary operations (dot product).
-data VVNBinOp = Dot
+-- | @Clif x Clif -> Number@ binary operations (dot product).
+data CCNBinOp = Dot
   deriving Eq
 
--- | @Number x Vector -> Vector@ binary operations (scaling).
-data NVVBinOp = Scale
+-- | @Number x Clif -> Clif@ binary operations (scaling).
+data NCCBinOp = Scale
+  deriving Eq
+
+-- | @Natural x Clif -> Clif@ binary operations (grade selection).
+data NatCCBinOp = GradeSelect
   deriving Eq
 
 -- | Element + Set -> Set
@@ -92,12 +121,12 @@ data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
 data UFuncB = Not
   deriving Eq
 
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
+-- | @Clif -> Clif@ operators.
+data UFuncCC = NegC
   deriving Eq
 
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
+-- | @Clif -> Number@ operators (norm, dim, grade).
+data UFuncCN = Norm | Dim | Grade
   deriving Eq
 
 -- | For case expressions (either complete or incomplete).
@@ -135,10 +164,10 @@ data Expr where
   UnaryOp       :: UFunc -> Expr -> Expr
   -- | Unary operation for @Bool -> Bool@ operations.
   UnaryOpB      :: UFuncB -> Expr -> Expr
-  -- | Unary operation for @Vector -> Vector@ operations.
-  UnaryOpVV     :: UFuncVV -> Expr -> Expr
-  -- | Unary operation for @Vector -> Number@ operations.
-  UnaryOpVN     :: UFuncVN -> Expr -> Expr
+  -- | Unary operation for @Clif -> Clif@ operations.
+  UnaryOpCC     :: UFuncCC -> Expr -> Expr
+  -- | Unary operation for @Clif -> Clif@ operations.
+  UnaryOpCN     :: UFuncCN -> Expr -> Expr
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> Expr -> Expr -> Expr
@@ -150,12 +179,14 @@ data Expr where
   LABinaryOp    :: LABinOp -> Expr -> Expr -> Expr
   -- | Binary operator for ordering expressions (less than, greater than, etc.).
   OrdBinaryOp   :: OrdBinOp -> Expr -> Expr -> Expr
-  -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
-  VVVBinaryOp   :: VVVBinOp -> Expr -> Expr -> Expr
-  -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
-  VVNBinaryOp   :: VVNBinOp -> Expr -> Expr -> Expr
-  -- | Binary operator for @Expr x Vector -> Vector@ operations (scaling).
-  NVVBinaryOp   :: NVVBinOp -> Expr -> Expr -> Expr
+  -- | Binary operator for @Clif x Clif -> Clif@ operations (cross product).
+  CCCBinaryOp   :: CCCBinOp -> Expr -> Expr -> Expr
+  -- | Binary operator for @Clif x Clif -> Number@ operations (dot product).
+  CCNBinaryOp   :: CCNBinOp -> Expr -> Expr -> Expr
+  -- | Binary operator for @Expr x Clif -> Clif@ operations (scaling).
+  NCCBinaryOp   :: NCCBinOp -> Expr -> Expr -> Expr
+  -- | Binary operator for @Natural x Clif -> Clif@ operations (grade selection).
+  NatCCBinaryOp :: NatCCBinOp -> Natural -> Expr -> Expr
   -- | Set operator for Element + Set -> Set
   ESSBinaryOp :: ESSBinOp -> Expr -> Expr -> Expr
   -- | Set operator for Element + Set -> Bool
@@ -166,6 +197,84 @@ data Expr where
   Operator :: AssocArithOper -> DiscreteDomainDesc Expr Expr -> Expr -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval Expr Expr -> Expr
+  -- | A clif of arbitrary dimension. The Maybe [Expr] determines the
+  --   components of the clif projected in a basis. If this is `Nothing`,
+  --   then the clif has not been projected into a particular basis. 
+  --   If this `isJust`, the number of components must be 2 ^ d where
+  --   d is the dimension of the clifford space.
+  -- All Clifs are currently assumed to be embedded in a space defined by spacelike 
+  -- basis vectors (e.g. Euclidean space) for now.
+  Clif     :: S.Dimension -> BasisBlades Expr -> Expr
+  -- | Indexing into an expression (clifs only for now)
+  -- The list of indexes correspond to the index in each grade
+  -- SubSup determines if it is a superscript or a subscript
+  -- The Expression must be a clif with the right grade and where the indexes are ≤ the dimension
+--   IndexC   :: [Index] -> SubSup -> Expr -> Expr
+
+-- -- | An index will use the same definition as dimension for now, renamed for clarity
+-- type Index = S.Dimension
+
+-- -- | Whether an index is a superscript or a subscript
+-- data SubSup = 
+--   Super | Sub
+--   deriving (Eq)
+
+-- TODO: Move this -- where?
+-- | Basis Keys are represented by binary numbers (per Roefls, 2025)
+--   Basis elements are ordered by grade, then sorted lexiographically
+--   Y means basis vector is included
+--   N means basis vector is not included
+--   C is for concatenation
+--   E is for empty
+--   Example: in dimension 3, the basis vectors are e0, e1, and e2
+--    Here are some examples for `BasisKey`:
+--     - e0     : N (N (Y E))
+--     - e2     : Y (N (N E))
+--     - e1e2   : Y (Y (N E))
+--     - 1      : N (N (N E))
+--     - e0e1e2 : Y (Y (Y E))
+data BasisKey =
+    Y BasisKey
+  | N BasisKey
+  | E
+  deriving (Eq, Ord, Show)
+
+-- | A mapping from basis blades to their expressions
+type BasisBlades e = OrderedMap BasisKey e
+
+-- | A scalar key. E.g., for d=2: `scalarKey 2 = N (N E)`
+scalarKey :: Natural -> BasisKey
+scalarKey = elemKey []
+
+-- | A vector key. E.g., for d=2, basis element e1: `vectorKey 1 2 = Y (N E)`
+vectorKey :: Natural -> Natural -> BasisKey
+vectorKey n = elemKey [n]
+
+-- | A bivector key. E.g., for d=3, basis element e0e1: `bivectorKey 0 1 3 = N (Y (Y E))`
+bivectorKey :: Natural -> Natural -> Natural -> BasisKey
+bivectorKey m n = elemKey [m,n]
+
+-- | A bivector key. E.g., for d=3, basis element e0e1: `bivectorKey 0 1 2 3 = Y (Y (Y E))`
+trivectorKey :: Natural -> Natural -> Natural -> Natural -> BasisKey
+trivectorKey m n p = elemKey [m,n,p]
+
+-- | Create a general element key. E.g. for d=4, basis element e0e2e3: `elemKey [0,2,3] 4 = (Y (Y (N (Y E))))`
+--   This function does not care about the order or cardinlaity of the objects in the Foldable 
+--   value. That is, it is treated as "set-like". Consider using Data.Set if you're interested 
+--   in enforcing these properties yourself.
+--   If you give it numbers that are "out of scope", i.e. n >= d, or duplicates, they will be ignored
+elemKey :: Foldable t => t Natural -> Natural -> BasisKey
+elemKey _  0 = E
+elemKey ns d
+  | d - 1 `elem` ns = Y (elemKey ns $ d-1)
+  | otherwise   = N (elemKey ns $ d-1)
+
+
+-- | The basis in which to project clifs
+-- TODO: Generalize this to other cliff spaces
+data Basis where
+  -- | ℝⁿ
+  Rn :: Natural -> Basis
 
 -- | Expressions are equal if their constructors and contents are equal.
 instance Eq Expr where
@@ -177,18 +286,20 @@ instance Eq Expr where
   Case a b            == Case c d            =   a == c && b == d
   UnaryOp a b         == UnaryOp c d         =   a == c && b == d
   UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
-  UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
-  UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
+  UnaryOpCC a b       == UnaryOpCC c d       =   a == c && b == d
+  UnaryOpCN a b       == UnaryOpCN c d       =   a == c && b == d
   ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
   BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
   EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
   OrdBinaryOp o a b   == OrdBinaryOp p c d   =   o == p && a == c && b == d
   LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
-  VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
-  VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
-  NVVBinaryOp o a b   == NVVBinaryOp p c d   =   o == p && a == c && b == d
+  CCCBinaryOp o a b   == CCCBinaryOp p c d   =   o == p && a == c && b == d
+  CCNBinaryOp o a b   == CCNBinaryOp p c d   =   o == p && a == c && b == d
+  NCCBinaryOp o a b   == NCCBinaryOp p c d   =   o == p && a == c && b == d
   ESSBinaryOp o a b   == ESSBinaryOp p c d   =   o == p && a == c && b == d
   ESBBinaryOp o a b   == ESBBinaryOp p c d   =   o == p && a == c && b == d
+  Clif a b            == Clif c d            =             a == c && b == d
+  -- IndexC a b c        == IndexC d e f        =   a == d && b == e && c == f
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
 
@@ -224,10 +335,12 @@ instance Eq Expr where
 class Pretty p where
   pretty :: p -> String
 
-instance Pretty VVVBinOp where
-  pretty Cross = "cross product"
-  pretty VAdd  = "vector addition"
-  pretty VSub  = "vector subtraction"
+instance Pretty CCCBinOp where
+  pretty Cross         = "cross product"
+  pretty CAdd          = "clif addition"
+  pretty CSub          = "clif subtraction"
+  pretty WedgeProd     = "clif wedge"
+  pretty GeometricProd = "clif geometric product"
 
 instance LiteralC Expr where
   int = Lit . int
@@ -238,24 +351,21 @@ instance LiteralC Expr where
 
 
 -- helper function for typechecking to help reduce duplication
-vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either TypeError Space
-vvvInfer ctx op l r = do
-  lt <- infer ctx l
-  rt <- infer ctx r
-
-  let msg dir sp = "Vector operation " ++ pretty op ++ " expects numeric vectors, but found `" ++ sp ++ "` on the " ++ dir ++ "-hand side."
-
-  lsp <- assertNumericVector lt $ msg "left"
-  rsp <- assertNumericVector rt $ msg "right"
-
-  if op == VSub then
-    assertNonNatNumeric lsp $ \sp ->
-      "Vector subtraction expects both operands to be vectors of non-natural numbers. Received `" ++ sp ++ "`."
-  else Right ()
-
-  lsp ~== rsp $ \lt' rt' -> "Vector " ++ pretty op ++ " expects both operands to be of the same numeric type. Received `" ++ lt' ++ "` and `" ++ rt' ++ "`."
-
-  pure lt
+-- TODO: refactor these if expressions so they're more readable (the else is too far from the if)
+-- helper function for typechecking to help reduce duplication
+cccInfer :: TypingContext Space -> CCCBinOp -> Expr -> Expr -> Either TypeError Space
+cccInfer ctx op l r = case (infer ctx l, infer ctx r) of
+    (Right lt@(S.ClifS lD lKind lsp), Right (S.ClifS rD rKind rsp)) ->
+      if lD == rD && lKind == rKind then -- The dimension and kind must match
+        if lsp == rsp && S.isBasicNumSpace lsp then
+          if op == CSub && (lsp == S.Natural || rsp == S.Natural) then
+            Left $ "Clif subtraction expects both operands to be clifs of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+          else Right lt
+        else Left $ "Clif " ++ pretty op ++ " expects both operands to be clifs of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+      else Left $ "Clif " ++ pretty op ++ " expects both Clifs to be of the same dimension and kind. Received `" ++ show lD ++ ", " ++ show lKind ++ "` and `" ++ show rD ++ ", " ++ show rKind ++ "`."
+    (Right lsp, Right rsp) -> Left $ "Vector operation " ++ pretty op ++ " expects clif operands. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+    (Left re, _       ) -> Left re
+    (_       , Left re) -> Left re
 
 instance Typed Expr Space where
   check :: TypingContext Space -> Expr -> Space -> Either TypeError Space
@@ -264,34 +374,39 @@ instance Typed Expr Space where
   infer :: TypingContext Space -> Expr -> Either TypeError Space
   infer cxt (Lit lit) = infer cxt lit
 
-  infer cxt (AssocA _ (e:exs)) = do
-    et <- infer cxt e
-    assertNumeric et $
-      \sp -> "Associative arithmetic operation expects numeric operands, but found `" ++ sp ++ "`."
-    assertAllEq cxt exs et
-        "Associative arithmetic operation expects all operands to be of the same type."
-    pure et
+  infer cxt (AssocA _ (e:exs)) =
+    case infer cxt e of
+      Right spaceValue | S.isBasicNumSpace spaceValue ->
+          -- If the inferred type of e is a valid Space, call allOfType with spaceValue
+          allOfType cxt exs spaceValue spaceValue
+              "Associative arithmetic operation expects all operands to be of the same expected type."
+      Right l ->
+          -- Handle the case when sp is a Right value but spaceValue is invalid
+          Left ("Expected all operands in addition/multiplication to be numeric, but found " ++ show l)
+      Left r ->
+          -- Handle the case when sp is a Left value containing a TypeError
+          Left r
+
   infer _ (AssocA Add _) = Left "Associative addition requires at least one operand."
   infer _ (AssocA Mul _) = Left "Associative multiplication requires at least one operand."
 
-  infer cxt (AssocB _ exs) = do
-    assertAllEq cxt exs S.Boolean $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."
-    pure S.Boolean
+  infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
+    "Associative boolean operation expects all operands to be of the same type (Boolean)."
 
-  infer cxt (AssocC _ (e:exs)) =
+  infer _ (AssocC SUnion []) = Left "Associative addition requires at least one operand."
+
+  infer cxt (AssocC SUnion (e:exs)) =
     case infer cxt e of
-      Right spaceValue | spaceValue /= S.Void -> do
-          assertAllEq cxt exs spaceValue
-              "Associative arithmetic operation expects all operands to be of the same type."
-          pure spaceValue
-      Right r ->
-          -- Handle the case when sp is a Left value but spaceValue is invalid
-          Left ("Expected all operands in addition/multiplication to be numeric, but found " ++ show r)
-      Left l ->
-          -- If sp is a Right value containing a TypeError
-          Left l
-
-  infer _ (AssocC SUnion _) = Left "Associative addition requires at least one operand."
+      Right spaceValue | spaceValue /= S.Void ->
+          -- If the inferred type of e is a valid Space, call allOfType with spaceValue
+          allOfType cxt exs spaceValue spaceValue
+              "Associative arithmetic operation expects all operands to be of the same expected type."
+      Right l ->
+          -- Handle the case when sp is a Right value but spaceValue is invalid
+          Left ("Expected all operands in addition/multiplication to be numeric, but found " ++ show l)
+      Left r ->
+          -- If sp is a Left value containing a TypeError
+          Left r
 
   infer cxt (C uid) = inferFromContext cxt uid
 
@@ -332,184 +447,181 @@ instance Typed Expr Space where
         expT = head $ head sss
         allRowsHaveSameColumnsAndSpace
           = either
-              (\_ -> all (\ r -> length r == columns && all (== expT) r) sss)
-              (const False) expT
+              (const False) 
+              (\_ -> all (\ r -> length r == columns && all (== expT) r) sss) expT
         t = fromRight (error "Infer on Matrix had a strong expectation of Right-valued data.") expT -- This error should never occur.
 
-  infer cxt (Set s es) = do
-    ets <- traverse (infer cxt) es
-    if all (== s) ets
-      then pure s
-      else Left $ "Set contains expressions of unexpected type: `" ++ show (filter (/= s) ets) ++ "`. Expected type: `" ++ show s ++ "`."
+  infer _ (Set s _) = Right s
 
-  infer cxt (UnaryOp uf e) = do
-    et <- infer cxt e
-    case uf of
-      Abs -> do
-        assertNonNatNumeric et (\sp -> "'Absolute value' operator only applies to non-natural numeric types. Received `" ++ sp ++ "`.")
-        pure et
-      Neg -> do
-        assertNonNatNumeric et (\sp -> "'Negation' operator only applies to non-natural numeric types. Received `" ++ sp ++ "`.")
-        pure et
-      Exp -> do
-        if et == S.Real || et == S.Integer
-          then pure S.Real
-          else Left $ "'Exponentiation' operator only applies to reals and integers. Received `" ++ show et ++ "`."
-      x -> do
-        if et == S.Real
-          then pure S.Real
-          else Left $ show x ++ " operator only applies to Reals. Received `" ++ show et ++ "`."
+  infer cxt (UnaryOp uf ex) = case infer cxt ex of
+    Right sp -> case uf of
+      Abs -> if S.isBasicNumSpace sp && sp /= S.Natural
+        then Right sp
+        else Left $ "Numeric 'absolute' value operator only applies to, non-natural, numeric types. Received `" ++ show sp ++ "`."
+      Neg -> if S.isBasicNumSpace sp && sp /= S.Natural
+        then Right sp
+        else Left $ "Negation only applies to, non-natural, numeric types. Received `" ++ show sp ++ "`."
+      Exp -> if sp == S.Real || sp == S.Integer then Right S.Real else Left $ show Exp ++ " only applies to reals."
+      x -> if sp == S.Real
+        then Right S.Real
+        else Left $ show x ++ " only applies to Reals. Received `" ++ show sp ++ "`."
+    x       -> x
 
-  infer cxt (UnaryOpB Not e) = do
-    et <- infer cxt e
-    assertBoolean et (\sp -> "¬ on non-boolean operand of type: " ++ sp ++ ".")
-    pure S.Boolean
+  infer cxt (UnaryOpB Not ex) = case infer cxt ex of
+    Right S.Boolean -> Right S.Boolean
+    Right sp        -> Left $ "¬ on non-boolean operand, " ++ show sp ++ "."
+    x              -> x
 
-  infer cxt (UnaryOpVV NegV e) = do
-    et <- infer cxt e
-    vet <- assertNonNatNumVector (\sp -> "Vector negation only applies to non-natural numeric vectors. Received `" ++ sp ++ "`.") et
-    pure $ S.Vect vet
+  infer cxt (UnaryOpCC NegC e) = case infer cxt e of
+    Right c@(S.ClifS _ _ sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
+      then Right c
+      else Left $ "Clif negation only applies to, non-natural, numbered clifs. Received `" ++ show sp ++ "`."
+    Right sp -> Left $ "Clif negation should only be applied to numeric clifs. Received `" ++ show sp ++ "`."
+    x -> x
 
-  infer cxt (UnaryOpVN Norm e) = do
-    et <- infer cxt e
-    assertRealVector et (\sp -> "Vector norm only applies to vectors of real numbers. Received `" ++ sp ++ "`.")
-    pure et
+  -- TODO: support generalized clif norm
+  infer cxt (UnaryOpCN Norm e) = case infer cxt e of
+    Right (S.ClifS _ _ S.Real) -> Right S.Real
+    Right sp -> Left $ "Vector norm only applies to vectors (or clifs) of real numbers. Received `" ++ show sp ++ "`."
+    x -> x
 
-  infer cxt (UnaryOpVN Dim e) = do
-    et <- infer cxt e
-    _ <- assertVector et (\sp -> "Vector dimension only applies to vectors. Received `" ++ sp ++ "`.")
-    pure S.Integer
+  infer cxt (UnaryOpCN Dim e) = case infer cxt e of
+    Right (S.ClifS {}) -> Right S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Right sp -> Left $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
+    x -> x
+  
+  infer cxt (UnaryOpCN Grade e) = case infer cxt e of
+    Right (S.ClifS {}) -> Right S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Right sp -> Left $ "Vector 'grade' only applies to vectors. Received `" ++ show sp ++ "`."
+    x -> x
 
-  infer cxt (ArithBinaryOp Frac n d) = do
-    nt <- infer cxt n
-    dt <- infer cxt d
-    assertEquivNumeric nt dt
-      (\lt rt -> "Fractions/divisions should only be applied to the same numeric typed operands. Received `" ++ lt ++ "` / `" ++ rt ++ "`.")
-    pure nt
+  infer cxt (ArithBinaryOp Frac l r) = case (infer cxt l, infer cxt r) of
+    (Right lt, Right rt) -> if S.isBasicNumSpace lt && lt == rt
+      then Right lt
+      else Left $ "Fractions/divisions should only be applied to the same numeric typed operands. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
+    (_, Left e) -> Left e
+    (Left e, _      ) -> Left e
 
-  infer cxt (ArithBinaryOp Pow l r) = do
-    lt <- infer cxt l
-    rt <- infer cxt r
-    if S.isBasicNumSpace lt && (lt == rt || (lt == S.Real && rt == S.Integer))
+  infer cxt (ArithBinaryOp Pow l r) = case (infer cxt l, infer cxt r) of
+    (Right lt, Right rt) -> if S.isBasicNumSpace lt && (lt == rt || (lt == S.Real && rt == S.Integer))
       then Right lt
       else Left $
         "Powers should only be applied to the same numeric type in both operands, or real base with integer exponent. Received `" ++ show lt ++ "` ^ `" ++ show rt ++ "`."
+    (_, Left x) -> Left x
+    (Left x, _      ) -> Left x
 
-  infer cxt (ArithBinaryOp Subt l r) = do
-    lt <- infer cxt l
-    rt <- infer cxt r
-    assertEquivNumeric
-      lt rt
-      (\ls rs -> "Subtraction should only be applied to the same numeric typed operands. Received `" ++ ls ++ "` - `" ++ rs ++ "`.")
-    pure lt
+  infer cxt (ArithBinaryOp Subt l r) = case (infer cxt l, infer cxt r) of
+    (Right lt, Right rt) -> if S.isBasicNumSpace lt && lt == rt
+      then Right lt
+      else Left $ "Both operands of a subtraction must be the same numeric type. Received `" ++ show lt ++ "` - `" ++ show rt ++ "`."
+    (_, Left re) -> Left re
+    (Left le, _) -> Left le
 
-  infer cxt (BoolBinaryOp _ l r) = do
-    lt <- infer cxt l
-    rt <- infer cxt r
-    let msg = const $ "Boolean expression contains non-boolean operand. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
-    assertBoolean lt msg
-    assertBoolean rt msg
-    pure S.Boolean
+  infer cxt (BoolBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+    (Right S.Boolean, Right S.Boolean) -> Right S.Boolean
+    (Right lt, Right rt) -> Left $ "Boolean expression contains non-boolean operand. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
+    (_, Left er) -> Left er
+    (Left el, _     ) -> Left el
 
-  infer cxt (EqBinaryOp _ l r) = do
-    lt <- infer cxt l
-    rt <- infer cxt r
-    lt ~== rt $ \lsp rsp -> "Both operands of an (in)equality (=/≠) must be of the same type. Received `" ++ lsp ++ "` & `" ++ rsp ++ "`."
-    pure S.Boolean
+  infer cxt (EqBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+    (Right lt, Right rt) -> if lt == rt
+      then Right S.Boolean
+      else Left $ "Both operands of an (in)equality (=/≠) must be of the same type. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
+    (_, Left re) -> Left re
+    (Left le, _) -> Left le
 
-  infer cxt (LABinaryOp Index l n) = do
-    lt <- infer cxt l
-    vet <- assertVector lt (\sp -> "List accessor expects a vector, but received `" ++ sp ++ "`.")
+  infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
+    (Right (S.ClifS _ _ lt), Right nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+      then Right lt
+      else Left $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
+    (Right lt         , Right _)  -> Left $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
+    (_, Left e) -> Left e
+    (Left e         , _      ) -> Left e
+  infer cxt (LABinaryOp IndexOf l n) = case (infer cxt l, infer cxt n) of
+    (Right (S.Set lt), Right nt) -> if S.isBasicNumSpace lt && nt == lt-- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+      then Right lt
+      else Left $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
+    (Right lt         , Right _)  -> Left $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
+    (_, Left e) -> Left e
+    (Left e         , _      ) -> Left e
+  infer cxt (OrdBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+    (Right lt, Right rt) -> if S.isBasicNumSpace lt && lt == rt
+      then Right S.Boolean
+      else Left $ "Both operands of a numeric comparison must be the same numeric type, got: " ++ show lt ++ ", " ++ show rt ++ "."
+    (_, Left re) -> Left re
+    (Left le, _) -> Left le
 
-    nt <- infer cxt n
-    assertIndexLike nt
-      (\sp -> "List accessor expects an index-like type (Integer or Natural), but received `" ++ sp ++ "`.")
+  infer cxt (NCCBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
+    (Right lt, Right (S.ClifS _ _ rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Right rsp
+      else if lt /= rsp then
+        Left $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
+      else
+        Left $ "Vector scaling expects a numeric scaling, but found `" ++ show lt ++ "`."
+    (Right _, Right rsp) -> Left $ "Vector scaling expects vector as second operand. Received `" ++ show rsp ++ "`."
+    (_, Left rx) -> Left rx
+    (Left lx, _) -> Left lx
 
-    pure vet
+  -- If you select grade N of a Clif, you get a Clif of grade N
+  infer cxt (NatCCBinaryOp GradeSelect n c) = case infer cxt c of
+    Right (S.ClifS _ k sp) -> Right $ S.ClifS (S.Fixed n) k sp
+    Right rsp -> Left $ "Grade selection expects clif as second operand. Received `" ++ show rsp ++ "`."
+    Left x -> Left x
+  
+  infer cxt (CCCBinaryOp o l r) = cccInfer cxt o l r
 
-  infer cxt (LABinaryOp IndexOf l e) = do
-    lt <- infer cxt l
-    vet <- assertVector lt (\sp -> "List index-of expects a vector, but received `" ++ sp ++ "`.")
+  infer cxt (CCNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
+    (Right lt@(S.ClifS lD lKind lsp), Right rt@(S.ClifS rD rKind rsp)) ->
+      if lD == rD && lKind == rKind then
+        if lsp == rsp && S.isBasicNumSpace lsp
+        then Right lsp
+        else Left $ "Vector dot product expects same numeric vector types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
+      else Left $ "Clif dot product expects both Clifs to be of the same dimension and kind. Received `" ++ show lD ++ ", " ++ show lKind ++ "` and `" ++ show rD ++ ", " ++ show rKind ++ "`."
+    (Right lsp, Right rsp) -> Left $ "Vector dot product expects vector operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
+    (_, Left rx) -> Left rx
+    (Left lx, _) -> Left lx
 
-    et <- infer cxt e
-    vet ~== et
-      $ \ls rs -> "List index-of expects an element of the same type as the vector, but received `" ++ ls ++ "` and `" ++ rs ++ "`."
+  infer cxt (ESSBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+    (Right lt, Right rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Right lt
+      else Left $ "Set Add/Sub should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
+    (_, Left e) -> Left e
+    (Left e, _      ) -> Left e
+    (Right lt, Right rsp) -> Left $ "Set union expects set operands. Received `" ++ show lt ++ "` · `" ++ show rsp ++ "`."
 
-    pure S.Integer -- TODO: This can also be `S.Natural`, but we don't express that in the type system yet.
+  infer cxt (ESBBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+    (Right lt, Right rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Right lt
+      else Left $ "Set contains should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
+    (_, Left e) -> Left e
+    (Left e, _      ) -> Left e
+    (Right lt, Right rsp) -> Left $ "Set union expects set operands. Received `" ++ show lt ++ "` · `" ++ show rsp ++ "`."
 
-  infer cxt (OrdBinaryOp _ l r) = do
-    lt <- infer cxt l
-    rt <- infer cxt r
-    let msg ls rs = "Ordering expression contains non-numeric operand. Received `" ++ ls ++ "` & `" ++ rs ++ "`."
-    assertEquivNumeric lt rt msg
-    pure S.Boolean
+  infer cxt (Operator _ (S.BoundedDD _ _ bot top) body) =
+    let expTy = S.Integer in
+    case (infer cxt bot, infer cxt top, infer cxt body) of
+      (Right botTy, Right topTy, Right bodyTy) -> if botTy == S.Integer
+        then if topTy == S.Integer
+          then if expTy == bodyTy
+            then Right expTy
+            else Left $ "'Big' operator range body not Integer, found: " ++ show bodyTy ++ "."
+          else Left $ "'Big' operator range top not Integer, found: " ++ show topTy ++ "."
+        else Left $ "'Big' operator range bottom not of expected type: " ++ show expTy ++ ", found: " ++ show botTy ++ "."
+      (_         , _         , Left x    ) -> Left x
+      (_         , Left x   , _          ) -> Left x
+      (Left x   , _         , _          ) -> Left x
 
-  infer cxt (NVVBinaryOp Scale l r) = do
-    lt <- infer cxt l
-    rt <- infer cxt r
-    vet <- assertNumericVector rt
-      (\sp -> "Vector scaling expects a numeric vector on the right-hand side, but found `" ++ sp ++ "`.")
-    assertEquivNumeric lt vet
-      (\ls rs -> "Vector scaling expects scalar and vector of scalars of the same type, but found `" ++ ls ++ "` over vector of `" ++ rs ++ "`s.")
-    pure rt
+  infer cxt (RealI uid ri) =
+    case (inferFromContext cxt uid, riTy ri) of
+      (Right S.Real, Right riSp) -> if riSp == S.Real
+        then Right S.Boolean
+        else Left $
+          "Real interval expects interval bounds to be of type Real, but received: " ++ show riSp ++ "."
+      (Right uidSp, _         ) -> Left $
+        "Real interval expects variable to be of type Real, but received `" ++ show uid ++ "` of type `" ++ show uidSp ++ "`."
+      (_          , Left x  ) -> Left x
+      (Left x    , _        ) -> Left x
 
-  infer cxt (VVVBinaryOp o l r) = vvvInfer cxt o l r
-
-  infer cxt (VVNBinaryOp Dot l r) = do
-    lt <- infer cxt l
-    rt <- infer cxt r
-    let msg hand sp = "Vector dot product expects a numeric vector on the " ++ hand ++ "-hand side, but found `" ++ sp ++ "`."
-    lvet <- assertNumericVector lt (msg "left")
-    rvet <- assertNumericVector rt (msg "right")
-    assertEquivNumeric lvet rvet
-      (\ls rs -> "Vector dot product expects vectors of the same numeric type, but found `" ++ ls ++ "` and `" ++ rs ++ "`.")
-    pure lvet
-
-  infer cxt (ESSBinaryOp _ l r) = do
-    lt <- infer cxt l
-    rt <- infer cxt r
-    set <- assertSet rt
-      (\sp -> "Set add/subtract expects a set on the right-hand side, but found `" ++ sp ++ "`.")
-    assertEquivNumeric lt set
-      (\ls rs -> "Set add/subtract expects numeric set operands. Received `" ++ ls ++ "` / `" ++ rs ++ "`.")
-    pure rt
-
-  infer cxt (ESBBinaryOp SContains l r) = do
-    lt <- infer cxt l
-    rt <- infer cxt r
-    set <- assertSet rt
-      (\sp -> "Set contains expects a set on the right-hand side, but found `" ++ sp ++ "`.")
-    assertEquivNumeric lt set
-      (\ls rs -> "Set contains should only be applied to Set of numeric type. Received `" ++ ls ++ "` / `" ++ rs ++ "`.")
-    pure S.Boolean
-
-  infer cxt (Operator _ (S.BoundedDD _ _ bot top) body) = do
-    botTy <- infer cxt bot
-    topTy <- infer cxt top
-    bodyTy <- infer cxt body
-
-    assertNumeric bodyTy
-      (\sp -> "'Big' operator body is not numeric, found: " ++ sp ++ ".")
-
-    let msg dir sp = "'Big' operator range " ++ dir ++ " is not an index-like type (Integer or Natural), found: " ++ sp ++ "."
-
-    assertIndexLike botTy (msg "start")
-    assertIndexLike topTy (msg "stop")
-
-    assertEquivNumeric botTy topTy
-      (\ls rs -> "'Big' operator range expects start and stop to be of the same numeric type, but found `" ++ ls ++ "` and `" ++ rs ++ "`.")
-
-    -- FIXME: We have a `Symbol` in the `S.BoundedDD` but it's not used in type-checking.
-    pure bodyTy
-
-  infer cxt (RealI uid ri) = do
-    uidT <- inferFromContext cxt uid
-    riT <- riTy ri
-    assertReal uidT $
-      \sp -> "Real interval expects variable to be of type Real, but received `" ++ show uid ++ "` of type `" ++ sp ++ "`."
-    assertReal riT $
-      \sp -> "Real interval expects interval bounds to be of type Real, but received: " ++ sp ++ "."
-    pure S.Boolean
     where
       riTy :: RealInterval Expr Expr -> Either TypeError Space
       riTy (S.Bounded (_, lx) (_, rx)) = do
@@ -521,3 +633,37 @@ instance Typed Expr Space where
         pure S.Real
       riTy (S.UpTo (_, x)) = infer cxt x
       riTy (S.UpFrom (_, x)) = infer cxt x
+
+  -- For a clif to be well-typed it must:
+  -- 1. Contain only basic numeric types inside it
+  -- 2. Have a dimension of at least the grade (a 0-dimensional vector makes no sense)
+  infer ctx (Clif d es) =
+    -- A clif with no explicit compile/"specification"-time expressions in the components
+    if OM.null es then Right $ S.ClifS d S.Vector S.Real
+    else
+      case eitherLists (infer ctx <$> OM.elems es) of
+        Left _ ->
+          let
+            -- Check the dimensions of a clif to ensure it makes sense
+            isValidDim =
+              case d of
+                -- If it's a fixed dimension, the number of expressions must be dimension ^ 2
+                S.Fixed fD -> OM.size es == fromIntegral ((2 :: Integer) ^ fD)
+                -- We don't know enough to say for sure
+                S.VDim _  -> True
+          in
+          -- `Clif`s must store a basic number space, not things like other clifs
+          if isValidDim then
+            Right $ S.ClifS d S.Vector S.Real
+          else Left $ "The number of components in a clif of dimension " ++ show d ++ " must be 2 ^ " ++ show d
+        Right x -> Right x
+
+
+eitherLists :: [Either a b] -> Either [a] b
+eitherLists = eitherLists' (Left [])
+  where
+    eitherLists' :: Either [a] b -> [Either a b] -> Either [a] b
+    eitherLists' (Left ls) (Left l : es') = eitherLists' (Left $ l : ls) es'
+    eitherLists' _ (Right r : _) = Right r
+    eitherLists' _ (Left _ : _) = error "eitherLists impl. non-exhaustive pattern: _ [Left, ...]"
+    eitherLists' ls [] = ls

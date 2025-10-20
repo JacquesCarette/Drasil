@@ -1,7 +1,7 @@
 -- | Defines types similar to those in "Drasil.Language", but better suited to printing.
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil (Special)
+import Language.Drasil (Special, BasisBlades, Dimension)
 
 -- | Different types of links for referencing. May be internal, a citation, or external.
 -- A citation may also hold additional reference information.
@@ -12,7 +12,8 @@ data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime 
   | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin | Arccos | Arctan | Not
   | Dim | Exp | Neg | Cross | Dot | Scale | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff
   | Subt | And | Or | Add | Mul | Summ | Inte | Prod | Point | Perc | LArrow | RArrow | ForAll
-  | VAdd | VSub | Partial | SAdd | SRemove | SUnion | SContains deriving Eq
+  | CAdd | CSub | Partial | SAdd | SRemove | SUnion | SContains 
+  | WedgeProd | GeometricProd | Grade deriving Eq
 
 -- | Holds the type of "text fencing" ("(), {}, |, ||").
 data Fence = Paren | Curly | Norm | Abs
@@ -45,6 +46,7 @@ data Expr = Dbl    Double
           | Div    Expr Expr -- ^ Fractions are a layout thing.
           | Sqrt   Expr      -- ^ Roots are also a layout thing. Just sqrt for now.
           | Spc    Spacing -- ^ Holds the 'Spacing'.
+          | Clif   Dimension (BasisBlades Expr)
           
 infixr 5 :+:
 

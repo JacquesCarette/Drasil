@@ -15,8 +15,6 @@ digraph allvsr {
 	{instance:twoDMotion, instance:cartSys, instance:cartSysR, instance:yAxisDir}
 	}
 
-	dataDefn:p_1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionVecDD1"];
-	dataDefn:p_2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionVecDD2"];
 	dataDefn:v_mv1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:velocityVecDD1"];
 	dataDefn:v_mv2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:velocityVecDD2"];
 	dataDefn:a_mv1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:accelVecDD1"];
@@ -26,7 +24,7 @@ digraph allvsr {
 
 	subgraph DD {
 	rank="same"
-	{dataDefn:p_1, dataDefn:p_2, dataDefn:v_mv1, dataDefn:v_mv2, dataDefn:a_mv1, dataDefn:a_mv2, dataDefn:F_mv1, dataDefn:F_mv2}
+	{dataDefn:v_mv1, dataDefn:v_mv2, dataDefn:a_mv1, dataDefn:a_mv2, dataDefn:F_mv1, dataDefn:F_mv2}
 	}
 
 	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];

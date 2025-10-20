@@ -4,40 +4,6 @@ This section collects and defines all the data needed to build the instance mode
 
 <div align="center">
 
-## Position of the first object {#DD:positionVecDD1}
-
-</div>
-
-|Refname    |DD:positionVecDD1                                                                                                                                                                                                                                      |
-|:----------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Label      |Position of the first object                                                                                                                                                                                                                           |
-|Symbol     |\\({\boldsymbol{p}\_{1}}\\)                                                                                                                                                                                                                            |
-|Units      |\\({\text{m}}\\)                                                                                                                                                                                                                                       |
-|Equation   |\\[{\boldsymbol{p}\_{1}}={L\_{1}}\\,\begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}\\]                                                                                                                             |
-|Description|<ul><li>\\({\boldsymbol{p}\_{1}}\\) is the position of the first object (\\({\text{m}}\\))</li><li>\\({L\_{1}}\\) is the length of the first rod (\\({\text{m}}\\))</li><li>\\({θ\_{1}}\\) is the angle of the first rod (\\({\text{rad}}\\))</li></ul>|
-|Notes      |<ul><li>\\({\boldsymbol{p}\_{1}}\\) is the pendulum position [Fig:dblpend](./SecPhysSyst.md#Figure:dblpend).</li></ul>                                                                                                                                 |
-|Source     |--                                                                                                                                                                                                                                                     |
-|RefBy      |[GD:velocityVector1](./SecGDs.md#GD:velocityVector1)                                                                                                                                                                                                   |
-
-<div align="center">
-
-## Position of the second object {#DD:positionVecDD2}
-
-</div>
-
-|Refname    |DD:positionVecDD2                                                                                                                                                                                                                                                                                                                                    |
-|:----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Label      |Position of the second object                                                                                                                                                                                                                                                                                                                        |
-|Symbol     |\\({\boldsymbol{p}\_{2}}\\)                                                                                                                                                                                                                                                                                                                          |
-|Units      |\\({\text{m}}\\)                                                                                                                                                                                                                                                                                                                                     |
-|Equation   |\\[{\boldsymbol{p}\_{2}}={\boldsymbol{p}\_{1}}+{L\_{2}}\\,\begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}\\]                                                                                                                                                                                                     |
-|Description|<ul><li>\\({\boldsymbol{p}\_{2}}\\) is the position of the second object (\\({\text{m}}\\))</li><li>\\({\boldsymbol{p}\_{1}}\\) is the position of the first object (\\({\text{m}}\\))</li><li>\\({L\_{2}}\\) is the length of the second rod (\\({\text{m}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li></ul>|
-|Notes      |<ul><li>\\({\boldsymbol{p}\_{2}}\\) is the pendulum position [Fig:dblpend](./SecPhysSyst.md#Figure:dblpend).</li></ul>                                                                                                                                                                                                                               |
-|Source     |--                                                                                                                                                                                                                                                                                                                                                   |
-|RefBy      |                                                                                                                                                                                                                                                                                                                                                     |
-
-<div align="center">
-
 ## Velocity of the first object {#DD:velocityVecDD1}
 
 </div>

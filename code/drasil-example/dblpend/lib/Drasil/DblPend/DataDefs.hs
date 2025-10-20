@@ -27,9 +27,9 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 ------------------------------------------------------
 dataDefs :: [DataDefinition]
 dataDefs =
-  [ -- positionVecDD_1  -- TODO: Position vectors cause type checker errors in ddENoRefs
-  -- , positionVecDD_2  -- They are defined in Expressions.hs as mvPosExpr_1/2
-    velocityVecDD_1
+  [ positionVecDD_1
+  , positionVecDD_2
+  , velocityVecDD_1
   , velocityVecDD_2
   , accelVecDD_1
   , accelVecDD_2

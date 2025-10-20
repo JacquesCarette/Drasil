@@ -4,38 +4,40 @@ This section collects the laws and equations that will be used to build the inst
 
 <div align="center">
 
-## Velocity vector of the first object {#GD:velocityVector1}
+## The vector of velocity of the first object {#GD:velocityVector1}
 
 </div>
 
 |Refname    |GD:velocityVector1                                                                                                                                                                                                                                                                                                                                                           |
 |:----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Label      |Velocity vector of the first object                                                                                                                                                                                                                                                                                                                                          |
+|Label      |The vector of velocity of the first object                                                                                                                                                                                                                                                                                                                                   |
 |Units      |\\(\frac{\text{m}}{\text{s}}\\)                                                                                                                                                                                                                                                                                                                                              |
 |Equation   |\\[{\boldsymbol{v}\_{1}}={w\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}\\]                                                                                                                                                                                                                                           |
 |Description|<ul><li>\\({\boldsymbol{v}\_{1}}\\) is the velocity of the first object (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\({w\_{1}}\\) is the angular velocity of the first object (\\(\frac{\text{rad}}{\text{s}}\\))</li><li>\\({L\_{1}}\\) is the length of the first rod (\\({\text{m}}\\))</li><li>\\({θ\_{1}}\\) is the angle of the first rod (\\({\text{rad}}\\))</li></ul>|
 |Source     |--                                                                                                                                                                                                                                                                                                                                                                           |
 |RefBy      |                                                                                                                                                                                                                                                                                                                                                                             |
 
-#### Detailed derivation of velocity of the first object: {#GD:velocityVector1Deriv}
+#### Detailed derivation of the vector of velocity: {#GD:velocityVector1Deriv}
 
-The velocity vector in Clifford algebra represents both magnitude and direction as a unified geometric entity.
+At a given point in time, velocity is defined in [DD:positionVecDD1](./SecDDs.md#DD:positionVecDD1)
+
+\\[{\boldsymbol{v}\_{1}}=\frac{\\,d{\boldsymbol{p}\_{1}}}{\\,dt}\\]
+
+We also know the horizontal position that is defined in [DD:positionVecDD1](./SecDDs.md#DD:positionVecDD1)
+
+\\[{\boldsymbol{p}\_{1}}={L\_{1}}\\,\begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}\\]
+
+Applying this,
+
+\\[\frac{\\,d{\boldsymbol{p}\_{1}}}{\\,dt}={L\_{1}}\\,\begin{bmatrix}\cos\left({θ\_{1}}\right)\\,{w\_{1}}\\\\\sin\left({θ\_{1}}\right)\\,{w\_{1}}\end{bmatrix}\\]
+
+\\({L\_{1}}\\) is constant with respect to time, so
+
+\\[{L\_{1}}\\,\begin{bmatrix}\cos\left({θ\_{1}}\right)\\,{w\_{1}}\\\\\sin\left({θ\_{1}}\right)\\,{w\_{1}}\end{bmatrix}={w\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}\\]
+
+Therefore, using the chain rule,
 
 \\[{\boldsymbol{v}\_{1}}={w\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}\\]
-
-Using the 2D Clifford space Cl(2,0), the velocity is expressed as a vector with components in the e₁ and e₂ basis directions.
-
-where the velocity vector combines angular velocity and rod length in Clifford space
-
-This approach provides a natural geometric representation that preserves rotational relationships.
-
-Direction vector = cos(θ₁)e₁ + sin(θ₁)e₂ using basis vectors e₁, e₂
-
-The angular velocity ω₁ and rod length L₁ combine with the direction vector to form the complete velocity vector.
-
-The geometric product preserves both magnitude and geometric orientation.
-
-Unlike traditional component-wise vector addition, this geometric product maintains the intrinsic geometric structure.
 
 <div align="center">
 
@@ -56,13 +58,17 @@ Unlike traditional component-wise vector addition, this geometric product mainta
 
 The velocity vector for the second object combines the velocity from the first pendulum with its own rotational motion.
 
+\\[{\boldsymbol{v}\_{2}}=\frac{\\,d{\boldsymbol{p}\_{2}}}{\\,dt}\\]
+
+The total velocity is expressed as the vector sum of these two velocity contributions.
+
+\\[{\boldsymbol{p}\_{2}}={\boldsymbol{p}\_{1}}+{L\_{2}}\\,\begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}\\]
+
+\\[\frac{\\,d{\boldsymbol{p}\_{2}}}{\\,dt}=\left(\frac{\\,d{\boldsymbol{p}\_{1}}}{\\,dt}+{L\_{2}}\right)\\,\begin{bmatrix}\cos\left({θ\_{2}}\right)\\,{w\_{2}}\\\\\sin\left({θ\_{2}}\right)\\,{w\_{2}}\end{bmatrix}\\]
+
+\\[\frac{\\,d{\boldsymbol{p}\_{1}}}{\\,dt}+{w\_{2}}\\,{L\_{2}} \begin{bmatrix}\cos\left({θ\_{2}}\right)\\\\\sin\left({θ\_{2}}\right)\end{bmatrix}={w\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}+{w\_{2}}\\,{L\_{2}} \begin{bmatrix}\cos\left({θ\_{2}}\right)\\\\\sin\left({θ\_{2}}\right)\end{bmatrix}\\]
+
 \\[{\boldsymbol{v}\_{2}}={w\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}+{w\_{2}}\\,{L\_{2}} \begin{bmatrix}\cos\left({θ\_{2}}\right)\\\\\sin\left({θ\_{2}}\right)\end{bmatrix}\\]
-
-In Clifford algebra, this vector addition preserves the geometric relationships between the two connected pendulums.
-
-This represents the geometric sum of the first pendulum's velocity and the second pendulum's relative velocity
-
-The total velocity is expressed as the sum of two vectors in the same geometric space.
 
 <div align="center">
 
@@ -81,25 +87,25 @@ The total velocity is expressed as the sum of two vectors in the same geometric 
 
 #### Detailed derivation of acceleration of the first object: {#GD:accelerationVector1Deriv}
 
-The acceleration vector in Clifford algebra combines centripetal and tangential acceleration components.
+The acceleration vector combines centripetal and tangential acceleration components.
 
-\\[{\boldsymbol{a}\_{1}}=-{w\_{1}}^{2}\\,{L\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}+{α\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}\\]
+\\[{\boldsymbol{a}\_{1}}=\frac{\\,d{\boldsymbol{v}\_{1}}}{\\,dt}\\]
 
 The centripetal acceleration points radially inward, while tangential acceleration is perpendicular to the rod.
 
-where the acceleration combines centripetal and tangential components in Clifford space
+\\[{\boldsymbol{v}\_{1}}={w\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}\\]
 
-Both components are naturally expressed as vector and added using Clifford geometric operations.
+Both components are expressed as vectors and added using vector addition.
 
-= centripetal_vector + tangential_vector
+\\[\frac{\\,d{\boldsymbol{v}\_{1}}}{\\,dt}=-{w\_{1}}^{2}\\,{L\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}+{α\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}\\]
 
 Centripetal component: -ω₁²L₁ × direction_vector (radial inward)
 
-Both terms maintain their geometric significance through the Clifford algebra representation
+\\[{\boldsymbol{a}\_{1}}=-{w\_{1}}^{2}\\,{L\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}+{α\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}\\]
 
 Tangential component: α₁L₁ × perpendicular_direction_vector (tangential)
 
-The geometric sum preserves the underlying geometric relationships without component-wise decomposition.
+The vector sum preserves the underlying geometric relationships.
 
 <div align="center">
 
@@ -118,15 +124,19 @@ The geometric sum preserves the underlying geometric relationships without compo
 
 #### Detailed derivation of acceleration of the second object: {#GD:accelerationVector2Deriv}
 
-The second object's acceleration is the geometric sum of the first object's acceleration and its own relative acceleration.
+The second object's acceleration is the vector sum of the first object's acceleration and its own relative acceleration.
 
-\\[{\boldsymbol{a}\_{2}}=-{w\_{1}}^{2}\\,{L\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}+{α\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}+-{w\_{2}}^{2}\\,{L\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}+{α\_{2}}\\,{L\_{2}} \begin{bmatrix}\cos\left({θ\_{2}}\right)\\\\\sin\left({θ\_{2}}\right)\end{bmatrix}\\]
+\\[{\boldsymbol{a}\_{2}}=\frac{\\,d{\boldsymbol{v}\_{2}}}{\\,dt}\\]
 
 This captures the coupling between the two pendulums through their mechanical connection.
 
-This represents the total acceleration as a vector sum in Clifford geometric space
+\\[{\boldsymbol{v}\_{2}}={w\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}+{w\_{2}}\\,{L\_{2}} \begin{bmatrix}\cos\left({θ\_{2}}\right)\\\\\sin\left({θ\_{2}}\right)\end{bmatrix}\\]
 
-The Clifford algebra representation preserves the geometric relationships in this coupled system.
+\\[\frac{\\,d{\boldsymbol{v}\_{2}}}{\\,dt}=\frac{\\,d{\boldsymbol{v}\_{1}}}{\\,dt}+-{w\_{2}}^{2}\\,{L\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}+{α\_{2}}\\,{L\_{2}} \begin{bmatrix}\cos\left({θ\_{2}}\right)\\\\\sin\left({θ\_{2}}\right)\end{bmatrix}\\]
+
+\\[{\boldsymbol{a}\_{2}}=-{w\_{1}}^{2}\\,{L\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}+{α\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}+-{w\_{2}}^{2}\\,{L\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}+{α\_{2}}\\,{L\_{2}} \begin{bmatrix}\cos\left({θ\_{2}}\right)\\\\\sin\left({θ\_{2}}\right)\end{bmatrix}\\]
+
+\\[{\boldsymbol{a}\_{2}}=-{w\_{1}}^{2}\\,{L\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}+{α\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}+-{w\_{2}}^{2}\\,{L\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}+{α\_{2}}\\,{L\_{2}} \begin{bmatrix}\cos\left({θ\_{2}}\right)\\\\\sin\left({θ\_{2}}\right)\end{bmatrix}\\]
 
 <div align="center">
 
@@ -134,26 +144,32 @@ The Clifford algebra representation preserves the geometric relationships in thi
 
 </div>
 
-|Refname    |GD:forceVector1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-|:----------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Label      |Force vector on the first object                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|Units      |\\({\text{N}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|Equation   |\\[{\boldsymbol{f}\_{1}}=-\left({T\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}\right)+{T\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}+\begin{bmatrix}0\\\\-{m\_{1}}\\,g\end{bmatrix}\\]                                                                                                                                                                                                                                                                                                         |
-|Description|<ul><li>\\({\boldsymbol{f}\_{1}}\\) is the force of the first object (\\({\text{N}}\\))</li><li>\\({T\_{1}}\\) is the tension of the first rod (\\({\text{N}}\\))</li><li>\\({θ\_{1}}\\) is the angle of the first rod (\\({\text{rad}}\\))</li><li>\\({T\_{2}}\\) is the tension of the second rod (\\({\text{N}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li><li>\\({m\_{1}}\\) is the mass of the first object (\\({\text{kg}}\\))</li><li>\\(g\\) is the magnitude of gravitational acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li></ul>|
-|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-|RefBy      |[IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+|Refname    |GD:forceVector1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+|:----------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |Force vector on the first object                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+|Units      |\\({\text{N}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+|Equation   |\\[{\boldsymbol{F}\_{1}}=-\left({\boldsymbol{T}\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}\right)+{\boldsymbol{T}\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}+\begin{bmatrix}0\\\\-{m\_{1}}\\,g\end{bmatrix}\\]                                                                                                                                                                                                                                                                                                                                                   |
+|Description|<ul><li>\\({\boldsymbol{F}\_{1}}\\) is the force of the first object (\\({\text{N}}\\))</li><li>\\({\boldsymbol{T}\_{1}}\\) is the the magnitude of the tension in the first rod (\\({\text{N}}\\))</li><li>\\({θ\_{1}}\\) is the angle of the first rod (\\({\text{rad}}\\))</li><li>\\({\boldsymbol{T}\_{2}}\\) is the the magnitude of the tension in the second rod (\\({\text{N}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li><li>\\({m\_{1}}\\) is the mass of the first object (\\({\text{kg}}\\))</li><li>\\(g\\) is the magnitude of gravitational acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|RefBy      |[IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 #### Detailed derivation of force on the first object: {#GD:forceVector1Deriv}
 
-The force vector in Clifford algebra combines inertial and gravitational forces as vectors.
+The force vector combines tension forces and gravitational force as vectors.
 
-\\[{\boldsymbol{f}\_{1}}=-\left({T\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}\right)+{T\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}+\begin{bmatrix}0\\\\-{m\_{1}}\\,g\end{bmatrix}\\]
+\\[{\boldsymbol{F}\_{1}}={\boldsymbol{T}\_{1}}+{\boldsymbol{T}\_{2}}+{m\_{1}} \boldsymbol{g}\\]
 
-The inertial force is proportional to the force vector, preserving Newton's second law in geometric form.
+The net force is obtained using vector addition, consistent with Newton's second law.
 
-where force equals mass times acceleration plus gravitational force in vector form
+\\[{\boldsymbol{F}\_{1}}={m\_{1}} {\boldsymbol{a}\_{1}}\\]
 
-Gravitational force acts vertically downward and is naturally represented as a vector.
+Gravitational force acts vertically downward and is represented as a vector.
+
+\\[{\boldsymbol{a}\_{1}}=-{w\_{1}}^{2}\\,{L\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}+{α\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}\\]
+
+\\[{\boldsymbol{F}\_{1}}=-\left({\boldsymbol{T}\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}\right)+{\boldsymbol{T}\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}+\begin{bmatrix}0\\\\-{m\_{1}}\\,g\end{bmatrix}\\]
+
+\\[{\boldsymbol{F}\_{1}}=-\left({\boldsymbol{T}\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}\right)+{\boldsymbol{T}\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}+\begin{bmatrix}0\\\\-{m\_{1}}\\,g\end{bmatrix}\\]
 
 <div align="center">
 
@@ -161,33 +177,29 @@ Gravitational force acts vertically downward and is naturally represented as a v
 
 </div>
 
-|Refname    |GD:forceVector2                                                                                                                                                                                                                                                                                                                                                                                                                          |
-|:----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Label      |Force vector on the second object                                                                                                                                                                                                                                                                                                                                                                                                        |
-|Units      |\\({\text{N}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                         |
-|Equation   |\\[{\boldsymbol{f}\_{2}}=-\left({T\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}\right)+\begin{bmatrix}0\\\\-{m\_{2}}\\,g\end{bmatrix}\\]                                                                                                                                                                                                                                                    |
-|Description|<ul><li>\\({\boldsymbol{f}\_{2}}\\) is the force of the second object (\\({\text{N}}\\))</li><li>\\({T\_{2}}\\) is the tension of the second rod (\\({\text{N}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li><li>\\({m\_{2}}\\) is the mass of the second object (\\({\text{kg}}\\))</li><li>\\(g\\) is the magnitude of gravitational acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li></ul>|
-|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-|RefBy      |[IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)                                                                                                                                                                                                                                                                                                                                                                                             |
+|Refname    |GD:forceVector2                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+|:----------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |Force vector on the second object                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+|Units      |\\({\text{N}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|Equation   |\\[{\boldsymbol{F}\_{2}}=-\left({\boldsymbol{T}\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}\right)+\begin{bmatrix}0\\\\-{m\_{2}}\\,g\end{bmatrix}\\]                                                                                                                                                                                                                                                                         |
+|Description|<ul><li>\\({\boldsymbol{F}\_{2}}\\) is the force of the second object (\\({\text{N}}\\))</li><li>\\({\boldsymbol{T}\_{2}}\\) is the the magnitude of the tension in the second rod (\\({\text{N}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li><li>\\({m\_{2}}\\) is the mass of the second object (\\({\text{kg}}\\))</li><li>\\(g\\) is the magnitude of gravitational acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+|RefBy      |[IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 #### Detailed derivation of force on the second object: {#GD:forceVector2Deriv}
 
-The force on the second object combines its inertial response with gravitational effects.
+The force on the second object combines tension from the second rod with gravitational effects.
 
-\\[{\boldsymbol{f}\_{2}}=-\left({T\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}\right)+\begin{bmatrix}0\\\\-{m\_{2}}\\,g\end{bmatrix}\\]
+\\[{\boldsymbol{F}\_{2}}={\boldsymbol{T}\_{2}}+{m\_{2}} \boldsymbol{g}\\]
 
-The Clifford algebra representation maintains the geometric consistency between force and acceleration.
+The vector representation maintains consistency between force and acceleration.
 
-This represents the total force as a vector sum in Clifford geometric space
+\\[{\boldsymbol{F}\_{2}}={m\_{2}} {\boldsymbol{a}\_{2}}\\]
 
 This approach naturally handles the coupling forces between the connected pendulum objects.
 
-= mass × acceleration_multivector + gravitational_force_multivector
+\\[{\boldsymbol{a}\_{2}}=-{w\_{1}}^{2}\\,{L\_{1}} \begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}+{α\_{1}}\\,{L\_{1}} \begin{bmatrix}\cos\left({θ\_{1}}\right)\\\\\sin\left({θ\_{1}}\right)\end{bmatrix}+-{w\_{2}}^{2}\\,{L\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}+{α\_{2}}\\,{L\_{2}} \begin{bmatrix}\cos\left({θ\_{2}}\right)\\\\\sin\left({θ\_{2}}\right)\end{bmatrix}\\]
 
-Key GA operations demonstrated: geometric product (combines magnitude and direction),
+\\[{\boldsymbol{F}\_{2}}=-\left({\boldsymbol{T}\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}\right)+\begin{bmatrix}0\\\\-{m\_{2}}\\,g\end{bmatrix}\\]
 
-Demonstrating how Newton's second law extends naturally to geometric algebra
-
-vector addition in Clifford space (preserves geometric relationships),
-
-scalar multiplication with multivectors (maintains geometric structure).
+\\[{\boldsymbol{F}\_{2}}=-\left({\boldsymbol{T}\_{2}} \begin{bmatrix}\sin\left({θ\_{2}}\right)\\\\-\cos\left({θ\_{2}}\right)\end{bmatrix}\right)+\begin{bmatrix}0\\\\-{m\_{2}}\\,g\end{bmatrix}\\]

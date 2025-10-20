@@ -42,28 +42,28 @@ This section transforms the problem defined in the [problem description](./SecPr
 
 #### Detailed derivation of angle of the second rod: {#IM:calOfAngle2Deriv}
 
-By solving multivector force equations [GD:forceVector1](./SecGDs.md#GD:forceVector1) and [GD:forceVector2](./SecGDs.md#GD:forceVector2) for \\({\boldsymbol{f}\_{1}}\\) and \\({\boldsymbol{f}\_{2}}\\) and then substituting into the Clifford algebra force equations , we can get equations 1 and 2:
+By solving multivector force equations [GD:forceVector1](./SecGDs.md#GD:forceVector1) and [GD:forceVector2](./SecGDs.md#GD:forceVector2) for \\({\boldsymbol{F}\_{1}}\\) and \\({\boldsymbol{F}\_{2}}\\) , we can get equations 1 and 2:
 
-\\[{m\_{1}}\\,{\boldsymbol{a}\_{1}}=-{T\_{1}}\\,\sin\left({θ\_{1}}\right)\\]
+\\[{m\_{1}}\\,{\boldsymbol{a}\_{1}}=-{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)\\]
 
 
 
-\\[{m\_{1}}\\,{\boldsymbol{a}\_{1}}={T\_{1}}\\,\cos\left({θ\_{1}}\right)-{m\_{1}}\\,g\\]
+\\[{m\_{1}}\\,{\boldsymbol{a}\_{1}}={\boldsymbol{T}\_{1}}\\,\cos\left({θ\_{1}}\right)-{m\_{1}}\\,g\\]
 
 Multiply the equation 1 by \\(\cos\left({θ\_{1}}\right)\\) and the equation 2 by \\(\sin\left({θ\_{1}}\right)\\) and rearrange to get:
 
-\\[{m\_{2}}\\,{\boldsymbol{a}\_{2}}=-{T\_{2}}\\,\sin\left({θ\_{2}}\right)\\]
+\\[{m\_{2}}\\,{\boldsymbol{a}\_{2}}=-{\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\]
 
 
 
-\\[{m\_{2}}\\,{\boldsymbol{a}\_{2}}={T\_{2}}\\,\cos\left({θ\_{2}}\right)-{m\_{2}}\\,g\\]
+\\[{m\_{2}}\\,{\boldsymbol{a}\_{2}}={\boldsymbol{T}\_{2}}\\,\cos\left({θ\_{2}}\right)-{m\_{2}}\\,g\\]
 
 This leads to the equation 3
 
-Next, multiply multivector force equation [GD:forceVector2](./SecGDs.md#GD:forceVector2) by \\(\cos\left({θ\_{2}}\right)\\) and the Clifford force equation by \\(\sin\left({θ\_{2}}\right)\\) and rearrange to get:
+Next, multiply multivector force equation [GD:forceVector2](./SecGDs.md#GD:forceVector2) by \\(\cos\left({θ\_{2}}\right)\\) and the second force equation by \\(\sin\left({θ\_{2}}\right)\\) and rearrange to get:
 
 
 
 which leads to equation 4
 
-By giving multivector acceleration equations [GD:accelerationVector1](./SecGDs.md#GD:accelerationVector1) and [GD:accelerationVector2](./SecGDs.md#GD:accelerationVector2) and plus Clifford algebra equations plus additional two equations, 3 and 4, we can get [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2) via a computer algebra program:
+By giving multivector acceleration equations [GD:accelerationVector1](./SecGDs.md#GD:accelerationVector1) and [GD:accelerationVector2](./SecGDs.md#GD:accelerationVector2) and plus additional two equations, 3 and 4, we can get [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2) via a computer algebra program:

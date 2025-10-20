@@ -3,14 +3,31 @@ module Drasil.DblPend.GenDefs (genDefns, mvVelGD_1, mvVelGD_2,
          mvAccelGD_1, mvAccelGD_2, mvForceGD_1, mvForceGD_2) where
 
 import Prelude hiding (cos, sin, sqrt)
+-- import qualified Data.List.NonEmpty as NE
 
-import Language.Drasil (ModelQDef, Derivation, Sentence(..), mkDerivName, eS, nounPhraseSP,
-  (+:+), phrase, getUnit, mkQuantDef', sy, ($=))
+import Language.Drasil
 import Utils.Drasil (weave)
-import Theory.Drasil (GenDefn, equationalModel', gdNoRefs)
-import Data.Drasil.Quantities.Physics (velocity, acceleration, force)
+import Theory.Drasil
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Language.Drasil.NounPhrase.Combinators as NP
+-- import Data.Drasil.Concepts.Math (xComp, yComp)
+import Data.Drasil.Quantities.Physics (velocity, acceleration, force, time)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
+-- import Drasil.DblPend.DataDefs
+-- import qualified Drasil.DblPend.Expressions as E
+-- import qualified Drasil.DblPend.Derivations as D
+import Drasil.DblPend.Unitals (lenRod_1, mvVel_1, mvVel_2,
+    mvAccel_1, mvAccel_2, mvForce_1, mvForce_2,
+    posVec_1, posVec_2, lenRod_2, pendDisAngle_1, pendDisAngle_2,
+    angularVel_1, angularVel_2)
+import Drasil.DblPend.DataDefs (positionVecDD_1)
+-- import Drasil.DblPend.Concepts (horizontalPos,
+--     verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, firstObject, secondObject)
+-- import Control.Lens ((^.))
+import Data.Drasil.Concepts.Math (vector)
 import qualified Drasil.DblPend.Expressions as E
-import Drasil.DblPend.Unitals (mvVel_1, mvVel_2, mvAccel_1, mvAccel_2, mvForce_1, mvForce_2)
+import Drasil.DblPend.Concepts 
 
 genDefns :: [GenDefn]
 genDefns = [mvVelGD_1, mvVelGD_2, mvAccelGD_1, mvAccelGD_2, mvForceGD_1, mvForceGD_2]
@@ -21,21 +38,41 @@ genDefns = [mvVelGD_1, mvVelGD_2, mvAccelGD_1, mvAccelGD_2, mvForceGD_1, mvForce
 mvVelGD_1 :: GenDefn
 mvVelGD_1 = gdNoRefs (equationalModel' mvVelQD_1) (getUnit velocity) (Just mvVelDeriv_1) "velocityVector1" []
 
-mvVelQD_1 :: ModelQDef  
-mvVelQD_1 = mkQuantDef' mvVel_1 (nounPhraseSP "velocity vector of the first object") E.mvVelExpr_1
+mvVelQD_1 :: ModelQDef
+mvVelQD_1 = mkQuantDef' mvVel_1 (the vector `NP.of_` (velocity `ofThe` firstObject)) E.mvVelExpr_1
+-- lable and equation
 
 mvVelDeriv_1 :: Derivation
-mvVelDeriv_1 = mkDerivName (phrase velocity +:+ S "of the first object") (weave [mvVelDerivSents_1, mvVelDerivEqns_1])
+mvVelDeriv_1 = mkDerivName (phraseNP (NP.the (vector`of_` velocity))) (weave [mvVelDerivSents_1, mvVelDerivEqns_1])
+-- title paragraph and weave the explained words and refined equation
 
+-- Derivation step sentences (vector -> component -> vector form)
+velDerivSent1, velXDerivSent2_1, velDerivSent3, velDerivSent4, velDerivSent5 :: Sentence
+velDerivSent1 = S "At a given point in time" `sC` phrase velocity `S.is` definedIn'' positionVecDD_1
+velXDerivSent2_1 = S "We also know the" +:+ phrase horizontalPos +:+ S "that" `S.is` definedIn'' positionVecDD_1
+velDerivSent3 = S "Applying this,"
+velDerivSent4 = eS' lenRod_1 `S.is` S "constant" `S.wrt` S "time, so"
+velDerivSent5 = S "Therefore, using the chain rule,"
 mvVelDerivSents_1 :: [Sentence]
-mvVelDerivSents_1 = [S "The velocity vector represents both magnitude and direction in a unified representation.",
-                     S "The velocity is expressed as a 2D vector with components in the horizontal and vertical directions.",
-                     S "The angular velocity ω₁ and rod length L₁ are scaled with the perpendicular direction vector to form the complete velocity vector.",
-                     S "This vector representation naturally preserves the rotational relationships in the pendulum system."]
+mvVelDerivSents_1 = [velDerivSent1, velXDerivSent2_1, velDerivSent3, velDerivSent4, velDerivSent5]
 
-mvVelDerivEqns_1 :: [Sentence]  
-mvVelDerivEqns_1 = [eS $ sy mvVel_1 $= E.mvVelExpr_1,
-                    S "where the velocity vector is obtained by scaling the perpendicular direction vector by the product of angular velocity and rod length"]
+mvVelDerivEqns_1 :: [Sentence]
+mvVelDerivEqns_1 = [
+    -- Definition: velocity is the time derivative of the position vector
+    eS $ sy mvVel_1 $= deriv (sy posVec_1) time,
+    -- Position vector definition (r1 = L1 * [sin θ1, -cos θ1])
+    eS $ sy posVec_1 $= sy lenRod_1 $* E.vector E.sinAngleExpr1 (neg E.cosAngleExpr1),
+    -- Take time derivative and apply the chain rule to each component
+    eS $ deriv (sy posVec_1) time $= sy lenRod_1 $* E.vector (cos (sy pendDisAngle_1) $* sy angularVel_1)
+                                                                                                                     (sin (sy pendDisAngle_1) $* sy angularVel_1),
+    -- Factor out angular velocity and rod length to expose the perpendicular direction vector
+    eS $ sy lenRod_1 $* E.vector (cos (sy pendDisAngle_1) $* sy angularVel_1)
+                                 (sin (sy pendDisAngle_1) $* sy angularVel_1)
+                                 $= (sy angularVel_1 $* sy lenRod_1) `cScale` E.perpDirectionVector_1,
+    -- Final simplified velocity expression
+    eS $ sy mvVel_1 $= E.mvVelExpr_1
+    ]
+
 
 -----------------------------------------------
 -- Velocity Vector for Second Object        --
@@ -54,8 +91,20 @@ mvVelDerivSents_2 = [S "The velocity vector for the second object combines the v
                      S "The total velocity is expressed as the vector sum of these two velocity contributions."]
 
 mvVelDerivEqns_2 :: [Sentence]
-mvVelDerivEqns_2 = [eS $ sy mvVel_2 $= E.mvVelExpr_2,
-                    S "This represents the vector sum of the first pendulum's velocity and the second pendulum's relative velocity"]
+mvVelDerivEqns_2 = [
+    -- Definition: velocity of second bob is derivative of its position
+    eS $ sy mvVel_2 $= deriv (sy posVec_2) time,
+    -- Position r2 = r1 + L2 * [sin θ2, -cos θ2]
+    eS $ sy posVec_2 $= sy posVec_1 $+ (sy lenRod_2 $* E.vector E.sinAngleExpr2 (neg E.cosAngleExpr2)),
+    -- Differentiate: derivative of r2 = derivative of r1 + derivative of the second term
+    eS $ deriv (sy posVec_2) time $= deriv (sy posVec_1) time $+ sy lenRod_2 $* E.vector (cos (sy pendDisAngle_2) $* sy angularVel_2)
+                                                                                                                                                                                 (sin (sy pendDisAngle_2) $* sy angularVel_2),
+    -- Recognize derivative of r1 is mvVel_1 and factor to show perpendicular scaling
+    eS $ deriv (sy posVec_1) time $+ (sy angularVel_2 $* sy lenRod_2) `cScale` E.perpDirectionVector_2
+             $= E.mvVelExpr_1 `cAdd` ((sy angularVel_2 $* sy lenRod_2) `cScale` E.perpDirectionVector_2),
+    -- Final simplified velocity expression for the second object
+    eS $ sy mvVel_2 $= E.mvVelExpr_2
+    ]
 
 -----------------------------------------------
 -- Acceleration Vector for First Object     --
@@ -78,9 +127,16 @@ mvAccelDerivSents_1 = [S "The acceleration vector combines centripetal and tange
                        S "The vector sum preserves the underlying geometric relationships."]
 
 mvAccelDerivEqns_1 :: [Sentence]
-mvAccelDerivEqns_1 = [eS $ sy mvAccel_1 $= E.mvAccelExpr_1,
-                      S "where the acceleration is the vector sum of centripetal and tangential components",
-                      S "= centripetal_vector + tangential_vector"]
+mvAccelDerivEqns_1 = [
+    -- Definition: acceleration is time derivative of velocity
+    eS $ sy mvAccel_1 $= deriv (sy mvVel_1) time,
+    -- Substitute velocity expression (ω1 L1) cScale perpDirectionVector_1
+    eS $ sy mvVel_1 $= (sy angularVel_1 $* sy lenRod_1) `cScale` E.perpDirectionVector_1,
+    -- Differentiate: gives centripetal and tangential components
+    eS $ deriv (sy mvVel_1) time $= E.centripetalAccel_1 `cAdd` E.tangentialAccel_1,
+    -- Final simplified acceleration expression
+    eS $ sy mvAccel_1 $= E.mvAccelExpr_1
+    ]
 
 -----------------------------------------------
 -- Acceleration Vector for Second Object    --
@@ -99,12 +155,18 @@ mvAccelDerivSents_2 = [S "The second object's acceleration is the vector sum of 
                        S "This captures the coupling between the two pendulums through their mechanical connection."]
 
 mvAccelDerivEqns_2 :: [Sentence]
-mvAccelDerivEqns_2 = [eS $ sy mvAccel_2 $= E.mvAccelExpr_2,
-                      S "This represents the total acceleration as a vector sum"]
+mvAccelDerivEqns_2 = [
+    eS $ sy mvAccel_2 $= deriv (sy mvVel_2) time,
+    -- mvVel_2 = mvVel_1 + component from second rod
+    eS $ sy mvVel_2 $= E.mvVelExpr_1 `cAdd` E.mvVelComponent_2,
+    -- Differentiate: derivative of mvVel_1 is mvAccel_1; derivative of mvVelComponent_2 gives centripetal+ tangential for 2
+    eS $ deriv (sy mvVel_2) time $= deriv (sy mvVel_1) time `cAdd` (E.centripetalAccel_2 `cAdd` E.tangentialAccel_2),
+    eS $ sy mvAccel_2 $= E.mvAccelExpr_1 `cAdd` (E.centripetalAccel_2 `cAdd` E.tangentialAccel_2),
+    eS $ sy mvAccel_2 $= E.mvAccelExpr_2
+    ]
 
 -----------------------------------------------
 -- Force Vector for First Object            --
------------------------------------------------
 mvForceGD_1 :: GenDefn
 mvForceGD_1 = gdNoRefs (equationalModel' mvForceQD_1) (getUnit force) (Just mvForceDeriv_1) "forceVector1" []
 
@@ -120,8 +182,16 @@ mvForceDerivSents_1 = [S "The force vector combines tension forces and gravitati
                        S "Gravitational force acts vertically downward and is represented as a vector."]
 
 mvForceDerivEqns_1 :: [Sentence]
-mvForceDerivEqns_1 = [eS $ sy mvForce_1 $= E.mvForceExpr_1,
-                      S "where the net force is the vector sum of tension forces and gravitational force"]
+mvForceDerivEqns_1 = [
+    -- Newton: F = m * a
+    eS $ sy mvForce_1 $= sy mass $* sy mvAccel_1,
+    -- Expand acceleration definition
+    eS $ sy mvAccel_1 $= E.mvAccelExpr_1,
+    -- Tension and gravity vector definitions
+    eS $ sy mvForce_1 $= negClif E.tensionVec_1 `cAdd` E.tensionVec_2 `cAdd` E.gravitationalForce_1,
+    -- Final simplified force expression
+    eS $ sy mvForce_1 $= E.mvForceExpr_1
+    ]
 
 -----------------------------------------------
 -- Force Vector for Second Object           --
@@ -141,6 +211,9 @@ mvForceDerivSents_2 = [S "The force on the second object combines tension from t
                        S "This approach naturally handles the coupling forces between the connected pendulum objects."]
 
 mvForceDerivEqns_2 :: [Sentence]
-mvForceDerivEqns_2 = [eS $ sy mvForce_2 $= E.mvForceExpr_2,
-                      S "This represents the net force as a vector sum",
-                      S "= tension_vector + gravitational_force_vector"]
+mvForceDerivEqns_2 = [
+    eS $ sy mvForce_2 $= sy mass $* sy mvAccel_2,
+    eS $ sy mvAccel_2 $= E.mvAccelExpr_2,
+    eS $ sy mvForce_2 $= (negClif E.tensionVec_2) `cAdd` E.gravitationalForce_2,
+    eS $ sy mvForce_2 $= E.mvForceExpr_2
+    ]

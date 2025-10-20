@@ -8,7 +8,6 @@ import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
   ( lM, lP, lV, lA, lW, lAlpha, lTheta, cL, cT, cF )
-import qualified Language.Drasil.Space as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Constraints (gtZeroConstr)
@@ -24,6 +23,7 @@ import Data.Drasil.Concepts.Math as CM (angle)
 import Data.Drasil.Quantities.Math as QM (unitVect, pi_)
 import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject)
 import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
+import Language.Drasil.Space (realVect, vecDim)
 
 ----------------------------------------
 -- ACRONYMS, SYMBOLS, INPUTS, OUTPUTS
@@ -58,13 +58,6 @@ outputs = map dqdWr
 
 constants :: [ConstQDef]
 constants = [QP.gravitationalAccelConst]
-
-----------------------------------------
--- CLIFFORD (GEOMETRIC) ALGEBRA HELPERS
-----------------------------------------
-
-realVect :: Space
-realVect = S.ClifS (S.Fixed 2) S.Vector Real
 
 ----------------------------------------
 -- UNITAL CHUNKS
@@ -108,45 +101,45 @@ pendDisAngle_1 = uc' "theta_1" (CM.angle `ofThe` firstRod)
 pendDisAngle_2 = uc' "theta_2" (CM.angle `ofThe` secondRod)
   (phraseNP (CM.angle `the_ofThe` secondRod)) (sub lTheta label2) Real radian
 
--- Clifford vector positions
+-- Position vectors
 posVec_1, posVec_2 :: UnitalChunk
 posVec_1 = uc' "p_1" (QP.position `ofThe` firstObject)
   (phraseNP (QP.position `the_ofThe` firstObject))
-  (vec lP `sub` label1) realVect metre
+  (vec lP `sub` label1) (realVect vecDim) metre
 
 posVec_2 = uc' "p_2" (QP.position `ofThe` secondObject)
   (phraseNP (QP.position `the_ofThe` secondObject))
-  (vec lP `sub` label2) realVect metre
+  (vec lP `sub` label2) (realVect vecDim) metre
 
 -- Clifford velocities
 mvVel_1, mvVel_2 :: UnitalChunk
 mvVel_1 = uc' "v_mv1" (QP.velocity `ofThe` firstObject)
   (phraseNP (QP.velocity `the_ofThe` firstObject))
-  (vec lV `sub` label1) realVect velU
+  (vec lV `sub` label1) (realVect vecDim) velU
 
 mvVel_2 = uc' "v_mv2" (QP.velocity `ofThe` secondObject)
   (phraseNP (QP.velocity `the_ofThe` secondObject))
-  (vec lV `sub` label2) realVect velU
+  (vec lV `sub` label2) (realVect vecDim) velU
 
 -- Clifford accelerations
 mvAccel_1, mvAccel_2 :: UnitalChunk
 mvAccel_1 = uc' "a_mv1" (QP.acceleration `ofThe` firstObject)
   (phraseNP (QP.acceleration `the_ofThe` firstObject))
-  (vec lA `sub` label1) realVect accelU
+  (vec lA `sub` label1) (realVect vecDim) accelU
 
 mvAccel_2 = uc' "a_mv2" (QP.acceleration `ofThe` secondObject)
   (phraseNP (QP.acceleration `the_ofThe` secondObject))
-  (vec lA `sub` label2) realVect accelU
+  (vec lA `sub` label2) (realVect vecDim) accelU
 
 -- Clifford forces
 mvForce_1, mvForce_2 :: UnitalChunk
 mvForce_1 = uc' "F_mv1" (QP.force `ofThe` firstObject)
   (phraseNP (QP.force `the_ofThe` firstObject))
-  (vec cF `sub` label1) realVect newton
+  (vec cF `sub` label1) (realVect vecDim) newton
 
 mvForce_2 = uc' "F_mv2" (QP.force `ofThe` secondObject)
   (phraseNP (QP.force `the_ofThe` secondObject))
-  (vec cF `sub` label2) realVect newton
+  (vec cF `sub` label2) (realVect vecDim) newton
 
 -- Angular velocity / acceleration
 angularVel_1, angularVel_2, angularAccel_1, angularAccel_2 :: UnitalChunk
@@ -211,5 +204,5 @@ pendDisAngle :: ConstrConcept
 pendDisAngle = cuc' "pendDisAngle"
   (nounPhraseSP "dependent variables")
   "column vector of displacement of rods with its derivatives"
-  lTheta radian realVect
+  lTheta radian (realVect vecDim)
   [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)

@@ -24,13 +24,8 @@ import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
 import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
   force, gravitationalAccel, height, moment2D, pressure, subX, subY, subZ, 
   supMax, supMin, torque, weight, positionVec)
+import Language.Drasil.Space (realVect, vecDim)
 
-vecDim :: Dimension
-vecDim = Fixed 2
-
--- | Helper function to create Clifford vector spaces of a given dimension
-realVect :: Dimension -> Space
-realVect _ = vect2DS Real
 
 symbols :: [DefinedQuantityDict]
 symbols = dqdWr coords : map dqdWr inputs ++ map dqdWr outputs

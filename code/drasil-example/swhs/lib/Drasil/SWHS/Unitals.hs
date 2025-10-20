@@ -3,7 +3,7 @@ module Drasil.SWHS.Unitals where -- all of this file is exported
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Display (Symbol(Atop), Decoration(Delta))
-import Language.Drasil.Space (ClifKind(..))
+import Language.Drasil.Space (realVect, vecDim)
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Documentation (simulation)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Quantities.Math (gradient, pi_, surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
-import Data.Drasil.Quantities.Physics (subMax, subMin, supMax, supMin, time, vecDim)
+import Data.Drasil.Quantities.Physics (subMax, subMin, supMax, supMin, time)
 import Data.Drasil.Quantities.Thermodynamics (sensHeat, temp, meltPt,
   htFlux, latentHeat, boilPt, heatCapSpec)
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
@@ -23,10 +23,6 @@ import qualified Data.Drasil.Units.Thermodynamics as UT (heatTransferCoef,
 import Drasil.SWHS.Concepts (water, phsChgMtrl)
 
 import Control.Lens ((^.))
-
--- | Helper function to create Clifford vector spaces of a given dimension
-realVect :: Dimension -> Space
-realVect d = ClifS d Vector Real
 
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained

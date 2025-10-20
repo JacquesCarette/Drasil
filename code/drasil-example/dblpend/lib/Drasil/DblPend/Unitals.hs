@@ -7,7 +7,7 @@ import Prelude hiding (sin, cos)
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
-    ( lM, lP, lV, lA, lF, lW, lAlpha, lTheta, cL, cT )
+  ( lM, lP, lV, lA, lW, lAlpha, lTheta, cL, cT, cF )
 import qualified Language.Drasil.Space as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Data.Drasil.Constraints (gtZeroConstr)
@@ -141,11 +141,11 @@ mvAccel_2 = uc' "a_mv2" (QP.acceleration `ofThe` secondObject)
 mvForce_1, mvForce_2 :: UnitalChunk
 mvForce_1 = uc' "F_mv1" (QP.force `ofThe` firstObject)
   (phraseNP (QP.force `the_ofThe` firstObject))
-  (vec lF `sub` label1) realVect newton
+  (vec cF `sub` label1) realVect newton
 
 mvForce_2 = uc' "F_mv2" (QP.force `ofThe` secondObject)
   (phraseNP (QP.force `the_ofThe` secondObject))
-  (vec lF `sub` label2) realVect newton
+  (vec cF `sub` label2) realVect newton
 
 -- Angular velocity / acceleration
 angularVel_1, angularVel_2, angularAccel_1, angularAccel_2 :: UnitalChunk

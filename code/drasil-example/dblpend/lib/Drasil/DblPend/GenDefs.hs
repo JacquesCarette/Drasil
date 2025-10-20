@@ -214,6 +214,6 @@ mvForceDerivEqns_2 :: [Sentence]
 mvForceDerivEqns_2 = [
     eS $ sy mvForce_2 $= sy mass $* sy mvAccel_2,
     eS $ sy mvAccel_2 $= E.mvAccelExpr_2,
-    eS $ sy mvForce_2 $= (negClif E.tensionVec_2) `cAdd` E.gravitationalForce_2,
+    eS $ sy mvForce_2 $= negClif E.tensionVec_2 `cAdd` E.gravitationalForce_2,
     eS $ sy mvForce_2 $= E.mvForceExpr_2
     ]

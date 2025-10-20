@@ -117,8 +117,7 @@ si = mkSystem progName Specification [dong]
   symbMap
 
 purp :: Sentence
-purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum,
-  S "using", S "formulation"]
+purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
 
 motivation :: Sentence
 motivation = foldlSent_ [S "To simulate", phraseNP (motion `the_ofThe` pendulum),

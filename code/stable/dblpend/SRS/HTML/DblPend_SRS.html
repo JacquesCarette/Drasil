@@ -831,11 +831,11 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of the vector of velocity:</h4>
                     <p class="paragraph">
-                      At a given point in time, velocity is defined in <a href=#DD:positionVecDD1>DD:positionVecDD1</a>
+                      At a given point in time, velocity is the time derivative of the position vector
                     </p>
                     \[{\symbf{v}_{1}}=\frac{\,d{\symbf{p}_{1}}}{\,dt}\]
                     <p class="paragraph">
-                      We also know the horizontal position that is defined in <a href=#DD:positionVecDD1>DD:positionVecDD1</a>
+                      The position vector is defined as <em><b>p</b><sub>1</sub></em> (shown in <a href=#Figure:dblpend>Fig:dblpend</a>.)
                     </p>
                     \[{\symbf{p}_{1}}={L_{1}}\,\begin{bmatrix}
                                                \sin\left({θ_{1}}\right)\\
@@ -1431,135 +1431,6 @@
                 <p class="paragraph">
                   This section collects and defines all the data needed to build the instance models.
                 </p>
-                <div id="DD:positionVecDD1">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:positionVecDD1</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Position of the first object</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em><b>p</b><sub>1</sub></em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph"><em>m</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[{\symbf{p}_{1}}={L_{1}}\,\begin{bmatrix}
-                                                   \sin\left({θ_{1}}\right)\\
-                                                   -\cos\left({θ_{1}}\right)
-                                                   \end{bmatrix}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em><b>p</b><sub>1</sub></em> is the position of the first object (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>1</sub></em> is the angle of the first rod (<em>rad</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em><b>p</b><sub>1</sub></em> is the pendulum position <a href=#Figure:dblpend>Fig:dblpend</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#GD:velocityVector1>GD:velocityVector1</a>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:positionVecDD2">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:positionVecDD2</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Position of the second object</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em><b>p</b><sub>2</sub></em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph"><em>m</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[{\symbf{p}_{2}}={\symbf{p}_{1}}+{L_{2}}\,\begin{bmatrix}
-                                                                   \sin\left({θ_{2}}\right)\\
-                                                                   -\cos\left({θ_{2}}\right)
-                                                                   \end{bmatrix}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em><b>p</b><sub>2</sub></em> is the position of the second object (<em>m</em>)
-                          </li>
-                          <li>
-                            <em><b>p</b><sub>1</sub></em> is the position of the first object (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>L<sub>2</sub></em> is the length of the second rod (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em><b>p</b><sub>2</sub></em> is the pendulum position <a href=#Figure:dblpend>Fig:dblpend</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
-                    </tr>
-                  </table>
-                </div>
                 <div id="DD:velocityVecDD1">
                   <table class="ddefn">
                     <tr>
@@ -2320,20 +2191,6 @@
               <th><a href=#yAxisDir>A:yAxisDir</a></th>
             </tr>
             <tr>
-              <td><a href=#DD:positionVecDD1>DD:positionVecDD1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:positionVecDD2>DD:positionVecDD2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:velocityVecDD1>DD:velocityVecDD1</a></td>
               <td></td>
               <td></td>
@@ -2503,8 +2360,6 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:positionVecDD1>DD:positionVecDD1</a></th>
-              <th><a href=#DD:positionVecDD2>DD:positionVecDD2</a></th>
               <th><a href=#DD:velocityVecDD1>DD:velocityVecDD1</a></th>
               <th><a href=#DD:velocityVecDD2>DD:velocityVecDD2</a></th>
               <th><a href=#DD:accelVecDD1>DD:accelVecDD1</a></th>
@@ -2524,53 +2379,7 @@
               <th><a href=#IM:calOfAngle2>IM:calOfAngle2</a></th>
             </tr>
             <tr>
-              <td><a href=#DD:positionVecDD1>DD:positionVecDD1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:positionVecDD2>DD:positionVecDD2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:velocityVecDD1>DD:velocityVecDD1</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2608,13 +2417,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:accelVecDD1>DD:accelVecDD1</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2652,13 +2457,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:forceVecDD1>DD:forceVecDD1</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2696,13 +2497,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:acceleration>TM:acceleration</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2740,8 +2537,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:NewtonSecLawMot>TM:NewtonSecLawMot</a></td>
@@ -2762,13 +2557,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:velocityVector1>GD:velocityVector1</a></td>
-              <td>X</td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2806,13 +2597,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:accelerationVector1>GD:accelerationVector1</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2850,13 +2637,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:forceVector1>GD:forceVector1</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2894,13 +2677,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:calOfAngle1>IM:calOfAngle1</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2932,8 +2711,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
               <td>X</td>
               <td>X</td>
@@ -2950,8 +2727,6 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:positionVecDD1>DD:positionVecDD1</a></th>
-              <th><a href=#DD:positionVecDD2>DD:positionVecDD2</a></th>
               <th><a href=#DD:velocityVecDD1>DD:velocityVecDD1</a></th>
               <th><a href=#DD:velocityVecDD2>DD:velocityVecDD2</a></th>
               <th><a href=#DD:accelVecDD1>DD:accelVecDD1</a></th>
@@ -3001,13 +2776,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#correct>NFR:Correctness</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3057,13 +2828,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#inputValues>FR:Input-Values</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3113,13 +2880,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#calcAng>FR:Calculate-Angle-Of-Rod</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3146,8 +2909,6 @@
             </tr>
             <tr>
               <td><a href=#outputValues>FR:Output-Values</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>

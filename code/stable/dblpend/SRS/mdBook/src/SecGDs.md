@@ -19,11 +19,11 @@ This section collects the laws and equations that will be used to build the inst
 
 #### Detailed derivation of the vector of velocity: {#GD:velocityVector1Deriv}
 
-At a given point in time, velocity is defined in [DD:positionVecDD1](./SecDDs.md#DD:positionVecDD1)
+At a given point in time, velocity is the time derivative of the position vector
 
 \\[{\boldsymbol{v}\_{1}}=\frac{\\,d{\boldsymbol{p}\_{1}}}{\\,dt}\\]
 
-We also know the horizontal position that is defined in [DD:positionVecDD1](./SecDDs.md#DD:positionVecDD1)
+The position vector is defined as \\({\boldsymbol{p}\_{1}}\\) (shown in [Fig:dblpend](./SecPhysSyst.md#Figure:dblpend).)
 
 \\[{\boldsymbol{p}\_{1}}={L\_{1}}\\,\begin{bmatrix}\sin\left({θ\_{1}}\right)\\\\-\cos\left({θ\_{1}}\right)\end{bmatrix}\\]
 

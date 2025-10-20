@@ -8,11 +8,11 @@ import Foundation
 
 /** Reads glass ASTM data from a file with the given file name
     - Parameter filename: name of the input file
-    - Parameter z_vect3DSor: list of z values
+    - Parameter z_vector: list of z values
     - Parameter x_matrix: lists of x values at different z values
     - Parameter y_matrix: lists of y values at different z values
 */
-func read_table(_ filename: String, _ z_vect3DSor: inout [Double], _ x_matrix: inout [[Double]], _ y_matrix: inout [[Double]]) throws -> Void {
+func read_table(_ filename: String, _ z_vector: inout [Double], _ x_matrix: inout [[Double]], _ y_matrix: inout [[Double]]) throws -> Void {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -43,12 +43,12 @@ func read_table(_ filename: String, _ z_vect3DSor: inout [Double], _ x_matrix: i
         throw "Error printing to file."
     }
     do {
-        try outfile.write(contentsOf: Data("  z_vect3DSor = ".utf8))
+        try outfile.write(contentsOf: Data("  z_vector = ".utf8))
     } catch {
         throw "Error printing to file."
     }
     do {
-        try outfile.write(contentsOf: Data(z_vect3DSor.description.utf8))
+        try outfile.write(contentsOf: Data(z_vector.description.utf8))
     } catch {
         throw "Error printing to file."
     }
@@ -113,7 +113,7 @@ func read_table(_ filename: String, _ z_vect3DSor: inout [Double], _ x_matrix: i
     line = goolLine.joined(separator: " ")
     linetokens = line.components(separatedBy: ",")
     for i in [Int](stride(from: 0, to: linetokens.count / 1, by: 1)) {
-        z_vect3DSor.append(Double(linetokens[i * 1 + 0])!)
+        z_vector.append(Double(linetokens[i * 1 + 0])!)
     }
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -122,12 +122,12 @@ func read_table(_ filename: String, _ z_vect3DSor: inout [Double], _ x_matrix: i
         throw "Error opening file."
     }
     do {
-        try outfile.write(contentsOf: Data("var 'z_vect3DSor' assigned ".utf8))
+        try outfile.write(contentsOf: Data("var 'z_vector' assigned ".utf8))
     } catch {
         throw "Error printing to file."
     }
     do {
-        try outfile.write(contentsOf: Data(z_vect3DSor.description.utf8))
+        try outfile.write(contentsOf: Data(z_vector.description.utf8))
     } catch {
         throw "Error printing to file."
     }

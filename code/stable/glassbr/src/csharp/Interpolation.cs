@@ -156,9 +156,9 @@ public class Interpolation {
         
         List<List<double>> x_matrix = new List<List<double>>(0);
         List<List<double>> y_matrix = new List<List<double>>(0);
-        List<double> z_vect3DSor = new List<double>(0);
-        ReadTable.read_table(filename, z_vect3DSor, x_matrix, y_matrix);
-        i = find(z_vect3DSor, z);
+        List<double> z_vector = new List<double>(0);
+        ReadTable.read_table(filename, z_vector, x_matrix, y_matrix);
+        i = find(z_vector, z);
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'i' assigned ");
         outfile.Write(i);
@@ -248,7 +248,7 @@ public class Interpolation {
         outfile.Write(y_2);
         outfile.WriteLine(" in module Interpolation");
         outfile.Close();
-        return lin_interp(z_vect3DSor[i], y_1, z_vect3DSor[i + 1], y_2, z);
+        return lin_interp(z_vector[i], y_1, z_vector[i + 1], y_2, z);
     }
     
     /** \brief Linearly interpolates a z value at given x and y values
@@ -283,9 +283,9 @@ public class Interpolation {
         
         List<List<double>> x_matrix = new List<List<double>>(0);
         List<List<double>> y_matrix = new List<List<double>>(0);
-        List<double> z_vect3DSor = new List<double>(0);
-        ReadTable.read_table(filename, z_vect3DSor, x_matrix, y_matrix);
-        for (int i = 0; i < z_vect3DSor.Count - 1; i += 1) {
+        List<double> z_vector = new List<double>(0);
+        ReadTable.read_table(filename, z_vector, x_matrix, y_matrix);
+        for (int i = 0; i < z_vector.Count - 1; i += 1) {
             x_z_1 = extractColumn(x_matrix, i);
             outfile = new StreamWriter("log.txt", true);
             outfile.Write("var 'x_z_1' assigned ");
@@ -371,7 +371,7 @@ public class Interpolation {
             outfile.WriteLine(" in module Interpolation");
             outfile.Close();
             if (y_1 <= y && y <= y_2) {
-                return lin_interp(y_1, z_vect3DSor[i], y_2, z_vect3DSor[i + 1], y);
+                return lin_interp(y_1, z_vector[i], y_2, z_vector[i + 1], y);
             }
         }
         throw new Exception("Interpolation of z failed");

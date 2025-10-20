@@ -12,25 +12,25 @@ public class ReadTable {
     
     /** \brief Reads glass ASTM data from a file with the given file name
         \param filename name of the input file
-        \param z_vect3DSor list of z values
+        \param z_vector list of z values
         \param x_matrix lists of x values at different z values
         \param y_matrix lists of y values at different z values
     */
-    public static void read_table(string filename, List<double> z_vect3DSor, List<List<double>> x_matrix, List<List<double>> y_matrix) {
+    public static void read_table(string filename, List<double> z_vector, List<List<double>> x_matrix, List<List<double>> y_matrix) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function read_table called with inputs: {");
         outfile.Write("  filename = ");
         outfile.Write(filename);
         outfile.WriteLine(", ");
-        outfile.Write("  z_vect3DSor = ");
+        outfile.Write("  z_vector = ");
         outfile.Write("[");
-        for (int list_i1 = 0; list_i1 < z_vect3DSor.Count - 1; list_i1++) {
-            outfile.Write(z_vect3DSor[list_i1]);
+        for (int list_i1 = 0; list_i1 < z_vector.Count - 1; list_i1++) {
+            outfile.Write(z_vector[list_i1]);
             outfile.Write(", ");
         }
-        if (z_vect3DSor.Count > 0) {
-            outfile.Write(z_vect3DSor[z_vect3DSor.Count - 1]);
+        if (z_vector.Count > 0) {
+            outfile.Write(z_vector[z_vector.Count - 1]);
         }
         outfile.Write("]");
         outfile.WriteLine(", ");
@@ -98,17 +98,17 @@ public class ReadTable {
         line = infile.ReadLine();
         linetokens = new List<string>(line.Split(','));
         for (int i = 0; i < linetokens.Count / 1; i += 1) {
-            z_vect3DSor.Add(Double.Parse(linetokens[i * 1 + 0]));
+            z_vector.Add(Double.Parse(linetokens[i * 1 + 0]));
         }
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'z_vect3DSor' assigned ");
+        outfile.Write("var 'z_vector' assigned ");
         outfile.Write("[");
-        for (int list_i1 = 0; list_i1 < z_vect3DSor.Count - 1; list_i1++) {
-            outfile.Write(z_vect3DSor[list_i1]);
+        for (int list_i1 = 0; list_i1 < z_vector.Count - 1; list_i1++) {
+            outfile.Write(z_vector[list_i1]);
             outfile.Write(", ");
         }
-        if (z_vect3DSor.Count > 0) {
-            outfile.Write(z_vect3DSor[z_vect3DSor.Count - 1]);
+        if (z_vector.Count > 0) {
+            outfile.Write(z_vector[z_vector.Count - 1]);
         }
         outfile.Write("]");
         outfile.WriteLine(" in module ReadTable");

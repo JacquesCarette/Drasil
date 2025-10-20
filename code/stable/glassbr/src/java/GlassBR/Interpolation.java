@@ -129,9 +129,9 @@ public class Interpolation {
         
         ArrayList<ArrayList<Double>> x_matrix = new ArrayList<ArrayList<Double>>(0);
         ArrayList<ArrayList<Double>> y_matrix = new ArrayList<ArrayList<Double>>(0);
-        ArrayList<Double> z_vect3DSor = new ArrayList<Double>(0);
-        ReadTable.read_table(filename, z_vect3DSor, x_matrix, y_matrix);
-        i = find(z_vect3DSor, z);
+        ArrayList<Double> z_vector = new ArrayList<Double>(0);
+        ReadTable.read_table(filename, z_vector, x_matrix, y_matrix);
+        i = find(z_vector, z);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'i' assigned ");
         outfile.print(i);
@@ -189,7 +189,7 @@ public class Interpolation {
         outfile.print(y_2);
         outfile.println(" in module Interpolation");
         outfile.close();
-        return lin_interp(z_vect3DSor.get(i), y_1, z_vect3DSor.get(i + 1), y_2, z);
+        return lin_interp(z_vector.get(i), y_1, z_vector.get(i + 1), y_2, z);
     }
     
     /** \brief Linearly interpolates a z value at given x and y values
@@ -224,9 +224,9 @@ public class Interpolation {
         
         ArrayList<ArrayList<Double>> x_matrix = new ArrayList<ArrayList<Double>>(0);
         ArrayList<ArrayList<Double>> y_matrix = new ArrayList<ArrayList<Double>>(0);
-        ArrayList<Double> z_vect3DSor = new ArrayList<Double>(0);
-        ReadTable.read_table(filename, z_vect3DSor, x_matrix, y_matrix);
-        for (int i = 0; i < z_vect3DSor.size() - 1; i += 1) {
+        ArrayList<Double> z_vector = new ArrayList<Double>(0);
+        ReadTable.read_table(filename, z_vector, x_matrix, y_matrix);
+        for (int i = 0; i < z_vector.size() - 1; i += 1) {
             x_z_1 = extractColumn(x_matrix, i);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'x_z_1' assigned ");
@@ -280,7 +280,7 @@ public class Interpolation {
             outfile.println(" in module Interpolation");
             outfile.close();
             if (y_1 <= y && y <= y_2) {
-                return lin_interp(y_1, z_vect3DSor.get(i), y_2, z_vect3DSor.get(i + 1), y);
+                return lin_interp(y_1, z_vector.get(i), y_2, z_vector.get(i + 1), y);
             }
         }
         throw new Exception("Interpolation of z failed");

@@ -133,9 +133,9 @@ double interpY(string filename, double x, double z) {
     
     vector<vector<double>> x_matrix(0);
     vector<vector<double>> y_matrix(0);
-    vector<double> z_vect3DSor(0);
-    read_table(filename, z_vect3DSor, x_matrix, y_matrix);
-    i = find(z_vect3DSor, z);
+    vector<double> z_vector(0);
+    read_table(filename, z_vector, x_matrix, y_matrix);
+    i = find(z_vector, z);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'i' assigned ";
     outfile << i;
@@ -225,7 +225,7 @@ double interpY(string filename, double x, double z) {
     outfile << y_2;
     outfile << " in module Interpolation" << std::endl;
     outfile.close();
-    return lin_interp(z_vect3DSor.at(i), y_1, z_vect3DSor.at(i + 1), y_2, z);
+    return lin_interp(z_vector.at(i), y_1, z_vector.at(i + 1), y_2, z);
 }
 
 double interpZ(string filename, double x, double y) {
@@ -254,9 +254,9 @@ double interpZ(string filename, double x, double y) {
     
     vector<vector<double>> x_matrix(0);
     vector<vector<double>> y_matrix(0);
-    vector<double> z_vect3DSor(0);
-    read_table(filename, z_vect3DSor, x_matrix, y_matrix);
-    for (int i = 0; i < (int)(z_vect3DSor.size()) - 1; i += 1) {
+    vector<double> z_vector(0);
+    read_table(filename, z_vector, x_matrix, y_matrix);
+    for (int i = 0; i < (int)(z_vector.size()) - 1; i += 1) {
         x_z_1 = extractColumn(x_matrix, i);
         outfile.open("log.txt", std::fstream::app);
         outfile << "var 'x_z_1' assigned ";
@@ -342,7 +342,7 @@ double interpZ(string filename, double x, double y) {
         outfile << " in module Interpolation" << std::endl;
         outfile.close();
         if (y_1 <= y && y <= y_2) {
-            return lin_interp(y_1, z_vect3DSor.at(i), y_2, z_vect3DSor.at(i + 1), y);
+            return lin_interp(y_1, z_vector.at(i), y_2, z_vector.at(i + 1), y);
         }
     }
     throw("Interpolation of z failed");

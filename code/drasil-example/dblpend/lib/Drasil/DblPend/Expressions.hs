@@ -40,6 +40,15 @@ perpDirectionVector_2 :: PExpr
 perpDirectionVector_2 = vector cosAngleExpr2 sinAngleExpr2
 
 --------------------------------------------------
+-- Positions
+--------------------------------------------------
+mvPosExpr_1 :: PExpr
+mvPosExpr_1 = sy lenRod_1 `cScale` directionVector_1
+
+mvPosExpr_2 :: PExpr
+mvPosExpr_2 = mvPosExpr_1 `cAdd` (sy lenRod_2 `cScale` directionVector_2)
+
+--------------------------------------------------
 -- Velocities
 --------------------------------------------------
 mvVelExpr_1 :: PExpr

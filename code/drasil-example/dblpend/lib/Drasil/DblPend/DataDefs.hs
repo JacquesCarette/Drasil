@@ -11,13 +11,12 @@ import Theory.Drasil (DataDefinition, ddMENoRefs, ddENoRefs)
 
 import Drasil.DblPend.LabelledContent (figMotion)
 import Drasil.DblPend.Unitals
-  ( pendDisAngle_1, pendDisAngle_2
-  , lenRod_1, lenRod_2
-  , posVec_1, posVec_2
+  ( posVec_1, posVec_2
   , mvVel_1, mvVel_2
   , mvAccel_1, mvAccel_2
   , mvForce_1, mvForce_2
   )
+import Drasil.DblPend.Expressions (mvPosExpr_1, mvPosExpr_2)
 
 import Drasil.DblPend.Concepts (pendulumPos)
 import Data.Drasil.Quantities.Physics (time)
@@ -28,9 +27,9 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 ------------------------------------------------------
 dataDefs :: [DataDefinition]
 dataDefs =
-  [ positionVecDD_1
-  , positionVecDD_2
-  , velocityVecDD_1
+  [ -- positionVecDD_1  -- TODO: Position vectors cause type checker errors in ddENoRefs
+  -- , positionVecDD_2  -- They are defined in Expressions.hs as mvPosExpr_1/2
+    velocityVecDD_1
   , velocityVecDD_2
   , accelVecDD_1
   , accelVecDD_2
@@ -47,11 +46,7 @@ positionVecDD_1 =
   ddENoRefs positionVecQD_1 Nothing "positionVecDD1" [posVecRef_1]
 
 positionVecQD_1 :: SimpleQDef
-positionVecQD_1 = mkQuantDef posVec_1 positionVecEqn_1
-
--- r₁ = l₁ * (sin θ₁ e₁ - cos θ₁ e₂)
-positionVecEqn_1 :: PExpr
-positionVecEqn_1 = sy lenRod_1 $* vec2D (sin (sy pendDisAngle_1)) (neg (cos (sy pendDisAngle_1)))
+positionVecQD_1 = mkQuantDef posVec_1 mvPosExpr_1
 
 posVecRef_1 :: Sentence
 posVecRef_1 = ch posVec_1 `S.isThe` phrase pendulumPos +:+. refS figMotion
@@ -63,11 +58,7 @@ positionVecDD_2 =
   ddENoRefs positionVecQD_2 Nothing "positionVecDD2" [posVecRef_2]
 
 positionVecQD_2 :: SimpleQDef
-positionVecQD_2 = mkQuantDef posVec_2 positionVecEqn_2
-
--- r₂ = r₁ + l₂ * (sin θ₂ e₁ - cos θ₂ e₂)
-positionVecEqn_2 :: PExpr
-positionVecEqn_2 = sy posVec_1 $+ (sy lenRod_2 $* vec2D (sin (sy pendDisAngle_2)) (neg (cos (sy pendDisAngle_2))))
+positionVecQD_2 = mkQuantDef posVec_2 mvPosExpr_2
 
 posVecRef_2 :: Sentence
 posVecRef_2 = ch posVec_2 `S.isThe` phrase pendulumPos +:+. refS figMotion

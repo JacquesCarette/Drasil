@@ -15,10 +15,10 @@ import Drasil.DblPend.Unitals (lenRod_1, mvVel_1, mvVel_2,
     posVec_1, posVec_2, lenRod_2, pendDisAngle_1, pendDisAngle_2,
     angularVel_1, angularVel_2, tension_1, tension_2, massObj_1, massObj_2)
 import qualified Data.Drasil.Quantities.Physics as QP (gravitationalAccel)
-import Drasil.DblPend.DataDefs (positionVecDD_1)
 import Data.Drasil.Concepts.Math (vector)
 import qualified Drasil.DblPend.Expressions as E
-import Drasil.DblPend.Concepts 
+import Drasil.DblPend.Concepts
+import Drasil.DblPend.LabelledContent (figMotion) 
 
 genDefns :: [GenDefn]
 genDefns = [mvVelGD_1, mvVelGD_2, mvAccelGD_1, mvAccelGD_2, mvForceGD_1, mvForceGD_2]
@@ -39,8 +39,8 @@ mvVelDeriv_1 = mkDerivName (phraseNP (NP.the (vector`of_` velocity))) (weave [mv
 
 -- Derivation step sentences (vector -> component -> vector form)
 velDerivSent1, velXDerivSent2_1, velDerivSent3, velDerivSent4, velDerivSent5 :: Sentence
-velDerivSent1 = S "At a given point in time" `sC` phrase velocity `S.is` definedIn'' positionVecDD_1
-velXDerivSent2_1 = S "We also know the" +:+ phrase horizontalPos +:+ S "that" `S.is` definedIn'' positionVecDD_1
+velDerivSent1 = S "At a given point in time" `sC` phrase velocity `S.is` S "the time derivative of the position vector"
+velXDerivSent2_1 = S "The position vector is defined as" +:+ eS' posVec_1 +:+ sParen (S "shown in" +:+. refS figMotion)
 velDerivSent3 = S "Applying this,"
 velDerivSent4 = eS' lenRod_1 `S.is` S "constant" `S.wrt` S "time, so"
 velDerivSent5 = S "Therefore, using the chain rule,"

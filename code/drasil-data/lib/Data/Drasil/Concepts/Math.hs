@@ -11,8 +11,8 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 -- | Collects all math-related concepts.
 mathcon :: [ConceptChunk]
 mathcon = [amplitude, angle, axis, calculation, cartesian, centre, change, component,
-  constraint, direction, equation, euclidSpace, graph, laplaceTransform, law, line, matrix,
-  norm, normal, number, origin, parameter, perp, positive, negative,
+  constraint, direction, equation, euclidSpace, graph, laplaceTransform, law, line, magnitude,
+  matrix, norm, normal, number, origin, parameter, perp, positive, negative,
   point, probability, rOfChng, rate, rightHand, shape, unit_, vector, 
   xAxis, xCoord, xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
 
@@ -23,10 +23,11 @@ mathcon' = [de, leftSide, ode, pde, rightSide]
 -- * Mathematical Concepts
 
 amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint, diameter,
-  direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix, norm, normal, normalV, 
-  number, orient, origin, parameter, perp, perpV, pi_, negInf, posInf, positive, negative, point, probability,
-  rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
-  yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
+  direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, magnitude,
+  matrix, norm, normal, normalV, number, orient, origin, parameter, perp, perpV, pi_, negInf, 
+  posInf, positive, negative, point, probability, rOfChng, rate, rightHand, shape, surArea, 
+  surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir, yAxis, yCoord,  yComp, yDir, 
+  zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
   
 amplitude   = dcc "amplitude"    (nounPhraseSP "amplitude")      "The peak deviation of a function from zero"
@@ -56,6 +57,7 @@ laplaceTransform = dcc "laplaceTransform" (cn' "laplace transform") ("An integra
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
 line         = dccWDS "line"      (pn' "line")                    $ S "An interval between two points" +:+
                                                                   fromSource lineSource
+magnitude    = dcc "magnitude"    (cn' "magnitude")              "the size or extent of a quantity; the absolute value of a vector"
 matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
                                                                  "is treated as a single entity and manipulated according to particular rules")
 norm        = dcc "norm"         (cn' "norm")                    "the positive length or size of a vector"

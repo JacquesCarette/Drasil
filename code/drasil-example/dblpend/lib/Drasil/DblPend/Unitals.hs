@@ -9,7 +9,8 @@ import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
   ( lM, lP, lV, lA, lW, lAlpha, lTheta, cL, cT, cF )
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Language.Drasil.NounPhrase.Combinators as NP
+import Control.Lens ((^.))
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
   requirement, refBy, refName, srs, typUnc)
@@ -19,7 +20,7 @@ import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, acceleration, tension, time, gravitationalAccelConst)
 import Data.Drasil.Concepts.Physics (twoD)
-import Data.Drasil.Concepts.Math as CM (angle)
+import Data.Drasil.Concepts.Math as CM (angle, magnitude)
 import Data.Drasil.Quantities.Math as QM (unitVect, pi_)
 import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject)
 import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
@@ -161,11 +162,11 @@ angularAccel_2 = uc' "alpha_2" (QP.angularAccel `ofThe` secondObject)
 
 -- Scalar tension forces
 tension_1, tension_2 :: UnitalChunk
-tension_1 = uc' "T_1" (nounPhraseSent (S "magnitude" `S.the_ofThe` phraseNP (QP.tension `inThe` firstRod)))
+tension_1 = uc' "T_1" (NP.ofThe (CM.magnitude ^. term) (QP.tension `inThe` firstRod))
   (phraseNP (QP.tension `the_ofThe` firstRod))
   (sub (vec cT) label1) Real newton
 
-tension_2 = uc' "T_2" (nounPhraseSent (S "magnitude" `S.the_ofThe` phraseNP (QP.tension `inThe` secondRod)))
+tension_2 = uc' "T_2" (NP.ofThe (CM.magnitude ^. term) (QP.tension `inThe` secondRod))
   (phraseNP (QP.tension `the_ofThe` secondRod))
   (sub (vec cT) label2) Real newton
 

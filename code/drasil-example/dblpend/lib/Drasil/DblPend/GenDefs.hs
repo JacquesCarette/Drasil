@@ -3,28 +3,19 @@ module Drasil.DblPend.GenDefs (genDefns, mvVelGD_1, mvVelGD_2,
          mvAccelGD_1, mvAccelGD_2, mvForceGD_1, mvForceGD_2) where
 
 import Prelude hiding (cos, sin, sqrt)
--- import qualified Data.List.NonEmpty as NE
-
 import Language.Drasil
 import Utils.Drasil (weave)
 import Theory.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.NounPhrase.Combinators as NP
--- import Data.Drasil.Concepts.Math (xComp, yComp)
 import Data.Drasil.Quantities.Physics (velocity, acceleration, force, time)
-import Data.Drasil.Quantities.PhysicalProperties (mass)
--- import Drasil.DblPend.DataDefs
--- import qualified Drasil.DblPend.Expressions as E
--- import qualified Drasil.DblPend.Derivations as D
 import Drasil.DblPend.Unitals (lenRod_1, mvVel_1, mvVel_2,
     mvAccel_1, mvAccel_2, mvForce_1, mvForce_2,
     posVec_1, posVec_2, lenRod_2, pendDisAngle_1, pendDisAngle_2,
-    angularVel_1, angularVel_2)
+    angularVel_1, angularVel_2, tension_1, tension_2, massObj_1, massObj_2)
+import qualified Data.Drasil.Quantities.Physics as QP (gravitationalAccel)
 import Drasil.DblPend.DataDefs (positionVecDD_1)
--- import Drasil.DblPend.Concepts (horizontalPos,
---     verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, firstObject, secondObject)
--- import Control.Lens ((^.))
 import Data.Drasil.Concepts.Math (vector)
 import qualified Drasil.DblPend.Expressions as E
 import Drasil.DblPend.Concepts 
@@ -167,6 +158,7 @@ mvAccelDerivEqns_2 = [
 
 -----------------------------------------------
 -- Force Vector for First Object            --
+-----------------------------------------------
 mvForceGD_1 :: GenDefn
 mvForceGD_1 = gdNoRefs (equationalModel' mvForceQD_1) (getUnit force) (Just mvForceDeriv_1) "forceVector1" []
 
@@ -183,11 +175,13 @@ mvForceDerivSents_1 = [S "The force vector combines tension forces and gravitati
 
 mvForceDerivEqns_1 :: [Sentence]
 mvForceDerivEqns_1 = [
-    -- Newton: F = m * a
-    eS $ sy mvForce_1 $= sy mass $* sy mvAccel_1,
+    -- Start with sum of forces (symbolic, not yet vectorized)
+        eS $ sy mvForce_1 $= sy tension_1 `cAdd` sy tension_2 `cAdd` (sy massObj_1 `cScale` sy QP.gravitationalAccel),
+    -- Newton: F = m * a (vector form)
+    eS $ sy mvForce_1 $= sy massObj_1 `cScale` sy mvAccel_1,
     -- Expand acceleration definition
     eS $ sy mvAccel_1 $= E.mvAccelExpr_1,
-    -- Tension and gravity vector definitions
+    -- Tension and gravity vector definitions (vector form)
     eS $ sy mvForce_1 $= negClif E.tensionVec_1 `cAdd` E.tensionVec_2 `cAdd` E.gravitationalForce_1,
     -- Final simplified force expression
     eS $ sy mvForce_1 $= E.mvForceExpr_1
@@ -212,8 +206,14 @@ mvForceDerivSents_2 = [S "The force on the second object combines tension from t
 
 mvForceDerivEqns_2 :: [Sentence]
 mvForceDerivEqns_2 = [
-    eS $ sy mvForce_2 $= sy mass $* sy mvAccel_2,
+    -- Start with sum of forces (symbolic, not yet vectorized)
+    eS $ sy mvForce_2 $= sy tension_2 `cAdd` (sy massObj_2 `cScale` sy QP.gravitationalAccel),
+    -- Newton: F = m * a (vector form)
+    eS $ sy mvForce_2 $= sy massObj_2 `cScale` sy mvAccel_2,
+    -- Expand acceleration definition
     eS $ sy mvAccel_2 $= E.mvAccelExpr_2,
+    -- Tension and gravity vector definitions (vector form)
     eS $ sy mvForce_2 $= negClif E.tensionVec_2 `cAdd` E.gravitationalForce_2,
+    -- Final simplified force expression
     eS $ sy mvForce_2 $= E.mvForceExpr_2
     ]

@@ -10,6 +10,7 @@ import Language.Drasil.ShortHands
   ( lM, lP, lV, lA, lW, lAlpha, lTheta, cL, cT, cF )
 import qualified Language.Drasil.Space as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
   requirement, refBy, refName, srs, typUnc)
@@ -167,13 +168,13 @@ angularAccel_2 = uc' "alpha_2" (QP.angularAccel `ofThe` secondObject)
 
 -- Scalar tension forces
 tension_1, tension_2 :: UnitalChunk
-tension_1 = uc' "T_1" (QP.tension `ofThe` firstRod)
+tension_1 = uc' "T_1" (nounPhraseSent (S "magnitude" `S.the_ofThe` phraseNP (QP.tension `inThe` firstRod)))
   (phraseNP (QP.tension `the_ofThe` firstRod))
-  (sub cT label1) Real newton
+  (sub (vec cT) label1) Real newton
 
-tension_2 = uc' "T_2" (QP.tension `ofThe` secondRod)
+tension_2 = uc' "T_2" (nounPhraseSent (S "magnitude" `S.the_ofThe` phraseNP (QP.tension `inThe` secondRod)))
   (phraseNP (QP.tension `the_ofThe` secondRod))
-  (sub cT label2) Real newton
+  (sub (vec cT) label2) Real newton
 
 ----------------------------------------
 -- UNITLESS, SYMBOLS

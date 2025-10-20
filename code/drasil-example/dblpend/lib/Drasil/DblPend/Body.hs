@@ -205,8 +205,7 @@ externalLinkRef = makeURI "DblPendSRSLink"
 scope :: Sentence
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
   sParen (short twoD), phrase pendMotion, phrase problem,
-  S "with various initial conditions using",
-  S "for geometric representation of physical quantities"]
+  S "with various initial conditions using"]
 
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --

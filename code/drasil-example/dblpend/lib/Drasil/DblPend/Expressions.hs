@@ -35,7 +35,7 @@ perpDirectionVector_1 = vector cosAngleExpr1 sinAngleExpr1
 
 directionVector_2 :: PExpr
 directionVector_2 = vector sinAngleExpr2 (neg cosAngleExpr2)
-  
+
 perpDirectionVector_2 :: PExpr
 perpDirectionVector_2 = vector cosAngleExpr2 sinAngleExpr2
 

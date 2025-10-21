@@ -7,7 +7,7 @@ import Prelude hiding (sin, cos, sqrt)
 
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
-import Theory.Drasil (DataDefinition, ddMENoRefs, ddENoRefs)
+import Theory.Drasil (DataDefinition, ddMENoRefs)
 
 import Drasil.DblPend.LabelledContent (figMotion)
 import Drasil.DblPend.Unitals
@@ -43,9 +43,9 @@ dataDefs =
 
 positionVecDD_1 :: DataDefinition
 positionVecDD_1 =
-  ddENoRefs positionVecQD_1 Nothing "positionVecDD1" [posVecRef_1]
+  ddMENoRefs positionVecQD_1 Nothing "positionVecDD1" [posVecRef_1]
 
-positionVecQD_1 :: SimpleQDef
+positionVecQD_1 :: ModelQDef
 positionVecQD_1 = mkQuantDef posVec_1 mvPosExpr_1
 
 posVecRef_1 :: Sentence
@@ -55,9 +55,9 @@ posVecRef_1 = ch posVec_1 `S.isThe` phrase pendulumPos +:+. refS figMotion
 
 positionVecDD_2 :: DataDefinition
 positionVecDD_2 =
-  ddENoRefs positionVecQD_2 Nothing "positionVecDD2" [posVecRef_2]
+  ddMENoRefs positionVecQD_2 Nothing "positionVecDD2" [posVecRef_2]
 
-positionVecQD_2 :: SimpleQDef
+positionVecQD_2 :: ModelQDef
 positionVecQD_2 = mkQuantDef posVec_2 mvPosExpr_2
 
 posVecRef_2 :: Sentence

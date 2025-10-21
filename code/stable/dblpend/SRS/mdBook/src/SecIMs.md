@@ -44,19 +44,19 @@ This section transforms the problem defined in the [problem description](./SecPr
 
 By solving multivector force equations [GD:forceVector1](./SecGDs.md#GD:forceVector1) and [GD:forceVector2](./SecGDs.md#GD:forceVector2) for \\({\boldsymbol{F}\_{1}}\\) and \\({\boldsymbol{F}\_{2}}\\) , we can get equations 1 and 2:
 
-\\[{m\_{1}} {\boldsymbol{a}\_{1}}=-{\boldsymbol{T}\_{1}} \sin\left({θ\_{1}}\right)\\]
+\\[{m\_{1}} {\boldsymbol{a}\_{1}}=-{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)\\]
 
 
 
-\\[{m\_{1}} {\boldsymbol{a}\_{1}}={\boldsymbol{T}\_{1}} \cos\left({θ\_{1}}\right)-{m\_{1}} g\\]
+\\[{m\_{1}} {\boldsymbol{a}\_{1}}={\boldsymbol{T}\_{1}}\\,\cos\left({θ\_{1}}\right)-{m\_{1}}\\,g\\]
 
 Multiply the equation 1 by \\(\cos\left({θ\_{1}}\right)\\) and the equation 2 by \\(\sin\left({θ\_{1}}\right)\\) and rearrange to get:
 
-\\[{m\_{2}} {\boldsymbol{a}\_{2}}=-{\boldsymbol{T}\_{2}} \sin\left({θ\_{2}}\right)\\]
+\\[{m\_{2}} {\boldsymbol{a}\_{2}}=-{\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\]
 
 
 
-\\[{m\_{2}} {\boldsymbol{a}\_{2}}={\boldsymbol{T}\_{2}} \cos\left({θ\_{2}}\right)-{m\_{2}} g\\]
+\\[{m\_{2}} {\boldsymbol{a}\_{2}}={\boldsymbol{T}\_{2}}\\,\cos\left({θ\_{2}}\right)-{m\_{2}}\\,g\\]
 
 This leads to the equation 3
 

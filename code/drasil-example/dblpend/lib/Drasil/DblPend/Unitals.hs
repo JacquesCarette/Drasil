@@ -24,7 +24,7 @@ import Data.Drasil.Concepts.Math as CM (angle, magnitude)
 import Data.Drasil.Quantities.Math as QM (unitVect, pi_)
 import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject)
 import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
-import Language.Drasil.Space (realVect, vecDim)
+import Language.Drasil.Space (vect2D)
 
 ----------------------------------------
 -- ACRONYMS, SYMBOLS, INPUTS, OUTPUTS
@@ -106,41 +106,41 @@ pendDisAngle_2 = uc' "theta_2" (CM.angle `ofThe` secondRod)
 posVec_1, posVec_2 :: UnitalChunk
 posVec_1 = uc' "p_1" (QP.position `ofThe` firstObject)
   (phraseNP (QP.position `the_ofThe` firstObject))
-  (vec lP `sub` label1) (realVect vecDim) metre
+  (vec lP `sub` label1) vect2D metre
 
 posVec_2 = uc' "p_2" (QP.position `ofThe` secondObject)
   (phraseNP (QP.position `the_ofThe` secondObject))
-  (vec lP `sub` label2) (realVect vecDim) metre
+  (vec lP `sub` label2) vect2D metre
 
 -- Clifford velocities
 mvVel_1, mvVel_2 :: UnitalChunk
 mvVel_1 = uc' "v_mv1" (QP.velocity `ofThe` firstObject)
   (phraseNP (QP.velocity `the_ofThe` firstObject))
-  (vec lV `sub` label1) (realVect vecDim) velU
+  (vec lV `sub` label1) vect2D velU
 
 mvVel_2 = uc' "v_mv2" (QP.velocity `ofThe` secondObject)
   (phraseNP (QP.velocity `the_ofThe` secondObject))
-  (vec lV `sub` label2) (realVect vecDim) velU
+  (vec lV `sub` label2) vect2D velU
 
 -- Clifford accelerations
 mvAccel_1, mvAccel_2 :: UnitalChunk
 mvAccel_1 = uc' "a_mv1" (QP.acceleration `ofThe` firstObject)
   (phraseNP (QP.acceleration `the_ofThe` firstObject))
-  (vec lA `sub` label1) (realVect vecDim) accelU
+  (vec lA `sub` label1) vect2D accelU
 
 mvAccel_2 = uc' "a_mv2" (QP.acceleration `ofThe` secondObject)
   (phraseNP (QP.acceleration `the_ofThe` secondObject))
-  (vec lA `sub` label2) (realVect vecDim) accelU
+  (vec lA `sub` label2) vect2D accelU
 
 -- Clifford forces
 mvForce_1, mvForce_2 :: UnitalChunk
 mvForce_1 = uc' "F_mv1" (QP.force `ofThe` firstObject)
   (phraseNP (QP.force `the_ofThe` firstObject))
-  (vec cF `sub` label1) (realVect vecDim) newton
+  (vec cF `sub` label1) vect2D newton
 
 mvForce_2 = uc' "F_mv2" (QP.force `ofThe` secondObject)
   (phraseNP (QP.force `the_ofThe` secondObject))
-  (vec cF `sub` label2) (realVect vecDim) newton
+  (vec cF `sub` label2) vect2D newton
 
 -- Angular velocity / acceleration
 angularVel_1, angularVel_2, angularAccel_1, angularAccel_2 :: UnitalChunk
@@ -205,5 +205,5 @@ pendDisAngle :: ConstrConcept
 pendDisAngle = cuc' "pendDisAngle"
   (nounPhraseSP "dependent variables")
   "column vector of displacement of rods with its derivatives"
-  lTheta radian (realVect vecDim)
+  lTheta radian vect2D
   [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)

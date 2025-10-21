@@ -18,7 +18,7 @@ module Language.Drasil.Space (
   Dimension(..), scalarS, vect2DS, vect3DS, vectS, vectNDS, 
   bivector2DS, bivector3DS, bivectorS, bivectorNDS,
   multivector2DS, multivector3DS, multivectorS, multivectorNDS,
-  ClifKind(..), realVect, vecDim
+  ClifKind(..), realVect, vecDim, vect2D, vect3D
 
 ) where
 
@@ -68,8 +68,17 @@ checkClifSpace _ = True --error $ "Non-real clif spaces unsupported"
 realVect :: Dimension -> Space
 realVect d = ClifS d Vector Real
 
+-- | Common dimension constants
 vecDim :: Dimension
 vecDim = Fixed 2
+
+-- | Direct 2D vector space (optimized)
+vect2D :: Space
+vect2D = ClifS (Fixed 2) Vector Real
+
+-- | Direct 3D vector space (optimized)
+vect3D :: Space
+vect3D = ClifS (Fixed 3) Vector Real
 
 -- | Helper that constructs a scalar Clifford object
 scalarS :: Space -> Space

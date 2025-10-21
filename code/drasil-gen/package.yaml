@@ -44,6 +44,7 @@ library:
   source-dirs: lib
   exposed-modules:
   - Drasil.Generator
+  - Drasil.Generator.BaseChunkDB
   when:
   - condition: false
     other-modules: Paths_drasil_gen

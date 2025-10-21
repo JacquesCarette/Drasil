@@ -2,9 +2,9 @@
 module Language.Drasil.Expr.Precedence where
 
 import Language.Drasil.Expr.Lang (Expr(..),
-  ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
-  UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
-  AssocBoolOper(..), AssocArithOper(..), VVVBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocConcatOper(..))
+  ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, CCNBinOp,
+  UFunc(..), UFuncB(..),
+  AssocBoolOper(..), AssocArithOper(..), CCCBinOp, NCCBinOp, ESSBinOp, ESBBinOp, AssocConcatOper(..))
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -32,17 +32,17 @@ prec2LA _ = 250
 prec2Ord :: OrdBinOp -> Int
 prec2Ord _  = 130
 
--- | prec2VVV - precedence for Vec->Vec->Vec-related binary operations.
-prec2VVV :: VVVBinOp -> Int
-prec2VVV _ = 190
+-- | prec2CCC - precedence for Vec->Vec->Vec-related binary operations.
+prec2CCC :: CCCBinOp -> Int
+prec2CCC _ = 190
 
--- | prec2VVN - precedence for Vec->Vec->Num-related binary operations.
-prec2VVN :: VVNBinOp -> Int
-prec2VVN _ = 190
+-- | prec2CCN - precedence for Vec->Vec->Num-related binary operations.
+prec2CCN :: CCNBinOp -> Int
+prec2CCN _ = 190
 
--- | prec2NVV - precedence for Num->Vec->Vec-related binary operations.
-prec2NVV :: NVVBinOp -> Int
-prec2NVV _ = 190
+-- | prec2NCC - precedence for Num->Vec->Vec-related binary operations.
+prec2NCC :: NCCBinOp -> Int
+prec2NCC _ = 190
 
 -- | prec2ESS - precedence for Element->Set->Set-related binary operations.
 prec2ESS :: ESSBinOp -> Int
@@ -76,13 +76,13 @@ prec1 _ = 250
 prec1B :: UFuncB -> Int
 prec1B Not = 230
 
--- | prec1VV - precedence of vector-vector-related unary operators.
-prec1VV :: UFuncVV -> Int
-prec1VV _ = 250
+-- | prec1CC - precedence of vector-vector-related unary operators.
+prec1CC :: uFuncCC -> Int
+prec1CC _ = 250
 
 -- | prec1Vec - precedence of vector-number-related unary operators.
-prec1VN :: UFuncVN -> Int
-prec1VN _ = 230
+prec1CN :: uFuncCN -> Int
+prec1CN _ = 230
 
 -- | eprec - "Expression" precedence.
 eprec :: Expr -> Int
@@ -98,17 +98,19 @@ eprec Set{}                  = 220
 eprec (Variable _ _)         = 220
 eprec (UnaryOp fn _)         = prec1 fn
 eprec (UnaryOpB fn _)        = prec1B fn
-eprec (UnaryOpVV fn _)       = prec1VV fn
-eprec (UnaryOpVN fn _)       = prec1VN fn
+eprec (UnaryOpCC fn _)       = prec1CC fn
+eprec (UnaryOpCN fn _)       = prec1CN fn
 eprec (Operator o _ _)       = precA o
 eprec (ArithBinaryOp bo _ _) = prec2Arith bo
 eprec (BoolBinaryOp bo _ _)  = prec2Bool bo
 eprec (EqBinaryOp bo _ _)    = prec2Eq bo
 eprec (LABinaryOp bo _ _)    = prec2LA bo
 eprec (OrdBinaryOp bo _ _)   = prec2Ord bo
-eprec (VVVBinaryOp bo _ _)   = prec2VVV bo
-eprec (VVNBinaryOp bo _ _)   = prec2VVN bo
-eprec (NVVBinaryOp bo _ _)   = prec2NVV bo
+eprec (CCCBinaryOp bo _ _)   = prec2CCC bo
+eprec (CCNBinaryOp bo _ _)   = prec2CCN bo
+eprec (NCCBinaryOp bo _ _)   = prec2NCC bo
 eprec (ESSBinaryOp bo _ _)   = prec2ESS bo
 eprec (ESBBinaryOp bo _ _)   = prec2ESB bo
+eprec (NatCCBinaryOp {})    = 250  -- Reasonable precedence for natural clif operations
+eprec (Clif _ _)            = 500  -- High precedence like literals
 eprec RealI{}                = 170

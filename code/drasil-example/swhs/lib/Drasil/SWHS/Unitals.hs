@@ -3,6 +3,7 @@ module Drasil.SWHS.Unitals where -- all of this file is exported
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Display (Symbol(Atop), Decoration(Delta))
+import Language.Drasil.Space (realVect, vecDim)
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
@@ -410,7 +411,7 @@ outputs = [tempW, tempPCM, watE, pcmE]
 tempW = cuc' "tempW"
   (nounPhraseSP "temperature of the water")
   "the average kinetic energy of the particles within the water" 
-  (sub (eqSymb temp) lWater) centigrade (Vect Real)
+  (sub (eqSymb temp) lWater) centigrade (realVect vecDim)
   [physRange $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (exactDbl 0)
 
 -- Constraint 19

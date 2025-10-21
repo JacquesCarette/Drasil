@@ -19,13 +19,13 @@ import Drasil.DblPend.Expressions (vector)
 -- | Position vectors
 posVecDerivEqn_1, posVecDerivEqn_2 :: ModelExpr
 posVecDerivEqn_1 = sy posVec_1 $=
-  vector (sy lenRod_1 `cScale` sin (sy pendDisAngle_1))
-         (neg (sy lenRod_1 `cScale` cos (sy pendDisAngle_1)))
+  vector (sy lenRod_1 $* sin (sy pendDisAngle_1))
+         (neg (sy lenRod_1 $* cos (sy pendDisAngle_1)))
 
 posVecDerivEqn_2 = sy posVec_2 $=
   sy posVec_1 $+
-  vector (sy lenRod_2 `cScale` sin (sy pendDisAngle_2))
-         (neg (sy lenRod_2 `cScale` cos (sy pendDisAngle_2)))
+  vector (sy lenRod_2 $* sin (sy pendDisAngle_2))
+         (neg (sy lenRod_2 $* cos (sy pendDisAngle_2)))
 
 
 -- | Velocity vectors (first derivatives of position)
@@ -55,15 +55,15 @@ angularAccelDerivEqns =
 -- Simplified symbolic GA-based relationships
 angAccelEqn_1, angAccelEqn_2, angAccelEqn_3, angAccelEqn_4 :: ModelExpr
 angAccelEqn_1 = sy massObj_1 `cScale` sy mvAccel_1 $=
-  neg (sy tension_1) `cScale` sin (sy pendDisAngle_1)
+  neg (sy tension_1 $* sin (sy pendDisAngle_1))
 
 angAccelEqn_2 = sy massObj_1 `cScale` sy mvAccel_1 $=
-  sy tension_1 `cScale` cos (sy pendDisAngle_1)
-  $- (sy massObj_1 `cScale` sy gravitationalMagnitude)
+  sy tension_1 $* cos (sy pendDisAngle_1)
+  $- (sy massObj_1 $* sy gravitationalMagnitude)
 
 angAccelEqn_3 = sy massObj_2 `cScale` sy mvAccel_2 $=
-  neg (sy tension_2) `cScale` sin (sy pendDisAngle_2)
+  neg (sy tension_2 $* sin (sy pendDisAngle_2))
 
 angAccelEqn_4 = sy massObj_2 `cScale` sy mvAccel_2 $=
-  sy tension_2 `cScale` cos (sy pendDisAngle_2)
-  $- (sy massObj_2 `cScale` sy gravitationalMagnitude)
+  sy tension_2 $* cos (sy pendDisAngle_2)
+  $- (sy massObj_2 $* sy gravitationalMagnitude)

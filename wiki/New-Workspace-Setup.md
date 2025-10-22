@@ -383,7 +383,6 @@ Hopefully, it should work now, but if it doesn't, please file an issue.
 ### Learning Resources
 
 * [A Simple Guide to LaTeX](https://latex-tutorial.com/tutorials/)
-* [Overleaf's LaTeX Guide](https://www.overleaf.com/learn/latex/Creating_a_document_in_LaTeX)
 * [Overleaf's LaTeX in 30min](https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes)
 * [Creating LaTeX tables](https://www.tablesgenerator.com/)
 

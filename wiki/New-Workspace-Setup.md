@@ -141,7 +141,7 @@ If you use GPG, you can also protect your commits by [signing them with GPG](htt
 
 Stack is an easy to use toolkit for building, executing, testing, and benchmarking your Haskell software, including tooling for isolated GHC installations and dependency management (similar to Python's `virtualenv` using a [curated listed of packages](https://www.stackage.org/)).
 
-Stack has an amazing document repository available on their [Read the Docs Official Website](https://docs.haskellstack.org/en/stable/README/). It has an [Installation Guide](https://docs.haskellstack.org/en/stable/README/#how-to-install), [Quickstart Guide](https://docs.haskellstack.org/en/stable/README/#quick-start-guide), [User Guide](https://docs.haskellstack.org/en/stable/GUIDE/), and much more!
+Stack has an amazing document repository available on their [Read the Docs Official Website](https://docs.haskellstack.org/en/stable/README/). It has an [Installation Guide](https://docs.haskellstack.org/en/stable/README/#how-to-install-stack), [Quickstart Guide](https://docs.haskellstack.org/en/stable/README/#quick-start-guide), [User Guide](https://docs.haskellstack.org/en/stable/GUIDE/), and much more!
 
 ### Installation
 

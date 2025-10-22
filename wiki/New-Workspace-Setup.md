@@ -390,7 +390,7 @@ Hopefully, it should work now, but if it doesn't, please file an issue.
 We use Inkscape in order to get `svg` diagrams to render in LaTeX. The program itself is actually an `svg` image creator, but Drasil uses it on the command line instead.
 
 ### Installation Instructions
-Please visit the [Inkscape website](https://inkscape.org/release/inkscape-1.1/) for more detailed instructions. For convenience, we have a summary for Linux, Windows, and Mac below.
+Please visit the [Inkscape website](https://inkscape.org/release/) for more detailed instructions. For convenience, we have a summary for Linux, Windows, and Mac below.
 
 <details>
 
@@ -409,7 +409,7 @@ The first command will ensure that all of the packages are up do date, and the s
 
 <summary><h4>Windows</h4></summary>
 
-Download the executable installer for Inkscape ([64-bit](https://inkscape.org/release/1.1/windows/64-bit/) or [32-bit](https://inkscape.org/release/1.1/windows/32-bit/)), run the file, and follow the instructions on screen. Make sure you add Inkscape to your `PATH` when the installer asks. If the installer cannot automatically add Inkscape to you `PATH` or if you already have Inkscape without using the `PATH`, please follow [these instructions](https://tex.stackexchange.com/a/523685).
+Download the executable installer for Inkscape from their [release page](https://inkscape.org/release/). Run the file and follow the instructions on screen. Make sure you add Inkscape to your `PATH` when the installer asks. If the installer cannot automatically add Inkscape to you `PATH` or if you already have Inkscape without using the `PATH`, please follow [these instructions](https://tex.stackexchange.com/a/523685).
 
 </details>
 
@@ -417,7 +417,7 @@ Download the executable installer for Inkscape ([64-bit](https://inkscape.org/re
 
 <summary><h4>Mac</h4></summary>
 
-Download the [disk image for Inkscape](https://inkscape.org/release/inkscape-1.1/mac-os-x/1010-1015/dl/), run the file, and follow the on-screen instructions. Enabling command line access to inkscape may require adding the path to inkscape to the PATH environment variable.
+Download the disk image for Inkscape from their [release page](https://inkscape.org/release/). Run the file and follow the on-screen instructions. Enabling command line access to inkscape may require adding the path to inkscape to the PATH environment variable.
 
 </details>
 

@@ -8,6 +8,8 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
+import Theory.Drasil (TheoryModel)
+import Drasil.System (SystemKind(RunnableSoftware), mkSystem)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics,
@@ -44,10 +46,6 @@ import Drasil.Projectile.MetaConcepts (progName)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
 import Drasil.Projectile.Unitals
-
-import Theory.Drasil (TheoryModel)
-
-import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -130,7 +128,7 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
   S "etc.")]
 
 si :: System
-si = mkSystem progName Specification
+si = mkSystem progName RunnableSoftware
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
   symbols tMods genDefns dataDefs iMods

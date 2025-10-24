@@ -157,10 +157,6 @@ duplication and maintain a single source of information, we intend to be able
 to create chunks with references to other chunks such that the definition can 
 use the known terminology.
 
-\ds{Should I work in something about how we use lenses in here, as all complex 
-chunks are instances of the simpler chunks they've been built from? Or is that 
-getting too into the Haskell-specific details?}
-
 To define a term with references to other terms, we need to ensure we are 
 creating our definitions by projecting relevant knowledge into the definition, 
 but also ensuring we have the flexibility to extend that knowledge. With that 
@@ -172,9 +168,28 @@ used to combine, change case, pluralize, and more. A simple example of a series
 of chunks that utilize the \codeH{Sentence} DSL to derive their definitions can 
 be seen in Figure~\ref{fig:acceleration}. We use the \codeH{phrase} helper 
 function to pull the appropriate sentence out of the \codeH{velocity} chunk and 
-the combinator (\codeH{+:+}) to concatenate the sentences. Note that position 
-uses a different smart constructor (for non-derived definitions) and so doesn't 
-require the sentence constructor (\codeH{S}) around its definition.
+the combinator (\codeH{+:+}) to concatenate the sentences. Note that 
+\codeH{position} uses a different smart constructor (for non-derived 
+definitions) and so doesn't require the sentence constructor (\codeH{S}) around 
+its definition.
+
+\ds{\sout{Should I work in something about how we use lenses in here, as all 
+complex chunks are instances of the simpler chunks they've been built from? Or 
+is that getting too into the Haskell-specific details?} I've written something 
+below}
+
+We also make opportunistic use of composable accessors (commonly known in the 
+Haskell ecosystem as ``lenses") to help manage complexity when combining and 
+projecting chunks. Conceptually, these are lightweight, composable getters and 
+setters that let us focus on the logical structure of a chunk (its name, 
+symbol, sentence, expression, units, etc.) without repeatedly writing 
+boilerplate navigation code for nested fields\footnote{Concrete lens usage and 
+examples are available in the code found in the project repository for 
+readers who want the implementation details.}. In practice they let us build 
+derived chunks by projecting the subparts we need, update specific components 
+(for instance a symbol or an attached unit) in a principled, immutable way, and 
+compose transformations cleanly when constructing larger chunks from smaller 
+ones. 
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={59-60,135-136,174-175}, 
@@ -378,13 +393,11 @@ for chunks that encode knowledge represented by given terms such as ``force",
 Figure~\ref{fig:chunkClasses} and Figure~\ref{fig:chunksClassified} show a 
 subset of the different ways we classify chunks and some example chunk types 
 and how they would be classified, respectively. Note there is a one to many 
-relationship between a given chunk and its classifications. \ds{Use UnitalChunk 
-and DefinedQuantityDict in the figure to show how they differ, yet are 
-classified into many of the same types} As you can see, the \codeH{UnitalChunk} 
-and \codeH{DefinedQuantityDict} are very closely related in that they both 
-contain their own \codeH{NamedIdea}, \codeH{Space}, \codeH{Symbol}, and 
-\codeH{Quantity}, however, the \codeH{UnitalChunk} is also classified as 
-\codeH{Unitary} as it \emph{must} have a unit associated with it.
+relationship between a given chunk and its classifications. As you can see, the 
+\codeH{UnitalChunk} and \codeH{DefinedQuantityDict} are very closely related in 
+that they both contain their own \codeH{NamedIdea}, \codeH{Space}, 
+\codeH{Symbol}, and \codeH{Quantity}, however, the \codeH{UnitalChunk} is also 
+classified as \codeH{Unitary} as it \emph{must} have a unit associated with it.
 
 \fig{\begin{center}
 \includegraphics[width=\linewidth]{figures/ChunkClasses.png}
@@ -397,24 +410,28 @@ the encoded property relationships}{fig:chunkClasses}
 }{A subset of Drasil's chunks showing how different chunks may belong to 
 multiple classifications}{fig:chunksClassified}
 
-\ds{I need something at the end here to finish up the section (for flow), but 
-something like ``With the ability to create unique chunks based on the 
-properties tied to the given underlying knowledge being encoding we are finally 
-ready to take things a step further and figure out how to use them." seems 
-redundant as I start the next section with basically the same line}
-
+We now have a compact, well-typed vocabulary for representing domain knowledge: 
+chunks and classifications give us named concepts, quantities, units, and 
+relationships that are easy to reason about. That vocabulary is only useful if 
+we can turn it into artifacts people consume. To convert that vocabulary into 
+artifacts people actually use, we need a way to operationalize those chunks. In 
+Drasil that means using recipes.
 
 \section{Recipes: Codifying Structure}
 \label{sec:recipes}
 
-Now that we have a means of encoding and organizing knowledge, we need some 
-way to operationalize it. Our knowledge base is essentially just a collection 
-of chunks, which are themselves a collection of definitions, encoded in our 
-Expr and Sentence DSLs. To generate \sfs{} we need a means to define the 
-overall structure of the \sf{} as well as the knowledge projections we require 
-to expose the appropriate knowledge from our chunks in a meaningful way for the 
-target audience of that particular \sf{}. This is where our \emph{Recipe} DSL 
-comes into play.
+Given our chunk classes and a compositional Expr/Sentence model in place, we 
+have a knowledge core that can be selectively projected for any audience. The 
+next step is thus operational: we must describe how those chunks are composed 
+into artifact-specific recipes and how the recipes are rendered into concrete 
+\sfs{} (documents, code, and supporting files).
+
+Our knowledge base is essentially just a collection of chunks, which are 
+themselves a collection of definitions, encoded in our Expr and Sentence DSLs. 
+To generate \sfs{} we need a means to define the overall structure of the \sf{} 
+as well as the knowledge projections we require to expose the appropriate 
+knowledge from our chunks in a meaningful way for the target audience of that 
+particular \sf{}. This is where our \emph{Recipe} DSL comes into play.
 
 A recipe is, in it's simplest form, a specification for one or more \sfs{}. 
 It is an intermediate representation of a given \sf{} and can be thought of as 
@@ -457,19 +474,16 @@ to follow, and it has lead to some interesting results.
 \codeBlock{DocDecl}{25}{42}
 }{Recipe Language for SRS}{fig:recipeSRS}
 
-As an example, let us take a look at the recipe language we have defined 
-\ds{What do we call 
-this? I mean the generic recipe for SRSes, not the specific example of glassbr 
-or w/e} for an SRS using the \smithea{} template.
-Looking at the \codeH{DocSection} definition from Figure~\ref{fig:recipeSRS}, 
-we can see a striking resemblance to (a subset of) the template's 
-Table of Contents (Figure~\ref{fig:SRSToC}). Each section is defined by a 
-datatype, which is, through a similar mechanism, decomposed into multiple 
-subsections (for example, Figure~\ref{fig:recipeReqSec} shows the decomposition 
-of the requirements section) which then defines the types of organizational 
-structures we use for specifying the contents of a given subsection. When 
-populated, the recipe specifies both the structure of our expected \sf{} and 
-the knowledge (chunks) contained therein.
+As an example, let us take a look at the recipe language we have defined for an 
+SRS using the \smithea{} template. Looking at the \codeH{DocSection} definition 
+from Figure~\ref{fig:recipeSRS}, we can see a striking resemblance to (a subset 
+of) the template's Table of Contents (Figure~\ref{fig:SRSToC}). Each section is 
+defined by a datatype, which is, through a similar mechanism, decomposed into 
+multiple subsections (for example, Figure~\ref{fig:recipeReqSec} shows the 
+decomposition of the requirements section) which then defines the types of 
+organizational structures we use for specifying the contents of a given 
+subsection. When populated, the recipe specifies both the structure of our 
+expected \sf{} and the knowledge (chunks) contained therein.
 
 \fig{
 \codeBlock{DocDecl}{88}{98}
@@ -563,9 +577,9 @@ chunks encoding given information}
 \\ \hline
 	\_constants & List of required constants. 
 \\ \hline
-	\_sysinfodb & Database of all required symbols. \ds{confirm this}
+	\_sysinfodb & Database of all required chunks.
 \\ \hline
-	\_usedinfodb & Database of all used acronyms and symbols. \ds{confirm this}
+	\_usedinfodb & Database of all used acronyms and symbols.
 \\ \hline
 	refdb & Database of all relevant external references/citations.
 \\ \hline
@@ -618,28 +632,8 @@ executable code recipe. Said recipe allows us to not only specify knowledge and
 the way we wish it structured, but also implementation choices that we would 
 like to make in the final generated source code.
 
-\ds{TODO ? (SEE BELOW COMMENT) - basically the list is obviously referencing 
-other things, which are themselves defined elsewhere, and we can follow that 
-through to figure out wtf is going on. I will pick one (DD) and traverse the SI 
-to show how things (ex. GTF) are defined. It'll be a bunch more code snippets.}
-\ds{Changed my mind on the above, I think the current example is shorter and 
-flows more easily. The chunk definitions aren't relevant to the recipe lang 
-itself or its definition, all that's relevant is that they exist. The generator 
-/ final generation example should follow a single DD throughout as described in 
-the above comment.}
-
 \subsection{Example: Executable Code recipe for \gb{}}
 \label{sec:gbCodeRecipe}
-
-\ds{I've gone back and forth a few times on this and can't think of a good way 
-to give the executable code recipe for \gb{}. I might need to rethink the way 
-I do it / go for the previous section's approach}
-%
-%As mentioned in the previous section, the executable code is a significantly 
-%different \sf{} than the documentation-heavy \sfs{} we've already discussed. 
-%We 
-%have created a recipe language for executable code, and an example (taken from 
-%GlassBR) can be seen in Figure~\ref{fig:gbCodeRecipe}.
 
 As discussed in the previous section, the executable code recipe is 
 fundamentally different from the documentation-heavy SRS recipe. While the SRS 
@@ -649,7 +643,15 @@ generating working source code. This includes not only the relevant knowledge
 chunks, but also the implementation choices (modules, functions, and other 
 details) necessary for code generation. 
 
-An example, the recipe for \gb{}'s executable code constructed using the 
+The executable-code recipe for GlassBR somewhat mirrors the document recipe in 
+structure but emphasizes implementation choices: module layout, data 
+representation, target languages, optional features, and constraint-handling 
+strategies. Practically, we supply the modules and computational relationships 
+(the mathematical execution order), target languages (e.g. Python, C++, Java), 
+modularity (single file or separated modules), data bundling (structs/classes), 
+and logging/documentation options. 
+
+The recipe for \gb{}'s executable code constructed using the 
 \codeH{CodeSpec} DSL, is shown in Figure~\ref{fig:gbCodeRecipe}. 
 Here, the \codeH{codeSpec} function takes three arguments:
 \begin{itemize}
@@ -819,10 +821,7 @@ is automatically reflected in the generated code, just as it is in the
 documentation. This approach minimizes duplication, maximizes consistency, and 
 enables reliable code generation for scientific computing applications.
 
-\subsection{Conclusion}
-
-\ds{Need a better title, but I don't want this piece to be part of the example 
-subsection.}
+\subsection{Operational Summary}
 
 Having established how Drasil captures, organizes, and operationalizes 
 knowledge through both documentation and executable code recipes, we are now 
@@ -853,7 +852,7 @@ refers to the process by which these abstract, language-agnostic structures
 defined in recipes are transformed into specific output formats suitable for 
 end-users and stakeholders. This stage bridges the gap between the high-level, 
 reusable knowledge representations and the diverse forms required for practical 
-use (ex., \LaTeX{}, HTML, PDF, or source code in various programming 
+use (ex. \LaTeX{}, HTML, PDF, or source code in various programming 
 languages).Drasil achieves this through a set of dedicated \emph{printers} and, 
 for code, through the use of the General Object-Oriented Language 
 (GOOL)\cite{??} library. Each printer is designed to interpret the structured 
@@ -873,7 +872,6 @@ specialized printers for each supported format:
     \item \codeH{genJSON} in \codeH{Language.Drasil.JSON.Print} --- outputs a 
     machine-readable JSON representation, supporting further processing or 
     integration.
-	\item \ds{\codeH{gen...} Put the other ones here.}
 \end{itemize}
 
 Each printer traverses the recipe structure, visiting each section and 
@@ -885,35 +883,30 @@ As a concrete illustration, consider the printing of the \gb{} SRS to
 \LaTeX{}. The process begins with the invocation of the \codeH{genTeX} 
 function, which recursively walks the document tree produced by the recipe, 
 emitting \LaTeX{} code for sections, equations, and tables. 
-Figure~\ref{fig:genTeX} shows the entry point to this process, while 
-Figure~\ref{fig:prntDocPrime} demonstrates the function responsible for writing 
-the rendered document to disk.
+Figure~\ref{fig:genTeX} shows the entry point to this process.
 
-\fig{\codeBlock{TeXPrint}{41}{44}}{genTeX function for LaTeX 
+\fig{\codeBlock{TeXPrint}{41}{44}}{\codeH{genTeX} function for LaTeX 
 rendering}{fig:genTeX}
-\fig{\codeBlock{Generate}{56}{60}}{prntDoc' function for document 
-output}{fig:prntDocPrime}
-
 
 \subsubsection{Code Rendering: GOOL and Target Language Emission}
-For executable code artifacts, Drasil uses the GOOL library as an intermediate 
+For executable code artifacts, Drasil uses GOOL\cite{??} as an intermediate 
 layer. GOOL provides a collection of type-safe combinators and abstractions for 
 representing object-oriented and procedural constructs in a language-agnostic 
-manner. The code recipe (ex., a \codeH{CodeSpec}) is first translated into a 
+manner. The code recipe (ex. a \codeH{CodeSpec}) is first translated into a 
 GOOL abstract syntax tree (AST), which is then emitted as source code in one or 
-more target languages.
-\subsubsection{GOOL Pipeline}
-The code emission process proceeds as follows:
-\begin{enumerate}
-    \item The code recipe and its referenced chunks are traversed to construct 
-    a GOOL AST, representing classes, functions, variables, and control flow.
-    \item The GOOL backend is invoked for each specified target language, 
-    translating the AST into concrete source code (ex., Python, C++, Java, 
-    C\#).
-    \item Auxiliary files (such as README, Doxygen config, and sample input 
-    files) are generated via dedicated routines, ensuring completeness and 
-    usability.
-\end{enumerate}
+more target languages. For brevity we will not get into the implementation 
+details regarding Drasil's use of GOOL, as those have been covered in other 
+works \cite{??} \ds{Someone else's thesis covered this yeah? I don't want to 
+make it sound like I wrote this part, but still want to give an overview}.
+
+In brief, the code emission process follows a straightforward translation 
+process: The code recipe and its referenced chunks are traversed to construct a 
+GOOL AST, representing classes, functions, variables, and control flow; The 
+GOOL backend is invoked for each specified target language, translating the AST 
+into concrete source code (ex. Python, C++, Java, C\#); Auxiliary files (such 
+as README, Doxygen config, and sample input files) are generated via dedicated 
+routines.
+
 \subsubsection{Example: Emitting \gb{} Code in Python}
 For \gb{}, suppose the code recipe specifies Python as a target. The 
 generation process calls \codeH{generateCode} in 
@@ -921,78 +914,75 @@ generation process calls \codeH{generateCode} in
 AST and then emits Python code by invoking the Python backend. The resulting 
 code includes all functions, data structures, and comments specified in the 
 recipe and choices object, as well as any automatically generated traceability 
-links (ex., comments referencing requirements or data definitions). 
+links (ex. comments referencing requirements or data definitions). 
 Figure~\ref{fig:generateCode} shows the relevant code path.
 
-\fig{\codeBlock{ImperativeGenerator}{100}{123}}{generateCode and genPackage for 
+\fig{\codeBlock{ImperativeGenerator}{98}{113}}{generateCode and genPackage for 
 code rendering}{fig:generateCode}
 
 \subsection{Assembly: Producing the Final \SF{} Set}
 Once rendering is complete, the generated document or code sections must be 
 assembled into coherent artifacts ready for distribution and use. Assembly 
-includes:
-\begin{itemize}
-    \item Writing primary artifacts to disk (ex., *.tex, *.html, *.py, *.cpp 
-    files)
-    \item Generating auxiliary files (ex. Makefiles, CSS, README, example input 
-    files)
-    \item Linking cross-references and ensuring the integrity of tables, 
-    figures, and code modules
-\end{itemize}
+includes writing the primary artifacts to disk (ex. *.tex, *.html, *.py, *.cpp 
+files), generating auxiliary files (ex. Makefiles, CSS, README, example input 
+files), linking cross-references, and ensuring the integrity of tables, 
+figures, and code modules. The remainder of this section illustrates these 
+steps in practice.
 
 \subsubsection{Example: SRS Assembly}
 
-After rendering the \gb{} SRS to \LaTeX{}, the \codeH{prntDoc'} function 
-writes the source file, while \codeH{prntMake} generates a Makefile for 
-automated PDF compilation. The resulting directory contains a fully 
-cross-referenced, typeset-ready SRS and all supporting files.
+After rendering the \gb{} SRS to \LaTeX{} via the \codeH{genTeX} function seen 
+in Figure~\ref{fig:genTeX}, the~\codeH{prntDoc'}~function, 
+Figure~\ref{fig:prntDocPrime}, writes the source file, while \codeH{prntMake}, 
+Figure~\ref{fig:prntMake}, generates a Makefile for automated PDF compilation. 
+The resulting directory contains a fully cross-referenced, typeset-ready SRS 
+and all supporting files.
+
+\fig{\codeBlock{Generate}{56}{60}}{\codeH{prntDoc'} function for document 
+output}{fig:prntDocPrime}
+
+\fig{\codeBlock{Generate}{68}{73}}{\codeH{prntMake} function for document 
+output}{fig:prntMake}
 
 \subsubsection{Example: Code Assembly}
 
-For code, \codeH{createCodeFiles} (Figure~\ref{fig:createCodeFiles}) is called 
-to write each generated source file and all auxiliary documentation to disk. 
-For multi-language builds, this process is repeated for each target language, 
-ensuring consistency across all output.
+Once the code has been rendered through the GOOL pipeline into target-language 
+text, the next stage is to assemble the resulting files into a coherent project 
+structure. In this case, \codeH{createCodeFiles} 
+(Figure~\ref{fig:createCodeFiles}) is called to write each generated source 
+file and all auxiliary documentation to disk using consistent directory and 
+naming conventions. For multi-language builds, this process is repeated for 
+each target language, ensuring consistency across all output.
+
+In essence, this stage performs for code what the SRS assembly stage does for 
+documentation: it gathers the individually generated fragments and organizes 
+them into a complete, ready-to-use product. The result comprises all files 
+necessary for the generated system source code, build instructions, and 
+supporting assets. They are generated and ready for compilation or integration 
+into a development environment. Because these outputs are directly derived from 
+the same knowledge base that informed the SRS, Drasil ensures that the 
+implementation remains consistent with the documentation.
 
 \fig{\codeBlock{CodeGeneration}{28}{38}}{createCodeFiles for code 
 output}{fig:createCodeFiles}
 
-\ds{TODO: Add something about \codeH{render code} from the figure?}
-
-\subsection{Guarantees and Extensibility}
-
-The rendering and assembly phases are designed to be fully deterministic and 
-repeatable. Because Drasil relies on Haskell's type system and the structure of 
-recipes and chunks, all generated outputs are \emph{consistent by 
-construction}. Any 
-modification to a chunk or recipe is automatically reflected in every rendered 
-artifact on the next generation pass, eliminating the risk of out-of-date 
-documentation or code.
-Moreover, the modular design of printers and the GOOL backend makes it 
-straightforward to add new output formats or languages, further enhancing 
-Drasil's long-term utility and extensibility.
-
 \subsection{A \gb{} Example: From Chunk Definition to Final SRS Rendering}
-
-\ds{Should I get more into the code in my example? I feel like I've shown a lot 
-of code already and this part is fairly straightforward, but I could rip some 
-code examples to add here}
 
 To illustrate the rendering and assembly process, we follow a single chunk 
 through each step of generation in the \gb{} SRS. Earlier, we 
 described how the SRS recipe for \gb{} is constructed by specifying the 
 document structure and referencing the necessary knowledge chunks through the 
-system information object (see Section~\ref{sec:glassBRSRSRecipe}). Now let us 
+system information object (see Section~\ref{sec:glassBRSRSRecipe}). Now we 
 observe the journey of the dimensionless load chunk ($\hat{q}$), from 
-its definition in the knowledge base to its appearance in the generated SRS in 
-\ds{HTML/\LaTeX} format.
+its definition in the knowledge base to its appearance as typeset-ready \LaTeX 
+formatted text in the generated SRS.
 
 \subsubsection{Step 1: Knowledge Capture}
 
 The definition of $\hat{q}$ is captured in the Drasil knowledge base as a 
-chunk. This chunk contains all necessary information: a unique identifier, 
-symbol, natural language description, units, and the defining mathematical 
-expression.
+chunk (Figure~\ref{fig:qhatChunkDef}). This chunk contains all necessary 
+information: a unique identifier, symbol, natural language description, units, 
+and the defining mathematical expression.
 
 \fig{
 \codeBlock{DataDefs}{130}{142}}{Definition of $\hat{q}$ as a chunk in the 
@@ -1002,11 +992,11 @@ expression.
 
 In this step, the previously defined $\hat{q}$ chunk is referenced and included 
 in the system information and recipe for the \gb{} SRS. Here, $\hat{q}$ is 
-added to the list of Data Definitions, which will later be used to populate the 
-relevant sections (Table of Symbols, Data Definitions, Traceability Matrix, 
+added to the list of Data Definitions (can be seen as \codeH{GB.dataDefs} 
+in Figure~\ref{fig:systemInformation}), which will later be used to populate 
+the relevant sections (Table of Symbols, Data Definitions, Traceability Matrix, 
 etc.) of the document. This step is about specifying what 
 knowledge is relevant and where it should appear, not about how it is rendered.
-\ds{TODO: Add a ref to the recipe fig here}
 
 \subsubsection{Step 3: Generation and Rendering}
 When the generator is invoked to produce the SRS (ex. as a \LaTeX{} document), 
@@ -1015,29 +1005,34 @@ section, it projects the full definition of $\hat{q}$, including its symbol,
 description, units, and defining equation. For the Table of Symbols, it 
 projects only the symbol, a brief description, and the units. The rendering 
 engine formats these projections according to the conventions of the target 
-output (ex. as a table in \LaTeX{}).
+output.
+
+\fig{\TeXBlock{GlassBR_SRS}{750}{799}}{Raw generated \LaTeX of the $\hat{q}$ 
+Data Definition}{fig:rawDD}
 
 During rendering, the SRS generator traverses the recipe and, for each chunk 
 referenced, projects and formats it for the target output. 
 For the Data Definitions section, it projects the full definition of $\hat{q}$, 
-including its symbol, description, units, and defining equation. For the Table 
-of Symbols, it projects only the symbol, a brief description, and the units. 
-The rendering engine formats these projections according to the conventions of 
-the target output (as a \ds{HTML/\LaTeX} table or 
-section). \ds{TODO: Raw HTML/\LaTeX of the definition (figure)}
+including its symbol, description, units, and defining equation 
+(Figure~\ref{fig:rawDD}). For the Table of Symbols, it projects only the 
+symbol, a brief description, and the units. The rendering engine formats these 
+projections according to the conventions of the target output (as a \LaTeX 
+table or section).
 
 \subsubsection{Step 4: Assembly and Output}
 
 Finally, the rendered sections are assembled into the complete SRS artifact. 
 Cross-references are automatically generated, so that, for example, references 
 to $\hat{q}$ in Instance Models or Requirements link back to its definition in 
-the Data Definitions or Table of Symbols. Auxiliary materials, such as the 
+the Data Definitions and/or Table of Symbols. Auxiliary materials, such as the 
 Table of Units and Table of Abbreviations, if required, are generated by 
 traversing the relevant lists in the system information object, ensuring 
 consistency and completeness. The completed document is output as a 
-\ds{(PDF/HTML)} with $\hat{q}$ fully integrated and accessible 
-alongside all other relevant information.
-\ds{TODO: Figure of rendered HTML/LaTeX snippets}
+\texttt{.tex} file with $\hat{q}$ fully integrated and accessible 
+alongside all other relevant auxiliary files (ex. \texttt{.bib} file for 
+citations). A makefile is also generated to 
+enable the user to easily create a human-readable PDF file from the \LaTeX 
+source and auxiliary files.
 
 \subsection{Multiple Renderings from a Single Source: From Chunk to Code}
 
@@ -1053,35 +1048,34 @@ artifacts.
 Recall that $\hat{q}$ was previously defined as a chunk containing its symbol, 
 natural language description, units, and mathematical formula (see 
 Figure~\ref{fig:qhatChunkDef}). In the process of generating executable code, 
-this chunk is referenced in the system information object and included in the 
-\codeH{CodeSpec} recipe for \gb{}. The recipe dictates which variables and 
+this chunk is referenced in the system information object (\codeH{fullSI}) and 
+included in the \codeH{CodeSpec} recipe for 
+\gb{}(Figure~\ref{fig:gbCodeRecipe}). The recipe dictates which variables and 
 formulas are required in the target program, and provides implementation-level 
 choices such as type mapping and function structure.
-\ds{TODO: Fix the figure -- reference the existing one?}
-\fig{
-\codeBlock{CodeSpec}{40}{72}}{Reference to $\hat{q}$ in the code 
-specification}{fig:qhatCodeSpecRef}
+
 
 \subsubsection{Rendering via GOOL}
 
 During code generation, Drasil translates the recipe and referenced chunks into 
 a GOOL (General Object-Oriented Language) intermediate representation. The 
-$\hat{q}$ chunk, for example, is mapped to a function or variable definition 
-within the GOOL AST, preserving its formula and metadata. This intermediate 
-form enables Drasil to emit code in multiple target languages without 
-duplicating logic. As GOOL is not the subject of this thesis, we will elide the 
-remaining details for the time being \ds{however, an intermediate 
-representation can be seen in figure [ADD A FIGURE]}
+$\hat{q}$ chunk, for example, is mapped to a function definition within the 
+GOOL AST, preserving its formula and metadata. This intermediate form enables 
+Drasil to emit code in multiple target languages without duplicating logic. As 
+GOOL is not the subject of this thesis, we will elide the GOOL-specific details 
+and continue down the code generation pipeline.
 
 \subsubsection{Generated Source Code}
 
-Finally, the GOOL backend emits concrete code for $\hat{q}$ in each selected 
-language. For example, in Python, $\hat{q}$ \ds{appears as a function computing 
-its value from its dependencies, with comments referencing its origin and 
-documentation... or something}. The generated code maintains traceability 
-through naming conventions and comments drawn from the original chunk.
+In the final step, the GOOL backend emits concrete code for $\hat{q}$ in each 
+selected language. For example, in Python, $\hat{q}$ appears as a function 
+computing its value from its dependencies(Figure~\ref{fig:qhatPython}) just as 
+we've seen before in Figure~\ref{fig:gbrsrccalc}. The generated code maintains 
+traceability through naming conventions and comments drawn from the original 
+chunk. The final python output can be seen in Figure~\ref{fig:qhatPython}.
 
-\ds{TODO: Python figure}
+\fig{\pyBlock{GenCalculations}{34}{40}}{$\hat{q}$ as defined in the generated 
+python code}{fig:qhatPython}
 
 \subsubsection{Discussion}
 
@@ -1093,46 +1087,11 @@ representations, guarantees consistency and traceability throughout the
 software system. Changes need only be made once, and are reflected everywhere 
 $\hat{q}$ appears, reducing maintenance cost and risk of error.
 
-
-\subsection{Traceability and Consistency}
-
-Drasil achieves traceability not by embedding explicit metadata in its 
-generated artifacts, but by making the entire generation process fully 
-deterministic \ds{This will be important later!} and rooted in a single source 
-of truth. All documents and code 
-are produced by traversing recipes and knowledge chunks, ensuring that every 
-output can be traced (by construction) back to the precise definitions and 
-relationships captured in the knowledge base. Cross-references, such as those 
-in tables of symbols or data definitions, are generated automatically as part 
-of this traversal, ensuring human-readable traceability throughout the 
-artifacts.
-
-Crucially, Drasil leverages Haskell's strong static type system to enforce 
-consistency and prevent errors. The chunk hierarchy, smart constructors, and 
-typeclass constraints ensure that only well-formed, type-correct chunks can be 
-constructed and referenced in recipes. As a result, malformed or missing chunks 
-are almost always detected at compile time, rather than at runtime or during 
-artifact generation. This “consistency by construction” philosophy means that 
-errors are typically surfaced as type errors or missing imports during 
-development, rather than as failures during the generation phase.
-
-Thus, Drasil does not attempt to recover from or annotate malformed data at 
-runtime; instead, it is architected to make such situations impossible (or at 
-least extremely rare) through the design and use of Haskell's type system. This 
-approach provides strong guarantees that all generated \sfs{} are 
-consistent, complete, and fully traceable to their source knowledge.
-
 \subsection{Summary}
 In summary, rendering and assembly are the final, crucial steps that 
-operationalize the knowledge-centric approach and translate Drasil's abstract, 
-knowledge-centric representations into practical, high-quality \sfs{}. By 
-separating the concerns of knowledge capture, structuring, rendering, and 
-assembly, Drasil ensures that \sfs{} remain maintainable, consistent, 
-traceable, and free of unnecessary manual duplication from their high-level 
-specification down to their concrete instances. Overall this increases 
-confidence in the resulting software systems.
-
-The examples from \gb{} demonstrate the practical effectiveness of this 
+operationalize Drasil's knowledge-centric approach and translate the abstract 
+representations produced by our chunks and recipes into practical, high-quality 
+\sfs{}. The examples from \gb{} demonstrate the practical effectiveness of this 
 approach for both documentation and code.
 
 The next section will discuss how iteration and refinement were used in the 
@@ -1141,21 +1100,126 @@ knowledge and artifacts.
 
 \section{Iteration and refinement}
 \label{sec:iterefine}
-\ds{TODO: Figure out what belongs here and what belongs in results}
 
-  - Practical approach to iron out kinks / find holes in Drasil
+With the understanding of Drasil's structure and implementation, we can now 
+discuss continuous improvement. The development of Drasil did not follow 
+anything even remotely close to the waterfall model of software development. If 
+anything its development began with a simple set of ideas that created a basis 
+for refinement. That is to say: it \emph{barely} worked.
 
-  - Find places to improve upon the existing case studies - 'update as you go' 
-  mindset
+We approached the development knowing the scope was far too large to plan out 
+all the details ahead of time (in any reasonable time-frame), and made 
+conscious choices on compromises we were willing to accept to get a minimum 
+viable framework and continuously improve upon it, similar to agile software 
+development practices. As such, and as we have eluded to throughout this and 
+the previous chapter, we took a very practical approach to development by 
+starting with a known-good state (our case studies), generalizing as much as 
+possible (as seen in Chapter~\ref{c:process}) to distill what we needed to 
+understand to generate software, and updating the framework as our assumptions 
+were challenged or found wanting. Finding holes is a lot easier when you 
+constantly step in them.
 
-  - Observe the amount of effort required to correct errors - show examples
+Many of our updates involved modifying implementation details (such as Chunk 
+types, combinators, and adding entirely new concepts) when we started looking 
+at the various case study domains and determining how we'd distill and capture 
+the knowledge necessary to reproduce those case studies.
 
-  - Tau example (see issue 348) and its implications - symbols and definitions 
-  didn't match. -> implicit 1m depth into the page (means we may need to change 
-  the equations). Resistive and mobilizing shear switched throughout the 
-  original docs -- impossible with Drasil.
+Throughout this process of iterative refinement, we inevitably found a number 
+of places to improve upon the existing case studies and applied those changes 
+to our known-good state. We found errors and undocumented assumptions in the 
+case studies that caused us to rework and improve them for the future. 
+Crucially, moving the case studies into Drasil made those mistakes trivial to 
+locate and correct. A representative example is the SSP symbol inconsistency 
+(Issue \#348 on the GitHub issue tracker). The original SSP SRS used the pair 
+$S_i$ and $P_i$ (mobilized shear stress and resistive shear force respectively) 
+in one place and later switched $S_i$ to $\tau_i$ (resistive shear stress). 
+$\tau_i$ was also omitted from the Table of Symbols. To reiterate, that 
+inconsistency existed in the original case study and was not a generator bug 
+but an error in the source document we had accepted as our starting point. Once 
+the SSP material was encoded as chunks in Drasil the fix was minimal: ensure we 
+had encoded the correct definitions of $S_i$, $P_i$, and $\tau_i$ and used them 
+in the appropriate equations. Then the correction automatically propagated to 
+all generated artifacts (Table of Symbols, cross‑references, and any code that 
+referenced the symbol).
 
-  - \ds{This next one might belong in future work} Implicit assumptions -> 
-  Issue 91. We take for granted things are "physical 
-  materials", but this is an assumption that could be codified and made 
-  explicit to the system (which would allow us some more flexibility).
+We also noticed a unit mismatch during the investigation of that issue, which 
+sparked some confusion until we determined there was an unspecified assumption 
+of 1m depth ``into the page" for one of the equations. That assumption was 
+later captured and encoded into the specific knowledge for that family of 
+software systems as well. Overall the effort to fix both of these related 
+issues was essentially a focused edit to a minuscule subset of the captured 
+knowledge, not a widespread rewrite.
+
+This pattern repeats across many issues: we would find a mismatch between a
+case study and our Drasil output, or some as-yet unencoded knowledge (ex. 
+implicit assumptions) that made the generated artifacts inconsistent or 
+unclear, update the chunk(s) that encoded the offending knowledge, and 
+re‑generate. That workflow was the dominant mode of refinement of the original 
+case studies and their Drasil implementations. It kept fixes small, localized, 
+and low cost while producing broad, immediate benefits in every artifact that 
+depended on the corrected knowledge.
+
+As Drasil encodes both semantics (definitions, units, relations) and 
+presentation choices (how a chunk is projected), correcting semantics upstream 
+was also used to eliminate downstream inconsistencies with, often, minimal 
+engineering effort. One example of this is changing our Chunk hierarchy to 
+include derived-unit chunks. After we determined the need for \codeH{Unital} 
+chunks which tied units to captured knowledge, it was obvious that the units 
+themselves would need to be able to represent their relationships, particularly 
+for those derived from standard SI units (ex. $m/s^2$). This involved the 
+addition of new combinators for creating \codeH{UnitDefn} chunks (examples of 
+some of these combinators have already been shown in Figure~\ref{fig:accelU}).
+
+In short, we learned how to improve Drasil by trying to reproduce existing case 
+studies, encoding what we needed as chunks, and then correcting or extending 
+the chunks when mismatches were discovered. Fixes were either small edits to 
+the knowledge base (cheap to apply, and automatically, consistently propagated 
+to all generated outputs) or an extension of the way we chose to capture 
+knowledge (new chunk types or combinators to encode previously un-encodable 
+knowledge or relationships between chunks).
+
+\section{Summary}
+
+In this chapter we have described the architecture and implementation choices 
+that make Drasil practical: a knowledge‑centric pipeline built from reusable, 
+typed ``chunks'', lightweight DSLs for expressions and natural language 
+fragments, and a recipe language that codifies how knowledge is projected into 
+concrete artifacts. The design is intentionally pragmatic: we capture what is 
+needed to reproduce real case studies, provide well‑typed building blocks for 
+assembling that knowledge, and offer generators (printers and the GOOL back 
+end) that render the same source into multiple, consistent outputs. The result 
+is a single source of truth that spans documentation and executable code.
+
+By separating the concerns of knowledge capture, structuring, rendering, and 
+assembly, Drasil ensures that \sfs{} remain maintainable, consistent, 
+traceable, and free of unnecessary manual duplication from their high-level 
+specification down to their concrete instances. All of which increases 
+confidence in the resulting software systems.
+
+The chunk hierarchy and its classification system give us the levers we need to 
+balance expressivity and reuse. Simple chunks (NamedChunk, ConceptChunk) let us 
+represent terminology and definitions; richer chunks (UnitalChunk, UnitDefn, 
+DataDefn, InstanceModel) let us attach units, symbols, and executable 
+expressions; and the Expr / Sentence DSLs give us language‑agnostic ways to 
+express mathematics and narrative. Recipes then select and arrange those chunks 
+for particular stakeholders so that the same underlying knowledge can be 
+rendered as an SRS, a module guide, or multi‑language source code with full 
+traceability between pieces.
+
+The iterative approach to Drasil's development ensured modularized components 
+that improve extensibility and maintainability of the system as a whole, as 
+well as continuous refinement and expansion of the system's capabilities. A key 
+practical lesson is that encoding case studies into Drasil exposes errors 
+and implicit assumptions in the original artifacts but makes them trivial to 
+fix. Fixes are usually local edits to the knowledge base and those edits 
+automatically propagate through all generated artifacts. This demonstrates the 
+principal payoff of the single‑source, chunk‑based approach: small, cheap 
+changes at the source yield broad, consistent improvements everywhere.
+
+Drasil is not a universal solution — it is a tool targeted at domains where the 
+models are well understood, long‑lived, and shared across multiple 
+stakeholders. Within that scope, Drasil shifts effort from repetitive editing 
+of many artifacts to careful modeling of domain knowledge. The framework we 
+have presented allows that modeling to pay dividends immediately (consistent 
+documents and code) and continuously (streamlined evolution through iteration 
+and refinement).

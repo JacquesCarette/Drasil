@@ -105,6 +105,16 @@
 	firstnumber=#2]{code/#1.hs}
 }
 
+\newcommand{\TeXBlock}[3]{
+	\lstinputlisting[language=TeX, linerange=#2-#3, 
+	firstnumber=#2]{code/#1.tex}
+}
+
+\newcommand{\pyBlock}[3]{
+	\lstinputlisting[language=Python, linerange=#2-#3, 
+	firstnumber=#2]{code/#1.py}
+}
+
 %Shortcuts
 \def\smithea{Smith et al.}
 \def\sfs{softifacts}

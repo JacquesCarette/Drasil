@@ -8,6 +8,101 @@ rigorous experiments for data collection due to Drasil being very much in flux
 and undergoing constant development. We will discuss more about experimental 
 data collection in ``Future Work"(Chapter~\ref{c:future}).
 
+\section {Mundane Value}
+\ds{Title should change since some of these may not be so "mundane", but I want 
+to cover a few very specific results and they don't warrant their own sections}.
+
+- Consistency by construction
+
+- No undefined symbols - use Tau example?
+
+- ``Free" sections - Ref mats can all be generated from "system information" 
+with little effort, unlike manual creation.
+
+/ds{Dropping this bit from the last section (pre-edits) here for future 
+refinement into something that makes sense. We used examples in Iteration and 
+Refinement, but they make more sense to be here in the grand scheme}
+
+This pattern repeats across many issues: we would find a mismatch in a 
+case study or an implicit assumption that made the generated artifacts 
+inconsistent or unclear, update the chunk(s) that encoded the offending 
+knowledge, and re‑generate. Because recipes and printers project the same 
+chunks in different forms, a single, small correction in the knowledge base 
+yields consistent fixes across documentation and code. That workflow — detect 
+in the generated output, repair the chunk, regenerate — was the dominant mode 
+of refinement. It kept fixes small, localized, and low cost while producing 
+broad, immediate benefits in every artifact that depended on the corrected 
+knowledge.
+
+Looking at the issue tracker helps make this concrete: early reports and 
+discussions often reveal errors or unstated assumptions in the original 
+examples rather than systemic generator defects. Fixes typically involved 
+clarifying identifiers, aligning symbol definitions, or making implicit domain 
+choices explicit in the chunks. Because Drasil encodes both semantics 
+(definitions, units, relations) and presentation choices (how a chunk is 
+projected), correcting the semantics upstream eliminated the downstream 
+inconsistencies with minimal engineering effort.
+
+Some of the refinements we have made are straightforward bug fixes to 
+the captured knowledge; others point to design improvements that we should 
+undertake to reduce future fragility or capture broader scopes of knowledge. 
+For instance, Issue \#91 (regarding ``Parameterized Unitals'') highlights a 
+recurring modeling pain: there is no internal concept of a ``physical material" 
+with specific properties like mass, density, etc. In the \sw{} example we 
+treated ``mass of water'' and ``mass of PCM'' as separate ad‑hoc things in 
+different, when they should be views of a single, parameterizable concept 
+(``mass of a physical material"). That issue is an example of a broader-scoped 
+change to the knowledge-capture mechanics and representation within Drasil 
+itself.
+
+In short, our development process has been practical and incremental. We 
+learned by trying to reproduce existing case studies, encoded what we needed as 
+chunks, and then corrected the chunks when mismatches were discovered. Fixes 
+were usually small edits to the knowledge base, cheap to apply, and — thanks to 
+the single‑source approach — automatically and consistently propagated to all 
+generated outputs. The issue tracker documents both the immediate, low‑cost 
+corrections (like \#348) and the longer‑term modelling improvements we should 
+pursue (like \#91).
+
+\subsection{Guarantees and Extensibility}
+
+The rendering and assembly phases are designed to be fully deterministic and 
+repeatable. Because Drasil relies on Haskell's type system and the structure of 
+recipes and chunks, all generated outputs must be \emph{consistent by 
+construction}. Any modification to a chunk or recipe is automatically reflected 
+in every rendered artifact on the next generation pass, eliminating the risk of 
+out-of-date documentation or code. Moreover, the modular design of printers and 
+the GOOL backend makes it straightforward to add new output formats or 
+languages, further enhancing Drasil's long-term utility and extensibility.
+
+\subsection{Traceability and Consistency}
+
+Drasil achieves traceability not by embedding explicit metadata in its 
+generated artifacts, but by making the entire generation process fully 
+deterministic \ds{This will be important later!} and rooted in a single source 
+of truth. All documents and code 
+are produced by traversing recipes and knowledge chunks, ensuring that every 
+output can be traced (by construction) back to the precise definitions and 
+relationships captured in the knowledge base. Cross-references, such as those 
+in tables of symbols or data definitions, are generated automatically as part 
+of this traversal, ensuring human-readable traceability throughout the 
+artifacts.
+
+Crucially, Drasil leverages Haskell's strong static type system to enforce 
+consistency and prevent errors. The chunk hierarchy, smart constructors, and 
+typeclass constraints ensure that only well-formed, type-correct chunks can be 
+constructed and referenced in recipes. As a result, malformed or missing chunks 
+are almost always detected at compile time, rather than at runtime or during 
+artifact generation. This “consistency by construction” philosophy means that 
+errors are typically surfaced as type errors or missing imports during 
+development, rather than as failures during the generation phase.
+
+Thus, Drasil does not attempt to recover from or annotate malformed data at 
+runtime; instead, it is architected to make such situations impossible (or at 
+least extremely rare) through the design and use of Haskell's type system. This 
+approach provides strong guarantees that all generated \sfs{} are 
+consistent, complete, and fully traceable to their source knowledge.
+
 \section{``Pervasive" Bugs} 
 
 One of the first, and most curious, observations made while using Drasil
@@ -40,7 +135,7 @@ lastline=46]{code/Calculations.py}
 At a glance, are the code and formula equivalent? 
 
 It is difficult to say without confirming the value of $E$ is defined as 
-$71.7\cdot{}10^{9}$, which is equivalent to the value used in the python code. 
+$7.17\cdot{}10^{10}$, which is equivalent to the value used in the python code. 
 However, if both \sfs{} were generated using Drasil then we have added 
 confidence due to them being generated from the same source. Now if we 
 determine there is a bug, we can look at either the formula or implementation 
@@ -76,17 +171,6 @@ development and the reimplementation of our case studies. One salient example
 was in the \gb{} case study.
 
 \ds{Fill in the example details here}
-
-\section {Mundane Value}
-\ds{Title should change since some of these may not be so "mundane", but I want 
-to cover a few very specific results and they don't warrant their own sections}.
-
-- Consistency by construction
-
-- No undefined symbols - use Tau example?
-
-- ``Free" sections - Ref mats can all be generated from "system information" 
-with little effort, unlike manual creation.
 	
 \section{Usability}
 One of Drasil's biggest issues is that of usability. Unless one reads the source

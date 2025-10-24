@@ -635,6 +635,21 @@ instance GHC.Classes.Eq Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Drasil.Code.CodeVar.DefiningCodeExpr Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 
+module Language.Drasil.ICOSolutionSearch
+
+-- | Mathematical definition.
+type Def = CodeDefinition
+
+-- | Known values.
+type Known = CodeVarChunk
+
+-- | Calculated values.
+type Need = CodeVarChunk
+
+-- | Orders a list of definitions such that they form a path between
+--   <a>Known</a> values and values that <a>Need</a> to be calculated.
+getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
+
 
 -- | Defines an AST for defining Modules.
 module Language.Drasil.Mod
@@ -1610,9 +1625,6 @@ type Const = CodeDefinition
 -- | Derived inputs.
 type Derived = CodeDefinition
 
--- | Mathematical definition.
-type Def = CodeDefinition
-
 -- | Maps constants to their respective <a>CodeDefinition</a>.
 type ConstantMap = Map UID CodeDefinition
 
@@ -1663,21 +1675,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_axVh
-oldCodeSpec :: HasOldCodeSpec c_axVh => Lens' c_axVh OldCodeSpec
-authorsO :: HasOldCodeSpec c_axVh => Lens' c_axVh People
-cMapO :: HasOldCodeSpec c_axVh => Lens' c_axVh ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_axVh => Lens' c_axVh [FilePath]
-constMapO :: HasOldCodeSpec c_axVh => Lens' c_axVh ConstantMap
-constantsO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Const]
-derivedInputsO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Derived]
-execOrderO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Def]
-extInputsO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Input]
-inputsO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Input]
-modsO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Mod]
-outputsO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Output]
-pNameO :: HasOldCodeSpec c_axVh => Lens' c_axVh Name
-systemdbO :: HasOldCodeSpec c_axVh => Lens' c_axVh ChunkDB
+class HasOldCodeSpec c_ayos
+oldCodeSpec :: HasOldCodeSpec c_ayos => Lens' c_ayos OldCodeSpec
+authorsO :: HasOldCodeSpec c_ayos => Lens' c_ayos People
+cMapO :: HasOldCodeSpec c_ayos => Lens' c_ayos ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_ayos => Lens' c_ayos [FilePath]
+constMapO :: HasOldCodeSpec c_ayos => Lens' c_ayos ConstantMap
+constantsO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Const]
+derivedInputsO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Derived]
+execOrderO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Def]
+extInputsO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Input]
+inputsO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Input]
+modsO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Mod]
+outputsO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Output]
+pNameO :: HasOldCodeSpec c_ayos => Lens' c_ayos Name
+systemdbO :: HasOldCodeSpec c_ayos => Lens' c_ayos ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -1721,16 +1733,6 @@ funcUID :: Func -> UID
 --   inputs will come from those. If there are none, then the
 --   <a>QDefinition</a>s are used instead.
 getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] -> ChunkDB -> [SimpleQDef]
-
--- | Known values.
-type Known = CodeVarChunk
-
--- | Calculated values.
-type Need = CodeVarChunk
-
--- | Orders a list of definitions such that they form a path between
---   <a>Known</a> values and values that <a>Need</a> to be calculated.
-getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
 
 -- | Get a list of <a>Constraint</a>s for a list of <a>CodeChunk</a>s.
 getConstraints :: HasUID c => ConstraintCEMap -> [c] -> [ConstraintCE]
@@ -2871,21 +2873,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_axVh
-oldCodeSpec :: HasOldCodeSpec c_axVh => Lens' c_axVh OldCodeSpec
-authorsO :: HasOldCodeSpec c_axVh => Lens' c_axVh People
-cMapO :: HasOldCodeSpec c_axVh => Lens' c_axVh ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_axVh => Lens' c_axVh [FilePath]
-constMapO :: HasOldCodeSpec c_axVh => Lens' c_axVh ConstantMap
-constantsO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Const]
-derivedInputsO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Derived]
-execOrderO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Def]
-extInputsO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Input]
-inputsO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Input]
-modsO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Mod]
-outputsO :: HasOldCodeSpec c_axVh => Lens' c_axVh [Output]
-pNameO :: HasOldCodeSpec c_axVh => Lens' c_axVh Name
-systemdbO :: HasOldCodeSpec c_axVh => Lens' c_axVh ChunkDB
+class HasOldCodeSpec c_ayos
+oldCodeSpec :: HasOldCodeSpec c_ayos => Lens' c_ayos OldCodeSpec
+authorsO :: HasOldCodeSpec c_ayos => Lens' c_ayos People
+cMapO :: HasOldCodeSpec c_ayos => Lens' c_ayos ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_ayos => Lens' c_ayos [FilePath]
+constMapO :: HasOldCodeSpec c_ayos => Lens' c_ayos ConstantMap
+constantsO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Const]
+derivedInputsO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Derived]
+execOrderO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Def]
+extInputsO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Input]
+inputsO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Input]
+modsO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Mod]
+outputsO :: HasOldCodeSpec c_ayos => Lens' c_ayos [Output]
+pNameO :: HasOldCodeSpec c_ayos => Lens' c_ayos Name
+systemdbO :: HasOldCodeSpec c_ayos => Lens' c_ayos ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

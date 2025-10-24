@@ -793,13 +793,15 @@ digraph alltypes {
 		Derived	[shape=oval, color=red2, label="Derived"];
 		Derived -> CodeDefinition;
 		}
-		subgraph def{
-		Def	[shape=oval, color=red2, label="Def"];
-		Def -> CodeDefinition;
-		}
 		subgraph constantmap{
 		ConstantMap	[shape=oval, color=red2, label="ConstantMap"];
 		ConstantMap -> MapUIDCodeDefinition;
+		}
+	}
+	subgraph icosolutionsearch {
+		subgraph def{
+		Def	[shape=oval, color=red2, label="Def"];
+		Def -> CodeDefinition;
 		}
 		subgraph known{
 		Known	[shape=oval, color=red2, label="Known"];

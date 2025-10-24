@@ -92,6 +92,7 @@ library:
     - Language.Drasil.Data.ODELibPckg
     - Language.Drasil.Choices
     - Language.Drasil.CodeSpec
+    - Language.Drasil.ICOSolutionSearch
     - Language.Drasil.Mod
   when:
   - condition: false

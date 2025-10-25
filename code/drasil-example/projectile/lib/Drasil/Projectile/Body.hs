@@ -291,10 +291,10 @@ inputs :: [DefinedQuantityDict]
 inputs = map dqdWr [launSpeed, launAngle, targPos]
 
 outputs :: [DefinedQuantityDict]
-outputs = [message, dqdWr offset, dqdWr flightDur]
+outputs = [dqdWr offset, dqdWr flightDur]
 
 unitalQuants :: [DefinedQuantityDict]
-unitalQuants = message : map dqdWr constrained
+unitalQuants = map dqdWr constrained
 
 inConstraints :: [UncertQ]
 inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]

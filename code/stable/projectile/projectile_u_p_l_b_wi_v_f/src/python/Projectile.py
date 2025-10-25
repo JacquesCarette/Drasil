@@ -136,38 +136,12 @@ def func_d_offset(inParams, p_land):
     
     return p_land - inParams.p_target
 
-## \brief Calculates output message as a string
-# \param inParams structure holding the input values
-# \param d_offset distance between the target position and the landing position (m)
-# \return output message as a string
-def func_s(inParams, d_offset):
-    outfile = open("log.txt", "a")
-    print("function func_s called with inputs: {", file=outfile)
-    print("  inParams = ", end="", file=outfile)
-    print("Instance of InputParameters object", end="", file=outfile)
-    print(", ", file=outfile)
-    print("  d_offset = ", end="", file=outfile)
-    print(d_offset, file=outfile)
-    print("  }", file=outfile)
-    outfile.close()
-    
-    if math.fabs(d_offset / inParams.p_target) < inParams.epsilon:
-        return "The target was hit."
-    elif d_offset < 0.0:
-        return "The projectile fell short."
-    else:
-        return "The projectile went long."
-
 ## \brief Writes the output values to output.txt
-# \param s output message as a string
 # \param d_offset distance between the target position and the landing position (m)
 # \param t_flight flight duration (s)
-def write_output(s, d_offset, t_flight):
+def write_output(d_offset, t_flight):
     outfile = open("log.txt", "a")
     print("function write_output called with inputs: {", file=outfile)
-    print("  s = ", end="", file=outfile)
-    print(s, end="", file=outfile)
-    print(", ", file=outfile)
     print("  d_offset = ", end="", file=outfile)
     print(d_offset, end="", file=outfile)
     print(", ", file=outfile)
@@ -177,8 +151,6 @@ def write_output(s, d_offset, t_flight):
     outfile.close()
     
     outputfile = open("output.txt", "w")
-    print("s = ", end="", file=outputfile)
-    print(s, file=outputfile)
     print("d_offset = ", end="", file=outputfile)
     print(d_offset, file=outputfile)
     print("t_flight = ", end="", file=outputfile)
@@ -210,10 +182,4 @@ print("var 'd_offset' assigned ", end="", file=outfile)
 print(d_offset, end="", file=outfile)
 print(" in module Projectile", file=outfile)
 outfile.close()
-s = func_s(inParams, d_offset)
-outfile = open("log.txt", "a")
-print("var 's' assigned ", end="", file=outfile)
-print(s, end="", file=outfile)
-print(" in module Projectile", file=outfile)
-outfile.close()
-write_output(s, d_offset, t_flight)
+write_output(d_offset, t_flight)

@@ -1,4 +1,4 @@
-module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM) where
+module Drasil.Projectile.IMods (iMods, landPosIM, offsetIM, timeIM) where
 
 import Prelude hiding (cos, sin)
 
@@ -8,8 +8,6 @@ import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, equationalM
 import Utils.Drasil (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-
-import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Math (constraint, equation, xAxis)
@@ -27,10 +25,10 @@ import qualified Drasil.Projectile.Expressions as E
 import Drasil.Projectile.GenDefs (posVecGD)
 import Drasil.Projectile.LabelledContent (figLaunch)
 import Drasil.Projectile.Unitals (flightDur, landPos, launAngle, launSpeed,
-  message, offset, targPos, tol)
+  offset, targPos)
 
 iMods :: [InstanceModel]
-iMods = [timeIM, landPosIM, offsetIM, messageIM]
+iMods = [timeIM, landPosIM, offsetIM]
 ---
 timeIM :: InstanceModel
 timeIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing time") timeQD)
@@ -113,22 +111,11 @@ offsetIM = imNoDerivNoRefs (equationalModelN (nounPhraseSP "offset") offsetQD)
 
 offsetQD :: SimpleQDef
 offsetQD = mkQuantDef offset E.offset'
----
-messageIM :: InstanceModel
-messageIM = imNoDerivNoRefs (equationalModelN (nounPhraseSP "output message") messageQD)
-  [qwC offset $ UpFrom (Exc, neg (sy targPos))
-  ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
-  message
-  [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
-
-messageQD :: SimpleQDef
-messageQD = mkQuantDef message E.message
 
 --- Notes
 
 angleConstraintNote, gravitationalAccelConstNote, landAndTargPosConsNote, landPosNote,
-  landPosConsNote, offsetNote, offsetConsNote, targPosConsNote,
-  timeConsNote, tolNote :: Sentence
+  landPosConsNote, timeConsNote :: Sentence
 
 angleConstraintNote = foldlSent [D.toSent (atStartNP (the constraint)),
   eS (realInterval launAngle (Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_))) `S.is` S "from",
@@ -146,15 +133,5 @@ landPosNote = ch landPos `S.is` S "from" +:+. refS landPosIM
 landPosConsNote = D.toSent (atStartNP (the constraint)) +:+
   eS (sy landPos $> exactDbl 0) `S.is` S "from" +:+. refS posXDirection
 
-offsetNote = ch offset `S.is` S "from" +:+. refS offsetIM
-
-offsetConsNote = foldlSent [D.toSent (atStartNP (the constraint)), eS (sy offset $> neg (sy targPos)) `S.is`
-  S "from the fact that", eS (sy landPos $> exactDbl 0) `sC` S "from", refS posXDirection]
-
-targPosConsNote = D.toSent (atStartNP (the constraint)) +:+
-  eS (sy targPos $> exactDbl 0) `S.is` S "from" +:+. refS posXDirection
-
 timeConsNote = D.toSent (atStartNP (the constraint)) +:+
   eS (sy flightDur $> exactDbl 0) `S.is` S "from" +:+. refS timeStartZero
-
-tolNote = ch tol `S.is` S "defined in" +:+. refS (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))

@@ -411,81 +411,11 @@ func func_d_offset(_ inParams: inout InputParameters, _ p_land: Double) throws -
     return p_land - inParams.p_target
 }
 
-/** Calculates output message as a string
-    - Parameter inParams: structure holding the input values
-    - Parameter d_offset: distance between the target position and the landing position (m)
-    - Returns: output message as a string
-*/
-func func_s(_ inParams: inout InputParameters, _ d_offset: Double) throws -> String {
-    var outfile: FileHandle
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("function func_s called with inputs: {".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  inParams = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(", ".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  d_offset = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(String(d_offset).utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  }".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    
-    if abs(d_offset / inParams.p_target) < Constants.epsilon {
-        return "The target was hit."
-    }
-    else if d_offset < 0.0 {
-        return "The projectile fell short."
-    }
-    else {
-        return "The projectile went long."
-    }
-}
-
 /** Writes the output values to output.txt
-    - Parameter s: output message as a string
     - Parameter d_offset: distance between the target position and the landing position (m)
     - Parameter t_flight: flight duration (s)
 */
-func write_output(_ s: String, _ d_offset: Double, _ t_flight: Double) throws -> Void {
+func write_output(_ d_offset: Double, _ t_flight: Double) throws -> Void {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -495,22 +425,6 @@ func write_output(_ s: String, _ d_offset: Double, _ t_flight: Double) throws ->
     }
     do {
         try outfile.write(contentsOf: Data("function write_output called with inputs: {".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  s = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(s.utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(", ".utf8))
         try outfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."
@@ -559,17 +473,6 @@ func write_output(_ s: String, _ d_offset: Double, _ t_flight: Double) throws ->
         outputfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("output.txt"))
     } catch {
         throw "Error opening file."
-    }
-    do {
-        try outputfile.write(contentsOf: Data("s = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outputfile.write(contentsOf: Data(s.utf8))
-        try outputfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
     }
     do {
         try outputfile.write(contentsOf: Data("d_offset = ".utf8))
@@ -714,32 +617,4 @@ do {
 } catch {
     throw "Error closing file."
 }
-var s: String = try func_s(&inParams, d_offset)
-do {
-    outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-    try outfile.seekToEnd()
-} catch {
-    throw "Error opening file."
-}
-do {
-    try outfile.write(contentsOf: Data("var 's' assigned ".utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.write(contentsOf: Data(s.utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.write(contentsOf: Data(" in module Projectile".utf8))
-    try outfile.write(contentsOf: Data("\n".utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.close()
-} catch {
-    throw "Error closing file."
-}
-try write_output(s, d_offset, t_flight)
+try write_output(d_offset, t_flight)

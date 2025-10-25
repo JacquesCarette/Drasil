@@ -24,7 +24,6 @@ digraph avsall {
 	theory:landingposition -> instance:accelXZero;
 	theory:landingposition -> instance:gravAccelValue;
 	theory:offset -> instance:posXDirection;
-	theory:outputMessage -> instance:posXDirection;
 
 
 	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -78,11 +77,10 @@ digraph avsall {
 	theory:flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
 	theory:landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
 	theory:offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
-	theory:outputMessage	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
 
 	subgraph IM {
 	rank="same"
-	{theory:flightduration, theory:landingposition, theory:offset, theory:outputMessage}
+	{theory:flightduration, theory:landingposition, theory:offset}
 	}
 
 	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];

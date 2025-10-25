@@ -206,6 +206,7 @@ objVar o' v' = do
         (variableType v) (R.objVar (RC.variable o) (RC.variable v))
   objVar' (variableBind v)
 
+-- This seems a bit sketchy - unwrapping everything to Doc, mixing it up, then wrapping it back to Variable
 arrayElem :: (OORenderSym r) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = do
   i <- IC.intToIndex i'

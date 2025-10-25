@@ -134,6 +134,7 @@ class (ValueSym r, OOTypeSym r) => OOValueSym r
 class (VariableSym r, OOTypeSym r) => OOVariableSym r where
   -- Bool: False for variable, True for constant.  Required by the Python renderer.
   staticVar'    :: Bool -> Label -> VSType r -> SVariable r
+  -- We should probably have a way to make this a constant that can't have an L-Value
   self         :: SVariable r
   classVar     :: VSType r -> SVariable r -> SVariable r
   extClassVar  :: VSType r -> SVariable r -> SVariable r

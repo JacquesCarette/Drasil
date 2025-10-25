@@ -89,6 +89,8 @@ class TypeSym r where
   funcType      :: [VSType r] -> VSType r -> VSType r
   void          :: VSType r
 
+-- We've established that getTypeString is a bad thing
+-- getType might be required, but without global state should it be a class?
 class (TypeSym r) => TypeElim r where
   getType :: r (Type r) -> CodeType
   getTypeString :: r (Type r) -> String
@@ -108,6 +110,7 @@ class (TypeSym r) => VariableSym r where
   extVar    :: Library -> Label -> VSType r -> SVariable r
   arrayElem :: Integer -> SVariable r -> SVariable r
 
+-- Similar here - shouldn't we be handling this on a per-language basis?
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
   variableType :: r (Variable r) -> r (Type r)
@@ -120,6 +123,7 @@ listOf = listVar
 
 type SValue a = VS (a (Value a))
 
+-- Similar here - is this the best way to get the type of a value?
 class (TypeSym r) => ValueSym r where
   type Value r
   valueType :: r (Value r) -> r (Type r)
@@ -256,6 +260,8 @@ libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
 exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
 
+-- These all return SValue, but shouldn't they return MSStatement?
+-- Also, they have the issue of not distinguishing Values and L-Values (See below)
 class (ValueSym r) => List r where
   -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
   --   the target language's assumptions
@@ -282,6 +288,7 @@ class (ValueSym r) => List r where
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
 
+-- Similar to List, shouldn't most of these be statements?
 class (ValueSym r) => Set r where
   -- | Checks membership
   -- Arguments are: Set, Value
@@ -377,6 +384,8 @@ assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r
   -> SValue r -> SValue r -> MSStatement r
 assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
+-- As Reed mentioned, these have a lack of distinction between values/variables
+-- and L-Values
 class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
   varDec       :: SVariable r -> r (Scope r) -> MSStatement r
   varDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
@@ -392,7 +401,7 @@ class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
   funcDecDef   :: SVariable r -> r (Scope r) -> [SVariable r] -> MSBody r
     -> MSStatement r
 
-
+-- More places that could benefit from L-Values
 class (VariableSym r, StatementSym r) => IOStatement r where
   print      :: SValue r -> MSStatement r
   printLn    :: SValue r -> MSStatement r

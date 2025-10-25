@@ -4,6 +4,8 @@ module Drasil.PDController.LabelledContent (
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
+
 import Data.Drasil.Concepts.Documentation (sysCont, physicalSystem)
 
 labelledContent :: [LabelledContent]
@@ -18,6 +20,6 @@ gsdSysContextFig
 sysFigure :: LabelledContent
 sysFigure
   = llcc (makeFigRef "pidSysDiagram") $
-      figWithWidth (atStartNP $ the physicalSystem)
+      figWithWidth (D.toSent $ atStartNP $ the physicalSystem)
         "../../../../datafiles/pdcontroller/Fig_PDController.png"
         70

@@ -4,13 +4,14 @@ module Drasil.SSP.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (analysis, likeChgDom, model, system, unlikeChgDom)
 import Data.Drasil.Concepts.Math (calculation, zDir)
 import Data.Drasil.Concepts.Physics (force, stress, threeD, twoD)
 
-import Drasil.SSP.Assumptions (assumpSLH, assumpINSFL, assumpENSL, 
+import Drasil.SSP.Assumptions (assumpSLH, assumpINSFL, assumpENSL,
   assumpSF, assumpSL)
 import Drasil.SSP.Defs (slope, soil, soilPrpty)
 import Drasil.SSP.Unitals (intNormForce, intShrForce, surfLoad)
@@ -41,7 +42,7 @@ lcCSFDesc = foldlSent [chgsStart assumpSF (S "The"), phrase system,
 lcCEFDesc :: Sentence
 lcCEFDesc = foldlSent [chgsStart assumpSL (S "The"), phrase system,
   S "currently assumes no" +:+. phrase surfLoad, S "In the future" `sC`
-  plural calculation, S "can be added" `S.for` S "an imposed surface load on the", 
+  plural calculation, S "can be added" `S.for` S "an imposed surface load on the",
   phrase slope]
 
 unlikelyChgs :: [ConceptInstance]
@@ -57,11 +58,11 @@ ucNASLODesc, uc2AODesc :: Sentence
 ucNASLODesc = foldlSent [S "Changes related to",
   refS assumpINSFL, S "are not possible due to the dependency"
   `S.ofThe` plural calculation, S "on the linear relationship between",
-  phraseNP (intNormForce `and_` intShrForce)]
+  D.toSent (phraseNP (intNormForce `and_` intShrForce))]
 
-uc2AODesc = foldlSent [refS assumpENSL, S "allows for", short twoD, 
-  phrase analysis, S "with these", plural model, S "only because", 
-  phrase stress, S "along the" +:+. (phrase zDir `S.is` S "zero"), 
-  S "These", plural model, S "do not take into account", phraseNP (stress 
-  `inThe` zDir) `sC` S "and therefore cannot be used",
-  S "without manipulation to attempt", phraseNP (combineNINI threeD analysis)]
+uc2AODesc = foldlSent [refS assumpENSL, S "allows for", short twoD,
+  phrase analysis, S "with these", plural model, S "only because",
+  phrase stress, S "along the" +:+. (phrase zDir `S.is` S "zero"),
+  S "These", plural model, S "do not take into account",
+  D.toSent (phraseNP (stress `inThe` zDir)) `sC` S "and therefore cannot be used",
+  S "without manipulation to attempt", D.toSent (phraseNP (combineNINI threeD analysis))]

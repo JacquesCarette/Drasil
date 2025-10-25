@@ -11,7 +11,6 @@ import Language.Drasil.Expr.Development (Expr(Matrix))
 import Language.Drasil.Printers (SingleLine(OneLine), exprDoc, sentenceDoc,
   unitDoc)
 
-import Control.Lens (view)
 import Data.List (intersperse, transpose)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, space,
   text, vcat)
@@ -67,7 +66,7 @@ dataLine db dl = hcat . intersperse (char dl) . map (eDoc db)
 docLine :: ChunkDB -> DataDesc -> Delim -> [Expr] -> [Doc]
 docLine db ds dl es = let dis = getDataInputs (head ds)
   in text "#" <+> hcat (intersperse (char dl <> space)
-  (map (\di -> (sDoc db . phraseNP . view term) di <+>
+  (map (\di -> (sDoc db . phrase) di <+>
   maybe empty (parens . uDoc . usymb) (getUnit di)) dis))
   : convDataDesc db ds es
 

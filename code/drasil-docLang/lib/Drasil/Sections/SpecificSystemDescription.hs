@@ -26,6 +26,7 @@ import Language.Drasil hiding (variable)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Language.Drasil.Development as D
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
@@ -63,7 +64,7 @@ intro_ = mkParagraph $ foldlSent [S "This", phrase section_, S "first presents t
 -- | Describes a problem the system is needed to accomplish.
 probDescF :: Sentence -> [Section] -> Section
 probDescF EmptyS = SRS.probDesc [mkParagraph $ foldlSent [S "There is no", phrase problemDescription]]
-probDescF prob   = SRS.probDesc [mkParagraph $ foldlSent [atStartNP (a_ system) `S.is` S "needed to", prob]]
+probDescF prob   = SRS.probDesc [mkParagraph $ foldlSent [D.toSent (atStartNP (a_ system)) `S.is` S "needed to", prob]]
 
 -- | Creates the Terms and Definitions section. Can take a ('Just' 'Sentence') if needed or 'Nothing' if not. Also takes 'Concept's that contain the definitions.
 termDefnF :: Concept c => Maybe Sentence -> [c] -> Section
@@ -76,7 +77,7 @@ termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ map termDef lst] []
                   plural requirement, fromMaybe EmptyS end]
         termDef x = atStart x +: EmptyS +:+. capSent (x ^. defn)
 
--- | Similar to 'termDefnF', except does not take definitions from the list of terms. 
+-- | Similar to 'termDefnF', except does not take definitions from the list of terms.
 termDefnF' :: Maybe Sentence -> [Contents] -> Section
 termDefnF' _   []            = SRS.termAndDefn [introNoTermDefn] []
 termDefnF' end otherContents = SRS.termAndDefn (intro : otherContents) []
@@ -94,7 +95,7 @@ introNoTermDefn = mkParagraph $ emptySectSentPlu [term_, definition]
 physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
 physSystDesc _        []    _  _     = SRS.physSyst [mkParagraph $ emptySectSentPlu [physSyst]] []
 physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : other) []
-  where intro = mkParagraph $ foldlSentCol [atStartNP (the physicalSystem) `S.of_` short progName `sC`
+  where intro = mkParagraph $ foldlSentCol [D.toSent (atStartNP (the physicalSystem)) `S.of_` short progName `sC`
                 S "as shown in", refS fg `sC` S "includes the following", plural element]
         bullets = enumSimpleU 1 (short physSyst) parts
 
@@ -105,15 +106,15 @@ goalStmtF []          _             _   = SRS.goalStmt [mkParagraph $ emptySectS
 goalStmtF givenInputs otherContents amt = SRS.goalStmt (intro:otherContents) []
   where intro = mkParagraph $ S "Given" +:+ foldlList Comma List
                 givenInputs `sC` if amt == 1
-                                   then phraseNP (the goalStmt) +: S "is"
-                                   else pluralNP (the goalStmt) +: S "are"
+                                   then D.toSent (phraseNP (the goalStmt)) +: S "is"
+                                   else D.toSent (pluralNP (the goalStmt)) +: S "are"
 
--- | General introduction for the Solution Characteristics Specification section. Takes the program name and a section of instance models. 
+-- | General introduction for the Solution Characteristics Specification section. Takes the program name and a section of instance models.
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
-solutionCharSpecIntro progName instModelSection = foldlSP [atStartNP' (the inModel),
+solutionCharSpecIntro progName instModelSection = foldlSP [D.toSent $ atStartNP' (the inModel),
   S "that govern", short progName, S "are presented in the" +:+.
-  namedRef instModelSection (titleize inModel +:+ titleize DCD.sec), 
-  atStartNP (the information), S "to understand",
+  namedRef instModelSection (titleize inModel +:+ titleize DCD.sec),
+  D.toSent $ atStartNP (the information), S "to understand",
   S "meaning" `S.the_ofThe` plural inModel,
   S "and their derivation is also presented, so that the", plural inModel,
   S "can be verified"]
@@ -130,7 +131,7 @@ assumpIntro _  = mkParagraph $ foldlSent
                   [S "This", phrase section_, S "simplifies the original", phrase problem,
                   S "and helps in developing the", plural thModel, S "by filling in the",
                   S "missing", phrase information, S "for the" +:+. phrase physicalSystem,
-                  atStartNP' (the assumption), S "refine the", phrase scope,
+                  D.toSent $ atStartNP' (the assumption), S "refine the", phrase scope,
                   S "by providing more detail"]
 
 -- | Wrapper for 'thModelIntro'. Takes the program name and other 'Contents'.
@@ -193,7 +194,7 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   S "transforms the", phrase problem, S "defined in the", namedRef r1 $ phrase problemDescription,
   S "into one which is expressed in mathematical terms. It uses concrete",
   plural symbol_, S "defined in the", namedRef r2 $ plural dataDefn, S "to replace the abstract",
-  pluralNP $ symbol_ `inThePP` model, S "identified in", namedRef r3 (plural thModel) `S.and_`
+  D.toSent $ pluralNP $ symbol_ `inThePP` model, S "identified in", namedRef r3 (plural thModel) `S.and_`
   namedRef r4 (plural genDefn)]
 
 -- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.
@@ -211,17 +212,17 @@ dataConstraintParagraph trailingSent = foldlSP_ [inputTableSent, physConsSent,
 -- | General 'Sentence' that describes the data constraints on the input variables.
 inputTableSent :: Sentence
 inputTableSent = foldlSent [S "The", namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_, S "shows the",
-  pluralNP (datumConstraint `onThePS` input_), plural variable]
+  D.toSent $ pluralNP (datumConstraint `onThePS` input_), plural variable]
 
 -- | General 'Sentence' that describes the physical constraints/limitations on the variables.
 physConsSent :: Sentence
-physConsSent = foldlSent [atStartNP $ NP.the $ column `for` physical,
+physConsSent = foldlSent [D.toSent (atStartNP $ NP.the $ column `for` physical),
   plural constraint, S "gives the",  phrase physical, plural limitation,
   S "on the range" `S.of_` plural value, S "that can be taken by the", phrase variable]
 
 -- | General 'Sentence' that describes the uncertainty on the input variables.
 uncertSent :: Sentence
-uncertSent = foldlSent [atStartNP (the uncertainty), phrase column,
+uncertSent = foldlSent [D.toSent $ atStartNP (the uncertainty), phrase column,
   S "provides an estimate of the confidence with which the", phrase physical,
   plural quantity +:+. S "can be measured", S "This", phrase information,
   S "would be part of the", phrase input_, S "if one were performing an",
@@ -229,13 +230,13 @@ uncertSent = foldlSent [atStartNP (the uncertainty), phrase column,
 
 -- | General 'Sentence' that describes some conservative constraints on the model.
 conservConsSent :: Sentence
-conservConsSent = foldlSent [atStartNP' (the constraint) `S.are` S "conservative" +:+
+conservConsSent = foldlSent [D.toSent (atStartNP' (the constraint)) `S.are` S "conservative" +:+
   S "to give", phrase user `S.the_ofThe` phrase model,
   S "the flexibility to experiment with unusual situations"]
 
 -- | General 'Sentence' that describes the typical values.
 typValSent :: Sentence
-typValSent = foldlSent [atStartNP (the column) `S.of_` S "typical",
+typValSent = foldlSent [D.toSent (atStartNP (the column)) `S.of_` S "typical",
   plural value `S.is` S "intended to provide a feel for a common scenario"]
 
 -- | General 'Sentence' that describes some auxiliary specifications of the system.
@@ -295,7 +296,7 @@ propsIntro = foldlSP_ [outputTableSent, physConsSent]
 -- | Outputs a data constraint table as a 'Sentence'.
 outputTableSent :: Sentence
 outputTableSent = foldlSent [S "The", namedRef (outDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_, S "shows the",
-  pluralNP (datumConstraint `onThePS` output_), plural variable]
+  D.toSent $ pluralNP (datumConstraint `onThePS` output_), plural variable]
 
 -- | Helper for making a 'ConceptInstance' with a reference to the system information.
 -- Used to find where a particular assumption is referenced.

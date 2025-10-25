@@ -3,8 +3,11 @@ module Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc) where
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Drasil.DocLang (inReq)
+import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
+
+import Drasil.DocLang (inReq)
+
 import Theory.Drasil (InstanceModel)
 
 import Data.Drasil.Concepts.Documentation (value)
@@ -34,13 +37,13 @@ findMass = findMassConstruct (inReq EmptyS) (phrase mass) [eBalanceOnWtr]
 --
 oIDQVals :: [Sentence]
 oIDQVals = map foldlSent_ [
-  [pluralNP (the value), fromSource (inReq EmptyS)],
-  [phraseNP (the mass), fromSource findMass],
+  [D.toSent (pluralNP (the value)), fromSource (inReq EmptyS)],
+  [D.toSent (phraseNP (the mass)), fromSource findMass],
   [ch (balanceDecayRate ^. defLhs), fromSource balanceDecayRate]
   ]
 
 funcReqs :: [ConceptInstance]
-funcReqs = [findMass, checkWithPhysConsts, oIDQConstruct oIDQVals, 
+funcReqs = [findMass, checkWithPhysConsts, oIDQConstruct oIDQVals,
             calcValues noPCMOutputs, outputValues noPCMOutputs]
 
 noPCMOutputs :: [InstanceModel]

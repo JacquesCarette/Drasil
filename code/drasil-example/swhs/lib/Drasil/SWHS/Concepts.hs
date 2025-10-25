@@ -3,6 +3,7 @@ module Drasil.SWHS.Concepts where --all of this file is exported
 import Control.Lens ((^.))
 
 import Language.Drasil
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt,
   likelyChg, physSyst, requirement, refBy, refName, srs, typUnc, unlikelyChg)
@@ -54,7 +55,7 @@ perfectInsul = dcc "perfectInsul" (nounPhraseSP "perfectly insulated")
 phaseChangeMaterial = dcc "pcm" (phsChgMtrl ^. term)
   ("a substance that uses phase changes (such as melting) to absorb or " ++
   "release large amounts of heat at a constant temperature")
-  
+
 tankParam = dcc "tankParam" (compoundPhrase' (tank ^. term)
   (parameter ^. term))
   "values associated with the tank"
@@ -63,8 +64,9 @@ tank  = dcc "tank"  (cn' "tank") "enclosure containing some kind of substance"
 sWHT  = dcc "sWHT"  (cn' "solar water heating tank") "solar water heating tank"
 water = dcc "water" (cn' "water") "the liquid with which the tank is filled"
 
+-- TODO: extract 'PCM' from 'phsChgMtrl' again instead of hard-coding it
 tankPCM = dcc "tankPCM" (nounPhrase''
-  (phrase sWHT +:+ S "incorporating" +:+ short phsChgMtrl)
-  (phrase sWHT +:+ S "incorporating" +:+ short phsChgMtrl)
+  (phraseNP (sWHT ^. term) NP.:+: NP.S "incorporating PCM")
+  (phraseNP (sWHT ^. term) NP.:+: NP.S "incorporating PCM")
   CapFirst CapWords)
   "solar water heating tank incorporating phase change material"

@@ -1,6 +1,7 @@
 module Drasil.SglPend.Unitals where
 
 import Language.Drasil
+import qualified Language.Drasil.Development as D
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
@@ -40,16 +41,16 @@ unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
 lenRod, pendDisplacementAngle, initialPendAngle :: UnitalChunk
 
 lenRod = uc' "l_rod" (cn "length of the rod")
-        (phraseNP (len `the_ofThe` rod))
+        (D.toSent $ phraseNP (len `the_ofThe` rod))
         (sub cL lRod) Real metre
 
 pendDisplacementAngle = uc' "pendDisplacementAngle" (cn "displacement angle of the pendulum")
-        (phraseNP (angle `the_ofThe` pendulum))
+        (D.toSent $ phraseNP (angle `the_ofThe` pendulum))
         (sub lTheta lP) Real radian
         -- (sub lTheta lP) (mkFunction [Real] Real) radian
 
 initialPendAngle = uc' "initialPendAngle" (cn "initial pendulum angle")
-        (phraseNP (NP.the (CM.iAngle `of_` pendulum)))
+        (D.toSent $ phraseNP (NP.the (CM.iAngle `of_` pendulum)))
         (sub lTheta lI) Real radian
 
 unitless :: [DefinedQuantityDict]

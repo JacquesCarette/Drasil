@@ -76,7 +76,7 @@ mkTableFromLenses pin@PI { _ckdb = db } _ ttle hsNEs =
     nestNum = 30
 
 openTerm :: NamedIdea a => PrintingInformation -> (String, a -> Doc)
-openTerm pinfo = ("Term", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) MultiLine . phraseNP . view term)
+openTerm pinfo = ("Term", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) MultiLine . phrase)
 
 openSymbol :: HasSymbol a =>PrintingInformation -> (String, a -> Doc)
 openSymbol pinfo = ("Symbol", symbolDoc . flip L.symbol (pinfo ^. stg))

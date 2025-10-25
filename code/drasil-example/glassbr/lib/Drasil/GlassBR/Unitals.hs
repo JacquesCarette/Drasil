@@ -2,10 +2,12 @@ module Drasil.GlassBR.Unitals where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
+import Language.Drasil.NounPhrase.Combinators (parensNP)
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Prelude hiding (log)
+import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Math (xComp, yComp, zComp)
 import Data.Drasil.Constraints (gtZeroConstr, probConstr)
@@ -102,8 +104,7 @@ standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
-nomThick = cuc' "nomThick"
-  (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (mkSet Rational (map dbl nominalThicknesses)))
+nomThick = cuc' "nomThick" (nounPhraseSP "nominal thickness")
   "the specified standard thickness of the glass plate" lT millimetre
   {-Discrete nominalThicknesses, but not implemented-} Rational
   [sfwrElem $ mkSet Rational (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
@@ -236,13 +237,13 @@ loadDur     = uc' "loadDur"    (nounPhraseSP "duration of load")
   (S "the amount of time that a load is applied to the glass plate")
   (sub lT lDur) Real second
 
-sdx         = uc' "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
+sdx         = uc' "sdx" (compoundPhrase (standOffDist ^. term) (parensNP (xComp ^. term)))
   (S "the x-component of the stand off distance") (subX (eqSymb standOffDist)) Real metre
 
-sdy         = uc' "sdy" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase yComp))
+sdy         = uc' "sdy" (compoundPhrase (standOffDist ^. term) (parensNP (yComp ^. term)))
   (S "the y-component of the stand off distance") (subY (eqSymb standOffDist)) Real metre
 
-sdz         = uc' "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
+sdz         = uc' "sdz" (compoundPhrase (standOffDist ^. term) (parensNP (zComp ^. term)))
   (S "the x-component of the stand off distance") (subZ (eqSymb standOffDist)) Real metre
 
 {-Quantities-}
@@ -259,7 +260,7 @@ riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, sdfTol,
 
 gTF, loadSF, loadDF :: DefinedQuantityDict
 
-dimlessLoad = dqdNoUnit (dcc "dimlessLoad" (nounPhraseSP "dimensionless load") 
+dimlessLoad = dqdNoUnit (dcc "dimlessLoad" (nounPhraseSP "dimensionless load")
   "the dimensionless load") (hat lQ) Real
 
 gTF           = dqdNoUnit glTyFac (variable "GTF") Integer

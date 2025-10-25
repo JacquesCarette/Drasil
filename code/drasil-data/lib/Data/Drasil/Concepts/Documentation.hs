@@ -1,6 +1,6 @@
 -- | Defines concepts used to create documentation.
 
--- Changes to documentation-related named chunks and common ideas should be reflected in the 
+-- Changes to documentation-related named chunks and common ideas should be reflected in the
 -- 'Creating Your Project in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 
@@ -10,6 +10,7 @@ module Data.Drasil.Concepts.Documentation where
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (organization, year, label, variable)
+import Language.Drasil.Development (NPStruct)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.Metadata (documentc, softEng, dataDefn, genDefn, inModel, thModel)
@@ -55,7 +56,7 @@ doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
   likelyChg, learnObj, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook]
 
-assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst, requirement, 
+assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst, requirement,
   mg, mis, notApp, srs, typUnc, sec, notebook, refBy, refName :: CI
 
 softReqSpec :: NP
@@ -91,17 +92,17 @@ refName     = commonIdeaWithDict "refName"     (cn' "reference name")           
 -- * Named Chunks
 -- ** Basic Chunks
 
-abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_, client, 
+abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_, client,
   code, column, company, component, concept, condition, connection, constant,
-  constraint, consumer, content, context, coordinate, customer, datum, decision, 
-  definition, dependency, description, design, document, documentation, effect, 
-  element, emphasis, endUser, environment, example, failure, figure, first, form, full, 
-  functional, game, general, goal, guide, implementation, individual, information, 
-  interest, interface, input_, instance_, intReader, introduction, issue, item, 
+  constraint, consumer, content, context, coordinate, customer, datum, decision,
+  definition, dependency, description, design, document, documentation, effect,
+  element, emphasis, endUser, environment, example, failure, figure, first, form, full,
+  functional, game, general, goal, guide, implementation, individual, information,
+  interest, interface, input_, instance_, intReader, introduction, issue, item,
   loss, label, library, limitation, literacy, material_, mainIdea, message, method_, module_,
   model, name_, nonfunctional, object, offShelf, open, organization, output_,
   physics, physical, plan, practice, priority, problem, procedure, product_, project,
-  property, purpose, quantity, realtime, review, reference, response, 
+  property, purpose, quantity, realtime, review, reference, response,
   result, reviewer, safety, scope, scpOfTheProjS, second_, section_, scenario,
   source, simulation, software, solution, summary, specific, specification, stakeholder,
   standard, statement, symbol_, system, table_, task, template, term_, terminology,
@@ -148,7 +149,7 @@ example         = nc "example"        (cn'    "example"            )
 failure         = nc "failure"        (cn'    "failure"            )
 figure          = nc "figure"         (cn'    "figure"             )
 first           = nc "first"          (cn'    "first"              ) --Does it make sense for this to be here?
-form            = nc "form"           (cn'    "form"               ) 
+form            = nc "form"           (cn'    "form"               )
 full            = nc "full"           (cn'    "full"               ) --FIXME: Adjective
 functional      = nc "functional"     (cn'    "functional"         ) --FIXME: Adjective
 game            = nc "game"           (cn'    "game"               )
@@ -240,7 +241,7 @@ year            = nc "year"           (cn'    "year"               )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
-abbAcc, caseProb, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc, 
+abbAcc, caseProb, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc,
   refMat, reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
   termAndDef, traceyMandG, vav, tOfCont :: IdeaDict
 
@@ -264,10 +265,10 @@ tOfSymb             = nc "tOfSymb"            (table_ `of_` symbol_)
 tOfUnit             = nc "tOfUnit"            (table_ `of_` unit_)
 inDatumConstraint   = nc "InDataConstraints"  (cn' "input data constraint") -- should be moved below
 outDatumConstraint  = nc "OutDataConstraints" (cn' "output data constraint")
-traceyMandG         = nc "traceyMandG"        (and_TGen titleize' titleize' traceyMatrix graph)
+traceyMandG         = nc "traceyMandG"        (and_TGen (\t -> titleizeNP' (t ^. term)) (\t -> titleizeNP' (t ^. term)) traceyMatrix graph)
 vav                 = nc "vav"                (verification `and_` validation)
 
-scpOfTheProj :: (IdeaDict -> Sentence) -> IdeaDict
+scpOfTheProj :: (IdeaDict -> NPStruct) -> IdeaDict
 scpOfTheProj oper = nc "scpOfTheProj" (scope `of_NINP` theGen oper project) -- reasonable hack?
 
 -- ** Compound Chunks
@@ -275,12 +276,12 @@ scpOfTheProj oper = nc "scpOfTheProj" (scope `of_NINP` theGen oper project) -- r
 designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, problemIntro, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
-  userCharacteristic, coordinateSystem, datumConstraint, inDatumConstraint, 
-  outDatumConstraint, functionalRequirement, nonfunctionalRequirement, safetyReq, 
-  softwareConstraint, softwareDoc, softwareReq, softwareSys, softwareVerif, 
-  softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution, 
+  userCharacteristic, coordinateSystem, datumConstraint, inDatumConstraint,
+  outDatumConstraint, functionalRequirement, nonfunctionalRequirement, safetyReq,
+  softwareConstraint, softwareDoc, softwareReq, softwareSys, softwareVerif,
+  softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution,
   physicalSim, productUC, useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: IdeaDict
- 
+
 coordinateSystem             = compoundNC coordinate system
 datumConstraint              = compoundNCPP datum constraint
 designDoc                    = compoundNC design document
@@ -290,7 +291,7 @@ generalSystemDescription     = compoundNC general systemdescription
 moduleInterface              = compoundNC module_ interface
 indPRCase                    = compoundNC individual productUC
 --inDatumConstraint            = compoundNC input_ datumConstraint -- may be used later, but they break stable for now
---outDatumConstraint           = compoundNC output_ datumConstraint 
+--outDatumConstraint           = compoundNC output_ datumConstraint
 nonfunctionalRequirement     = compoundNC nonfunctional requirement
 offShelfSolution             = compoundNC offShelf solution
 physicalConstraint           = compoundNC physical constraint
@@ -326,7 +327,7 @@ vavPlan                      = compoundNC vav plan
 srsDom :: ConceptChunk
 srsDom = dcc "srsDom" (srs ^. term) "srs"
 
-goalStmtDom, assumpDom, reqDom, funcReqDom, nonFuncReqDom, chgProbDom, 
+goalStmtDom, assumpDom, reqDom, funcReqDom, nonFuncReqDom, chgProbDom,
   likeChgDom, unlikeChgDom, refByDom, refNameDom :: ConceptChunk
 goalStmtDom   = ccs (mkIdea "goalStmtDom"   (goalStmt ^. term)                 $ Just "GS")       EmptyS [srsDom]
 assumpDom     = ccs (mkIdea "assumpDom"     (assumption ^. term)               $ Just "A")        EmptyS [srsDom]
@@ -341,6 +342,6 @@ refNameDom    = ccs (mkIdea "refNameDom"    (refName ^. term)                  $
 
 -- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]
-srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, 
+srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom,
   assumpDom, chgProbDom, likeChgDom, unlikeChgDom, refByDom, refNameDom]
 

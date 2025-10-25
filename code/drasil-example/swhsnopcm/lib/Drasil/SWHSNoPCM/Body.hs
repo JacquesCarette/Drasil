@@ -1,14 +1,14 @@
 module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
 import Language.Drasil hiding (section)
-import Drasil.Metadata (inModel)
-import Drasil.SRSDocument
-import Drasil.Generator (cdb)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
+import Drasil.Metadata (inModel)
+import Drasil.SRSDocument
+import qualified Drasil.DocLang.SRS as SRS (inModel)
+import Drasil.Generator (cdb)
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
@@ -29,6 +29,8 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect, surArea, area)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy)
+
+import Theory.Drasil (TheoryModel)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -161,7 +163,7 @@ si = mkSystem
   progName Specification [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
   -- FIXME: Everything after (and including) \\ should be removed when
-  -- #1658 is resolved. Basically, _quants is used here, but 
+  -- #1658 is resolved. Basically, _quants is used here, but
   -- tau does not appear in the document and thus should not be displayed.
   ((map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
@@ -171,7 +173,7 @@ si = mkSystem
   symbMap
 
 purp :: Sentence
-purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
+purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
@@ -243,9 +245,9 @@ scope = phrase thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
 ---------------------------------------
 
 orgDocEnd :: Sentence
-orgDocEnd = foldlSent_ [atStartNP (the inModel),
+orgDocEnd = foldlSent_ [D.toSent (atStartNP (the inModel)),
   S "to be solved" `S.is` S "referred to as" +:+. refS eBalanceOnWtr,
-  atStartNP (the inModel), S "provides the", titleize ode,
+  D.toSent (atStartNP (the inModel)), S "provides the", titleize ode,
   sParen (short ode), S "that models the" +:+. phrase progName,
   short progName, S "solves this", short ode]
 
@@ -292,8 +294,8 @@ physSystParts :: [Sentence]
 physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
 goalInputs :: [Sentence]
-goalInputs = [phraseNP (temp `the_ofThe` coil),
-  S "the initial" +:+ phrase tempW, pluralNP (the materialProprty)]
+goalInputs = [D.toSent (phraseNP (temp `the_ofThe` coil)),
+  S "the initial" +:+ phrase tempW, D.toSent (pluralNP (the materialProprty))]
 
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
@@ -344,7 +346,7 @@ dataConstListOut = [tempW, watE]
 -- Traceabilty Graphs --
 ------------------------
 
--- Using the SWHS graphs as place holders until ones can be generated for NoPCM 
+-- Using the SWHS graphs as place holders until ones can be generated for NoPCM
 
 ------------------------------------------
 --Section 8: SPECIFICATION PARAMETER VALUE

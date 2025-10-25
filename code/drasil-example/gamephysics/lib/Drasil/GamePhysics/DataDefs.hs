@@ -3,13 +3,15 @@ module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD,
   kEnergyDD, coeffRestitutionDD, reVelInCollDD, impulseVDD, momentOfInertiaDD,
   collisionAssump, rightHandAssump, rigidTwoDAssump, potEnergyDD,) where
 
+import Control.Lens ((^.))
+
 import Language.Drasil
 
 import Theory.Drasil
 import Utils.Drasil (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Control.Lens ((^.))
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 import Drasil.GamePhysics.Derivations (impulseVDerivEqns)
@@ -74,9 +76,9 @@ dispEqn = deriv (apply1 QP.position QP.time) QP.time
 {-
 dd2descr :: Sentence
 dd2descr = S "linear" +:+ (QP.displacement ^. term) +:+ S "of a" +:+
-  ( rigidBody ^. term) +:+ S "as a function of" +:+ (QP.time ^. term) +:+ 
+  ( rigidBody ^. term) +:+ S "as a function of" +:+ (QP.time ^. term) +:+
   ch QP.time +:+ sParen (Sy (unit_symb QP.time)) `sC`
-  S "also equal to the derivative of its linear" +:+ (QP.position ^. term) +:+ 
+  S "also equal to the derivative of its linear" +:+ (QP.position ^. term) +:+
   S "with respect to" +:+ (QP.time ^. term) +:+ ch QP.time
 -}
 -- DD3 : Linear velocity --
@@ -103,7 +105,7 @@ velEqn = deriv (apply1 QP.displacement QP.time) QP.time
 {-
 dd3descr :: Sentence
 dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
-  (rigidBody ^. term) +:+ S "as a function of" +:+ (QP.time ^. term) +:+ 
+  (rigidBody ^. term) +:+ S "as a function of" +:+ (QP.time ^. term) +:+
   ch QP.time +:+ sParen (Sy (unit_symb QP.time)) `sC`
   S "also equal to the derivative of its linear" +:+ (QP.velocity ^. term) +:+
   S "with respect to" +:+ (QP.time ^. term) +:+ ch QP.time
@@ -121,7 +123,7 @@ accelEqn = deriv (apply1 QP.velocity QP.time) QP.time
 {-
 dd4descr :: Sentence
 dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
-  (rigidBody ^. term) +:+ S "as a function of" +:+ (QP.time ^. term) +:+ 
+  (rigidBody ^. term) +:+ S "as a function of" +:+ (QP.time ^. term) +:+
   ch QP.time +:+ sParen (Sy (unit_symb QP.time)) `sC`
   S "also equal to the derivative of its linear" +:+ (accel ^. term) +:+
   S "with respect to" +:+ (QP.time ^. term) +:+ ch QP.time
@@ -139,7 +141,7 @@ angDispEqn = deriv (apply1 QM.orientation QP.time) QP.time
 {-
 dd5descr :: Sentence
 dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
-  (rigidBody ^. term) +:+ S "as a function of" +:+ (QP.time ^. term) +:+ 
+  (rigidBody ^. term) +:+ S "as a function of" +:+ (QP.time ^. term) +:+
   ch QP.time +:+ sParen (Sy (unit_symb QP.time)) `sC`
   S "also equal to the derivative of its" +:+ (QM.orientation ^. term) +:+
   S "with respect to" +:+ (QP.time ^. term) +:+ ch QP.time
@@ -157,7 +159,7 @@ angVelEqn = deriv (apply1 QP.angularDisplacement QP.time) QP.time
 {-
 dd6descr :: Sentence
 dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
-  (rigidBody ^. term) +:+ S "as a function of" +:+ (QP.time ^. term) +:+ 
+  (rigidBody ^. term) +:+ S "as a function of" +:+ (QP.time ^. term) +:+
   ch QP.time +:+ sParen (Sy (unit_symb QP.time)) `sC`
   S "also equal to the derivative of its" +:+ (QP.angularDisplacement ^. term) +:+
   S "with respect to" +:+ (QP.time ^. term) +:+ ch QP.time
@@ -191,7 +193,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
-chaslesDD = ddE chasles [dRef chaslesWiki] Nothing "chaslesThm" 
+chaslesDD = ddE chasles [dRef chaslesWiki] Nothing "chaslesThm"
   [chaslesThmNote, rigidBodyAssump]
 
 chasles :: SimpleQDef
@@ -202,7 +204,7 @@ chaslesEqn :: Expr
 chaslesEqn = sy velO $+ cross (sy  QP.angularVelocity) (sy rOB)
 
 chaslesThmNote :: Sentence
-chaslesThmNote = foldlSent [atStartNP (the QP.linearVelocity),
+chaslesThmNote = foldlSent [D.toSent (atStartNP (the QP.linearVelocity)),
   ch velB `S.of_` S "any point B in a", phrase rigidBody `S.isThe` S "sum" `S.ofThe`
   phrase QP.linearVelocity +:+ ch velO `S.ofThe` phrase rigidBody,
   S "at the origin (axis of rotation)" `S.andThe` S "resultant vector from",
@@ -228,19 +230,19 @@ impulseVDeriv :: Derivation
 impulseVDeriv = mkDerivName (phrase QP.impulseV) (weave [impulseVDerivSentences, map eS impulseVDerivEqns])
 
 impulseVDerivSentences :: [Sentence]
-impulseVDerivSentences = map foldlSentCol [impulseVDerivSentence1, 
- impulseVDerivSentence2, impulseVDerivSentence3]  
+impulseVDerivSentences = map foldlSentCol [impulseVDerivSentence1,
+ impulseVDerivSentence2, impulseVDerivSentence3]
 
 impulseVDerivSentence1 :: [Sentence]
 impulseVDerivSentence1 = [S "Newton's second law of motion states"]
 
 impulseVDerivSentence2 :: [Sentence]
-impulseVDerivSentence2 = [S "Rearranging"] 
+impulseVDerivSentence2 = [S "Rearranging"]
 
 impulseVDerivSentence3 :: [Sentence]
 impulseVDerivSentence3 = [S "Integrating the right hand side"]
 
------------------DD11 Relative Velocity in Collision------------------------------------------------------- 
+-----------------DD11 Relative Velocity in Collision-------------------------------------------------------
 reVelInCollDD :: DataDefinition
 reVelInCollDD = ddENoRefs reVelInColl Nothing "reVeInColl"
   [reVelInCollDesc, rigidBodyAssump]
@@ -252,8 +254,8 @@ reVelInCollEqn :: Expr
 reVelInCollEqn = sy velAP `vSub` sy velBP
 
 reVelInCollDesc :: Sentence
-reVelInCollDesc = foldlSent [S "In a collision, the", phraseNP (QP.velocity
-  `ofA` rigidBody), S "A colliding with another", phrase rigidBody,
+reVelInCollDesc = foldlSent [S "In a collision, the", D.toSent (phraseNP (QP.velocity `ofA` rigidBody)),
+  S "A colliding with another", phrase rigidBody,
   S "B relative to that body", ch initRelVel `S.isThe` S "difference between the",
   plural QP.velocity, S "of A and B at point P"]
 -----------------DD13 Torque-------------------------------------------------------------------------------
@@ -280,10 +282,10 @@ coeffRestitutionDesc = foldlSent [S "The", getTandS QP.restitutionCoef,
   eS (sy QP.restitutionCoef $= exactDbl 1) +:+ S "results" `S.in_` S "an elastic collision",
   eS (sy QP.restitutionCoef $< exactDbl 1) +:+ S "results" `S.in_` S "an inelastic collision",
   eS (sy QP.restitutionCoef $= exactDbl 0) +:+ S "results" `S.in_` S "a totally inelastic collision"]]
------------------------DD15 Kinetic Energy--------------------------------  
+-----------------------DD15 Kinetic Energy--------------------------------
 kEnergyDD :: DataDefinition
 kEnergyDD = ddENoRefs kEnergy Nothing "kEnergy"
- [kEnergyDesc, rigidTwoDAssump, noDampingAssump] 
+ [kEnergyDesc, rigidTwoDAssump, noDampingAssump]
 
 kEnergy :: SimpleQDef
 kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
@@ -297,7 +299,7 @@ kEnergyDesc = foldlSent [atStart QP.kEnergy `S.is` (QP.kEnergy ^. defn)]
 
 momentOfInertiaDD :: DataDefinition
 momentOfInertiaDD = ddMENoRefs momentOfInertia Nothing "momentOfInertia"
- [momentOfInertiaDesc, rigidBodyAssump] 
+ [momentOfInertiaDesc, rigidBodyAssump]
 
 momentOfInertia :: ModelQDef
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
@@ -314,7 +316,7 @@ momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,
 
 potEnergyDD :: DataDefinition
 potEnergyDD = ddENoRefs potEnergy Nothing "potEnergy"
- [potEnergyDesc, rigidTwoDAssump, noDampingAssump] 
+ [potEnergyDesc, rigidTwoDAssump, noDampingAssump]
 
 potEnergy :: SimpleQDef
 potEnergy = mkQuantDef QP.potEnergy potEnergyEqn
@@ -323,7 +325,7 @@ potEnergyEqn :: Expr
 potEnergyEqn = sy QPP.mass $* sy QP.gravitationalAccel $* sy QP.height
 
 potEnergyDesc :: Sentence
-potEnergyDesc = foldlSent [atStartNP (the QP.potEnergy) `S.of_`
+potEnergyDesc = foldlSent [D.toSent (atStartNP (the QP.potEnergy)) `S.of_`
   S "an object" `S.isThe` phrase QP.energy, S "held by an object because of its",
   phrase QP.position, S "to other objects"]
 

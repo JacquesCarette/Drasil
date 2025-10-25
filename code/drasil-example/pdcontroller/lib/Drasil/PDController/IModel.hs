@@ -1,18 +1,23 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.PDController.IModel where
 
+import Language.Drasil
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
+import qualified Language.Drasil.Sentence.Combinators as S
+
+import Utils.Drasil (weave)
+
 import Data.Drasil.Quantities.Physics (time)
+
+import Theory.Drasil (InstanceModel, im, qwC, newDEModel')
+
 import Drasil.PDController.Assumptions
 import Drasil.PDController.Concepts
 import Drasil.PDController.DataDefs
 import Drasil.PDController.GenDefs
 import Drasil.PDController.References
 import Drasil.PDController.TModel
-import Language.Drasil
-import Theory.Drasil (InstanceModel, im, qwC, newDEModel')
-import Utils.Drasil (weave)
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.PDController.Unitals
 
 instanceModels :: [InstanceModel]
@@ -46,7 +51,7 @@ imPDRC
                   $++ (exactDbl 1 $** (opProcessVariable $^^ 2))
                   $++ (exactDbl 20 $+ sy dqdPropGain $** (opProcessVariable $^^ 0))
             rhs = sy dqdSetPointTD $* sy dqdPropGain
-      -- Matrix form: 
+      -- Matrix form:
       -- coeffs = [[exactDbl 1, exactDbl 1 $+ sy dqdDerivGain, exactDbl 20 $+ sy dqdPropGain]]
       -- unknowns = [2, 1, 0]
       -- constants = [sy dqdSetPointTD $* sy dqdPropGain]
@@ -65,7 +70,7 @@ imDerivEqns = [derivEqn1, derivEqn2, derivEqn3, derivEqn4]
 derivStmt1 :: Sentence
 derivStmt1
   = foldlSent
-      [atStartNP (the processVariable), eS' dqdProcessVariableFD, S "in a", phrase pidCL +:+
+      [D.toSent (atStartNP (the processVariable)), eS' dqdProcessVariableFD, S "in a", phrase pidCL +:+
          S "is the product" `S.ofThe` phrase processError, fromSource ddErrSig `sC`
          phrase controlVariable, fromSource ddCtrlVar `sC` EmptyS
          `S.andThe` phrase powerPlant, fromSource gdPowerPlant]
@@ -104,7 +109,7 @@ derivEqn3
 derivStmt4 :: Sentence
 derivStmt4
   = foldlSent_
-      [atStartNP (the setPoint), eS' dqdSetPointTD, S "is a step function and a constant" +:+.
+      [D.toSent (atStartNP (the setPoint)), eS' dqdSetPointTD, S "is a step function and a constant" +:+.
          fromSource aSP,
        S "Therefore the",
          S "differential" `S.ofThe` S "set point" `S.is` S "zero. Hence the equation",

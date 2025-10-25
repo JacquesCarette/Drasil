@@ -1,13 +1,16 @@
 module Drasil.PDController.Assumptions where
 
+import Language.Drasil
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
+import qualified Language.Drasil.Sentence.Combinators as S
+
 import Data.Drasil.Concepts.Documentation (assumpDom)
 
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.SI_Units (kilogram)
+
 import Drasil.PDController.Concepts
-import Language.Drasil
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
 
 assumptions :: [ConceptInstance]
 assumptions
@@ -55,12 +58,12 @@ pwrPlantDesc, aDecoupledDesc, aSPDesc, aExtDisturbDesc, aManualTuningDesc,
               aStiffnessCoeffDesc :: Sentence
 pwrPlantDesc
   = foldlSent
-      [atStartNP (the powerPlant) `S.andThe` S "Sensor are coupled as a single unit"]
+      [D.toSent (atStartNP (the powerPlant)) `S.andThe` S "Sensor are coupled as a single unit"]
 
 apwrPlantTxFnxDesc
   = foldlSent
       [S "The combined", phrase powerPlant `S.and_` S "Sensor",
-         sParen (refS aPwrPlant),        
+         sParen (refS aPwrPlant),
          S "are characterized by a Second Order mass-spring-damper System"]
 
 aDecoupledDesc
@@ -70,8 +73,8 @@ aDecoupledDesc
 
 aSPDesc
   = foldlSent
-      [atStartNP (the setPoint), S "is constant throughout",
-         phraseNP (the simulation)]
+      [D.toSent (atStartNP (the setPoint)), S "is constant throughout",
+         D.toSent (phraseNP (the simulation))]
 
 aExtDisturbDesc
   = foldlSent
@@ -98,19 +101,19 @@ aUnfilteredDerivativeDesc
 
 aMassDesc
   = foldlSent
-      [atStartNP (the mass) `S.ofThe` S "spring" `S.inThe` S "mass-spring-damper system",
+      [D.toSent (atStartNP (the mass)) `S.ofThe` S "spring" `S.inThe` S "mass-spring-damper system",
        sParen (refS aPwrPlant),
-       S "is assumed to be 1", 
+       S "is assumed to be 1",
        phrase kilogram]
 
 aDampingCoeffDesc
   = foldlSent
-      [atStartNP (the ccDampingCoeff) `S.ofThe` S "spring" `S.inThe` S "mass-spring-damper system",
-       sParen (refS aPwrPlant), 
+      [D.toSent (atStartNP (the ccDampingCoeff)) `S.ofThe` S "spring" `S.inThe` S "mass-spring-damper system",
+       sParen (refS aPwrPlant),
        S "is assumed to be 1"]
 
 aStiffnessCoeffDesc
   = foldlSent
-      [atStartNP (the ccStiffCoeff) `S.ofThe` S "spring" `S.inThe` S "mass-spring-damper system",
-       sParen (refS aPwrPlant), 
+      [D.toSent (atStartNP (the ccStiffCoeff)) `S.ofThe` S "spring" `S.inThe` S "mass-spring-damper system",
+       sParen (refS aPwrPlant),
        S "is assumed to be 20"]

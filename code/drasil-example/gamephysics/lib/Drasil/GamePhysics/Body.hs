@@ -6,6 +6,7 @@ import Drasil.SRSDocument
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
@@ -124,9 +125,9 @@ ideaDicts =
   -- CIs
   map nw [progName, centreMass] ++ map nw CM.mathcon' ++
   map nw CP.physicCon'
-  
+
 conceptChunks :: [ConceptChunk]
-conceptChunks = 
+conceptChunks =
   -- ConceptChunks
   softwarecon ++ [CP.angular, CP.linear, CP.rigidBody, CP.collision,
   CP.damping, CP.friction, CP.joint, CP.energy, CP.motion, CP.space,
@@ -167,9 +168,9 @@ allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
 
 para1_introduction_intro :: Sentence
 para1_introduction_intro = foldlSent
-  [S "Due to the rising cost of developing", plural videoGame `sC` 
+  [S "Due to the rising cost of developing", plural videoGame `sC`
   S "developers are looking" `S.for` S "ways to save time and money for their" +:+.
-  plural project, S "Using an", phrase openSource, 
+  plural project, S "Using an", phrase openSource,
   phrase physLib,
   S "that is reliable and free will cut down development costs and lead",
   S "to better quality" +:+. plural product_ ,
@@ -178,8 +179,8 @@ para1_introduction_intro = foldlSent
   namedRef externalLinkRef (S "GamePhysics")]
 
 externalLinkRef :: Reference
-externalLinkRef = makeURI "GamePhysicsSRSLink" 
-  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/gamephys" 
+externalLinkRef = makeURI "GamePhysicsSRSLink"
+  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/gamephys"
   (shortname' $ S "GamePhysicsSRSLink")
 -------------------------------
 -- 2.1 : Purpose of Document --
@@ -191,12 +192,12 @@ externalLinkRef = makeURI "GamePhysicsSRSLink"
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 scope :: Sentence
-scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` short twoD,
+scope = foldlSent_ [D.toSent (phraseNP (the physicalSim)) `S.of_` short twoD,
   plural CP.rigidBody, S "acted on by", plural QP.force]
 
 --scope_of_requirements_intro_p2 = EmptyS
-  
-{-scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these", 
+
+{-scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these",
   plural CP.rigidBody, S "interact with one another"]
 -}
 ----------------------------------------------
@@ -218,20 +219,19 @@ sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external" `S.toThe` phrase software
-   `sC` phraseNP (the user), S "in this case. A rectangle represents the",
+   `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", sParen (short progName) +:+. EmptyS,
-   S "Arrows are used to show the data flow between the", phraseNP (system
-   `andIts` environment)]
+   S "Arrows are used to show the data flow between the", D.toSent (phraseNP (system `andIts` environment))]
 
 sysCtxDesc :: Contents
-sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
-   `andThe` user), S "is through an application programming" +:+.
-   phrase interface, S "The responsibilities" `S.ofThe` phraseNP (user 
-   `andThe` system), S "are as follows"]
+sysCtxDesc = foldlSPCol [S "The interaction between the", D.toSent (phraseNP (product_ `andThe` user)),
+   S "is through an application programming" +:+.
+   phrase interface, S "The responsibilities" `S.ofThe` D.toSent (phraseNP (user `andThe` system)),
+   S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
-  physical) +:+ S "state" `S.ofThe` phrase simulation `sC`
+sysCtxUsrResp = [S "Provide initial" +:+ D.toSent (pluralNP (condition `ofThePS`
+  physical)) +:+ S "state" `S.ofThe` phrase simulation `sC`
   plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
   S "applied to them",
   S "Ensure application programming" +:+ phrase interface +:+
@@ -239,11 +239,11 @@ sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
   S "Ensure required" +:+
   namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
   S "are appropriate for any particular" +:+
-  phrase problem +:+ phraseNP (the software) +:+. S "addresses"]
+  phrase problem +:+ D.toSent (phraseNP (the software)) +:+. S "addresses"]
 
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = [S "Determine if the" +:+ pluralNP (input_ `and_PS`
-    simulation) +:+ S "state satisfy the required" +:+.
+sysCtxSysResp = [S "Determine if the" +:+ D.toSent (pluralNP (input_ `and_PS`
+    simulation)) +:+ S "state satisfy the required" +:+.
     namedRef (SRS.datCon ([]::[Contents]) ([]::[Section])) (phrase physical `S.and_` plural systemConstraint),
   S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
     S "within the" +:+ phrase simulation +:+ S "at each" +:+
@@ -292,14 +292,14 @@ probDescIntro = foldlSent_
   S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
   S "need", plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
   plural condition `sC` S "while simultaneously being fast and efficient enough to work in soft",
-  phrase realtime, S "during the" +:+. phrase game, S "Developing a", 
+  phrase realtime, S "during the" +:+. phrase game, S "Developing a",
   phrase physLib, S "from scratch takes a long period" `S.of_` phrase QP.time `S.and_`
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
-  phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+. 
+  phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+.
   plural product_, S "There are a few free" `sC` phrase openSource `S.and_` S "high quality",
   namedRef (SRS.offShelfSol ([] :: [Contents]) ([] :: [Section])) (plural physLib),
   S "available to be used for", phrase consumer, plural product_]
-  
+
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
@@ -330,10 +330,10 @@ terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand,
 generalDefinitionsIntro :: Contents
 -- general_definitions_GDefs :: [Contents]
 
-generalDefinitionsIntro = foldlSP 
-  [S "This", phrase section_, S "collects the", pluralNP (CM.law `and_PP` 
-  CM.equation), S "that will be used in deriving the", 
-  plural dataDefn `sC` S "which in turn will be used to build the", 
+generalDefinitionsIntro = foldlSP
+  [S "This", phrase section_, S "collects the", D.toSent (pluralNP (CM.law `and_PP`
+  CM.equation)), S "that will be used in deriving the",
+  plural dataDefn `sC` S "which in turn will be used to build the",
   plural inModel]
 
 -- GDefs not yet implemented --
@@ -347,7 +347,7 @@ general_definitions_GDefs = map (Definition . General) gDefs)
 ------------------------------
 
 dataDefinitionsIntro :: Sentence
-dataDefinitionsIntro = foldlSent [atStartNP (the CPP.dimension)
+dataDefinitionsIntro = foldlSent [D.toSent (atStartNP (the CPP.dimension))
    `S.of_` S "each", phrase quantity, S "is also given"]
 
 -----------------------------
@@ -358,11 +358,11 @@ dataDefinitionsIntro = foldlSent [atStartNP (the CPP.dimension)
 -- Collision Diagram        --
 ------------------------------
 {-- should be paired with the last instance model for this example
-secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image", 
-  S "of a typical collision between two 2D rigid bodies labeled A and B,"  
+secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image",
+  S "of a typical collision between two 2D rigid bodies labeled A and B,"
   S "showing the position of the two objects, the collision normal vector n and",
   S "the vectors from the approximate center of mass of each object to the point",
-  S "of collision P, rAP and rBP. Note that this figure only presents", 
+  S "of collision P, rAP and rBP. Note that this figure only presents",
   S "vertex-to-edge collisions, as per our assumptions (A5)."]
 --}
 
@@ -395,13 +395,13 @@ offShelfSols = [offShelfSolsIntro, offShelfSols2DList,
                 offShelfSolsMid, offShelfSols3DList]
 
 offShelfSolRefs :: [Reference]
-offShelfSolRefs = [box2D, napePhysicsEngine, bullet, 
+offShelfSolRefs = [box2D, napePhysicsEngine, bullet,
                    openDynamicsEngine, newtonGameDynamics]
 
-offShelfSolsIntro, offShelfSols2DList, 
+offShelfSolsIntro, offShelfSols2DList,
   offShelfSolsMid, offShelfSols3DList :: Contents
 
-offShelfSolsIntro = mkParagraph $ foldlSentCol 
+offShelfSolsIntro = mkParagraph $ foldlSentCol
   [S "As mentioned" `S.inThe` namedRef (SRS.probDesc [] []) (phrase problemDescription) `sC`
   S "there already exist free", phrase openSource, phrase game +:+.
   plural physLib, S "Similar", short twoD, plural physLib, S "are"]
@@ -421,19 +421,19 @@ offShelfSols3DList = enumBulletU [
 box2D, napePhysicsEngine, bullet, openDynamicsEngine,
   newtonGameDynamics :: Reference
 
-box2D = makeURI "box2D" "http://box2d.org/" $ 
+box2D = makeURI "box2D" "http://box2d.org/" $
   shortname' $ S "Box2D"
 
-napePhysicsEngine = makeURI "napePhysicsEngine" "http://napephys.com/" $ 
+napePhysicsEngine = makeURI "napePhysicsEngine" "http://napephys.com/" $
   shortname' $ S "Nape Physics Engine"
 
-bullet = makeURI "bullet" "http://bulletphysics.org/" $ 
+bullet = makeURI "bullet" "http://bulletphysics.org/" $
   shortname' $ S "Bullet"
 
-openDynamicsEngine = makeURI "openDynamicsEngine" "http://www.ode.org/" $ 
+openDynamicsEngine = makeURI "openDynamicsEngine" "http://www.ode.org/" $
   shortname' $ S "Open Dynamic Engine"
 
-newtonGameDynamics = makeURI "newtonGameDynamics" "http://newtondynamics.com/" $ 
+newtonGameDynamics = makeURI "newtonGameDynamics" "http://newtondynamics.com/" $
   shortname' $ S "Newton Game Dynamics"
 
 -------------------------------------------------

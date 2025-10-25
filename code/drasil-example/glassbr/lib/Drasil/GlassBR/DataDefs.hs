@@ -37,7 +37,8 @@ hFromtQD :: SimpleQDef
 hFromtQD = mkQuantDef minThick hFromtEq
 
 hFromt :: DataDefinition
-hFromt = ddE hFromtQD [dRef astm2009] Nothing "minThick" [hMin]
+hFromt = ddE hFromtQD [dRef astm2009] Nothing "minThick"
+  [hMin, S "nominal thickness t is in" +:+ eS (mkSet Rational (map dbl nominalThicknesses)) ]
 
 {--}
 

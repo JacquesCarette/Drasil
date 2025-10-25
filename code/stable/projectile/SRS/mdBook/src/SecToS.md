@@ -26,7 +26,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({p\_{\text{y}}}\\)                |\\(y\\)-component of position                                |\\({\text{m}}\\)                   |
 |\\({{p\_{\text{y}}}^{\text{i}}}\\)   |\\(y\\)-component of initial position                        |\\({\text{m}}\\)                   |
 |\\(\boldsymbol{p}\text{(}t\text{)}\\)|Position                                                     |\\({\text{m}}\\)                   |
-|\\(s\\)                              |Output message as a string                                   |--                                 |
 |\\(t\\)                              |Time                                                         |\\({\text{s}}\\)                   |
 |\\({t\_{\text{flight}}}\\)           |Flight duration                                              |\\({\text{s}}\\)                   |
 |\\(v\\)                              |Speed                                                        |\\(\frac{\text{m}}{\text{s}}\\)    |

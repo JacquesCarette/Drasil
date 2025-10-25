@@ -36,8 +36,7 @@ int main(int argc, const char *argv[]) {
     double t_flight = func_t_flight(v_launch, theta, g);
     double p_land = func_p_land(v_launch, theta, g);
     double d_offset = func_d_offset(p_target, p_land);
-    string s = func_s(p_target, epsilon, d_offset);
-    write_output(s, d_offset, t_flight);
+    write_output(d_offset, t_flight);
     
     return 0;
 }
@@ -52,18 +51,6 @@ double func_p_land(double v_launch, double theta, double g) {
 
 double func_d_offset(double p_target, double p_land) {
     return p_land - p_target;
-}
-
-string func_s(double p_target, double epsilon, double d_offset) {
-    if (fabs(d_offset / p_target) < epsilon) {
-        return "The target was hit.";
-    }
-    else if (d_offset < 0.0) {
-        return "The projectile fell short.";
-    }
-    else {
-        return "The projectile went long.";
-    }
 }
 
 void get_input(string filename, double &v_launch, double &theta, double &p_target) {
@@ -114,11 +101,9 @@ void input_constraints(double v_launch, double theta, double p_target) {
     }
 }
 
-void write_output(string s, double d_offset, double t_flight) {
+void write_output(double d_offset, double t_flight) {
     ofstream outputfile;
     outputfile.open("output.txt", std::fstream::out);
-    outputfile << "s = ";
-    outputfile << s << std::endl;
     outputfile << "d_offset = ";
     outputfile << d_offset << std::endl;
     outputfile << "t_flight = ";

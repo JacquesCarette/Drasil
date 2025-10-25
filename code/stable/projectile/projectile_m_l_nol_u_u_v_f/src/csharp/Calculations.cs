@@ -36,22 +36,4 @@ public class Calculations {
     public static float func_d_offset(float p_target, float p_land) {
         return p_land - p_target;
     }
-    
-    /** \brief Calculates output message as a string
-        \param p_target target position (m)
-        \param epsilon hit tolerance
-        \param d_offset distance between the target position and the landing position (m)
-        \return output message as a string
-    */
-    public static string func_s(float p_target, float epsilon, float d_offset) {
-        if (Math.Abs(d_offset / p_target) < epsilon) {
-            return "The target was hit.";
-        }
-        else if (d_offset < 0.0f) {
-            return "The projectile fell short.";
-        }
-        else {
-            return "The projectile went long.";
-        }
-    }
 }

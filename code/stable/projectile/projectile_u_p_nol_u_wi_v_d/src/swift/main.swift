@@ -37,24 +37,6 @@ func func_d_offset(_ p_target: Double, _ p_land: Double) -> Double {
     return p_land - p_target
 }
 
-/** Calculates output message as a string
-    - Parameter p_target: target position (m)
-    - Parameter epsilon: hit tolerance
-    - Parameter d_offset: distance between the target position and the landing position (m)
-    - Returns: output message as a string
-*/
-func func_s(_ p_target: Double, _ epsilon: Double, _ d_offset: Double) -> String {
-    if abs(d_offset / p_target) < epsilon {
-        return "The target was hit."
-    }
-    else if d_offset < 0.0 {
-        return "The projectile fell short."
-    }
-    else {
-        return "The projectile went long."
-    }
-}
-
 /** Reads input from a file with the given file name
     - Parameter filename: name of the input file
     - Returns: launch speed (m/s)
@@ -120,27 +102,15 @@ func input_constraints(_ v_launch: Double, _ theta: Double, _ p_target: Double) 
 }
 
 /** Writes the output values to output.txt
-    - Parameter s: output message as a string
     - Parameter d_offset: distance between the target position and the landing position (m)
     - Parameter t_flight: flight duration (s)
 */
-func write_output(_ s: String, _ d_offset: Double, _ t_flight: Double) throws -> Void {
+func write_output(_ d_offset: Double, _ t_flight: Double) throws -> Void {
     var outputfile: FileHandle
     do {
         outputfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("output.txt"))
     } catch {
         throw "Error opening file."
-    }
-    do {
-        try outputfile.write(contentsOf: Data("s = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outputfile.write(contentsOf: Data(s.utf8))
-        try outputfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
     }
     do {
         try outputfile.write(contentsOf: Data("d_offset = ".utf8))
@@ -182,5 +152,4 @@ input_constraints(v_launch, theta, p_target)
 var t_flight: Double = func_t_flight(v_launch, theta, g)
 var p_land: Double = func_p_land(v_launch, theta, g)
 var d_offset: Double = func_d_offset(p_target, p_land)
-var s: String = func_s(p_target, epsilon, d_offset)
-try write_output(s, d_offset, t_flight)
+try write_output(d_offset, t_flight)

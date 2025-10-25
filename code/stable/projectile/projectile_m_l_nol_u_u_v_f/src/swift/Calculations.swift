@@ -34,21 +34,3 @@ func func_p_land(_ v_launch: Float, _ theta: Float, _ g: Float) -> Float {
 func func_d_offset(_ p_target: Float, _ p_land: Float) -> Float {
     return p_land - p_target
 }
-
-/** Calculates output message as a string
-    - Parameter p_target: target position (m)
-    - Parameter epsilon: hit tolerance
-    - Parameter d_offset: distance between the target position and the landing position (m)
-    - Returns: output message as a string
-*/
-func func_s(_ p_target: Float, _ epsilon: Float, _ d_offset: Float) -> String {
-    if abs(d_offset / p_target) < epsilon {
-        return "The target was hit."
-    }
-    else if d_offset < 0.0 {
-        return "The projectile fell short."
-    }
-    else {
-        return "The projectile went long."
-    }
-}

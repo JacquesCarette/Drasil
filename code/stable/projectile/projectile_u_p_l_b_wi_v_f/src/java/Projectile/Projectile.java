@@ -45,13 +45,7 @@ public class Projectile {
         outfile.print(d_offset);
         outfile.println(" in module Projectile");
         outfile.close();
-        String s = func_s(inParams, d_offset);
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 's' assigned ");
-        outfile.print(s);
-        outfile.println(" in module Projectile");
-        outfile.close();
-        write_output(s, d_offset, t_flight);
+        write_output(d_offset, t_flight);
     }
     
     /** \brief Calculates flight duration (s)
@@ -106,46 +100,14 @@ public class Projectile {
         return p_land - inParams.p_target;
     }
     
-    /** \brief Calculates output message as a string
-        \param inParams structure holding the input values
-        \param d_offset distance between the target position and the landing position (m)
-        \return output message as a string
-    */
-    public static String func_s(InputParameters inParams, float d_offset) throws IOException {
-        PrintWriter outfile;
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_s called with inputs: {");
-        outfile.print("  inParams = ");
-        outfile.print("Instance of InputParameters object");
-        outfile.println(", ");
-        outfile.print("  d_offset = ");
-        outfile.println(d_offset);
-        outfile.println("  }");
-        outfile.close();
-        
-        if (Math.abs(d_offset / inParams.p_target) < inParams.epsilon) {
-            return "The target was hit.";
-        }
-        else if (d_offset < 0.0f) {
-            return "The projectile fell short.";
-        }
-        else {
-            return "The projectile went long.";
-        }
-    }
-    
     /** \brief Writes the output values to output.txt
-        \param s output message as a string
         \param d_offset distance between the target position and the landing position (m)
         \param t_flight flight duration (s)
     */
-    public static void write_output(String s, float d_offset, float t_flight) throws IOException {
+    public static void write_output(float d_offset, float t_flight) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function write_output called with inputs: {");
-        outfile.print("  s = ");
-        outfile.print(s);
-        outfile.println(", ");
         outfile.print("  d_offset = ");
         outfile.print(d_offset);
         outfile.println(", ");
@@ -156,8 +118,6 @@ public class Projectile {
         
         PrintWriter outputfile;
         outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));
-        outputfile.print("s = ");
-        outputfile.println(s);
         outputfile.print("d_offset = ");
         outputfile.println(d_offset);
         outputfile.print("t_flight = ");

@@ -33,8 +33,7 @@ public class Projectile {
         double t_flight = func_t_flight(v_launch, theta, g);
         double p_land = func_p_land(v_launch, theta, g);
         double d_offset = func_d_offset(p_target, p_land);
-        String s = func_s(p_target, epsilon, d_offset);
-        write_output(s, d_offset, t_flight);
+        write_output(d_offset, t_flight);
     }
     
     /** \brief Calculates flight duration (s)
@@ -64,24 +63,6 @@ public class Projectile {
     */
     public static double func_d_offset(double p_target, double p_land) {
         return p_land - p_target;
-    }
-    
-    /** \brief Calculates output message as a string
-        \param p_target target position (m)
-        \param epsilon hit tolerance
-        \param d_offset distance between the target position and the landing position (m)
-        \return output message as a string
-    */
-    public static String func_s(double p_target, double epsilon, double d_offset) {
-        if (Math.abs(d_offset / p_target) < epsilon) {
-            return "The target was hit.";
-        }
-        else if (d_offset < 0.0) {
-            return "The projectile fell short.";
-        }
-        else {
-            return "The projectile went long.";
-        }
     }
     
     /** \brief Reads input from a file with the given file name
@@ -152,15 +133,12 @@ public class Projectile {
     }
     
     /** \brief Writes the output values to output.txt
-        \param s output message as a string
         \param d_offset distance between the target position and the landing position (m)
         \param t_flight flight duration (s)
     */
-    public static void write_output(String s, double d_offset, double t_flight) throws IOException {
+    public static void write_output(double d_offset, double t_flight) throws IOException {
         PrintWriter outputfile;
         outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));
-        outputfile.print("s = ");
-        outputfile.println(s);
         outputfile.print("d_offset = ");
         outputfile.println(d_offset);
         outputfile.print("t_flight = ");

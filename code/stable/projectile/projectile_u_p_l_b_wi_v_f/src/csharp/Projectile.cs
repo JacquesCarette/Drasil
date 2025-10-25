@@ -39,13 +39,7 @@ public class Projectile {
         outfile.Write(d_offset);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
-        string s = func_s(inParams, d_offset);
-        outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 's' assigned ");
-        outfile.Write(s);
-        outfile.WriteLine(" in module Projectile");
-        outfile.Close();
-        write_output(s, d_offset, t_flight);
+        write_output(d_offset, t_flight);
     }
     
     /** \brief Calculates flight duration (s)
@@ -100,46 +94,14 @@ public class Projectile {
         return p_land - inParams.p_target;
     }
     
-    /** \brief Calculates output message as a string
-        \param inParams structure holding the input values
-        \param d_offset distance between the target position and the landing position (m)
-        \return output message as a string
-    */
-    public static string func_s(InputParameters inParams, float d_offset) {
-        StreamWriter outfile;
-        outfile = new StreamWriter("log.txt", true);
-        outfile.WriteLine("function func_s called with inputs: {");
-        outfile.Write("  inParams = ");
-        outfile.Write("Instance of InputParameters object");
-        outfile.WriteLine(", ");
-        outfile.Write("  d_offset = ");
-        outfile.WriteLine(d_offset);
-        outfile.WriteLine("  }");
-        outfile.Close();
-        
-        if (Math.Abs(d_offset / inParams.p_target) < inParams.epsilon) {
-            return "The target was hit.";
-        }
-        else if (d_offset < 0.0f) {
-            return "The projectile fell short.";
-        }
-        else {
-            return "The projectile went long.";
-        }
-    }
-    
     /** \brief Writes the output values to output.txt
-        \param s output message as a string
         \param d_offset distance between the target position and the landing position (m)
         \param t_flight flight duration (s)
     */
-    public static void write_output(string s, float d_offset, float t_flight) {
+    public static void write_output(float d_offset, float t_flight) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function write_output called with inputs: {");
-        outfile.Write("  s = ");
-        outfile.Write(s);
-        outfile.WriteLine(", ");
         outfile.Write("  d_offset = ");
         outfile.Write(d_offset);
         outfile.WriteLine(", ");
@@ -150,8 +112,6 @@ public class Projectile {
         
         StreamWriter outputfile;
         outputfile = new StreamWriter("output.txt", false);
-        outputfile.Write("s = ");
-        outputfile.WriteLine(s);
         outputfile.Write("d_offset = ");
         outputfile.WriteLine(d_offset);
         outputfile.Write("t_flight = ");

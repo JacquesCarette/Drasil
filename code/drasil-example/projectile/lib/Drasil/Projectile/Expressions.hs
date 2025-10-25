@@ -12,7 +12,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
 import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalAccelConst,
   ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, 
   velocity, acceleration, constAccelV, speed)
-import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, offset)
+import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, landPos)
 
 flightDur', iyPos, yConstAccel, iSpeed :: PExpr
 flightDur' = exactDbl 2 $* sy launSpeed $* sin (sy launAngle) $/ sy gravitationalAccelConst
@@ -22,12 +22,6 @@ iSpeed = sy launSpeed
 
 offset' :: PExpr
 offset' = sy landPos $- sy targPos
-
-message :: PExpr
-message = completeCase [case1, case2, case3]
-  where case1 = (str "The target was hit.",        abs_ (sy offset $/ sy targPos) $< sy tol)
-        case2 = (str "The projectile fell short.", sy offset $< exactDbl 0)
-        case3 = (str "The projectile went long.",  sy offset $> exactDbl 0)
 
 --
 speed' :: PExpr

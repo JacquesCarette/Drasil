@@ -12,8 +12,8 @@ import Data.Drasil.Concepts.Documentation (datumConstraint,
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
 
-import Drasil.Projectile.IMods (landPosIM, messageIM, offsetIM, timeIM)
-import Drasil.Projectile.Unitals (flightDur, landPos, message, offset)
+import Drasil.Projectile.IMods (landPosIM, offsetIM, timeIM)
+import Drasil.Projectile.Unitals (flightDur, landPos, offset)
 
 {--Functional Requirements--}
 
@@ -35,14 +35,12 @@ calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
   foldlList Comma List [
     ch flightDur +:+ fromSource timeIM,
     ch landPos   +:+ fromSource landPosIM,
-    ch offset    +:+ fromSource offsetIM,
-    ch message   +:+ fromSource messageIM
+    ch offset    +:+ fromSource offsetIM
   ]]
 outputValuesDesc = atStart output_ +:+. outputs
   where
     outputs = foldlList Comma List $ map foldlSent_ [ 
         [ch flightDur, fromSource timeIM],
-        [ch message, fromSource messageIM], 
         [ch offset, fromSource offsetIM]
       ]
 

@@ -144,13 +144,7 @@ int main(int argc, const char *argv[]) {
     outfile << d_offset;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
-    string s = func_s(inParams, d_offset);
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "var 's' assigned ";
-    outfile << s;
-    outfile << " in module Projectile" << std::endl;
-    outfile.close();
-    write_output(s, d_offset, t_flight);
+    write_output(d_offset, t_flight);
     
     return 0;
 }
@@ -194,36 +188,10 @@ double func_d_offset(InputParameters &inParams, double p_land) {
     return p_land - inParams.p_target;
 }
 
-string func_s(InputParameters &inParams, double d_offset) {
-    ofstream outfile;
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "function func_s called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object";
-    outfile << ", " << std::endl;
-    outfile << "  d_offset = ";
-    outfile << d_offset << std::endl;
-    outfile << "  }" << std::endl;
-    outfile.close();
-    
-    if (fabs(d_offset / inParams.p_target) < Constants::epsilon) {
-        return "The target was hit.";
-    }
-    else if (d_offset < 0.0) {
-        return "The projectile fell short.";
-    }
-    else {
-        return "The projectile went long.";
-    }
-}
-
-void write_output(string s, double d_offset, double t_flight) {
+void write_output(double d_offset, double t_flight) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function write_output called with inputs: {" << std::endl;
-    outfile << "  s = ";
-    outfile << s;
-    outfile << ", " << std::endl;
     outfile << "  d_offset = ";
     outfile << d_offset;
     outfile << ", " << std::endl;
@@ -234,8 +202,6 @@ void write_output(string s, double d_offset, double t_flight) {
     
     ofstream outputfile;
     outputfile.open("output.txt", std::fstream::out);
-    outputfile << "s = ";
-    outputfile << s << std::endl;
     outputfile << "d_offset = ";
     outputfile << d_offset << std::endl;
     outputfile << "t_flight = ";

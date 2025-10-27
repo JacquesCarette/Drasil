@@ -12,6 +12,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Drasil.Metadata (inModel)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
@@ -54,7 +55,6 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
   tempW, thickness, watE)
 
-import Drasil.System (SystemKind(Specification), mkSystem)
 
 -------------------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
+printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 si :: System
 si = mkSystem

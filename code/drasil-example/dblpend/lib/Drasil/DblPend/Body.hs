@@ -10,6 +10,7 @@ import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
+import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
@@ -46,8 +47,6 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols, odeInfoChunks)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
-import Drasil.System (SystemKind(Specification), mkSystem)
-
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
@@ -55,7 +54,7 @@ fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
+printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents

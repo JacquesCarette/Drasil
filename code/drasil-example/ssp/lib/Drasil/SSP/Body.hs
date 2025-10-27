@@ -2,8 +2,8 @@
 module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
 import Prelude hiding (sin, cos, tan)
+import Control.Lens ((^.))
 
-import Drasil.System (SystemKind(Specification), mkSystem)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
@@ -11,6 +11,7 @@ import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 import Drasil.Metadata (inModel)
+import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
@@ -57,7 +58,7 @@ srs :: Document
 srs = mkDoc mkSRS S.forT si
 
 printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
+printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 fullSI :: System
 fullSI = fillcdbSRS mkSRS si

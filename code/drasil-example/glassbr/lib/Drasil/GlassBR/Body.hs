@@ -13,6 +13,7 @@ import Drasil.DocLang (auxSpecSent, termDefnF')
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
@@ -50,8 +51,6 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
-import Drasil.System (SystemKind(Specification), mkSystem)
-
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
@@ -59,7 +58,7 @@ fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
+printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 si :: System
 si = mkSystem progName Specification

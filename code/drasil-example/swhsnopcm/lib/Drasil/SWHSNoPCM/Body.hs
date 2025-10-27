@@ -1,15 +1,18 @@
 module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
+import Control.Lens ((^.))
+import Data.List ((\\))
+
 import Language.Drasil hiding (section)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Drasil.Generator (cdb)
-import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Documentation as Doc (material_)
@@ -64,8 +67,6 @@ import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
-import Drasil.System (SystemKind(Specification), mkSystem)
-
 srs :: Document
 srs = mkDoc mkSRS S.forT si
 
@@ -73,7 +74,7 @@ fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
+printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]

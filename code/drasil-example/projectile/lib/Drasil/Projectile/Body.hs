@@ -1,5 +1,7 @@
 module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
 
+import Control.Lens ((^.))
+
 import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Language.Drasil
 import Drasil.SRSDocument
@@ -8,6 +10,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
+import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics,
@@ -47,8 +50,6 @@ import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
 
-import Drasil.System (SystemKind(Specification), mkSystem)
-
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
@@ -56,7 +57,7 @@ fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
+printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

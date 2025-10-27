@@ -48,7 +48,7 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
 srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize short) si
+srs = mkDoc mkSRS (S.forGen titleize short) fullSI
 
 fullSI :: System
 fullSI = fillcdbSRS mkSRS si

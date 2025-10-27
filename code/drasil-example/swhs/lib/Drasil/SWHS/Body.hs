@@ -59,7 +59,7 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
 -------------------------------------------------------------------------------
 
 srs :: Document
-srs = mkDoc mkSRS S.forT si
+srs = mkDoc mkSRS S.forT fullSI
 
 fullSI :: System
 fullSI = fillcdbSRS mkSRS si

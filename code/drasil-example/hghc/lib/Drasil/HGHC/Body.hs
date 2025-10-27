@@ -16,7 +16,7 @@ import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
 
 srs :: Document
-srs = mkDoc mkSRS S.forT si
+srs = mkDoc mkSRS S.forT fullSI
 
 fullSI :: System
 fullSI = fillcdbSRS mkSRS si

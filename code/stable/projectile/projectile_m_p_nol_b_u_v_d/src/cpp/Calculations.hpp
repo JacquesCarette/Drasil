@@ -7,11 +7,7 @@
 #ifndef Calculations_h
 #define Calculations_h
 
-#include <string>
-
 #include "InputParameters.hpp"
-
-using std::string;
 
 /** \brief Calculates flight duration (s)
     \param inParams structure holding the input values
@@ -33,13 +29,5 @@ double func_p_land(InputParameters &inParams, double g);
     \return distance between the target position and the landing position (m)
 */
 double func_d_offset(InputParameters &inParams, double p_land);
-
-/** \brief Calculates output message as a string
-    \param inParams structure holding the input values
-    \param epsilon hit tolerance
-    \param d_offset distance between the target position and the landing position (m)
-    \return output message as a string
-*/
-string func_s(InputParameters &inParams, double epsilon, double d_offset);
 
 #endif

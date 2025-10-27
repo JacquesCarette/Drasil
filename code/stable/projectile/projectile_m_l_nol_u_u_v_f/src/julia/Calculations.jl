@@ -35,20 +35,4 @@ function func_d_offset(p_target::Float32, p_land::Float32)
     return p_land - p_target
 end
 
-""" Calculates output message as a string
-    - Parameter p_target: target position (m)
-    - Parameter epsilon: hit tolerance
-    - Parameter d_offset: distance between the target position and the landing position (m)
-    - Returns: output message as a string
-"""
-function func_s(p_target::Float32, epsilon::Float32, d_offset::Float32)
-    if abs(d_offset / p_target) < epsilon
-        return "The target was hit."
-    elseif d_offset < Float32(0.0)
-        return "The projectile fell short."
-    else
-        return "The projectile went long."
-    end
-end
-
 end

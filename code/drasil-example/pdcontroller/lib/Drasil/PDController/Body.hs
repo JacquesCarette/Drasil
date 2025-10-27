@@ -1,7 +1,6 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
 import Language.Drasil
-import Language.Drasil.Code (ODEInfo(..))
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
@@ -10,8 +9,8 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.ExternalLibraries.ODELibraries
-       (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
-        scipyODESymbols, diffCodeChunk)
+       (apacheODESymbols, odeintSymbols, osloSymbols,
+        scipyODESymbols, odeInfoChunks)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
@@ -119,14 +118,12 @@ background = foldlSent_ [
   S "in a variety of applications such as thermostats, automobile",
   S "cruise-control, etc"]
 
--- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is added to symbolsAll as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
+-- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is currently added to symbolsAll automatically as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ map dqdWr pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
-  ++ map dqdWr [listToArray dp, arrayVecDepVar pidODEInfo,
-  listToArray $ diffCodeChunk dp, diffCodeChunk dp]
-  where dp = depVar pidODEInfo
+  ++ odeInfoChunks pidODEInfo
 
 ideaDicts :: [IdeaDict]
 ideaDicts =

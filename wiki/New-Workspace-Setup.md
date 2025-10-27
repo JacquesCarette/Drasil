@@ -141,7 +141,7 @@ If you use GPG, you can also protect your commits by [signing them with GPG](htt
 
 Stack is an easy to use toolkit for building, executing, testing, and benchmarking your Haskell software, including tooling for isolated GHC installations and dependency management (similar to Python's `virtualenv` using a [curated listed of packages](https://www.stackage.org/)).
 
-Stack has an amazing document repository available on their [Read the Docs Official Website](https://docs.haskellstack.org/en/stable/README/). It has an [Installation Guide](https://docs.haskellstack.org/en/stable/README/#how-to-install), [Quickstart Guide](https://docs.haskellstack.org/en/stable/README/#quick-start-guide), [User Guide](https://docs.haskellstack.org/en/stable/GUIDE/), and much more!
+Stack has an amazing document repository available on their [Read the Docs Official Website](https://docs.haskellstack.org/en/stable/README/). It has an [Installation Guide](https://docs.haskellstack.org/en/stable/README/#how-to-install-stack), [Quickstart Guide](https://docs.haskellstack.org/en/stable/README/#quick-start-guide), [User Guide](https://docs.haskellstack.org/en/stable/GUIDE/), and much more!
 
 ### Installation
 
@@ -257,10 +257,9 @@ For each of the following plugins/extensions, the same general installation proc
 **Helpful Extensions/Configurations (all optional):**
 1. [Insert Unicode](https://marketplace.visualstudio.com/items?itemName=brunnerh.insert-unicode) - We often use unicode symbols in Drasil, so having a quick way to search unicode symbols by name is very helpful.
 2. [Haskelly](https://marketplace.visualstudio.com/items?itemName=UCL.haskelly) - Some useful GHCi commands for Haskell among other things.
-3. [Graphviz support](https://marketplace.visualstudio.com/items?itemName=joaompinto.vscode-graphviz) - Sometimes deal with graphviz commands and .dot files, so the `CTRL+K V` command from here helps to view those files quickly.
-4. [Nix Environment Selector](https://marketplace.visualstudio.com/items?itemName=arrterian.nix-env-selector) - Automatically use the Drasil `shell.nix`!
-5. If you're interested in using a font that mimics unicode characters for Haskell, consider using the [FiraCode](https://github.com/tonsky/FiraCode) font with ligatures enabled ([installation instructions](https://github.com/tonsky/FiraCode/wiki/VS-Code-Instructions)). It makes reading Haskell more like reading hand-written simple type theory works.
-6. [TODO Tree](https://open-vsx.org/extension/Gruntfuggly/todo-tree) - Gather your code's TODO notes together in one nice VSCode panel. You need `ripgrep` installed on your machine for this plugin to work. For making sure TODO notes in Haskell source code are gathered correctly, you might need to add "--" to the regular expression used in searching for "TODO" notes in the TODO Tree extension settings.
+3. [Nix Environment Selector](https://marketplace.visualstudio.com/items?itemName=arrterian.nix-env-selector) - Automatically use the Drasil `shell.nix`!
+4. If you're interested in using a font that mimics unicode characters for Haskell, consider using the [FiraCode](https://github.com/tonsky/FiraCode) font with ligatures enabled ([installation instructions](https://github.com/tonsky/FiraCode/wiki/VS-Code-Instructions)). It makes reading Haskell more like reading hand-written simple type theory works.
+5. [TODO Tree](https://open-vsx.org/extension/Gruntfuggly/todo-tree) - Gather your code's TODO notes together in one nice VSCode panel. You need `ripgrep` installed on your machine for this plugin to work. For making sure TODO notes in Haskell source code are gathered correctly, you might need to add "--" to the regular expression used in searching for "TODO" notes in the TODO Tree extension settings.
 7. [Rewrap](https://open-vsx.org/extension/stkb/rewrap) - Hard wrap text in your documents around the 80 character "limit" (configurable).
 
 Despite most of these above being "optional", if you have a powerful computer, it's best to install all of them.
@@ -383,7 +382,6 @@ Hopefully, it should work now, but if it doesn't, please file an issue.
 ### Learning Resources
 
 * [A Simple Guide to LaTeX](https://latex-tutorial.com/tutorials/)
-* [Overleaf's LaTeX Guide](https://www.overleaf.com/learn/latex/Creating_a_document_in_LaTeX)
 * [Overleaf's LaTeX in 30min](https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes)
 * [Creating LaTeX tables](https://www.tablesgenerator.com/)
 
@@ -391,7 +389,7 @@ Hopefully, it should work now, but if it doesn't, please file an issue.
 We use Inkscape in order to get `svg` diagrams to render in LaTeX. The program itself is actually an `svg` image creator, but Drasil uses it on the command line instead.
 
 ### Installation Instructions
-Please visit the [Inkscape website](https://inkscape.org/release/inkscape-1.1/) for more detailed instructions. For convenience, we have a summary for Linux, Windows, and Mac below.
+Please visit the [Inkscape website](https://inkscape.org/release/) for more detailed instructions. For convenience, we have a summary for Linux, Windows, and Mac below.
 
 <details>
 
@@ -410,7 +408,7 @@ The first command will ensure that all of the packages are up do date, and the s
 
 <summary><h4>Windows</h4></summary>
 
-Download the executable installer for Inkscape ([64-bit](https://inkscape.org/release/1.1/windows/64-bit/) or [32-bit](https://inkscape.org/release/1.1/windows/32-bit/)), run the file, and follow the instructions on screen. Make sure you add Inkscape to your `PATH` when the installer asks. If the installer cannot automatically add Inkscape to you `PATH` or if you already have Inkscape without using the `PATH`, please follow [these instructions](https://tex.stackexchange.com/a/523685).
+Download the executable installer for Inkscape from their [release page](https://inkscape.org/release/). Run the file and follow the instructions on screen. Make sure you add Inkscape to your `PATH` when the installer asks. If the installer cannot automatically add Inkscape to you `PATH` or if you already have Inkscape without using the `PATH`, please follow [these instructions](https://tex.stackexchange.com/a/523685).
 
 </details>
 
@@ -418,7 +416,7 @@ Download the executable installer for Inkscape ([64-bit](https://inkscape.org/re
 
 <summary><h4>Mac</h4></summary>
 
-Download the [disk image for Inkscape](https://inkscape.org/release/inkscape-1.1/mac-os-x/1010-1015/dl/), run the file, and follow the on-screen instructions. Enabling command line access to inkscape may require adding the path to inkscape to the PATH environment variable.
+Download the disk image for Inkscape from their [release page](https://inkscape.org/release/). Run the file and follow the on-screen instructions. Enabling command line access to inkscape may require adding the path to inkscape to the PATH environment variable.
 
 </details>
 

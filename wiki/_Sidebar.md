@@ -21,6 +21,7 @@
   * [Printing Information](Printing-Information-Guide)
   * [Sub-packages](SubPackages)
   * [Folders](Folder-layout)
+    * [GOOL/GProc Overview](GOOL-GProc%20Overview)
   * [Quantifying Productivity and Ease of Use](Quantifying-Productivity-and-Ease-of-Use)
 * Design
   * [Attributes and Chunks](Attributes-and-Chunks)
@@ -28,7 +29,6 @@
     * [Investigation of Abbreviation Functions](Investigation-of-Abbreviation-Functions)
   * [Attributes of Datatypes](Attributes-of-Data-Types)
   * [Code Generation](Code-Generation)
-  * [Converting GOOL Classes into Struct Libraries for Procedural Languages](Converting-GOOL-Classes-into-Struct-Libraries-for-Procedural-Languages)
   * [Design Choices](Design-Choices)
   * [Explicitly Grouped Expressions](Explicit-Grouping-of-Expressions)
   * [General Definitions](General-Definitions)

@@ -11,7 +11,6 @@ module Drasil.ExtractDocDesc (
 import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
-import Data.List (transpose)
 
 import Drasil.DocumentLanguage.Core
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
@@ -193,7 +192,7 @@ getCon' = getCon . (^. accessContents)
 
 -- | Extracts 'Sentence's from raw content.
 getCon :: RawContent -> [Sentence]
-getCon (Table s1 s2 t _)   = isVar (s1, transpose s2) ++ [t]
+getCon (Table s1 s2 t _)   = t : s1 ++ concat s2
 getCon (Paragraph s)       = [s]
 getCon EqnBlock{}          = []
 getCon CodeBlock{}         = []
@@ -204,17 +203,6 @@ getCon (Bib bref)          = getBib bref
 getCon (Graph sss _ _ l)   = let (ls, rs) = unzip sss
                              in l : ls ++ rs
 getCon (Defini _ ics)      = concatMap (concatMap getCon' . snd) ics
-
--- | This function is used in collecting 'Sentence's from a table. Since only
--- the table's first Column titled "Var" should be collected, this function is
--- used to filter out only the first column of 'Sentence's.
---
--- FIXME: Avoid pattern matching on S "Var".
-isVar :: ([Sentence], [[Sentence]]) -> [Sentence]
-isVar (S "Var" : _, hd1 : _) = hd1
-isVar (_ : tl, _ : tl1) = isVar (tl, tl1)
-isVar ([], _) = []
-isVar (_, []) = []
 
 -- | Get the bibliography from something that has a field.
 getBib :: (HasFields c) => [c] -> [Sentence]

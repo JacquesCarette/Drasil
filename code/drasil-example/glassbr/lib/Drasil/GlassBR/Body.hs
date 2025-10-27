@@ -50,7 +50,7 @@ import Drasil.System (SystemKind(Specification), mkSystem)
 import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 
 srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
 
 fullSI :: System
 fullSI = fillcdbSRS mkSRS si

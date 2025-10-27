@@ -65,7 +65,7 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
 import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
-srs = mkDoc mkSRS S.forT si
+srs = mkDoc mkSRS S.forT fullSI
 
 fullSI :: System
 fullSI = fillcdbSRS mkSRS si

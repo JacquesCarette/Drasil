@@ -53,7 +53,7 @@ import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
 --Document Setup--
 
 srs :: Document
-srs = mkDoc mkSRS S.forT si
+srs = mkDoc mkSRS S.forT fullSI
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration

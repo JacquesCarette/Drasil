@@ -50,7 +50,7 @@ import Theory.Drasil (TheoryModel)
 import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
 
 fullSI :: System
 fullSI = fillcdbSRS mkSRS si

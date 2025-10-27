@@ -19,7 +19,7 @@ import Drasil.DocumentLanguage.TraceabilityGraph
 import Drasil.DocLang (tunitNone)
 
 srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
 
 fullSI :: System
 fullSI = fillcdbSRS mkSRS si

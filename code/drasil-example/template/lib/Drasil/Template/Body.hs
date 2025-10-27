@@ -4,8 +4,10 @@
 -- This comment can be removed after copying this template to build your own example.
 
 module Drasil.Template.Body where
+  
+import Control.Lens ((^.))
 
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
@@ -25,7 +27,7 @@ fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
+printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

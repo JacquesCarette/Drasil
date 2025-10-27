@@ -231,14 +231,6 @@ digraph alltypes {
 	}
 	subgraph languagerenderer {
 	}
-	subgraph configparers {
-		subgraph configuration{
-		Configuration	[shape=oval, color=cyan3, label="Configuration"];
-		Configuration -> String;
-		Configuration -> MaybeString;
-		Configuration -> Options;
-		}
-	}
 	subgraph import {
 		subgraph readmeinfo{
 		ReadMeInfo	[shape=oval, color=cyan3, label="ReadMeInfo"];

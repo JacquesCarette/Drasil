@@ -21,7 +21,6 @@ PythonProject	[shape=oval, color=turquoise4, label="PythonProject"];
 SwiftProject	[shape=oval, color=turquoise4, label="SwiftProject"];
 AuxData	[shape=oval, color=turquoise4, label="AuxData"];
 PackData	[shape=oval, color=turquoise4, label="PackData"];
-Configuration	[shape=oval, color=turquoise4, label="Configuration"];
 ReadMeInfo	[shape=oval, color=turquoise4, label="ReadMeInfo"];
 ScopeType	[shape=oval, color=turquoise4, label="ScopeType"];
 DrasilState	[shape=oval, color=turquoise4, label="DrasilState"];

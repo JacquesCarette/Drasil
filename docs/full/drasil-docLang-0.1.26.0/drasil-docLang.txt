@@ -2354,17 +2354,13 @@ data () => System
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.
 data () => PrintingInformation
-PI :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
-[_ckdb] :: PrintingInformation -> ChunkDB
-[_stg] :: PrintingInformation -> Stage
-[_configuration] :: PrintingInformation -> PrintingConfiguration
 
 -- | Default configuration is for engineering.
 defaultConfiguration :: PrintingConfiguration
 
 -- | Builds a document's printing information based on the system
 --   information.
-piSys :: System -> Stage -> PrintingConfiguration -> PrintingInformation
+piSys :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | A Software Requirements Specification Declaration is made up of all
 --   necessary sections (<a>DocSection</a>s).

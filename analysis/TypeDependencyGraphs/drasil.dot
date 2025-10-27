@@ -295,14 +295,6 @@ digraph alltypes {
 	}
 	subgraph languagerenderer {
 	}
-	subgraph configparers {
-		subgraph configuration{
-		Configuration	[shape=oval, color=cyan3, label="Configuration"];
-		Configuration -> String;
-		Configuration -> MaybeString;
-		Configuration -> Options;
-		}
-	}
 	subgraph import {
 		subgraph readmeinfo{
 		ReadMeInfo	[shape=oval, color=cyan3, label="ReadMeInfo"];
@@ -4157,7 +4149,11 @@ digraph alltypes {
 	subgraph print {
 		subgraph singleline{
 		SingleLine	[shape=oval, color=darkviolet, label="SingleLine"];
-		SingleLine -> PrintingConfiguration;
+		SingleLine -> ChunkDB;
+		SingleLine -> Stage;
+		SingleLine -> SingleLine;
+		SingleLine -> Expr;
+		SingleLine -> Doc;
 		}
 	}
 	subgraph codeexpr {

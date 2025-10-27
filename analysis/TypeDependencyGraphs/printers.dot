@@ -85,7 +85,11 @@ digraph alltypes {
 	subgraph print {
 		subgraph singleline{
 		SingleLine	[shape=oval, color=darkviolet, label="SingleLine"];
-		SingleLine -> PrintingConfiguration;
+		SingleLine -> ChunkDB;
+		SingleLine -> Stage;
+		SingleLine -> SingleLine;
+		SingleLine -> Expr;
+		SingleLine -> Doc;
 		}
 	}
 	subgraph codeexpr {

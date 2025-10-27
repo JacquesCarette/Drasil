@@ -97,7 +97,6 @@ launAngle :: ConstrConcept
 launSpeed :: ConstrConcept
 offset :: ConstrConcept
 targPos :: ConstrConcept
-message :: DefinedQuantityDict
 tol :: ConstQDef
 
 module Drasil.Projectile.Expressions
@@ -106,7 +105,6 @@ iyPos :: PExpr
 yConstAccel :: PExpr
 iSpeed :: PExpr
 offset' :: PExpr
-message :: PExpr
 speed' :: PExpr
 scalarPos' :: PExpr
 rectNoTime :: PExpr
@@ -217,7 +215,6 @@ speedIY :: DataDefinition
 module Drasil.Projectile.IMods
 iMods :: [InstanceModel]
 landPosIM :: InstanceModel
-messageIM :: InstanceModel
 offsetIM :: InstanceModel
 timeIM :: InstanceModel
 

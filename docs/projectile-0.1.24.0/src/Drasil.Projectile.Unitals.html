@@ -2,7 +2,7 @@
 </span><span id="line-2"></span><span>
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Display</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Symbol</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.ShortHands</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">lD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lTheta</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lV</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lP</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lT</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lS</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">vEpsilon</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.ShortHands</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">lD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lTheta</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lV</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lP</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lT</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">vEpsilon</span></span><span class="hs-special">)</span><span>
 </span><span id="line-6"></span><span>
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">pi_</span></span><span class="hs-special">)</span><span>
 </span><span id="line-8"></span><span>
@@ -259,22 +259,8 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">1000</span></span><span class="hs-special">)</span><span>
 </span><span id="line-39"></span><span>
 </span><span id="line-40"></span><span class="hs-comment">---</span><span>
-</span><span id="line-41"></span><span class="hs-comment">-- The output contains a message, as a string, so it needs to be a quantity</span><span>
-</span><span id="line-42"></span><span class="annot"><a href="Drasil.Projectile.Unitals.html#message"><span class="hs-identifier hs-type">message</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span>
-</span><span id="line-43"></span><span id="message"><span class="annot"><span class="annottext">message :: DefinedQuantityDict
-</span><a href="Drasil.Projectile.Unitals.html#message"><span class="hs-identifier hs-var hs-var">message</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; DefinedQuantityDict
-</span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
-</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;outputMessage&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
-</span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;output message as a string&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the output message given as a string&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><span class="hs-identifier hs-var">lS</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">String</span></span><span>
-</span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span class="hs-comment">---</span><span>
-</span><span id="line-46"></span><span class="annot"><a href="Drasil.Projectile.Unitals.html#tol"><span class="hs-identifier hs-type">tol</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span>
-</span><span id="line-47"></span><span id="tol"><span class="annot"><span class="annottext">tol :: ConstQDef
+</span><span id="line-41"></span><span class="annot"><a href="Drasil.Projectile.Unitals.html#tol"><span class="hs-identifier hs-type">tol</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span>
+</span><span id="line-42"></span><span id="tol"><span class="annot"><span class="annottext">tol :: ConstQDef
 </span><a href="Drasil.Projectile.Unitals.html#tol"><span class="hs-identifier hs-var hs-var">tol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Literal -&gt; ConstQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -293,4 +279,4 @@ forall r. LiteralC r =&gt; Integer -&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">perc</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">2</span></span><span class="hs-special">)</span><span>
-</span><span id="line-48"></span></pre></body></html>
+</span><span id="line-43"></span></pre></body></html>

@@ -14214,11 +14214,6 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <td style="text-align:left">$m$</td>
 </tr>
 <tr>
-<td style="text-align:left">$s$</td>
-<td style="text-align:left">Output message as a string</td>
-<td style="text-align:left">--</td>
-</tr>
-<tr>
 <td style="text-align:left">$t$</td>
 <td style="text-align:left">Time</td>
 <td style="text-align:left">$s$</td>
@@ -14448,7 +14443,7 @@ launchOrigin: The launcher is coincident with the origin. (RefBy: <a href="#IM:c
 targetXAxis: The target lies on the $x$-axis (from <a href="#neglectCurv">A:neglectCurv</a>). (RefBy: <a href="#IM:calOfLandingTime">IM:calOfLandingTime</a>.)</p>
 <p>&lt;/div&gt;</p>
 <p>&lt;div id=\"posXDirection\"&gt;
-posXDirection: The positive $x$-direction is from the launcher to the target. (RefBy: <a href="#IM:messageIM">IM:messageIM</a>, <a href="#IM:offsetIM">IM:offsetIM</a>, <a href="#IM:calOfLandingDist">IM:calOfLandingDist</a>, and <a href="#IM:calOfLandingTime">IM:calOfLandingTime</a>.)</p>
+posXDirection: The positive $x$-direction is from the launcher to the target. (RefBy: <a href="#IM:offsetIM">IM:offsetIM</a>, <a href="#IM:calOfLandingDist">IM:calOfLandingDist</a>, and <a href="#IM:calOfLandingTime">IM:calOfLandingTime</a>.)</p>
 <p>&lt;/div&gt;</p>
 <p>&lt;div id=\"constAccel\"&gt;
 constAccel: The acceleration is constant (from <a href="#accelXZero">A:accelXZero</a>, <a href="#accelYGravity">A:accelYGravity</a>, <a href="#neglectDrag">A:neglectDrag</a>, and <a href="#freeFlight">A:freeFlight</a>). (RefBy: <a href="#GD:velVec">GD:velVec</a> and <a href="#GD:posVec">GD:posVec</a>.)</p>
@@ -15286,89 +15281,6 @@ $${d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}$$
 <p><th>RefBy</th></p>
 <td>
 
-<p><a href="#IM:messageIM">IM:messageIM</a>, <a href="#outputValues">FR:Output-Values</a>, and <a href="#calcValues">FR:Calculate-Values</a>
-&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/table&gt;
-<br>
-<a id="IM:messageIM"></a></p>
-<p>&lt;table class=\"idefn\"&gt;</p>
-<p><tr></p>
-<p><th>Refname</th></p>
-<p><td>
-<b>IM:messageIM</b>
-</td>
-&lt;/tr&gt;</p>
-<p><tr></p>
-<p><th>Label</th></p>
-<td>
-
-<p>Output message
-&lt;/td&gt;
-&lt;/tr&gt;</p>
-<p><tr></p>
-<p><th>Input</th></p>
-<td>
-
-<p>$d_offset$, $p_target$
-&lt;/td&gt;
-&lt;/tr&gt;</p>
-<p><tr></p>
-<p><th>Output</th></p>
-<td>
-
-<p>$s$
-&lt;/td&gt;
-&lt;/tr&gt;</p>
-<p><tr></p>
-<p><th>Input Constraints</th></p>
-<p><td>
-$${d_{\text{offset}}}\gt{}-{p_{\text{target}}}$$
-$${p_{\text{target}}}\gt{}0$$
-</td>
-&lt;/tr&gt;</p>
-<p><tr></p>
-<p><th>Output Constraints</th></p>
-<p><td>
-</td>
-&lt;/tr&gt;</p>
-<p><tr></p>
-<p><th>Equation</th></p>
-<p><td>
-$$s=\begin{cases}  \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\  \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\  \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0  \end{cases}$$
-</td>
-&lt;/tr&gt;</p>
-<p><tr></p>
-<p><th>Description</th></p>
-<td>
-
-<p><li>$s$ is the output message as a string (Unitless)</li></p>
-<p><li>$d_offset$ is the distance between the target position and the landing position ($m$)</li></p>
-<p><li>$p_target$ is the target position ($m$)</li></p>
-<p><li>$ε$ is the hit tolerance (Unitless)</li>
-&lt;/td&gt;
-&lt;/tr&gt;</p>
-<p><tr></p>
-<p><th>Notes</th></p>
-<td>
-
-<p>$d_offset$ is from <a href="#IM:offsetIM">IM:offsetIM</a>.</p>
-<p>The constraint $p_target&amp;thinsp;&amp;gt;&amp;thinsp;0$ is from <a href="#posXDirection">A:posXDirection</a>.</p>
-<p>The constraint $d_offset&amp;thinsp;&amp;gt;&amp;thinsp;-p_target$ is from the fact that $p_land&amp;thinsp;&amp;gt;&amp;thinsp;0$, from <a href="#posXDirection">A:posXDirection</a>.</p>
-<p>$ε$ is defined in <a href="#Sec:AuxConstants">Sec:Values of Auxiliary Constants</a>.
-&lt;/td&gt;
-&lt;/tr&gt;</p>
-<p><tr></p>
-<p><th>Source</th></p>
-<td>
-
-<p>--
-&lt;/td&gt;
-&lt;/tr&gt;</p>
-<p><tr></p>
-<p><th>RefBy</th></p>
-<td>
-
 <p><a href="#outputValues">FR:Output-Values</a> and <a href="#calcValues">FR:Calculate-Values</a>
 &lt;/td&gt;
 &lt;/tr&gt;
@@ -15440,10 +15352,10 @@ Input-Values: Input the values from <a href="#Table:ReqInputs">Tab:ReqInputs</a>
 Verify-Input-Values: Check the entered input values to ensure that they do not exceed the <a href="#Sec:DataConstraints">data constraints</a>. If any of the input values are out of bounds, an error message is displayed and the calculations stop.</p>
 <p>&lt;/div&gt;</p>
 <p>&lt;div id=\"calcValues\"&gt;
-Calculate-Values: Calculate the following values: $t_flight$ (from <a href="#IM:calOfLandingTime">IM:calOfLandingTime</a>), $p_land$ (from <a href="#IM:calOfLandingDist">IM:calOfLandingDist</a>), $d_offset$ (from <a href="#IM:offsetIM">IM:offsetIM</a>), and $s$ (from <a href="#IM:messageIM">IM:messageIM</a>).</p>
+Calculate-Values: Calculate the following values: $t_flight$ (from <a href="#IM:calOfLandingTime">IM:calOfLandingTime</a>), $p_land$ (from <a href="#IM:calOfLandingDist">IM:calOfLandingDist</a>), and $d_offset$ (from <a href="#IM:offsetIM">IM:offsetIM</a>).</p>
 <p>&lt;/div&gt;</p>
 <p>&lt;div id=\"outputValues\"&gt;
-Output-Values: Output $t_flight$ (from <a href="#IM:calOfLandingTime">IM:calOfLandingTime</a>), $s$ (from <a href="#IM:messageIM">IM:messageIM</a>), and $d_offset$ (from <a href="#IM:offsetIM">IM:offsetIM</a>).</p>
+Output-Values: Output $t_flight$ (from <a href="#IM:calOfLandingTime">IM:calOfLandingTime</a>) and $d_offset$ (from <a href="#IM:offsetIM">IM:offsetIM</a>).</p>
 <p>&lt;/div&gt;</p>
 <p><a id="Table:ReqInputs"></a></p>
 <table>
@@ -16025,24 +15937,6 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 </tr>
 <tr>
-<td style="text-align:left"><a href="#IM:messageIM">IM:messageIM</a></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">X</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
 <td style="text-align:left"><a href="#correct">NFR:Correctness</a></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16239,13 +16133,11 @@ Portability: The code shall be portable to multiple environments, particularly W
 <th style="text-align:left"><a href="#IM:calOfLandingTime">IM:calOfLandingTime</a></th>
 <th style="text-align:left"><a href="#IM:calOfLandingDist">IM:calOfLandingDist</a></th>
 <th style="text-align:left"><a href="#IM:offsetIM">IM:offsetIM</a></th>
-<th style="text-align:left"><a href="#IM:messageIM">IM:messageIM</a></th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left"><a href="#DD:vecMag">DD:vecMag</a></td>
-<td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16273,7 +16165,6 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
-<td style="text-align:left"></td>
 </tr>
 <tr>
 <td style="text-align:left"><a href="#DD:speedIY">DD:speedIY</a></td>
@@ -16289,11 +16180,9 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
-<td style="text-align:left"></td>
 </tr>
 <tr>
 <td style="text-align:left"><a href="#TM:acceleration">TM:acceleration</a></td>
-<td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16321,7 +16210,6 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
-<td style="text-align:left"></td>
 </tr>
 <tr>
 <td style="text-align:left"><a href="#GD:rectVel">GD:rectVel</a></td>
@@ -16329,7 +16217,6 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left">X</td>
-<td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16353,7 +16240,6 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
-<td style="text-align:left"></td>
 </tr>
 <tr>
 <td style="text-align:left"><a href="#GD:velVec">GD:velVec</a></td>
@@ -16363,7 +16249,6 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left">X</td>
-<td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16385,7 +16270,6 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
-<td style="text-align:left"></td>
 </tr>
 <tr>
 <td style="text-align:left"><a href="#IM:calOfLandingTime">IM:calOfLandingTime</a></td>
@@ -16398,7 +16282,6 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left">X</td>
-<td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16417,27 +16300,9 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left">X</td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
-<td style="text-align:left"></td>
 </tr>
 <tr>
 <td style="text-align:left"><a href="#IM:offsetIM">IM:offsetIM</a></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">X</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left"><a href="#IM:messageIM">IM:messageIM</a></td>
-<td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16468,7 +16333,6 @@ Portability: The code shall be portable to multiple environments, particularly W
 <th style="text-align:left"><a href="#IM:calOfLandingTime">IM:calOfLandingTime</a></th>
 <th style="text-align:left"><a href="#IM:calOfLandingDist">IM:calOfLandingDist</a></th>
 <th style="text-align:left"><a href="#IM:offsetIM">IM:offsetIM</a></th>
-<th style="text-align:left"><a href="#IM:messageIM">IM:messageIM</a></th>
 <th style="text-align:left"><a href="#correct">NFR:Correctness</a></th>
 <th style="text-align:left"><a href="#verifiable">NFR:Verifiability</a></th>
 <th style="text-align:left"><a href="#understandable">NFR:Understandability</a></th>
@@ -16484,7 +16348,6 @@ Portability: The code shall be portable to multiple environments, particularly W
 <tbody>
 <tr>
 <td style="text-align:left"><a href="#targetHit">GS:targetHit</a></td>
-<td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16532,11 +16395,9 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
-<td style="text-align:left"></td>
 </tr>
 <tr>
 <td style="text-align:left"><a href="#verifiable">NFR:Verifiability</a></td>
-<td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16584,11 +16445,9 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
-<td style="text-align:left"></td>
 </tr>
 <tr>
 <td style="text-align:left"><a href="#reusable">NFR:Reusability</a></td>
-<td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16636,11 +16495,9 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
-<td style="text-align:left"></td>
 </tr>
 <tr>
 <td style="text-align:left"><a href="#portable">NFR:Portability</a></td>
-<td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16688,11 +16545,9 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
-<td style="text-align:left"></td>
 </tr>
 <tr>
 <td style="text-align:left"><a href="#verifyInVals">FR:Verify-Input-Values</a></td>
-<td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16730,7 +16585,6 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left">X</td>
 <td style="text-align:left">X</td>
 <td style="text-align:left">X</td>
-<td style="text-align:left">X</td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
@@ -16755,7 +16609,6 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left">X</td>
 <td style="text-align:left"></td>
-<td style="text-align:left">X</td>
 <td style="text-align:left">X</td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>

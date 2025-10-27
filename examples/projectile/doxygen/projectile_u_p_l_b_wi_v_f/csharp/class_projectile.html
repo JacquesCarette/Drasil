@@ -83,12 +83,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a9543f0940bdd5f0e499c621e82c7009a"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile.html#a9543f0940bdd5f0e499c621e82c7009a">func_d_offset</a> (<a class="el" href="class_input_parameters.html">InputParameters</a> inParams, float p_land)</td></tr>
 <tr class="memdesc:a9543f0940bdd5f0e499c621e82c7009a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates distance between the target position and the landing position (m)  <a href="class_projectile.html#a9543f0940bdd5f0e499c621e82c7009a">More...</a><br /></td></tr>
 <tr class="separator:a9543f0940bdd5f0e499c621e82c7009a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07e0bb811e648e00edb65e87ddd37ce4"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile.html#a07e0bb811e648e00edb65e87ddd37ce4">func_s</a> (<a class="el" href="class_input_parameters.html">InputParameters</a> inParams, float d_offset)</td></tr>
-<tr class="memdesc:a07e0bb811e648e00edb65e87ddd37ce4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates output message as a string.  <a href="class_projectile.html#a07e0bb811e648e00edb65e87ddd37ce4">More...</a><br /></td></tr>
-<tr class="separator:a07e0bb811e648e00edb65e87ddd37ce4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b6866a55c1eaa8c6c222211a8ce5d6c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile.html#a9b6866a55c1eaa8c6c222211a8ce5d6c">write_output</a> (string s, float d_offset, float t_flight)</td></tr>
-<tr class="memdesc:a9b6866a55c1eaa8c6c222211a8ce5d6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="class_projectile.html#a9b6866a55c1eaa8c6c222211a8ce5d6c">More...</a><br /></td></tr>
-<tr class="separator:a9b6866a55c1eaa8c6c222211a8ce5d6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba799854297a97fb35f54699c04af1bd"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile.html#aba799854297a97fb35f54699c04af1bd">write_output</a> (float d_offset, float t_flight)</td></tr>
+<tr class="memdesc:aba799854297a97fb35f54699c04af1bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="class_projectile.html#aba799854297a97fb35f54699c04af1bd">More...</a><br /></td></tr>
+<tr class="separator:aba799854297a97fb35f54699c04af1bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a9543f0940bdd5f0e499c621e82c7009a"></a>
@@ -172,52 +169,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a07e0bb811e648e00edb65e87ddd37ce4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07e0bb811e648e00edb65e87ddd37ce4">&#9670;&nbsp;</a></span>func_s()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static string Projectile.func_s </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_input_parameters.html">InputParameters</a>&#160;</td>
-          <td class="paramname"><em>inParams</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>d_offset</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Calculates output message as a string. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">inParams</td><td>structure holding the input values </td></tr>
-    <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position (m) </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>output message as a string </dd></dl>
-
-</div>
-</div>
 <a id="a482fd6391060f805edb3f527a7ce2a9e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a482fd6391060f805edb3f527a7ce2a9e">&#9670;&nbsp;</a></span>func_t_flight()</h2>
 
@@ -287,8 +238,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9b6866a55c1eaa8c6c222211a8ce5d6c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b6866a55c1eaa8c6c222211a8ce5d6c">&#9670;&nbsp;</a></span>write_output()</h2>
+<a id="aba799854297a97fb35f54699c04af1bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba799854297a97fb35f54699c04af1bd">&#9670;&nbsp;</a></span>write_output()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -299,12 +250,6 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">static void Projectile.write_output </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">float&#160;</td>
           <td class="paramname"><em>d_offset</em>, </td>
         </tr>
@@ -330,7 +275,6 @@ Static Public Member Functions</h2></td></tr>
 <p>Writes the output values to output.txt. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">s</td><td>output message as a string </td></tr>
     <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position (m) </td></tr>
     <tr><td class="paramname">t_flight</td><td>flight duration (s) </td></tr>
   </table>

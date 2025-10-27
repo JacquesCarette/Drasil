@@ -244,21 +244,6 @@
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({d_{\text{offset}}}\) is the distance between the target position and the landing position (\({\text{m}}\))</li><li>\({p_{\text{land}}}\) is the landing position (\({\text{m}}\))</li><li>\({p_{\text{target}}}\) is the target position (\({\text{m}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({p_{\text{land}}}\) is from <a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a>.</li><li>The constraints \({p_{\text{land}}}\gt{}0\) and \({p_{\text{target}}}\gt{}0\) are from <a href="./SecAssumps.html#posXDirection">A:posXDirection</a>.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
-<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:messageIM">IM:messageIM</a>, <a href="./SecFRs.html#outputValues">FR:Output-Values</a>, and <a href="./SecFRs.html#calcValues">FR:Calculate-Values</a></td></tr>
-</tbody></table>
-</div><div align="center">
-<h2 id="IM:messageIM"><a class="header" href="#IM:messageIM">Output message</a></h2>
-</div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">IM:messageIM</th></tr></thead><tbody>
-<tr><td style="text-align: left">Label</td><td style="text-align: left">Output message</td></tr>
-<tr><td style="text-align: left">Input</td><td style="text-align: left">\({d_{\text{offset}}}\), \({p_{\text{target}}}\)</td></tr>
-<tr><td style="text-align: left">Output</td><td style="text-align: left">\(s\)</td></tr>
-<tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[{d_{\text{offset}}}\gt{}-{p_{\text{target}}}\]\[{p_{\text{target}}}\gt{}0\]</td></tr>
-<tr><td style="text-align: left">Output Constraints</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[s=\begin{cases}\text{\(``\)The target was hit.‘’}, &amp; |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\\text{\(``\)The projectile fell short.‘’}, &amp; {d_{\text{offset}}}\lt{}0\\\text{\(``\)The projectile went long.‘’}, &amp; {d_{\text{offset}}}\gt{}0\end{cases}\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(s\) is the output message as a string (Unitless)</li><li>\({d_{\text{offset}}}\) is the distance between the target position and the landing position (\({\text{m}}\))</li><li>\({p_{\text{target}}}\) is the target position (\({\text{m}}\))</li><li>\(ε\) is the hit tolerance (Unitless)</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({d_{\text{offset}}}\) is from <a href="./SecIMs.html#IM:offsetIM">IM:offsetIM</a>.</li><li>The constraint \({p_{\text{target}}}\gt{}0\) is from <a href="./SecAssumps.html#posXDirection">A:posXDirection</a>.</li><li>The constraint \({d_{\text{offset}}}\gt{}-{p_{\text{target}}}\) is from the fact that \({p_{\text{land}}}\gt{}0\), from <a href="./SecAssumps.html#posXDirection">A:posXDirection</a>.</li><li>\(ε\) is defined in <a href="./SecAuxConstants.html#Sec:AuxConstants">Sec:Values of Auxiliary Constants</a>.</li></ul></td></tr>
-<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecFRs.html#outputValues">FR:Output-Values</a> and <a href="./SecFRs.html#calcValues">FR:Calculate-Values</a></td></tr>
 </tbody></table>
 </div>

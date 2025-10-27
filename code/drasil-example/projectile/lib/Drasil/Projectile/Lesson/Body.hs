@@ -2,7 +2,7 @@ module Drasil.Projectile.Lesson.Body where
 
 import Data.List (nub)
 import Language.Drasil hiding (Notebook)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation, defaultConfiguration, piSys)
 import Database.Drasil (ChunkDB)
 import Drasil.Generator (cdb)
 import Drasil.System (System, mkSystem, SystemKind(Notebook))
@@ -32,7 +32,7 @@ nb :: Document
 nb = mkNb mkNB (S.forGen titleize phrase) si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys symbMap Equational defaultConfiguration
 
 mkNB :: LsnDecl
 mkNB = [

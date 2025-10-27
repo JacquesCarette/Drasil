@@ -32,7 +32,7 @@ module Language.Drasil.Printers (
   -- * Log
   , printAllDebugInfo
   -- * Printing Information and Options
-  , PrintingInformation(..), piSys
+  , PrintingInformation, piSys
   , HasPrintingOptions (..)
   , Notation(..)
   , defaultConfiguration
@@ -50,7 +50,7 @@ import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
 import Language.Drasil.Plain.Print (SingleLine(..), sentenceDoc, exprDoc,
   codeExprDoc, symbolDoc, unitDoc, showSymb, showHasSymbImpl)
 import Language.Drasil.TeX.Print (genTeX)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
   HasPrintingOptions(..), Notation(..), defaultConfiguration, piSys)
 import Language.Drasil.DOT.Print (outputDot, GraphInfo(..), NodeFamily(..))
 import Language.Drasil.Debug.Print (printAllDebugInfo)

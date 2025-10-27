@@ -49,7 +49,7 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
 srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
 
 fullSI :: System
 fullSI = fillcdbSRS mkSRS si

@@ -73,13 +73,14 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
 import Language.Drasil.Development (shortdep)
 
 -- * Main Function
+
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
 mkDoc dd comb si@SI {_sys = sys, _authors = docauthors} =
   Document (whatsTheBigIdea si `comb` nw sys) (foldlList Comma List $ map (S . name) docauthors) (findToC l) $
-  mkSections fullSI l where
-    fullSI = fillcdbSRS dd si
-    l = mkDocDesc fullSI dd
+  mkSections si l
+  where
+    l = mkDocDesc si dd
 
 -- * Functions to Fill 'ChunkDB'
 

@@ -8,7 +8,6 @@ import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
 import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 
@@ -24,6 +23,8 @@ import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
 import Data.Drasil.Software.Products (sciCompS)
 
 import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
+import Data.Maybe (maybeToList)
+
 
 -----------------------
 --     Constants     --
@@ -72,6 +73,7 @@ introductionSection EmptyS              programDefinition = SRS.intro
 introductionSection problemIntroduction programDefinition = SRS.intro
   [mkParagraph problemIntroduction, overviewParagraph programDefinition]
 
+
 -- | Constructor for the overview paragraph for the Introduction.
 -- Takes the definition of the specific example being generated ('Sentence').
 overviewParagraph :: Sentence -> Contents
@@ -79,6 +81,7 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
   S "provides an overview of the", introduceAbb srs, S "for" +:+.
   programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
   S "of this", phrase document `sC` introductionSubsections]
+
 
 -- | Constructor for Purpose of Document section that each example controls.
 purpDocPara1 :: CI -> Sentence
@@ -141,7 +144,7 @@ intReaderIntro progName assumed topic asset sectionRef =
   [foldlSP [S "Reviewers of this", phrase documentation,
   S "should have an understanding of" +:+.
   foldlList Comma List (assumed ++ topic), assetSent,
-  D.toSent (atStartNP' (the user)) `S.of_` short progName, S "can have a lower level" `S.of_`
+  atStartNP' (the user) `S.of_` short progName, S "can have a lower level" `S.of_`
   S "expertise, as explained" `S.in_` refS sectionRef]]
   where
     assetSent = case asset of
@@ -151,13 +154,13 @@ intReaderIntro progName assumed topic asset sectionRef =
 -- | Constructor for the Organization of the Document section. Parameters should be
 -- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
 -- and any other relevant information ('Sentence').
-orgSec :: NamedIdea c => c -> Section -> Sentence -> Section
+orgSec :: NamedIdea c => c -> Section -> Maybe Sentence -> Section
 orgSec b s t = SRS.orgOfDoc (orgIntro b s t) []
 
 -- | Helper function that creates the introduction for the Organization of the Document section. Parameters should be
 -- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
 -- and any other relevant information ('Sentence').
-orgIntro :: NamedIdea c => c -> Section -> Sentence -> [Contents]
+orgIntro :: NamedIdea c => c -> Section -> Maybe Sentence -> [Contents]
 orgIntro bottom bottomSec trailingSentence =
   foldlSP [
     orgOfDocIntro, S "The presentation follows the standard pattern of presenting" +:+.
@@ -169,41 +172,31 @@ orgIntro bottom bottomSec trailingSentence =
 
 orgOfDocIntro :: Sentence
 orgOfDocIntro = foldlSent
-<<<<<<< HEAD
-  [D.toSent $ atStartNP (the Doc.organization), S "of this", phrase document,
-  S "follows the", phrase template, S "for an", short Doc.srs, S "for",
-  phrase sciCompS, S "proposed by", foldlList Comma List $
-    map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
-=======
   [atStartNP (the organization), S "of this", phrase document,
   S "follows the", phrase template, S "for an", short srs, S "for",
   phrase sciCompS, S "proposed by", foldlList Comma List $
     map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
 
-flowDiscussion :: Sentence -> [Contents]
-flowDiscussion extraSentence = [
-    folder 
-      [ refineChain (zip 
-                      [goalStmt, thModel, inModel]
-                      [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]) -- FIXME: This abuses `SRS.goalStmt` etc.
-      , extraSentence] 
-  , foldlSP_ [S "The" +:+ introduceAbbPlrl goalStmt +:+ S "are systematically refined into the" +:+ 
-      introduceAbbPlrl thModel `sC` S "which in turn are refined into the" +:+ 
+flowDiscussion :: Maybe Sentence -> [Contents]
+flowDiscussion mbXtraSent = [
+    foldlSP_ (introS : maybeToList mbXtraSent)
+  , foldlSP_ [S "The" +:+ introduceAbbPlrl goalStmt +:+ S "are systematically refined into the" +:+
+      introduceAbbPlrl thModel `sC` S "which in turn are refined into the" +:+
       introduceAbbPlrl inModel +:+.
-      S "This refinement process is guided by the" +:+ introduceAbbPlrl assumption +:+ 
-      S "that constrain the" +:+ phrase system `sC` S "as well as the supporting" +:+ 
-      introduceAbbPlrl genDefn +:+ S "and" +:+ introduceAbbPlrl dataDefn +:+ 
-      S "that provide the necessary mathematical and physical context." +:+ 
-      S "The" +:+ introduceAbbPlrl requirement +:+ S "are traced back through the" +:+ 
-      short goalStmt `sC` short thModel `sC` S "and" +:+ short inModel +:+ S "to ensure consistency and completeness." +:+ 
-      S "Furthermore" `sC` S "the" +:+ introduceAbbPlrl physSyst +:+ S "establishes the overall" +:+ 
-      S "context in which the" +:+ short goalStmt +:+ S "are formulated and the" +:+ short assumption +:+ S "are validated." +:+ 
-      S "Finally" `sC` S "the" +:+ introduceAbbPlrl typUnc +:+ S "are documented and linked to" +:+ 
+      S "This refinement process is guided by the" +:+ introduceAbbPlrl assumption +:+
+      S "that constrain the" +:+ phrase system `sC` S "as well as the supporting" +:+
+      introduceAbbPlrl genDefn +:+ S "and" +:+ introduceAbbPlrl dataDefn +:+
+      S "that provide the necessary mathematical and physical context." +:+
+      S "The" +:+ introduceAbbPlrl requirement +:+ S "are traced back through the" +:+
+      short goalStmt `sC` short thModel `sC` S "and" +:+ short inModel +:+ S "to ensure consistency and completeness." +:+
+      S "Furthermore" `sC` S "the" +:+ introduceAbbPlrl physSyst +:+ S "establishes the overall" +:+
+      S "context in which the" +:+ short goalStmt +:+ S "are formulated and the" +:+ short assumption +:+ S "are validated." +:+
+      S "Finally" `sC` S "the" +:+ introduceAbbPlrl typUnc +:+ S "are documented and linked to" +:+
       S "the relevant" +:+ short inModel +:+ S "and" +:+ short dataDefn `sC` S "ensuring transparency in the modeling process."
     ]
   ]
   where
-    folder = case extraSentence of
-      EmptyS -> foldlSP_
-      _      -> foldlSP
->>>>>>> 9671d48fdb (move extra paragraph in dblpend (for adding abbreviation declarations) to drasil-docLang so that all case studies benefit)
+    -- FIXME: The below abuses `SRS.goalStmt`, `SRS.thModel`, etc.
+    introS = refineChain (zip
+      [goalStmt, thModel, inModel]
+      [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []])

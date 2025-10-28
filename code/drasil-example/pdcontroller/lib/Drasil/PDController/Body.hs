@@ -51,12 +51,7 @@ mkSRS
        IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec dataDefn (SRS.inModel [] [])
-            (S "The instance model referred as" +:+ refS imPD +:+
-               S "provides an"
-               +:+ titleize ode +:+ sParen (short ode)
-               +:+ S "that models the"
-               +:+ phrase pidC)],
+          IOrgSec dataDefn (SRS.inModel [] []) (Just orgSecEnd)],
      GSDSec $
        GSDProg
          [SysCntxt
@@ -110,6 +105,12 @@ background = foldlSent_ [
   S "in a variety of applications such as thermostats, automobile",
   S "cruise-control, etc"]
 
+orgSecEnd :: Sentence
+orgSecEnd = foldlSent [
+    S "The instance model referred as", refS imPD, S "provides an", 
+    titleize ode, sParen (short ode), S "that models the", phrase pidC
+  ]
+
 -- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is currently added to symbolsAll automatically as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
@@ -121,6 +122,11 @@ ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
   concepts ++
+  -- CIs
+  -- CIs
+  -- CIs
+  -- CIs
+  
   -- CIs
   nw progName : map nw mathcon' ++ map nw acronyms
 

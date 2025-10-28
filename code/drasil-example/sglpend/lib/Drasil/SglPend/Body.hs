@@ -1,18 +1,17 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SglPend.Body (mkSRS, si) where
+module Drasil.SglPend.Body where
 
 import Control.Lens ((^.))
 
 import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
-import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Math (mathcon')
@@ -38,39 +37,38 @@ import Drasil.SglPend.MetaConcepts (progName)
 import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
 import Drasil.SglPend.Requirements (funcReqs)
-import Drasil.DocumentLanguage (collectDocumentAbbreviations)
-import Drasil.DocDecl (mkDocDesc)
+
 
 srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
 
 fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
+printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
   RefSec $      --This creates the Reference section of the SRS
-    RefProg intro      -- This add the introduction blob to the reference section
+    RefProg intro      -- This add the introduction blob to the reference section  
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-      , TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)         -- Add table of abbreviation and acronym section
+      , TAandA          -- Add table of abbreviation and acronym section
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) EmptyS],
-  GSDSec $
+       IOrgSec inModel (SRS.inModel [] []) Nothing],
+  GSDSec $ 
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
-      UsrChars [userCharacteristicsIntro progName],
-      SystCons [] []],
-  SSDSec $
+      UsrChars [userCharacteristicsIntro progName], 
+      SystCons [] []],                            
+  SSDSec $ 
     SSDProg
       [ SSDProblem $ PDProg purp []                -- This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
@@ -88,7 +86,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
        ]
      ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub funcReqsTables
+    [ FReqsSub EmptyS []
     , NonFReqsSub
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -104,13 +102,13 @@ si = mkSystem progName Specification [olu]
   tMods genDefns dataDefs iMods
   []
   inputs outputs inConstraints []
-  symbMap allRefs
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]
 
 ideaDicts :: [IdeaDict]
-ideaDicts =
+ideaDicts = 
   -- Actual IdeaDicts
   concepts ++
   -- CIs
@@ -126,8 +124,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns citations
-  (labelledContent ++ funcReqsTables)
+  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -175,6 +172,7 @@ concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------
 -- System Constraints automatically generated in SystCons
 
+
 --------------------------------------------
 -- Section 4: Specific System Description --
 --------------------------------------------
@@ -192,7 +190,7 @@ concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 -- 4.1.2 Physical System Description --
 -----------------------------------
 physSystParts :: [Sentence]
-physSystParts = map ((!.) . D.toSent . atStartNP) [the rod, the mass]
+physSystParts = map ((!.) . atStartNP) [the rod, the mass]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --

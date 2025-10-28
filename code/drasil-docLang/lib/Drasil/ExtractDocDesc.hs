@@ -16,6 +16,7 @@ import Drasil.DocumentLanguage.Core
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 import Language.Drasil hiding (Manual, Verb)
 import Theory.Drasil
+import Data.Drasil.Concepts.Documentation (refName)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -125,7 +126,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
                              def (x ^. defined_quant) ++ notes [x] ++
                              r (x ^. valid_context)) in r t
       (DDs s _ d _) -> s ++ der d ++ notes d
-      (GDs s _ d _) -> def d ++ s ++ der d ++ notes d
+      (GDs s _ d _) -> s ++ def d ++ der d ++ notes d
       (IMs s _ d _) -> s ++ der d ++ notes d
       (Constraints s _) -> [s]
       (CorrSolnPpties _ cs) -> getC cs,
@@ -202,7 +203,13 @@ getCon (Figure l _ _ _)    = [l]
 getCon (Bib bref)          = getBib bref
 getCon (Graph sss _ _ l)   = let (ls, rs) = unzip sss
                              in l : ls ++ rs
-getCon (Defini _ ics)      = concatMap (concatMap getCon' . snd) ics
+getCon (Defini _ ics)      = rnHACK : concatMap (concatMap getCon' . snd) ics
+  where
+    -- FIXME: rnHACK exists because `Refname` does not explicitly go into any
+    -- `Sentence`, but is used in the generation of the "Definition" tables
+    -- (i.e., for DDs, IMs, GDs, and TMs). To fix this 'properly', `Defini`
+    -- needs to be removed in favour of using `Table` for the same feature.
+    rnHACK = short refName
 
 -- | Get the bibliography from something that has a field.
 getBib :: (HasFields c) => [c] -> [Sentence]

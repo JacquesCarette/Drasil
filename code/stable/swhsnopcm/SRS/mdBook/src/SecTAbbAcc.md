@@ -14,6 +14,7 @@
 |PS          |Physical System Description                             |
 |R           |Requirement                                             |
 |RefBy       |Referenced by                                           |
+|Refname     |Reference Name                                          |
 |SRS         |Software Requirements Specification                     |
 |SWHSNoPCM   |Solar Water Heating System With No Phase Change Material|
 |TM          |Theoretical Model                                       |

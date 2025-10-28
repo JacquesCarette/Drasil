@@ -234,7 +234,7 @@ mkSections si dd =
   where
     doit :: DocSection -> Section
     doit TableOfContents      = mkToC dd
-    doit (RefSec _)           = error "RefSecs should have been filtered out!" -- mkRefSec si dd rs
+    doit (RefSec _)           = error "RefSecs should have been filtered out!"
     doit (IntroSec is)        = mkIntroSec si is
     doit (StkhldrSec sts)     = mkStkhldrSec sts
     doit (SSDSec ss)          = mkSSDSec si ss

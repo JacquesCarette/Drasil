@@ -14,6 +14,7 @@
 |ODE         |Ordinary Differential Equation     |
 |PS          |Physical System Description        |
 |R           |Requirement                        |
+|Refname     |Reference Name                     |
 |SRS         |Software Requirements Specification|
 |TM          |Theoretical Model                  |
 |Uncert.     |Typical Uncertainty                |

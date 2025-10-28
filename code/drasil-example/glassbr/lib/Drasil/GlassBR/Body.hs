@@ -75,7 +75,7 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec M.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
+     IOrgSec M.dataDefn (SRS.inModel [] []) (Just orgOfDocIntroEnd)],
   StkhldrSec $
     StkhldrProg
       [Client progName $ phraseNP (a_ company)
@@ -228,7 +228,7 @@ scope = foldlSent_ [S "determining the safety" `S.ofA` phrase glaSlab,
 {--Organization of Document--}
 
 orgOfDocIntroEnd :: Sentence
-orgOfDocIntroEnd = foldlSent_ [atStartNP' (the dataDefn) `S.are`
+orgOfDocIntroEnd = foldlSent [atStartNP' (the dataDefn) `S.are`
   S "used to support", plural definition `S.the_ofThe` S "different", plural model]
 
 {--STAKEHOLDERS--}

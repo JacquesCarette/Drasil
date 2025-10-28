@@ -116,7 +116,7 @@ mkSRS = [TableOfContents,
     [ IPurpose $ purpDoc progName Verbose
     , IScope scope
     , IChar [] charsOfReader []
-    , IOrgSec inModel (SRS.inModel [] []) orgDocEnd
+    , IOrgSec inModel (SRS.inModel [] []) (Just orgDocEnd)
     ],
   GSDSec $
     GSDProg
@@ -237,7 +237,7 @@ scope = phrase thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
 ---------------------------------------
 
 orgDocEnd :: Sentence
-orgDocEnd = foldlSent_ [atStartNP (the inModel),
+orgDocEnd = foldlSent [atStartNP (the inModel),
   S "to be solved" `S.is` S "referred to as" +:+. refS eBalanceOnWtr,
   atStartNP (the inModel), S "provides the", titleize ode,
   sParen (short ode), S "that models the" +:+. phrase progName,

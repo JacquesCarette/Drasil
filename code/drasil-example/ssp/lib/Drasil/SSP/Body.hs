@@ -86,7 +86,7 @@ mkSRS = [TableOfContents,
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
         phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
         [phrase soilMechanics]
-    , IOrgSec inModel (SRS.inModel [] []) orgSecEnd
+    , IOrgSec inModel (SRS.inModel [] []) (Just orgSecEnd)
     ],
     --FIXME: issue #235
   GSDSec $ GSDProg
@@ -228,7 +228,7 @@ scope = foldlSent_ [phraseNP (stabAnalysis `ofA` twoD), sParen (short twoD),
 -- SECTION 2.4 --
 -- Organization automatically generated in IOrgSec
 orgSecEnd :: Sentence
-orgSecEnd = foldlSent_ [atStartNP' (the inModel), S "provide the set of",
+orgSecEnd = foldlSent [atStartNP' (the inModel), S "provide the set of",
   S "algebraic", plural equation, S "that must be solved"]
 
 -- SECTION 3 --

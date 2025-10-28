@@ -17,6 +17,7 @@ import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTb
 import Language.Drasil hiding (Manual, Verb)
 import Theory.Drasil
 import Data.Drasil.Concepts.Documentation (refName)
+import Data.Maybe (maybeToList)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -110,7 +111,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (IPurpose s) -> s
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec _ s1 s2) -> s2 : getSec s1,
+      (IOrgSec _ s1 s2) -> maybeToList s2 ++ getSec s1,
     stkSub = Constant . f <$> \case
       (Client _ s) -> [s]
       (Cstmr _) -> [],
@@ -147,7 +148,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
     getIntroSub (IPurpose ss) = ss
     getIntroSub (IScope s) = [s]
     getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
-    getIntroSub (IOrgSec _ s1 s2) = s2 : getSec s1
+    getIntroSub (IOrgSec _ s1 s2) = maybeToList s2 ++ getSec s1
 
     der :: MayHaveDerivation a => [a] -> [Sentence]
     der = concatMap (getDerivSent . (^. derivations))
@@ -172,7 +173,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
 
 -- | Extracts 'Sentence's from a document description.
 getDocDesc :: DocDesc -> [Sentence]
-getDocDesc = fmGetDocDesc (sentencePlate id) 
+getDocDesc = fmGetDocDesc (sentencePlate id)
 -- ^ FIXME: We want all Sentences from a document (not necessarily a document
 -- description), so we use this function. But 'sentencePlate' does not include
 -- all 'Sentence's! Some only appear when rendering (at least, after

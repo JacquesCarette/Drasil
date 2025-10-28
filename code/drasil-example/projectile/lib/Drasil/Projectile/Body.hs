@@ -72,7 +72,7 @@ mkSRS = [TableOfContents,
       [ IPurpose $ purpDoc progName Verbose
       , IScope scope
       , IChar [] charsOfReader []
-      , IOrgSec inModel (SRS.inModel [] []) EmptyS],
+      , IOrgSec inModel (SRS.inModel [] []) Nothing],
   GSDSec $ 
       GSDProg 
         [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]

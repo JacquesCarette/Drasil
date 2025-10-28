@@ -23,6 +23,7 @@ import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
 import Data.Drasil.Software.Products (sciCompS)
 
 import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
+import Data.Maybe (maybeToList)
 
 
 -----------------------
@@ -153,14 +154,13 @@ intReaderIntro progName assumed topic asset sectionRef =
 -- | Constructor for the Organization of the Document section. Parameters should be
 -- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
 -- and any other relevant information ('Sentence').
-orgSec :: NamedIdea c => c -> Section -> Sentence -> Section
+orgSec :: NamedIdea c => c -> Section -> Maybe Sentence -> Section
 orgSec b s t = SRS.orgOfDoc (orgIntro b s t) []
-
 
 -- | Helper function that creates the introduction for the Organization of the Document section. Parameters should be
 -- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
 -- and any other relevant information ('Sentence').
-orgIntro :: NamedIdea c => c -> Section -> Sentence -> [Contents]
+orgIntro :: NamedIdea c => c -> Section -> Maybe Sentence -> [Contents]
 orgIntro bottom bottomSec trailingSentence =
   foldlSP [
     orgOfDocIntro, S "The presentation follows the standard pattern of presenting" +:+.
@@ -177,29 +177,26 @@ orgOfDocIntro = foldlSent
   phrase sciCompS, S "proposed by", foldlList Comma List $
     map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
 
-flowDiscussion :: Sentence -> [Contents]
-flowDiscussion extraSentence = [
-    folder 
-      [ refineChain (zip 
-                      [goalStmt, thModel, inModel]
-                      [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]) -- FIXME: This abuses `SRS.goalStmt` etc.
-      , extraSentence] 
-  , foldlSP_ [S "The" +:+ introduceAbbPlrl goalStmt +:+ S "are systematically refined into the" +:+ 
-      introduceAbbPlrl thModel `sC` S "which in turn are refined into the" +:+ 
+flowDiscussion :: Maybe Sentence -> [Contents]
+flowDiscussion mbXtraSent = [
+    foldlSP_ (introS : maybeToList mbXtraSent)
+  , foldlSP_ [S "The" +:+ introduceAbbPlrl goalStmt +:+ S "are systematically refined into the" +:+
+      introduceAbbPlrl thModel `sC` S "which in turn are refined into the" +:+
       introduceAbbPlrl inModel +:+.
-      S "This refinement process is guided by the" +:+ introduceAbbPlrl assumption +:+ 
-      S "that constrain the" +:+ phrase system `sC` S "as well as the supporting" +:+ 
-      introduceAbbPlrl genDefn +:+ S "and" +:+ introduceAbbPlrl dataDefn +:+ 
-      S "that provide the necessary mathematical and physical context." +:+ 
-      S "The" +:+ introduceAbbPlrl requirement +:+ S "are traced back through the" +:+ 
-      short goalStmt `sC` short thModel `sC` S "and" +:+ short inModel +:+ S "to ensure consistency and completeness." +:+ 
-      S "Furthermore" `sC` S "the" +:+ introduceAbbPlrl physSyst +:+ S "establishes the overall" +:+ 
-      S "context in which the" +:+ short goalStmt +:+ S "are formulated and the" +:+ short assumption +:+ S "are validated." +:+ 
-      S "Finally" `sC` S "the" +:+ introduceAbbPlrl typUnc +:+ S "are documented and linked to" +:+ 
+      S "This refinement process is guided by the" +:+ introduceAbbPlrl assumption +:+
+      S "that constrain the" +:+ phrase system `sC` S "as well as the supporting" +:+
+      introduceAbbPlrl genDefn +:+ S "and" +:+ introduceAbbPlrl dataDefn +:+
+      S "that provide the necessary mathematical and physical context." +:+
+      S "The" +:+ introduceAbbPlrl requirement +:+ S "are traced back through the" +:+
+      short goalStmt `sC` short thModel `sC` S "and" +:+ short inModel +:+ S "to ensure consistency and completeness." +:+
+      S "Furthermore" `sC` S "the" +:+ introduceAbbPlrl physSyst +:+ S "establishes the overall" +:+
+      S "context in which the" +:+ short goalStmt +:+ S "are formulated and the" +:+ short assumption +:+ S "are validated." +:+
+      S "Finally" `sC` S "the" +:+ introduceAbbPlrl typUnc +:+ S "are documented and linked to" +:+
       S "the relevant" +:+ short inModel +:+ S "and" +:+ short dataDefn `sC` S "ensuring transparency in the modeling process."
     ]
   ]
   where
-    folder = case extraSentence of
-      EmptyS -> foldlSP_
-      _      -> foldlSP
+    -- FIXME: The below abuses `SRS.goalStmt`, `SRS.thModel`, etc.
+    introS = refineChain (zip
+      [goalStmt, thModel, inModel]
+      [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []])

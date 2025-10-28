@@ -119,7 +119,7 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] charsOfReader [],
-     IOrgSec inModel (SRS.inModel [] []) orgDocEnd
+     IOrgSec inModel (SRS.inModel [] []) (Just orgDocEnd)
     ],
   GSDSec $ GSDProg
     [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets progName]
@@ -251,7 +251,7 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 -- 2.4 : Organization of Document --
 ------------------------------------
 orgDocEnd :: Sentence
-orgDocEnd = foldlSent_ [atStartNP' (the inModel),
+orgDocEnd = foldlSent [atStartNP' (the inModel),
   S "to be solved" `S.are` S "referred to as" +:+.
   foldlList Comma List (map refS iMods), S "The", plural inModel,
   S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_`

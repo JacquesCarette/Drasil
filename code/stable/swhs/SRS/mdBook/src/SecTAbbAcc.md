@@ -16,6 +16,7 @@
 |R           |Requirement                                  |
 |RHS         |Right-Hand Side                              |
 |RefBy       |Referenced by                                |
+|Refname     |Reference Name                               |
 |SRS         |Software Requirements Specification          |
 |SWHS        |Solar Water Heating System                   |
 |SWHS        |Solar Water Heating Systems Incorporating PCM|

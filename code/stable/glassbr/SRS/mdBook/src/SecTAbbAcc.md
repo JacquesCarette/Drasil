@@ -25,6 +25,7 @@
 |PS          |Physical System Description        |
 |R           |Requirement                        |
 |RefBy       |Referenced by                      |
+|Refname     |Reference Name                     |
 |SD          |Stand Off Distance                 |
 |SRS         |Software Requirements Specification|
 |TM          |Theoretical Model                  |

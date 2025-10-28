@@ -27,7 +27,7 @@ import Drasil.Database.UID (HasUID(..))
 toSent :: NPStruct -> S.Sentence
 toSent (S s) = S.S s
 toSent (s1 :-: s2) = toSent s1 S.:+: toSent s2 -- no space between noun phases
-toSent (s1 :+: s2) = toSent s1 S.:+: S.S " " S.:+: toSent s2 -- insert space between noun phrases
+toSent (s1 :+: s2) = toSent s1 S.+:+ toSent s2 -- insert space between noun phrases
 toSent (P p) = S.P p
 
 -- | Get short form (if it exists), else get term of an 'Idea'.

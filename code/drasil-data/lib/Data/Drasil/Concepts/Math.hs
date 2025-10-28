@@ -2,7 +2,7 @@
 module Data.Drasil.Concepts.Math where
 
 import Language.Drasil hiding (number, norm, matrix, Sentence(P, S, (:+:)))
-import qualified Language.Drasil as D (Sentence(S))
+import qualified Language.Drasil as D
 import Language.Drasil.Development (NPStruct(P, S, (:-:)))
 import Language.Drasil.ShortHands (lX, lY, lZ)
 import Drasil.Metadata (mathematics)

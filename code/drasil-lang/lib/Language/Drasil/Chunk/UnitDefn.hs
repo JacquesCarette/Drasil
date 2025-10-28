@@ -22,6 +22,7 @@ module Language.Drasil.Chunk.UnitDefn (
 
 import Control.Lens ((^.), makeLenses, view)
 import Control.Arrow (second)
+import qualified Data.Set as S
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
@@ -46,7 +47,10 @@ data UnitDefn = UD { _vc :: ConceptChunk
 makeLenses ''UnitDefn
 
 instance HasChunkRefs UnitDefn where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs u =
+    let conceptRefs      = chunkRefs (u ^. vc)
+        contributorRefs  = S.delete (u ^. uid) $ S.fromList (u ^. cu)
+    in conceptRefs `S.union` contributorRefs
 
 -- | Finds 'UID' of the 'ConceptChunk' used to make the 'UnitDefn'.
 instance HasUID        UnitDefn where uid = vc . uid

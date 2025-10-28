@@ -6,15 +6,14 @@ import Data.Drasil.Concepts.Documentation (funcReqDom, output_, value)
 import Drasil.SglPend.IMods (angularDisplacementIM)
 import Drasil.SglPend.Unitals (lenRod, pendDisplacementAngle)
 import Data.Drasil.Quantities.Physics (angularDisplacement)
-import Drasil.DblPend.Requirements(verifyInptValsDesc)
+import Drasil.DblPend.Requirements(verifyInptVals, verifyInptValsDesc)
 
 --Functional Requirements--
 funcReqs :: [ConceptInstance]
 funcReqs = [verifyInptVals, calcAngPos, outputValues]
 
-verifyInptVals, calcAngPos, outputValues :: ConceptInstance
+calcAngPos, outputValues :: ConceptInstance
 
-verifyInptVals = cic "verifyInptVals" verifyInptValsDesc "Verify-Input-Values" funcReqDom
 calcAngPos = cic "calcAngPos" calcAngPosDesc "Calculate-Angular-Position-Of-Mass" funcReqDom
 outputValues = cic "outputValues" outputValuesDesc "Output-Values" funcReqDom
 

@@ -12,9 +12,12 @@ module Language.Drasil.Chunk.NamedIdea (
 import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (mkUid, UID, HasUID(..))
 import Control.Lens ((^.), makeLenses)
-
-import Language.Drasil.NounPhrase.Core ( NP )
 import Control.Lens.Lens (Lens')
+import qualified Data.Set as S
+
+import Language.Drasil.NounPhrase.Core (CapitalizationRule(..), NP(..))
+import Language.Drasil.Sentence (Sentence)
+import Language.Drasil.Sentence.Extract (lnames, sdep, shortdep)
 
 -- TODO: Why does a NamedIdea need a UID? It might need a UID to be registered in the chunk map.
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as 
@@ -57,7 +60,7 @@ data IdeaDict = IdeaDict {
 makeLenses ''IdeaDict
 
 instance HasChunkRefs IdeaDict where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs (IdeaDict _ np' _) = npRefs np'
 
 -- | Equal if 'UID's are equal.
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid
@@ -84,3 +87,20 @@ mkIdeaUID = IdeaDict
 -- 'Nothing' for an abbreviation.
 nw :: Idea c => c -> IdeaDict
 nw c = IdeaDict (c ^. uid) (c ^. term) (getA c)
+
+npRefs :: NP -> S.Set UID
+npRefs (ProperNoun _ _)          = mempty
+npRefs (CommonNoun _ _ capRule)  = capRuleRefs capRule
+npRefs (Phrase sing plural c1 c2) =
+  sentenceRefs sing `S.union`
+  sentenceRefs plural `S.union`
+  capRuleRefs c1 `S.union`
+  capRuleRefs c2
+
+capRuleRefs :: CapitalizationRule -> S.Set UID
+capRuleRefs CapFirst     = mempty
+capRuleRefs CapWords     = mempty
+capRuleRefs (Replace s)  = sentenceRefs s
+
+sentenceRefs :: Sentence -> S.Set UID
+sentenceRefs s = S.fromList (lnames s ++ sdep s ++ shortdep s)

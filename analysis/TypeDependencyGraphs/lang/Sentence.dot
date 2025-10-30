@@ -5,6 +5,7 @@ Sentence -> TermCapitalization;
 Sentence -> UID;
 Sentence -> Sentence;
 Sentence -> USymb;
+Sentence -> NP;
 Sentence -> String;
 Sentence -> Symbol;
 }

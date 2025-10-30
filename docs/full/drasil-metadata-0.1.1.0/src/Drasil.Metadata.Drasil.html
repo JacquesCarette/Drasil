@@ -16,7 +16,7 @@
 </span><span id="line-16"></span><span class="annot"><span class="hs-comment">-- | Basic Drasil metadata.</span></span><span>
 </span><span id="line-17"></span><span class="hs-keyword">newtype</span><span> </span><span id="DrasilMeta"><span class="annot"><a href="Drasil.Metadata.Drasil.html#DrasilMeta"><span class="hs-identifier hs-var">DrasilMeta</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="DrasilMeta"><span class="annot"><a href="Drasil.Metadata.Drasil.html#DrasilMeta"><span class="hs-identifier hs-var">DrasilMeta</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span id="version"><span class="annot"><span class="annottext">DrasilMeta -&gt; String
 </span><a href="Drasil.Metadata.Drasil.html#version"><span class="hs-identifier hs-var hs-var">version</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-special">}</span><span>
-</span><span id="line-18"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679111375"><span id="local-6989586621679111377"><span class="annot"><span class="annottext">(forall x. DrasilMeta -&gt; Rep DrasilMeta x)
+</span><span id="line-18"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679111409"><span id="local-6989586621679111411"><span class="annot"><span class="annottext">(forall x. DrasilMeta -&gt; Rep DrasilMeta x)
 -&gt; (forall x. Rep DrasilMeta x -&gt; DrasilMeta) -&gt; Generic DrasilMeta
 forall x. Rep DrasilMeta x -&gt; DrasilMeta
 forall x. DrasilMeta -&gt; Rep DrasilMeta x
@@ -26,7 +26,7 @@ $cfrom :: forall x. DrasilMeta -&gt; Rep DrasilMeta x
 from :: forall x. DrasilMeta -&gt; Rep DrasilMeta x
 $cto :: forall x. Rep DrasilMeta x -&gt; DrasilMeta
 to :: forall x. Rep DrasilMeta x -&gt; DrasilMeta
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679111381"><span id="local-6989586621679111388"><span id="local-6989586621679111392"><span class="annot"><span class="annottext">Int -&gt; DrasilMeta -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679111415"><span id="local-6989586621679111422"><span id="local-6989586621679111426"><span class="annot"><span class="annottext">Int -&gt; DrasilMeta -&gt; ShowS
 [DrasilMeta] -&gt; ShowS
 DrasilMeta -&gt; String
 (Int -&gt; DrasilMeta -&gt; ShowS)
@@ -41,7 +41,7 @@ $cshow :: DrasilMeta -&gt; String
 show :: DrasilMeta -&gt; String
 $cshowList :: [DrasilMeta] -&gt; ShowS
 showList :: [DrasilMeta] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679111397"><span id="local-6989586621679111405"><span class="annot"><span class="annottext">(forall (m :: * -&gt; *). Quote m =&gt; DrasilMeta -&gt; m Exp)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679111431"><span id="local-6989586621679111439"><span class="annot"><span class="annottext">(forall (m :: * -&gt; *). Quote m =&gt; DrasilMeta -&gt; m Exp)
 -&gt; (forall (m :: * -&gt; *).
     Quote m =&gt;
     DrasilMeta -&gt; Code m DrasilMeta)
@@ -57,25 +57,25 @@ $cliftTyped :: forall (m :: * -&gt; *). Quote m =&gt; DrasilMeta -&gt; Code m Dr
 liftTyped :: forall (m :: * -&gt; *). Quote m =&gt; DrasilMeta -&gt; Code m DrasilMeta
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Lift</span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679111414"><span id="local-6989586621679111421"><span id="local-6989586621679111424"><span id="local-6989586621679111427"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Drasil.Metadata.Drasil.html#DrasilMeta"><span class="hs-identifier hs-type">DrasilMeta</span></a></span></span></span></span></span><span>
-</span><span id="line-21"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679111503"><span id="local-6989586621679111509"><span class="annot"><span class="hs-identifier hs-type">FromJSON</span></span><span> </span><span class="annot"><a href="Drasil.Metadata.Drasil.html#DrasilMeta"><span class="hs-identifier hs-type">DrasilMeta</span></a></span></span></span><span>
+</span><span id="line-20"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679111448"><span id="local-6989586621679111455"><span id="local-6989586621679111458"><span id="local-6989586621679111461"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Drasil.Metadata.Drasil.html#DrasilMeta"><span class="hs-identifier hs-type">DrasilMeta</span></a></span></span></span></span></span><span>
+</span><span id="line-21"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679111537"><span id="local-6989586621679111543"><span class="annot"><span class="hs-identifier hs-type">FromJSON</span></span><span> </span><span class="annot"><a href="Drasil.Metadata.Drasil.html#DrasilMeta"><span class="hs-identifier hs-type">DrasilMeta</span></a></span></span></span><span>
 </span><span id="line-22"></span><span>
 </span><span id="line-23"></span><span class="annot"><span class="hs-comment">-- | Prepare a Template Haskell expression that reads Drasil's metadata from a local JSON file.</span></span><span>
 </span><span id="line-24"></span><span class="annot"><a href="Drasil.Metadata.Drasil.html#drasilMetaCfg"><span class="hs-identifier hs-type">drasilMetaCfg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Q</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Exp</span></span><span>
 </span><span id="line-25"></span><span id="drasilMetaCfg"><span class="annot"><span class="annottext">drasilMetaCfg :: Q Exp
 </span><a href="Drasil.Metadata.Drasil.html#drasilMetaCfg"><span class="hs-identifier hs-var hs-var">drasilMetaCfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-26"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679111566"><span class="annot"><span class="annottext">fp :: String
-</span><a href="#local-6989586621679111566"><span class="hs-identifier hs-var hs-var">fp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-26"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679111600"><span class="annot"><span class="annottext">fp :: String
+</span><a href="#local-6989586621679111600"><span class="hs-identifier hs-var hs-var">fp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;lib/Drasil/Metadata/Drasil.json&quot;</span></span><span>
-</span><span id="line-27"></span><span>  </span><span id="local-6989586621679111567"><span class="annot"><span class="annottext">Maybe DrasilMeta
-</span><a href="#local-6989586621679111567"><span class="hs-identifier hs-var">maybeDM</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO (Maybe DrasilMeta) -&gt; Q (Maybe DrasilMeta)
+</span><span id="line-27"></span><span>  </span><span id="local-6989586621679111601"><span class="annot"><span class="annottext">Maybe DrasilMeta
+</span><a href="#local-6989586621679111601"><span class="hs-identifier hs-var">maybeDM</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO (Maybe DrasilMeta) -&gt; Q (Maybe DrasilMeta)
 forall a. IO a -&gt; Q a
 </span><span class="hs-identifier hs-var">runIO</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; IO (Maybe DrasilMeta)
 forall a. FromJSON a =&gt; String -&gt; IO (Maybe a)
 </span><span class="hs-identifier hs-var">decodeFileStrict</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679111566"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Drasil.Metadata.Drasil.html#DrasilMeta"><span class="hs-identifier hs-type">DrasilMeta</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679111600"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Drasil.Metadata.Drasil.html#DrasilMeta"><span class="hs-identifier hs-type">DrasilMeta</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Q ()
 </span><span class="hs-identifier hs-var">addDependentFile</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679111566"><span class="hs-identifier hs-var">fp</span></a></span><span>
-</span><span id="line-29"></span><span>  </span><span class="hs-special">[|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">fromMaybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;could not read in the drasil metadata file&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679111567"><span class="hs-identifier hs-type">maybeDM</span></a></span><span> </span><span class="hs-special">|]</span><span>
+</span><a href="#local-6989586621679111600"><span class="hs-identifier hs-var">fp</span></a></span><span>
+</span><span id="line-29"></span><span>  </span><span class="hs-special">[|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">fromMaybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;could not read in the drasil metadata file&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679111601"><span class="hs-identifier hs-type">maybeDM</span></a></span><span> </span><span class="hs-special">|]</span><span>
 </span><span id="line-30"></span></pre></body></html>

@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SWHS.DataDefs</span><span> </span><span class="hs-keyword">where</span><span> </span><span class="hs-comment">--exports all of it</span><span>
 </span><span id="line-2"></span><span>
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
-</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">DataDefinition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ddE</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ddENoRefs</span></span><span class="hs-special">)</span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Development</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
 </span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
 </span><span id="line-7"></span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Citations</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">koothoor2013</span></span><span class="hs-special">)</span><span>
@@ -15,51 +15,52 @@
 </span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mass</span></span><span class="hs-special">)</span><span>
 </span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Thermodynamics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">latentHeat</span></span><span class="hs-special">)</span><span>
 </span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span>
-</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html"><span class="hs-identifier">Drasil.SWHS.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpVCN"><span class="hs-identifier">assumpVCN</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.References.html"><span class="hs-identifier">Drasil.SWHS.References</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.References.html#bueche1986"><span class="hs-identifier">bueche1986</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.References.html#lightstone2012"><span class="hs-identifier">lightstone2012</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html"><span class="hs-identifier">Drasil.SWHS.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Unitals.html#aspectRatio"><span class="hs-identifier">aspectRatio</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#coilHTC"><span class="hs-identifier">coilHTC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#coilSA"><span class="hs-identifier">coilSA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#diam"><span class="hs-identifier">diam</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#eta"><span class="hs-identifier">eta</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htCapLP"><span class="hs-identifier">htCapLP</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-22"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htCapSP"><span class="hs-identifier">htCapSP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htCapW"><span class="hs-identifier">htCapW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFusion"><span class="hs-identifier">htFusion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#latentEP"><span class="hs-identifier">latentEP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#meltFrac"><span class="hs-identifier">meltFrac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmHTC"><span class="hs-identifier">pcmHTC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmMass"><span class="hs-identifier">pcmMass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmSA"><span class="hs-identifier">pcmSA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmVol"><span class="hs-identifier">pcmVol</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-23"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tankLength"><span class="hs-identifier">tankLength</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tankVol"><span class="hs-identifier">tankVol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tauLP"><span class="hs-identifier">tauLP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tauSP"><span class="hs-identifier">tauSP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tauW"><span class="hs-identifier">tauW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#wDensity"><span class="hs-identifier">wDensity</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#wMass"><span class="hs-identifier">wMass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#wVol"><span class="hs-identifier">wVol</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#qDefs"><span class="hs-identifier hs-type">qDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span class="hs-special">]</span><span>
-</span><span id="line-26"></span><span id="qDefs"><span class="annot"><span class="annottext">qDefs :: [SimpleQDef]
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">DataDefinition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ddE</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ddENoRefs</span></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html"><span class="hs-identifier">Drasil.SWHS.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpVCN"><span class="hs-identifier">assumpVCN</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.References.html"><span class="hs-identifier">Drasil.SWHS.References</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.References.html#bueche1986"><span class="hs-identifier">bueche1986</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.References.html#lightstone2012"><span class="hs-identifier">lightstone2012</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html"><span class="hs-identifier">Drasil.SWHS.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Unitals.html#aspectRatio"><span class="hs-identifier">aspectRatio</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#coilHTC"><span class="hs-identifier">coilHTC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#coilSA"><span class="hs-identifier">coilSA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#diam"><span class="hs-identifier">diam</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#eta"><span class="hs-identifier">eta</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htCapLP"><span class="hs-identifier">htCapLP</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-23"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htCapSP"><span class="hs-identifier">htCapSP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htCapW"><span class="hs-identifier">htCapW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFusion"><span class="hs-identifier">htFusion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#latentEP"><span class="hs-identifier">latentEP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#meltFrac"><span class="hs-identifier">meltFrac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmHTC"><span class="hs-identifier">pcmHTC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmMass"><span class="hs-identifier">pcmMass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmSA"><span class="hs-identifier">pcmSA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmVol"><span class="hs-identifier">pcmVol</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-24"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tankLength"><span class="hs-identifier">tankLength</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tankVol"><span class="hs-identifier">tankVol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tauLP"><span class="hs-identifier">tauLP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tauSP"><span class="hs-identifier">tauSP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tauW"><span class="hs-identifier">tauW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#wDensity"><span class="hs-identifier">wDensity</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#wMass"><span class="hs-identifier">wMass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#wVol"><span class="hs-identifier">wVol</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#qDefs"><span class="hs-identifier hs-type">qDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span class="hs-special">]</span><span>
+</span><span id="line-27"></span><span id="qDefs"><span class="annot"><span class="annottext">qDefs :: [SimpleQDef]
 </span><a href="Drasil.SWHS.DataDefs.html#qDefs"><span class="hs-identifier hs-var hs-var">qDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#waterMassQD"><span class="hs-identifier hs-var">waterMassQD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-var">waterVolumeQD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#tankVolumeQD"><span class="hs-identifier hs-var">tankVolumeQD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateQD"><span class="hs-identifier hs-var">balanceDecayRateQD</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">SimpleQDef
+</span><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateQD"><span class="hs-identifier hs-var">balanceDecayRateQD</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayTimeQD"><span class="hs-identifier hs-var">balanceDecayTimeQD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCMQD"><span class="hs-identifier hs-var">balanceSolidPCMQD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCMQD"><span class="hs-identifier hs-var">balanceLiquidPCMQD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.DataDefs.html#ddHtFusionQD"><span class="hs-identifier hs-var">ddHtFusionQD</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">SimpleQDef
+</span><a href="Drasil.SWHS.DataDefs.html#ddHtFusionQD"><span class="hs-identifier hs-var">ddHtFusionQD</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#ddMeltFracQD"><span class="hs-identifier hs-var">ddMeltFracQD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#aspRatQD"><span class="hs-identifier hs-var">aspRatQD</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-29"></span><span>
-</span><span id="line-30"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#dataDefs"><span class="hs-identifier hs-type">dataDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span> </span><span>
-</span><span id="line-31"></span><span id="dataDefs"><span class="annot"><span class="annottext">dataDefs :: [DataDefinition]
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#dataDefs"><span class="hs-identifier hs-type">dataDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span>
+</span><span id="line-32"></span><span id="dataDefs"><span class="annot"><span class="annottext">dataDefs :: [DataDefinition]
 </span><a href="Drasil.SWHS.DataDefs.html#dataDefs"><span class="hs-identifier hs-var hs-var">dataDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#waterMass"><span class="hs-identifier hs-var">waterMass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#waterVolume"><span class="hs-identifier hs-var">waterVolume</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#tankVolume"><span class="hs-identifier hs-var">tankVolume</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="Drasil.SWHS.DataDefs.html#balanceDecayRate"><span class="hs-identifier hs-var">balanceDecayRate</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.SWHS.DataDefs.html#balanceDecayRate"><span class="hs-identifier hs-var">balanceDecayRate</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayTime"><span class="hs-identifier hs-var">balanceDecayTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCM"><span class="hs-identifier hs-var">balanceSolidPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCM"><span class="hs-identifier hs-var">balanceLiquidPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#ddHtFusion"><span class="hs-identifier hs-var">ddHtFusion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="Drasil.SWHS.DataDefs.html#ddMeltFrac"><span class="hs-identifier hs-var">ddMeltFrac</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.SWHS.DataDefs.html#ddMeltFrac"><span class="hs-identifier hs-var">ddMeltFrac</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#aspRat"><span class="hs-identifier hs-var">aspRat</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-34"></span><span>
-</span><span id="line-35"></span><span class="hs-comment">-- FIXME? This section looks strange. Some data defs are created using</span><span>
-</span><span id="line-36"></span><span class="hs-comment">--    terms, some using defns, and some with a brand new description.</span><span>
-</span><span id="line-37"></span><span class="hs-comment">--    I think this will need an overhaul after we fix Data Definitions.</span><span>
-</span><span id="line-38"></span><span>
-</span><span id="line-39"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterMassQD"><span class="hs-identifier hs-type">waterMassQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-40"></span><span id="waterMassQD"><span class="annot"><span class="annottext">waterMassQD :: SimpleQDef
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span class="hs-comment">-- FIXME? This section looks strange. Some data defs are created using</span><span>
+</span><span id="line-37"></span><span class="hs-comment">--    terms, some using defns, and some with a brand new description.</span><span>
+</span><span id="line-38"></span><span class="hs-comment">--    I think this will need an overhaul after we fix Data Definitions.</span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterMassQD"><span class="hs-identifier hs-type">waterMassQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-41"></span><span id="waterMassQD"><span class="annot"><span class="annottext">waterMassQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#waterMassQD"><span class="hs-identifier hs-var hs-var">waterMassQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -67,9 +68,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#wMass"><span class="hs-identifier hs-var">wMass</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#waterMassEqn"><span class="hs-identifier hs-var">waterMassEqn</span></a></span><span>
-</span><span id="line-41"></span><span>
-</span><span id="line-42"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterMassEqn"><span class="hs-identifier hs-type">waterMassEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-43"></span><span id="waterMassEqn"><span class="annot"><span class="annottext">waterMassEqn :: Expr
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterMassEqn"><span class="hs-identifier hs-type">waterMassEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-44"></span><span id="waterMassEqn"><span class="annot"><span class="annottext">waterMassEqn :: Expr
 </span><a href="Drasil.SWHS.DataDefs.html#waterMassEqn"><span class="hs-identifier hs-var hs-var">waterMassEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -81,9 +82,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#wDensity"><span class="hs-identifier hs-var">wDensity</span></a></span><span>
-</span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterMassNotes"><span class="hs-identifier hs-type">waterMassNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-46"></span><span id="waterMassNotes"><span class="annot"><span class="annottext">waterMassNotes :: Sentence
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterMassNotes"><span class="hs-identifier hs-type">waterMassNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-47"></span><span id="waterMassNotes"><span class="annot"><span class="annottext">waterMassNotes :: Sentence
 </span><a href="Drasil.SWHS.DataDefs.html#waterMassNotes"><span class="hs-identifier hs-var hs-var">waterMassNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
@@ -96,9 +97,9 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#waterVolume"><span class="hs-identifier hs-var">waterVolume</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-47"></span><span>
-</span><span id="line-48"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterMass"><span class="hs-identifier hs-type">waterMass</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-49"></span><span id="waterMass"><span class="annot"><span class="annottext">waterMass :: DataDefinition
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterMass"><span class="hs-identifier hs-type">waterMass</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-50"></span><span id="waterMass"><span class="annot"><span class="annottext">waterMass :: DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#waterMass"><span class="hs-identifier hs-var hs-var">waterMass</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddENoRefs</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
@@ -106,11 +107,11 @@ r -&gt; Sentence
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;waterMass&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-50"></span><span>
-</span><span id="line-51"></span><span class="hs-comment">----</span><span>
-</span><span id="line-52"></span><span>
-</span><span id="line-53"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-type">waterVolumeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-54"></span><span id="waterVolumeQD"><span class="annot"><span class="annottext">waterVolumeQD :: SimpleQDef
+</span><span id="line-51"></span><span>
+</span><span id="line-52"></span><span class="hs-comment">----</span><span>
+</span><span id="line-53"></span><span>
+</span><span id="line-54"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-type">waterVolumeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-55"></span><span id="waterVolumeQD"><span class="annot"><span class="annottext">waterVolumeQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-var hs-var">waterVolumeQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -118,9 +119,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#wVol"><span class="hs-identifier hs-var">wVol</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#waterVolumeEqn"><span class="hs-identifier hs-var">waterVolumeEqn</span></a></span><span>
-</span><span id="line-55"></span><span>
-</span><span id="line-56"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterVolumeEqn"><span class="hs-identifier hs-type">waterVolumeEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-57"></span><span id="waterVolumeEqn"><span class="annot"><span class="annottext">waterVolumeEqn :: Expr
+</span><span id="line-56"></span><span>
+</span><span id="line-57"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterVolumeEqn"><span class="hs-identifier hs-type">waterVolumeEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-58"></span><span id="waterVolumeEqn"><span class="annot"><span class="annottext">waterVolumeEqn :: Expr
 </span><a href="Drasil.SWHS.DataDefs.html#waterVolumeEqn"><span class="hs-identifier hs-var hs-var">waterVolumeEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -132,9 +133,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmVol"><span class="hs-identifier hs-var">pcmVol</span></a></span><span>
-</span><span id="line-58"></span><span>
-</span><span id="line-59"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterVolumeNotes"><span class="hs-identifier hs-type">waterVolumeNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-60"></span><span id="waterVolumeNotes"><span class="annot"><span class="annottext">waterVolumeNotes :: Sentence
+</span><span id="line-59"></span><span>
+</span><span id="line-60"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterVolumeNotes"><span class="hs-identifier hs-type">waterVolumeNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-61"></span><span id="waterVolumeNotes"><span class="annot"><span class="annottext">waterVolumeNotes :: Sentence
 </span><a href="Drasil.SWHS.DataDefs.html#waterVolumeNotes"><span class="hs-identifier hs-var hs-var">waterVolumeNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -144,8 +145,8 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="Drasil.SWHS.Assumptions.html#assumpVCN"><span class="hs-identifier hs-var">assumpVCN</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-61"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><a href="Drasil.SWHS.Assumptions.html#assumpVCN"><span class="hs-identifier hs-var">assumpVCN</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#tankVol"><span class="hs-identifier hs-var">tankVol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -156,23 +157,23 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#tankVolume"><span class="hs-identifier hs-var">tankVolume</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-62"></span><span>
-</span><span id="line-63"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterVolume"><span class="hs-identifier hs-type">waterVolume</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-64"></span><span id="waterVolume"><span class="annot"><span class="annottext">waterVolume :: DataDefinition
+</span><span id="line-63"></span><span>
+</span><span id="line-64"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterVolume"><span class="hs-identifier hs-type">waterVolume</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-65"></span><span id="waterVolume"><span class="annot"><span class="annottext">waterVolume :: DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#waterVolume"><span class="hs-identifier hs-var hs-var">waterVolume</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddENoRefs</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-var">waterVolumeQD</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;waterVolume_pcm&quot;</span></span><span> </span><span>
-</span><span id="line-65"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-string">&quot;waterVolume_pcm&quot;</span></span><span>
+</span><span id="line-66"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SWHS.DataDefs.html#waterVolumeNotes"><span class="hs-identifier hs-var">waterVolumeNotes</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-66"></span><span>
-</span><span id="line-67"></span><span class="hs-comment">----</span><span>
-</span><span id="line-68"></span><span>
-</span><span id="line-69"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#tankVolumeQD"><span class="hs-identifier hs-type">tankVolumeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-70"></span><span id="tankVolumeQD"><span class="annot"><span class="annottext">tankVolumeQD :: SimpleQDef
+</span><span id="line-67"></span><span>
+</span><span id="line-68"></span><span class="hs-comment">----</span><span>
+</span><span id="line-69"></span><span>
+</span><span id="line-70"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#tankVolumeQD"><span class="hs-identifier hs-type">tankVolumeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-71"></span><span id="tankVolumeQD"><span class="annot"><span class="annottext">tankVolumeQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#tankVolumeQD"><span class="hs-identifier hs-var hs-var">tankVolumeQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -180,9 +181,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#tankVol"><span class="hs-identifier hs-var">tankVol</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#tankVolumeEqn"><span class="hs-identifier hs-var">tankVolumeEqn</span></a></span><span>
-</span><span id="line-71"></span><span>
-</span><span id="line-72"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#tankVolumeEqn"><span class="hs-identifier hs-type">tankVolumeEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-73"></span><span id="tankVolumeEqn"><span class="annot"><span class="annottext">tankVolumeEqn :: Expr
+</span><span id="line-72"></span><span>
+</span><span id="line-73"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#tankVolumeEqn"><span class="hs-identifier hs-type">tankVolumeEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-74"></span><span id="tankVolumeEqn"><span class="annot"><span class="annottext">tankVolumeEqn :: Expr
 </span><a href="Drasil.SWHS.DataDefs.html#tankVolumeEqn"><span class="hs-identifier hs-var hs-var">tankVolumeEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -206,9 +207,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#tankLength"><span class="hs-identifier hs-var">tankLength</span></a></span><span>
-</span><span id="line-74"></span><span>
-</span><span id="line-75"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#tankVolume"><span class="hs-identifier hs-type">tankVolume</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-76"></span><span id="tankVolume"><span class="annot"><span class="annottext">tankVolume :: DataDefinition
+</span><span id="line-75"></span><span>
+</span><span id="line-76"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#tankVolume"><span class="hs-identifier hs-type">tankVolume</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-77"></span><span id="tankVolume"><span class="annot"><span class="annottext">tankVolume :: DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#tankVolume"><span class="hs-identifier hs-var hs-var">tankVolume</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddENoRefs</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
@@ -216,11 +217,11 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;tankVolume&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-77"></span><span>
-</span><span id="line-78"></span><span class="hs-comment">----</span><span>
-</span><span id="line-79"></span><span>
-</span><span id="line-80"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateQD"><span class="hs-identifier hs-type">balanceDecayRateQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-81"></span><span id="balanceDecayRateQD"><span class="annot"><span class="annottext">balanceDecayRateQD :: SimpleQDef
+</span><span id="line-78"></span><span>
+</span><span id="line-79"></span><span class="hs-comment">----</span><span>
+</span><span id="line-80"></span><span>
+</span><span id="line-81"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateQD"><span class="hs-identifier hs-type">balanceDecayRateQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-82"></span><span id="balanceDecayRateQD"><span class="annot"><span class="annottext">balanceDecayRateQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateQD"><span class="hs-identifier hs-var hs-var">balanceDecayRateQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -228,9 +229,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#tauW"><span class="hs-identifier hs-var">tauW</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateEqn"><span class="hs-identifier hs-var">balanceDecayRateEqn</span></a></span><span>
-</span><span id="line-82"></span><span>
-</span><span id="line-83"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateEqn"><span class="hs-identifier hs-type">balanceDecayRateEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-84"></span><span id="balanceDecayRateEqn"><span class="annot"><span class="annottext">balanceDecayRateEqn :: Expr
+</span><span id="line-83"></span><span>
+</span><span id="line-84"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateEqn"><span class="hs-identifier hs-type">balanceDecayRateEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-85"></span><span id="balanceDecayRateEqn"><span class="annot"><span class="annottext">balanceDecayRateEqn :: Expr
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateEqn"><span class="hs-identifier hs-var hs-var">balanceDecayRateEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -254,25 +255,25 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#coilSA"><span class="hs-identifier hs-var">coilSA</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-85"></span><span>
-</span><span id="line-86"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateNotes"><span class="hs-identifier hs-type">balanceDecayRateNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-87"></span><span id="balanceDecayRateNotes"><span class="annot"><span class="annottext">balanceDecayRateNotes :: Sentence
+</span><span id="line-86"></span><span>
+</span><span id="line-87"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateNotes"><span class="hs-identifier hs-type">balanceDecayRateNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-88"></span><span id="balanceDecayRateNotes"><span class="annot"><span class="annottext">balanceDecayRateNotes :: Sentence
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateNotes"><span class="hs-identifier hs-var hs-var">balanceDecayRateNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#wMass"><span class="hs-identifier hs-var">wMass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;is defined in&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-88"></span><span>  </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+</span><span class="hs-string">&quot;is defined in&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-89"></span><span>  </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#waterMass"><span class="hs-identifier hs-var">waterMass</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-89"></span><span>
-</span><span id="line-90"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayRate"><span class="hs-identifier hs-type">balanceDecayRate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-91"></span><span id="balanceDecayRate"><span class="annot"><span class="annottext">balanceDecayRate :: DataDefinition
+</span><span id="line-90"></span><span>
+</span><span id="line-91"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayRate"><span class="hs-identifier hs-type">balanceDecayRate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-92"></span><span id="balanceDecayRate"><span class="annot"><span class="annottext">balanceDecayRate :: DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayRate"><span class="hs-identifier hs-var hs-var">balanceDecayRate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; [DecRef]
 -&gt; Maybe Derivation
@@ -286,15 +287,15 @@ forall r.
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">koothoor2013</span></span><span class="hs-special">]</span><span>
-</span><span id="line-92"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;balanceDecayRate&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-93"></span><span>
-</span><span id="line-94"></span><span class="hs-comment">----</span><span>
-</span><span id="line-95"></span><span>
-</span><span id="line-96"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayTimeQD"><span class="hs-identifier hs-type">balanceDecayTimeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-97"></span><span id="balanceDecayTimeQD"><span class="annot"><span class="annottext">balanceDecayTimeQD :: SimpleQDef
+</span><span id="line-94"></span><span>
+</span><span id="line-95"></span><span class="hs-comment">----</span><span>
+</span><span id="line-96"></span><span>
+</span><span id="line-97"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayTimeQD"><span class="hs-identifier hs-type">balanceDecayTimeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-98"></span><span id="balanceDecayTimeQD"><span class="annot"><span class="annottext">balanceDecayTimeQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayTimeQD"><span class="hs-identifier hs-var hs-var">balanceDecayTimeQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -302,9 +303,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SWHS.Unitals.html#eta"><span class="hs-identifier hs-var">eta</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayTimeEqn"><span class="hs-identifier hs-var">balanceDecayTimeEqn</span></a></span><span>
-</span><span id="line-98"></span><span>
-</span><span id="line-99"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayTimeEqn"><span class="hs-identifier hs-type">balanceDecayTimeEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-100"></span><span id="balanceDecayTimeEqn"><span class="annot"><span class="annottext">balanceDecayTimeEqn :: Expr
+</span><span id="line-99"></span><span>
+</span><span id="line-100"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayTimeEqn"><span class="hs-identifier hs-type">balanceDecayTimeEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-101"></span><span id="balanceDecayTimeEqn"><span class="annot"><span class="annottext">balanceDecayTimeEqn :: Expr
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayTimeEqn"><span class="hs-identifier hs-var hs-var">balanceDecayTimeEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -328,9 +329,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#coilSA"><span class="hs-identifier hs-var">coilSA</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-101"></span><span>
-</span><span id="line-102"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayTime"><span class="hs-identifier hs-type">balanceDecayTime</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-103"></span><span id="balanceDecayTime"><span class="annot"><span class="annottext">balanceDecayTime :: DataDefinition
+</span><span id="line-102"></span><span>
+</span><span id="line-103"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayTime"><span class="hs-identifier hs-type">balanceDecayTime</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-104"></span><span id="balanceDecayTime"><span class="annot"><span class="annottext">balanceDecayTime :: DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayTime"><span class="hs-identifier hs-var hs-var">balanceDecayTime</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; [DecRef]
 -&gt; Maybe Derivation
@@ -344,15 +345,15 @@ forall r.
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">koothoor2013</span></span><span class="hs-special">]</span><span>
-</span><span id="line-104"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;balanceDecayTime&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-105"></span><span>
-</span><span id="line-106"></span><span class="hs-comment">----</span><span>
-</span><span id="line-107"></span><span>
-</span><span id="line-108"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCMQD"><span class="hs-identifier hs-type">balanceSolidPCMQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-109"></span><span id="balanceSolidPCMQD"><span class="annot"><span class="annottext">balanceSolidPCMQD :: SimpleQDef
+</span><span id="line-106"></span><span>
+</span><span id="line-107"></span><span class="hs-comment">----</span><span>
+</span><span id="line-108"></span><span>
+</span><span id="line-109"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCMQD"><span class="hs-identifier hs-type">balanceSolidPCMQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-110"></span><span id="balanceSolidPCMQD"><span class="annot"><span class="annottext">balanceSolidPCMQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCMQD"><span class="hs-identifier hs-var hs-var">balanceSolidPCMQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -360,9 +361,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#tauSP"><span class="hs-identifier hs-var">tauSP</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCMEqn"><span class="hs-identifier hs-var">balanceSolidPCMEqn</span></a></span><span>
-</span><span id="line-110"></span><span>
-</span><span id="line-111"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCMEqn"><span class="hs-identifier hs-type">balanceSolidPCMEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-112"></span><span id="balanceSolidPCMEqn"><span class="annot"><span class="annottext">balanceSolidPCMEqn :: Expr
+</span><span id="line-111"></span><span>
+</span><span id="line-112"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCMEqn"><span class="hs-identifier hs-type">balanceSolidPCMEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-113"></span><span id="balanceSolidPCMEqn"><span class="annot"><span class="annottext">balanceSolidPCMEqn :: Expr
 </span><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCMEqn"><span class="hs-identifier hs-var hs-var">balanceSolidPCMEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -376,7 +377,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.SWHS.Unitals.html#htCapSP"><span class="hs-identifier hs-var">htCapSP</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span>
-</span><span id="line-113"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
+</span><span id="line-114"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -387,9 +388,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmSA"><span class="hs-identifier hs-var">pcmSA</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-114"></span><span>
-</span><span id="line-115"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCM"><span class="hs-identifier hs-type">balanceSolidPCM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-116"></span><span id="balanceSolidPCM"><span class="annot"><span class="annottext">balanceSolidPCM :: DataDefinition
+</span><span id="line-115"></span><span>
+</span><span id="line-116"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCM"><span class="hs-identifier hs-type">balanceSolidPCM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-117"></span><span id="balanceSolidPCM"><span class="annot"><span class="annottext">balanceSolidPCM :: DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCM"><span class="hs-identifier hs-var hs-var">balanceSolidPCM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; [DecRef]
 -&gt; Maybe Derivation
@@ -403,15 +404,15 @@ forall r.
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><a href="Drasil.SWHS.References.html#lightstone2012"><span class="hs-identifier hs-var">lightstone2012</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;balanceSolidPCM&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-118"></span><span>
-</span><span id="line-119"></span><span class="hs-comment">----</span><span>
-</span><span id="line-120"></span><span>
-</span><span id="line-121"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCMQD"><span class="hs-identifier hs-type">balanceLiquidPCMQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-122"></span><span id="balanceLiquidPCMQD"><span class="annot"><span class="annottext">balanceLiquidPCMQD :: SimpleQDef
+</span><span id="line-119"></span><span>
+</span><span id="line-120"></span><span class="hs-comment">----</span><span>
+</span><span id="line-121"></span><span>
+</span><span id="line-122"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCMQD"><span class="hs-identifier hs-type">balanceLiquidPCMQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-123"></span><span id="balanceLiquidPCMQD"><span class="annot"><span class="annottext">balanceLiquidPCMQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCMQD"><span class="hs-identifier hs-var hs-var">balanceLiquidPCMQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -419,9 +420,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#tauLP"><span class="hs-identifier hs-var">tauLP</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCMEqn"><span class="hs-identifier hs-var">balanceLiquidPCMEqn</span></a></span><span>
-</span><span id="line-123"></span><span>
-</span><span id="line-124"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCMEqn"><span class="hs-identifier hs-type">balanceLiquidPCMEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-125"></span><span id="balanceLiquidPCMEqn"><span class="annot"><span class="annottext">balanceLiquidPCMEqn :: Expr
+</span><span id="line-124"></span><span>
+</span><span id="line-125"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCMEqn"><span class="hs-identifier hs-type">balanceLiquidPCMEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-126"></span><span id="balanceLiquidPCMEqn"><span class="annot"><span class="annottext">balanceLiquidPCMEqn :: Expr
 </span><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCMEqn"><span class="hs-identifier hs-var hs-var">balanceLiquidPCMEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -435,7 +436,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.SWHS.Unitals.html#htCapLP"><span class="hs-identifier hs-var">htCapLP</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span>
-</span><span id="line-126"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
+</span><span id="line-127"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -446,9 +447,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmSA"><span class="hs-identifier hs-var">pcmSA</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-127"></span><span>
-</span><span id="line-128"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCM"><span class="hs-identifier hs-type">balanceLiquidPCM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-129"></span><span id="balanceLiquidPCM"><span class="annot"><span class="annottext">balanceLiquidPCM :: DataDefinition
+</span><span id="line-128"></span><span>
+</span><span id="line-129"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCM"><span class="hs-identifier hs-type">balanceLiquidPCM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-130"></span><span id="balanceLiquidPCM"><span class="annot"><span class="annottext">balanceLiquidPCM :: DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCM"><span class="hs-identifier hs-var hs-var">balanceLiquidPCM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; [DecRef]
 -&gt; Maybe Derivation
@@ -462,15 +463,15 @@ forall r.
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><a href="Drasil.SWHS.References.html#lightstone2012"><span class="hs-identifier hs-var">lightstone2012</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-130"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><span id="line-131"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;balanceLiquidPCM&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-131"></span><span>
-</span><span id="line-132"></span><span class="hs-comment">----</span><span>
-</span><span id="line-133"></span><span>
-</span><span id="line-134"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#ddHtFusionQD"><span class="hs-identifier hs-type">ddHtFusionQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-135"></span><span id="ddHtFusionQD"><span class="annot"><span class="annottext">ddHtFusionQD :: SimpleQDef
+</span><span id="line-132"></span><span>
+</span><span id="line-133"></span><span class="hs-comment">----</span><span>
+</span><span id="line-134"></span><span>
+</span><span id="line-135"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#ddHtFusionQD"><span class="hs-identifier hs-type">ddHtFusionQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-136"></span><span id="ddHtFusionQD"><span class="annot"><span class="annottext">ddHtFusionQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#ddHtFusionQD"><span class="hs-identifier hs-var hs-var">ddHtFusionQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -478,9 +479,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htFusion"><span class="hs-identifier hs-var">htFusion</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#htFusionEqn"><span class="hs-identifier hs-var">htFusionEqn</span></a></span><span>
-</span><span id="line-136"></span><span>
-</span><span id="line-137"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#htFusionEqn"><span class="hs-identifier hs-type">htFusionEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-138"></span><span id="htFusionEqn"><span class="annot"><span class="annottext">htFusionEqn :: Expr
+</span><span id="line-137"></span><span>
+</span><span id="line-138"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#htFusionEqn"><span class="hs-identifier hs-type">htFusionEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-139"></span><span id="htFusionEqn"><span class="annot"><span class="annottext">htFusionEqn :: Expr
 </span><a href="Drasil.SWHS.DataDefs.html#htFusionEqn"><span class="hs-identifier hs-var hs-var">htFusionEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -492,9 +493,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">mass</span></span><span>
-</span><span id="line-139"></span><span>
-</span><span id="line-140"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#ddHtFusion"><span class="hs-identifier hs-type">ddHtFusion</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-141"></span><span id="ddHtFusion"><span class="annot"><span class="annottext">ddHtFusion :: DataDefinition
+</span><span id="line-140"></span><span>
+</span><span id="line-141"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#ddHtFusion"><span class="hs-identifier hs-type">ddHtFusion</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-142"></span><span id="ddHtFusion"><span class="annot"><span class="annottext">ddHtFusion :: DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#ddHtFusion"><span class="hs-identifier hs-var hs-var">ddHtFusion</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; [DecRef]
 -&gt; Maybe Derivation
@@ -512,29 +513,30 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; RefInfo
 </span><span class="hs-identifier hs-var">Page</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">282</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-142"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><span id="line-143"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;htFusion&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SWHS.DataDefs.html#htFusionNote"><span class="hs-identifier hs-var">htFusionNote</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-143"></span><span>
-</span><span id="line-144"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#htFusionNote"><span class="hs-identifier hs-type">htFusionNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-145"></span><span id="htFusionNote"><span class="annot"><span class="annottext">htFusionNote :: Sentence
+</span><span id="line-144"></span><span>
+</span><span id="line-145"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#htFusionNote"><span class="hs-identifier hs-type">htFusionNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-146"></span><span id="htFusionNote"><span class="annot"><span class="annottext">htFusionNote :: Sentence
 </span><a href="Drasil.SWHS.DataDefs.html#htFusionNote"><span class="hs-identifier hs-var hs-var">htFusionNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
-</span><a href="Drasil.SWHS.Unitals.html#htFusion"><span class="hs-identifier hs-var">htFusion</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-146"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="Drasil.SWHS.Unitals.html#htFusion"><span class="hs-identifier hs-var">htFusion</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-147"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;also known as the enthalpy of fusion&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.ofA`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;substance is the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-147"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span id="line-148"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">heat</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -552,7 +554,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.ofA`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;unit of the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-148"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-149"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
@@ -564,17 +566,17 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;substance from solid to liquid&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-149"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-150"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;at constant&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">pressure</span></span><span class="hs-special">]</span><span>
-</span><span id="line-150"></span><span>
-</span><span id="line-151"></span><span class="hs-comment">----</span><span>
-</span><span id="line-152"></span><span>
-</span><span id="line-153"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#ddMeltFracQD"><span class="hs-identifier hs-type">ddMeltFracQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-154"></span><span id="ddMeltFracQD"><span class="annot"><span class="annottext">ddMeltFracQD :: SimpleQDef
+</span><span id="line-151"></span><span>
+</span><span id="line-152"></span><span class="hs-comment">----</span><span>
+</span><span id="line-153"></span><span>
+</span><span id="line-154"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#ddMeltFracQD"><span class="hs-identifier hs-type">ddMeltFracQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-155"></span><span id="ddMeltFracQD"><span class="annot"><span class="annottext">ddMeltFracQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#ddMeltFracQD"><span class="hs-identifier hs-var hs-var">ddMeltFracQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -582,13 +584,13 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SWHS.Unitals.html#meltFrac"><span class="hs-identifier hs-var">meltFrac</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#meltFracEqn"><span class="hs-identifier hs-var">meltFracEqn</span></a></span><span>
-</span><span id="line-155"></span><span>
-</span><span id="line-156"></span><span class="hs-comment">--FIXME: &quot;Phi is the melt fraction&quot; is produced; </span><span>
-</span><span id="line-157"></span><span>  </span><span class="hs-comment">--&quot;Phi is the fraction of the PCM that is liquid&quot; is what is supposed to be</span><span>
-</span><span id="line-158"></span><span>  </span><span class="hs-comment">-- produced according to CaseStudies' original</span><span>
-</span><span id="line-159"></span><span>
-</span><span id="line-160"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#meltFracEqn"><span class="hs-identifier hs-type">meltFracEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-161"></span><span id="meltFracEqn"><span class="annot"><span class="annottext">meltFracEqn :: Expr
+</span><span id="line-156"></span><span>
+</span><span id="line-157"></span><span class="hs-comment">--FIXME: &quot;Phi is the melt fraction&quot; is produced;</span><span>
+</span><span id="line-158"></span><span>  </span><span class="hs-comment">--&quot;Phi is the fraction of the PCM that is liquid&quot; is what is supposed to be</span><span>
+</span><span id="line-159"></span><span>  </span><span class="hs-comment">-- produced according to CaseStudies' original</span><span>
+</span><span id="line-160"></span><span>
+</span><span id="line-161"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#meltFracEqn"><span class="hs-identifier hs-type">meltFracEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-162"></span><span id="meltFracEqn"><span class="annot"><span class="annottext">meltFracEqn :: Expr
 </span><a href="Drasil.SWHS.DataDefs.html#meltFracEqn"><span class="hs-identifier hs-var hs-var">meltFracEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -606,9 +608,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#pcmMass"><span class="hs-identifier hs-var">pcmMass</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-162"></span><span>
-</span><span id="line-163"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#ddMeltFrac"><span class="hs-identifier hs-type">ddMeltFrac</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-164"></span><span id="ddMeltFrac"><span class="annot"><span class="annottext">ddMeltFrac :: DataDefinition
+</span><span id="line-163"></span><span>
+</span><span id="line-164"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#ddMeltFrac"><span class="hs-identifier hs-type">ddMeltFrac</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-165"></span><span id="ddMeltFrac"><span class="annot"><span class="annottext">ddMeltFrac :: DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#ddMeltFrac"><span class="hs-identifier hs-var hs-var">ddMeltFrac</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; [DecRef]
 -&gt; Maybe Derivation
@@ -622,29 +624,30 @@ forall r.
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">koothoor2013</span></span><span class="hs-special">]</span><span>
-</span><span id="line-165"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><span id="line-166"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;meltFrac&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679085969"><span class="hs-identifier hs-var">meltFracConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+</span><a href="#local-6989586621679086066"><span class="hs-identifier hs-var">meltFracConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#ddHtFusion"><span class="hs-identifier hs-var">ddHtFusion</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-166"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679085969"><span class="annot"><span class="annottext">meltFracConst :: Sentence
-</span><a href="#local-6989586621679085969"><span class="hs-identifier hs-var hs-var">meltFracConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span id="line-167"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086066"><span class="annot"><span class="annottext">meltFracConst :: Sentence
+</span><a href="#local-6989586621679086066"><span class="hs-identifier hs-var hs-var">meltFracConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
-</span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
 forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SWHS.Unitals.html#meltFrac"><span class="hs-identifier hs-var">meltFrac</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span>
-</span><span id="line-167"></span><span>                        </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-168"></span><span>                        </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;constrained to&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
@@ -667,11 +670,11 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-168"></span><span>
-</span><span id="line-169"></span><span class="hs-comment">----</span><span>
-</span><span id="line-170"></span><span>
-</span><span id="line-171"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#aspRatQD"><span class="hs-identifier hs-type">aspRatQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-172"></span><span id="aspRatQD"><span class="annot"><span class="annottext">aspRatQD :: SimpleQDef
+</span><span id="line-169"></span><span>
+</span><span id="line-170"></span><span class="hs-comment">----</span><span>
+</span><span id="line-171"></span><span>
+</span><span id="line-172"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#aspRatQD"><span class="hs-identifier hs-type">aspRatQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-173"></span><span id="aspRatQD"><span class="annot"><span class="annottext">aspRatQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#aspRatQD"><span class="hs-identifier hs-var hs-var">aspRatQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -679,9 +682,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SWHS.Unitals.html#aspectRatio"><span class="hs-identifier hs-var">aspectRatio</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#aspRatEq"><span class="hs-identifier hs-var">aspRatEq</span></a></span><span>
-</span><span id="line-173"></span><span>
-</span><span id="line-174"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#aspRatEq"><span class="hs-identifier hs-type">aspRatEq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-175"></span><span id="aspRatEq"><span class="annot"><span class="annottext">aspRatEq :: Expr
+</span><span id="line-174"></span><span>
+</span><span id="line-175"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#aspRatEq"><span class="hs-identifier hs-type">aspRatEq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-176"></span><span id="aspRatEq"><span class="annot"><span class="annottext">aspRatEq :: Expr
 </span><a href="Drasil.SWHS.DataDefs.html#aspRatEq"><span class="hs-identifier hs-var hs-var">aspRatEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -693,9 +696,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#tankLength"><span class="hs-identifier hs-var">tankLength</span></a></span><span>
-</span><span id="line-176"></span><span>
-</span><span id="line-177"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#aspRat"><span class="hs-identifier hs-type">aspRat</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-178"></span><span id="aspRat"><span class="annot"><span class="annottext">aspRat :: DataDefinition
+</span><span id="line-177"></span><span>
+</span><span id="line-178"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#aspRat"><span class="hs-identifier hs-type">aspRat</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-179"></span><span id="aspRat"><span class="annot"><span class="annottext">aspRat :: DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#aspRat"><span class="hs-identifier hs-var hs-var">aspRat</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddENoRefs</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
@@ -703,10 +706,10 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;aspectRatio&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-179"></span><span>
-</span><span id="line-180"></span><span class="hs-comment">--Need to add units to data definition descriptions</span><span>
-</span><span id="line-181"></span><span>
-</span><span id="line-182"></span><span class="hs-comment">--Symbol appears as &quot;Label&quot;</span><span>
-</span><span id="line-183"></span><span class="hs-comment">--There is no actual label</span><span>
-</span><span id="line-184"></span><span class="hs-comment">--Units section doesn't appear</span><span>
-</span><span id="line-185"></span></pre></body></html>
+</span><span id="line-180"></span><span>
+</span><span id="line-181"></span><span class="hs-comment">--Need to add units to data definition descriptions</span><span>
+</span><span id="line-182"></span><span>
+</span><span id="line-183"></span><span class="hs-comment">--Symbol appears as &quot;Label&quot;</span><span>
+</span><span id="line-184"></span><span class="hs-comment">--There is no actual label</span><span>
+</span><span id="line-185"></span><span class="hs-comment">--Units section doesn't appear</span><span>
+</span><span id="line-186"></span></pre></body></html>

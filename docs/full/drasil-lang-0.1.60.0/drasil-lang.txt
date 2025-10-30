@@ -1175,6 +1175,477 @@ lPosInf :: Symbol
 lNegInf :: Symbol
 
 
+-- | Noun phrases are used to hold terms with knowledge of proper
+--   capitalization and pluralization.
+module Language.Drasil.NounPhrase.Core
+
+-- | Capitalization rules.
+data CapitalizationRule
+
+-- | Capitalize the first letter of the first word only.
+CapFirst :: CapitalizationRule
+
+-- | Capitalize the first letter of each word.
+CapWords :: CapitalizationRule
+
+-- | Replace the noun phrase with the given 'NPStruct. Used for custom
+--   capitalization.
+Replace :: NPStruct -> CapitalizationRule
+CapNothing :: CapitalizationRule
+
+-- | For nouns and <tt>NounPhrase</tt>s. May be constructed from a proper
+--   noun, common noun, or phrase (<tt>Sentence</tt>) and their respective
+--   pluralization and capitalization rules.
+data NP
+
+-- | Stores a proper noun and its pluralization.
+ProperNoun :: String -> PluralRule -> NP
+
+-- | Stores a common noun and its pluralization.
+CommonNoun :: String -> PluralRule -> CapitalizationRule -> NP
+
+-- | Stores noun phrase and its pluralization. Phrase plurals can get very
+--   odd, so it seems best (for now) to encode them directly. FIXME: If the
+--   singular/plural phrase has special (replace) capitalization, one of
+--   the two cannot be capitalized right now. The two capitalization rules
+--   are for sentenceCase / titleCase respectively
+Phrase :: NPStruct -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
+
+-- | Synonym for 'NPStruct typically used for plural forms.
+type PluralForm = NPStruct
+
+-- | Pluralization rules.
+data PluralRule
+
+-- | Add "s" to the end of the noun phrase.
+AddS :: PluralRule
+
+-- | Add "e" to the end of the noun phrase.
+AddE :: PluralRule
+
+-- | Add "es" to the end of the noun phrase.
+AddES :: PluralRule
+
+-- | The noun phrase is already plural.
+SelfPlur :: PluralRule
+
+-- | Apply the given function to the noun phrase to get the plural.
+IrregPlur :: (String -> String) -> PluralRule
+
+-- | Essentially a subset of <tt>Sentence</tt> that contains only the parts
+--   that make sense for a NounPhrase
+data NPStruct
+S :: String -> NPStruct
+(:-:) :: NPStruct -> NPStruct -> NPStruct
+(:+:) :: NPStruct -> NPStruct -> NPStruct
+P :: Symbol -> NPStruct
+
+module Language.Drasil.NounPhrase
+class NounPhrase n
+
+-- | Retrieves singular form of term. Ex. "the quick brown fox".
+phraseNP :: NounPhrase n => n -> NPStruct
+
+-- | Retrieves plural form of term. Ex. "the quick brown foxes".
+pluralNP :: NounPhrase n => n -> PluralForm
+
+-- | Retrieves the singular form and applies a captalization rule (usually
+--   capitalizes the first word) to produce a 'NPStruct. Ex. "The quick
+--   brown fox".
+sentenceCase :: NounPhrase n => n -> (NP -> NPStruct) -> Capitalization
+
+-- | Retrieves the singular form and applies a captalization rule (usually
+--   capitalizes all words) to produce a 'NPStruct. Ex. "The Quick Brown
+--   Fox".
+titleCase :: NounPhrase n => n -> (NP -> NPStruct) -> Capitalization
+
+-- | For nouns and <tt>NounPhrase</tt>s. May be constructed from a proper
+--   noun, common noun, or phrase (<tt>Sentence</tt>) and their respective
+--   pluralization and capitalization rules.
+data NP
+
+-- | Singular sentence case.
+--   
+--   Helper function for getting the sentence case of a noun phrase.
+atStartNP :: NounPhrase n => n -> Capitalization
+
+-- | Plural sentence case.
+--   
+--   Helper function for getting the sentence case of a noun phrase.
+atStartNP' :: NounPhrase n => n -> Capitalization
+
+-- | Singular title case.
+--   
+--   Helper function for getting the title case of a noun phrase.
+titleizeNP :: NounPhrase n => n -> Capitalization
+
+-- | Plural title case.
+--   
+--   Helper function for getting the title case of a noun phrase.
+titleizeNP' :: NounPhrase n => n -> Capitalization
+
+-- | Self plural.
+--   
+--   Constructs a common noun which capitalizes the first letter of the
+--   first word at the beginning of a sentence.
+cn :: String -> NP
+
+-- | Plural form simply adds "s" (ex. dog -&gt; dogs).
+--   
+--   Constructs a common noun which capitalizes the first letter of the
+--   first word at the beginning of a sentence.
+cn' :: String -> NP
+
+-- | Plural form adds "e" (ex. formula -&gt; formulae).
+--   
+--   Constructs a common noun which capitalizes the first letter of the
+--   first word at the beginning of a sentence.
+cn'' :: String -> NP
+
+-- | Plural form adds "es" (ex. bush -&gt; bushes).
+--   
+--   Constructs a common noun which capitalizes the first letter of the
+--   first word at the beginning of a sentence.
+cn''' :: String -> NP
+
+-- | Construct a common noun that pluralizes by dropping the last two
+--   letters and adding an "ices" ending (ex. matrix -&gt; matrices).
+cnICES :: String -> NP
+
+-- | Constructs a common noun that pluralizes by dropping the last letter
+--   and adding an "ies" ending (ex. body -&gt; bodies).
+cnIES :: String -> NP
+
+-- | Constructs a common noun that allows you to specify the pluralization
+--   rule (as in <a>pnIrr</a>).
+cnIP :: String -> PluralRule -> NP
+
+-- | Constructs a common noun that pluralizes by dropping the last two
+--   letters and adding "es" (ex. analysis -&gt; analyses).
+cnIS :: String -> NP
+
+-- | Common noun that allows you to specify both the pluralization rule and
+--   the capitalization rule for sentence case (if the noun is used at the
+--   beginning of a sentence).
+cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
+
+-- | Constructs a common noun that pluralizes by dropping the last two
+--   letters and adding "a" (ex. datum -&gt; data).
+cnUM :: String -> NP
+
+-- | Self plural.
+--   
+--   Constructs a Proper Noun, it is always capitalized as written.
+pn :: String -> NP
+
+-- | Plural form simply adds "s" (ex. Henderson -&gt; Hendersons).
+--   
+--   Constructs a Proper Noun, it is always capitalized as written.
+pn' :: String -> NP
+
+-- | Plural form adds "e".
+--   
+--   Constructs a Proper Noun, it is always capitalized as written.
+pn'' :: String -> NP
+
+-- | Plural form adds "es" (ex. Bush -&gt; Bushes).
+--   
+--   Constructs a Proper Noun, it is always capitalized as written.
+pn''' :: String -> NP
+
+-- | Constructs a <a>ProperNoun</a> with a custom plural rule (using
+--   <a>IrregPlur</a> from <a>PluralRule</a>). First argument is the String
+--   representing the noun, second is the rule.
+pnIrr :: String -> PluralRule -> NP
+
+-- | Creates a <a>NP</a> with a given singular and plural form (as
+--   <a>String</a>s) that capitalizes the first letter of the first word
+--   for sentence case.
+nounPhrase :: String -> PluralString -> NP
+
+-- | Similar to <a>nounPhrase</a>, but takes a specified capitalization
+--   rule for the sentence case.
+nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
+
+-- | Custom noun phrase constructor that takes a singular form ('NPStruct),
+--   plural form ('NPStruct), sentence case capitalization rule, and title
+--   case capitalization rule.
+nounPhrase'' :: NPStruct -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
+
+-- | For things that should not be pluralized (or are self-plural). Works
+--   like <a>nounPhrase</a>, but with only the first argument.
+nounPhraseSP :: String -> NP
+
+-- | Similar to nounPhrase, except it only accepts one 'NPStruct. Plural
+--   case is just <a>AddS</a>.
+nounPhraseSent :: NPStruct -> NP
+
+-- | Combine two noun phrases. The singular form becomes <tt>phrase</tt>
+--   from t1 followed by <tt>phrase</tt> of t2. The plural becomes
+--   <tt>phrase</tt> of t1 followed by <tt>plural</tt> of t2. Uses standard
+--   <a>CapFirst</a> sentence case and <a>CapWords</a> title case. For
+--   example: <tt>compoundPhrase system constraint</tt> will have singular
+--   form "system constraint" and plural "system constraints".
+compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
+
+-- | Similar to <a>compoundPhrase</a>, but the sentence case is the same as
+--   the title case (<a>CapWords</a>).
+compoundPhrase' :: NP -> NP -> NP
+
+-- | Similar to <a>compoundPhrase'</a>, but accepts two functions that will
+--   be used to construct the plural form. For example,
+--   <tt>compoundPhrase'' plural phrase system constraint</tt> would have
+--   the plural form "systems constraint".
+compoundPhrase'' :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+
+-- | Similar to <a>compoundPhrase</a>, but used when you need a special
+--   function applied to the first term of both singular and pluralcases
+--   (eg. short or plural).
+compoundPhrase''' :: (NP -> NPStruct) -> NP -> NP -> NP
+
+-- | Similar to <a>compoundPhrase</a>, but pluralizes the first <a>NP</a>
+--   for both singular and plural cases.
+compoundPhraseP1 :: NP -> NP -> NP
+surroundNPStruct :: String -> String -> NPStruct -> NPStruct
+
+-- | Capitalization rules.
+data CapitalizationRule
+
+-- | Capitalize the first letter of the first word only.
+CapFirst :: CapitalizationRule
+
+-- | Capitalize the first letter of each word.
+CapWords :: CapitalizationRule
+
+-- | Replace the noun phrase with the given 'NPStruct. Used for custom
+--   capitalization.
+Replace :: NPStruct -> CapitalizationRule
+CapNothing :: CapitalizationRule
+
+-- | Pluralization rules.
+data PluralRule
+
+-- | Add "s" to the end of the noun phrase.
+AddS :: PluralRule
+
+-- | Add "e" to the end of the noun phrase.
+AddE :: PluralRule
+
+-- | Add "es" to the end of the noun phrase.
+AddES :: PluralRule
+
+-- | The noun phrase is already plural.
+SelfPlur :: PluralRule
+
+-- | Apply the given function to the noun phrase to get the plural.
+IrregPlur :: (String -> String) -> PluralRule
+
+-- | Essentially a subset of <tt>Sentence</tt> that contains only the parts
+--   that make sense for a NounPhrase
+data NPStruct
+S :: String -> NPStruct
+(:-:) :: NPStruct -> NPStruct -> NPStruct
+(:+:) :: NPStruct -> NPStruct -> NPStruct
+P :: Symbol -> NPStruct
+instance Language.Drasil.NounPhrase.NounPhrase Language.Drasil.NounPhrase.Core.NP
+
+
+-- | Defines various NounPhrase-level combinators. These hold more
+--   information than those of the Sentence level but may not necessarily
+--   have a conceptual link. See the <a>Wiki</a> for more information and
+--   details about the naming process for combinators. A summary of the
+--   function naming scheme is as follows:
+--   
+--   <ul>
+--   <li>Combinators that conflict with haskell-native functions have an
+--   underscore appended.</li>
+--   <li>Default plural case for combinators will be first term singular,
+--   second term plural.</li>
+--   <li><tt>P</tt> and <tt>S</tt> denote the plural case of the combinator
+--   when it does not follow the above default.</li>
+--   <li><tt>Gen</tt> denotes the general function case.</li>
+--   </ul>
+--   
+--   This module should be used as a qualified import (usually as
+--   <tt>NP</tt>), as many function names clash with those in Concepts.hs
+--   and Sentence.hs.
+module Language.Drasil.NounPhrase.Combinators
+
+-- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
+--   Plural case is <tt>(phraseNP t1) :+: S s :+: (pluralNP t2)</tt>.
+insertString :: String -> NP -> NP -> NP
+
+-- | Helper function that prepends a <a>String</a> to a <a>NP</a>.
+prependString :: String -> NP -> NP
+
+-- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
+--   Plural case is <tt>(pluralNP t1) :+: S s :+: (phraseNP t2)</tt>, i.e.
+--   opposite of <a>insertString</a>
+insertStringOp :: String -> NP -> NP -> NP
+
+-- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
+--   Plural case is given by two generic functions.
+insertStringGen :: String -> (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+
+-- | Prepends "the" to a <a>NP</a>.
+the :: NP -> NP
+
+-- | Similar to <a>the</a>, but accepts a function that determines the
+--   plural case.
+theGen :: (NP -> NPStruct) -> NP -> NP
+
+-- | Prepends "a" to a <a>NP</a>.
+a_ :: NP -> NP
+
+-- | Similar to <tt>a</tt>, but accepts a function that determines the
+--   plural case.
+a_Gen :: (NP -> NPStruct) -> NP -> NP
+
+-- | Inserts "and" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   :+: "and" :+: (pluralNP t2)</tt>.
+and_ :: NP -> NP -> NP
+
+-- | Same as <a>and_</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>and_</a> (phraseNP t2)</tt>.
+and_PS :: NP -> NP -> NP
+
+-- | Same as <a>and_</a>, but takes two functions for the plural case.
+and_Gen :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+
+-- | Inserts "and the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) :+: "and the" :+: (pluralNP t2)</tt>.
+andThe :: NP -> NP -> NP
+
+-- | Inserts "of the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) :+: "of the" :+: (pluralNP t2)</tt>.
+ofThe :: NP -> NP -> NP
+
+-- | Similar to <a>ofThe</a>, but the plural case is now <tt>(pluralNP t1)
+--   <a>ofThe</a> (phraseNP t2)</tt>.
+ofThePS :: NP -> NP -> NP
+
+-- | Similar to <a>ofThe</a>, but accepts two functions for the plural
+--   case.
+ofTheGen :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+
+-- | Inserts "in the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) :+: "in the" :+: (pluralNP t2)</tt>.
+inThe :: NP -> NP -> NP
+
+-- | Similar to <a>ofThe</a>, but the plural case is now <tt>(pluralNP t1)
+--   <a>inThe</a> (phraseNP t2)</tt>.
+inThePS :: NP -> NP -> NP
+
+-- | Similar to <a>ofThe</a>, but accepts two functions for the plural
+--   case.
+inTheGen :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+
+-- | Prepends "the" and inserts "of the". Plural case is <tt>"the" :+:
+--   (phraseNP t1) :+: "of the" :+: (pluralNP t2)</tt>.
+the_ofThe :: NP -> NP -> NP
+
+-- | Similar to <a>the_ofThe</a>, but the plural case is now <tt> S "the"
+--   :+: (pluralNP t1) <a>ofThe</a> (phraseNP t2)</tt>.
+the_ofThePS :: NP -> NP -> NP
+
+-- | Similar to <tt>the_ofThe'</tt>, but takes two functions for the plural
+--   case.
+the_ofTheGen :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+
+-- | Inserts "for" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   :+: "for" :+: (pluralNP t2)</tt>.
+for :: NP -> NP -> NP
+
+-- | Same as <a>for</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>for</a> (phraseNP t2)</tt>.
+forPS :: NP -> NP -> NP
+
+-- | Same as <tt>for'</tt>, but takes two functions for the plural case.
+forGen :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+
+-- | Inserts "of" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   :+: "of" :+: (pluralNP t2)</tt>.
+of_ :: NP -> NP -> NP
+
+-- | Same as <a>of_</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>of_</a> (phraseNP t2)</tt>.
+of_PS :: NP -> NP -> NP
+
+-- | Same as <a>of_</a>, but takes two functions for the plural case.
+of_Gen :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+
+-- | Inserts "with" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) :+: "with" :+: (pluralNP t2)</tt>.
+with :: NP -> NP -> NP
+
+-- | Puts parentheses around a word; to be used as a kind of postfix
+--   qualifier
+parensNP :: NP -> NP
+
+-- | Essentially a subset of <tt>Sentence</tt> that contains only the parts
+--   that make sense for a NounPhrase
+data NPStruct
+S :: String -> NPStruct
+(:+:) :: NPStruct -> NPStruct -> NPStruct
+P :: Symbol -> NPStruct
+
+
+-- | The lowest level of chunks in Drasil. It all starts with an identifier
+--   and a term.
+module Language.Drasil.Chunk.NamedIdea
+
+-- | <a>IdeaDict</a> is the canonical dictionary associated to an
+--   <a>Idea</a>. Contains a <a>UID</a> and a term that could have an
+--   abbreviation (<a>Maybe</a> <a>String</a>).
+--   
+--   Ex. The project name "Double Pendulum" may have the abbreviation
+--   <a>DblPend</a>.
+data IdeaDict
+
+-- | A NamedIdea is a <a>term</a> that we've identified (has a <a>UID</a>)
+--   as being worthy of naming.
+class HasUID c => NamedIdea c
+
+-- | Lens to the term (a noun phrase).
+term :: NamedIdea c => Lens' c NP
+
+-- | An <a>Idea</a> is the combination of a <a>NamedIdea</a> and a
+--   <tt>CommonIdea</tt>. In other words, it <i>may</i> have an
+--   acronym/abbreviation.
+class NamedIdea c => Idea c
+
+-- | Gets the acronym/abbreviation.
+getA :: Idea c => c -> Maybe String
+
+-- | <a>IdeaDict</a> constructor, takes a <a>String</a> for its <a>UID</a>
+--   and a term.
+nc :: String -> NP -> IdeaDict
+
+-- | Similar to <a>nc</a>, but takes in the <a>UID</a> in the form of a
+--   <a>UID</a> rather than a <a>String</a>.
+ncUID :: UID -> NP -> IdeaDict
+
+-- | Historical name: nw comes from 'named wrapped' from when
+--   <a>NamedIdea</a> exported <a>getA</a> (now in <a>Idea</a>). But there
+--   are no more wrappers, instead we have explicit dictionaries. Unwraps
+--   an <a>Idea</a> and places its <a>UID</a> and <a>NP</a> into an
+--   <a>IdeaDict</a> with <a>Nothing</a> for an abbreviation.
+nw :: Idea c => c -> IdeaDict
+
+-- | <a>IdeaDict</a> constructor, takes a <a>UID</a>, <a>NP</a>, and an
+--   abbreviation in the form of <a>Maybe</a> <a>String</a>.
+mkIdea :: String -> NP -> Maybe String -> IdeaDict
+
+-- | Same as <a>mkIdea</a> but takes a <a>UID</a> rather than a
+--   <a>String</a>.
+mkIdeaUID :: UID -> NP -> Maybe String -> IdeaDict
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.NamedIdea.IdeaDict
+instance GHC.Classes.Eq Language.Drasil.Chunk.NamedIdea.IdeaDict
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.NamedIdea.IdeaDict
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.NamedIdea.IdeaDict
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.NamedIdea.IdeaDict
+
+
 -- | Re-export display-related functions and types to simplify external
 --   use.
 module Language.Drasil.Display
@@ -2314,8 +2785,7 @@ data Sentence
 
 -- | Ch looks up the term for a given <a>UID</a> and displays the term with
 --   a given <a>SentenceStyle</a> and <tt>CapitalizationRule</tt>. This
---   allows Sentences to hold plural forms of <tt>NounPhrase</tt>s and
---   <tt>NamedIdea</tt>s.
+--   allows Sentences to hold plural forms of <tt>NamedIdea</tt>s.
 [Ch] :: SentenceStyle -> TermCapitalization -> UID -> Sentence
 
 -- | A branch of Ch dedicated to SymbolStyle only.
@@ -2323,6 +2793,9 @@ data Sentence
 
 -- | Converts a unit symbol into a usable Sentence form.
 [Sy] :: USymb -> Sentence
+
+-- | Directly embeds a <a>Sentence</a>
+[NP] :: NP -> Sentence
 
 -- | Constructor for <a>String</a>s, used often for descriptions in Chunks.
 [S] :: String -> Sentence
@@ -2522,346 +2995,6 @@ instance GHC.Classes.Eq Language.Drasil.Reference.Reference
 instance Drasil.Database.UID.HasUID Language.Drasil.Reference.Reference
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Reference.Reference
 instance Language.Drasil.ShortName.HasShortName Language.Drasil.Reference.Reference
-
-
--- | Noun phrases are used to hold terms with knowledge of proper
---   capitalization and pluralization.
-module Language.Drasil.NounPhrase.Core
-
--- | Capitalization rules.
-data CapitalizationRule
-
--- | Capitalize the first letter of the first word only.
-CapFirst :: CapitalizationRule
-
--- | Capitalize the first letter of each word.
-CapWords :: CapitalizationRule
-
--- | Replace the noun phrase with the given <a>Sentence</a>. Used for
---   custom capitalization.
-Replace :: Sentence -> CapitalizationRule
-
--- | For nouns and <tt>NounPhrase</tt>s. May be constructed from a proper
---   noun, common noun, or phrase (<a>Sentence</a>) and their respective
---   pluralization and capitalization rules.
-data NP
-
--- | Stores a proper noun and its pluralization.
-ProperNoun :: String -> PluralRule -> NP
-
--- | Stores a common noun and its pluralization.
-CommonNoun :: String -> PluralRule -> CapitalizationRule -> NP
-
--- | Stores noun phrase and its pluralization. Phrase plurals can get very
---   odd, so it seems best (for now) to encode them directly. FIXME: If the
---   singular/plural phrase has special (replace) capitalization, one of
---   the two cannot be capitalized right now. The two capitalization rules
---   are for sentenceCase / titleCase respectively
-Phrase :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
-
--- | Synonym for <a>Sentence</a> typically used for plural forms.
-type PluralForm = Sentence
-
--- | Pluralization rules.
-data PluralRule
-
--- | Add "s" to the end of the noun phrase.
-AddS :: PluralRule
-
--- | Add "e" to the end of the noun phrase.
-AddE :: PluralRule
-
--- | Add "es" to the end of the noun phrase.
-AddES :: PluralRule
-
--- | The noun phrase is already plural.
-SelfPlur :: PluralRule
-
--- | Apply the given function to the noun phrase to get the plural.
-IrregPlur :: (String -> String) -> PluralRule
-
-
--- | The lowest level of chunks in Drasil. It all starts with an identifier
---   and a term.
-module Language.Drasil.Chunk.NamedIdea
-
--- | <a>IdeaDict</a> is the canonical dictionary associated to an
---   <a>Idea</a>. Contains a <a>UID</a> and a term that could have an
---   abbreviation (<a>Maybe</a> <a>String</a>).
---   
---   Ex. The project name "Double Pendulum" may have the abbreviation
---   <a>DblPend</a>.
-data IdeaDict
-
--- | A NamedIdea is a <a>term</a> that we've identified (has a <a>UID</a>)
---   as being worthy of naming.
-class HasUID c => NamedIdea c
-
--- | Lens to the term (a noun phrase).
-term :: NamedIdea c => Lens' c NP
-
--- | An <a>Idea</a> is the combination of a <a>NamedIdea</a> and a
---   <tt>CommonIdea</tt>. In other words, it <i>may</i> have an
---   acronym/abbreviation.
-class NamedIdea c => Idea c
-
--- | Gets the acronym/abbreviation.
-getA :: Idea c => c -> Maybe String
-
--- | <a>IdeaDict</a> constructor, takes a <a>String</a> for its <a>UID</a>
---   and a term.
-nc :: String -> NP -> IdeaDict
-
--- | Similar to <a>nc</a>, but takes in the <a>UID</a> in the form of a
---   <a>UID</a> rather than a <a>String</a>.
-ncUID :: UID -> NP -> IdeaDict
-
--- | Historical name: nw comes from 'named wrapped' from when
---   <a>NamedIdea</a> exported <a>getA</a> (now in <a>Idea</a>). But there
---   are no more wrappers, instead we have explicit dictionaries. Unwraps
---   an <a>Idea</a> and places its <a>UID</a> and <a>NP</a> into an
---   <a>IdeaDict</a> with <a>Nothing</a> for an abbreviation.
-nw :: Idea c => c -> IdeaDict
-
--- | <a>IdeaDict</a> constructor, takes a <a>UID</a>, <a>NP</a>, and an
---   abbreviation in the form of <a>Maybe</a> <a>String</a>.
-mkIdea :: String -> NP -> Maybe String -> IdeaDict
-
--- | Same as <a>mkIdea</a> but takes a <a>UID</a> rather than a
---   <a>String</a>.
-mkIdeaUID :: UID -> NP -> Maybe String -> IdeaDict
-instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.NamedIdea.IdeaDict
-instance GHC.Classes.Eq Language.Drasil.Chunk.NamedIdea.IdeaDict
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.NamedIdea.IdeaDict
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.NamedIdea.IdeaDict
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.NamedIdea.IdeaDict
-
-module Language.Drasil.NounPhrase
-class NounPhrase n
-
--- | Retrieves singular form of term. Ex. "the quick brown fox".
-phraseNP :: NounPhrase n => n -> Sentence
-
--- | Retrieves plural form of term. Ex. "the quick brown foxes".
-pluralNP :: NounPhrase n => n -> PluralForm
-
--- | Retrieves the singular form and applies a captalization rule (usually
---   capitalizes the first word) to produce a <a>Sentence</a>. Ex. "The
---   quick brown fox".
-sentenceCase :: NounPhrase n => n -> (NP -> Sentence) -> Capitalization
-
--- | Retrieves the singular form and applies a captalization rule (usually
---   capitalizes all words) to produce a <a>Sentence</a>. Ex. "The Quick
---   Brown Fox".
-titleCase :: NounPhrase n => n -> (NP -> Sentence) -> Capitalization
-
--- | For nouns and <tt>NounPhrase</tt>s. May be constructed from a proper
---   noun, common noun, or phrase (<a>Sentence</a>) and their respective
---   pluralization and capitalization rules.
-data NP
-
--- | Singular sentence case.
---   
---   Helper function for getting the sentence case of a noun phrase.
-atStartNP :: NounPhrase n => n -> Capitalization
-
--- | Plural sentence case.
---   
---   Helper function for getting the sentence case of a noun phrase.
-atStartNP' :: NounPhrase n => n -> Capitalization
-
--- | Singular title case.
---   
---   Helper function for getting the title case of a noun phrase.
-titleizeNP :: NounPhrase n => n -> Capitalization
-
--- | Plural title case.
---   
---   Helper function for getting the title case of a noun phrase.
-titleizeNP' :: NounPhrase n => n -> Capitalization
-
--- | Self plural.
---   
---   Constructs a common noun which capitalizes the first letter of the
---   first word at the beginning of a sentence.
-cn :: String -> NP
-
--- | Plural form simply adds "s" (ex. dog -&gt; dogs).
---   
---   Constructs a common noun which capitalizes the first letter of the
---   first word at the beginning of a sentence.
-cn' :: String -> NP
-
--- | Plural form adds "e" (ex. formula -&gt; formulae).
---   
---   Constructs a common noun which capitalizes the first letter of the
---   first word at the beginning of a sentence.
-cn'' :: String -> NP
-
--- | Plural form adds "es" (ex. bush -&gt; bushes).
---   
---   Constructs a common noun which capitalizes the first letter of the
---   first word at the beginning of a sentence.
-cn''' :: String -> NP
-
--- | Construct a common noun that pluralizes by dropping the last two
---   letters and adding an "ices" ending (ex. matrix -&gt; matrices).
-cnICES :: String -> NP
-
--- | Constructs a common noun that pluralizes by dropping the last letter
---   and adding an "ies" ending (ex. body -&gt; bodies).
-cnIES :: String -> NP
-
--- | Constructs a common noun that allows you to specify the pluralization
---   rule (as in <a>pnIrr</a>).
-cnIP :: String -> PluralRule -> NP
-
--- | Constructs a common noun that pluralizes by dropping the last two
---   letters and adding "es" (ex. analysis -&gt; analyses).
-cnIS :: String -> NP
-
--- | Common noun that allows you to specify both the pluralization rule and
---   the capitalization rule for sentence case (if the noun is used at the
---   beginning of a sentence).
-cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
-
--- | Constructs a common noun that pluralizes by dropping the last two
---   letters and adding "a" (ex. datum -&gt; data).
-cnUM :: String -> NP
-
--- | Self plural.
---   
---   Constructs a Proper Noun, it is always capitalized as written.
-pn :: String -> NP
-
--- | Plural form simply adds "s" (ex. Henderson -&gt; Hendersons).
---   
---   Constructs a Proper Noun, it is always capitalized as written.
-pn' :: String -> NP
-
--- | Plural form adds "e".
---   
---   Constructs a Proper Noun, it is always capitalized as written.
-pn'' :: String -> NP
-
--- | Plural form adds "es" (ex. Bush -&gt; Bushes).
---   
---   Constructs a Proper Noun, it is always capitalized as written.
-pn''' :: String -> NP
-
--- | Constructs a <a>ProperNoun</a> with a custom plural rule (using
---   <a>IrregPlur</a> from <a>PluralRule</a>). First argument is the String
---   representing the noun, second is the rule.
-pnIrr :: String -> PluralRule -> NP
-
--- | Creates a <a>NP</a> with a given singular and plural form (as
---   <a>String</a>s) that capitalizes the first letter of the first word
---   for sentence case.
-nounPhrase :: String -> PluralString -> NP
-
--- | Similar to <a>nounPhrase</a>, but takes a specified capitalization
---   rule for the sentence case.
-nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
-
--- | Custom noun phrase constructor that takes a singular form
---   (<a>Sentence</a>), plural form (<a>Sentence</a>), sentence case
---   capitalization rule, and title case capitalization rule.
-nounPhrase'' :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
-
--- | For things that should not be pluralized (or are self-plural). Works
---   like <a>nounPhrase</a>, but with only the first argument.
-nounPhraseSP :: String -> NP
-
--- | Similar to nounPhrase, except it only accepts one <a>Sentence</a>.
---   Used for Requirements, Assumptions, LikelyChanges, etc. to allow for
---   referencing. Plural case is just <a>AddS</a>.
-nounPhraseSent :: Sentence -> NP
-
--- | Combine two noun phrases. The singular form becomes <tt>phrase</tt>
---   from t1 followed by <tt>phrase</tt> of t2. The plural becomes
---   <tt>phrase</tt> of t1 followed by <tt>plural</tt> of t2. Uses standard
---   <a>CapFirst</a> sentence case and <a>CapWords</a> title case. For
---   example: <tt>compoundPhrase system constraint</tt> will have singular
---   form "system constraint" and plural "system constraints".
-compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
-
--- | Similar to <a>compoundPhrase</a>, but the sentence case is the same as
---   the title case (<a>CapWords</a>).
-compoundPhrase' :: NP -> NP -> NP
-
--- | Similar to <a>compoundPhrase'</a>, but accepts two functions that will
---   be used to construct the plural form. For example,
---   <tt>compoundPhrase'' plural phrase system constraint</tt> would have
---   the plural form "systems constraint".
-compoundPhrase'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Similar to <a>compoundPhrase</a>, but used when you need a special
---   function applied to the first term of both singular and pluralcases
---   (eg. short or plural).
-compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
-
--- | Similar to <a>compoundPhrase</a>, but pluralizes the first <a>NP</a>
---   for both singular and plural cases.
-compoundPhraseP1 :: NP -> NP -> NP
-
--- | Capitalization rules.
-data CapitalizationRule
-
--- | Capitalize the first letter of the first word only.
-CapFirst :: CapitalizationRule
-
--- | Capitalize the first letter of each word.
-CapWords :: CapitalizationRule
-
--- | Replace the noun phrase with the given <a>Sentence</a>. Used for
---   custom capitalization.
-Replace :: Sentence -> CapitalizationRule
-
--- | Pluralization rules.
-data PluralRule
-
--- | Add "s" to the end of the noun phrase.
-AddS :: PluralRule
-
--- | Add "e" to the end of the noun phrase.
-AddE :: PluralRule
-
--- | Add "es" to the end of the noun phrase.
-AddES :: PluralRule
-
--- | The noun phrase is already plural.
-SelfPlur :: PluralRule
-
--- | Apply the given function to the noun phrase to get the plural.
-IrregPlur :: (String -> String) -> PluralRule
-instance Language.Drasil.NounPhrase.NounPhrase Language.Drasil.NounPhrase.Core.NP
-
-
--- | Developing the expression language in Drasil. Re-export many things to
---   simplify external use.
-module Language.Drasil.Development
-class NounPhrase n
-
--- | Retrieves singular form of term. Ex. "the quick brown fox".
-phraseNP :: NounPhrase n => n -> Sentence
-
--- | Retrieves plural form of term. Ex. "the quick brown foxes".
-pluralNP :: NounPhrase n => n -> PluralForm
-
--- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <tt>Symbol</tt>.
-sdep :: Sentence -> [UID]
-shortdep :: Sentence -> [UID]
-
--- | Generic traverse of all positions that could lead to <i>reference</i>
---   <a>UID</a>s from <a>Sentence</a>s.
-lnames :: Sentence -> [UID]
-
--- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
-lnames' :: [Sentence] -> [UID]
-
--- | Get something's <a>UID</a> as a <a>Value</a>.
-showUID :: HasUID a => a -> String
 
 
 -- | For deriving equations in examples.
@@ -3567,6 +3700,9 @@ titleize :: NamedIdea n => n -> Sentence
 --   <a>NamedIdea</a>.
 titleize' :: NamedIdea n => n -> Sentence
 
+-- | Translate from NPStruct to Sentence
+toSent :: NPStruct -> Sentence
+
 -- | Get short form (if it exists), else get term of an <a>Idea</a>. Uses
 --   the UID of the <a>Idea</a> in a <tt>Ch</tt> Sentence constructor to
 --   get the short form using getA. getA may return Nothing, in which case
@@ -3682,140 +3818,42 @@ versus :: Sentence -> Sentence -> Sentence
 wrt :: Sentence -> Sentence -> Sentence
 
 
--- | Defines various NounPhrase-level combinators. These hold more
---   information than those of the Sentence level but may not necessarily
---   have a conceptual link. See the <a>Wiki</a> for more information and
---   details about the naming process for combinators. A summary of the
---   function naming scheme is as follows:
---   
---   <ul>
---   <li>Combinators that conflict with haskell-native functions have an
---   underscore appended.</li>
---   <li>Default plural case for combinators will be first term singular,
---   second term plural.</li>
---   <li><tt>P</tt> and <tt>S</tt> denote the plural case of the combinator
---   when it does not follow the above default.</li>
---   <li><tt>Gen</tt> denotes the general function case.</li>
---   </ul>
---   
---   This module should be used as a qualified import (usually as
---   <tt>NP</tt>), as many function names clash with those in Concepts.hs
---   and Sentence.hs.
-module Language.Drasil.NounPhrase.Combinators
+-- | Developing the expression language in Drasil. Re-export many things to
+--   simplify external use.
+module Language.Drasil.Development
 
--- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
---   Plural case is <tt>(phraseNP t1) +:+ S s +:+ (pluralNP t2)</tt>.
-insertString :: String -> NP -> NP -> NP
+-- | Translate from NPStruct to Sentence
+toSent :: NPStruct -> Sentence
+class NounPhrase n
 
--- | Helper function that prepends a <a>String</a> to a <a>NP</a>.
-prependString :: String -> NP -> NP
+-- | Retrieves singular form of term. Ex. "the quick brown fox".
+phraseNP :: NounPhrase n => n -> NPStruct
 
--- | Helper function that places a <a>Sentence</a> in between two
---   <a>NP</a>s. Plural case is <tt>(phraseNP t1) +:+ s +:+ (pluralNP
---   t2)</tt>.
-insertSent :: Sentence -> NP -> NP -> NP
+-- | Retrieves plural form of term. Ex. "the quick brown foxes".
+pluralNP :: NounPhrase n => n -> PluralForm
 
--- | Helper function that prepends a <a>Sentence</a> to a <a>NP</a>.
-prependSent :: Sentence -> NP -> NP
+-- | Essentially a subset of <tt>Sentence</tt> that contains only the parts
+--   that make sense for a NounPhrase
+data NPStruct
+S :: String -> NPStruct
+(:-:) :: NPStruct -> NPStruct -> NPStruct
+(:+:) :: NPStruct -> NPStruct -> NPStruct
+P :: Symbol -> NPStruct
 
--- | Prepends "the" to a <a>NP</a>.
-the :: NP -> NP
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <tt>Symbol</tt>.
+sdep :: Sentence -> [UID]
+shortdep :: Sentence -> [UID]
 
--- | Similar to <a>the</a>, but accepts a function that determines the
---   plural case.
-theGen :: (NP -> Sentence) -> NP -> NP
+-- | Generic traverse of all positions that could lead to <i>reference</i>
+--   <a>UID</a>s from <a>Sentence</a>s.
+lnames :: Sentence -> [UID]
 
--- | Prepends "a" to a <a>NP</a>.
-a_ :: NP -> NP
+-- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
+lnames' :: [Sentence] -> [UID]
 
--- | Similar to <tt>a</tt>, but accepts a function that determines the
---   plural case.
-a_Gen :: (NP -> Sentence) -> NP -> NP
-
--- | Inserts "and" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
---   +:+ "and" +:+ (pluralNP t2)</tt>.
-and_ :: NP -> NP -> NP
-
--- | Same as <a>and_</a>, but plural case is now <tt>(pluralNP t1)
---   <a>and_</a> (phraseNP t2)</tt>.
-and_PS :: NP -> NP -> NP
-
--- | Same as <a>and_</a>, but takes two functions for the plural case.
-and_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Same as <a>and_</a>, but takes two functions for the singular case and
---   two for the plural case.
-and_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "and the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
---   t1) +:+ "and the" +:+ (pluralNP t2)</tt>.
-andThe :: NP -> NP -> NP
-
--- | Inserts "of the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
---   t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
-ofThe :: NP -> NP -> NP
-
--- | Similar to <a>ofThe</a>, but the plural case is now <tt>(pluralNP t1)
---   <a>ofThe</a> (phraseNP t2)</tt>.
-ofThePS :: NP -> NP -> NP
-
--- | Similar to <a>ofThe</a>, but accepts two functions for the plural
---   case.
-ofTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "in the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
---   t1) +:+ "in the" +:+ (pluralNP t2)</tt>.
-inThe :: NP -> NP -> NP
-
--- | Similar to <a>ofThe</a>, but the plural case is now <tt>(pluralNP t1)
---   <a>inThe</a> (phraseNP t2)</tt>.
-inThePS :: NP -> NP -> NP
-
--- | Similar to <a>ofThe</a>, but accepts two functions for the plural
---   case.
-inTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Prepends "the" and inserts "of the". Plural case is <tt>"the" +:+
---   (phraseNP t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
-the_ofThe :: NP -> NP -> NP
-
--- | Similar to <a>the_ofThe</a>, but the plural case is now <tt> S "the"
---   +:+ (pluralNP t1) <a>ofThe</a> (phraseNP t2)</tt>.
-the_ofThePS :: NP -> NP -> NP
-
--- | Similar to <tt>the_ofThe'</tt>, but takes two functions for the plural
---   case.
-the_ofTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "for" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
---   +:+ "for" +:+ (pluralNP t2)</tt>.
-for :: NP -> NP -> NP
-
--- | Same as <a>for</a>, but plural case is now <tt>(pluralNP t1)
---   <a>for</a> (phraseNP t2)</tt>.
-forPS :: NP -> NP -> NP
-
--- | Same as <tt>for'</tt>, but takes two functions for the plural case.
-forGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "of" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
---   +:+ "of" +:+ (pluralNP t2)</tt>.
-of_ :: NP -> NP -> NP
-
--- | Same as <a>of_</a>, but plural case is now <tt>(pluralNP t1)
---   <a>of_</a> (phraseNP t2)</tt>.
-of_PS :: NP -> NP -> NP
-
--- | Same as <a>of_</a>, but takes two functions for the plural case.
-of_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Same as <a>of_</a>, but takes two functions for the singular case and
---   two for the plural case.
-of_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "with" between two <a>NP</a>s. Plural case is <tt>(phraseNP
---   t1) +:+ "with" +:+ (pluralNP t2)</tt>.
-with :: NP -> NP -> NP
+-- | Get something's <a>UID</a> as a <a>Value</a>.
+showUID :: HasUID a => a -> String
 
 
 -- | Defines various chunk combinators. The full naming scheme can be found
@@ -3824,10 +3862,10 @@ with :: NP -> NP -> NP
 --   <ul>
 --   <li>Combinators that conflict with haskell-native functions have an
 --   underscore appended.</li>
---   <li>Default plural case for combinators will be first term singular,
+--   <li>Default pluralNP case for combinators will be first term singular,
 --   second term plural.</li>
---   <li><tt>P</tt> and <tt>S</tt> denote the plural case of the combinator
---   when it does not follow the above default.</li>
+--   <li><tt>P</tt> and <tt>S</tt> denote the pluralNP case of the
+--   combinator when it does not follow the above default.</li>
 --   <li><tt>Gen</tt> denotes the general function case.</li>
 --   <li>Although this should eventually be phased out, <tt>T</tt> denotes
 --   a combinator meant for use with titles.</li>
@@ -3840,170 +3878,162 @@ module Language.Drasil.Chunk.Concept.NamedCombinators
 the :: NamedIdea t => t -> NP
 
 -- | A customizable version of <a>the</a>. The given function is applied to
---   both singular and plural cases.
-theGen :: (t -> Sentence) -> t -> NP
+--   both singular and pluralNP cases.
+theGen :: (t -> NPStruct) -> t -> NP
 
 -- | Prepends "a" to a <a>NamedIdea</a> (similar to <a>the</a>).
 a_ :: NamedIdea c => c -> NP
 
 -- | Customizable version of <tt>a</tt>.
-a_Gen :: (c -> Sentence) -> c -> NP
+a_Gen :: (c -> NPStruct) -> c -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
---   "and" between their terms. Plural case is <tt>(phrase t1) "and"
---   (plural t2)</tt>.
+--   "and" between their terms. Plural case is <tt>(phraseNP t1) "and"
+--   (pluralNP t2)</tt>.
 and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
---   "and" between their terms. Plural case is <tt>(plural t1) "and"
---   (phrase t2)</tt>.
+--   "and" between their terms. Plural case is <tt>(pluralNP t1) "and"
+--   (phraseNP t2)</tt>.
 and_PS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
---   "and" between their terms. Plural case is <tt>(plural t1) "and"
---   (plural t2)</tt>.
+--   "and" between their terms. Plural case is <tt>(pluralNP t1) "and"
+--   (pluralNP t2)</tt>.
 and_PP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Customizable <a>and_</a> combinator (takes two title case
 --   capitalization rules and two <tt>NamedIdeas</tt>).
-and_TGen :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
-
--- | Customizable <a>and_</a> combinator. Both plural and singular cases
---   are dermined by the two given functions
-and_Gen :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+and_TGen :: (NamedIdea c, NamedIdea d) => (c -> NPStruct) -> (d -> NPStruct) -> c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
---   "and its" between their terms. Plural case is <tt>(phrase t1) "and
---   its" (plural t2)</tt>.
-andIts :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+--   "and its" between their terms. Plural case is <tt>(phraseNP t1) "and
+--   its" (pluralNP t2)</tt>.
+andIts :: (NamedIdea a, NamedIdea b) => a -> b -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
---   "and the" between their terms. Plural case is <tt>(phrase t1) "and
---   the" (plural t2)</tt>.
+--   "and the" between their terms. Plural case is <tt>(phraseNP t1) "and
+--   the" (pluralNP t2)</tt>.
 andThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
---   "of" between their terms. Plural case is <tt>(phrase t1) "of" (plural
---   t2)</tt>.
+--   "of" between their terms. Plural case is <tt>(phraseNP t1) "of"
+--   (pluralNP t2)</tt>.
 of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>of_</a> but second argument is a <a>NounPhrase</a>.
-of_NINP :: (NamedIdea c, NounPhrase d) => c -> d -> NP
+-- | Same as <a>of_</a> but second argument is NP.
+of_NINP :: NamedIdea c => c -> NP -> NP
 
 -- | Same as <a>of_</a> but first argument is a <a>NounPhrase</a> and
---   plural case is <tt>(plural t1) "of" (phrase t2)</tt>.
-of_PSNPNI :: (NounPhrase c, NamedIdea d) => c -> d -> NP
+--   pluralNP case is <tt>(pluralNP t1) "of" (phraseNP t2)</tt>.
+of_PSNPNI :: NamedIdea d => NP -> d -> NP
 
--- | Same as <a>of_</a>, except plural case is <tt>(plural t1) "of" (phrase
---   t2)</tt>.
+-- | Same as <a>of_</a>, except pluralNP case is <tt>(pluralNP t1) "of"
+--   (phraseNP t2)</tt>.
 of_PS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>of_PS</a>, except combining <a>Sentence</a> piece is "of
---   a".
+-- | Same as <a>of_PS</a>, except combining 'NPStruct piece is "of a".
 ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as <a>ofA</a>, except phrase case is <tt>(plural t1) "of a"
---   (phrase t2)</tt>.
 ofAPS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>of_</a>, except combining <a>Sentence</a> piece is "of
---   the". Plural case is <tt>(phrase t1) <a>ofThe</a> (plural t2)</tt>.
+-- | Same as <a>of_</a>, except combining 'NPStruct piece is "of the".
+--   Plural case is <tt>(phraseNP t1) <a>ofThe</a> (pluralNP t2)</tt>.
 ofThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>ofThe</a>, except plural case is <tt>(plural t1)
---   <a>ofThe</a> (phrase t2)</tt>.
+-- | Same as <a>ofThe</a>, except pluralNP case is <tt>(pluralNP t1)
+--   <a>ofThe</a> (phraseNP t2)</tt>.
 ofThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Same as <a>ofThe</a>, except prepends "the".
 the_ofThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>the_ofThe</a>, except plural case is <tt>(plural t1)
---   <a>the_ofThe</a> (phrase t2)</tt>
+-- | Same as <a>the_ofThe</a>, except pluralNP case is <tt>(pluralNP t1)
+--   <a>the_ofThe</a> (phraseNP t2)</tt>
 the_ofThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>of_</a>, except combining Sentence piece is "on the".
-onThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+-- | Same as <a>of_</a>, except combining NPStruct piece is "on the".
+onThe :: (NamedIdea a, NamedIdea b) => a -> b -> NP
 
--- | Same as <a>onThe</a>, except plural case is (plural t1) S.onThe
---   (phrase t2)
-onThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+-- | Same as <a>onThe</a>, except pluralNP case is (pluralNP t1) NP.onThe
+--   (phraseNP t2)
+onThePS :: (NamedIdea a, NamedIdea b) => a -> b -> NP
 
--- | Same as <a>onThe</a>, except plural case is (plural t1) S.onThe
---   (plural t2)
+-- | Same as <a>onThe</a>, except pluralNP case is (pluralNP t1) NP.onThe
+--   (pluralNP t2)
 onThePP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
---   "in the" between their terms. Plural case is <tt>(phrase t1) "in the"
---   (plural t2)</tt>.
+--   "in the" between their terms. Plural case is <tt>(phraseNP t1) "in
+--   the" (pluralNP t2)</tt>.
 inThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
---   "in the" between their terms. Plural case is <tt>(plural t1) "in the"
---   (phrase t2)</tt>.
+--   "in the" between their terms. Plural case is <tt>(pluralNP t1) "in
+--   the" (phraseNP t2)</tt>.
 inThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
---   "in the" between their terms. Plural case is <tt>(plural t1) "in the"
---   (plural t2)</tt>.
+--   "in the" between their terms. Plural case is <tt>(pluralNP t1) "in
+--   the" (pluralNP t2)</tt>.
 inThePP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
---   "is the" between their terms. Plural case is <tt>(phrase t1) "is the"
---   (plural t2)</tt>.
+--   "is the" between their terms. Plural case is <tt>(phraseNP t1) "is
+--   the" (pluralNP t2)</tt>.
 isThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
---   "to the" between their terms. Plural case is <tt>(phrase t1) "to the"
---   (plural t2)</tt>.
+--   "to the" between their terms. Plural case is <tt>(phraseNP t1) "to
+--   the" (pluralNP t2)</tt>.
 toThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
---   "for" between their terms. Plural case is <tt>(phrase t1) "for"
---   (plural t2)</tt>.
+--   "for" between their terms. Plural case is <tt>(phraseNP t1) "for"
+--   (pluralNP t2)</tt>.
 for :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Similar to <a>for</a>, but takes two functions that determine the
 --   <tt>titleCase</tt>.
-forTGen :: (NamedIdea c, Idea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+forTGen :: (NamedIdea c, Idea d) => (c -> NPStruct) -> (d -> NPStruct) -> c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
---   "in" between their terms. Plural case is <tt>(phrase t1) "in" (plural
---   t2)</tt>.
+--   "in" between their terms. Plural case is <tt>(phraseNP t1) "in"
+--   (pluralNP t2)</tt>.
 in_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>in_</a>, except plural case is <tt>(plural t1) "in" (phrase
---   t2)</tt>.
+-- | Same as <a>in_</a>, except pluralNP case is <tt>(pluralNP t1) "in"
+--   (phraseNP t2)</tt>.
 in_PS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
---   "in a" between their terms. Plural case is <tt>(phrase t1) "in a"
---   (plural t2)</tt>.
+--   "in a" between their terms. Plural case is <tt>(phraseNP t1) "in a"
+--   (pluralNP t2)</tt>.
 inA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
---   "is" between their terms. Plural case is <tt>(phrase t1) "is" (plural
---   t2)</tt>.
+--   "is" between their terms. Plural case is <tt>(phraseNP t1) "is"
+--   (pluralNP t2)</tt>.
 is :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Case with "T1s with T2", as opposed to "T1 with T2", i.e. singular
---   case is <tt>(plural t1) "with" (phrase t2)</tt> while the plural case
---   pluralizes the first.
+--   case is <tt>(pluralNP t1) "with" (phraseNP t2)</tt> while the pluralNP
+--   case pluralizes the first.
 with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Combinator for combining two <tt>NamedIdeas</tt>s into a
 --   <a>IdeaDict</a>. Plural case only makes second term plural. See
---   <a>compoundPhrase</a> for more on plural behaviour. <i>Does not
+--   <a>compoundPhrase</a> for more on pluralNP behaviour. <i>Does not
 --   preserve abbreviations</i>.
 compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> IdeaDict
 
--- | Similar to <a>compoundNC</a> but both terms are pluralized for plural
---   case.
+-- | Similar to <a>compoundNC</a> but both terms are pluralized for
+--   pluralNP case.
 compoundNCPP :: (NamedIdea a, NamedIdea b) => a -> b -> IdeaDict
 
--- | Similar to <a>compoundNC</a>, except plural cases are customizable.
-compoundNCGen :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> IdeaDict
+-- | Similar to <a>compoundNC</a>, except pluralNP cases are customizable.
+compoundNCGen :: (NamedIdea a, NamedIdea b) => (NP -> NPStruct) -> (NP -> NPStruct) -> a -> b -> IdeaDict
 
--- | Similar to <a>compoundNC</a>, except for plural case, where first
+-- | Similar to <a>compoundNC</a>, except for pluralNP case, where first
 --   parameter gets pluralized while second one stays singular.
 compoundNCPS :: IdeaDict -> IdeaDict -> IdeaDict
 
@@ -4013,16 +4043,12 @@ compoundNCPSPP :: IdeaDict -> IdeaDict -> IdeaDict
 
 -- | Similar to <a>compoundNC</a>, but takes a function that is applied to
 --   the first term (eg. <tt>short</tt> or <a>plural</a>).
-compoundNCGenP :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> IdeaDict
+compoundNCGenP :: (NamedIdea a, NamedIdea b) => (NP -> NPStruct) -> a -> b -> IdeaDict
 
 -- | Helper function that combines a <a>NamedIdea</a> and a <a>NP</a>
---   without any words in between. Plural case is <tt>(phrase t1) +:+
+--   without any words in between. Plural case is <tt>(phraseNP t1) :+:
 --   (pluralNP t2)</tt>.
 combineNINP :: NamedIdea c => c -> NP -> NP
-
--- | Similar to <a>combineNINP</a> but takes in a <a>NP</a> first and a
---   <a>NamedIdea</a> second.
-combineNPNI :: NamedIdea c => NP -> c -> NP
 
 -- | Similar to <a>combineNINP</a> but takes two <a>NamedIdea</a>s.
 combineNINI :: (NamedIdea c, NamedIdea d) => c -> d -> NP
@@ -7837,8 +7863,7 @@ data Sentence
 
 -- | Ch looks up the term for a given <a>UID</a> and displays the term with
 --   a given <a>SentenceStyle</a> and <tt>CapitalizationRule</tt>. This
---   allows Sentences to hold plural forms of <tt>NounPhrase</tt>s and
---   <tt>NamedIdea</tt>s.
+--   allows Sentences to hold plural forms of <tt>NamedIdea</tt>s.
 [Ch] :: SentenceStyle -> TermCapitalization -> UID -> Sentence
 
 -- | A branch of Ch dedicated to SymbolStyle only.
@@ -7846,6 +7871,9 @@ data Sentence
 
 -- | Converts a unit symbol into a usable Sentence form.
 [Sy] :: USymb -> Sentence
+
+-- | Directly embeds a <a>Sentence</a>
+[NP] :: NP -> Sentence
 
 -- | Constructor for <a>String</a>s, used often for descriptions in Chunks.
 [S] :: String -> Sentence
@@ -7941,23 +7969,23 @@ sParen :: Sentence -> Sentence
 class NounPhrase n
 
 -- | Retrieves singular form of term. Ex. "the quick brown fox".
-phraseNP :: NounPhrase n => n -> Sentence
+phraseNP :: NounPhrase n => n -> NPStruct
 
 -- | Retrieves plural form of term. Ex. "the quick brown foxes".
 pluralNP :: NounPhrase n => n -> PluralForm
 
 -- | Retrieves the singular form and applies a captalization rule (usually
---   capitalizes the first word) to produce a <a>Sentence</a>. Ex. "The
---   quick brown fox".
-sentenceCase :: NounPhrase n => n -> (NP -> Sentence) -> Capitalization
+--   capitalizes the first word) to produce a 'NPStruct. Ex. "The quick
+--   brown fox".
+sentenceCase :: NounPhrase n => n -> (NP -> NPStruct) -> Capitalization
 
 -- | Retrieves the singular form and applies a captalization rule (usually
---   capitalizes all words) to produce a <a>Sentence</a>. Ex. "The Quick
---   Brown Fox".
-titleCase :: NounPhrase n => n -> (NP -> Sentence) -> Capitalization
+--   capitalizes all words) to produce a 'NPStruct. Ex. "The Quick Brown
+--   Fox".
+titleCase :: NounPhrase n => n -> (NP -> NPStruct) -> Capitalization
 
 -- | For nouns and <tt>NounPhrase</tt>s. May be constructed from a proper
---   noun, common noun, or phrase (<a>Sentence</a>) and their respective
+--   noun, common noun, or phrase (<tt>Sentence</tt>) and their respective
 --   pluralization and capitalization rules.
 data NP
 
@@ -8053,9 +8081,10 @@ CapFirst :: CapitalizationRule
 -- | Capitalize the first letter of each word.
 CapWords :: CapitalizationRule
 
--- | Replace the noun phrase with the given <a>Sentence</a>. Used for
---   custom capitalization.
-Replace :: Sentence -> CapitalizationRule
+-- | Replace the noun phrase with the given 'NPStruct. Used for custom
+--   capitalization.
+Replace :: NPStruct -> CapitalizationRule
+CapNothing :: CapitalizationRule
 
 -- | Singular sentence case.
 --   
@@ -8101,12 +8130,12 @@ compoundPhrase' :: NP -> NP -> NP
 --   be used to construct the plural form. For example,
 --   <tt>compoundPhrase'' plural phrase system constraint</tt> would have
 --   the plural form "systems constraint".
-compoundPhrase'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+compoundPhrase'' :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
 
 -- | Similar to <a>compoundPhrase</a>, but used when you need a special
 --   function applied to the first term of both singular and pluralcases
 --   (eg. short or plural).
-compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
+compoundPhrase''' :: (NP -> NPStruct) -> NP -> NP -> NP
 
 -- | Similar to <a>compoundPhrase</a>, but pluralizes the first <a>NP</a>
 --   for both singular and plural cases.
@@ -8122,19 +8151,18 @@ titleizeNP :: NounPhrase n => n -> Capitalization
 --   Helper function for getting the title case of a noun phrase.
 titleizeNP' :: NounPhrase n => n -> Capitalization
 
--- | Custom noun phrase constructor that takes a singular form
---   (<a>Sentence</a>), plural form (<a>Sentence</a>), sentence case
---   capitalization rule, and title case capitalization rule.
-nounPhrase'' :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
+-- | Custom noun phrase constructor that takes a singular form ('NPStruct),
+--   plural form ('NPStruct), sentence case capitalization rule, and title
+--   case capitalization rule.
+nounPhrase'' :: NPStruct -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
 
 -- | For things that should not be pluralized (or are self-plural). Works
 --   like <a>nounPhrase</a>, but with only the first argument.
 nounPhraseSP :: String -> NP
 
--- | Similar to nounPhrase, except it only accepts one <a>Sentence</a>.
---   Used for Requirements, Assumptions, LikelyChanges, etc. to allow for
---   referencing. Plural case is just <a>AddS</a>.
-nounPhraseSent :: Sentence -> NP
+-- | Similar to nounPhrase, except it only accepts one 'NPStruct. Plural
+--   case is just <a>AddS</a>.
+nounPhraseSent :: NPStruct -> NP
 
 -- | Helper for common pattern of introducing the title-case version of a
 --   noun phrase (from an Idea) followed by its abbreviation in

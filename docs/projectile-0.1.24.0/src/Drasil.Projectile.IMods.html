@@ -3,38 +3,39 @@
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Prelude</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sin</span></span><span class="hs-special">)</span><span>
 </span><span id="line-4"></span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">InstanceModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">imNoDerivNoRefs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">imNoRefs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">qwC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">equationalModelN</span></span><span class="hs-special">)</span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">weave</span></span><span class="hs-special">)</span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
-</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
-</span><span id="line-10"></span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">value</span></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">constraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xAxis</span></span><span class="hs-special">)</span><span>
-</span><span id="line-13"></span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">pi_</span></span><span class="hs-special">)</span><span>
-</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">gravitationalAccelConst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iSpeed</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ixPos</span></span><span class="hs-special">,</span><span>
-</span><span id="line-16"></span><span>  </span><span class="annot"><span class="hs-identifier">ixVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iyPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iyVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xConstAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yConstAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yPos</span></span><span class="hs-special">)</span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html"><span class="hs-identifier">Drasil.Projectile.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#accelXZero"><span class="hs-identifier">accelXZero</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#accelYGravity"><span class="hs-identifier">accelYGravity</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#gravAccelValue"><span class="hs-identifier">gravAccelValue</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-19"></span><span>  </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#launchOrigin"><span class="hs-identifier">launchOrigin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#posXDirection"><span class="hs-identifier">posXDirection</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#targetXAxis"><span class="hs-identifier">targetXAxis</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#timeStartZero"><span class="hs-identifier">timeStartZero</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#yAxisGravity"><span class="hs-identifier">yAxisGravity</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html"><span class="hs-identifier">Drasil.Projectile.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier">projectile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier">target</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.DataDefs.html"><span class="hs-identifier">Drasil.Projectile.DataDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedIX"><span class="hs-identifier">speedIX</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedIY"><span class="hs-identifier">speedIY</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html"><span class="hs-identifier">Drasil.Projectile.Derivations</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
-</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html"><span class="hs-identifier">Drasil.Projectile.Expressions</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">E</span></span><span>
-</span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.GenDefs.html"><span class="hs-identifier">Drasil.Projectile.GenDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.GenDefs.html#posVecGD"><span class="hs-identifier">posVecGD</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.LabelledContent.html"><span class="hs-identifier">Drasil.Projectile.LabelledContent</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.LabelledContent.html#figLaunch"><span class="hs-identifier">figLaunch</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html"><span class="hs-identifier">Drasil.Projectile.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier">flightDur</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier">landPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier">launAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier">launSpeed</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier">offset</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#targPos"><span class="hs-identifier">targPos</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-28"></span><span>
-</span><span id="line-29"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#iMods"><span class="hs-identifier hs-type">iMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span class="hs-special">]</span><span>
-</span><span id="line-30"></span><span id="iMods"><span class="annot"><span class="annottext">iMods :: [InstanceModel]
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Development</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">InstanceModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">imNoDerivNoRefs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">imNoRefs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">qwC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">equationalModelN</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">weave</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">value</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">constraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xAxis</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">pi_</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">gravitationalAccelConst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iSpeed</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ixPos</span></span><span class="hs-special">,</span><span>
+</span><span id="line-17"></span><span>  </span><span class="annot"><span class="hs-identifier">ixVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iyPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iyVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xConstAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yConstAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yPos</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html"><span class="hs-identifier">Drasil.Projectile.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#accelXZero"><span class="hs-identifier">accelXZero</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#accelYGravity"><span class="hs-identifier">accelYGravity</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#gravAccelValue"><span class="hs-identifier">gravAccelValue</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-20"></span><span>  </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#launchOrigin"><span class="hs-identifier">launchOrigin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#posXDirection"><span class="hs-identifier">posXDirection</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#targetXAxis"><span class="hs-identifier">targetXAxis</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#timeStartZero"><span class="hs-identifier">timeStartZero</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Assumptions.html#yAxisGravity"><span class="hs-identifier">yAxisGravity</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html"><span class="hs-identifier">Drasil.Projectile.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier">projectile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier">target</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.DataDefs.html"><span class="hs-identifier">Drasil.Projectile.DataDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedIX"><span class="hs-identifier">speedIX</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedIY"><span class="hs-identifier">speedIY</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html"><span class="hs-identifier">Drasil.Projectile.Derivations</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
+</span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html"><span class="hs-identifier">Drasil.Projectile.Expressions</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">E</span></span><span>
+</span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.GenDefs.html"><span class="hs-identifier">Drasil.Projectile.GenDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.GenDefs.html#posVecGD"><span class="hs-identifier">posVecGD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.LabelledContent.html"><span class="hs-identifier">Drasil.Projectile.LabelledContent</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.LabelledContent.html#figLaunch"><span class="hs-identifier">figLaunch</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-27"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html"><span class="hs-identifier">Drasil.Projectile.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier">flightDur</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier">landPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier">launAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier">launSpeed</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-28"></span><span>  </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier">offset</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#targPos"><span class="hs-identifier">targPos</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#iMods"><span class="hs-identifier hs-type">iMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span class="hs-special">]</span><span>
+</span><span id="line-31"></span><span id="iMods"><span class="annot"><span class="annottext">iMods :: [InstanceModel]
 </span><a href="Drasil.Projectile.IMods.html#iMods"><span class="hs-identifier hs-var hs-var">iMods</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.Projectile.IMods.html#timeIM"><span class="hs-identifier hs-var">timeIM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.Projectile.IMods.html#landPosIM"><span class="hs-identifier hs-var">landPosIM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.Projectile.IMods.html#offsetIM"><span class="hs-identifier hs-var">offsetIM</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-31"></span><span class="hs-comment">---</span><span>
-</span><span id="line-32"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeIM"><span class="hs-identifier hs-type">timeIM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
-</span><span id="line-33"></span><span id="timeIM"><span class="annot"><span class="annottext">timeIM :: InstanceModel
+</span><span id="line-32"></span><span class="hs-comment">---</span><span>
+</span><span id="line-33"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeIM"><span class="hs-identifier hs-type">timeIM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
+</span><span id="line-34"></span><span id="timeIM"><span class="annot"><span class="annottext">timeIM :: InstanceModel
 </span><a href="Drasil.Projectile.IMods.html#timeIM"><span class="hs-identifier hs-var hs-var">timeIM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 -&gt; Inputs
 -&gt; DefinedQuantityDict
@@ -49,7 +50,7 @@ forall e. NP -&gt; QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;calculation of landing time&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.Projectile.IMods.html#timeQD"><span class="hs-identifier hs-var">timeQD</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-34"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-35"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -64,7 +65,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-35"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-36"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -88,7 +89,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><span class="hs-identifier hs-var">pi_</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-36"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; DefinedQuantityDict
+</span><span id="line-37"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; DefinedQuantityDict
 forall c.
 (Quantity c, Concept c, MayHaveUnit c) =&gt;
 c -&gt; DefinedQuantityDict
@@ -100,7 +101,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-37"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+</span><span id="line-38"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
 </span><a href="Drasil.Projectile.IMods.html#timeDeriv"><span class="hs-identifier hs-var">timeDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
@@ -108,9 +109,9 @@ forall a. a -&gt; Maybe a
 </span><a href="Drasil.Projectile.IMods.html#angleConstraintNote"><span class="hs-identifier hs-var">angleConstraintNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#gravitationalAccelConstNote"><span class="hs-identifier hs-var">gravitationalAccelConstNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#timeConsNote"><span class="hs-identifier hs-var">timeConsNote</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-38"></span><span>
-</span><span id="line-39"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeQD"><span class="hs-identifier hs-type">timeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span> </span><span>
-</span><span id="line-40"></span><span id="timeQD"><span class="annot"><span class="annottext">timeQD :: SimpleQDef
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeQD"><span class="hs-identifier hs-type">timeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-41"></span><span id="timeQD"><span class="annot"><span class="annottext">timeQD :: SimpleQDef
 </span><a href="Drasil.Projectile.IMods.html#timeQD"><span class="hs-identifier hs-var hs-var">timeQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -119,9 +120,9 @@ c -&gt; e -&gt; QDefinition e
 </span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
 </span><a href="Drasil.Projectile.Expressions.html#flightDur%27"><span class="hs-identifier hs-var">E.flightDur'</span></a></span><span>
-</span><span id="line-41"></span><span>
-</span><span id="line-42"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDeriv"><span class="hs-identifier hs-type">timeDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
-</span><span id="line-43"></span><span id="timeDeriv"><span class="annot"><span class="annottext">timeDeriv :: Derivation
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDeriv"><span class="hs-identifier hs-type">timeDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-44"></span><span id="timeDeriv"><span class="annot"><span class="annottext">timeDeriv :: Derivation
 </span><a href="Drasil.Projectile.IMods.html#timeDeriv"><span class="hs-identifier hs-var hs-var">timeDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -134,28 +135,28 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="Drasil.Projectile.IMods.html#timeDerivEqns"><span class="hs-identifier hs-var">timeDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivSents"><span class="hs-identifier hs-type">timeDerivSents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-46"></span><span id="timeDerivSents"><span class="annot"><span class="annottext">timeDerivSents :: [Sentence]
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivSents"><span class="hs-identifier hs-type">timeDerivSents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-47"></span><span id="timeDerivSents"><span class="annot"><span class="annottext">timeDerivSents :: [Sentence]
 </span><a href="Drasil.Projectile.IMods.html#timeDerivSents"><span class="hs-identifier hs-var hs-var">timeDerivSents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#timeDerivSent1"><span class="hs-identifier hs-var">timeDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#timeDerivSent2"><span class="hs-identifier hs-var">timeDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#timeDerivSent3"><span class="hs-identifier hs-var">timeDerivSent3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#timeDerivSent4"><span class="hs-identifier hs-var">timeDerivSent4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#timeDerivSent5"><span class="hs-identifier hs-var">timeDerivSent5</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-47"></span><span>
-</span><span id="line-48"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivSent1"><span class="hs-identifier hs-type">timeDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivSent2"><span class="hs-identifier hs-type">timeDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivSent3"><span class="hs-identifier hs-type">timeDerivSent3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivSent4"><span class="hs-identifier hs-type">timeDerivSent4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivSent5"><span class="hs-identifier hs-type">timeDerivSent5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-49"></span><span id="timeDerivSent1"><span class="annot"><span class="annottext">timeDerivSent1 :: Sentence
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivSent1"><span class="hs-identifier hs-type">timeDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivSent2"><span class="hs-identifier hs-type">timeDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivSent3"><span class="hs-identifier hs-type">timeDerivSent3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivSent4"><span class="hs-identifier hs-type">timeDerivSent4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivSent5"><span class="hs-identifier hs-type">timeDerivSent5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-50"></span><span id="timeDerivSent1"><span class="annot"><span class="annottext">timeDerivSent1 :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#timeDerivSent1"><span class="hs-identifier hs-var hs-var">timeDerivSent1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;We know that&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
-</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span>
-</span><span id="line-51"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr -&gt; ConceptInstance -&gt; Sentence
+</span><span id="line-52"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr -&gt; ConceptInstance -&gt; Sentence
 forall r.
 (Referable r, HasShortName r) =&gt;
 ModelExpr -&gt; r -&gt; Sentence
@@ -169,7 +170,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 PExpr
 </span><a href="Drasil.Projectile.Expressions.html#iyPos"><span class="hs-identifier hs-var">E.iyPos</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.Projectile.Assumptions.html#launchOrigin"><span class="hs-identifier hs-var">launchOrigin</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-52"></span><span>     </span><span class="annot"><span class="annottext">ModelExpr -&gt; ConceptInstance -&gt; Sentence
+</span><span id="line-53"></span><span>     </span><span class="annot"><span class="annottext">ModelExpr -&gt; ConceptInstance -&gt; Sentence
 forall r.
 (Referable r, HasShortName r) =&gt;
 ModelExpr -&gt; r -&gt; Sentence
@@ -183,7 +184,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 PExpr
 </span><a href="Drasil.Projectile.Expressions.html#yConstAccel"><span class="hs-identifier hs-var">E.yConstAccel</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.Projectile.Assumptions.html#accelYGravity"><span class="hs-identifier hs-var">accelYGravity</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-53"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-54"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Substituting these&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -192,7 +193,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;into the y-direction&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span>
-</span><span id="line-54"></span><span>  </span><span class="annot"><span class="annottext">GenDefn -&gt; Sentence
+</span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">GenDefn -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
@@ -200,7 +201,7 @@ r -&gt; Sentence
 </span><a href="Drasil.Projectile.GenDefs.html#posVecGD"><span class="hs-identifier hs-var">posVecGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;gives us&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-55"></span><span id="timeDerivSent2"><span class="annot"><span class="annottext">timeDerivSent2 :: Sentence
+</span><span id="line-56"></span><span id="timeDerivSent2"><span class="annot"><span class="annottext">timeDerivSent2 :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#timeDerivSent2"><span class="hs-identifier hs-var hs-var">timeDerivSent2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -210,7 +211,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;that the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span id="line-57"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier hs-var">projectile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -225,7 +226,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">,</span><span>
-</span><span id="line-57"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -247,7 +248,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;since the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier hs-var">target</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -267,7 +268,7 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.Projectile.Assumptions.html#targetXAxis"><span class="hs-identifier hs-var">targetXAxis</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-60"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;From the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -275,7 +276,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;above we get&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-60"></span><span id="timeDerivSent3"><span class="annot"><span class="annottext">timeDerivSent3 :: Sentence
+</span><span id="line-61"></span><span id="timeDerivSent3"><span class="annot"><span class="annottext">timeDerivSent3 :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#timeDerivSent3"><span class="hs-identifier hs-var hs-var">timeDerivSent3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -283,7 +284,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-61"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;with the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -302,10 +303,10 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;gives us&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-63"></span><span id="timeDerivSent4"><span class="annot"><span class="annottext">timeDerivSent4 :: Sentence
+</span><span id="line-64"></span><span id="timeDerivSent4"><span class="annot"><span class="annottext">timeDerivSent4 :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#timeDerivSent4"><span class="hs-identifier hs-var hs-var">timeDerivSent4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Solving for&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -316,7 +317,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-operator hs-var">+:</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;gives us&quot;</span></span><span>
-</span><span id="line-64"></span><span id="timeDerivSent5"><span class="annot"><span class="annottext">timeDerivSent5 :: Sentence
+</span><span id="line-65"></span><span id="timeDerivSent5"><span class="annot"><span class="annottext">timeDerivSent5 :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#timeDerivSent5"><span class="hs-identifier hs-var hs-var">timeDerivSent5</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -326,7 +327,7 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.Projectile.DataDefs.html#speedIY"><span class="hs-identifier hs-var">speedIY</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-65"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-66"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;with&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -345,9 +346,9 @@ PExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">iyVel</span></span><span class="hs-special">]</span><span>
-</span><span id="line-66"></span><span>
-</span><span id="line-67"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivEqns"><span class="hs-identifier hs-type">timeDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
-</span><span id="line-68"></span><span id="timeDerivEqns"><span class="annot"><span class="annottext">timeDerivEqns :: [ModelExpr]
+</span><span id="line-67"></span><span>
+</span><span id="line-68"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeDerivEqns"><span class="hs-identifier hs-type">timeDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
+</span><span id="line-69"></span><span id="timeDerivEqns"><span class="annot"><span class="annottext">timeDerivEqns :: [ModelExpr]
 </span><a href="Drasil.Projectile.IMods.html#timeDerivEqns"><span class="hs-identifier hs-var hs-var">timeDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="Drasil.Projectile.Derivations.html#timeDeriv"><span class="hs-identifier hs-var">D.timeDeriv</span></a></span><span> </span><span class="annot"><span class="annottext">[ModelExpr] -&gt; [ModelExpr] -&gt; [ModelExpr]
 forall a. [a] -&gt; [a] -&gt; [a]
@@ -355,10 +356,10 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall c. Express c =&gt; c -&gt; ModelExpr
 </span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.Projectile.IMods.html#timeQD"><span class="hs-identifier hs-var">timeQD</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-69"></span><span>
-</span><span id="line-70"></span><span class="hs-comment">---</span><span>
-</span><span id="line-71"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosIM"><span class="hs-identifier hs-type">landPosIM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
-</span><span id="line-72"></span><span id="landPosIM"><span class="annot"><span class="annottext">landPosIM :: InstanceModel
+</span><span id="line-70"></span><span>
+</span><span id="line-71"></span><span class="hs-comment">---</span><span>
+</span><span id="line-72"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosIM"><span class="hs-identifier hs-type">landPosIM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
+</span><span id="line-73"></span><span id="landPosIM"><span class="annot"><span class="annottext">landPosIM :: InstanceModel
 </span><a href="Drasil.Projectile.IMods.html#landPosIM"><span class="hs-identifier hs-var hs-var">landPosIM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 -&gt; Inputs
 -&gt; DefinedQuantityDict
@@ -373,7 +374,7 @@ forall e. NP -&gt; QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;calculation of landing position&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.Projectile.IMods.html#landPosQD"><span class="hs-identifier hs-var">landPosQD</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-73"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-74"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -388,7 +389,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-74"></span><span>   </span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-75"></span><span>   </span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -412,7 +413,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><span class="hs-identifier hs-var">pi_</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-75"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; DefinedQuantityDict
+</span><span id="line-76"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; DefinedQuantityDict
 forall c.
 (Quantity c, Concept c, MayHaveUnit c) =&gt;
 c -&gt; DefinedQuantityDict
@@ -424,7 +425,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-76"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+</span><span id="line-77"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
 </span><a href="Drasil.Projectile.IMods.html#landPosDeriv"><span class="hs-identifier hs-var">landPosDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
@@ -432,9 +433,9 @@ forall a. a -&gt; Maybe a
 </span><a href="Drasil.Projectile.IMods.html#angleConstraintNote"><span class="hs-identifier hs-var">angleConstraintNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#gravitationalAccelConstNote"><span class="hs-identifier hs-var">gravitationalAccelConstNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosConsNote"><span class="hs-identifier hs-var">landPosConsNote</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-77"></span><span>
-</span><span id="line-78"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosQD"><span class="hs-identifier hs-type">landPosQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-79"></span><span id="landPosQD"><span class="annot"><span class="annottext">landPosQD :: SimpleQDef
+</span><span id="line-78"></span><span>
+</span><span id="line-79"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosQD"><span class="hs-identifier hs-type">landPosQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-80"></span><span id="landPosQD"><span class="annot"><span class="annottext">landPosQD :: SimpleQDef
 </span><a href="Drasil.Projectile.IMods.html#landPosQD"><span class="hs-identifier hs-var hs-var">landPosQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -443,9 +444,9 @@ c -&gt; e -&gt; QDefinition e
 </span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
 </span><a href="Drasil.Projectile.Expressions.html#landPosExpr"><span class="hs-identifier hs-var">E.landPosExpr</span></a></span><span>
-</span><span id="line-80"></span><span>
-</span><span id="line-81"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDeriv"><span class="hs-identifier hs-type">landPosDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
-</span><span id="line-82"></span><span id="landPosDeriv"><span class="annot"><span class="annottext">landPosDeriv :: Derivation
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDeriv"><span class="hs-identifier hs-type">landPosDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-83"></span><span id="landPosDeriv"><span class="annot"><span class="annottext">landPosDeriv :: Derivation
 </span><a href="Drasil.Projectile.IMods.html#landPosDeriv"><span class="hs-identifier hs-var hs-var">landPosDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -458,27 +459,27 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivEqns"><span class="hs-identifier hs-var">landPosDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-83"></span><span>
-</span><span id="line-84"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDerivSents"><span class="hs-identifier hs-type">landPosDerivSents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-85"></span><span id="landPosDerivSents"><span class="annot"><span class="annottext">landPosDerivSents :: [Sentence]
+</span><span id="line-84"></span><span>
+</span><span id="line-85"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDerivSents"><span class="hs-identifier hs-type">landPosDerivSents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-86"></span><span id="landPosDerivSents"><span class="annot"><span class="annottext">landPosDerivSents :: [Sentence]
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivSents"><span class="hs-identifier hs-var hs-var">landPosDerivSents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivSent1"><span class="hs-identifier hs-var">landPosDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivSent2"><span class="hs-identifier hs-var">landPosDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivSent3"><span class="hs-identifier hs-var">landPosDerivSent3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivSent4"><span class="hs-identifier hs-var">landPosDerivSent4</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-86"></span><span>
-</span><span id="line-87"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDerivSent1"><span class="hs-identifier hs-type">landPosDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDerivSent2"><span class="hs-identifier hs-type">landPosDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDerivSent3"><span class="hs-identifier hs-type">landPosDerivSent3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDerivSent4"><span class="hs-identifier hs-type">landPosDerivSent4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-88"></span><span id="landPosDerivSent1"><span class="annot"><span class="annottext">landPosDerivSent1 :: Sentence
+</span><span id="line-87"></span><span>
+</span><span id="line-88"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDerivSent1"><span class="hs-identifier hs-type">landPosDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDerivSent2"><span class="hs-identifier hs-type">landPosDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDerivSent3"><span class="hs-identifier hs-type">landPosDerivSent3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDerivSent4"><span class="hs-identifier hs-type">landPosDerivSent4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-89"></span><span id="landPosDerivSent1"><span class="annot"><span class="annottext">landPosDerivSent1 :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivSent1"><span class="hs-identifier hs-var hs-var">landPosDerivSent1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;We know that&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
-</span><span id="line-89"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><span id="line-90"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span>
-</span><span id="line-90"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr -&gt; ConceptInstance -&gt; Sentence
+</span><span id="line-91"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr -&gt; ConceptInstance -&gt; Sentence
 forall r.
 (Referable r, HasShortName r) =&gt;
 ModelExpr -&gt; r -&gt; Sentence
@@ -493,7 +494,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.Projectile.Assumptions.html#launchOrigin"><span class="hs-identifier hs-var">launchOrigin</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-91"></span><span>     </span><span class="annot"><span class="annottext">ModelExpr -&gt; ConceptInstance -&gt; Sentence
+</span><span id="line-92"></span><span>     </span><span class="annot"><span class="annottext">ModelExpr -&gt; ConceptInstance -&gt; Sentence
 forall r.
 (Referable r, HasShortName r) =&gt;
 ModelExpr -&gt; r -&gt; Sentence
@@ -508,7 +509,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.Projectile.Assumptions.html#accelXZero"><span class="hs-identifier hs-var">accelXZero</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-92"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Substituting these&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -517,7 +518,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;into the x-direction&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span>
-</span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">GenDefn -&gt; Sentence
+</span><span id="line-94"></span><span>  </span><span class="annot"><span class="annottext">GenDefn -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
@@ -525,7 +526,7 @@ r -&gt; Sentence
 </span><a href="Drasil.Projectile.GenDefs.html#posVecGD"><span class="hs-identifier hs-var">posVecGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;gives us&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-94"></span><span id="landPosDerivSent2"><span class="annot"><span class="annottext">landPosDerivSent2 :: Sentence
+</span><span id="line-95"></span><span id="landPosDerivSent2"><span class="annot"><span class="annottext">landPosDerivSent2 :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivSent2"><span class="hs-identifier hs-var hs-var">landPosDerivSent2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -534,7 +535,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-95"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-96"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;we want to find the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
@@ -547,7 +548,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-96"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;at&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -556,7 +557,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.Projectile.IMods.html#timeIM"><span class="hs-identifier hs-var">timeIM</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-97"></span><span id="landPosDerivSent3"><span class="annot"><span class="annottext">landPosDerivSent3 :: Sentence
+</span><span id="line-98"></span><span id="landPosDerivSent3"><span class="annot"><span class="annottext">landPosDerivSent3 :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivSent3"><span class="hs-identifier hs-var hs-var">landPosDerivSent3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -566,7 +567,7 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.Projectile.DataDefs.html#speedIX"><span class="hs-identifier hs-var">speedIX</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-98"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;with&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -587,7 +588,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">ixVel</span></span><span class="hs-special">]</span><span>
-</span><span id="line-99"></span><span id="landPosDerivSent4"><span class="annot"><span class="annottext">landPosDerivSent4 :: Sentence
+</span><span id="line-100"></span><span id="landPosDerivSent4"><span class="annot"><span class="annottext">landPosDerivSent4 :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivSent4"><span class="hs-identifier hs-var hs-var">landPosDerivSent4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Rearranging this gives us the required&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -595,9 +596,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">equation</span></span><span>
-</span><span id="line-100"></span><span>
-</span><span id="line-101"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDerivEqns"><span class="hs-identifier hs-type">landPosDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
-</span><span id="line-102"></span><span id="landPosDerivEqns"><span class="annot"><span class="annottext">landPosDerivEqns :: [ModelExpr]
+</span><span id="line-101"></span><span>
+</span><span id="line-102"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosDerivEqns"><span class="hs-identifier hs-type">landPosDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
+</span><span id="line-103"></span><span id="landPosDerivEqns"><span class="annot"><span class="annottext">landPosDerivEqns :: [ModelExpr]
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivEqns"><span class="hs-identifier hs-var hs-var">landPosDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="Drasil.Projectile.Derivations.html#landPosDeriv"><span class="hs-identifier hs-var">D.landPosDeriv</span></a></span><span> </span><span class="annot"><span class="annottext">[ModelExpr] -&gt; [ModelExpr] -&gt; [ModelExpr]
 forall a. [a] -&gt; [a] -&gt; [a]
@@ -605,10 +606,10 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall c. Express c =&gt; c -&gt; ModelExpr
 </span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.Projectile.IMods.html#landPosQD"><span class="hs-identifier hs-var">landPosQD</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-103"></span><span>
-</span><span id="line-104"></span><span class="hs-comment">---</span><span>
-</span><span id="line-105"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#offsetIM"><span class="hs-identifier hs-type">offsetIM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
-</span><span id="line-106"></span><span id="offsetIM"><span class="annot"><span class="annottext">offsetIM :: InstanceModel
+</span><span id="line-104"></span><span>
+</span><span id="line-105"></span><span class="hs-comment">---</span><span>
+</span><span id="line-106"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#offsetIM"><span class="hs-identifier hs-type">offsetIM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
+</span><span id="line-107"></span><span id="offsetIM"><span class="annot"><span class="annottext">offsetIM :: InstanceModel
 </span><a href="Drasil.Projectile.IMods.html#offsetIM"><span class="hs-identifier hs-var hs-var">offsetIM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 -&gt; Inputs
 -&gt; DefinedQuantityDict
@@ -622,7 +623,7 @@ forall e. NP -&gt; QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;offset&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.Projectile.IMods.html#offsetQD"><span class="hs-identifier hs-var">offsetQD</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-107"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-108"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -637,7 +638,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-108"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-109"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -652,7 +653,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-109"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; DefinedQuantityDict
+</span><span id="line-110"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; DefinedQuantityDict
 forall c.
 (Quantity c, Concept c, MayHaveUnit c) =&gt;
 c -&gt; DefinedQuantityDict
@@ -661,9 +662,9 @@ c -&gt; DefinedQuantityDict
 </span><span class="hs-string">&quot;offsetIM&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosNote"><span class="hs-identifier hs-var">landPosNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#landAndTargPosConsNote"><span class="hs-identifier hs-var">landAndTargPosConsNote</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-110"></span><span>
-</span><span id="line-111"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#offsetQD"><span class="hs-identifier hs-type">offsetQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-112"></span><span id="offsetQD"><span class="annot"><span class="annottext">offsetQD :: SimpleQDef
+</span><span id="line-111"></span><span>
+</span><span id="line-112"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#offsetQD"><span class="hs-identifier hs-type">offsetQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-113"></span><span id="offsetQD"><span class="annot"><span class="annottext">offsetQD :: SimpleQDef
 </span><a href="Drasil.Projectile.IMods.html#offsetQD"><span class="hs-identifier hs-var hs-var">offsetQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -672,21 +673,22 @@ c -&gt; e -&gt; QDefinition e
 </span><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier hs-var">offset</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
 </span><a href="Drasil.Projectile.Expressions.html#offset%27"><span class="hs-identifier hs-var">E.offset'</span></a></span><span>
-</span><span id="line-113"></span><span>
-</span><span id="line-114"></span><span class="hs-comment">--- Notes</span><span>
-</span><span id="line-115"></span><span>
-</span><span id="line-116"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#angleConstraintNote"><span class="hs-identifier hs-type">angleConstraintNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#gravitationalAccelConstNote"><span class="hs-identifier hs-type">gravitationalAccelConstNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#landAndTargPosConsNote"><span class="hs-identifier hs-type">landAndTargPosConsNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosNote"><span class="hs-identifier hs-type">landPosNote</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-117"></span><span>  </span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosConsNote"><span class="hs-identifier hs-type">landPosConsNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeConsNote"><span class="hs-identifier hs-type">timeConsNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-118"></span><span>
-</span><span id="line-119"></span><span id="angleConstraintNote"><span class="annot"><span class="annottext">angleConstraintNote :: Sentence
+</span><span id="line-114"></span><span>
+</span><span id="line-115"></span><span class="hs-comment">--- Notes</span><span>
+</span><span id="line-116"></span><span>
+</span><span id="line-117"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#angleConstraintNote"><span class="hs-identifier hs-type">angleConstraintNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#gravitationalAccelConstNote"><span class="hs-identifier hs-type">gravitationalAccelConstNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#landAndTargPosConsNote"><span class="hs-identifier hs-type">landAndTargPosConsNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosNote"><span class="hs-identifier hs-type">landPosNote</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-118"></span><span>  </span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosConsNote"><span class="hs-identifier hs-type">landPosConsNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeConsNote"><span class="hs-identifier hs-type">timeConsNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-119"></span><span>
+</span><span id="line-120"></span><span id="angleConstraintNote"><span class="annot"><span class="annottext">angleConstraintNote :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#angleConstraintNote"><span class="hs-identifier hs-var hs-var">angleConstraintNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-120"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
+</span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-121"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval ModelExpr ModelExpr -&gt; ModelExpr
 forall c.
 HasUID c =&gt;
@@ -713,7 +715,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;from&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-121"></span><span>  </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+</span><span id="line-122"></span><span>  </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
@@ -726,7 +728,7 @@ r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.Projectile.Assumptions.html#yAxisGravity"><span class="hs-identifier hs-var">yAxisGravity</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-122"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-123"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and is shown&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.in_`</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Sentence
@@ -735,14 +737,14 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.Projectile.LabelledContent.html#figLaunch"><span class="hs-identifier hs-var">figLaunch</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-123"></span><span>
-</span><span id="line-124"></span><span id="gravitationalAccelConstNote"><span class="annot"><span class="annottext">gravitationalAccelConstNote :: Sentence
+</span><span id="line-124"></span><span>
+</span><span id="line-125"></span><span id="gravitationalAccelConstNote"><span class="annot"><span class="annottext">gravitationalAccelConstNote :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#gravitationalAccelConstNote"><span class="hs-identifier hs-var hs-var">gravitationalAccelConstNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span>
-</span><span id="line-125"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-126"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;defined in&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
@@ -751,16 +753,17 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.Projectile.Assumptions.html#gravAccelValue"><span class="hs-identifier hs-var">gravAccelValue</span></a></span><span>
-</span><span id="line-126"></span><span>
-</span><span id="line-127"></span><span id="landAndTargPosConsNote"><span class="annot"><span class="annottext">landAndTargPosConsNote :: Sentence
-</span><a href="Drasil.Projectile.IMods.html#landAndTargPosConsNote"><span class="hs-identifier hs-var hs-var">landAndTargPosConsNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span id="line-127"></span><span>
+</span><span id="line-128"></span><span id="landAndTargPosConsNote"><span class="annot"><span class="annottext">landAndTargPosConsNote :: Sentence
+</span><a href="Drasil.Projectile.IMods.html#landAndTargPosConsNote"><span class="hs-identifier hs-var hs-var">landAndTargPosConsNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-128"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
+</span><span id="line-129"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -791,8 +794,8 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.Projectile.Assumptions.html#posXDirection"><span class="hs-identifier hs-var">posXDirection</span></a></span><span>
-</span><span id="line-129"></span><span>
-</span><span id="line-130"></span><span id="landPosNote"><span class="annot"><span class="annottext">landPosNote :: Sentence
+</span><span id="line-130"></span><span>
+</span><span id="line-131"></span><span id="landPosNote"><span class="annot"><span class="annottext">landPosNote :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosNote"><span class="hs-identifier hs-var hs-var">landPosNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -806,16 +809,17 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.Projectile.IMods.html#landPosIM"><span class="hs-identifier hs-var">landPosIM</span></a></span><span>
-</span><span id="line-131"></span><span>
-</span><span id="line-132"></span><span id="landPosConsNote"><span class="annot"><span class="annottext">landPosConsNote :: Sentence
-</span><a href="Drasil.Projectile.IMods.html#landPosConsNote"><span class="hs-identifier hs-var hs-var">landPosConsNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span id="line-132"></span><span>
+</span><span id="line-133"></span><span id="landPosConsNote"><span class="annot"><span class="annottext">landPosConsNote :: Sentence
+</span><a href="Drasil.Projectile.IMods.html#landPosConsNote"><span class="hs-identifier hs-var hs-var">landPosConsNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-133"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
+</span><span id="line-134"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -835,16 +839,17 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.Projectile.Assumptions.html#posXDirection"><span class="hs-identifier hs-var">posXDirection</span></a></span><span>
-</span><span id="line-134"></span><span>
-</span><span id="line-135"></span><span id="timeConsNote"><span class="annot"><span class="annottext">timeConsNote :: Sentence
-</span><a href="Drasil.Projectile.IMods.html#timeConsNote"><span class="hs-identifier hs-var hs-var">timeConsNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span id="line-135"></span><span>
+</span><span id="line-136"></span><span id="timeConsNote"><span class="annot"><span class="annottext">timeConsNote :: Sentence
+</span><a href="Drasil.Projectile.IMods.html#timeConsNote"><span class="hs-identifier hs-var hs-var">timeConsNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-136"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
+</span><span id="line-137"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -864,4 +869,4 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.Projectile.Assumptions.html#timeStartZero"><span class="hs-identifier hs-var">timeStartZero</span></a></span><span>
-</span><span id="line-137"></span></pre></body></html>
+</span><span id="line-138"></span></pre></body></html>

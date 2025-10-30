@@ -1,31 +1,35 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE PostfixOperators #-}</span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.PDController.DataDefs</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
-</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Concepts.html"><span class="hs-identifier">Drasil.PDController.Concepts</span></a></span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Assumptions.html"><span class="hs-identifier">Drasil.PDController.Assumptions</span></a></span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html"><span class="hs-identifier">Drasil.PDController.Unitals</span></a></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.References.html"><span class="hs-identifier">Drasil.PDController.References</span></a></span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.TModel.html"><span class="hs-identifier">Drasil.PDController.TModel</span></a></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Development</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-8"></span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">equation</span></span><span class="hs-special">)</span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-10"></span><span>
 </span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">DataDefinition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ddE</span></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
-</span><span id="line-14"></span><span>
-</span><span id="line-15"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#dataDefinitions"><span class="hs-identifier hs-type">dataDefinitions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span>
-</span><span id="line-16"></span><span id="dataDefinitions"><span class="annot"><span class="annottext">dataDefinitions :: [DataDefinition]
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Concepts.html"><span class="hs-identifier">Drasil.PDController.Concepts</span></a></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Assumptions.html"><span class="hs-identifier">Drasil.PDController.Assumptions</span></a></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html"><span class="hs-identifier">Drasil.PDController.Unitals</span></a></span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.References.html"><span class="hs-identifier">Drasil.PDController.References</span></a></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.TModel.html"><span class="hs-identifier">Drasil.PDController.TModel</span></a></span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#dataDefinitions"><span class="hs-identifier hs-type">dataDefinitions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span>
+</span><span id="line-20"></span><span id="dataDefinitions"><span class="annot"><span class="annottext">dataDefinitions :: [DataDefinition]
 </span><a href="Drasil.PDController.DataDefs.html#dataDefinitions"><span class="hs-identifier hs-var hs-var">dataDefinitions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddErrSig"><span class="hs-identifier hs-var">ddErrSig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddPropCtrl"><span class="hs-identifier hs-var">ddPropCtrl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddDerivCtrl"><span class="hs-identifier hs-var">ddDerivCtrl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddCtrlVar"><span class="hs-identifier hs-var">ddCtrlVar</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="hs-comment">----------------------------------------------</span><span>
-</span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddErrSig"><span class="hs-identifier hs-type">ddErrSig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-21"></span><span id="ddErrSig"><span class="annot"><span class="annottext">ddErrSig :: DataDefinition
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddErrSig"><span class="hs-identifier hs-type">ddErrSig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-25"></span><span id="ddErrSig"><span class="annot"><span class="annottext">ddErrSig :: DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddErrSig"><span class="hs-identifier hs-var hs-var">ddErrSig</span></a></span></span><span>
-</span><span id="line-22"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span id="line-26"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; [DecRef]
 -&gt; Maybe Derivation
 -&gt; String
@@ -41,11 +45,11 @@ r -&gt; DecRef
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ddProcessError&quot;</span></span><span>
-</span><span id="line-23"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-27"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.PDController.DataDefs.html#ddErrSigNote"><span class="hs-identifier hs-var">ddErrSigNote</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddErrSigDefn"><span class="hs-identifier hs-type">ddErrSigDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-26"></span><span id="ddErrSigDefn"><span class="annot"><span class="annottext">ddErrSigDefn :: SimpleQDef
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddErrSigDefn"><span class="hs-identifier hs-type">ddErrSigDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-30"></span><span id="ddErrSigDefn"><span class="annot"><span class="annottext">ddErrSigDefn :: SimpleQDef
 </span><a href="Drasil.PDController.DataDefs.html#ddErrSigDefn"><span class="hs-identifier hs-var hs-var">ddErrSigDefn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -53,9 +57,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.PDController.Unitals.html#dqdProcessErrorFD"><span class="hs-identifier hs-var">dqdProcessErrorFD</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.PDController.DataDefs.html#ddErrSigEqn"><span class="hs-identifier hs-var">ddErrSigEqn</span></a></span><span>
-</span><span id="line-27"></span><span>
-</span><span id="line-28"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddErrSigEqn"><span class="hs-identifier hs-type">ddErrSigEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-29"></span><span id="ddErrSigEqn"><span class="annot"><span class="annottext">ddErrSigEqn :: Expr
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddErrSigEqn"><span class="hs-identifier hs-type">ddErrSigEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-33"></span><span id="ddErrSigEqn"><span class="annot"><span class="annottext">ddErrSigEqn :: Expr
 </span><a href="Drasil.PDController.DataDefs.html#ddErrSigEqn"><span class="hs-identifier hs-var hs-var">ddErrSigEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -67,38 +71,40 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableFD"><span class="hs-identifier hs-var">dqdProcessVariableFD</span></a></span><span>
-</span><span id="line-30"></span><span>
-</span><span id="line-31"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddErrSigNote"><span class="hs-identifier hs-type">ddErrSigNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-32"></span><span id="ddErrSigNote"><span class="annot"><span class="annottext">ddErrSigNote :: Sentence
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddErrSigNote"><span class="hs-identifier hs-type">ddErrSigNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-36"></span><span id="ddErrSigNote"><span class="annot"><span class="annottext">ddErrSigNote :: Sentence
 </span><a href="Drasil.PDController.DataDefs.html#ddErrSigNote"><span class="hs-identifier hs-var hs-var">ddErrSigNote</span></a></span></span><span>
-</span><span id="line-33"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-37"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-34"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span id="line-38"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.PDController.Concepts.html#processError"><span class="hs-identifier hs-var">processError</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.PDController.Concepts.html#processError"><span class="hs-identifier hs-var">processError</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is the difference between the Set-Point and&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
-</span><span id="line-35"></span><span>         </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span id="line-39"></span><span>         </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#processVariable"><span class="hs-identifier hs-var">processVariable</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-36"></span><span>       </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span id="line-40"></span><span>       </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is converted&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#ccFrequencyDomain"><span class="hs-identifier hs-var">ccFrequencyDomain</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-37"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-41"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;by applying the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -108,15 +114,16 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><a href="Drasil.PDController.TModel.html#tmLaplace"><span class="hs-identifier hs-var">tmLaplace</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-38"></span><span>       </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span id="line-42"></span><span>       </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.PDController.Concepts.html#setPoint"><span class="hs-identifier hs-var">setPoint</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.PDController.Concepts.html#setPoint"><span class="hs-identifier hs-var">setPoint</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is assumed to be constant throughout the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-39"></span><span>         </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span id="line-43"></span><span>         </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#simulation"><span class="hs-identifier hs-var">simulation</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -124,7 +131,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.PDController.Assumptions.html#aSP"><span class="hs-identifier hs-var">aSP</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-40"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-44"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The initial value&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -133,19 +140,19 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><a href="Drasil.PDController.Concepts.html#processVariable"><span class="hs-identifier hs-var">processVariable</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is assumed&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-41"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-45"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;to be zero&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.PDController.Assumptions.html#aInitialValue"><span class="hs-identifier hs-var">aInitialValue</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-42"></span><span>
-</span><span id="line-43"></span><span class="hs-comment">----------------------------------------------</span><span>
-</span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddPropCtrl"><span class="hs-identifier hs-type">ddPropCtrl</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-46"></span><span id="ddPropCtrl"><span class="annot"><span class="annottext">ddPropCtrl :: DataDefinition
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddPropCtrl"><span class="hs-identifier hs-type">ddPropCtrl</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-50"></span><span id="ddPropCtrl"><span class="annot"><span class="annottext">ddPropCtrl :: DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddPropCtrl"><span class="hs-identifier hs-var hs-var">ddPropCtrl</span></a></span></span><span>
-</span><span id="line-47"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span id="line-51"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; [DecRef]
 -&gt; Maybe Derivation
 -&gt; String
@@ -161,11 +168,11 @@ r -&gt; DecRef
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ddPropCtrl&quot;</span></span><span>
-</span><span id="line-48"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-52"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.PDController.DataDefs.html#ddPropCtrlNote"><span class="hs-identifier hs-var">ddPropCtrlNote</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddPropCtrlDefn"><span class="hs-identifier hs-type">ddPropCtrlDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-51"></span><span id="ddPropCtrlDefn"><span class="annot"><span class="annottext">ddPropCtrlDefn :: SimpleQDef
+</span><span id="line-53"></span><span>
+</span><span id="line-54"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddPropCtrlDefn"><span class="hs-identifier hs-type">ddPropCtrlDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-55"></span><span id="ddPropCtrlDefn"><span class="annot"><span class="annottext">ddPropCtrlDefn :: SimpleQDef
 </span><a href="Drasil.PDController.DataDefs.html#ddPropCtrlDefn"><span class="hs-identifier hs-var hs-var">ddPropCtrlDefn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -173,9 +180,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.PDController.Unitals.html#dqdPropControlFD"><span class="hs-identifier hs-var">dqdPropControlFD</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.PDController.DataDefs.html#ddPropCtrlEqn"><span class="hs-identifier hs-var">ddPropCtrlEqn</span></a></span><span>
-</span><span id="line-52"></span><span>
-</span><span id="line-53"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddPropCtrlEqn"><span class="hs-identifier hs-type">ddPropCtrlEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-54"></span><span id="ddPropCtrlEqn"><span class="annot"><span class="annottext">ddPropCtrlEqn :: Expr
+</span><span id="line-56"></span><span>
+</span><span id="line-57"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddPropCtrlEqn"><span class="hs-identifier hs-type">ddPropCtrlEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-58"></span><span id="ddPropCtrlEqn"><span class="annot"><span class="annottext">ddPropCtrlEqn :: Expr
 </span><a href="Drasil.PDController.DataDefs.html#ddPropCtrlEqn"><span class="hs-identifier hs-var hs-var">ddPropCtrlEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -187,43 +194,45 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.PDController.Unitals.html#dqdProcessErrorFD"><span class="hs-identifier hs-var">dqdProcessErrorFD</span></a></span><span>
-</span><span id="line-55"></span><span>
-</span><span id="line-56"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddPropCtrlNote"><span class="hs-identifier hs-type">ddPropCtrlNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-57"></span><span id="ddPropCtrlNote"><span class="annot"><span class="annottext">ddPropCtrlNote :: Sentence
+</span><span id="line-59"></span><span>
+</span><span id="line-60"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddPropCtrlNote"><span class="hs-identifier hs-type">ddPropCtrlNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-61"></span><span id="ddPropCtrlNote"><span class="annot"><span class="annottext">ddPropCtrlNote :: Sentence
 </span><a href="Drasil.PDController.DataDefs.html#ddPropCtrlNote"><span class="hs-identifier hs-var hs-var">ddPropCtrlNote</span></a></span></span><span>
-</span><span id="line-58"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-62"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-59"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-63"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The Proportional Controller&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the product&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#propGain"><span class="hs-identifier hs-var">propGain</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`andThe`</span></span><span>
-</span><span id="line-60"></span><span>         </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.PDController.Concepts.html#processError"><span class="hs-identifier hs-var">processError</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-64"></span><span>         </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#processError"><span class="hs-identifier hs-var">processError</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddErrSig"><span class="hs-identifier hs-var">ddErrSig</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-61"></span><span>         </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span id="line-65"></span><span>         </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is converted&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#ccFrequencyDomain"><span class="hs-identifier hs-var">ccFrequencyDomain</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-62"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-66"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;by applying the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -232,13 +241,13 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><a href="Drasil.PDController.TModel.html#tmLaplace"><span class="hs-identifier hs-var">tmLaplace</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-63"></span><span>
-</span><span id="line-64"></span><span class="hs-comment">----------------------------------------------</span><span>
-</span><span id="line-65"></span><span>
-</span><span id="line-66"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddDerivCtrl"><span class="hs-identifier hs-type">ddDerivCtrl</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-67"></span><span id="ddDerivCtrl"><span class="annot"><span class="annottext">ddDerivCtrl :: DataDefinition
+</span><span id="line-67"></span><span>
+</span><span id="line-68"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-69"></span><span>
+</span><span id="line-70"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddDerivCtrl"><span class="hs-identifier hs-type">ddDerivCtrl</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-71"></span><span id="ddDerivCtrl"><span class="annot"><span class="annottext">ddDerivCtrl :: DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddDerivCtrl"><span class="hs-identifier hs-var hs-var">ddDerivCtrl</span></a></span></span><span>
-</span><span id="line-68"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span id="line-72"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; [DecRef]
 -&gt; Maybe Derivation
 -&gt; String
@@ -254,11 +263,11 @@ r -&gt; DecRef
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ddDerivCtrl&quot;</span></span><span>
-</span><span id="line-69"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-73"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlNote"><span class="hs-identifier hs-var">ddDerivCtrlNote</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-70"></span><span>
-</span><span id="line-71"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlDefn"><span class="hs-identifier hs-type">ddDerivCtrlDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-72"></span><span id="ddDerivCtrlDefn"><span class="annot"><span class="annottext">ddDerivCtrlDefn :: SimpleQDef
+</span><span id="line-74"></span><span>
+</span><span id="line-75"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlDefn"><span class="hs-identifier hs-type">ddDerivCtrlDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-76"></span><span id="ddDerivCtrlDefn"><span class="annot"><span class="annottext">ddDerivCtrlDefn :: SimpleQDef
 </span><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlDefn"><span class="hs-identifier hs-var hs-var">ddDerivCtrlDefn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -266,11 +275,11 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.PDController.Unitals.html#dqdDerivativeControlFD"><span class="hs-identifier hs-var">dqdDerivativeControlFD</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlEqn"><span class="hs-identifier hs-var">ddDerivCtrlEqn</span></a></span><span>
-</span><span id="line-73"></span><span>
-</span><span id="line-74"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlEqn"><span class="hs-identifier hs-type">ddDerivCtrlEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-75"></span><span id="ddDerivCtrlEqn"><span class="annot"><span class="annottext">ddDerivCtrlEqn :: Expr
+</span><span id="line-77"></span><span>
+</span><span id="line-78"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlEqn"><span class="hs-identifier hs-type">ddDerivCtrlEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-79"></span><span id="ddDerivCtrlEqn"><span class="annot"><span class="annottext">ddDerivCtrlEqn :: Expr
 </span><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlEqn"><span class="hs-identifier hs-var hs-var">ddDerivCtrlEqn</span></a></span></span><span>
-</span><span id="line-76"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
+</span><span id="line-80"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
@@ -287,13 +296,13 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.PDController.Unitals.html#dqdFreqDomain"><span class="hs-identifier hs-var">dqdFreqDomain</span></a></span><span>
-</span><span id="line-77"></span><span>
-</span><span id="line-78"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlNote"><span class="hs-identifier hs-type">ddDerivCtrlNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-79"></span><span id="ddDerivCtrlNote"><span class="annot"><span class="annottext">ddDerivCtrlNote :: Sentence
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlNote"><span class="hs-identifier hs-type">ddDerivCtrlNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-83"></span><span id="ddDerivCtrlNote"><span class="annot"><span class="annottext">ddDerivCtrlNote :: Sentence
 </span><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlNote"><span class="hs-identifier hs-var hs-var">ddDerivCtrlNote</span></a></span></span><span>
-</span><span id="line-80"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-84"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-81"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-85"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The Derivative Controller&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -303,7 +312,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#derGain"><span class="hs-identifier hs-var">derGain</span></a></span><span>
-</span><span id="line-82"></span><span>         </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-86"></span><span>         </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.andThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;differential&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -315,19 +324,20 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddErrSig"><span class="hs-identifier hs-var">ddErrSig</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-83"></span><span>       </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span id="line-87"></span><span>       </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is converted&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#ccFrequencyDomain"><span class="hs-identifier hs-var">ccFrequencyDomain</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-84"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-88"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;by applying the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -337,7 +347,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><a href="Drasil.PDController.TModel.html#tmLaplace"><span class="hs-identifier hs-var">tmLaplace</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-85"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-89"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;A pure form&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -346,19 +356,19 @@ forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;used in this&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-86"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-90"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;application&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.PDController.Assumptions.html#aUnfilteredDerivative"><span class="hs-identifier hs-var">aUnfilteredDerivative</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-87"></span><span>
-</span><span id="line-88"></span><span class="hs-comment">----------------------------------------------</span><span>
-</span><span id="line-89"></span><span>
-</span><span id="line-90"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddCtrlVar"><span class="hs-identifier hs-type">ddCtrlVar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-91"></span><span id="ddCtrlVar"><span class="annot"><span class="annottext">ddCtrlVar :: DataDefinition
+</span><span id="line-91"></span><span>
+</span><span id="line-92"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-93"></span><span>
+</span><span id="line-94"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddCtrlVar"><span class="hs-identifier hs-type">ddCtrlVar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-95"></span><span id="ddCtrlVar"><span class="annot"><span class="annottext">ddCtrlVar :: DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddCtrlVar"><span class="hs-identifier hs-var hs-var">ddCtrlVar</span></a></span></span><span>
-</span><span id="line-92"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span id="line-96"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; [DecRef]
 -&gt; Maybe Derivation
 -&gt; String
@@ -375,9 +385,9 @@ forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ddCtrlVar&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.PDController.DataDefs.html#ddCtrlNote"><span class="hs-identifier hs-var">ddCtrlNote</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-93"></span><span>
-</span><span id="line-94"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddCtrlVarDefn"><span class="hs-identifier hs-type">ddCtrlVarDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-95"></span><span id="ddCtrlVarDefn"><span class="annot"><span class="annottext">ddCtrlVarDefn :: SimpleQDef
+</span><span id="line-97"></span><span>
+</span><span id="line-98"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddCtrlVarDefn"><span class="hs-identifier hs-type">ddCtrlVarDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-99"></span><span id="ddCtrlVarDefn"><span class="annot"><span class="annottext">ddCtrlVarDefn :: SimpleQDef
 </span><a href="Drasil.PDController.DataDefs.html#ddCtrlVarDefn"><span class="hs-identifier hs-var hs-var">ddCtrlVarDefn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -385,11 +395,11 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.PDController.Unitals.html#dqdCtrlVarFD"><span class="hs-identifier hs-var">dqdCtrlVarFD</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.PDController.DataDefs.html#ddCtrlEqn"><span class="hs-identifier hs-var">ddCtrlEqn</span></a></span><span>
-</span><span id="line-96"></span><span>
-</span><span id="line-97"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddCtrlEqn"><span class="hs-identifier hs-type">ddCtrlEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-98"></span><span id="ddCtrlEqn"><span class="annot"><span class="annottext">ddCtrlEqn :: Expr
+</span><span id="line-100"></span><span>
+</span><span id="line-101"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddCtrlEqn"><span class="hs-identifier hs-type">ddCtrlEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-102"></span><span id="ddCtrlEqn"><span class="annot"><span class="annottext">ddCtrlEqn :: Expr
 </span><a href="Drasil.PDController.DataDefs.html#ddCtrlEqn"><span class="hs-identifier hs-var hs-var">ddCtrlEqn</span></a></span></span><span>
-</span><span id="line-99"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
+</span><span id="line-103"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
@@ -401,8 +411,8 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier hs-var">dqdPropGain</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span>
-</span><span id="line-100"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
+</span><span class="hs-operator hs-var">$+</span></span><span>
+</span><span id="line-104"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
@@ -413,25 +423,26 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.PDController.Unitals.html#dqdFreqDomain"><span class="hs-identifier hs-var">dqdFreqDomain</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-101"></span><span>
-</span><span id="line-102"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddCtrlNote"><span class="hs-identifier hs-type">ddCtrlNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-103"></span><span id="ddCtrlNote"><span class="annot"><span class="annottext">ddCtrlNote :: Sentence
+</span><span id="line-105"></span><span>
+</span><span id="line-106"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddCtrlNote"><span class="hs-identifier hs-type">ddCtrlNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-107"></span><span id="ddCtrlNote"><span class="annot"><span class="annottext">ddCtrlNote :: Sentence
 </span><a href="Drasil.PDController.DataDefs.html#ddCtrlNote"><span class="hs-identifier hs-var hs-var">ddCtrlNote</span></a></span></span><span>
-</span><span id="line-104"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-108"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-105"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span id="line-109"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.PDController.Concepts.html#controlVariable"><span class="hs-identifier hs-var">controlVariable</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="Drasil.PDController.Concepts.html#controlVariable"><span class="hs-identifier hs-var">controlVariable</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is the output&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;controller&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-106"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-110"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;In this case&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -443,31 +454,32 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddPropCtrl"><span class="hs-identifier hs-var">ddPropCtrl</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-107"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-111"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and Derivative&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddDerivCtrl"><span class="hs-identifier hs-var">ddDerivCtrl</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
-</span><span id="line-108"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-112"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;controllers&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-109"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-113"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The parallel&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.PDController.Assumptions.html#aParallelEq"><span class="hs-identifier hs-var">aParallelEq</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-110"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-114"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and de-coupled&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.PDController.Assumptions.html#aDecoupled"><span class="hs-identifier hs-var">aDecoupled</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-111"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-115"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;form of the PD equation&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;used in this document&quot;</span></span><span class="hs-special">]</span></pre></body></html>
+</span><span class="hs-string">&quot;used in this document&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-116"></span></pre></body></html>

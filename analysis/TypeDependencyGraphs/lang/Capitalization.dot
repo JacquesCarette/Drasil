@@ -1,4 +1,4 @@
 digraph capitalization{
 Capitalization	[shape=oval, color=red2, label="Capitalization"];
-Capitalization -> Sentence;
+Capitalization -> NPStruct;
 }

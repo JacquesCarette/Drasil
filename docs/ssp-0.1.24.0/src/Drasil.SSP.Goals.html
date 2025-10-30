@@ -3,39 +3,40 @@
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
-</span><span id="line-7"></span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">goalStmtDom</span></span><span class="hs-special">)</span><span>
-</span><span id="line-9"></span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html"><span class="hs-identifier">Drasil.SSP.Defs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.Defs.html#crtSlpSrf"><span class="hs-identifier">crtSlpSrf</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#fsConcept"><span class="hs-identifier">fsConcept</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#slice"><span class="hs-identifier">slice</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#slope"><span class="hs-identifier">slope</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html"><span class="hs-identifier">Drasil.SSP.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier">intNormForce</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier">intShrForce</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="hs-comment">-----------</span><span>
-</span><span id="line-14"></span><span class="hs-comment">-- Goals --</span><span>
-</span><span id="line-15"></span><span class="hs-comment">-----------</span><span>
-</span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="annot"><a href="Drasil.SSP.Goals.html#goals"><span class="hs-identifier hs-type">goals</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
-</span><span id="line-18"></span><span id="goals"><span class="annot"><span class="annottext">goals :: [ConceptInstance]
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Development</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">goalStmtDom</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html"><span class="hs-identifier">Drasil.SSP.Defs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.Defs.html#crtSlpSrf"><span class="hs-identifier">crtSlpSrf</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#fsConcept"><span class="hs-identifier">fsConcept</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#slice"><span class="hs-identifier">slice</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#slope"><span class="hs-identifier">slope</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html"><span class="hs-identifier">Drasil.SSP.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier">intNormForce</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier">intShrForce</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="hs-comment">-----------</span><span>
+</span><span id="line-15"></span><span class="hs-comment">-- Goals --</span><span>
+</span><span id="line-16"></span><span class="hs-comment">-----------</span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="annot"><a href="Drasil.SSP.Goals.html#goals"><span class="hs-identifier hs-type">goals</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-19"></span><span id="goals"><span class="annot"><span class="annottext">goals :: [ConceptInstance]
 </span><a href="Drasil.SSP.Goals.html#goals"><span class="hs-identifier hs-var hs-var">goals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SSP.Goals.html#identifyCritAndFSGS"><span class="hs-identifier hs-var">identifyCritAndFSGS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SSP.Goals.html#determineNormalFGS"><span class="hs-identifier hs-var">determineNormalFGS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SSP.Goals.html#determineShearFGS"><span class="hs-identifier hs-var">determineShearFGS</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="annot"><a href="Drasil.SSP.Goals.html#identifyCritAndFSGS"><span class="hs-identifier hs-type">identifyCritAndFSGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-21"></span><span id="identifyCritAndFSGS"><span class="annot"><span class="annottext">identifyCritAndFSGS :: ConceptInstance
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="annot"><a href="Drasil.SSP.Goals.html#identifyCritAndFSGS"><span class="hs-identifier hs-type">identifyCritAndFSGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-22"></span><span id="identifyCritAndFSGS"><span class="annot"><span class="annottext">identifyCritAndFSGS :: ConceptInstance
 </span><a href="Drasil.SSP.Goals.html#identifyCritAndFSGS"><span class="hs-identifier hs-var hs-var">identifyCritAndFSGS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;identifyCritAndFS&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="Drasil.SSP.Goals.html#identifyCritAndFS"><span class="hs-identifier hs-var">identifyCritAndFS</span></a></span><span> </span><span>
-</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.SSP.Goals.html#identifyCritAndFS"><span class="hs-identifier hs-var">identifyCritAndFS</span></a></span><span>
+</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Identify-Crit-and-FS&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">goalStmtDom</span></span><span>
-</span><span id="line-23"></span><span>
-</span><span id="line-24"></span><span class="annot"><a href="Drasil.SSP.Goals.html#determineNormalFGS"><span class="hs-identifier hs-type">determineNormalFGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-25"></span><span id="determineNormalFGS"><span class="annot"><span class="annottext">determineNormalFGS :: ConceptInstance
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span class="annot"><a href="Drasil.SSP.Goals.html#determineNormalFGS"><span class="hs-identifier hs-type">determineNormalFGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-26"></span><span id="determineNormalFGS"><span class="annot"><span class="annottext">determineNormalFGS :: ConceptInstance
 </span><a href="Drasil.SSP.Goals.html#determineNormalFGS"><span class="hs-identifier hs-var hs-var">determineNormalFGS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -44,13 +45,13 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-string">&quot;determineNormalF&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall a. NamedIdea a =&gt; a -&gt; Sentence
 </span><a href="Drasil.SSP.Goals.html#determineF"><span class="hs-identifier hs-var">determineF</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Determine-Normal-Forces&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">goalStmtDom</span></span><span>
-</span><span id="line-27"></span><span>
-</span><span id="line-28"></span><span class="annot"><a href="Drasil.SSP.Goals.html#determineShearFGS"><span class="hs-identifier hs-type">determineShearFGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-29"></span><span id="determineShearFGS"><span class="annot"><span class="annottext">determineShearFGS :: ConceptInstance
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="annot"><a href="Drasil.SSP.Goals.html#determineShearFGS"><span class="hs-identifier hs-type">determineShearFGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-30"></span><span id="determineShearFGS"><span class="annot"><span class="annottext">determineShearFGS :: ConceptInstance
 </span><a href="Drasil.SSP.Goals.html#determineShearFGS"><span class="hs-identifier hs-var hs-var">determineShearFGS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -59,13 +60,13 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-string">&quot;determineShearF&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall a. NamedIdea a =&gt; a -&gt; Sentence
 </span><a href="Drasil.SSP.Goals.html#determineF"><span class="hs-identifier hs-var">determineF</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier hs-var">intShrForce</span></a></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier hs-var">intShrForce</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Determine-Shear-Forces&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">goalStmtDom</span></span><span>
-</span><span id="line-31"></span><span>
-</span><span id="line-32"></span><span class="annot"><a href="Drasil.SSP.Goals.html#identifyCritAndFS"><span class="hs-identifier hs-type">identifyCritAndFS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-33"></span><span id="identifyCritAndFS"><span class="annot"><span class="annottext">identifyCritAndFS :: Sentence
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span class="annot"><a href="Drasil.SSP.Goals.html#identifyCritAndFS"><span class="hs-identifier hs-type">identifyCritAndFS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-34"></span><span id="identifyCritAndFS"><span class="annot"><span class="annottext">identifyCritAndFS :: Sentence
 </span><a href="Drasil.SSP.Goals.html#identifyCritAndFS"><span class="hs-identifier hs-var hs-var">identifyCritAndFS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Identify the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -73,34 +74,35 @@ forall a. NamedIdea a =&gt; a -&gt; Sentence
 forall a. NamedIdea a =&gt; a -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.SSP.Defs.html#crtSlpSrf"><span class="hs-identifier hs-var">crtSlpSrf</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`S.andThe`</span></span><span> </span><span>
-</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.andThe`</span></span><span>
+</span><span id="line-35"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;corresponding&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall a. NamedIdea a =&gt; a -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.SSP.Defs.html#fsConcept"><span class="hs-identifier hs-var">fsConcept</span></a></span><span>
-</span><span id="line-35"></span><span>  </span><span>
-</span><span id="line-36"></span><span id="local-6989586621679081747"><span class="annot"><a href="Drasil.SSP.Goals.html#determineF"><span class="hs-identifier hs-type">determineF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679081747"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679081747"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
-</span><span id="line-37"></span><span id="determineF"><span class="annot"><span class="annottext">determineF :: forall a. NamedIdea a =&gt; a -&gt; Sentence
-</span><a href="Drasil.SSP.Goals.html#determineF"><span class="hs-identifier hs-var hs-var">determineF</span></a></span></span><span> </span><span id="local-6989586621679081796"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679081796"><span class="hs-identifier hs-var">what</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-36"></span><span>
+</span><span id="line-37"></span><span id="local-6989586621679082065"><span class="annot"><a href="Drasil.SSP.Goals.html#determineF"><span class="hs-identifier hs-type">determineF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679082065"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679082065"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
+</span><span id="line-38"></span><span id="determineF"><span class="annot"><span class="annottext">determineF :: forall a. NamedIdea a =&gt; a -&gt; Sentence
+</span><a href="Drasil.SSP.Goals.html#determineF"><span class="hs-identifier hs-var hs-var">determineF</span></a></span></span><span> </span><span id="local-6989586621679082115"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679082115"><span class="hs-identifier hs-var">what</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Determine the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; Sentence
 forall a. NamedIdea a =&gt; a -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679081796"><span class="hs-identifier hs-var">what</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679082115"><span class="hs-identifier hs-var">what</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;between each pair of vertical&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.SSP.Defs.html#slice"><span class="hs-identifier hs-var">slice</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-operator hs-var">`ofThePS`</span></span><span>
-</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
-</span><a href="Drasil.SSP.Defs.html#slope"><span class="hs-identifier hs-var">slope</span></a></span><span class="hs-special">)</span></pre></body></html>
+</span><span class="hs-operator hs-var">`ofThePS`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
+</span><a href="Drasil.SSP.Defs.html#slope"><span class="hs-identifier hs-var">slope</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-40"></span></pre></body></html>

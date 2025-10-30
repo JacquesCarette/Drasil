@@ -14,8 +14,8 @@
 </span><span id="line-14"></span><span>
 </span><span id="line-15"></span><span class="annot"><a href="Database.Drasil.Dump.html#dumpChunkDB"><span class="hs-identifier hs-type">dumpChunkDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Database.Drasil.ChunkDB.html#ChunkDB"><span class="hs-identifier hs-type">ChunkDB</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Database.Drasil.Dump.html#DumpedChunkDB"><span class="hs-identifier hs-type">DumpedChunkDB</span></a></span><span>
 </span><span id="line-16"></span><span id="dumpChunkDB"><span class="annot"><span class="annottext">dumpChunkDB :: ChunkDB -&gt; DumpedChunkDB
-</span><a href="Database.Drasil.Dump.html#dumpChunkDB"><span class="hs-identifier hs-var hs-var">dumpChunkDB</span></a></span></span><span> </span><span id="local-6989586621679058658"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679058658"><span class="hs-identifier hs-var">cdb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(ChunkType, [UID])] -&gt; DumpedChunkDB
+</span><a href="Database.Drasil.Dump.html#dumpChunkDB"><span class="hs-identifier hs-var hs-var">dumpChunkDB</span></a></span></span><span> </span><span id="local-6989586621679058666"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679058666"><span class="hs-identifier hs-var">cdb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(ChunkType, [UID])] -&gt; DumpedChunkDB
 forall k a. Ord k =&gt; [(k, a)] -&gt; Map k a
 </span><span class="hs-identifier hs-var">SM.fromList</span></span><span> </span><span class="annot"><span class="annottext">([(ChunkType, [UID])] -&gt; DumpedChunkDB)
 -&gt; [(ChunkType, [UID])] -&gt; DumpedChunkDB
@@ -23,14 +23,14 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(SomeTypeRep -&gt; (ChunkType, [UID]))
 -&gt; [SomeTypeRep] -&gt; [(ChunkType, [UID])]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679058660"><span class="annot"><span class="annottext">SomeTypeRep
-</span><a href="#local-6989586621679058660"><span class="hs-identifier hs-var">ty</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SomeTypeRep -&gt; ChunkType
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679058668"><span class="annot"><span class="annottext">SomeTypeRep
+</span><a href="#local-6989586621679058668"><span class="hs-identifier hs-var">ty</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SomeTypeRep -&gt; ChunkType
 forall a. Show a =&gt; a -&gt; ChunkType
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">SomeTypeRep
-</span><a href="#local-6989586621679058660"><span class="hs-identifier hs-var">ty</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SomeTypeRep -&gt; ChunkDB -&gt; [UID]
+</span><a href="#local-6989586621679058668"><span class="hs-identifier hs-var">ty</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SomeTypeRep -&gt; ChunkDB -&gt; [UID]
 </span><a href="Database.Drasil.ChunkDB.html#findAll%27"><span class="hs-identifier hs-var">findAll'</span></a></span><span> </span><span class="annot"><span class="annottext">SomeTypeRep
-</span><a href="#local-6989586621679058660"><span class="hs-identifier hs-var">ty</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679058658"><span class="hs-identifier hs-var">cdb</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB -&gt; [SomeTypeRep]
+</span><a href="#local-6989586621679058668"><span class="hs-identifier hs-var">ty</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679058666"><span class="hs-identifier hs-var">cdb</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB -&gt; [SomeTypeRep]
 </span><a href="Database.Drasil.ChunkDB.html#typesRegistered"><span class="hs-identifier hs-var">typesRegistered</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679058658"><span class="hs-identifier hs-var">cdb</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679058666"><span class="hs-identifier hs-var">cdb</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-17"></span></pre></body></html>

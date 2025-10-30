@@ -366,7 +366,7 @@ termAndDef :: IdeaDict
 traceyMandG :: IdeaDict
 vav :: IdeaDict
 tOfCont :: IdeaDict
-scpOfTheProj :: (IdeaDict -> Sentence) -> IdeaDict
+scpOfTheProj :: (IdeaDict -> NPStruct) -> IdeaDict
 designDoc :: IdeaDict
 fullForm :: IdeaDict
 generalSystemDescription :: IdeaDict

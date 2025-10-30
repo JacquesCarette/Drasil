@@ -628,6 +628,12 @@ digraph alltypes {
 	subgraph combinators {
 	}
 	subgraph core {
+		subgraph npstruct{
+		NPStruct	[shape=oval, color=darkviolet, label="NPStruct"];
+		NPStruct -> String;
+		NPStruct -> ::;
+		NPStruct -> NPStruct;
+		}
 		subgraph capitalizationrule{
 		CapitalizationRule	[shape=oval, color=darkviolet, label="CapitalizationRule"];
 		}
@@ -641,7 +647,7 @@ digraph alltypes {
 		}
 		subgraph pluralform{
 		PluralForm	[shape=oval, color=red2, label="PluralForm"];
-		PluralForm -> Sentence;
+		PluralForm -> NPStruct;
 		}
 	}
 	subgraph combinators {
@@ -752,7 +758,7 @@ digraph alltypes {
 	subgraph nounpraehs {
 		subgraph capitalization{
 		Capitalization	[shape=oval, color=red2, label="Capitalization"];
-		Capitalization -> Sentence;
+		Capitalization -> NPStruct;
 		}
 		subgraph pluralstring{
 		PluralString	[shape=oval, color=red2, label="PluralString"];
@@ -800,6 +806,7 @@ digraph alltypes {
 		Sentence -> UID;
 		Sentence -> Sentence;
 		Sentence -> USymb;
+		Sentence -> NP;
 		Sentence -> String;
 		Sentence -> Symbol;
 		}

@@ -96,6 +96,7 @@ StatBinOp	[shape=oval, color=turquoise4, label="StatBinOp"];
 SpaceBinOp	[shape=oval, color=turquoise4, label="SpaceBinOp"];
 DerivType	[shape=oval, color=turquoise4, label="DerivType"];
 ModelExpr	[shape=oval, color=turquoise4, label="ModelExpr"];
+NPStruct	[shape=oval, color=turquoise4, label="NPStruct"];
 CapitalizationRule	[shape=oval, color=turquoise4, label="CapitalizationRule"];
 PluralRule	[shape=oval, color=turquoise4, label="PluralRule"];
 NP	[shape=oval, color=turquoise4, label="NP"];

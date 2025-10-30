@@ -1,0 +1,6 @@
+digraph npstruct{
+NPStruct	[shape=oval, color=darkviolet, label="NPStruct"];
+NPStruct -> String;
+NPStruct -> ::;
+NPStruct -> NPStruct;
+}

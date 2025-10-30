@@ -32,6 +32,7 @@ soilLyr :: IdeaDict
 soilMechanics :: IdeaDict
 stabAnalysis :: IdeaDict
 ssa :: IdeaDict
+slpSrfCon :: IdeaDict
 effFandS :: ConceptChunk
 slpSrf :: ConceptChunk
 crtSlpSrf :: ConceptChunk
@@ -40,6 +41,10 @@ fsConcept :: ConceptChunk
 waterTable :: ConceptChunk
 factor :: IdeaDict
 factorOfSafety :: NP
+minim :: IdeaDict
+maxim :: IdeaDict
+xCoords :: ConceptChunk
+yCoords :: ConceptChunk
 
 module Drasil.SSP.Figures
 figForceActing :: LabelledContent

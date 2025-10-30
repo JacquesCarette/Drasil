@@ -22,7 +22,7 @@ module Language.Drasil (
   , Literal
   , LiteralC(..)
 
-  -- ** Expression Modelling Language 
+  -- ** Expression Modelling Language
   -- | Defines display-related expression functions. Used in models.
 
   -- Language.Drasil.ModelExpr
@@ -107,7 +107,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
-  , mkFuncDef, mkFuncDef', mkFuncDefByQ 
+  , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.Unitary
   , unit_symb
   -- Language.Drasil.Chunk.DefinedQuantity
@@ -216,7 +216,7 @@ module Language.Drasil (
 
   -- *** Sentence-related
   , foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent
-  , foldlSent_,foldlSentCol, foldlsC, foldNums, numList 
+  , foldlSent_,foldlSentCol, foldlsC, foldNums, numList
 
 
   -- * Basic Document Language
@@ -298,8 +298,8 @@ module Language.Drasil (
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 
 import Drasil.Code.Classes (Callable, IsArgumentName)
-import Drasil.Code.CodeVar (CodeIdea(..), CodeChunk(..), 
-  CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
+import Drasil.Code.CodeVar (CodeIdea(..), CodeChunk(..),
+  CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv,
   listToArray, programName, funcPrefix, DefiningCodeExpr(..))
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Drasil.Code.CodeExpr.Class (CodeExprC(..))
@@ -357,7 +357,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.DifferentialModel(DifferentialModel(..), ODESolverFormat(..),
-  InitialValueProblem(..), ($^^), ($**), ($++), makeAODESolverFormat, makeAIVP, makeASystemDE, 
+  InitialValueProblem(..), ($^^), ($**), ($++), makeAODESolverFormat, makeAIVP, makeASystemDE,
   makeASingleDE, formEquations)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), uc, uc', ucStaged, ucStaged',

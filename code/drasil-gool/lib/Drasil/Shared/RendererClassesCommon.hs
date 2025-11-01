@@ -50,6 +50,7 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
 
 -- Common Typeclasses --
 
+-- Couldn't this just be in InterfaceCommon?
 class ImportSym r where
   type Import r
   -- For importing an external library
@@ -69,18 +70,23 @@ class BodyElim r where
 class RenderBlock r where
   multiBlock :: [MSBlock r] -> MSBlock r
 
+-- This assumes that the renderers encode Body as Doc
 class BlockElim r where
   block :: r (Block r) -> Doc
 
+-- This relates to TypeData, which keeps ADT, String, and Doc representations of a type for _reasons_
 class RenderType r where
   multiType :: [VSType r] -> VSType r
   typeFromData :: CodeType -> String -> Doc -> VSType r
 
+-- This is coupled to TypeData
 class InternalTypeElim r where
   type' :: r (Type r) -> Doc
 
 type VSUnOp a = VS (a (UnaryOp a))
 
+-- Why do we have these, when we also have NumericExpression in InterfaceCommon?
+-- It looks like the implementations for NumericExpression link here, but why?
 class UnaryOpSym r where
   type UnaryOp r
   notOp    :: VSUnOp r
@@ -124,12 +130,16 @@ class OpElim r where
   uOpPrec :: r (UnaryOp r) -> Int
   bOpPrec :: r (BinaryOp r) -> Int
 
+-- These assume we represent Scope with ScopeData
 class ScopeElim r where
   scopeData :: r (Scope r) -> ScopeData
-  
+
+-- What exactly is this, since it adds a bunch of extra required data?
 class RenderVariable r where
   varFromData :: Binding -> String -> VSType r -> Doc -> SVariable r
-    
+
+-- This assumes variables are represented in a certain way, and
+-- its existence seems a bit sketchy
 class InternalVarElim r where
   variableBind :: r (Variable r) -> Binding
   variable  :: r (Variable r) -> Doc
@@ -157,6 +167,7 @@ class ValueElim r where
   valueInt :: r (Value r) -> Maybe Integer
   value :: r (Value r) -> Doc
 
+-- Again, wh are we recreating all these list functions?
 class InternalListFunc r where
   -- | List
   listSizeFunc   :: SValue r -> VSFunction r
@@ -172,10 +183,12 @@ class InternalListFunc r where
 class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r
   
+-- Assumes a certain representation for functions
 class FunctionElim r where
   functionType :: r (Function r) -> r (Type r)
   function :: r (Function r) -> Doc
 
+-- Shouldn't this be in InterfaceCommon?
 class InternalAssignStmt r where
   multiAssign       :: [SVariable r] -> [SValue r] -> MSStatement r 
 
@@ -198,13 +211,16 @@ class StatementElim r where
 
 class RenderVisibility r where
   visibilityFromData :: VisibilityTag -> Doc -> r (Visibility r)
-  
+
+-- This assumes a certain representation of visibility 
 class VisibilityElim r where
   visibility :: r (Visibility r) -> Doc
 
+-- Why do we need a Doc here?
 class RenderParam r where
   paramFromData :: SVariable r -> Doc -> MSParameter r
   
+-- This assumes a certain representation for Parameter
 class ParamElim r where
   parameterName :: r (Parameter r) -> Label
   parameterType :: r (Parameter r) -> r (Type r)
@@ -216,6 +232,7 @@ class BlockCommentSym r where
   -- | Converts a list of strings into a block comment
   docComment :: State a [String] -> State a (r (BlockComment r))
 
+-- This assumes a certain representation for BlockComment
 class BlockCommentElim r where
   blockComment' :: r (BlockComment r) -> Doc
 
@@ -230,5 +247,6 @@ class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r where
   commentedFunc :: MS (r (BlockComment r)) -> SMethod r -> SMethod r
   mthdFromData :: VisibilityTag -> Doc -> SMethod r
 
+-- This assumes a certain representation for Method
 class MethodElim r where
   method :: r (Method r) -> Doc

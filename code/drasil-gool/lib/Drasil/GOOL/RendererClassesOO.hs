@@ -40,10 +40,12 @@ class (BlockCommentSym r) => RenderFile r where
 
   fileFromData :: FilePath -> IG.FSModule r -> IG.SFile r
 
+-- This assumes a certain representation for Permanence
 class PermElim r where
   perm :: r (IG.Permanence r) -> Doc
   binding :: r (IG.Permanence r) -> Binding
 
+-- Why do we have these here on top of InterfaceCommon?
 class InternalGetSet r where
   getFunc :: SVariable r -> VSFunction r
   setFunc :: VSType r -> SVariable r -> SValue r -> VSFunction r
@@ -63,6 +65,7 @@ class (RenderMethod r, OOMethodTypeSym r) => OORenderMethod r where
     
   destructor :: [IG.CSStateVar r] -> SMethod r
 
+-- This assumes a certain representation for StateVar
 class StateVarElim r where  
   stateVar :: r (IG.StateVar r) -> Doc
 
@@ -85,5 +88,6 @@ class RenderMod r where
   modFromData :: String -> FS Doc -> IG.FSModule r
   updateModuleDoc :: (Doc -> Doc) -> r (IG.Module r) -> r (IG.Module r)
   
+-- This assumes a certain representation for Module
 class ModuleElim r where
   module' :: r (IG.Module r) -> Doc

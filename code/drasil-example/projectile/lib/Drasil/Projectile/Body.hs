@@ -14,7 +14,10 @@ import qualified Drasil.DocLang.SRS as SRS
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (analysis, assumption, condition,
+  datum, endUser, environment, example, input_, interface, output_, physical,
+  physics, problem, product_, software, softwareConstraint, softwareSys,
+  sysCont, system, user)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)

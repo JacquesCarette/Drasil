@@ -8,6 +8,7 @@ import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
 import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 
@@ -34,13 +35,13 @@ import Data.Maybe (maybeToList)
 developmentProcessParagraph :: Sentence
 developmentProcessParagraph = foldlSent [S "This", phrase document,
   S "will be used as a starting point for subsequent development",
-  S "phases, including writing the", phraseNP (desSpec `andThe` softwareVAV) +:+.
-  S "plan", atStartNP (the designDoc), S "will show how the",
+  S "phases, including writing the", D.toSent (phraseNP (desSpec `andThe` softwareVAV)) +:+.
+  S "plan", D.toSent $ atStartNP (the designDoc), S "will show how the",
   plural requirement, S "are to be realized, including", plural decision,
   S "on the numerical", plural algorithm, S "and programming" +:+.
   phrase environment, S "The", phrase vavPlan,
   S "will show the steps that will be used to increase confidence in the",
-  (phraseNP (softwareDoc `andThe` implementation) !.), S "Although",
+  (D.toSent (phraseNP (softwareDoc `andThe` implementation)) !.), S "Although",
   S "the", short srs, S "fits in a series of", plural document,
   S "that follow the so-called waterfall", phrase model `sC`
   S "the actual development process is not constrained",
@@ -144,7 +145,7 @@ intReaderIntro progName assumed topic asset sectionRef =
   [foldlSP [S "Reviewers of this", phrase documentation,
   S "should have an understanding of" +:+.
   foldlList Comma List (assumed ++ topic), assetSent,
-  atStartNP' (the user) `S.of_` short progName, S "can have a lower level" `S.of_`
+  D.toSent (atStartNP' (the user)) `S.of_` short progName, S "can have a lower level" `S.of_`
   S "expertise, as explained" `S.in_` refS sectionRef]]
   where
     assetSent = case asset of
@@ -172,7 +173,7 @@ orgIntro bottom bottomSec trailingSentence =
 
 orgOfDocIntro :: Sentence
 orgOfDocIntro = foldlSent
-  [atStartNP (the organization), S "of this", phrase document,
+  [D.toSent $ atStartNP (the organization), S "of this", phrase document,
   S "follows the", phrase template, S "for an", short srs, S "for",
   phrase sciCompS, S "proposed by", foldlList Comma List $
     map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]

@@ -1,6 +1,6 @@
 -- | Holds all section constructors and labels for creating SRS documents.
 
--- Changes to SRS sections should be reflected in the 'Creating Your Project 
+-- Changes to SRS sections should be reflected in the 'Creating Your Project
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 
@@ -34,6 +34,7 @@ module Drasil.DocLang.SRS (
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   charOfIR, client, customer, consVals, datumConstraint, functionalRequirement,
@@ -45,6 +46,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption
   tOfCont, tOfSymb, tOfUnit, userCharacteristic, refMat, abbAcc)
 import qualified Drasil.Metadata as M (dataDefn, genDefn, inModel, thModel)
 
+import Control.Lens ((^.), view)
 
 -- Ordered by appearance in SRS.
 -- | Standard SRS section builders.
@@ -82,9 +84,9 @@ orgOfDoc      cs ss = section (titleize Doc.orgOfDoc)                  cs ss doc
 -- | Stakeholders section.
 stakeholder   cs ss = section (titleize' Doc.stakeholder)              cs ss stakeholderLabel
 -- | The Customer section.
-theCustomer   cs ss = section (titleizeNP $ the Doc.customer)          cs ss customerLabel
+theCustomer   cs ss = section (D.toSent $ titleizeNP $ the Doc.customer) cs ss customerLabel
 -- | The Client section.
-theClient     cs ss = section (titleizeNP $ the Doc.client)            cs ss clientLabel
+theClient     cs ss = section (D.toSent $ titleizeNP $ the Doc.client) cs ss clientLabel
 
 -- | General System Description section.
 genSysDes     cs ss = section (titleize Doc.generalSystemDescription)  cs ss genSysDescLabel
@@ -149,7 +151,7 @@ offShelfSol   cs ss = section (titleize' Doc.offShelfSolution)         cs ss off
 
 -- Unused
 -- | Scope of the Project section.
-scpOfTheProj  cs ss = section (atStart (Doc.scpOfTheProj titleize))    cs ss projScopeLabel
+scpOfTheProj  cs ss = section (atStart (Doc.scpOfTheProj (\s -> titleizeNP (s ^. term))))    cs ss projScopeLabel
 -- | Product Use Case Table section.
 prodUCTable   cs ss = section (titleize Doc.prodUCTable)               cs ss useCaseTableLabel
 -- | Individual Product Use Case section.
@@ -196,8 +198,8 @@ readerCharsLabel    = makeSecRef "ReaderChars"      $ titleize' Doc.charOfIR
 docOrgLabel         = makeSecRef "DocOrg"           $ titleize  Doc.orgOfDoc
 
 stakeholderLabel    = makeSecRef "Stakeholder"      $ titleize' Doc.stakeholder
-clientLabel         = makeSecRef "Client"           $ titleizeNP $ the Doc.client
-customerLabel       = makeSecRef "Customer"         $ titleizeNP $ the Doc.customer
+clientLabel         = makeSecRef "Client"           $ D.toSent $ titleizeNP $ the Doc.client
+customerLabel       = makeSecRef "Customer"         $ D.toSent $ titleizeNP $ the Doc.customer
 
 genSysDescLabel     = makeSecRef "GenSysDesc"       $ titleize  Doc.generalSystemDescription
 sysContextLabel     = makeSecRef "SysContext"       $ titleize  Doc.sysCont
@@ -228,13 +230,13 @@ unlikeChgLabel      = makeSecRef "UCs"              $ titleize' Doc.unlikelyChg
 
 traceMatricesLabel  = makeSecRef "TraceMatrices"    $ titleize' Doc.traceyMandG
 valsOfAuxConsLabel  = makeSecRef "AuxConstants"     $ titleize  Doc.consVals
-referenceLabel      = makeSecRef "References"       $ titleize' Doc.reference 
+referenceLabel      = makeSecRef "References"       $ titleize' Doc.reference
 appendixLabel       = makeSecRef "Appendix"         $ titleize  Doc.appendix
 offShelfSolnsLabel  = makeSecRef "offShelfSolns"    $ titleize' Doc.offShelfSolution
 
 -- Used only under People/Dan/Presentations/CommitteeMeeting4/BodyNew.hs
 indPRCaseLabel      = makeSecRef "IndividualProdUC" $ titleize' Doc.indPRCase
 -- Seem to be unused. Should they be deleted?
-projScopeLabel      = makeSecRef "ProjScope"        $ atStart $ Doc.scpOfTheProj titleize
+projScopeLabel      = makeSecRef "ProjScope"        $ atStart $ Doc.scpOfTheProj (titleizeNP . view term)
 useCaseTableLabel   = makeSecRef "UseCaseTable"     $ titleize  Doc.prodUCTable
 terminologyLabel    = makeSecRef "Terminology"      $ titleize  Doc.terminology

@@ -1,8 +1,8 @@
 module Drasil.SWHS.DataDefs where --exports all of it
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition, ddE, ddENoRefs)
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Citations (koothoor2013)
@@ -15,6 +15,7 @@ import Data.Drasil.Quantities.Physics (energy, pressure)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
+import Theory.Drasil (DataDefinition, ddE, ddENoRefs)
 
 import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.References (bueche1986, lightstone2012)
@@ -23,13 +24,13 @@ import Drasil.SWHS.Unitals (aspectRatio, coilHTC, coilSA, diam, eta, htCapLP,
   tankLength, tankVol, tauLP, tauSP, tauW, wDensity, wMass, wVol)
 
 qDefs :: [SimpleQDef]
-qDefs = [waterMassQD, waterVolumeQD, tankVolumeQD, balanceDecayRateQD, 
-  balanceDecayTimeQD, balanceSolidPCMQD, balanceLiquidPCMQD, ddHtFusionQD, 
+qDefs = [waterMassQD, waterVolumeQD, tankVolumeQD, balanceDecayRateQD,
+  balanceDecayTimeQD, balanceSolidPCMQD, balanceLiquidPCMQD, ddHtFusionQD,
   ddMeltFracQD, aspRatQD]
 
-dataDefs :: [DataDefinition] 
-dataDefs = [waterMass, waterVolume, tankVolume, balanceDecayRate, 
-  balanceDecayTime, balanceSolidPCM, balanceLiquidPCM, ddHtFusion, ddMeltFrac, 
+dataDefs :: [DataDefinition]
+dataDefs = [waterMass, waterVolume, tankVolume, balanceDecayRate,
+  balanceDecayTime, balanceSolidPCM, balanceLiquidPCM, ddHtFusion, ddMeltFrac,
   aspRat]
 
 -- FIXME? This section looks strange. Some data defs are created using
@@ -57,11 +58,11 @@ waterVolumeEqn :: Expr
 waterVolumeEqn = sy tankVol $- sy pcmVol
 
 waterVolumeNotes :: Sentence
-waterVolumeNotes = foldlSent [S "Based on" +:+. refS assumpVCN, 
+waterVolumeNotes = foldlSent [S "Based on" +:+. refS assumpVCN,
   ch tankVol, S "is defined in", refS tankVolume]
 
 waterVolume :: DataDefinition
-waterVolume = ddENoRefs waterVolumeQD Nothing "waterVolume_pcm" 
+waterVolume = ddENoRefs waterVolumeQD Nothing "waterVolume_pcm"
   [waterVolumeNotes]
 
 ----
@@ -84,7 +85,7 @@ balanceDecayRateEqn :: Expr
 balanceDecayRateEqn = sy wMass $* sy htCapW $/ (sy coilHTC $* sy coilSA)
 
 balanceDecayRateNotes :: Sentence
-balanceDecayRateNotes = foldlSent [ch wMass, S "is defined in", 
+balanceDecayRateNotes = foldlSent [ch wMass, S "is defined in",
   refS waterMass]
 
 balanceDecayRate :: DataDefinition
@@ -142,7 +143,7 @@ ddHtFusion = ddE ddHtFusionQD [dRefInfo bueche1986 $ Page [282]]
   Nothing "htFusion" [htFusionNote]
 
 htFusionNote :: Sentence
-htFusionNote = foldlSent [atStartNP (the htFusion),
+htFusionNote = foldlSent [D.toSent (atStartNP (the htFusion)),
   sParen (S "also known as the enthalpy of fusion") `S.ofA` S "substance is the",
   phrase heat, phrase energy, S "required", sParen (ch latentHeat), S "to change the state" `S.ofA` S "unit of the",
   phrase mass, sParen (ch mass) `S.ofThe` S "substance from solid to liquid" `sC`
@@ -153,7 +154,7 @@ htFusionNote = foldlSent [atStartNP (the htFusion),
 ddMeltFracQD :: SimpleQDef
 ddMeltFracQD = mkQuantDef meltFrac meltFracEqn
 
---FIXME: "Phi is the melt fraction" is produced; 
+--FIXME: "Phi is the melt fraction" is produced;
   --"Phi is the fraction of the PCM that is liquid" is what is supposed to be
   -- produced according to CaseStudies' original
 
@@ -163,7 +164,7 @@ meltFracEqn = sy latentEP $/ (sy htFusion $* sy pcmMass)
 ddMeltFrac :: DataDefinition
 ddMeltFrac = ddE ddMeltFracQD [dRef koothoor2013]
   Nothing "meltFrac" [meltFracConst, refS ddHtFusion]
-  where meltFracConst = atStartNP (the value) `S.of_` eS' meltFrac `S.is`
+  where meltFracConst = D.toSent (atStartNP (the value)) `S.of_` eS' meltFrac `S.is`
                         S "constrained to" +:+. eS (realInterval meltFrac (Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)))
 
 ----

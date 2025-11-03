@@ -4,6 +4,7 @@ module Drasil.SglPend.IMods (iMods, angularDisplacementIM) where
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
+import qualified Language.Drasil.Development as D
 import Theory.Drasil
 import Utils.Drasil (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -50,21 +51,24 @@ angularDisplacementDerivSents = [angularDisplacementDerivSent1, angularDisplacem
 
 angularDisplacementDerivSent1, angularDisplacementDerivSent2, angularDisplacementDerivSent3,
   angularDisplacementDerivSent4, angularDisplacementDerivSent5 :: Sentence
-angularDisplacementDerivSent1 = foldlSentCol [S "When", phraseNP (the pendulum) `S.is` S "displaced to an", phrase iAngle `S.and_` S "released" `sC`
-                                       phraseNP (the pendulum), S "swings back and forth with periodic" +:+. phrase motion,
-                                       S "By applying", namedRef newtonSLR (phrase newtonSLR) `sC`
-                                       phraseNP (NP.the (equation `of_` motion) `NP.for` the pendulum), S "may be obtained"]
+angularDisplacementDerivSent1 = foldlSentCol
+ [S "When", D.toSent (phraseNP (the pendulum)) `S.is` S "displaced to an",
+  phrase iAngle `S.and_` S "released" `sC`
+  D.toSent (phraseNP (the pendulum)), S "swings back and forth with periodic" +:+. phrase motion,
+  S "By applying", namedRef newtonSLR (phrase newtonSLR) `sC`
+  D.toSent (phraseNP (NP.the (equation `of_` motion) `NP.for` the pendulum)), S "may be obtained"]
 angularDisplacementDerivSent2 = foldlSentCol [S "Where", ch torque `S.denotes` phrase torque `sC`
                                     ch momentOfInertia `S.denotes` phrase momentOfInertia `S.and_` ch angularAccel `S.denotes`
                                     (phrase angularAccel !.), S "This implies"]
 angularDisplacementDerivSent3 = foldlSentCol [S "And rearranged as" ]
-angularDisplacementDerivSent4 = foldlSentCol [S "If", phraseNP (NP.the (amplitude `of_` angularDisplacement)), S "is small enough" `sC`
+angularDisplacementDerivSent4 = foldlSentCol
+ [S "If", D.toSent (phraseNP (NP.the (amplitude `of_` angularDisplacement))), S "is small enough" `sC`
   S "we can approximate", eS (sin (sy pendDisplacementAngle) $= sy pendDisplacementAngle), S "for the purpose of a simple", phrase pendulum,
-  S "at very small" +:+. plural angle,
-  S "Then", phraseNP (NP.the (equation `of_` motion)), S "reduces to", phraseNP (NP.the (equation `of_` shm))]                                       
+  S "at very small" +:+. plural angle, S "Then", D.toSent (phraseNP (NP.the (equation `of_` motion))),
+  S "reduces to", D.toSent $ phraseNP (NP.the (equation `of_` shm))]
 angularDisplacementDerivSent5 = foldlSentCol [S "Thus the", phrase shm, S "is" ]
 
 angularDispConstraintNote :: Sentence
-angularDispConstraintNote = foldlSent [atStartNP (the constraint),
+angularDispConstraintNote = foldlSent [D.toSent $ atStartNP (the constraint),
      eS (sy initialPendAngle $> exactDbl 0) `S.is` (S "required" !.),
-     atStartNP (the angularFrequency) `S.is` definedIn'' angFrequencyGD]
+     D.toSent (atStartNP (the angularFrequency)) `S.is` definedIn'' angFrequencyGD]

@@ -3,6 +3,7 @@ module Drasil.SWHS.Changes (likelyChgs, likeChgTCVOD, likeChgTCVOL,
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
@@ -52,7 +53,7 @@ likeChgDT = cic "likeChgDT" (
 --
 likeChgDITPW = cic "likeChgDITPW" (
   foldlSent [chgsStart assumpSITWP (S "To add more flexibility to the"),
-  phrase simulation `sC` phraseNP (tempInit `the_ofThe` water) `S.andThe`
+  phrase simulation `sC` D.toSent (phraseNP (tempInit `the_ofThe` water)) `S.andThe`
   short phsChgMtrl, S "could be allowed to have different",
   plural value] ) "Different-Initial-Temps-PCM-Water" likeChgDom
 --

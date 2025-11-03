@@ -13,10 +13,11 @@ module Language.Drasil.Sentence (
   sentenceSymb, sentenceTerm) where
 
 import Drasil.Database.UID (HasUID(..), UID)
-import Language.Drasil.Symbol (HasSymbol, Symbol)
-import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ExprClasses (Express(express))
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
+import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.UnitLang (USymb)
+import Language.Drasil.Symbol (HasSymbol, Symbol)
 
 import Control.Lens ((^.))
 
@@ -51,12 +52,14 @@ data RefInfo = None
 infixr 5 :+:
 data Sentence where
   -- | Ch looks up the term for a given 'UID' and displays the term with a given 'SentenceStyle' and 'CapitalizationRule'.
-  -- This allows Sentences to hold plural forms of 'NounPhrase's and 'NamedIdea's.
+  -- This allows Sentences to hold plural forms of 'NamedIdea's.
   Ch    :: SentenceStyle -> TermCapitalization -> UID -> Sentence
   -- | A branch of Ch dedicated to SymbolStyle only.
   SyCh  :: UID -> Sentence
   -- | Converts a unit symbol into a usable Sentence form.
   Sy    :: USymb -> Sentence
+  -- | Directly embeds a 'NP'
+  NP    :: NP -> Sentence
   -- | Constructor for 'String's, used often for descriptions in Chunks.
   S     :: String -> Sentence
   -- | Converts the graphical representation of a symbol into a usable Sentence form.

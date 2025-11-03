@@ -151,7 +151,7 @@ ${\mathit{SD}_{\text{y}}}$ & Stand off distance ($y$-component) & ${\text{m}}$
 \\
 ${\mathit{SD}_{\text{z}}}$ & Stand off distance ($z$-component) & ${\text{m}}$
 \\
-$t$ & Nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & ${\text{mm}}$
+$t$ & Nominal thickness & ${\text{mm}}$
 \\
 ${t_{\text{d}}}$ & Duration of load & ${\text{s}}$
 \\
@@ -388,7 +388,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[glassLite:\phantomsection\label{assumpGL}]{Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[accMoreThanSingleLite]{LC:Accomodate-More-than-Single-Lite}.)}
 \item[boundaryConditions:\phantomsection\label{assumpBC}]{Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: \hyperref[accMoreBoundaryConditions]{LC:Accomodate-More-Boundary-Conditions}.)}
 \item[responseType:\phantomsection\label{assumpRT}]{The response type considered in GlassBR is flexural. (RefBy: \hyperref[considerMoreThanFlexGlass]{LC:Consider-More-than-Flexure-Glass}.)}
-\item[ldfConstant:\phantomsection\label{assumpLDFC}]{With reference to \hyperref[assumpSV]{A:standardValues}, the Load Duration Factor (LDF) is a constant. (RefBy: \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E} and \hyperref[DD:loadDurFactor]{DD:loadDurFactor}.)}
+\item[ldfConstant:\phantomsection\label{assumpLDFC}]{With reference to \hyperref[assumpSV]{A:standardValues}, the Load Duration Factor (LDF) is constant. (RefBy: \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E} and \hyperref[DD:loadDurFactor]{DD:loadDurFactor}.)}
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -502,10 +502,12 @@ Equation & \begin{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$h$ is the minimum thickness (${\text{m}}$)}
-              \item{$t$ is the nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (${\text{mm}}$)}
+              \item{$t$ is the nominal thickness (${\text{mm}}$)}
               \end{symbDescription}
 \\ \midrule
 Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
+        
+        nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$
         
 \\ \midrule
 Source & \cite{astm2009}
@@ -1358,7 +1360,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \end{description}
 \begin{longtblr}
 [caption={Required Inputs}]
-{colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
 $a$ & Plate length (long dimension) & ${\text{m}}$
@@ -1375,7 +1377,7 @@ ${\mathit{SD}_{\text{y}}}$ & Stand off distance ($y$-component) & ${\text{m}}$
 \\
 ${\mathit{SD}_{\text{z}}}$ & Stand off distance ($z$-component) & ${\text{m}}$
 \\
-$t$ & Nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & ${\text{mm}}$
+$t$ & Nominal thickness & ${\text{mm}}$
 \\
 $\mathit{TNT}$ & TNT equivalent factor & --
 \\

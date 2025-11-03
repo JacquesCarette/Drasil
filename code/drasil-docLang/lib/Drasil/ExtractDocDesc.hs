@@ -168,7 +168,6 @@ getCon :: RawContent -> [Sentence]
 getCon (Table s1 s2 t _)   = t : s1 ++ concat s2
 getCon (Paragraph s)       = [s]
 getCon EqnBlock{}          = []
-getCon CodeBlock{}         = []
 getCon (DerivBlock h d)    = h : concatMap getCon d
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _ _)    = [l]

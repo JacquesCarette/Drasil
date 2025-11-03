@@ -6,7 +6,6 @@ import Language.Drasil.Chunk.Citation (BibRef)
 
 import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (HasUID(..))
-import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
@@ -79,8 +78,6 @@ data RawContent =
                                              -- ^ For creating figures in a document includes whether the figure has a caption.
   | Bib BibRef                               -- ^ Grants the ability to reference something.
   | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl -- ^ Contain a graph with coordinates ('Sentence's), maybe a width and height, and a label ('Sentence').
-  | CodeBlock CodeExpr                       -- ^ Block for codes
-               -- TODO: Fill this one in.
 
 -- | An identifier is just a 'String'.
 type Identifier = String
@@ -138,7 +135,6 @@ prependLabel Figure{}       = prepend "Fig"
 prependLabel Graph{}        = prepend "Fig"
 prependLabel Defini{}       = prepend "Def"
 prependLabel EqnBlock{}     = prepend "EqnB"
-prependLabel CodeBlock{}    = prepend "CodeB"
 prependLabel DerivBlock{}   = prepend "Deriv"
 prependLabel Enumeration{}  = prepend "Lst"
 prependLabel Paragraph{}    = error "Shouldn't reference paragraphs"

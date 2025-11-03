@@ -20,9 +20,9 @@ exampleContextP3 = foldlSP_ [S "Task: Determine the", phrase time, S "needed for
     S "The", phrase acceleration, S "due to", phrase gravity, P lG +:+. S "is assumed to have the following value"]
 
 codeC1, codeC2, codeC3 :: Contents
-codeC1 = unlbldCode (sy horiz_velo $= exactDbl 17)
-codeC2 = unlbldCode (sy QP.height $= exactDbl 6)
-codeC3 = unlbldCode (sy QP.gravitationalAccel $= dbl 9.81)
+codeC1 = unlbldExpr (sy horiz_velo $= exactDbl 17)
+codeC2 = unlbldExpr (sy QP.height $= exactDbl 6)
+codeC3 = unlbldExpr (sy QP.gravitationalAccel $= dbl 9.81)
 
 horiz_velo :: UnitalChunk
 horiz_velo = uc horizontalMotion (variable "horiz_velo") Real velU 

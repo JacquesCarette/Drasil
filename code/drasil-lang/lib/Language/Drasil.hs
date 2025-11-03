@@ -237,7 +237,7 @@ module Language.Drasil (
 
   -- | Language.Drasil.Document.Contents
   , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD
-  , lbldExpr, unlbldExpr, unlbldCode
+  , lbldExpr, unlbldExpr
 
   -- * Document combinators
   -- | From "Language.Drasil.Document.Combinators". General sorting functions, useful combinators,
@@ -324,7 +324,7 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..), HasCaption(..))
-import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr, unlbldCode
+import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr
   , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD)
 import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))

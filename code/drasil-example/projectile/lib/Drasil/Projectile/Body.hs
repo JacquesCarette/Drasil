@@ -10,13 +10,14 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
+import Drasil.DocLang (inReq, inReqDesc, mkInputPropsTable)
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics,
   problem, assumption, goalStmt, physSyst, sysCont, software, user,
   requirement, refBy, refName, typUnc, example, softwareSys, system, environment, 
-  product_, interface, condition, physical, datum, input_, softwareConstraint, 
+  product_, interface, condition, physical, datum, input_, value, softwareConstraint, 
   output_, endUser)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
@@ -97,7 +98,7 @@ mkSRS = [TableOfContents,
       ],
   ReqrmntSec $
     ReqsProg
-      [ FReqsSub EmptyS []
+      [ FReqsSub inputValuesDescription []
       , NonFReqsSub
       ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -169,7 +170,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
-  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
+  dataDefs iMods genDefns tMods concIns labelledContentWithInputs allRefs citations
 
 abbreviationsList  :: [IdeaDict]
 abbreviationsList  =
@@ -180,13 +181,28 @@ abbreviationsList  =
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref labelledContentWithInputs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
+labelledContentWithInputs :: [LabelledContent]
+labelledContentWithInputs = inputValuesTable : labelledContent
+
+inputValuesTable :: LabelledContent
+inputValuesTable = mkInputPropsTable inputs
+
+inputValuesDescription :: Sentence
+inputValuesDescription = S "the initial launch conditions"
+
+inputValuesSentence :: Sentence
+inputValuesSentence = inReqDesc inputValuesTable inputValuesDescription
+
+inputValuesRequirement :: ConceptInstance
+inputValuesRequirement = inReq inputValuesSentence
+
 concIns :: [ConceptInstance]
-concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
+concIns = inputValuesRequirement : (assumptions ++ funcReqs ++ goals ++ nonfuncReqs)
 
 ----------------------------------------
 -- Characteristics of Intended Reader --
@@ -307,4 +323,3 @@ constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 acronyms :: [CI]
 acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, Doc.srs, refBy, refName, thModel, typUnc]
-

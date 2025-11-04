@@ -8,7 +8,7 @@ module Language.Drasil.Chunk.Concept.Core(
   , sDom
 ) where
 
-import Language.Drasil.ShortName (HasShortName(..), ShortName)
+import Language.Drasil.ShortName (HasShortName(..), ShortName, getSentSN)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict)
@@ -19,6 +19,9 @@ import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (UID, HasUID(..))
 
 import Control.Lens (makeLenses, (^.), view)
+import qualified Data.Set as S
+
+import Language.Drasil.Sentence.Extract (lnames, sdep, shortdep)
 
 -- | Check if something has one domain. Throws an error if there is more than one.
 sDom :: [UID] -> UID
@@ -36,9 +39,15 @@ data ConceptChunk = ConDict { _idea :: IdeaDict -- ^ Contains the idea of the co
                             }
 makeLenses ''ConceptChunk
 
+collectSentenceRefs :: Sentence -> S.Set UID
+collectSentenceRefs s = S.fromList (lnames s ++ sdep s ++ shortdep s)
 
 instance HasChunkRefs ConceptChunk where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs c =
+    let ideaRefs   = chunkRefs (c ^. idea)
+        defnRefs   = collectSentenceRefs (c ^. defn')
+        domainRefs = S.fromList (cdom' c)
+    in ideaRefs `S.union` defnRefs `S.union` domainRefs
 
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
@@ -67,7 +76,11 @@ data ConceptInstance = ConInst { _ciuid :: UID
 makeLenses ''ConceptInstance
 
 instance HasChunkRefs ConceptInstance where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs ci =
+    let conceptRefs    = chunkRefs (ci ^. cc)
+        shortNameRefs  = collectSentenceRefs (getSentSN (shortname ci))
+        domainRefs     = S.fromList (cdom ci)
+    in conceptRefs `S.union` shortNameRefs `S.union` domainRefs
 
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptInstance where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)

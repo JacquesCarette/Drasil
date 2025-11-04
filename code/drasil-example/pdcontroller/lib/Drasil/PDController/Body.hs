@@ -6,10 +6,12 @@ import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import Drasil.DocLang (inReq, inReqDesc, mkInputPropsTable)
+import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
+import Data.Drasil.Concepts.Documentation (input_, value)
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, odeintSymbols, osloSymbols,
@@ -90,7 +92,7 @@ mkSRS
                  ShowDerivation,
                Constraints EmptyS inputsUC]],
 
-     ReqrmntSec $ ReqsProg [FReqsSub EmptyS [], NonFReqsSub], LCsSec,
+     ReqrmntSec $ ReqsProg [FReqsSub inputValuesDescription [], NonFReqsSub], LCsSec,
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
 si :: System
@@ -146,13 +148,13 @@ symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, 
   genDefns
   theoreticalModels
   conceptInstances
-  labelledContent
+  labelledContentWithInputs
   allRefs
   citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref labelledContentWithInputs
 
 abbreviationsList  :: [IdeaDict]
 abbreviationsList  =
@@ -161,8 +163,23 @@ abbreviationsList  =
   -- QuantityDicts
   map nw symbolsAll
 
+labelledContentWithInputs :: [LabelledContent]
+labelledContentWithInputs = inputValuesTable : labelledContent
+
+inputValuesTable :: LabelledContent
+inputValuesTable = mkInputPropsTable inputs
+
+inputValuesDescription :: Sentence
+inputValuesDescription = S "the tunable controller parameters"
+
+inputValuesSentence :: Sentence
+inputValuesSentence = inReqDesc inputValuesTable inputValuesDescription
+
+inputValuesRequirement :: ConceptInstance
+inputValuesRequirement = inReq inputValuesSentence
+
 conceptInstances :: [ConceptInstance]
-conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs
+conceptInstances = inputValuesRequirement : (assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs)
 
 stdFields :: Fields
 stdFields

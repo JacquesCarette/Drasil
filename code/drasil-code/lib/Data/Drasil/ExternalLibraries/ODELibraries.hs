@@ -681,5 +681,16 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (CE.CCCBinaryOp b e1 e2)   = CE.CCCBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (CE.Operator ao dd e)      = CE.Operator ao dd $ replaceDepVar e
+    replaceDepVar (Operator ao dd e)      = Operator ao dd $ replaceDepVar e
     replaceDepVar e = e
+
+-- | Collect all chunks related to a specific ODE
+odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]
+odeInfoChunks info =
+  let dv = depVar info
+  in map dqdWr [ dv
+               , listToArray dv
+               , arrayVecDepVar info
+               , diffCodeChunk dv
+               , listToArray $ diffCodeChunk dv
+               ] 

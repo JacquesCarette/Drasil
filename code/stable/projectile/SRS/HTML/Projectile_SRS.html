@@ -262,11 +262,6 @@
                   <td><em>m</em></td>
                 </tr>
                 <tr>
-                  <td><em>s</em></td>
-                  <td>Output message as a string</td>
-                  <td>--</td>
-                </tr>
-                <tr>
                   <td><em>t</em></td>
                   <td>Time</td>
                   <td><em>s</em></td>
@@ -648,7 +643,7 @@
                   </p>
                   <p>
                     <div id="posXDirection">
-                      posXDirection: The positive <em>x</em>-direction is from the launcher to the target. (RefBy: <a href=#IM:messageIM>IM:messageIM</a>, <a href=#IM:offsetIM>IM:offsetIM</a>, <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                      posXDirection: The positive <em>x</em>-direction is from the launcher to the target. (RefBy: <a href=#IM:offsetIM>IM:offsetIM</a>, <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
                     </div>
                   </p>
                   <p>
@@ -1046,7 +1041,7 @@
                       <th>Label</th>
                       <td>
                         <p class="paragraph">
-                          Position vector as a function of time for <span title="two-dimensional">2D</span> motion under constant acceleration
+                          Position vector as a function of time for two-dimensional motion under constant acceleration
                         </p>
                       </td>
                     </tr>
@@ -1628,95 +1623,6 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:messageIM>IM:messageIM</a>, <a href=#outputValues>FR:Output-Values</a>, and <a href=#calcValues>FR:Calculate-Values</a>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="IM:messageIM">
-                  <table class="idefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>IM:messageIM</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Output message</p></td>
-                    </tr>
-                    <tr>
-                      <th>Input</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>d<sub>offset</sub></em>, <em>p<sub>target</sub></em>
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Output</th>
-                      <td><p class="paragraph"><em>s</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Input Constraints</th>
-                      <td>
-                        \[{d_{\text{offset}}}\gt{}-{p_{\text{target}}}\]
-                        \[{p_{\text{target}}}\gt{}0\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Output Constraints</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[s=\begin{cases}
-                            \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
-                            \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
-                            \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
-                            \end{cases}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em>s</em> is the output message as a string (Unitless)</li>
-                          <li>
-                            <em>d<sub>offset</sub></em> is the distance between the target position and the landing position (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>p<sub>target</sub></em> is the target position (<em>m</em>)
-                          </li>
-                          <li><em>ε</em> is the hit tolerance (Unitless)</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>d<sub>offset</sub></em> is from <a href=#IM:offsetIM>IM:offsetIM</a>.
-                        </p>
-                        <p class="paragraph">
-                          The constraint <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A:posXDirection</a>.
-                        </p>
-                        <p class="paragraph">
-                          The constraint <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;&minus;p<sub>target</sub></em> is from the fact that <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em>, from <a href=#posXDirection>A:posXDirection</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>ε</em> is defined in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
                           <a href=#outputValues>FR:Output-Values</a> and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
@@ -1824,12 +1730,12 @@
               </p>
               <p>
                 <div id="calcValues">
-                  Calculate-Values: Calculate the following values: <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>), <em>p<sub>land</sub></em> (from <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>), and <em>s</em> (from <a href=#IM:messageIM>IM:messageIM</a>).
+                  Calculate-Values: Calculate the following values: <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>), <em>p<sub>land</sub></em> (from <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>), and <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>).
                 </div>
               </p>
               <p>
                 <div id="outputValues">
-                  Output-Values: Output <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>), <em>s</em> (from <a href=#IM:messageIM>IM:messageIM</a>), and <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>).
+                  Output-Values: Output <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>) and <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>).
                 </div>
               </p>
             </div>
@@ -2438,24 +2344,6 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#IM:messageIM>IM:messageIM</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#correct>NFR:Correctness</a></td>
               <td></td>
               <td></td>
@@ -2656,11 +2544,9 @@
               <th><a href=#IM:calOfLandingTime>IM:calOfLandingTime</a></th>
               <th><a href=#IM:calOfLandingDist>IM:calOfLandingDist</a></th>
               <th><a href=#IM:offsetIM>IM:offsetIM</a></th>
-              <th><a href=#IM:messageIM>IM:messageIM</a></th>
             </tr>
             <tr>
               <td><a href=#DD:vecMag>DD:vecMag</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2688,7 +2574,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:speedIY>DD:speedIY</a></td>
@@ -2704,11 +2589,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:acceleration>TM:acceleration</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2736,7 +2619,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:rectVel>GD:rectVel</a></td>
@@ -2744,7 +2626,6 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2768,7 +2649,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:velVec>GD:velVec</a></td>
@@ -2778,7 +2658,6 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2800,7 +2679,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:calOfLandingTime>IM:calOfLandingTime</a></td>
@@ -2813,7 +2691,6 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2832,27 +2709,9 @@
               <td>X</td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:offsetIM>IM:offsetIM</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#IM:messageIM>IM:messageIM</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2887,7 +2746,6 @@
               <th><a href=#IM:calOfLandingTime>IM:calOfLandingTime</a></th>
               <th><a href=#IM:calOfLandingDist>IM:calOfLandingDist</a></th>
               <th><a href=#IM:offsetIM>IM:offsetIM</a></th>
-              <th><a href=#IM:messageIM>IM:messageIM</a></th>
               <th><a href=#correct>NFR:Correctness</a></th>
               <th><a href=#verifiable>NFR:Verifiability</a></th>
               <th><a href=#understandable>NFR:Understandability</a></th>
@@ -2901,7 +2759,6 @@
             </tr>
             <tr>
               <td><a href=#targetHit>GS:targetHit</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2949,11 +2806,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#verifiable>NFR:Verifiability</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3001,11 +2856,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#reusable>NFR:Reusability</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3053,11 +2906,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#portable>NFR:Portability</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3105,11 +2956,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#verifyInVals>FR:Verify-Input-Values</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3147,7 +2996,6 @@
               <td>X</td>
               <td>X</td>
               <td>X</td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3172,7 +3020,6 @@
               <td></td>
               <td>X</td>
               <td></td>
-              <td>X</td>
               <td>X</td>
               <td></td>
               <td></td>

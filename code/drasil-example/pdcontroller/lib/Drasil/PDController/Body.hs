@@ -1,5 +1,7 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
+import Control.Lens ((^.))
+
 import Language.Drasil
 import Language.Drasil.Code (ODEInfo(..))
 import Drasil.Metadata (dataDefn)
@@ -7,6 +9,7 @@ import Drasil.SRSDocument
 import Drasil.Generator.BaseChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.ExternalLibraries.ODELibraries
@@ -38,19 +41,17 @@ import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
   inpConstrained, pidConstants)
 import Drasil.PDController.ODEs (pidODEInfo)
 
-import Drasil.System (SystemKind(Specification), mkSystem)
-
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
 
 srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
 
 fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
+printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS

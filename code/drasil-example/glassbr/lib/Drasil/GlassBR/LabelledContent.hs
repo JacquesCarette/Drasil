@@ -4,6 +4,7 @@ import Control.Lens((^.))
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (assumption, item, physicalSystem,
@@ -23,11 +24,11 @@ figures = [sysCtxFig, physSystFig, traceItemSecsFig, traceReqsItemsFig,
 sysCtxFig, physSystFig, traceItemSecsFig, traceReqsItemsFig,
   traceAssumpsOthersFig, demandVsSDFig, dimlessloadVsARFig :: LabelledContent
 
-sysCtxFig = llcc (makeFigRef "sysCtxDiag") $ 
+sysCtxFig = llcc (makeFigRef "sysCtxDiag") $
   fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
 
-physSystFig = llcc (makeFigRef "physSystImage") $ figWithWidth 
-  (atStartNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
+physSystFig = llcc (makeFigRef "physSystImage") $ figWithWidth
+  (D.toSent $ atStartNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
 traceItemSecsFig = llcc (makeFigRef "TraceyItemSecs") $ fig (showingCxnBw traceyMatrix $
   titleize' item +:+ S "of Different" +:+ titleize' section_)

@@ -29,19 +29,6 @@ def func_p_land(v_launch, theta, g):
 def func_d_offset(p_target, p_land):
     return p_land - p_target
 
-## \brief Calculates output message as a string
-# \param p_target target position (m)
-# \param epsilon hit tolerance
-# \param d_offset distance between the target position and the landing position (m)
-# \return output message as a string
-def func_s(p_target, epsilon, d_offset):
-    if math.fabs(d_offset / p_target) < epsilon:
-        return "The target was hit."
-    elif d_offset < 0.0:
-        return "The projectile fell short."
-    else:
-        return "The projectile went long."
-
 ## \brief Reads input from a file with the given file name
 # \param filename name of the input file
 # \return launch speed (m/s)
@@ -93,13 +80,10 @@ def input_constraints(v_launch, theta, p_target):
         print(".")
 
 ## \brief Writes the output values to output.txt
-# \param s output message as a string
 # \param d_offset distance between the target position and the landing position (m)
 # \param t_flight flight duration (s)
-def write_output(s, d_offset, t_flight):
+def write_output(d_offset, t_flight):
     outputfile = open("output.txt", "w")
-    print("s = ", end="", file=outputfile)
-    print(s, file=outputfile)
     print("d_offset = ", end="", file=outputfile)
     print(d_offset, file=outputfile)
     print("t_flight = ", end="", file=outputfile)
@@ -114,5 +98,4 @@ input_constraints(v_launch, theta, p_target)
 t_flight = func_t_flight(v_launch, theta, g)
 p_land = func_p_land(v_launch, theta, g)
 d_offset = func_d_offset(p_target, p_land)
-s = func_s(p_target, epsilon, d_offset)
-write_output(s, d_offset, t_flight)
+write_output(d_offset, t_flight)

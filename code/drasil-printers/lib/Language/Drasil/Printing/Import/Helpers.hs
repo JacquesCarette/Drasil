@@ -4,6 +4,7 @@ module Language.Drasil.Printing.Import.Helpers where
 import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S),
   Symbol, UID, TermCapitalization(..), titleizeNP, titleizeNP',
   atStartNP, atStartNP', NP, DefinedQuantityDict)
+import Language.Drasil.Development (toSent)
 import Database.Drasil (ChunkDB, findOrErr)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 
@@ -39,7 +40,7 @@ digitsProcess [] pos coun ex
 -- References for standard of Engineering Notation:
 --
 -- https://www.khanacademy.org/science/electrical-engineering/introduction-to-ee/
---    intro-to-ee/a/ee-numbers-in-electrical-engineering 
+--    intro-to-ee/a/ee-numbers-in-electrical-engineering
 --
 -- https://www.calculatorsoup.com/calculators/math/scientific-notation-converter.php
 --
@@ -54,7 +55,7 @@ processExpo a
 -- * Lookup/Term Resolution Functions
 
 -- | Given the stage of the symbol, looks up a character/symbol
--- inside a chunk database that matches the given 'UID'. 
+-- inside a chunk database that matches the given 'UID'.
 lookupC :: Stage -> ChunkDB -> UID -> Symbol
 lookupC Equational     sm c = eqSymb   (findOrErr c sm :: DefinedQuantityDict)
 lookupC Implementation sm c = codeSymb (findOrErr c sm :: DefinedQuantityDict)
@@ -74,15 +75,15 @@ lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' sm c
 
 -- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
 resolveCapT :: TermCapitalization -> (NP -> Sentence)
-resolveCapT NoCap = phraseNP
-resolveCapT CapF = atStartNP
-resolveCapT CapW = titleizeNP
+resolveCapT NoCap = toSent . phraseNP
+resolveCapT CapF = toSent . atStartNP
+resolveCapT CapW = toSent . titleizeNP
 
 -- | Helper to get the right function for capitalizing a 'NP' based on its 'TermCapitalization'. Plural case.
 resolveCapP :: TermCapitalization -> (NP -> Sentence)
-resolveCapP NoCap = pluralNP
-resolveCapP CapF = atStartNP'
-resolveCapP CapW = titleizeNP'
+resolveCapP NoCap = toSent . pluralNP
+resolveCapP CapF = toSent . atStartNP'
+resolveCapP CapW = toSent . titleizeNP'
 
 -- | Helper to get the capital case of an abbreviation based on 'TermCapitalization'. For sentence and title cases.
 capHelper :: TermCapitalization -> String -> Maybe String

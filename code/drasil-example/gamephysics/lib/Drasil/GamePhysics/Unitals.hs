@@ -1,10 +1,11 @@
 module Drasil.GamePhysics.Unitals where
 
 import Language.Drasil
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import Language.Drasil.Display (Symbol(..), Decoration(Magnitude))
 import Language.Drasil.Space (ClifKind(..))
 import Language.Drasil.ShortHands
-import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
@@ -195,10 +196,11 @@ accj = uc (dccWDS "accj" (compoundPhrase' (cn "j-th body's")
 
 -- FIXME: Using the titleized version in the same style as 'accj' above does not render properly.
 --        Oddly, stable breaks differently when trying to use 'nounPhraseSent' or 'combineNPNI'. See #2650.
-angAccj = uc (dccWDS "angAccj" (nounPhrase'' (S "j-th body's" +:+
-               phrase QP.angularAccel) (S "j-th body's" +:+
-               phrase QP.angularAccel) CapWords CapWords) (phrase QP.angularAccel))
+angAccj = uc (dccWDS "angAccj" (nounPhrase'' n n CapWords CapWords) (phrase QP.angularAccel))
                (sub (eqSymb QP.angularAccel) lJ) Real angAccelU
+  where
+    n :: D.NPStruct
+    n = D.S "j-th body's" D.:+: phraseNP (QP.angularAccel ^. term)
 
 velj = uc (dccWDS "velj" (compoundPhrase' (QP.velocity ^. term)
                (cn "of the j-th body")) (phrase QP.velocity))

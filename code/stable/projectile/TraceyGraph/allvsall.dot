@@ -44,15 +44,11 @@ digraph allvsall {
 	theory:landingposition -> theory:flightduration;
 	theory:offset -> instance:posXDirection;
 	theory:offset -> theory:landingposition;
-	theory:outputMessage -> instance:posXDirection;
-	theory:outputMessage -> theory:offset;
 	instance:calcValues -> theory:flightduration;
 	instance:calcValues -> theory:landingposition;
 	instance:calcValues -> theory:offset;
-	instance:calcValues -> theory:outputMessage;
 	instance:outputValues -> theory:flightduration;
 	instance:outputValues -> theory:offset;
-	instance:outputValues -> theory:outputMessage;
 
 
 	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -106,11 +102,10 @@ digraph allvsall {
 	theory:flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
 	theory:landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
 	theory:offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
-	theory:outputMessage	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
 
 	subgraph IM {
 	rank="same"
-	{theory:flightduration, theory:landingposition, theory:offset, theory:outputMessage}
+	{theory:flightduration, theory:landingposition, theory:offset}
 	}
 
 	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];

@@ -1,10 +1,15 @@
 {-# LANGUAGE TemplateHaskell #-}
 -- | Defines types and functions to gather all the information needed for printing.
-module Language.Drasil.Printing.PrintingInformation where
+module Language.Drasil.Printing.PrintingInformation (
+    Notation(..), HasPrintingOptions(..)
+  , PrintingConfiguration, notation
+  , PrintingInformation, ckdb, stg, configuration
+  , piSys
+  , defaultConfiguration, plainConfiguration
+) where
 
-import Control.Lens (makeLenses, Lens', (^.))
+import Control.Lens (makeLenses, Lens')
 
-import Drasil.System (systemdb, System)
 import Database.Drasil (ChunkDB)
 
 import Language.Drasil (Stage(..))
@@ -37,9 +42,13 @@ makeLenses ''PrintingInformation
 instance HasPrintingOptions  PrintingInformation where getSetting  = configuration . getSetting
 
 -- | Builds a document's printing information based on the system information.
-piSys :: System -> Stage -> PrintingConfiguration -> PrintingInformation
-piSys si = PI (si ^. systemdb)
+piSys :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
+piSys = PI
 
 -- | Default configuration is for engineering.
 defaultConfiguration :: PrintingConfiguration
 defaultConfiguration = PC Engineering
+
+-- | Simple printing configuration is scientific.
+plainConfiguration :: PrintingConfiguration
+plainConfiguration = PC Scientific

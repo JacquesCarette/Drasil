@@ -27,7 +27,7 @@
 </span><span id="line-27"></span><span>
 </span><span id="line-28"></span><span class="hs-comment">-- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')</span><span>
 </span><span id="line-29"></span><span class="hs-comment">-- with 'Constraint's and maybe a reasonable value (no units!).</span><span>
-</span><span id="line-30"></span><span class="hs-comment">-- Similar to 'ConstrainedChunk' but includes a definition and domain. </span><span>
+</span><span id="line-30"></span><span class="hs-comment">-- Similar to 'ConstrainedChunk' but includes a definition and domain.</span><span>
 </span><span id="line-31"></span><span class="hs-comment">--</span><span>
 </span><span id="line-32"></span><span class="hs-comment">-- Ex. Measuring the length of a pendulum arm could be a concept that has some reasonable value</span><span>
 </span><span id="line-33"></span><span class="hs-comment">-- (between 1 cm and 2 m) and the constraint that the length cannot be a negative value.</span><span>
@@ -117,7 +117,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span class="annot"><span class="annottext">Getting DefinedQuantityDict ConstrConcept DefinedQuantityDict
 Lens' ConstrConcept DefinedQuantityDict
 </span><a href="Language.Drasil.Chunk.Constrained.html#defq"><span class="hs-identifier hs-var">defq</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-50"></span><span class="annot"><span class="hs-comment">-- | 'ConstrConcept's have a 'Quantity'. </span></span><span>
+</span><span id="line-50"></span><span class="annot"><span class="hs-comment">-- | 'ConstrConcept's have a 'Quantity'.</span></span><span>
 </span><span id="line-51"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#Quantity"><span class="hs-identifier hs-type">Quantity</span></a></span><span>      </span><span class="annot"><a href="Language.Drasil.Chunk.Constrained.html#ConstrConcept"><span class="hs-identifier hs-type">ConstrConcept</span></a></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-52"></span><span class="annot"><span class="hs-comment">-- | Finds definition of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.</span></span><span>
 </span><span id="line-53"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#Definition"><span class="hs-identifier hs-type">Definition</span></a></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Constrained.html#ConstrConcept"><span class="hs-identifier hs-type">ConstrConcept</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679424175"><span class="annot"><span class="annottext">defn :: Lens' ConstrConcept Sentence

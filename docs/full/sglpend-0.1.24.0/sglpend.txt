@@ -112,15 +112,11 @@ angularDisplacementIM :: InstanceModel
 
 module Drasil.SglPend.Requirements
 funcReqs :: [ConceptInstance]
-verifyInptVals :: ConceptInstance
-calcAngPos :: ConceptInstance
-outputValues :: ConceptInstance
-calcAngPosDesc :: Sentence
-outputValuesDesc :: Sentence
 
 module Drasil.SglPend.Body
-srs :: Document
+sd :: (System, DocDesc)
 fullSI :: System
+srs :: Document
 printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 si :: System

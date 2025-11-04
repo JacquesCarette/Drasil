@@ -10,7 +10,7 @@
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#component"><span class="hs-identifier">component</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#material_"><span class="hs-identifier">material_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#value"><span class="hs-identifier">value</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#constant"><span class="hs-identifier">constant</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Math.html"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Math.html#cartesian"><span class="hs-identifier">cartesian</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Math.html#equation"><span class="hs-identifier">equation</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Math.html#vector"><span class="hs-identifier">vector</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html#gravity"><span class="hs-identifier">gravity</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html#twoD"><span class="hs-identifier">twoD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html#rigidBody"><span class="hs-identifier">rigidBody</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QPP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#density"><span class="hs-identifier">density</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QPP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#density"><span class="hs-identifier">density</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-14"></span><span>  </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#mass"><span class="hs-identifier">mass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#specWeight"><span class="hs-identifier">specWeight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#vol"><span class="hs-identifier">vol</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#acceleration"><span class="hs-identifier">acceleration</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#velocity"><span class="hs-identifier">velocity</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-16"></span><span>  </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#force"><span class="hs-identifier">force</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier">gravitationalAccel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#pressure"><span class="hs-identifier">pressure</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#torque"><span class="hs-identifier">torque</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier">weight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#positionVec"><span class="hs-identifier">positionVec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#momentOfInertia"><span class="hs-identifier">momentOfInertia</span></a></span><span class="hs-special">,</span><span>
@@ -108,7 +108,7 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="Data.Drasil.Theories.Physics.html#weightSrc"><span class="hs-identifier hs-var">weightSrc</span></a></span><span class="hs-special">]</span><span> </span><span>
+</span><a href="Data.Drasil.Theories.Physics.html#weightSrc"><span class="hs-identifier hs-var">weightSrc</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;weight&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-comment">{-Notes-}</span><span class="hs-special">]</span><span>
 </span><span id="line-37"></span><span>
@@ -160,10 +160,10 @@ forall a. [[a]] -&gt; [a]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="Data.Drasil.Theories.Physics.html#weightDerivAccelSentence"><span class="hs-identifier hs-var">weightDerivAccelSentence</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="Data.Drasil.Theories.Physics.html#weightDerivAccelSentence"><span class="hs-identifier hs-var">weightDerivAccelSentence</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Data.Drasil.Theories.Physics.html#weightDerivNewtonSentence"><span class="hs-identifier hs-var">weightDerivNewtonSentence</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="Data.Drasil.Theories.Physics.html#weightDerivReplaceMassSentence"><span class="hs-identifier hs-var">weightDerivReplaceMassSentence</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="Data.Drasil.Theories.Physics.html#weightDerivReplaceMassSentence"><span class="hs-identifier hs-var">weightDerivReplaceMassSentence</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Data.Drasil.Theories.Physics.html#weightDerivSpecWeightSentence"><span class="hs-identifier hs-var">weightDerivSpecWeightSentence</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-52"></span><span id="weightDerivEqns"><span class="annot"><span class="annottext">weightDerivEqns :: [Sentence]
@@ -172,7 +172,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivAccelEqn"><span class="hs-identifier hs-var">weightDerivAccelEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivNewtonEqn"><span class="hs-identifier hs-var">weightDerivNewtonEqn</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivNewtonEqn"><span class="hs-identifier hs-var">weightDerivNewtonEqn</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-53"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivReplaceMassEqn"><span class="hs-identifier hs-var">weightDerivReplaceMassEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivSpecWeightEqn"><span class="hs-identifier hs-var">weightDerivSpecWeightEqn</span></a></span><span class="hs-special">]</span><span>
@@ -186,7 +186,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#gravity"><span class="hs-identifier hs-var">gravity</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">`sC`</span></span><span>
 </span><span id="line-57"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and assuming a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
@@ -215,7 +215,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-61"></span><span id="weightDerivNewtonSentence"><span class="annot"><span class="annottext">weightDerivNewtonSentence :: [Sentence]
 </span><a href="Data.Drasil.Theories.Physics.html#weightDerivNewtonSentence"><span class="hs-identifier hs-var hs-var">weightDerivNewtonSentence</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Since there is only one non-zero&quot;</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span class="hs-string">&quot;Since there is only one non-zero&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -228,7 +228,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-string">&quot;the scalar&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
-</span><a href="Data.Drasil.Concepts.Documentation.html#value"><span class="hs-identifier hs-var">value</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="Data.Drasil.Concepts.Documentation.html#value"><span class="hs-identifier hs-var">value</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -252,7 +252,7 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
-</span><a href="Data.Drasil.Theories.Physics.html#newtonSL"><span class="hs-identifier hs-var">newtonSL</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="Data.Drasil.Theories.Physics.html#newtonSL"><span class="hs-identifier hs-var">newtonSL</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-65"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;can be expressed as&quot;</span></span><span class="hs-special">]</span><span>
@@ -285,7 +285,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-string">&quot;Substituting&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#specWeight"><span class="hs-identifier hs-var">QPP.specWeight</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#specWeight"><span class="hs-identifier hs-var">QPP.specWeight</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-73"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;as the product&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -410,7 +410,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;torque&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
-</span><a href="Data.Drasil.Theories.Physics.html#torqueDesc"><span class="hs-identifier hs-var">torqueDesc</span></a></span><span class="hs-special">]</span><span> </span><span>
+</span><a href="Data.Drasil.Theories.Physics.html#torqueDesc"><span class="hs-identifier hs-var">torqueDesc</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-98"></span><span>
 </span><span id="line-99"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#torque"><span class="hs-identifier hs-type">torque</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-100"></span><span id="torque"><span class="annot"><span class="annottext">torque :: SimpleQDef
@@ -444,7 +444,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Data.Drasil.Theories.Physics.html#torque"><span class="hs-identifier hs-var">torque</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="Data.Drasil.Theories.Physics.html#torque"><span class="hs-identifier hs-var">torque</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;on a body measures the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -455,7 +455,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-string">&quot;a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#force"><span class="hs-identifier hs-var">QP.force</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="Data.Drasil.Quantities.Physics.html#force"><span class="hs-identifier hs-var">QP.force</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-108"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;to rotate the body around an axis or pivot&quot;</span></span><span class="hs-special">]</span><span>
@@ -558,7 +558,7 @@ forall c.
 (Quantity c, Concept c, MayHaveUnit c) =&gt;
 c -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#angularAccel"><span class="hs-identifier hs-var">QP.angularAccel</span></a></span><span class="hs-special">]</span><span> </span><span>
+</span><a href="Data.Drasil.Quantities.Physics.html#angularAccel"><span class="hs-identifier hs-var">QP.angularAccel</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-128"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelQDef
 </span><a href="Data.Drasil.Theories.Physics.html#newtonSLRQD"><span class="hs-identifier hs-var">newtonSLRQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;NewtonSecLawRotMot&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]

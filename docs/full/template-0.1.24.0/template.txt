@@ -10,8 +10,9 @@
 @version 0.1.24.0
 
 module Drasil.Template.Body
-srs :: Document
+sd :: (System, DocDesc)
 fullSI :: System
+srs :: Document
 printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 si :: System

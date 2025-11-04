@@ -39,7 +39,7 @@ $c/= :: Person -&gt; Person -&gt; Bool
 </span><span id="line-27"></span><span class="annot"><span class="hs-comment">-- | Naming conventions.</span></span><span>
 </span><span id="line-28"></span><span class="hs-keyword">data</span><span> </span><span id="Conv"><span class="annot"><a href="Language.Drasil.People.html#Conv"><span class="hs-identifier hs-var">Conv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Western"><span class="annot"><a href="Language.Drasil.People.html#Western"><span class="hs-identifier hs-var">Western</span></a></span></span><span> </span><span class="hs-comment">-- ^ Western style conventions are given name followed</span><span>
 </span><span id="line-29"></span><span>                    </span><span class="hs-comment">-- by middle names, followed by surname.</span><span>
-</span><span id="line-30"></span><span>          </span><span class="hs-glyph">|</span><span> </span><span id="Eastern"><span class="annot"><a href="Language.Drasil.People.html#Eastern"><span class="hs-identifier hs-var">Eastern</span></a></span></span><span> </span><span class="hs-comment">-- ^ Eastern style conventions are surname followed by middle names, </span><span>
+</span><span id="line-30"></span><span>          </span><span class="hs-glyph">|</span><span> </span><span id="Eastern"><span class="annot"><a href="Language.Drasil.People.html#Eastern"><span class="hs-identifier hs-var">Eastern</span></a></span></span><span> </span><span class="hs-comment">-- ^ Eastern style conventions are surname followed by middle names,</span><span>
 </span><span id="line-31"></span><span>                    </span><span class="hs-comment">-- followed by given name.</span><span>
 </span><span id="line-32"></span><span>          </span><span class="hs-glyph">|</span><span> </span><span id="Mono"><span class="annot"><a href="Language.Drasil.People.html#Mono"><span class="hs-identifier hs-var">Mono</span></a></span></span><span>  </span><span class="annot"><span class="hs-comment">-- ^ Mononyms are for those people who have only one name (ex. Madonna).</span></span><span>
 </span><span id="line-33"></span><span>          </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679414877"><span id="local-6989586621679414879"><span class="annot"><span class="annottext">Conv -&gt; Conv -&gt; Bool
@@ -58,7 +58,7 @@ $c/= :: Conv -&gt; Conv -&gt; Bool
 </span><span class="hs-identifier hs-var">EQ</span></span><span>
 </span><span id="line-38"></span><span class="annot"><a href="Language.Drasil.People.html#comparePeople"><span class="hs-identifier hs-var">comparePeople</span></a></span><span> </span><span class="annot"><span class="annottext">[Person]
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Ordering
-</span><span class="hs-identifier hs-var">GT</span></span><span> </span><span class="hs-comment">-- this makes sure that if the authors are the same </span><span>
+</span><span class="hs-identifier hs-var">GT</span></span><span> </span><span class="hs-comment">-- this makes sure that if the authors are the same</span><span>
 </span><span id="line-39"></span><span class="annot"><a href="Language.Drasil.People.html#comparePeople"><span class="hs-identifier hs-var">comparePeople</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>  </span><span class="annot"><span class="annottext">[Person]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">LT</span></span><span> </span><span class="hs-comment">-- up to a point, the citation with more goes last</span><span>
@@ -97,7 +97,7 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Ordering
 </span><a href="#local-6989586621679414883"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">[Person]
 </span><a href="#local-6989586621679414886"><span class="hs-identifier hs-var">ys</span></a></span><span>
 </span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span class="hs-comment">-- | Constructor for a person using Western naming conventions. </span><span>
+</span><span id="line-45"></span><span class="hs-comment">-- | Constructor for a person using Western naming conventions.</span><span>
 </span><span id="line-46"></span><span class="hs-comment">-- Used for a person with only a given name and surname.</span><span>
 </span><span id="line-47"></span><span class="hs-comment">-- Arguments are in the order: given name, surname.</span><span>
 </span><span id="line-48"></span><span class="annot"><a href="Language.Drasil.People.html#person"><span class="hs-identifier hs-type">person</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.People.html#Person"><span class="hs-identifier hs-type">Person</span></a></span><span>
@@ -110,7 +110,7 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Ordering
 </span><a href="#local-6989586621679414890"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Conv
 </span><a href="Language.Drasil.People.html#Western"><span class="hs-identifier hs-var">Western</span></a></span><span>
 </span><span id="line-50"></span><span>
-</span><span id="line-51"></span><span class="hs-comment">-- | Constructor for a person using Eastern naming conventions. </span><span>
+</span><span id="line-51"></span><span class="hs-comment">-- | Constructor for a person using Eastern naming conventions.</span><span>
 </span><span id="line-52"></span><span class="hs-comment">-- Used for a person with only a given name and surname.</span><span>
 </span><span id="line-53"></span><span class="hs-comment">-- Arguments are in the order: surname, given name.</span><span>
 </span><span id="line-54"></span><span class="annot"><a href="Language.Drasil.People.html#person%27"><span class="hs-identifier hs-type">person'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.People.html#Person"><span class="hs-identifier hs-type">Person</span></a></span><span>

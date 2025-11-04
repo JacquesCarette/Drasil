@@ -17,8 +17,8 @@
 </span><span id="line-17"></span><span class="hs-comment">-- to extend, so start there.</span><span>
 </span><span id="line-18"></span><span>
 </span><span id="line-19"></span><span class="hs-comment">-- | There are two proper contexts, Text and Math; Curr is the current context.</span><span>
-</span><span id="line-20"></span><span class="hs-comment">-- There are multiple ways of getting there: for Text, either being at the top-level </span><span>
-</span><span id="line-21"></span><span class="hs-comment">-- or inside \text. For Math, either surrounded by $ or </span><span>
+</span><span id="line-20"></span><span class="hs-comment">-- There are multiple ways of getting there: for Text, either being at the top-level</span><span>
+</span><span id="line-21"></span><span class="hs-comment">-- or inside \text. For Math, either surrounded by $ or</span><span>
 </span><span id="line-22"></span><span class="hs-comment">-- in \begin{equation} .. \end{equation}.</span><span>
 </span><span id="line-23"></span><span class="hs-comment">-- Curr is when the current context is fine.</span><span>
 </span><span id="line-24"></span><span class="hs-keyword">data</span><span> </span><span id="MathContext"><span class="annot"><a href="Language.Drasil.TeX.Monad.html#MathContext"><span class="hs-identifier hs-var">MathContext</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Text"><span class="annot"><a href="Language.Drasil.TeX.Monad.html#Text"><span class="hs-identifier hs-var">Text</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Math"><span class="annot"><a href="Language.Drasil.TeX.Monad.html#Math"><span class="hs-identifier hs-var">Math</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Curr"><span class="annot"><a href="Language.Drasil.TeX.Monad.html#Curr"><span class="hs-identifier hs-var">Curr</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679103777"><span id="local-6989586621679103779"><span class="annot"><span class="annottext">MathContext -&gt; MathContext -&gt; Bool
@@ -93,7 +93,7 @@ forall a. (MathContext -&gt; a) -&gt; PrintLaTeX a
 -&gt; (MathContext -&gt; b) -&gt; PrintLaTeX b
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679103830"><span class="annot"><span class="annottext">MathContext
-</span><a href="#local-6989586621679103830"><span class="hs-identifier hs-var">ctx</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><a href="#local-6989586621679103830"><span class="hs-identifier hs-var">ctx</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-42"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679103831"><span class="annot"><span class="annottext">a :: a
 </span><a href="#local-6989586621679103831"><span class="hs-identifier hs-var hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintLaTeX a -&gt; MathContext -&gt; a
 forall a. PrintLaTeX a -&gt; MathContext -&gt; a
@@ -193,7 +193,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Language.Drasil.TeX.Monad.html#Curr"><span class="hs-identifier hs-var">Curr</span></a></span><span> </span><span id="local-6989586621679103851"><span class="annot"><span class="annottext">MathContext -&gt; Doc
 </span><a href="#local-6989586621679103851"><span class="hs-identifier hs-var">gen</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MathContext -&gt; Doc
 </span><a href="#local-6989586621679103851"><span class="hs-identifier hs-var">gen</span></a></span><span> </span><span class="annot"><span class="annottext">MathContext
-</span><a href="#local-6989586621679103850"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span>
+</span><a href="#local-6989586621679103850"><span class="hs-identifier hs-var">x</span></a></span><span>
 </span><span id="line-65"></span><span>
 </span><span id="line-66"></span><span class="annot"><a href="Language.Drasil.TeX.Monad.html#toMath"><span class="hs-identifier hs-type">toMath</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.TeX.Monad.html#toText"><span class="hs-identifier hs-type">toText</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.TeX.Monad.html#D"><span class="hs-identifier hs-type">D</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.TeX.Monad.html#D"><span class="hs-identifier hs-type">D</span></a></span><span>
 </span><span id="line-67"></span><span class="annot"><span class="hs-comment">-- | Change context to Math.</span></span><span>

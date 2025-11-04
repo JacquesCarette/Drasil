@@ -5112,7 +5112,7 @@ forall s (m :: * -&gt; *). MonadState s m =&gt; (s -&gt; s) -&gt; m ()
 </span><span class="hs-identifier hs-var">modify</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; FileState -&gt; FileState
 </span><a href="Drasil.Shared.State.html#setModuleName"><span class="hs-identifier hs-var">setModuleName</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679386066"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- This needs to be set before the functions/</span><span>
-</span><span id="line-778"></span><span>                             </span><span class="hs-comment">-- classes are evaluated. CP.buildModule will </span><span>
+</span><span id="line-778"></span><span>                             </span><span class="hs-comment">-- classes are evaluated. CP.buildModule will</span><span>
 </span><span id="line-779"></span><span>                             </span><span class="hs-comment">-- reset it to the proper name.</span><span>
 </span><span id="line-780"></span><span>    </span><span id="local-6989586621679386070"><span class="annot"><span class="annottext">[SwiftCode MethodData]
 </span><a href="#local-6989586621679386070"><span class="hs-identifier hs-var">fns</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(State MethodState (SwiftCode MethodData)
@@ -7326,7 +7326,7 @@ LensLike' (Zoomed m c) t s -&gt; m c -&gt; n c
 Lens' MethodState ValueState
 </span><a href="Drasil.Shared.State.html#lensMStoVS"><span class="hs-identifier hs-var">lensMStoVS</span></a></span><span> </span><span class="annot"><span class="annottext">SValue r
 </span><a href="#local-6989586621679387260"><span class="hs-identifier hs-var">f'</span></a></span><span>
-</span><span id="line-1135"></span><span>  </span><span class="hs-comment">-- How I've currently implemented file-reading, files don't need to be </span><span>
+</span><span id="line-1135"></span><span>  </span><span class="hs-comment">-- How I've currently implemented file-reading, files don't need to be</span><span>
 </span><span id="line-1136"></span><span>  </span><span class="hs-comment">-- &quot;closed&quot;, so InFile case is (correctly) just an empty stmt</span><span>
 </span><span id="line-1137"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679387262"><span class="annot"><span class="annottext">swClose :: CodeType -&gt; MSStatement r
 </span><a href="#local-6989586621679387262"><span class="hs-identifier hs-var hs-var">swClose</span></a></span></span><span> </span><span class="annot"><span class="annottext">CodeType
@@ -8090,8 +8090,8 @@ forall (r :: * -&gt; *). BodyElim r =&gt; r (Body r) -&gt; Doc
 </span><span id="line-1233"></span><span>    </span><span class="annot"><span class="annottext">Doc
 </span><a href="Drasil.Shared.LanguageRenderer.html#bodyEnd"><span class="hs-identifier hs-var">bodyEnd</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-1234"></span><span>
-</span><span id="line-1235"></span><span class="hs-comment">-- If the program uses throw, then generate code that extends Strings with the </span><span>
-</span><span id="line-1236"></span><span class="hs-comment">-- Error protocol. This line only needs to be generated once for the entire </span><span>
+</span><span id="line-1235"></span><span class="hs-comment">-- If the program uses throw, then generate code that extends Strings with the</span><span>
+</span><span id="line-1236"></span><span class="hs-comment">-- Error protocol. This line only needs to be generated once for the entire</span><span>
 </span><span id="line-1237"></span><span class="hs-comment">-- program</span><span>
 </span><span id="line-1238"></span><span class="annot"><a href="Drasil.GOOL.LanguageRenderer.SwiftRenderer.html#swiftStringError"><span class="hs-identifier hs-type">swiftStringError</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.Shared.State.html#MS"><span class="hs-identifier hs-type">MS</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-1239"></span><span id="swiftStringError"><span class="annot"><span class="annottext">swiftStringError :: StateT MethodState Identity Doc

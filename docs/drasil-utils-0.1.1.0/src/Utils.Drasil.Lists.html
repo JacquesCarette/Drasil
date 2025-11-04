@@ -189,11 +189,11 @@ forall a. a -&gt; [a] -&gt; [a]
   The second argument is a list of elements apply the functions to.
 
   For example, @mkTable [id, *5] [1,2,3]@ should produce a table:
-  
+
   &gt; | 1 |  5 |
   &gt; | 2 | 10 |
   &gt; | 3 | 15 |
-  
+
 -}</span></span><span>
 </span><span id="line-66"></span><span id="local-6989586621679047867"><span id="local-6989586621679047868"><span class="annot"><a href="Utils.Drasil.Lists.html#mkTable"><span class="hs-identifier hs-type">mkTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679047867"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679047868"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679047867"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679047868"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span></span></span><span>
 </span><span id="line-67"></span><span id="mkTable"><span class="annot"><span class="annottext">mkTable :: forall a b. [a -&gt; b] -&gt; [a] -&gt; [[b]]

@@ -27,7 +27,7 @@
 </span><span id="line-27"></span><span>  </span><span class="annot"><a href="Language.Drasil.HTML.Print.html#htmlBibFormatter"><span class="hs-identifier">htmlBibFormatter</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-28"></span><span>
 </span><span id="line-29"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html"><span class="hs-identifier">Language.Drasil.JSON.Helpers</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#makeMetadata"><span class="hs-identifier">makeMetadata</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#h"><span class="hs-identifier">h</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#stripnewLine"><span class="hs-identifier">stripnewLine</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#nbformat"><span class="hs-identifier">nbformat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#codeformat"><span class="hs-identifier">codeformat</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-30"></span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#tr"><span class="hs-identifier">tr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#td"><span class="hs-identifier">td</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#image"><span class="hs-identifier">image</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#li"><span class="hs-identifier">li</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#pa"><span class="hs-identifier">pa</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#ba"><span class="hs-identifier">ba</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#table"><span class="hs-identifier">table</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#refwrap"><span class="hs-identifier">refwrap</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#refID"><span class="hs-identifier">refID</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#reflink"><span class="hs-identifier">reflink</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#reflinkURI"><span class="hs-identifier">reflinkURI</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#mkDiv"><span class="hs-identifier">mkDiv</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-30"></span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#tr"><span class="hs-identifier">tr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#td"><span class="hs-identifier">td</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#image"><span class="hs-identifier">image</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#li"><span class="hs-identifier">li</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#pa"><span class="hs-identifier">pa</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#ba"><span class="hs-identifier">ba</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#table"><span class="hs-identifier">table</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#refwrap"><span class="hs-identifier">refwrap</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#refID"><span class="hs-identifier">refID</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#reflink"><span class="hs-identifier">reflink</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#reflinkURI"><span class="hs-identifier">reflinkURI</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#mkDiv"><span class="hs-identifier">mkDiv</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-31"></span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#markdownB"><span class="hs-identifier">markdownB</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#markdownB%27"><span class="hs-identifier">markdownB'</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#markdownE"><span class="hs-identifier">markdownE</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#markdownE%27"><span class="hs-identifier">markdownE'</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#markdownCell"><span class="hs-identifier">markdownCell</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#codeCell"><span class="hs-identifier">codeCell</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-32"></span><span>
 </span><span id="line-33"></span><span class="hs-comment">-- | Generate a python notebook document (using json).</span><span>
@@ -58,7 +58,7 @@
 </span><a href="Language.Drasil.JSON.Print.html#build"><span class="hs-identifier hs-var hs-var">build</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html#Document"><span class="hs-identifier hs-type">Document</span></a></span><span> </span><span id="local-6989586621679106665"><span class="annot"><span class="annottext">Title
 </span><a href="#local-6989586621679106665"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679106666"><span class="annot"><span class="annottext">Title
 </span><a href="#local-6989586621679106666"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679106667"><span class="annot"><span class="annottext">[LayoutObj]
-</span><a href="#local-6989586621679106667"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><a href="#local-6989586621679106667"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">Doc
 </span><a href="Language.Drasil.JSON.Helpers.html#markdownB"><span class="hs-identifier hs-var">markdownB</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">$$</span></span><span>
@@ -96,14 +96,14 @@
 </span><span class="hs-operator hs-var">$$</span></span><span>
 </span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;}&quot;</span></span><span> </span><span>
+</span><span class="hs-string">&quot;}&quot;</span></span><span>
 </span><span id="line-52"></span><span>
 </span><span id="line-53"></span><span class="annot"><a href="Language.Drasil.JSON.Print.html#build%27"><span class="hs-identifier hs-type">build'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html#Document"><span class="hs-identifier hs-type">Document</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-54"></span><span id="build%27"><span class="annot"><span class="annottext">build' :: Document -&gt; Doc
 </span><a href="Language.Drasil.JSON.Print.html#build%27"><span class="hs-identifier hs-var hs-var">build'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html#Document"><span class="hs-identifier hs-type">Document</span></a></span><span> </span><span id="local-6989586621679106673"><span class="annot"><span class="annottext">Title
 </span><a href="#local-6989586621679106673"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679106674"><span class="annot"><span class="annottext">Title
 </span><a href="#local-6989586621679106674"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679106675"><span class="annot"><span class="annottext">[LayoutObj]
-</span><a href="#local-6989586621679106675"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><a href="#local-6989586621679106675"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">Doc
 </span><a href="Language.Drasil.JSON.Helpers.html#markdownB"><span class="hs-identifier hs-var">markdownB</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">$$</span></span><span>
@@ -128,7 +128,7 @@
 </span><span class="hs-operator hs-var">$$</span></span><span>
 </span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">Doc
 </span><a href="Language.Drasil.JSON.Helpers.html#markdownB%27"><span class="hs-identifier hs-var">markdownB'</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
-</span><span class="hs-operator hs-var">$$</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">$$</span></span><span>
 </span><span id="line-60"></span><span>  </span><span class="annot"><span class="annottext">[LayoutObj] -&gt; Doc
 </span><a href="Language.Drasil.JSON.Print.html#print"><span class="hs-identifier hs-var">print</span></a></span><span> </span><span class="annot"><span class="annottext">[LayoutObj]
 </span><a href="#local-6989586621679106675"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
@@ -141,7 +141,7 @@
 </span><span class="hs-operator hs-var">$$</span></span><span>
 </span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;}&quot;</span></span><span> </span><span>
+</span><span class="hs-string">&quot;}&quot;</span></span><span>
 </span><span id="line-64"></span><span>
 </span><span id="line-65"></span><span class="annot"><span class="hs-comment">-- | Helper for rendering a D from Latex print</span></span><span>
 </span><span id="line-66"></span><span class="annot"><a href="Language.Drasil.JSON.Print.html#printMath"><span class="hs-identifier hs-type">printMath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.TeX.Monad.html#D"><span class="hs-identifier hs-type">D</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
@@ -230,7 +230,7 @@ forall a. Show a =&gt; a -&gt; String
 </span><a href="#local-6989586621679106701"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;$$&quot;</span></span><span> </span><span>
+</span><span class="hs-string">&quot;$$&quot;</span></span><span>
 </span><span id="line-80"></span><span>    </span><span id="local-6989586621679106695"><span class="annot"><span class="annottext">mathEqn :: Doc
 </span><a href="#local-6989586621679106695"><span class="hs-identifier hs-var hs-var">mathEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 forall {a}. Show a =&gt; a -&gt; Doc
@@ -301,7 +301,7 @@ forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><a href="Language.Drasil.JSON.Print.html#makeBib"><span class="hs-identifier hs-var">makeBib</span></a></span><span> </span><span class="annot"><span class="annottext">BibRef
 </span><a href="#local-6989586621679106722"><span class="hs-identifier hs-var">bib</span></a></span><span>
 </span><span id="line-86"></span><span class="annot"><a href="Language.Drasil.JSON.Print.html#printLO"><span class="hs-identifier hs-var">printLO</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html#Graph"><span class="hs-identifier hs-type">Graph</span></a></span><span class="hs-special">{</span><span class="hs-special">}</span><span>                         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
-</span><span class="hs-identifier hs-var">empty</span></span><span> </span><span>
+</span><span class="hs-identifier hs-var">empty</span></span><span>
 </span><span id="line-87"></span><span class="annot"><a href="Language.Drasil.JSON.Print.html#printLO"><span class="hs-identifier hs-var">printLO</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html#CodeBlock"><span class="hs-identifier hs-type">CodeBlock</span></a></span><span> </span><span class="hs-special">{</span><span class="hs-special">}</span><span>                    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">empty</span></span><span>
 </span><span id="line-88"></span><span>
@@ -385,7 +385,7 @@ forall a. Show a =&gt; a -&gt; String
 </span><a href="#local-6989586621679106740"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;$$&quot;</span></span><span> </span><span>
+</span><span class="hs-string">&quot;$$&quot;</span></span><span>
 </span><span id="line-100"></span><span>    </span><span id="local-6989586621679106734"><span class="annot"><span class="annottext">mathEqn :: Doc
 </span><a href="#local-6989586621679106734"><span class="hs-identifier hs-var hs-var">mathEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 forall {a}. Show a =&gt; a -&gt; Doc
@@ -451,7 +451,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Language.Drasil.JSON.Print.html#makeBib"><span class="hs-identifier hs-var">makeBib</span></a></span><span> </span><span class="annot"><span class="annottext">BibRef
 </span><a href="#local-6989586621679106749"><span class="hs-identifier hs-var">bib</span></a></span><span>
 </span><span id="line-106"></span><span class="annot"><a href="Language.Drasil.JSON.Print.html#printLO%27"><span class="hs-identifier hs-var">printLO'</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html#Graph"><span class="hs-identifier hs-type">Graph</span></a></span><span class="hs-special">{</span><span class="hs-special">}</span><span>                         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
-</span><span class="hs-identifier hs-var">empty</span></span><span> </span><span>
+</span><span class="hs-identifier hs-var">empty</span></span><span>
 </span><span id="line-107"></span><span class="annot"><a href="Language.Drasil.JSON.Print.html#printLO%27"><span class="hs-identifier hs-var">printLO'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html#CodeBlock"><span class="hs-identifier hs-type">CodeBlock</span></a></span><span> </span><span id="local-6989586621679106750"><span class="annot"><span class="annottext">Title
 </span><a href="#local-6989586621679106750"><span class="hs-identifier hs-var">contents</span></a></span></span><span class="hs-special">)</span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><a href="Language.Drasil.JSON.Helpers.html#codeCell"><span class="hs-identifier hs-var">codeCell</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
@@ -613,7 +613,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Language.Drasil.JSON.Print.html#cSpec"><span class="hs-identifier hs-var hs-var">cSpec</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.AST.html#E"><span class="hs-identifier hs-type">E</span></a></span><span> </span><span id="local-6989586621679106778"><span class="annot"><span class="annottext">Expr
 </span><a href="#local-6989586621679106778"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Doc
 </span><a href="Language.Drasil.JSON.Print.html#pExpr"><span class="hs-identifier hs-var">pExpr</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679106778"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span>
+</span><a href="#local-6989586621679106778"><span class="hs-identifier hs-var">e</span></a></span><span>
 </span><span id="line-139"></span><span class="annot"><a href="Language.Drasil.JSON.Print.html#cSpec"><span class="hs-identifier hs-var">cSpec</span></a></span><span> </span><span class="annot"><span class="annottext">Title
 </span><span class="hs-identifier">_</span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">empty</span></span><span>
@@ -745,7 +745,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-159"></span><span class="hs-comment">--pExpr (Font Bold e)  = bold $ pExpr e -- used before</span><span>
 </span><span id="line-160"></span><span class="hs-comment">--pExpr (Font Emph e)  = text &quot;&lt;em&gt;&quot; &lt;&gt; pExpr e &lt;&gt; text &quot;&lt;/em&gt;&quot; -- HTML used</span><span>
 </span><span id="line-161"></span><span class="hs-comment">--pExpr (Spc Thin)     = text &quot;&amp;#8239;&quot; -- HTML used</span><span>
-</span><span id="line-162"></span><span class="hs-comment">-- Uses TeX for Mathjax for all other exprs </span><span>
+</span><span id="line-162"></span><span class="hs-comment">-- Uses TeX for Mathjax for all other exprs</span><span>
 </span><span id="line-163"></span><span class="annot"><a href="Language.Drasil.JSON.Print.html#pExpr"><span class="hs-identifier hs-var">pExpr</span></a></span><span> </span><span id="local-6989586621679106814"><span class="annot"><span class="annottext">Expr
 </span><a href="#local-6989586621679106814"><span class="hs-identifier hs-var">e</span></a></span></span><span>              </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">D -&gt; Doc
 </span><a href="Language.Drasil.JSON.Print.html#printMath"><span class="hs-identifier hs-var">printMath</span></a></span><span> </span><span class="annot"><span class="annottext">(D -&gt; Doc) -&gt; D -&gt; Doc
@@ -1002,7 +1002,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="#local-6989586621679106875"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;|&quot;</span></span><span class="hs-special">)</span><span>        </span><span>
+</span><span class="hs-string">&quot;|&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-238"></span><span>        </span><span id="local-6989586621679106880"><span class="annot"><span class="annottext">c :: Int
 </span><a href="#local-6989586621679106880"><span class="hs-identifier hs-var hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char -&gt; String -&gt; Int
 </span><a href="Language.Drasil.JSON.Print.html#count"><span class="hs-identifier hs-var">count</span></a></span><span> </span><span class="annot"><span class="annottext">Char
@@ -1047,7 +1047,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span id="line-245"></span><span class="annot"><a href="Language.Drasil.JSON.Print.html#count"><span class="hs-identifier hs-var">count</span></a></span><span> </span><span id="local-6989586621679106888"><span class="annot"><span class="annottext">Char
 </span><a href="#local-6989586621679106888"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679106889"><span class="annot"><span class="annottext">Char
 </span><a href="#local-6989586621679106889"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679106890"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679106890"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span>
+</span><a href="#local-6989586621679106890"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span>
 </span><span id="line-246"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Char
 </span><a href="#local-6989586621679106888"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
@@ -1167,7 +1167,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier">_</span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; [Doc] -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-269"></span><span>  </span><span class="annot"><span class="annottext">((Title, ItemType, Maybe Title) -&gt; Doc)
 -&gt; [(Title, ItemType, Maybe Title)] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -1197,7 +1197,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="#local-6989586621679106912"><span class="hs-identifier hs-var">bl</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; [Doc] -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-271"></span><span>  </span><span class="annot"><span class="annottext">((Title, ItemType, Maybe Title) -&gt; Doc)
 -&gt; [(Title, ItemType, Maybe Title)] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -1263,7 +1263,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="#local-6989586621679106923"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><a href="#local-6989586621679106922"><span class="hs-identifier hs-var">bl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(ItemType, Maybe Title)]
 </span><a href="#local-6989586621679106921"><span class="hs-identifier hs-var">items</span></a></span><span>
-</span><span id="line-274"></span><span class="hs-comment">--makeList (Definitions items) _ = ul [&quot;hide-list-style-no-indent&quot;] $ vcat $ </span><span>
+</span><span id="line-274"></span><span class="hs-comment">--makeList (Definitions items) _ = ul [&quot;hide-list-style-no-indent&quot;] $ vcat $</span><span>
 </span><span id="line-275"></span><span>  </span><span class="hs-comment">--map (\(b,e,l) -&gt; li $ mlref l $ quote(pSpec b &lt;&gt; text &quot; is the&quot; &lt;+&gt; sItem e)) items</span><span>
 </span><span id="line-276"></span><span class="annot"><a href="Language.Drasil.JSON.Print.html#makeList"><span class="hs-identifier hs-var">makeList</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.AST.html#Definitions"><span class="hs-identifier hs-type">Definitions</span></a></span><span> </span><span id="local-6989586621679106925"><span class="annot"><span class="annottext">[(Title, ItemType, Maybe Title)]
 </span><a href="#local-6989586621679106925"><span class="hs-identifier hs-var">items</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool

@@ -15,7 +15,7 @@
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span class="hs-comment">-- | Decorations on symbols/characters such as hats or Vector representations</span><span>
 </span><span id="line-17"></span><span class="hs-comment">-- (determines bolding, italics, etc).</span><span>
-</span><span id="line-18"></span><span class="hs-keyword">data</span><span> </span><span id="Decoration"><span class="annot"><a href="Language.Drasil.Symbol.html#Decoration"><span class="hs-identifier hs-var">Decoration</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-18"></span><span class="hs-keyword">data</span><span> </span><span id="Decoration"><span class="annot"><a href="Language.Drasil.Symbol.html#Decoration"><span class="hs-identifier hs-var">Decoration</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-19"></span><span>    </span><span id="Hat"><span class="annot"><a href="Language.Drasil.Symbol.html#Hat"><span class="hs-identifier hs-var">Hat</span></a></span></span><span>       </span><span class="annot"><span class="hs-comment">-- ^ Places a @^@ on top of a symbol.</span></span><span>
 </span><span id="line-20"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Vector"><span class="annot"><a href="Language.Drasil.Symbol.html#Vector"><span class="hs-identifier hs-var">Vector</span></a></span></span><span>    </span><span class="annot"><span class="hs-comment">-- ^ Makes a symbol bold.</span></span><span>
 </span><span id="line-21"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Prime"><span class="annot"><a href="Language.Drasil.Symbol.html#Prime"><span class="hs-identifier hs-var">Prime</span></a></span></span><span>     </span><span class="annot"><span class="hs-comment">-- ^ Appends a @'@ to a symbol.</span></span><span>
@@ -71,10 +71,10 @@ min :: Decoration -&gt; Decoration -&gt; Decoration
 </span><span id="line-26"></span><span class="hs-comment">-- | A 'Symbol' is actually going to be a graphical description of what gets</span><span>
 </span><span id="line-27"></span><span class="hs-comment">-- rendered as a (unique) symbol.  This is actually NOT based on semantics at</span><span>
 </span><span id="line-28"></span><span class="hs-comment">-- all, but just a description of how things look.</span><span>
-</span><span id="line-29"></span><span class="hs-comment">-- </span><span>
+</span><span id="line-29"></span><span class="hs-comment">--</span><span>
 </span><span id="line-30"></span><span class="hs-comment">-- Symbols can be:</span><span>
-</span><span id="line-31"></span><span class="hs-comment">-- </span><span>
-</span><span id="line-32"></span><span class="hs-comment">--     * @'Variable'@ (string such as &quot;x&quot; that represent a value that can vary) </span><span>
+</span><span id="line-31"></span><span class="hs-comment">--</span><span>
+</span><span id="line-32"></span><span class="hs-comment">--     * @'Variable'@ (string such as &quot;x&quot; that represent a value that can vary)</span><span>
 </span><span id="line-33"></span><span class="hs-comment">--     * @'Label'@ (strings such as &quot;max&quot; or &quot;target&quot; that represent a single idea)</span><span>
 </span><span id="line-34"></span><span class="hs-comment">--     * @'Special'@ characters (ex. unicode)</span><span>
 </span><span id="line-35"></span><span class="hs-comment">--     * @Decorated@ symbols using 'Atop'</span><span>
@@ -82,11 +82,11 @@ min :: Decoration -&gt; Decoration -&gt; Decoration
 </span><span id="line-37"></span><span class="hs-comment">--     * @'Empty'@! (this is to give this a monoid-like flavour)</span><span>
 </span><span id="line-38"></span><span class="hs-keyword">data</span><span> </span><span id="Symbol"><span class="annot"><a href="Language.Drasil.Symbol.html#Symbol"><span class="hs-identifier hs-var">Symbol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-39"></span><span>    </span><span id="Variable"><span class="annot"><a href="Language.Drasil.Symbol.html#Variable"><span class="hs-identifier hs-var">Variable</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><span class="hs-comment">-- ^ Basic variable name creation.</span></span><span>
-</span><span id="line-40"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Label"><span class="annot"><a href="Language.Drasil.Symbol.html#Label"><span class="hs-identifier hs-var">Label</span></a></span></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span>
+</span><span id="line-40"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Label"><span class="annot"><a href="Language.Drasil.Symbol.html#Label"><span class="hs-identifier hs-var">Label</span></a></span></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-41"></span><span>    </span><span class="hs-comment">-- ^ For when symbols need more context, but we don't want to add a new variable name.</span><span>
 </span><span id="line-42"></span><span>    </span><span class="hs-comment">-- For example, @v_f@ may be encoded as @Concat [variable &quot;v&quot;, label &quot;f&quot;]@.</span><span>
 </span><span id="line-43"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Integ"><span class="annot"><a href="Language.Drasil.Symbol.html#Integ"><span class="hs-identifier hs-var">Integ</span></a></span></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="annot"><span class="hs-comment">-- ^ For using numbers in Symbols.</span></span><span>
-</span><span id="line-44"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Special"><span class="annot"><a href="Language.Drasil.Symbol.html#Special"><span class="hs-identifier hs-var">Special</span></a></span></span><span>  </span><span class="annot"><a href="Language.Drasil.Unicode.html#Special"><span class="hs-identifier hs-type">Special</span></a></span><span> </span><span>
+</span><span id="line-44"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Special"><span class="annot"><a href="Language.Drasil.Symbol.html#Special"><span class="hs-identifier hs-var">Special</span></a></span></span><span>  </span><span class="annot"><a href="Language.Drasil.Unicode.html#Special"><span class="hs-identifier hs-type">Special</span></a></span><span>
 </span><span id="line-45"></span><span>    </span><span class="hs-comment">-- ^ For now, special characters are the degree and partial</span><span>
 </span><span id="line-46"></span><span>    </span><span class="hs-comment">-- differentiation symbols. These should eventually move elsewhere</span><span>
 </span><span id="line-47"></span><span>    </span><span class="hs-comment">-- and the 'Special' type removed.</span><span>
@@ -201,7 +201,7 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><a href="#local-6989586621679415387"><span class="hs-identifier hs-var">d1</span></a></span></span><span> </span><span id="local-6989586621679415388"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679415388"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span id="local-6989586621679415389"><span class="annot"><span class="annottext">Decoration
 </span><a href="#local-6989586621679415389"><span class="hs-identifier hs-var">d2</span></a></span></span><span> </span><span id="local-6989586621679415390"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679415390"><span class="hs-identifier hs-var">a'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><a href="#local-6989586621679415390"><span class="hs-identifier hs-var">a'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-106"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679415388"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
@@ -510,7 +510,8 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall a. Ord a =&gt; a -&gt; a -&gt; Ordering
 </span><span class="hs-identifier hs-var">compare</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679415446"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679415447"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span>
+</span><a href="#local-6989586621679415447"><span class="hs-identifier hs-var">y</span></a></span><span>
 </span><span id="line-197"></span><span>  </span><span id="local-6989586621679415448"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679415448"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
-</span><a href="#local-6989586621679415448"><span class="hs-identifier hs-var">other</span></a></span></pre></body></html>
+</span><a href="#local-6989586621679415448"><span class="hs-identifier hs-var">other</span></a></span><span>
+</span><span id="line-198"></span></pre></body></html>

@@ -1460,9 +1460,6 @@ module Drasil.Sections.TableOfContents
 --   Contents.
 toToC :: DocSection -> ItemType
 
--- | Finds whether the Table of Contents is in a SRSDecl.
-findToC :: [DocSection] -> ShowTableOfContents
-
 
 -- | Standard code to make a table of symbols.
 module Drasil.Sections.TableOfSymbols
@@ -1716,111 +1713,16 @@ module Drasil.DocumentLanguage
 
 -- | Creates a document from a document description, a title combinator
 --   function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (System, DocDesc) -> Document
 
 -- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
 --   references, fill in for rest of system information. Currently fills in
 --   references, traceability matrix information and <a>IdeaDict</a>s.
-fillcdbSRS :: SRSDecl -> System -> System
-
--- | Fill in the <a>Section</a>s and <a>LabelledContent</a> maps of the
---   <a>ChunkDB</a> from the <a>SRSDecl</a>.
-fillSecAndLC :: SRSDecl -> System -> System
-
--- | Takes in existing information from the Chunk database to construct a
---   database of references.
-fillReferences :: SRSDecl -> System -> System
-
--- | Helper that gets references from definitions and models.
-dRefToRef :: HasDecRef a => a -> [Reference]
+fillcdbSRS :: SRSDecl -> System -> (System, DocDesc)
 
 -- | Recursively find all references in a section (meant for getting at
 --   <a>LabelledContent</a>).
 findAllRefs :: Section -> [Reference]
-
--- | Helper for filling in the traceability matrix and graph information
---   into the system.
-fillTraceSI :: SRSDecl -> System -> System
-
--- | Fills in the traceabiliy matrix and graphs section of the system
---   information using the document description.
-fillTraceMaps :: DocDesc -> System -> System
-
--- | Fills in the requirements section of the system information using the
---   document description.
-fillReqs :: DocDesc -> System -> System
-
--- | Constructs the unit definitions (<a>UnitDefn</a>s) found in the
---   document description (<a>DocDesc</a>) from a database
---   (<a>ChunkDB</a>).
-extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
-
--- | For a given list of <a>Quantity</a>s, collects the <a>UnitDefn</a>s
---   dependencies of their units (i.e., what units their units are defined
---   with).
-collectUnitDeps :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
-
--- | Helper for creating the different document sections.
-mkSections :: System -> DocDesc -> [Section]
-
--- | Helper for making the Table of Contents section.
-mkToC :: DocDesc -> Section
-
--- | Helper for creating the reference section and subsections. Includes
---   Table of Symbols, Units and Abbreviations and Acronyms.
-mkRefSec :: System -> DocDesc -> RefSec -> Section
-
--- | Helper for creating the table of symbols.
-mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) => [e] -> LFunc -> [TSIntro] -> Section
-
--- | Makes the Introduction section into a <a>Section</a>.
-mkIntroSec :: System -> IntroSec -> Section
-
--- | Helper for making the Stakeholders section.
-mkStkhldrSec :: StkhldrSec -> Section
-
--- | Helper for making the General System Description section.
-mkGSDSec :: GSDSec -> Section
-
--- | Helper for making the Specific System Description section.
-mkSSDSec :: System -> SSDSec -> Section
-
--- | Helper for making the Specific System Description Problem section.
-mkSSDProb :: System -> ProblemDescription -> Section
-
--- | Helper for making the Solution Characteristics Specification section.
-mkSolChSpec :: System -> SolChSpec -> Section
-
--- | Helper for making the Requirements section.
-mkReqrmntSec :: ReqrmntSec -> Section
-
--- | Helper for making the Likely Changes section.
-mkLCsSec :: LCsSec -> Section
-
--- | Helper for making the Unikely Changes section.
-mkUCsSec :: UCsSec -> Section
-
--- | Intro paragraph for likely and unlikely changes
-introChgs :: NamedIdea n => n -> [ConceptInstance] -> Contents
-
--- | Helper for making the Traceability Matrices and Graphs section.
-mkTraceabilitySec :: TraceabilitySec -> System -> Section
-
--- | Helper to get headers of rows and columns
-header :: ([UID] -> [UID]) -> System -> [Sentence]
-
--- | Helper for making the Off-the-Shelf Solutions section.
-mkOffShelfSolnSec :: OffShelfSolnsSec -> Section
-
--- | Helper for making the Values of Auxiliary Constants section.
-mkAuxConsSec :: AuxConstntSec -> Section
-
--- | Helper for making the References section.
-mkBib :: BibRef -> Section
-
--- | Helper for making the Appendix section.
-mkAppndxSec :: AppndxSec -> Section
 
 
 -- | Re-export document language types and functions for easy use in other
@@ -1965,6 +1867,9 @@ AuxConsProg :: CI -> [ConstQDef] -> AuxConstntSec
 data DerivationDisplay
 ShowDerivation :: DerivationDisplay
 HideDerivation :: DerivationDisplay
+
+-- | A document description is made up of document sections.
+type DocDesc = [DocSection]
 
 -- | How to handle emphasis of words.
 data Emphasis
@@ -2119,16 +2024,12 @@ TUPurpose :: TUIntro
 
 -- | Creates a document from a document description, a title combinator
 --   function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
-
--- | Helper for filling in the traceability matrix and graph information
---   into the system.
-fillTraceSI :: SRSDecl -> System -> System
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (System, DocDesc) -> Document
 
 -- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
 --   references, fill in for rest of system information. Currently fills in
 --   references, traceability matrix information and <a>IdeaDict</a>s.
-fillcdbSRS :: SRSDecl -> System -> System
+fillcdbSRS :: SRSDecl -> System -> (System, DocDesc)
 
 -- | Recursively find all references in a section (meant for getting at
 --   <a>LabelledContent</a>).
@@ -2687,12 +2588,12 @@ Succinct :: Verbosity
 
 -- | Creates a document from a document description, a title combinator
 --   function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (System, DocDesc) -> Document
 
 -- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
 --   references, fill in for rest of system information. Currently fills in
 --   references, traceability matrix information and <a>IdeaDict</a>s.
-fillcdbSRS :: SRSDecl -> System -> System
+fillcdbSRS :: SRSDecl -> System -> (System, DocDesc)
 
 -- | Default Reference Material section introduction.
 intro :: Contents

@@ -28,7 +28,7 @@
 </span><span id="line-25"></span><span>
 </span><span id="line-26"></span><span>
 </span><span id="line-27"></span><span class="hs-comment">{-conservationOfMomentGDef :: RelationConcept
-conservationOfMomentGDef = makeRC &quot;conservOfMoment&quot; (nounPhraseSP &quot;Conservation of Momentum&quot;) 
+conservationOfMomentGDef = makeRC &quot;conservOfMoment&quot; (nounPhraseSP &quot;Conservation of Momentum&quot;)
   conservationOfMomentDesc conservationOfMomentRel
 
 conservationOfMomentRel :: Relation
@@ -48,9 +48,9 @@ conservationOfMomentDeriv = foldlSent [S &quot;When bodies collide, they exert&q
   S &quot;an equal (force) on each other in opposite directions&quot; +:+.
   S &quot;This is Newton's third law:&quot;,
   S &quot;(expr1)&quot;,
-  S &quot;The objects collide with each other for the exact same amount of&quot;, 
+  S &quot;The objects collide with each other for the exact same amount of&quot;,
   phrase time, getS time,
-  S &quot;The above equation is equal to the&quot;, phrase impulseS, 
+  S &quot;The above equation is equal to the&quot;, phrase impulseS,
   S &quot;(GD1 ref)&quot;,
   S &quot;(expr2)&quot;,
   S &quot;The&quot;, phrase impulseS, S &quot;is equal to the change in momentum:&quot;,
@@ -212,7 +212,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span id="line-91"></span><span id="accelGravityDerivSentence1"><span class="annot"><span class="annottext">accelGravityDerivSentence1 :: [Sentence]
 </span><a href="Drasil.GamePhysics.GenDefs.html#accelGravityDerivSentence1"><span class="hs-identifier hs-var hs-var">accelGravityDerivSentence1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;From&quot;</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span class="hs-string">&quot;From&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-92"></span><span>        </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
@@ -440,7 +440,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.gravitationalConst</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">$*</span></span><span>
 </span><span id="line-128"></span><span>                         </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -544,7 +544,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#dVect"><span class="hs-identifier hs-var">dVect</span></a></span><span>
 </span><span id="line-136"></span><span>
-</span><span id="line-137"></span><span id="local-6989586621679068715"><span class="annot"><a href="Drasil.GamePhysics.GenDefs.html#accelGravityDerivEqns"><span class="hs-identifier hs-type">accelGravityDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679068715"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679068715"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679068715"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-137"></span><span id="local-6989586621679069067"><span class="annot"><a href="Drasil.GamePhysics.GenDefs.html#accelGravityDerivEqns"><span class="hs-identifier hs-type">accelGravityDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679069067"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679069067"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679069067"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-138"></span><span id="accelGravityDerivEqns"><span class="annot"><span class="annottext">accelGravityDerivEqns :: forall r. (ExprC r, LiteralC r) =&gt; [r]
 </span><a href="Drasil.GamePhysics.GenDefs.html#accelGravityDerivEqns"><span class="hs-identifier hs-var hs-var">accelGravityDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">r
 PExpr
@@ -658,7 +658,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#massB"><span class="hs-identifier hs-var">massB</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">$*</span></span><span>
 </span><span id="line-155"></span><span>  </span><span class="annot"><span class="annottext">r -&gt; r
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r

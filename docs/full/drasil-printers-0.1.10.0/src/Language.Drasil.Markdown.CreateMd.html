@@ -3,7 +3,7 @@
 </span><span id="line-3"></span><span>    </span><span class="annot"><span class="hs-comment">-- * Main Function</span></span><span>
 </span><span id="line-4"></span><span>    </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#makeMd"><span class="hs-identifier">makeMd</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-5"></span><span>    </span><span class="annot"><span class="hs-comment">-- * Section Creators</span></span><span>
-</span><span id="line-6"></span><span>    </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#introInfo"><span class="hs-identifier">introInfo</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#whatInfo"><span class="hs-identifier">whatInfo</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#verInfo"><span class="hs-identifier">verInfo</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#unsupOS"><span class="hs-identifier">unsupOS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#extLibSec"><span class="hs-identifier">extLibSec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#regularSec"><span class="hs-identifier">regularSec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#instDoc"><span class="hs-identifier">instDoc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#endNote"><span class="hs-identifier">endNote</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-6"></span><span>    </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#introInfo"><span class="hs-identifier">introInfo</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#whatInfo"><span class="hs-identifier">whatInfo</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#verInfo"><span class="hs-identifier">verInfo</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#unsupOS"><span class="hs-identifier">unsupOS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#extLibSec"><span class="hs-identifier">extLibSec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#regularSec"><span class="hs-identifier">regularSec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#instDoc"><span class="hs-identifier">instDoc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#endNote"><span class="hs-identifier">endNote</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-7"></span><span>    </span><span class="hs-keyword">where</span><span>
 </span><span id="line-8"></span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Prelude</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(&lt;&gt;)</span></span><span class="hs-special">)</span><span>
@@ -41,7 +41,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall a. [a] -&gt; Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679099494"><span class="hs-identifier hs-var">auths</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><a href="#local-6989586621679099494"><span class="hs-identifier hs-var">auths</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-22"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Maybe String -&gt; Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#maybeSub"><span class="hs-identifier hs-var">maybeSub</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Motivation&quot;</span></span><span> </span><span class="annot"><span class="annottext">Maybe String
@@ -60,7 +60,7 @@ forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><a href="#local-6989586621679099503"><span class="hs-identifier hs-var">inoutn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#regularSec"><span class="hs-identifier hs-var">regularSec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Making Examples&quot;</span></span><span class="hs-special">)</span><span> </span><span>
+</span><span class="hs-string">&quot;Making Examples&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-28"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(String, String) -&gt; Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#runInstDoc"><span class="hs-identifier hs-var">runInstDoc</span></a></span><span> </span><span class="annot"><span class="annottext">(String, String)
 </span><a href="#local-6989586621679099503"><span class="hs-identifier hs-var">inoutn</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
@@ -111,7 +111,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679099511"><span class="hs-keyword hs-var">role</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;:&quot;</span></span><span class="hs-special">)</span><span> </span><span>
+</span><span class="hs-string">&quot;:&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#upcase"><span class="hs-identifier hs-var">upcase</span></a></span><span> </span><span class="annot"><span class="annottext">String
@@ -204,7 +204,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679099518"><span class="hs-identifier hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
-</span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span>
 </span><span id="line-60"></span><span>      </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;will take the inputs from&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
@@ -215,7 +215,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679099519"><span class="hs-identifier hs-var">inFile</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#bkQuote"><span class="hs-identifier hs-var">bkQuote</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
-</span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span>
 </span><span id="line-61"></span><span>      </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and write the outputs to&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
@@ -226,7 +226,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679099520"><span class="hs-identifier hs-var">outFile</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#bkQuote"><span class="hs-identifier hs-var">bkQuote</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
-</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span>
 </span><span id="line-62"></span><span>      </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;.&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
@@ -237,7 +237,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-string">&quot;Inputs can be changed by editing&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#bkQuote"><span class="hs-identifier hs-var">bkQuote</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
-</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span>
 </span><span id="line-63"></span><span>      </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679099519"><span class="hs-identifier hs-var">inFile</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
@@ -258,7 +258,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#regularSec"><span class="hs-identifier hs-var">regularSec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Configuration Files&quot;</span></span><span class="hs-special">)</span><span> </span><span>
+</span><span class="hs-string">&quot;Configuration Files&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-69"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Configuration files are files that must be &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
@@ -317,13 +317,13 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679099525"><span class="hs-identifier hs-var">uns</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-81"></span><span>
 </span><span id="line-82"></span><span class="hs-comment">-- | External Libraries section. The inputs are a list of name and version pairs</span><span>
-</span><span id="line-83"></span><span class="hs-comment">-- and a list of the corresponding version numbers, these are first combined into a </span><span>
+</span><span id="line-83"></span><span class="hs-comment">-- and a list of the corresponding version numbers, these are first combined into a</span><span>
 </span><span id="line-84"></span><span class="hs-comment">-- list of triplets, and then each printed on a new line.</span><span>
 </span><span id="line-85"></span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#extLibSec"><span class="hs-identifier hs-type">extLibSec</span></a></span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-86"></span><span id="extLibSec"><span class="annot"><span class="annottext">extLibSec :: [(String, String)] -&gt; [String] -&gt; Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#extLibSec"><span class="hs-identifier hs-var hs-var">extLibSec</span></a></span></span><span> </span><span id="local-6989586621679099526"><span class="annot"><span class="annottext">[(String, String)]
 </span><a href="#local-6989586621679099526"><span class="hs-identifier hs-var">libns</span></a></span></span><span> </span><span id="local-6989586621679099527"><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679099527"><span class="hs-identifier hs-var">libfps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><a href="#local-6989586621679099527"><span class="hs-identifier hs-var">libfps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-87"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679099528"><span class="annot"><span class="annottext">libs :: [(String, String, String)]
 </span><a href="#local-6989586621679099528"><span class="hs-identifier hs-var hs-var">libs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(String, String)] -&gt; [String] -&gt; [(String, String, String)]
 </span><a href="Language.Drasil.Markdown.CreateMd.html#addListToTuple"><span class="hs-identifier hs-var">addListToTuple</span></a></span><span> </span><span class="annot"><span class="annottext">[(String, String)]
@@ -349,7 +349,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 -&gt; [(String, String, String)]
 -&gt; [Doc]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">.</span></span><span>
 </span><span id="line-89"></span><span>            </span><span class="annot"><span class="annottext">((String, String, String) -&gt; Doc)
 -&gt; [(String, String, String)] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -359,7 +359,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span id="line-90"></span><span>    </span><span class="hs-keyword">in</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Bool
 </span><span class="hs-identifier hs-var">isEmpty</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="#local-6989586621679099530"><span class="hs-identifier hs-var">formattedLibs</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">Doc
-</span><span class="hs-identifier hs-var">empty</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span>
+</span><span class="hs-identifier hs-var">empty</span></span><span> </span><span class="hs-keyword">else</span><span>
 </span><span id="line-91"></span><span>            </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#regularSec"><span class="hs-identifier hs-var">regularSec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -457,7 +457,7 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679099544"><span class="hs-identifier hs-var">num</span></a></span></span><span> </span><span id="local-6989586621679099545"><span class="annot"><span class="annottext">[String]
 </span><a href="#local-6989586621679099545"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;*This README is a software artifact generated by Drasil.*&quot;</span></span><span> </span><span>
+</span><span class="hs-string">&quot;*This README is a software artifact generated by Drasil.*&quot;</span></span><span>
 </span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#doubleSep"><span class="hs-identifier hs-var">doubleSep</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
@@ -496,7 +496,7 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-string">&quot;```&quot;</span></span><span>
 </span><span id="line-129"></span><span>
 </span><span id="line-130"></span><span>
-</span><span id="line-131"></span><span class="hs-comment">-- FIXME as explained in #2224 we still need to add in the purpose section, </span><span>
+</span><span id="line-131"></span><span class="hs-comment">-- FIXME as explained in #2224 we still need to add in the purpose section,</span><span>
 </span><span id="line-132"></span><span class="hs-comment">-- this could be done by adding a third parameter to introSec</span><span>
 </span><span id="line-133"></span><span class="annot"><span class="hs-comment">-- | Constructs introduction section from header and message.</span></span><span>
 </span><span id="line-134"></span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#introSec"><span class="hs-identifier hs-type">introSec</span></a></span><span> </span><span class="hs-glyph">::</span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
@@ -521,7 +521,7 @@ forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&gt; Author:&quot;</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;&gt; Authors: &quot;</span></span><span class="hs-special">)</span><span> </span><span>
+</span><span class="hs-string">&quot;&gt; Authors: &quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-136"></span><span>  </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="#local-6989586621679099549"><span class="hs-identifier hs-var">ms1</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
@@ -589,7 +589,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">contSep</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;&lt;img src=\&quot;&quot;</span></span><span> </span><span>
+</span><span class="hs-string">&quot;&lt;img src=\&quot;&quot;</span></span><span>
 </span><span id="line-154"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String

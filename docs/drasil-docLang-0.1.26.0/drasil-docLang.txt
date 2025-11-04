@@ -706,6 +706,9 @@ data DerivationDisplay
 ShowDerivation :: DerivationDisplay
 HideDerivation :: DerivationDisplay
 
+-- | A document description is made up of document sections.
+type DocDesc = [DocSection]
+
 -- | How to handle emphasis of words.
 data Emphasis
 Bold :: Emphasis
@@ -859,16 +862,12 @@ TUPurpose :: TUIntro
 
 -- | Creates a document from a document description, a title combinator
 --   function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
-
--- | Helper for filling in the traceability matrix and graph information
---   into the system.
-fillTraceSI :: SRSDecl -> System -> System
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (System, DocDesc) -> Document
 
 -- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
 --   references, fill in for rest of system information. Currently fills in
 --   references, traceability matrix information and <a>IdeaDict</a>s.
-fillcdbSRS :: SRSDecl -> System -> System
+fillcdbSRS :: SRSDecl -> System -> (System, DocDesc)
 
 -- | Recursively find all references in a section (meant for getting at
 --   <a>LabelledContent</a>).
@@ -1427,12 +1426,12 @@ Succinct :: Verbosity
 
 -- | Creates a document from a document description, a title combinator
 --   function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (System, DocDesc) -> Document
 
 -- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
 --   references, fill in for rest of system information. Currently fills in
 --   references, traceability matrix information and <a>IdeaDict</a>s.
-fillcdbSRS :: SRSDecl -> System -> System
+fillcdbSRS :: SRSDecl -> System -> (System, DocDesc)
 
 -- | Default Reference Material section introduction.
 intro :: Contents

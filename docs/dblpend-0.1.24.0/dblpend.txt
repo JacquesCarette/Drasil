@@ -225,8 +225,9 @@ correct :: ConceptInstance
 portable :: ConceptInstance
 
 module Drasil.DblPend.Body
-srs :: Document
+sd :: (System, DocDesc)
 fullSI :: System
+srs :: Document
 printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 si :: System

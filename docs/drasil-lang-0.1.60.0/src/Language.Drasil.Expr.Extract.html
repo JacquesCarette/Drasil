@@ -288,7 +288,7 @@ forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Expr, Expr)]
 </span><a href="#local-6989586621679420203"><span class="hs-identifier hs-var">ls</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-57"></span><span>                                </span><span class="annot"><span class="annottext">((Expr, Expr) -&gt; [UID]) -&gt; [(Expr, Expr)] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; [UID]
@@ -477,7 +477,7 @@ forall a b. (a, b) -&gt; b
 </span><span id="line-84"></span><span class="hs-comment">---------------------------------------------------------------------------</span><span>
 </span><span id="line-85"></span><span class="hs-comment">-- And now implement the exported traversals all in terms of the above</span><span>
 </span><span id="line-86"></span><span>
-</span><span id="line-87"></span><span class="annot"><span class="hs-comment">-- | Get dependencies from an equation.  </span></span><span>
+</span><span id="line-87"></span><span class="annot"><span class="hs-comment">-- | Get dependencies from an equation.</span></span><span>
 </span><span id="line-88"></span><span class="annot"><a href="Language.Drasil.Expr.Extract.html#eDep"><span class="hs-identifier hs-type">eDep</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.Database.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-89"></span><span id="eDep"><span class="annot"><span class="annottext">eDep :: Expr -&gt; [UID]
 </span><a href="Language.Drasil.Expr.Extract.html#eDep"><span class="hs-identifier hs-var hs-var">eDep</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID]

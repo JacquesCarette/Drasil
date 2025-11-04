@@ -576,11 +576,11 @@ forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [[a]]
 </span><span id="line-130"></span><span id="markdownB"><span class="annot"><span class="annottext">markdownB :: Doc
 </span><a href="Language.Drasil.JSON.Helpers.html#markdownB"><span class="hs-identifier hs-var hs-var">markdownB</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><span class="hs-string">&quot;{\n \&quot;cells\&quot;: [\n  {\n   \&quot;cell_type\&quot;: \&quot;markdown\&quot;,\n   \&quot;metadata\&quot;: {},\n   \&quot;source\&quot;: [\n&quot;</span></span><span> </span><span>
+</span><span class="hs-string">&quot;{\n \&quot;cells\&quot;: [\n  {\n   \&quot;cell_type\&quot;: \&quot;markdown\&quot;,\n   \&quot;metadata\&quot;: {},\n   \&quot;source\&quot;: [\n&quot;</span></span><span>
 </span><span id="line-131"></span><span id="markdownB%27"><span class="annot"><span class="annottext">markdownB' :: Doc
 </span><a href="Language.Drasil.JSON.Helpers.html#markdownB%27"><span class="hs-identifier hs-var hs-var">markdownB'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><span class="hs-string">&quot;  {\n   \&quot;cell_type\&quot;: \&quot;markdown\&quot;,\n   \&quot;metadata\&quot;: {},\n   \&quot;source\&quot;: [\n&quot;</span></span><span> </span><span>
+</span><span class="hs-string">&quot;  {\n   \&quot;cell_type\&quot;: \&quot;markdown\&quot;,\n   \&quot;metadata\&quot;: {},\n   \&quot;source\&quot;: [\n&quot;</span></span><span>
 </span><span id="line-132"></span><span id="markdownE"><span class="annot"><span class="annottext">markdownE :: Doc
 </span><a href="Language.Drasil.JSON.Helpers.html#markdownE"><span class="hs-identifier hs-var hs-var">markdownE</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
@@ -595,7 +595,7 @@ forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [[a]]
 </span><span id="line-137"></span><span id="codeB"><span class="annot"><span class="annottext">codeB :: Doc
 </span><a href="Language.Drasil.JSON.Helpers.html#codeB"><span class="hs-identifier hs-var hs-var">codeB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><span class="hs-string">&quot;  {\n   \&quot;cell_type\&quot;: \&quot;code\&quot;,\n   \&quot;execution_count\&quot;: null,\n   \&quot;metadata\&quot;: {},\n   \&quot;outputs\&quot;: [],\n   \&quot;source\&quot;: [&quot;</span></span><span> </span><span>
+</span><span class="hs-string">&quot;  {\n   \&quot;cell_type\&quot;: \&quot;code\&quot;,\n   \&quot;execution_count\&quot;: null,\n   \&quot;metadata\&quot;: {},\n   \&quot;outputs\&quot;: [],\n   \&quot;source\&quot;: [&quot;</span></span><span>
 </span><span id="line-138"></span><span id="codeE"><span class="annot"><span class="annottext">codeE :: Doc
 </span><a href="Language.Drasil.JSON.Helpers.html#codeE"><span class="hs-identifier hs-var hs-var">codeE</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
@@ -624,7 +624,7 @@ forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [[a]]
 </span><a href="Language.Drasil.JSON.Helpers.html#codeE"><span class="hs-identifier hs-var">codeE</span></a></span><span>
 </span><span id="line-147"></span><span>
 </span><span id="line-148"></span><span class="annot"><span class="hs-comment">-- | Generate the metadata necessary for a notebook document.</span></span><span>
-</span><span id="line-149"></span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#makeMetadata"><span class="hs-identifier hs-type">makeMetadata</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>  </span><span>
+</span><span id="line-149"></span><span class="annot"><a href="Language.Drasil.JSON.Helpers.html#makeMetadata"><span class="hs-identifier hs-type">makeMetadata</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-150"></span><span id="makeMetadata"><span class="annot"><span class="annottext">makeMetadata :: Doc
 </span><a href="Language.Drasil.JSON.Helpers.html#makeMetadata"><span class="hs-identifier hs-var hs-var">makeMetadata</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
@@ -691,9 +691,9 @@ forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [[a]]
 </span><span class="hs-string">&quot; },&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-172"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><span class="hs-string">&quot; \&quot;nbformat\&quot;: 4,&quot;</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span class="hs-string">&quot; \&quot;nbformat\&quot;: 4,&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-173"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><span class="hs-string">&quot; \&quot;nbformat_minor\&quot;: 4&quot;</span></span><span> </span><span>
+</span><span class="hs-string">&quot; \&quot;nbformat_minor\&quot;: 4&quot;</span></span><span>
 </span><span id="line-174"></span><span> </span><span class="hs-special">]</span><span>
 </span><span id="line-175"></span></pre></body></html>

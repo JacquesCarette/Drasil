@@ -257,8 +257,9 @@ likelyChgs :: [ConceptInstance]
 unlikelyChgs :: [ConceptInstance]
 
 module Drasil.GlassBR.Body
-srs :: Document
+sd :: (System, DocDesc)
 fullSI :: System
+srs :: Document
 printSetting :: PrintingInformation
 si :: System
 mkSRS :: SRSDecl

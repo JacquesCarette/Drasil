@@ -251,7 +251,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Citation -&gt; ([Char], [Char])
 </span><a href="#local-6989586621679102697"><span class="hs-identifier hs-var">bibRefs</span></a></span><span> </span><span class="annot"><span class="annottext">BibRef
 </span><a href="#local-6989586621679102696"><span class="hs-identifier hs-var">ls</span></a></span><span>
-</span><span id="line-68"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span>
+</span><span id="line-68"></span><span>  </span><span class="hs-keyword">where</span><span>
 </span><span id="line-69"></span><span>    </span><span id="local-6989586621679102697"><span class="annot"><span class="annottext">bibRefs :: Citation -&gt; ([Char], [Char])
 </span><a href="#local-6989586621679102697"><span class="hs-identifier hs-var hs-var">bibRefs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.Citation.html#Cite"><span class="hs-identifier hs-type">P.Cite</span></a></span><span> </span><span id="local-6989586621679102699"><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679102699"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="annot"><span class="annottext">CitationKind
@@ -323,7 +323,7 @@ forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679102713"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="#local-6989586621679102714"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Int, Section) -&gt; [(Int, Section)] -&gt; [(Int, Section)]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span>
+</span><span class="hs-glyph hs-var">:</span></span><span>
 </span><span id="line-89"></span><span>      </span><span class="annot"><span class="annottext">(SecCons -&gt; [(Int, Section)]) -&gt; [SecCons] -&gt; [(Int, Section)]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; SecCons -&gt; [(Int, Section)]
@@ -333,7 +333,7 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SecCons]
 </span><a href="#local-6989586621679102713"><span class="hs-identifier hs-var">c</span></a></span><span>
-</span><span id="line-90"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span>
+</span><span id="line-90"></span><span>  </span><span class="hs-keyword">where</span><span>
 </span><span id="line-91"></span><span>    </span><span id="local-6989586621679102716"><span class="annot"><span class="annottext">isCon :: SecCons -&gt; Bool
 </span><a href="#local-6989586621679102716"><span class="hs-identifier hs-var hs-var">isCon</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Con</span></span><span> </span><span class="annot"><span class="annottext">Contents
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
@@ -361,7 +361,7 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="#local-6989586621679102725"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span id="local-6989586621679102726"><span class="annot"><span class="annottext">Title
 </span><a href="#local-6989586621679102726"><span class="hs-identifier hs-var">titleLb</span></a></span></span><span> </span><span id="local-6989586621679102727"><span class="annot"><span class="annottext">[SecCons]
 </span><a href="#local-6989586621679102727"><span class="hs-identifier hs-var">contents</span></a></span></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">Title -&gt; [Char] -&gt; Int -&gt; [LayoutObj] -&gt; File
 </span><a href="Language.Drasil.Printing.LayoutObj.html#File"><span class="hs-identifier hs-var">T.File</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Title -&gt; Title
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
@@ -456,7 +456,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="#local-6989586621679102749"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span id="local-6989586621679102750"><span class="annot"><span class="annottext">Title
 </span><a href="#local-6989586621679102750"><span class="hs-identifier hs-var">titleLb</span></a></span></span><span> </span><span id="local-6989586621679102751"><span class="annot"><span class="annottext">[SecCons]
 </span><a href="#local-6989586621679102751"><span class="hs-identifier hs-var">contents</span></a></span></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-116"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679102753"><span class="annot"><span class="annottext">refr :: Title
 </span><a href="#local-6989586621679102753"><span class="hs-identifier hs-var hs-var">refr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Title
 </span><a href="Language.Drasil.Printing.AST.html#S"><span class="hs-identifier hs-var">P.S</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Section -&gt; [Char]
@@ -479,7 +479,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="Language.Drasil.Printing.Import.Document.html#layout"><span class="hs-identifier hs-var">layout</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679102747"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><a href="#local-6989586621679102748"><span class="hs-identifier hs-var">depth</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SecCons]
-</span><a href="#local-6989586621679102751"><span class="hs-identifier hs-var">contents</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><a href="#local-6989586621679102751"><span class="hs-identifier hs-var">contents</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-119"></span><span>
 </span><span id="line-120"></span><span class="annot"><span class="hs-comment">-- | Helper for translating sections into a printable representation of layout objects ('T.LayoutObj').</span></span><span>
 </span><span id="line-121"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Document.html#layout"><span class="hs-identifier hs-type">layout</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier hs-type">PrintingInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SecCons</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html#LayoutObj"><span class="hs-identifier hs-type">T.LayoutObj</span></a></span><span>
@@ -873,7 +873,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="#local-6989586621679102853"><span class="hs-identifier hs-var">hc</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Title -&gt; Maybe Title -&gt; [Char] -&gt; MaxWidthPercent -&gt; LayoutObj
 </span><a href="Language.Drasil.Printing.LayoutObj.html#Figure"><span class="hs-identifier hs-var">T.Figure</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Char] -&gt; Title
 </span><a href="Language.Drasil.Printing.AST.html#S"><span class="hs-identifier hs-var">P.S</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><span class="hs-string">&quot;nolabel2&quot;</span></span><span class="hs-special">)</span><span> </span><span>
+</span><span class="hs-string">&quot;nolabel2&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-172"></span><span>  </span><span class="hs-special">(</span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">HasCaption
 </span><a href="#local-6989586621679102853"><span class="hs-identifier hs-var">hc</span></a></span><span> </span><span class="annot"><span class="annottext">HasCaption -&gt; HasCaption -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool

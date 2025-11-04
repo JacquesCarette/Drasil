@@ -348,7 +348,7 @@ forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(ModelExpr, ModelExpr)]
 </span><a href="#local-6989586621679418507"><span class="hs-identifier hs-var">ls</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-64"></span><span>                                 </span><span class="annot"><span class="annottext">((ModelExpr, ModelExpr) -&gt; [UID])
 -&gt; [(ModelExpr, ModelExpr)] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
@@ -567,7 +567,7 @@ forall a b. (a, b) -&gt; b
 </span><span id="line-94"></span><span class="hs-comment">---------------------------------------------------------------------------</span><span>
 </span><span id="line-95"></span><span class="hs-comment">-- And now implement the exported traversals all in terms of the above</span><span>
 </span><span id="line-96"></span><span>
-</span><span id="line-97"></span><span class="annot"><span class="hs-comment">-- | Get dependencies from an equation.  </span></span><span>
+</span><span id="line-97"></span><span class="annot"><span class="hs-comment">-- | Get dependencies from an equation.</span></span><span>
 </span><span id="line-98"></span><span class="annot"><a href="Language.Drasil.ModelExpr.Extract.html#meDep"><span class="hs-identifier hs-type">meDep</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.Database.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-99"></span><span id="meDep"><span class="annot"><span class="annottext">meDep :: ModelExpr -&gt; [UID]
 </span><a href="Language.Drasil.ModelExpr.Extract.html#meDep"><span class="hs-identifier hs-var hs-var">meDep</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID]

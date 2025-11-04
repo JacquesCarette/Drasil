@@ -73,7 +73,7 @@ $c== :: HasCaption -&gt; HasCaption -&gt; Bool
 == :: HasCaption -&gt; HasCaption -&gt; Bool
 $c/= :: HasCaption -&gt; HasCaption -&gt; Bool
 /= :: HasCaption -&gt; HasCaption -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">)</span><span> </span><span>
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-69"></span><span>
 </span><span id="line-70"></span><span class="annot"><span class="hs-comment">-- | Types of layout objects we deal with explicitly.</span></span><span>
 </span><span id="line-71"></span><span class="hs-keyword">data</span><span> </span><span id="RawContent"><span class="annot"><a href="Language.Drasil.Document.Core.html#RawContent"><span class="hs-identifier hs-var">RawContent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
@@ -100,7 +100,7 @@ $c/= :: HasCaption -&gt; HasCaption -&gt; Bool
 </span><a href="Language.Drasil.Document.Core.html#_ctype"><span class="hs-identifier hs-var hs-var">_ctype</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Document.Core.html#RawContent"><span class="hs-identifier hs-type">RawContent</span></a></span><span>
 </span><span id="line-91"></span><span>                            </span><span class="hs-special">}</span><span>
 </span><span id="line-92"></span><span>
-</span><span id="line-93"></span><span class="annot"><span class="hs-comment">-- | Only contains 'RawContent'.                         </span></span><span>
+</span><span id="line-93"></span><span class="annot"><span class="hs-comment">-- | Only contains 'RawContent'.</span></span><span>
 </span><span id="line-94"></span><span class="hs-keyword">newtype</span><span> </span><span id="UnlabelledContent"><span class="annot"><a href="Language.Drasil.Document.Core.html#UnlabelledContent"><span class="hs-identifier hs-var">UnlabelledContent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="UnlblC"><span class="annot"><a href="Language.Drasil.Document.Core.html#UnlblC"><span class="hs-identifier hs-var">UnlblC</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span id="_cntnts"><span class="annot"><span class="annottext">UnlabelledContent -&gt; RawContent
 </span><a href="Language.Drasil.Document.Core.html#_cntnts"><span class="hs-identifier hs-var hs-var">_cntnts</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Document.Core.html#RawContent"><span class="hs-identifier hs-type">RawContent</span></a></span><span> </span><span class="hs-special">}</span><span>
 </span><span id="line-95"></span><span>
@@ -154,7 +154,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID LabelledContent UID
 forall c. HasUID c =&gt; Getter c UID
 Getter LabelledContent UID
-</span><a href="Drasil.Database.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><a href="Drasil.Database.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-112"></span><span class="annot"><span class="hs-comment">-- | Finds the reference address contained in the 'Reference' of 'LabelledContent'.</span></span><span>
 </span><span id="line-113"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Label.Type.html#HasRefAddress"><span class="hs-identifier hs-type">HasRefAddress</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Document.Core.html#LabelledContent"><span class="hs-identifier hs-type">LabelledContent</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679425390"><span class="annot"><span class="annottext">getRefAdd :: LabelledContent -&gt; LblType
 </span><a href="#local-6989586621679425390"><span class="hs-identifier hs-var hs-var hs-var hs-var">getRefAdd</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Document.Core.html#LblC"><span class="hs-identifier hs-type">LblC</span></a></span><span> </span><span id="local-6989586621679425392"><span class="annot"><span class="annottext">Reference
@@ -308,7 +308,7 @@ forall a. HasCallStack =&gt; String -&gt; a
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; IRefProg) -&gt; String -&gt; IRefProg
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-146"></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Bibliography list of references cannot be referenced. &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]

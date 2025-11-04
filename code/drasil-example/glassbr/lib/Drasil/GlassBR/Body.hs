@@ -8,9 +8,8 @@ import qualified Language.Drasil.Development as D
 
 import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
+import Drasil.DocLang (DocDesc, auxSpecSent, termDefnF')
 import Drasil.Generator (cdb)
-import Drasil.DocLang (auxSpecSent, termDefnF')
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S

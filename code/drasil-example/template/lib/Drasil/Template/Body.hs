@@ -11,7 +11,7 @@ import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
+import Drasil.DocLang (DocDesc, tunitNone)
 import Drasil.Generator (cdb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -19,7 +19,6 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
-import Drasil.DocLang (tunitNone)
 
 sd  :: (System , DocDesc)
 sd = fillcdbSRS mkSRS si

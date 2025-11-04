@@ -60,7 +60,7 @@ meNames' (C c)                 = [c]
 meNames' Lit{}                 = []
 meNames' Spc{}                 = []
 meNames' (FCall _ x)           = concatMap meNames' x
-meNames' (Case _ ls)           = concatMap (meNames' . fst) ls ++ 
+meNames' (Case _ ls)           = concatMap (meNames' . fst) ls ++
                                  concatMap (meNames' . snd) ls
 meNames' (UnaryOp _ u)         = meNames' u
 meNames' (UnaryOpB _ u)        = meNames' u
@@ -94,6 +94,6 @@ meNamesRI' (UpFrom il)     = meNames' (snd il)
 ---------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
 
--- | Get dependencies from an equation.  
+-- | Get dependencies from an equation.
 meDep :: ModelExpr -> [UID]
 meDep = nubOrd . meNames

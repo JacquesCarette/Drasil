@@ -6,16 +6,16 @@ import Language.Drasil.Display
 import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   angDisp, angVelo, chgInVelocity, constAccel, constAccelV, displacement,
-  distance, energy, fSpeed, fVel, force, frequency, gravitationalAccel, gravitationalConst, 
-  gravitationalMagnitude, height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV, 
-  ixPos, ixVel, iyPos, iyVel, kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, 
+  distance, energy, fSpeed, fVel, force, frequency, gravitationalAccel, gravitationalConst,
+  gravitationalMagnitude, height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV,
+  ixPos, ixVel, iyPos, iyVel, kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position,
   potEnergy, pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
-  velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, 
-  yPos, yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angFreq, period, 
+  velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
+  yPos, yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angFreq, period,
   frequency, chgMomentum)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second, hertz)
-import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
+import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU,
     impulseU, momtInertU, torqueU, velU)
 
 restitutionCoef :: DefinedQuantityDict
@@ -26,8 +26,8 @@ physicscon :: [UnitalChunk]
 physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   chgInVelocity, constAccel, constAccelV, displacement, distance, energy, frequency,
   fSpeed, fVel, force, gravitationalAccel, gravitationalConst, gravitationalMagnitude,
-  height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, 
-  iyVel, kEnergy, linearAccel, linearDisplacement, linearVelocity, momentOfInertia, 
+  height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos,
+  iyVel, kEnergy, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
   position, potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
   weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel,momentum, moment, moment2D, fOfGravity, positionVec, tension,
@@ -37,12 +37,12 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
 
 acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   constAccel, constAccelV, displacement, distance, energy, fSpeed, fVel, force,
-  gravitationalAccel, gravitationalConst, gravitationalMagnitude, height, iPos, 
-  iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, iyVel, 
-  kEnergy, linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position, 
-  potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity, weight, 
-  xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, yPos, 
-  yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, 
+  gravitationalAccel, gravitationalConst, gravitationalMagnitude, height, iPos,
+  iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, iyVel,
+  kEnergy, linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position,
+  potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity, weight,
+  xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, yPos,
+  yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency,
   period, frequency, chgMomentum :: UnitalChunk
 
 acceleration           = uc CP.acceleration           (Concat [vec lA, label "(", lT, label ")"]) (Vect Real) accelU

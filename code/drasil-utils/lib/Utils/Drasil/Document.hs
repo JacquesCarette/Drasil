@@ -24,7 +24,7 @@ indentList = indent . vcat
 
 -- | Filter blank `Doc`s from a list.
 filterEmpty :: [Doc] -> [Doc]
-filterEmpty = filter (not . isEmpty) 
+filterEmpty = filter (not . isEmpty)
 
 -- | Merge a list of `String`s into a `Doc` format:
 --

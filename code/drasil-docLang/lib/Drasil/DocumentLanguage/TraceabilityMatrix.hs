@@ -26,17 +26,17 @@ type TraceViewCat = [UID] -> ChunkDB -> [UID]
 -- and wraps in 'Contents'. Usually references the four tables generally found in this section (in order of being mentioned).
 traceMIntro :: [LabelledContent] -> [Sentence] -> Contents
 traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
-        `S.the_ofTheC` plural traceyMatrix, S "is to provide easy", plural reference, 
+        `S.the_ofTheC` plural traceyMatrix, S "is to provide easy", plural reference,
         S "on what has to be additionally modified if a certain",
-        phrase component, S "is changed. Every time a", phrase component, 
-        S "is changed, the", plural item, S "in the column of that", 
-        phrase component, S "that are marked with an", Quote (S "X"), 
+        phrase component, S "is changed. Every time a", phrase component,
+        S "is changed, the", plural item, S "in the column of that",
+        phrase component, S "that are marked with an", Quote (S "X"),
         S "should be modified as well"] +:+ foldlSent_ (zipWith tableShows refs trailings)
 
 -- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'System'.
 generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> System -> LabelledContent
-generateTraceTableView u desc cols rows c = llcc (makeTabRef' u) $ Table 
-  (EmptyS : traceMColHeader colf c) 
+generateTraceTableView u desc cols rows c = llcc (makeTabRef' u) $ Table
+  (EmptyS : traceMColHeader colf c)
   (makeTMatrix (traceMRowHeader rowf c) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb)
   (showingCxnBw traceyMatrix desc) True
     where

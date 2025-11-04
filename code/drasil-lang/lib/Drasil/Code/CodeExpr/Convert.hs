@@ -119,7 +119,7 @@ assocBoolOp :: LD.AssocBoolOper -> AssocBoolOper
 assocBoolOp LD.And = And -- TODO: These L.'s should be exported through L.D.Development
 assocBoolOp LD.Or = Or
 
-assocConcatOp :: LD.AssocConcatOper -> AssocConcatOper 
+assocConcatOp :: LD.AssocConcatOper -> AssocConcatOper
 assocConcatOp LD.SUnion  = SUnion
 
 uFunc :: LD.UFunc -> UFunc

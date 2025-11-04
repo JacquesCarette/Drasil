@@ -20,11 +20,11 @@ import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
 import Drasil.System (System)
-import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML, 
-  genTeX, Format(TeX, HTML, Jupyter, MDBook), genJupyter, genMDBook, 
+import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML,
+  genTeX, Format(TeX, HTML, Jupyter, MDBook), genJupyter, genMDBook,
   PrintingInformation, outputDot, makeBook, makeRequirements)
 import Language.Drasil.Code (generator, generateCode, generateCodeProc,
-  Choices(..), CodeSpec(..), HasOldCodeSpec(..), Lang(..), 
+  Choices(..), CodeSpec(..), HasOldCodeSpec(..), Lang(..),
   getSampleData, readWithDataDesc, sampleInputDD, unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 
 import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC))
@@ -63,7 +63,7 @@ prntDoc d pinfo fn dtype fmt =
                             prntCSV  dtype pinfo
     _                 -> mempty
 
--- | Helper function to produce an error when an incorrect SRS format is used. 
+-- | Helper function to produce an error when an incorrect SRS format is used.
 srsFormatError :: a
 srsFormatError = error "We can only write TeX/HTML/JSON/MDBook (for now)."
 
@@ -73,7 +73,7 @@ prntDoc' :: DocType -> String -> String -> Format -> Document -> PrintingInforma
 prntDoc' _ dt' _ MDBook body' sm = do
   createDirIfMissing True dir
   mapM_ writeDocToFile con
-  where 
+  where
     con = writeDoc' sm MDBook body'
     dir = dt' ++ "/src"
     writeDocToFile (fp, d) = do
@@ -85,7 +85,7 @@ prntDoc' dt dt' fn format body' sm = do
   outh <- openFile (dt' ++ "/" ++ fn ++ getExt format) WriteMode
   hPutStrLn outh $ render $ writeDoc sm dt format fn body'
   hClose outh
-  where 
+  where
     -- | Gets extension for a particular format.
     -- MDBook case is handled above.
     getExt  TeX         = ".tex"

@@ -6,10 +6,10 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 import Language.Drasil hiding (isIn, Var)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Language.Drasil.Chunk.CodeBase
-import Language.Drasil.Choices (Structure(..), ConstantStructure(..), 
+import Language.Drasil.Choices (Structure(..), ConstantStructure(..),
   ConstantRepr(..), InternalConcept(..))
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName)
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..), constraintvars, getConstraints)
 import Language.Drasil.Mod (Name)

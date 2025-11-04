@@ -5,7 +5,7 @@ import Data.Drasil.SI_Units (metre, newton)
 
 --N^(-7)*m^12--
 sFlawPU :: UnitDefn
-sFlawPU = newUnit "surface flaw parameter" $ m12 ^$ n7 
+sFlawPU = newUnit "surface flaw parameter" $ m12 ^$ n7
   where
     m12 = metre ^: 12
     n7  = newton ^: (-7)

@@ -69,26 +69,26 @@ angularAccelDerivEqn2 = sy massObj_1 $* sy yAccel_1 $=
                       sy tension_1 $* cos (sy pendDisAngle_1) $- (sy massObj_2 $* sy yAccel_2) $-
                       (sy massObj_2 $* sy gravitationalMagnitude) $- (sy massObj_1 $* sy gravitationalMagnitude)
 angularAccelDerivEqn3 = sy tension_1 $* sin (sy pendDisAngle_1) $* cos (sy pendDisAngle_1) $=
-                      neg (cos (sy pendDisAngle_1)) $* 
+                      neg (cos (sy pendDisAngle_1)) $*
                       ((sy massObj_1 $* sy xAccel_1) $+ (sy massObj_2 $* sy xAccel_2))
 angularAccelDerivEqn4 = sy tension_1 $* sin (sy pendDisAngle_1) $* cos (sy pendDisAngle_1) $=
-                      sin (sy pendDisAngle_1) $* 
+                      sin (sy pendDisAngle_1) $*
                       (
                           (sy massObj_1 $* sy yAccel_1) $+ (sy massObj_2 $* sy yAccel_2) $+
                           (sy massObj_2 $* sy gravitationalMagnitude) $+ (sy massObj_1 $* sy gravitationalMagnitude)
                       )
-angularAccelDerivEqn5 = sin (sy pendDisAngle_1) $* 
+angularAccelDerivEqn5 = sin (sy pendDisAngle_1) $*
                       (
                           (sy massObj_1 $* sy yAccel_1) $+ (sy massObj_2 $* sy yAccel_2) $+
                           (sy massObj_2 $* sy gravitationalMagnitude) $+ (sy massObj_1 $* sy gravitationalMagnitude)
                       ) $=
-                      neg (cos (sy pendDisAngle_1)) $* 
+                      neg (cos (sy pendDisAngle_1)) $*
                       ((sy massObj_1 $* sy xAccel_1) $+ (sy massObj_2 $* sy xAccel_2))
 angularAccelDerivEqn6 = sy tension_2 $* sin(sy pendDisAngle_2) $* cos (sy pendDisAngle_2) $=
                       neg (cos (sy pendDisAngle_2)) $* sy massObj_2 $* sy xAccel_2
 angularAccelDerivEqn7 = sy tension_1 $* sin (sy pendDisAngle_2 ) $* cos (sy pendDisAngle_2) $=
-                      sin (sy pendDisAngle_2) $* 
+                      sin (sy pendDisAngle_2) $*
                       ((sy massObj_2 $* sy yAccel_2) $+ (sy massObj_2 $* sy gravitationalMagnitude))
-angularAccelDerivEqn8 = sin (sy pendDisAngle_2) $* 
+angularAccelDerivEqn8 = sin (sy pendDisAngle_2) $*
                       ((sy massObj_2 $* sy yAccel_2) $+ (sy massObj_2 $* sy gravitationalMagnitude)) $=
                       neg (cos (sy pendDisAngle_2)) $* sy massObj_2 $* sy xAccel_2

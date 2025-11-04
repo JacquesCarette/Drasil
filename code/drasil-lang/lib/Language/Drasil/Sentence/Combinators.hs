@@ -73,7 +73,7 @@ forT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 forT t1 t2 = titleize t1 +:+ S "for" +:+ titleize t2
 -- | Similar to 'forTT', but takes two arguments (for capitalization or pluralization) to apply to the two terms respectively.
 forGen :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
-forGen f1 f2 t1 t2 = f1 t1 +:+ S "for" +:+ f2 t2   
+forGen f1 f2 t1 t2 = f1 t1 +:+ S "for" +:+ f2 t2
 
 -- | Similar to 'for', but used for titles and first 'NamedIdea' is pluralized.
 forTPS :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence

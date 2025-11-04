@@ -55,9 +55,9 @@ module Drasil.DocLang (
   unitTableRef, tunit, tunit', tunitNone,
   -- ** Requirements
   -- Drasil.Sections.Requirements
-  inReq, mkInputPropsTable, mkQRTuple, mkQRTupleRef, 
+  inReq, mkInputPropsTable, mkQRTuple, mkQRTupleRef,
   mkValsSourceTable, reqInputsRef, mkMaintainableNFR, mkPortableNFR,
-  mkCorrectNFR, mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, 
+  mkCorrectNFR, mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR,
   mkSecurityNFR,
   -- ** Specific System Description
   -- Drasil.Sections.SpecificSystemDescription
@@ -68,7 +68,7 @@ module Drasil.DocLang (
   -- * References
   -- Drasil.SRS.References
   secRefs
-) where 
+) where
 
 import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
@@ -80,10 +80,10 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
   TSIntro(..), TUIntro(..))
-import Drasil.DocumentLanguage.Notebook.Core (Intro(..), LearnObj(..), Review(..), 
+import Drasil.DocumentLanguage.Notebook.Core (Intro(..), LearnObj(..), Review(..),
   CaseProb(..), Example(..), Smmry(..), Apndx(..))
 import Drasil.DocumentLanguage.Notebook.DocumentLanguage (mkNb)
-import Drasil.DocumentLanguage.Notebook.LsnDecl (LsnDecl, LsnChapter(Intro, LearnObj, Review, 
+import Drasil.DocumentLanguage.Notebook.LsnDecl (LsnDecl, LsnChapter(Intro, LearnObj, Review,
   CaseProb, Example, Smmry, BibSec, Apndx))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)

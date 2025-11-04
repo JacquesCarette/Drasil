@@ -180,7 +180,7 @@ assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec)
 addExpr :: [CodeExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 addExpr exprs o sm = addExprFilter (map (expr' sm (precA o)) exprs)
 
--- | Add add symbol only when the second Expr is not negation 
+-- | Add add symbol only when the second Expr is not negation
 addExprFilter :: [P.Expr] -> [P.Expr]
 addExprFilter [] = []
 addExprFilter [x] = [x]

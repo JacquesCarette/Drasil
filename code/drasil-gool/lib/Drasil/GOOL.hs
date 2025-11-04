@@ -1,5 +1,5 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType, 
+module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar,
   SClass, FSModule, NamedArgs, Initializers, SharedProg, OOProg, ProgramSym(..),
   FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, oneLiner,
@@ -8,7 +8,7 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=),
   assignToListIndex, DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..), 
+  FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..),
   initObserverList, addObserver, ControlStatement(..), ifNoElse, switchAsIf,
   VariableSym(..), ScopeSym(..), OOVariableSym(..), staticVar, staticConst,
   VariableElim(..), ($->), listOf, listVar, ValueSym(..), Argument(..),
@@ -61,7 +61,7 @@ import Drasil.Shared.AST (FileData(..), ModData(..), ProgData(..),
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.State (GOOLState(..), lensMStoVS, headers, sources, mainMod, 
+import Drasil.Shared.State (GOOLState(..), lensMStoVS, headers, sources, mainMod,
   initialState)
 
 import Drasil.Shared.Helpers (onStateValue, onCodeList)

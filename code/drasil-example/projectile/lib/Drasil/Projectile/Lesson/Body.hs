@@ -15,7 +15,7 @@ import Drasil.DocLang (mkNb, LsnDecl, LsnChapter(BibSec, LearnObj, Review, CaseP
 import qualified Data.Drasil.Quantities.Physics as Qs (iSpeed, ixSpeed, iySpeed,
   speed, constAccel, gravitationalAccel, xAccel, yAccel, time, ixPos, iyPos,
   xPos, yPos, ixVel, iyVel, xVel, yVel, scalarPos, iPos, height)
-import qualified Data.Drasil.Concepts.Physics as CCs (motion, acceleration, 
+import qualified Data.Drasil.Concepts.Physics as CCs (motion, acceleration,
   velocity, force, verticalMotion, gravity, position)
 
 import Data.Drasil.People (spencerSmith)

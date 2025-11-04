@@ -83,32 +83,32 @@ si fl = mkSystem
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
-sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspaceSetupWiki contribGuideWiki workflowWiki 
-  createProjWiki debuggingWiki, aboutSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl) 
-  (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef infoEncodingWiki chunksWiki recipesWiki 
+sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspaceSetupWiki contribGuideWiki workflowWiki
+  createProjWiki debuggingWiki, aboutSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl)
+  (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef infoEncodingWiki chunksWiki recipesWiki
   paperGOOL papersWiki icsePositionPaper danPoster wellUnderstoodPaper, exampleSec (repoRt fl) (exRt fl), caseStudySec, docsSec (docsRt fl),
   analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl, footer fl]
 
 -- | Needed for references and terms to work.
 symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, phsChgMtrl, twoD] ++ 
-  map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast, 
-  heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
+symbMap fl = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, phsChgMtrl, twoD] ++
+  map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast,
+  heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce,
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,
-  slope, safety, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] 
+  slope, safety, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] []
   [] [] (allRefs fl) []
 
 -- | Helper to get the system name as an 'IdeaDict' from 'System'.
 getSysName :: System -> IdeaDict
-getSysName SI{_sys = nm} = nw nm 
+getSysName SI{_sys = nm} = nw nm
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
-allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, paperGOOL, papersWiki, 
+allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, paperGOOL, papersWiki,
   quickStartWiki, newWorkspaceSetupWiki, contribGuideWiki, workflowWiki, createProjWiki, debuggingWiki,
   icsePositionPaper, danPoster, wellUnderstoodPaper]
   ++ exampleRefs (repoRt fl) (exRt fl)
-  ++ docRefs (docsRt fl) 
+  ++ docRefs (docsRt fl)
   ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
   ++ concatMap findAllRefs (sections fl)
 
@@ -120,7 +120,7 @@ webName = commonIdea "websiteName" (cn websiteTitle) "Drasil" [] -- FIXME: Impro
 
 -- | Header section creator.
 headerSec :: Section
-headerSec = 
+headerSec =
   section EmptyS -- No title
   [LlC imageContent] -- Contents
   [] $ makeSecRef "Header" $ S "Header" -- Section reference
@@ -151,7 +151,7 @@ danPoster :: Reference
 danPoster = makeURI "danPoster" (danContributionPath
   ++ "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
 wellUnderstoodPaper :: Reference
-wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL 
+wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL
   ++ "/blob/master/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
 quickStartWiki :: Reference
 quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL ++ "#quick-start") (shortname' $ S "quickStartWiki")

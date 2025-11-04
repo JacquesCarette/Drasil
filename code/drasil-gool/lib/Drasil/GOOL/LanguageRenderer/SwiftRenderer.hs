@@ -775,7 +775,7 @@ instance ModuleSym SwiftCode where
   type Module SwiftCode = ModData
   buildModule n is fs cs = do
     modify (setModuleName n) -- This needs to be set before the functions/
-                             -- classes are evaluated. CP.buildModule will 
+                             -- classes are evaluated. CP.buildModule will
                              -- reset it to the proper name.
     fns <- mapM (zoom lensFStoMS) fs
     cls <- mapM (zoom lensFStoCS) cs
@@ -1132,7 +1132,7 @@ swiftOpenFileWA app f' n' = tryCatch
 swiftCloseFile :: (OORenderSym r) => SValue r -> MSStatement r
 swiftCloseFile f' = do
   f <- zoom lensMStoVS f'
-  -- How I've currently implemented file-reading, files don't need to be 
+  -- How I've currently implemented file-reading, files don't need to be
   -- "closed", so InFile case is (correctly) just an empty stmt
   let swClose InFile = modify resetIndices >> emptyStmt
       swClose OutFile = tryCatch (oneLiner $ valStmt $ swiftTryVal $
@@ -1232,8 +1232,8 @@ swiftConstructor ps is b = do
     indent $ RC.body bod,
     bodyEnd])
 
--- If the program uses throw, then generate code that extends Strings with the 
--- Error protocol. This line only needs to be generated once for the entire 
+-- If the program uses throw, then generate code that extends Strings with the
+-- Error protocol. This line only needs to be generated once for the entire
 -- program
 swiftStringError :: MS Doc
 swiftStringError = do

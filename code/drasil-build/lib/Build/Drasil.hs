@@ -6,7 +6,7 @@ module Build.Drasil (
     RuleTransformer(makeRule)
   -- ** Types and Functions
   -- AST
-  ,  Annotation, Command, mkCheckedCommand, mkCommand, Dependencies, Rule, 
+  ,  Annotation, Command, mkCheckedCommand, mkCommand, Dependencies, Rule,
   mkFile, mkRule
     -- MakeString
   , MakeString, (+:+), makeS, mkFreeVar, mkImplicitVar, mkWindowsVar, mkOSVar
@@ -15,9 +15,9 @@ module Build.Drasil (
   )
   where
 
-import Build.Drasil.Make.AST (Annotation, Command, Dependencies, mkCheckedCommand, 
+import Build.Drasil.Make.AST (Annotation, Command, Dependencies, mkCheckedCommand,
   mkCommand, mkFile, mkRule, Rule)
 import Build.Drasil.Make.Import (RuleTransformer(makeRule))
-import Build.Drasil.Make.MakeString ((+:+), makeS, MakeString, mkFreeVar, 
+import Build.Drasil.Make.MakeString ((+:+), makeS, MakeString, mkFreeVar,
   mkImplicitVar, mkWindowsVar, mkOSVar)
 import Build.Drasil.Make.Print (genMake)

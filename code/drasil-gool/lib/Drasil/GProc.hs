@@ -41,7 +41,7 @@ import Drasil.Shared.AST (FileData(..), ModData(..), ProgData(..),
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.State (GOOLState(..), lensMStoVS, headers, sources, mainMod, 
+import Drasil.Shared.State (GOOLState(..), lensMStoVS, headers, sources, mainMod,
   initialState)
 
 import Drasil.Shared.Helpers (onStateValue, onCodeList)

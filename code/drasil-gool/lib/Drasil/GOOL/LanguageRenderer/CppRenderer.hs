@@ -706,14 +706,14 @@ instance (Pair p) => VisibilitySym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => RenderVisibility (p CppSrcCode CppHdrCode) where
   visibilityFromData s d = pair (visibilityFromData s d) (visibilityFromData s d)
-  
+
 instance (Pair p) => VisibilityElim (p CppSrcCode CppHdrCode) where
   visibility s = RC.visibility $ pfst s
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
   type MethodType (p CppSrcCode CppHdrCode) = TypeData
   mType = pair1 mType mType . zoom lensMStoVS
-  
+
 instance (Pair p) => OOMethodTypeSym (p CppSrcCode CppHdrCode) where
   construct n = on2StateValues pair (construct n) (construct n)
 
@@ -1133,7 +1133,7 @@ instance TypeSym CppSrcCode where
     modify (addUsing vector . addLangImportVS vector)
     C.listType vector t
   setType t = do
-    modify (addUsing cppSet . addLangImportVS cppSet) 
+    modify (addUsing cppSet . addLangImportVS cppSet)
     C.setType cppSet t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
@@ -1617,14 +1617,14 @@ instance VisibilitySym CppSrcCode where
 
 instance RenderVisibility CppSrcCode where
   visibilityFromData s d = toCode (d, s)
-  
+
 instance VisibilityElim CppSrcCode where
   visibility = fst . unCPPSC
 
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
   mType = zoom lensMStoVS
-  
+
 instance OOMethodTypeSym CppSrcCode where
   construct = G.construct
 
@@ -1652,9 +1652,9 @@ instance MethodSym CppSrcCode where
     [param argcVar, param argvVar]
     (on2StateValues (on2CodeValues appendToBody) b (returnStmt $ litInt 0))
     where argcVar = var argc int
-          argvVar = do 
-            t <- typeFromData (List String) 
-              (constDec ++ " " ++ C.charRender) (constDec' <+> text 
+          argvVar = do
+            t <- typeFromData (List String)
+              (constDec ++ " " ++ C.charRender) (constDec' <+> text
               C.charRender)
             mkVar argv t (cppDeref <> text argv <> array')
   docFunc = CP.doxFunc
@@ -1684,9 +1684,9 @@ instance OORenderMethod CppSrcCode where
   intFunc m n s _ t ps b = do
     modify (if m then setCurrMainFunc m . setCurrMain else id)
     cppsIntFunc (cppsFunction n) s t ps b
-  destructor vs = 
+  destructor vs =
     let i = var "i" int
-        deleteStatements = map (onStateValue (onCodeValue destructSts) . 
+        deleteStatements = map (onStateValue (onCodeValue destructSts) .
           zoom lensMStoCS) vs
         loopIndexDec = varDec i local
         dbody = on2StateValues (on2CodeValues emptyIfEmpty)
@@ -1860,7 +1860,7 @@ instance TypeSym CppHdrCode where
     modify (addHeaderUsing vector . addHeaderLangImport vector)
     C.listType vector t
   setType t = do
-    modify (addHeaderUsing cppSet . addHeaderLangImport cppSet) 
+    modify (addHeaderUsing cppSet . addHeaderLangImport cppSet)
     C.setType cppSet t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
@@ -1938,7 +1938,7 @@ instance VariableSym CppHdrCode where
   constant  _ _ = mkStateVar "" void empty
   extVar  _ _ _ = mkStateVar "" void empty
   arrayElem _ _ = mkStateVar "" void empty
-  
+
 instance OOVariableSym CppHdrCode where
   staticVar' _ = G.staticVar
   self = mkStateVar "" void empty
@@ -2269,7 +2269,7 @@ instance VisibilitySym CppHdrCode where
 
 instance RenderVisibility CppHdrCode where
   visibilityFromData s d = toCode (d, s)
-  
+
 instance VisibilityElim CppHdrCode where
   visibility = fst . unCPPHC
 
@@ -2327,7 +2327,7 @@ instance RenderMethod CppHdrCode where
 
 instance OORenderMethod CppHdrCode where
   intMethod _ n s _ t ps _ = do
-    modify (setVisibility (snd $ unCPPHC s)) 
+    modify (setVisibility (snd $ unCPPHC s))
     tp <- t
     pms <- sequence ps
     pure $ toCode $ mthd (snd $ unCPPHC s) $ cpphMethod n tp pms
@@ -2428,11 +2428,11 @@ getParam v = zoom lensMStoVS v >>= (\v' -> getParamFunc ((getType .
   where getParamFunc (List _) = pointerParam
         getParamFunc (Object _) = pointerParam
         getParamFunc _ = param
- 
+
 data MethodData = MthD {getMthdScp :: VisibilityTag, mthdDoc :: Doc}
 
 mthd :: VisibilityTag -> Doc -> MethodData
-mthd = MthD 
+mthd = MthD
 
 addAlgorithmImport :: MS a -> MS a
 addAlgorithmImport v = do
@@ -2799,11 +2799,11 @@ cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $
 
 cppConstructor :: [MSParameter CppSrcCode] -> NamedArgs CppSrcCode ->
   MSBody CppSrcCode -> SMethod CppSrcCode
-cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals 
-  bod -> if null is then CP.constructor n ps is b else modify (setVisibility Pub) >> 
-  toState (toCode $ mthd Pub (cppsMethod (zipWith (\ivar ival -> RC.variable 
-  ivar <> parens (RC.value ival)) ivars ivals) n n tp pms bod))) <$> construct 
-  n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom 
+cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals
+  bod -> if null is then CP.constructor n ps is b else modify (setVisibility Pub) >>
+  toState (toCode $ mthd Pub (cppsMethod (zipWith (\ivar ival -> RC.variable
+  ivar <> parens (RC.value ival)) ivars ivals) n n tp pms bod))) <$> construct
+  n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom
   lensMStoVS . snd) is <*> b)
 
 cppsFunction :: Label -> CppSrcCode (Type CppSrcCode) ->
@@ -2812,10 +2812,10 @@ cppsFunction n t ps b = vcat [
   RC.type' t <+> text n <> parens (parameterList ps) <+> bodyStart,
   indent (RC.body b),
   bodyEnd]
-  
-cppsIntFunc :: (CppSrcCode (Type CppSrcCode) -> 
-  [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc) 
-  -> CppSrcCode (Visibility CppSrcCode) -> MSMthdType CppSrcCode -> 
+
+cppsIntFunc :: (CppSrcCode (Type CppSrcCode) ->
+  [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc)
+  -> CppSrcCode (Visibility CppSrcCode) -> MSMthdType CppSrcCode ->
   [MSParameter CppSrcCode] -> MSBody CppSrcCode -> SMethod CppSrcCode
 cppsIntFunc f s t ps b = do
   modify (setVisibility (snd $ unCPPSC s))
@@ -2841,8 +2841,8 @@ cppCommentedFunc ft cmt fn = do
       ret Combined = error "Combined passed to cppCommentedFunc"
   ret ft
 
-cppsStateVarDef :: Doc -> CppSrcCode (Visibility CppSrcCode) -> 
-  CppSrcCode (Permanence CppSrcCode) -> SVariable CppSrcCode -> 
+cppsStateVarDef :: Doc -> CppSrcCode (Visibility CppSrcCode) ->
+  CppSrcCode (Permanence CppSrcCode) -> SVariable CppSrcCode ->
   SValue CppSrcCode -> CSStateVar CppSrcCode
 cppsStateVarDef cns s p vr' vl' = do
   vr <- zoom lensCStoVS vr'
@@ -2867,10 +2867,10 @@ cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
     indent $ RC.body b,
     bEnd]
 
-cppLitSet :: (OORenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
+cppLitSet :: (OORenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r]
     -> SValue r
-cppLitSet f t' es' = do 
-  es <- sequence es' 
+cppLitSet f t' es' = do
+  es <- sequence es'
   lt <- f t'
   mkVal lt ( braces (valueList es))
 
@@ -2880,9 +2880,9 @@ cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
   RC.statement) (zoom lensCStoMS $ stmt $ onBinding (binding p)
   (varDec vr local) (varDecDef vr local vl))
 
-cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode (StateVar CppHdrCode)] -> 
+cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode (StateVar CppHdrCode)] ->
   [CppHdrCode (Method CppHdrCode)] -> Doc
-cpphVarsFuncsList st vs fs = 
+cpphVarsFuncsList st vs fs =
   let visVs = [RC.stateVar v | v <- vs, getStVarScp (unCPPHC v) == st]
       visFs = [RC.method f | f <- fs, getMthdScp (unCPPHC f) == st]
   in vcat $ visVs ++ (if null visVs then empty else blank) : visFs
@@ -2893,9 +2893,9 @@ cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
   where vars = map RC.stateVar vs
         funcs = map RC.method fs
 
-cpphClass :: Label -> CppHdrCode ParentSpec -> 
-  [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode (Method CppHdrCode)] -> 
-  CppHdrCode (Visibility CppHdrCode) -> CppHdrCode (Visibility CppHdrCode) -> 
+cpphClass :: Label -> CppHdrCode ParentSpec ->
+  [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode (Method CppHdrCode)] ->
+  CppHdrCode (Visibility CppHdrCode) -> CppHdrCode (Visibility CppHdrCode) ->
   CppHdrCode (Class CppHdrCode)
 cpphClass n ps vars funcs pub priv = let
   pubs  = cpphVarsFuncsList Pub vars funcs
@@ -2905,7 +2905,7 @@ cpphClass n ps vars funcs pub priv = let
   indLi = [ifEmptyPubs (RC.visibility pub <> colon), ifEmptyPubs (indent pubs),
           ifEmptyPubs (ifEmptyPrivs blank),
           ifEmptyPrivs (RC.visibility priv <> colon), ifEmptyPrivs (indent privs)]
-  in onCodeValue (\p -> vcat [ 
+  in onCodeValue (\p -> vcat [
     classDec <+> text n <+> p <+> bodyStart,
     indentList indLi,
     bodyEnd <> endStatement]) ps

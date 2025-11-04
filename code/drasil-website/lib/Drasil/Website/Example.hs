@@ -85,15 +85,15 @@ allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (i
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]
 -- No choices mean no generated code, so we do not need to display generated code and thus do not call versionList.
-individualExList ex@E{systemE = SI{_sys = sys}, choicesE = [], codePath = srsP} = 
+individualExList ex@E{systemE = SI{_sys = sys}, choicesE = [], codePath = srsP} =
   [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
-  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ programName sys) (S "[HTML]") 
-  +:+ namedRef (getSRSRef srsP TeX $ programName sys) (S "[PDF]") 
+  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ programName sys) (S "[HTML]")
+  +:+ namedRef (getSRSRef srsP TeX $ programName sys) (S "[PDF]")
   +:+ namedRef (getSRSRef srsP MDBook $ programName sys) (S "[mdBook]")]
 -- Anything else means we need to display program information, so use versionList.
-individualExList ex@E{systemE = SI{_sys = sys}, codePath = srsP} = 
+individualExList ex@E{systemE = SI{_sys = sys}, codePath = srsP} =
   [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
-  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ programName sys) (S "[HTML]") 
+  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ programName sys) (S "[HTML]")
   +:+ namedRef (getSRSRef srsP TeX $ programName sys) (S "[PDF]")
   +:+ namedRef (getSRSRef srsP MDBook $ programName sys) (S "[mdBook]")
   +:+ namedRef (getSRSRef srsP Jupyter $ programName sys) (S "[Jupyter (HTML)]"),
@@ -101,7 +101,7 @@ individualExList ex@E{systemE = SI{_sys = sys}, codePath = srsP} =
   Nested (S generatedCodeDocsTitle) $ Bullet $ map (, Nothing) (versionList getDoxRef noSwiftJlEx)]
     where
       -- For now, swift does not generate any references using doxygen, so we pretend it doesn't exist in the doxygen list
-      noSwiftJlEx = ex {choicesE = map (\x -> x {lang = filter 
+      noSwiftJlEx = ex {choicesE = map (\x -> x {lang = filter
         (\l -> l /= Swift && l /= Julia) $ lang x}) $ choicesE ex}
 
 -- | Takes a function that gets the needed references (either references for the code or doxygen references)
@@ -112,7 +112,7 @@ versionList _ E{choicesE = []} = [] -- If the choices are empty, then we don't d
                                     -- match (this case should be caught in the function that calls this one),
                                     -- but it is here just to be extra careful.
 versionList getRef ex@E{systemE = SI{_sys = sys}, choicesE = chcs} =
-  map versionItem chcs 
+  map versionItem chcs
   where
     -- Version item displays version name and appends the languages of generated code below.
     versionItem chc = Flat $ S (verName chc) +:+ foldlSent_ (map (makeLangRef chc) $ lang chc)
@@ -136,7 +136,7 @@ showLang l = show l
 
 -- | Example section function generator. Makes a list of examples and generated artifacts.
 exampleSec :: FilePath -> FilePath -> Section
-exampleSec codePth srsDoxPth = 
+exampleSec codePth srsDoxPth =
   section exampleTitle -- Title
   [mkParagraph exampleIntro, UlC $ ulcc $ fullExList codePth srsDoxPth] -- Contents
   [] $ makeSecRef "Examples" $ S "Examples" -- Section reference
@@ -176,7 +176,7 @@ getCodeRef :: Example -> Lang -> String -> Reference
 -- since that was checked in an earlier function.
 --
 -- Pattern matches so that examples that only have a single set of choices will be referenced one way.
-getCodeRef ex@E{systemE=SI{_sys = sys}, choicesE = chcs} l verName = 
+getCodeRef ex@E{systemE=SI{_sys = sys}, choicesE = chcs} l verName =
   makeURI refUID refURI refShortNm
   where
     -- Append system name and program language to ensure a unique id for each.
@@ -187,7 +187,7 @@ getCodeRef ex@E{systemE=SI{_sys = sys}, choicesE = chcs} l verName =
     refShortNm = shortname' $ S refUID
 
     -- System name, different between one set of choices and multiple sets.
-    sysName = case chcs of 
+    sysName = case chcs of
       [_] -> map toLower $ programName sys
       _   -> map toLower (programName sys) ++ "/" ++ verName
     -- Program language converted for use in file folder navigation.
@@ -195,7 +195,7 @@ getCodeRef ex@E{systemE=SI{_sys = sys}, choicesE = chcs} l verName =
 
 -- | Similar to 'getCodeRef', but builds the source code references
 buildDrasilExSrcRef :: Example -> Reference
-buildDrasilExSrcRef ex@E{systemE=SI{_sys = sys}} = 
+buildDrasilExSrcRef ex@E{systemE=SI{_sys = sys}} =
   makeURI refUID refURI refShortNm
   where
     refUID = "srcCodeRef" ++ sysName
@@ -206,7 +206,7 @@ buildDrasilExSrcRef ex@E{systemE=SI{_sys = sys}} =
 
 -- | Similar to 'getCodeRef', but gets the doxygen references and uses 'getDoxRef' instead.
 getDoxRef :: Example -> Lang -> String -> Reference
-getDoxRef ex@E{systemE=SI{_sys = sys}, choicesE = chcs} l verName = 
+getDoxRef ex@E{systemE=SI{_sys = sys}, choicesE = chcs} l verName =
   makeURI refUID refURI refShortNm
   where
     refUID = "doxRef" ++ progName ++ programLang
@@ -216,7 +216,7 @@ getDoxRef ex@E{systemE=SI{_sys = sys}, choicesE = chcs} l verName =
     progName = programName sys
     -- Here is the only difference from getCodeRef. When there is more than one set of choices,
     -- we append version name to program language since the organization of folders follows this way.
-    programLang = case chcs of 
+    programLang = case chcs of
       [_] -> convertLang l
       _   -> map toLower verName ++ "/" ++ convertLang l
 
@@ -235,7 +235,7 @@ getSRSPath path format ex = path ++ map toLower ex ++ "/SRS/" ++ show format ++ 
     sufx HTML    = ex ++ "_SRS.html"
     sufx TeX     = ex ++ "_SRS.pdf"
     sufx Jupyter = ex ++ "_SRS.html"
-    sufx Plain   = error "Plain SRS display is not supported." 
+    sufx Plain   = error "Plain SRS display is not supported."
 
 -- | Get the file paths for generated code and doxygen locations.
 getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath
@@ -246,13 +246,13 @@ getDoxPath path ex programLang = path ++ map toLower ex ++ "/doxygen/" ++ progra
 
 -- | Gather all references used in making the Examples section.
 exampleRefs :: FilePath -> FilePath -> [Reference]
-exampleRefs codePth srsDoxPth = 
-  concatMap getCodeRefDB (examples codePth srsDoxPth) ++ 
-  concatMap getDoxRefDB (examples codePth srsDoxPth) ++ 
-  map (getSRSRef srsDoxPth HTML . getAbrv) (examples codePth srsDoxPth) ++ 
-  map (getSRSRef srsDoxPth TeX . getAbrv) (examples codePth srsDoxPth) ++ 
-  map (getSRSRef srsDoxPth MDBook . getAbrv) (examples codePth srsDoxPth) ++ 
-  map (getSRSRef srsDoxPth Jupyter . getAbrv) (examples codePth srsDoxPth) ++ 
+exampleRefs codePth srsDoxPth =
+  concatMap getCodeRefDB (examples codePth srsDoxPth) ++
+  concatMap getDoxRefDB (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth HTML . getAbrv) (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth TeX . getAbrv) (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth MDBook . getAbrv) (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth Jupyter . getAbrv) (examples codePth srsDoxPth) ++
   map buildDrasilExSrcRef (examples codePth srsDoxPth)
 
 -- | Helpers to pull code and doxygen references from an example.

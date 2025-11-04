@@ -22,7 +22,7 @@ class (FileSym r) => ProgramSym r where
 
 type SFile a = FS (a (File a))
 
-class (ModuleSym r) => FileSym r where 
+class (ModuleSym r) => FileSym r where
   type File r
   fileDoc :: FSModule r -> SFile r
 

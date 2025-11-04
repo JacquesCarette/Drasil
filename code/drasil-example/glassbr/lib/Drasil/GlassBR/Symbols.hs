@@ -18,14 +18,14 @@ symbolsForSymbolTable = symbolsForTermTable ++ map dqdWr unitalSymbols ++
 
 symbolsForTermTable :: [DefinedQuantityDict]
 symbolsForTermTable = map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
-  map dqdWr sdVector ++ tmSymbols ++ map dqdWr specParamVals ++ 
+  map dqdWr sdVector ++ tmSymbols ++ map dqdWr specParamVals ++
   [dqdWr modElas] ++ interps
 
   -- include all module functions as symbols
 thisSymbols :: [DefinedQuantityDict]
 thisSymbols = (map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
   \\ symbolsForSymbolTable) ++ implVars ++ symbolsForSymbolTable
-  
+
 thisTerms :: [DefinedQuantityDict]
 thisTerms = (map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
   \\ symbolsForTermTable) ++ implVars ++ symbolsForTermTable

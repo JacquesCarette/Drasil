@@ -1,10 +1,10 @@
--- Changes to this template should be reflected in the 'Creating Your Project 
+-- Changes to this template should be reflected in the 'Creating Your Project
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 -- This comment can be removed after copying this template to build your own example.
 
 module Drasil.Template.Body where
-  
+
 import Control.Lens ((^.))
 
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
@@ -32,10 +32,10 @@ printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $      --This creates the Reference section of the SRS
-  RefProg intro      -- This add the introduction blob to the reference section  
+  RefProg intro      -- This add the introduction blob to the reference section
     [ tunitNone []      -- Adds table of unit section with a table frame
     , tsymb [] -- Adds table of symbol section with a table frame
-    --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
+    --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
     ],
   IntroSec $
   IntroProg EmptyS (phrase progName)

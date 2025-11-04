@@ -2,10 +2,10 @@ module Drasil.DocLang.Notebook where
 
 import Language.Drasil
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (introduction, learnObj, caseProb, 
+import qualified Data.Drasil.Concepts.Documentation as Doc (introduction, learnObj, caseProb,
   prpsOfDoc, review, summary, example, appendix, reference)
 
---  Notebook constructor. 
+--  Notebook constructor.
 -- Create the notebook from given system name, authors, and sections
 --doc :: NamedIdea c => c -> Sentence -> [Section] -> Document
 --doc  sys = Document (Doc.notebook `S.forTPS` sys)
@@ -34,7 +34,7 @@ sectionReferences = [introLabel, learnObjLabel, docPurposeLabel, referenceLabel,
 -- * Section References
 
 -- | Individual section reference labels. Used in creating example sections for the notebook.
-introLabel, learnObjLabel, docPurposeLabel, referenceLabel, 
+introLabel, learnObjLabel, docPurposeLabel, referenceLabel,
   reviewLabel, caseProbLabel, appendixLabel, summaryLabel, exampleLabel :: Reference
 introLabel          = makeSecRef "Intro"            $ titleize Doc.introduction
 learnObjLabel       = makeSecRef "LearnObj"         $ titleize' Doc.learnObj

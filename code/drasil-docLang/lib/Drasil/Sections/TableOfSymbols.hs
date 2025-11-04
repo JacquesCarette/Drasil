@@ -27,8 +27,8 @@ table st ls f
       Table [atStart symbol_, atStart description, atStart' unit_]
       (mkTable [P . (`symbol` st), f, toSentence] filteredChunks)
       (titleize' tOfSymb) True
-    | otherwise = error errorMessage 
-    where 
+    | otherwise = error errorMessage
+    where
         filteredChunks = filter (`hasStageSymbol`st) ls
         symbolsCol     = map (`symbol` st) filteredChunks
         uidCol         = map (view uid)    filteredChunks
@@ -39,7 +39,7 @@ table st ls f
         extractPairs symb = filter (\x -> fst x == symb) symUidPair
         extractUid  = map snd
         extractUidFromPairs = text . show . extractUid . extractPairs
-        errSymUidDuplicates = vcat $ map (\symb -> 
+        errSymUidDuplicates = vcat $ map (\symb ->
           extractUidFromPairs symb<+>text "all have symbol"<+>symbolDoc symb) symDuplicates
         errorMessage = "Same symbols for different quantities found: " ++ render errSymUidDuplicates
 

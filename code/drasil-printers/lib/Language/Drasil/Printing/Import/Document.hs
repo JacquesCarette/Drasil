@@ -65,7 +65,7 @@ createRefMap fn (T.List t)           = pass t
     process' = concatMap (\(_, _, l) -> maybe [] (createRef fn) l)
 createRefMap fn (T.Figure l _ _ _)   = createRef fn l
 createRefMap fn (T.Bib ls)           = map bibRefs ls
-  where 
+  where
     bibRefs (P.Cite l _ _) = (l, fn)
 createRefMap _ _                     = []
 
@@ -85,9 +85,9 @@ createLayout' sm = map (cel sm 0)
 extractSubS :: Int -> Section -> [(T.Depth, Section)]
 extractSubS d x@(Section tl c r)
   | d > 1 = [(d, x)]
-  | otherwise = (d, Section tl (filter isCon c) r) : 
+  | otherwise = (d, Section tl (filter isCon c) r) :
       concatMap (sepSub (d + 1)) c
-  where 
+  where
     isCon (Con _)        = True
     isCon  _             = False
     sepSub _   (Con _)   = []
@@ -95,7 +95,7 @@ extractSubS d x@(Section tl c r)
 
 -- | Helper for converting a Section to a File
 file :: PrintingInformation -> (T.Depth, Section) -> T.File
-file sm (d, x@(Section titleLb contents _)) = 
+file sm (d, x@(Section titleLb contents _)) =
   T.File (spec sm titleLb) fn d los
   where
     refr = refAdd x
@@ -112,10 +112,10 @@ sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used 
    map (layout sm depth) contents) refr
 
 cel :: PrintingInformation -> Int -> Section -> T.LayoutObj
-cel sm depth x@(Section titleLb contents _) = 
+cel sm depth x@(Section titleLb contents _) =
   let refr = P.S (refAdd x) in
   T.Cell (T.Header depth (spec sm titleLb) refr :
-   map (layout sm depth) contents) 
+   map (layout sm depth) contents)
 
 -- | Helper for translating sections into a printable representation of layout objects ('T.LayoutObj').
 layout :: PrintingInformation -> Int -> SecCons -> T.LayoutObj
@@ -168,7 +168,7 @@ layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
   where refr = P.S "nolabel1"
 layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
-layUnlabelled sm (Figure c f wp hc)  = T.Figure (P.S "nolabel2") 
+layUnlabelled sm (Figure c f wp hc)  = T.Figure (P.S "nolabel2")
   (if hc == WithCaption then Just (spec sm c) else Nothing) f wp
 layUnlabelled sm (Graph ps w h t) = T.Graph (map (bimap (spec sm) (spec sm)) ps)
                                w h (spec sm t) (P.S "nolabel6")

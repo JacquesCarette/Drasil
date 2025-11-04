@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs, TemplateHaskell, RankNTypes #-}
 -- | Define types and functions related to creating a system information database.
 
--- Changes to System should be reflected in the 'Creating Your Project 
+-- Changes to System should be reflected in the 'Creating Your Project
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 
@@ -62,7 +62,7 @@ data System where
   Quantity e, Eq e, MayHaveUnit e, Concept e,
   Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
-  HasUID j, Constrained j) => 
+  HasUID j, Constrained j) =>
   { _sys          :: a
   , _kind         :: SystemKind
   , _authors      :: People

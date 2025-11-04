@@ -60,7 +60,7 @@ foldlSPCol :: [Sentence] -> Contents
 foldlSPCol = mkParagraph . foldlSentCol
 
 -- | Folds a list of elements separated by commas, including the last element.
-foldlsC :: [Sentence] -> Sentence 
+foldlsC :: [Sentence] -> Sentence
 foldlsC [] = EmptyS
 foldlsC xs = foldl1 sC xs
 

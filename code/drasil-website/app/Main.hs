@@ -41,7 +41,7 @@ main = do
       -- organize all the possible folder locations to use in functions
       allFolders = Folder {depL = deployLocation, docsRt = docsRoot,
         exRt = exampleRoot, graphRt = graphRoot,
-        analysisRt = analysisRoot, repoRt = repoCommitRoot, 
+        analysisRt = analysisRoot, repoRt = repoCommitRoot,
         buildNum = buildNumber, buildPth = buildPath,
         typeGraphFolder = typeGFolder, classInstFolder = classIFolder,
         packages = words listOfPackages ++ ["example"]

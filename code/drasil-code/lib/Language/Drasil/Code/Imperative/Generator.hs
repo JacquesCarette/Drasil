@@ -150,8 +150,8 @@ genPackage unRepr = do
       db = codeSpec g ^. systemdbO
       -- prps = show $ sentenceDoc db Implementation OneLine
       --   (foldlSent $ purpose $ codeSpec g)
-      prps = show $ sentenceDoc db Implementation OneLine 
-        (foldlSent $ codeSpec g ^. purpose)  
+      prps = show $ sentenceDoc db Implementation OneLine
+        (foldlSent $ codeSpec g ^. purpose)
       bckgrnd = show $ sentenceDoc db Implementation OneLine
         (foldlSent $ codeSpec g ^. background)
       mtvtn = show $ sentenceDoc db Implementation OneLine
@@ -183,7 +183,7 @@ genProgram :: (OOProg r) => GenState (OO.GSProgram r)
 genProgram = do
   g <- get
   ms <- chooseModules $ modular g
-  let n = codeSpec g ^. pNameO 
+  let n = codeSpec g ^. pNameO
   let p = show $ sentenceDoc (codeSpec g ^. systemdbO) Implementation OneLine $ foldlSent $ codeSpec g ^. purpose
   return $ OO.prog n p ms
 

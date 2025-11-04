@@ -4,7 +4,7 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
-  physSyst, response, requirement, refBy, refName, srs, type_, typUnc, 
+  physSyst, response, requirement, refBy, refName, srs, type_, typUnc,
   unlikelyChg)
 import Drasil.Metadata (dataDefn, inModel, thModel)
 
@@ -14,7 +14,7 @@ idglass      = mkIdea  "glass"          (cn' "Glass")                 Nothing
 
 {--}
 con :: [CI]
-con = [annealed, aR, fullyT, glassTypeFac, heatS, lDurFac, iGlass, lGlass, 
+con = [annealed, aR, fullyT, glassTypeFac, heatS, lDurFac, iGlass, lGlass,
   lResistance, lShareFac, stdOffDist, nFL]
 
 con' :: [IdeaDict]
@@ -23,12 +23,12 @@ con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
 
 {-Acronyms-}
 acronyms :: [CI]
-acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt, 
-  glassTypeFac, heatS, iGlass, inModel, likelyChg, lDurFac, 
-  lGlass, lResistance, lShareFac, nFL, physSyst, requirement, 
+acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt,
+  glassTypeFac, heatS, iGlass, inModel, likelyChg, lDurFac,
+  lGlass, lResistance, lShareFac, nFL, physSyst, requirement,
   refBy, refName, stdOffDist, srs, thModel, typUnc, unlikelyChg]
 
-annealed, aR, fullyT, glassTypeFac, heatS, lDurFac, iGlass, lGlass, 
+annealed, aR, fullyT, glassTypeFac, heatS, lDurFac, iGlass, lGlass,
   lResistance, lShareFac, stdOffDist, nFL :: CI
 
 --FIXME: Add compound nounphrases
@@ -48,7 +48,7 @@ nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored l
 
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.
- 
+
 beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy :: IdeaDict
 beam         = nc "beam"       (cn' "beam")

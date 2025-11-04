@@ -121,7 +121,7 @@ modelExpr (AssocC SUnion l)          sm = assocExpr P.SUnion (precC SUnion) l sm
 modelExpr (Deriv 0 Part a _)         sm = P.Row [modelExpr a sm]
 modelExpr (Deriv 0 Total a _)        sm = P.Row [modelExpr a sm]
 modelExpr (Deriv n Part a b)         sm =
-  let st = [P.Spc P.Thin, P.MO P.Partial] in 
+  let st = [P.Spc P.Thin, P.MO P.Partial] in
     P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
     (P.Row (st ++ [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b] ++ sup n))
 modelExpr (Deriv n Total a b)        sm =
@@ -197,7 +197,7 @@ assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (modelExpr' sm 
 setExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
 setExpr _ prec exprs sm = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (modelExpr' sm prec) exprs
 
--- | Add add symbol only when the second Expr is not negation 
+-- | Add add symbol only when the second Expr is not negation
 addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 addExpr [] _ _ = []
 addExpr [x] o sm = [modelExpr' sm (precA o) x]

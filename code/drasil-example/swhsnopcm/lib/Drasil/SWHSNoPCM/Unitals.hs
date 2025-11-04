@@ -29,5 +29,5 @@ tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
 
 specParamValList :: [ConstQDef]
 specParamValList = [tankLengthMin, tankLengthMax,
-  wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax, 
+  wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax,
   coilHTCMin, coilHTCMax, timeFinalMax, arMin, arMax]

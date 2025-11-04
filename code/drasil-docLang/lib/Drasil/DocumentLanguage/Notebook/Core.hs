@@ -34,7 +34,7 @@ newtype CaseProb = CaseProbProg [Contents]
 
 -- ** Examples of the lesson
 newtype Example = ExampleProg [Contents]
-  
+
 -- ** Summary
 newtype Smmry = SmmryProg [Contents]
 
@@ -65,12 +65,12 @@ instance Multiplate DLPlate where
     lc (Apndx x) = Apndx <$> apndx p x
     lc BibSec = pure BibSec
 
-    introd (IntrodProg con) = pure $ IntrodProg con 
-    lrnObj (LrnObjProg con) = pure $ LrnObjProg con 
+    introd (IntrodProg con) = pure $ IntrodProg con
+    lrnObj (LrnObjProg con) = pure $ LrnObjProg con
     rvw (ReviewProg con) = pure $ ReviewProg con
-    csProb (CaseProbProg con) = pure $ CaseProbProg con 
+    csProb (CaseProbProg con) = pure $ CaseProbProg con
     exmp (ExampleProg con) = pure $ ExampleProg con
-    smry (SmmryProg con) = pure $ SmmryProg con 
+    smry (SmmryProg con) = pure $ SmmryProg con
     aps (ApndxProg con) = pure $ ApndxProg con
-  mkPlate b = DLPlate (b lsnChap) (b intro) (b learnObj) (b review) 
+  mkPlate b = DLPlate (b lsnChap) (b intro) (b learnObj) (b review)
     (b caseProb) (b example) (b smmry) (b apndx)

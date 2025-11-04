@@ -109,7 +109,7 @@ accelGQD :: ModelQDef
 accelGQD = mkQuantDef acceleration accelGEqn
 
 accelGEqn :: ModelExpr
-accelGEqn = deriv (sy velocity) time 
+accelGEqn = deriv (sy velocity) time
 
 ---------------------------
 -- Force in General--

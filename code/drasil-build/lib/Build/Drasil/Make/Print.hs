@@ -7,8 +7,8 @@ import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), ($$), hsep, vcat)
 import qualified Data.Text as T
 import Text.Wrap
 
-import Build.Drasil.Make.AST (Annotation, Command(C), 
-  CommandOpts(IgnoreReturnCode), Dependencies, Makefile(M), Rule(R), Target, 
+import Build.Drasil.Make.AST (Annotation, Command(C),
+  CommandOpts(IgnoreReturnCode), Dependencies, Makefile(M), Rule(R), Target,
   Type(Abstract))
 import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
 import Build.Drasil.Make.Import (RuleTransformer, toMake)

@@ -23,10 +23,10 @@ class (CommonRenderSym r, IP.FileSym r, RenderFile r, RenderMod r, ModuleElim r,
 -- Procedural-Only Typeclasses --
 
 class (BlockCommentSym r) => RenderFile r where
-  -- top and bottom are only used for pre-processor guards for C++ header 
-  -- files. FIXME: Remove them (generation of pre-processor guards can be 
+  -- top and bottom are only used for pre-processor guards for C++ header
+  -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
-  top :: r (IP.Module r) -> r (Block r) 
+  top :: r (IP.Module r) -> r (Block r)
   bottom :: r (Block r)
 
   commentedMod :: IP.SFile r -> FS (r (BlockComment r)) -> IP.SFile r
@@ -36,7 +36,7 @@ class (BlockCommentSym r) => RenderFile r where
 class RenderMod r where
   modFromData :: String -> FS Doc -> IP.FSModule r
   updateModuleDoc :: (Doc -> Doc) -> r (IP.Module r) -> r (IP.Module r)
-  
+
 class ModuleElim r where
   module' :: r (IP.Module r) -> Doc
 

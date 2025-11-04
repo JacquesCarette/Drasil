@@ -59,7 +59,7 @@ basisConceptChunks =
   --                but did not fit into the other lists
   --  * errMsg - Concept chunk defining an error message. Error messages are common in
   --             any software, so this is included in the basis.
-  --  * program - A concept chunk defining a computer program. This is included 
+  --  * program - A concept chunk defining a computer program. This is included
   --              in the basis as all of the case studies are concerned with software.
   --  * srsDomains - SRS related concepts. These are included in the basis as every
   --                 case study should have a generated SRS, and these concepts would
@@ -82,7 +82,7 @@ basisCDB =
 
   -- | Smart constructor for chunk databases. Takes in the following:
 --
---     * ['Quantity'] (for 'SymbolMap'), 
+--     * ['Quantity'] (for 'SymbolMap'),
 --     * 'NamedIdea's (for 'TermMap'),
 --     * 'Concept's (for 'ConceptMap'),
 --     * Units (something that 'IsUnit' for 'UnitMap'),

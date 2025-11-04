@@ -8,7 +8,7 @@
 -}
 
 -- FIXME: use real parser (Low Priority; see line 267)
--- | Data table generator. Uses information from SourceCodeReader.hs 
+-- | Data table generator. Uses information from SourceCodeReader.hs
 -- to organize all types, classes, and instances in Drasil.
 -- Generates a .csv file and an HTML table with this information.
 module ClassInstDepGen (main) where
@@ -20,7 +20,7 @@ import System.Directory
 import System.FilePath (takeDirectory)
 import Control.Monad
 import qualified Data.Map as Map
-import qualified DirectoryController as DC (createFolder, createFile, finder, 
+import qualified DirectoryController as DC (createFolder, createFile, finder,
   getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
 import SourceCodeReaderCI as SCR (extractEntryData, EntryData(..))
 import Data.List.Split (splitOn)
@@ -52,10 +52,10 @@ data Entry = Entry { drasilPack :: DC.DrasilPack
                    , classInstances :: [ClassInstance]
                    } deriving (Show)
 -- ClassInstance data type for storing data/newtype type + class instance names
-data ClassInstance = ClassInstance {dnType :: DNType, clsInstName :: ClassName} 
+data ClassInstance = ClassInstance {dnType :: DNType, clsInstName :: ClassName}
   deriving (Show)
 -- Class data type to store class name + type
-data Class = Class {className :: ClassName, classType :: ClassType} 
+data Class = Class {className :: ClassName, classType :: ClassType}
   deriving (Show)
 -- ClassType data type for specifying class type (Haskell, Drasil or GOOL)
 data ClassType = Haskell | Drasil | GOOL deriving (Eq)
@@ -85,7 +85,7 @@ instance Show ClassType where
 ------------
 
 -- makes Entry data instance
-makeEntry :: DC.DrasilPack -> DC.FileName -> FilePath -> [DataType] -> 
+makeEntry :: DC.DrasilPack -> DC.FileName -> FilePath -> [DataType] ->
   [Newtype] -> [Class] -> [ClassInstance] -> Entry
 makeEntry drpk fn fp dtl ntl cls clsint = Entry {drasilPack=drpk, fileName = fn,
   filePath = fp, dataTypes = dtl, newtypes = ntl, classes = cls, classInstances = clsint}
@@ -124,7 +124,7 @@ main = do
 
   -- imports configuration settings (drasil- package names + class types order)
   (packageNames,classInstOrd) <- config scriptsDirectory
-  
+
   -- uses ordering (imported from config file) iff imported ordering is complete
   let ordered
         | ldL == lpN = map (getFolder drctyDict) packageNames
@@ -163,7 +163,7 @@ output outputFilePath entryData ordClassInsts bakedEntryData entries= do
 ------------
 -- CSV Output Functions
 ------------
-  
+
 -- function creates and writes output data file DataTable.csv to /code/analysis
 outputCSV :: FilePath -> EntryString -> [ClassName] -> IO ()
 outputCSV outputFilePath entryData ordClassInsts = do
@@ -210,7 +210,7 @@ mkEntryPack = map $ \(n, es) -> makeEntryPack n $ filter isEntryEmpty $ map entr
   where
     -- only take the information needed to construct a graph from a full entry
     entryToSmallEntry :: Entry -> SmallEntry
-    entryToSmallEntry Entry{dataTypes = dts, newtypes = nts, classes = clss, classInstances = clsinst} = 
+    entryToSmallEntry Entry{dataTypes = dts, newtypes = nts, classes = clss, classInstances = clsinst} =
       makeSmallEntry (dts ++ nts) (nubOrd $ map className clss)
       (nubOrd $ concatMap snd (mkPkgEdges clsinst) \\ map className clss) $ mkPkgEdges clsinst
 
@@ -302,7 +302,7 @@ toClassType "GOOL"    = GOOL
 -- creates an entry for each file (new Entry data-oriented format)
 createEntry :: FilePath -> DC.File -> DC.FileName -> IO Entry
 -- creates blank line to separate file entries by drasil- package
-createEntry _ _ "newline" = return nlEntry where 
+createEntry _ _ "newline" = return nlEntry where
   nlEntry = makeEntry "" "newline" "" [] [] [] []
 -- creates actual file entries
 createEntry homeDirectory file filename = do
@@ -315,7 +315,7 @@ createEntry homeDirectory file filename = do
   -- extracts entry data from File data type
   -- stripInstances = [(dataType,classInfo)]
   rEntryData <- SCR.extractEntryData fn fp
-  
+
   let dtl = SCR.dNs rEntryData
       ntl = SCR.ntNs rEntryData
       classNames = SCR.cNs rEntryData
@@ -354,7 +354,7 @@ compileEntryData ordClassInsts entry filename = do
       hEnt _ (x:_) _ = f "\t" x "\t"
       hEnt _ _ (x:_) = f "\t" "\t" x
       hEnt _ _ _     = f "\t" "\t" "\t"
-  
+
   -- creates heads of each data, newtype and class entry line
   let dtEntryHds = map (("\t,\t,\t,"++) . (++",\t,\t")) dataNames
       ntEntryHds = map (("\t,\t,\t,\t,"++) . (++",\t")) newtypeNames
@@ -372,7 +372,7 @@ compileEntryData ordClassInsts entry filename = do
 
   -- creates file entry data by combining data, newtype and class entries
   let entryData = dtEntries ++ ntEntries ++ clsEntries
-  
+
   -- guards determine how to handle overall file entry output
   -- for single line entry data vs. multi-line entry data
   let output = tEnt (length entryData) dtRefLines ntRefLines entryData
@@ -396,7 +396,7 @@ getFolder dict name = fromMaybe (error $ "Could not find " ++ name) $ Map.lookup
 
 -- converts list to dictionary list format (for use by drasil- directories only)
 toDictList :: DC.Folder -> (DC.FolderName,DC.Folder)
-toDictList folder = (DC.folderDrasilPack folder,folder) 
+toDictList folder = (DC.folderDrasilPack folder,folder)
 
 -- gets raw Entries, extracts classes and orders them with config file settings
 ordClasses :: [ClassType] -> [Entry] -> [Class]
@@ -418,14 +418,14 @@ sortClasses dCls iClsN = (haskellCls,drasilCls,goolCls) where
   -- makes new Haskell type classes
   haskellCls = map (makeClass Haskell) haskellClsNms
 
--- outputs class instance group; used by ordClasses to order the class instances 
+-- outputs class instance group; used by ordClasses to order the class instances
 -- by class type (as defined in config file settings)
 getClasses :: [Class] -> [Class] -> [Class] -> ClassType -> [Class]
 getClasses h _ _ Haskell = h
 getClasses _ d _ Drasil  = d
 getClasses _ _ g GOOL    = g
 
--- compares file instance in master list with file Instances List; replaces 
+-- compares file instance in master list with file Instances List; replaces
 -- instance if in list with "Y" else "\t"
 isInstanceOf :: [FileInstance] -> FileInstance -> IsInstanceOf
 isInstanceOf fileInstances fileInstance = if isInstance then yes else no where
@@ -452,5 +452,5 @@ getRefNames clsInsts tn = map clsInstName $ filter (isTypeOf_ tn) clsInsts
 -- class instance ref lines (EntryString fragments) for each data/newtype line
 createRefLines :: [ClassName] -> [[ClassName]] -> [EntryString]
 createRefLines classInsts instRefNames = map (intercalate ",") instRefs where
-  instRefs = zipWith (map . isInstanceOf) instRefNames instanceSkeleton 
+  instRefs = zipWith (map . isInstanceOf) instRefNames instanceSkeleton
   instanceSkeleton = replicate (length instRefNames) classInsts

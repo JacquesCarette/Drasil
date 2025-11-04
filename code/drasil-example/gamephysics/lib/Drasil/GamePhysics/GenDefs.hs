@@ -25,7 +25,7 @@ generalDefns = [accelGravityGD, impulseGD]
 
 
 {-conservationOfMomentGDef :: RelationConcept
-conservationOfMomentGDef = makeRC "conservOfMoment" (nounPhraseSP "Conservation of Momentum") 
+conservationOfMomentGDef = makeRC "conservOfMoment" (nounPhraseSP "Conservation of Momentum")
   conservationOfMomentDesc conservationOfMomentRel
 
 conservationOfMomentRel :: Relation
@@ -45,9 +45,9 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
   S "an equal (force) on each other in opposite directions" +:+.
   S "This is Newton's third law:",
   S "(expr1)",
-  S "The objects collide with each other for the exact same amount of", 
+  S "The objects collide with each other for the exact same amount of",
   phrase time, getS time,
-  S "The above equation is equal to the", phrase impulseS, 
+  S "The above equation is equal to the", phrase impulseS,
   S "(GD1 ref)",
   S "(expr2)",
   S "The", phrase impulseS, S "is equal to the change in momentum:",
@@ -88,7 +88,7 @@ accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1,
  accelGravityDerivSentence5]
 
 accelGravityDerivSentence1 :: [Sentence]
-accelGravityDerivSentence1 = [S "From", 
+accelGravityDerivSentence1 = [S "From",
         namedRef newtonLUG (S "Newton's law" `S.of_` S "universal gravitation") `sC` S "we have"]
 
 
@@ -124,7 +124,7 @@ accelGravityDerivEqn2 :: PExpr
 accelGravityDerivEqn2 = sy dVect $= (sy distMass $/ sy dispNorm)
 
 accelGravityDerivEqn3 :: PExpr
-accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst $* 
+accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst $*
                          (sy mLarger $* sy QPP.mass $/ sy sqrDist) $* sy dVect
                          $= sy QPP.mass $* sy QP.gravitationalAccel
 
@@ -151,7 +151,7 @@ impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") impul
 
 impulseExpr :: PExpr
 impulseExpr = (neg (exactDbl 1 $+ sy QP.restitutionCoef) $* sy initRelVel $.
-  sy normalVect) $/ ((recip_ (sy massA) $+ recip_ (sy massB)) $* 
+  sy normalVect) $/ ((recip_ (sy massA) $+ recip_ (sy massB)) $*
   square (sy normalLen) $+
   (square (sy perpLenA) $/ sy momtInertA) $+
   (square (sy perpLenB) $/ sy momtInertB))

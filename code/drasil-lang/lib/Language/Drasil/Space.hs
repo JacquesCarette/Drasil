@@ -44,7 +44,7 @@ data Space =
   | Set Space
   | Matrix Int Int Space
   | Array Space
-  | Actor String 
+  | Actor String
   | Function (NE.NonEmpty Primitive) Primitive
   | Void
   deriving (Eq, Show)
@@ -133,7 +133,7 @@ assertNonNatNumeric s msg
 -- | Assert that two numeric 'Space's are equivalent or return a formatted error
 -- message.
 assertEquivNumeric ::  Space -> Space -> (String -> String -> String) -> Either String ()
-assertEquivNumeric l r msg 
+assertEquivNumeric l r msg
   | isBasicNumSpace l && l == r = Right ()
   | otherwise                   = Left $ msg (show l) (show r)
 

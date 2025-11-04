@@ -10,7 +10,7 @@ import Language.Drasil
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
 import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalAccelConst,
-  ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, 
+  ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position,
   velocity, acceleration, constAccelV, speed)
 import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, landPos)
 
@@ -62,7 +62,7 @@ horizPos = sy xPos $= sy QP.ixPos $+ (sy ixVel $* sy time)
 vertVel, vertPos, vertNoTime :: PExpr
 vertVel = sy yVel $= sy iyVel $- (sy gravitationalAccel $* sy time)
 vertPos = sy yPos $= sy QP.iyPos $+ (sy iyVel $* sy time) $- (sy gravitationalAccel $* square (sy time) $/ exactDbl 2)
-vertNoTime = square (sy yVel) $= square (sy iyVel) $- (exactDbl 2 $* sy gravitationalAccel $* (sy yPos $- sy QP.iyPos)) 
+vertNoTime = square (sy yVel) $= square (sy iyVel) $- (exactDbl 2 $* sy gravitationalAccel $* (sy yPos $- sy QP.iyPos))
 
 lcrectVel, lcrectPos, lcrectNoTime, lchorizVel, lchorizPos, lcvertVel, lcvertPos, lcvertNoTime :: LabelledContent
 lcrectVel = lbldExpr (sy speed $= speed') (makeEqnRef "rectVel")

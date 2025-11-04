@@ -100,15 +100,15 @@ genPreamble los = let (pkgs, defs) = parseDoc los
 
 -- | Helper to gather all preamble information.
 parseDoc :: [LayoutObj] -> ([Package], [Def])
-parseDoc los' = 
-  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++ 
+parseDoc los' =
+  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++
    nub (concatMap fst res)
   , [SetMathFont, GreaterThan, LessThan] ++ nub (concatMap snd res))
-  where 
+  where
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
     parseDoc' Table{} = ([Tabularray,TabularX,BookTabs,Caption], [])
-    parseDoc' (HDiv _ slos _) = 
+    parseDoc' (HDiv _ slos _) =
       let res1 = map parseDoc' slos in
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in

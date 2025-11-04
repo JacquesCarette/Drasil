@@ -222,7 +222,7 @@ getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
 
--- ciPlate is not currently used. 
+-- ciPlate is not currently used.
 -- | A common idea plate.
 -- ciPlate :: DLPlate (Constant [CI])
 -- ciPlate = preorderFold $ purePlate {

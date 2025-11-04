@@ -1,8 +1,8 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module Drasil.Shared.LanguageRenderer.Constructors (
-  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, 
-  VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec, 
-  andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, 
+  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar,
+  VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec,
+  andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExpr', binExprNumDbl', typeBinExpr
 ) where
 
@@ -89,7 +89,7 @@ powerPrec :: (Monad r) => String -> VSOp r
 powerPrec = mkOp 8 . text
 
 -- | Construct an operator with conjunction-level precedence
-andPrec :: (Monad r) => String -> VSOp r 
+andPrec :: (Monad r) => String -> VSOp r
 andPrec = mkOp 3 . text
 
 -- | Construct an operator with disjunction-level precedence
@@ -112,12 +112,12 @@ unExpr' u' v'= do
   v <- v'
   (join .: on2StateValues (mkUnExpr (if maybe False (< uOpPrec u) (valuePrec v) then unOpDocD else unOpDocD'))) u' v'
 
-mkUnExpr :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> r (UnaryOp r) -> 
+mkUnExpr :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> r (UnaryOp r) ->
   r (Value r) -> SValue r
 mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 
--- | To be used in languages where the unary operator returns a double. If the 
--- value passed to the operator is a float, this function preserves that type 
+-- | To be used in languages where the unary operator returns a double. If the
+-- value passed to the operator is a float, this function preserves that type
 -- by casting the result to a float.
 unExprNumDbl :: (CommonRenderSym r) => VSUnOp r -> SValue r -> SValue r
 unExprNumDbl u' v' = do
@@ -131,20 +131,20 @@ unExprCastFloat :: (CommonRenderSym r) => r (Type r) -> r (Value r) -> SValue r
 unExprCastFloat t = castType (getType t) . toState
   where castType Float = cast float
         castType _ = id
-  
+
 -- | To be used when the type of the value is different from the type of the
 -- resulting expression. The type of the result is passed as a parameter.
 typeUnExpr :: (CommonRenderSym r) => VSUnOp r -> VSType r -> SValue r -> SValue r
-typeUnExpr u' t' s' = do 
+typeUnExpr u' t' s' = do
   u <- u'
   t <- t'
   s <- s'
   mkExpr (uOpPrec u) t (unOpDocD (RC.uOp u) (RC.value s))
 
--- | Constructs binary expressions like v + w, for some operator + and values v 
+-- | Constructs binary expressions like v + w, for some operator + and values v
 -- and w, parenthesizing v and w if needed.
 binExpr :: (CommonRenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExpr b' v1' v2'= do 
+binExpr b' v1' v2'= do
   b <- b'
   exprType <- numType v1' v2'
   exprRender <- exprRender' binExprRender b' v1' v2'
@@ -153,16 +153,16 @@ binExpr b' v1' v2'= do
 -- | Constructs binary expressions like pow(v,w), for some operator pow and
 -- values v and w
 binExpr' :: (CommonRenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExpr' b' v1' v2' = do 
+binExpr' b' v1' v2' = do
   exprType <- numType v1' v2'
   exprRender <- exprRender' binOpDocDRend b' v1' v2'
-  mkExpr 9 exprType exprRender 
+  mkExpr 9 exprType exprRender
 
--- | To be used in languages where the binary operator returns a double. If 
--- either value passed to the operator is a float, this function preserves that 
+-- | To be used in languages where the binary operator returns a double. If
+-- either value passed to the operator is a float, this function preserves that
 -- type by casting the result to a float.
 binExprNumDbl' :: (CommonRenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExprNumDbl' b' v1' v2' = do 
+binExprNumDbl' b' v1' v2' = do
   v1 <- v1'
   v2 <- v2'
   let t1 = valueType v1
@@ -171,7 +171,7 @@ binExprNumDbl' b' v1' v2' = do
   binExprCastFloat t1 t2 e
 
 -- Only used by binExprNumDbl'
-binExprCastFloat :: (CommonRenderSym r) => r (Type r) -> r (Type r) -> r (Value r) -> 
+binExprCastFloat :: (CommonRenderSym r) => r (Type r) -> r (Type r) -> r (Value r) ->
   SValue r
 binExprCastFloat t1 t2 = castType (getType t1) (getType t2) . toState
   where castType Float _ = cast float
@@ -180,7 +180,7 @@ binExprCastFloat t1 t2 = castType (getType t1) (getType t2) . toState
 
 -- | To be used when the types of the values are different from the type of the
 -- resulting expression. The type of the result is passed as a parameter.
-typeBinExpr :: (CommonRenderSym r) => VSBinOp r -> VSType r -> SValue r -> SValue r 
+typeBinExpr :: (CommonRenderSym r) => VSBinOp r -> VSType r -> SValue r -> SValue r
   -> SValue r
 typeBinExpr b' t' v1' v2' = do
   b <- b'
@@ -188,7 +188,7 @@ typeBinExpr b' t' v1' v2' = do
   bnexr <- exprRender' binExprRender b' v1' v2'
   mkExpr (bOpPrec b) t bnexr
 
--- For numeric binary expressions, checks that both types are numeric and 
+-- For numeric binary expressions, checks that both types are numeric and
 -- returns result type. Selects the type with lowest precision.
 numType :: (CommonRenderSym r) => SValue r-> SValue r -> VSType r
 numType v1' v2' = do
@@ -204,10 +204,10 @@ numType v1' v2' = do
       numericType _ _ = error "Numeric types required for numeric expression"
   toState $ numericType (getType t1) (getType t2)
 
-exprRender' :: (r (BinaryOp r) -> r (Value r) -> r (Value r) -> Doc) -> 
+exprRender' :: (r (BinaryOp r) -> r (Value r) -> r (Value r) -> Doc) ->
   VSBinOp r -> SValue r -> SValue r -> VS Doc
-exprRender' f b' v1' v2' = do 
-  b <- b' 
+exprRender' f b' v1' v2' = do
+  b <- b'
   v1 <- v1'
   v2 <- v2'
   toState $ f b v1 v2
@@ -215,28 +215,28 @@ exprRender' f b' v1' v2' = do
 mkExpr :: (CommonRenderSym r) => Int -> r (Type r) -> Doc -> SValue r
 mkExpr p t = valFromData (Just p) Nothing (toState t)
 
-binOpDocDRend :: (CommonRenderSym r) => r (BinaryOp r) -> r (Value r) -> 
+binOpDocDRend :: (CommonRenderSym r) => r (BinaryOp r) -> r (Value r) ->
   r (Value r) -> Doc
 binOpDocDRend b v1 v2 = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
 
--- Adds parentheses around an expression passed as the left argument to a 
--- left-associative binary operator if the precedence of the expression is less 
+-- Adds parentheses around an expression passed as the left argument to a
+-- left-associative binary operator if the precedence of the expression is less
 -- than the precedence of the operator
 exprParensL :: (CommonRenderSym r) => r (BinaryOp r) -> r (Value r) -> Doc
-exprParensL o v = (if maybe False (< bOpPrec o) (valuePrec v) then parens else 
+exprParensL o v = (if maybe False (< bOpPrec o) (valuePrec v) then parens else
   id) $ RC.value v
 
--- Adds parentheses around an expression passed as the right argument to a 
--- left-associative binary operator if the precedence of the expression is less 
+-- Adds parentheses around an expression passed as the right argument to a
+-- left-associative binary operator if the precedence of the expression is less
 -- than or equal to the precedence of the operator
 exprParensR :: (CommonRenderSym r) => r (BinaryOp r) -> r (Value r) -> Doc
-exprParensR o v = (if maybe False (<= bOpPrec o) (valuePrec v) then parens else 
+exprParensR o v = (if maybe False (<= bOpPrec o) (valuePrec v) then parens else
   id) $ RC.value v
 
 -- Renders binary expression, adding parentheses if needed
-binExprRender :: (CommonRenderSym r) =>  r (BinaryOp r) -> r (Value r) -> r (Value r) 
+binExprRender :: (CommonRenderSym r) =>  r (BinaryOp r) -> r (Value r) -> r (Value r)
   -> Doc
-binExprRender b v1 v2 = 
+binExprRender b v1 v2 =
   let leftExpr = exprParensL b v1
       rightExpr = exprParensR b v2
   in binOpDocD (RC.bOp b) leftExpr rightExpr

@@ -10,6 +10,6 @@ goals :: [ConceptInstance]
 goals = [targetHit]
 
 targetHit :: ConceptInstance
-targetHit = cic "targetHit" 
+targetHit = cic "targetHit"
   (S "Determine if the" +:+ phrase projectile +:+ S "hits the" +:+. phrase target)
   "targetHit" goalStmtDom

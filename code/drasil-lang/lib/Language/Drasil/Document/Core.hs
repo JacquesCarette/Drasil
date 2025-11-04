@@ -64,7 +64,7 @@ data DType = General
 
 -- | Indicates whether a figure has a caption or not.
 data HasCaption = NoCaption | WithCaption
-  deriving (Eq) 
+  deriving (Eq)
 
 -- | Types of layout objects we deal with explicitly.
 data RawContent =
@@ -87,7 +87,7 @@ data LabelledContent = LblC { _ref :: Reference
                             , _ctype :: RawContent
                             }
 
--- | Only contains 'RawContent'.                         
+-- | Only contains 'RawContent'.
 newtype UnlabelledContent = UnlblC { _cntnts :: RawContent }
 
 makeLenses ''LabelledContent
@@ -105,7 +105,7 @@ instance HasChunkRefs LabelledContent where
 -- | Finds 'UID' of the 'LabelledContent'.
 instance HasUID        LabelledContent where uid = ref . uid
 -- | 'LabelledContent's are equal if their reference 'UID's are equal.
-instance Eq            LabelledContent where a == b = (a ^. uid) == (b ^. uid) 
+instance Eq            LabelledContent where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the reference address contained in the 'Reference' of 'LabelledContent'.
 instance HasRefAddress LabelledContent where getRefAdd (LblC lb c) = RP (prependLabel c) $ getAdd $ getRefAdd lb
 -- | Access the 'RawContent' within the 'LabelledContent'.
@@ -138,6 +138,6 @@ prependLabel EqnBlock{}     = prepend "EqnB"
 prependLabel DerivBlock{}   = prepend "Deriv"
 prependLabel Enumeration{}  = prepend "Lst"
 prependLabel Paragraph{}    = error "Shouldn't reference paragraphs"
-prependLabel Bib{}          = error $ 
+prependLabel Bib{}          = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."

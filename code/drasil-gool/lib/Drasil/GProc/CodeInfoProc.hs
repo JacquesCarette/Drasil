@@ -32,8 +32,8 @@ import Data.Maybe (fromMaybe)
 
 newtype CodeInfoProc a = CI {unCI :: a} deriving Eq
 
--- FIXME: Use DerivingVia language extension (and maybe DeriveFunctor) to 
--- derive the Functor, Applicative, Monad instances for this 
+-- FIXME: Use DerivingVia language extension (and maybe DeriveFunctor) to
+-- derive the Functor, Applicative, Monad instances for this
 -- (and for JavaCode, PythonCode, etc.)
 instance Functor CodeInfoProc where
   fmap f (CI x) = CI (f x)
@@ -60,7 +60,7 @@ instance ProgramSym CodeInfoProc where
 instance FileSym CodeInfoProc where
   type File CodeInfoProc = ()
   fileDoc = execute1
-  
+
   docMod _ _ _ = execute1
 
 instance BodySym CodeInfoProc where
@@ -179,14 +179,14 @@ instance Comparison CodeInfoProc where
   (?>=) = execute2
   (?==) = execute2
   (?!=) = execute2
-    
+
 instance ValueExpression CodeInfoProc where
   inlineIf = execute3
   funcAppMixedArgs n _ = currModCall n
   extFuncAppMixedArgs l n _ vs ns = do
     sequence_ vs
     executePairList ns
-    addExternalCall l n  
+    addExternalCall l n
   libFuncAppMixedArgs = extFuncAppMixedArgs
 
   lambda _ = execute1
@@ -245,7 +245,7 @@ instance StatementSym CodeInfoProc where
   valStmt = zoom lensMStoVS . execute1
   emptyStmt = noInfo
   multi    = executeList
-  
+
 instance AssignStatement CodeInfoProc where
   assign _ = zoom lensMStoVS . execute1
   (&-=)  _ = zoom lensMStoVS . execute1
@@ -281,7 +281,7 @@ instance IOStatement CodeInfoProc where
   getFileInput v _ = zoom lensMStoVS $ execute1 v
   discardFileInput = zoom lensMStoVS . execute1
 
-  openFileR _ v = modify (addException FileNotFound) >> 
+  openFileR _ v = modify (addException FileNotFound) >>
     execute1 (zoom lensMStoVS v)
   openFileW _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
   openFileA _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
@@ -324,7 +324,7 @@ instance ControlStatement CodeInfoProc where
   ifExists v = execute3 (zoom lensMStoVS v)
 
   for dec v = execute4 dec (zoom lensMStoVS v)
-  forRange _ b e s = execute4 (zoom lensMStoVS b) (zoom lensMStoVS e) 
+  forRange _ b e s = execute4 (zoom lensMStoVS b) (zoom lensMStoVS e)
     (zoom lensMStoVS s)
   forEach _ v = execute2 (zoom lensMStoVS v)
   while v = execute2 (zoom lensMStoVS v)
@@ -332,7 +332,7 @@ instance ControlStatement CodeInfoProc where
   tryCatch _ cb = do
     _ <- cb
     noInfo
-  
+
   assert cond msg = do
     _ <- zoom lensMStoVS cond
     _ <- zoom lensMStoVS msg
@@ -381,7 +381,7 @@ updateMEMandCM n b = do
   modify (updateCallMap n . updateMethodExcMap n)
   noInfo
 
-evalConds :: [(SValue CodeInfoProc, MSBody CodeInfoProc)] -> MSBody CodeInfoProc -> 
+evalConds :: [(SValue CodeInfoProc, MSBody CodeInfoProc)] -> MSBody CodeInfoProc ->
   MSStatement CodeInfoProc
 evalConds cs def = do
   mapM_ (zoom lensMStoVS . fst) cs
@@ -391,8 +391,8 @@ evalConds cs def = do
 
 addCurrModCall :: String -> SValue CodeInfoProc
 addCurrModCall n = do
-  mn <- zoom lensVStoFS getModuleName 
-  modify (addCall (qualName mn n)) 
+  mn <- zoom lensVStoFS getModuleName
+  modify (addCall (qualName mn n))
   noInfo
 
 addExternalCall :: String -> String -> SValue CodeInfoProc
@@ -408,32 +408,32 @@ executeList l = do
   sequence_ l
   noInfo
 
-executePairList :: [(State a (CodeInfoProc ()), State a (CodeInfoProc ()))] -> 
+executePairList :: [(State a (CodeInfoProc ()), State a (CodeInfoProc ()))] ->
   State a (CodeInfoProc ())
 executePairList ps = do
   mapM_ fst ps
   mapM_ snd ps
   noInfo
 
-execute2 :: State a (CodeInfoProc ()) -> State a (CodeInfoProc ()) -> 
+execute2 :: State a (CodeInfoProc ()) -> State a (CodeInfoProc ()) ->
   State a (CodeInfoProc ())
 execute2 s1 s2 = do
   _ <- s1
   execute1 s2
 
-execute3 :: State a (CodeInfoProc ()) -> State a (CodeInfoProc ()) -> 
+execute3 :: State a (CodeInfoProc ()) -> State a (CodeInfoProc ()) ->
   State a (CodeInfoProc ()) -> State a (CodeInfoProc ())
 execute3 s1 s2 s3 = do
   _ <- s1
   execute2 s2 s3
 
-execute4 :: State a (CodeInfoProc ()) -> State a (CodeInfoProc ()) -> 
+execute4 :: State a (CodeInfoProc ()) -> State a (CodeInfoProc ()) ->
   State a (CodeInfoProc ()) -> State a (CodeInfoProc ()) -> State a (CodeInfoProc ())
 execute4 s1 s2 s3 s4 = do
   _ <- s1
   execute3 s2 s3 s4
 
-currModCall :: String -> [VS (CodeInfoProc ())] -> 
+currModCall :: String -> [VS (CodeInfoProc ())] ->
   [(VS (CodeInfoProc ()), VS (CodeInfoProc ()))] -> VS (CodeInfoProc ())
 currModCall n ps ns = do
   sequence_ ps

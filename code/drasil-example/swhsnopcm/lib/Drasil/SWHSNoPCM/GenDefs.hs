@@ -10,7 +10,7 @@ import Drasil.SWHS.Assumptions (assumpCWTAT)
 import Drasil.SWHS.GenDefs (htFluxWaterFromCoil, rocTempSimpRC, rocTempSimpDeriv)
 
 genDefs :: [GenDefn]
-genDefs = [rocTempSimp, htFluxWaterFromCoil] 
+genDefs = [rocTempSimp, htFluxWaterFromCoil]
 
 rocTempSimp :: GenDefn
 rocTempSimp = gdNoRefs (othModel' rocTempSimpRC) (Nothing :: Maybe UnitDefn)

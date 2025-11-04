@@ -364,7 +364,7 @@ convExpr (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExpr Matrix{} = error "convExpr: Matrix"
-convExpr (S.Set s l) = do 
+convExpr (S.Set s l) = do
   ar <- mapM convExpr l
   sm <- spaceCodeType s
   return $ litSet (convTypeOO sm) ar
@@ -1064,7 +1064,7 @@ convExprProc (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExprProc Matrix{} = error "convExprProc: Matrix"
-convExprProc (S.Set s l) = do 
+convExprProc (S.Set s l) = do
   ar <- mapM convExprProc l
   sm <- spaceCodeType s
   return $ litSet (convType sm) ar

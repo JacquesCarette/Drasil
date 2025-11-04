@@ -1,6 +1,6 @@
-module Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat, 
-  vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue, 
-  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
+module Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat,
+  vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue,
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, getInnerType, on2StateWrapped,
   getNestDegree
 ) where
@@ -14,7 +14,7 @@ import Control.Applicative (liftA3)
 import Control.Monad (liftM2, liftM3)
 import Control.Monad.State (State)
 import Data.List (intersperse)
-import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
+import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes,
   (<>), empty, isEmpty)
 
 angles :: Doc -> Doc
@@ -56,14 +56,14 @@ onCodeValue = fmap
 onStateValue :: (a -> b) -> State s a -> State s b
 onStateValue = fmap
 
-on2CodeValues :: (Applicative r) => (a -> b -> c) -> r a -> r b -> 
+on2CodeValues :: (Applicative r) => (a -> b -> c) -> r a -> r b ->
   r c
 on2CodeValues = liftA2
 
 on2StateValues :: (a -> b -> c) -> State s a -> State s b -> State s c
 on2StateValues = liftM2
 
-on3CodeValues :: (Applicative r) => (a -> b -> c -> d) -> r a -> r b 
+on3CodeValues :: (Applicative r) => (a -> b -> c -> d) -> r a -> r b
   -> r c -> r d
 on3CodeValues = liftA3
 
@@ -81,10 +81,10 @@ on2StateLists :: ([a] -> [b] -> c) -> [State s a] -> [State s b] -> State s c
 on2StateLists f as bs = liftM2 f (sequence as) (sequence bs)
 
 on2StateWrapped :: (Monad m) => (a -> b -> m c) -> m a -> m b -> m c
-on2StateWrapped f a' b' = do 
+on2StateWrapped f a' b' = do
     a <- a'
     b <- b'
-    f a b 
+    f a b
 
 getInnerType :: C.CodeType -> C.CodeType
 getInnerType (C.List innerT) = innerT

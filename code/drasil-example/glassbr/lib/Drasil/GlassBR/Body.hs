@@ -6,8 +6,9 @@ import Language.Drasil hiding (organization, section, variable)
 import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
-import Drasil.DocLang (auxSpecSent, termDefnF')
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
+import Drasil.DocLang (auxSpecSent, termDefnF', inReq, mkInputPropsTable)
+import qualified Drasil.DocLang as DocLang (inReqDesc)
+import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel, sectionReferences)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
@@ -39,14 +40,14 @@ import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, cartesianWiki)
 import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForSymbolTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
+  sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, unitalSymbols)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
@@ -120,17 +121,21 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- IdeaDicts
-  [lateralLoad, materialProprty] ++ con' ++
-  -- CIs
-  map nw [progName, iGlass, lGlass] ++ map nw mathcon'
+  filter (\idc -> (idc ^. uid) `notElem` conceptChunkUIDs) baseIdeaDicts
+  where
+    baseIdeaDicts =
+      -- IdeaDicts
+      [lateralLoad, materialProprty] ++ con' ++
+      -- CIs
+      map nw [progName, iGlass, lGlass] ++ map nw mathcon'
+    conceptChunkUIDs = map (^. uid) conceptChunks
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
   distance : concepts ++ softwarecon ++ physicalcon ++
   -- Unital Chunks
-  map cw mathunitals ++ map cw physicalquants ++
+  map cw mathunitals ++ map cw physicalquants ++ map cw unitalSymbols ++
   -- DefinedQuantityDicts
   map cw mathquants
 
@@ -145,13 +150,22 @@ symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref (inputValuesTable : funcReqsTables)
+
+inputValuesTable :: LabelledContent
+inputValuesTable = mkInputPropsTable inputs
+
+inputValuesRequirement :: ConceptInstance
+inputValuesRequirement = inReq inputValuesSentence
+
+inputValuesSentence :: Sentence
+inputValuesSentence = DocLang.inReqDesc inputValuesTable inReqDesc
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
+concIns = inputValuesRequirement : (assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs)
 
 labCon :: [LabelledContent]
-labCon = funcReqsTables ++ figures
+labCon = inputValuesTable : (funcReqsTables ++ figures)
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

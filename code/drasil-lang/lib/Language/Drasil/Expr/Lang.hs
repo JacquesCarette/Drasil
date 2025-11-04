@@ -671,7 +671,7 @@ instance Typed Expr Space where
                if isValidDim then Right $ S.ClifS d S.Vector firstTy
                else case d of
                       S.Fixed fD -> Left $ "The number of components in a clif of dimension " ++ show d ++ " must be between 1 and " ++ show ((2 :: Integer) ^ fD)
-                      S.VDim _    -> Left $ "Clif must have at least one component."
+                      S.VDim _    -> Left "Clif must have at least one component."
              else
                Left $ "Clif components must all have the same basic numeric type; found: " ++ show compTys
 

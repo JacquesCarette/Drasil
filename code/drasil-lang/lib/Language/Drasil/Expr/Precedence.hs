@@ -6,7 +6,7 @@ import Language.Drasil.Expr.Lang (Expr(..),
   UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   AssocBoolOper(..), AssocArithOper(..), VVVBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocConcatOper(..))
 
--- These precedences are inspired from Haskell/F# 
+-- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
 

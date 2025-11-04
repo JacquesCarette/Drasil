@@ -118,7 +118,7 @@ mthdArg = narg $ implVar "method_scipy" (nounPhrase
 atolArg = narg $ implVar "atol_scipy" (nounPhrase
   "absolute tolerance for ODE solution" "absolute tolerances for ODE solution")
   "the absolute tolerance for the ODE solution"
-  Real (label "atol") 
+  Real (label "atol")
 rtolArg = narg $ implVar "rtol_scipy" (nounPhrase
   "relative tolerance for ODE solution" "relative tolerances for ODE solution")
   "the relative tolerance for the ODE solution"
@@ -249,9 +249,9 @@ rTol = quantvar $ implVar "rTol_oslo" (nounPhrase
   "relative tolerance for ODE solution" "relative tolerances for ODE solution")
   "the relative tolerance for the ODE solution"
   Real (label "RelativeTolerance")
-sol = quantvar $ implVar "sol_oslo" (nounPhrase 
-  "container for ODE information" "containers for ODE information") 
-  "the container for ODE information" solT(label "sol") 
+sol = quantvar $ implVar "sol_oslo" (nounPhrase
+  "container for ODE information" "containers for ODE information")
+  "the container for ODE information" solT(label "sol")
 points = quantvar $ implVar "points_oslo" (nounPhrase
   "container holding ODE solution" "containers holding ODE solution")
   "the container holding the ODE solution"
@@ -429,7 +429,7 @@ adamsC, dp54C, stepHandlerCtor, addStepHandler, initMethod, handleStep,
   getInterpState, integrate, getDimension, computeDerivatives :: CodeFuncChunk
 adamsC = quantfunc $ implVar "adams_ctor_apache" (nounPhrase
   "constructor for an Adams-Bashforth integrator"
-  "constructors for an Adams-Bashforth integrator") 
+  "constructors for an Adams-Bashforth integrator")
   "the constructors for an Adams-Bashforth integrator"
   (Actor adams) (Label adams)
 dp54C = quantfunc $ implVar "dp54_ctor_apache" (nounPhrase
@@ -632,8 +632,8 @@ odeMethodUnavailable = "Chosen ODE solving method is not available" ++
 -- | Change in @X@ chunk constructor (where @X@ is a given argument).
 diffCodeChunk :: CodeVarChunk -> CodeVarChunk
 diffCodeChunk c = quantvar $ implVarAU' (show $ c +++ "d" )
-  (compoundPhrase (nounPhraseSP "change in") (c ^. term)) 
-  (S "the change in" +:+ (c ^. defn)) (getA c) 
+  (compoundPhrase (nounPhraseSP "change in") (c ^. term))
+  (S "the change in" +:+ (c ^. defn)) (getA c)
   (c ^. typ) (Concat [label "d", symbol c Implementation]) (getUnit c)
 
 -- FIXME: This is surely a hack, but I can't think of a better way right now.
@@ -685,4 +685,4 @@ odeInfoChunks info =
                , arrayVecDepVar info
                , diffCodeChunk dv
                , listToArray $ diffCodeChunk dv
-               ] 
+               ]

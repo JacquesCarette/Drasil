@@ -40,7 +40,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
   RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
   ScopeElim(..))
-import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block, 
+import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
@@ -49,16 +49,16 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
-import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
+import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
-  argv, printLabel, listSep, piLabel, access, functionDox, variableList, 
+  argv, printLabel, listSep, piLabel, access, functionDox, variableList,
   parameterList)
-import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10, 
-  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, 
-  classVar, listSetFunc, castObj, dynamic, break, continue, addComments, 
+import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
+  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
+  classVar, listSetFunc, castObj, dynamic, break, continue, addComments,
   commentedMod, commentedItem, var)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
-  mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec, 
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
+  mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec,
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkStaticVar)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
@@ -66,17 +66,17 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, listAppend, 
-  listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, 
-  assign, subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
+  lambda, func, get, set, listAdd, listAppend,
+  listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt,
+  assign, subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod,
   function, buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, local)
-import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP 
-import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, 
-  decrement1, increment1, runStrategy, stringListVals, stringListLists, 
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
+import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
+  decrement1, increment1, runStrategy, stringListVals, stringListLists,
   notifyObservers')
-import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD, 
+import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
@@ -124,7 +124,7 @@ instance SharedProg PythonCode
 instance OOProg PythonCode
 
 instance ProgramSym PythonCode where
-  type Program PythonCode = ProgData 
+  type Program PythonCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
@@ -144,7 +144,7 @@ instance FileSym PythonCode where
 instance RenderFile PythonCode where
   top _ = toCode empty
   bottom = toCode empty
-  
+
   commentedMod = on2StateValues (on2CodeValues R.commentedMod)
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
@@ -173,7 +173,7 @@ instance BodySym PythonCode where
   addComments s = onStateValue (onCodeValue (R.addComments s pyCommentStart))
 
 instance RenderBody PythonCode where
-  multiBody = G.multiBody 
+  multiBody = G.multiBody
 
 instance BodyElim PythonCode where
   body = unPC
@@ -234,7 +234,7 @@ instance UnaryOpSym PythonCode where
   asinOp = pyAsinOp
   acosOp = pyAcosOp
   atanOp = pyAtanOp
-  floorOp = pyFloorOp 
+  floorOp = pyFloorOp
   ceilOp = pyCeilOp
 
 instance BinaryOpSym PythonCode where
@@ -281,8 +281,8 @@ instance OOVariableSym PythonCode where
                           else G.staticVar n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVar = CP.classVar R.classVar
-  extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
-    addModuleImportVS) (Map.lookup (getTypeString t) cm) $ 
+  extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify .
+    addModuleImportVS) (Map.lookup (getTypeString t) cm) $
     CP.classVar pyClassVar (toState t) v) c getClassMap
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
@@ -296,7 +296,7 @@ instance InternalVarElim PythonCode where
   variable = varDoc . unPC
 
 instance RenderVariable PythonCode where
-  varFromData b n t' d = do 
+  varFromData b n t' d = do
     t <- t'
     toState $ on2CodeValues (vard b n) t (toCode d)
 
@@ -348,7 +348,7 @@ instance NumericExpression PythonCode where
     v2 <- v2'
     let pyDivision Integer Integer = binExpr (multPrec pyIntDiv)
         pyDivision _ _ = binExpr divideOp
-    pyDivision (getType $ valueType v1) (getType $ valueType v2) (pure v1) 
+    pyDivision (getType $ valueType v1) (getType $ valueType v2) (pure v1)
       (pure v2)
   (#%) = binExpr moduloOp
   (#^) = binExpr powerOp
@@ -412,13 +412,13 @@ instance RenderValue PythonCode where
   printLnFunc = mkStateVal void empty
   printFileFunc _ = mkStateVal void empty
   printFileLnFunc _ = mkStateVal void empty
-  
-  cast = on2StateWrapped (\t v-> mkVal t . R.castObj (RC.type' t) 
+
+  cast = on2StateWrapped (\t v-> mkVal t . R.castObj (RC.type' t)
     $ RC.value v)
-  
+
   call = G.call pyNamedArgSep
 
-  valFromData p i t' d = do 
+  valFromData p i t' d = do
     t <- t'
     toState $ on2CodeValues (vd p i) t (toCode d)
 
@@ -509,7 +509,7 @@ instance VectorExpression PythonCode where
 
 instance RenderFunction PythonCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
-  
+
 instance FunctionElim PythonCode where
   functionType = onCodeValue fType
   function = funcDoc . unPC
@@ -596,7 +596,7 @@ instance IOStatement PythonCode where
   getFileInputLine = getFileInput
   discardFileLine = CP.discardFileLine pyReadline
   getFileInputAll f v = v &= readlines f
-  
+
 instance StringStatement PythonCode where
   stringSplit d vnew s = assign vnew (objAccess s (splitFunc d))
 
@@ -629,7 +629,7 @@ instance ControlStatement PythonCode where
   for _ _ _ _ = error $ CP.forLoopError pyName
   forRange i initv finalv stepv = forEach i (range initv finalv stepv)
   forEach = CS.forEach' pyForEach
-  while v' b' = do 
+  while v' b' = do
     v <- zoom lensMStoVS v'
     b <- b'
     mkStmtNoEnd (pyWhile v b)
@@ -661,7 +661,7 @@ instance VisibilityElim PythonCode where
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
   mType = zoom lensMStoVS
-  
+
 instance OOMethodTypeSym PythonCode where
   construct = G.construct
 
@@ -671,10 +671,10 @@ instance ParameterSym PythonCode where
   pointerParam = param
 
 instance RenderParam PythonCode where
-  paramFromData v' d = do 
+  paramFromData v' d = do
     v <- zoom lensMStoVS v'
     toState $ on2CodeValues pd v (toCode d)
-  
+
 instance ParamElim PythonCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
@@ -700,9 +700,9 @@ instance OOMethodSym PythonCode where
   docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
 
 instance RenderMethod PythonCode where
-  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
+  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
-    
+
   mthdFromData _ d = toState $ toCode $ mthd d
 
 instance OORenderMethod PythonCode where
@@ -717,7 +717,7 @@ instance OORenderMethod PythonCode where
     pms <- sequence ps
     pure $ toCode $ mthd $ pyFunction n pms bd
   destructor _ = error $ CP.destructorError pyName
-  
+
 instance MethodElim PythonCode where
   method = mthdDoc . unPC
 
@@ -725,22 +725,22 @@ instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ = toState (toCode empty)
   stateVarDef = CP.stateVarDef
-  constVar = CP.constVar (RC.perm 
+  constVar = CP.constVar (RC.perm
     (static :: PythonCode (Permanence PythonCode)))
-  
+
 instance StateVarElim PythonCode where
   stateVar = unPC
 
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
-  buildClass par sVars cstrs = if length cstrs <= 1 
+  buildClass par sVars cstrs = if length cstrs <= 1
                                   then G.buildClass par sVars cstrs
                                   else error pyMultCstrsError
-  extraClass n par sVars cstrs = if 
+  extraClass n par sVars cstrs = if
                                   length cstrs <= 1
                                     then CP.extraClass n par sVars cstrs
                                     else error pyMultCstrsError
-  implementingClass n iNms sVars cstrs = if 
+  implementingClass n iNms sVars cstrs = if
                                   length cstrs <= 1
                                     then G.implementingClass n iNms sVars cstrs
                                     else error pyMultCstrsError
@@ -754,7 +754,7 @@ instance RenderClass PythonCode where
   implements is = toCode $ parens (text $ intercalate listSep is)
 
   commentedClass = G.commentedClass
-  
+
 instance ClassElim PythonCode where
   class' = unPC
 
@@ -765,19 +765,19 @@ instance ModuleSym PythonCode where
     libis <- getLibImports
     mis <- getModuleImports
     pure $ vibcat [
-      vcat (map (RC.import' . 
+      vcat (map (RC.import' .
         (langImport :: Label -> PythonCode (Import PythonCode))) lis),
-      vcat (map (RC.import' . 
-        (langImport :: Label -> PythonCode (Import PythonCode))) (sort $ is ++ 
+      vcat (map (RC.import' .
+        (langImport :: Label -> PythonCode (Import PythonCode))) (sort $ is ++
         libis)),
-      vcat (map (RC.import' . 
-        (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
+      vcat (map (RC.import' .
+        (modImport :: Label -> PythonCode (Import PythonCode))) mis)])
     (pure empty) getMainDoc
 
 instance RenderMod PythonCode where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
-  
+
 instance ModuleElim PythonCode where
   module' = modDoc . unPC
 
@@ -834,7 +834,7 @@ pyInputFunc, pyPrintFunc :: Doc
 pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
-pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyClose, 
+pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyClose,
   pySplit, pyRange, pyRstrip, pyMath, pyIn, pyAdd, pyRemove, pyUnion :: String
 pyListSize = "len"
 pyIndex = "index"
@@ -915,7 +915,7 @@ addmathImport :: VS a -> VS a
 addmathImport = (>>) $ modify (addLangImportVS pyMath)
 
 mathFunc :: (Monad r) => String -> VSOp r
-mathFunc = addmathImport . unOpPrec . access pyMath 
+mathFunc = addmathImport . unOpPrec . access pyMath
 
 splitFunc :: (OORenderSym r) => Char -> VSFunction r
 splitFunc d = func pySplit (listType string) [litString [d]]
@@ -936,11 +936,11 @@ pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v
 
 pyInlineIf :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-pyInlineIf c' v1' v2' = do 
+pyInlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
   v2 <- v2'
-  valFromData (valuePrec c) (valueInt c) (toState $ valueType v1) 
+  valFromData (valuePrec c) (valueInt c) (toState $ valueType v1)
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
 pyLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
@@ -950,23 +950,23 @@ pyStringType :: (CommonRenderSym r) => VSType r
 pyStringType = typeFromData String pyString (text pyString)
 
 pyExtNewObjMixedArgs :: (CommonRenderSym r) => Library -> MixedCtorCall r
-pyExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing 
+pyExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing
   (getTypeString t) (pure t) vs ns)
 
-pyPrint :: Bool -> Maybe (SValue PythonCode) -> SValue PythonCode -> 
+pyPrint :: Bool -> Maybe (SValue PythonCode) -> SValue PythonCode ->
   SValue PythonCode -> MSStatement PythonCode
 pyPrint newLn f' p' v' = do
     f <- zoom lensMStoVS $ fromMaybe (mkStateVal void empty) f'
     prf <- zoom lensMStoVS p'
     v <- zoom lensMStoVS v'
     s <- zoom lensMStoVS (litString "" :: SValue PythonCode)
-    let nl = if newLn then empty else listSep' <> text "end" <> equals <> 
+    let nl = if newLn then empty else listSep' <> text "end" <> equals <>
                RC.value s
-        fl = emptyIfEmpty (RC.value f) $ listSep' <> text "file" <> equals 
+        fl = emptyIfEmpty (RC.value f) $ listSep' <> text "file" <> equals
                <> RC.value f
     mkStmtNoEnd $ RC.value prf <> parens (RC.value v <> nl <> fl)
 
-pyOut :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
+pyOut :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
   MSStatement r
 pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getType . valueType
   where pyOut' (List _) = printSt newLn f printFn v
@@ -1005,7 +1005,7 @@ pyTryCatch tryB catchB = vcat [
 pyAssert :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
 pyAssert condition message = text "assert" <+> RC.value condition <> comma <+> RC.value message
 
-pyListSlice :: (CommonRenderSym r, Monad r) => SVariable r -> SValue r -> SValue r -> 
+pyListSlice :: (CommonRenderSym r, Monad r) => SVariable r -> SValue r -> SValue r ->
   SValue r -> SValue r -> MS (r Doc)
 pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   vnew <- vn
@@ -1013,7 +1013,7 @@ pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   b <- beg
   e <- end
   s <- step
-  pure $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <> 
+  pure $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <>
     brackets (RC.value b <> colon <> RC.value e <> colon <> RC.value s)
 
 pyMethod :: (CommonRenderSym r) => Label -> r (Variable r) -> [r (Parameter r)] ->
@@ -1050,7 +1050,7 @@ pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
 
 pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty
-pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . 
+pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid .
   text) lns
 
 toConstName :: String -> String

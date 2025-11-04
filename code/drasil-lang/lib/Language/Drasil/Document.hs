@@ -39,7 +39,7 @@ makeLenses ''Section
 {-
 data Section = Section
              { depth  :: Depth
-             , header :: SecHeader 
+             , header :: SecHeader
              , cons   :: Content
              }
 

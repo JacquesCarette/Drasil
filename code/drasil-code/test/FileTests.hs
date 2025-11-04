@@ -3,7 +3,7 @@
 module FileTests (fileTestsOO, fileTestsProc) where
 
 import Drasil.GOOL (MSBlock, MSStatement, SMethod, SharedProg, OOProg,
-  BodySym(..), BlockSym(..), TypeSym(..), DeclStatement(..), IOStatement(..), 
+  BodySym(..), BlockSym(..), TypeSym(..), DeclStatement(..), IOStatement(..),
   ControlStatement(..), VariableSym(var), Literal(..), VariableValue(..),
   Comparison(..), List(..), MethodSym(..), ScopeSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
@@ -58,6 +58,6 @@ readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
 goodBye :: (SharedProg r) => MSBlock r
 goodBye = block [
   printLn (valueOf $ var "fileContents" (listType string)),
-  assert (listSize (valueOf (var "fileContents" (listType string))) ?> litInt 0) 
+  assert (listSize (valueOf (var "fileContents" (listType string))) ?> litInt 0)
   (litString "fileContents should not be empty."),
   closeFile (valueOf $ var "fileToRead" infile)]

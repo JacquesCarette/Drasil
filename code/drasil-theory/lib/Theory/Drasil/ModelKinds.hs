@@ -25,7 +25,7 @@ import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..), Expr,
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
 
--- | Models can be of different kinds: 
+-- | Models can be of different kinds:
 --
 --     * 'NewDEModel's represent differential equations as 'DifferentialModel's
 --     * 'DEModel's represent differential equations as 'RelationConcept's
@@ -169,7 +169,7 @@ instance RequiresChecking (ModelKind Expr) Expr Space where
   requiredChecks = requiredChecks . (^. mk)
 
 -- | Retrieve internal data from ModelKinds
-elimMk :: Getter DifferentialModel a 
+elimMk :: Getter DifferentialModel a
   -> Getter RelationConcept a -> Getter (ConstraintSet e) a
   -> Getter (QDefinition e) a -> Getter (MultiDefn e) a
   -> ModelKinds e -> a
@@ -196,7 +196,7 @@ setMk (OthModel q)              _ f _ _ _ x = OthModel              $ set f x q
 -- | Make a 'Lens' for 'ModelKinds'.
 lensMk :: forall e a.
      Lens' DifferentialModel a
-  -> Lens' RelationConcept a -> Lens' (ConstraintSet e) a 
+  -> Lens' RelationConcept a -> Lens' (ConstraintSet e) a
   -> Lens' (QDefinition e) a -> Lens' (MultiDefn e) a
   -> Lens' (ModelKinds e) a
 lensMk ld lr lcs lq lmd = lens g s
@@ -208,9 +208,9 @@ lensMk ld lr lcs lq lmd = lens g s
 -- | Make a 'Getter' for 'ModelKinds'.
 getterMk :: forall e a.
      Getter DifferentialModel a
-  -> Getter RelationConcept a 
-  -> Getter (ConstraintSet e) a 
-  -> Getter (QDefinition e) a 
+  -> Getter RelationConcept a
+  -> Getter (ConstraintSet e) a
+  -> Getter (QDefinition e) a
   -> Getter (MultiDefn e) a
   -> Getter (ModelKinds e) a
 getterMk gd gr gcs gq gmd = to $ \modelKinds ->

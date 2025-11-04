@@ -361,13 +361,13 @@ chsFieldSent :: (Sentence, Sentence) -> Sentence
 chsFieldSent (rec, chc) = rec +:+ S "selected as" +:+. chc
 
 -- | Data type of internal concepts
-data InternalConcept = 
+data InternalConcept =
     InputConstraintsFn
   | InputConstraintsMod
-  | WriteOutput 
+  | WriteOutput
   | DerivedValuesFn
   | DerivedValuesMod
-  | GetInput 
+  | GetInput
   | InputParameters
   | InputFormat
   | OutputFormat

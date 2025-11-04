@@ -2,18 +2,18 @@
 module Data.Drasil.People where
 
 import Language.Drasil (Person, person, person', personWM, personWM', mononym)
-  
+
 spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   cTitus, kdHuff, nChueHong, mDavis, rGuy, shdHaddock, imMitchell, mdPlumblet,
   bWaugh, epWhite, pWilson, pcClements, luthfi, alex, nikitha, thulasi,
   brooks, mLightstone, lLai, pjAgerfalk, nKraiem, jRalyte, jBueche,
-  fIncropera, dDewitt, tBergman, aLavine, jRobertson, sRobertson, 
+  fIncropera, dDewitt, tBergman, aLavine, jRobertson, sRobertson,
   wlBeason, tlKohutek, jmBracci, qhQian, dyZhu, cfLee, grChen, dgFredlund,
   jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo,
-  mCampidelli, dmWiess, sPalmer, scottSmith, bKarchewski, rHuston, 
+  mCampidelli, dmWiess, sPalmer, scottSmith, bKarchewski, rHuston,
   hJosephs, nrMorgenstern, vePrice, samCrawford, rcHibbeler, olu, rodPierce,
   dong, rKhedri :: Person
-  
+
 pjAgerfalk    = person    "PJ"                        "Agerfalk"
 daAruliah     = personWM  "D"         ["A"]           "Aruliah"
 wlBeason      = personWM  "W"         ["Lynn"]        "Beason"

@@ -24,7 +24,7 @@ import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
 import Drasil.Shared.LanguageRenderer (addExt)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (modDoc')
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVar)
-import Drasil.Shared.State (FS, lensFStoGS, lensFStoMS, lensMStoVS, getModuleName, 
+import Drasil.Shared.State (FS, lensFStoGS, lensFStoMS, lensMStoVS, getModuleName,
   setModuleName, setMainMod, currFileType, currMain, addFile, useVarName,
   currParameters, setVarScope)
 
@@ -44,16 +44,16 @@ fileDoc ext md = do
   let fp = addExt ext nm
   RCP.fileFromData fp (toState m)
 
-fileFromData :: (ProcRenderSym r) => (FilePath -> r (Module r) -> r (File r)) 
+fileFromData :: (ProcRenderSym r) => (FilePath -> r (Module r) -> r (File r))
   -> FilePath -> FSModule r -> SFile r
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'
-  modify (\s -> if isEmpty (RCP.module' mdl) 
+  modify (\s -> if isEmpty (RCP.module' mdl)
     then s
-    else over lensFStoGS (addFile (s ^. currFileType) fpath) $ 
+    else over lensFStoGS (addFile (s ^. currFileType) fpath) $
       -- If this is the main source file, set it as the main module in the state
-      if s ^. currMain && isSource (s ^. currFileType) 
+      if s ^. currMain && isSource (s ^. currFileType)
         then over lensFStoGS (setMainMod fpath) s
         else s)
   return $ f fpath mdl
@@ -69,9 +69,9 @@ buildModule n imps bot fs = RCP.modFromData n (do
   let fnDocs = vibcat (map RCC.method fns ++ [bt])
   return $ emptyIfEmpty fnDocs (vibcat (filter (not . isEmpty) [is, fnDocs])))
 
-docMod :: (ProcRenderSym r) => String -> String -> [String] -> String -> 
+docMod :: (ProcRenderSym r) => String -> String -> [String] -> String ->
   SFile r -> SFile r
-docMod e d a dt fl = RCP.commentedMod fl (RCC.docComment $ CP.modDoc' d a dt . 
+docMod e d a dt fl = RCP.commentedMod fl (RCC.docComment $ CP.modDoc' d a dt .
   addExt e <$> getModuleName)
 
 modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
@@ -96,11 +96,11 @@ funcDecDef v scp ps b = do
   modify $ useVarName $ variableName vr
   modify $ setVarScope (variableName vr) (RCC.scopeData scp)
   s <- get
-  f <- IC.function (variableName vr) private (return $ variableType vr) 
+  f <- IC.function (variableName vr) private (return $ variableType vr)
     (map IC.param ps) b
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RCC.method f
 
-function :: (ProcRenderSym r) => Label -> r (Visibility r) -> VSType r -> 
+function :: (ProcRenderSym r) => Label -> r (Visibility r) -> VSType r ->
   [MSParameter r] -> MSBody r -> SMethod r
 function n s t = RCP.intFunc False n s (RCC.mType t)

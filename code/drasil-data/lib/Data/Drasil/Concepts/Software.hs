@@ -19,29 +19,29 @@ softwarecon = [correctness, verifiability, physLib,
 
 c, errMsg, physLib, program :: ConceptChunk
 
-c       = dcc "c" (pn "C") 
+c       = dcc "c" (pn "C")
   "the C programming language"
-physLib = dcc "physLib" (cnIES "physics library") 
+physLib = dcc "physLib" (cnIES "physics library")
   "a programming library which provides functions for modelling physical phenomenon"
 program = dcc "program" (cn' "program")
   "a series of coded software instructions to control the operation of a computer or other machine"
-errMsg  = dcc "errMsg" (cn' "error message") 
+errMsg  = dcc "errMsg" (cn' "error message")
   "a message that indicates an incorrect instruction has been given, or that there is an error resulting from faulty software"
 
--- * Non-functional Requirements 
+-- * Non-functional Requirements
 
 accuracy, correctness, maintainability, performance, performanceSpd, portability,
   reliability, reusability, understandability, verifiability :: ConceptChunk
 
 qualOfBeing :: String -> String
 qualOfBeing s = "the quality or state of being" ++ s
-  
+
 accuracy          = dcc "accuracy"          (nounPhraseSP "accuracy")
   $ qualOfBeing "correct or precise"
 
 correctness       = dcc "correctness"       (nounPhraseSP "correctness")
   $ qualOfBeing "free from error"
-  
+
 maintainability   = dcc "maintainability"   (nounPhraseSP "maintainability")
   "the probability of performing a successful repair action within a given time"
 
@@ -50,7 +50,7 @@ performance       = dcc "performance"       (nounPhraseSP "performance")
 
 performanceSpd    = dcc "performanceSpd"    (cn' "performance speed")
   "the action or process of carrying out or accomplishing an action, task, or function quickly"
- 
+
 portability       = dcc "portability"       (nounPhraseSP "portability")
   "the ability of software to be transferred from one machine or system to another"
 
@@ -79,7 +79,7 @@ hwHiding = dcc "hwHiding" (cn "hardware hiding")
 
 modBehavHiding :: ConceptChunk
 modBehavHiding = dccWDS "modBehavHiding" (cn "behaviour hiding") (foldlSent_
-  [S "includes programs that provide externally visible behaviour of the", 
+  [S "includes programs that provide externally visible behaviour of the",
    S "system as specified in the", phrase srs, sParen $ short srs +:+. S "documents",
    S "This module serves as a communication layer between the hardware-hiding module",
    S "and the software decision module. The programs in this module will need",
@@ -96,7 +96,7 @@ modSfwrDecision = dccWDS "modSfwrDecision" (cn' "software decision module") (fol
 modInputFormat :: ConceptChunk
 modInputFormat = dcc "modInputFormat" (cn' "input format module")
   "converts the input data into the data structure used by the input parameters module"
-  
+
 modInputParam :: ConceptChunk
 modInputParam = dccWDS "modInputParam" (cn' "input parameter module") (foldlSent_
   [S "stores the parameters needed for the program, including" +:+. foldlList Comma List
@@ -104,7 +104,7 @@ modInputParam = dccWDS "modInputParam" (cn' "input parameter module") (foldlSent
    S "The values can be read as needed. This module knows how many parameters it stores"])
 
 modInputConstraint :: ConceptChunk
-modInputConstraint = dcc "modInputConstraint" (cn' "input constraint module") 
+modInputConstraint = dcc "modInputConstraint" (cn' "input constraint module")
   ("defines the constraints on the input data and gives an error if " ++
    "a constraint is violated")
 
@@ -151,7 +151,7 @@ modVectorServ :: ConceptChunk
 modVectorServ = dccWDS "modVectorServ" (cn' "vector")
   (S "Provides vector operations such as" +:+ foldlList Comma List [S "addition",
    S "scalar and vector multiplication", S "dot and cross products", S "rotations"])
-  
+
 modPlotDesc :: ConceptChunk
 modPlotDesc = dcc "modPlotDesc" (cn' "plotting") "provides a plot function"
 

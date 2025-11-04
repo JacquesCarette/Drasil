@@ -127,14 +127,14 @@ stripnewLine s = hcat (map text (splitOn "\n" s))
 
 -- | Helper for building Markdown cells
 markdownB, markdownB', markdownE, markdownE' :: Doc
-markdownB  = text "{\n \"cells\": [\n  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [\n" 
-markdownB' = text "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [\n" 
+markdownB  = text "{\n \"cells\": [\n  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [\n"
+markdownB' = text "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [\n"
 markdownE  = text "    \"\\n\"\n   ]\n  },"
 markdownE' = text "    \"\\n\"\n   ]\n  }\n ],"
 
 -- | Helper for building code cells
 codeB, codeE :: Doc
-codeB = text "  {\n   \"cell_type\": \"code\",\n   \"execution_count\": null,\n   \"metadata\": {},\n   \"outputs\": [],\n   \"source\": [" 
+codeB = text "  {\n   \"cell_type\": \"code\",\n   \"execution_count\": null,\n   \"metadata\": {},\n   \"outputs\": [],\n   \"source\": ["
 codeE  = text "\n   ]\n  },"
 
 -- | Helper for generate a Markdown cell
@@ -146,7 +146,7 @@ codeCell :: Doc -> Doc
 codeCell c = codeB <> c <> codeE
 
 -- | Generate the metadata necessary for a notebook document.
-makeMetadata :: Doc  
+makeMetadata :: Doc
 makeMetadata = vcat [
   text " \"metadata\": {",
   vcat [
@@ -169,6 +169,6 @@ makeMetadata = vcat [
   text "   \"version\": \"3.9.1\"",
   text "  }",
   text " },",
-  text " \"nbformat\": 4,", 
-  text " \"nbformat_minor\": 4" 
+  text " \"nbformat\": 4,",
+  text " \"nbformat_minor\": 4"
  ]

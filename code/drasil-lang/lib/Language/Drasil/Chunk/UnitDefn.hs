@@ -28,7 +28,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
 import Language.Drasil.NounPhrase (cn,cn',NP)
 import Language.Drasil.Symbol (Symbol(Label))
-import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), 
+import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift),
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))
 import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (UID, HasUID(..), mkUid)
@@ -40,7 +40,7 @@ import Drasil.Database.UID (UID, HasUID(..), mkUid)
 -- the definition.
 --
 -- Ex. Meter is a unit of length defined by the symbol (m).
-data UnitDefn = UD { _vc :: ConceptChunk 
+data UnitDefn = UD { _vc :: ConceptChunk
                    , _cas :: UnitSymbol
                    , _cu :: [UID] }
 makeLenses ''UnitDefn
@@ -62,8 +62,8 @@ instance Eq            UnitDefn where a == b = usymb a == usymb b
 instance ConceptDomain UnitDefn where cdom = cdom . view vc
 -- | Finds unit symbol of the 'ConceptChunk' used to make the 'UnitDefn'.
 instance HasUnitSymbol UnitDefn where usymb = getUSymb . view cas
--- | Gets the UnitDefn and contributing units. 
-instance IsUnit        UnitDefn where 
+-- | Gets the UnitDefn and contributing units.
+instance IsUnit        UnitDefn where
   udefn = getDefn . view cas  -- Finds unit definition of UnitDefn.
   getUnits = view cu  -- Finds list of contributing units through UIDs from a UnitDefn.
 
@@ -96,7 +96,7 @@ derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitD
 derCUC a b c s ue = UD (dcc a (cn b) c) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [mkUid a]
 -- | Similar to 'derCUC', but the created 'NP' has the 'AddS' plural rule.
 derCUC' a b c s ue = UD (dcc a (cn' b) c) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [mkUid a]
- 
+
 -- | Create a derived unit chunk from a 'UID', term ('String'), definition,
 -- 'Symbol', and unit equation.
 derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
@@ -105,11 +105,11 @@ derUC  a b c s u = UD (dcc a (cn b) c) (DerivedSI (US [(s,1)]) (fromUDefn u) u) 
 -- | Uses term that pluralizes by adding "s" to the end.
 derUC' a b c s u = UD (dcc a (cn' b) c) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
 
--- | Create a derived unit chunk from a 'UID', term ('NP'), definition, 
+-- | Create a derived unit chunk from a 'UID', term ('NP'), definition,
 -- 'Symbol', and unit equation.
 derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
 derCUC'' a b c s ue = UD (dcc a b c) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) (getCu ue)
--- | Create a derived unit chunk from a 'UID', term ('NP'), definition, 
+-- | Create a derived unit chunk from a 'UID', term ('NP'), definition,
 -- 'Symbol', and unit equation.
 derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
 derUC'' a b c s u = UD (dcc a b c) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
@@ -122,7 +122,7 @@ unitCon s = dcc s (cn' s) s
 ---------------------------------------------------------
 
 -- | For allowing lists to mix together chunks that are units by projecting them into a 'UnitDefn'.
--- For now, this only works on 'UnitDefn's. 
+-- For now, this only works on 'UnitDefn's.
 unitWrapper :: (IsUnit u)  => u -> UnitDefn
 unitWrapper u = UD (cc' u (u ^. defn)) (Defined (usymb u) (USynonym $ usymb u)) (getUnits u)
 
@@ -178,7 +178,7 @@ u1 /$ u2 = let US l1 = usymb u1
 u1 ^$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
   UE (getCu u1 ++ getCu u2) (US $ l1 ++ l2)
- 
+
 -- | Combinator for scaling one unit by some number.
 scale :: IsUnit s => Double -> s -> UDefn
 scale a b = UScale a (usymb b)

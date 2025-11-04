@@ -9,13 +9,13 @@ import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force
 concepts :: [IdeaDict]
 concepts = map nw [rod, horizontal, vertical,
   pendMotion, horizontalPos, verticalPos, horizontalVel,horizontalAccel, verticalAccel,
-  verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject] 
+  verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject]
   ++ map nw defs
 
 rod, horizontal, vertical :: IdeaDict
 rod = nc "rod" (cn' "rod")
-horizontal = nc "horizontal" (cn "horizontal") 
-vertical = nc "vertical" (cn "vertical") 
+horizontal = nc "horizontal" (cn "horizontal")
+vertical = nc "vertical" (cn "vertical")
 
 pendMotion, horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce,
   horizontalAccel, verticalAccel, firstRod, secondRod, firstObject, secondObject:: IdeaDict

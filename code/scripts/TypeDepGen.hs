@@ -18,9 +18,9 @@ import System.Directory
 import System.FilePath (takeDirectory)
 import Control.Monad
 import qualified Data.Map as Map
-import qualified DirectoryController as DC (createFolder, createFile, finder, 
+import qualified DirectoryController as DC (createFolder, createFile, finder,
   getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
-import SourceCodeReaderT as SCRT (extractEntryData, EntryData(..), 
+import SourceCodeReaderT as SCRT (extractEntryData, EntryData(..),
   DataDeclRecord(..), DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..),
   DataTypeDeclaration(..))
 import Data.List.Split (splitOn)
@@ -54,7 +54,7 @@ main = do
 
   -- imports configuration settings (drasil- package names + class types order)
   packageNames <- config scriptsDirectory
-  
+
   -- uses ordering (imported from config file) iff imported ordering is complete
   let ordered
         | ldL == lpN = map (getFolder drctyDict) packageNames
@@ -184,7 +184,7 @@ subgraphDTD typeGraph col typeDecl =
 ---------
 
 -- makes Entry data instance
-makeEntry :: DC.DrasilPack -> DC.FileName -> FilePath -> [DataDeclRecord] -> 
+makeEntry :: DC.DrasilPack -> DC.FileName -> FilePath -> [DataDeclRecord] ->
     [DataDeclConstruct] -> [NewtypeDecl] -> [TypeDecl] -> Entry
 makeEntry drpk fn fp dtR dtC ntd td = Entry {drasilPack=drpk,fileName=fn,
   filePath=fp,dataTypeRecords=dtR, dataTypeConstructors=dtC, newtypes=ntd, types=td}
@@ -212,7 +212,7 @@ createEntry homeDirectory file filename = do
 
   -- extracts entry data from File data type
   rEntryData <- SCRT.extractEntryData fn fp
-  
+
   let dataTypeDeclR = SCRT.dRNs rEntryData
       dataTypeDeclC = SCRT.dCNs rEntryData
       newtypeDecl = SCRT.ntNs rEntryData
@@ -231,4 +231,4 @@ getFolder dict name = fromJust $ Map.lookup name dict
 
 -- converts list to dictionary list format (for use by drasil- directories only)
 toDictList :: DC.Folder -> (DC.FolderName,DC.Folder)
-toDictList folder = (DC.folderDrasilPack folder,folder) 
+toDictList folder = (DC.folderDrasilPack folder,folder)

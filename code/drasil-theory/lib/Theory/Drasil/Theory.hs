@@ -45,10 +45,10 @@ data SpaceDefn -- FIXME: This should be defined.
 --      * lb - a label ('SpaceDefn'),
 --      * ra - reference address ('SpaceDefn'),
 --      * notes - additional notes ('Sentence's).
--- 
+--
 -- Right now, neither the definition context (vctx) nor the
 -- spaces (spc) are ever defined.
-data TheoryModel = TM 
+data TheoryModel = TM
   { _mk    :: ModelKind ModelExpr
   , _vctx  :: [TheoryModel]
   , _spc   :: [SpaceDefn]
@@ -85,7 +85,7 @@ instance ConceptDomain      TheoryModel where cdom = cdom . view mk
 instance HasAdditionalNotes TheoryModel where getNotes = notes
 
 -- TODO: I think we should be gathering these from the ModelKinds of the TheoryModel.
---       If we need "more than 1 ModelKind" in the TheoryModel, we may need to create 
+--       If we need "more than 1 ModelKind" in the TheoryModel, we may need to create
 --       a "stacked model" that allows for composing them.
 
 -- | Finds the aspects of the 'Theory' behind the 'TheoryModel'.
@@ -121,14 +121,14 @@ tm :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -
     [ModelExpr] -> [ModelQDef] -> [DecRef] ->
     String -> [Sentence] -> TheoryModel
 tm mkind _ _ _  _   _   [] _   = error $ "Source field of " ++ showUID mkind ++ " is empty"
-tm mkind q c dq inv dfn r  lbe = 
+tm mkind q c dq inv dfn r  lbe =
   TM mkind [] [] (map dqdWr q) (map cw c) dq inv dfn r (shortname' $ S lbe)
       (prependAbrv thModel lbe)
 
 -- | Constructor for theory models. Uses the shortname of the reference address.
 tmNoRefs :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr ->
-    [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> 
+    [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] ->
     String -> [Sentence] -> TheoryModel
-tmNoRefs mkind q c dq inv dfn lbe = 
+tmNoRefs mkind q c dq inv dfn lbe =
   TM mkind [] [] (map dqdWr q) (map cw c) dq inv dfn [] (shortname' $ S lbe)
       (prependAbrv thModel lbe)

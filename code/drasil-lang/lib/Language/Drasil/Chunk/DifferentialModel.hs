@@ -30,7 +30,7 @@ import Language.Drasil.WellTyped (RequiresChecking (requiredChecks))
 import Language.Drasil.Space (Space, HasSpace (..))
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 
--- | Unknown is nth order of the dependent variable 
+-- | Unknown is nth order of the dependent variable
 type Unknown = Integer
 
 -- | Term consist of a coefficient and an unknown (order)
@@ -55,8 +55,8 @@ type LHS = [Term]
 
 -- | Operation represent multiple
 {-
-  e.g. exactDbl 1 $* (opProcessVariable $^^ 2), 
-  exactDbl 1 is the the coefficient, 
+  e.g. exactDbl 1 $* (opProcessVariable $^^ 2),
+  exactDbl 1 is the the coefficient,
   (opProcessVariable $^^ 2) is the 2rd order of opProcessVariable
 -}
 ($**) :: Expr -> Unknown -> Term
@@ -66,7 +66,7 @@ type LHS = [Term]
 {-
   e.g. [exactDbl 1 $* (opProcessVariable $^^ 2)]
        $+ (exactDbl 1 $+ sy qdDerivGain $* (opProcessVariable $^^ 1))
-  [exactDbl 1 $* (opProcessVariable $^^ 2)] is a collection with a single Term, 
+  [exactDbl 1 $* (opProcessVariable $^^ 2)] is a collection with a single Term,
   (exactDbl 1 $+ sy qdDerivGain $* (opProcessVariable $^^ 1)) is the appended element
 -}
 ($++) :: [Term] -> Term -> LHS
@@ -82,7 +82,7 @@ data DifferentialModel = SystemOfLinearODEs {
   _coefficients :: [[Expr]],
   -- | unknowns column vector (orders)
   _unknowns :: [Unknown],
-  -- | constant column vector 
+  -- | constant column vector
   _dmConstants :: [Expr],
   -- | meta data
   _dmconc :: ConceptChunk
@@ -160,10 +160,10 @@ formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy (dqdWr dep))
 -- |   Create a 'DifferentialModel' by giving a independent variable, a dependent variable a canonical matrix form, and conceptChuck.
 {-
   canonical matrix form: Ax = b
-    A is a known m*n matrix that contains coefficients, 
+    A is a known m*n matrix that contains coefficients,
     x is an n-vector that contain derivatives of dependent variables
     b is an m-vector that contain constants
-  conceptChuck: 
+  conceptChuck:
     uid ('String'), term ('NP'), definition ('Sentence').
 -}
 makeASystemDE :: UnitalChunk -> ConstrConcept -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
@@ -229,7 +229,7 @@ findCoefficient u = find(\x -> x ^. unk == u)
 transUnknowns :: [Unknown] -> [Unknown]
 transUnknowns = tail
 
--- | Reduce the target term, move the target to the left hand side and the rest of term to the right hand side. Then, reduce its coefficient-- 
+-- | Reduce the target term, move the target to the left hand side and the rest of term to the right hand side. Then, reduce its coefficient--
 transCoefficients :: [Expr] -> [Expr]
 transCoefficients es
   | head es == exactDbl 1 = mapNeg $ tail es
@@ -248,7 +248,7 @@ addIdentityCoeffs es len index
 constIdentityRowVect :: Int -> Int -> [Expr]
 constIdentityRowVect len index = addIdentityValue index $ replicate len $ exactDbl 0
 
--- | Recreate the identity row vector with identity value 
+-- | Recreate the identity row vector with identity value
 addIdentityValue :: Int -> [Expr] -> [Expr]
 addIdentityValue n es = fst splits ++ [exactDbl 1] ++ tail (snd splits)
   where splits = splitAt n es
@@ -275,7 +275,7 @@ makeAODESolverFormat dm = X' transEs transUnks transConsts
 -- | Form well-formatted ODE equations which the ODE solvers can solve.
 {-
   For example:
-  the original fourth-order ODE: 
+  the original fourth-order ODE:
   y'''' + 3y′′ − sin(t)y′ + 8y = t2
 
   can be re-written to
@@ -284,8 +284,8 @@ makeAODESolverFormat dm = X' transEs transUnks transConsts
 
   0  0      1   0      x₄       0       equation 1
   0  1      0   0      x₃       0       equation 2
-  1  0      0   0      x₂       0       equation 3 
-  0 -3  sin(t) -8      x₁       t^2     equation 4 
+  1  0      0   0      x₂       0       equation 3
+  0 -3  sin(t) -8      x₁       t^2     equation 4
 
   X = x₄,x₃,x₂,x₁ and x₁ = y, x₂ = y', x₃ = y'', x₄ = y'''
 

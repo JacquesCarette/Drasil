@@ -2,13 +2,13 @@
 module Drasil.Projectile.Choices where
 
 import Language.Drasil (Space(..), programName)
-import Language.Drasil.Code (Choices(..), Comments(..), 
-  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
+import Language.Drasil.Code (Choices(..), Comments(..),
+  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
+  Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
   ConstantRepr(..), CodeConcept(..), matchConcepts, SpaceMatch,
-  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit, 
+  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit,
   Architecture(..), makeData, DataInfo(..), Maps(..), makeMaps, spaceToCodeType,
-  makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
+  makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
   makeOptFeats)
 import Drasil.Generator (genCode)
 import Drasil.GOOL (CodeType(..))
@@ -38,9 +38,9 @@ codedDirName n Choices {
   architecture = a,
   optFeats = o,
   dataInfo = d,
-  maps = m} = 
-  intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging $ logConfig o, 
-    codedStruct $ inputStructure d, codedConStruct $ constStructure d, 
+  maps = m} =
+  intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging $ logConfig o,
+    codedStruct $ inputStructure d, codedConStruct $ constStructure d,
     codedConRepr $ constRepr d, codedSpaceMatch $ spaceMatch m]
 
 codedMod :: Modularity -> String
@@ -70,15 +70,15 @@ codedConRepr Const = "C"
 
 codedSpaceMatch :: SpaceMatch -> String
 codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
-                                     [Float, Double] -> "F" 
-                                     _ -> error 
+                                     [Float, Double] -> "F"
+                                     _ -> error
                                        "Unexpected SpaceMatch for Projectile"
 
 choiceCombos :: [Choices]
 choiceCombos = [
   baseChoices {
     lang = [Python, Cpp, CSharp, Java, Swift, Julia]
-  }, 
+  },
   baseChoices {
     architecture = makeArchit Modular Program,
     dataInfo = makeData Bundled (Store Unbundled) Var

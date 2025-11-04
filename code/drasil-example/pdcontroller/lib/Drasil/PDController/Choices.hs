@@ -1,9 +1,9 @@
 module Drasil.PDController.Choices where
 
-import Language.Drasil.Code (AuxFile(..), Choices(..), CodeSpec, Comments(..), 
-  ConstantRepr(..), ConstantStructure(..), ConstraintBehaviour(..), 
-  ImplementationType(..), Lang(..), Modularity(..), Structure(..), 
-  Verbosity(..), Visibility(..), codeSpec, defaultChoices, makeArchit, makeData, 
+import Language.Drasil.Code (AuxFile(..), Choices(..), CodeSpec, Comments(..),
+  ConstantRepr(..), ConstantStructure(..), ConstraintBehaviour(..),
+  ImplementationType(..), Lang(..), Modularity(..), Structure(..),
+  Verbosity(..), Visibility(..), codeSpec, defaultChoices, makeArchit, makeData,
   makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats, ExtLib(..))
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg,

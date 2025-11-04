@@ -9,7 +9,7 @@ import Language.Drasil.Space
 import qualified Language.Drasil.Expr.Lang as E
 import Language.Drasil.ModelExpr.Lang
 
-assocArithOper :: E.AssocArithOper -> AssocArithOper 
+assocArithOper :: E.AssocArithOper -> AssocArithOper
 assocArithOper E.Add  = Add
 assocArithOper E.Mul  = Mul
 
@@ -17,7 +17,7 @@ assocBoolOper :: E.AssocBoolOper -> AssocBoolOper
 assocBoolOper E.And = And
 assocBoolOper E.Or  = Or
 
-assocConcatOper :: E.AssocConcatOper -> AssocConcatOper 
+assocConcatOper :: E.AssocConcatOper -> AssocConcatOper
 assocConcatOper E.SUnion  = SUnion
 
 uFunc :: E.UFunc -> UFunc

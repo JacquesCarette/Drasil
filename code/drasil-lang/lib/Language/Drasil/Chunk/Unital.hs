@@ -47,13 +47,13 @@ instance HasSpace      UnitalChunk where typ = defq' . typ
 -- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
 -- | 'UnitalChunk's have a 'Quantity'.
-instance Quantity      UnitalChunk where 
+instance Quantity      UnitalChunk where
 -- | Finds the unit definition of a 'UnitalChunk'.
 instance Unitary       UnitalChunk where unit = view uni
 -- | Finds the units used to make the 'UnitalChunk'.
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 -- | Finds the units used to make the 'UnitalChunk'.
-instance TempHasUnit       UnitalChunk where findUnit = view uni   
+instance TempHasUnit       UnitalChunk where findUnit = view uni
 -- | Equal if 'UID's are equal.
 instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Convert the symbol of the 'UnitalChunk' to a 'ModelExpr'.

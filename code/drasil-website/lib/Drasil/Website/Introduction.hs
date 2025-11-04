@@ -9,7 +9,7 @@ import Language.Drasil
 
 -- | Creates the about section.
 introSec :: Section
-introSec = 
+introSec =
   section (S "Introduction") -- Title
   [mkParagraph introParagraph1] -- Contents
   [] $ makeSecRef "Introduction" $ S "Introduction" -- Section reference

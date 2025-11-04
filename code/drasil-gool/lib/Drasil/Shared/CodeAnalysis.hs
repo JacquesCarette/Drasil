@@ -3,7 +3,7 @@ module Drasil.Shared.CodeAnalysis (
   HasException(..)
 ) where
 
--- Eq is needed so that the same exception doesn't get added multiple times 
+-- Eq is needed so that the same exception doesn't get added multiple times
 -- to the list of exceptions for a given method.
 data ExceptionType = Standard | FileNotFound | IO deriving Eq
 

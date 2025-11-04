@@ -1,8 +1,8 @@
 module Drasil.GlassBR.Choices where
 
-import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
-  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
+import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
+  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
+  Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
   ConstantRepr(..), AuxFile(..), Visibility(..), makeArchit,
   makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats,
   defaultChoices)
@@ -24,4 +24,3 @@ choices = defaultChoices {
     [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Exception Exception
 }
-  

@@ -32,7 +32,7 @@ verbosityToDoc Quiet = yes
 
 -- | Renderings of comments regarding the default tag values for various Doxygen
 -- settings.
--- 
+--
 -- TODO: `makeDoxConfig` needs access to a `ChunkDB` so that we can re-write
 -- these `Doc`s as `Sentence`s and render them back into `Doc`s appropriately.
 defNo, defYes :: Doc

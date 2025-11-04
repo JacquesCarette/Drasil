@@ -15,7 +15,7 @@ import Data.Char (toLower)
 
 -- | Decorations on symbols/characters such as hats or Vector representations
 -- (determines bolding, italics, etc).
-data Decoration = 
+data Decoration =
     Hat       -- ^ Places a @^@ on top of a symbol.
   | Vector    -- ^ Makes a symbol bold.
   | Prime     -- ^ Appends a @'@ to a symbol.
@@ -26,10 +26,10 @@ data Decoration =
 -- | A 'Symbol' is actually going to be a graphical description of what gets
 -- rendered as a (unique) symbol.  This is actually NOT based on semantics at
 -- all, but just a description of how things look.
--- 
+--
 -- Symbols can be:
--- 
---     * @'Variable'@ (string such as "x" that represent a value that can vary) 
+--
+--     * @'Variable'@ (string such as "x" that represent a value that can vary)
 --     * @'Label'@ (strings such as "max" or "target" that represent a single idea)
 --     * @'Special'@ characters (ex. unicode)
 --     * @Decorated@ symbols using 'Atop'
@@ -37,11 +37,11 @@ data Decoration =
 --     * @'Empty'@! (this is to give this a monoid-like flavour)
 data Symbol =
     Variable String -- ^ Basic variable name creation.
-  | Label    String 
+  | Label    String
     -- ^ For when symbols need more context, but we don't want to add a new variable name.
     -- For example, @v_f@ may be encoded as @Concat [variable "v", label "f"]@.
   | Integ    Int -- ^ For using numbers in Symbols.
-  | Special  Special 
+  | Special  Special
     -- ^ For now, special characters are the degree and partial
     -- differentiation symbols. These should eventually move elsewhere
     -- and the 'Special' type removed.
@@ -102,7 +102,7 @@ compsy :: Symbol -> Symbol -> Ordering
 compsy (Concat x) (Concat y) = complsy x y
 compsy (Concat a) b = complsy a [b]
 compsy b (Concat a) = complsy [b] a
-compsy (Atop d1 a) (Atop d2 a') = 
+compsy (Atop d1 a) (Atop d2 a') =
   case compsy a a' of
     EQ -> compare d1 d2
     other -> other
@@ -193,5 +193,5 @@ compsy Empty Empty    = EQ
 -- | Helper for 'compsy' that compares lower case 'String's.
 compsyLower :: String -> String -> Ordering
 compsyLower x y = case compare (map toLower x) (map toLower y) of
-  EQ    -> compare x y 
+  EQ    -> compare x y
   other -> other

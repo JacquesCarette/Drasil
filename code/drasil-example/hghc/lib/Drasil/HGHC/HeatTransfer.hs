@@ -34,7 +34,7 @@ coolFilmCond = dqdNoUnit (dcc "coolFilmCond" (cn' "initial coolant film conducta
 gapFilmCond  = dqdNoUnit (dcc "gapFilmCond"  (cn' "initial gap film conductance")
   "the initial gap film conductance")
   (sub lH lGap) Real
-cladCond     = dqdNoUnit (dcc "cladCond"     (cnIES "clad conductivity") 
+cladCond     = dqdNoUnit (dcc "cladCond"     (cnIES "clad conductivity")
   "the clad conductivity")
   (sub lK lClad) Real
 
@@ -52,7 +52,7 @@ htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
   EmptyS (sub lH lClad) Real heatTransferCoef htTransCladCoolEq
 
 htTransCladCoolEq =
-  exactDbl 2 $* sy cladCond $* sy coolFilmCond $/ (exactDbl 2 $* sy cladCond $+ (sy cladThick 
+  exactDbl 2 $* sy cladCond $* sy coolFilmCond $/ (exactDbl 2 $* sy cladCond $+ (sy cladThick
   $* sy coolFilmCond))
 
 ---

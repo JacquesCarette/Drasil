@@ -6,6 +6,7 @@ import Drasil.Metadata (inModel)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
@@ -50,11 +51,15 @@ import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
 
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
 
+-- sigh, this is used by others
 fullSI :: System
-fullSI = fillcdbSRS mkSRS si
+fullSI = fst sd
+
+srs :: Document
+srs = mkDoc mkSRS (S.forGen titleize phrase) sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration

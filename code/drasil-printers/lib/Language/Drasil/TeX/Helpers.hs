@@ -102,14 +102,14 @@ mkEnv nm cat d =
 -- | Encapsulate environments with argument with braces.
 mkEnvArgBr :: String -> String -> D -> D
 mkEnvArgBr nm args d =
-  pure (text ("\\begin" ++ H.brace nm ++ H.brace args)) $+$ 
+  pure (text ("\\begin" ++ H.brace nm ++ H.brace args)) $+$
   d $+$
   pure (text ("\\end" ++ H.brace nm))
 
 -- | Encapsulate environments with argument with brackets.
 mkEnvArgSq :: String -> String -> D -> D
 mkEnvArgSq nm args d =
-  pure (text ("\\begin" ++ H.brace nm ++ H.sqbrac args)) $+$ 
+  pure (text ("\\begin" ++ H.brace nm ++ H.sqbrac args)) $+$
   d $+$
   pure (text ("\\end" ++ H.brace nm))
 
@@ -120,7 +120,7 @@ mkMinipage d = command0 "medskip" $+$
 
 -- | For defining (LaTeX) macros.
 comm :: String -> String -> Maybe String -> D
-comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<> 
+comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<>
   maybe TP.empty H.sq s1 TP.<> H.br b2)
 
 -- this one is special enough, let this sub-optimal implementation stand
@@ -138,9 +138,9 @@ genSec d
   | d < 0 = error "Cannot have section with negative depth"
   | d > 3 = error "Section depth must be from 0-2"
   | d == 3 = pure $ H.bslash TP.<> text "paragraph"
-  | otherwise = pure $ 
-     H.bslash TP.<> text (concat $ replicate d "sub") TP.<> text "section" 
-      TP.<> (if not numberedSections then text "*" else TP.empty) 
+  | otherwise = pure $
+     H.bslash TP.<> text (concat $ replicate d "sub") TP.<> text "section"
+      TP.<> (if not numberedSections then text "*" else TP.empty)
 
 -- | For references.
 ref, sref, hyperref, externalref, snref :: String -> D -> D
@@ -174,7 +174,7 @@ usepackage = command "usepackage"
 
 -- | Include graphics with a given max width percentage.
 includegraphics :: MaxWidthPercent -> String -> D
-includegraphics n fp 
+includegraphics n fp
   | ".svg" `isSuffixOf` fp = command1p "includesvg" ("width=" ++ per n ++ "\\textwidth, inkscapelatex = false") fpNoSvg -- in order to use inkscape to render svgs, there can't be a file type appended
   | otherwise = command1p "includegraphics" ("width=" ++ per n ++ "\\textwidth") fp -- still need a case for normal images
   where
@@ -203,7 +203,7 @@ newpage   = command0 "newpage"
 centering = command0 "centering"
 
 -- | Common commands and formatting options for a LaTeX document.
-code, itemize, enumerate, description, description', figure, 
+code, itemize, enumerate, description, description', figure,
   center, document, equation, symbDescription :: D -> D
 code         = mkEnv "lstlisting" ($+$)
 itemize      = mkEnv "itemize" ($+$)
@@ -271,7 +271,7 @@ useTikz = usepackage "luatex85" $+$ command0 "def" <>
   usepackage "tikz" $+$ command "usetikzlibrary" "arrows.meta" $+$
   command "usetikzlibrary" "graphs" $+$ command "usetikzlibrary" "graphdrawing" $+$
   command "usegdlibrary" "layered"
-  
+
 -- * Helpers
 
 -----------------------------------------------------------------------------

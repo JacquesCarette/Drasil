@@ -47,14 +47,14 @@ mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ examples "" "
 -- | Holds individual case studies. System info may not be needed,
 -- but it is still nice to keep around for now.
 data CaseStudy = CS {
-  -- | Each case study needs a name, so use system information. 
+  -- | Each case study needs a name, so use system information.
   systemCS :: System,
   -- | A case study may have different program names for the same example (ex. Projectile).
   progName :: Sentence,
   -- | Each case study has code that is generated from a set of choices.
   choicesCS :: Choices}
 
--- | Converts a list of examples into a list of CaseStudies. 
+-- | Converts a list of examples into a list of CaseStudies.
 -- Currently, projectile is the only one that has more than one set of choices,
 -- so we take the naming scheme from there.
 mkCaseStudy :: Example -> [CaseStudy]

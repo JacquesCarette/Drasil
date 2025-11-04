@@ -73,7 +73,7 @@ type VSType a = VS (a (Type a))
 class TypeSym r where
   type Type r
   bool          :: VSType r
-  int           :: VSType r -- This is 32-bit signed ints except in Python, 
+  int           :: VSType r -- This is 32-bit signed ints except in Python,
                             -- which has unlimited precision ints; and Julia,
                             -- Which defaults to 64-bit signed ints
   float         :: VSType r
@@ -231,7 +231,7 @@ class (VariableSym r, ValueSym r) => ValueExpression r where
   -- An inline if-statement, aka the ternary operator.  Inputs:
   -- Condition, True-value, False-value
   inlineIf     :: SValue r -> SValue r -> SValue r -> SValue r
-  
+
   funcAppMixedArgs     ::            MixedCall r
   extFuncAppMixedArgs  :: Library -> MixedCall r
   libFuncAppMixedArgs  :: Library -> MixedCall r
@@ -297,11 +297,11 @@ class (ValueSym r) => Set r where
   setUnion :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => InternalList r where
-  listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 
+  listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
     -> SVariable r -> SValue r -> MSBlock r
 
 -- | Creates a slice of a list and assigns it to a variable.
---   Arguments are: 
+--   Arguments are:
 --   Variable to assign
 --   List to read from
 --   (optional) Start index inclusive.
@@ -309,7 +309,7 @@ class (ValueSym r) => InternalList r where
 --   (optional) End index exclusive.
 --      (if Nothing, then list end if step > 0, list start if step > 0)
 --   (optional) Step (if Nothing, then defaults to 1)
-listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) -> 
+listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) ->
   Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold
 
@@ -373,7 +373,7 @@ class (VariableSym r, StatementSym r) => AssignStatement r where
 infixr 1 &=
 (&=) = assign
 
-assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r 
+assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r
   -> SValue r -> SValue r -> MSStatement r
 assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
@@ -432,7 +432,7 @@ class (ValueSym r) => FunctionSym r where
   type Function r
 
 -- The three lists are inputs, outputs, and both, respectively
-type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> 
+type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] ->
   MSStatement r
 
 class (VariableSym r, StatementSym r) => FuncAppStatement r where
@@ -458,13 +458,13 @@ class (BodySym r, VariableSym r) => ControlStatement r where
 
   ifExists :: SValue r -> MSBody r -> MSBody r -> MSStatement r
 
-  for      :: MSStatement r -> SValue r -> MSStatement r -> MSBody r -> 
+  for      :: MSStatement r -> SValue r -> MSStatement r -> MSBody r ->
     MSStatement r
   -- Iterator variable, start value, end value, step value, loop body
-  forRange :: SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r -> 
+  forRange :: SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r ->
     MSStatement r
   forEach  :: SVariable r -> SValue r -> MSBody r -> MSStatement r
-  while    :: SValue r -> MSBody r -> MSStatement r 
+  while    :: SValue r -> MSBody r -> MSStatement r
 
   tryCatch :: MSBody r -> MSBody r -> MSStatement r
 
@@ -473,7 +473,7 @@ class (BodySym r, VariableSym r) => ControlStatement r where
 ifNoElse :: (ControlStatement r) => [(SValue r, MSBody r)] -> MSStatement r
 ifNoElse bs = ifCond bs $ body []
 
-switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> 
+switchAsIf :: (ControlStatement r, Comparison r) => SValue r ->
   [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 switchAsIf v = ifCond . map (first (v ?==))
 
@@ -492,12 +492,12 @@ class (VariableSym r) => ParameterSym r where
 type SMethod a = MS (a (Method a))
 
 -- The three lists are inputs, outputs, and both, respectively
-type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] -> 
+type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] ->
   MSBody r -> SMethod r
--- Parameters are: brief description of function, input descriptions and 
--- variables, output descriptions and variables, descriptions and variables 
+-- Parameters are: brief description of function, input descriptions and
+-- variables, output descriptions and variables, descriptions and variables
 -- for parameters that are both input and output, function body
-type DocInOutFunc r = String -> [(String, SVariable r)] -> 
+type DocInOutFunc r = String -> [(String, SVariable r)] ->
   [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 
 class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r
@@ -505,10 +505,10 @@ class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r
   type Method r
   docMain :: MSBody r -> SMethod r
 
-  function :: Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> 
+  function :: Label -> r (Visibility r) -> VSType r -> [MSParameter r] ->
     MSBody r -> SMethod r
   mainFunction  :: MSBody r -> SMethod r
-  -- Parameters are: function description, parameter descriptions, 
+  -- Parameters are: function description, parameter descriptions,
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> SMethod r -> SMethod r
 

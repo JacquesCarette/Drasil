@@ -97,7 +97,7 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
 
 import Drasil.Code.CodeExpr (field)
 
-import Language.Drasil.CodeSpec (CodeSpec(..), OldCodeSpec(..), HasOldCodeSpec(..), 
+import Language.Drasil.CodeSpec (CodeSpec(..), OldCodeSpec(..), HasOldCodeSpec(..),
   codeSpec, funcUID, asVC)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..),
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)

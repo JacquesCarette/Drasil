@@ -21,11 +21,11 @@ import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 data Terminator = Semi | Empty
 
 -- Used for state variables and methods
--- Eq is needed for organizing methods and state variables into public and 
+-- Eq is needed for organizing methods and state variables into public and
 -- private groups for C++ class rendering
 data VisibilityTag = Pub | Priv deriving Eq
 
--- Used in method exception map and call map. 
+-- Used in method exception map and call map.
 -- Qualification first, name second
 -- Eq and Ord needed for map lookups
 data QualifiedName = QN String String deriving (Eq, Ord)
@@ -33,7 +33,7 @@ data QualifiedName = QN String String deriving (Eq, Ord)
 qualName :: String -> String -> QualifiedName
 qualName = QN
 
--- In C++ Source and Header files are separate, other languages have a single 
+-- In C++ Source and Header files are separate, other languages have a single
 -- (Combined) file
 data FileType = Combined | Source | Header -- deriving Eq
 
@@ -41,7 +41,7 @@ isSource :: FileType -> Bool
 isSource Header = False
 isSource _ = True
 
--- Static means bound at compile-time, Dynamic at run-time, used in BindData 
+-- Static means bound at compile-time, Dynamic at run-time, used in BindData
 -- and VarData
 data Binding = Static | Dynamic
 
@@ -84,7 +84,7 @@ updateMod f m = md (name m) (f $ modDoc m)
 newtype MethodData = MthD {mthdDoc :: Doc}
 
 mthd :: Doc -> MethodData
-mthd = MthD 
+mthd = MthD
 
 updateMthd :: MethodData -> (Doc -> Doc) -> MethodData
 updateMthd m f = mthd ((f . mthdDoc) m)
@@ -99,7 +99,7 @@ od = OD
 data ParamData = PD {paramVar :: VarData, paramDoc :: Doc}
 
 pd :: VarData -> Doc -> ParamData
-pd = PD 
+pd = PD
 
 paramName :: ParamData -> String
 paramName = varName . paramVar
@@ -117,7 +117,7 @@ emptyProg :: ProgData
 emptyProg = progD "" "" []
 
 -- Used as the underlying data type for StateVars in the C++ renderer
-data StateVarData = SVD {getStVarScp :: VisibilityTag, stVar :: Doc, 
+data StateVarData = SVD {getStVarScp :: VisibilityTag, stVar :: Doc,
   destructSts :: (Doc, Terminator)}
 
 svd :: VisibilityTag -> Doc -> (Doc, Terminator) -> StateVarData
@@ -151,7 +151,7 @@ updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 updateValDoc f v = vd (valPrec v) (valInt v) (valType v) ((f . val) v)
 
 -- Used as the underlying data type for Variables in all renderers
-data VarData = VarD {varBind :: Binding, varName :: String, 
+data VarData = VarD {varBind :: Binding, varName :: String,
   varType :: TypeData, varDoc :: Doc}
 
 vard :: Binding -> String -> TypeData -> Doc -> VarData

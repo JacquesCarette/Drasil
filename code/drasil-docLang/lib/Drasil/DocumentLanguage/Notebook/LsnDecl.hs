@@ -1,7 +1,7 @@
 -- | Lesson plan notebook section declaration types and functions.
 module Drasil.DocumentLanguage.Notebook.LsnDecl where
 
-import qualified Drasil.DocumentLanguage.Notebook.Core as NB (LsnDesc, LsnChapter(..), 
+import qualified Drasil.DocumentLanguage.Notebook.Core as NB (LsnDesc, LsnChapter(..),
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
 
 import Drasil.System (System)
@@ -29,9 +29,9 @@ mkLsnDesc _ = map sec where
   sec :: LsnChapter -> NB.LsnChapter
   sec (Intro i)     = NB.Intro i
   sec (LearnObj lo) = NB.LearnObj lo
-  sec (Review r)    = NB.Review r  
+  sec (Review r)    = NB.Review r
   sec (CaseProb cp) = NB.CaseProb cp
-  sec (Example e)   = NB.Example e  
+  sec (Example e)   = NB.Example e
   sec (Smmry s)     = NB.Smmry s
   sec BibSec        = NB.BibSec
   sec (Apndx a)     = NB.Apndx a

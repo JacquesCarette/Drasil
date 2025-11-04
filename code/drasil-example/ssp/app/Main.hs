@@ -1,12 +1,12 @@
 module Main (main) where
 
 import GHC.IO.Encoding
-import Drasil.Generator (gen, typeCheckSI, genDot, 
+import Drasil.Generator (gen, typeCheckSI, genDot,
   DocSpec(DocSpec), DocType(SRS), Format(..), docChoices, dumpEverything)
 import Drasil.SSP.Body (srs, printSetting, fullSI)
 -- import Drasil.SSP.Choices
-       
-main :: IO ()            
+
+main :: IO ()
 main = do
   setLocaleEncoding utf8
   dumpEverything fullSI printSetting ".drasil/"

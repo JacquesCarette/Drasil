@@ -1,13 +1,13 @@
 module Main where
 
 import GHC.IO.Encoding
-import Drasil.Generator (gen, typeCheckSI, genDot, 
+import Drasil.Generator (gen, typeCheckSI, genDot,
   DocSpec(DocSpec), DocType(SRS), Format(..), docChoices, dumpEverything)
 import Drasil.SWHS.Body (srs, printSetting, fullSI)
 -- import Drasil.SWHS.Choices (code, choices)
 
 main :: IO ()
-main = 
+main =
   do
     setLocaleEncoding utf8
     dumpEverything fullSI printSetting ".drasil/"
@@ -16,4 +16,4 @@ main =
     genDot fullSI
     -- When ready to generate code from SWHS, uncomment this file and Choices
     -- genCode choices code
-       
+

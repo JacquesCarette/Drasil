@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   AuxFile, Modularity(..), ImplementationType(..), Comments, Verbosity,
-  MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging, 
+  MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging,
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
   CodeSpec(..),  OldCodeSpec(..), getConstraints)

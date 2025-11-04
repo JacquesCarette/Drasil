@@ -9,7 +9,7 @@ module Language.Drasil.HTML.Print(
   -- * HTML Spec Printing
   pSpec,
   -- * Term Fencing Helpers
-  OpenClose(Open, Close), 
+  OpenClose(Open, Close),
   fence) where
 
 import Prelude hiding (print, (<>))
@@ -33,9 +33,9 @@ import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:), Tooltip),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
-import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
+import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author,
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
-  Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
+  Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb),
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sufxPrint)

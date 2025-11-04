@@ -6,7 +6,7 @@ import Text.PrettyPrint (Doc, text, vcat)
 import Language.Drasil hiding (Expr)
 
 -- | Generates the CSS selectors necessary for a document.
-makeCSS :: Document -> Doc  
+makeCSS :: Document -> Doc
 makeCSS _ = vcat [
 -- TODO: Autogenerate necessary css selectors only, make CSS configurable
   text "body {min-width: 400px; max-width: 1400px;}",
@@ -138,6 +138,6 @@ makeCSS _ = vcat [
   ]
 
 -- | Create the link to the necessary CSS file.
-linkCSS :: String -> Doc  
-linkCSS fn = 
+linkCSS :: String -> Doc
+linkCSS fn =
   text $ "<link rel=\"stylesheet\" type=\"text/css\" href=\""++fn++".css\">"

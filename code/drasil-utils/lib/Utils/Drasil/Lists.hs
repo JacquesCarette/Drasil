@@ -72,11 +72,11 @@ toColumn = map (: [])
   The second argument is a list of elements apply the functions to.
 
   For example, @mkTable [id, *5] [1,2,3]@ should produce a table:
-  
+
   > | 1 |  5 |
   > | 2 | 10 |
   > | 3 | 15 |
-  
+
 -}
 mkTable :: [a -> b] -> [a] -> [[b]]
 mkTable fs = map (\x -> map ($ x) fs)

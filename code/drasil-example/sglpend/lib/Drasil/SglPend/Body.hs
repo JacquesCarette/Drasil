@@ -8,6 +8,7 @@ import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
@@ -39,12 +40,15 @@ import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
 import Drasil.SglPend.Requirements (funcReqs)
 
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
+
+-- sigh, this is used by others
+fullSI :: System
+fullSI = fst sd
 
 srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
+srs = mkDoc mkSRS (S.forGen titleize phrase) sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration

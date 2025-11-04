@@ -14,7 +14,7 @@ chaslesWiki, jfBeucheIntro, parnas1978, sciComp2013 :: Citation
 
 citations :: BibRef
 citations = [parnas1978, sciComp2013, chaslesWiki, parnasClements1986,
-  koothoor2013, smithEtAl2007, smithLai2005, smithKoothoor2016, jfBeucheIntro, 
+  koothoor2013, smithEtAl2007, smithLai2005, smithKoothoor2016, jfBeucheIntro,
   cartesianWiki, lineSource, pointSource, dampingSource]
 
 --FIXME: check for references made within document
@@ -33,7 +33,7 @@ jfBeucheIntro = cMisc
 
 parnas1978 = cInProceedings [dParnas]
     "Designing Software for Ease of Extension and Contraction"
-    "ICSE '78: Proceedings of the 3rd international conference on Software engineering" 
+    "ICSE '78: Proceedings of the 3rd international conference on Software engineering"
     1978 [pages [264..277]] "parnas1978"
 
 sciComp2013 = cArticle

@@ -1,5 +1,5 @@
 module Language.Drasil.ICOSolutionSearch where
-    
+
 import Language.Drasil (CodeVarChunk, showUID, DefiningCodeExpr(codeExpr))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Database.Drasil (ChunkDB)

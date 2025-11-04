@@ -167,7 +167,7 @@ data ModelExpr where
   Operator :: AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> ModelExpr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval ModelExpr ModelExpr -> ModelExpr
-  
+
   -- | Universal quantification
   ForAll   :: UID -> Space -> ModelExpr -> ModelExpr
 
@@ -188,7 +188,7 @@ type Variable = String
 --   a              * b              = AssocA Mul [a, b]
 
 --   a - b = ArithBinaryOp Subt a b
-  
+
 --   fromInteger = Int
 --   abs         = UnaryOp Abs
 --   negate      = UnaryOp Neg
@@ -204,7 +204,7 @@ instance Eq ModelExpr where
   Deriv a t1 b c      == Deriv d t2 e f      =   a == d && t1 == t2 && b == e && c == f
   C a                 == C b                 =   a == b
   FCall a b           == FCall c d           =   a == c && b == d
-  Case a b            == Case c d            =   a == c && b == d 
+  Case a b            == Case c d            =   a == c && b == d
   UnaryOp a b         == UnaryOp c d         =   a == c && b == d
   UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
   UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d

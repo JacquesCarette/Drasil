@@ -2,7 +2,7 @@
 -- | Contains the common idea type and respective constructors.
 module Language.Drasil.Chunk.CommonIdea (
   -- * Common Idea datatype
-  CI, 
+  CI,
   -- * Constructors
   commonIdea, commonIdeaWithDict,
   -- * Functions
@@ -37,7 +37,7 @@ instance Idea          CI where getA = Just . view ab
 instance CommonIdea    CI where abrv = view ab
 -- | Finds the domain of a 'CI'.
 instance ConceptDomain CI where cdom = cdom'
-  
+
 -- | The commonIdea smart constructor requires a chunk id ('String'), a
 -- term ('NP'), an abbreviation ('String'), and a domain (['UID']).
 commonIdea :: String -> NP -> String -> [UID] -> CI

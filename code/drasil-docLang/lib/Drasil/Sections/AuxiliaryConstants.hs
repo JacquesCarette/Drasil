@@ -1,5 +1,5 @@
 -- | Defines helper functions for making the Table of Auxiliary Constants section.
-module Drasil.Sections.AuxiliaryConstants 
+module Drasil.Sections.AuxiliaryConstants
   (valsOfAuxConstantsF, tableOfConstants, tableOfConstantsRef) where
 
 import Language.Drasil

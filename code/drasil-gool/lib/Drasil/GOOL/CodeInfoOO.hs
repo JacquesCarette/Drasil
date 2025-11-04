@@ -3,7 +3,7 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (MSBody, VSType, SValue, MSStatement, 
+import Drasil.Shared.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
   VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
@@ -25,9 +25,9 @@ import Drasil.Shared.AST (VisibilityTag(..), qualName)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn, 
-  setClassName, getClassName, setModuleName, getModuleName, addClass, 
-  updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall, 
+  lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn,
+  setClassName, getClassName, setModuleName, getModuleName, addClass,
+  updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall,
   callMapTransClosure, updateMEMWithCalls)
 
 import Control.Monad.State (State, modify)
@@ -37,8 +37,8 @@ import Data.Maybe (fromMaybe)
 
 newtype CodeInfoOO a = CI {unCI :: a} deriving Eq
 
--- FIXME: Use DerivingVia language extension (and maybe DeriveFunctor) to 
--- derive the Functor, Applicative, Monad instances for this 
+-- FIXME: Use DerivingVia language extension (and maybe DeriveFunctor) to
+-- derive the Functor, Applicative, Monad instances for this
 -- (and for JavaCode, PythonCode, etc.)
 instance Functor CodeInfoOO where
   fmap f (CI x) = CI (f x)
@@ -64,7 +64,7 @@ instance ProgramSym CodeInfoOO where
 instance FileSym CodeInfoOO where
   type File CodeInfoOO = ()
   fileDoc = execute1
-  
+
   docMod _ _ _ = execute1
 
 instance PermanenceSym CodeInfoOO where
@@ -203,14 +203,14 @@ instance Comparison CodeInfoOO where
   (?>=) = execute2
   (?==) = execute2
   (?!=) = execute2
-    
+
 instance ValueExpression CodeInfoOO where
   inlineIf = execute3
   funcAppMixedArgs n _ = currModCall n
   extFuncAppMixedArgs l n _ vs ns = do
     sequence_ vs
     executePairList ns
-    addExternalCall l n  
+    addExternalCall l n
   libFuncAppMixedArgs = extFuncAppMixedArgs
 
   lambda _ = execute1
@@ -228,7 +228,7 @@ instance OOValueExpression CodeInfoOO where
     executePairList ns
     addExternalConstructorCall l ot
   libNewObjMixedArgs = extNewObjMixedArgs
-  
+
 instance InternalValueExp CodeInfoOO where
   objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
 
@@ -238,7 +238,7 @@ instance FunctionSym CodeInfoOO where
 instance OOFunctionSym CodeInfoOO where
   func  _ _ = executeList
   objAccess = execute2
-  
+
 instance GetSet CodeInfoOO where
   get v _ = execute1 v
   set v _ = execute2 v
@@ -292,7 +292,7 @@ instance StatementSym CodeInfoOO where
   valStmt = zoom lensMStoVS . execute1
   emptyStmt = noInfo
   multi    = executeList
-  
+
 instance AssignStatement CodeInfoOO where
   assign _ = zoom lensMStoVS . execute1
   (&-=)  _ = zoom lensMStoVS . execute1
@@ -333,7 +333,7 @@ instance IOStatement CodeInfoOO where
   getFileInput v _ = zoom lensMStoVS $ execute1 v
   discardFileInput = zoom lensMStoVS . execute1
 
-  openFileR _ v = modify (addException FileNotFound) >> 
+  openFileR _ v = modify (addException FileNotFound) >>
     execute1 (zoom lensMStoVS v)
   openFileW _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
   openFileA _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
@@ -381,7 +381,7 @@ instance ControlStatement CodeInfoOO where
   ifExists v = execute3 (zoom lensMStoVS v)
 
   for dec v = execute4 dec (zoom lensMStoVS v)
-  forRange _ b e s = execute4 (zoom lensMStoVS b) (zoom lensMStoVS e) 
+  forRange _ b e s = execute4 (zoom lensMStoVS b) (zoom lensMStoVS e)
     (zoom lensMStoVS s)
   forEach _ v = execute2 (zoom lensMStoVS v)
   while v = execute2 (zoom lensMStoVS v)
@@ -389,7 +389,7 @@ instance ControlStatement CodeInfoOO where
   tryCatch _ cb = do
     _ <- cb
     noInfo
-  
+
   assert cond msg = do
     _ <- zoom lensMStoVS cond
     _ <- zoom lensMStoVS msg
@@ -397,7 +397,7 @@ instance ControlStatement CodeInfoOO where
 
 instance ObserverPattern CodeInfoOO where
   notifyObservers f _ = execute1 (zoom lensMStoVS f)
-  
+
 instance StrategyPattern CodeInfoOO where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
@@ -470,7 +470,7 @@ instance ModuleSym CodeInfoOO where
   type Module CodeInfoOO = ()
   buildModule n _ funcs classes = do
     modify (setModuleName n)
-    mapM_ (zoom lensFStoCS) classes 
+    mapM_ (zoom lensFStoCS) classes
     mapM_ (zoom lensFStoMS) funcs
     modifyReturn (updateClassMap n) (toCode ())
 
@@ -488,7 +488,7 @@ updateMEMandCM n b = do
   modify (updateCallMap n . updateMethodExcMap n)
   noInfo
 
-evalConds :: [(SValue CodeInfoOO, MSBody CodeInfoOO)] -> MSBody CodeInfoOO -> 
+evalConds :: [(SValue CodeInfoOO, MSBody CodeInfoOO)] -> MSBody CodeInfoOO ->
   MSStatement CodeInfoOO
 evalConds cs def = do
   mapM_ (zoom lensMStoVS . fst) cs
@@ -498,8 +498,8 @@ evalConds cs def = do
 
 addCurrModCall :: String -> SValue CodeInfoOO
 addCurrModCall n = do
-  mn <- zoom lensVStoFS getModuleName 
-  modify (addCall (qualName mn n)) 
+  mn <- zoom lensVStoFS getModuleName
+  modify (addCall (qualName mn n))
   noInfo
 
 addCurrModConstructorCall :: VSType CodeInfoOO -> SValue CodeInfoOO
@@ -527,32 +527,32 @@ executeList l = do
   sequence_ l
   noInfo
 
-executePairList :: [(State a (CodeInfoOO ()), State a (CodeInfoOO ()))] -> 
+executePairList :: [(State a (CodeInfoOO ()), State a (CodeInfoOO ()))] ->
   State a (CodeInfoOO ())
 executePairList ps = do
   mapM_ fst ps
   mapM_ snd ps
   noInfo
 
-execute2 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) -> 
+execute2 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) ->
   State a (CodeInfoOO ())
 execute2 s1 s2 = do
   _ <- s1
   execute1 s2
 
-execute3 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) -> 
+execute3 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) ->
   State a (CodeInfoOO ()) -> State a (CodeInfoOO ())
 execute3 s1 s2 s3 = do
   _ <- s1
   execute2 s2 s3
 
-execute4 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) -> 
+execute4 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) ->
   State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) -> State a (CodeInfoOO ())
 execute4 s1 s2 s3 s4 = do
   _ <- s1
   execute3 s2 s3 s4
 
-currModCall :: String -> [VS (CodeInfoOO ())] -> 
+currModCall :: String -> [VS (CodeInfoOO ())] ->
   [(VS (CodeInfoOO ()), VS (CodeInfoOO ()))] -> VS (CodeInfoOO ())
 currModCall n ps ns = do
   sequence_ ps

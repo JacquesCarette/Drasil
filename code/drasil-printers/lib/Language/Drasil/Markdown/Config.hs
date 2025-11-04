@@ -40,6 +40,6 @@ mkTitle sm t = text "\"" <> pSpec mempty (spec sm t) <> text "\""
 -- | Map the original filepaths of assets to the location mdBook generator
 -- needs.
 assetMat :: PrintingInformation -> [[Filepath]]
-assetMat pinfo = 
+assetMat pinfo =
   [[fp, "src/assets/" ++ takeFileName fp]
     | LblC { _ctype = Figure _ fp _ _ } <- findAllLabelledContent (pinfo ^. ckdb)]

@@ -2,7 +2,7 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 
--- | Contains chunks related to adding an expression to a quantitative concept. 
+-- | Contains chunks related to adding an expression to a quantitative concept.
 module Language.Drasil.Chunk.Eq (
   -- * Types
   QDefinition,
@@ -121,8 +121,8 @@ mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> e -> QDefinition e
 mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 
 -- HACK - makes the definition EmptyS !!! FIXME
--- | Smart constructor for QDefinitions. Requires a quantity and its defining 
--- equation. 
+-- | Smart constructor for QDefinitions. Requires a quantity and its defining
+-- equation.
 ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
 ec c = QD (dqd' (cc' (nw c) EmptyS) (symbol c) (c ^. typ) (getUnit c)) []
 

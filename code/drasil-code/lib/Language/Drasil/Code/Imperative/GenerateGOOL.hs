@@ -34,7 +34,7 @@ import Control.Lens ((^.))
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImports :: (OOProg r) => Name -> Description -> [Import] ->
-  [GenState (Maybe (SMethod r))] -> [GenState (Maybe (SClass r))] -> 
+  [GenState (Maybe (SMethod r))] -> [GenState (Maybe (SClass r))] ->
   GenState (OO.SFile r)
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get

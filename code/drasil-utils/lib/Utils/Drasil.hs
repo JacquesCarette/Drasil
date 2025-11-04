@@ -12,7 +12,7 @@ module Utils.Drasil (
   -- * Language
   -- | From "Utils.Drasil.English".
   capitalize, stringList,
-  
+
   -- * Lists
   -- | From "Utils.Drasil.Lists". General functions involving lists.
   splitAtAll, mergeAll,

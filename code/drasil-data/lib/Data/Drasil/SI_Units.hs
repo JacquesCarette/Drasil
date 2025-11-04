@@ -11,9 +11,10 @@ fundamentals :: [UnitDefn]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 
 derived :: [UnitDefn]
-derived = [becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
-  katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
-  pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber]
+derived = [becquerel, centigrade, coulomb, hertz, joule, katal, litre,
+  millimetre, newton, pascal, radian, steradian, watt, kilowatt, volt, weber,
+  tesla, henry, calorie, gray, sievert, kilopascal, lumen, lux, farad, ohm,
+  siemens]
 
 common :: [UnitDefn]
 common = [s_2, m_2, m_3]

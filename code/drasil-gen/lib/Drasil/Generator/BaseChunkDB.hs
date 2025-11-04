@@ -6,6 +6,7 @@ module Drasil.Generator.BaseChunkDB (
 import Database.Drasil (empty, idMap, insertAll, ChunkDB(refTable, labelledcontentTable))
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
   DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
+import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Education (educon)
@@ -16,6 +17,9 @@ import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.SI_Units (siUnits)
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
+import Control.Lens ((^.))
+import qualified Data.Set as Set
+import Drasil.Database.UID (uid)
 
 basisSymbols :: [DefinedQuantityDict]
 basisSymbols =
@@ -69,15 +73,19 @@ basisConceptChunks =
   --              in the basis.
   [algorithm, errMsg, program] ++ srsDomains ++ mathcon
 
+basisCitations :: [Citation]
+basisCitations = [cartesianWiki, lineSource, pointSource]
+
 -- | The basis chunk database, which contains the basic idea dicts, concept chunks,
 --  and units that are used in all of the case studies. This database is then added
 -- to all of the new chunk databases created using the cdb constructor.
 basisCDB :: ChunkDB
 basisCDB =
-    insertAll siUnits
-  $ insertAll basisConceptChunks
-  $ insertAll basisSymbols
+    insertAll basisConceptChunks
+  $ insertAll basisCitations
   $ insertAll basisIdeaDicts
+  $ insertAll basisSymbols
+  $ insertAll siUnits
     empty
 
   -- | Smart constructor for chunk databases. Takes in the following:
@@ -97,16 +105,23 @@ basisCDB =
 cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
     [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
     [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
-cdb s t c u d ins gd tm ci lc r cits =
-    insertAll s
-  $ insertAll t
-  $ insertAll c
-  $ insertAll u
-  $ insertAll d
-  $ insertAll ins
-  $ insertAll gd
-  $ insertAll tm
-  $ insertAll ci
-  $ insertAll cits
-  $ basisCDB { labelledcontentTable = idMap lc,
-               refTable = idMap r }
+cdb s t c u d ins gd tm ci lc r cits = finalDB
+  where
+    baseDB = basisCDB { labelledcontentTable = idMap lc,
+                        refTable = idMap r }
+    withIdeaDicts = insertAll t baseDB
+    withCitations = insertAll cits withIdeaDicts
+    withReferences = insertAll refsSansCitations withCitations
+    withConceptChunks = insertAll conceptChunksSansDQDs withReferences
+    withUnits = insertAll u withConceptChunks
+    withDefinedQuants = insertAll s withUnits
+    withDataDefs = insertAll d withDefinedQuants
+    withInstMods = insertAll ins withDataDefs
+    withGenDefs = insertAll gd withInstMods
+    withTheoryMods = insertAll tm withGenDefs
+    finalDB = insertAll ci withTheoryMods
+
+    dqUIDs = Set.fromList (map (^. uid) s)
+    conceptChunksSansDQDs = filter (\cc -> (cc ^. uid) `Set.notMember` dqUIDs) c
+    citationUIDs = Set.fromList (map (^. uid) cits)
+    refsSansCitations = filter (\refChunk -> (refChunk ^. uid) `Set.notMember` citationUIDs) r

@@ -3509,6 +3509,219 @@ precC :: AssocConcatOper -> Int
 -- | eprec - <a>Expression</a> precedence.
 eprec :: Expr -> Int
 
+module Language.Drasil.Expr.Class
+class ExprC r
+lit :: ExprC r => Literal -> r
+($=) :: ExprC r => r -> r -> r
+($!=) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for ordering two equations.
+($<) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for ordering two equations.
+($>) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for ordering two equations.
+($<=) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for ordering two equations.
+($>=) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for the dot product of two equations.
+($.) :: ExprC r => r -> r -> r
+
+-- | Add two expressions.
+($+) :: ExprC r => r -> r -> r
+
+-- | Multiply two expressions.
+($*) :: ExprC r => r -> r -> r
+($-) :: ExprC r => r -> r -> r
+($/) :: ExprC r => r -> r -> r
+($^) :: ExprC r => r -> r -> r
+($=>) :: ExprC r => r -> r -> r
+($<=>) :: ExprC r => r -> r -> r
+($&&) :: ExprC r => r -> r -> r
+($||) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for set-theoretic membership relation. Added ' to
+--   avoid conflict.
+in' :: ExprC r => r -> r -> r
+
+-- | Smart constructor for taking the absolute value of an expression.
+abs_ :: ExprC r => r -> r
+
+-- | Smart constructor for negating an expression.
+neg :: ExprC r => r -> r
+
+-- | Smart constructor to take the log of an expression.
+log :: ExprC r => r -> r
+
+-- | Smart constructor to take the ln of an expression.
+ln :: ExprC r => r -> r
+
+-- | Smart constructor to take the square root of an expression.
+sqrt :: ExprC r => r -> r
+
+-- | Smart constructor to apply sin to an expression.
+sin :: ExprC r => r -> r
+
+-- | Smart constructor to apply cos to an expression.
+cos :: ExprC r => r -> r
+
+-- | Smart constructor to apply tan to an expression.
+tan :: ExprC r => r -> r
+
+-- | Smart constructor to apply sec to an expression.
+sec :: ExprC r => r -> r
+
+-- | Smart constructor to apply csc to an expression.
+csc :: ExprC r => r -> r
+
+-- | Smart constructor to apply cot to an expression.
+cot :: ExprC r => r -> r
+
+-- | Smart constructor to apply arcsin to an expression.
+arcsin :: ExprC r => r -> r
+
+-- | Smart constructor to apply arccos to an expression.
+arccos :: ExprC r => r -> r
+
+-- | Smart constructor to apply arctan to an expression.
+arctan :: ExprC r => r -> r
+
+-- | Smart constructor for the exponential (base e) function.
+exp :: ExprC r => r -> r
+
+-- | Smart constructor for calculating the dimension of a vector.
+dim :: ExprC r => r -> r
+
+-- | Smart constructor for calculating the normal form of a vector.
+norm :: ExprC r => r -> r
+
+-- | Smart constructor for negating vectors.
+negVec :: ExprC r => r -> r
+
+-- | Smart constructor for applying logical negation to an expression.
+not_ :: ExprC r => r -> r
+
+-- | Smart constructor for indexing.
+idx :: ExprC r => r -> r -> r
+
+-- | Smart constructor for indexOf. Finds the index of the first occurrence
+--   of a value in a list.
+idxOf :: ExprC r => r -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
+defint :: ExprC r => Symbol -> r -> r -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
+defsum :: ExprC r => Symbol -> r -> r -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
+defprod :: ExprC r => Symbol -> r -> r -> r -> r
+
+-- | Smart constructor for 'real interval' membership.
+realInterval :: (ExprC r, HasUID c) => c -> RealInterval r r -> r
+
+-- | Euclidean function : takes a vector and returns the sqrt of the
+--   sum-of-squares.
+euclidean :: ExprC r => [r] -> r
+
+-- | Smart constructor to cross product two expressions.
+cross :: ExprC r => r -> r -> r
+
+-- | Smart constructor for vector scaling
+vScale :: ExprC r => r -> r -> r
+
+-- | Vector Addition
+vAdd :: ExprC r => r -> r -> r
+
+-- | Vector Subtraction
+vSub :: ExprC r => r -> r -> r
+
+-- | Smart constructor for case statements with a complete set of cases.
+completeCase :: ExprC r => [(r, r)] -> r
+
+-- | Smart constructor for case statements with an incomplete set of cases.
+incompleteCase :: ExprC r => [(r, r)] -> r
+
+-- | Create a matrix.
+matrix :: ExprC r => [[r]] -> r
+
+-- | Create a Set.
+set' :: ExprC r => Space -> [r] -> r
+
+-- | Applies a given function with a list of parameters.
+apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
+
+-- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
+sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
+infixr 4 $=
+infixl 7 $/
+infixr 8 $^
+infixr 9 $&&
+infixr 9 $||
+
+-- | Smart constructor for fractions.
+frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
+
+-- | Smart constructor for rational expressions (only in 1/x form).
+recip_ :: (ExprC r, LiteralC r) => r -> r
+
+-- | Smart constructor to square a function.
+square :: (ExprC r, LiteralC r) => r -> r
+
+-- | Smart constructor to half a function exactly.
+half :: (ExprC r, LiteralC r) => r -> r
+
+-- | 1/2, as an expression.
+oneHalf :: (ExprC r, LiteralC r) => r
+
+-- | 1/3rd, as an expression.
+oneThird :: (ExprC r, LiteralC r) => r
+
+-- | Similar to <a>apply</a>, but converts second argument into
+--   <a>Symbol</a>s.
+apply1 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
+
+-- | Similar to <a>apply</a>, but the applied function takes two parameters
+--   (which are both <a>Symbol</a>s).
+apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> r
+
+-- | Create a two-by-two matrix from four given values. For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; m2x2 1 2 3 4
+--   [ [1,2],
+--     [3,4] ]
+--   </pre>
+m2x2 :: ExprC r => r -> r -> r -> r -> r
+
+-- | Create a 2D vector (a matrix with two rows, one column). First
+--   argument is placed above the second.
+vec2D :: ExprC r => r -> r -> r
+
+-- | Creates a diagonal two-by-two matrix. For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; dgnl2x2 1 2
+--   [ [1, 0],
+--     [0, 2] ]
+--   </pre>
+dgnl2x2 :: (ExprC r, LiteralC r) => r -> r -> r
+
+-- | Create a row vector
+rowVec :: ExprC r => [r] -> r
+
+-- | Create a column vector
+columnVec :: ExprC r => [r] -> r
+mkSet :: ExprC r => Space -> [r] -> r
+instance Language.Drasil.Expr.Class.ExprC Language.Drasil.Expr.Lang.Expr
+instance Language.Drasil.Expr.Class.ExprC Language.Drasil.ModelExpr.Lang.ModelExpr
+
 
 -- | Defines types and functions for constrained values.
 module Language.Drasil.Constraint
@@ -4321,6 +4534,122 @@ instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Relation.Re
 instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Relation.RelationConcept
 
 
+-- | Contains types that define quantities from concepts.
+module Language.Drasil.Chunk.DefinedQuantity
+
+-- | DefinedQuantityDict is the combination of a <a>Concept</a> and a
+--   <a>Quantity</a>. Contains a <a>ConceptChunk</a>, a <a>Symbol</a>
+--   dependent on <a>Stage</a>, a <a>Space</a>, and maybe a
+--   <a>UnitDefn</a>. Used when we want to assign a quantity to a concept.
+--   Includes the space, symbol, and units for that quantity.
+--   
+--   Ex. A pendulum arm can be defined as a concept with a symbol (l),
+--   space (Real numbers), and units (cm, m, etc.).
+data DefinedQuantityDict
+class DefinesQuantity d
+defLhs :: DefinesQuantity d => Getter d DefinedQuantityDict
+
+-- | Smart constructor that creates a DefinedQuantityDict with a
+--   <a>ConceptChunk</a>, a <a>Symbol</a> independent of <a>Stage</a>, a
+--   <a>Space</a>, and a unit.
+dqd :: IsUnit u => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
+
+-- | Similar to <a>dqd</a>, but without any units.
+dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
+dqdNoUnit' :: ConceptChunk -> (Stage -> Symbol) -> Space -> DefinedQuantityDict
+
+-- | Similar to <a>dqd</a>, but the <a>Symbol</a> is now dependent on the
+--   <a>Stage</a>.
+dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict
+
+-- | When we want to merge a quantity and a concept. This is suspicious.
+dqdQd :: (Quantity c, MayHaveUnit c) => c -> Sentence -> DefinedQuantityDict
+
+-- | When the input already has all the necessary information. A
+--   <tt>projection</tt> operator from some a type with instances of listed
+--   classes to a <a>DefinedQuantityDict</a>.
+dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
+
+-- | Makes a variable that is implementation-only.
+implVar :: String -> NP -> String -> Space -> Symbol -> DefinedQuantityDict
+
+-- | Similar to <a>implVar</a>, but takes in a <a>Sentence</a> for the
+--   description rather than a <a>String</a>.
+implVar' :: String -> NP -> Sentence -> Space -> Symbol -> DefinedQuantityDict
+
+-- | Similar to <a>implVar</a> but allows specification of abbreviation and
+--   unit.
+implVarAU :: String -> NP -> String -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> DefinedQuantityDict
+
+-- | Similar to <a>implVarAU</a> but takes a Sentence for the description
+--   rather than a String.
+implVarAU' :: String -> NP -> Sentence -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> DefinedQuantityDict
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance GHC.Classes.Eq Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+
+
+-- | Defines chunks to add units to a quantity. Similar to
+--   <tt>UnitaryChunk</tt>.
+module Language.Drasil.Chunk.Unital
+
+-- | Similar to a <a>DefinedQuantityDict</a>, UnitalChunks are concepts
+--   with quantities that must have a unit definition. Contains
+--   <a>DefinedQuantityDict</a>s and a <a>UnitDefn</a>.
+--   
+--   Ex. A pendulum arm is a tangible object with a symbol (l) and units
+--   (cm, m, etc.).
+data UnitalChunk
+UC :: DefinedQuantityDict -> UnitDefn -> UnitalChunk
+[_defq'] :: UnitalChunk -> DefinedQuantityDict
+[_uni] :: UnitalChunk -> UnitDefn
+
+-- | Used to create a <a>UnitalChunk</a> from a <a>Concept</a>,
+--   <a>Symbol</a>, and <tt>Unit</tt>.
+uc :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
+
+-- | Similar to <a>uc</a>, except it builds the <a>Concept</a> portion of
+--   the <a>UnitalChunk</a> from a given <tt>UID</tt>, term, and definition
+--   (as a <a>Sentence</a>) which are its first three arguments.
+uc' :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalChunk
+
+-- | Similar to <a>uc</a>, but <a>Symbol</a> is dependent on the
+--   <a>Stage</a>.
+ucStaged :: (Concept c, IsUnit u) => c -> (Stage -> Symbol) -> Space -> u -> UnitalChunk
+
+-- | Similar to <a>uc'</a>, but <a>Symbol</a> is dependent on the
+--   <a>Stage</a>.
+ucStaged' :: IsUnit u => String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> UnitalChunk
+
+-- | Attach units to a chunk that has a symbol and definition.
+ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
+
+-- | Constructs a UnitalChunk from a <a>Concept</a> with <tt>Units</tt>.
+ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Chunk.Unitary.Unitary Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Chunk.UnitDefn.TempHasUnit Language.Drasil.Chunk.Unital.UnitalChunk
+instance GHC.Classes.Eq Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Unital.UnitalChunk
+
+
 -- | Contains the common idea type and respective constructors.
 module Language.Drasil.Chunk.CommonIdea
 
@@ -4351,6 +4680,96 @@ instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CommonI
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CommonIdea.CI
 instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.CommonIdea.CI
 instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.CommonIdea.CI
+
+
+-- | Add constraints and a reasonable value to chunks that are quantities.
+module Language.Drasil.Chunk.Constrained
+
+-- | ConstrConcepts are conceptual symbolic quantities
+--   (<a>DefinedQuantityDict</a>) with <tt>Constraint</tt>s and maybe a
+--   reasonable value (no units!). Similar to <tt>ConstrainedChunk</tt> but
+--   includes a definition and domain.
+--   
+--   Ex. Measuring the length of a pendulum arm could be a concept that has
+--   some reasonable value (between 1 cm and 2 m) and the constraint that
+--   the length cannot be a negative value.
+data ConstrConcept
+ConstrConcept :: DefinedQuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrConcept
+[_defq] :: ConstrConcept -> DefinedQuantityDict
+[_constr'] :: ConstrConcept -> [ConstraintE]
+[_reasV'] :: ConstrConcept -> Maybe Expr
+
+-- | Similar to <tt>cnstrw</tt>, but types must also have a <a>Concept</a>.
+cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
+
+-- | Creates a <a>ConstrConcept</a> with a quantitative concept, a list of
+--   <tt>Constraint</tt>s and an <a>Expr</a>.
+constrained' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> Expr -> ConstrConcept
+
+-- | Similar to <a>constrained'</a>, but defaults <a>Maybe</a> <a>Expr</a>
+--   to <a>Nothing</a>.
+constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> ConstrConcept
+
+-- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
+--   (<a>NP</a>), description (<a>String</a>), <a>Symbol</a>, unit,
+--   <a>Space</a>, <tt>Constraint</tt>s, and an <a>Expr</a>.
+cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
+
+-- | Similar to <a>cuc'</a>, but <a>Symbol</a> is dependent on
+--   <a>Stage</a>.
+cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
+
+-- | Similar to cuc', but does not include a unit.
+cucNoUnit' :: String -> NP -> String -> Symbol -> Space -> [ConstraintE] -> Expr -> ConstrConcept
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.ConstrConcept
+instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Constrained.ConstrConcept
+
+
+-- | For adding an uncertainty value to quantities with constraints.
+module Language.Drasil.Chunk.UncertainQuantity
+
+-- | UncertQs are conceptual symbolic quantities with constraints and an
+--   <a>Uncertainty</a>. Contains a <a>ConstrConcept</a> and an
+--   <a>Uncertainty</a>.
+--   
+--   Ex. Measuring the length of a pendulum arm may be recorded with an
+--   uncertainty value.
+data UncertQ
+
+-- | Smart constructor that requires a <a>Quantity</a>, a percentage, and a
+--   typical value with an <a>Uncertainty</a>.
+uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertQ
+
+-- | Uncertainty quantity (<a>uq</a>) but with a constraint.
+uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
+
+-- | Uncertainty quantity constraint (<a>uqc</a>) without a description.
+uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
+instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Uncertainty.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.UncertainQuantity.UncertQ
 
 module Drasil.Code.CodeExpr.Lang
 
@@ -4559,7 +4978,7 @@ data CodeExpr
 [ESBBinaryOp] :: ESBBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
 -- | Operators are generalized arithmetic operators over a
---   <tt>DomainDesc</tt> of an <tt>Expr</tt>. Could be called BigOp. ex:
+--   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
 --   Summation is represented via <a>Add</a> over a discrete domain.
 [Operator] :: AssocArithOper -> DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
 
@@ -4585,426 +5004,7 @@ instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFuncB
 instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFuncVV
 instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFuncVN
 instance Language.Drasil.Literal.Class.LiteralC Drasil.Code.CodeExpr.Lang.CodeExpr
-
-module Language.Drasil.Expr.Class
-class ExprC r
-lit :: ExprC r => Literal -> r
-($=) :: ExprC r => r -> r -> r
-($!=) :: ExprC r => r -> r -> r
-
--- | Smart constructor for ordering two equations.
-($<) :: ExprC r => r -> r -> r
-
--- | Smart constructor for ordering two equations.
-($>) :: ExprC r => r -> r -> r
-
--- | Smart constructor for ordering two equations.
-($<=) :: ExprC r => r -> r -> r
-
--- | Smart constructor for ordering two equations.
-($>=) :: ExprC r => r -> r -> r
-
--- | Smart constructor for the dot product of two equations.
-($.) :: ExprC r => r -> r -> r
-
--- | Add two expressions.
-($+) :: ExprC r => r -> r -> r
-
--- | Multiply two expressions.
-($*) :: ExprC r => r -> r -> r
-($-) :: ExprC r => r -> r -> r
-($/) :: ExprC r => r -> r -> r
-($^) :: ExprC r => r -> r -> r
-($=>) :: ExprC r => r -> r -> r
-($<=>) :: ExprC r => r -> r -> r
-($&&) :: ExprC r => r -> r -> r
-($||) :: ExprC r => r -> r -> r
-
--- | Smart constructor for set-theoretic membership relation. Added ' to
---   avoid conflict.
-in' :: ExprC r => r -> r -> r
-
--- | Smart constructor for taking the absolute value of an expression.
-abs_ :: ExprC r => r -> r
-
--- | Smart constructor for negating an expression.
-neg :: ExprC r => r -> r
-
--- | Smart constructor to take the log of an expression.
-log :: ExprC r => r -> r
-
--- | Smart constructor to take the ln of an expression.
-ln :: ExprC r => r -> r
-
--- | Smart constructor to take the square root of an expression.
-sqrt :: ExprC r => r -> r
-
--- | Smart constructor to apply sin to an expression.
-sin :: ExprC r => r -> r
-
--- | Smart constructor to apply cos to an expression.
-cos :: ExprC r => r -> r
-
--- | Smart constructor to apply tan to an expression.
-tan :: ExprC r => r -> r
-
--- | Smart constructor to apply sec to an expression.
-sec :: ExprC r => r -> r
-
--- | Smart constructor to apply csc to an expression.
-csc :: ExprC r => r -> r
-
--- | Smart constructor to apply cot to an expression.
-cot :: ExprC r => r -> r
-
--- | Smart constructor to apply arcsin to an expression.
-arcsin :: ExprC r => r -> r
-
--- | Smart constructor to apply arccos to an expression.
-arccos :: ExprC r => r -> r
-
--- | Smart constructor to apply arctan to an expression.
-arctan :: ExprC r => r -> r
-
--- | Smart constructor for the exponential (base e) function.
-exp :: ExprC r => r -> r
-
--- | Smart constructor for calculating the dimension of a vector.
-dim :: ExprC r => r -> r
-
--- | Smart constructor for calculating the normal form of a vector.
-norm :: ExprC r => r -> r
-
--- | Smart constructor for negating vectors.
-negVec :: ExprC r => r -> r
-
--- | Smart constructor for applying logical negation to an expression.
-not_ :: ExprC r => r -> r
-
--- | Smart constructor for indexing.
-idx :: ExprC r => r -> r -> r
-
--- | Smart constructor for indexOf. Finds the index of the first occurrence
---   of a value in a list.
-idxOf :: ExprC r => r -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over an interval.
-defint :: ExprC r => Symbol -> r -> r -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over an interval.
-defsum :: ExprC r => Symbol -> r -> r -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over an interval.
-defprod :: ExprC r => Symbol -> r -> r -> r -> r
-
--- | Smart constructor for 'real interval' membership.
-realInterval :: (ExprC r, HasUID c) => c -> RealInterval r r -> r
-
--- | Euclidean function : takes a vector and returns the sqrt of the
---   sum-of-squares.
-euclidean :: ExprC r => [r] -> r
-
--- | Smart constructor to cross product two expressions.
-cross :: ExprC r => r -> r -> r
-
--- | Smart constructor for vector scaling
-vScale :: ExprC r => r -> r -> r
-
--- | Vector Addition
-vAdd :: ExprC r => r -> r -> r
-
--- | Vector Subtraction
-vSub :: ExprC r => r -> r -> r
-
--- | Smart constructor for case statements with a complete set of cases.
-completeCase :: ExprC r => [(r, r)] -> r
-
--- | Smart constructor for case statements with an incomplete set of cases.
-incompleteCase :: ExprC r => [(r, r)] -> r
-
--- | Create a matrix.
-matrix :: ExprC r => [[r]] -> r
-
--- | Create a Set.
-set' :: ExprC r => Space -> [r] -> r
-
--- | Applies a given function with a list of parameters.
-apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
-
--- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
-sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
-infixr 4 $=
-infixl 7 $/
-infixr 8 $^
-infixr 9 $&&
-infixr 9 $||
-
--- | Smart constructor for fractions.
-frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
-
--- | Smart constructor for rational expressions (only in 1/x form).
-recip_ :: (ExprC r, LiteralC r) => r -> r
-
--- | Smart constructor to square a function.
-square :: (ExprC r, LiteralC r) => r -> r
-
--- | Smart constructor to half a function exactly.
-half :: (ExprC r, LiteralC r) => r -> r
-
--- | 1/2, as an expression.
-oneHalf :: (ExprC r, LiteralC r) => r
-
--- | 1/3rd, as an expression.
-oneThird :: (ExprC r, LiteralC r) => r
-
--- | Similar to <a>apply</a>, but converts second argument into
---   <a>Symbol</a>s.
-apply1 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
-
--- | Similar to <a>apply</a>, but the applied function takes two parameters
---   (which are both <a>Symbol</a>s).
-apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> r
-
--- | Create a two-by-two matrix from four given values. For example:
---   
---   <pre>
---   &gt;&gt;&gt; m2x2 1 2 3 4
---   [ [1,2],
---     [3,4] ]
---   </pre>
-m2x2 :: ExprC r => r -> r -> r -> r -> r
-
--- | Create a 2D vector (a matrix with two rows, one column). First
---   argument is placed above the second.
-vec2D :: ExprC r => r -> r -> r
-
--- | Creates a diagonal two-by-two matrix. For example:
---   
---   <pre>
---   &gt;&gt;&gt; dgnl2x2 1 2
---   [ [1, 0],
---     [0, 2] ]
---   </pre>
-dgnl2x2 :: (ExprC r, LiteralC r) => r -> r -> r
-
--- | Create a row vector
-rowVec :: ExprC r => [r] -> r
-
--- | Create a column vector
-columnVec :: ExprC r => [r] -> r
-mkSet :: ExprC r => Space -> [r] -> r
-instance Language.Drasil.Expr.Class.ExprC Language.Drasil.Expr.Lang.Expr
-instance Language.Drasil.Expr.Class.ExprC Language.Drasil.ModelExpr.Lang.ModelExpr
 instance Language.Drasil.Expr.Class.ExprC Drasil.Code.CodeExpr.Lang.CodeExpr
-
-
--- | Contains types that define quantities from concepts.
-module Language.Drasil.Chunk.DefinedQuantity
-
--- | DefinedQuantityDict is the combination of a <a>Concept</a> and a
---   <a>Quantity</a>. Contains a <a>ConceptChunk</a>, a <a>Symbol</a>
---   dependent on <a>Stage</a>, a <a>Space</a>, and maybe a
---   <a>UnitDefn</a>. Used when we want to assign a quantity to a concept.
---   Includes the space, symbol, and units for that quantity.
---   
---   Ex. A pendulum arm can be defined as a concept with a symbol (l),
---   space (Real numbers), and units (cm, m, etc.).
-data DefinedQuantityDict
-class DefinesQuantity d
-defLhs :: DefinesQuantity d => Getter d DefinedQuantityDict
-
--- | Smart constructor that creates a DefinedQuantityDict with a
---   <a>ConceptChunk</a>, a <a>Symbol</a> independent of <a>Stage</a>, a
---   <a>Space</a>, and a unit.
-dqd :: IsUnit u => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
-
--- | Similar to <a>dqd</a>, but without any units.
-dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
-dqdNoUnit' :: ConceptChunk -> (Stage -> Symbol) -> Space -> DefinedQuantityDict
-
--- | Similar to <a>dqd</a>, but the <a>Symbol</a> is now dependent on the
---   <a>Stage</a>.
-dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict
-
--- | When we want to merge a quantity and a concept. This is suspicious.
-dqdQd :: (Quantity c, MayHaveUnit c) => c -> Sentence -> DefinedQuantityDict
-
--- | When the input already has all the necessary information. A
---   <tt>projection</tt> operator from some a type with instances of listed
---   classes to a <a>DefinedQuantityDict</a>.
-dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
-
--- | Makes a variable that is implementation-only.
-implVar :: String -> NP -> String -> Space -> Symbol -> DefinedQuantityDict
-
--- | Similar to <a>implVar</a>, but takes in a <a>Sentence</a> for the
---   description rather than a <a>String</a>.
-implVar' :: String -> NP -> Sentence -> Space -> Symbol -> DefinedQuantityDict
-
--- | Similar to <a>implVar</a> but allows specification of abbreviation and
---   unit.
-implVarAU :: String -> NP -> String -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> DefinedQuantityDict
-
--- | Similar to <a>implVarAU</a> but takes a Sentence for the description
---   rather than a String.
-implVarAU' :: String -> NP -> Sentence -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> DefinedQuantityDict
-instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance GHC.Classes.Eq Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-
-
--- | Defines chunks to add units to a quantity. Similar to
---   <tt>UnitaryChunk</tt>.
-module Language.Drasil.Chunk.Unital
-
--- | Similar to a <a>DefinedQuantityDict</a>, UnitalChunks are concepts
---   with quantities that must have a unit definition. Contains
---   <a>DefinedQuantityDict</a>s and a <a>UnitDefn</a>.
---   
---   Ex. A pendulum arm is a tangible object with a symbol (l) and units
---   (cm, m, etc.).
-data UnitalChunk
-UC :: DefinedQuantityDict -> UnitDefn -> UnitalChunk
-[_defq'] :: UnitalChunk -> DefinedQuantityDict
-[_uni] :: UnitalChunk -> UnitDefn
-
--- | Used to create a <a>UnitalChunk</a> from a <a>Concept</a>,
---   <a>Symbol</a>, and <tt>Unit</tt>.
-uc :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
-
--- | Similar to <a>uc</a>, except it builds the <a>Concept</a> portion of
---   the <a>UnitalChunk</a> from a given <tt>UID</tt>, term, and definition
---   (as a <a>Sentence</a>) which are its first three arguments.
-uc' :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalChunk
-
--- | Similar to <a>uc</a>, but <a>Symbol</a> is dependent on the
---   <a>Stage</a>.
-ucStaged :: (Concept c, IsUnit u) => c -> (Stage -> Symbol) -> Space -> u -> UnitalChunk
-
--- | Similar to <a>uc'</a>, but <a>Symbol</a> is dependent on the
---   <a>Stage</a>.
-ucStaged' :: IsUnit u => String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> UnitalChunk
-
--- | Attach units to a chunk that has a symbol and definition.
-ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
-
--- | Constructs a UnitalChunk from a <a>Concept</a> with <tt>Units</tt>.
-ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Chunk.Unitary.Unitary Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Chunk.UnitDefn.TempHasUnit Language.Drasil.Chunk.Unital.UnitalChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Unital.UnitalChunk
-
-
--- | Add constraints and a reasonable value to chunks that are quantities.
-module Language.Drasil.Chunk.Constrained
-
--- | ConstrConcepts are conceptual symbolic quantities
---   (<a>DefinedQuantityDict</a>) with <tt>Constraint</tt>s and maybe a
---   reasonable value (no units!). Similar to <tt>ConstrainedChunk</tt> but
---   includes a definition and domain.
---   
---   Ex. Measuring the length of a pendulum arm could be a concept that has
---   some reasonable value (between 1 cm and 2 m) and the constraint that
---   the length cannot be a negative value.
-data ConstrConcept
-ConstrConcept :: DefinedQuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrConcept
-[_defq] :: ConstrConcept -> DefinedQuantityDict
-[_constr'] :: ConstrConcept -> [ConstraintE]
-[_reasV'] :: ConstrConcept -> Maybe Expr
-
--- | Similar to <tt>cnstrw</tt>, but types must also have a <a>Concept</a>.
-cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
-
--- | Creates a <a>ConstrConcept</a> with a quantitative concept, a list of
---   <tt>Constraint</tt>s and an <a>Expr</a>.
-constrained' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> Expr -> ConstrConcept
-
--- | Similar to <a>constrained'</a>, but defaults <a>Maybe</a> <a>Expr</a>
---   to <a>Nothing</a>.
-constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> ConstrConcept
-
--- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), description (<a>String</a>), <a>Symbol</a>, unit,
---   <a>Space</a>, <tt>Constraint</tt>s, and an <a>Expr</a>.
-cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
-
--- | Similar to <a>cuc'</a>, but <a>Symbol</a> is dependent on
---   <a>Stage</a>.
-cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
-
--- | Similar to cuc', but does not include a unit.
-cucNoUnit' :: String -> NP -> String -> Symbol -> Space -> [ConstraintE] -> Expr -> ConstrConcept
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.ConstrConcept
-instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Constrained.ConstrConcept
-
-
--- | For adding an uncertainty value to quantities with constraints.
-module Language.Drasil.Chunk.UncertainQuantity
-
--- | UncertQs are conceptual symbolic quantities with constraints and an
---   <a>Uncertainty</a>. Contains a <a>ConstrConcept</a> and an
---   <a>Uncertainty</a>.
---   
---   Ex. Measuring the length of a pendulum arm may be recorded with an
---   uncertainty value.
-data UncertQ
-
--- | Smart constructor that requires a <a>Quantity</a>, a percentage, and a
---   typical value with an <a>Uncertainty</a>.
-uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertQ
-
--- | Uncertainty quantity (<a>uq</a>) but with a constraint.
-uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
-
--- | Uncertainty quantity constraint (<a>uqc</a>) without a description.
-uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
-instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Uncertainty.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.UncertainQuantity.UncertQ
 
 
 -- | Contains types and functions common to aspects of generating
@@ -5838,7 +5838,7 @@ data CodeExpr
 [ESBBinaryOp] :: ESBBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
 -- | Operators are generalized arithmetic operators over a
---   <tt>DomainDesc</tt> of an <tt>Expr</tt>. Could be called BigOp. ex:
+--   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
 --   Summation is represented via <a>Add</a> over a discrete domain.
 [Operator] :: AssocArithOper -> DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
 

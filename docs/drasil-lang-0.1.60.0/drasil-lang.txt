@@ -1694,7 +1694,7 @@ data CodeExpr
 [ESBBinaryOp] :: ESBBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
 -- | Operators are generalized arithmetic operators over a
---   <tt>DomainDesc</tt> of an <tt>Expr</tt>. Could be called BigOp. ex:
+--   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
 --   Summation is represented via <a>Add</a> over a discrete domain.
 [Operator] :: AssocArithOper -> DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
 

@@ -20,62 +20,62 @@
 </span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint.HughesPJ</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Doc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">empty</span></span><span class="hs-special">)</span><span>
 </span><span id="line-21"></span><span>
 </span><span id="line-22"></span><span class="annot"><span class="hs-comment">-- | Holds a Julia project</span></span><span>
-</span><span id="line-23"></span><span class="hs-keyword">newtype</span><span> </span><span id="JuliaProject"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-var">JuliaProject</span></a></span></span><span> </span><span id="local-6989586621679353506"><span class="annot"><a href="#local-6989586621679353506"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="JLP"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-var">JLP</span></a></span></span><span> </span><span class="hs-special">{</span><span id="unJLP"><span class="annot"><span class="annottext">forall a. JuliaProject a -&gt; a
-</span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#unJLP"><span class="hs-identifier hs-var hs-var">unJLP</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679353506"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">}</span><span>
+</span><span id="line-23"></span><span class="hs-keyword">newtype</span><span> </span><span id="JuliaProject"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-var">JuliaProject</span></a></span></span><span> </span><span id="local-6989586621679353508"><span class="annot"><a href="#local-6989586621679353508"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="JLP"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-var">JLP</span></a></span></span><span> </span><span class="hs-special">{</span><span id="unJLP"><span class="annot"><span class="annottext">forall a. JuliaProject a -&gt; a
+</span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#unJLP"><span class="hs-identifier hs-var hs-var">unJLP</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679353508"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">}</span><span>
 </span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679353597"><span class="annot"><span class="hs-identifier hs-type">Functor</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-type">JuliaProject</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-26"></span><span>  </span><span id="local-6989586621679353601"><span class="annot"><span class="annottext">fmap :: forall a b. (a -&gt; b) -&gt; JuliaProject a -&gt; JuliaProject b
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">fmap</span></span></span><span> </span><span id="local-6989586621679353602"><span class="annot"><span class="annottext">a -&gt; b
-</span><a href="#local-6989586621679353602"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-type">JLP</span></a></span><span> </span><span id="local-6989586621679353603"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679353603"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b -&gt; JuliaProject b
+</span><span id="line-25"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679353599"><span class="annot"><span class="hs-identifier hs-type">Functor</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-type">JuliaProject</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-26"></span><span>  </span><span id="local-6989586621679353603"><span class="annot"><span class="annottext">fmap :: forall a b. (a -&gt; b) -&gt; JuliaProject a -&gt; JuliaProject b
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">fmap</span></span></span><span> </span><span id="local-6989586621679353604"><span class="annot"><span class="annottext">a -&gt; b
+</span><a href="#local-6989586621679353604"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-type">JLP</span></a></span><span> </span><span id="local-6989586621679353605"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679353605"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b -&gt; JuliaProject b
 forall a. a -&gt; JuliaProject a
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-var">JLP</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; b
-</span><a href="#local-6989586621679353602"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679353603"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679353604"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679353605"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-27"></span><span>
-</span><span id="line-28"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679353609"><span id="local-6989586621679353613"><span id="local-6989586621679353616"><span class="annot"><span class="hs-identifier hs-type">Applicative</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-type">JuliaProject</span></a></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-29"></span><span>  </span><span id="local-6989586621679353619"><span class="annot"><span class="annottext">pure :: forall a. a -&gt; JuliaProject a
+</span><span id="line-28"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679353611"><span id="local-6989586621679353615"><span id="local-6989586621679353618"><span class="annot"><span class="hs-identifier hs-type">Applicative</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-type">JuliaProject</span></a></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-29"></span><span>  </span><span id="local-6989586621679353621"><span class="annot"><span class="annottext">pure :: forall a. a -&gt; JuliaProject a
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">pure</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; JuliaProject a
 forall a. a -&gt; JuliaProject a
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-var">JLP</span></a></span><span>
-</span><span id="line-30"></span><span>  </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-type">JLP</span></a></span><span> </span><span id="local-6989586621679353620"><span class="annot"><span class="annottext">a -&gt; b
-</span><a href="#local-6989586621679353620"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679353621"><span class="annot"><span class="annottext">&lt;*&gt; :: forall a b.
+</span><span id="line-30"></span><span>  </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-type">JLP</span></a></span><span> </span><span id="local-6989586621679353622"><span class="annot"><span class="annottext">a -&gt; b
+</span><a href="#local-6989586621679353622"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679353623"><span class="annot"><span class="annottext">&lt;*&gt; :: forall a b.
 JuliaProject (a -&gt; b) -&gt; JuliaProject a -&gt; JuliaProject b
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;*&gt;</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-type">JLP</span></a></span><span> </span><span id="local-6989586621679353622"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679353622"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b -&gt; JuliaProject b
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;*&gt;</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-type">JLP</span></a></span><span> </span><span id="local-6989586621679353624"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679353624"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b -&gt; JuliaProject b
 forall a. a -&gt; JuliaProject a
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-var">JLP</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; b
-</span><a href="#local-6989586621679353620"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679353622"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679353622"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679353624"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-31"></span><span>
-</span><span id="line-32"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679353627"><span id="local-6989586621679353631"><span class="annot"><span class="hs-identifier hs-type">Monad</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-type">JuliaProject</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-33"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-type">JLP</span></a></span><span> </span><span id="local-6989586621679353634"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679353634"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679353635"><span class="annot"><span class="annottext">&gt;&gt;= :: forall a b.
+</span><span id="line-32"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679353629"><span id="local-6989586621679353633"><span class="annot"><span class="hs-identifier hs-type">Monad</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-type">JuliaProject</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-33"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JLP"><span class="hs-identifier hs-type">JLP</span></a></span><span> </span><span id="local-6989586621679353636"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679353636"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679353637"><span class="annot"><span class="annottext">&gt;&gt;= :: forall a b.
 JuliaProject a -&gt; (a -&gt; JuliaProject b) -&gt; JuliaProject b
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">&gt;&gt;=</span></span></span><span> </span><span id="local-6989586621679353636"><span class="annot"><span class="annottext">a -&gt; JuliaProject b
-</span><a href="#local-6989586621679353636"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; JuliaProject b
-</span><a href="#local-6989586621679353636"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679353634"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">&gt;&gt;=</span></span></span><span> </span><span id="local-6989586621679353638"><span class="annot"><span class="annottext">a -&gt; JuliaProject b
+</span><a href="#local-6989586621679353638"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; JuliaProject b
+</span><a href="#local-6989586621679353638"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679353636"><span class="hs-identifier hs-var">x</span></a></span><span>
 </span><span id="line-34"></span><span>
 </span><span id="line-35"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#PackageSym"><span class="hs-identifier hs-type">PackageSym</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-type">JuliaProject</span></a></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-36"></span><span>  </span><span class="hs-keyword">type</span><span> </span><span id="Package"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#Package"><span class="hs-identifier hs-var">Package</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-type">JuliaProject</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#PackData"><span class="hs-identifier hs-type">PackData</span></a></span><span>
-</span><span id="line-37"></span><span>  </span><span id="local-6989586621679353644"><span class="annot"><span class="annottext">package :: ProgData
+</span><span id="line-37"></span><span>  </span><span id="local-6989586621679353646"><span class="annot"><span class="annottext">package :: ProgData
 -&gt; [JuliaProject (Auxiliary JuliaProject)]
 -&gt; JuliaProject (Package JuliaProject)
-</span><a href="#local-6989586621679353644"><span class="hs-identifier hs-var hs-var hs-var hs-var">package</span></a></span></span><span> </span><span id="local-6989586621679353646"><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679353646"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([AuxData] -&gt; PackData)
+</span><a href="#local-6989586621679353646"><span class="hs-identifier hs-var hs-var hs-var hs-var">package</span></a></span></span><span> </span><span id="local-6989586621679353648"><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679353648"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([AuxData] -&gt; PackData)
 -&gt; [JuliaProject AuxData] -&gt; JuliaProject PackData
 forall (m :: * -&gt; *) a b. Monad m =&gt; ([a] -&gt; b) -&gt; [m a] -&gt; m b
 </span><span class="hs-identifier hs-var">onCodeList</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ProgData -&gt; [AuxData] -&gt; PackData
 </span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#packD"><span class="hs-identifier hs-var">packD</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679353646"><span class="hs-identifier hs-var">p</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679353648"><span class="hs-identifier hs-var">p</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-38"></span><span>
 </span><span id="line-39"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#AuxiliarySym"><span class="hs-identifier hs-type">AuxiliarySym</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-type">JuliaProject</span></a></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-40"></span><span>  </span><span class="hs-keyword">type</span><span> </span><span id="Auxiliary"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#Auxiliary"><span class="hs-identifier hs-var">Auxiliary</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-type">JuliaProject</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#AuxData"><span class="hs-identifier hs-type">AuxData</span></a></span><span>
 </span><span id="line-41"></span><span>  </span><span class="hs-keyword">type</span><span> </span><span id="AuxHelper"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#AuxHelper"><span class="hs-identifier hs-var">AuxHelper</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#JuliaProject"><span class="hs-identifier hs-type">JuliaProject</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-42"></span><span>  </span><span id="local-6989586621679353656"><span class="annot"><span class="annottext">doxConfig :: String
+</span><span id="line-42"></span><span>  </span><span id="local-6989586621679353658"><span class="annot"><span class="annottext">doxConfig :: String
 -&gt; GOOLState -&gt; Verbosity -&gt; JuliaProject (Auxiliary JuliaProject)
-</span><a href="#local-6989586621679353656"><span class="hs-identifier hs-var hs-var hs-var hs-var">doxConfig</span></a></span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679353658"><span class="hs-identifier hs-var hs-var hs-var hs-var">doxConfig</span></a></span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">GOOLState
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Verbosity
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc -&gt; JuliaProject (Auxiliary JuliaProject)
@@ -85,41 +85,41 @@ String -&gt; Doc -&gt; r (Auxiliary r)
 </span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#auxFromData"><span class="hs-identifier hs-var">auxFromData</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">empty</span></span><span> </span><span class="hs-comment">-- Doxygen does not support Julia</span><span>
-</span><span id="line-43"></span><span>  </span><span id="local-6989586621679353660"><span class="annot"><span class="annottext">readMe :: ReadMeInfo -&gt; JuliaProject (Auxiliary JuliaProject)
-</span><a href="#local-6989586621679353660"><span class="hs-identifier hs-var hs-var hs-var hs-var">readMe</span></a></span></span><span> </span><span id="local-6989586621679353662"><span class="annot"><span class="annottext">ReadMeInfo
-</span><a href="#local-6989586621679353662"><span class="hs-identifier hs-var">rmi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReadMeInfo -&gt; JuliaProject (Auxiliary JuliaProject)
+</span><span id="line-43"></span><span>  </span><span id="local-6989586621679353662"><span class="annot"><span class="annottext">readMe :: ReadMeInfo -&gt; JuliaProject (Auxiliary JuliaProject)
+</span><a href="#local-6989586621679353662"><span class="hs-identifier hs-var hs-var hs-var hs-var">readMe</span></a></span></span><span> </span><span id="local-6989586621679353664"><span class="annot"><span class="annottext">ReadMeInfo
+</span><a href="#local-6989586621679353664"><span class="hs-identifier hs-var">rmi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReadMeInfo -&gt; JuliaProject (Auxiliary JuliaProject)
 forall (r :: * -&gt; *).
 AuxiliarySym r =&gt;
 ReadMeInfo -&gt; r (Auxiliary r)
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#readMe"><span class="hs-identifier hs-var">G.readMe</span></a></span><span> </span><span class="annot"><span class="annottext">ReadMeInfo
-</span><a href="#local-6989586621679353662"><span class="hs-identifier hs-var">rmi</span></a></span><span> </span><span class="hs-special">{</span><span>
+</span><a href="#local-6989586621679353664"><span class="hs-identifier hs-var">rmi</span></a></span><span> </span><span class="hs-special">{</span><span>
 </span><span id="line-44"></span><span>        </span><span class="annot"><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#langName"><span class="hs-identifier hs-var">langName</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">jlName</span></span><span class="hs-special">,</span><span>
 </span><span id="line-45"></span><span>        </span><span class="annot"><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#langVersion"><span class="hs-identifier hs-var">langVersion</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">jlVersion</span></span><span class="hs-special">}</span><span>
-</span><span id="line-46"></span><span>  </span><span id="local-6989586621679353666"><span class="annot"><span class="annottext">sampleInput :: ChunkDB
+</span><span id="line-46"></span><span>  </span><span id="local-6989586621679353668"><span class="annot"><span class="annottext">sampleInput :: ChunkDB
 -&gt; DataDesc -&gt; [Expr] -&gt; JuliaProject (Auxiliary JuliaProject)
-</span><a href="#local-6989586621679353666"><span class="hs-identifier hs-var hs-var hs-var hs-var">sampleInput</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679353668"><span class="hs-identifier hs-var hs-var hs-var hs-var">sampleInput</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; DataDesc -&gt; [Expr] -&gt; JuliaProject (Auxiliary JuliaProject)
 forall (r :: * -&gt; *).
 AuxiliarySym r =&gt;
 ChunkDB -&gt; DataDesc -&gt; [Expr] -&gt; r (Auxiliary r)
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#sampleInput"><span class="hs-identifier hs-var">G.sampleInput</span></a></span><span>
 </span><span id="line-47"></span><span>
-</span><span id="line-48"></span><span>  </span><span id="local-6989586621679353670"><span class="annot"><span class="annottext">optimizeDox :: JuliaProject (AuxHelper JuliaProject)
-</span><a href="#local-6989586621679353670"><span class="hs-identifier hs-var hs-var hs-var hs-var">optimizeDox</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; JuliaProject Doc
+</span><span id="line-48"></span><span>  </span><span id="local-6989586621679353672"><span class="annot"><span class="annottext">optimizeDox :: JuliaProject (AuxHelper JuliaProject)
+</span><a href="#local-6989586621679353672"><span class="hs-identifier hs-var hs-var hs-var hs-var">optimizeDox</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; JuliaProject Doc
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#doxError"><span class="hs-identifier hs-var">doxError</span></a></span><span>
 </span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span>  </span><span id="local-6989586621679353675"><span class="annot"><span class="annottext">makefile :: [String]
+</span><span id="line-50"></span><span>  </span><span id="local-6989586621679353677"><span class="annot"><span class="annottext">makefile :: [String]
 -&gt; ImplementationType
 -&gt; [Comments]
 -&gt; GOOLState
 -&gt; ProgData
 -&gt; JuliaProject (Auxiliary JuliaProject)
-</span><a href="#local-6989586621679353675"><span class="hs-identifier hs-var hs-var hs-var hs-var">makefile</span></a></span></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679353677"><span class="annot"><span class="annottext">ImplementationType
-</span><a href="#local-6989586621679353677"><span class="hs-identifier hs-var">it</span></a></span></span><span> </span><span id="local-6989586621679353678"><span class="annot"><span class="annottext">[Comments]
-</span><a href="#local-6989586621679353678"><span class="hs-identifier hs-var">cms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe BuildConfig
+</span><a href="#local-6989586621679353677"><span class="hs-identifier hs-var hs-var hs-var hs-var">makefile</span></a></span></span><span> </span><span class="annot"><span class="annottext">[String]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679353679"><span class="annot"><span class="annottext">ImplementationType
+</span><a href="#local-6989586621679353679"><span class="hs-identifier hs-var">it</span></a></span></span><span> </span><span id="local-6989586621679353680"><span class="annot"><span class="annottext">[Comments]
+</span><a href="#local-6989586621679353680"><span class="hs-identifier hs-var">cms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe BuildConfig
 -&gt; Maybe Runnable
 -&gt; Maybe DocConfig
 -&gt; GOOLState
@@ -137,22 +137,22 @@ Maybe BuildConfig
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ImplementationType -&gt; Maybe Runnable -&gt; Maybe Runnable
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#noRunIfLib"><span class="hs-identifier hs-var">G.noRunIfLib</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
-</span><a href="#local-6989586621679353677"><span class="hs-identifier hs-var">it</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Runnable
+</span><a href="#local-6989586621679353679"><span class="hs-identifier hs-var">it</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Runnable
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#jlRunnable"><span class="hs-identifier hs-var">jlRunnable</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-51"></span><span>                            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Comments] -&gt; DocConfig -&gt; Maybe DocConfig
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#docIfEnabled"><span class="hs-identifier hs-var">G.docIfEnabled</span></a></span><span> </span><span class="annot"><span class="annottext">[Comments]
-</span><a href="#local-6989586621679353678"><span class="hs-identifier hs-var">cms</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Dependencies -&gt; [Command] -&gt; DocConfig
+</span><a href="#local-6989586621679353680"><span class="hs-identifier hs-var">cms</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Dependencies -&gt; [Command] -&gt; DocConfig
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#DocConfig"><span class="hs-identifier hs-var">DocConfig</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-52"></span><span>
-</span><span id="line-53"></span><span>  </span><span id="local-6989586621679353681"><span class="annot"><span class="annottext">auxHelperDoc :: JuliaProject (AuxHelper JuliaProject) -&gt; Doc
-</span><a href="#local-6989586621679353681"><span class="hs-identifier hs-var hs-var hs-var hs-var">auxHelperDoc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">JuliaProject Doc -&gt; Doc
+</span><span id="line-53"></span><span>  </span><span id="local-6989586621679353683"><span class="annot"><span class="annottext">auxHelperDoc :: JuliaProject (AuxHelper JuliaProject) -&gt; Doc
+</span><a href="#local-6989586621679353683"><span class="hs-identifier hs-var hs-var hs-var hs-var">auxHelperDoc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">JuliaProject Doc -&gt; Doc
 JuliaProject (AuxHelper JuliaProject) -&gt; Doc
 forall a. JuliaProject a -&gt; a
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#unJLP"><span class="hs-identifier hs-var">unJLP</span></a></span><span>
-</span><span id="line-54"></span><span>  </span><span id="local-6989586621679353684"><span class="annot"><span class="annottext">auxFromData :: String -&gt; Doc -&gt; JuliaProject (Auxiliary JuliaProject)
-</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#auxFromData"><span class="hs-identifier hs-var hs-var hs-var hs-var">auxFromData</span></a></span></span><span> </span><span id="local-6989586621679353685"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679353685"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span id="local-6989586621679353686"><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679353686"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AuxData -&gt; JuliaProject AuxData
+</span><span id="line-54"></span><span>  </span><span id="local-6989586621679353686"><span class="annot"><span class="annottext">auxFromData :: String -&gt; Doc -&gt; JuliaProject (Auxiliary JuliaProject)
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#auxFromData"><span class="hs-identifier hs-var hs-var hs-var hs-var">auxFromData</span></a></span></span><span> </span><span id="local-6989586621679353687"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679353687"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span id="local-6989586621679353688"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679353688"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AuxData -&gt; JuliaProject AuxData
 forall a. a -&gt; JuliaProject a
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(AuxData -&gt; JuliaProject AuxData)
@@ -160,8 +160,8 @@ forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc -&gt; AuxData
 </span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#ad"><span class="hs-identifier hs-var">ad</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679353685"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679353686"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><a href="#local-6989586621679353687"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679353688"><span class="hs-identifier hs-var">d</span></a></span><span>
 </span><span id="line-55"></span><span>
 </span><span id="line-56"></span><span class="annot"><span class="hs-comment">-- | Default runnable information for Julia files</span></span><span>
 </span><span id="line-57"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.html#jlRunnable"><span class="hs-identifier hs-type">jlRunnable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#Runnable"><span class="hs-identifier hs-type">Runnable</span></a></span><span>

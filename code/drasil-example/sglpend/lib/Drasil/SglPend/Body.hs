@@ -8,6 +8,7 @@ import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
+import Drasil.DocLang (inReq, inReqDesc, mkInputPropsTable)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -87,7 +88,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
        ]
      ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub EmptyS []
+    [ FReqsSub inputValuesDescription []
     , NonFReqsSub
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -132,14 +133,29 @@ abbreviationsList =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
+  dataDefs iMods genDefns tMods concIns labelledContentWithInputs allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref labelledContentWithInputs
 
 concIns :: [ConceptInstance]
-concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
+concIns = inputValuesRequirement : (assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs)
+
+labelledContentWithInputs :: [LabelledContent]
+labelledContentWithInputs = inputValuesTable : labelledContent
+
+inputValuesTable :: LabelledContent
+inputValuesTable = mkInputPropsTable inputs
+
+inputValuesDescription :: Sentence
+inputValuesDescription = S "the single pendulum parameters"
+
+inputValuesSentence :: Sentence
+inputValuesSentence = inReqDesc inputValuesTable inputValuesDescription
+
+inputValuesRequirement :: ConceptInstance
+inputValuesRequirement = inReq inputValuesSentence
 
 ------------------------------
 -- Section : INTRODUCTION --

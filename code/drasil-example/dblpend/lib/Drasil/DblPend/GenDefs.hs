@@ -1,11 +1,8 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.DblPend.GenDefs (genDefns, velXGD_1, velYGD_1,
-         accelXGD_1, accelYGD_1, accelXGD_2, accelYGD_2, xForceGD_1, yForceGD_1,
-         xForceGD_2, yForceGD_2) where
+module Drasil.DblPend.GenDefs (genDefns, mvVelGD_1, mvVelGD_2, 
+         mvAccelGD_1, mvAccelGD_2, mvForceGD_1, mvForceGD_2) where
 
 import Prelude hiding (cos, sin, sqrt)
-import qualified Data.List.NonEmpty as NE
-
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Utils.Drasil (weave)
@@ -13,47 +10,36 @@ import Theory.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.NounPhrase.Combinators as NP
-import Data.Drasil.Concepts.Math (xComp, yComp)
-import Data.Drasil.Quantities.Physics (velocity, acceleration, force)
-import Drasil.DblPend.DataDefs
+import Data.Drasil.Quantities.Physics (velocity, acceleration, force, time)
+import Drasil.DblPend.Unitals (lenRod_1, mvVel_1, mvVel_2,
+    mvAccel_1, mvAccel_2, mvForce_1, mvForce_2,
+    posVec_1, posVec_2, lenRod_2, pendDisAngle_1, pendDisAngle_2,
+    angularVel_1, angularVel_2, tension_1, tension_2, massObj_1, massObj_2)
+import qualified Data.Drasil.Quantities.Physics as QP (gravitationalAccel)
+import Data.Drasil.Concepts.Math (vector)
 import qualified Drasil.DblPend.Expressions as E
-import qualified Drasil.DblPend.Derivations as D
-import Drasil.DblPend.Unitals (lenRod_1, xVel_1, xVel_2,
-    yVel_1, yVel_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2)
-import Drasil.DblPend.Concepts (horizontalPos,
-    verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, firstObject, secondObject)
-import Control.Lens ((^.))
+import Drasil.DblPend.Concepts
+import Drasil.DblPend.LabelledContent (figMotion) 
 
 genDefns :: [GenDefn]
-genDefns = [velXGD_1, velYGD_1, velXGD_2, velYGD_2, accelXGD_1, accelYGD_1, accelXGD_2, accelYGD_2,
-       xForceGD_1, yForceGD_1, xForceGD_2, yForceGD_2]
-
-------------------------------------------------
--- Velocity in X Direction in the First Object--
-------------------------------------------------
-velXGD_1 :: GenDefn
-velXGD_1 = gdNoRefs (equationalModel' velXQD_1) (getUnit velocity) (Just velXDeriv_1) "velocityX1" [{-Notes-}]
--- general definiton block, with equation, unit, refinement explanation
-
-velXQD_1 :: ModelQDef
-velXQD_1 = mkQuantDef' xVel_1 (the xComp `NP.of_` (velocity `ofThe` firstObject)) E.velXExpr_1
--- lable and equation
+genDefns = [mvVelGD_1, mvVelGD_2, mvAccelGD_1, mvAccelGD_2, mvForceGD_1, mvForceGD_2]
 
 velXDeriv_1 :: Derivation
 velXDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` velocity))) (weave [velXDerivSents_1, velXDerivEqns_1])
 -- title paragraph and weave the explained words and refined equation
 
-velXDerivSents_1 :: [Sentence]
-velXDerivSents_1 = [velDerivSent1,velXDerivSent2_1,velDerivSent3,velDerivSent4, velDerivSent5]
--- words used to explain the equation refinement
+mvVelQD_1 :: ModelQDef
+mvVelQD_1 = mkQuantDef' mvVel_1 (the vector `NP.of_` (velocity `ofThe` firstObject)) E.mvVelExpr_1
+-- lable and equation
 
-velXDerivEqns_1 :: [Sentence]
-velXDerivEqns_1 = map eS [D.velDerivEqn1, D.velXDerivEqn2_1, D.velXDerivEqn3_1, D.velXDerivEqn4_1] ++ [eS' velXQD_1]
--- refinement equation after explained words
+mvVelDeriv_1 :: Derivation
+mvVelDeriv_1 = mkDerivName (phraseNP (NP.the (vector`of_` velocity))) (weave [mvVelDerivSents_1, mvVelDerivEqns_1])
+-- title paragraph and weave the explained words and refined equation
 
+-- Derivation step sentences (vector -> component -> vector form)
 velDerivSent1, velXDerivSent2_1, velDerivSent3, velDerivSent4, velDerivSent5 :: Sentence
-velDerivSent1 = S "At a given point in time" `sC` phrase velocity `S.is` definedIn'' positionGDD
-velXDerivSent2_1 = S "We also know the" +:+ phrase horizontalPos +:+ S "that" `S.is` definedIn'' positionXDD_1
+velDerivSent1 = S "At a given point in time" `sC` phrase velocity `S.is` S "the time derivative of the position vector"
+velXDerivSent2_1 = S "The position vector is defined as" +:+ eS' posVec_1 +:+ sParen (S "shown in" +:+. refS figMotion)
 velDerivSent3 = S "Applying this,"
 velDerivSent4 = eS' lenRod_1 `S.is` S "constant" `S.wrt` S "time, so"
 velDerivSent5 = S "Therefore, using the chain rule,"

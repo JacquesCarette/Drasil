@@ -251,7 +251,7 @@ reVelInColl :: SimpleQDef
 reVelInColl = mkQuantDef initRelVel reVelInCollEqn
 
 reVelInCollEqn :: Expr
-reVelInCollEqn = sy velAP `vSub` sy velBP
+reVelInCollEqn = sy velAP `cSub` sy velBP
 
 reVelInCollDesc :: Sentence
 reVelInCollDesc = foldlSent [S "In a collision, the", D.toSent (phraseNP (QP.velocity `ofA` rigidBody)),

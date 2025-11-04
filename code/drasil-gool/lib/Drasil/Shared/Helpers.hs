@@ -90,7 +90,12 @@ getInnerType :: C.CodeType -> C.CodeType
 getInnerType (C.List innerT) = innerT
 getInnerType (C.Array innerT) = innerT
 getInnerType (C.Set innerT) = innerT
-getInnerType _ = error "Attempt to extract inner type from a non-nested type"
+-- Handle potential function types that might arise from matrix indexing operations
+getInnerType (C.Func _ retType) = retType  -- If it's a function, get its return type
+-- Add debug information to understand what's happening
+getInnerType t@(C.Object _) = error $ "Attempt to extract inner type from Object type: " ++ show t
+getInnerType t@C.Void = error $ "Attempt to extract inner type from Void type: " ++ show t
+getInnerType t = error $ "DEBUG: Attempt to extract inner type from unexpected type: " ++ show t
 
 getNestDegree :: Integer -> C.CodeType -> Integer
 getNestDegree n (C.List t) = getNestDegree (n+1) t

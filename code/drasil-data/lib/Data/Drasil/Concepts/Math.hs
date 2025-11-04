@@ -58,6 +58,7 @@ laplaceTransform = dcc "laplaceTransform" (cn' "laplace transform") ("An integra
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
 line         = dccWDS "line"      (pn' "line")                    $ D.S "An interval between two points" +:+
                                                                   fromSource lineSource
+magnitude    = dcc "magnitude"    (cn' "magnitude")              "the size or extent of a quantity; the absolute value of a vector"
 matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
                                                                  "is treated as a single entity and manipulated according to particular rules")
 norm        = dcc "norm"         (cn' "norm")                    "the positive length or size of a vector"

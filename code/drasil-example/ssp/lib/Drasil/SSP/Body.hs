@@ -5,6 +5,7 @@ import Prelude hiding (sin, cos, tan)
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (Verb, number, organization, section, variable)
+import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
 import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
@@ -126,8 +127,8 @@ mkSRS = [TableOfContents,
 
 purp :: Sentence
 purp = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
-  phrase slpSrf `S.and_` S "identify", phraseNP (crtSlpSrf `the_ofThe` slope) `sC`
-  S "as well as the", phrase intrslce, phraseNP (normForce `and_` shearForce),
+  phrase slpSrf `S.and_` S "identify", D.toSent (phraseNP (crtSlpSrf `the_ofThe` slope)) `sC`
+  S "as well as the", phrase intrslce, D.toSent (phraseNP (normForce `and_` shearForce)),
   S "along the", phrase crtSlpSrf]
 
 concIns :: [ConceptInstance]
@@ -192,11 +193,11 @@ tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
 
 -- SECTION 2 --
 startIntro, kSent :: Sentence
-startIntro = foldlSent [atStartNP (a_ slope), S "of geological",
+startIntro = foldlSent [D.toSent (atStartNP (a_ slope)), S "of geological",
   phrase mass `sC` S "composed of", phrase soil, S "and rock and sometimes",
-  S "water" `sC` S "is subject" `S.toThe` S "influence" `S.of_` (phraseNP (gravity `onThe` mass) !.),
+  S "water" `sC` S "is subject" `S.toThe` S "influence" `S.of_` (D.toSent (phraseNP (gravity `onThe` mass)) !.),
   S "This can cause instability" `S.inThe` S "form" `S.of_` phrase soil +:+.
-  S "or rock movement", atStartNP' (NP.the (effect `of_PS` soil)),
+  S "or rock movement", D.toSent (atStartNP' (NP.the (effect `of_PS` soil))),
   S "or rock movement can range from inconvenient to",
   S "seriously hazardous" `sC` S "resulting in significant life and economic" +:+.
   plural loss, atStart slope, S "stability is of", phrase interest,
@@ -210,7 +211,7 @@ startIntro = foldlSent [atStartNP (a_ slope), S "of geological",
 kSent = keySent ssa progName
 
 keySent :: (Idea a, Idea b) => a -> b -> Sentence
-keySent probType pname = foldlSent_ [(phraseNP (NP.a_ (combineNINI probType problem)) !.),
+keySent probType pname = foldlSent_ [(D.toSent (phraseNP (NP.a_ (combineNINI probType problem))) !.),
   S "The developed", phrase program, S "will be referred to as the",
   introduceAbb pname,
   S "based on the original, manually created version of" +:+
@@ -228,11 +229,12 @@ externalLinkRef = makeURI "SSP"
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope
 scope :: Sentence
-scope = foldlSent_ [phraseNP (stabAnalysis `ofA` twoD), sParen (short twoD),
-  phraseNP (combineNINI soil mass) `sC` S "composed of a single homogeneous", phrase layer,
-  S "with" +:+. pluralNP (combineNINI constant mtrlPrpty), atStartNP (NP.the (combineNINI soil mass))
+scope = foldlSent_ [D.toSent (phraseNP (stabAnalysis `ofA` twoD)), sParen (short twoD),
+  D.toSent (phraseNP (combineNINI soil mass)) `sC` S "composed of a single homogeneous", phrase layer,
+  S "with" +:+. D.toSent (pluralNP (combineNINI constant mtrlPrpty)),
+  D.toSent (atStartNP (NP.the (combineNINI soil mass)))
   `S.is` S "assumed to extend infinitely in the third" +:+.
-  phrase dimension, atStartNP (the analysis), S "will be at an instant" `S.in_`
+  phrase dimension, D.toSent (atStartNP (the analysis)), S "will be at an instant" `S.in_`
   phrase time :+: S ";", plural factor, S "that may change the", plural soilPrpty,
   S "over", phrase time, S "will not be considered"]
 
@@ -242,7 +244,7 @@ scope = foldlSent_ [phraseNP (stabAnalysis `ofA` twoD), sParen (short twoD),
 -- SECTION 2.4 --
 -- Organization automatically generated in IOrgSec
 orgSecEnd :: Sentence
-orgSecEnd = foldlSent_ [atStartNP' (the inModel), S "provide the set of",
+orgSecEnd = foldlSent_ [D.toSent (atStartNP' (the inModel)), S "provide the set of",
   S "algebraic", plural equation, S "that must be solved"]
 
 -- SECTION 3 --
@@ -253,24 +255,23 @@ sysCtxIntro = foldlSP
   [refS sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+. phrase software, S "A rectangle represents the",
    phrase softwareSys, S "itself" +:+. sParen (short progName),
-   S "Arrows are used to show the data flow between the" +:+ phraseNP (system
-   `andIts` environment)]
+   S "Arrows are used to show the data flow between the" +:+ D.toSent (phraseNP (system `andIts` environment))]
 
 sysCtxFig1 :: LabelledContent
 sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
-  [S "The responsibilities" `S.ofThe` phraseNP (user `andThe` system),
+  [S "The responsibilities" `S.ofThe` D.toSent (phraseNP (user `andThe` system)),
    S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = [S "Provide" +:+ phraseNP (the input_) +:+ S "data related to" +:+
-  phraseNP (the soilLyr) :+: S "(s) and water table (if applicable)" `sC`
+sysCtxUsrResp = [S "Provide" +:+ D.toSent (phraseNP (the input_)) +:+ S "data related to" +:+
+  D.toSent (phraseNP (the soilLyr)) :+: S "(s) and water table (if applicable)" `sC`
   S "ensuring conformation to" +:+ phrase input_ +:+ S "data format" +:+
   S "required by" +:+ short progName,
-  S "Ensure that consistent units are used for" +:+ pluralNP (combineNINI input_ variable),
-  S "Ensure required" +:+ namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption))
+  S "Ensure that consistent units are used for" +:+ D.toSent (pluralNP (combineNINI input_ variable)),
+  S "Ensure required" +:+ namedRef (SRS.assumpt [] []) (D.toSent $ pluralNP (combineNINI software assumption))
   +:+ S "are" +:+ S "appropriate for the" +:+ phrase problem +:+ S "to which the" +:+
   phrase user +:+ S "is applying the" +:+ phrase software]
 
@@ -283,7 +284,8 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   S "Identify the" +:+ phrase crtSlpSrf +:+ S "within the possible" +:+
   phrase input_ +:+ S "range",
   S "Find the" +:+ phrase fsConcept +:+ S "for the" +:+ phrase slope,
-  S "Find the" +:+ phrase intrslce +:+ phraseNP (normForce `and_` shearForce) +:+ S "along the" +:+ phrase crtSlpSrf]
+  S "Find the" +:+ phrase intrslce +:+ D.toSent (phraseNP (normForce `and_` shearForce)) +:+
+  S "along the" +:+ phrase crtSlpSrf]
 
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
@@ -304,7 +306,7 @@ userCharIntro = userChar progName [S "Calculus", titleize Doc.physics]
 
 userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
 userChar pname understandings familiarities specifics = foldlSP [
-  atStartNP (the endUser) `S.of_` short pname,
+  D.toSent (atStartNP (the endUser)) `S.of_` short pname,
   S "should have an understanding" `S.of_` S "undergraduate Level 1",
   foldlList Comma List understandings `sC`
   S "and be familiar with", foldlList Comma List familiarities `sC`
@@ -312,7 +314,7 @@ userChar pname understandings familiarities specifics = foldlSP [
 
 -- SECTION 3.2 --
 sysConstraints :: Contents
-sysConstraints = foldlSP [atStartNP (NP.the (combineNINI morPrice method_)),
+sysConstraints = foldlSP [D.toSent (atStartNP (NP.the (combineNINI morPrice method_))),
   refS morgenstern1965 `sC` S "which involves dividing the", phrase slope,
   S "into vertical", plural slice `sC` S "will be used to derive the",
   plural equation, S "for analysing the", phrase slope]
@@ -340,12 +342,12 @@ terms = [fsConcept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
 -- SECTION 4.1.2 --
 physSystParts :: [Sentence]
 physSystParts = map foldlSent [
-  [atStartNP (a_ slope), S "comprised of one", phrase soilLyr],
-  [atStartNP (a_ waterTable) `sC` S "which may or may not exist"]]
+  [D.toSent (atStartNP (a_ slope)), S "comprised of one", phrase soilLyr],
+  [D.toSent (atStartNP (a_ waterTable)) `sC` S "which may or may not exist"]]
 
 figPhysSyst :: LabelledContent
 figPhysSyst = llcc (makeFigRef "PhysicalSystem") $
-  fig (foldlSent_ [S "An example", phraseNP (slope `for` analysis),
+  fig (foldlSent_ [S "An example", D.toSent (phraseNP (slope `for` analysis)),
   S "by", short progName `sC` S "where the dashed line represents the",
   phrase waterTable]) (resourcePath ++ "PhysSyst.png")
 
@@ -356,7 +358,7 @@ physSysConv :: Contents
 physSysConv = foldlSP [atStart morPrice, phrase analysis, refS morgenstern1965
   `S.ofThe` phrase slope, S "involves representing the", phrase slope,
   S "as a series of vertical" +:+. plural slice, S "As shown in",
-  refS figIndexConv `sC` phraseNP (the index), ch index, S "is used to denote a",
+  refS figIndexConv `sC` D.toSent (phraseNP (the index)), ch index, S "is used to denote a",
   phrase value `S.for` S "a single", phrase slice `sC` S "and an", phrase intrslce,
   phrase value, S "at a given", phrase index, ch index, S "refers to the",
   phrase value, S "between", phrase slice, ch index `S.and_` S "adjacent", phrase slice,
@@ -364,24 +366,24 @@ physSysConv = foldlSP [atStart morPrice, phrase analysis, refS morgenstern1965
 
 figIndexConv :: LabelledContent
 figIndexConv = llcc (makeFigRef "IndexConvention") $
-  fig (foldlSent_ [S "Index convention for", phraseNP (slice `and_`
-  intrslce), plural value]) (resourcePath ++ "IndexConvention.png")
+  fig (foldlSent_ [S "Index convention for", D.toSent (phraseNP (slice `and_`
+  intrslce)), plural value]) (resourcePath ++ "IndexConvention.png")
 
 physSysFbd :: Contents
-physSysFbd = foldlSP [atStartNP' (NP.a_ (fbd `ofThe` force)), S "acting on a",
+physSysFbd = foldlSP [D.toSent (atStartNP' (NP.a_ (fbd `ofThe` force))), S "acting on a",
   phrase slice `S.is` S "displayed in" +:+. refS figForceActing, S "The specific",
-  pluralNP (force `and_PP` symbol_), S "will be discussed in detail in",
+  D.toSent (pluralNP (force `and_PP` symbol_)), S "will be discussed in detail in",
   refS (SRS.genDefn [] []) `S.and_` refS (SRS.dataDefn [] [])]
 
 figForceActing :: LabelledContent
 figForceActing = llcc (makeFigRef "ForceDiagram") $
-  fig (atStartNP' (fbd `of_` force) +:+ S "acting on a" +:+
+  fig (D.toSent (atStartNP' (fbd `of_` force)) +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
 goalsInputs :: [Sentence]
-goalsInputs = [phraseNP (the shape `NP.ofThe` combineNINI soil mass),
-  S "location" `S.the_ofThe` phrase waterTable, pluralNP (mtrlPrpty `the_ofThePS` soil)]
+goalsInputs = [D.toSent (phraseNP (the shape `NP.ofThe` combineNINI soil mass)),
+  S "location" `S.the_ofThe` phrase waterTable, D.toSent (pluralNP (mtrlPrpty `the_ofThePS` soil))]
 
 -- SECTION 4.2 --
 

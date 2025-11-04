@@ -3,6 +3,7 @@ module Drasil.Projectile.IMods (iMods, landPosIM, offsetIM, timeIM) where
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
+import qualified Language.Drasil.Development as D
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, equationalModelN)
 import Utils.Drasil (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -36,7 +37,7 @@ timeIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing time")
   (dqdWr flightDur) [UpFrom (Exc, exactDbl 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
-timeQD :: SimpleQDef 
+timeQD :: SimpleQDef
 timeQD = mkQuantDef flightDur E.flightDur'
 
 timeDeriv :: Derivation
@@ -116,7 +117,7 @@ offsetQD = mkQuantDef offset E.offset'
 angleConstraintNote, gravitationalAccelConstNote, landAndTargPosConsNote, landPosNote,
   landPosConsNote, timeConsNote :: Sentence
 
-angleConstraintNote = foldlSent [atStartNP (the constraint),
+angleConstraintNote = foldlSent [D.toSent (atStartNP (the constraint)),
   eS (realInterval launAngle (Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_))) `S.is` S "from",
   refS posXDirection `S.and_` refS yAxisGravity `sC`
   S "and is shown" `S.in_` refS figLaunch]
@@ -124,13 +125,13 @@ angleConstraintNote = foldlSent [atStartNP (the constraint),
 gravitationalAccelConstNote = ch gravitationalAccelConst `S.is`
   S "defined in" +:+. refS gravAccelValue
 
-landAndTargPosConsNote = atStartNP' (the constraint) +:+
+landAndTargPosConsNote = D.toSent (atStartNP' (the constraint)) +:+
   eS (sy landPos $> exactDbl 0) `S.and_` eS (sy targPos $> exactDbl 0) `S.are` S "from" +:+. refS posXDirection
 
 landPosNote = ch landPos `S.is` S "from" +:+. refS landPosIM
 
-landPosConsNote = atStartNP (the constraint) +:+
+landPosConsNote = D.toSent (atStartNP (the constraint)) +:+
   eS (sy landPos $> exactDbl 0) `S.is` S "from" +:+. refS posXDirection
 
-timeConsNote = atStartNP (the constraint) +:+
+timeConsNote = D.toSent (atStartNP (the constraint)) +:+
   eS (sy flightDur $> exactDbl 0) `S.is` S "from" +:+. refS timeStartZero

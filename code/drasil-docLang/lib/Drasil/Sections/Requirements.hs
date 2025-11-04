@@ -17,6 +17,7 @@ import Utils.Drasil (stringList, mkTable)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Language.Drasil.Development as D
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import Theory.Drasil (HasOutput(output))
 
@@ -75,12 +76,12 @@ reqIntroStart = foldlSent_ [S "This", phrase section_, S "provides"]
 
 -- | General 'Sentence' for use in the Functional Requirements subsection introduction.
 frReqIntroBody :: Sentence
-frReqIntroBody = foldlSent_ [pluralNP (the functionalRequirement) `sC`
+frReqIntroBody = foldlSent_ [D.toSent (pluralNP (the functionalRequirement)) `sC`
   S "the tasks and behaviours that the", phrase software, S "is expected to complete"]
 
 -- | General 'Sentence' for use in the Non-Functional Requirements subsection introduction.
 nfrReqIntroBody :: Sentence
-nfrReqIntroBody = foldlSent_ [pluralNP (the nonfunctionalRequirement) `sC`
+nfrReqIntroBody = foldlSent_ [D.toSent (pluralNP (the nonfunctionalRequirement)) `sC`
   S "the qualities that the", phrase software, S "is expected to exhibit"]
 
 -- | Generalized Requirements section introduction.
@@ -120,26 +121,26 @@ mkPortableNFR refAddress osList lbl = cic refAddress (foldlSent [
 -- | Common Non-Functional Requirement for Correctness.
 mkCorrectNFR :: String -> String -> ConceptInstance
 mkCorrectNFR refAddress lbl = cic refAddress (foldlSent [
-  atStartNP' (output_ `the_ofThePS` code), S "have the",
+  D.toSent $ atStartNP' (output_ `the_ofThePS` code), S "have the",
   namedRef (SRS.propCorSol [] []) (plural propOfCorSol)
   ]) lbl nonFuncReqDom
 
 -- | Common Non-Functional Requirement for Verifiability.
 mkVerifiableNFR :: String -> String -> ConceptInstance
 mkVerifiableNFR refAddress lbl = cic refAddress (foldlSent [
-  atStartNP (the code), S "is tested with complete",
+  D.toSent $ atStartNP (the code), S "is tested with complete",
   phrase vavPlan]) lbl nonFuncReqDom
 
 -- | Common Non-Functional Requirement for Understandability.
 mkUnderstandableNFR :: String -> String -> ConceptInstance
 mkUnderstandableNFR refAddress lbl = cic refAddress (foldlSent [
-  atStartNP (the code), S "is modularized with complete",
+  D.toSent $ atStartNP (the code), S "is modularized with complete",
   phrase mg `S.and_` phrase mis]) lbl nonFuncReqDom
 
 -- | Common Non-Functional Requirement for Reusability.
 mkReusableNFR :: String -> String -> ConceptInstance
 mkReusableNFR refAddress lbl = cic refAddress (foldlSent [
-  atStartNP (the code), S "is modularized"]) lbl nonFuncReqDom
+  D.toSent $ atStartNP (the code), S "is modularized"]) lbl nonFuncReqDom
 
 -- | Common Non-Functional Requirement for Security.
 mkSecurityNFR :: String -> String -> ConceptInstance

@@ -2,13 +2,14 @@ module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, HasOutput(output))
 
-import Drasil.DocLang (inReq, mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR, 
+import Drasil.DocLang (inReq, mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR)
-import Drasil.DocLang.SRS (datCon, propCorSol) 
+import Drasil.DocLang.SRS (datCon, propCorSol)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (condition, funcReqDom, input_, output_,
@@ -20,10 +21,10 @@ import Data.Drasil.Concepts.Thermodynamics as CT (lawConsEnergy, melting)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (energy, time)
 
-import Drasil.SWHS.DataDefs (waterMass, waterVolume, tankVolume, 
+import Drasil.SWHS.DataDefs (waterMass, waterVolume, tankVolume,
   balanceDecayRate, balanceDecayTime, balanceSolidPCM, balanceLiquidPCM)
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
-import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, 
+import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods)
 import Drasil.SWHS.Unitals (consTol, pcmE, tFinalMelt, tInitMelt, watE)
 
@@ -41,7 +42,7 @@ import Control.Lens ((^.))
 -----------------------------------
 
 inReqDesc :: Sentence
-inReqDesc = foldlList Comma List [pluralNP (NP.the (combineNINI tank parameter)),
+inReqDesc = foldlList Comma List [D.toSent (pluralNP (NP.the (combineNINI tank parameter))),
   plural materialProprty, S "initial" +:+ plural condition]
 
 funcReqs :: [ConceptInstance]
@@ -55,19 +56,19 @@ findMass, checkWithPhysConsts, outputInputDerivVals, verifyEnergyOutput,
 calcValues, outputValues :: [InstanceModel] -> ConceptInstance
 
 --
-findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods 
+findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods
   [waterMass, waterVolume, tankVolume]
 
 findMassConstruct :: (Referable r, HasShortName r, Referable s, HasShortName s,
   Referable t, HasShortName t) => r -> Sentence -> [s] -> [t] -> ConceptInstance
 findMassConstruct fr m ims ddefs = cic "findMass" (foldlSent [
-  S "Use the", plural input_ `S.in_` refS fr, S "to find the", 
+  S "Use the", plural input_ `S.in_` refS fr, S "to find the",
   m, S "needed for", foldlList Comma List (map refS ims) `sC`
   S "using", foldlList Comma List (map refS ddefs)])
   "Find-Mass" funcReqDom
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" (foldlSent [
-  S "Verify that", pluralNP (the input_), S "satisfy the required",
+  S "Verify that", D.toSent (pluralNP (the input_)), S "satisfy the required",
   namedRef (datCon [] []) (plural physicalConstraint)])
   "Check-Input-with-Physical_Constraints" funcReqDom
 --
@@ -75,14 +76,14 @@ outputInputDerivVals = oIDQConstruct oIDQVals
 
 oIDQConstruct :: [Sentence] -> ConceptInstance
 oIDQConstruct x = cic "outputInputDerivVals" (foldlSentCol [
-  titleize output_, pluralNP (the inValue) `S.and_`
+  titleize output_, D.toSent (pluralNP (the inValue)) `S.and_`
   S "derived", plural value `S.inThe` S "following list"] +:+.
   foldlList Comma List x) "Output-Input-Derived-Values" funcReqDom
 
 oIDQVals :: [Sentence]
 oIDQVals = map foldlSent_ [
-  [pluralNP (the value), fromSource (inReq EmptyS)],
-  [pluralNP (the mass), fromSource findMass],
+  [D.toSent (pluralNP (the value)), fromSource (inReq EmptyS)],
+  [D.toSent (pluralNP (the mass)), fromSource findMass],
   [ch (balanceDecayRate ^. defLhs), fromSource balanceDecayRate],
   [ch (balanceDecayTime ^. defLhs), fromSource balanceDecayTime],
   [ch (balanceSolidPCM ^. defLhs),  fromSource balanceSolidPCM],
@@ -102,13 +103,13 @@ verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
   "Verify-Energy-Output-Follow-Conservation-of-Energy" funcReqDom
 --
 calcPCMMeltBegin = cic "calcPCMMeltBegin" (foldlSent [
-  S "Calculate and", phrase output_, phraseNP (the time),
+  S "Calculate and", phrase output_, D.toSent (phraseNP (the time)),
   S "at which the", short phsChgMtrl, S "begins to melt",
   ch tInitMelt, fromSource eBalanceOnPCM])
   "Calculate-PCM-Melt-Begin-Time" funcReqDom
 --
 calcPCMMeltEnd = cic "calcPCMMeltEnd" (foldlSent [
-  S "Calculate and", phrase output_, phraseNP (the time),
+  S "Calculate and", phrase output_, D.toSent (phraseNP (the time)),
   S "at which the", short phsChgMtrl, S "stops", phrase CT.melting,
   ch tFinalMelt, fromSource eBalanceOnPCM])
   "Calculate-PCM-Melt-End-Time" funcReqDom
@@ -137,7 +138,7 @@ nfRequirements = [correct, verifiable, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
 correct = mkCorrectNFR "correct" "Correctness"
- 
+
 verifiable :: ConceptInstance
 verifiable = mkVerifiableNFR "verifiable" "Verifiability"
 

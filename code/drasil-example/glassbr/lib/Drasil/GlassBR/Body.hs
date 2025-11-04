@@ -2,7 +2,10 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
+
 import Language.Drasil hiding (organization, section, variable)
+import qualified Language.Drasil.Development as D
+
 import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
 import Drasil.DocLang (DocDesc)
@@ -21,12 +24,12 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   system, term_, user, value, variable, reference, definition)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, mathcon')
-import Data.Drasil.Quantities.Math (mathquants, mathunitals)
-import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability, softwarecon)
+import Data.Drasil.Quantities.Math (mathquants, mathunitals)
+import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 
@@ -83,7 +86,7 @@ mkSRS = [TableOfContents,
      IOrgSec M.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
   StkhldrSec $
     StkhldrProg
-      [Client progName $ phraseNP (a_ company)
+      [Client progName $ D.toSent (phraseNP (a_ company))
         +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (name mCampidelli),
       Cstmr progName],
   GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
@@ -218,7 +221,7 @@ externalLinkRef = makeURI "glassBRSRSLink"
 
 undIR, appStanddIR :: [Sentence]
 undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
-  phrase blastRisk, pluralNP (computerApp `in_PS` Edu.civilEng)]
+  phrase blastRisk, D.toSent $ pluralNP (computerApp `in_PS` Edu.civilEng)]
 appStanddIR = [S "applicable" +:+ plural standard +:+
   S "for constructions using glass from" +:+ foldlList Comma List
   (map refS [astm2009, astm2012, astm2016]) `S.in_`
@@ -238,7 +241,7 @@ scope = foldlSent_ [S "determining the safety" `S.ofA` phrase glaSlab,
 {--Organization of Document--}
 
 orgOfDocIntroEnd :: Sentence
-orgOfDocIntroEnd = foldlSent_ [atStartNP' (the dataDefn) `S.are`
+orgOfDocIntroEnd = foldlSent_ [D.toSent (atStartNP' (the dataDefn)) `S.are`
   S "used to support", plural definition `S.the_ofThe` S "different", plural model]
 
 {--STAKEHOLDERS--}
@@ -254,24 +257,24 @@ sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
-   `sC` phraseNP (the user), S "in this case. A rectangle represents the",
+   `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", (sParen (short progName) !.),
-   S "Arrows are used to show the data flow between the" +:+ phraseNP (system
-   `andIts` environment)]
+   S "Arrows are used to show the data flow between the" +:+ D.toSent (phraseNP (system
+   `andIts` environment))]
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
-  [S "The interaction between the", phraseNP (product_ `andThe` user),
+  [S "The interaction between the", D.toSent $ phraseNP (product_ `andThe` user),
    S "is through a user" +:+. phrase interface,
-   S "The responsibilities" `S.ofThe` phraseNP (user `andThe` system),
+   S "The responsibilities" `S.ofThe` D.toSent (phraseNP (user `andThe` system)),
    S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
-  phraseNP (glaSlab `and_` blastTy) `sC` S "ensuring no errors" `S.inThe` plural datum +:+. S "entry",
-  S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ variable),
+  D.toSent (phraseNP (glaSlab `and_` blastTy)) `sC` S "ensuring no errors" `S.inThe` plural datum +:+. S "entry",
+  S "Ensure that consistent units are used for" +:+. D.toSent (pluralNP (combineNINI input_ variable)),
   S "Ensure required" +:+
-  namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption))
+  namedRef (SRS.assumpt [] []) (D.toSent $ pluralNP (combineNINI software assumption))
     +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+. phrase software]
 
@@ -279,7 +282,7 @@ sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
   phrase input_ +:+. S "instead of a floating point number",
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
-  pluralNP (physical `and_` softwareConstraint),
+  D.toSent (pluralNP (physical `and_` softwareConstraint)),
   S "Predict whether the" +:+ phrase glaSlab +:+. S "is safe or not"]
 
 sysCtxResp :: [Sentence]
@@ -319,16 +322,16 @@ termsAndDesc = termDefnF' (Just (S "All of the" +:+ plural term_ +:+
 {--Physical System Description--}
 
 physSystParts :: [Sentence]
-physSystParts = [(atStartNP (the glaSlab)!.),
-  foldlSent [(atStartNP (the ptOfExplsn) !.), S "Where the", phrase bomb `sC`
-  S "or", (blast ^. defn) `sC` (S "is located" !.), atStartNP (the sD) `S.isThe`
-  phrase distance, S "between the", phrase ptOfExplsn `S.and_` phraseNP (the glass)]]
+physSystParts = [(D.toSent (atStartNP (the glaSlab))!.),
+  foldlSent [(D.toSent (atStartNP (the ptOfExplsn)) !.), S "Where the", phrase bomb `sC`
+  S "or", (blast ^. defn) `sC` (S "is located" !.), D.toSent (atStartNP (the sD)) `S.isThe`
+  phrase distance, S "between the", phrase ptOfExplsn `S.and_` D.toSent (phraseNP (the glass))]]
 
 {--Goal Statements--}
 
 goalInputs :: [Sentence]
-goalInputs = [pluralNP (dimension `the_ofThePS` glaPlane), phraseNP (the glassTy),
-  pluralNP (characteristic `the_ofThePS` explosion), phraseNP (the pbTol)]
+goalInputs = [D.toSent $ pluralNP (dimension `the_ofThePS` glaPlane), D.toSent $ phraseNP (the glassTy),
+  D.toSent $ pluralNP (characteristic `the_ofThePS` explosion), D.toSent $ phraseNP (the pbTol)]
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 

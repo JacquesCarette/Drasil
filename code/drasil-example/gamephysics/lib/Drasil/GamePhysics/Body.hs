@@ -9,6 +9,7 @@ import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
@@ -197,7 +198,7 @@ externalLinkRef = makeURI "GamePhysicsSRSLink"
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 scope :: Sentence
-scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` short twoD,
+scope = foldlSent_ [D.toSent (phraseNP (the physicalSim)) `S.of_` short twoD,
   plural CP.rigidBody, S "acted on by", plural QP.force]
 
 --scope_of_requirements_intro_p2 = EmptyS
@@ -224,20 +225,19 @@ sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external" `S.toThe` phrase software
-   `sC` phraseNP (the user), S "in this case. A rectangle represents the",
+   `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", sParen (short progName) +:+. EmptyS,
-   S "Arrows are used to show the data flow between the", phraseNP (system
-   `andIts` environment)]
+   S "Arrows are used to show the data flow between the", D.toSent (phraseNP (system `andIts` environment))]
 
 sysCtxDesc :: Contents
-sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
-   `andThe` user), S "is through an application programming" +:+.
-   phrase interface, S "The responsibilities" `S.ofThe` phraseNP (user
-   `andThe` system), S "are as follows"]
+sysCtxDesc = foldlSPCol [S "The interaction between the", D.toSent (phraseNP (product_ `andThe` user)),
+   S "is through an application programming" +:+.
+   phrase interface, S "The responsibilities" `S.ofThe` D.toSent (phraseNP (user `andThe` system)),
+   S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
-  physical) +:+ S "state" `S.ofThe` phrase simulation `sC`
+sysCtxUsrResp = [S "Provide initial" +:+ D.toSent (pluralNP (condition `ofThePS`
+  physical)) +:+ S "state" `S.ofThe` phrase simulation `sC`
   plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
   S "applied to them",
   S "Ensure application programming" +:+ phrase interface +:+
@@ -245,11 +245,11 @@ sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
   S "Ensure required" +:+
   namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
   S "are appropriate for any particular" +:+
-  phrase problem +:+ phraseNP (the software) +:+. S "addresses"]
+  phrase problem +:+ D.toSent (phraseNP (the software)) +:+. S "addresses"]
 
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = [S "Determine if the" +:+ pluralNP (input_ `and_PS`
-    simulation) +:+ S "state satisfy the required" +:+.
+sysCtxSysResp = [S "Determine if the" +:+ D.toSent (pluralNP (input_ `and_PS`
+    simulation)) +:+ S "state satisfy the required" +:+.
     namedRef (SRS.datCon ([]::[Contents]) ([]::[Section])) (phrase physical `S.and_` plural systemConstraint),
   S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
     S "within the" +:+ phrase simulation +:+ S "at each" +:+
@@ -337,8 +337,8 @@ generalDefinitionsIntro :: Contents
 -- general_definitions_GDefs :: [Contents]
 
 generalDefinitionsIntro = foldlSP
-  [S "This", phrase section_, S "collects the", pluralNP (CM.law `and_PP`
-  CM.equation), S "that will be used in deriving the",
+  [S "This", phrase section_, S "collects the", D.toSent (pluralNP (CM.law `and_PP`
+  CM.equation)), S "that will be used in deriving the",
   plural dataDefn `sC` S "which in turn will be used to build the",
   plural inModel]
 
@@ -353,7 +353,7 @@ general_definitions_GDefs = map (Definition . General) gDefs)
 ------------------------------
 
 dataDefinitionsIntro :: Sentence
-dataDefinitionsIntro = foldlSent [atStartNP (the CPP.dimension)
+dataDefinitionsIntro = foldlSent [D.toSent (atStartNP (the CPP.dimension))
    `S.of_` S "each", phrase quantity, S "is also given"]
 
 -----------------------------

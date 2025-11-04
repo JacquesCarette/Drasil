@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 
 import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
+import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
 import Drasil.DocLang (DocDesc)
@@ -202,7 +203,7 @@ concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 -- 4.1.2 Physical System Description --
 -----------------------------------
 physSystParts :: [Sentence]
-physSystParts = map ((!.) . atStartNP) [the rod, the mass]
+physSystParts = map ((!.) . D.toSent . atStartNP) [the rod, the mass]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --

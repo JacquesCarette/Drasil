@@ -1,11 +1,12 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
-  assumptions, constAccel, gravAccelValue, launchOrigin, pointMass, 
+  assumptions, constAccel, gravAccelValue, launchOrigin, pointMass,
   posXDirection, targetXAxis, timeStartZero, twoDMotion, yAxisGravity) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
@@ -18,13 +19,13 @@ import Data.Drasil.Concepts.Physics (acceleration, collision, distance, gravity,
 import Drasil.Projectile.Concepts (launcher, projectile, target, projMotion)
 
 assumptions :: [ConceptInstance]
-assumptions = [twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis, 
-  posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag, pointMass, 
+assumptions = [twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis,
+  posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag, pointMass,
   freeFlight, neglectCurv, timeStartZero, gravAccelValue]
 
 twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis,
   posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag,
-  pointMass, freeFlight, neglectCurv, timeStartZero, 
+  pointMass, freeFlight, neglectCurv, timeStartZero,
   gravAccelValue :: ConceptInstance
 twoDMotion      = cic "twoDMotion"      twoDMotionDesc      "twoDMotion"      assumpDom
 cartSyst        = cic "cartSyst"        cartSystDesc        "cartSyst"        assumpDom
@@ -43,32 +44,32 @@ timeStartZero   = cic "timeStartZero"   timeStartZeroDesc   "timeStartZero"   as
 gravAccelValue  = cic "gravAccelValue"  gravAccelValueDesc  "gravAccelValue"  assumpDom
 
 twoDMotionDesc :: Sentence
-twoDMotionDesc = atStartNP (NP.the (projMotion `is` twoD)) +:+. sParen (short twoD)
+twoDMotionDesc = D.toSent (atStartNP (NP.the (projMotion `is` twoD))) +:+. sParen (short twoD)
 
 cartSystDesc :: Sentence
-cartSystDesc = atStartNP (a_ cartesian) `S.is` S "used" +:+. fromSource neglectCurv
+cartSystDesc = D.toSent (atStartNP (a_ cartesian)) `S.is` S "used" +:+. fromSource neglectCurv
 
 yAxisGravityDesc :: Sentence
-yAxisGravityDesc = atStartNP (direction `the_ofThe` yAxis) `S.is` S "directed opposite to" +:+. phrase gravity
+yAxisGravityDesc = D.toSent (atStartNP (direction `the_ofThe` yAxis)) `S.is` S "directed opposite to" +:+. phrase gravity
 
 launchOriginDesc :: Sentence
-launchOriginDesc = (atStartNP (the launcher) `S.is` S "coincident with the origin" !.)
+launchOriginDesc = (D.toSent (atStartNP (the launcher)) `S.is` S "coincident with the origin" !.)
 
 targetXAxisDesc :: Sentence
-targetXAxisDesc = atStartNP (the target) +:+ S "lies on the" +:+ phrase xAxis +:+. fromSource neglectCurv
+targetXAxisDesc = D.toSent (atStartNP (the target)) +:+ S "lies on the" +:+ phrase xAxis +:+. fromSource neglectCurv
 
 posXDirectionDesc :: Sentence
-posXDirectionDesc = atStartNP (NP.the (combineNINI positive xDir)) `S.is` S "from the" +:+. phraseNP (launcher `toThe` target)
+posXDirectionDesc = D.toSent (atStartNP (NP.the (combineNINI positive xDir))) `S.is` S "from the" +:+. D.toSent (phraseNP (launcher `toThe` target))
 
 constAccelDesc :: Sentence
-constAccelDesc = atStartNP (the acceleration) `S.is` S "constant" +:+.
+constAccelDesc = D.toSent (atStartNP (the acceleration)) `S.is` S "constant" +:+.
                  fromSources [accelXZero, accelYGravity, neglectDrag, freeFlight]
 
 accelXZeroDesc :: Sentence
-accelXZeroDesc = atStartNP (NP.the (acceleration `inThe` xDir)) `S.is` (S "zero" !.)
+accelXZeroDesc = D.toSent (atStartNP (NP.the (acceleration `inThe` xDir))) `S.is` (S "zero" !.)
 
 accelYGravityDesc :: Sentence
-accelYGravityDesc = atStartNP (NP.the (acceleration `inThe` yDir)) `S.isThe` phrase acceleration +:+
+accelYGravityDesc = D.toSent (atStartNP (NP.the (acceleration `inThe` yDir))) `S.isThe` phrase acceleration +:+
                     S "due to" +:+ phrase gravity +:+. fromSource yAxisGravity
 
 neglectDragDesc :: Sentence
@@ -83,13 +84,13 @@ freeFlightDesc = S "The flight" `S.is` S "free; there" `S.are` S "no" +:+ plural
                  S "during" +:+. (S "trajectory" `S.the_ofThe` phrase projectile)
 
 neglectCurvDesc :: Sentence
-neglectCurvDesc = atStartNP (the distance) `S.is` S "small enough that" +:+.
+neglectCurvDesc = D.toSent (atStartNP (the distance)) `S.is` S "small enough that" +:+.
                   (S "curvature" `S.the_ofThe` S "celestial body can be neglected")
 
 timeStartZeroDesc :: Sentence
 timeStartZeroDesc = atStart time +:+. S "starts at zero"
 
 gravAccelValueDesc :: Sentence
-gravAccelValueDesc = atStartNP (the acceleration) +:+ S "due to" +:+
-  phrase gravity +:+ S "is assumed to have the" +:+ phrase value +:+ 
+gravAccelValueDesc = D.toSent (atStartNP (the acceleration)) +:+ S "due to" +:+
+  phrase gravity +:+ S "is assumed to have the" +:+ phrase value +:+
   S "provided in the section for" +:+. namedRef (SRS.valsOfAuxCons [] []) (titleize consVals)

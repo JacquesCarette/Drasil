@@ -7,7 +7,9 @@ import Language.Drasil hiding (section)
 import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import Drasil.DocLang (inReq, mkInputPropsTable)
+import qualified Drasil.DocLang as DocLang (inReqDesc)
+import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
 import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -15,7 +17,7 @@ import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Data.Drasil.People (thulasi)
 
-import Data.Drasil.Concepts.Documentation as Doc (material_)
+import Data.Drasil.Concepts.Documentation (material_)
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (physicCon', energy, mechEnergy, pressure)
@@ -151,8 +153,9 @@ mkSRS = [TableOfContents,
   Bibliography]
 
 concIns :: [ConceptInstance]
-concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
- [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
+concIns = inputValuesRequirement :
+  (goals ++ funcReqs ++ nfRequirements ++ assumptions ++
+   [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs)
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -192,7 +195,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns labelledContent allRefs citations
+  NoPCM.iMods genDefs tMods concIns labelledContentWithInputs allRefs citations
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
@@ -203,7 +206,19 @@ abbreviationsList =
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef, externalLinkRef'] ++ uriReferences
+allRefs = [externalLinkRef, externalLinkRef'] ++ SRS.sectionReferences ++ map ref labelledContentWithInputs ++ uriReferences
+
+labelledContentWithInputs :: [LabelledContent]
+labelledContentWithInputs = inputValuesTable : labelledContent
+
+inputValuesTable :: LabelledContent
+inputValuesTable = mkInputPropsTable inputs
+
+inputValuesSentence :: Sentence
+inputValuesSentence = DocLang.inReqDesc inputValuesTable inReqDesc
+
+inputValuesRequirement :: ConceptInstance
+inputValuesRequirement = inReq inputValuesSentence
 
 --------------------------
 --Section 2 : INTRODUCTION

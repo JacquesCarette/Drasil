@@ -8,6 +8,7 @@ import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
@@ -47,11 +48,15 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols, odeInfoChunks)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
 
+-- sigh, this is used by others
 fullSI :: System
-fullSI = fillcdbSRS mkSRS si
+fullSI = fst sd
+
+srs :: Document
+srs = mkDoc mkSRS (S.forGen titleize phrase) sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration

@@ -10,14 +10,14 @@ module Drasil.DocLang (
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..),
   -- Drasil.DocumentLanguage.Core
-  AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), Emphasis(..),
+  AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), DocDesc, Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
   RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
   -- *** Functions
   -- Drasil.DocumentLanguage
-  mkDoc, fillTraceSI, fillcdbSRS, findAllRefs,
+  mkDoc, fillcdbSRS, findAllRefs,
   -- ** Notebook
   -- | For generating Jupyter notebook lesson plans.
 
@@ -73,9 +73,9 @@ module Drasil.DocLang (
 import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..))
-import Drasil.DocumentLanguage (mkDoc, fillTraceSI, fillcdbSRS, findAllRefs)
+import Drasil.DocumentLanguage (mkDoc, fillcdbSRS, findAllRefs)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
-  DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
+  DerivationDisplay(..), DocDesc, Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),

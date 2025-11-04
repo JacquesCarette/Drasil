@@ -11,6 +11,7 @@ import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc, tunitNone)
 import Drasil.Generator (cdb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -18,13 +19,16 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
-import Drasil.DocLang (tunitNone)
+
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
+
+-- sigh, this is used by others
+fullSI :: System
+fullSI = fst sd
 
 srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
+srs = mkDoc mkSRS (S.forGen titleize phrase) sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration

@@ -7,8 +7,9 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
+import Drasil.DocLang (inReq, inReqDesc)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
-  genDefn, dataDefn, datCon)
+  genDefn, dataDefn, datCon, sectionReferences)
 import Drasil.Metadata (inModel)
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
@@ -125,11 +126,37 @@ purp = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
   S "as well as the", phrase intrslce, phraseNP (normForce `and_` shearForce),
   S "along the", phrase crtSlpSrf]
 
-concIns :: [ConceptInstance]
-concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
+labConWithInputs :: [LabelledContent]
+labConWithInputs = inputDataTable : labCon
 
 labCon :: [LabelledContent]
-labCon = [figPhysSyst, figIndexConv, figForceActing, sysCtxFig1] ++ funcReqTables
+labCon = remainingFuncReqTables ++ figures
+
+inputDataTable :: LabelledContent
+inputDataTable = fst splitFuncReqTables
+
+remainingFuncReqTables :: [LabelledContent]
+remainingFuncReqTables = snd splitFuncReqTables
+
+splitFuncReqTables :: (LabelledContent, [LabelledContent])
+splitFuncReqTables = case funcReqTables of
+  (tbl:rest) -> (tbl, rest)
+  [] -> error "funcReqTables must include at least one table"
+
+figures :: [LabelledContent]
+figures = [sysCtxFig1, figPhysSyst, figIndexConv, figForceActing]
+
+inputValuesDescription :: Sentence
+inputValuesDescription = S "the slope and soil parameters"
+
+inputValuesSentence :: Sentence
+inputValuesSentence = inReqDesc inputDataTable inputValuesDescription
+
+inputValuesRequirement :: ConceptInstance
+inputValuesRequirement = inReq inputValuesSentence
+
+concIns :: [ConceptInstance]
+concIns = inputValuesRequirement : (goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs)
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -153,7 +180,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts conceptChunks
-  [degree] dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
+  [degree] dataDefs iMods generalDefinitions tMods concIns labConWithInputs allRefs citations
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
@@ -166,7 +193,7 @@ abbreviationsList =
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef, weightSrc, hsPressureSrc]
+allRefs = externalLinkRef : weightSrc : hsPressureSrc : SRS.sectionReferences ++ map ref labConWithInputs
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

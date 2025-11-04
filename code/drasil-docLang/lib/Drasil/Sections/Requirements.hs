@@ -8,7 +8,7 @@ module Drasil.Sections.Requirements (
   fullReqs, fullTables, inReq,
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- * Non-functional Requirements
-  nfReqF, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR, 
+  nfReqF, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR
   ) where
 
@@ -27,7 +27,6 @@ import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)
-import Data.List (nub)
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
@@ -41,7 +40,7 @@ reqF = SRS.require [reqIntro]
 -- For listing input requirements.
 fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> [ConceptInstance] -> [ConceptInstance]
 fullReqs [] _ _ = []
-fullReqs i d r = nub $ inReq (inReqDesc (mkInputPropsTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
+fullReqs i d r = inReq (inReqDesc (mkInputPropsTable i) d) : r -- ++ [outReq (outReqDesc outTable)]
 
 -- | Prepends given LabelledContent to an input-value table.
 fullTables :: (Quantity i, MayHaveUnit i) => [i] -> [LabelledContent] -> [LabelledContent]
@@ -51,7 +50,7 @@ fullTables i t = mkInputPropsTable i : t
 -- | Creates a Sentence from a Referable and possible description. Output is of the form
 -- "Inputs the values from @reference@, which define @description@". If no description is given,
 -- there will be nothing after the word "@reference@".
-inReqDesc :: (HasShortName r, Referable r) => r -> Sentence -> Sentence 
+inReqDesc :: (HasShortName r, Referable r) => r -> Sentence -> Sentence
 inReqDesc  t desc = foldlSent [atStart input_,  S "the", plural value, S "from", end]
   where end = case desc of EmptyS -> refS t
                            sent   -> refS t `sC` S "which define" +:+ sent
@@ -99,11 +98,11 @@ nfReqIntro [] = mkParagraph $ emptySectSentPlu [nonfunctionalRequirement]
 nfReqIntro _  = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 
 -- | Common Non-Functional Requirement for Maintainability.
--- Takes in a Reference Address ('String'), a percent value ('Integer'), 
+-- Takes in a Reference Address ('String'), a percent value ('Integer'),
 -- and a label ('String').
 mkMaintainableNFR :: String -> Integer -> String -> ConceptInstance
 mkMaintainableNFR refAddress percent lbl = cic refAddress (foldlSent [
-  S "If a likely change is made" `S.toThe` 
+  S "If a likely change is made" `S.toThe`
   S "finished software, it will take at most", addPercent percent `S.ofThe`
   S "original development time,",
   S "assuming the same development resources are available"
@@ -150,10 +149,10 @@ mkSecurityNFR refAddress lbl = cic refAddress (foldlSent [
   ]) lbl nonFuncReqDom
 
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
-mkInputPropsTable :: (Quantity i, MayHaveUnit i) => 
+mkInputPropsTable :: (Quantity i, MayHaveUnit i) =>
                           [i] -> LabelledContent
 mkInputPropsTable []        = llcc reqInputsRef $ Paragraph EmptyS
-mkInputPropsTable reqInputs = llcc reqInputsRef $ 
+mkInputPropsTable reqInputs = llcc reqInputsRef $
   Table [atStart symbol_, atStart description, atStart' unit_]
   (mkTable [ch, atStart, toSentence] $ sortBySymbol reqInputs)
   (titleize' reqInput) True
@@ -162,10 +161,10 @@ mkInputPropsTable reqInputs = llcc reqInputsRef $
 reqInputsRef :: Reference
 reqInputsRef = makeTabRef' (reqInput ^. uid)
 
--- | Creates a table for use in the Functional Requirments section. Takes a list of tuples containing variables and sources, a label, and a caption. 
-mkValsSourceTable :: (Quantity i, MayHaveUnit i, Concept i) => 
+-- | Creates a table for use in the Functional Requirments section. Takes a list of tuples containing variables and sources, a label, and a caption.
+mkValsSourceTable :: (Quantity i, MayHaveUnit i, Concept i) =>
                           [(i, Sentence)] -> String -> Sentence -> LabelledContent
-mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $ 
+mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $
   Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 

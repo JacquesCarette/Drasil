@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
@@ -48,11 +49,15 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
 
+-- sigh, this is used by others
 fullSI :: System
-fullSI = fillcdbSRS mkSRS si
+fullSI = fst sd
+
+srs :: Document
+srs = mkDoc mkSRS (S.forGen titleize phrase) sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
@@ -110,12 +115,12 @@ mkSRS = [TableOfContents,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
 
 purp :: Sentence
-purp = foldlSent_ [S "predict whether a", phrase glaSlab, S "can withstand a", 
+purp = foldlSent_ [S "predict whether a", phrase glaSlab, S "can withstand a",
   phrase blast, S "under given", plural condition]
 
 background :: Sentence
-background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous from the", 
-  phrase blast +:+ S "itself" `S.and_` S "also potentially from the secondary" 
+background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous from the",
+  phrase blast +:+ S "itself" `S.and_` S "also potentially from the secondary"
   +:+ S "effect of falling glass"]
 
 ideaDicts :: [IdeaDict]
@@ -126,7 +131,7 @@ ideaDicts =
   map nw [progName, iGlass, lGlass] ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = 
+conceptChunks =
   -- ConceptChunks
   distance : concepts ++ softwarecon ++ physicalcon ++
   -- Unital Chunks
@@ -135,12 +140,12 @@ conceptChunks =
   map cw mathquants
 
 abbreviationsList :: [IdeaDict]
-abbreviationsList = 
+abbreviationsList =
   -- CIs
   map nw acronyms
 
 symbMap :: ChunkDB
-symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn]) 
+symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
   GB.dataDefs iMods [] tMods concIns labCon allRefs citations
 
 -- | Holds all references and links used in the document.
@@ -158,13 +163,13 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 --------------------------------------------------------------------------------
 termsAndDescBullets :: Contents
-termsAndDescBullets = UlC $ ulcc $ Enumeration$ 
+termsAndDescBullets = UlC $ ulcc $ Enumeration$
   Numeric $
     noRefs $
-      map tAndDOnly termsWithDefsOnly 
-      ++ termsAndDescBulletsGlTySubSec 
-      ++ termsAndDescBulletsLoadSubSec 
-      ++ map tAndDWAcc termsWithAccDefn 
+      map tAndDOnly termsWithDefsOnly
+      ++ termsAndDescBulletsGlTySubSec
+      ++ termsAndDescBulletsLoadSubSec
+      ++ map tAndDWAcc termsWithAccDefn
       ++ [tAndDWSym probBreak probBr]
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 
@@ -196,19 +201,19 @@ priorityNFReqs = [correctness, verifiability, understandability,
 
 startIntro :: (NamedIdea n) => n -> Sentence -> CI -> Sentence
 startIntro prgm _ sysName = foldlSent [
-  atStart' explosion, S "in downtown areas are dangerous" `S.fromThe` phrase blast +:+ 
-  S "itself" `S.and_` S "also potentially from the secondary" +:+ 
-  S "effect of falling glass. Therefore" `sC` phrase prgm `S.is` S "needed to" +:+. 
+  atStart' explosion, S "in downtown areas are dangerous" `S.fromThe` phrase blast +:+
+  S "itself" `S.and_` S "also potentially from the secondary" +:+
+  S "effect of falling glass. Therefore" `sC` phrase prgm `S.is` S "needed to" +:+.
   purp, S "For example" `sC` S "we might wish to know whether a pane of",
-  phrase glass, S "fails from a gas main", phrase explosion `S.or_` 
+  phrase glass, S "fails from a gas main", phrase explosion `S.or_`
   S "from a small fertilizer truck bomb." +:+
   S "The document describes the program called", short sysName,
   S ", which is based" `S.onThe` S "original" `sC` S "manually created version of" +:+
   namedRef externalLinkRef (S "GlassBR")]
 
 externalLinkRef :: Reference
-externalLinkRef = makeURI "glassBRSRSLink" 
-  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass" 
+externalLinkRef = makeURI "glassBRSRSLink"
+  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass"
   (shortname' $ S "glassBRSRSLink")
 
 undIR, appStanddIR :: [Sentence]
@@ -244,7 +249,7 @@ orgOfDocIntroEnd = foldlSent_ [atStartNP' (the dataDefn) `S.are`
 {--GENERAL SYSTEM DESCRIPTION--}
 
 {--System Context--}
-  
+
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
@@ -260,12 +265,12 @@ sysCtxDesc = foldlSPCol
    S "is through a user" +:+. phrase interface,
    S "The responsibilities" `S.ofThe` phraseNP (user `andThe` system),
    S "are as follows"]
-   
+
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
   phraseNP (glaSlab `and_` blastTy) `sC` S "ensuring no errors" `S.inThe` plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ variable),
-  S "Ensure required" +:+ 
+  S "Ensure required" +:+
   namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption))
     +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+. phrase software]
@@ -276,7 +281,7 @@ sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
   pluralNP (physical `and_` softwareConstraint),
   S "Predict whether the" +:+ phrase glaSlab +:+. S "is safe or not"]
-  
+
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
   short progName +:+ S "Responsibilities"]
@@ -284,7 +289,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
   map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
-   
+
 {--User Characteristics--}
 
 userCharacteristicsIntro :: Contents

@@ -6,6 +6,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
@@ -28,7 +29,7 @@ import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
   strain, stress, time, twoD, physicCon', distance, friction, linear, velocity, position, threeD)
 import Data.Drasil.Concepts.Software (program, softwarecon)
-import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
+import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
   shearRes, solidcon)
 import Data.Drasil.Theories.Physics (weightSrc, hsPressureSrc)
 
@@ -53,14 +54,18 @@ import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
 
 --Document Setup--
 
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
+
+-- sigh, this is used by others
+fullSI :: System
+fullSI = fst sd
+
 srs :: Document
-srs = mkDoc mkSRS S.forT fullSI
+srs = mkDoc mkSRS S.forT sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
 
 resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
@@ -74,7 +79,7 @@ si = mkSystem
   []
   inputs outputs constrained []
   symbMap
-  
+
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
@@ -97,7 +102,7 @@ mkSRS = [TableOfContents,
     SSDProg
       [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
-        , PhySysDesc progName physSystParts figPhysSyst physSystContents 
+        , PhySysDesc progName physSystParts figPhysSyst physSystContents
         , Goals goalsInputs]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -135,7 +140,7 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 ideaDicts :: [IdeaDict]
-ideaDicts = 
+ideaDicts =
   -- Actual IdeaDicts
   defs ++
   -- CIs
@@ -178,8 +183,8 @@ allRefs = [externalLinkRef, weightSrc, hsPressureSrc]
 --automatically generated in mkSRS using the intro below
 tableOfSymbIntro :: [TSIntro]
 tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
-  [S "a subscript", ch index, S "indicates that the", phrase value, 
-  S "will be taken at" `sC` S "and analyzed at, a", phrase slice `S.or_` phrase slice, 
+  [S "a subscript", ch index, S "indicates that the", phrase value,
+  S "will be taken at" `sC` S "and analyzed at, a", phrase slice `S.or_` phrase slice,
   S "interface composing the total slip", phrase mass]], VectorUnits]
 
 -- SECTION 1.3 --
@@ -212,10 +217,10 @@ keySent probType pname = foldlSent_ [(phraseNP (NP.a_ (combineNINI probType prob
   namedRef externalLinkRef (S "SSP")]
 
 externalLinkRef :: Reference
-externalLinkRef = makeURI "SSP" 
-  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp" 
+externalLinkRef = makeURI "SSP"
+  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp"
   (shortname' $ S "SSP")
-  
+
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in IPurpose
 
@@ -250,7 +255,7 @@ sysCtxIntro = foldlSP
    phrase softwareSys, S "itself" +:+. sParen (short progName),
    S "Arrows are used to show the data flow between the" +:+ phraseNP (system
    `andIts` environment)]
-   
+
 sysCtxFig1 :: LabelledContent
 sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
 
@@ -258,17 +263,17 @@ sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
   [S "The responsibilities" `S.ofThe` phraseNP (user `andThe` system),
    S "are as follows"]
-   
+
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide" +:+ phraseNP (the input_) +:+ S "data related to" +:+
   phraseNP (the soilLyr) :+: S "(s) and water table (if applicable)" `sC`
   S "ensuring conformation to" +:+ phrase input_ +:+ S "data format" +:+
   S "required by" +:+ short progName,
   S "Ensure that consistent units are used for" +:+ pluralNP (combineNINI input_ variable),
-  S "Ensure required" +:+ namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption)) 
-  +:+ S "are" +:+ S "appropriate for the" +:+ phrase problem +:+ S "to which the" +:+ 
+  S "Ensure required" +:+ namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption))
+  +:+ S "are" +:+ S "appropriate for the" +:+ phrase problem +:+ S "to which the" +:+
   phrase user +:+ S "is applying the" +:+ phrase software]
-  
+
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   S "a string of characters" +:+ phrase input_ +:+ S "instead of a floating" +:+
@@ -279,7 +284,7 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   phrase input_ +:+ S "range",
   S "Find the" +:+ phrase fsConcept +:+ S "for the" +:+ phrase slope,
   S "Find the" +:+ phrase intrslce +:+ phraseNP (normForce `and_` shearForce) +:+ S "along the" +:+ phrase crtSlpSrf]
-  
+
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
   short progName +:+ S "Responsibilities"]
@@ -294,7 +299,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharIntro :: Contents
 userCharIntro = userChar progName [S "Calculus", titleize Doc.physics]
-  [phrase soil, plural mtrlPrpty] [phrase effCohesion, phrase fricAngle, 
+  [phrase soil, plural mtrlPrpty] [phrase effCohesion, phrase fricAngle,
   S "unit weight"]
 
 userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
@@ -302,12 +307,12 @@ userChar pname understandings familiarities specifics = foldlSP [
   atStartNP (the endUser) `S.of_` short pname,
   S "should have an understanding" `S.of_` S "undergraduate Level 1",
   foldlList Comma List understandings `sC`
-  S "and be familiar with", foldlList Comma List familiarities `sC` 
+  S "and be familiar with", foldlList Comma List familiarities `sC`
   S "specifically", foldlList Comma List specifics]
 
 -- SECTION 3.2 --
 sysConstraints :: Contents
-sysConstraints = foldlSP [atStartNP (NP.the (combineNINI morPrice method_)), 
+sysConstraints = foldlSP [atStartNP (NP.the (combineNINI morPrice method_)),
   refS morgenstern1965 `sC` S "which involves dividing the", phrase slope,
   S "into vertical", plural slice `sC` S "will be used to derive the",
   plural equation, S "for analysing the", phrase slope]
@@ -352,14 +357,14 @@ physSysConv = foldlSP [atStart morPrice, phrase analysis, refS morgenstern1965
   `S.ofThe` phrase slope, S "involves representing the", phrase slope,
   S "as a series of vertical" +:+. plural slice, S "As shown in",
   refS figIndexConv `sC` phraseNP (the index), ch index, S "is used to denote a",
-  phrase value `S.for` S "a single", phrase slice `sC` S "and an", phrase intrslce, 
+  phrase value `S.for` S "a single", phrase slice `sC` S "and an", phrase intrslce,
   phrase value, S "at a given", phrase index, ch index, S "refers to the",
   phrase value, S "between", phrase slice, ch index `S.and_` S "adjacent", phrase slice,
   eS $ sy index $+ int 1]
 
 figIndexConv :: LabelledContent
-figIndexConv = llcc (makeFigRef "IndexConvention") $ 
-  fig (foldlSent_ [S "Index convention for", phraseNP (slice `and_` 
+figIndexConv = llcc (makeFigRef "IndexConvention") $
+  fig (foldlSent_ [S "Index convention for", phraseNP (slice `and_`
   intrslce), plural value]) (resourcePath ++ "IndexConvention.png")
 
 physSysFbd :: Contents

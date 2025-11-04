@@ -6,6 +6,7 @@ import Data.List ((\\))
 import Language.Drasil hiding (section)
 import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (TheoryModel)
@@ -65,11 +66,15 @@ import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
-srs :: Document
-srs = mkDoc mkSRS S.forT fullSI
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
 
+-- sigh, this is used by others
 fullSI :: System
-fullSI = fillcdbSRS mkSRS si
+fullSI = fst sd
+
+srs :: Document
+srs = mkDoc mkSRS S.forT sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
@@ -162,7 +167,7 @@ si = mkSystem
   progName Specification [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
   -- FIXME: Everything after (and including) \\ should be removed when
-  -- #1658 is resolved. Basically, _quants is used here, but 
+  -- #1658 is resolved. Basically, _quants is used here, but
   -- tau does not appear in the document and thus should not be displayed.
   ((map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
@@ -345,7 +350,7 @@ dataConstListOut = [tempW, watE]
 -- Traceabilty Graphs --
 ------------------------
 
--- Using the SWHS graphs as place holders until ones can be generated for NoPCM 
+-- Using the SWHS graphs as place holders until ones can be generated for NoPCM
 
 ------------------------------------------
 --Section 8: SPECIFICATION PARAMETER VALUE

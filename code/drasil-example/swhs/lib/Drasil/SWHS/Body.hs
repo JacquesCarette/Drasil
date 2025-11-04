@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
@@ -54,14 +55,17 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
   tempW, thickness, watE)
 
-
 -------------------------------------------------------------------------------
 
-srs :: Document
-srs = mkDoc mkSRS S.forT fullSI
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
 
+-- sigh, this is used by others
 fullSI :: System
-fullSI = fillcdbSRS mkSRS si
+fullSI = fst sd
+
+srs :: Document
+srs = mkDoc mkSRS S.forT sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
@@ -433,7 +437,7 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
   s4_2_3_deriv_10 density mass vol,
   s4_2_3_deriv_11]-}
 
--- General Definitions is automatically generated 
+-- General Definitions is automatically generated
 
 ------------------------------
 -- 4.2.4 : Data Definitions --

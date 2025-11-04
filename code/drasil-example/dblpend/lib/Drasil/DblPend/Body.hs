@@ -7,6 +7,7 @@ import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
@@ -46,11 +47,15 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols, odeInfoChunks)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
 
+-- sigh, this is used by others
 fullSI :: System
-fullSI = fillcdbSRS mkSRS si
+fullSI = fst sd
+
+srs :: Document
+srs = mkDoc mkSRS (S.forGen titleize phrase) sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
@@ -61,7 +66,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     RefProg intro      -- This add the introduction blob to the reference section
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
-      -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
+      -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
       , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
       ],
   IntroSec $
@@ -70,12 +75,12 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
        IScope scope,
        IChar [] charsOfReader [],
        IOrgSec inModel (SRS.inModel [] []) EmptyS],
-  GSDSec $ 
+  GSDSec $
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
-      UsrChars [userCharacteristicsIntro progName], 
-      SystCons [] []],                            
-  SSDSec $ 
+      UsrChars [userCharacteristicsIntro progName],
+      SystCons [] []],
+  SSDSec $
     SSDProg
       [ SSDProblem $ PDProg purp []                -- This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
@@ -120,32 +125,32 @@ motivation = foldlSent_ [S "To simulate", phraseNP (motion `the_ofThe` pendulum)
   S "and exhibit its chaotic characteristics"]
 
 background :: Sentence
-background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
+background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mass,
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
   S "highly sensitive to initial conditions"]
 
 -- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is currently added to symbolsAll automatically as it is used to create new chunks with pendDisAngle's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
-symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
+symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
   ++ odeInfoChunks dblPenODEInfo
 
 ideaDicts :: [IdeaDict]
-ideaDicts = 
+ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
   nw progName : map nw mathcon' ++ map nw physicCon'
 
 abbreviationsList :: [IdeaDict]
-abbreviationsList = 
+abbreviationsList =
   -- DefinedQuantityDict abbreviations
   map nw symbols ++
   -- Other acronyms/abbreviations
   nw progName : map nw acronyms
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = 
+conceptChunks =
   -- ConceptChunks
   physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
   gravitationalConst, gravity] ++
@@ -171,7 +176,7 @@ concIns = assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs
 -- Section : INTRODUCTION --
 ------------------------------
 justification :: CI -> Sentence
-justification prog = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
+justification prog = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` phrase mass,
                             S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
                             (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate", phraseNP (motion
@@ -179,11 +184,11 @@ justification prog = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` p
                             S "The document describes the program called", phrase prog,
                             S ", which is based on the original, manually created version of" +:+
                             namedRef externalLinkRef (S "Double Pendulum")]
-                            
+
 externalLinkRef :: Reference
-externalLinkRef = makeURI "DblPendSRSLink" 
-  "https://github.com/Zhang-Zhi-ZZ/CAS741Project/tree/master/Double%20Pendulum" 
-  (shortname' $ S "DblPendSRSLink")                            
+externalLinkRef = makeURI "DblPendSRSLink"
+  "https://github.com/Zhang-Zhi-ZZ/CAS741Project/tree/master/Double%20Pendulum"
+  (shortname' $ S "DblPendSRSLink")
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------
@@ -193,7 +198,7 @@ externalLinkRef = makeURI "DblPendSRSLink"
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 scope :: Sentence
-scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
+scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
   sParen (short twoD), phrase pendMotion, phrase problem,
                    S "with various initial conditions"]
 
@@ -231,7 +236,7 @@ sysCtxIntro prog = foldlSP
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
    `andThe` user), S "is through an application programming" +:+.
-   phrase interface, S "The responsibilities" `S.ofThe` phraseNP (user 
+   phrase interface, S "The responsibilities" `S.ofThe` phraseNP (user
    `andThe` system), S "are as follows"]
 
 sysCtxUsrResp :: CI -> [Sentence]
@@ -250,7 +255,7 @@ sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +
   phrase input_ +:+. (S "instead" `S.ofA` S "floating point number"),
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
   pluralNP (physical `and_` softwareConstraint),
-  S "Calculate the required" +:+. plural output_, 
+  S "Calculate the required" +:+. plural output_,
   S "Generate the required" +:+. plural graph]
 
 sysCtxResp :: CI -> [Sentence]
@@ -267,7 +272,7 @@ sysCtxList prog = UlC $ ulcc $ Enumeration $ bulletNested (sysCtxResp prog) $
 userCharacteristicsIntro :: CI -> Contents
 userCharacteristicsIntro prog = foldlSP
   [S "The", phrase endUser `S.of_` short prog,
-   S "should have an understanding of", 
+   S "should have an understanding of",
    phrase highSchoolPhysics `sC` phrase highSchoolCalculus `S.and_` plural ode]
 
 -------------------------------

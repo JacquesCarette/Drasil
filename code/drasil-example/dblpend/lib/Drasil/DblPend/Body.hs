@@ -8,7 +8,8 @@ import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
-import qualified Drasil.DocLang.SRS as SRS
+import Drasil.DocLang (inReq, inReqDesc, mkInputPropsTable)
+import qualified Drasil.DocLang.SRS as SRS (assumpt, inModel, sectionReferences)
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -93,7 +94,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
         ]
       ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub EmptyS []
+    [ FReqsSub inputValuesDescription []
     , NonFReqsSub
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -154,17 +155,32 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
+  dataDefs iMods genDefns tMods concIns labelledContentWithInputs allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref labelledContentWithInputs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
+labelledContentWithInputs :: [LabelledContent]
+labelledContentWithInputs = inputValuesTable : labelledContent
+
+inputValuesTable :: LabelledContent
+inputValuesTable = mkInputPropsTable inputs
+
+inputValuesDescription :: Sentence
+inputValuesDescription = S "the initial double pendulum configuration"
+
+inputValuesSentence :: Sentence
+inputValuesSentence = inReqDesc inputValuesTable inputValuesDescription
+
+inputValuesRequirement :: ConceptInstance
+inputValuesRequirement = inReq inputValuesSentence
+
 concIns :: [ConceptInstance]
-concIns = assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs
+concIns = inputValuesRequirement : (assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs)
 -- ++ likelyChgs ++ unlikelyChgs
 
 ------------------------------

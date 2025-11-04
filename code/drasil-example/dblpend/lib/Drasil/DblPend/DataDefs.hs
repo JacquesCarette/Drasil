@@ -7,9 +7,9 @@ import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (DataDefinition, ddENoRefs, ddMENoRefs)
 import Drasil.DblPend.LabelledContent (figMotion)
-import Drasil.DblPend.Unitals (pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2)
+import Drasil.DblPend.Unitals (forceVec, pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2)
 import Drasil.DblPend.Concepts (horizontalPos, verticalPos)
-import Data.Drasil.Quantities.Physics (velocity, position, time, acceleration, force)
+import Data.Drasil.Quantities.Physics (velocity, position, time, acceleration)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 dataDefs :: [DataDefinition]
@@ -118,7 +118,7 @@ forceGDD :: DataDefinition
 forceGDD = ddENoRefs forceGQD Nothing "forceGDD" []
 
 forceGQD :: SimpleQDef
-forceGQD = mkQuantDef force forceGEqn
+forceGQD = mkQuantDef forceVec forceGEqn
 
 forceGEqn :: PExpr
 forceGEqn = vScale (sy mass) (sy acceleration)

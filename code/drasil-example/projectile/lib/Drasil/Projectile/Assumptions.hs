@@ -18,9 +18,9 @@ import Data.Drasil.Concepts.Physics (acceleration, collision, distance, gravity,
 import Drasil.Projectile.Concepts (launcher, projectile, target, projMotion)
 
 assumptions :: [ConceptInstance]
-assumptions = [twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis, 
-  posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag, pointMass, 
-  freeFlight, neglectCurv, timeStartZero, gravAccelValue]
+assumptions = [twoDMotion, neglectCurv, cartSyst, yAxisGravity, accelYGravity,
+  launchOrigin, targetXAxis, posXDirection, neglectDrag, pointMass,
+  freeFlight, accelXZero, constAccel, timeStartZero, gravAccelValue]
 
 twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis,
   posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag,

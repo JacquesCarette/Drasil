@@ -48,6 +48,7 @@ library:
   - Language.Drasil.ShortHands
   - Language.Drasil.Space
   - Data.Map.Ordered
+  - Language.Drasil.Expr.Lang
   when:
   - condition: false
     other-modules: Paths_drasil_lang

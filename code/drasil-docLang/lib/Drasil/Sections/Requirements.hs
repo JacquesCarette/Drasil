@@ -28,7 +28,6 @@ import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)
-import Data.List (nub)
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
@@ -42,7 +41,7 @@ reqF = SRS.require [reqIntro]
 -- For listing input requirements.
 fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> [ConceptInstance] -> [ConceptInstance]
 fullReqs [] _ _ = []
-fullReqs i d r = nub $ inReq (inReqDesc (mkInputPropsTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
+fullReqs i d r = inReq (inReqDesc (mkInputPropsTable i) d) : r -- ++ [outReq (outReqDesc outTable)]
 
 -- | Prepends given LabelledContent to an input-value table.
 fullTables :: (Quantity i, MayHaveUnit i) => [i] -> [LabelledContent] -> [LabelledContent]

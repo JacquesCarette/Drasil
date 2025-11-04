@@ -5,7 +5,7 @@
 -- Over time, we'll want to have a cleaner separation, but doing that
 -- all at once would break too much for too long.  So we start here
 -- instead.
-module Drasil.DocumentLanguage where
+module Drasil.DocumentLanguage (mkDoc, fillcdbSRS, findAllRefs) where
 
 import Control.Lens ((^.), set)
 import Data.Function (on)
@@ -16,7 +16,7 @@ import qualified Data.Map as Map (elems, assocs, keys)
 import Utils.Drasil (invert)
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
-import qualified Drasil.DocDecl as DD (DocSection(TraceabilitySec))
+import qualified Drasil.DocDecl as DD
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..),
@@ -40,7 +40,7 @@ import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
-import Drasil.Sections.TableOfContents (toToC, findToC)
+import Drasil.Sections.TableOfContents (toToC)
 import Drasil.Sections.TableOfSymbols (table, tsIntro)
 import Drasil.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
 import qualified Drasil.DocLang.SRS as SRS (appendix,
@@ -73,12 +73,10 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
 -- * Main Function
 
 -- | Creates a document from a document description, a title combinator function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
-mkDoc dd comb si@SI {_sys = sys, _authors = docauthors} =
-  Document (whatsTheBigIdea si `comb` nw sys) (foldlList Comma List $ map (S . name) docauthors) (findToC l) $
-  mkSections si l
-  where
-    l = mkDocDesc si dd
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (System, DocDesc) -> Document
+mkDoc srs comb (si@SI {_sys = sys, _authors = docauthors}, dd) =
+  Document (whatsTheBigIdea si `comb` nw sys) (foldlList Comma List $ map (S . name) docauthors)
+    (findToC srs) $ mkSections si dd
 
 -- * Functions to Fill 'ChunkDB'
 
@@ -91,12 +89,17 @@ mkDoc dd comb si@SI {_sys = sys, _authors = docauthors} =
 -- | Assuming a given 'ChunkDB' with no traces and minimal/no references, fill
 -- in for rest of system information. Currently fills in references,
 -- traceability matrix information and 'IdeaDict's.
-fillcdbSRS :: SRSDecl -> System -> System
-fillcdbSRS srsDec si = fillLC srsDec $ fillReferences srsDec $ fillTraceSI srsDec si
+fillcdbSRS :: SRSDecl -> System -> (System , DocDesc)
+fillcdbSRS srsDec si =
+  (fillLC dd $ fillReferences sections $ fillTraceSI dd si , dd)
+  where
+    dd :: DocDesc
+    dd = mkDocDesc si srsDec
+    sections :: [Section]
+    sections = mkSections si dd
 
--- | Input the to-be-created 'LabelledContent's into the 'ChunkDB' (to be
--- created by the final SRS artifact renderer).
-fillLC :: SRSDecl -> System -> System
+-- | Fill in the 'Section's and 'LabelledContent' maps of the 'ChunkDB' from the 'SRSDecl'.
+fillLC :: DocDesc -> System -> System
 fillLC sd si@SI{ _sys = sn }
   | containsTraceSec sd = si2
   | otherwise = si
@@ -111,20 +114,18 @@ fillLC sd si@SI{ _sys = sn }
     chkdb2 = chkdb { labelledcontentTable = idMap $ nub $ existingLC ++ createdLCs }
     si2 = set systemdb chkdb2 si
 
-    containsTraceSec :: SRSDecl -> Bool
-    containsTraceSec ((DD.TraceabilitySec _):_) = True
+    containsTraceSec :: DocDesc -> Bool
+    containsTraceSec ((TraceabilitySec _):_) = True
     containsTraceSec (_:ss)                = containsTraceSec ss
     containsTraceSec []                    = False
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: SRSDecl -> System -> System
-fillReferences dd si@SI{_sys = sys} = si2
+fillReferences :: [Section] -> System -> System
+fillReferences allSections si@SI{_sys = sys} = si2
   where
     -- get old chunk database + ref database
     chkdb = si ^. systemdb
     cites = citeDB si
-    -- convert SRSDecl into a list of sections (to easily get at all the references used in the SRS)
-    allSections = mkSections si $ mkDocDesc si dd
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
@@ -147,10 +148,6 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- set new chunk database into system information
     si2 = set systemdb chkdb2 si
 
--- | Helper that gets references from definitions and models.
-dRefToRef :: HasDecRef a => a -> [Reference]
-dRefToRef r = map ref $ r ^. getDecRefs
-
 -- | Recursively find all references in a section (meant for getting at 'LabelledContent').
 findAllRefs :: Section -> [Reference]
 findAllRefs (Section _ cs r) = r: concatMap findRefSecCons cs
@@ -161,10 +158,8 @@ findAllRefs (Section _ cs r) = r: concatMap findRefSecCons cs
     findRefSecCons _ = []
 
 -- | Helper for filling in the traceability matrix and graph information into the system.
-fillTraceSI :: SRSDecl -> System -> System
-fillTraceSI dd si = fillTraceMaps l $ fillReqs l si
-  where
-    l = mkDocDesc si dd
+fillTraceSI :: DocDesc -> System -> System
+fillTraceSI dd si = fillTraceMaps dd $ fillReqs dd si
 
 -- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
 fillTraceMaps :: DocDesc -> System -> System
@@ -439,3 +434,12 @@ mkBib bib = SRS.reference [UlC $ ulcc (Bib bib)] []
 -- | Helper for making the Appendix section.
 mkAppndxSec :: AppndxSec -> Section
 mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
+
+-- ** Find Table of Contents
+
+-- Find more concise way to do this
+-- | Finds whether the Table of Contents is in a SRSDecl.
+findToC :: SRSDecl -> ShowTableOfContents
+findToC [] = NoToC
+findToC (DD.TableOfContents:_) = ToC
+findToC (_:dds) = findToC dds

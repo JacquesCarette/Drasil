@@ -4,6 +4,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (mkSystem, SystemKind(Specification), systemdb)
@@ -15,11 +16,15 @@ import Drasil.HGHC.MetaConcepts (progName)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
 
-srs :: Document
-srs = mkDoc mkSRS S.forT fullSI
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
 
+-- sigh, this is used by others
 fullSI :: System
-fullSI = fillcdbSRS mkSRS si
+fullSI = fst sd
+
+srs :: Document
+srs = mkDoc mkSRS S.forT sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration

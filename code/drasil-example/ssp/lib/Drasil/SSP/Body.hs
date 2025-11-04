@@ -7,6 +7,7 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
@@ -54,14 +55,18 @@ import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
 
 --Document Setup--
 
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
+
+-- sigh, this is used by others
+fullSI :: System
+fullSI = fst sd
+
 srs :: Document
-srs = mkDoc mkSRS S.forT fullSI
+srs = mkDoc mkSRS S.forT sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
 
 resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"

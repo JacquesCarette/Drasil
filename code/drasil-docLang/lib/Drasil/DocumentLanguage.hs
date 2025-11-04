@@ -63,7 +63,7 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
   generateTraceTableView, traceMHeader, layoutUIDs)
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
-import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, traceGCon')
+import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
@@ -105,7 +105,9 @@ fillLC sd si@SI{ _sys = sn }
   | otherwise = si
   where
     chkdb = si ^. systemdb
-    createdLCs = traceGCon' $ programName sn -- Pre-generate a copy of all LabelledContents for insertion in the ChunkDB.
+    -- Pre-generate a copy of all required LabelledContents (i.e., traceability
+    -- graphs) for insertion in the ChunkDB.
+    createdLCs = genTraceGraphLabCons $ programName sn
     -- FIXME: This is a semi-hack. This is only strictly necessary for the
     -- traceability graphs. Those are all chunks that should exist but not be
     -- handled like this. They should be created and included in the

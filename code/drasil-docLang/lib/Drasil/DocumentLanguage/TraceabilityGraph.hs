@@ -162,12 +162,14 @@ traceGLst = UlC $ ulcc $ Enumeration $ Bullet $ map (, Nothing) folderList'
 
 -- | The Traceability Graph contents.
 traceGCon :: String -> [Contents] -- FIXME: HACK: We're generating "LlC"s of the traceability graphs multiple times... See DocumentLanguage.hs' mkTraceabilitySec for the other spot.
-traceGCon ex = map LlC (traceGCon' ex)
+traceGCon ex = map LlC (genTraceGraphLabCons ex)
             ++ [mkParagraph $ S "For convenience, the following graphs can be\
                \ found at the links below:", traceGLst]
 
-traceGCon' :: String -> [LabelledContent]
-traceGCon' ex = zipWith (traceGraphLC ex) traceGFiles traceGUIDs
+-- | Generate the `LabelledContent` chunks, specialized to a specific example
+-- (and its path).
+genTraceGraphLabCons :: String -> [LabelledContent]
+genTraceGraphLabCons ex = zipWith (traceGraphLC ex) traceGFiles traceGUIDs
 
 -- | Generates traceability graphs as figures on an SRS document.
 traceGraphLC :: String -> FilePath -> UID -> LabelledContent

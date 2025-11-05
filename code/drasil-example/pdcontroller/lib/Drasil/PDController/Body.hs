@@ -121,7 +121,7 @@ background = foldlSent_ [
 
 orgSecEnd :: Sentence
 orgSecEnd = foldlSent [
-    S "The instance model referred as", refS imPD, S "provides an", 
+    S "The instance model referred as", refS imPD, S "provides an",
     titleize ode, sParen (short ode), S "that models the", phrase pidC
   ]
 

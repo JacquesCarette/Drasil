@@ -67,7 +67,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     RefProg intro      -- This add the introduction blob to the reference section
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
-      -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
+      -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
       , TAandA        -- Add table of abbreviation and acronym section
       ],
   IntroSec $
@@ -76,7 +76,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
        IScope scope,
        IChar [] charsOfReader [],
        IOrgSec inModel (SRS.inModel [] []) Nothing],
-  GSDSec $ 
+  GSDSec $
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
       UsrChars [userCharacteristicsIntro progName],
@@ -107,7 +107,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
      AuxConsProg progName [], -- Adds Auxilliary constraint section
   Bibliography                -- Adds reference section
   ]
-        
+
 si :: System
 si = mkSystem progName Specification [dong]
   [purp] [background] [scope] [motivation]

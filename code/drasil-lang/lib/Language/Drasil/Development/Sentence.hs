@@ -50,7 +50,7 @@ introduceAbb n = toSent (NP.titleizeNP (n ^. term)) +:+ sParen (short n)
 introduceAbbPlrl :: Idea n => n -> S.Sentence
 introduceAbbPlrl n = toSent (NP.titleizeNP' (n ^. term)) +:+ sParen (short n)
 
--- | Helper function for getting the sentence case of a noun phrase from a 
+-- | Helper function for getting the sentence case of a noun phrase from a
 -- 'NamedIdea'.
 atStart, atStart' :: NamedIdea n => n -> S.Sentence
 -- | Singular sentence case.

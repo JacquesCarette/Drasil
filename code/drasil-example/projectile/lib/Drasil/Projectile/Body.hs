@@ -70,7 +70,7 @@ mkSRS = [TableOfContents,
     RefProg intro
       [ TUnits
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-      , TAandA  
+      , TAandA
       ],
   IntroSec $
     IntroProg justification (phrase progName)
@@ -78,8 +78,8 @@ mkSRS = [TableOfContents,
       , IScope scope
       , IChar [] charsOfReader []
       , IOrgSec inModel (SRS.inModel [] []) Nothing],
-  GSDSec $ 
-      GSDProg 
+  GSDSec $
+      GSDProg
         [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]
         , UsrChars [userCharacteristicsIntro]
         , SystCons [] []],

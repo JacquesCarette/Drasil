@@ -137,11 +137,6 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  -- CIs
-  -- CIs
-  -- CIs
-  
-  -- CIs
   nw progName : map nw mathcon' ++ map nw acronyms
 
 conceptChunks :: [ConceptChunk]

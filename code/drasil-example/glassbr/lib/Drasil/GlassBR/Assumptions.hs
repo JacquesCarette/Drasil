@@ -6,6 +6,7 @@ import Language.Drasil hiding (organization)
 import qualified Language.Drasil.Development as D
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,
@@ -85,5 +86,6 @@ responseTypeDesc = foldlSent [D.toSent $ atStartNP (the responseTy), S "consider
 
 ldfConstantDesc :: Sentence
 ldfConstantDesc = foldlSent [S "With", phrase reference, S "to",
-  refS assumpSV `sC` S "the" +:+ introduceAbb loadDF
-  `S.is` phrase constant]
+  refS assumpSV `sC` D.toSent (phraseNP (NP.the (value `of_`
+  loadDF))), sParen (short loadDF) `S.is` D.toSent (phraseNP (a_ constant))
+  `S.in_` short progName]

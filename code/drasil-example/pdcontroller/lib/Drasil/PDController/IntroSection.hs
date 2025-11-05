@@ -10,7 +10,7 @@ import Drasil.PDController.Concepts
 introPara, introPurposeOfDoc, introscopeOfReq :: Sentence
 introPara
   = foldlSent
-      [S "Automatic process control with a controller (" :+: 
+      [S "Automatic process control with a controller (" :+:
        short proportionalCI :+: S "/PI/" :+: short pdControllerCI :+: S "/" :+: short pidCI :+: S ") is used",
          S "in a variety of applications such as thermostats, automobile",
          S "cruise-control, etc. The gains" `S.ofA` S "controller in an application" +:+.

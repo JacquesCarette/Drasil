@@ -192,7 +192,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns labelledContent allRefs citations 
+  NoPCM.iMods genDefs tMods concIns labelledContent allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

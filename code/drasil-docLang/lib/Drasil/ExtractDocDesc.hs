@@ -1,5 +1,4 @@
 {-# LANGUAGE LambdaCase, Rank2Types #-}
-{-# OPTIONS_GHC -Wno-unused-top-binds #-}
 -- | Defines functions to extract certain kinds of information from a document.
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
 module Drasil.ExtractDocDesc (

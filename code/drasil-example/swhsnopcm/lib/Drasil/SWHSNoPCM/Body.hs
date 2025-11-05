@@ -59,7 +59,7 @@ import Drasil.SWHSNoPCM.Definitions (htTrans)
 import Drasil.SWHSNoPCM.GenDefs (genDefs)
 import Drasil.SWHSNoPCM.Goals (goals)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
-import Drasil.SWHSNoPCM.LabelledContent (figTank, sysCntxtFig)
+import Drasil.SWHSNoPCM.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHSNoPCM.MetaConcepts (progName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
@@ -199,7 +199,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns [] allRefs citations 
+  NoPCM.iMods genDefs tMods concIns labelledContent allRefs citations 
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

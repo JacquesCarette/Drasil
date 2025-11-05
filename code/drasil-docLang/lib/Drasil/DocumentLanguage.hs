@@ -63,7 +63,7 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
   generateTraceTableView, traceMHeader, layoutUIDs)
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
-import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs)
+import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
@@ -91,7 +91,7 @@ mkDoc srs comb (si@SI {_sys = sys, _authors = docauthors}, dd) =
 -- traceability matrix information and 'IdeaDict's.
 fillcdbSRS :: SRSDecl -> System -> (System , DocDesc)
 fillcdbSRS srsDec si =
-  (fillSecAndLC dd $ fillReferences sections $ fillTraceSI dd si , dd)
+  (fillLC dd $ fillReferences sections $ fillTraceSI dd si , dd)
   where
     dd :: DocDesc
     dd = mkDocDesc si srsDec
@@ -99,35 +99,27 @@ fillcdbSRS srsDec si =
     sections = mkSections si dd
 
 -- | Fill in the 'Section's and 'LabelledContent' maps of the 'ChunkDB' from the 'SRSDecl'.
-fillSecAndLC :: DocDesc -> System -> System
-fillSecAndLC dd si = si2
+fillLC :: DocDesc -> System -> System
+fillLC sd si@SI{ _sys = sn }
+  | containsTraceSec sd = si2
+  | otherwise = si
   where
-    -- Get current contents of si
     chkdb = si ^. systemdb
-    -- extract sections and labelledcontent
-    allSections = concatMap findAllSec $ mkSections si dd -- FIXME: `mkSections` on something particularly large that is immediately discarded is a sign that we're doing something wrong.
-    allLC = concatMap findAllLC allSections
+    -- Pre-generate a copy of all required LabelledContents (i.e., traceability
+    -- graphs) for insertion in the ChunkDB.
+    createdLCs = genTraceGraphLabCons $ programName sn
+    -- FIXME: This is a semi-hack. This is only strictly necessary for the
+    -- traceability graphs. Those are all chunks that should exist but not be
+    -- handled like this. They should be created and included in the
+    -- meta-ChunkDB of `drasil-docLang`.
     existingLC = map (fst . snd) $ Map.assocs $ labelledcontentTable chkdb
-    -- fill in the appropriate chunkdb fields
-    chkdb2 = chkdb { labelledcontentTable = idMap $ nub $ existingLC ++ allLC }
-    -- return the filled in system information
+    chkdb2 = chkdb { labelledcontentTable = idMap $ nub $ existingLC ++ createdLCs }
     si2 = set systemdb chkdb2 si
 
-    -- Helper and finder functions
-    findAllSec :: Section -> [Section]
-    findAllSec s@(Section _ cs _) = s : concatMap findAllSubSec cs
-
-    findAllSubSec :: SecCons -> [Section]
-    findAllSubSec (Sub s) = findAllSec s
-    findAllSubSec _ = []
-
-    findAllLC :: Section -> [LabelledContent]
-    findAllLC (Section _ cs _) = concatMap findLCSecCons cs
-
-    findLCSecCons :: SecCons -> [LabelledContent]
-    findLCSecCons (Sub s) = findAllLC s
-    findLCSecCons (Con (LlC lblcons@(LblC {_ctype = Figure {}}))) = [lblcons]
-    findLCSecCons _ = []
+    containsTraceSec :: DocDesc -> Bool
+    containsTraceSec ((TraceabilitySec _):_) = True
+    containsTraceSec (_:ss)                = containsTraceSec ss
+    containsTraceSec []                    = False
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
 fillReferences :: [Section] -> System -> System

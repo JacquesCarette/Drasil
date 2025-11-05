@@ -535,6 +535,10 @@ traceGLst :: Contents
 -- | The Traceability Graph contents.
 traceGCon :: String -> [Contents]
 
+-- | Generate the <a>LabelledContent</a> chunks, specialized to a specific
+--   example (and its path).
+genTraceGraphLabCons :: String -> [LabelledContent]
+
 -- | Generates traceability graphs as figures on an SRS document.
 traceGraphLC :: String -> FilePath -> UID -> LabelledContent
 

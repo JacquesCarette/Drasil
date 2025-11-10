@@ -3,7 +3,7 @@
 module Drasil.Shared.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSFunction, VSType, SVariable, SValue,
-  VSThunk, MSStatement, MSParameter, SMethod, NamedArgs, MixedCall,
+  SLValue, VSThunk, MSStatement, MSParameter, SMethod, NamedArgs, MixedCall,
   MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
@@ -18,7 +18,7 @@ module Drasil.Shared.InterfaceCommon (
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), convType
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), LValueSym(..), convType
   ) where
 
 import Data.Bifunctor (first)
@@ -98,6 +98,13 @@ class ScopeSym r where
   mainFn :: r (Scope r) -- Main program - either main function or global scope
   local  :: r (Scope r) -- Definite local scope
 
+type SLValue a = VS (a (LValue a))
+
+class (VariableSym r) => LValueSym r where
+  type LValue r
+  symbol    :: SVariable r -> SLValue r
+  arrayElem :: SValue r -> SVariable r -> LValue r
+
 type SVariable a = VS (a (Variable a))
 
 class (TypeSym r) => VariableSym r where
@@ -105,7 +112,6 @@ class (TypeSym r) => VariableSym r where
   var       :: Label -> VSType r -> SVariable r
   constant  :: Label -> VSType r -> SVariable r
   extVar    :: Library -> Label -> VSType r -> SVariable r
-  arrayElem :: Integer -> SVariable r -> SVariable r
 
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
@@ -215,6 +221,7 @@ class (ValueSym r) => Comparison r where
   (?!=) :: SValue r -> SValue r -> SValue r
   infixl 3 ?!=
 
+-- TODO: I'm not sure if this should be uptated to SLValue
 type NamedArgs r = [(SVariable r, SValue r)]
 -- Function call with both positional and named arguments
 type MixedCall r = Label -> VSType r -> [SValue r] -> NamedArgs r -> SValue r
@@ -297,18 +304,18 @@ class (ValueSym r) => Set r where
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
-    -> SVariable r -> SValue r -> MSBlock r
+    -> SLValue r -> SValue r -> MSBlock r
 
 -- | Creates a slice of a list and assigns it to a variable.
 --   Arguments are:
---   Variable to assign
+--   LValue to assign
 --   List to read from
 --   (optional) Start index inclusive.
 --      (if Nothing, then list start if step > 0, list end if step < 0)
 --   (optional) End index exclusive.
 --      (if Nothing, then list end if step > 0, list start if step > 0)
 --   (optional) Step (if Nothing, then defaults to 1)
-listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) ->
+listSlice :: (InternalList r) => SLValue r -> SValue r -> Maybe (SValue r) ->
   Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold
 
@@ -328,8 +335,8 @@ class ThunkSym r where
   -- signature of valueType
   type Thunk (r :: K.Type -> K.Type)
 
-class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r where
-  thunkAssign :: SVariable r -> VSThunk r -> MSStatement r
+class (LValueSym r, ThunkSym r, StatementSym r) => ThunkAssign r where
+  thunkAssign :: SLValue r -> VSThunk r -> MSStatement r
 
 class TypeSym r => VectorType r where
   vecType :: VSType r -> VSType r

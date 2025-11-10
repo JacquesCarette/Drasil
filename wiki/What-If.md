@@ -173,7 +173,7 @@ programming language.
 concept (i.e. a human-level explanation and a rendering of the executable
 part as code) is a huge problem; if these are always seen as an integral
 whole, then the synchronization problem disappears.
-4. There is power in usual the 'right language' for any given job at hand.
+4. There is power in using the 'right language' for any given job at hand.
 
 It's important to note that these ideas can't be seen as direct descendants
 of literate programming: they weave in ideas from other sources too!
@@ -350,7 +350,7 @@ that all the steps are things that the system has knowledge of?
 Even the documentation?
 
 **S** Yes, that's right.  Every step involves either 
-writing down specific 'knowledge' or gathering specific 'knowledge' for
+writing down specific 'knowledge' or gathering specific 'knowledge' from
 an existing library. It can be explanations meant for humans or lead
 to code or both.
 
@@ -376,7 +376,7 @@ kinds of activities?
 
 **S** Yes, that's exactly right! This is one of the important ideas that
 emerges from much of the work that has influenced us. There are many
-'domain of knowledge' and each one of them ends up defining a vocabulary
+'domains of knowledge' and each one of them ends up defining a vocabulary
 (and grammar and formation rules and ...).
 
 Some domains of knowledge are obvious, such as solid-body physics for
@@ -626,7 +626,7 @@ impact on many subsequent projects.
 The main reason for the tools to fall to the wayside is that the maintenance
 burden was too high compared to the amount of take-up by outsiders in a
 reasonable time frame. And a lot of that had three underlying reasons:
-1) poor technology, 2) overly ambitious aims, and 3) lack of theoretical
+1\) poor technology, 2) overly ambitious aims, and 3) lack of theoretical
 foundations. Any one of them is not a fatal flaw, but the combination of all
 of them was too much. In some sense, a fourth reason is that some of them
 were just too far ahead of the state-of-the-art, and so used 'clunky'
@@ -636,7 +636,7 @@ means to get the job done.
 
 **S** Yes, absolutely. There have been tremendous advances in
 meta-programming, statically typed programming, tooling for DSLs and
-generally a much better understanding on how to create languages.
+generally a much better understanding of how to create languages.
 Our project tries to mitigate the 'overly ambitious' by trying to do
 the minimal infrastructure necessary to get things to work, and then
 refactor when necessary. We're also very example-driven when it comes to

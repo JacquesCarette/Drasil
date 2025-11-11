@@ -81,22 +81,9 @@ basisCDB =
   $ insertAll basisIdeaDicts
     empty
 
-  -- | Smart constructor for chunk databases. Takes in the following:
---
---     * ['Quantity'] (for 'SymbolMap'),
---     * 'NamedIdea's (for 'TermMap'),
---     * 'Concept's (for 'ConceptMap'),
---     * Units (something that 'IsUnit' for 'UnitMap'),
---     * 'DataDefinition's (for 'DatadefnMap'),
---     * 'InstanceModel's (for 'InsModelMap'),
---     * 'GenDefn's (for 'GendefMap'),
---     * 'TheoryModel's (for 'TheoryModelMap'),
---     * 'ConceptInstance's (for 'ConceptInstanceMap'),
---     * 'LabelledContent's (for 'LabelledContentMap').
--- Creates a ChunkDB with basic data already included. Should be used over
--- cdb' in Database.Drasil, which does not include the basic data.
+-- | Create a `ChunkDB` containing all knowledge (chunks) required to generate
+-- our SmithEtAl-esque SRS.
 cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
     [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
-    [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
-cdb s t c u d ins gd tm ci lc r cits =
-  insertAllOutOfOrder12 s t c u d ins gd tm ci cits lc r basisCDB
+    [ConceptInstance] -> [Citation] -> [LabelledContent] -> [Reference] -> ChunkDB
+cdb = insertAllOutOfOrder12 basisCDB

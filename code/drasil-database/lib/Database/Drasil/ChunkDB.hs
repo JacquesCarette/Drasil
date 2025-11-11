@@ -247,10 +247,11 @@ chunks cdb =
 insertAllOutOfOrder12 ::
   (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e,
    IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j) =>
+   ChunkDB ->
    [a] -> [b] -> [c] -> [d] -> [e] ->
    [f] -> [g] -> [h] -> [i] -> [j] ->
-   [LabelledContent] -> [Reference] -> ChunkDB -> ChunkDB
-insertAllOutOfOrder12 as bs cs ds es fs gs hs is js lcs rs strtr =
+   [LabelledContent] -> [Reference] -> ChunkDB
+insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
   let
     -- Box all of our chunks
     as' = map mkChunk as

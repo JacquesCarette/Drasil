@@ -91,7 +91,7 @@ ideaDicts =
   -- Actual IdeaDicts
   materialProprty :
   -- CIs
-  map nw [progName', progName] ++ [nw phsChgMtrl] ++
+  map nw [phsChgMtrl, progName', progName] ++
   map nw mathcon'
 
 conceptChunks :: [ConceptChunk]

@@ -5,7 +5,7 @@
 -- Over time, we'll want to have a cleaner separation, but doing that
 -- all at once would break too much for too long.  So we start here
 -- instead.
-module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
+module Drasil.DocumentLanguage (mkDoc, fillcdbSRS, findAllRefs) where
 
 import Control.Lens ((^.), set)
 import Data.Function (on)
@@ -32,13 +32,11 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..))
+import Database.Drasil (findOrErr, idMap, insertAll, ChunkDB(..))
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
-  findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent,
-  TermAbbr, shortForm, termResolve')
+  findAllInstMods, findAllTheoryMods, findAllConcInsts, TermAbbr, shortForm, termResolve')
 
-import Drasil.System (System(SI), whatsTheBigIdea, _sys, _systemdb, _quants,
-  _authors, refTable, refbyTable, traceTable, systemdb, sysName)
+import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -71,32 +69,17 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
-import qualified Data.Map.Strict as M
+import Data.Drasil.Concepts.Documentation (refBy)
+
 import Language.Drasil.Development (shortdep)
 
 -- * Main Function
 
--- | Creates a document from a 'System', a document description ('SRSDecl'), and
--- a title combinator.
-mkDoc :: System -> SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (Document, System)
-mkDoc si srsDecl headingComb =
-  let dd = mkDocDesc si srsDecl
-      sections = mkSections si dd
-      -- Above this line, the content to be generated in the SRS artifact is
-      -- pre-generated (missing content involving 'Reference's and
-      -- 'LabelledContent'). The below line injects "traceability" maps into the
-      -- 'ChunkDB' and adds missing 'LabelledContent' (the generated
-      -- traceability-related tables).
-      si'@SI{ _authors = docAuthors } = fillLC dd $ fillReferences sections $ fillTraceMaps dd si
-      -- Now, the 'real generation' of the SRS artifact can begin, with the
-      -- 'Reference' map now full (so 'Reference' references can resolve to
-      -- 'Reference's).
-      heading = whatsTheBigIdea si `headingComb` sysName si'
-      authorsList = foldlList Comma List $ map (S . name) docAuthors
-      toc = findToC srsDecl
-      dd' = mkDocDesc si' srsDecl
-      sections' = mkSections si' dd'
-  in (Document heading authorsList toc sections', si')
+-- | Creates a document from a document description, a title combinator function, and system information.
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (System, DocDesc) -> Document
+mkDoc srs comb (si@SI {_sys = sys, _authors = docauthors}, dd) =
+  Document (whatsTheBigIdea si `comb` nw sys) (foldlList Comma List $ map (S . name) docauthors)
+    (findToC srs) $ mkSections si dd
 
 -- * Functions to Fill 'ChunkDB'
 
@@ -105,6 +88,18 @@ mkDoc si srsDecl headingComb =
 -- - The traceability-stuff should be internal to ChunkDB.
 -- - The References and LabelledContent entirely need to be rebuilt. Some will
 --   be chunks that are manually written, others will not be chunks.
+
+-- | Assuming a given 'ChunkDB' with no traces and minimal/no references, fill
+-- in for rest of system information. Currently fills in references,
+-- traceability matrix information and 'IdeaDict's.
+fillcdbSRS :: SRSDecl -> System -> (System , DocDesc)
+fillcdbSRS srsDec si =
+  (fillLC dd $ fillReferences sections $ fillTraceSI dd si , dd)
+  where
+    dd :: DocDesc
+    dd = mkDocDesc si srsDec
+    sections :: [Section]
+    sections = mkSections si dd
 
 -- | Fill in the 'Section's and 'LabelledContent' maps of the 'ChunkDB' from the 'SRSDecl'.
 fillLC :: DocDesc -> System -> System
@@ -120,7 +115,8 @@ fillLC sd si@SI{ _sys = sn }
     -- traceability graphs. Those are all chunks that should exist but not be
     -- handled like this. They should be created and included in the
     -- meta-ChunkDB of `drasil-docLang`.
-    chkdb2 = insertAll createdLCs chkdb
+    existingLC = map (fst . snd) $ Map.assocs $ labelledcontentTable chkdb
+    chkdb2 = chkdb { labelledcontentTable = idMap $ nub $ existingLC ++ createdLCs }
     si2 = set systemdb chkdb2 si
 
     containsTraceSec :: DocDesc -> Bool
@@ -143,31 +139,53 @@ fillReferences allSections si@SI{_sys = sys} = si2
     imods   = findAllInstMods chkdb
     tmods   = findAllTheoryMods chkdb
     concIns = findAllConcInsts chkdb
-    lblCon  = findAllLabelledContent chkdb
-    newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $ refsFromSRS
+    lblCon  = map fst $ Map.elems $ labelledcontentTable chkdb
+    -- search the old reference table just in case the user wants to manually add in some references
+    refs    = map fst $ Map.elems $ refTable chkdb
+    -- set new reference table in the chunk database
+    chkdb2 = chkdb { refTable = idMap $ nub $ refsFromSRS
       ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
       ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (programName sys) ++ map ref cites
       ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref lblCon
-    si2 = set refTable (M.union (si ^. refTable) newRefs) si
+      ++ refs }
+    -- set new chunk database into system information
+    si2 = set systemdb chkdb2 si
 
 -- | Recursively find all references in a section (meant for getting at 'LabelledContent').
 findAllRefs :: Section -> [Reference]
-findAllRefs (Section _ cs r) = r : concatMap findRefSecCons cs
+findAllRefs (Section _ cs r) = r: concatMap findRefSecCons cs
   where
     findRefSecCons :: SecCons -> [Reference]
     findRefSecCons (Sub s) = findAllRefs s
-    findRefSecCons (Con (LlC (LblC _ rf _))) = [rf]
+    findRefSecCons (Con (LlC (LblC rf _))) = [rf]
     findRefSecCons _ = []
+
+-- | Helper for filling in the traceability matrix and graph information into the system.
+fillTraceSI :: DocDesc -> System -> System
+fillTraceSI dd si = fillTraceMaps dd $ fillReqs dd si
 
 -- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
 fillTraceMaps :: DocDesc -> System -> System
-fillTraceMaps dd si = si''
+fillTraceMaps dd si@SI{_systemdb = db} = si { _systemdb = newCDB }
   where
     tdb = generateTraceMap dd
-    si' = set traceTable tdb si
-    si'' = set refbyTable (invert tdb) si'
+    newCDB = db { traceTable = tdb, refbyTable = invert tdb }
+
+-- FIXME: ChunkDB-related work: `fillReqs` should not be used at all. It is a
+-- remnant of the old document-based derivation of System. See the note on the
+-- `ReqrmntSec` pattern matching line.
+
+-- | Fills in the requirements section of the system information using the document description.
+fillReqs :: DocDesc -> System -> System
+fillReqs [] si = si
+fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_systemdb = db} = genReqs x -- This causes overwrites in the ChunkDB for all requirements.
+  where
+    genReqs [] = si
+    genReqs (FReqsSub c _:_) = si { _systemdb = insertAll (nub c) db }
+    genReqs (_:xs) = genReqs xs
+fillReqs (_:xs) si = fillReqs xs si
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
@@ -263,7 +281,14 @@ mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map (mkSubRef si) l)
 -- | Extracts abbreviations/acronyms found in the document
 getAllChunksFromDoc :: [Section] -> ChunkDB -> [TermAbbr]
 getAllChunksFromDoc renderedSecs cdb =
-  map (termResolve' cdb) $ nub $ concatMap shortdep $ concatMap getSec renderedSecs
+  let
+    -- UIDs extracted from short-style positions in the rendered sections
+    uids = nub $ concatMap shortdep $ concatMap getSec renderedSecs
+    -- Ensure the common "RefBy" short-form chunk is included since it is
+    -- referenced in generated tables and definition fields (helperCI), but may
+    -- not always appear directly as a ShortStyle occurrence in some inputs.
+    uids' = if (refBy ^. uid) `elem` uids then uids else (refBy ^. uid) : uids
+  in map (termResolve' cdb) uids'
 
 collectDocumentAbbreviations :: [Section] -> ChunkDB -> [TermAbbr]
 collectDocumentAbbreviations renderedSecs cdb =
@@ -340,15 +365,16 @@ mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSub
         mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
         mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
 
+
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: System -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
-  SRS.solCharSpec [SSD.solutionCharSpecIntro (sysName si) SSD.imStub] $
+  SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) SSD.imStub] $
     map (mkSubSCS si) l
   where
     mkSubSCS :: System -> SCSSub -> Section
     mkSubSCS si' (TMs intro fields ts) =
-      SSD.thModF (sysName si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
+      SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
       SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap f dds
       where f e = LlC (ddefn fields si' e) : maybeToList (derivation e)
@@ -369,6 +395,8 @@ mkSolChSpec si (SCSProg l) =
       SSD.assumpF $ mkEnumSimpleD $ map (`SSD.helperCI` si') ci
     mkSubSCS _ (Constraints end cs)  = SSD.datConF end cs
     mkSubSCS _ (CorrSolnPpties c cs) = SSD.propCorSolF c cs
+    siSys :: System -> IdeaDict
+    siSys SI {_sys = sys} = nw sys
 
 -- ** Requirements
 
@@ -378,6 +406,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub  frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
+    mkSubs (FReqsSub' frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
     mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
 -- ** Likely Changes
@@ -409,12 +438,13 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
     trace = map (\(TraceConfig u _ desc cols rows) ->
       TM.generateTraceTableView u desc cols rows si) fProgs
     fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
-      not $ null (header (TM.layoutUIDs rows si) si)
-         || null (header (TM.layoutUIDs cols si) si)) progs
+      not $ null (header (TM.layoutUIDs rows sidb) si)
+         || null (header (TM.layoutUIDs cols sidb) si)) progs
+    sidb = si ^. systemdb
 
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> System -> [Sentence]
-header f = TM.traceMHeader (f . Map.keys . (^. refbyTable))
+header f = TM.traceMHeader (f . Map.keys . refbyTable)
 
 -- ** Off the Shelf Solutions
 

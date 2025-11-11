@@ -69,6 +69,7 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
+import Data.Drasil.Concepts.Documentation (refBy)
 
 import Language.Drasil.Development (shortdep)
 
@@ -280,7 +281,14 @@ mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map (mkSubRef si) l)
 -- | Extracts abbreviations/acronyms found in the document
 getAllChunksFromDoc :: [Section] -> ChunkDB -> [TermAbbr]
 getAllChunksFromDoc renderedSecs cdb =
-  map (termResolve' cdb) $ nub $ concatMap shortdep $ concatMap getSec renderedSecs
+  let
+    -- UIDs extracted from short-style positions in the rendered sections
+    uids = nub $ concatMap shortdep $ concatMap getSec renderedSecs
+    -- Ensure the common "RefBy" short-form chunk is included since it is
+    -- referenced in generated tables and definition fields (helperCI), but may
+    -- not always appear directly as a ShortStyle occurrence in some inputs.
+    uids' = if (refBy ^. uid) `elem` uids then uids else (refBy ^. uid) : uids
+  in map (termResolve' cdb) uids'
 
 collectDocumentAbbreviations :: [Section] -> ChunkDB -> [TermAbbr]
 collectDocumentAbbreviations renderedSecs cdb =

@@ -13,8 +13,8 @@ progName' :: CI
 -- nounPhrases instead of strings
 -- Another capitalization hack.
 progName' = commonIdea "swhsPCM" (nounPhrase''
-  (S "solar water heating systems incorporating PCM")
-  (S "solar water heating systems incorporating PCM")
+  (S "solar water heating systems incorporating" +:+ short phsChgMtrl)
+  (S "solar water heating systems incorporating" +:+ short phsChgMtrl)
   CapFirst CapWords)
   "SWHS"
   []

@@ -15,27 +15,27 @@
 <ellipse fill="#bbffbb" stroke="black" cx="524.79" cy="-573" rx="85.59" ry="18"/>
 <text text-anchor="middle" x="524.79" y="-569.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata</text>
 </g>
-<!-- u3 -->
-<g id="node2" class="node">
-<title>u3</title>
-<ellipse fill="#ffffbb" stroke="black" cx="163.79" cy="-318" rx="163.57" ry="18"/>
-<text text-anchor="middle" x="163.79" y="-314.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.TheoryConcepts</text>
-</g>
-<!-- u4&#45;&gt;u3 -->
-<g id="edge4" class="edge">
-<title>u4&#45;&gt;u3</title>
-<path fill="none" stroke="black" d="M501.38,-555.59C438.92,-511.82 268.2,-392.18 196.34,-341.82"/>
-<polygon fill="black" stroke="black" points="198.28,-338.9 188.09,-336.03 194.27,-344.64 198.28,-338.9"/>
-</g>
 <!-- u2 -->
 <g id="node3" class="node">
 <title>u2</title>
+<ellipse fill="#ffffbb" stroke="black" cx="163.79" cy="-318" rx="163.57" ry="18"/>
+<text text-anchor="middle" x="163.79" y="-314.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.TheoryConcepts</text>
+</g>
+<!-- u4&#45;&gt;u2 -->
+<g id="edge4" class="edge">
+<title>u4&#45;&gt;u2</title>
+<path fill="none" stroke="black" d="M501.38,-555.59C438.92,-511.82 268.2,-392.18 196.34,-341.82"/>
+<polygon fill="black" stroke="black" points="198.28,-338.9 188.09,-336.03 194.27,-344.64 198.28,-338.9"/>
+</g>
+<!-- u1 -->
+<g id="node4" class="node">
+<title>u1</title>
 <ellipse fill="#ffffbb" stroke="black" cx="524.79" cy="-318" rx="179.27" ry="18"/>
 <text text-anchor="middle" x="524.79" y="-314.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.SupportedSoftware</text>
 </g>
-<!-- u4&#45;&gt;u2 -->
+<!-- u4&#45;&gt;u1 -->
 <g id="edge3" class="edge">
-<title>u4&#45;&gt;u2</title>
+<title>u4&#45;&gt;u1</title>
 <path fill="none" stroke="black" d="M524.79,-554.61C524.79,-511.36 524.79,-398.65 524.79,-346.37"/>
 <polygon fill="black" stroke="black" points="528.29,-346.18 524.79,-336.18 521.29,-346.18 528.29,-346.18"/>
 </g>
@@ -51,15 +51,15 @@
 <path fill="none" stroke="black" d="M545.39,-555.4C599.71,-511.63 746.95,-392.99 809.76,-342.39"/>
 <polygon fill="black" stroke="black" points="812.1,-344.99 817.7,-335.99 807.71,-339.54 812.1,-344.99"/>
 </g>
-<!-- u1 -->
-<g id="node4" class="node">
-<title>u1</title>
+<!-- u3 -->
+<g id="node2" class="node">
+<title>u3</title>
 <ellipse fill="#ffffbb" stroke="black" cx="163.79" cy="-64" rx="129.18" ry="18"/>
 <text text-anchor="middle" x="163.79" y="-60.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.Domains</text>
 </g>
-<!-- u3&#45;&gt;u1 -->
+<!-- u2&#45;&gt;u3 -->
 <g id="edge1" class="edge">
-<title>u3&#45;&gt;u1</title>
+<title>u2&#45;&gt;u3</title>
 <path fill="none" stroke="black" d="M163.79,-299.68C163.79,-256.6 163.79,-144.33 163.79,-92.26"/>
 <polygon fill="black" stroke="black" points="167.29,-92.11 163.79,-82.11 160.29,-92.11 167.29,-92.11"/>
 </g>

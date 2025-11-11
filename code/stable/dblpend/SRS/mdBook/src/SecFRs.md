@@ -6,6 +6,10 @@ This section provides the functional requirements, the tasks and behaviours that
 
 Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs), which define the initial double pendulum configuration.
 
+<div id="inputValues"></div>
+
+Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs), which define the initial double pendulum configuration.
+
 <div id="verifyInptVals"></div>
 
 Verify-Input-Values: Check the entered input values to ensure that they do not exceed the [data constraints](./SecDataConstraints.md#Sec:DataConstraints). If any of the input values are out of bounds, an error message is displayed and the calculations stop.

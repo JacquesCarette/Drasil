@@ -6,6 +6,10 @@ This section provides the functional requirements, the tasks and behaviours that
 
 Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs), which define the tunable controller parameters.
 
+<div id="inputValues"></div>
+
+Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs), which define the tunable controller parameters.
+
 <div id="verifyInputs"></div>
 
 Verify-Input-Values: Ensure that the input values are within the limits specified in the [data constraints](./SecDataConstraints.md#Sec:DataConstraints).

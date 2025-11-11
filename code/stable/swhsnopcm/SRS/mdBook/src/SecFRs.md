@@ -6,6 +6,10 @@ This section provides the functional requirements, the tasks and behaviours that
 
 Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs), which define the tank parameters, material properties, and initial conditions.
 
+<div id="inputValues"></div>
+
+Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs), which define the tank parameters, material properties, and initial conditions.
+
 <div id="findMass"></div>
 
 Find-Mass: Use the inputs in [FR:Input-Values](./SecFRs.md#inputValues) to find the mass needed for [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr), using [DD:waterMass](./SecDDs.md#DD:waterMass), [DD:waterVolume_nopcm](./SecDDs.md#DD:waterVolume.nopcm), and [DD:tankVolume](./SecDDs.md#DD:tankVolume).

@@ -7,9 +7,13 @@ import Language.Drasil.ShortHands (cOmega)
 
 -- * Lists of Units
 
+-- Keep fundamentals alphabetical.
 fundamentals :: [UnitDefn]
-fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
+fundamentals = [ampere, candela, kelvin, kilogram, metre, mole, second]
 
+-- Derived units must be inserted after every unit they depend on
+-- so that `insert0` (Database.Drasil.ChunkDB) can resolve their references. 
+-- Within each dependency level we keep alphabetical order to make the list easy to audit.
 derived :: [UnitDefn]
 derived = [becquerel, centigrade, coulomb, hertz, joule, katal, litre,
   millimetre, newton, pascal, radian, steradian, watt, kilowatt, volt, weber,

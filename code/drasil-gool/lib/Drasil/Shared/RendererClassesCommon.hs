@@ -30,7 +30,7 @@ import Drasil.Shared.State (MS, VS)
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (AssignStatement r, DeclStatement r, IOStatement r, 
+class (AssignStatement r, DeclStatement r, IOStatement r,
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement
   r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
   NumericExpression r, BooleanExpression r, Comparison r, List r,
@@ -98,7 +98,7 @@ class UnaryOpSym r where
   atanOp   :: VSUnOp r
   floorOp  :: VSUnOp r
   ceilOp   :: VSUnOp r
-  
+
 type VSBinOp a = VS (a (BinaryOp a))
 
 class BinaryOpSym r where
@@ -126,10 +126,10 @@ class OpElim r where
 
 class ScopeElim r where
   scopeData :: r (Scope r) -> ScopeData
-  
+
 class RenderVariable r where
   varFromData :: Binding -> String -> VSType r -> Doc -> SVariable r
-    
+
 class InternalVarElim r where
   variableBind :: r (Variable r) -> Binding
   variable  :: r (Variable r) -> Doc
@@ -143,10 +143,10 @@ class RenderValue r where
 
   cast :: VSType r -> SValue r -> SValue r
 
-  -- | Very generic internal function for generating calls, to reduce repeated 
+  -- | Very generic internal function for generating calls, to reduce repeated
   -- code throughout generators.
-  -- Parameters are: maybe name of external module, maybe Doc for object 
-  -- variable (including separator between object and function) for method 
+  -- Parameters are: maybe name of external module, maybe Doc for object
+  -- variable (including separator between object and function) for method
   -- calls.
   call :: Maybe Library -> Maybe Doc -> MixedCall r
 
@@ -171,18 +171,18 @@ class InternalListFunc r where
 
 class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r
-  
+
 class FunctionElim r where
   functionType :: r (Function r) -> r (Type r)
   function :: r (Function r) -> Doc
 
 class InternalAssignStmt r where
-  multiAssign       :: [SVariable r] -> [SValue r] -> MSStatement r 
+  multiAssign       :: [SVariable r] -> [SValue r] -> MSStatement r
 
 class InternalIOStmt r where
   -- newLn, maybe a file to print to, printFunc, value to print
   printSt :: Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MSStatement r
-    
+
 class InternalControlStmt r where
   multiReturn :: [SValue r] -> MSStatement r
 
@@ -198,13 +198,13 @@ class StatementElim r where
 
 class RenderVisibility r where
   visibilityFromData :: VisibilityTag -> Doc -> r (Visibility r)
-  
+
 class VisibilityElim r where
   visibility :: r (Visibility r) -> Doc
 
 class RenderParam r where
   paramFromData :: SVariable r -> Doc -> MSParameter r
-  
+
 class ParamElim r where
   parameterName :: r (Parameter r) -> Label
   parameterType :: r (Parameter r) -> r (Type r)
@@ -224,7 +224,7 @@ type MSMthdType a = MS (a (MethodType a))
 class (TypeSym r) => MethodTypeSym r where
   type MethodType r
   mType    :: VSType r -> MSMthdType r
-    
+
 class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r where
   -- | Takes a BlockComment and a method and generates a function.
   commentedFunc :: MS (r (BlockComment r)) -> SMethod r -> SMethod r

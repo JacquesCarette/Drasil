@@ -27,7 +27,7 @@ import Drasil.Database.UID (HasUID(..))
 
 -- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')
 -- with 'Constraint's and maybe a reasonable value (no units!).
--- Similar to 'ConstrainedChunk' but includes a definition and domain. 
+-- Similar to 'ConstrainedChunk' but includes a definition and domain.
 --
 -- Ex. Measuring the length of a pendulum arm could be a concept that has some reasonable value
 -- (between 1 cm and 2 m) and the constraint that the length cannot be a negative value.
@@ -47,7 +47,7 @@ instance Idea          ConstrConcept where getA = getA . view defq
 instance HasSpace      ConstrConcept where typ = defq . typ
 -- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
--- | 'ConstrConcept's have a 'Quantity'. 
+-- | 'ConstrConcept's have a 'Quantity'.
 instance Quantity      ConstrConcept where
 -- | Finds definition of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance Definition    ConstrConcept where defn = defq . defn

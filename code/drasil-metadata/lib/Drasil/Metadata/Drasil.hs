@@ -7,7 +7,7 @@ import GHC.Generics (Generic)
 import Language.Haskell.TH.Syntax (Lift, addDependentFile)
 import Language.Haskell.TH (Exp, Q, runIO)
 
-{- 
+{-
   Thank you to the following people for their helpful public resources.
    - 'leftaroundabout': https://stackoverflow.com/a/44369564/16760741
    - Mark Karpov: https://markkarpov.com/tutorial/th.html

@@ -64,7 +64,7 @@ instance ConceptDomain DefinedQuantityDict where cdom = cdom . view con
 instance HasSpace      DefinedQuantityDict where typ = spa
 -- | Finds the 'Stage' -> 'Symbol' of the 'DefinedQuantityDict'.
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
--- | 'DefinedQuantityDict's have a 'Quantity'. 
+-- | 'DefinedQuantityDict's have a 'Quantity'.
 instance Quantity      DefinedQuantityDict where
 -- | Finds the units of the 'DefinedQuantityDict'.
 instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
@@ -111,7 +111,7 @@ implVar' i ter desc sp sym = dqdNoUnit' (dccWDS i ter desc) f sp
     f Equational = Empty
 
 -- | Similar to 'implVar' but allows specification of abbreviation and unit.
-implVarAU :: String -> NP -> String -> Maybe String -> Space -> Symbol -> 
+implVarAU :: String -> NP -> String -> Maybe String -> Space -> Symbol ->
   Maybe UnitDefn -> DefinedQuantityDict
 implVarAU s np desc a t sym = dqd' (dccA s np desc a) f t
   where f :: Stage -> Symbol
@@ -119,7 +119,7 @@ implVarAU s np desc a t sym = dqd' (dccA s np desc a) f t
         f Equational = Empty
 
 -- | Similar to 'implVarAU' but takes a Sentence for the description rather than a String.
-implVarAU' :: String -> NP -> Sentence -> Maybe String -> Space -> Symbol -> 
+implVarAU' :: String -> NP -> Sentence -> Maybe String -> Space -> Symbol ->
   Maybe UnitDefn -> DefinedQuantityDict
 implVarAU' s np desc a t sym = dqd' (dccAWDS s np desc a) f t
   where f :: Stage -> Symbol

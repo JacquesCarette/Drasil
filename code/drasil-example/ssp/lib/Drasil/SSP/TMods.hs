@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStress) 
+module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStress)
   where
 
 import Control.Lens ((^.))
@@ -8,6 +8,7 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Theory.Drasil
+import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -20,8 +21,8 @@ import Data.Drasil.Theories.Physics (newtonSL)
 import Drasil.SSP.Assumptions (assumpENSL, assumpSBSBISL)
 import Drasil.SSP.Defs (factorOfSafety)
 import Drasil.SSP.References (fredlund1977)
-import Drasil.SSP.Unitals (effCohesion, effNormStress, effectiveStress, 
-  fricAngle, fs, fx, fy, genericM, mobilizedShear, nrmFSubWat, porePressure, 
+import Drasil.SSP.Unitals (effCohesion, effNormStress, effectiveStress,
+  fricAngle, fs, fx, fy, genericM, mobilizedShear, nrmFSubWat, porePressure,
   resistiveShear, shrStress, totNormStress)
 import Drasil.SSP.DataDefs (normStressDD)
 
@@ -51,7 +52,7 @@ equilibrium = tm (equationalConstraints' equilibriumCS)
   ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
   [] (map express equilibriumRels) [] [dRef fredlund1977] "equilibrium" [eqDesc]
 
-------------------------------------  
+------------------------------------
 
 equilibriumRels :: [ModelExpr]
 equilibriumRels = map (($= int 0) . sumAll (variable "i") . sy) [fx, fy, genericM]
@@ -65,7 +66,7 @@ equilibriumCS = mkConstraintSet
 
 eqDesc :: Sentence
 eqDesc = foldlSent [S "For a body in static equilibrium" `sC` S "the net",
-  pluralNP (force `and_PP` genericM) +:+. (S "acting" `S.onThe` S "body will cancel out"),
+  D.toSent (pluralNP (force `and_PP` genericM)) +:+. (S "acting" `S.onThe` S "body will cancel out"),
   S "Assuming a 2D problem", sParen (refS assumpENSL) `sC` S "the", getTandS fx `S.and_`
   getTandS fy, S "will be equal to" +:+. eS (exactDbl 0), S "All", plural force,
   S "and their", phrase distance, S "from the chosen point" `S.of_` S "rotation",
@@ -75,7 +76,7 @@ eqDesc = foldlSent [S "For a body in static equilibrium" `sC` S "the net",
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
 mcShrStrgth = tm (equationalModelU "mcShrSrgth" mcShrStrgthQD)
-  ([] :: [DefinedQuantityDict]) 
+  ([] :: [DefinedQuantityDict])
   ([] :: [ConceptChunk])
   [mcShrStrgthQD] [] [] [dRef fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
 
@@ -89,15 +90,15 @@ mcShrStrgthExpr = sy effNormStress $* tan (sy fricAngle) $+ sy effCohesion
 
 mcShrStrgthDesc :: Sentence
 mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
-  getTandS shrStress `S.is` S "proportional to the product" `S.ofThe` phrase effNormStress, 
-  ch effNormStress `S.onThe` S "plane", 
+  getTandS shrStress `S.is` S "proportional to the product" `S.ofThe` phrase effNormStress,
+  ch effNormStress `S.onThe` S "plane",
   S "with its static", phrase friction `S.inThe` S "angular form" +:+.
   eS (tan $ sy fricAngle),
   S "The", ch shrStress, S "versus", ch effNormStress,
   S "relationship" `S.is` S "not truly",
-  phrase linear `sC` S "but assuming the", phrase nrmFSubWat, 
+  phrase linear `sC` S "but assuming the", phrase nrmFSubWat,
   S "is strong enough" `sC` S "it can be approximated with a", phrase linear,
-  S "fit", sParen (refS assumpSBSBISL), S "where the", phrase effCohesion, 
+  S "fit", sParen (refS assumpSBSBISL), S "where the", phrase effCohesion,
   ch effCohesion, S "represents the", ch shrStress,
   S "intercept" `S.ofThe` S "fitted line"]
 
@@ -105,7 +106,7 @@ mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
 ------------- New Chunk -----------
 effStress :: TheoryModel
 effStress = tm (equationalModelU "effectiveStressTM" effStressQD)
-  ([] :: [DefinedQuantityDict]) 
+  ([] :: [DefinedQuantityDict])
   ([] :: [ConceptChunk])
   [effStressQD] [] [] [dRef fredlund1977] "effStress" [effStressDesc]
 

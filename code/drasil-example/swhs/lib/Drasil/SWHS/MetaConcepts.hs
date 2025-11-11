@@ -2,19 +2,14 @@ module Drasil.SWHS.MetaConcepts where
 
 import Language.Drasil
 import Drasil.Metadata (materialEng)
-import Drasil.SWHS.Concepts (phsChgMtrl)
+-- import Drasil.SWHS.Concepts (phsChgMtrl)
 
 progName :: CI
 progName = commonIdeaWithDict "swhsName"   (nounPhrase "solar water heating system"
   "solar water heating systems") "SWHS" [materialEng]
 
+-- HACK: should re-decompose this noun phrase back into components!
 progName' :: CI
--- Nounphrase'' hack to get nounPhraseSP words to accept
--- nounPhrases instead of strings
--- Another capitalization hack.
-progName' = commonIdea "swhsPCM" (nounPhrase''
-  (S "solar water heating systems incorporating" +:+ short phsChgMtrl)
-  (S "solar water heating systems incorporating" +:+ short phsChgMtrl)
-  CapFirst CapWords)
+progName' = commonIdea "swhsPCM" (nounPhraseSP "solar water heating systems incorporating PCM")
   "SWHS"
   []

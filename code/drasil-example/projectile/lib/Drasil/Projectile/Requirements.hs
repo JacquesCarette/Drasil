@@ -3,7 +3,7 @@ module Drasil.Projectile.Requirements (funcReqs, nonfuncReqs) where
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, 
+import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
   mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR)
 
 import Data.Drasil.Concepts.Computation (inValue)
@@ -39,7 +39,7 @@ calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
   ]]
 outputValuesDesc = atStart output_ +:+. outputs
   where
-    outputs = foldlList Comma List $ map foldlSent_ [ 
+    outputs = foldlList Comma List $ map foldlSent_ [
         [ch flightDur, fromSource timeIM],
         [ch offset, fromSource offsetIM]
       ]
@@ -51,7 +51,7 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 
 correct :: ConceptInstance
 correct = mkCorrectNFR "correct" "Correctness"
- 
+
 verifiable :: ConceptInstance
 verifiable = mkVerifiableNFR "verifiable" "Verifiability"
 
@@ -66,4 +66,3 @@ maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"
 
 portable :: ConceptInstance
 portable = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portability"
-  

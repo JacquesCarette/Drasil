@@ -6,13 +6,13 @@ import Text.PrettyPrint (text, Doc, (<>), ($$))
 import Data.Char (toUpper, toLower)
 import Language.Drasil.Printing.Citation ( CiteField(HowPublished), HP (..) )
 
--- | Custom infix operator for concatenating 
+-- | Custom infix operator for concatenating
 -- two 'Doc's vertically with an empty line in between.
 infixl 5 $^$
 ($^$) :: Doc -> Doc -> Doc
 ($^$) a b = a $$ emptyline $$ b
 
--- | Concatenate a list of 'Doc's vertically 
+-- | Concatenate a list of 'Doc's vertically
 -- with an empty line in between.
 vsep :: [Doc] -> Doc
 vsep = foldr1 ($^$)

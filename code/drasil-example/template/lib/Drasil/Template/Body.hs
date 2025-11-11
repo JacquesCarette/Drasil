@@ -1,16 +1,17 @@
--- Changes to this template should be reflected in the 'Creating Your Project 
+-- Changes to this template should be reflected in the 'Creating Your Project
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 -- This comment can be removed after copying this template to build your own example.
 
 module Drasil.Template.Body where
-  
+
 import Control.Lens ((^.))
 
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc, tunitNone)
 import Drasil.Generator (cdb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -18,13 +19,16 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
-import Drasil.DocLang (tunitNone)
+
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
+
+-- sigh, this is used by others
+fullSI :: System
+fullSI = fst sd
 
 srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
+srs = mkDoc mkSRS (S.forGen titleize phrase) sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
@@ -32,10 +36,10 @@ printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $      --This creates the Reference section of the SRS
-  RefProg intro      -- This add the introduction blob to the reference section  
+  RefProg intro      -- This add the introduction blob to the reference section
     [ tunitNone []      -- Adds table of unit section with a table frame
     , tsymb [] -- Adds table of symbol section with a table frame
-    --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
+    --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
     ],
   IntroSec $
   IntroProg EmptyS (phrase progName)

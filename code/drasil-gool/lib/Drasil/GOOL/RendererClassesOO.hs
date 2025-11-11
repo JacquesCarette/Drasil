@@ -30,10 +30,10 @@ class (CommonRenderSym r, IG.FileSym r, IG.InternalValueExp r, IG.GetSet r,
 -- OO-Only Typeclasses --
 
 class (BlockCommentSym r) => RenderFile r where
-  -- top and bottom are only used for pre-processor guards for C++ header 
-  -- files. FIXME: Remove them (generation of pre-processor guards can be 
+  -- top and bottom are only used for pre-processor guards for C++ header
+  -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
-  top :: r (IG.Module r) -> r (Block r) 
+  top :: r (IG.Module r) -> r (Block r)
   bottom :: r (Block r)
 
   commentedMod :: IG.SFile r -> FS (r (BlockComment r)) -> IG.SFile r
@@ -52,38 +52,38 @@ class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r
 
 class (RenderMethod r, OOMethodTypeSym r) => OORenderMethod r where
-  -- | Main method?, name, public/private, static/dynamic, 
+  -- | Main method?, name, public/private, static/dynamic,
   --   return type, parameters, body
-  intMethod     :: Bool -> Label -> r (Visibility r) -> r (IG.Permanence r) -> 
+  intMethod     :: Bool -> Label -> r (Visibility r) -> r (IG.Permanence r) ->
     MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
-  -- | True for main function, name, public/private, static/dynamic, 
+  -- | True for main function, name, public/private, static/dynamic,
   --   return type, parameters, body
-  intFunc       :: Bool -> Label -> r (Visibility r) -> r (IG.Permanence r) 
+  intFunc       :: Bool -> Label -> r (Visibility r) -> r (IG.Permanence r)
     -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
-    
+
   destructor :: [IG.CSStateVar r] -> SMethod r
 
-class StateVarElim r where  
+class StateVarElim r where
   stateVar :: r (IG.StateVar r) -> Doc
 
 type ParentSpec = Doc
 
 class (BlockCommentSym r) => RenderClass r where
   -- class name, visibility, parent, state variables, constructor(s), methods
-  intClass :: Label -> r (Visibility r) -> r ParentSpec -> [IG.CSStateVar r] 
+  intClass :: Label -> r (Visibility r) -> r ParentSpec -> [IG.CSStateVar r]
     -> [SMethod r] -> [SMethod r] -> IG.SClass r
-    
+
   inherit :: Maybe Label -> r ParentSpec
   implements :: [Label] -> r ParentSpec
 
   commentedClass :: CS (r (BlockComment r)) -> IG.SClass r -> IG.SClass r
-  
+
 class ClassElim r where
   class' :: r (IG.Class r) -> Doc
 
 class RenderMod r where
   modFromData :: String -> FS Doc -> IG.FSModule r
   updateModuleDoc :: (Doc -> Doc) -> r (IG.Module r) -> r (IG.Module r)
-  
+
 class ModuleElim r where
   module' :: r (IG.Module r) -> Doc

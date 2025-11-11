@@ -18,7 +18,7 @@ boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans, htFlux,
   htTransTheo, latentHeat, lawConsEnergy, lawConvCooling, meltPt, melting,
   phaseChange, sensHeat, temp, thermalAnalysis, thermalConduction,
   thermalConductor, thermalEnergy :: ConceptChunk
-  
+
 -- FIXME: "Boiling" is not a noun. How should we deal with it?
 --    Same for "Melting"
 boiling           = dcc "boiling"           (cn "boiling")
@@ -36,7 +36,7 @@ heatTrans         = dcc "heatTrans"         (cn' "heat transfer")
 heatCapSpec       = dcc "heatCapSpec"       (cnIES "specific heat capacity")
                       ("the amount of energy required to raise the temperature " ++
                       "of the unit mass of a given substance by a given amount")
-htFlux            = dcc "htFlux"            (cn'' "heat flux") 
+htFlux            = dcc "htFlux"            (cn'' "heat flux")
                       ("the rate of thermal energy transfer through a given " ++
                       "surface per unit time")
 latentHeat        = dcc "latentHeat"        (cn' "latent heat")

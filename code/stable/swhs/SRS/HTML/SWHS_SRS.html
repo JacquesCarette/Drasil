@@ -3,7 +3,7 @@
   <head>
     <link rel="stylesheet" type="text/css" href="SWHS_SRS.css">
     <title>
-      Software Requirements Specification for Solar Water Heating Systems Incorporating <span title="Phase Change Material">PCM</span>
+      Software Requirements Specification for Solar Water Heating Systems Incorporating PCM
     </title>
     <meta charset="utf-8">
     <script>
@@ -24,7 +24,7 @@
   <body>
     <div class="title">
       <h1>
-        Software Requirements Specification for Solar Water Heating Systems Incorporating <span title="Phase Change Material">PCM</span>
+        Software Requirements Specification for Solar Water Heating Systems Incorporating PCM
       </h1>
     </div>
     <div class="author">
@@ -768,10 +768,10 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (<span title="phase change material">PCM</span>) use a renewable energy source and provide a novel way of storing energy. Solar water heating systems incorporating <span title="phase change material">PCM</span> improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of <span title="phase change material">PCM</span> to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
+          Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (<span title="phase change material">PCM</span>) use a renewable energy source and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of <span title="phase change material">PCM</span> to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for solar water heating systems incorporating <span title="phase change material">PCM</span>. The developed program will be referred to as Solar Water Heating System (<span title="solar water heating system">SWHS</span>) based on the original, manually created version of <a href="https://github.com/smiths/swhs/tree/master">SWHS</a>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for solar water heating systems incorporating PCM. The developed program will be referred to as Solar Water Heating System (<span title="solar water heating system">SWHS</span>) based on the original, manually created version of <a href="https://github.com/smiths/swhs/tree/master">SWHS</a>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
@@ -788,7 +788,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating <span title="phase change material">PCM</span>. This entire document is written assuming that the substances inside the solar water heating tank are water and <span title="phase change material">PCM</span>.
+              The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and <span title="phase change material">PCM</span>.
             </p>
           </div>
         </div>
@@ -796,7 +796,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of heat transfer theory from level 3 or 4 mechanical engineering and differential equations from level 1 and 2 calculus. The users of <span title="solar water heating systems incorporating <span title="phase change material">PCM</span>">SWHS</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of heat transfer theory from level 3 or 4 mechanical engineering and differential equations from level 1 and 2 calculus. The users of <span title="solar water heating systems incorporating PCM">SWHS</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -807,7 +807,7 @@
               The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
-              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The instance models to be solved are referred to as <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM:heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM:heatEInPCM</a>. The instance models provide the ordinary differential equations (<span title="ordinary differential equation">ODE</span>s) and algebraic equations that model the solar water heating systems incorporating <span title="phase change material">PCM</span>. <span title="solar water heating system">SWHS</span> solves these <span title="ordinary differential equation">ODE</span>s.
+              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The instance models to be solved are referred to as <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM:heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM:heatEInPCM</a>. The instance models provide the ordinary differential equations (<span title="ordinary differential equation">ODE</span>s) and algebraic equations that model the solar water heating systems incorporating PCM. <span title="solar water heating system">SWHS</span> solves these <span title="ordinary differential equation">ODE</span>s.
             </p>
           </div>
         </div>
@@ -975,7 +975,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern <span title="solar water heating systems incorporating <span title="phase change material">PCM</span>">SWHS</span> are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern <span title="solar water heating systems incorporating PCM">SWHS</span> are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -1091,7 +1091,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that <span title="solar water heating systems incorporating <span title="phase change material">PCM</span>">SWHS</span> is based on.
+                  This section focuses on the general equations and laws that <span title="solar water heating systems incorporating PCM">SWHS</span> is based on.
                 </p>
                 <div id="TM:consThermE">
                   <table class="tdefn">

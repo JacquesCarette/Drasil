@@ -123,7 +123,7 @@ wrapInside :: String -> [(String, Doc)] -> Doc
 wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text ">"
   where foldStr (attr, val) = text (attr ++ "=\"") <> val <> text "\" "
 
--- | Helper for setting up captions. 
+-- | Helper for setting up captions.
 caption :: Doc -> Doc
 caption = wrap "p" ["caption"]
 
@@ -197,7 +197,7 @@ indent = nest 2
 -- Not used since we use MathJax handles this
 -- -- | Build cases for case expressions
 -- cases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
--- cases ps pExpr = spanTag ["casebr"] (text "{") $$ divTag ["cases"] 
+-- cases ps pExpr = spanTag ["casebr"] (text "{") $$ divTag ["cases"]
 --                   (makeCases ps pExpr)
 
 -- | Build case expressions.

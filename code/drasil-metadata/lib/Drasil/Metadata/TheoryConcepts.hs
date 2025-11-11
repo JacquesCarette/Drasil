@@ -5,7 +5,7 @@ import Language.Drasil (cn', CI, commonIdeaWithDict)
 
 import Drasil.Metadata.Domains (softEng)
 
--- | These are internal-to-Drasil common ideas, and need to be defined at the 
+-- | These are internal-to-Drasil common ideas, and need to be defined at the
 -- same time as theories.
 dataDefn, genDefn, inModel, thModel :: CI
 -- | Data definition.

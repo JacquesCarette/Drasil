@@ -60,7 +60,7 @@ eqlExprNNoKQ f1_ f2_ _e_ = (inxi slcWght `_e_`
 
 sliceExpr :: (ExprC r, LiteralC r) => Integer -> r
 sliceExpr n = idx (sy intNormForce) (int n) $* idx (sy shrResC) (int n) $=
-  (idx (sy mobShrC) (int (n-1)) $* idx (sy intNormForce) (int (n-1)) $* 
+  (idx (sy mobShrC) (int (n-1)) $* idx (sy intNormForce) (int (n-1)) $*
   idx (sy shrResC) (int (n-1)) $+ (sy fs $* idx (sy shearFNoIntsl) (int n)) $-
   idx (sy shearRNoIntsl) (int n))
 
@@ -68,7 +68,7 @@ momExpr :: (ExprC r, LiteralC r) => (r -> r -> r) -> r
 momExpr _e_ = (neg (inxi intNormForce) $* (inxi sliceHght $+(half (inxi baseWthX)
   $* tan (inxi baseAngle))) $+ (inxiM1 intNormForce $* (inxiM1 sliceHght $-
   (half (inxi baseWthX) $* tan (inxi baseAngle)))) $-
-  (inxi watrForce $* (oneThird $* inxi sliceHghtW $+ (half (inxi baseWthX) $* 
+  (inxi watrForce $* (oneThird $* inxi sliceHghtW $+ (half (inxi baseWthX) $*
   tan (inxi baseAngle)))) $+ (inxiM1 watrForce $* (oneThird $* inxiM1 sliceHghtW $-
   (half (inxi baseWthX) $* tan (inxi baseAngle))))) `_e_`
   (half (neg (sy earthqkLoadFctr) $* inxi slcWght $* inxi midpntHght) $+
@@ -79,7 +79,7 @@ momExprNoKQ :: (ExprC r, LiteralC r) => (r -> r -> r) -> r
 momExprNoKQ _e_ = (neg (inxi intNormForce) $* (inxi sliceHght $+(half (inxi baseWthX)
   $* tan (inxi baseAngle))) $+ (inxiM1 intNormForce $* (inxiM1 sliceHght $-
   (half (inxi baseWthX) $* tan (inxi baseAngle)))) $-
-  (inxi watrForce $* (oneThird $* inxi sliceHghtW $+ (half (inxi baseWthX) $* 
+  (inxi watrForce $* (oneThird $* inxi sliceHghtW $+ (half (inxi baseWthX) $*
   tan (inxi baseAngle)))) $+ (inxiM1 watrForce $* (oneThird $* inxiM1 sliceHghtW $-
   (half (inxi baseWthX) $* tan (inxi baseAngle))))) `_e_`
   (inxi surfHydroForce $* sin (inxi surfAngle) $* inxi midpntHght)

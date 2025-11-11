@@ -1,8 +1,8 @@
 module Drasil.DblPend.Choices where
 
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
-  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
+  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
+  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..),
   AuxFile(..), Visibility(..), defaultChoices, makeArchit, makeData,
   makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats,
   ExtLib(..))

@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import Drasil.DocLang (inReq, inReqDesc, mkInputPropsTable)
 import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
@@ -45,11 +46,15 @@ import Drasil.PDController.ODEs (pidODEInfo)
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
 
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
 
+-- sigh, this is used by others
 fullSI :: System
-fullSI = fillcdbSRS mkSRS si
+fullSI = fst sd
+
+srs :: Document
+srs = mkDoc mkSRS (S.forGen titleize phrase) sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration

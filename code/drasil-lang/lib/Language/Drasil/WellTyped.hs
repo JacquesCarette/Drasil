@@ -58,7 +58,7 @@ infix 4 ~==
 typeCheckByInfer :: Typed e t => TypingContext t -> e -> t -> Either TypeError t
 typeCheckByInfer cxt e t = do
   et <- infer cxt e
-  et ~== t 
+  et ~== t
     $ \lt rt -> "Inferred type `" ++ lt ++ "` does not match expected type `" ++ rt ++ "`"
   pure et
 

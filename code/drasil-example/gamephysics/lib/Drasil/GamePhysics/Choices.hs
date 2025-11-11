@@ -1,10 +1,10 @@
 module Drasil.GamePhysics.Choices where
 
 -- import Language.Drasil (QDefinition)
--- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
---   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
---   Modularity(..), Structure(..), ConstantStructure(..), 
---   ConstantRepr(..), matchConcepts, AuxFile(..), 
+-- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
+--   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
+--   Modularity(..), Structure(..), ConstantStructure(..),
+--   ConstantRepr(..), matchConcepts, AuxFile(..),
 --   Visibility(..), defaultChoices)
 -- import Drasil.GamePhysics.Body (fullSI)
 
@@ -28,5 +28,4 @@ module Drasil.GamePhysics.Choices where
 --   constRepr        = Const,
 --   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],
 --   auxFiles         = [SampleInput "../../datafiles/gamephysics/sampleInput.txt"]
--- }       
-       
+-- }

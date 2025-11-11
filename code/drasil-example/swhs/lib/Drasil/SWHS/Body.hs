@@ -5,12 +5,14 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import Drasil.DocLang (inReq, mkInputPropsTable)
 import qualified Drasil.DocLang as DocLang (inReqDesc)
 import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
@@ -56,14 +58,17 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
   tempW, thickness, watE)
 
-
 -------------------------------------------------------------------------------
 
-srs :: Document
-srs = mkDoc mkSRS S.forT fullSI
+sd  :: (System , DocDesc)
+sd = fillcdbSRS mkSRS si
 
+-- sigh, this is used by others
 fullSI :: System
-fullSI = fillcdbSRS mkSRS si
+fullSI = fst sd
+
+srs :: Document
+srs = mkDoc mkSRS S.forT sd
 
 printSetting :: PrintingInformation
 printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
@@ -83,8 +88,8 @@ purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
   short phsChgMtrl, S "within a", phrase sWHT]
 
 motivation :: Sentence
-motivation = foldlSent_ [S "the demand" `S.is` S "high for renewable", pluralNP (enerSrc `and_PS`
-  energy), S "storage technology"]
+motivation = foldlSent_ [S "the demand" `S.is` S "high for renewable",
+  D.toSent (pluralNP (enerSrc `and_PS` energy)), S "storage technology"]
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
@@ -203,11 +208,11 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 introStart :: Sentence
 introStart = foldlSent [S "Due to", foldlList Comma List (map S
   ["increasing costs", "diminishing availability", "negative environmental impact"]) `S.of_`
-  S "fossil fuels" `sC` S "the demand" `S.is` S "high for renewable", pluralNP (enerSrc `and_PS`
-  energy), S "storage technology"]
+  S "fossil fuels" `sC` S "the demand" `S.is` S "high for renewable",
+  D.toSent (pluralNP (enerSrc `and_PS` energy)), S "storage technology"]
 
 introStartSWHS :: Sentence
-introStartSWHS = foldlSent [capSent $ pluralNP $ progName ^. term, S "incorporating",
+introStartSWHS = foldlSent [D.toSent $ atStartNP' $ progName ^. term, S "incorporating",
   phrase phsChgMtrl, sParen (short phsChgMtrl), S "use a renewable",
   phrase enerSrc `S.and_` S "provide a novel way of storing" +:+. phrase energy,
   atStart progName', S "improve over the traditional", plural progName,
@@ -243,7 +248,7 @@ externalLinkRef = makeURI "SWHS_SRSLink"
 scope :: Sentence
 scope = foldlSent_ [phrase thermalAnalysis `S.of_` S "a single" +:+. phrase tankPCM,
   S "This entire", phrase document `S.is` S "written assuming that the substances inside the",
-  phrase sWHT `S.are` phraseNP (and_Gen phrase short water phsChgMtrl)]
+  phrase sWHT `S.are` (phrase water `S.and_` short phsChgMtrl)]
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar
@@ -272,12 +277,12 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 -- 2.4 : Organization of Document --
 ------------------------------------
 orgDocEnd :: Sentence
-orgDocEnd = foldlSent_ [atStartNP' (the inModel),
+orgDocEnd = foldlSent_ [D.toSent (atStartNP' (the inModel)),
   S "to be solved" `S.are` S "referred to as" +:+.
   foldlList Comma List (map refS iMods), S "The", plural inModel,
   S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_`
   S "algebraic", plural equation, S "that", phrase model,
-  (phraseNP (the progName') !.), short progName, S "solves these", short ode :+: S "s"]
+  (D.toSent (phraseNP (the progName')) !.), short progName, S "solves these", short ode :+: S "s"]
 
 -- This paragraph is mostly general (besides program name and number of IMs),
 -- but there are some differences between the examples that I'm not sure how to
@@ -306,16 +311,16 @@ orgDocEnd = foldlSent_ [atStartNP' (the inModel),
 sysCntxtDesc :: CI -> Contents
 sysCntxtDesc pro = foldlSP [refS sysCntxtFig, S "shows the" +:+.
   phrase sysCont, S "A circle represents an external entity outside the",
-  phrase software `sC` phraseNP (the user) +:+. S "in this case",
+  phrase software `sC` D.toSent (phraseNP (the user)) +:+. S "in this case",
   S "A rectangle represents the", phrase softwareSys, S "itself" +:+.
   sParen (short pro), S "Arrows" `S.are` S "used to show the", plural datum,
-  S "flow between the", phraseNP (system `andIts` environment)]
+  S "flow between the", D.toSent (phraseNP (system `andIts` environment))]
 
 sysCntxtRespIntro :: CI -> Contents
 sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
   S "The only external interaction" `S.is` S "through the", phrase user +:+.
-  S "interface", S "responsibilities" `S.the_ofTheC` phraseNP (user `andThe`
-  system) `S.are` S "as follows"]
+  S "interface", S "responsibilities" `S.the_ofTheC` D.toSent (phraseNP (user `andThe`
+  system)) `S.are` S "as follows"]
 
 systContRespBullets :: CI -> Contents
 systContRespBullets prog = UlC $ ulcc $ Enumeration $ bulletNested
@@ -335,7 +340,7 @@ swhsResp = map foldlSent_ [
   [S "Detect", plural datum, S "type mismatch" `sC` S "such as a string" `S.of_`
     S "characters instead" `S.ofA` S "floating point number"],
   [S "Determine if the", plural input_, S "satisfy the required",
-    phraseNP (physical `and_` software), plural constraint],
+    D.toSent (phraseNP (physical `and_` software)), plural constraint],
   [S "Calculate the required", plural output_]
   ]
 
@@ -399,8 +404,8 @@ physSyst2 co ta hfc = [atStart co, S "at bottom of" +:+. phrase ta,
 -----------------------------
 
 goalInputs :: [Sentence]
-goalInputs = [phraseNP (the tempC),
-  S "the initial" +:+ plural condition +:+ S "for the" +:+ phraseNP (tempW `andThe` tempPCM),
+goalInputs = [D.toSent (phraseNP (the tempC)),
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ D.toSent (phraseNP (tempW `andThe` tempPCM)),
   S "the material" +:+ plural property]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
@@ -447,7 +452,7 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
   s4_2_3_deriv_10 density mass vol,
   s4_2_3_deriv_11]-}
 
--- General Definitions is automatically generated 
+-- General Definitions is automatically generated
 
 ------------------------------
 -- 4.2.4 : Data Definitions --
@@ -464,8 +469,8 @@ dataConTail :: Sentence
 dataConTail = dataContMid +:+ dataContFooter
 
 dataContMid :: Sentence
-dataContMid = foldlSent [atStartNP (the column) `S.for` pluralNP (combineNINI software
-  constraint), S "restricts the range" `S.of_` plural input_,
+dataContMid = foldlSent [D.toSent (atStartNP (the column)) `S.for` D.toSent (pluralNP (combineNINI software
+  constraint)), S "restricts the range" `S.of_` plural input_,
   S "to reasonable", plural value]
 
 dataContFooter :: Sentence
@@ -477,14 +482,14 @@ dataContFooter = foldlSent_ $ map foldlSent [
   [sParen (S "+"), S "These", plural quantity, S "cannot be zero" `sC`
   S "or there would be freezing", sParen (refS assumpPIS)],
 
-  [sParen (S "++"), atStartNP' (NP.the (constraint `onThePS` surArea)),
+  [sParen (S "++"), D.toSent (atStartNP' (NP.the (constraint `onThePS` surArea))),
   S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
-  S "ratio", atStartNP (the assumption) `S.is` S "that the lowest ratio is 1" `S.and_`
+  S "ratio", D.toSent (atStartNP (the assumption)) `S.is` S "that the lowest ratio is 1" `S.and_`
   S "the highest possible" `S.is` eS (exactDbl 2 $/ sy thickness) `sC` S "where", ch thickness,
   S "is the thickness of a" +:+. (Quote (S "sheet") `S.of_` short phsChgMtrl),
   S "A thin sheet has the greatest", phrase surArea, S "to", phrase vol, S "ratio"],
 
-  [sParen (S "**"), atStartNP (the constraint), S "on the maximum", phrase time,
+  [sParen (S "**"), D.toSent (atStartNP (the constraint)), S "on the maximum", phrase time,
   S "at the end" `S.ofThe` S "simulation" `S.is` S "the total number of seconds" `S.in_` S "one day"]
 
   ]
@@ -523,11 +528,11 @@ propsDeriv = [
 propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk ->
   ConceptChunk -> CI -> GenDefn -> GenDefn -> h -> ConceptChunk -> Contents
 propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht =
-  foldlSPCol [atStartNP (a_ corSol), S "must exhibit" +:+.
-  phraseNP (the lce), S "This means that", phraseNP (the ewat),
+  foldlSPCol [D.toSent (atStartNP (a_ corSol)), S "must exhibit" +:+.
+  D.toSent (phraseNP (the lce)), S "This means that", D.toSent (phraseNP (the ewat)),
   S "should equal the difference between the total", phrase en,
-  phrase input_, S "from", phraseNP (the co `NP.andThe`
-  combineNINI en output_), S "to the" +:+. short pcmat,
+  phrase input_, S "from", D.toSent (phraseNP (the co `NP.andThe`
+  combineNINI en output_)), S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
   refS g1hfc `S.and_` refS g2hfp `sC`
   S "multiplying each by their respective", phrase su,

@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
-import qualified 
+import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
@@ -56,8 +56,7 @@ instance AuxiliarySym JuliaProject where
 -- | Default runnable information for Julia files
 jlRunnable :: Maybe Runnable
 jlRunnable = interpMM "julia"
-  
+
 -- | Julia is not compatible with Doxygen, so raise an error if trying to compile Doxygen documentation.
 doxError :: String
 doxError = jlName ++ " is not compatible with Doxygen."
-  

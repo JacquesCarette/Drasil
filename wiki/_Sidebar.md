@@ -64,6 +64,7 @@
   * [Promoting Drasil](Promoting-Drasil)
   * [Benefits of Drasil](Benefits-of-Drasil)
 * WIP Projects
+  * [Working Notes](Working-Notes)
   * [Jason: Typed Exprs](Typed-Exprs)
   * [Sam: Chunk Investigation](Chunk-Investigation)
     * [Chunk Observations](Chunk-Observations)

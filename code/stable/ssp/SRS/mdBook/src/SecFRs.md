@@ -2,6 +2,10 @@
 
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
+<div id="inputValues"></div>
+
+Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs), which define the slope and soil parameters.
+
 <div id="readAndStore"></div>
 
 Read-and-Store: Read the inputs, shown in the table [Required Inputs](./SecFRs.md#Table:ReqInputs), and store the data.

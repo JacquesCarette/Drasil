@@ -12,6 +12,7 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({a\_{\text{y}2}}\\)               |Vertical acceleration of the second object       |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{a}\text{(}t\text{)}\\)|Acceleration                                     |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{F}\\)                 |Force                                            |\\({\text{N}}\\)                     |
+|\\(\boldsymbol{F'}\\)                |Force vector                                     |\\({\text{N}}\\)                     |
 |\\(g\\)                              |Magnitude of gravitational acceleration          |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{g}\\)                 |Gravitational acceleration                       |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{\hat{i}}\\)           |Unit vector                                      |--                                   |

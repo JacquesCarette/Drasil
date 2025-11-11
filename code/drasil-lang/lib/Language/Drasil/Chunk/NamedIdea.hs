@@ -13,10 +13,11 @@ import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (mkUid, UID, HasUID(..))
 import Control.Lens ((^.), makeLenses)
 import Control.Lens.Lens (Lens')
-import qualified Data.Set as S
+import qualified Data.Set as Set
 
-import Language.Drasil.NounPhrase.Core (CapitalizationRule(..), NP(..))
+import Language.Drasil.NounPhrase.Core (CapitalizationRule(..), NP(..), NPStruct(..))
 import Language.Drasil.Sentence (Sentence)
+import qualified Language.Drasil.Sentence as Sent
 import Language.Drasil.Sentence.Extract (lnames, sdep, shortdep)
 
 -- TODO: Why does a NamedIdea need a UID? It might need a UID to be registered in the chunk map.
@@ -88,19 +89,29 @@ mkIdeaUID = IdeaDict
 nw :: Idea c => c -> IdeaDict
 nw c = IdeaDict (c ^. uid) (c ^. term) (getA c)
 
-npRefs :: NP -> S.Set UID
+npRefs :: NP -> Set.Set UID
 npRefs (ProperNoun _ _)          = mempty
 npRefs (CommonNoun _ _ capRule)  = capRuleRefs capRule
 npRefs (Phrase sing plural c1 c2) =
-  sentenceRefs sing `S.union`
-  sentenceRefs plural `S.union`
-  capRuleRefs c1 `S.union`
+  npStructRefs sing `Set.union`
+  npStructRefs plural `Set.union`
+  capRuleRefs c1 `Set.union`
   capRuleRefs c2
 
-capRuleRefs :: CapitalizationRule -> S.Set UID
+capRuleRefs :: CapitalizationRule -> Set.Set UID
 capRuleRefs CapFirst     = mempty
 capRuleRefs CapWords     = mempty
-capRuleRefs (Replace s)  = sentenceRefs s
+capRuleRefs CapNothing   = mempty
+capRuleRefs (Replace s)  = npStructRefs s
 
-sentenceRefs :: Sentence -> S.Set UID
-sentenceRefs s = S.fromList (lnames s ++ sdep s ++ shortdep s)
+npStructRefs :: NPStruct -> Set.Set UID
+npStructRefs = sentenceRefs . npStructToSentence
+
+npStructToSentence :: NPStruct -> Sentence
+npStructToSentence (S s)       = Sent.S s
+npStructToSentence (a :-: b)   = npStructToSentence a Sent.:+: npStructToSentence b
+npStructToSentence (a :+: b)   = npStructToSentence a Sent.+:+ npStructToSentence b
+npStructToSentence (P sym)     = Sent.P sym
+
+sentenceRefs :: Sentence -> Set.Set UID
+sentenceRefs s = Set.fromList (lnames s ++ sdep s ++ shortdep s)

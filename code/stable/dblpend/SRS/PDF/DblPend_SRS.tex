@@ -79,6 +79,8 @@ $\symbf{a}\text{(}t\text{)}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{F}$ & Force & ${\text{N}}$
 \\
+$\symbf{F'}$ & Force vector & ${\text{N}}$
+\\
 $g$ & Magnitude of gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
@@ -1283,21 +1285,21 @@ RefBy &
 \phantomsection 
 \label{DD:forceGDD}
 \\ \midrule
-Label & Force
+Label & Force vector
         
 \\ \midrule
-Symbol & $\symbf{F}$
+Symbol & $\symbf{F'}$
          
 \\ \midrule
 Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{F}=m \symbf{a}\text{(}t\text{)}}
+           \resizeExpression{\symbf{F'}=m \symbf{a}\text{(}t\text{)}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{$\symbf{F}$ is the force (${\text{N}}$)}
+              \item{$\symbf{F'}$ is the force vector (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
@@ -1518,7 +1520,7 @@ This section provides the functional requirements, the tasks and behaviours that
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
 \begin{description}[font=\normalfont]
-\item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
+\item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}, which define the initial double pendulum configuration.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInptVals}]{Check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
 \item[Calculate-Angle-Of-Rod:\phantomsection\label{calcAng}]{Calculate the following values: ${θ_{1}}$ and ${θ_{2}}$ (from \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}).}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output ${θ_{1}}$ and ${θ_{2}}$ (from \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}).}
@@ -1777,6 +1779,12 @@ volume={12},
 number={2},
 pages={251--257},
 address={Washington, USA}}
+@misc{pointSource,
+author={Pierce, Rod},
+title={Point},
+howpublished={\url{https://www.mathsisfun.com/geometry/point.html}},
+month=may,
+year={2017}}
 @article{smithKoothoor2016,
 author={Smith, W. Spencer and Koothoor, Nirmitha},
 title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},
@@ -1806,6 +1814,12 @@ volume={13},
 number={1},
 pages={83--107},
 howpublished={\url{https://doi.org/10.1007/s11155-006-9020-7}}}
+@misc{lineSource,
+author={The Editors of Encyclopaedia Britannica},
+title={Line},
+howpublished={\url{https://www.britannica.com/science/line-mathematics}},
+month=jun,
+year={2019}}
 @misc{accelerationWiki,
 author={Wikipedia Contributors},
 title={Acceleration},

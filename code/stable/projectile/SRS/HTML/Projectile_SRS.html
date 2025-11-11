@@ -622,6 +622,11 @@
                     </div>
                   </p>
                   <p>
+                    <div id="neglectCurv">
+                      neglectCurv: The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: <a href=#targetXAxis>A:targetXAxis</a> and <a href=#cartSyst>A:cartSyst</a>.)
+                    </div>
+                  </p>
+                  <p>
                     <div id="cartSyst">
                       cartSyst: A Cartesian coordinate system is used (from <a href=#neglectCurv>A:neglectCurv</a>). (RefBy: <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:posVec>GD:posVec</a>.)
                     </div>
@@ -629,6 +634,11 @@
                   <p>
                     <div id="yAxisGravity">
                       yAxisGravity: The direction of the <em>y</em>-axis is directed opposite to gravity. (RefBy: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>, and <a href=#accelYGravity>A:accelYGravity</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="accelYGravity">
+                      accelYGravity: The acceleration in the <em>y</em>-direction is the acceleration due to gravity (from <a href=#yAxisGravity>A:yAxisGravity</a>). (RefBy: <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a> and <a href=#constAccel>A:constAccel</a>.)
                     </div>
                   </p>
                   <p>
@@ -647,21 +657,6 @@
                     </div>
                   </p>
                   <p>
-                    <div id="constAccel">
-                      constAccel: The acceleration is constant (from <a href=#accelXZero>A:accelXZero</a>, <a href=#accelYGravity>A:accelYGravity</a>, <a href=#neglectDrag>A:neglectDrag</a>, and <a href=#freeFlight>A:freeFlight</a>). (RefBy: <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:posVec>GD:posVec</a>.)
-                    </div>
-                  </p>
-                  <p>
-                    <div id="accelXZero">
-                      accelXZero: The acceleration in the <em>x</em>-direction is zero. (RefBy: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#constAccel>A:constAccel</a>.)
-                    </div>
-                  </p>
-                  <p>
-                    <div id="accelYGravity">
-                      accelYGravity: The acceleration in the <em>y</em>-direction is the acceleration due to gravity (from <a href=#yAxisGravity>A:yAxisGravity</a>). (RefBy: <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a> and <a href=#constAccel>A:constAccel</a>.)
-                    </div>
-                  </p>
-                  <p>
                     <div id="neglectDrag">
                       neglectDrag: Air drag is neglected. (RefBy: <a href=#constAccel>A:constAccel</a>.)
                     </div>
@@ -677,8 +672,13 @@
                     </div>
                   </p>
                   <p>
-                    <div id="neglectCurv">
-                      neglectCurv: The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: <a href=#targetXAxis>A:targetXAxis</a> and <a href=#cartSyst>A:cartSyst</a>.)
+                    <div id="accelXZero">
+                      accelXZero: The acceleration in the <em>x</em>-direction is zero. (RefBy: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#constAccel>A:constAccel</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="constAccel">
+                      constAccel: The acceleration is constant (from <a href=#accelXZero>A:accelXZero</a>, <a href=#accelYGravity>A:accelYGravity</a>, <a href=#neglectDrag>A:neglectDrag</a>, and <a href=#freeFlight>A:freeFlight</a>). (RefBy: <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:posVec>GD:posVec</a>.)
                     </div>
                   </p>
                   <p>
@@ -1720,7 +1720,7 @@
             <div class="list">
               <p>
                 <div id="inputValues">
-                  Input-Values: Input the values from <a href=#Table:ReqInputs>Tab:ReqInputs</a>.
+                  Input-Values: Input the values from <a href=#Table:ReqInputs>Tab:ReqInputs</a>, which define the initial launch conditions.
                 </div>
               </p>
               <p>
@@ -1817,18 +1817,18 @@
             <tr>
               <th></th>
               <th><a href=#twoDMotion>A:twoDMotion</a></th>
+              <th><a href=#neglectCurv>A:neglectCurv</a></th>
               <th><a href=#cartSyst>A:cartSyst</a></th>
               <th><a href=#yAxisGravity>A:yAxisGravity</a></th>
+              <th><a href=#accelYGravity>A:accelYGravity</a></th>
               <th><a href=#launchOrigin>A:launchOrigin</a></th>
               <th><a href=#targetXAxis>A:targetXAxis</a></th>
               <th><a href=#posXDirection>A:posXDirection</a></th>
-              <th><a href=#constAccel>A:constAccel</a></th>
-              <th><a href=#accelXZero>A:accelXZero</a></th>
-              <th><a href=#accelYGravity>A:accelYGravity</a></th>
               <th><a href=#neglectDrag>A:neglectDrag</a></th>
               <th><a href=#pointMass>A:pointMass</a></th>
               <th><a href=#freeFlight>A:freeFlight</a></th>
-              <th><a href=#neglectCurv>A:neglectCurv</a></th>
+              <th><a href=#accelXZero>A:accelXZero</a></th>
+              <th><a href=#constAccel>A:constAccel</a></th>
               <th><a href=#timeStartZero>A:timeStartZero</a></th>
               <th><a href=#gravAccelValue>A:gravAccelValue</a></th>
             </tr>
@@ -1851,20 +1851,38 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#neglectCurv>A:neglectCurv</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#cartSyst>A:cartSyst</a></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
@@ -1874,6 +1892,24 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#accelYGravity>A:accelYGravity</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -1907,25 +1943,7 @@
             <tr>
               <td><a href=#targetXAxis>A:targetXAxis</a></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#posXDirection>A:posXDirection</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1941,46 +1959,10 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#constAccel>A:constAccel</a></td>
+              <td><a href=#posXDirection>A:posXDirection</a></td>
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#accelXZero>A:accelXZero</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#accelYGravity>A:accelYGravity</a></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2049,7 +2031,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#neglectCurv>A:neglectCurv</a></td>
+              <td><a href=#accelXZero>A:accelXZero</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2062,6 +2044,24 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#constAccel>A:constAccel</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2112,18 +2112,18 @@
             <tr>
               <th></th>
               <th><a href=#twoDMotion>A:twoDMotion</a></th>
+              <th><a href=#neglectCurv>A:neglectCurv</a></th>
               <th><a href=#cartSyst>A:cartSyst</a></th>
               <th><a href=#yAxisGravity>A:yAxisGravity</a></th>
+              <th><a href=#accelYGravity>A:accelYGravity</a></th>
               <th><a href=#launchOrigin>A:launchOrigin</a></th>
               <th><a href=#targetXAxis>A:targetXAxis</a></th>
               <th><a href=#posXDirection>A:posXDirection</a></th>
-              <th><a href=#constAccel>A:constAccel</a></th>
-              <th><a href=#accelXZero>A:accelXZero</a></th>
-              <th><a href=#accelYGravity>A:accelYGravity</a></th>
               <th><a href=#neglectDrag>A:neglectDrag</a></th>
               <th><a href=#pointMass>A:pointMass</a></th>
               <th><a href=#freeFlight>A:freeFlight</a></th>
-              <th><a href=#neglectCurv>A:neglectCurv</a></th>
+              <th><a href=#accelXZero>A:accelXZero</a></th>
+              <th><a href=#constAccel>A:constAccel</a></th>
               <th><a href=#timeStartZero>A:timeStartZero</a></th>
               <th><a href=#gravAccelValue>A:gravAccelValue</a></th>
             </tr>
@@ -2228,8 +2228,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -2246,8 +2246,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -2256,10 +2256,6 @@
             <tr>
               <td><a href=#GD:velVec>GD:velVec</a></td>
               <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td>X</td>
               <td></td>
@@ -2268,16 +2264,16 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
               <td>X</td>
               <td></td>
             </tr>
             <tr>
               <td><a href=#GD:posVec>GD:posVec</a></td>
               <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td>X</td>
               <td></td>
@@ -2286,6 +2282,10 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
               <td>X</td>
               <td></td>
             </tr>
@@ -2293,13 +2293,13 @@
               <td><a href=#IM:calOfLandingTime>IM:calOfLandingTime</a></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td>X</td>
               <td>X</td>
               <td>X</td>
               <td>X</td>
               <td>X</td>
               <td></td>
-              <td></td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2311,16 +2311,16 @@
               <td><a href=#IM:calOfLandingDist>IM:calOfLandingDist</a></td>
               <td></td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
               <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -2332,9 +2332,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3145,6 +3145,10 @@
           <dd>
             Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
           </dd>
+          <dt id="pointSource">[<b>pointSource</b>]</dt>
+          <dd>
+            Pierce, Rod. <em>Point</em>. May, 2017. <a href="https://www.mathsisfun.com/geometry/point.html">https://www.mathsisfun.com/geometry/point.html</a>.
+          </dd>
           <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
           <dd>
             Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
@@ -3156,6 +3160,10 @@
           <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
           <dd>
             Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
+          </dd>
+          <dt id="lineSource">[<b>lineSource</b>]</dt>
+          <dd>
+            The Editors of Encyclopaedia Britannica. <em>Line</em>. June, 2019. <a href="https://www.britannica.com/science/line-mathematics">https://www.britannica.com/science/line-mathematics</a>.
           </dd>
           <dt id="accelerationWiki">[<b>accelerationWiki</b>]</dt>
           <dd>

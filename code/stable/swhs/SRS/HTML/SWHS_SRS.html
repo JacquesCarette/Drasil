@@ -1035,13 +1035,13 @@
                     </div>
                   </p>
                   <p>
-                    <div id="assumpCTNOD">
-                      Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature <a href=#assumpSITWP>A:Same-Initial-Temp-Water-PCM</a> is less than (or equal) to the temperature of the heating coil. (RefBy: <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a> and <a href=#likeChgDT>LC:Discharging-Tank</a>.)
+                    <div id="assumpSITWP">
+                      Same-Initial-Temp-Water-PCM: The initial temperature of the water and the <span title="phase change material">PCM</span> is the same. (RefBy: <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, <a href=#likeChgDITPW>LC:Different-Initial-Temps-PCM-Water</a>, and <a href=#assumpCTNOD>A:Charging-Tank-No-Temp-Discharge</a>.)
                     </div>
                   </p>
                   <p>
-                    <div id="assumpSITWP">
-                      Same-Initial-Temp-Water-PCM: The initial temperature of the water and the <span title="phase change material">PCM</span> is the same. (RefBy: <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, <a href=#likeChgDITPW>LC:Different-Initial-Temps-PCM-Water</a>, and <a href=#assumpCTNOD>A:Charging-Tank-No-Temp-Discharge</a>.)
+                    <div id="assumpCTNOD">
+                      Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature <a href=#assumpSITWP>A:Same-Initial-Temp-Water-PCM</a> is less than (or equal) to the temperature of the heating coil. (RefBy: <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a> and <a href=#likeChgDT>LC:Discharging-Tank</a>.)
                     </div>
                   </p>
                   <p>
@@ -3229,8 +3229,8 @@
               <th>
                 <a href=#assumpLCCWP>A:Law-Convective-Cooling-Water-PCM</a>
               </th>
-              <th><a href=#assumpCTNOD>A:Charging-Tank-No-Temp-Discharge</a></th>
               <th><a href=#assumpSITWP>A:Same-Initial-Temp-Water-PCM</a></th>
+              <th><a href=#assumpCTNOD>A:Charging-Tank-No-Temp-Discharge</a></th>
               <th><a href=#assumpPIS>A:PCM-Initially-Solid</a></th>
               <th><a href=#assumpWAL>A:Water-Always-Liquid</a></th>
               <th><a href=#assumpPIT>A:Perfect-Insulation-Tank</a></th>
@@ -3487,29 +3487,6 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#assumpCTNOD>A:Charging-Tank-No-Temp-Discharge</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#assumpSITWP>A:Same-Initial-Temp-Water-PCM</a></td>
               <td></td>
               <td></td>
@@ -3522,6 +3499,29 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpCTNOD>A:Charging-Tank-No-Temp-Discharge</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3751,8 +3751,8 @@
               <th>
                 <a href=#assumpLCCWP>A:Law-Convective-Cooling-Water-PCM</a>
               </th>
-              <th><a href=#assumpCTNOD>A:Charging-Tank-No-Temp-Discharge</a></th>
               <th><a href=#assumpSITWP>A:Same-Initial-Temp-Water-PCM</a></th>
+              <th><a href=#assumpCTNOD>A:Charging-Tank-No-Temp-Discharge</a></th>
               <th><a href=#assumpPIS>A:PCM-Initially-Solid</a></th>
               <th><a href=#assumpWAL>A:Water-Always-Liquid</a></th>
               <th><a href=#assumpPIT>A:Perfect-Insulation-Tank</a></th>
@@ -4192,8 +4192,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -4664,8 +4664,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -4689,8 +4689,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6335,6 +6335,10 @@
           <dd>
             Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
           </dd>
+          <dt id="pointSource">[<b>pointSource</b>]</dt>
+          <dd>
+            Pierce, Rod. <em>Point</em>. May, 2017. <a href="https://www.mathsisfun.com/geometry/point.html">https://www.mathsisfun.com/geometry/point.html</a>.
+          </dd>
           <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
           <dd>
             Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
@@ -6346,6 +6350,14 @@
           <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
           <dd>
             Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
+          </dd>
+          <dt id="lineSource">[<b>lineSource</b>]</dt>
+          <dd>
+            The Editors of Encyclopaedia Britannica. <em>Line</em>. June, 2019. <a href="https://www.britannica.com/science/line-mathematics">https://www.britannica.com/science/line-mathematics</a>.
+          </dd>
+          <dt id="cartesianWiki">[<b>cartesianWiki</b>]</dt>
+          <dd>
+            Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
           </dd>
         </dl>
       </div>

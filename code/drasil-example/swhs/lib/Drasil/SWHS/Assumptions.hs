@@ -29,6 +29,7 @@ import Drasil.SWHS.Unitals (wVol, volHtGen, tempC, tempInit, tempW,
 -------------------------
 
 assumptions :: [ConceptInstance]
+-- Order matters: each assumption appears after those it references so generated SRS links work.
 assumptions = [assumpTEO, assumpHTCC, assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV,
   assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpLCCWP, assumpSITWP, assumpCTNOD,
   assumpPIS, assumpWAL, assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP,

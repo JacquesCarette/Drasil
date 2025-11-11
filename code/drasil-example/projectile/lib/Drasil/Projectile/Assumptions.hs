@@ -18,6 +18,7 @@ import Data.Drasil.Concepts.Physics (acceleration, collision, distance, gravity,
 import Drasil.Projectile.Concepts (launcher, projectile, target, projMotion)
 
 assumptions :: [ConceptInstance]
+-- Order matters: each assumption appears after those it references so generated SRS links work.
 assumptions = [twoDMotion, neglectCurv, cartSyst, yAxisGravity, accelYGravity,
   launchOrigin, targetXAxis, posXDirection, neglectDrag, pointMass,
   freeFlight, accelXZero, constAccel, timeStartZero, gravAccelValue]

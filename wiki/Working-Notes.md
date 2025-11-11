@@ -21,6 +21,11 @@ This is a place to organize our "Working Notes". See [#4429](../issues/4429) for
   - [June 7th, 2023 Meeting Notes](Attributes-and-Chunks,-Meeting-June-7th,-2023)
   - [Investigation of Abbreviation Functions](Investigation-of-Abbreviation-Functions)
 - [Attributes of Datatypes](Attributes-of-Data-Types)
+- [Explicitly Grouped Expressions](Explicit-Grouping-of-Expressions)
+- [General Definitions](General-Definitions)
+- [MUChunk](MUChunk)
+- [Purpose of Document](Recipe-for-Purpose-of-Document-Section)
+- [How to Define Unitals](WIP-How-to-define-Unitals)
 
 #### WIP Projects
 

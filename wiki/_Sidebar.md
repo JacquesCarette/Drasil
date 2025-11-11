@@ -26,11 +26,6 @@
 * Design
   * [Code Generation](Code-Generation)
   * [Design Choices](Design-Choices)
-  * [Explicitly Grouped Expressions](Explicit-Grouping-of-Expressions)
-  * [General Definitions](General-Definitions)
-  * [MUChunk](MUChunk)
-  * [Purpose of Document](Recipe-for-Purpose-of-Document-Section)
-  * [How to Define Unitals](WIP-How-to-define-Unitals)
 * [Readings](Readings)
   * [Drasil Papers and Documents](Drasil-Papers-and-Documents)
   * [Related Work](Related-Work) and [Inspiration](Inspiration)

@@ -8,9 +8,8 @@ import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
+import Drasil.DocLang (DocDesc, inReq, inReqDesc, mkInputPropsTable)
 import Drasil.Generator (cdb)
-import Drasil.DocLang (inReq, inReqDesc, mkInputPropsTable)
 import qualified Drasil.DocLang.SRS as SRS (assumpt, inModel, sectionReferences)
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 

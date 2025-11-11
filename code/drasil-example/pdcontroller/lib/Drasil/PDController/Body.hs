@@ -5,14 +5,12 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
+import Drasil.DocLang (DocDesc, inReq, inReqDesc, mkInputPropsTable)
 import Drasil.Generator (cdb)
-import Drasil.DocLang (inReq, inReqDesc, mkInputPropsTable)
 import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
-import Data.Drasil.Concepts.Documentation (input_, value)
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, odeintSymbols, osloSymbols,

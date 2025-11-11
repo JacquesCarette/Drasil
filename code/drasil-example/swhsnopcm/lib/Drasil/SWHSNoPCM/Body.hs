@@ -6,8 +6,8 @@ import Data.List ((\\))
 import Language.Drasil hiding (section)
 import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
+import Drasil.DocLang (DocDesc, inReq, mkInputPropsTable)
 import Drasil.Generator (cdb)
-import Drasil.DocLang (inReq, mkInputPropsTable)
 import qualified Drasil.DocLang as DocLang (inReqDesc)
 import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
 import Theory.Drasil (TheoryModel)
@@ -15,12 +15,6 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
-
-import Drasil.Metadata (inModel)
-import Drasil.SRSDocument
-import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Drasil.DocLang (DocDesc)
-import Drasil.Generator (cdb)
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Documentation (material_)
@@ -40,8 +34,6 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect, surArea, area)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy)
-
-import Theory.Drasil (TheoryModel)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in

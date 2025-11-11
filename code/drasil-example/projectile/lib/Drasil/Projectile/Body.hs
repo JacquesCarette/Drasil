@@ -6,13 +6,12 @@ import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
+import Drasil.DocLang (DocDesc, inReq, inReqDesc, mkInputPropsTable)
 import Drasil.Generator (cdb)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
-import Drasil.DocLang (inReq, inReqDesc, mkInputPropsTable)
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Data.Drasil.Concepts.Computation (inDatum)

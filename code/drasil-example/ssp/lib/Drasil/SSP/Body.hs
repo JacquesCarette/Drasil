@@ -7,9 +7,8 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
+import Drasil.DocLang (DocDesc, inReq, inReqDesc)
 import Drasil.Generator (cdb)
-import Drasil.DocLang (inReq, inReqDesc)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon, sectionReferences)
 import Drasil.Metadata (inModel)

@@ -5,9 +5,8 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
+import Drasil.DocLang (DocDesc, inReq, mkInputPropsTable)
 import Drasil.Generator (cdb)
-import Drasil.DocLang (inReq, mkInputPropsTable)
 import qualified Drasil.DocLang as DocLang (inReqDesc)
 import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
 import Theory.Drasil (GenDefn, InstanceModel)

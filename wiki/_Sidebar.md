@@ -24,10 +24,6 @@
     * [GOOL/GProc Overview](GOOL-GProc%20Overview)
   * [Quantifying Productivity and Ease of Use](Quantifying-Productivity-and-Ease-of-Use)
 * Design
-  * [Attributes and Chunks](Attributes-and-Chunks)
-    * [June 7th, 2023 Meeting Notes](Attributes-and-Chunks,-Meeting-June-7th,-2023)
-    * [Investigation of Abbreviation Functions](Investigation-of-Abbreviation-Functions)
-  * [Attributes of Datatypes](Attributes-of-Data-Types)
   * [Code Generation](Code-Generation)
   * [Design Choices](Design-Choices)
   * [Explicitly Grouped Expressions](Explicit-Grouping-of-Expressions)

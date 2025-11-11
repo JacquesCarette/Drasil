@@ -15,6 +15,10 @@ This is a place to organize our "Working Notes". See [#4429](../issues/4429) for
 
 ## Other
 
+- [Attributes and Chunks](Attributes-and-Chunks)
+  - [June 7th, 2023 Meeting Notes](Attributes-and-Chunks,-Meeting-June-7th,-2023)
+  - [Investigation of Abbreviation Functions](Investigation-of-Abbreviation-Functions)
+- [Attributes of Datatypes](Attributes-of-Data-Types)
 - [Refined Theories Version of Drasil](Refined-Theories-version-of-Drasil)
 - [Idealized Process](Idealized-Process)
 - [Chunk Redesign 2024](Chunk-Redesign-2024)

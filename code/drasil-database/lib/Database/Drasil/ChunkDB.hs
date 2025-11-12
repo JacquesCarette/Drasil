@@ -310,6 +310,8 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
 
     -- Search all inserted chunks for missing dependencies.
     missingDeps = mapMaybe depsUnsatisfied calt
+      ++ mapMaybe (depsUnsatisfied . mkChunk) lcs
+      ++ mapMaybe (depsUnsatisfied . mkChunk) rs
 
     -- If there are any missing dependencies, then dump them all in an error,
     -- otherwise, it's okay, return the new database.

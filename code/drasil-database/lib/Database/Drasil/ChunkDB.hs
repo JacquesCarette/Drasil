@@ -305,8 +305,8 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
       where
         unsatisfiedDeps = S.filter (\u -> not $ isRegistered u strtr') (chunkRefs c)
 
-    -- Aggregate all chunks with missing dependencies.
-    missingDeps = mapMaybe depsUnsatisfied $ chunks strtr'
+    -- Search all inserted chunks for missing dependencies.
+    missingDeps = mapMaybe depsUnsatisfied calt
 
     -- If there are any missing dependencies, then dump them all in an error,
     -- otherwise, it's okay, return the new database.

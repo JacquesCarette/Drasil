@@ -275,9 +275,9 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
     -- Calculate what chunks are depended on (i.e., UID -> Dependants)
     chDpdts = invert $ M.fromList $ map (\c -> (c ^. uid, S.toList $ chunkRefs c)) calt
 
-    -- Note: each chunk is listed in `chDeps` with a list of the chunks that
-    -- depend on them.
-    hardLookup k m = fromMaybe (error "this situation should never happen") $ M.lookup k m
+    -- Note: Chunks that are not in chDpdts mean none of the inserted chunks
+    -- depend on it, everything else should have a list of things dependant on it.
+    hardLookup k m = fromMaybe [] $ M.lookup k m
 
     -- Create the chunk table for the incoming chunks
     chDpdtsTab = M.fromList $ map (\c -> (c ^. uid, (c, hardLookup (c ^. uid) chDpdts))) calt

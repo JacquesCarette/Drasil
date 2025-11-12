@@ -272,12 +272,15 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
                    fs', gs', hs', is', js']
     calt = concat altogether
 
-    -- Calculate the chunk dependancies (i.e., UID -> Dependants)
-    chDeps = invert $ M.fromList $ map (\c -> (c ^. uid, S.toList $ chunkRefs c)) calt
-    hardLookup k m = fromMaybe (error "this situation will never happen") $ M.lookup k m
+    -- Calculate what chunks are depended on (i.e., UID -> Dependants)
+    chDpdts = invert $ M.fromList $ map (\c -> (c ^. uid, S.toList $ chunkRefs c)) calt
+
+    -- Note: each chunk is listed in `chDeps` with a list of the chunks that
+    -- depend on them.
+    hardLookup k m = fromMaybe (error "this situation should never happen") $ M.lookup k m
 
     -- Create the chunk table for the incoming chunks
-    chDepsTab = M.fromList ((\c -> (c ^. uid, (c, hardLookup (c ^. uid) chDeps))) <$> calt)
+    chDpdtsTab = M.fromList $ map (\c -> (c ^. uid, (c, hardLookup (c ^. uid) chDpdts))) calt
 
     -- Insert all incoming chunks with the existing chunk table, asserting that
     -- none of the inserted chunks were already inserted.
@@ -285,7 +288,7 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
       (chunkTable strtr) (M.fromList $ map (\c -> (c ^. uid, (c, []))) calt)
     
     -- Merge the chunk-deps table with that existing chunks table
-    chTabWDeps = M.unionWith (\(lc, ldeps) (_, rdeps) -> (lc, ldeps ++ rdeps)) chTab chDepsTab
+    chTabWDeps = M.unionWith (\(lc, ldeps) (_, rdeps) -> (lc, ldeps ++ rdeps)) chTab chDpdtsTab
 
     -- Create the list of new chunk types and add them to the previous list of chunk types
     chTys = M.fromList (map (\chs -> (chunkType $ head chs, chs)) altogether)

@@ -22,7 +22,7 @@ If you're looking to build your project with Drasil, please have a look at the [
 <!-- TODO: At some point we should document the requirements for Drasil and its design. -->
 
 ## What is Drasil? (cont.)
-*Note: Please see the brief description in the [README](https://github.com/JacquesCarette/Drasil) before reading this.*
+*Note: Please see the brief description in the [README](https://github.com/JacquesCarette/Drasil) before reading this. See also [What If](What-If) for a more conversational explanation*
 
 Drasil is a framework for generating all of the software artifacts from a stable knowledge base, focusing currently on scientific software. The main goals are to reduce knowledge duplication and improve traceability. The artifacts are generated from a common knowledge-base using recipes written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of knowledge should be used in which artifacts, how to transform them, and more.
 

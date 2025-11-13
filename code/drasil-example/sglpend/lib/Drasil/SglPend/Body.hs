@@ -137,7 +137,7 @@ abbreviationsList =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns labelledContentWithInputs allRefs citations
+  dataDefs iMods genDefns tMods concIns citations labelledContentWithInputs allRefs
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

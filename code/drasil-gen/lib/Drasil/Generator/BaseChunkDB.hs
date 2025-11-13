@@ -3,7 +3,7 @@ module Drasil.Generator.BaseChunkDB (
   cdb
 ) where
 
-import Database.Drasil (empty, idMap, insertAll, ChunkDB(refTable, labelledcontentTable))
+import Database.Drasil (empty, insertAll, ChunkDB, insertAllOutOfOrder12)
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
   DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
@@ -27,6 +27,7 @@ basisSymbols =
   --  * codeDQDs - A list of DefinedQuantityDicts that are used for general
   --               code generation in all case studies
   codeDQDs
+
 -- | The basic idea dicts that are used to construct the basis chunk database.
 -- Every chunk added here is added to every new chunk database created that uses
 --  the cdb constructor. This ensures that the information in these idea dicts
@@ -88,40 +89,9 @@ basisCDB =
   $ insertAll siUnits
     empty
 
-  -- | Smart constructor for chunk databases. Takes in the following:
---
---     * ['Quantity'] (for 'SymbolMap'),
---     * 'NamedIdea's (for 'TermMap'),
---     * 'Concept's (for 'ConceptMap'),
---     * Units (something that 'IsUnit' for 'UnitMap'),
---     * 'DataDefinition's (for 'DatadefnMap'),
---     * 'InstanceModel's (for 'InsModelMap'),
---     * 'GenDefn's (for 'GendefMap'),
---     * 'TheoryModel's (for 'TheoryModelMap'),
---     * 'ConceptInstance's (for 'ConceptInstanceMap'),
---     * 'LabelledContent's (for 'LabelledContentMap').
--- Creates a ChunkDB with basic data already included. Should be used over
--- cdb' in Database.Drasil, which does not include the basic data.
+-- | Create a `ChunkDB` containing all knowledge (chunks) required to generate
+-- our SmithEtAl-esque SRS.
 cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
     [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
-    [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
-cdb s t c u d ins gd tm ci lc r cits = finalDB
-  where
-    baseDB = basisCDB { labelledcontentTable = idMap lc,
-                        refTable = idMap r }
-    withIdeaDicts = insertAll t baseDB
-    withCitations = insertAll cits withIdeaDicts
-    withReferences = insertAll refsSansCitations withCitations
-    withConceptChunks = insertAll conceptChunksSansDQDs withReferences
-    withUnits = insertAll u withConceptChunks
-    withDefinedQuants = insertAll s withUnits
-    withDataDefs = insertAll d withDefinedQuants
-    withInstMods = insertAll ins withDataDefs
-    withGenDefs = insertAll gd withInstMods
-    withTheoryMods = insertAll tm withGenDefs
-    finalDB = insertAll ci withTheoryMods
-
-    dqUIDs = Set.fromList (map (^. uid) s)
-    conceptChunksSansDQDs = filter (\cc -> (cc ^. uid) `Set.notMember` dqUIDs) c
-    citationUIDs = Set.fromList (map (^. uid) cits)
-    refsSansCitations = filter (\refChunk -> (refChunk ^. uid) `Set.notMember` citationUIDs) r
+    [ConceptInstance] -> [Citation] -> [LabelledContent] -> [Reference] -> ChunkDB
+cdb = insertAllOutOfOrder12 basisCDB

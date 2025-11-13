@@ -1,7 +1,7 @@
 -- | Defines Drasil generator functions.
 module Drasil.Generator.Generate (
   -- * Generator Functions
-  gen, genDot, genCode,
+  genDoc, genDot, genCode,
   -- * Types (Printing Options)
   DocType(..), DocSpec(DocSpec), DocChoices(DC),
   Format(TeX, HTML, Jupyter, MDBook),
@@ -38,9 +38,9 @@ import Utils.Drasil (createDirIfMissing)
 
 -- | Generate a document in one or many flavours (HTML, TeX+Makefile,
 -- mdBook+Makefile, or Jupyter Notebook, up to document type).
-gen :: DocSpec -> Document -> PrintingInformation -> IO ()
-gen (DocSpec (DC Lesson _) fn) body sm = prntDoc body sm fn Lesson Jupyter
-gen (DocSpec (DC dt fmts) fn)  body sm = mapM_ (prntDoc body sm fn dt) fmts
+genDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
+genDoc (DocSpec (DC Lesson _) fn) body sm = prntDoc body sm fn Lesson Jupyter
+genDoc (DocSpec (DC dt fmts) fn)  body sm = mapM_ (prntDoc body sm fn dt) fmts
 
 -- | Helper for writing the documents (TeX / HTML / Jupyter) to file.
 prntDoc :: Document -> PrintingInformation -> String -> DocType -> Format -> IO ()

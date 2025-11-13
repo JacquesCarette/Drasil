@@ -1,7 +1,7 @@
 module Main (main) where
 
 import GHC.IO.Encoding
-import Drasil.Generator (gen, typeCheckSI, genCode, genDot,
+import Drasil.Generator (genDoc, typeCheckSI, genCode, genDot,
   DocSpec(DocSpec), DocType(SRS), Format(..), docChoices, dumpEverything)
 import Drasil.SWHSNoPCM.Body (srs, printSetting, fullSI)
 import Drasil.SWHSNoPCM.Choices (choices, code)
@@ -11,6 +11,6 @@ main = do
   setLocaleEncoding utf8
   dumpEverything fullSI printSetting ".drasil/"
   typeCheckSI fullSI
-  gen (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) "SWHSNoPCM_SRS") srs printSetting
+  genDoc (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) "SWHSNoPCM_SRS") srs printSetting
   genCode choices code
   genDot fullSI

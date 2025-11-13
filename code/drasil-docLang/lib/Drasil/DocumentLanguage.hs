@@ -32,7 +32,7 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (findOrErr, idMap, insertAll, ChunkDB(..))
+import Database.Drasil (ChunkDB(..), findOrErr, idMap, insertAll, isRegistered)
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts)
 
@@ -177,11 +177,14 @@ fillTraceMaps dd si@SI{_systemdb = db} = si { _systemdb = newCDB }
 -- | Fills in the requirements section of the system information using the document description.
 fillReqs :: DocDesc -> System -> System
 fillReqs [] si = si
-fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_systemdb = db} = genReqs x -- This causes overwrites in the ChunkDB for all requirements.
+fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_systemdb = db} = si { _systemdb = genReqs x db }
   where
-    genReqs [] = si
-    genReqs (FReqsSub c _:_) = si { _systemdb = insertAll (nub c) db }
-    genReqs (_:xs) = genReqs xs
+    genReqs [] acc = acc
+    genReqs (FReqsSub c _:xs) acc =
+      let newReqs = nub $ filter (not . (`isRegistered` acc) . (^. uid)) c
+          acc' = insertAll newReqs acc
+      in genReqs xs acc'
+    genReqs (_:xs) acc = genReqs xs acc
 fillReqs (_:xs) si = fillReqs xs si
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').

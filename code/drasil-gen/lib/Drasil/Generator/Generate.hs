@@ -17,15 +17,16 @@ import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
 
 import Build.Drasil (genMake)
-import Language.Drasil
+import Language.Drasil (Document)
 import Drasil.DocLang (mkGraphInfo)
 import Drasil.System (System)
 import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML,
-  genTeX, Format(TeX, HTML, Jupyter, MDBook), genJupyter, genMDBook,
+  genTeX, Format(..), genJupyter, genMDBook,
   PrintingInformation, outputDot, makeBook, makeRequirements)
 import Language.Drasil.Code (generator, generateCode, generateCodeProc,
   Choices(..), CodeSpec(..), HasOldCodeSpec(..), Lang(..),
-  getSampleData, readWithDataDesc, sampleInputDD, unPP, unJP, unCSP, unCPPP, unSP, unJLP)
+  getSampleData, readWithDataDesc, sampleInputDD,
+  unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 
 import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC))
 
@@ -59,7 +60,7 @@ prntDoc d pinfo fn dtype fmt =
                   prntCSV  dtype pinfo
     Plain   -> putStrLn "Plain-rendering is not supported."
 
--- | Helper function to produce an error when an incorrect SRS format is used.
+-- | Common error for when an unsupported SRS format is attempted.
 srsFormatError :: a
 srsFormatError = error "We can only write TeX/HTML/JSON/MDBook (for now)."
 

@@ -142,7 +142,7 @@ conceptChunks =
   -- ConceptChunks
   distance : concepts ++ softwarecon ++ physicalcon ++
   -- Unital Chunks
-  map cw mathunitals ++ map cw physicalquants ++ map cw unitalSymbols ++
+  map cw mathunitals ++ map cw physicalquants ++
   -- DefinedQuantityDicts
   map cw mathquants
 

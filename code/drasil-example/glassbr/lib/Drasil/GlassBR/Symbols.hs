@@ -8,7 +8,7 @@ import Drasil.GlassBR.Assumptions (assumptionConstants)
 import Drasil.GlassBR.Unitals (specParamVals, modElas,
   tmSymbols, interps, derivedInputDataConstraints, unitless, probBr,
   stressDistFac, nomThick, sdVector, inputsWUnitsUncrtn, inputsWUncrtn,
-  glassTypeCon, unitalSymbols)
+  glassTypeCon, unitalSymbols, loadDur)
 
 import Data.List ((\\))
 import Control.Lens (view)
@@ -20,7 +20,7 @@ symbolsForSymbolTable = symbolsForTermTable ++ map dqdWr unitalSymbols ++
 
 symbolsForTermTable :: [DefinedQuantityDict]
 symbolsForTermTable = map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
-  map dqdWr sdVector ++ tmSymbols ++ map dqdWr specParamVals ++ 
+  map dqdWr sdVector ++ tmSymbols ++ dqdWr loadDur : map (view defLhs) specParamVals ++ 
   map (view defLhs) assumptionConstants ++ [dqdWr modElas] ++ interps
 
   -- include all module functions as symbols

@@ -17,9 +17,6 @@ import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.SI_Units (siUnits)
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
-import Control.Lens ((^.))
-import qualified Data.Set as Set
-import Drasil.Database.UID (uid)
 
 basisSymbols :: [DefinedQuantityDict]
 basisSymbols =
@@ -82,11 +79,11 @@ basisCitations = [cartesianWiki, lineSource, pointSource]
 -- to all of the new chunk databases created using the cdb constructor.
 basisCDB :: ChunkDB
 basisCDB =
-    insertAll basisConceptChunks
-  $ insertAll basisCitations
-  $ insertAll basisIdeaDicts
+    insertAll siUnits
+  $ insertAll basisConceptChunks
   $ insertAll basisSymbols
-  $ insertAll siUnits
+  $ insertAll basisIdeaDicts
+  $ insertAll basisCitations
     empty
 
 -- | Create a `ChunkDB` containing all knowledge (chunks) required to generate

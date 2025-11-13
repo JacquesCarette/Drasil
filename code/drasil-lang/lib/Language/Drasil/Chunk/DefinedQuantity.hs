@@ -43,9 +43,9 @@ class DefinesQuantity d where
   defLhs :: Getter d DefinedQuantityDict
 
 instance HasChunkRefs DefinedQuantityDict where
-  chunkRefs dqd' =
-    let conceptRefs = chunkRefs (dqd' ^. con)
-        unitRefs    = maybe mempty chunkRefs (dqd' ^. unit')
+  chunkRefs dqDict =
+    let conceptRefs = chunkRefs (dqDict ^. con)
+        unitRefs    = maybe mempty chunkRefs (dqDict ^. unit')
     in conceptRefs `S.union` unitRefs
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.

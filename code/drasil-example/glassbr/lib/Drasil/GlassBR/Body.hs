@@ -50,7 +50,7 @@ import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, unitalSymbols)
+  sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
 sd  :: (System , DocDesc)
 sd = fillcdbSRS mkSRS si

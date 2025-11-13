@@ -43,19 +43,21 @@ gen (DocSpec (DC dt fmts) fn)  body sm = mapM_ (prntDoc body sm fn dt) fmts
 
 -- | Helper for writing the documents (TeX / HTML / Jupyter) to file.
 prntDoc :: Document -> PrintingInformation -> String -> DocType -> Format -> IO ()
-prntDoc d pinfo fn Lesson _ = prntDoc' Lesson "Lesson" fn Jupyter d pinfo
+prntDoc d pinfo fn Lesson Jupyter = prntDoc' Lesson "Lesson" fn Jupyter d pinfo
+prntDoc _ _     _  Lesson _       =
+  error "Lesson-plan rendering only supports Jupyter Notebook output type."
 prntDoc d pinfo fn dtype fmt =
   case fmt of
-    HTML              -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
-                            prntCSS dtype fn d
-    TeX               -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
-                            prntMake $ DocSpec (DC dtype [TeX]) fn
-    Jupyter           -> do prntDoc' dtype (show dtype ++ "/Jupyter") fn Jupyter d pinfo
-    MDBook            -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
-                            prntMake $ DocSpec (DC dtype [MDBook]) fn
-                            prntBook dtype d pinfo
-                            prntCSV  dtype pinfo
-    _                 -> mempty
+    HTML    -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
+                  prntCSS dtype fn d
+    TeX     -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
+                  prntMake $ DocSpec (DC dtype [TeX]) fn
+    Jupyter -> do prntDoc' dtype (show dtype ++ "/Jupyter") fn Jupyter d pinfo
+    MDBook  -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
+                  prntMake $ DocSpec (DC dtype [MDBook]) fn
+                  prntBook dtype d pinfo
+                  prntCSV  dtype pinfo
+    Plain   -> putStrLn "Plain-rendering is not supported."
 
 -- | Helper function to produce an error when an incorrect SRS format is used.
 srsFormatError :: a

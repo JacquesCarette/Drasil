@@ -130,10 +130,10 @@ prntCSV dt sm = do
 
 -- | Renders single-page documents.
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc
-writeDoc s _  TeX               _  doc = genTeX doc s
-writeDoc s _  HTML              fn doc = genHTML s fn doc
-writeDoc s dt Jupyter           _  doc = genJupyter s dt doc
-writeDoc _ _  _                 _  _   = srsFormatError
+writeDoc s _  TeX     _  doc = genTeX doc s
+writeDoc s _  HTML    fn doc = genHTML s fn doc
+writeDoc s dt Jupyter _  doc = genJupyter s dt doc
+writeDoc _ _  _       _  _   = srsFormatError
 
 -- | Renders multi-page documents.
 writeDoc' :: PrintingInformation -> Format -> Document -> [(Filename, Doc)]

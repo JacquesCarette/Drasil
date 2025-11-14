@@ -178,11 +178,6 @@ concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-priorityNFReqs :: [ConceptChunk]
-priorityNFReqs = [correctness, verifiability, understandability, reusability,
-  maintainability]
--- It is sometimes hard to remember to add new sections both here and above.
-
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
 -- =================================== --

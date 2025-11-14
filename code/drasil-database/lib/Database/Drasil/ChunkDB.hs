@@ -168,14 +168,14 @@ dependantsOrErr u = fromMaybe (error $ "Failed to find references for unknown ch
 findTypeOf :: UID -> ChunkDB -> Maybe TypeRep
 findTypeOf u cdb = chunkType . fst <$> M.lookup u (chunkTable cdb)
 
--- | Internal function for inserting a dependancy of a chunk into the
--- dependancy's respective dependants list.
-insertRefExpectingExistence :: UID -> UID -> ChunkByUID -> ChunkByUID
-insertRefExpectingExistence depdnt depdncy cbu =
-  case M.insertLookupWithKey (\_ _ (c, depdnts) -> (c, depdnt : depdnts)) depdncy (undefined, []) cbu of
+-- | Internal function for updating a chunk's list of depndant chunks (i.e.,
+-- chunks that reference it).
+insertRefsExpectingExistence :: [UID] -> UID -> ChunkByUID -> ChunkByUID
+insertRefsExpectingExistence newDpdnts depdncy cbu =
+  case M.insertLookupWithKey (\_ _ (c, dpdnts) -> (c, newDpdnts ++ dpdnts)) depdncy (undefined, []) cbu of
     (Just _, cbu') -> cbu' -- If the chunk is already registered, we just updated its dependants, and everything is fine.
     (Nothing, _) -> -- But if no data was found, then we have a problem: the chunk we are inserting depends on a chunk that does not exist.
-      error $ "Chunk dependancy is missing for `" ++ show depdnt ++ "`. Missing: `" ++ show depdncy ++ "`."
+      error $ "Chunk dependancy is missing for `" ++ show newDpdnts ++ "`. Missing: `" ++ show depdncy ++ "`."
 
 -- | Internal function to insert a chunk into the 'ChunkDB'. This function
 -- assumes that the chunk is not already registered in the database, and quietly
@@ -190,7 +190,7 @@ insert0 cdb c = cdb'
     chunkTable' = M.insert (c ^. uid) (c', mempty) (chunkTable cdb)
 
     -- Capture all dependencies of this chunk.
-    chunkTable'' = foldr (insertRefExpectingExistence $ c' ^. uid) chunkTable'
+    chunkTable'' = foldr (insertRefsExpectingExistence [c' ^. uid]) chunkTable'
       $ chunkRefs c
 
     -- Add our chunk to its corresponding 'chunks by type' list.
@@ -267,7 +267,7 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
 
     -- Put all of our chunks in a list of lists, with each list carrying a
     -- unique type of chunk, filtering out empty lists
-    altogether = filter (not . null) 
+    altogether = filter (not . null)
                   [as', bs', cs', ds', es',
                    fs', gs', hs', is', js']
     calt = concat altogether
@@ -275,20 +275,16 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
     -- Calculate what chunks are depended on (i.e., UID -> Dependants)
     chDpdts = invert $ M.fromList $ map (\c -> (c ^. uid, S.toList $ chunkRefs c)) calt
 
-    -- Note: Chunks that are not in chDpdts mean none of the inserted chunks
-    -- depend on it, everything else should have a list of things dependant on it.
-    hardLookup k m = fromMaybe [] $ M.lookup k m
-
-    -- Create the chunk table for the incoming chunks
-    chDpdtsTab = M.fromList $ map (\c -> (c ^. uid, (c, hardLookup (c ^. uid) chDpdts))) calt
-
     -- Insert all incoming chunks with the existing chunk table, asserting that
     -- none of the inserted chunks were already inserted.
-    chTab = M.unionWith (\(x, _) _ -> error $ "duplicate chunk found in mass insertion: " ++ show (x ^. uid))
-      (chunkTable strtr) (M.fromList $ map (\c -> (c ^. uid, (c, []))) calt)
-    
+    chTab = M.unionWith
+      (\(x, _) _ -> error $ "duplicate chunk found in mass insertion: " ++ show (x ^. uid))
+      (chunkTable strtr)
+      (M.fromList $ map (\c -> (c ^. uid, (c, []))) calt)
+
     -- Merge the chunk-deps table with that existing chunks table
-    chTabWDeps = M.unionWith (\(lc, ldeps) (_, rdeps) -> (lc, ldeps ++ rdeps)) chTab chDpdtsTab
+    chTabWDeps = M.foldlWithKey'
+      (\acc k dpdts -> insertRefsExpectingExistence dpdts k acc) chTab chDpdts
 
     -- Create the list of new chunk types and add them to the previous list of chunk types
     chTys = M.fromList (map (\chs -> (chunkType $ head chs, chs)) altogether)
@@ -309,9 +305,8 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
         unsatisfiedDeps = S.filter (\u -> not $ isRegistered u strtr') (chunkRefs c)
 
     -- Search all inserted chunks for missing dependencies.
-    missingDeps = mapMaybe depsUnsatisfied calt
-      ++ mapMaybe (depsUnsatisfied . mkChunk) lcs
-      ++ mapMaybe (depsUnsatisfied . mkChunk) rs
+    missingDeps = mapMaybe (depsUnsatisfied . mkChunk) lcs
+               ++ mapMaybe (depsUnsatisfied . mkChunk) rs
 
     -- If there are any missing dependencies, then dump them all in an error,
     -- otherwise, it's okay, return the new database.

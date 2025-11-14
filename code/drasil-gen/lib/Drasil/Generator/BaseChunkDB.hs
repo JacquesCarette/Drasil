@@ -3,7 +3,7 @@ module Drasil.Generator.BaseChunkDB (
   cdb
 ) where
 
-import Database.Drasil (empty, idMap, insertAll, ChunkDB(refTable, labelledcontentTable))
+import Database.Drasil (empty, insertAll, ChunkDB, insertAllOutOfOrder12)
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
   DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
@@ -23,6 +23,7 @@ basisSymbols =
   --  * codeDQDs - A list of DefinedQuantityDicts that are used for general
   --               code generation in all case studies
   codeDQDs
+
 -- | The basic idea dicts that are used to construct the basis chunk database.
 -- Every chunk added here is added to every new chunk database created that uses
 --  the cdb constructor. This ensures that the information in these idea dicts
@@ -98,15 +99,4 @@ cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
     [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
     [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
 cdb s t c u d ins gd tm ci lc r cits =
-    insertAll s
-  $ insertAll t
-  $ insertAll c
-  $ insertAll u
-  $ insertAll d
-  $ insertAll ins
-  $ insertAll gd
-  $ insertAll tm
-  $ insertAll ci
-  $ insertAll cits
-  $ basisCDB { labelledcontentTable = idMap lc,
-               refTable = idMap r }
+  insertAllOutOfOrder12 s t c u d ins gd tm ci cits lc r basisCDB

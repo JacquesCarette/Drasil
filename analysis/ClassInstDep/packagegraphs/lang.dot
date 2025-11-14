@@ -391,6 +391,7 @@ CodeFuncChunk -> Eq;
 CodeFuncChunk -> MayHaveUnit;
 Chunk -> Eq;
 Chunk -> HasUID;
+Chunk -> HasChunkRefs;
 UID -> ToJSON;
 UID -> ToJSONKey;
 UID -> Show;

@@ -75,6 +75,7 @@ unChunk :: Typeable a => Chunk -> Maybe a
 chunkType :: Chunk -> TypeRep
 instance GHC.Classes.Eq Drasil.Database.Chunk.Chunk
 instance Drasil.Database.UID.HasUID Drasil.Database.Chunk.Chunk
+instance Drasil.Database.Chunk.HasChunkRefs Drasil.Database.Chunk.Chunk
 
 module Drasil.Database.TypedUIDRef
 

@@ -236,6 +236,9 @@ insertAll as cdb = foldl' (flip insert) cdb as
 -- | Insert 12 lists of /unique/ chunk types into a 'ChunkDB', assuming the
 -- input 'ChunkDB' does not already contain any of the chunks from the chunk
 -- lists.
+--
+-- NOTE: Ignores management of dependancies related to 'LabelledContent's and
+-- 'Reference's.
 insertAllOutOfOrder12 ::
   (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e,
    IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j) =>
@@ -281,30 +284,12 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
     -- Create the list of new chunk types and add them to the previous list of chunk types
     chTys = M.fromList (map (\chs -> (chunkType $ head chs, chs)) altogether)
     chTT = M.unionWith (++) (chunkTypeTable strtr) chTys
-
+  in
     -- Create the updated chunk database, adding the LCs and Rs, ignoring their dependencies.
-    strtr' = strtr { chunkTable = chTabWDeps
-                   , chunkTypeTable = chTT
-                   , labelledcontentTable = idMap $ findAll strtr ++ lcs
-                   , refTable = idMap $ findAll strtr ++ rs }
-
-    -- /Helper/ function: Searches for for any missing dependencies.
-    depsUnsatisfied :: Chunk -> Maybe (UID, S.Set UID)
-    depsUnsatisfied c
-      | S.null unsatisfiedDeps = Nothing
-      | otherwise = Just (c ^. uid, unsatisfiedDeps)
-      where
-        unsatisfiedDeps = S.filter (\u -> not $ isRegistered u strtr') (chunkRefs c)
-
-    -- Search all inserted chunks for missing dependencies.
-    missingDeps = mapMaybe (depsUnsatisfied . mkChunk) lcs
-               ++ mapMaybe (depsUnsatisfied . mkChunk) rs
-
-    -- If there are any missing dependencies, then dump them all in an error,
-    -- otherwise, it's okay, return the new database.
-  in if null missingDeps
-      then strtr'
-      else error $ "The following chunks have the following missing chunk dependencies: " ++ show missingDeps
+    strtr { chunkTable = chTabWDeps
+          , chunkTypeTable = chTT
+          , labelledcontentTable = idMap $ findAll strtr ++ lcs
+          , refTable = idMap $ findAll strtr ++ rs }
 
 -- | An ordered map based on 'Data.Map.Strict' for looking up chunks by their
 -- 'UID's.

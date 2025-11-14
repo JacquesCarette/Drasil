@@ -14,7 +14,6 @@ module Database.Drasil.ChunkDB (
   dependants, dependantsOrErr,
   findTypeOf,
   insert, insertAll,
-  chunks,
   -- * Temporary functions
   insertAllOutOfOrder12,
   UMap, idMap,
@@ -225,13 +224,6 @@ insert c cdb
 -- | Insert a list of chunks into a 'ChunkDB'.
 insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
 insertAll as cdb = foldl' (flip insert) cdb as
-
--- | List all chunks inserted in the 'ChunkDB'.
-chunks :: ChunkDB -> [Chunk]
-chunks cdb =
-     M.foldr' (\(c, _) cs -> c:cs) [] (chunkTable cdb) -- `map fst . elems` specialized
-  ++ map mkChunk (findAll cdb :: [LabelledContent])
-  ++ map mkChunk (findAll cdb :: [Reference])
 
 --------------------------------------------------------------------------------
 -- Temporary functions for working with non-chunk tables

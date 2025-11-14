@@ -9,16 +9,16 @@ import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower)
 import Language.Drasil.Printers (Format(..))
 
-import qualified Drasil.DblPend.Body as DblPend (fullSI)
-import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
-import qualified Drasil.GlassBR.Body as GlassBR (fullSI)
-import qualified Drasil.HGHC.Body as HGHC (fullSI)
-import qualified Drasil.SWHSNoPCM.Body as NoPCM (fullSI)
-import qualified Drasil.PDController.Body as PDController (fullSI)
-import qualified Drasil.Projectile.Body as Projectile (fullSI)
-import qualified Drasil.SglPend.Body as SglPend (fullSI)
-import qualified Drasil.SSP.Body as SSP (fullSI)
-import qualified Drasil.SWHS.Body as SWHS (fullSI)
+import qualified Drasil.DblPend.Body as DblPend (si)
+import qualified Drasil.GamePhysics.Body as GamePhysics (si)
+import qualified Drasil.GlassBR.Body as GlassBR (si)
+import qualified Drasil.HGHC.Body as HGHC (si)
+import qualified Drasil.SWHSNoPCM.Body as NoPCM (si)
+import qualified Drasil.PDController.Body as PDController (si)
+import qualified Drasil.Projectile.Body as Projectile (si)
+import qualified Drasil.SglPend.Body as SglPend (si)
+import qualified Drasil.SSP.Body as SSP (si)
+import qualified Drasil.SWHS.Body as SWHS (si)
 
 -- import choices for code generation
 import qualified Drasil.DblPend.Choices as DblPend (choices)
@@ -52,7 +52,17 @@ data Example = E {
 
 -- | Records example system information.
 allExampleSI :: [System]
-allExampleSI = [DblPend.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SglPend.fullSI, SSP.fullSI, SWHS.fullSI]
+allExampleSI = [
+  DblPend.si,
+  GamePhysics.si,
+  GlassBR.si,
+  HGHC.si, 
+  NoPCM.si,
+  PDController.si,
+  Projectile.si,
+  SglPend.si,
+  SSP.si,
+  SWHS.si]
 
 -- To developer: Fill this list in when more examples can run code. The list
 -- needs to be of this form since projectile comes with a list of choice combos.

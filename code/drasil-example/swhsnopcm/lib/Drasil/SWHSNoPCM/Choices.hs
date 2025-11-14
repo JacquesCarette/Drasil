@@ -1,19 +1,14 @@
 module Drasil.SWHSNoPCM.Choices where
 
-import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
+import Language.Drasil.Code (Choices(..), Comments(..), ExtLib(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..),
   AuxFile(..), Visibility(..), defaultChoices, makeArchit, makeData,
-  makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats,
-  ExtLib(..))
+  makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg,
   apacheODEPckg, odeintPckg)
-import Drasil.SWHSNoPCM.Body (noPCMODEInfo, fullSI)
-
-code :: CodeSpec
-code = codeSpec fullSI choices []
--- Sub interpolation mod into list when possible
+import Drasil.SWHSNoPCM.Body (noPCMODEInfo)
 
 choices :: Choices
 choices = defaultChoices {

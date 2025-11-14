@@ -1,5 +1,6 @@
 -- | Defines Drasil generator functions.
 module Drasil.Generator.Generate (
+  exportSmithEtAlSrsWCode, exportSmithEtAlSrs, exportCode,
   -- * Generator Functions
   genDoc, genDot, genCode,
   -- * Types (Printing Options)
@@ -9,32 +10,56 @@ module Drasil.Generator.Generate (
   docChoices
 ) where
 
-import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
-import Text.PrettyPrint.HughesPJ (Doc, render)
 import Prelude hiding (id)
-import System.Directory (getCurrentDirectory, setCurrentDirectory)
+import Control.Lens ((^.))
 import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
+import System.Directory (getCurrentDirectory, setCurrentDirectory)
+import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
+import Text.PrettyPrint.HughesPJ (Doc, render)
 
 import Build.Drasil (genMake)
-import Language.Drasil (Document)
 import Drasil.DocLang (mkGraphInfo)
-import Drasil.System (System)
-import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML,
-  genTeX, Format(..), genJupyter, genMDBook,
-  PrintingInformation, outputDot, makeBook, makeRequirements)
-import Language.Drasil.Code (generator, generateCode, generateCodeProc,
-  Choices(..), CodeSpec(..), HasOldCodeSpec(..), Lang(..),
-  getSampleData, readWithDataDesc, sampleInputDD,
-  unPP, unJP, unCSP, unCPPP, unSP, unJLP)
-
-import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC))
-
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC)
 import Drasil.GProc (unJLC)
-import Control.Lens ((^.))
-
+import Language.Drasil (Stage(Equational), Document)
+import Language.Drasil.Code (Choices(lang), Mod, getSampleData, generateCode,
+  generateCodeProc, generator, readWithDataDesc, sampleInputDD, codeSpec,
+  unCSP, unCPPP, unJP, unJLP, unPP, unSP, Lang(..),
+  CodeSpec, HasOldCodeSpec(extInputsO))
+import qualified Language.Drasil.Sentence.Combinators as S
+import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS,
+  genHTML, genTeX, Format(..), genJupyter, genMDBook, outputDot, makeBook,
+  makeRequirements)
+import Drasil.SRSDocument (System, SRSDecl, defaultConfiguration, piSys,
+  PrintingInformation, fillcdbSRS, mkDoc)
+import Drasil.System (systemdb)
 import Utils.Drasil (createDirIfMissing)
+
+import Drasil.Generator.ChunkDump (dumpEverything)
+import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC))
+import Drasil.Generator.TypeCheck (typeCheckSI)
+
+exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> [Mod] -> IO ()
+exportSmithEtAlSrsWCode syst srsDecl srsFileName chcs extraModules = do
+  syst' <- exportSmithEtAlSrs syst srsDecl srsFileName
+  exportCode syst' chcs extraModules
+
+exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO System
+exportSmithEtAlSrs syst srsDecl srsFileName = do
+  let sd@(syst', _) = fillcdbSRS srsDecl syst
+      srs = mkDoc srsDecl S.forT sd
+      printfo = piSys (syst' ^. systemdb) Equational defaultConfiguration
+  dumpEverything syst' printfo ".drasil/"
+  typeCheckSI syst'
+  genDoc (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
+  genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
+  return syst' -- FIXME: `fillcdbSRS` does some stuff that the code generator needs (or else it errors out!)! What?
+
+exportCode :: System -> Choices -> [Mod] -> IO ()
+exportCode syst chcs extraModules = do
+  let code = codeSpec syst chcs extraModules
+  genCode chcs code
 
 -- | Generate a document in one or many flavours (HTML, TeX+Makefile,
 -- mdBook+Makefile, or Jupyter Notebook, up to document type).

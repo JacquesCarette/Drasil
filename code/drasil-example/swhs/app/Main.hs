@@ -1,19 +1,13 @@
-module Main where
+module Main (main) where
 
 import GHC.IO.Encoding
-import Drasil.Generator (genDoc, typeCheckSI, genDot,
-  DocSpec(DocSpec), DocType(SRS), Format(..), docChoices, dumpEverything)
-import Drasil.SWHS.Body (srs, printSetting, fullSI)
--- import Drasil.SWHS.Choices (code, choices)
+
+import Drasil.Generator (exportSmithEtAlSrs)
+
+import Drasil.SWHS.Body (mkSRS, si)
 
 main :: IO ()
-main =
-  do
-    setLocaleEncoding utf8
-    dumpEverything fullSI printSetting ".drasil/"
-    typeCheckSI fullSI
-    genDoc (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) "SWHS_SRS") srs printSetting
-    genDot fullSI
-    -- When ready to generate code from SWHS, uncomment this file and Choices
-    -- genCode choices code
-
+main = do
+  setLocaleEncoding utf8
+  _ <- exportSmithEtAlSrs si mkSRS "SWHS_SRS"
+  return ()

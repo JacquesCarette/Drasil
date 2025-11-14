@@ -24,7 +24,7 @@ import qualified Drasil.SWHS.Body as SWHS (si)
 import qualified Drasil.DblPend.Choices as DblPend (choices)
 import qualified Drasil.GlassBR.Choices as GlassBR (choices)
 import qualified Drasil.SWHSNoPCM.Choices as NoPCM (choices)
-import qualified Drasil.PDController.Choices as PDController (codeChoices)
+import qualified Drasil.PDController.Choices as PDController (choices)
 import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCombos)
 -- the other examples currently do not generate any code.
 
@@ -69,7 +69,7 @@ allExampleSI = [
 -- | Records example choices. The order of the list must match up with
 -- that in `allExampleSI`, or the Case Studies Table will be incorrect.
 allExampleChoices :: [[Choices]]
-allExampleChoices = [[DblPend.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
+allExampleChoices = [[DblPend.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.choices], Projectile.choiceCombos, [], [], []]
 
 -- | Combine system info, description, choices, and file paths into one nice package.
 allExamples :: [System] -> [[Choices]] -> FilePath -> FilePath -> [Example]

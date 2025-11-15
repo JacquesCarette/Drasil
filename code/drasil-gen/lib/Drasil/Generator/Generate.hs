@@ -3,7 +3,7 @@ module Drasil.Generator.Generate (
   exportSmithEtAlSrs, exportLessonPlan, exportCode, exportCodeZoo,
   exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo,
   -- * Generator Functions
-  genDoc, genDot, genCode,
+  genDoc, genCode,
   codedDirName
 ) where
 

@@ -9,7 +9,7 @@ import qualified Drasil.Projectile.Choices as Proj (choiceCombos)
 
 import qualified Drasil.Projectile.Lesson.Body as ProjLP
 
-main :: IO()
+main :: IO ()
 main = do
   setLocaleEncoding utf8
   exportSmithEtAlSrsWCodeZoo Proj.si Proj.mkSRS "Projectile_SRS" Proj.choiceCombos

@@ -1,15 +1,16 @@
 module Main (main) where
 
 import GHC.IO.Encoding
-import Drasil.Generator (docChoices, genDoc, DocSpec(DocSpec),
-  DocType(Lesson), exportSmithEtAlSrsWCodeZoo)
-import Drasil.Projectile.Body (si, mkSRS)
-import Drasil.Projectile.Choices (choiceCombos)
 
-import qualified Drasil.Projectile.Lesson.Body as PL (nb, printSetting)
+import Drasil.Generator (exportSmithEtAlSrsWCodeZoo, exportLessonPlan)
+
+import qualified Drasil.Projectile.Body as Proj (si, mkSRS)
+import qualified Drasil.Projectile.Choices as Proj (choiceCombos)
+
+import qualified Drasil.Projectile.Lesson.Body as ProjLP
 
 main :: IO()
 main = do
   setLocaleEncoding utf8
-  genDoc (DocSpec (docChoices Lesson []) "Projectile_Lesson") PL.nb PL.printSetting
-  exportSmithEtAlSrsWCodeZoo si mkSRS "Projectile_SRS" choiceCombos
+  exportSmithEtAlSrsWCodeZoo Proj.si Proj.mkSRS "Projectile_SRS" Proj.choiceCombos
+  exportLessonPlan ProjLP.si ProjLP.nbDecl "Projectile_Lesson"

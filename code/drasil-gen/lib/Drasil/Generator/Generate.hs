@@ -1,7 +1,6 @@
 -- | Defines Drasil generator functions.
 module Drasil.Generator.Generate (
-  exportSmithEtAlSrs,
-  exportCode, exportCodeZoo,
+  exportSmithEtAlSrs, exportLessonPlan, exportCode, exportCodeZoo,
   exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo,
   -- * Generator Functions
   genDoc, genDot, genCode,
@@ -19,7 +18,7 @@ import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 
 import Build.Drasil (genMake)
-import Drasil.DocLang (mkGraphInfo)
+import Drasil.DocLang (mkGraphInfo, LsnDecl, mkNb)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Stage(Equational), Document, Space(..), programName)
@@ -55,6 +54,12 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
   genDoc (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
   genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
   return syst' -- FIXME: `fillcdbSRS` does some stuff that the code generator needs (or else it errors out!)! What?
+
+exportLessonPlan :: System -> LsnDecl -> String -> IO ()
+exportLessonPlan syst nbDecl lsnFileName = do
+  let nb = mkNb nbDecl S.forT syst
+      printSetting = piSys (syst ^. systemdb) Equational defaultConfiguration
+  genDoc (DocSpec (docChoices Lesson []) lsnFileName) nb printSetting
 
 exportCode :: System -> Choices -> [Mod] -> IO ()
 exportCode syst chcs extraModules = do

@@ -2,7 +2,7 @@
 module Drasil.Generator.Generate (
   -- * Generators
   exportSmithEtAlSrs, exportLessonPlan, exportCode, exportCodeZoo,
-  exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo,
+  exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo, exportWebsite,
   genDoc,
   -- * Internal Functions
   codedDirName
@@ -25,7 +25,7 @@ import Drasil.GProc (unJLC)
 import Language.Drasil (Stage(Equational), Document, Space(..), programName)
 import Language.Drasil.Code
 import qualified Language.Drasil.Sentence.Combinators as S
-import Language.Drasil.Printers (DocType(SRS, Lesson), makeCSS, Format(..),
+import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
   makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)
 import Drasil.SRSDocument (System, SRSDecl, defaultConfiguration, piSys,
   PrintingInformation, fillcdbSRS, mkDoc)
@@ -76,6 +76,11 @@ exportCodeZoo syst = mapM_ $ \(chcs, mods) -> do
   setCurrentDirectory dir
   exportCode syst chcs mods
   setCurrentDirectory workingDir
+
+exportWebsite :: System -> Document -> Filename -> IO ()
+exportWebsite syst doc fileName = do
+  let printSetting = piSys (syst ^. systemdb) Equational defaultConfiguration
+  genDoc (DocSpec (docChoices Website [HTML]) fileName) doc printSetting
 
 -- | Generate a document in one or many flavours (HTML, TeX+Makefile,
 -- mdBook+Makefile, or Jupyter Notebook, up to document type).

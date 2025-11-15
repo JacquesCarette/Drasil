@@ -1,18 +1,15 @@
-module Drasil.Projectile.Body (printSetting, si, srs, fullSI, mkSRS) where
-
-import Control.Lens ((^.))
+module Drasil.Projectile.Body (si, mkSRS) where
 
 import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics,
@@ -51,19 +48,6 @@ import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
 import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

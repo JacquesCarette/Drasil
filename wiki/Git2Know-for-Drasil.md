@@ -198,12 +198,6 @@ Follow these steps:
 
 ### [Helpful VS Code Shortcuts](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup#general-helpful-vscode-shortcuts) 
 
-
-## Things to avoid 
-
-- Don’t write lines more than 80 characters long. 
-- Don’t add too many blank lines (no more than 1 or 2).
-
 ## Avoidable Issues 
 I’ve made changes to the code, but the program says there’s nothing to commit? 
 - might seem obvious but don’t forget to save your changes! `CTRL+S`

@@ -7,7 +7,7 @@ module Drasil.Database.Chunk
   ( Chunk,
     IsChunk,
     HasChunkRefs (..),
-    mkChunk,
+    mkChunk, -- FIXME: mkChunk should not be exported but is temporarily because this module is NOT in `drasil-database`
     unChunk,
     chunkType,
   )
@@ -38,6 +38,10 @@ instance Eq Chunk where
 instance HasUID Chunk where
   uid :: Getter Chunk UID
   uid = to (\(Chunk c) -> c ^. uid)
+
+instance HasChunkRefs Chunk where
+  chunkRefs :: Chunk -> S.Set UID
+  chunkRefs (Chunk c) = chunkRefs c
 
 -- | Create a 'Chunk', ensuring that 'Chunk's are never placed within 'Chunk's.
 mkChunk :: IsChunk a => a -> Chunk

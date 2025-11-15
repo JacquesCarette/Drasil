@@ -2,11 +2,13 @@
 module Drasil.Generator.Generate (
   exportSmithEtAlSrsWCode, exportSmithEtAlSrs, exportCode,
   -- * Generator Functions
-  genDoc, genDot, genCode
+  genDoc, genDot, genCode, genCodeWithChoices
 ) where
 
 import Prelude hiding (id)
 import Control.Lens ((^.))
+import Data.Char (toLower)
+import Data.List (intercalate)
 import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
 import System.Directory (getCurrentDirectory, setCurrentDirectory)
@@ -15,21 +17,17 @@ import Text.PrettyPrint.HughesPJ (Doc, render)
 
 import Build.Drasil (genMake)
 import Drasil.DocLang (mkGraphInfo)
-import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC)
+import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
-import Language.Drasil (Stage(Equational), Document)
-import Language.Drasil.Code (Choices(lang), Mod, getSampleData, generateCode,
-  generateCodeProc, generator, readWithDataDesc, sampleInputDD, codeSpec,
-  unCSP, unCPPP, unJP, unJLP, unPP, unSP, Lang(..),
-  CodeSpec, HasOldCodeSpec(extInputsO))
+import Language.Drasil (Stage(Equational), Document, Space(..), programName)
+import Language.Drasil.Code
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(SRS, Lesson), makeCSS, Format(..),
   makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)
 import Drasil.SRSDocument (System, SRSDecl, defaultConfiguration, piSys,
   PrintingInformation, fillcdbSRS, mkDoc)
-import Drasil.System (systemdb)
+import Drasil.System (systemdb, System(SI, _sys))
 import Utils.Drasil (createDirIfMissing)
-
 import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC), docChoices)
 import Drasil.Generator.TypeCheck (typeCheckSI)
@@ -189,3 +187,56 @@ genCode chs spec = do
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
 
+genCodeWithChoices :: System -> [Choices] -> IO ()
+genCodeWithChoices _  [] = return ()
+genCodeWithChoices si (c:cs) = 
+  let dir = map toLower $ codedDirName (getSysName si) c
+      getSysName SI{_sys = sysName} = programName sysName
+  in do
+    workingDir <- getCurrentDirectory
+    createDirIfMissing False dir
+    setCurrentDirectory dir
+    genCode c (codeSpec si c [])
+    setCurrentDirectory workingDir
+    genCodeWithChoices si cs
+
+codedDirName :: String -> Choices -> String
+codedDirName n Choices {
+  architecture = a,
+  optFeats = o,
+  dataInfo = d,
+  maps = m} =
+  intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging $ logConfig o,
+    codedStruct $ inputStructure d, codedConStruct $ constStructure d,
+    codedConRepr $ constRepr d, codedSpaceMatch $ spaceMatch m]
+
+codedMod :: Modularity -> String
+codedMod Unmodular = "U"
+codedMod Modular = "M"
+
+codedImpTp :: ImplementationType -> String
+codedImpTp Program = "P"
+codedImpTp Library = "L"
+
+codedLog :: [Logging] -> String
+codedLog [] = "NoL"
+codedLog _ = "L"
+
+codedStruct :: Structure -> String
+codedStruct Bundled = "B"
+codedStruct Unbundled = "U"
+
+codedConStruct :: ConstantStructure -> String
+codedConStruct Inline = "I"
+codedConStruct WithInputs = "WI"
+codedConStruct (Store s) = codedStruct s
+
+codedConRepr :: ConstantRepr -> String
+codedConRepr Var = "V"
+codedConRepr Const = "C"
+
+codedSpaceMatch :: SpaceMatch -> String
+codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
+                                     [Float, Double] -> "F"
+                                     _ -> error
+                                       "Unexpected SpaceMatch for Projectile"

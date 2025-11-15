@@ -155,9 +155,11 @@ git init
 ```
 
 
-## Windows/git bash terminal need2know 
+## Windows/git bash terminal need2know
 
-Most of the commands using git bash are similar to that of Unix style operating systems (Mac OS and Linux). Git bash is a different terminal than the default PowerShell command line from Windows and will need to be downloaded from [the web](https://git-scm.com/downloads). However, not all Unix commands work in the Windows git bash shell. It is only meant as a light wrapper to interact using git. For example, `open` and `rev` do not work. If a certain command does not work, it may not be available for Windows OS, and you may need to use the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+If you are using [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install), git should work the same as for Mac OS and Linux.
+
+If you are using git bash, most of the commands using will be similar to that of Unix style operating systems (Mac OS and Linux). However, not all Unix commands work in the Windows git bash shell. It is only meant as a light wrapper to interact using git. For example, `open` and `rev` do not work. If a certain command does not work, it may not be available for Windows OS, and you may need to use the [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install).
 
 
 ## Additional `git` information

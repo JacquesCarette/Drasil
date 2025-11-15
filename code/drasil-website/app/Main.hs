@@ -3,14 +3,15 @@
 module Main where
 
 import GHC.IO.Encoding
-import Drasil.Generator (genDoc, DocSpec(DocSpec), DocType(Website), Format(..), docChoices)
+import Drasil.Generator (docChoices, genDoc, DocSpec(DocSpec), DocType(Website))
+import Language.Drasil.Printers (Format(HTML))
 import Drasil.Website.Body (mkWebsite, printSetting, FolderLocation(..))
 import System.Environment (getEnv, lookupEnv)
 import Data.Maybe (fromMaybe)
 
 -- | Collect environment variables, place them in 'FolderLocation',
 -- and generate the Drasil website.
-main :: IO()
+main :: IO ()
 main = do
   -- Require the Makefile (or deploy script as it will usually be) to feed locations for where to find certain
   -- files/groups of files in the staged deploy folder.

@@ -2,12 +2,7 @@
 module Drasil.Generator.Generate (
   exportSmithEtAlSrsWCode, exportSmithEtAlSrs, exportCode,
   -- * Generator Functions
-  genDoc, genDot, genCode,
-  -- * Types (Printing Options)
-  DocType(..), DocSpec(DocSpec), DocChoices(DC),
-  Format(TeX, HTML, Jupyter, MDBook),
-  -- * Constructor
-  docChoices
+  genDoc, genDot, genCode
 ) where
 
 import Prelude hiding (id)
@@ -28,16 +23,15 @@ import Language.Drasil.Code (Choices(lang), Mod, getSampleData, generateCode,
   unCSP, unCPPP, unJP, unJLP, unPP, unSP, Lang(..),
   CodeSpec, HasOldCodeSpec(extInputsO))
 import qualified Language.Drasil.Sentence.Combinators as S
-import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS,
-  genHTML, genTeX, Format(..), genJupyter, genMDBook, outputDot, makeBook,
-  makeRequirements)
+import Language.Drasil.Printers (DocType(SRS, Lesson), makeCSS, Format(..),
+  makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)
 import Drasil.SRSDocument (System, SRSDecl, defaultConfiguration, piSys,
   PrintingInformation, fillcdbSRS, mkDoc)
 import Drasil.System (systemdb)
 import Utils.Drasil (createDirIfMissing)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
-import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC))
+import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC), docChoices)
 import Drasil.Generator.TypeCheck (typeCheckSI)
 
 exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> [Mod] -> IO ()
@@ -195,6 +189,3 @@ genCode chs spec = do
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
 
--- | Constructor for users to choose their document options
-docChoices :: DocType -> [Format] -> DocChoices
-docChoices = DC

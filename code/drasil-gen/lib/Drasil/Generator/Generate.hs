@@ -1,8 +1,11 @@
 -- | Defines Drasil generator functions.
 module Drasil.Generator.Generate (
-  exportSmithEtAlSrsWCode, exportSmithEtAlSrs, exportCode,
+  exportSmithEtAlSrs,
+  exportCode, exportCodeZoo,
+  exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo,
   -- * Generator Functions
-  genDoc, genDot, genCode, genCodeWithChoices
+  genDoc, genDot, genCode,
+  codedDirName
 ) where
 
 import Prelude hiding (id)
@@ -37,6 +40,11 @@ exportSmithEtAlSrsWCode syst srsDecl srsFileName chcs extraModules = do
   syst' <- exportSmithEtAlSrs syst srsDecl srsFileName
   exportCode syst' chcs extraModules
 
+exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [(Choices, [Mod])] -> IO ()
+exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcsMods = do
+  syst' <- exportSmithEtAlSrs syst srsDecl srsFileName
+  exportCodeZoo syst' chcsMods
+
 exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO System
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let sd@(syst', _) = fillcdbSRS srsDecl syst
@@ -52,6 +60,16 @@ exportCode :: System -> Choices -> [Mod] -> IO ()
 exportCode syst chcs extraModules = do
   let code = codeSpec syst chcs extraModules
   genCode chcs code
+
+exportCodeZoo :: System -> [(Choices, [Mod])] -> IO ()
+exportCodeZoo syst = mapM_ $ \(chcs, mods) -> do
+  let dir = map toLower $ codedDirName (getSysName syst) chcs
+      getSysName SI{_sys = sysName} = programName sysName
+  workingDir <- getCurrentDirectory
+  createDirIfMissing False dir
+  setCurrentDirectory dir
+  exportCode syst chcs mods
+  setCurrentDirectory workingDir
 
 -- | Generate a document in one or many flavours (HTML, TeX+Makefile,
 -- mdBook+Makefile, or Jupyter Notebook, up to document type).
@@ -186,19 +204,6 @@ genCode chs spec = do
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
-
-genCodeWithChoices :: System -> [Choices] -> IO ()
-genCodeWithChoices _  [] = return ()
-genCodeWithChoices si (c:cs) = 
-  let dir = map toLower $ codedDirName (getSysName si) c
-      getSysName SI{_sys = sysName} = programName sysName
-  in do
-    workingDir <- getCurrentDirectory
-    createDirIfMissing False dir
-    setCurrentDirectory dir
-    genCode c (codeSpec si c [])
-    setCurrentDirectory workingDir
-    genCodeWithChoices si cs
 
 codedDirName :: String -> Choices -> String
 codedDirName n Choices {

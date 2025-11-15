@@ -1,4 +1,4 @@
-module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
+module Drasil.Projectile.Body (printSetting, si, srs, fullSI, mkSRS) where
 
 import Control.Lens ((^.))
 

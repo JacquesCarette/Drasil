@@ -6,10 +6,10 @@ module Drasil.Website.CaseStudy where
 import Language.Drasil hiding (E, Var)
 import Language.Drasil.Code hiding (CS)
 import Drasil.System
+import Drasil.Generator (codedDirName)
 import Drasil.GOOL (CodeType(..))
 
 import Drasil.Website.Example (examples, Example(..))
-import qualified Drasil.Projectile.Choices as Projectile (codedDirName)
 
 
 -- * Case Studies Section
@@ -60,7 +60,7 @@ data CaseStudy = CS {
 mkCaseStudy :: Example -> [CaseStudy]
 mkCaseStudy E{choicesE = []} = []
 mkCaseStudy E{systemE = si@SI{_sys = sys}, choicesE = [x]} = [CS{systemCS = si, progName = S $ programName sys, choicesCS = x}]
-mkCaseStudy E{systemE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{systemCS = si, progName = S $ Projectile.codedDirName (programName sys) x, choicesCS = x}) xs
+mkCaseStudy E{systemE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{systemCS = si, progName = S $ codedDirName (programName sys) x, choicesCS = x}) xs
 
 -- * Display 'CaseStudy' Information as a Table
 --

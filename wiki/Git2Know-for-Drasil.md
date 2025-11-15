@@ -119,7 +119,7 @@ To merge a branch, follow these steps:
     >>>>>>>
     ```
 
-5. At this point, you can now look through and edit the code by hand to combine the current changes and the changes you made to resolve the conflict. After editing, you can chose to accept either “incoming changes”, “current changes”, or just manually delete the `<`,`>`, and `=` symbols. 
+5. At this point, you can now look through and edit the code by hand to combine the current changes and the changes you made to resolve the conflict. After editing, you can chose to accept either “incoming changes”, “current changes”, or just manually delete the `<`,`>`, and `=` symbols. If you prefer, VS Code provides a visual merge editor that can give a more intuitive way to resolve conflicts.
 6. Continue as if you were making a new commit: `git add .`, `git add *`, or `git add -u`.
 7. `git commit -m “merge main to branchName”`.
 8. `git push` to send your changes to the remote repo.

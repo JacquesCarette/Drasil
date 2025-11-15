@@ -95,7 +95,7 @@ symbMap fl = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, phsChgMtrl, two
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce,
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [glaSlab, intrslce,
   slope, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] []
-  [] [] (allRefs fl) []
+  [] [] [] (allRefs fl)
 
 -- | Helper to get the system name as an 'IdeaDict' from 'System'.
 getSysName :: System -> IdeaDict

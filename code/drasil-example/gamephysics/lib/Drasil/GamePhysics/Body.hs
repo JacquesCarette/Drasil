@@ -145,7 +145,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks [] dataDefs iMods generalDefns
-  tMods concIns labelledContent allRefs citations
+  tMods concIns citations labelledContent allRefs
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

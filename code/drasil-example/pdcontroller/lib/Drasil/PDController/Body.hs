@@ -151,9 +151,9 @@ symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, 
   genDefns
   theoreticalModels
   conceptInstances
+  citations
   labelledContent
   allRefs
-  citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

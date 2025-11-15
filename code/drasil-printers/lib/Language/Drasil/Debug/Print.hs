@@ -11,7 +11,7 @@ import Text.PrettyPrint.HughesPJ
 import qualified Data.Map as Map
 
 import Language.Drasil
-import Database.Drasil
+import Database.Drasil (IsChunk, findAll, ChunkDB(refbyTable, traceTable))
 import Language.Drasil.Plain.Print
 import Language.Drasil.Printing.PrintingInformation
 

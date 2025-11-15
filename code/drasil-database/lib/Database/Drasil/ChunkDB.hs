@@ -14,7 +14,8 @@ module Database.Drasil.ChunkDB (
   dependants, dependantsOrErr,
   findTypeOf,
   insert, insertAll,
-  -- * Temporary functions for working with non-chunk tables
+  -- * Temporary functions
+  insertAllOutOfOrder12,
   UMap, idMap,
   refTable, refFind,
   labelledcontentTable, labelledcontentFind,
@@ -38,9 +39,12 @@ import Debug.Trace (trace)
 -- other databases.
 import qualified Data.Map.Strict as M
 
+import qualified Data.Set as S
+
 import Drasil.Database.Chunk (Chunk, HasChunkRefs(chunkRefs), IsChunk,
   mkChunk, unChunk, chunkType)
 import Language.Drasil (HasUID(..), UID, LabelledContent, Reference)
+import Utils.Drasil (invert)
 
 -- | A chunk that depends on another.
 type Dependant = UID
@@ -163,14 +167,14 @@ dependantsOrErr u = fromMaybe (error $ "Failed to find references for unknown ch
 findTypeOf :: UID -> ChunkDB -> Maybe TypeRep
 findTypeOf u cdb = chunkType . fst <$> M.lookup u (chunkTable cdb)
 
--- | Internal function for inserting a dependancy of a chunk into the
--- dependancy's respective dependants list.
-insertRefExpectingExistence :: UID -> UID -> ChunkByUID -> ChunkByUID
-insertRefExpectingExistence depdnt depdncy cbu =
-  case M.insertLookupWithKey (\_ _ (c, depdnts) -> (c, depdnt : depdnts)) depdncy (undefined, []) cbu of
+-- | Internal function for updating a chunk's list of depndant chunks (i.e.,
+-- chunks that reference it).
+insertRefsExpectingExistence :: [UID] -> UID -> ChunkByUID -> ChunkByUID
+insertRefsExpectingExistence newDpdnts depdncy cbu =
+  case M.insertLookupWithKey (\_ _ (c, dpdnts) -> (c, newDpdnts ++ dpdnts)) depdncy (undefined, []) cbu of
     (Just _, cbu') -> cbu' -- If the chunk is already registered, we just updated its dependants, and everything is fine.
     (Nothing, _) -> -- But if no data was found, then we have a problem: the chunk we are inserting depends on a chunk that does not exist.
-      error $ "Chunk dependancy is missing for `" ++ show depdnt ++ "`. Missing: `" ++ show depdncy ++ "`."
+      error $ "Chunk dependancy is missing for `" ++ show newDpdnts ++ "`. Missing: `" ++ show depdncy ++ "`."
 
 -- | Internal function to insert a chunk into the 'ChunkDB'. This function
 -- assumes that the chunk is not already registered in the database, and quietly
@@ -185,7 +189,7 @@ insert0 cdb c = cdb'
     chunkTable' = M.insert (c ^. uid) (c', mempty) (chunkTable cdb)
 
     -- Capture all dependencies of this chunk.
-    chunkTable'' = foldr (insertRefExpectingExistence $ c' ^. uid) chunkTable'
+    chunkTable'' = foldr (insertRefsExpectingExistence [c' ^. uid]) chunkTable'
       $ chunkRefs c
 
     -- Add our chunk to its corresponding 'chunks by type' list.
@@ -228,6 +232,64 @@ insertAll as cdb = foldl' (flip insert) cdb as
 -- and Reference chunks are properly implemented and the "chunk refs" tables are
 -- built properly (i.e., using the `HasChunkRefs` typeclass).
 --------------------------------------------------------------------------------
+
+-- | Insert 12 lists of /unique/ chunk types into a 'ChunkDB', assuming the
+-- input 'ChunkDB' does not already contain any of the chunks from the chunk
+-- lists.
+--
+-- NOTE: Ignores management of dependancies related to 'LabelledContent's and
+-- 'Reference's.
+insertAllOutOfOrder12 ::
+  (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e,
+   IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j) =>
+   ChunkDB ->
+   [a] -> [b] -> [c] -> [d] -> [e] ->
+   [f] -> [g] -> [h] -> [i] -> [j] ->
+   [LabelledContent] -> [Reference] -> ChunkDB
+insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
+  let
+    -- Box all of our chunks
+    as' = map mkChunk as
+    bs' = map mkChunk bs
+    cs' = map mkChunk cs
+    ds' = map mkChunk ds
+    es' = map mkChunk es
+    fs' = map mkChunk fs
+    gs' = map mkChunk gs
+    hs' = map mkChunk hs
+    is' = map mkChunk is
+    js' = map mkChunk js
+
+    -- Put all of our chunks in a list of lists, with each list carrying a
+    -- unique type of chunk, filtering out empty lists
+    altogether = filter (not . null)
+                  [as', bs', cs', ds', es',
+                   fs', gs', hs', is', js']
+    calt = concat altogether
+
+    -- Calculate what chunks are depended on (i.e., UID -> Dependants)
+    chDpdts = invert $ M.fromList $ map (\c -> (c ^. uid, S.toList $ chunkRefs c)) calt
+
+    -- Insert all incoming chunks with the existing chunk table, asserting that
+    -- none of the inserted chunks were already inserted.
+    chTab = M.unionWith
+      (\(x, _) _ -> error $ "duplicate chunk found in mass insertion: " ++ show (x ^. uid))
+      (chunkTable strtr)
+      (M.fromList $ map (\c -> (c ^. uid, (c, []))) calt)
+
+    -- Merge the chunk-deps table with that existing chunks table
+    chTabWDeps = M.foldlWithKey'
+      (\acc k dpdts -> insertRefsExpectingExistence dpdts k acc) chTab chDpdts
+
+    -- Create the list of new chunk types and add them to the previous list of chunk types
+    chTys = M.fromList (map (\chs -> (chunkType $ head chs, chs)) altogether)
+    chTT = M.unionWith (++) (chunkTypeTable strtr) chTys
+  in
+    -- Create the updated chunk database, adding the LCs and Rs, ignoring their dependencies.
+    strtr { chunkTable = chTabWDeps
+          , chunkTypeTable = chTT
+          , labelledcontentTable = idMap $ findAll strtr ++ lcs
+          , refTable = idMap $ findAll strtr ++ rs }
 
 -- | An ordered map based on 'Data.Map.Strict' for looking up chunks by their
 -- 'UID's.

@@ -1,9 +1,10 @@
 -- | Defines Drasil generator functions.
 module Drasil.Generator.Generate (
+  -- * Generators
   exportSmithEtAlSrs, exportLessonPlan, exportCode, exportCodeZoo,
   exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo,
-  -- * Generator Functions
   genDoc,
+  -- * Internal Functions
   codedDirName
 ) where
 

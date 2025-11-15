@@ -23,21 +23,21 @@ Specification :: SystemKind
 RunnableSoftware :: SystemKind
 Notebook :: SystemKind
 Website :: SystemKind
-class HasSystem c_a91d
-system :: HasSystem c_a91d => Lens' c_a91d System
-authors :: HasSystem c_a91d => Lens' c_a91d People
-background :: HasSystem c_a91d => Lens' c_a91d Background
-configFiles :: HasSystem c_a91d => Lens' c_a91d [String]
-constants :: HasSystem c_a91d => Lens' c_a91d [ConstQDef]
-dataDefns :: HasSystem c_a91d => Lens' c_a91d [DataDefinition]
-genDefns :: HasSystem c_a91d => Lens' c_a91d [GenDefn]
-instModels :: HasSystem c_a91d => Lens' c_a91d [InstanceModel]
-kind :: HasSystem c_a91d => Lens' c_a91d SystemKind
-motivation :: HasSystem c_a91d => Lens' c_a91d Motivation
-purpose :: HasSystem c_a91d => Lens' c_a91d Purpose
-scope :: HasSystem c_a91d => Lens' c_a91d Scope
-systemdb :: HasSystem c_a91d => Lens' c_a91d ChunkDB
-theoryModels :: HasSystem c_a91d => Lens' c_a91d [TheoryModel]
+class HasSystem c_a91H
+system :: HasSystem c_a91H => Lens' c_a91H System
+authors :: HasSystem c_a91H => Lens' c_a91H People
+background :: HasSystem c_a91H => Lens' c_a91H Background
+configFiles :: HasSystem c_a91H => Lens' c_a91H [String]
+constants :: HasSystem c_a91H => Lens' c_a91H [ConstQDef]
+dataDefns :: HasSystem c_a91H => Lens' c_a91H [DataDefinition]
+genDefns :: HasSystem c_a91H => Lens' c_a91H [GenDefn]
+instModels :: HasSystem c_a91H => Lens' c_a91H [InstanceModel]
+kind :: HasSystem c_a91H => Lens' c_a91H SystemKind
+motivation :: HasSystem c_a91H => Lens' c_a91H Motivation
+purpose :: HasSystem c_a91H => Lens' c_a91H Purpose
+scope :: HasSystem c_a91H => Lens' c_a91H Scope
+systemdb :: HasSystem c_a91H => Lens' c_a91H ChunkDB
+theoryModels :: HasSystem c_a91H => Lens' c_a91H [TheoryModel]
 whatsTheBigIdea :: System -> IdeaDict
 mkSystem :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
 

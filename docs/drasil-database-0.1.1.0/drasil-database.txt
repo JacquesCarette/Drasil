@@ -74,6 +74,14 @@ insert :: IsChunk a => a -> ChunkDB -> ChunkDB
 -- | Insert a list of chunks into a <a>ChunkDB</a>.
 insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
 
+-- | Insert 12 lists of <i>unique</i> chunk types into a <a>ChunkDB</a>,
+--   assuming the input <a>ChunkDB</a> does not already contain any of the
+--   chunks from the chunk lists.
+--   
+--   NOTE: Ignores management of dependancies related to
+--   <a>LabelledContent</a>s and <a>Reference</a>s.
+insertAllOutOfOrder12 :: (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e, IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j) => ChunkDB -> [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [g] -> [h] -> [i] -> [j] -> [LabelledContent] -> [Reference] -> ChunkDB
+
 -- | An ordered map based on <a>Strict</a> for looking up chunks by their
 --   <a>UID</a>s.
 type UMap a = Map UID (a, Int)

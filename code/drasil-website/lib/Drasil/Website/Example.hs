@@ -57,7 +57,7 @@ allExampleSI = [
   DblPend.si,
   GamePhysics.si,
   GlassBR.si,
-  HGHC.si, 
+  HGHC.si,
   NoPCM.si,
   PDController.si,
   Projectile.si,

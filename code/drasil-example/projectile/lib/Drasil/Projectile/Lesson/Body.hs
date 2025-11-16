@@ -45,7 +45,7 @@ si = mkSystem
   symbMap
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts conceptChunks ([] :: [UnitDefn]) [] [] [] [] [] [] allRefs []
+symbMap = cdb symbols ideaDicts conceptChunks ([] :: [UnitDefn]) [] [] [] [] [] [] [] allRefs
 
 ideaDicts :: [IdeaDict]
 ideaDicts = nw projectileMotionLesson : concepts

@@ -68,8 +68,7 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = map dqdWr concepts ++ map dqdWr constrained
- ++ map dqdWr [tempW, watE]
+symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained
 
 symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
@@ -184,7 +183,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns labelledContent allRefs citations
+  NoPCM.iMods genDefs tMods concIns citations labelledContent allRefs
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

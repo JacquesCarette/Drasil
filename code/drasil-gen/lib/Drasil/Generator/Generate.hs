@@ -1,8 +1,8 @@
 -- | Defines Drasil generator functions.
 module Drasil.Generator.Generate (
   -- * Generators
-  exportSmithEtAlSrs, exportLessonPlan, exportCode, exportCodeZoo,
-  exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo, exportWebsite,
+  exportSmithEtAlSrs, exportLessonPlan, exportWebsite,
+  exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo,
   -- * Internal Functions
   codedDirName
 ) where
@@ -34,16 +34,7 @@ import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC), docChoices)
 import Drasil.Generator.TypeCheck (typeCheckSI)
 
-exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> [Mod] -> IO ()
-exportSmithEtAlSrsWCode syst srsDecl srsFileName chcs extraModules = do
-  syst' <- exportSmithEtAlSrs syst srsDecl srsFileName
-  exportCode syst' chcs extraModules
-
-exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [(Choices, [Mod])] -> IO ()
-exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcsMods = do
-  syst' <- exportSmithEtAlSrs syst srsDecl srsFileName
-  exportCodeZoo syst' chcsMods
-
+-- | Generate an SRS softifact.
 exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO System
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let sd@(syst', _) = fillcdbSRS srsDecl syst
@@ -55,17 +46,13 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
   genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
   return syst' -- FIXME: `fillcdbSRS` does some stuff that the code generator needs (or else it errors out!)! What?
 
-exportLessonPlan :: System -> LsnDecl -> String -> IO ()
-exportLessonPlan syst nbDecl lsnFileName = do
-  let nb = mkNb nbDecl S.forT syst
-      printSetting = piSys (syst ^. systemdb) Equational defaultConfiguration
-  genDoc (DocSpec (docChoices Lesson []) lsnFileName) nb printSetting
-
+-- | Internal: Generate an ICO-style executable softifact.
 exportCode :: System -> Choices -> [Mod] -> IO ()
 exportCode syst chcs extraModules = do
   let code = codeSpec syst chcs extraModules
   genCode chcs code
 
+-- | Internal: Generate a zoo of ICO-style executable softifact.
 exportCodeZoo :: System -> [(Choices, [Mod])] -> IO ()
 exportCodeZoo syst = mapM_ $ \(chcs, mods) -> do
   let dir = map toLower $ codedDirName (getSysName syst) chcs
@@ -76,6 +63,26 @@ exportCodeZoo syst = mapM_ $ \(chcs, mods) -> do
   exportCode syst chcs mods
   setCurrentDirectory workingDir
 
+-- | Generate an SRS softifact with a specific solution softifact.
+exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> [Mod] -> IO ()
+exportSmithEtAlSrsWCode syst srsDecl srsFileName chcs extraModules = do
+  syst' <- exportSmithEtAlSrs syst srsDecl srsFileName
+  exportCode syst' chcs extraModules
+
+-- | Generate an SRS softifact with a zoo of solution softifacts.
+exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [(Choices, [Mod])] -> IO ()
+exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcsMods = do
+  syst' <- exportSmithEtAlSrs syst srsDecl srsFileName
+  exportCodeZoo syst' chcsMods
+
+-- | Generate a JupyterNotebook-based lesson plan.
+exportLessonPlan :: System -> LsnDecl -> String -> IO ()
+exportLessonPlan syst nbDecl lsnFileName = do
+  let nb = mkNb nbDecl S.forT syst
+      printSetting = piSys (syst ^. systemdb) Equational defaultConfiguration
+  genDoc (DocSpec (docChoices Lesson []) lsnFileName) nb printSetting
+
+-- | Generate a "website" (HTML file) softifact.
 exportWebsite :: System -> Document -> Filename -> IO ()
 exportWebsite syst doc fileName = do
   let printSetting = piSys (syst ^. systemdb) Equational defaultConfiguration
@@ -215,6 +222,10 @@ genCode chs spec = do
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
 
+-- | Find name of folders created for a "zoo" of executable softifacts.
+--
+-- FIXME: This is a hack. The generation phase should emit what artifacts it
+-- created.
 codedDirName :: String -> Choices -> String
 codedDirName n Choices {
   architecture = a,

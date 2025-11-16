@@ -476,7 +476,7 @@ hot_hlint: ##@Linters Run HLint through the drasil packages. Uses the latest HLi
 	curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
 
 check_whitespace: ##@Linters Check whitespace rules in all Haskell code (i.e., no per-line trailing whitespace and always trailing newline)
-	sh scripts/check_whitespace.sh
+	scripts/check_whitespace.sh
 
 shellcheck: ##@Linters Run ShellCheck static analyzer on all shell script files.
 	find . -type f -name '*.sh' -exec shellcheck {} +

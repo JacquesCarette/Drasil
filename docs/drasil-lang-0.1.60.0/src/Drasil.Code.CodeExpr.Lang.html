@@ -360,7 +360,7 @@ forall r. LiteralC r =&gt; Integer -&gt; Integer -&gt; r
 </span><a href="#local-6989586621679425075"><span class="hs-operator hs-var hs-var hs-var hs-var">($!=)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">EqBinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#EqBinaryOp"><span class="hs-identifier hs-var">EqBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">EqBinOp
 </span><a href="Drasil.Code.CodeExpr.Lang.html#NEq"><span class="hs-identifier hs-var">NEq</span></a></span><span>
-</span><span id="line-183"></span><span>  </span><span>
+</span><span id="line-183"></span><span>
 </span><span id="line-184"></span><span>  </span><span class="hs-comment">-- | Smart constructor for ordering two equations.</span><span>
 </span><span id="line-185"></span><span>  </span><span class="hs-comment">-- | Less than.</span><span>
 </span><span id="line-186"></span><span>  </span><span id="local-6989586621679425077"><span class="annot"><span class="annottext">$&lt; :: CodeExpr -&gt; CodeExpr -&gt; CodeExpr
@@ -382,13 +382,13 @@ forall r. LiteralC r =&gt; Integer -&gt; Integer -&gt; r
 </span><a href="#local-6989586621679425083"><span class="hs-operator hs-var hs-var hs-var hs-var">($&gt;=)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">OrdBinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#OrdBinaryOp"><span class="hs-identifier hs-var">OrdBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">OrdBinOp
 </span><a href="Drasil.Code.CodeExpr.Lang.html#GEq"><span class="hs-identifier hs-var">GEq</span></a></span><span>
-</span><span id="line-193"></span><span>  </span><span>
+</span><span id="line-193"></span><span>
 </span><span id="line-194"></span><span>  </span><span class="hs-comment">-- | Smart constructor for the dot product of two equations.</span><span>
 </span><span id="line-195"></span><span>  </span><span id="local-6989586621679425085"><span class="annot"><span class="annottext">$. :: CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425085"><span class="hs-operator hs-var hs-var hs-var hs-var">($.)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">VVNBinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#VVNBinaryOp"><span class="hs-identifier hs-var">VVNBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">VVNBinOp
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Dot"><span class="hs-identifier hs-var">Dot</span></a></span><span>
-</span><span id="line-196"></span><span>  </span><span>
+</span><span id="line-196"></span><span>
 </span><span id="line-197"></span><span>  </span><span class="hs-comment">-- | Add two expressions.</span><span>
 </span><span id="line-198"></span><span>  </span><span id="local-6989586621679425103"><span class="annot"><span class="annottext">$+ :: CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425103"><span class="hs-operator hs-var hs-var hs-var hs-var">($+)</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Lit"><span class="hs-identifier hs-type">Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Int"><span class="hs-identifier hs-type">Int</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
@@ -518,7 +518,7 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Mul"><span class="hs-identifier hs-var">Mul</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeExpr
 </span><a href="#local-6989586621679425149"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">CodeExpr
 </span><a href="#local-6989586621679425150"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-220"></span><span>  </span><span>
+</span><span id="line-220"></span><span>
 </span><span id="line-221"></span><span>  </span><span class="hs-comment">-- | Smart constructor for subtracting two expressions.</span><span>
 </span><span id="line-222"></span><span>  </span><span id="local-6989586621679425151"><span class="annot"><span class="annottext">$- :: CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425151"><span class="hs-operator hs-var hs-var hs-var hs-var">($-)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ArithBinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
@@ -534,7 +534,7 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679425155"><span class="hs-operator hs-var hs-var hs-var hs-var">($^)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ArithBinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#ArithBinaryOp"><span class="hs-identifier hs-var">ArithBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">ArithBinOp
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Pow"><span class="hs-identifier hs-var">Pow</span></a></span><span>
-</span><span id="line-227"></span><span>  </span><span>
+</span><span id="line-227"></span><span>
 </span><span id="line-228"></span><span>  </span><span class="hs-comment">-- | Smart constructor to show that one expression implies the other (conditional operator).</span><span>
 </span><span id="line-229"></span><span>  </span><span id="local-6989586621679425157"><span class="annot"><span class="annottext">$=&gt; :: CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425157"><span class="hs-operator hs-var hs-var hs-var hs-var">($=&gt;)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BoolBinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
@@ -545,7 +545,7 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679425159"><span class="hs-operator hs-var hs-var hs-var hs-var">($&lt;=&gt;)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BoolBinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#BoolBinaryOp"><span class="hs-identifier hs-var">BoolBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">BoolBinOp
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Iff"><span class="hs-identifier hs-var">Iff</span></a></span><span>
-</span><span id="line-232"></span><span>  </span><span>
+</span><span id="line-232"></span><span>
 </span><span id="line-233"></span><span>  </span><span class="hs-comment">-- | Smart constructor for the boolean /and/ operator.</span><span>
 </span><span id="line-234"></span><span>  </span><span id="local-6989586621679425161"><span class="annot"><span class="annottext">CodeExpr
 </span><a href="#local-6989586621679425161"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679425162"><span class="annot"><span class="annottext">$&amp;&amp; :: CodeExpr -&gt; CodeExpr -&gt; CodeExpr
@@ -564,7 +564,7 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Or"><span class="hs-identifier hs-var">Or</span></a></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeExpr
 </span><a href="#local-6989586621679425165"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CodeExpr
 </span><a href="#local-6989586621679425168"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-237"></span><span>  </span><span>
+</span><span id="line-237"></span><span>
 </span><span id="line-238"></span><span>  </span><span id="local-6989586621679425169"><span class="annot"><span class="annottext">in' :: CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425169"><span class="hs-identifier hs-var hs-var hs-var hs-var">in'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ESBBinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#ESBBinaryOp"><span class="hs-identifier hs-var">ESBBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">ESBBinOp
@@ -575,103 +575,103 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679425171"><span class="hs-identifier hs-var hs-var hs-var hs-var">abs_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Abs"><span class="hs-identifier hs-var">Abs</span></a></span><span>
-</span><span id="line-242"></span><span>  </span><span>
+</span><span id="line-242"></span><span>
 </span><span id="line-243"></span><span>  </span><span class="hs-comment">-- | Smart constructor for negating an expression.</span><span>
 </span><span id="line-244"></span><span>  </span><span id="local-6989586621679425173"><span class="annot"><span class="annottext">neg :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425173"><span class="hs-identifier hs-var hs-var hs-var hs-var">neg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Neg"><span class="hs-identifier hs-var">Neg</span></a></span><span>
-</span><span id="line-245"></span><span>  </span><span>
+</span><span id="line-245"></span><span>
 </span><span id="line-246"></span><span>  </span><span class="hs-comment">-- | Smart constructor to take the log of an expression.</span><span>
 </span><span id="line-247"></span><span>  </span><span id="local-6989586621679425175"><span class="annot"><span class="annottext">log :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425175"><span class="hs-identifier hs-var hs-var hs-var hs-var">log</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Log"><span class="hs-identifier hs-var">Log</span></a></span><span>
-</span><span id="line-248"></span><span>  </span><span>
+</span><span id="line-248"></span><span>
 </span><span id="line-249"></span><span>  </span><span class="hs-comment">-- | Smart constructor to take the ln of an expression.</span><span>
 </span><span id="line-250"></span><span>  </span><span id="local-6989586621679425177"><span class="annot"><span class="annottext">ln :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425177"><span class="hs-identifier hs-var hs-var hs-var hs-var">ln</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Ln"><span class="hs-identifier hs-var">Ln</span></a></span><span>
-</span><span id="line-251"></span><span>  </span><span>
+</span><span id="line-251"></span><span>
 </span><span id="line-252"></span><span>  </span><span class="hs-comment">-- | Smart constructor to take the square root of an expression.</span><span>
 </span><span id="line-253"></span><span>  </span><span id="local-6989586621679425179"><span class="annot"><span class="annottext">sqrt :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425179"><span class="hs-identifier hs-var hs-var hs-var hs-var">sqrt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Sqrt"><span class="hs-identifier hs-var">Sqrt</span></a></span><span>
-</span><span id="line-254"></span><span>  </span><span>
+</span><span id="line-254"></span><span>
 </span><span id="line-255"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply sin to an expression.</span><span>
 </span><span id="line-256"></span><span>  </span><span id="local-6989586621679425181"><span class="annot"><span class="annottext">sin :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425181"><span class="hs-identifier hs-var hs-var hs-var hs-var">sin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Sin"><span class="hs-identifier hs-var">Sin</span></a></span><span>
-</span><span id="line-257"></span><span>  </span><span>
+</span><span id="line-257"></span><span>
 </span><span id="line-258"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply cos to an expression.</span><span>
 </span><span id="line-259"></span><span>  </span><span id="local-6989586621679425183"><span class="annot"><span class="annottext">cos :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425183"><span class="hs-identifier hs-var hs-var hs-var hs-var">cos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Cos"><span class="hs-identifier hs-var">Cos</span></a></span><span>
-</span><span id="line-260"></span><span>  </span><span>
+</span><span id="line-260"></span><span>
 </span><span id="line-261"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply tan to an expression.</span><span>
 </span><span id="line-262"></span><span>  </span><span id="local-6989586621679425185"><span class="annot"><span class="annottext">tan :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425185"><span class="hs-identifier hs-var hs-var hs-var hs-var">tan</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Tan"><span class="hs-identifier hs-var">Tan</span></a></span><span>
-</span><span id="line-263"></span><span>  </span><span>
+</span><span id="line-263"></span><span>
 </span><span id="line-264"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply sec to an expression.</span><span>
 </span><span id="line-265"></span><span>  </span><span id="local-6989586621679425187"><span class="annot"><span class="annottext">sec :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425187"><span class="hs-identifier hs-var hs-var hs-var hs-var">sec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Sec"><span class="hs-identifier hs-var">Sec</span></a></span><span>
-</span><span id="line-266"></span><span>  </span><span>
+</span><span id="line-266"></span><span>
 </span><span id="line-267"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply csc to an expression.</span><span>
 </span><span id="line-268"></span><span>  </span><span id="local-6989586621679425189"><span class="annot"><span class="annottext">csc :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425189"><span class="hs-identifier hs-var hs-var hs-var hs-var">csc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Csc"><span class="hs-identifier hs-var">Csc</span></a></span><span>
-</span><span id="line-269"></span><span>  </span><span>
+</span><span id="line-269"></span><span>
 </span><span id="line-270"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply cot to an expression.</span><span>
 </span><span id="line-271"></span><span>  </span><span id="local-6989586621679425191"><span class="annot"><span class="annottext">cot :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425191"><span class="hs-identifier hs-var hs-var hs-var hs-var">cot</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Cot"><span class="hs-identifier hs-var">Cot</span></a></span><span>
-</span><span id="line-272"></span><span>  </span><span>
+</span><span id="line-272"></span><span>
 </span><span id="line-273"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply arcsin to an expression.</span><span>
 </span><span id="line-274"></span><span>  </span><span id="local-6989586621679425193"><span class="annot"><span class="annottext">arcsin :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425193"><span class="hs-identifier hs-var hs-var hs-var hs-var">arcsin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Arcsin"><span class="hs-identifier hs-var">Arcsin</span></a></span><span>
-</span><span id="line-275"></span><span>  </span><span>
+</span><span id="line-275"></span><span>
 </span><span id="line-276"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply arccos to an expression.</span><span>
 </span><span id="line-277"></span><span>  </span><span id="local-6989586621679425195"><span class="annot"><span class="annottext">arccos :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425195"><span class="hs-identifier hs-var hs-var hs-var hs-var">arccos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Arccos"><span class="hs-identifier hs-var">Arccos</span></a></span><span>
-</span><span id="line-278"></span><span>  </span><span>
+</span><span id="line-278"></span><span>
 </span><span id="line-279"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply arctan to an expression.</span><span>
 </span><span id="line-280"></span><span>  </span><span id="local-6989586621679425197"><span class="annot"><span class="annottext">arctan :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425197"><span class="hs-identifier hs-var hs-var hs-var hs-var">arctan</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Arctan"><span class="hs-identifier hs-var">Arctan</span></a></span><span>
-</span><span id="line-281"></span><span>  </span><span>
+</span><span id="line-281"></span><span>
 </span><span id="line-282"></span><span>  </span><span class="hs-comment">-- | Smart constructor for the exponential (base e) function.</span><span>
 </span><span id="line-283"></span><span>  </span><span id="local-6989586621679425199"><span class="annot"><span class="annottext">exp :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425199"><span class="hs-identifier hs-var hs-var hs-var hs-var">exp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Exp"><span class="hs-identifier hs-var">Exp</span></a></span><span>
-</span><span id="line-284"></span><span>  </span><span>
+</span><span id="line-284"></span><span>
 </span><span id="line-285"></span><span>  </span><span class="hs-comment">-- | Smart constructor for calculating the dimension of a vector.</span><span>
 </span><span id="line-286"></span><span>  </span><span id="local-6989586621679425201"><span class="annot"><span class="annottext">dim :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425201"><span class="hs-identifier hs-var hs-var hs-var hs-var">dim</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFuncVN -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOpVN"><span class="hs-identifier hs-var">UnaryOpVN</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVN
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Dim"><span class="hs-identifier hs-var">Dim</span></a></span><span>
-</span><span id="line-287"></span><span>  </span><span>
+</span><span id="line-287"></span><span>
 </span><span id="line-288"></span><span>  </span><span class="hs-comment">-- | Smart constructor for calculating the normal form of a vector.</span><span>
 </span><span id="line-289"></span><span>  </span><span id="local-6989586621679425203"><span class="annot"><span class="annottext">norm :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425203"><span class="hs-identifier hs-var hs-var hs-var hs-var">norm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFuncVN -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOpVN"><span class="hs-identifier hs-var">UnaryOpVN</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVN
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Norm"><span class="hs-identifier hs-var">Norm</span></a></span><span>
-</span><span id="line-290"></span><span>  </span><span>
+</span><span id="line-290"></span><span>
 </span><span id="line-291"></span><span>  </span><span class="hs-comment">-- | Smart constructor for negating vectors.</span><span>
 </span><span id="line-292"></span><span>  </span><span id="local-6989586621679425205"><span class="annot"><span class="annottext">negVec :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425205"><span class="hs-identifier hs-var hs-var hs-var hs-var">negVec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFuncVV -&gt; CodeExpr -&gt; CodeExpr
@@ -682,19 +682,19 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679425207"><span class="hs-identifier hs-var hs-var hs-var hs-var">vScale</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NVVBinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#NVVBinaryOp"><span class="hs-identifier hs-var">NVVBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">NVVBinOp
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Scale"><span class="hs-identifier hs-var">Scale</span></a></span><span>
-</span><span id="line-295"></span><span>  </span><span>
+</span><span id="line-295"></span><span>
 </span><span id="line-296"></span><span>  </span><span class="hs-comment">-- | Smart constructor for applying logical negation to an expression.</span><span>
 </span><span id="line-297"></span><span>  </span><span id="local-6989586621679425209"><span class="annot"><span class="annottext">not_ :: CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425209"><span class="hs-identifier hs-var hs-var hs-var hs-var">not_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFuncB -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOpB"><span class="hs-identifier hs-var">UnaryOpB</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncB
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Not"><span class="hs-identifier hs-var">Not</span></a></span><span>
-</span><span id="line-298"></span><span>  </span><span>
+</span><span id="line-298"></span><span>
 </span><span id="line-299"></span><span>  </span><span class="hs-comment">-- | Smart constructor for indexing.</span><span>
 </span><span id="line-300"></span><span>  </span><span id="local-6989586621679425211"><span class="annot"><span class="annottext">idx :: CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425211"><span class="hs-identifier hs-var hs-var hs-var hs-var">idx</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">LABinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#LABinaryOp"><span class="hs-identifier hs-var">LABinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">LABinOp
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Index"><span class="hs-identifier hs-var">Index</span></a></span><span>
-</span><span id="line-301"></span><span>  </span><span>
+</span><span id="line-301"></span><span>
 </span><span id="line-302"></span><span>  </span><span id="local-6989586621679425213"><span class="annot"><span class="annottext">idxOf :: CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425213"><span class="hs-identifier hs-var hs-var hs-var hs-var">idxOf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">LABinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#LABinaryOp"><span class="hs-identifier hs-var">LABinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">LABinOp
@@ -719,7 +719,7 @@ Symbol -&gt; RTopology -&gt; a -&gt; b -&gt; DomainDesc 'Discrete a b
 </span><a href="Language.Drasil.Space.html#Continuous"><span class="hs-identifier hs-var">Continuous</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
 </span><a href="#local-6989586621679425218"><span class="hs-identifier hs-var">low</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
 </span><a href="#local-6989586621679425219"><span class="hs-identifier hs-var">high</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-305"></span><span>  </span><span>
+</span><span id="line-305"></span><span>
 </span><span id="line-306"></span><span>  </span><span class="hs-comment">-- | Sum over some expression with bounds (&#8721;).</span><span>
 </span><span id="line-307"></span><span>  </span><span id="local-6989586621679425221"><span class="annot"><span class="annottext">defsum :: Symbol -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425221"><span class="hs-identifier hs-var hs-var hs-var hs-var">defsum</span></a></span></span><span> </span><span id="local-6989586621679425223"><span class="annot"><span class="annottext">Symbol
@@ -740,7 +740,7 @@ Symbol -&gt; RTopology -&gt; a -&gt; b -&gt; DomainDesc 'Discrete a b
 </span><a href="Language.Drasil.Space.html#Discrete"><span class="hs-identifier hs-var">Discrete</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
 </span><a href="#local-6989586621679425224"><span class="hs-identifier hs-var">low</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
 </span><a href="#local-6989586621679425225"><span class="hs-identifier hs-var">high</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-308"></span><span>  </span><span>
+</span><span id="line-308"></span><span>
 </span><span id="line-309"></span><span>  </span><span class="hs-comment">-- | Product over some expression with bounds (&#8719;).</span><span>
 </span><span id="line-310"></span><span>  </span><span id="local-6989586621679425226"><span class="annot"><span class="annottext">defprod :: Symbol -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425226"><span class="hs-identifier hs-var hs-var hs-var hs-var">defprod</span></a></span></span><span> </span><span id="local-6989586621679425228"><span class="annot"><span class="annottext">Symbol
@@ -761,7 +761,7 @@ Symbol -&gt; RTopology -&gt; a -&gt; b -&gt; DomainDesc 'Discrete a b
 </span><a href="Language.Drasil.Space.html#Discrete"><span class="hs-identifier hs-var">Discrete</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
 </span><a href="#local-6989586621679425229"><span class="hs-identifier hs-var">low</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
 </span><a href="#local-6989586621679425230"><span class="hs-identifier hs-var">high</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-311"></span><span>  </span><span>
+</span><span id="line-311"></span><span>
 </span><span id="line-312"></span><span>  </span><span class="hs-comment">-- | Smart constructor for 'real interval' membership.</span><span>
 </span><span id="line-313"></span><span>  </span><span id="local-6989586621679425237"><span class="annot"><span class="annottext">realInterval :: forall c.
 HasUID c =&gt;
@@ -775,7 +775,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasUID c =&gt; Getter c UID
 Getter c UID
 </span><a href="Drasil.Database.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-314"></span><span>  </span><span>
+</span><span id="line-314"></span><span>
 </span><span id="line-315"></span><span>  </span><span class="hs-comment">-- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.</span><span>
 </span><span id="line-316"></span><span>  </span><span id="local-6989586621679425247"><span class="annot"><span class="annottext">euclidean :: [CodeExpr] -&gt; CodeExpr
 </span><a href="#local-6989586621679425247"><span class="hs-identifier hs-var hs-var hs-var hs-var">euclidean</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr
@@ -796,13 +796,13 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><a href="Language.Drasil.Expr.Class.html#square"><span class="hs-identifier hs-var">square</span></a></span><span>
-</span><span id="line-317"></span><span>  </span><span>
+</span><span id="line-317"></span><span>
 </span><span id="line-318"></span><span>  </span><span class="hs-comment">-- | Smart constructor to cross product two expressions.</span><span>
 </span><span id="line-319"></span><span>  </span><span id="local-6989586621679425250"><span class="annot"><span class="annottext">cross :: CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425250"><span class="hs-identifier hs-var hs-var hs-var hs-var">cross</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">VVVBinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#VVVBinaryOp"><span class="hs-identifier hs-var">VVVBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">VVVBinOp
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Cross"><span class="hs-identifier hs-var">Cross</span></a></span><span>
-</span><span id="line-320"></span><span>  </span><span>
+</span><span id="line-320"></span><span>
 </span><span id="line-321"></span><span>  </span><span class="hs-comment">-- | Adding vectors</span><span>
 </span><span id="line-322"></span><span>  </span><span id="local-6989586621679425252"><span class="annot"><span class="annottext">vAdd :: CodeExpr -&gt; CodeExpr -&gt; CodeExpr
 </span><a href="#local-6989586621679425252"><span class="hs-identifier hs-var hs-var hs-var hs-var">vAdd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">VVVBinOp -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr
@@ -819,13 +819,13 @@ forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><a href="#local-6989586621679425256"><span class="hs-identifier hs-var hs-var hs-var hs-var">completeCase</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Completeness -&gt; [(CodeExpr, CodeExpr)] -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Case"><span class="hs-identifier hs-var">Case</span></a></span><span> </span><span class="annot"><span class="annottext">Completeness
 </span><a href="Language.Drasil.Expr.Lang.html#Complete"><span class="hs-identifier hs-var">Complete</span></a></span><span>
-</span><span id="line-328"></span><span>  </span><span>
+</span><span id="line-328"></span><span>
 </span><span id="line-329"></span><span>  </span><span class="hs-comment">-- | Smart constructor for case statements with an incomplete set of cases.</span><span>
 </span><span id="line-330"></span><span>  </span><span id="local-6989586621679425259"><span class="annot"><span class="annottext">incompleteCase :: [(CodeExpr, CodeExpr)] -&gt; CodeExpr
 </span><a href="#local-6989586621679425259"><span class="hs-identifier hs-var hs-var hs-var hs-var">incompleteCase</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Completeness -&gt; [(CodeExpr, CodeExpr)] -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Case"><span class="hs-identifier hs-var">Case</span></a></span><span> </span><span class="annot"><span class="annottext">Completeness
 </span><a href="Language.Drasil.Expr.Lang.html#Incomplete"><span class="hs-identifier hs-var">Incomplete</span></a></span><span>
-</span><span id="line-331"></span><span>  </span><span>
+</span><span id="line-331"></span><span>
 </span><span id="line-332"></span><span>  </span><span id="local-6989586621679425262"><span class="annot"><span class="annottext">matrix :: [[CodeExpr]] -&gt; CodeExpr
 </span><a href="#local-6989586621679425262"><span class="hs-identifier hs-var hs-var hs-var hs-var">matrix</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[CodeExpr]] -&gt; CodeExpr
 </span><a href="Drasil.Code.CodeExpr.Lang.html#Matrix"><span class="hs-identifier hs-var">Matrix</span></a></span><span>
@@ -852,7 +852,7 @@ forall c. HasUID c =&gt; Getter c UID
 Getter f UID
 </span><a href="Drasil.Database.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
 </span><a href="#local-6989586621679425279"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-338"></span><span>  </span><span>
+</span><span id="line-338"></span><span>
 </span><span id="line-339"></span><span>  </span><span class="hs-comment">-- Note how |sy| 'enforces' having a symbol</span><span>
 </span><span id="line-340"></span><span>  </span><span class="hs-comment">-- | Create an 'Expr' from a 'Symbol'ic Chunk.</span><span>
 </span><span id="line-341"></span><span>  </span><span id="local-6989586621679425285"><span class="annot"><span class="annottext">sy :: forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; CodeExpr

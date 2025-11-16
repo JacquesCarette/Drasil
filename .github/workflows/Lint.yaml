@@ -44,6 +44,10 @@ jobs:
           path: code/
           fail-on: status
 
+      - name: 'Check no lines end with trailing whitespace and no files are missing trailing newlines'
+        if: ${{ steps.filter.outputs.hs == 'true' }}
+        run: sh scripts/check_whitespace.sh
+
       # If a sh script was edited, then run shellcheck
       - name: "Run ShellCheck"
         if: ${{ steps.filter.outputs.sh == 'true' }}

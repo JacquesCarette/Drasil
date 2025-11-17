@@ -8,20 +8,21 @@ module Language.Drasil.Choices (
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs, InternalConcept(..)) where
+  choicesSent, showChs, InternalConcept(..)
+) where
 
-import Language.Drasil hiding (None, Var)
-import Language.Drasil.Code.Code (spaceToCodeType)
+import Control.Lens ((^.))
+import Data.List.NonEmpty (toList)
+import Data.Map (Map)
+import qualified Data.Map as Map
+
+import qualified Drasil.GOOL as C (CodeType(..))
+import Language.Drasil hiding (Var)
+import qualified Language.Drasil as S (Space(..))
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)
 import Language.Drasil.Mod (Name)
-import Data.Map (Map)
-import qualified Data.Map as Map
-
-import Drasil.GOOL (CodeType)
-
-import Control.Lens ((^.))
 
 -- | The instruction indicates how the generated program should be written down.
 -- Full details of Choices documentation https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
@@ -167,18 +168,37 @@ matchConcepts = Map.fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
 -- | Specifies which 'CodeType' should be used to represent each mathematical
 -- 'Space'. ['CodeType'] is preferentially-ordered, first 'CodeType' that does not
 -- conflict with other choices will be selected.
-type SpaceMatch = Space -> [CodeType]
+type SpaceMatch = Space -> [C.CodeType]
 
 -- | Updates a 'SpaceMatch' by matching the given 'Space' with the given ['CodeType'].
-matchSpace :: Space -> [CodeType] -> SpaceMatch -> SpaceMatch
+matchSpace :: Space -> [C.CodeType] -> SpaceMatch -> SpaceMatch
 matchSpace _ [] _ = error "Must match each Space to at least one CodeType"
 matchSpace s ts sm = \sp -> if sp == s then ts else sm sp
 
 -- | Builds a 'SpaceMatch' from an association list of 'Spaces' and 'CodeTypes'.
-matchSpaces :: [(Space, [CodeType])] -> SpaceMatch
+matchSpaces :: [(Space, [C.CodeType])] -> SpaceMatch
 matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
   where matchSpaces' ((s,ct):sms) sm = matchSpaces' sms $ matchSpace s ct sm
         matchSpaces' [] sm = sm
+
+-- | Default mapping between 'Space' and 'CodeType'.
+spaceToCodeType :: S.Space -> [C.CodeType]
+spaceToCodeType S.Integer        = [C.Integer]
+spaceToCodeType S.Natural        = [C.Integer]
+spaceToCodeType S.Real           = [C.Double, C.Float]
+spaceToCodeType S.Rational       = [C.Double, C.Float]
+spaceToCodeType S.Boolean        = [C.Boolean]
+spaceToCodeType S.Char           = [C.Char]
+spaceToCodeType S.String         = [C.String]
+spaceToCodeType (S.Vect s)       = map C.List (spaceToCodeType s)
+spaceToCodeType (S.Matrix _ _ s) = map (C.List . C.List) (spaceToCodeType s)
+spaceToCodeType (S.Set s)        = map C.List (spaceToCodeType s)
+spaceToCodeType (S.Array s)      = map C.Array (spaceToCodeType s)
+spaceToCodeType (S.Actor s)      = [C.Object s]
+spaceToCodeType S.Void           = [C.Void]
+spaceToCodeType (S.Function i t) = [C.Func is ts | is <- ins, ts <- trgs]
+    where trgs = spaceToCodeType t
+          ins  = map spaceToCodeType (toList i)
 
 -- Optional Features can be added to the program or left it out
 data OptionalFeatures = OptFeats{

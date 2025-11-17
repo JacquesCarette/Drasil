@@ -7,11 +7,12 @@ module Language.Drasil.Development.Sentence (
   -- * Capitalize First Word
   atStart, atStart',
   -- * Capitalize All Words
-  titleize, titleize',
+  titleize, titleize', introduceAbb, introduceAbbPlrl,
   -- * from NPStruct to Sentence
   toSent,
   -- * Short Form (lowercase)
-  short, introduceAbb) where
+  short
+) where
 
 import Control.Lens ((^.))
 
@@ -38,11 +39,15 @@ toSent (P p) = S.P p
 short :: Idea c => c -> S.Sentence
 short c = sentenceShort (c ^. uid)
 
--- | Helper for common pattern of introducing the title-case version of a
--- noun phrase (from an Idea)
--- followed by its abbreviation in parentheses.
+-- | Introduce title-case version of a noun phrase followed by its
+-- (parenthesized) abbreviation.
 introduceAbb :: Idea n => n -> S.Sentence
 introduceAbb n = toSent (NP.titleizeNP (n ^. term)) +:+ sParen (short n)
+
+-- | Introduce plural title-case version of a noun phrase followed by its
+-- (parenthesized) abbreviation.
+introduceAbbPlrl :: Idea n => n -> S.Sentence
+introduceAbbPlrl n = toSent (NP.titleizeNP' (n ^. term)) +:+ sParen (short n)
 
 -- | Helper function for getting the sentence case of a noun phrase from a
 -- 'NamedIdea'.

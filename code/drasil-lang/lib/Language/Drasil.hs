@@ -196,7 +196,7 @@ module Language.Drasil (
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Language.Drasil.Development.Sentence
-  , introduceAbb, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
+  , introduceAbb, introduceAbbPlrl, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
   , titleize, titleize', short
   -- Language.Drasil.ShortName
   , ShortName, shortname', getSentSN, HasShortName(..)

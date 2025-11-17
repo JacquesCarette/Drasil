@@ -54,7 +54,8 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, learnObj, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook]
+  likelyChg, learnObj, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc,
+  unlikelyChg, notebook, refBy, refName]
 
 assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst, requirement,
   mg, mis, notApp, srs, typUnc, sec, notebook, refBy, refName :: CI
@@ -79,7 +80,7 @@ requirement = commonIdeaWithDict "requirement" (cn' "requirement")              
 mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
 mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
 notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                       "N/A"     []
-typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                           "Uncert." [softEng]
+typUnc      = commonIdeaWithDict "typUnc"      (cnIES "typical uncertainty")                         "Uncert." [softEng]
 sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
 srs         = commonIdeaWithDict "srs"         softReqSpec                                           "SRS"     [softEng]
 notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                                      "NB"      [softEng]

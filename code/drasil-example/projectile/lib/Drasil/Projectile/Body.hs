@@ -2,7 +2,7 @@ module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
 
 import Control.Lens ((^.))
 
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata (inModel)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
@@ -15,16 +15,15 @@ import qualified Drasil.DocLang.SRS as SRS
 import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (analysis, physics,
-  problem, assumption, goalStmt, physSyst, sysCont, software, user,
-  requirement, refBy, refName, typUnc, example, softwareSys, system, environment,
-  product_, interface, condition, physical, datum, input_, softwareConstraint,
-  output_, endUser)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
+import Data.Drasil.Concepts.Documentation (analysis, assumption, condition,
+  datum, endUser, environment, example, input_, interface, output_, physical,
+  physics, problem, product_, software, softwareConstraint, softwareSys,
+  sysCont, system, user)
+import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon',
-  rectilinear, oneD, twoD, motion, distance, collision, positionVec)
+  rectilinear, twoD, motion, distance, collision, positionVec)
 import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
@@ -71,14 +70,14 @@ mkSRS = [TableOfContents,
     RefProg intro
       [ TUnits
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-      , TAandA abbreviationsList
+      , TAandA
       ],
   IntroSec $
     IntroProg justification (phrase progName)
       [ IPurpose $ purpDoc progName Verbose
       , IScope scope
       , IChar [] charsOfReader []
-      , IOrgSec inModel (SRS.inModel [] []) EmptyS],
+      , IOrgSec inModel (SRS.inModel [] []) Nothing],
   GSDSec $
       GSDProg
         [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]
@@ -176,13 +175,6 @@ conceptChunks =
 symbMap :: ChunkDB
 symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
   dataDefs iMods genDefns tMods concIns citations labelledContent allRefs
-
-abbreviationsList  :: [IdeaDict]
-abbreviationsList  =
-  -- CIs
-  map nw acronyms ++
-  -- DefinedQuantityDicts
-  map nw symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -310,8 +302,3 @@ outConstraints = [landPosUnc, offsetUnc, flightDurUnc]
 
 constrained :: [ConstrConcept]
 constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
-
-acronyms :: [CI]
-acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, Doc.srs, refBy, refName, thModel, typUnc]
-

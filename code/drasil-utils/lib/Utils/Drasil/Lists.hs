@@ -5,6 +5,32 @@ import Data.List
 
 import Data.Containers.ListUtils (nubOrd)
 
+-- | Split a list of elements by a delimiter, returning all delimited segments
+-- and delimiters.
+splitAtAll :: (a -> Bool) -> [a] -> ([[a]], [a])
+splitAtAll = go [] [] []
+  where
+    go :: [a] -> [[a]] -> [a] -> (a -> Bool) -> [a] -> ([[a]], [a])
+    -- List ended with delimiter (nothing accumulated)
+    go []   gacc as _ []     = ([] : reverse gacc, reverse as)
+    -- List ends with non-delimiter (elements accumulated)
+    go lacc gacc as _ []     = (reverse (reverse lacc : gacc), reverse as)
+    go lacc gacc as p (x:xs)
+      -- Next element is a delimiter (fix ordering of accumulated elements and
+      -- continue)
+      | p x = go [] (reverse lacc : gacc) (x:as) p xs
+      -- Next element is not a delimiter (put element in local segment
+      -- cache/accumulator [reverse order])
+      | otherwise = go (x:lacc) gacc as p xs
+
+-- | Concatenate a list of list segments given a list of delimiters.
+--
+-- e.g., mergeAll [[1,2], [4,5]] [3,6] == [1,2,3,4,5,6]
+mergeAll :: [[a]] -> [a] -> [a]
+mergeAll [] rs = rs
+mergeAll (l:ls) (r:rs) = l ++ r : mergeAll ls rs
+mergeAll ls _ = concat ls
+
 -- | Check if list has at least 2 elements.
 atLeast2 :: [a] -> Bool
 atLeast2 (_:_:_) = True

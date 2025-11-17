@@ -20,15 +20,15 @@ getUIDs S {}                = []
 getUIDs P {}                = []
 getUIDs Ref {}              = []
 getUIDs Percent             = []
-getUIDs ((:+:) a b)         = getUIDs a ++ getUIDs b
+getUIDs (a :+: b)           = getUIDs a ++ getUIDs b
 getUIDs (Quote a)           = getUIDs a
 getUIDs (E a)               = meNames a
 getUIDs EmptyS              = []
 
--- | Generic traverse of all positions that could lead to /symbolic/ and /abbreviated/ 'UID's from 'Sentence's
--- but doesn't go into expressions.
+-- | Generic traverse of all positions that could lead to /symbolic/ and
+-- /abbreviated/ 'UID's from 'Sentence's but doesn't go into expressions.
 getUIDshort :: Sentence -> [UID]
-getUIDshort (Ch ShortStyle _ a) = [a]
+getUIDshort (Ch ShortStyle _ x) = [x]
 getUIDshort (Ch TermStyle _ _)  = []
 getUIDshort (Ch PluralTerm _ _) = []
 getUIDshort SyCh {}             = []
@@ -37,8 +37,8 @@ getUIDshort NP {}               = []
 getUIDshort S {}                = []
 getUIDshort Percent             = []
 getUIDshort P {}                = []
-getUIDshort Ref {}              = []
-getUIDshort ((:+:) a b)         = getUIDshort a ++ getUIDshort b
+getUIDshort (Ref _ s _)         = getUIDshort s
+getUIDshort (a :+: b)           = getUIDshort a ++ getUIDshort b
 getUIDshort (Quote a)           = getUIDshort a
 getUIDshort E {}                = []
 getUIDshort EmptyS              = []
@@ -63,7 +63,7 @@ lnames S {}        = []
 lnames Percent     = []
 lnames P {}        = []
 lnames (Ref a _ _) = [a]
-lnames ((:+:) a b) = lnames a ++ lnames b
+lnames (a :+: b)   = lnames a ++ lnames b
 lnames Quote {}    = []
 lnames E {}        = []
 lnames EmptyS      = []

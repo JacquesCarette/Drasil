@@ -46,8 +46,8 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
 import Drasil.SWHS.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHS.MetaConcepts (progName, progName')
 import Drasil.SWHS.References (citations, uriReferences)
-import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements,
-  verifyEnergyOutput)
+import Drasil.SWHS.Requirements (funcReqs, nfRequirements,
+  verifyEnergyOutput, funcReqsTables)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
@@ -90,7 +90,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks [] SWHS.dataDefs insModel
-  genDefs tMods concIns citations labelledContent allRefs
+  genDefs tMods concIns citations (labelledContent ++ funcReqsTables) allRefs
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
@@ -138,7 +138,7 @@ mkSRS = [TableOfContents,
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub inReqDesc [],
+    FReqsSub funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,

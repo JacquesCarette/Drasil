@@ -31,7 +31,7 @@ import Drasil.PDController.IModel (instanceModels, imPD)
 import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc, externalLinkRef,
        introUserChar1, introUserChar2, introscopeOfReq, scope)
 import Drasil.PDController.References (citations)
-import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
+import Drasil.PDController.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
@@ -79,7 +79,7 @@ mkSRS
                  ShowDerivation,
                Constraints EmptyS inputsUC]],
 
-     ReqrmntSec $ ReqsProg [FReqsSub EmptyS [], NonFReqsSub], LCsSec,
+     ReqrmntSec $ ReqsProg [FReqsSub funcReqsTables, NonFReqsSub], LCsSec,
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
 si :: System
@@ -136,7 +136,7 @@ symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, 
   theoreticalModels
   conceptInstances
   citations
-  labelledContent
+  (labelledContent ++ funcReqsTables)
   allRefs
 
 -- | Holds all references and links used in the document.

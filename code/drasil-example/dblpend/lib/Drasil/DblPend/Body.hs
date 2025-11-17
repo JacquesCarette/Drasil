@@ -41,7 +41,7 @@ import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms, constants)
-import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
+import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs, funcReqsTables)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols, odeInfoChunks)
@@ -85,7 +85,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
         ]
       ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub EmptyS []
+    [ FReqsSub funcReqsTables
     , NonFReqsSub
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -146,7 +146,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns citations labelledContent allRefs
+  dataDefs iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables) allRefs
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

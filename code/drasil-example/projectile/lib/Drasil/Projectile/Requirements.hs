@@ -1,10 +1,12 @@
-module Drasil.Projectile.Requirements (funcReqs, nonfuncReqs) where
+module Drasil.Projectile.Requirements (
+  funcReqs, nonfuncReqs, funcReqsTables
+) where
 
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
-  mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR)
+  mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, inReqWTab)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (datumConstraint,
@@ -13,12 +15,19 @@ import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Drasil.Projectile.IMods (landPosIM, offsetIM, timeIM)
-import Drasil.Projectile.Unitals (flightDur, landPos, offset)
+import Drasil.Projectile.Unitals (flightDur, landPos, offset, inputs)
 
 {--Functional Requirements--}
 
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInVals, calcValues, outputValues]
+funcReqs = [inputValues, verifyInVals, calcValues, outputValues]
+
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab Nothing inputs
 
 verifyInVals, calcValues, outputValues :: ConceptInstance
 

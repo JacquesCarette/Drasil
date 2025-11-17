@@ -13,6 +13,12 @@ import Data.Drasil.Units.Physics (velU)
 import qualified Drasil.Projectile.Concepts as C (flightDur, offset,
   flightDur, landPos, launAngle, launSpeed, offset, targPos, projSpeed, projPos)
 
+inputs :: [DefinedQuantityDict]
+inputs = map dqdWr [launSpeed, launAngle, targPos]
+
+outputs :: [DefinedQuantityDict]
+outputs = [dqdWr offset, dqdWr flightDur]
+
 projSpeed :: UnitalChunk
 projSpeed = uc C.projSpeed (Concat [lV, label "(", lT, label ")"]) Real velU
 

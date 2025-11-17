@@ -1,6 +1,7 @@
 module Drasil.DblPend.Derivations where
 
 import Prelude hiding (sin, cos)
+import Control.Lens ((^.))
 
 import Language.Drasil (ModelExprC(..), ExprC(..),
   Express(..), ModelExpr, DefiningExpr(..))
@@ -11,8 +12,6 @@ import Drasil.DblPend.Expressions (velXExpr_2, velYExpr_2)
 import Drasil.DblPend.Unitals (lenRod_1, massObj_1, massObj_2,
   xPos_1, xPos_2, yPos_1, yPos_2, xVel_1, xVel_2, yVel_1, yVel_2, xAccel_1, xAccel_2,
   yAccel_1, yAccel_2, tension_1, tension_2, angularVel_1, pendDisAngle_1, pendDisAngle_2)
-import Control.Lens ((^.))
-
 
 -- Velocity X/Y First Object
 velDerivEqn1, velXDerivEqn2_1, velXDerivEqn3_1, velXDerivEqn4_1 :: ModelExpr

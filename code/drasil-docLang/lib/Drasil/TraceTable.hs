@@ -29,7 +29,6 @@ dependencyPlate = preorderFold $ purePlate {
     (IMs _ _ i _) -> getDependenciesOf [derivs, notes] i
     _ -> [],
   reqSub = Constant . getDependenciesOf [defs] <$> \case
-    (FReqsSub' c _) -> c
     (FReqsSub c _) -> c
     (NonFReqsSub c) -> c,
   lcsSec = Constant . getDependenciesOf [defs] <$> \(LCsProg c) -> c,

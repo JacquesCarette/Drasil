@@ -93,22 +93,22 @@ digraph allvsall {
 	{theory:riskFun, theory:stressDistFac, theory:nFL, theory:dimlessLoad, theory:tolLoad, theory:sdfTol, theory:probBr, theory:lResistance, theory:isSafePb, theory:isSafeLR}
 	}
 
-	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
-	instance:verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
-	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
-	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
-	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
-	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
 	instance:sysSetValsFollowingAssumps	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:sysSetValsFollowingAssumps"];
 	instance:checkInputWithDataCons	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkInputWithDataCons"];
 	instance:outputValsAndKnownValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValsAndKnownValues"];
 	instance:checkGlassSafety	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkGlassSafety"];
 	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
+	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
+	instance:verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
+	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
+	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
+	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
+	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 
-	subgraph NFR {
+	subgraph FR {
 	rank="same"
-	{instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:portable, instance:inputValues, instance:sysSetValsFollowingAssumps, instance:checkInputWithDataCons, instance:outputValsAndKnownValues, instance:checkGlassSafety, instance:outputValues}
+	{instance:inputValues, instance:sysSetValsFollowingAssumps, instance:checkInputWithDataCons, instance:outputValsAndKnownValues, instance:checkGlassSafety, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:portable}
 	}
 
 	instance:willBreakGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:willBreakGS"];

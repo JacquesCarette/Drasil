@@ -155,7 +155,7 @@ mkSRS = [TableOfContents,
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub EmptyS funcReqsTables,
+    FReqsSub funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,

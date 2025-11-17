@@ -94,10 +94,8 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 -- | Requirements subsections.
 data ReqsSub where
-  -- | Functional requirements. 'LabelledContent' for tables (includes input values).
-  FReqsSub    :: Sentence -> [LabelledContent] -> ReqsSub
-  -- | Functional requirements. 'LabelledContent' for tables (no input values).
-  FReqsSub'   :: [LabelledContent] -> ReqsSub
+  -- | Functional requirements. 'LabelledContent' for tables.
+  FReqsSub    :: [LabelledContent] -> ReqsSub
   -- | Non-Functional requirements.
   NonFReqsSub :: ReqsSub
 
@@ -123,8 +121,7 @@ mkDocDesc sys@SI{_systemdb = db} = map sec where
   sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e
 
   reqSec :: ReqsSub -> DL.ReqsSub
-  reqSec (FReqsSub _ t) = DL.FReqsSub (fromConcInsDB funcReqDom) t
-  reqSec (FReqsSub' t) = DL.FReqsSub' (fromConcInsDB funcReqDom) t
+  reqSec (FReqsSub t) = DL.FReqsSub (fromConcInsDB funcReqDom) t
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
 
   ssdSec :: SSDSub -> DL.SSDSub

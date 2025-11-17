@@ -1,20 +1,17 @@
 module Drasil.PDController.Choices where
 
-import Language.Drasil.Code (AuxFile(..), Choices(..), CodeSpec, Comments(..),
+import Language.Drasil.Code (AuxFile(..), Choices(..), Comments(..),
   ConstantRepr(..), ConstantStructure(..), ConstraintBehaviour(..),
   ImplementationType(..), Lang(..), Modularity(..), Structure(..),
-  Verbosity(..), Visibility(..), codeSpec, defaultChoices, makeArchit, makeData,
+  Verbosity(..), Visibility(..), defaultChoices, makeArchit, makeData,
   makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats, ExtLib(..))
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg,
   apacheODEPckg, odeintPckg)
-import Drasil.PDController.Body (pidODEInfo, fullSI)
+import Drasil.PDController.ODEs (pidODEInfo)
 
-codeSpecs :: CodeSpec
-codeSpecs = codeSpec fullSI codeChoices []
-
-codeChoices :: Choices
-codeChoices = defaultChoices{
+choices :: Choices
+choices = defaultChoices {
   lang = [Python, CSharp, Java, Cpp],
   architecture = makeArchit Modular Program,
   dataInfo = makeData Unbundled (Store Bundled) Const,

@@ -1,15 +1,12 @@
-module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
-
-import Control.Lens ((^.))
+module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
 import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.ExternalLibraries.ODELibraries
@@ -43,19 +40,6 @@ import Drasil.PDController.ODEs (pidODEInfo)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS

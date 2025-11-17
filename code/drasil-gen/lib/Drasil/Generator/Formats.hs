@@ -1,5 +1,11 @@
 -- | Defines output formats for the different documents we can generate.
-module Drasil.Generator.Formats where
+module Drasil.Generator.Formats (
+  -- * Types (Printing Options)
+  DocType(..), DocSpec(DocSpec), DocChoices(..),
+  DocClass(..), UsePackages(..), ExDoc(..), Filename,
+  -- * Constructors
+  docChoices
+) where
 
 import Data.Char (toLower)
 import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeVar,
@@ -19,6 +25,10 @@ data DocChoices = DC {
 
 -- | Document specifications. Holds the type of document ('DocType') and its name ('Filename').
 data DocSpec = DocSpec DocChoices Filename
+
+-- | Constructor for users to choose their document options
+docChoices :: DocType -> [Format] -> DocChoices
+docChoices = DC
 
 -- | Allows the creation of Makefiles for documents that use LaTeX.
 instance RuleTransformer DocSpec where
@@ -40,7 +50,9 @@ instance RuleTransformer DocSpec where
 
 -- | LaTeX helper.
 data DocClass = DocClass (Maybe String) String
+
 -- | LaTeX helper for adding packages. Wraps a list of package names.
 newtype UsePackages = UsePackages [String] -- Package name list
+
 -- | LaTeX helper.
 data ExDoc = ExDoc (Maybe String) String

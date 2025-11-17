@@ -1,16 +1,13 @@
-module Main where
+module Main (main) where
 
 import GHC.IO.Encoding
-import Drasil.Generator (gen, typeCheckSI, genDot,
-  DocSpec(DocSpec), DocType(SRS), Format(..), docChoices, dumpEverything)
-import Drasil.GamePhysics.Body (srs, printSetting, fullSI)
+
+import Drasil.Generator (exportSmithEtAlSrs)
+
+import Drasil.GamePhysics.Body (mkSRS, si)
 
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  dumpEverything fullSI printSetting ".drasil/"
-  typeCheckSI fullSI
-  gen (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) "GamePhysics_SRS") srs  printSetting
-  genDot fullSI
-  -- When ready to generate code from GamePhysics, uncomment the next line and all of Choices.hs
-  -- genCode choices code
+  _ <- exportSmithEtAlSrs si mkSRS "GamePhysics_SRS"
+  return ()

@@ -1,13 +1,9 @@
-module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
-
-import Control.Lens ((^.))
+module Drasil.HGHC.Body (si, mkSRS) where
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
-import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (mkSystem, SystemKind(Specification), systemdb)
+import Drasil.System (mkSystem, SystemKind(Specification))
 
 import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
@@ -15,19 +11,6 @@ import Drasil.HGHC.MetaConcepts (progName)
 
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS S.forT sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 si :: System
 si = mkSystem
@@ -37,7 +20,6 @@ si = mkSystem
   [] [] dataDefs [] []
   htInputs htOutputs ([] :: [ConstrConcept]) []
   symbMap
-
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

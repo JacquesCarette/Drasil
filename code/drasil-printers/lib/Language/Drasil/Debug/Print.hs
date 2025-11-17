@@ -110,7 +110,6 @@ cntntToStr Defini {} = "Definition or Model"
 cntntToStr Figure {} = "Figure"
 cntntToStr Bib {} = "Bibliography"
 cntntToStr Graph {} = "Graph"
-cntntToStr CodeBlock {} = "Code"
 
 openContentType :: HasContents s => p -> (String, s -> Doc)
 openContentType _ = ("Content Type", text . cntntToStr . view accessContents)

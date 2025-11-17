@@ -28,12 +28,6 @@ import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep, cast)
 
--- NOTE: Debug.Trace should only be used for warnings and errors, not for
--- general logging, as it can affect program behavior in unexpected ways.
--- However, we (ab)use it here to provide *soft* warnings when overwriting
--- chunks in the database.
-import Debug.Trace (trace)
-
 -- NOTE: Strictness is important for (a) performance, (b) space leaks, (c)
 -- avoiding chunk dependancy cycles and (d) ensuring operation consistency with
 -- other databases.
@@ -217,8 +211,8 @@ insert c cdb
           cdb' = cdb { chunkTable = cu', chunkTypeTable = ctr' }
           cdb'' = insert0 cdb' c
       in if typeOf c == x
-            then trace ("WARNING! Overwriting `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb''
-            else error $ "ERROR! Overwriting a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`"
+            then error ("ERROR! Attempting to insert duplicate chunk: `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb''
+            else error $ "ERROR! Attempting to overwrite a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`"
   | otherwise = insert0 cdb c
 
 -- | Insert a list of chunks into a 'ChunkDB'.

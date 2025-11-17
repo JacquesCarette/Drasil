@@ -499,14 +499,6 @@ introParagraph1 :: Sentence
 --   website</a>.
 module Drasil.Website.Body
 
--- | Printing info to get document to generate. Takes in the
---   <a>FolderLocation</a>.
-printSetting :: FolderLocation -> PrintingInformation
-
--- | Instead of being an <tt>SRSDecl</tt>, this takes the folder locations
---   and generates the document from there.
-mkWebsite :: FolderLocation -> Document
-
 -- | Folder locations based on environment variables (using <tt>getEnv</tt>
 --   in <a>Drasil.Website.Main</a>).
 data FolderLocation
@@ -555,55 +547,15 @@ Folder :: FilePath -> FilePath -> FilePath -> FilePath -> FilePath -> FilePath -
 -- | System information.
 si :: FolderLocation -> System
 
+-- | Needed for references and terms to work.
+symbMap :: FolderLocation -> ChunkDB
+
+-- | Used for the repository link.
+gitHubRef :: Reference
+
 -- | Puts all the sections in order. Basically the website version of the
 --   SRS declaration.
 sections :: FolderLocation -> [Section]
 
--- | Needed for references and terms to work.
-symbMap :: FolderLocation -> ChunkDB
-
--- | Helper to get the system name as an <a>IdeaDict</a> from
---   <a>System</a>.
-getSysName :: System -> IdeaDict
-
--- | Holds all references and links used in the website.
-allRefs :: FolderLocation -> [Reference]
-
--- | Used for system name and kind inside of <a>si</a>.
-webName :: CI
-
--- | Header section creator.
-headerSec :: Section
-
--- | For the drasil tree image on the website.
-imageContent :: LabelledContent
-
--- | Used for the repository link.
-gitHubRef :: Reference
-wikiRef :: Reference
-infoEncodingWiki :: Reference
-chunksWiki :: Reference
-recipesWiki :: Reference
-paperGOOL :: Reference
-papersWiki :: Reference
-icsePositionPaper :: Reference
-danPoster :: Reference
-wellUnderstoodPaper :: Reference
-quickStartWiki :: Reference
-newWorkspaceSetupWiki :: Reference
-contribGuideWiki :: Reference
-workflowWiki :: Reference
-createProjWiki :: Reference
-debuggingWiki :: Reference
-
 -- | Hardcoded info for the title, URL, and image path.
 websiteTitle :: String
-gitHubInfoURL :: FilePath
-imagePath :: FilePath
-danContributionPath :: FilePath
-
--- | Create the footer section.
-footer :: FolderLocation -> Section
-
--- | <a>footer</a> contents.
-copyrightInfo :: Sentence

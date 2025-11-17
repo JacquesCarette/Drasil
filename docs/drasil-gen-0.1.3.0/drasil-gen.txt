@@ -20,15 +20,6 @@ cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] -> [D
 --   system to the host system.
 dumpEverything :: System -> PrintingInformation -> Path -> IO ()
 
--- | Generate a number of artifacts based on a list of recipes.
-gen :: DocSpec -> Document -> PrintingInformation -> IO ()
-
--- | Generates traceability graphs as .dot files.
-genDot :: System -> IO ()
-
--- | Calls the code generator.
-genCode :: Choices -> CodeSpec -> IO ()
-
 -- | Document types include Software Requirements Specification and
 --   Website. Choosing SRS will generate both TeX and HTML files, while
 --   Website generates only as HTML. This also determines what folders the
@@ -47,14 +38,46 @@ DocSpec :: DocChoices -> Filename -> DocSpec
 --   formats we want to generate as.
 data DocChoices
 DC :: DocType -> [Format] -> DocChoices
+[doctype] :: DocChoices -> DocType
+[format] :: DocChoices -> [Format]
 
--- | Possible formats for printer output.
-data () => Format
-TeX :: Format
-HTML :: Format
-Jupyter :: Format
-MDBook :: Format
+-- | LaTeX helper.
+data DocClass
+DocClass :: Maybe String -> String -> DocClass
+
+-- | LaTeX helper for adding packages. Wraps a list of package names.
+newtype UsePackages
+UsePackages :: [String] -> UsePackages
+
+-- | LaTeX helper.
+data ExDoc
+ExDoc :: Maybe String -> String -> ExDoc
+
+-- | When choosing your document, you must specify the filename for the
+--   generated output (specified <i>without</i> a file extension).
+type Filename = String
 
 -- | Constructor for users to choose their document options
 docChoices :: DocType -> [Format] -> DocChoices
+
+-- | Generate an SRS softifact.
+exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO System
+
+-- | Generate a JupyterNotebook-based lesson plan.
+exportLessonPlan :: System -> LsnDecl -> String -> IO ()
+
+-- | Generate a "website" (HTML file) softifact.
+exportWebsite :: System -> Document -> Filename -> IO ()
+
+-- | Generate an SRS softifact with a specific solution softifact.
+exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> [Mod] -> IO ()
+
+-- | Generate an SRS softifact with a zoo of solution softifacts.
+exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [(Choices, [Mod])] -> IO ()
+
+-- | Find name of folders created for a "zoo" of executable softifacts.
+--   
+--   FIXME: This is a hack. The generation phase should emit what artifacts
+--   it created.
+codedDirName :: String -> Choices -> String
 typeCheckSI :: System -> IO ()

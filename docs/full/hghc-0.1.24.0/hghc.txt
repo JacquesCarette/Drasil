@@ -39,8 +39,5 @@ module Drasil.HGHC.MetaConcepts
 progName :: CI
 
 module Drasil.HGHC.Body
-srs :: Document
 si :: System
-symbMap :: ChunkDB
-printSetting :: PrintingInformation
-fullSI :: System
+mkSRS :: SRSDecl

@@ -1432,7 +1432,6 @@ digraph alltypes {
 		}
 		subgraph reqssub{
 		ReqsSub	[shape=oval, color=darkviolet, label="ReqsSub"];
-		ReqsSub -> Sentence;
 		ReqsSub -> LabelledContent;
 		ReqsSub -> ReqsSub;
 		ReqsSub -> System;
@@ -1644,8 +1643,6 @@ digraph alltypes {
 	}
 	subgraph learnobj {
 	}
-	subgraph main {
-	}
 	subgraph review {
 	}
 	subgraph asumptionss {
@@ -1838,6 +1835,8 @@ digraph alltypes {
 		DocSpec	[shape=oval, color=darkviolet, label="DocSpec"];
 		DocSpec -> DocChoices;
 		DocSpec -> Filename;
+		DocSpec -> DocType;
+		DocSpec -> Format;
 		}
 		subgraph docclass{
 		DocClass	[shape=oval, color=darkviolet, label="DocClass"];

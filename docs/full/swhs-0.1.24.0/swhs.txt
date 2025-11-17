@@ -292,8 +292,11 @@ heatEInPCM :: InstanceModel
 instModIntro :: Sentence
 
 module Drasil.SWHS.Requirements
-inReqDesc :: Sentence
 funcReqs :: [ConceptInstance]
+funcReqsTables :: [LabelledContent]
+inReqDesc :: Sentence
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
 findMass :: ConceptInstance
 checkWithPhysConsts :: ConceptInstance
 outputInputDerivVals :: ConceptInstance
@@ -322,10 +325,6 @@ likeChgTLH :: ConceptInstance
 unlikelyChgs :: [ConceptInstance]
 
 module Drasil.SWHS.Body
-sd :: (System, DocDesc)
-fullSI :: System
-srs :: Document
-printSetting :: PrintingInformation
 si :: System
 purp :: Sentence
 motivation :: Sentence
@@ -341,7 +340,6 @@ tSymbIntro :: [TSIntro]
 insModel :: [InstanceModel]
 concIns :: [ConceptInstance]
 stdFields :: Fields
-priorityNFReqs :: [ConceptChunk]
 introStart :: Sentence
 introStartSWHS :: Sentence
 introEnd :: Sentence -> CI -> Sentence

@@ -373,7 +373,6 @@ digraph alltypes {
 		}
 		subgraph reqssub{
 		ReqsSub	[shape=oval, color=darkviolet, label="ReqsSub"];
-		ReqsSub -> Sentence;
 		ReqsSub -> LabelledContent;
 		ReqsSub -> ReqsSub;
 		ReqsSub -> System;

@@ -628,13 +628,8 @@ ReqsProg :: [ReqsSub] -> ReqrmntSec
 -- | Requirements subsections.
 data ReqsSub
 
--- | Functional requirements. <a>LabelledContent</a> for tables (includes
---   input values).
-[FReqsSub] :: Sentence -> [LabelledContent] -> ReqsSub
-
--- | Functional requirements. <a>LabelledContent</a> for tables (no input
---   values).
-[FReqsSub'] :: [LabelledContent] -> ReqsSub
+-- | Functional requirements. <a>LabelledContent</a> for tables.
+[FReqsSub] :: [LabelledContent] -> ReqsSub
 
 -- | Non-Functional requirements.
 [NonFReqsSub] :: ReqsSub
@@ -1013,8 +1008,16 @@ tunit' :: [TUIntro] -> RefTab
 --   Table of units constructors.
 tunitNone :: [TUIntro] -> RefTab
 
--- | Creates a <a>ConceptInstance</a> of input values.
-inReq :: Sentence -> ConceptInstance
+-- | Creates an "input-values" functional requirement
+--   (<a>ConceptInstance</a>) and an associated table of input variables
+--   (<a>LabelledContent</a>) from a list of quantities. The 'Maybe
+--   Sentence' provides an optional description for what the inputs define.
+--   
+--   The resulting requirement sentence is of the form: "Inputs the values
+--   from <tt>table_ref</tt>, which define <tt>description</tt>". If the
+--   description is <a>Nothing</a>, the sentence is: "Inputs the values
+--   from <tt>table_ref</tt>".
+inReqWTab :: (Quantity q, MayHaveUnit q) => Maybe Sentence -> [q] -> (ConceptInstance, LabelledContent)
 
 -- | Creates an Input Data Table for use in the Functional Requirments
 --   section. Takes a list of wrapped variables and something that is
@@ -1162,13 +1165,8 @@ ReqsProg :: [ReqsSub] -> ReqrmntSec
 -- | Requirements subsections.
 data ReqsSub
 
--- | Functional requirements. <a>LabelledContent</a> for tables (includes
---   input values).
-[FReqsSub] :: Sentence -> [LabelledContent] -> ReqsSub
-
--- | Functional requirements. <a>LabelledContent</a> for tables (no input
---   values).
-[FReqsSub'] :: [LabelledContent] -> ReqsSub
+-- | Functional requirements. <a>LabelledContent</a> for tables.
+[FReqsSub] :: [LabelledContent] -> ReqsSub
 
 -- | Non-Functional requirements.
 [NonFReqsSub] :: ReqsSub

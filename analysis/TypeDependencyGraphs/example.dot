@@ -179,8 +179,6 @@ digraph alltypes {
 	}
 	subgraph learnobj {
 	}
-	subgraph main {
-	}
 	subgraph review {
 	}
 	subgraph asumptionss {

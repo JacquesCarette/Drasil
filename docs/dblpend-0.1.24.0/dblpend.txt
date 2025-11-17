@@ -110,6 +110,9 @@ module Drasil.DblPend.ODEs
 dblPenODEOpts :: ODEOptions
 dblPenODEInfo :: ODEInfo
 
+module Drasil.DblPend.Choices
+choices :: Choices
+
 module Drasil.DblPend.DataDefs
 dataDefs :: [DataDefinition]
 positionGDD :: DataDefinition
@@ -213,6 +216,9 @@ angleIM_2 :: InstanceModel
 
 module Drasil.DblPend.Requirements
 funcReqs :: [ConceptInstance]
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+funcReqsTables :: [LabelledContent]
 verifyInptVals :: ConceptInstance
 calcAng :: ConceptInstance
 outputValues :: ConceptInstance
@@ -225,10 +231,6 @@ correct :: ConceptInstance
 portable :: ConceptInstance
 
 module Drasil.DblPend.Body
-sd :: (System, DocDesc)
-fullSI :: System
-srs :: Document
-printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 si :: System
 purp :: Sentence
@@ -258,7 +260,3 @@ userCharacteristicsIntro :: CI -> Contents
 terms :: [ConceptChunk]
 physSystParts :: [Sentence]
 tMods :: [TheoryModel]
-
-module Drasil.DblPend.Choices
-code :: CodeSpec
-choices :: Choices

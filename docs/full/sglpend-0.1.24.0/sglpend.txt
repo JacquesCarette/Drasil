@@ -112,22 +112,8 @@ angularDisplacementIM :: InstanceModel
 
 module Drasil.SglPend.Requirements
 funcReqs :: [ConceptInstance]
+funcReqsTables :: [LabelledContent]
 
 module Drasil.SglPend.Body
-sd :: (System, DocDesc)
-fullSI :: System
-srs :: Document
-printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 si :: System
-purp :: Sentence
-ideaDicts :: [IdeaDict]
-conceptChunks :: [ConceptChunk]
-abbreviationsList :: [IdeaDict]
-symbMap :: ChunkDB
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-concIns :: [ConceptInstance]
-physSystParts :: [Sentence]
-tMods :: [TheoryModel]

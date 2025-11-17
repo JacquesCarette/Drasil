@@ -239,6 +239,9 @@ derivEqn4 :: ModelExpr
 
 module Drasil.PDController.Requirements
 funcReqs :: [ConceptInstance]
+funcReqsTables :: [LabelledContent]
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
 verifyInputs :: ConceptInstance
 calculateValues :: ConceptInstance
 outputValues :: ConceptInstance
@@ -256,13 +259,10 @@ pidODEOptions :: ODEOptions
 pdIVP :: InitialValueProblem
 pidODEInfo :: ODEInfo
 
-module Drasil.PDController.Body
-pidODEInfo :: ODEInfo
-printSetting :: PrintingInformation
-si :: System
-srs :: Document
-fullSI :: System
-
 module Drasil.PDController.Choices
-codeSpecs :: CodeSpec
-codeChoices :: Choices
+choices :: Choices
+
+module Drasil.PDController.Body
+si :: System
+mkSRS :: SRSDecl
+pidODEInfo :: ODEInfo

@@ -9,6 +9,9 @@
 @package glassbr
 @version 0.1.24.0
 
+module Drasil.GlassBR.Choices
+choices :: Choices
+
 module Drasil.GlassBR.Concepts
 idglass :: IdeaDict
 con :: [CI]
@@ -257,10 +260,6 @@ likelyChgs :: [ConceptInstance]
 unlikelyChgs :: [ConceptInstance]
 
 module Drasil.GlassBR.Body
-sd :: (System, DocDesc)
-fullSI :: System
-srs :: Document
-printSetting :: PrintingInformation
 si :: System
 mkSRS :: SRSDecl
 purp :: Sentence
@@ -299,7 +298,3 @@ physSystParts :: [Sentence]
 goalInputs :: [Sentence]
 appdxIntro :: Contents
 blstRskInvWGlassSlab :: Sentence
-
-module Drasil.GlassBR.Choices
-code :: CodeSpec
-choices :: Choices

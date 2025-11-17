@@ -9,6 +9,11 @@
 @package projectile
 @version 0.1.24.0
 
+module Drasil.Projectile.Choices
+choiceCombos :: [(Choices, [Mod])]
+matchToFloats :: SpaceMatch
+baseChoices :: Choices
+
 module Drasil.Projectile.Concepts
 concepts :: [IdeaDict]
 durationNC :: IdeaDict
@@ -83,6 +88,8 @@ module Drasil.Projectile.References
 citations :: BibRef
 
 module Drasil.Projectile.Unitals
+inputs :: [DefinedQuantityDict]
+outputs :: [DefinedQuantityDict]
 projSpeed :: UnitalChunk
 projPos :: UnitalChunk
 landPosUnc :: UncertQ
@@ -183,9 +190,7 @@ foot :: UnitDefn
 accelinftU :: UnitDefn
 
 module Drasil.Projectile.Lesson.Body
-nb :: Document
-printSetting :: PrintingInformation
-mkNB :: LsnDecl
+nbDecl :: LsnDecl
 si :: System
 symbMap :: ChunkDB
 ideaDicts :: [IdeaDict]
@@ -193,9 +198,6 @@ conceptChunks :: [ConceptChunk]
 symbols :: [DefinedQuantityDict]
 projectileMotionLesson :: CI
 allRefs :: [Reference]
-
-module Drasil.Projectile.Lesson.Main
-main :: IO ()
 
 module Drasil.Projectile.Derivations
 timeDeriv :: [ModelExpr]
@@ -221,23 +223,8 @@ timeIM :: InstanceModel
 module Drasil.Projectile.Requirements
 funcReqs :: [ConceptInstance]
 nonfuncReqs :: [ConceptInstance]
+funcReqsTables :: [LabelledContent]
 
 module Drasil.Projectile.Body
-printSetting :: PrintingInformation
 si :: System
-srs :: Document
-fullSI :: System
-
-module Drasil.Projectile.Choices
-genCodeWithChoices :: [Choices] -> IO ()
-codedDirName :: String -> Choices -> String
-codedMod :: Modularity -> String
-codedImpTp :: ImplementationType -> String
-codedLog :: [Logging] -> String
-codedStruct :: Structure -> String
-codedConStruct :: ConstantStructure -> String
-codedConRepr :: ConstantRepr -> String
-codedSpaceMatch :: SpaceMatch -> String
-choiceCombos :: [Choices]
-matchToFloats :: SpaceMatch
-baseChoices :: Choices
+mkSRS :: SRSDecl

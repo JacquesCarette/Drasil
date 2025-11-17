@@ -145,15 +145,15 @@ PExpr
 </span><span id="line-65"></span><span id="fctSftyExpr"><span class="annot"><span class="annottext">fctSftyExpr :: PExpr
 </span><a href="Drasil.SSP.IMods.html#fctSftyExpr"><span class="hs-identifier hs-var hs-var">fctSftyExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><a href="#local-6989586621679088250"><span class="hs-identifier hs-var">sumOp</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679087769"><span class="hs-identifier hs-var">sumOp</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#shearRNoIntsl"><span class="hs-identifier hs-var">shearRNoIntsl</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><a href="#local-6989586621679088250"><span class="hs-identifier hs-var">sumOp</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679087769"><span class="hs-identifier hs-var">sumOp</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#shearFNoIntsl"><span class="hs-identifier hs-var">shearFNoIntsl</span></a></span><span>
-</span><span id="line-66"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679088269"><span class="annot"><span class="annottext">prodOp :: r
-</span><a href="#local-6989586621679088269"><span class="hs-identifier hs-var hs-var">prodOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; r -&gt; r -&gt; r -&gt; r
+</span><span id="line-66"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679087788"><span class="annot"><span class="annottext">prodOp :: r
+</span><a href="#local-6989586621679087788"><span class="hs-identifier hs-var hs-var">prodOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">defprod</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -183,9 +183,9 @@ forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#varblV"><span class="hs-identifier hs-var">varblV</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-68"></span><span>        </span><span id="local-6989586621679088250"><span class="annot"><span class="annottext">sumOp :: c -&gt; r
-</span><a href="#local-6989586621679088250"><span class="hs-identifier hs-var hs-var">sumOp</span></a></span></span><span> </span><span id="local-6989586621679088302"><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679088302"><span class="hs-identifier hs-var">sym</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; r -&gt; r -&gt; r -&gt; r
+</span><span id="line-68"></span><span>        </span><span id="local-6989586621679087769"><span class="annot"><span class="annottext">sumOp :: c -&gt; r
+</span><a href="#local-6989586621679087769"><span class="hs-identifier hs-var hs-var">sumOp</span></a></span></span><span> </span><span id="local-6989586621679087821"><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679087821"><span class="hs-identifier hs-var">sym</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">defsum</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -209,14 +209,14 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679088302"><span class="hs-identifier hs-var">sym</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
+</span><a href="#local-6989586621679087821"><span class="hs-identifier hs-var">sym</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
 forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#index"><span class="hs-identifier hs-var">index</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088269"><span class="hs-identifier hs-var">prodOp</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><a href="#local-6989586621679087788"><span class="hs-identifier hs-var">prodOp</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -224,7 +224,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679088302"><span class="hs-identifier hs-var">sym</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
+</span><a href="#local-6989586621679087821"><span class="hs-identifier hs-var">sym</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
 forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
@@ -349,7 +349,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="Drasil.SSP.IMods.html#fctSftyDerivSentence18"><span class="hs-identifier hs-var">fctSftyDerivSentence18</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SSP.IMods.html#fctSftyDerivSentence19"><span class="hs-identifier hs-var">fctSftyDerivSentence19</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-94"></span><span>
-</span><span id="line-95"></span><span id="local-6989586621679087130"><span class="annot"><a href="Drasil.SSP.IMods.html#fctSftyDerivEqns1"><span class="hs-identifier hs-type">fctSftyDerivEqns1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679087130"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679087130"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679087130"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-95"></span><span id="local-6989586621679086649"><span class="annot"><a href="Drasil.SSP.IMods.html#fctSftyDerivEqns1"><span class="hs-identifier hs-type">fctSftyDerivEqns1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679086649"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679086649"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679086649"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-96"></span><span id="fctSftyDerivEqns1"><span class="annot"><span class="annottext">fctSftyDerivEqns1 :: forall r. (ExprC r, LiteralC r) =&gt; [r]
 </span><a href="Drasil.SSP.IMods.html#fctSftyDerivEqns1"><span class="hs-identifier hs-var hs-var">fctSftyDerivEqns1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">r
 PExpr
@@ -375,7 +375,7 @@ PExpr
 PExpr
 </span><a href="Drasil.SSP.IMods.html#fctSftyDerivEqn10a"><span class="hs-identifier hs-var">fctSftyDerivEqn10a</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-99"></span><span>
-</span><span id="line-100"></span><span id="local-6989586621679088375"><span class="annot"><a href="Drasil.SSP.IMods.html#fctSftyDerivEqns2"><span class="hs-identifier hs-type">fctSftyDerivEqns2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679088375"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679088375"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679088375"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-100"></span><span id="local-6989586621679087894"><span class="annot"><a href="Drasil.SSP.IMods.html#fctSftyDerivEqns2"><span class="hs-identifier hs-type">fctSftyDerivEqns2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679087894"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679087894"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679087894"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-101"></span><span id="fctSftyDerivEqns2"><span class="annot"><span class="annottext">fctSftyDerivEqns2 :: forall r. (ExprC r, LiteralC r) =&gt; [r]
 </span><a href="Drasil.SSP.IMods.html#fctSftyDerivEqns2"><span class="hs-identifier hs-var hs-var">fctSftyDerivEqns2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">r
 PExpr
@@ -1017,10 +1017,10 @@ forall r.
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679088467"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088467"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679088468"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088468"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088467"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679087986"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087986"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679087987"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087987"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087986"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
@@ -1033,7 +1033,7 @@ forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier hs-var">intShrForce</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088468"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679087987"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-210"></span><span>  </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
@@ -1082,10 +1082,10 @@ forall r.
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679088493"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088493"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679088494"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088494"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088493"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679088012"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679088012"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679088013"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679088013"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679088012"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span>
 </span><span id="line-215"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
@@ -1099,7 +1099,7 @@ forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier hs-var">intShrForce</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088494"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><a href="#local-6989586621679088013"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
@@ -1116,10 +1116,10 @@ forall r.
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679088545"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088545"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679088546"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088546"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088545"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679088064"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679088064"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679088065"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679088065"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679088064"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
@@ -1133,7 +1133,7 @@ forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier hs-var">intShrForce</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088546"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><a href="#local-6989586621679088065"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">(r -&gt; r) -&gt; (r -&gt; r) -&gt; (r -&gt; r -&gt; r) -&gt; r
 forall r.
@@ -1143,10 +1143,10 @@ forall r.
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679088547"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088547"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679088548"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088548"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088547"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679088066"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679088066"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679088067"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679088067"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679088066"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span>
 </span><span id="line-220"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
@@ -1160,7 +1160,7 @@ forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier hs-var">intShrForce</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088548"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><a href="#local-6989586621679088067"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
@@ -3965,7 +3965,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="Drasil.SSP.IMods.html#nrmShrDerivSentence3"><span class="hs-identifier hs-var">nrmShrDerivSentence3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SSP.IMods.html#nrmShrDerivSentence4"><span class="hs-identifier hs-var">nrmShrDerivSentence4</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-435"></span><span>
-</span><span id="line-436"></span><span id="local-6989586621679090005"><span class="annot"><a href="Drasil.SSP.IMods.html#nrmShrDerivEqns"><span class="hs-identifier hs-type">nrmShrDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679090005"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679090005"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679090005"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-436"></span><span id="local-6989586621679089524"><span class="annot"><a href="Drasil.SSP.IMods.html#nrmShrDerivEqns"><span class="hs-identifier hs-type">nrmShrDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679089524"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679089524"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679089524"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-437"></span><span id="nrmShrDerivEqns"><span class="annot"><span class="annottext">nrmShrDerivEqns :: forall r. (ExprC r, LiteralC r) =&gt; [r]
 </span><a href="Drasil.SSP.IMods.html#nrmShrDerivEqns"><span class="hs-identifier hs-var hs-var">nrmShrDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">r
 PExpr
@@ -3988,10 +3988,10 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span>
 </span><span id="line-442"></span><span>  </span><span class="annot"><span class="annottext">(r -&gt; r -&gt; r) -&gt; r
 forall r. (ExprC r, LiteralC r) =&gt; (r -&gt; r -&gt; r) -&gt; r
-</span><a href="Drasil.SSP.BasicExprs.html#momExpr"><span class="hs-identifier hs-var">momExpr</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679090054"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679090054"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679090055"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679090055"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679090054"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><a href="Drasil.SSP.BasicExprs.html#momExpr"><span class="hs-identifier hs-var">momExpr</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679089573"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679089573"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679089574"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679089574"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679089573"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -4029,7 +4029,7 @@ forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#scalFunc"><span class="hs-identifier hs-var">scalFunc</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679090055"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679089574"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-445"></span><span>
 </span><span id="line-446"></span><span id="nrmShrDerivEqn2"><span class="annot"><span class="annottext">nrmShrDerivEqn2 :: PExpr
 </span><a href="Drasil.SSP.IMods.html#nrmShrDerivEqn2"><span class="hs-identifier hs-var hs-var">nrmShrDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
@@ -4289,11 +4289,11 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">[(Relation, Relation)] -&gt; Relation
 forall r. ExprC r =&gt; [(r, r)] -&gt; r
 </span><span class="hs-identifier hs-var">incompleteCase</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Relation, Relation)
-</span><a href="#local-6989586621679090190"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">(Relation, Relation)
-</span><a href="#local-6989586621679090191"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">(Relation, Relation)
-</span><a href="#local-6989586621679090192"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-475"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679090190"><span class="annot"><span class="annottext">case1 :: (Relation, Relation)
-</span><a href="#local-6989586621679090190"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+</span><a href="#local-6989586621679089709"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">(Relation, Relation)
+</span><a href="#local-6989586621679089710"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">(Relation, Relation)
+</span><a href="#local-6989586621679089711"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-475"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679089709"><span class="annot"><span class="annottext">case1 :: (Relation, Relation)
+</span><a href="#local-6989586621679089709"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#indx1"><span class="hs-identifier hs-var">indx1</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseWthX"><span class="hs-identifier hs-var">baseWthX</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
@@ -4324,8 +4324,8 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
-</span><span id="line-477"></span><span>        </span><span id="local-6989586621679090191"><span class="annot"><span class="annottext">case2 :: (Relation, Relation)
-</span><a href="#local-6989586621679090191"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+</span><span id="line-477"></span><span>        </span><span id="local-6989586621679089710"><span class="annot"><span class="annottext">case2 :: (Relation, Relation)
+</span><a href="#local-6989586621679089710"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseWthX"><span class="hs-identifier hs-var">baseWthX</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
@@ -4397,8 +4397,8 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-482"></span><span>        </span><span id="local-6989586621679090192"><span class="annot"><span class="annottext">case3 :: (Relation, Relation)
-</span><a href="#local-6989586621679090192"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+</span><span id="line-482"></span><span>        </span><span id="local-6989586621679089711"><span class="annot"><span class="annottext">case3 :: (Relation, Relation)
+</span><a href="#local-6989586621679089711"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
 forall r a. (ExprC r, Quantity a) =&gt; a -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#indxn"><span class="hs-identifier hs-var">indxn</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseWthX"><span class="hs-identifier hs-var">baseWthX</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
@@ -5193,7 +5193,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span id="line-580"></span><span>  </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SSP.IMods.html#intrSlcDerivSentence2"><span class="hs-identifier hs-var">intrSlcDerivSentence2</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-581"></span><span>
-</span><span id="line-582"></span><span id="local-6989586621679090314"><span class="annot"><a href="Drasil.SSP.IMods.html#intrSlcDerivEqns"><span class="hs-identifier hs-type">intrSlcDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679090314"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679090314"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679090314"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-582"></span><span id="local-6989586621679089833"><span class="annot"><a href="Drasil.SSP.IMods.html#intrSlcDerivEqns"><span class="hs-identifier hs-type">intrSlcDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679089833"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679089833"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679089833"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-583"></span><span id="intrSlcDerivEqns"><span class="annot"><span class="annottext">intrSlcDerivEqns :: forall r. (ExprC r, LiteralC r) =&gt; [r]
 </span><a href="Drasil.SSP.IMods.html#intrSlcDerivEqns"><span class="hs-identifier hs-var hs-var">intrSlcDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">r
 PExpr

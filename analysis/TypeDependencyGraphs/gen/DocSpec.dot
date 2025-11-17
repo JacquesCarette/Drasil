@@ -2,4 +2,6 @@ digraph docspec{
 DocSpec	[shape=oval, color=darkviolet, label="DocSpec"];
 DocSpec -> DocChoices;
 DocSpec -> Filename;
+DocSpec -> DocType;
+DocSpec -> Format;
 }

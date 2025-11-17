@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE PostfixOperators #-}</span><span>
-</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SglPend.Body</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SglPend.Body</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Body.html#mkSRS"><span class="hs-identifier">mkSRS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Body.html#si"><span class="hs-identifier">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span>
@@ -8,99 +8,52 @@
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Development</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">TheoryModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">output</span></span><span class="hs-special">)</span><span>
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SRSDocument</span></span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">DocDesc</span></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Generator</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cdb</span></span><span class="hs-special">)</span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang.SRS</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">SRS</span></span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">the</span></span><span class="hs-special">)</span><span>
-</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
-</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.System</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">SystemKind</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Specification</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkSystem</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">systemdb</span></span><span class="hs-special">)</span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.People</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">olu</span></span><span class="hs-special">)</span><span>
-</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mathcon'</span></span><span class="hs-special">)</span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">physicCon'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">motion</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">pendulum</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angular</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">displacement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gravitationalConst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gravity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">rigidBody</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">weight</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">shm</span></span><span class="hs-special">)</span><span>
-</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.PhysicalProperties</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physicalcon</span></span><span class="hs-special">)</span><span>
-</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">len</span></span><span class="hs-special">)</span><span>
-</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Theories.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">newtonSLR</span></span><span class="hs-special">)</span><span>
-</span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Body</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">justification</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">externalLinkRef</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">charsOfReader</span></span><span class="hs-special">,</span><span>
-</span><span id="line-26"></span><span>  </span><span class="annot"><span class="hs-identifier">sysCtxIntro</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sysCtxDesc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sysCtxList</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">stdFields</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">scope</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">terms</span></span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><span class="hs-identifier">userCharacteristicsIntro</span></span><span class="hs-special">)</span><span>
-</span><span id="line-28"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Body</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">DPD</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">tMods</span></span><span class="hs-special">)</span><span>
-</span><span id="line-29"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Concepts</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">concepts</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">rod</span></span><span class="hs-special">)</span><span>
-</span><span id="line-30"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Requirements</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">nonFuncReqs</span></span><span class="hs-special">)</span><span>
-</span><span id="line-31"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Unitals</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">acronyms</span></span><span class="hs-special">)</span><span>
-</span><span id="line-32"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.References</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">citations</span></span><span class="hs-special">)</span><span>
-</span><span id="line-33"></span><span>
-</span><span id="line-34"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Assumptions.html"><span class="hs-identifier">Drasil.SglPend.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Assumptions.html#assumpSingle"><span class="hs-identifier">assumpSingle</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-35"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Goals.html"><span class="hs-identifier">Drasil.SglPend.Goals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Goals.html#goals"><span class="hs-identifier">goals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Goals.html#goalsInputs"><span class="hs-identifier">goalsInputs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-36"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.DataDefs.html"><span class="hs-identifier">Drasil.SglPend.DataDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#dataDefs"><span class="hs-identifier">dataDefs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-37"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.IMods.html"><span class="hs-identifier">Drasil.SglPend.IMods</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.IMods.html#iMods"><span class="hs-identifier">iMods</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-38"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.LabelledContent.html"><span class="hs-identifier">Drasil.SglPend.LabelledContent</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.LabelledContent.html#figMotion"><span class="hs-identifier">figMotion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.LabelledContent.html#sysCtxFig1"><span class="hs-identifier">sysCtxFig1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.LabelledContent.html#labelledContent"><span class="hs-identifier">labelledContent</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-39"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.MetaConcepts.html"><span class="hs-identifier">Drasil.SglPend.MetaConcepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier">progName</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-40"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.GenDefs.html"><span class="hs-identifier">Drasil.SglPend.GenDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.GenDefs.html#genDefns"><span class="hs-identifier">genDefns</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-41"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html"><span class="hs-identifier">Drasil.SglPend.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Unitals.html#inputs"><span class="hs-identifier">inputs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html#outputs"><span class="hs-identifier">outputs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html#inConstraints"><span class="hs-identifier">inConstraints</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html#outConstraints"><span class="hs-identifier">outConstraints</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html#symbols"><span class="hs-identifier">symbols</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-42"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Requirements.html"><span class="hs-identifier">Drasil.SglPend.Requirements</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Requirements.html#funcReqs"><span class="hs-identifier">funcReqs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-43"></span><span>
-</span><span id="line-44"></span><span class="annot"><a href="Drasil.SglPend.Body.html#sd"><span class="hs-identifier hs-type">sd</span></a></span><span>  </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DocDesc</span></span><span class="hs-special">)</span><span>
-</span><span id="line-45"></span><span id="sd"><span class="annot"><span class="annottext">sd :: (System, DocDesc)
-</span><a href="Drasil.SglPend.Body.html#sd"><span class="hs-identifier hs-var hs-var">sd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SRSDecl -&gt; System -&gt; (System, DocDesc)
-</span><span class="hs-identifier hs-var">fillcdbSRS</span></span><span> </span><span class="annot"><span class="annottext">SRSDecl
-</span><a href="Drasil.SglPend.Body.html#mkSRS"><span class="hs-identifier hs-var">mkSRS</span></a></span><span> </span><span class="annot"><span class="annottext">System
-</span><a href="Drasil.SglPend.Body.html#si"><span class="hs-identifier hs-var">si</span></a></span><span>
-</span><span id="line-46"></span><span>
-</span><span id="line-47"></span><span class="hs-comment">-- sigh, this is used by others</span><span>
-</span><span id="line-48"></span><span class="annot"><a href="Drasil.SglPend.Body.html#fullSI"><span class="hs-identifier hs-type">fullSI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span>
-</span><span id="line-49"></span><span id="fullSI"><span class="annot"><span class="annottext">fullSI :: System
-</span><a href="Drasil.SglPend.Body.html#fullSI"><span class="hs-identifier hs-var hs-var">fullSI</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(System, DocDesc) -&gt; System
-forall a b. (a, b) -&gt; a
-</span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">(System, DocDesc)
-</span><a href="Drasil.SglPend.Body.html#sd"><span class="hs-identifier hs-var">sd</span></a></span><span>
-</span><span id="line-50"></span><span>
-</span><span id="line-51"></span><span class="annot"><a href="Drasil.SglPend.Body.html#srs"><span class="hs-identifier hs-type">srs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span>
-</span><span id="line-52"></span><span id="srs"><span class="annot"><span class="annottext">srs :: Document
-</span><a href="Drasil.SglPend.Body.html#srs"><span class="hs-identifier hs-var hs-var">srs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SRSDecl
--&gt; (IdeaDict -&gt; IdeaDict -&gt; Sentence)
--&gt; (System, DocDesc)
--&gt; Document
-</span><span class="hs-identifier hs-var">mkDoc</span></span><span> </span><span class="annot"><span class="annottext">SRSDecl
-</span><a href="Drasil.SglPend.Body.html#mkSRS"><span class="hs-identifier hs-var">mkSRS</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(IdeaDict -&gt; Sentence)
--&gt; (IdeaDict -&gt; Sentence) -&gt; IdeaDict -&gt; IdeaDict -&gt; Sentence
-forall c d.
-(c -&gt; Sentence) -&gt; (d -&gt; Sentence) -&gt; c -&gt; d -&gt; Sentence
-</span><span class="hs-identifier hs-var">S.forGen</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(System, DocDesc)
-</span><a href="Drasil.SglPend.Body.html#sd"><span class="hs-identifier hs-var">sd</span></a></span><span>
-</span><span id="line-53"></span><span>
-</span><span id="line-54"></span><span class="annot"><a href="Drasil.SglPend.Body.html#printSetting"><span class="hs-identifier hs-type">printSetting</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span>
-</span><span id="line-55"></span><span id="printSetting"><span class="annot"><span class="annottext">printSetting :: PrintingInformation
-</span><a href="Drasil.SglPend.Body.html#printSetting"><span class="hs-identifier hs-var hs-var">printSetting</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; PrintingConfiguration -&gt; PrintingInformation
-</span><span class="hs-identifier hs-var">piSys</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System
-</span><a href="Drasil.SglPend.Body.html#fullSI"><span class="hs-identifier hs-var">fullSI</span></a></span><span> </span><span class="annot"><span class="annottext">System -&gt; Getting ChunkDB System ChunkDB -&gt; ChunkDB
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB System ChunkDB
-forall c. HasSystem c =&gt; Lens' c ChunkDB
-Lens' System ChunkDB
-</span><span class="hs-identifier hs-var">systemdb</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Stage
-</span><span class="hs-identifier hs-var">Equational</span></span><span> </span><span class="annot"><span class="annottext">PrintingConfiguration
-</span><span class="hs-identifier hs-var">defaultConfiguration</span></span><span>
-</span><span id="line-56"></span><span>
-</span><span id="line-57"></span><span class="annot"><a href="Drasil.SglPend.Body.html#mkSRS"><span class="hs-identifier hs-type">mkSRS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SRSDecl</span></span><span>
-</span><span id="line-58"></span><span id="mkSRS"><span class="annot"><span class="annottext">mkSRS :: SRSDecl
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Generator</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cdb</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang.SRS</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">SRS</span></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">the</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.System</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">SystemKind</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Specification</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkSystem</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.People</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">olu</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mathcon'</span></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">physicCon'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">motion</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">pendulum</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angular</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">displacement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gravitationalConst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gravity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">rigidBody</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">weight</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">shm</span></span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.PhysicalProperties</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physicalcon</span></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">len</span></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Theories.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">newtonSLR</span></span><span class="hs-special">)</span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Body</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">justification</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">externalLinkRef</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">charsOfReader</span></span><span class="hs-special">,</span><span>
+</span><span id="line-25"></span><span>  </span><span class="annot"><span class="hs-identifier">sysCtxIntro</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sysCtxDesc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sysCtxList</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">stdFields</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">scope</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">terms</span></span><span class="hs-special">,</span><span>
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="hs-identifier">userCharacteristicsIntro</span></span><span class="hs-special">)</span><span>
+</span><span id="line-27"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Body</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">DPD</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">tMods</span></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Concepts</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">concepts</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">rod</span></span><span class="hs-special">)</span><span>
+</span><span id="line-29"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Requirements</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">nonFuncReqs</span></span><span class="hs-special">)</span><span>
+</span><span id="line-30"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Unitals</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">acronyms</span></span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.References</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">citations</span></span><span class="hs-special">)</span><span>
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Assumptions.html"><span class="hs-identifier">Drasil.SglPend.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Assumptions.html#assumpSingle"><span class="hs-identifier">assumpSingle</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-34"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Goals.html"><span class="hs-identifier">Drasil.SglPend.Goals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Goals.html#goals"><span class="hs-identifier">goals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Goals.html#goalsInputs"><span class="hs-identifier">goalsInputs</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-35"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.DataDefs.html"><span class="hs-identifier">Drasil.SglPend.DataDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#dataDefs"><span class="hs-identifier">dataDefs</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-36"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.IMods.html"><span class="hs-identifier">Drasil.SglPend.IMods</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.IMods.html#iMods"><span class="hs-identifier">iMods</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-37"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.LabelledContent.html"><span class="hs-identifier">Drasil.SglPend.LabelledContent</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.LabelledContent.html#figMotion"><span class="hs-identifier">figMotion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.LabelledContent.html#sysCtxFig1"><span class="hs-identifier">sysCtxFig1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.LabelledContent.html#labelledContent"><span class="hs-identifier">labelledContent</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-38"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.MetaConcepts.html"><span class="hs-identifier">Drasil.SglPend.MetaConcepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier">progName</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-39"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.GenDefs.html"><span class="hs-identifier">Drasil.SglPend.GenDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.GenDefs.html#genDefns"><span class="hs-identifier">genDefns</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-40"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html"><span class="hs-identifier">Drasil.SglPend.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Unitals.html#inputs"><span class="hs-identifier">inputs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html#outputs"><span class="hs-identifier">outputs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html#inConstraints"><span class="hs-identifier">inConstraints</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html#outConstraints"><span class="hs-identifier">outConstraints</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html#symbols"><span class="hs-identifier">symbols</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-41"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Requirements.html"><span class="hs-identifier">Drasil.SglPend.Requirements</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Requirements.html#funcReqs"><span class="hs-identifier">funcReqs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Requirements.html#funcReqsTables"><span class="hs-identifier">funcReqsTables</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span class="annot"><a href="Drasil.SglPend.Body.html#mkSRS"><span class="hs-identifier hs-type">mkSRS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SRSDecl</span></span><span>
+</span><span id="line-44"></span><span id="mkSRS"><span class="annot"><span class="annottext">mkSRS :: SRSDecl
 </span><a href="Drasil.SglPend.Body.html#mkSRS"><span class="hs-identifier hs-var hs-var">mkSRS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DocSection
 </span><span class="hs-identifier hs-var">TableOfContents</span></span><span class="hs-special">,</span><span> </span><span class="hs-comment">-- This creates the Table of Contents</span><span>
-</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">RefSec -&gt; DocSection
+</span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">RefSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">RefSec</span></span><span> </span><span class="annot"><span class="annottext">(RefSec -&gt; DocSection) -&gt; RefSec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>      </span><span class="hs-comment">--This creates the Reference section of the SRS</span><span>
-</span><span id="line-60"></span><span>    </span><span class="annot"><span class="annottext">Contents -&gt; [RefTab] -&gt; RefSec
+</span><span id="line-46"></span><span>    </span><span class="annot"><span class="annottext">Contents -&gt; [RefTab] -&gt; RefSec
 </span><span class="hs-identifier hs-var">RefProg</span></span><span> </span><span class="annot"><span class="annottext">Contents
 </span><span class="hs-identifier hs-var">intro</span></span><span>      </span><span class="hs-comment">-- This add the introduction blob to the reference section</span><span>
-</span><span id="line-61"></span><span>      </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">RefTab
+</span><span id="line-47"></span><span>      </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">RefTab
 </span><span class="hs-identifier hs-var">TUnits</span></span><span>         </span><span class="hs-comment">-- Adds table of unit section with a table frame</span><span>
-</span><span id="line-62"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TSIntro] -&gt; RefTab
+</span><span id="line-48"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TSIntro] -&gt; RefTab
 </span><span class="hs-identifier hs-var">tsymb</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TSIntro
 </span><span class="hs-identifier hs-var">TSPurpose</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TConvention] -&gt; TSIntro
 </span><span class="hs-identifier hs-var">TypogConvention</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Emphasis -&gt; TConvention
@@ -108,47 +61,47 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">Bold</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TSIntro
 </span><span class="hs-identifier hs-var">SymbOrder</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TSIntro
 </span><span class="hs-identifier hs-var">VectorUnits</span></span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- Adds table of symbol section with a table frame</span><span>
-</span><span id="line-63"></span><span>      </span><span class="hs-comment">--introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols</span><span>
-</span><span id="line-64"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; RefTab
+</span><span id="line-49"></span><span>      </span><span class="hs-comment">--introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols</span><span>
+</span><span id="line-50"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; RefTab
 </span><span class="hs-identifier hs-var">TAandA</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><a href="Drasil.SglPend.Body.html#abbreviationsList"><span class="hs-identifier hs-var">abbreviationsList</span></a></span><span>         </span><span class="hs-comment">-- Add table of abbreviation and acronym section</span><span>
-</span><span id="line-65"></span><span>      </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-66"></span><span>  </span><span class="annot"><span class="annottext">IntroSec -&gt; DocSection
+</span><span id="line-51"></span><span>      </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">IntroSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">IntroSec</span></span><span> </span><span class="annot"><span class="annottext">(IntroSec -&gt; DocSection) -&gt; IntroSec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-67"></span><span>    </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; [IntroSub] -&gt; IntroSec
+</span><span id="line-53"></span><span>    </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; [IntroSub] -&gt; IntroSec
 </span><span class="hs-identifier hs-var">IntroProg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 </span><span class="hs-identifier hs-var">justification</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-68"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence] -&gt; IntroSub
+</span><span id="line-54"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence] -&gt; IntroSub
 </span><span class="hs-identifier hs-var">IPurpose</span></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; IntroSub) -&gt; [Sentence] -&gt; IntroSub
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Verbosity -&gt; [Sentence]
 </span><span class="hs-identifier hs-var">purpDoc</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">Verbosity
 </span><span class="hs-identifier hs-var">Verbose</span></span><span class="hs-special">,</span><span>
-</span><span id="line-69"></span><span>       </span><span class="annot"><span class="annottext">Sentence -&gt; IntroSub
+</span><span id="line-55"></span><span>       </span><span class="annot"><span class="annottext">Sentence -&gt; IntroSub
 </span><span class="hs-identifier hs-var">IScope</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">scope</span></span><span class="hs-special">,</span><span>
-</span><span id="line-70"></span><span>       </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence] -&gt; IntroSub
+</span><span id="line-56"></span><span>       </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence] -&gt; IntroSub
 </span><span class="hs-identifier hs-var">IChar</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><span class="hs-identifier hs-var">charsOfReader</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-71"></span><span>       </span><span class="annot"><span class="annottext">CI -&gt; Section -&gt; Sentence -&gt; IntroSub
+</span><span id="line-57"></span><span>       </span><span class="annot"><span class="annottext">CI -&gt; Section -&gt; Sentence -&gt; IntroSub
 </span><span class="hs-identifier hs-var">IOrgSec</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">inModel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><span class="hs-identifier hs-var">SRS.inModel</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-72"></span><span>  </span><span class="annot"><span class="annottext">GSDSec -&gt; DocSection
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">GSDSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">GSDSec</span></span><span> </span><span class="annot"><span class="annottext">(GSDSec -&gt; DocSection) -&gt; GSDSec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-73"></span><span>    </span><span class="annot"><span class="annottext">[GSDSub] -&gt; GSDSec
+</span><span id="line-59"></span><span>    </span><span class="annot"><span class="annottext">[GSDSub] -&gt; GSDSec
 </span><span class="hs-identifier hs-var">GSDProg</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-74"></span><span>      </span><span class="annot"><span class="annottext">[Contents] -&gt; GSDSub
+</span><span id="line-60"></span><span>      </span><span class="annot"><span class="annottext">[Contents] -&gt; GSDSub
 </span><span class="hs-identifier hs-var">SysCntxt</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI -&gt; Contents
 </span><span class="hs-identifier hs-var">sysCtxIntro</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
@@ -157,31 +110,31 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">sysCtxDesc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Contents
 </span><span class="hs-identifier hs-var">sysCtxList</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-75"></span><span>      </span><span class="annot"><span class="annottext">[Contents] -&gt; GSDSub
+</span><span id="line-61"></span><span>      </span><span class="annot"><span class="annottext">[Contents] -&gt; GSDSub
 </span><span class="hs-identifier hs-var">UsrChars</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI -&gt; Contents
 </span><span class="hs-identifier hs-var">userCharacteristicsIntro</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-76"></span><span>      </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; GSDSub
+</span><span id="line-62"></span><span>      </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; GSDSub
 </span><span class="hs-identifier hs-var">SystCons</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-77"></span><span>  </span><span class="annot"><span class="annottext">SSDSec -&gt; DocSection
+</span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">SSDSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">SSDSec</span></span><span> </span><span class="annot"><span class="annottext">(SSDSec -&gt; DocSection) -&gt; SSDSec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-78"></span><span>    </span><span class="annot"><span class="annottext">[SSDSub] -&gt; SSDSec
+</span><span id="line-64"></span><span>    </span><span class="annot"><span class="annottext">[SSDSub] -&gt; SSDSec
 </span><span class="hs-identifier hs-var">SSDProg</span></span><span>
-</span><span id="line-79"></span><span>      </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ProblemDescription -&gt; SSDSub
+</span><span id="line-65"></span><span>      </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ProblemDescription -&gt; SSDSub
 </span><span class="hs-identifier hs-var">SSDProblem</span></span><span> </span><span class="annot"><span class="annottext">(ProblemDescription -&gt; SSDSub) -&gt; ProblemDescription -&gt; SSDSub
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Section] -&gt; [PDSub] -&gt; ProblemDescription
 </span><span class="hs-identifier hs-var">PDProg</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.Body.html#purp"><span class="hs-identifier hs-var">purp</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>                </span><span class="hs-comment">-- This adds a is used to define the problem your system will solve</span><span>
-</span><span id="line-80"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">Maybe Sentence -&gt; [ConceptChunk] -&gt; PDSub
+</span><span id="line-66"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">Maybe Sentence -&gt; [ConceptChunk] -&gt; PDSub
 forall c. Concept c =&gt; Maybe Sentence -&gt; [c] -&gt; PDSub
 </span><span class="hs-identifier hs-var">TermsAndDefs</span></span><span> </span><span class="annot"><span class="annottext">Maybe Sentence
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
 </span><span class="hs-identifier hs-var">terms</span></span><span>               </span><span class="hs-comment">-- This is used to define the terms to be defined in terminology sub section</span><span>
-</span><span id="line-81"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; [Sentence] -&gt; LabelledContent -&gt; [Contents] -&gt; PDSub
+</span><span id="line-67"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; [Sentence] -&gt; LabelledContent -&gt; [Contents] -&gt; PDSub
 forall a.
 Idea a =&gt;
 a -&gt; [Sentence] -&gt; LabelledContent -&gt; [Contents] -&gt; PDSub
@@ -189,24 +142,24 @@ a -&gt; [Sentence] -&gt; LabelledContent -&gt; [Contents] -&gt; PDSub
 </span><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SglPend.Body.html#physSystParts"><span class="hs-identifier hs-var">physSystParts</span></a></span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.SglPend.LabelledContent.html#figMotion"><span class="hs-identifier hs-var">figMotion</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- This defines the Physicalsystem sub-section, define the parts</span><span>
-</span><span id="line-82"></span><span>                                                          </span><span class="hs-comment">-- of the system using physSysParts, figMotion is a function in figures for the image</span><span>
-</span><span id="line-83"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; PDSub
+</span><span id="line-68"></span><span>                                                          </span><span class="hs-comment">-- of the system using physSysParts, figMotion is a function in figures for the image</span><span>
+</span><span id="line-69"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; PDSub
 </span><span class="hs-identifier hs-var">Goals</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SglPend.Goals.html#goalsInputs"><span class="hs-identifier hs-var">goalsInputs</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- This adds a goals section and goals input is defined for the preample of the goal.</span><span>
-</span><span id="line-84"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SolChSpec -&gt; SSDSub
+</span><span id="line-70"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SolChSpec -&gt; SSDSub
 </span><span class="hs-identifier hs-var">SSDSolChSpec</span></span><span> </span><span class="annot"><span class="annottext">(SolChSpec -&gt; SSDSub) -&gt; SolChSpec -&gt; SSDSub
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[SCSSub] -&gt; SolChSpec
 </span><span class="hs-identifier hs-var">SCSProg</span></span><span> </span><span class="hs-comment">--This creates the solution characteristics section with a preamble</span><span>
-</span><span id="line-85"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">SCSSub
+</span><span id="line-71"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">SCSSub
 </span><span class="hs-identifier hs-var">Assumptions</span></span><span>
-</span><span id="line-86"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; SCSSub
+</span><span id="line-72"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; SCSSub
 </span><span class="hs-identifier hs-var">TMs</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Field
 </span><span class="hs-identifier hs-var">Label</span></span><span> </span><span class="annot"><span class="annottext">Field -&gt; Fields -&gt; Fields
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Fields
 </span><span class="hs-identifier hs-var">stdFields</span></span><span class="hs-special">)</span><span>
-</span><span id="line-87"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; DerivationDisplay -&gt; SCSSub
+</span><span id="line-73"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; DerivationDisplay -&gt; SCSSub
 </span><span class="hs-identifier hs-var">GDs</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Field
 </span><span class="hs-identifier hs-var">Label</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Field
 </span><span class="hs-identifier hs-var">Units</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Fields -&gt; Fields -&gt; Fields
@@ -214,7 +167,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Fields
 </span><span class="hs-identifier hs-var">stdFields</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">DerivationDisplay
 </span><span class="hs-identifier hs-var">ShowDerivation</span></span><span>
-</span><span id="line-88"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; DerivationDisplay -&gt; SCSSub
+</span><span id="line-74"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; DerivationDisplay -&gt; SCSSub
 </span><span class="hs-identifier hs-var">DDs</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Field
 </span><span class="hs-identifier hs-var">Label</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Field
 </span><span class="hs-identifier hs-var">Symbol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Field
@@ -223,7 +176,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Fields
 </span><span class="hs-identifier hs-var">stdFields</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">DerivationDisplay
 </span><span class="hs-identifier hs-var">ShowDerivation</span></span><span>
-</span><span id="line-89"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; DerivationDisplay -&gt; SCSSub
+</span><span id="line-75"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; DerivationDisplay -&gt; SCSSub
 </span><span class="hs-identifier hs-var">IMs</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Field
 </span><span class="hs-identifier hs-var">Label</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Field
 </span><span class="hs-identifier hs-var">Input</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Field
@@ -234,7 +187,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Fields
 </span><span class="hs-identifier hs-var">stdFields</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">DerivationDisplay
 </span><span class="hs-identifier hs-var">ShowDerivation</span></span><span>
-</span><span id="line-90"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [UncertQ] -&gt; SCSSub
+</span><span id="line-76"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [UncertQ] -&gt; SCSSub
 forall c.
 (HasUncertainty c, Quantity c, Constrained c, HasReasVal c,
  MayHaveUnit c) =&gt;
@@ -242,26 +195,26 @@ Sentence -&gt; [c] -&gt; SCSSub
 </span><span class="hs-identifier hs-var">Constraints</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.SglPend.Unitals.html#inConstraints"><span class="hs-identifier hs-var">inConstraints</span></a></span><span>
-</span><span id="line-91"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[UncertQ] -&gt; [Contents] -&gt; SCSSub
+</span><span id="line-77"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[UncertQ] -&gt; [Contents] -&gt; SCSSub
 forall c.
 (Quantity c, Constrained c) =&gt;
 [c] -&gt; [Contents] -&gt; SCSSub
 </span><span class="hs-identifier hs-var">CorrSolnPpties</span></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.SglPend.Unitals.html#outConstraints"><span class="hs-identifier hs-var">outConstraints</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-92"></span><span>       </span><span class="hs-special">]</span><span>
-</span><span id="line-93"></span><span>     </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-94"></span><span>  </span><span class="annot"><span class="annottext">ReqrmntSec -&gt; DocSection
+</span><span id="line-78"></span><span>       </span><span class="hs-special">]</span><span>
+</span><span id="line-79"></span><span>     </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-80"></span><span>  </span><span class="annot"><span class="annottext">ReqrmntSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">ReqrmntSec</span></span><span> </span><span class="annot"><span class="annottext">(ReqrmntSec -&gt; DocSection) -&gt; ReqrmntSec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[ReqsSub] -&gt; ReqrmntSec
 </span><span class="hs-identifier hs-var">ReqsProg</span></span><span>
-</span><span id="line-95"></span><span>    </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [LabelledContent] -&gt; ReqsSub
-</span><span class="hs-identifier hs-var">FReqsSub</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-96"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ReqsSub
+</span><span id="line-81"></span><span>    </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">[LabelledContent] -&gt; ReqsSub
+</span><span class="hs-identifier hs-var">FReqsSub</span></span><span> </span><span class="annot"><span class="annottext">[LabelledContent]
+</span><a href="Drasil.SglPend.Requirements.html#funcReqsTables"><span class="hs-identifier hs-var">funcReqsTables</span></a></span><span>
+</span><span id="line-82"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ReqsSub
 </span><span class="hs-identifier hs-var">NonFReqsSub</span></span><span>
-</span><span id="line-97"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-98"></span><span>  </span><span class="annot"><span class="annottext">TraceabilitySec -&gt; DocSection
+</span><span id="line-83"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-84"></span><span>  </span><span class="annot"><span class="annottext">TraceabilitySec -&gt; DocSection
 </span><span class="hs-identifier hs-var">TraceabilitySec</span></span><span> </span><span class="annot"><span class="annottext">(TraceabilitySec -&gt; DocSection) -&gt; TraceabilitySec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[TraceConfig] -&gt; TraceabilitySec
@@ -271,19 +224,19 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">System -&gt; [TraceConfig]
 </span><span class="hs-identifier hs-var">traceMatStandard</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="Drasil.SglPend.Body.html#si"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">AuxConstntSec -&gt; DocSection
+</span><span id="line-85"></span><span>  </span><span class="annot"><span class="annottext">AuxConstntSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">AuxConstntSec</span></span><span> </span><span class="annot"><span class="annottext">(AuxConstntSec -&gt; DocSection) -&gt; AuxConstntSec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-100"></span><span>     </span><span class="annot"><span class="annottext">CI -&gt; [ConstQDef] -&gt; AuxConstntSec
+</span><span id="line-86"></span><span>     </span><span class="annot"><span class="annottext">CI -&gt; [ConstQDef] -&gt; AuxConstntSec
 </span><span class="hs-identifier hs-var">AuxConsProg</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>  </span><span class="hs-comment">-- Adds Auxilliary constraint section</span><span>
-</span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">DocSection
+</span><span id="line-87"></span><span>  </span><span class="annot"><span class="annottext">DocSection
 </span><span class="hs-identifier hs-var">Bibliography</span></span><span>                    </span><span class="hs-comment">-- Adds reference section</span><span>
-</span><span id="line-102"></span><span>  </span><span class="hs-special">]</span><span>
-</span><span id="line-103"></span><span>
-</span><span id="line-104"></span><span class="annot"><a href="Drasil.SglPend.Body.html#si"><span class="hs-identifier hs-type">si</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span>
-</span><span id="line-105"></span><span id="si"><span class="annot"><span class="annottext">si :: System
+</span><span id="line-88"></span><span>  </span><span class="hs-special">]</span><span>
+</span><span id="line-89"></span><span>
+</span><span id="line-90"></span><span class="annot"><a href="Drasil.SglPend.Body.html#si"><span class="hs-identifier hs-type">si</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span>
+</span><span id="line-91"></span><span id="si"><span class="annot"><span class="annottext">si :: System
 </span><a href="Drasil.SglPend.Body.html#si"><span class="hs-identifier hs-var hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI
 -&gt; SystemKind
 -&gt; People
@@ -330,25 +283,25 @@ a
 </span><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">SystemKind
 </span><span class="hs-identifier hs-var">Specification</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
 </span><span class="hs-identifier hs-var">olu</span></span><span class="hs-special">]</span><span>
-</span><span id="line-106"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-92"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.Body.html#purp"><span class="hs-identifier hs-var">purp</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+</span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.SglPend.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span>
-</span><span id="line-108"></span><span>  </span><span class="annot"><span class="annottext">[TheoryModel]
+</span><span id="line-94"></span><span>  </span><span class="annot"><span class="annottext">[TheoryModel]
 </span><a href="Drasil.SglPend.Body.html#tMods"><span class="hs-identifier hs-var">tMods</span></a></span><span> </span><span class="annot"><span class="annottext">[GenDefn]
 </span><a href="Drasil.SglPend.GenDefs.html#genDefns"><span class="hs-identifier hs-var">genDefns</span></a></span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="Drasil.SglPend.DataDefs.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
 </span><a href="Drasil.SglPend.IMods.html#iMods"><span class="hs-identifier hs-var">iMods</span></a></span><span>
-</span><span id="line-109"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-110"></span><span>  </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+</span><span id="line-95"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-96"></span><span>  </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.SglPend.Unitals.html#inputs"><span class="hs-identifier hs-var">inputs</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.SglPend.Unitals.html#outputs"><span class="hs-identifier hs-var">outputs</span></a></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.SglPend.Unitals.html#inConstraints"><span class="hs-identifier hs-var">inConstraints</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-111"></span><span>  </span><span class="annot"><span class="annottext">ChunkDB
+</span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.SglPend.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span>
-</span><span id="line-112"></span><span>
-</span><span id="line-113"></span><span class="annot"><a href="Drasil.SglPend.Body.html#purp"><span class="hs-identifier hs-type">purp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-114"></span><span id="purp"><span class="annot"><span class="annottext">purp :: Sentence
+</span><span id="line-98"></span><span>
+</span><span id="line-99"></span><span class="annot"><a href="Drasil.SglPend.Body.html#purp"><span class="hs-identifier hs-type">purp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-100"></span><span id="purp"><span class="annot"><span class="annottext">purp :: Sentence
 </span><a href="Drasil.SglPend.Body.html#purp"><span class="hs-identifier hs-var hs-var">purp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -362,17 +315,17 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">]</span><span>
-</span><span id="line-115"></span><span>
-</span><span id="line-116"></span><span class="annot"><a href="Drasil.SglPend.Body.html#ideaDicts"><span class="hs-identifier hs-type">ideaDicts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-117"></span><span id="ideaDicts"><span class="annot"><span class="annottext">ideaDicts :: [IdeaDict]
+</span><span id="line-101"></span><span>
+</span><span id="line-102"></span><span class="annot"><a href="Drasil.SglPend.Body.html#ideaDicts"><span class="hs-identifier hs-type">ideaDicts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-103"></span><span id="ideaDicts"><span class="annot"><span class="annottext">ideaDicts :: [IdeaDict]
 </span><a href="Drasil.SglPend.Body.html#ideaDicts"><span class="hs-identifier hs-var hs-var">ideaDicts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-118"></span><span>  </span><span class="hs-comment">-- Actual IdeaDicts</span><span>
-</span><span id="line-119"></span><span>  </span><span class="annot"><span class="annottext">[IdeaDict]
+</span><span id="line-104"></span><span>  </span><span class="hs-comment">-- Actual IdeaDicts</span><span>
+</span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><span class="hs-identifier hs-var">concepts</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-120"></span><span>  </span><span class="hs-comment">-- CIs</span><span>
-</span><span id="line-121"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
+</span><span id="line-106"></span><span>  </span><span class="hs-comment">-- CIs</span><span>
+</span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; [IdeaDict] -&gt; [IdeaDict]
@@ -390,12 +343,12 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[CI]
 </span><span class="hs-identifier hs-var">physicCon'</span></span><span>
-</span><span id="line-122"></span><span>
-</span><span id="line-123"></span><span class="annot"><a href="Drasil.SglPend.Body.html#conceptChunks"><span class="hs-identifier hs-type">conceptChunks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-124"></span><span id="conceptChunks"><span class="annot"><span class="annottext">conceptChunks :: [ConceptChunk]
+</span><span id="line-108"></span><span>
+</span><span id="line-109"></span><span class="annot"><a href="Drasil.SglPend.Body.html#conceptChunks"><span class="hs-identifier hs-type">conceptChunks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-110"></span><span id="conceptChunks"><span class="annot"><span class="annottext">conceptChunks :: [ConceptChunk]
 </span><a href="Drasil.SglPend.Body.html#conceptChunks"><span class="hs-identifier hs-var hs-var">conceptChunks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-125"></span><span>  </span><span class="hs-comment">-- ConceptChunks</span><span>
-</span><span id="line-126"></span><span>  </span><span class="annot"><span class="annottext">[ConceptChunk]
+</span><span id="line-111"></span><span>  </span><span class="hs-comment">-- ConceptChunks</span><span>
+</span><span id="line-112"></span><span>  </span><span class="annot"><span class="annottext">[ConceptChunk]
 </span><span class="hs-identifier hs-var">physicalcon</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk] -&gt; [ConceptChunk] -&gt; [ConceptChunk]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
@@ -404,7 +357,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">iPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">motion</span></span><span class="hs-special">,</span><span>
-</span><span id="line-127"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-113"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">gravitationalConst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">gravity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">rigidBody</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -412,17 +365,17 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">shm</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[ConceptChunk] -&gt; [ConceptChunk] -&gt; [ConceptChunk]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-128"></span><span>  </span><span class="hs-comment">-- Unital Chunks</span><span>
-</span><span id="line-129"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk
+</span><span id="line-114"></span><span>  </span><span class="hs-comment">-- Unital Chunks</span><span>
+</span><span id="line-115"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk
 forall c. Concept c =&gt; c -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">len</span></span><span class="hs-special">]</span><span>
-</span><span id="line-130"></span><span>
-</span><span id="line-131"></span><span class="annot"><a href="Drasil.SglPend.Body.html#abbreviationsList"><span class="hs-identifier hs-type">abbreviationsList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-132"></span><span id="abbreviationsList"><span class="annot"><span class="annottext">abbreviationsList :: [IdeaDict]
+</span><span id="line-116"></span><span>
+</span><span id="line-117"></span><span class="annot"><a href="Drasil.SglPend.Body.html#abbreviationsList"><span class="hs-identifier hs-type">abbreviationsList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-118"></span><span id="abbreviationsList"><span class="annot"><span class="annottext">abbreviationsList :: [IdeaDict]
 </span><a href="Drasil.SglPend.Body.html#abbreviationsList"><span class="hs-identifier hs-var hs-var">abbreviationsList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-133"></span><span>  </span><span class="hs-comment">-- CIs</span><span>
-</span><span id="line-134"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
+</span><span id="line-119"></span><span>  </span><span class="hs-comment">-- CIs</span><span>
+</span><span id="line-120"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; [IdeaDict] -&gt; [IdeaDict]
@@ -435,17 +388,17 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">acronyms</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-135"></span><span>  </span><span class="hs-comment">-- QuantityDicts</span><span>
-</span><span id="line-136"></span><span>  </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; IdeaDict)
+</span><span id="line-121"></span><span>  </span><span class="hs-comment">-- QuantityDicts</span><span>
+</span><span id="line-122"></span><span>  </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; IdeaDict)
 -&gt; [DefinedQuantityDict] -&gt; [IdeaDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.SglPend.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span>
-</span><span id="line-137"></span><span>
-</span><span id="line-138"></span><span class="annot"><a href="Drasil.SglPend.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
-</span><span id="line-139"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: ChunkDB
+</span><span id="line-123"></span><span>
+</span><span id="line-124"></span><span class="annot"><a href="Drasil.SglPend.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
+</span><span id="line-125"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: ChunkDB
 </span><a href="Drasil.SglPend.Body.html#symbMap"><span class="hs-identifier hs-var hs-var">symbMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 -&gt; [IdeaDict]
 -&gt; [ConceptChunk]
@@ -477,24 +430,28 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="Drasil.SglPend.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><a href="Drasil.SglPend.Body.html#ideaDicts"><span class="hs-identifier hs-var">ideaDicts</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
 </span><a href="Drasil.SglPend.Body.html#conceptChunks"><span class="hs-identifier hs-var">conceptChunks</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-140"></span><span>  </span><span class="annot"><span class="annottext">[DataDefinition]
+</span><span id="line-126"></span><span>  </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="Drasil.SglPend.DataDefs.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
 </span><a href="Drasil.SglPend.IMods.html#iMods"><span class="hs-identifier hs-var">iMods</span></a></span><span> </span><span class="annot"><span class="annottext">[GenDefn]
 </span><a href="Drasil.SglPend.GenDefs.html#genDefns"><span class="hs-identifier hs-var">genDefns</span></a></span><span> </span><span class="annot"><span class="annottext">[TheoryModel]
 </span><a href="Drasil.SglPend.Body.html#tMods"><span class="hs-identifier hs-var">tMods</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="Drasil.SglPend.Body.html#concIns"><span class="hs-identifier hs-var">concIns</span></a></span><span> </span><span class="annot"><span class="annottext">[Citation]
-</span><span class="hs-identifier hs-var">citations</span></span><span> </span><span class="annot"><span class="annottext">[LabelledContent]
-</span><a href="Drasil.SglPend.LabelledContent.html#labelledContent"><span class="hs-identifier hs-var">labelledContent</span></a></span><span> </span><span class="annot"><span class="annottext">[Reference]
+</span><span class="hs-identifier hs-var">citations</span></span><span>
+</span><span id="line-127"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[LabelledContent]
+</span><a href="Drasil.SglPend.LabelledContent.html#labelledContent"><span class="hs-identifier hs-var">labelledContent</span></a></span><span> </span><span class="annot"><span class="annottext">[LabelledContent] -&gt; [LabelledContent] -&gt; [LabelledContent]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[LabelledContent]
+</span><a href="Drasil.SglPend.Requirements.html#funcReqsTables"><span class="hs-identifier hs-var">funcReqsTables</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Reference]
 </span><a href="Drasil.SglPend.Body.html#allRefs"><span class="hs-identifier hs-var">allRefs</span></a></span><span>
-</span><span id="line-141"></span><span>
-</span><span id="line-142"></span><span class="annot"><span class="hs-comment">-- | Holds all references and links used in the document.</span></span><span>
-</span><span id="line-143"></span><span class="annot"><a href="Drasil.SglPend.Body.html#allRefs"><span class="hs-identifier hs-type">allRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
-</span><span id="line-144"></span><span id="allRefs"><span class="annot"><span class="annottext">allRefs :: [Reference]
+</span><span id="line-128"></span><span>
+</span><span id="line-129"></span><span class="annot"><span class="hs-comment">-- | Holds all references and links used in the document.</span></span><span>
+</span><span id="line-130"></span><span class="annot"><a href="Drasil.SglPend.Body.html#allRefs"><span class="hs-identifier hs-type">allRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
+</span><span id="line-131"></span><span id="allRefs"><span class="annot"><span class="annottext">allRefs :: [Reference]
 </span><a href="Drasil.SglPend.Body.html#allRefs"><span class="hs-identifier hs-var hs-var">allRefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference
 </span><span class="hs-identifier hs-var">externalLinkRef</span></span><span class="hs-special">]</span><span>
-</span><span id="line-145"></span><span>
-</span><span id="line-146"></span><span class="annot"><a href="Drasil.SglPend.Body.html#concIns"><span class="hs-identifier hs-type">concIns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
-</span><span id="line-147"></span><span id="concIns"><span class="annot"><span class="annottext">concIns :: [ConceptInstance]
+</span><span id="line-132"></span><span>
+</span><span id="line-133"></span><span class="annot"><a href="Drasil.SglPend.Body.html#concIns"><span class="hs-identifier hs-type">concIns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-134"></span><span id="concIns"><span class="annot"><span class="annottext">concIns :: [ConceptInstance]
 </span><a href="Drasil.SglPend.Body.html#concIns"><span class="hs-identifier hs-var hs-var">concIns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="Drasil.SglPend.Assumptions.html#assumpSingle"><span class="hs-identifier hs-var">assumpSingle</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance] -&gt; [ConceptInstance] -&gt; [ConceptInstance]
 forall a. [a] -&gt; [a] -&gt; [a]
@@ -506,65 +463,65 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><span class="hs-identifier hs-var">nonFuncReqs</span></span><span>
+</span><span id="line-135"></span><span>
+</span><span id="line-136"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-137"></span><span class="hs-comment">-- Section : INTRODUCTION --</span><span>
+</span><span id="line-138"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-139"></span><span>
+</span><span id="line-140"></span><span class="hs-comment">-------------------------------</span><span>
+</span><span id="line-141"></span><span class="hs-comment">-- 2.1 : Purpose of Document --</span><span>
+</span><span id="line-142"></span><span class="hs-comment">-------------------------------</span><span>
+</span><span id="line-143"></span><span class="hs-comment">-- Purpose of Document automatically generated in IPurpose</span><span>
+</span><span id="line-144"></span><span>
+</span><span id="line-145"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-146"></span><span class="hs-comment">-- 2.2 : Scope of Requirements --</span><span>
+</span><span id="line-147"></span><span class="hs-comment">---------------------------------</span><span>
 </span><span id="line-148"></span><span>
-</span><span id="line-149"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-150"></span><span class="hs-comment">-- Section : INTRODUCTION --</span><span>
-</span><span id="line-151"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-149"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-150"></span><span class="hs-comment">-- 2.3 : Characteristics of Intended Reader --</span><span>
+</span><span id="line-151"></span><span class="hs-comment">----------------------------------------------</span><span>
 </span><span id="line-152"></span><span>
-</span><span id="line-153"></span><span class="hs-comment">-------------------------------</span><span>
-</span><span id="line-154"></span><span class="hs-comment">-- 2.1 : Purpose of Document --</span><span>
-</span><span id="line-155"></span><span class="hs-comment">-------------------------------</span><span>
-</span><span id="line-156"></span><span class="hs-comment">-- Purpose of Document automatically generated in IPurpose</span><span>
-</span><span id="line-157"></span><span>
-</span><span id="line-158"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-159"></span><span class="hs-comment">-- 2.2 : Scope of Requirements --</span><span>
-</span><span id="line-160"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-153"></span><span class="hs-comment">-------------------------------------</span><span>
+</span><span id="line-154"></span><span class="hs-comment">-- 2.4 : Organization of Documents --</span><span>
+</span><span id="line-155"></span><span class="hs-comment">-------------------------------------</span><span>
+</span><span id="line-156"></span><span>
+</span><span id="line-157"></span><span class="hs-comment">-------------------------------------------</span><span>
+</span><span id="line-158"></span><span class="hs-comment">-- Section 3: GENERAL SYSTEM DESCRIPTION --</span><span>
+</span><span id="line-159"></span><span class="hs-comment">-------------------------------------------</span><span>
+</span><span id="line-160"></span><span class="hs-comment">-- Description of Genreal System automatically generated in GSDProg</span><span>
 </span><span id="line-161"></span><span>
-</span><span id="line-162"></span><span class="hs-comment">----------------------------------------------</span><span>
-</span><span id="line-163"></span><span class="hs-comment">-- 2.3 : Characteristics of Intended Reader --</span><span>
-</span><span id="line-164"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-162"></span><span class="hs-comment">--------------------------</span><span>
+</span><span id="line-163"></span><span class="hs-comment">-- 3.1 : System Context --</span><span>
+</span><span id="line-164"></span><span class="hs-comment">--------------------------</span><span>
 </span><span id="line-165"></span><span>
-</span><span id="line-166"></span><span class="hs-comment">-------------------------------------</span><span>
-</span><span id="line-167"></span><span class="hs-comment">-- 2.4 : Organization of Documents --</span><span>
-</span><span id="line-168"></span><span class="hs-comment">-------------------------------------</span><span>
+</span><span id="line-166"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-167"></span><span class="hs-comment">-- 3.2 : User Characteristics --</span><span>
+</span><span id="line-168"></span><span class="hs-comment">--------------------------------</span><span>
 </span><span id="line-169"></span><span>
-</span><span id="line-170"></span><span class="hs-comment">-------------------------------------------</span><span>
-</span><span id="line-171"></span><span class="hs-comment">-- Section 3: GENERAL SYSTEM DESCRIPTION --</span><span>
-</span><span id="line-172"></span><span class="hs-comment">-------------------------------------------</span><span>
-</span><span id="line-173"></span><span class="hs-comment">-- Description of Genreal System automatically generated in GSDProg</span><span>
+</span><span id="line-170"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-171"></span><span class="hs-comment">-- 3.3 : System Constraints --</span><span>
+</span><span id="line-172"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-173"></span><span class="hs-comment">-- System Constraints automatically generated in SystCons</span><span>
 </span><span id="line-174"></span><span>
-</span><span id="line-175"></span><span class="hs-comment">--------------------------</span><span>
-</span><span id="line-176"></span><span class="hs-comment">-- 3.1 : System Context --</span><span>
-</span><span id="line-177"></span><span class="hs-comment">--------------------------</span><span>
-</span><span id="line-178"></span><span>
-</span><span id="line-179"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-180"></span><span class="hs-comment">-- 3.2 : User Characteristics --</span><span>
-</span><span id="line-181"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-182"></span><span>
+</span><span id="line-175"></span><span>
+</span><span id="line-176"></span><span class="hs-comment">--------------------------------------------</span><span>
+</span><span id="line-177"></span><span class="hs-comment">-- Section 4: Specific System Description --</span><span>
+</span><span id="line-178"></span><span class="hs-comment">--------------------------------------------</span><span>
+</span><span id="line-179"></span><span class="hs-comment">-- Description of Specific System automatically generated in SSDProg</span><span>
+</span><span id="line-180"></span><span>
+</span><span id="line-181"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-182"></span><span class="hs-comment">-- 4.1 : System Constraints --</span><span>
 </span><span id="line-183"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-184"></span><span class="hs-comment">-- 3.3 : System Constraints --</span><span>
-</span><span id="line-185"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-186"></span><span class="hs-comment">-- System Constraints automatically generated in SystCons</span><span>
-</span><span id="line-187"></span><span>
+</span><span id="line-184"></span><span>
+</span><span id="line-185"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-186"></span><span class="hs-comment">-- 4.1.1 Terminology and Definitions --</span><span>
+</span><span id="line-187"></span><span class="hs-comment">---------------------------------</span><span>
 </span><span id="line-188"></span><span>
-</span><span id="line-189"></span><span class="hs-comment">--------------------------------------------</span><span>
-</span><span id="line-190"></span><span class="hs-comment">-- Section 4: Specific System Description --</span><span>
-</span><span id="line-191"></span><span class="hs-comment">--------------------------------------------</span><span>
-</span><span id="line-192"></span><span class="hs-comment">-- Description of Specific System automatically generated in SSDProg</span><span>
-</span><span id="line-193"></span><span>
-</span><span id="line-194"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-195"></span><span class="hs-comment">-- 4.1 : System Constraints --</span><span>
-</span><span id="line-196"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-197"></span><span>
-</span><span id="line-198"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-199"></span><span class="hs-comment">-- 4.1.1 Terminology and Definitions --</span><span>
-</span><span id="line-200"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-201"></span><span>
-</span><span id="line-202"></span><span class="hs-comment">-----------------------------------</span><span>
-</span><span id="line-203"></span><span class="hs-comment">-- 4.1.2 Physical System Description --</span><span>
-</span><span id="line-204"></span><span class="hs-comment">-----------------------------------</span><span>
-</span><span id="line-205"></span><span class="annot"><a href="Drasil.SglPend.Body.html#physSystParts"><span class="hs-identifier hs-type">physSystParts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-206"></span><span id="physSystParts"><span class="annot"><span class="annottext">physSystParts :: [Sentence]
+</span><span id="line-189"></span><span class="hs-comment">-----------------------------------</span><span>
+</span><span id="line-190"></span><span class="hs-comment">-- 4.1.2 Physical System Description --</span><span>
+</span><span id="line-191"></span><span class="hs-comment">-----------------------------------</span><span>
+</span><span id="line-192"></span><span class="annot"><a href="Drasil.SglPend.Body.html#physSystParts"><span class="hs-identifier hs-type">physSystParts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-193"></span><span id="physSystParts"><span class="annot"><span class="annottext">physSystParts :: [Sentence]
 </span><a href="Drasil.SglPend.Body.html#physSystParts"><span class="hs-identifier hs-var hs-var">physSystParts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; [NP] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
@@ -582,87 +539,87 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">]</span><span>
+</span><span id="line-194"></span><span>
+</span><span id="line-195"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-196"></span><span class="hs-comment">-- 4.1.3 : Goal Statements --</span><span>
+</span><span id="line-197"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-198"></span><span>
+</span><span id="line-199"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-200"></span><span class="hs-comment">-- 4.2 : Solution Characteristics Specification --</span><span>
+</span><span id="line-201"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-202"></span><span>
+</span><span id="line-203"></span><span class="hs-comment">-------------------------</span><span>
+</span><span id="line-204"></span><span class="hs-comment">-- 4.2.1 : Assumptions --</span><span>
+</span><span id="line-205"></span><span class="hs-comment">-------------------------</span><span>
+</span><span id="line-206"></span><span class="hs-comment">-- Assumptions defined in Assumptions</span><span>
 </span><span id="line-207"></span><span>
-</span><span id="line-208"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-209"></span><span class="hs-comment">-- 4.1.3 : Goal Statements --</span><span>
-</span><span id="line-210"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-211"></span><span>
-</span><span id="line-212"></span><span class="hs-comment">--------------------------------------------------</span><span>
-</span><span id="line-213"></span><span class="hs-comment">-- 4.2 : Solution Characteristics Specification --</span><span>
-</span><span id="line-214"></span><span class="hs-comment">--------------------------------------------------</span><span>
-</span><span id="line-215"></span><span>
-</span><span id="line-216"></span><span class="hs-comment">-------------------------</span><span>
-</span><span id="line-217"></span><span class="hs-comment">-- 4.2.1 : Assumptions --</span><span>
-</span><span id="line-218"></span><span class="hs-comment">-------------------------</span><span>
-</span><span id="line-219"></span><span class="hs-comment">-- Assumptions defined in Assumptions</span><span>
-</span><span id="line-220"></span><span>
-</span><span id="line-221"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-222"></span><span class="hs-comment">-- 4.2.2 : Theoretical Models --</span><span>
-</span><span id="line-223"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-224"></span><span class="hs-comment">-- Theoretical Models defined in TMs</span><span>
-</span><span id="line-225"></span><span class="annot"><a href="Drasil.SglPend.Body.html#tMods"><span class="hs-identifier hs-type">tMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span>
-</span><span id="line-226"></span><span id="tMods"><span class="annot"><span class="annottext">tMods :: [TheoryModel]
+</span><span id="line-208"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-209"></span><span class="hs-comment">-- 4.2.2 : Theoretical Models --</span><span>
+</span><span id="line-210"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-211"></span><span class="hs-comment">-- Theoretical Models defined in TMs</span><span>
+</span><span id="line-212"></span><span class="annot"><a href="Drasil.SglPend.Body.html#tMods"><span class="hs-identifier hs-type">tMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span>
+</span><span id="line-213"></span><span id="tMods"><span class="annot"><span class="annottext">tMods :: [TheoryModel]
 </span><a href="Drasil.SglPend.Body.html#tMods"><span class="hs-identifier hs-var hs-var">tMods</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TheoryModel]
 </span><span class="hs-identifier hs-var">DPD.tMods</span></span><span> </span><span class="annot"><span class="annottext">[TheoryModel] -&gt; [TheoryModel] -&gt; [TheoryModel]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">newtonSLR</span></span><span class="hs-special">]</span><span>
-</span><span id="line-227"></span><span>
-</span><span id="line-228"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-229"></span><span class="hs-comment">-- 4.2.3 : General Definitions --</span><span>
-</span><span id="line-230"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-231"></span><span class="hs-comment">-- General Definitions defined in GDs</span><span>
-</span><span id="line-232"></span><span>
-</span><span id="line-233"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-234"></span><span class="hs-comment">-- 4.2.4 : Data Definitions --</span><span>
-</span><span id="line-235"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-236"></span><span class="hs-comment">-- Data Definitions defined in DDs</span><span>
-</span><span id="line-237"></span><span>
-</span><span id="line-238"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-239"></span><span class="hs-comment">-- 4.2.5 : Instance Models --</span><span>
-</span><span id="line-240"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-241"></span><span class="hs-comment">-- Instance Models defined in IMs</span><span>
-</span><span id="line-242"></span><span>
-</span><span id="line-243"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-244"></span><span class="hs-comment">-- 4.2.6 : Data Constraints --</span><span>
-</span><span id="line-245"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-246"></span><span class="hs-comment">-- Data Constraints defined in Constraints</span><span>
-</span><span id="line-247"></span><span>
-</span><span id="line-248"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-249"></span><span class="hs-comment">-- 4.2.7 : Properties of a Correct Solution --</span><span>
-</span><span id="line-250"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-251"></span><span class="hs-comment">-- Properties of a Correct Solution defined in CorrSolnPpties</span><span>
+</span><span id="line-214"></span><span>
+</span><span id="line-215"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-216"></span><span class="hs-comment">-- 4.2.3 : General Definitions --</span><span>
+</span><span id="line-217"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-218"></span><span class="hs-comment">-- General Definitions defined in GDs</span><span>
+</span><span id="line-219"></span><span>
+</span><span id="line-220"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-221"></span><span class="hs-comment">-- 4.2.4 : Data Definitions --</span><span>
+</span><span id="line-222"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-223"></span><span class="hs-comment">-- Data Definitions defined in DDs</span><span>
+</span><span id="line-224"></span><span>
+</span><span id="line-225"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-226"></span><span class="hs-comment">-- 4.2.5 : Instance Models --</span><span>
+</span><span id="line-227"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-228"></span><span class="hs-comment">-- Instance Models defined in IMs</span><span>
+</span><span id="line-229"></span><span>
+</span><span id="line-230"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-231"></span><span class="hs-comment">-- 4.2.6 : Data Constraints --</span><span>
+</span><span id="line-232"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-233"></span><span class="hs-comment">-- Data Constraints defined in Constraints</span><span>
+</span><span id="line-234"></span><span>
+</span><span id="line-235"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-236"></span><span class="hs-comment">-- 4.2.7 : Properties of a Correct Solution --</span><span>
+</span><span id="line-237"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-238"></span><span class="hs-comment">-- Properties of a Correct Solution defined in CorrSolnPpties</span><span>
+</span><span id="line-239"></span><span>
+</span><span id="line-240"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-241"></span><span class="hs-comment">-- SECTION 5 : REQUIREMENTS --</span><span>
+</span><span id="line-242"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-243"></span><span class="hs-comment">-- in Requirements.hs</span><span>
+</span><span id="line-244"></span><span>
+</span><span id="line-245"></span><span class="hs-comment">-----------------------------------</span><span>
+</span><span id="line-246"></span><span class="hs-comment">-- 5.1 : Functional Requirements --</span><span>
+</span><span id="line-247"></span><span class="hs-comment">-----------------------------------</span><span>
+</span><span id="line-248"></span><span>
+</span><span id="line-249"></span><span class="hs-comment">--------------------------------------</span><span>
+</span><span id="line-250"></span><span class="hs-comment">-- 5.2 : Nonfunctional Requirements --</span><span>
+</span><span id="line-251"></span><span class="hs-comment">--------------------------------------</span><span>
 </span><span id="line-252"></span><span>
-</span><span id="line-253"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-254"></span><span class="hs-comment">-- SECTION 5 : REQUIREMENTS --</span><span>
-</span><span id="line-255"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-256"></span><span class="hs-comment">-- in Requirements.hs</span><span>
-</span><span id="line-257"></span><span>
-</span><span id="line-258"></span><span class="hs-comment">-----------------------------------</span><span>
-</span><span id="line-259"></span><span class="hs-comment">-- 5.1 : Functional Requirements --</span><span>
-</span><span id="line-260"></span><span class="hs-comment">-----------------------------------</span><span>
-</span><span id="line-261"></span><span>
-</span><span id="line-262"></span><span class="hs-comment">--------------------------------------</span><span>
-</span><span id="line-263"></span><span class="hs-comment">-- 5.2 : Nonfunctional Requirements --</span><span>
-</span><span id="line-264"></span><span class="hs-comment">--------------------------------------</span><span>
-</span><span id="line-265"></span><span>
-</span><span id="line-266"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-267"></span><span class="hs-comment">-- SECTION 6 : LIKELY CHANGES --</span><span>
-</span><span id="line-268"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-269"></span><span>
-</span><span id="line-270"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-271"></span><span class="hs-comment">-- SECTION 6b : UNLIKELY CHANGES --</span><span>
-</span><span id="line-272"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-273"></span><span>
-</span><span id="line-274"></span><span class="hs-comment">--------------------------------------------------</span><span>
-</span><span id="line-275"></span><span class="hs-comment">-- Section 7 : TRACEABILITY MATRICES AND GRAPHS --</span><span>
-</span><span id="line-276"></span><span class="hs-comment">--------------------------------------------------</span><span>
-</span><span id="line-277"></span><span>
-</span><span id="line-278"></span><span class="hs-comment">------------------------------------------------</span><span>
-</span><span id="line-279"></span><span class="hs-comment">-- Section 8 : Specification Parameter Values --</span><span>
-</span><span id="line-280"></span><span class="hs-comment">------------------------------------------------</span><span>
-</span><span id="line-281"></span><span>
-</span><span id="line-282"></span><span class="hs-comment">----------------------------</span><span>
-</span><span id="line-283"></span><span class="hs-comment">-- Section 9 : References --</span><span>
-</span><span id="line-284"></span><span class="hs-comment">----------------------------</span><span>
-</span><span id="line-285"></span></pre></body></html>
+</span><span id="line-253"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-254"></span><span class="hs-comment">-- SECTION 6 : LIKELY CHANGES --</span><span>
+</span><span id="line-255"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-256"></span><span>
+</span><span id="line-257"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-258"></span><span class="hs-comment">-- SECTION 6b : UNLIKELY CHANGES --</span><span>
+</span><span id="line-259"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-260"></span><span>
+</span><span id="line-261"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-262"></span><span class="hs-comment">-- Section 7 : TRACEABILITY MATRICES AND GRAPHS --</span><span>
+</span><span id="line-263"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-264"></span><span>
+</span><span id="line-265"></span><span class="hs-comment">------------------------------------------------</span><span>
+</span><span id="line-266"></span><span class="hs-comment">-- Section 8 : Specification Parameter Values --</span><span>
+</span><span id="line-267"></span><span class="hs-comment">------------------------------------------------</span><span>
+</span><span id="line-268"></span><span>
+</span><span id="line-269"></span><span class="hs-comment">----------------------------</span><span>
+</span><span id="line-270"></span><span class="hs-comment">-- Section 9 : References --</span><span>
+</span><span id="line-271"></span><span class="hs-comment">----------------------------</span><span>
+</span><span id="line-272"></span></pre></body></html>

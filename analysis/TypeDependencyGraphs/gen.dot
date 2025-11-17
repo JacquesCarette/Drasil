@@ -21,6 +21,8 @@ digraph alltypes {
 		DocSpec	[shape=oval, color=darkviolet, label="DocSpec"];
 		DocSpec -> DocChoices;
 		DocSpec -> Filename;
+		DocSpec -> DocType;
+		DocSpec -> Format;
 		}
 		subgraph docclass{
 		DocClass	[shape=oval, color=darkviolet, label="DocClass"];

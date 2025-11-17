@@ -1,5 +1,5 @@
-# Table of Content
-- [Table of Content](#table-of-content)
+# Table of Contents
+- [Table of Contents](#table-of-content)
 - [Desired Workflow In Drasil](#desired-workflow-in-drasil)
   - [Git Workflow](#git-workflow)
     - [Branches](#branches)

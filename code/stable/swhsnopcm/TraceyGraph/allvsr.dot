@@ -68,21 +68,21 @@ digraph allvsr {
 	{theory:eBalanceOnWtrRC, theory:heatEInWtrIM}
 	}
 
-	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
-	instance:verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
-	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
-	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
-	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
 	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
 	instance:findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:findMass"];
 	instance:checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkWithPhysConsts"];
 	instance:outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputInputDerivVals"];
 	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
 	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
+	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
+	instance:verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
+	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
+	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
+	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
 
-	subgraph NFR {
+	subgraph FR {
 	rank="same"
-	{instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:inputValues, instance:findMass, instance:checkWithPhysConsts, instance:outputInputDerivVals, instance:calcValues, instance:outputValues}
+	{instance:inputValues, instance:findMass, instance:checkWithPhysConsts, instance:outputInputDerivVals, instance:calcValues, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable}
 	}
 
 	instance:waterTempGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:waterTempGS"];

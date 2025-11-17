@@ -63,10 +63,10 @@ import Drasil.SWHSNoPCM.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHSNoPCM.MetaConcepts (progName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
-import Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc)
+import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
-  specParamValList)
+  specParamValList, outputs)
 
 sd  :: (System , DocDesc)
 sd = fillcdbSRS mkSRS si
@@ -147,7 +147,7 @@ mkSRS = [TableOfContents,
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub inReqDesc [],
+    FReqsSub EmptyS funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,
@@ -173,7 +173,7 @@ si = mkSystem
   ((map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   []
-  (inputs ++ [dqdWr watE]) [tempW, watE]
+  inputs outputs
   (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
   symbMap
 
@@ -198,7 +198,8 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns citations labelledContent allRefs
+  NoPCM.iMods genDefs tMods concIns citations
+  (labelledContent ++ funcReqsTables) allRefs
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

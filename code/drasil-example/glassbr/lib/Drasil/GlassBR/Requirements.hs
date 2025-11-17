@@ -16,7 +16,7 @@ import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
-import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
+import Drasil.DocLang (inReq, inReqWTab, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR)
 import Drasil.DocLang.SRS (datCon)
@@ -28,16 +28,16 @@ import Drasil.GlassBR.Concepts (glass)
 import Drasil.GlassBR.DataDefs (aspRat, glaTyFac, hFromt, loadDFDD, standOffDis)
 import Drasil.GlassBR.IMods (iMods, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
-  pbTolfail, safeMessage)
+  pbTolfail, safeMessage, inputs)
 
 {--Functional Requirements--}
 
 funcReqs :: [ConceptInstance]
-funcReqs = [sysSetValsFollowingAssumps, checkInputWithDataCons,
+funcReqs = [inputValues, sysSetValsFollowingAssumps, checkInputWithDataCons,
   outputValsAndKnownValues, checkGlassSafety, outputValues]
 
 funcReqsTables :: [LabelledContent]
-funcReqsTables = [sysSetValsFollowingAssumpsTable, outputValuesTable]
+funcReqsTables = [inputValuesTable, sysSetValsFollowingAssumpsTable, outputValuesTable]
 
 sysSetValsFollowingAssumps, checkInputWithDataCons,
   outputValsAndKnownValues, checkGlassSafety, outputValues :: ConceptInstance
@@ -56,6 +56,10 @@ inReqDesc = foldlList Comma List [D.toSent $ pluralNP (NP.the (combineNINI glass
 
 sysSetValsFollowingAssumpsDesc = foldlSent [D.toSent $ atStartNP (the system), S "shall set the known",
     plural value, S "as described in the table for", namedRef sysSetValsFollowingAssumpsTable (S "Required Assignments")]
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab (Just inReqDesc) inputs
 
 sysSetValsFollowingAssumpsTable :: LabelledContent
 sysSetValsFollowingAssumpsTable =

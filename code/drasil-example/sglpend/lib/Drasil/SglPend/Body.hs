@@ -39,7 +39,7 @@ import Drasil.SglPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.SglPend.MetaConcepts (progName)
 import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
-import Drasil.SglPend.Requirements (funcReqs)
+import Drasil.SglPend.Requirements (funcReqs, funcReqsTables)
 
 sd  :: (System , DocDesc)
 sd = fillcdbSRS mkSRS si
@@ -92,7 +92,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
        ]
      ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub EmptyS []
+    [ FReqsSub EmptyS funcReqsTables
     , NonFReqsSub
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -137,7 +137,8 @@ abbreviationsList =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns citations labelledContent allRefs
+  dataDefs iMods genDefns tMods concIns citations
+  (labelledContent ++ funcReqsTables) allRefs
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

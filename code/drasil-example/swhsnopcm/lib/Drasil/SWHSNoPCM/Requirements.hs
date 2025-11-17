@@ -1,4 +1,6 @@
-module Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc) where
+module Drasil.SWHSNoPCM.Requirements (
+  funcReqs, inReqDesc, funcReqsTables
+) where
 
 import Control.Lens ((^.))
 
@@ -6,7 +8,7 @@ import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Drasil.DocLang (inReq)
+import Drasil.DocLang (inReq, inReqWTab)
 
 import Theory.Drasil (InstanceModel)
 
@@ -20,6 +22,7 @@ import Drasil.SWHS.Requirements (calcValues, checkWithPhysConsts,
 
 import Drasil.SWHSNoPCM.DataDefs (waterVolume)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr)
+import Drasil.SWHSNoPCM.Unitals (inputs)
 
 --------------------------
 --Section 5 : REQUIREMENTS
@@ -28,6 +31,13 @@ import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr)
 ---------------------------------------
 --Section 5.1 : FUNCTIONAL REQUIREMENTS
 ---------------------------------------
+
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab (Just inReqDesc) inputs
 
 --
 findMass :: ConceptInstance
@@ -43,7 +53,7 @@ oIDQVals = map foldlSent_ [
   ]
 
 funcReqs :: [ConceptInstance]
-funcReqs = [findMass, checkWithPhysConsts, oIDQConstruct oIDQVals,
+funcReqs = [inputValues, findMass, checkWithPhysConsts, oIDQConstruct oIDQVals,
             calcValues noPCMOutputs, outputValues noPCMOutputs]
 
 noPCMOutputs :: [InstanceModel]

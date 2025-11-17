@@ -47,7 +47,7 @@ import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.LabelledContent (figLaunch, sysCtxFig1, labelledContent)
 import Drasil.Projectile.MetaConcepts (progName)
 import Drasil.Projectile.References (citations)
-import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
+import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
@@ -103,7 +103,7 @@ mkSRS = [TableOfContents,
       ],
   ReqrmntSec $
     ReqsProg
-      [ FReqsSub EmptyS []
+      [ FReqsSub EmptyS funcReqsTables
       , NonFReqsSub
       ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -175,7 +175,8 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
-  dataDefs iMods genDefns tMods concIns citations labelledContent allRefs
+  dataDefs iMods genDefns tMods concIns citations
+  (labelledContent ++ funcReqsTables) allRefs
 
 abbreviationsList  :: [IdeaDict]
 abbreviationsList  =
@@ -292,12 +293,6 @@ symbols = unitalQuants ++ map dqdWr [gravitationalAccelConst, tol] ++
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst, tol]
-
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr [launSpeed, launAngle, targPos]
-
-outputs :: [DefinedQuantityDict]
-outputs = [dqdWr offset, dqdWr flightDur]
 
 unitalQuants :: [DefinedQuantityDict]
 unitalQuants = map dqdWr constrained

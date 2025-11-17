@@ -1,17 +1,25 @@
-{-#LANGUAGE PostfixOperators#-}
 module Drasil.PDController.Requirements where
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, datumConstraint)
 import Drasil.DocLang.SRS (datCon)
-import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkVerifiableNFR, mkSecurityNFR)
+import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkVerifiableNFR,
+  mkSecurityNFR, inReqWTab)
 
 import Drasil.PDController.Concepts
 import Drasil.PDController.IModel
+import Drasil.PDController.Unitals (inputs)
 
 import Language.Drasil
 
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInputs, calculateValues, outputValues]
+funcReqs = [inputValues, verifyInputs, calculateValues, outputValues]
+
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab Nothing inputs
 
 verifyInputs, calculateValues, outputValues :: ConceptInstance
 verifyInputs

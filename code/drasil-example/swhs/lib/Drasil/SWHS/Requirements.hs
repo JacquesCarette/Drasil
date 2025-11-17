@@ -7,7 +7,7 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, HasOutput(output))
 
-import Drasil.DocLang (inReq, mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
+import Drasil.DocLang (mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR, inReqWTab)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 
@@ -63,7 +63,7 @@ findMass, checkWithPhysConsts, outputInputDerivVals, verifyEnergyOutput,
 calcValues, outputValues :: [InstanceModel] -> ConceptInstance
 
 --
-findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods
+findMass = findMassConstruct inputValues (plural mass) iMods
   [waterMass, waterVolume, tankVolume]
 
 findMassConstruct :: (Referable r, HasShortName r, Referable s, HasShortName s,
@@ -89,7 +89,7 @@ oIDQConstruct x = cic "outputInputDerivVals" (foldlSentCol [
 
 oIDQVals :: [Sentence]
 oIDQVals = map foldlSent_ [
-  [D.toSent (pluralNP (the value)), fromSource (inReq EmptyS)],
+  [D.toSent (pluralNP (the value)), fromSource inputValues],
   [D.toSent (pluralNP (the mass)), fromSource findMass],
   [ch (balanceDecayRate ^. defLhs), fromSource balanceDecayRate],
   [ch (balanceDecayTime ^. defLhs), fromSource balanceDecayTime],

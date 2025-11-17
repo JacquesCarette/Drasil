@@ -5,7 +5,7 @@ module Drasil.Sections.Requirements (
   -- * Functional Requirements
   fReqF,
   -- ** Input Requirements
-  inReq, inReqWTab,
+  inReqWTab,
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- * Non-functional Requirements
   nfReqF, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
@@ -35,10 +35,6 @@ import Drasil.DocumentLanguage.Units (toSentence)
 -- | Wrapper for 'reqIntro'.
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
-
--- FIXME: Remove.
-inReq :: Sentence -> ConceptInstance
-inReq  s = cic "inputValues"  s "Input-Values"  funcReqDom
 
 -- | Creates an "input-values" functional requirement ('ConceptInstance') and an
 -- associated table of input variables ('LabelledContent') from a list of

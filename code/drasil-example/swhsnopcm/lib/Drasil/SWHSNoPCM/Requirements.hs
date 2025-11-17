@@ -8,7 +8,7 @@ import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Drasil.DocLang (inReq, inReqWTab)
+import Drasil.DocLang (inReqWTab)
 
 import Theory.Drasil (InstanceModel)
 
@@ -41,13 +41,13 @@ inputValuesTable :: LabelledContent
 
 --
 findMass :: ConceptInstance
-findMass = findMassConstruct (inReq EmptyS) (phrase mass) [eBalanceOnWtr]
+findMass = findMassConstruct inputValues (phrase mass) [eBalanceOnWtr]
             [waterMass, waterVolume, tankVolume]
 
 --
 oIDQVals :: [Sentence]
 oIDQVals = map foldlSent_ [
-  [D.toSent (pluralNP (the value)), fromSource (inReq EmptyS)],
+  [D.toSent (pluralNP (the value)), fromSource inputValues],
   [D.toSent (phraseNP (the mass)), fromSource findMass],
   [ch (balanceDecayRate ^. defLhs), fromSource balanceDecayRate]
   ]

@@ -16,7 +16,7 @@ import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
-import Drasil.DocLang (inReq, inReqWTab, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
+import Drasil.DocLang (inReqWTab, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR)
 import Drasil.DocLang.SRS (datCon)
@@ -81,7 +81,7 @@ checkInputWithDataConsDesc = foldlSent [D.toSent $ atStartNP (the system), S "sh
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 
 outputValsAndKnownValuesDesc = foldlSent [titleize output_, D.toSent $ pluralNP (the inValue),
-  S "from", refS (inReq EmptyS) `S.andThe` S "known", plural value,
+  S "from", refS inputValues `S.andThe` S "known", plural value,
   S "from", refS sysSetValsFollowingAssumps]
 
 checkGlassSafetyDesc = foldlSent_ [S "If", eS $ sy isSafePb $&& sy isSafeLR,

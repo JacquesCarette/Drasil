@@ -52,7 +52,7 @@ From your local machine, use `git reset --hard x` where `x` is the commit hash o
 - You should avoid submitting a pull request then keep adding commits to it. You should be doing that work locally instead, and submit a pull request when it is ready to be merged.
 - Remember to also link related issues, so that others can know what is motivating the pull request. However, **do not** manually link issues to pull requests; rather, in the PR description, write (at minimum, the required keywords, replacing #ID with the issue ID):
     - "Contributes to issue #ID" or "contributes to #ID" → links issue to PR, but doesn't close issue when PR is merged (required keywords: #ID).
-    - "Closes issue #ID" or "Closes #ID" → links issue to PR, and closes issue when PR is merged (required keywords: closes, #ID).
+    - "Closes #ID" → links issue to PR, and closes issue when PR is merged.
 - I am working on an issue that requires multiple pull requests to complete, some of which are dependent on others. I have created one branch that I intend to use for my multiple pull requests for the same issue.
     - This can be done; however, it is problematic, as outlined in [this comment](https://github.com/JacquesCarette/Drasil/pull/2157#issuecomment-637079762); instead, follow the advice given in the [same comment](https://github.com/JacquesCarette/Drasil/pull/2157#issuecomment-637079762). In summary, create a new branch for each PR to avoid confusion.
 - I am working on an issue that has resulted in a long-lived branch with many accumulated commits; now this branch is out-of-date with the main branch. How do I update my branch to be up-to-date with the main branch without losing my commits?

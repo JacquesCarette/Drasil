@@ -288,18 +288,18 @@ This section simplifies the original problem and helps in developing the theoret
 
 \begin{description}[font=\normalfont]
 \item[twoDMotion:\phantomsection\label{twoDMotion}]{The projectile motion is two-dimensional (2D). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
+\item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: \hyperref[targetXAxis]{A:targetXAxis} and \hyperref[cartSyst]{A:cartSyst}.)}
 \item[cartSyst:\phantomsection\label{cartSyst}]{A Cartesian coordinate system is used (from \hyperref[neglectCurv]{A:neglectCurv}). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
 \item[yAxisGravity:\phantomsection\label{yAxisGravity}]{The direction of the $y$-axis is directed opposite to gravity. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}, and \hyperref[accelYGravity]{A:accelYGravity}.)}
+\item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A:yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} and \hyperref[constAccel]{A:constAccel}.)}
 \item[launchOrigin:\phantomsection\label{launchOrigin}]{The launcher is coincident with the origin. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[targetXAxis:\phantomsection\label{targetXAxis}]{The target lies on the $x$-axis (from \hyperref[neglectCurv]{A:neglectCurv}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[posXDirection:\phantomsection\label{posXDirection}]{The positive $x$-direction is from the launcher to the target. (RefBy: \hyperref[IM:offsetIM]{IM:offsetIM}, \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
-\item[constAccel:\phantomsection\label{constAccel}]{The acceleration is constant (from \hyperref[accelXZero]{A:accelXZero}, \hyperref[accelYGravity]{A:accelYGravity}, \hyperref[neglectDrag]{A:neglectDrag}, and \hyperref[freeFlight]{A:freeFlight}). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
-\item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[constAccel]{A:constAccel}.)}
-\item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A:yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} and \hyperref[constAccel]{A:constAccel}.)}
 \item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected. (RefBy: \hyperref[constAccel]{A:constAccel}.)}
 \item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD:rectVel} and \hyperref[GD:rectPos]{GD:rectPos}.)}
 \item[freeFlight:\phantomsection\label{freeFlight}]{The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A:constAccel}.)}
-\item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: \hyperref[targetXAxis]{A:targetXAxis} and \hyperref[cartSyst]{A:cartSyst}.)}
+\item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[constAccel]{A:constAccel}.)}
+\item[constAccel:\phantomsection\label{constAccel}]{The acceleration is constant (from \hyperref[accelXZero]{A:accelXZero}, \hyperref[accelYGravity]{A:accelYGravity}, \hyperref[neglectDrag]{A:neglectDrag}, and \hyperref[freeFlight]{A:freeFlight}). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
 \item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD:velVec}, \hyperref[GD:rectVel]{GD:rectVel}, \hyperref[GD:rectPos]{GD:rectPos}, \hyperref[GD:posVec]{GD:posVec}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[gravAccelValue:\phantomsection\label{gravAccelValue}]{The acceleration due to gravity is assumed to have the value provided in the section for \hyperref[Sec:AuxConstants]{Values of Auxiliary Constants}. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \end{description}
@@ -1019,25 +1019,23 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
 {colspec={l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSyst]{A:cartSyst}} & \textbf{\hyperref[yAxisGravity]{A:yAxisGravity}} & \textbf{\hyperref[launchOrigin]{A:launchOrigin}} & \textbf{\hyperref[targetXAxis]{A:targetXAxis}} & \textbf{\hyperref[posXDirection]{A:posXDirection}} & \textbf{\hyperref[constAccel]{A:constAccel}} & \textbf{\hyperref[accelXZero]{A:accelXZero}} & \textbf{\hyperref[accelYGravity]{A:accelYGravity}} & \textbf{\hyperref[neglectDrag]{A:neglectDrag}} & \textbf{\hyperref[pointMass]{A:pointMass}} & \textbf{\hyperref[freeFlight]{A:freeFlight}} & \textbf{\hyperref[neglectCurv]{A:neglectCurv}} & \textbf{\hyperref[timeStartZero]{A:timeStartZero}} & \textbf{\hyperref[gravAccelValue]{A:gravAccelValue}}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[neglectCurv]{A:neglectCurv}} & \textbf{\hyperref[cartSyst]{A:cartSyst}} & \textbf{\hyperref[yAxisGravity]{A:yAxisGravity}} & \textbf{\hyperref[accelYGravity]{A:accelYGravity}} & \textbf{\hyperref[launchOrigin]{A:launchOrigin}} & \textbf{\hyperref[targetXAxis]{A:targetXAxis}} & \textbf{\hyperref[posXDirection]{A:posXDirection}} & \textbf{\hyperref[neglectDrag]{A:neglectDrag}} & \textbf{\hyperref[pointMass]{A:pointMass}} & \textbf{\hyperref[freeFlight]{A:freeFlight}} & \textbf{\hyperref[accelXZero]{A:accelXZero}} & \textbf{\hyperref[constAccel]{A:constAccel}} & \textbf{\hyperref[timeStartZero]{A:timeStartZero}} & \textbf{\hyperref[gravAccelValue]{A:gravAccelValue}}
 \\
 \hyperref[twoDMotion]{A:twoDMotion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[cartSyst]{A:cartSyst} &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\hyperref[neglectCurv]{A:neglectCurv} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[cartSyst]{A:cartSyst} &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[yAxisGravity]{A:yAxisGravity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
+\hyperref[accelYGravity]{A:accelYGravity} &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\\
 \hyperref[launchOrigin]{A:launchOrigin} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[targetXAxis]{A:targetXAxis} &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\hyperref[targetXAxis]{A:targetXAxis} &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[posXDirection]{A:posXDirection} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[constAccel]{A:constAccel} &  &  &  &  &  &  &  & X & X & X &  & X &  &  & 
-\\
-\hyperref[accelXZero]{A:accelXZero} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[accelYGravity]{A:accelYGravity} &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[neglectDrag]{A:neglectDrag} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1045,7 +1043,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[freeFlight]{A:freeFlight} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[neglectCurv]{A:neglectCurv} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[accelXZero]{A:accelXZero} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[constAccel]{A:constAccel} &  &  &  &  & X &  &  &  & X &  & X & X &  &  & 
 \\
 \hyperref[timeStartZero]{A:timeStartZero} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1055,7 +1055,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSyst]{A:cartSyst}} & \textbf{\hyperref[yAxisGravity]{A:yAxisGravity}} & \textbf{\hyperref[launchOrigin]{A:launchOrigin}} & \textbf{\hyperref[targetXAxis]{A:targetXAxis}} & \textbf{\hyperref[posXDirection]{A:posXDirection}} & \textbf{\hyperref[constAccel]{A:constAccel}} & \textbf{\hyperref[accelXZero]{A:accelXZero}} & \textbf{\hyperref[accelYGravity]{A:accelYGravity}} & \textbf{\hyperref[neglectDrag]{A:neglectDrag}} & \textbf{\hyperref[pointMass]{A:pointMass}} & \textbf{\hyperref[freeFlight]{A:freeFlight}} & \textbf{\hyperref[neglectCurv]{A:neglectCurv}} & \textbf{\hyperref[timeStartZero]{A:timeStartZero}} & \textbf{\hyperref[gravAccelValue]{A:gravAccelValue}}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[neglectCurv]{A:neglectCurv}} & \textbf{\hyperref[cartSyst]{A:cartSyst}} & \textbf{\hyperref[yAxisGravity]{A:yAxisGravity}} & \textbf{\hyperref[accelYGravity]{A:accelYGravity}} & \textbf{\hyperref[launchOrigin]{A:launchOrigin}} & \textbf{\hyperref[targetXAxis]{A:targetXAxis}} & \textbf{\hyperref[posXDirection]{A:posXDirection}} & \textbf{\hyperref[neglectDrag]{A:neglectDrag}} & \textbf{\hyperref[pointMass]{A:pointMass}} & \textbf{\hyperref[freeFlight]{A:freeFlight}} & \textbf{\hyperref[accelXZero]{A:accelXZero}} & \textbf{\hyperref[constAccel]{A:constAccel}} & \textbf{\hyperref[timeStartZero]{A:timeStartZero}} & \textbf{\hyperref[gravAccelValue]{A:gravAccelValue}}
 \\
 \hyperref[DD:vecMag]{DD:vecMag} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1067,19 +1067,19 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:rectVel]{GD:rectVel} &  &  &  &  &  &  &  &  &  &  & X &  &  & X & 
+\hyperref[GD:rectVel]{GD:rectVel} &  &  &  &  &  &  &  &  &  & X &  &  &  & X & 
 \\
-\hyperref[GD:rectPos]{GD:rectPos} &  &  &  &  &  &  &  &  &  &  & X &  &  & X & 
+\hyperref[GD:rectPos]{GD:rectPos} &  &  &  &  &  &  &  &  &  & X &  &  &  & X & 
 \\
-\hyperref[GD:velVec]{GD:velVec} & X & X &  &  &  &  & X &  &  &  &  &  &  & X & 
+\hyperref[GD:velVec]{GD:velVec} & X &  & X &  &  &  &  &  &  &  &  &  & X & X & 
 \\
-\hyperref[GD:posVec]{GD:posVec} & X & X &  &  &  &  & X &  &  &  &  &  &  & X & 
+\hyperref[GD:posVec]{GD:posVec} & X &  & X &  &  &  &  &  &  &  &  &  & X & X & 
 \\
-\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} &  &  & X & X & X & X &  &  & X &  &  &  &  & X & X
+\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} &  &  &  & X & X & X & X & X &  &  &  &  &  & X & X
 \\
-\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} &  &  & X & X &  & X &  & X &  &  &  &  &  &  & X
+\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} &  &  &  & X &  & X &  & X &  &  &  & X &  &  & X
 \\
-\hyperref[IM:offsetIM]{IM:offsetIM} &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[IM:offsetIM]{IM:offsetIM} &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1246,6 +1246,12 @@ volume={12},
 number={2},
 pages={251--257},
 address={Washington, USA}}
+@misc{pointSource,
+author={Pierce, Rod},
+title={Point},
+howpublished={\url{https://www.mathsisfun.com/geometry/point.html}},
+month=may,
+year={2017}}
 @article{smithKoothoor2016,
 author={Smith, W. Spencer and Koothoor, Nirmitha},
 title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},
@@ -1275,6 +1281,12 @@ volume={13},
 number={1},
 pages={83--107},
 howpublished={\url{https://doi.org/10.1007/s11155-006-9020-7}}}
+@misc{lineSource,
+author={The Editors of Encyclopaedia Britannica},
+title={Line},
+howpublished={\url{https://www.britannica.com/science/line-mathematics}},
+month=jun,
+year={2019}}
 @misc{accelerationWiki,
 author={Wikipedia Contributors},
 title={Acceleration},

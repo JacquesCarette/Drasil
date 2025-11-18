@@ -12,9 +12,13 @@ module Language.Drasil.Chunk.NamedIdea (
 import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (mkUid, UID, HasUID(..))
 import Control.Lens ((^.), makeLenses)
-
-import Language.Drasil.NounPhrase.Core ( NP )
 import Control.Lens.Lens (Lens')
+import qualified Data.Set as Set
+
+import Language.Drasil.NounPhrase.Core (CapitalizationRule(..), NP(..), NPStruct(..))
+import Language.Drasil.Sentence (Sentence)
+import qualified Language.Drasil.Sentence as Sent
+import Language.Drasil.Sentence.Extract (lnames, sdep, shortdep)
 
 -- TODO: Why does a NamedIdea need a UID? It might need a UID to be registered in the chunk map.
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as
@@ -57,7 +61,7 @@ data IdeaDict = IdeaDict {
 makeLenses ''IdeaDict
 
 instance HasChunkRefs IdeaDict where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs (IdeaDict _ np' _) = npRefs np'
 
 -- | Equal if 'UID's are equal.
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid
@@ -84,3 +88,30 @@ mkIdeaUID = IdeaDict
 -- 'Nothing' for an abbreviation.
 nw :: Idea c => c -> IdeaDict
 nw c = IdeaDict (c ^. uid) (c ^. term) (getA c)
+
+npRefs :: NP -> Set.Set UID
+npRefs (ProperNoun _ _)          = mempty
+npRefs (CommonNoun _ _ capRule)  = capRuleRefs capRule
+npRefs (Phrase sing plural c1 c2) =
+  npStructRefs sing `Set.union`
+  npStructRefs plural `Set.union`
+  capRuleRefs c1 `Set.union`
+  capRuleRefs c2
+
+capRuleRefs :: CapitalizationRule -> Set.Set UID
+capRuleRefs CapFirst     = mempty
+capRuleRefs CapWords     = mempty
+capRuleRefs CapNothing   = mempty
+capRuleRefs (Replace s)  = npStructRefs s
+
+npStructRefs :: NPStruct -> Set.Set UID
+npStructRefs = sentenceRefs . npStructToSentence
+
+npStructToSentence :: NPStruct -> Sentence
+npStructToSentence (S s)       = Sent.S s
+npStructToSentence (a :-: b)   = npStructToSentence a Sent.:+: npStructToSentence b
+npStructToSentence (a :+: b)   = npStructToSentence a Sent.+:+ npStructToSentence b
+npStructToSentence (P sym)     = Sent.P sym
+
+sentenceRefs :: Sentence -> Set.Set UID
+sentenceRefs s = Set.fromList (lnames s ++ sdep s ++ shortdep s)

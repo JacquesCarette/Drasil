@@ -16,7 +16,7 @@ module Language.Drasil.Chunk.Citation (
 
 import Language.Drasil.People (People)
 
-import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
+import Language.Drasil.ShortName (HasShortName(..), ShortName, getSentSN, shortname')
 import Language.Drasil.Data.Citation (HasFields(..), CitationKind(..), CiteField,
   author, chapter, pages, editor, bookTitle, title,
   year, school, journal, institution, note, publisher)
@@ -26,6 +26,9 @@ import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (UID, HasUID(..), showUID, mkUid)
 
 import Control.Lens (makeLenses, Lens')
+import qualified Data.Set as S
+
+import Language.Drasil.Sentence.Extract (lnames, sdep, shortdep)
 
 -- | A list of 'Citation's.
 type BibRef = [Citation]
@@ -52,7 +55,7 @@ class HasCitation c where
   getCitations :: Lens' c [Citation]
 
 instance HasChunkRefs Citation where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs = sentenceRefs . getSentSN . shortname
 
 -- | Finds 'UID' of the 'Citation'.
 instance HasUID       Citation where uid       = citeID
@@ -141,6 +144,9 @@ cInCollection :: People -> String -> String -> String -> Int ->
 cInCollection auth t bt pub yr opt = cite InCollection
   (author auth : bookTitle bt : stdFields t pub yr opt)
 
+sentenceRefs :: Sentence -> S.Set UID
+sentenceRefs s = S.fromList (lnames s ++ sdep s ++ shortdep s)
+
 -- | InProceedings citation requires author, title, bookTitle, year.
 -- Optional fields can be editor, volume or number, series, pages,
 -- address, month, organization, publisher, and note.
@@ -202,4 +208,3 @@ stdFields t pub yr opt = title t : publisher pub : year yr : opt
 -- | Helper function (do not export) for creating thesis reference.
 thesis :: People -> String -> String -> Int -> [CiteField] -> [CiteField]
 thesis auth t sch yr opt = author auth : title t : school sch : year yr : opt
-

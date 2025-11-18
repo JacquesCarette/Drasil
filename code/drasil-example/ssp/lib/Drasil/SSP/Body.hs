@@ -8,7 +8,7 @@ import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
-  genDefn, dataDefn, datCon)
+  genDefn, dataDefn, datCon, sectionReferences)
 import Drasil.Metadata (inModel)
 import Drasil.System (SystemKind(Specification), mkSystem)
 
@@ -114,11 +114,14 @@ purp = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
   S "as well as the", phrase intrslce, D.toSent (phraseNP (normForce `and_` shearForce)),
   S "along the", phrase crtSlpSrf]
 
+labeledWithReqs :: [LabelledContent]
+labeledWithReqs = funcReqTables ++ figures
+
+figures :: [LabelledContent]
+figures = [sysCtxFig1, figPhysSyst, figIndexConv, figForceActing]
+
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
-
-labCon :: [LabelledContent]
-labCon = [figPhysSyst, figIndexConv, figForceActing, sysCtxFig1] ++ funcReqTables
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -142,7 +145,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts conceptChunks
-  [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon allRefs
+  [degree] dataDefs iMods generalDefinitions tMods concIns citations labeledWithReqs allRefs
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
@@ -155,7 +158,7 @@ abbreviationsList =
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef, weightSrc, hsPressureSrc]
+allRefs = externalLinkRef : weightSrc : hsPressureSrc : SRS.sectionReferences ++ map ref labeledWithReqs
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

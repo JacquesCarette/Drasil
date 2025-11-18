@@ -10,7 +10,7 @@ import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import Drasil.Generator (cdb)
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
+import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel, sectionReferences)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
@@ -114,10 +114,14 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- IdeaDicts
-  [lateralLoad, materialProprty] ++ con' ++
-  -- CIs
-  map nw [progName, iGlass, lGlass] ++ map nw mathcon'
+  filter (\idc -> (idc ^. uid) `notElem` conceptChunkUIDs) baseIdeaDicts
+  where
+    baseIdeaDicts =
+      -- IdeaDicts
+      [lateralLoad, materialProprty] ++ con' ++
+      -- CIs
+      map nw [progName, iGlass, lGlass] ++ map nw mathcon'
+    conceptChunkUIDs = map (^. uid) conceptChunks
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
@@ -139,7 +143,7 @@ symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref (funcReqsTables ++ figures)
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs

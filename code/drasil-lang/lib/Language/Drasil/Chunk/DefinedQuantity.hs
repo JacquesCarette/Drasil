@@ -24,6 +24,7 @@ import Drasil.Database.UID (HasUID(uid))
 import Control.Lens ((^.), makeLenses, view, Getter)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
+import qualified Data.Set as S
 
 -- | DefinedQuantityDict is the combination of a 'Concept' and a 'Quantity'.
 -- Contains a 'ConceptChunk', a 'Symbol' dependent on 'Stage', a 'Space', and maybe a 'UnitDefn'.
@@ -42,7 +43,10 @@ class DefinesQuantity d where
   defLhs :: Getter d DefinedQuantityDict
 
 instance HasChunkRefs DefinedQuantityDict where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs dqDict =
+    let conceptRefs = chunkRefs (dqDict ^. con)
+        unitRefs    = maybe mempty chunkRefs (dqDict ^. unit')
+    in conceptRefs `S.union` unitRefs
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance HasUID        DefinedQuantityDict where uid = con . uid

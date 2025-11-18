@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -77,7 +77,7 @@ ideaDicts =
   -- Actual IdeaDicts
   materialProprty :
   -- CIs
-  map nw [progName', progName] ++ [nw phsChgMtrl] ++
+  map nw [phsChgMtrl, progName', progName] ++
   map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
@@ -101,7 +101,7 @@ abbreviationsList =
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = externalLinkRef : uriReferences
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref (funcReqsTables ++ labelledContent) ++ uriReferences
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -155,8 +155,8 @@ insModel :: [InstanceModel]
 insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
 concIns :: [ConceptInstance]
-concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
-  ++ nfRequirements
+concIns =
+  assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nfRequirements
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

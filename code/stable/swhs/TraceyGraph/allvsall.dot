@@ -21,8 +21,8 @@ digraph allvsall {
 	theory:eBalanceOnWtrRC -> instance:assumpCWTAT;
 	theory:eBalanceOnWtrRC -> instance:assumpTPCAV;
 	theory:eBalanceOnWtrRC -> instance:assumpTHCCoL;
-	theory:eBalanceOnWtrRC -> instance:assumpCTNOD;
 	theory:eBalanceOnWtrRC -> instance:assumpSITWP;
+	theory:eBalanceOnWtrRC -> instance:assumpCTNOD;
 	theory:eBalanceOnWtrRC -> instance:assumpWAL;
 	theory:eBalanceOnWtrRC -> instance:assumpPIT;
 	theory:eBalanceOnWtrRC -> instance:assumpNIHGBWP;
@@ -106,8 +106,8 @@ digraph allvsall {
 	instance:assumpTHCCoT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTHCCoT"];
 	instance:assumpTHCCoL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTHCCoL"];
 	instance:assumpLCCWP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpLCCWP"];
-	instance:assumpCTNOD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCTNOD"];
 	instance:assumpSITWP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSITWP"];
+	instance:assumpCTNOD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCTNOD"];
 	instance:assumpPIS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpPIS"];
 	instance:assumpWAL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpWAL"];
 	instance:assumpPIT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpPIT"];
@@ -119,7 +119,7 @@ digraph allvsall {
 
 	subgraph A {
 	rank="same"
-	{instance:assumpTEO, instance:assumpHTCC, instance:assumpCWTAT, instance:assumpTPCAV, instance:assumpDWPCoV, instance:assumpSHECov, instance:assumpLCCCW, instance:assumpTHCCoT, instance:assumpTHCCoL, instance:assumpLCCWP, instance:assumpCTNOD, instance:assumpSITWP, instance:assumpPIS, instance:assumpWAL, instance:assumpPIT, instance:assumpNIHGBWP, instance:assumpVCMPN, instance:assumpNGSP, instance:assumpAPT, instance:assumpVCN}
+	{instance:assumpTEO, instance:assumpHTCC, instance:assumpCWTAT, instance:assumpTPCAV, instance:assumpDWPCoV, instance:assumpSHECov, instance:assumpLCCCW, instance:assumpTHCCoT, instance:assumpTHCCoL, instance:assumpLCCWP, instance:assumpSITWP, instance:assumpCTNOD, instance:assumpPIS, instance:assumpWAL, instance:assumpPIT, instance:assumpNIHGBWP, instance:assumpVCMPN, instance:assumpNGSP, instance:assumpAPT, instance:assumpVCN}
 	}
 
 	dataDefn:wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];

@@ -150,7 +150,7 @@ symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref (labelledContent ++ funcReqsTables)
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

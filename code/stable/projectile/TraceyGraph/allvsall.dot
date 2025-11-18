@@ -1,11 +1,11 @@
 digraph allvsall {
 	instance:cartSyst -> instance:neglectCurv;
+	instance:accelYGravity -> instance:yAxisGravity;
 	instance:targetXAxis -> instance:neglectCurv;
-	instance:constAccel -> instance:accelXZero;
 	instance:constAccel -> instance:accelYGravity;
 	instance:constAccel -> instance:neglectDrag;
 	instance:constAccel -> instance:freeFlight;
-	instance:accelYGravity -> instance:yAxisGravity;
+	instance:constAccel -> instance:accelXZero;
 	dataDefn:ixVel -> dataDefn:speed;
 	dataDefn:iyVel -> dataDefn:speed;
 	theory:projSpeed -> instance:pointMass;
@@ -26,10 +26,10 @@ digraph allvsall {
 	theory:position -> instance:timeStartZero;
 	theory:position -> theory:projPos;
 	theory:flightduration -> instance:yAxisGravity;
+	theory:flightduration -> instance:accelYGravity;
 	theory:flightduration -> instance:launchOrigin;
 	theory:flightduration -> instance:targetXAxis;
 	theory:flightduration -> instance:posXDirection;
-	theory:flightduration -> instance:accelYGravity;
 	theory:flightduration -> instance:timeStartZero;
 	theory:flightduration -> instance:gravAccelValue;
 	theory:flightduration -> dataDefn:iyVel;
@@ -52,24 +52,24 @@ digraph allvsall {
 
 
 	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
+	instance:neglectCurv	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:neglectCurv"];
 	instance:cartSyst	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSyst"];
 	instance:yAxisGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisGravity"];
+	instance:accelYGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:accelYGravity"];
 	instance:launchOrigin	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:launchOrigin"];
 	instance:targetXAxis	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:targetXAxis"];
 	instance:posXDirection	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:posXDirection"];
-	instance:constAccel	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:constAccel"];
-	instance:accelXZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:accelXZero"];
-	instance:accelYGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:accelYGravity"];
 	instance:neglectDrag	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:neglectDrag"];
 	instance:pointMass	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pointMass"];
 	instance:freeFlight	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:freeFlight"];
-	instance:neglectCurv	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:neglectCurv"];
+	instance:accelXZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:accelXZero"];
+	instance:constAccel	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:constAccel"];
 	instance:timeStartZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:timeStartZero"];
 	instance:gravAccelValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:gravAccelValue"];
 
 	subgraph A {
 	rank="same"
-	{instance:twoDMotion, instance:cartSyst, instance:yAxisGravity, instance:launchOrigin, instance:targetXAxis, instance:posXDirection, instance:constAccel, instance:accelXZero, instance:accelYGravity, instance:neglectDrag, instance:pointMass, instance:freeFlight, instance:neglectCurv, instance:timeStartZero, instance:gravAccelValue}
+	{instance:twoDMotion, instance:neglectCurv, instance:cartSyst, instance:yAxisGravity, instance:accelYGravity, instance:launchOrigin, instance:targetXAxis, instance:posXDirection, instance:neglectDrag, instance:pointMass, instance:freeFlight, instance:accelXZero, instance:constAccel, instance:timeStartZero, instance:gravAccelValue}
 	}
 
 	dataDefn:speed	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:vecMag"];

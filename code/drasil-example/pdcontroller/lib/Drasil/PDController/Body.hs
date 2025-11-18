@@ -4,7 +4,7 @@ import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
 
@@ -141,7 +141,7 @@ symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, 
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref (labelledContent ++ funcReqsTables)
 
 abbreviationsList  :: [IdeaDict]
 abbreviationsList  =

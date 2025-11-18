@@ -9,13 +9,16 @@ module Language.Drasil.Reference (
   ref, refS, namedRef, complexRef, namedComplexRef
 ) where
 
-import Language.Drasil.Label.Type (LblType, HasRefAddress(..))
-import Language.Drasil.ShortName (HasShortName(..), ShortName)
+import Language.Drasil.Label.Type (LblType(..), HasRefAddress(..), IRefProg(..))
+import Language.Drasil.ShortName (HasShortName(..), ShortName, getSentSN)
 import Language.Drasil.Sentence (Sentence(Ref, EmptyS), RefInfo(..))
 import Drasil.Database.UID (UID, HasUID(..))
 import Drasil.Database.Chunk (HasChunkRefs(..))
 
 import Control.Lens ((^.), makeLenses, Lens')
+import qualified Data.Set as S
+
+import Language.Drasil.Sentence.Extract (lnames, sdep, shortdep)
 
 -- | A Reference contains the identifier ('UID'), a reference address ('LblType'),
 -- a human-readable shortname ('ShortName'), and any extra information about the reference ('RefInfo').
@@ -27,11 +30,11 @@ makeLenses ''Reference
 
 -- | A class that contains a list of 'Reference's.
 class HasReference c where
-  -- | Provides a 'Lens' to the 'Reference's.
   getReferences :: Lens' c [Reference]
 
 instance HasChunkRefs Reference where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs r = S.delete (r ^. uid) $
+    lblTypeRefs (ra r) `S.union` sentenceRefs (getSentSN $ sn r)
 
 -- | Equal if 'UID's are equal.
 instance Eq            Reference where a == b = (a ^. uid) == (b ^. uid)
@@ -70,3 +73,17 @@ complexRef r = Ref (ref r ^. uid) EmptyS
 -- Does not overwrite the shortname contained in the reference, but will only display as the given 'Sentence' along with the given 'RefInfo'.
 namedComplexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
 namedComplexRef r = Ref (ref r ^. uid)
+
+sentenceRefs :: Sentence -> S.Set UID
+sentenceRefs s = S.fromList $ lnames s ++ sdep s ++ shortdep s
+
+lblTypeRefs :: LblType -> S.Set UID
+lblTypeRefs (RP prog _)     = iRefProgRefs prog
+lblTypeRefs (Citation _)    = mempty
+lblTypeRefs (URI _)         = mempty
+
+iRefProgRefs :: IRefProg -> S.Set UID
+iRefProgRefs (Deferred u)    = S.singleton u
+iRefProgRefs (RS _)          = mempty
+iRefProgRefs (RConcat a b)   = iRefProgRefs a `S.union` iRefProgRefs b
+iRefProgRefs Name            = mempty

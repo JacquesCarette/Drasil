@@ -261,8 +261,13 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
                    fs', gs', hs', is', js']
     calt = concat altogether
 
-    -- Calculate what chunks are depended on (i.e., UID -> Dependants)
-    chDpdts = invert $ M.fromList $ map (\c -> (c ^. uid, S.toList $ chunkRefs c)) calt
+    -- Calculate what chunks are depended on (i.e., UID -> Dependants), but only
+    -- keep dependencies that correspond to chunks we are actually inserting or
+    -- that already exist in the chunk table. References/LabelledContent live in
+    -- separate tables and are handled elsewhere.
+    allowedDeps = S.fromList (M.keys (chunkTable strtr) ++ map (^. uid) calt)
+    chDpdts = invert $ M.fromList $
+      map (\c -> (c ^. uid, S.toList $ S.filter (`S.member` allowedDeps) (chunkRefs c))) calt
 
     -- Insert all incoming chunks with the existing chunk table, asserting that
     -- none of the inserted chunks were already inserted.

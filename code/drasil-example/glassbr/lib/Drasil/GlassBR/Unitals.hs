@@ -301,11 +301,11 @@ lFail  = label "f"
 lTol   = label "tol"
 
 concepts :: [ConceptChunk]
-concepts = [glBreakage, lite, annealedGl, fTemperedGl, hStrengthGl, lateral,
+concepts = [glBreakage, lite, annealedGl, laminatedGl, fTemperedGl, hStrengthGl, lateral,
   specDeLoad, longDurLoad, glassWL, shortDurLoad, specA, blastResisGla, blast,
   blastTy, glassGeo, safeMessage, notSafe, bomb, explosion]
 
-aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
+aspectRatioCon, glBreakage, lite, glassTy, annealedGl, laminatedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadDurFac, loadResis, longDurLoad, modE, nonFactoredL,
   glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
@@ -343,6 +343,10 @@ fTemperedGl   = cc' fullyT
   S "been subjected to a special heat treatment process where the residual",
   S "surface compression is not less than 69 MPa (10 000 psi) or the edge",
   S "compression not less than 67 MPa (9700 psi), as defined in", refS astm2012])
+laminatedGl   = cc' lGlass
+  (foldlSent_ [S "glass composed of two or more plies bonded together with an interlayer",
+  S "to improve strength and safety characteristics, particularly for blast resistant",
+  S "applications"])
 glassGeo      = dccWDS "glassGeo"    (cnIES "glass geometry")
   (S "the glass geometry based inputs include the dimensions of the" +:+
     foldlList Comma List [phrase glaPlane, phrase glassTy, phrase responseTy])

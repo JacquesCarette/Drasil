@@ -42,13 +42,13 @@ Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does
 
 Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM. (RefBy: [GD:htFluxPCMFromWater](./SecGDs.md#GD:htFluxPCMFromWater).)
 
-<div id="assumpCTNOD"></div>
-
-Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [A:Same-Initial-Temp-Water-PCM](./SecAssumps.md#assumpSITWP) is less than (or equal) to the temperature of the heating coil. (RefBy: [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr) and [LC:Discharging-Tank](./SecLCs.md#likeChgDT).)
-
 <div id="assumpSITWP"></div>
 
 Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is the same. (RefBy: [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr), [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM), [LC:Different-Initial-Temps-PCM-Water](./SecLCs.md#likeChgDITPW), and [A:Charging-Tank-No-Temp-Discharge](./SecAssumps.md#assumpCTNOD).)
+
+<div id="assumpCTNOD"></div>
+
+Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [A:Same-Initial-Temp-Water-PCM](./SecAssumps.md#assumpSITWP) is less than (or equal) to the temperature of the heating coil. (RefBy: [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr) and [LC:Discharging-Tank](./SecLCs.md#likeChgDT).)
 
 <div id="assumpPIS"></div>
 

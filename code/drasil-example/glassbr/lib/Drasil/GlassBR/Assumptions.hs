@@ -5,6 +5,7 @@ module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
 import Language.Drasil hiding (organization)
 import qualified Language.Drasil.Development as D
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
+import Control.Lens (view)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -68,7 +69,7 @@ standardValuesDesc :: UnitalChunk -> Sentence
 standardValuesDesc mainIdea = foldlSent [D.toSent $ atStartNP' (the value), S "provided in",
   refS $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase mainIdea,
   sParen (ch mainIdea) `sC` S "and the", plural materialProprty `S.of_`
-  foldlList Comma List (map ch (take 3 assumptionConstants))]
+  foldlList Comma List (map (ch . view defLhs) assumptionConstants)]
 
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [atStart glass, S "under consideration is assumed to be a single",

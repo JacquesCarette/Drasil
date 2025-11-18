@@ -3,18 +3,19 @@ module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 import Data.List ((\\))
 
 import Language.Drasil hiding (section)
+import Drasil.SRSDocument
+import Drasil.Metadata (inModel)
+import Drasil.Generator (cdb)
+import qualified Drasil.DocLang.SRS as SRS (inModel, inModelLabel, sectionReferences)
+import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
 
-import Drasil.Metadata (inModel)
-import Drasil.SRSDocument
-import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Drasil.Generator (cdb)
 import Data.Drasil.People (thulasi)
 
-import Data.Drasil.Concepts.Documentation as Doc (material_)
+import Data.Drasil.Concepts.Documentation (material_)
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (physicCon', energy, mechEnergy, pressure)
@@ -31,8 +32,6 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect, surArea, area)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy)
-
-import Theory.Drasil (TheoryModel)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -142,8 +141,9 @@ mkSRS = [TableOfContents,
   Bibliography]
 
 concIns :: [ConceptInstance]
-concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
- [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
+concIns =
+  assumptions ++ goals ++ funcReqs ++ nfRequirements ++
+  [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -195,7 +195,9 @@ abbreviationsList =
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef, externalLinkRef'] ++ uriReferences
+allRefs =
+  [externalLinkRef, externalLinkRef'] ++
+  SRS.sectionReferences ++ map ref (labelledContent ++ funcReqsTables) ++ uriReferences
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -238,7 +240,7 @@ scope = phrase thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [D.toSent (atStartNP (the inModel)),
   S "to be solved" `S.is` S "referred to as" +:+. refS eBalanceOnWtr,
-  D.toSent (atStartNP (the inModel)), S "provides the", titleize ode,
+  refS SRS.inModelLabel, S "provides the", titleize ode,
   sParen (short ode), S "that models the" +:+. phrase progName,
   short progName, S "solves this", short ode]
 

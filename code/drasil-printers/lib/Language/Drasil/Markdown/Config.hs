@@ -19,7 +19,6 @@ makeBook :: Document -> PrintingInformation -> Doc
 makeBook (Document t _ _ _) sm = vcat [
   text "[book]",
   text "language = \"en\"",
-  text "multilingual = false",
   text "src = \"src\"",
   text "title =" <+> mkTitle sm t,
   text "[output.html]",

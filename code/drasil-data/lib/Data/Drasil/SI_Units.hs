@@ -12,7 +12,7 @@ fundamentals :: [UnitDefn]
 fundamentals = [ampere, candela, kelvin, kilogram, metre, mole, second]
 
 -- Derived units must be inserted after every unit they depend on
--- so that `insert0` (Database.Drasil.ChunkDB) can resolve their references. 
+-- so that `insert0` (Database.Drasil.ChunkDB) can resolve their references.
 -- Within each dependency level we keep alphabetical order to make the list easy to audit.
 derived :: [UnitDefn]
 derived = [becquerel, centigrade, coulomb, hertz, joule, katal, litre,

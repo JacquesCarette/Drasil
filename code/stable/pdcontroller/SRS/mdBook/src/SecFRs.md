@@ -4,11 +4,7 @@ This section provides the functional requirements, the tasks and behaviours that
 
 <div id="inputValues"></div>
 
-Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs), which define the tunable controller parameters.
-
-<div id="inputValues"></div>
-
-Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs), which define the tunable controller parameters.
+Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs).
 
 <div id="verifyInputs"></div>
 

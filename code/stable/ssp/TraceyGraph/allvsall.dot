@@ -248,7 +248,6 @@ digraph allvsall {
 	{theory:FS, theory:nrmShrForIM, theory:nrmShrForNumRC, theory:nrmShrForDenRC, theory:intsliceFsRC, theory:crtSlpIdIM}
 	}
 
-	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
 	instance:readAndStore	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:readAndStore"];
 	instance:verifyInput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInput"];
 	instance:determineCritSlip	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:determineCritSlip"];
@@ -266,7 +265,7 @@ digraph allvsall {
 
 	subgraph FR {
 	rank="same"
-	{instance:inputValues, instance:readAndStore, instance:verifyInput, instance:determineCritSlip, instance:verifyOutput, instance:displayInput, instance:displayGraph, instance:displayFS, instance:displayNormal, instance:displayShear, instance:writeToFile, instance:correct, instance:understandable, instance:reusable, instance:maintainable}
+	{instance:readAndStore, instance:verifyInput, instance:determineCritSlip, instance:verifyOutput, instance:displayInput, instance:displayGraph, instance:displayFS, instance:displayNormal, instance:displayShear, instance:writeToFile, instance:correct, instance:understandable, instance:reusable, instance:maintainable}
 	}
 
 	instance:identifyCritAndFS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:identifyCritAndFS"];

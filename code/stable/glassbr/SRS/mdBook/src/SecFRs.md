@@ -6,10 +6,6 @@ This section provides the functional requirements, the tasks and behaviours that
 
 Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs), which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.
 
-<div id="inputValues"></div>
-
-Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs), which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.
-
 <div id="sysSetValsFollowingAssumps"></div>
 
 System-Set-Values-Following-Assumptions: The system shall set the known values as described in the table for [Required Assignments](./SecFRs.md#Table:ReqAssignments).

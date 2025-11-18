@@ -1,6 +1,5 @@
-module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
+module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 
-import Control.Lens ((^.))
 import Data.List ((\\))
 
 import Language.Drasil hiding (section)
@@ -14,7 +13,12 @@ import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
+
+import Drasil.Metadata (inModel)
+import Drasil.SRSDocument
+import qualified Drasil.DocLang.SRS as SRS (inModel)
+import Drasil.Generator (cdb)
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Documentation (material_)
@@ -62,28 +66,14 @@ import Drasil.SWHSNoPCM.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHSNoPCM.MetaConcepts (progName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
-import Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc)
+import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
-  specParamValList)
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS S.forT sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
+  specParamValList, outputs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = map dqdWr concepts ++ map dqdWr constrained
- ++ map dqdWr [tempW, watE]
+symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained
 
 symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
@@ -147,7 +137,7 @@ mkSRS = [TableOfContents,
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub inReqDesc [],
+    FReqsSub funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,
@@ -174,7 +164,7 @@ si = mkSystem
   ((map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   []
-  (inputs ++ [dqdWr watE]) [tempW, watE]
+  inputs outputs
   (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
   symbMap
 
@@ -199,7 +189,8 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns  citations labelledContentWithInputs allRefs
+  NoPCM.iMods genDefs tMods concIns citations
+  (labelledContent ++ funcReqsTables) allRefs
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

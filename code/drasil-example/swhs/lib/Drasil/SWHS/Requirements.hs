@@ -1,4 +1,4 @@
-module Drasil.SWHS.Requirements where --all of this file is exported
+module Drasil.SWHS.Requirements where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -7,8 +7,8 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, HasOutput(output))
 
-import Drasil.DocLang (inReq, mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
-  mkUnderstandableNFR, mkReusableNFR)
+import Drasil.DocLang (mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
+  mkUnderstandableNFR, mkReusableNFR, inReqWTab)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 
 import Data.Drasil.Concepts.Computation (inValue)
@@ -26,7 +26,7 @@ import Drasil.SWHS.DataDefs (waterMass, waterVolume, tankVolume,
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods)
-import Drasil.SWHS.Unitals (consTol, pcmE, tFinalMelt, tInitMelt, watE)
+import Drasil.SWHS.Unitals (consTol, pcmE, tFinalMelt, tInitMelt, watE, inputs)
 
 import Control.Lens ((^.))
 
@@ -41,14 +41,21 @@ import Control.Lens ((^.))
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
+funcReqs :: [ConceptInstance]
+funcReqs = [inputValues, findMass, checkWithPhysConsts, outputInputDerivVals,
+  calcValues swhsOutputs, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd,
+  outputValues swhsOutputs]
+
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
+
 inReqDesc :: Sentence
 inReqDesc = foldlList Comma List [D.toSent (pluralNP (NP.the (combineNINI tank parameter))),
   plural materialProprty, S "initial" +:+ plural condition]
 
-funcReqs :: [ConceptInstance]
-funcReqs = [findMass, checkWithPhysConsts, outputInputDerivVals,
-  calcValues swhsOutputs, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd,
-  outputValues swhsOutputs]
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab (Just inReqDesc) inputs
 
 findMass, checkWithPhysConsts, outputInputDerivVals, verifyEnergyOutput,
   calcPCMMeltBegin, calcPCMMeltEnd :: ConceptInstance
@@ -56,7 +63,7 @@ findMass, checkWithPhysConsts, outputInputDerivVals, verifyEnergyOutput,
 calcValues, outputValues :: [InstanceModel] -> ConceptInstance
 
 --
-findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods
+findMass = findMassConstruct inputValues (plural mass) iMods
   [waterMass, waterVolume, tankVolume]
 
 findMassConstruct :: (Referable r, HasShortName r, Referable s, HasShortName s,
@@ -82,7 +89,7 @@ oIDQConstruct x = cic "outputInputDerivVals" (foldlSentCol [
 
 oIDQVals :: [Sentence]
 oIDQVals = map foldlSent_ [
-  [D.toSent (pluralNP (the value)), fromSource (inReq EmptyS)],
+  [D.toSent (pluralNP (the value)), fromSource inputValues],
   [D.toSent (pluralNP (the mass)), fromSource findMass],
   [ch (balanceDecayRate ^. defLhs), fromSource balanceDecayRate],
   [ch (balanceDecayTime ^. defLhs), fromSource balanceDecayTime],

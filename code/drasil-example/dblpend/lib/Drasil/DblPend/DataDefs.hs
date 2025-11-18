@@ -3,9 +3,11 @@ module Drasil.DblPend.DataDefs where
 import Control.Lens ((^.))
 
 import Prelude hiding (sin, cos, sqrt)
+
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (DataDefinition, ddENoRefs, ddMENoRefs)
+
 import Drasil.DblPend.LabelledContent (figMotion)
 import Drasil.DblPend.Unitals (forceVec, pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2)
 import Drasil.DblPend.Concepts (horizontalPos, verticalPos)

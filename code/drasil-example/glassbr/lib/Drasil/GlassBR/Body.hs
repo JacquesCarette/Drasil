@@ -8,13 +8,13 @@ import qualified Language.Drasil.Development as D
 
 import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc, auxSpecSent, termDefnF', inReq, mkInputPropsTable)
+import Drasil.DocLang (auxSpecSent, termDefnF')
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang as DocLang (inReqDesc)
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel, sectionReferences)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
@@ -44,26 +44,13 @@ import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
-import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
+import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForSymbolTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 si :: System
 si = mkSystem progName Specification
@@ -107,7 +94,7 @@ mkSRS = [TableOfContents,
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub inReqDesc funcReqsTables,
+    FReqsSub funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,

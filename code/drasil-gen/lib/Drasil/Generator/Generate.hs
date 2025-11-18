@@ -1,69 +1,118 @@
 -- | Defines Drasil generator functions.
 module Drasil.Generator.Generate (
-  -- * Generator Functions
-  gen, genDot, genCode,
-  -- * Types (Printing Options)
-  DocType(..), DocSpec(DocSpec), DocChoices(DC),
-  Format(TeX, HTML, Jupyter, MDBook),
-  -- * Constructor
-  docChoices
+  -- * Generators
+  exportSmithEtAlSrs, exportLessonPlan, exportWebsite,
+  exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo,
+  -- * Internal Functions
+  codedDirName
 ) where
 
-import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
-import Text.PrettyPrint.HughesPJ (Doc, render)
 import Prelude hiding (id)
-import System.Directory (getCurrentDirectory, setCurrentDirectory)
+import Control.Lens ((^.))
+import Data.Char (toLower)
+import Data.List (intercalate)
 import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
+import System.Directory (getCurrentDirectory, setCurrentDirectory)
+import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
+import Text.PrettyPrint.HughesPJ (Doc, render)
 
 import Build.Drasil (genMake)
-import Language.Drasil
-import Drasil.DocLang (mkGraphInfo)
-import Drasil.System (System)
-import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML,
-  genTeX, Format(TeX, HTML, Jupyter, MDBook), genJupyter, genMDBook,
-  PrintingInformation, outputDot, makeBook, makeRequirements)
-import Language.Drasil.Code (generator, generateCode, generateCodeProc,
-  Choices(..), CodeSpec(..), HasOldCodeSpec(..), Lang(..),
-  getSampleData, readWithDataDesc, sampleInputDD, unPP, unJP, unCSP, unCPPP, unSP, unJLP)
-
-import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC))
-
-import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC)
+import Drasil.DocLang (mkGraphInfo, LsnDecl, mkNb)
+import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
-import Control.Lens ((^.))
-
+import Language.Drasil (Stage(Equational), Document, Space(..), programName)
+import Language.Drasil.Code
+import qualified Language.Drasil.Sentence.Combinators as S
+import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
+  makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)
+import Drasil.SRSDocument (System, SRSDecl, defaultConfiguration, piSys,
+  PrintingInformation, fillcdbSRS, mkDoc)
+import Drasil.System (systemdb, System(SI, _sys))
 import Utils.Drasil (createDirIfMissing)
+import Drasil.Generator.ChunkDump (dumpEverything)
+import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC), docChoices)
+import Drasil.Generator.TypeCheck (typeCheckSI)
 
--- | Generate a number of artifacts based on a list of recipes.
-gen :: DocSpec -> Document -> PrintingInformation -> IO ()
-gen ds fn sm = prnt sm ds fn -- FIXME: 'prnt' is just 'gen' with the arguments reordered
+-- | Generate an SRS softifact.
+exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO System
+exportSmithEtAlSrs syst srsDecl srsFileName = do
+  let sd@(syst', _) = fillcdbSRS srsDecl syst
+      srs = mkDoc srsDecl S.forT sd
+      printfo = piSys (syst' ^. systemdb) Equational defaultConfiguration
+  dumpEverything syst' printfo ".drasil/"
+  typeCheckSI syst'
+  genDoc (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
+  genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
+  return syst' -- FIXME: `fillcdbSRS` does some stuff that the code generator needs (or else it errors out!)! What?
 
--- TODO: Include Jupyter into the SRS setup.
--- | Generate the output artifacts (TeX+Makefile, HTML or Notebook).
-prnt :: PrintingInformation -> DocSpec -> Document -> IO ()
-prnt sm (DocSpec (DC Lesson _) fn) body =
-  do prntDoc body sm fn Lesson Jupyter
-prnt sm (DocSpec (DC dtype fmts) fn) body =
-  do mapM_ (prntDoc body sm fn dtype) fmts
+-- | Internal: Generate an ICO-style executable softifact.
+exportCode :: System -> Choices -> [Mod] -> IO ()
+exportCode syst chcs extraModules = do
+  let code = codeSpec syst chcs extraModules
+  genCode chcs code
+
+-- | Internal: Generate a zoo of ICO-style executable softifact.
+exportCodeZoo :: System -> [(Choices, [Mod])] -> IO ()
+exportCodeZoo syst = mapM_ $ \(chcs, mods) -> do
+  let dir = map toLower $ codedDirName (getSysName syst) chcs
+      getSysName SI{_sys = sysName} = programName sysName
+  workingDir <- getCurrentDirectory
+  createDirIfMissing False dir
+  setCurrentDirectory dir
+  exportCode syst chcs mods
+  setCurrentDirectory workingDir
+
+-- | Generate an SRS softifact with a specific solution softifact.
+exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> [Mod] -> IO ()
+exportSmithEtAlSrsWCode syst srsDecl srsFileName chcs extraModules = do
+  syst' <- exportSmithEtAlSrs syst srsDecl srsFileName
+  exportCode syst' chcs extraModules
+
+-- | Generate an SRS softifact with a zoo of solution softifacts.
+exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [(Choices, [Mod])] -> IO ()
+exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcsMods = do
+  syst' <- exportSmithEtAlSrs syst srsDecl srsFileName
+  exportCodeZoo syst' chcsMods
+
+-- | Generate a JupyterNotebook-based lesson plan.
+exportLessonPlan :: System -> LsnDecl -> String -> IO ()
+exportLessonPlan syst nbDecl lsnFileName = do
+  let nb = mkNb nbDecl S.forT syst
+      printSetting = piSys (syst ^. systemdb) Equational defaultConfiguration
+  genDoc (DocSpec (docChoices Lesson []) lsnFileName) nb printSetting
+
+-- | Generate a "website" (HTML file) softifact.
+exportWebsite :: System -> Document -> Filename -> IO ()
+exportWebsite syst doc fileName = do
+  let printSetting = piSys (syst ^. systemdb) Equational defaultConfiguration
+  genDoc (DocSpec (docChoices Website [HTML]) fileName) doc printSetting
+
+-- | Generate a document in one or many flavours (HTML, TeX+Makefile,
+-- mdBook+Makefile, or Jupyter Notebook, up to document type).
+genDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
+genDoc (DocSpec (DC Lesson _) fn) body sm = prntDoc body sm fn Lesson Jupyter
+genDoc (DocSpec (DC dt fmts) fn)  body sm = mapM_ (prntDoc body sm fn dt) fmts
 
 -- | Helper for writing the documents (TeX / HTML / Jupyter) to file.
 prntDoc :: Document -> PrintingInformation -> String -> DocType -> Format -> IO ()
-prntDoc d pinfo fn Lesson _ = prntDoc' Lesson "Lesson" fn Jupyter d pinfo
+prntDoc d pinfo fn Lesson Jupyter = prntDoc' Lesson "Lesson" fn Jupyter d pinfo
+prntDoc _ _     _  Lesson _       =
+  error "Lesson-plan rendering only supports Jupyter Notebook output type."
 prntDoc d pinfo fn dtype fmt =
   case fmt of
-    HTML              -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
-                            prntCSS dtype fn d
-    TeX               -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
-                            prntMake $ DocSpec (DC dtype [TeX]) fn
-    Jupyter           -> do prntDoc' dtype (show dtype ++ "/Jupyter") fn Jupyter d pinfo
-    MDBook            -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
-                            prntMake $ DocSpec (DC dtype [MDBook]) fn
-                            prntBook dtype d pinfo
-                            prntCSV  dtype pinfo
-    _                 -> mempty
+    HTML    -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
+                  prntCSS dtype fn d
+    TeX     -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
+                  prntMake $ DocSpec (DC dtype [TeX]) fn
+    Jupyter -> do prntDoc' dtype (show dtype ++ "/Jupyter") fn Jupyter d pinfo
+    MDBook  -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
+                  prntMake $ DocSpec (DC dtype [MDBook]) fn
+                  prntBook dtype d pinfo
+                  prntCSV  dtype pinfo
+    Plain   -> putStrLn "Plain-rendering is not supported."
 
--- | Helper function to produce an error when an incorrect SRS format is used.
+-- | Common error for when an unsupported SRS format is attempted.
 srsFormatError :: a
 srsFormatError = error "We can only write TeX/HTML/JSON/MDBook (for now)."
 
@@ -133,10 +182,10 @@ prntCSV dt sm = do
 
 -- | Renders single-page documents.
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc
-writeDoc s _  TeX               _  doc = genTeX doc s
-writeDoc s _  HTML              fn doc = genHTML s fn doc
-writeDoc s dt Jupyter           _  doc = genJupyter s dt doc
-writeDoc _ _  _                 _  _   = srsFormatError
+writeDoc s _  TeX     _  doc = genTeX doc s
+writeDoc s _  HTML    fn doc = genHTML s fn doc
+writeDoc s dt Jupyter _  doc = genJupyter s dt doc
+writeDoc _ _  _       _  _   = srsFormatError
 
 -- | Renders multi-page documents.
 writeDoc' :: PrintingInformation -> Format -> Document -> [(Filename, Doc)]
@@ -173,6 +222,47 @@ genCode chs spec = do
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
 
--- | Constructor for users to choose their document options
-docChoices :: DocType -> [Format] -> DocChoices
-docChoices = DC
+-- | Find name of folders created for a "zoo" of executable softifacts.
+--
+-- FIXME: This is a hack. The generation phase should emit what artifacts it
+-- created.
+codedDirName :: String -> Choices -> String
+codedDirName n Choices {
+  architecture = a,
+  optFeats = o,
+  dataInfo = d,
+  maps = m} =
+  intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging $ logConfig o,
+    codedStruct $ inputStructure d, codedConStruct $ constStructure d,
+    codedConRepr $ constRepr d, codedSpaceMatch $ spaceMatch m]
+
+codedMod :: Modularity -> String
+codedMod Unmodular = "U"
+codedMod Modular = "M"
+
+codedImpTp :: ImplementationType -> String
+codedImpTp Program = "P"
+codedImpTp Library = "L"
+
+codedLog :: [Logging] -> String
+codedLog [] = "NoL"
+codedLog _ = "L"
+
+codedStruct :: Structure -> String
+codedStruct Bundled = "B"
+codedStruct Unbundled = "U"
+
+codedConStruct :: ConstantStructure -> String
+codedConStruct Inline = "I"
+codedConStruct WithInputs = "WI"
+codedConStruct (Store s) = codedStruct s
+
+codedConRepr :: ConstantRepr -> String
+codedConRepr Var = "V"
+codedConRepr Const = "C"
+
+codedSpaceMatch :: SpaceMatch -> String
+codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
+                                     [Float, Double] -> "F"
+                                     _ -> error
+                                       "Unexpected SpaceMatch for Projectile"

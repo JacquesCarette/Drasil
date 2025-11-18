@@ -32,7 +32,7 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (ChunkDB(..), findOrErr, idMap, insertAll, isRegistered)
+import Database.Drasil (findOrErr, idMap, ChunkDB(..))
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts)
 
@@ -91,7 +91,7 @@ mkDoc srs comb (si@SI {_sys = sys, _authors = docauthors}, dd) =
 -- traceability matrix information and 'IdeaDict's.
 fillcdbSRS :: SRSDecl -> System -> (System , DocDesc)
 fillcdbSRS srsDec si =
-  (fillLC dd $ fillReferences sections $ fillTraceSI dd si , dd)
+  (fillLC dd $ fillReferences sections $ fillTraceMaps dd si , dd)
   where
     dd :: DocDesc
     dd = mkDocDesc si srsDec
@@ -159,33 +159,12 @@ findAllRefs (Section _ cs r) = r: concatMap findRefSecCons cs
     findRefSecCons (Con (LlC (LblC rf _))) = [rf]
     findRefSecCons _ = []
 
--- | Helper for filling in the traceability matrix and graph information into the system.
-fillTraceSI :: DocDesc -> System -> System
-fillTraceSI dd si = fillTraceMaps dd $ fillReqs dd si
-
 -- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
 fillTraceMaps :: DocDesc -> System -> System
 fillTraceMaps dd si@SI{_systemdb = db} = si { _systemdb = newCDB }
   where
     tdb = generateTraceMap dd
     newCDB = db { traceTable = tdb, refbyTable = invert tdb }
-
--- FIXME: ChunkDB-related work: `fillReqs` should not be used at all. It is a
--- remnant of the old document-based derivation of System. See the note on the
--- `ReqrmntSec` pattern matching line.
-
--- | Fills in the requirements section of the system information using the document description.
-fillReqs :: DocDesc -> System -> System
-fillReqs [] si = si
-fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_systemdb = db} = si { _systemdb = genReqs x db }
-  where
-    genReqs [] acc = acc
-    genReqs (FReqsSub c _:xs) acc =
-      let newReqs = nub $ filter (not . (`isRegistered` acc) . (^. uid)) c
-          acc' = insertAll newReqs acc
-      in genReqs xs acc'
-    genReqs (_:xs) acc = genReqs xs acc
-fillReqs (_:xs) si = fillReqs xs si
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
@@ -376,7 +355,6 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub  frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
-    mkSubs (FReqsSub' frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
     mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
 -- ** Likely Changes

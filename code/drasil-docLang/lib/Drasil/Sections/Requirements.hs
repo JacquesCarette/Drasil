@@ -5,7 +5,7 @@ module Drasil.Sections.Requirements (
   -- * Functional Requirements
   fReqF,
   -- ** Input Requirements
-  fullReqs, fullTables, inReq, inReqDesc,
+  inReqWTab,
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- * Non-functional Requirements
   nfReqF, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
@@ -13,6 +13,9 @@ module Drasil.Sections.Requirements (
   ) where
 
 import Utils.Drasil (stringList, mkTable)
+
+import Control.Lens ((^.))
+import Data.Bifunctor (bimap)
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -29,38 +32,25 @@ import Data.Drasil.Concepts.Math (unit_)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)
 
-import Control.Lens ((^.))
-import Data.Bifunctor (bimap)
-
-
 -- | Wrapper for 'reqIntro'.
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
 
--- | Prepends a 'ConceptInstance' referencing an input-value table to a list of other 'ConceptInstance's.
--- For listing input requirements.
-fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> [ConceptInstance] -> [ConceptInstance]
-fullReqs [] _ _ = []
-fullReqs i d r = inReq (inReqDesc (mkInputPropsTable i) d) : r -- ++ [outReq (outReqDesc outTable)]
-
--- | Prepends given LabelledContent to an input-value table.
-fullTables :: (Quantity i, MayHaveUnit i) => [i] -> [LabelledContent] -> [LabelledContent]
-fullTables [] _ = []
-fullTables i t = mkInputPropsTable i : t
-
--- | Creates a Sentence from a Referable and possible description. Output is of the form
--- "Inputs the values from @reference@, which define @description@". If no description is given,
--- there will be nothing after the word "@reference@".
-inReqDesc :: (HasShortName r, Referable r) => r -> Sentence -> Sentence
-inReqDesc  t desc = foldlSent [atStart input_,  S "the", plural value, S "from", end]
-  where end = case desc of EmptyS -> refS t
-                           sent   -> refS t `sC` S "which define" +:+ sent
---outReqDesc t = foldlSent [atStart output_, S "the", plural value, S "from", refS t]
-
--- | Creates a 'ConceptInstance' of input values.
-inReq :: Sentence -> ConceptInstance
-inReq  s = cic "inputValues"  s "Input-Values"  funcReqDom
---outReq s = cic "inputValues" s "Output-Values" funcReqDom
+-- | Creates an "input-values" functional requirement ('ConceptInstance') and an
+-- associated table of input variables ('LabelledContent') from a list of
+-- quantities. The 'Maybe Sentence' provides an optional description for what
+-- the inputs define.
+--
+-- The resulting requirement sentence is of the form: "Inputs the values from
+-- @table_ref@, which define @description@". If the description is 'Nothing',
+-- the sentence is: "Inputs the values from @table_ref@".
+inReqWTab :: (Quantity q, MayHaveUnit q) => Maybe Sentence -> [q] -> (ConceptInstance, LabelledContent)
+inReqWTab mdesc qs = (ci, tbl)
+  where
+    tbl = mkInputPropsTable qs
+    desc = foldlSent $ [atStart input_,  S "the", plural value, S "from"]
+      ++ maybe [refS tbl] (\d -> [refS tbl `sC` S "which define", d]) mdesc
+    ci = cic "inputValues" desc "Input-Values" funcReqDom
 
 -- | Adds a generalized introduction for a Non-Fucntional Requirements section. Takes in the contents of that section.
 fReqF :: [Contents] -> Section

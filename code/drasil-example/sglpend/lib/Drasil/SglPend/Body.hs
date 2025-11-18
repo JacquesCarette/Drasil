@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SglPend.Body where
+module Drasil.SglPend.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
@@ -8,12 +8,11 @@ import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc, inReq, inReqDesc, mkInputPropsTable)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Math (mathcon')
@@ -39,20 +38,7 @@ import Drasil.SglPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.SglPend.MetaConcepts (progName)
 import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
-import Drasil.SglPend.Requirements (funcReqs)
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
+import Drasil.SglPend.Requirements (funcReqs, funcReqsTables)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
@@ -92,7 +78,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
        ]
      ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub inputValuesDescription []
+    [ FReqsSub funcReqsTables
     , NonFReqsSub
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -137,7 +123,8 @@ abbreviationsList =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns citations labelledContentWithInputs allRefs
+  dataDefs iMods genDefns tMods concIns citations
+  (labelledContent ++ funcReqsTables) allRefs
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

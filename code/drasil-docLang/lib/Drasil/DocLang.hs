@@ -55,7 +55,7 @@ module Drasil.DocLang (
   unitTableRef, tunit, tunit', tunitNone,
   -- ** Requirements
   -- Drasil.Sections.Requirements
-  inReq, inReqDesc, mkInputPropsTable, mkQRTuple, mkQRTupleRef,
+  inReqWTab, mkInputPropsTable, mkQRTuple, mkQRTupleRef,
   mkValsSourceTable, reqInputsRef, mkMaintainableNFR, mkPortableNFR,
   mkCorrectNFR, mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR,
   mkSecurityNFR,
@@ -93,9 +93,9 @@ import Drasil.Sections.AuxiliaryConstants (tableOfConstants)
 --import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.Introduction (purpDoc)
 import Drasil.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing)
-import Drasil.Sections.Requirements (inReq, inReqDesc, mkInputPropsTable,
+import Drasil.Sections.Requirements (mkInputPropsTable,
   mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
-  mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR)
+  mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR, inReqWTab)
 import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms

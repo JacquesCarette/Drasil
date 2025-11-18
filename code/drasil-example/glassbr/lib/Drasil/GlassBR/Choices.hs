@@ -1,17 +1,10 @@
 module Drasil.GlassBR.Choices where
 
-import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
+import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
   ConstantRepr(..), AuxFile(..), Visibility(..), makeArchit,
-  makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats,
-  defaultChoices)
-
-import Drasil.GlassBR.ModuleDefs (allMods)
-import Drasil.GlassBR.Body (fullSI)
-
-code :: CodeSpec
-code = codeSpec fullSI choices allMods
+  makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats)
 
 choices :: Choices
 choices = defaultChoices {

@@ -1,15 +1,12 @@
-module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
-
-import Control.Lens ((^.))
+module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
 import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc, inReq, inReqDesc, mkInputPropsTable)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.ExternalLibraries.ODELibraries
@@ -34,7 +31,7 @@ import Drasil.PDController.IModel (instanceModels, imPD)
 import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc, externalLinkRef,
        introUserChar1, introUserChar2, introscopeOfReq, scope)
 import Drasil.PDController.References (citations)
-import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
+import Drasil.PDController.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
@@ -43,19 +40,6 @@ import Drasil.PDController.ODEs (pidODEInfo)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS
@@ -95,7 +79,7 @@ mkSRS
                  ShowDerivation,
                Constraints EmptyS inputsUC]],
 
-     ReqrmntSec $ ReqsProg [FReqsSub inputValuesDescription [], NonFReqsSub], LCsSec,
+     ReqrmntSec $ ReqsProg [FReqsSub funcReqsTables, NonFReqsSub], LCsSec,
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
 si :: System
@@ -152,7 +136,7 @@ symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, 
   theoreticalModels
   conceptInstances
   citations
-  labelledContentWithInputs
+  (labelledContent ++ funcReqsTables)
   allRefs
 
 -- | Holds all references and links used in the document.

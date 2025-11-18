@@ -4,6 +4,8 @@ import Database.Drasil (ChunkDB, findOrErr)
 import Drasil.Code.CodeExpr.Development
 import Language.Drasil
 
+-- FIXME: Everything in this file needs to be deleted.
+
 -- | Construct a 'CodeVarChunk' from a 'Quantity'.
 quantvar :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeVarChunk
 quantvar c = CodeVC (CodeC (dqdWr c) Var) Nothing

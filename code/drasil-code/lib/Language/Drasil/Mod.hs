@@ -20,6 +20,8 @@ import Utils.Drasil (toPlainName)
 
 import Data.List ((\\), nub)
 
+-- FIXME: This probably belongs somewhere in Imperative land.
+
 -- | Type synonym for clarity.
 type Name = String
 -- | Type synonym for clarity.

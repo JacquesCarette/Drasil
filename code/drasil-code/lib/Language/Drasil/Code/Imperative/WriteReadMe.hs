@@ -11,6 +11,8 @@ import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 import Data.List.NonEmpty (nonEmpty, toList)
 
+-- FIXME: Put closer to definition of 'ReadMeInfo'.
+--
 -- | Generates a README file.
 makeReadMe :: ReadMeInfo -> Doc
 makeReadMe ReadMeInfo {

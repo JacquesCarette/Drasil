@@ -17,7 +17,7 @@ import Language.Drasil.Stages (Stage(..))
 
 import Utils.Drasil (toPlainName)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, implVarAU')
--- not using lenses for now
+
 -- | A 'CodeIdea' must include some code and its name.
 class CodeIdea c where
   -- | Name of the idea.

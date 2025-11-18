@@ -14,6 +14,8 @@ import Prelude hiding (pi)
 import qualified Data.Map as Map (mapWithKey)
 import Control.Monad.State (State, modify)
 
+-- FIXME: Move to `Language.Drasil.Choices`.
+--
 -- | Concretizes the ConceptMatchMap in Choices to a 'MatchedConceptMap'.
 -- Currently we don't have any Choices that would prevent a 'CodeConcept' from
 -- being mapped, so we just take the head of the list of 'CodeConcept's

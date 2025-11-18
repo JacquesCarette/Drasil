@@ -16,6 +16,8 @@ import Language.Drasil.Printers (symbolDoc)
 
 import Text.PrettyPrint.HughesPJ (render)
 
+-- FIXME: These are orphan instances?
+
 -- | Finds the code name of a 'CodeChunk'.
 instance CodeIdea    CodeChunk where
   codeName = render . symbolDoc . codeSymb . view qc
@@ -31,6 +33,8 @@ instance CodeIdea    CodeFuncChunk where
   codeName = codeName . view ccf
   codeChunk c = CodeC (view qc $ view ccf c) Func
 
+-- FIXME: Move closer to definition of CodeVarChunk.
+--
 -- | Combine an Object-type 'CodeChunk' with another 'CodeChunk' to create a new
 -- 'CodeChunk' which represents a field of the first. ex. @ccObjVar obj f = obj.f@.
 ccObjVar :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk

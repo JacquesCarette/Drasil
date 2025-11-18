@@ -47,7 +47,7 @@ introPara = foldlSent [
 
 -- Optional short name
 programNameWithShortForm :: Sentence
-programNameWithShortForm = 
+programNameWithShortForm =
   if hasDistinctShortForm progName
      then phrase progName +:+ sParen (short progName)
      else phrase progName
@@ -58,7 +58,7 @@ hasDistinctShortForm ci = case getA ci of
 
 -- Optional provenance information
 provenanceInfo :: Sentence
-provenanceInfo = 
+provenanceInfo =
   let hasProvenance = False
   in if hasProvenance
      then S ", which is based on the original, manually created version of" -- +:+ provenanceRef

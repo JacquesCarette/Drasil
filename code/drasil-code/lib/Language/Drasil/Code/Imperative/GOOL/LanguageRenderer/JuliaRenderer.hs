@@ -1,9 +1,13 @@
 {-# LANGUAGE TypeFamilies #-}
-
 -- | The logic to render Julia auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (
   JuliaProject(..)
 ) where
+
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import Text.PrettyPrint.HughesPJ (Doc, empty)
+
+import Drasil.GProc (onCodeList, jlName, jlVersion)
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
@@ -13,11 +17,6 @@ import qualified
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, DocConfig(..), interpMM)
-
-import Drasil.GProc (onCodeList, jlName, jlVersion)
-
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 -- | Holds a Julia project
 newtype JuliaProject a = JLP {unJLP :: a}

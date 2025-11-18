@@ -4,9 +4,18 @@
 module Language.Drasil.Code.ExtLibImport (ExtLibState(..), auxMods, defs,
   imports, modExports, steps, genExternalLibraryCall) where
 
+import Prelude hiding ((!!))
+import Control.Lens (makeLenses, (^.), over)
+import Control.Monad (zipWithM)
+import Control.Monad.State (State, execState, get, modify)
+import Data.List (nub, partition)
+import Data.List.NonEmpty (NonEmpty(..), (!!), toList)
+import Data.Maybe (isJust)
+
+import Language.Drasil (HasSpace(typ), getActorName)
+
 import Drasil.Code.CodeExpr (CodeExpr, ($&&), applyWithNamedArgs,
   msgWithNamedArgs, new, newWithNamedArgs, sy)
-import Language.Drasil (HasSpace(typ), getActorName)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName,
   ccObjVar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk)
@@ -20,14 +29,6 @@ import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
 import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   StepGroupFill(..), StepFill(..), FunctionIntFill(..), ArgumentFill(..),
   ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..))
-
-import Control.Lens (makeLenses, (^.), over)
-import Control.Monad (zipWithM)
-import Control.Monad.State (State, execState, get, modify)
-import Data.List (nub, partition)
-import Data.List.NonEmpty (NonEmpty(..), (!!), toList)
-import Data.Maybe (isJust)
-import Prelude hiding ((!!))
 
 -- | State object used during interpretation of an 'ExternalLibrary' and
 -- 'ExternalLibraryCall'.

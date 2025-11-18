@@ -2,14 +2,15 @@ module Language.Drasil.Code.Imperative.WriteReadMe (
   makeReadMe
 ) where
 
-import Language.Drasil.Choices (ImplementationType(..))
+import Prelude hiding ((<>))
+import Data.List.NonEmpty (nonEmpty, toList)
+import Text.PrettyPrint.HughesPJ (Doc, empty)
+
 import Language.Drasil.Printers (makeMd, introInfo, verInfo, unsupOS,
     extLibSec, instDoc, endNote, whatInfo)
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
 
-import Prelude hiding ((<>))
-import Text.PrettyPrint.HughesPJ (Doc, empty)
-import Data.List.NonEmpty (nonEmpty, toList)
+import Language.Drasil.Choices (ImplementationType(..))
+import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
 
 -- | Generates a README file.
 makeReadMe :: ReadMeInfo -> Doc

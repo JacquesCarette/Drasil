@@ -6,16 +6,15 @@ module Language.Drasil.Code.CodeGeneration (
   createCodeFiles
 ) where
 
-import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..))
-
-import Drasil.GOOL (FileData(..), ModData(modDoc))
-
-import Text.PrettyPrint.HughesPJ (Doc,render)
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
+import Text.PrettyPrint.HughesPJ (Doc,render)
 
+import Drasil.GOOL (FileData(..), ModData(modDoc))
 import Utils.Drasil (createDirIfMissing)
+
+import Language.Drasil.Code.Code (Code(..))
+import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..))
 
 -- | Makes code from 'FileData' ('FilePath's with module data) and 'AuxData' ('FilePath's with auxiliary document information).
 makeCode :: [FileData] -> [AuxData] -> Code

@@ -2,15 +2,16 @@ module Language.Drasil.Code.Imperative.Helpers (
   liftS, lookupC, convScope
 ) where
 
+import Control.Lens ((^.))
+import Control.Monad.State (State)
+
 import Drasil.Database (UID, findOrErr)
 import Language.Drasil (DefinedQuantityDict)
+import Drasil.GOOL (SharedProg, ScopeSym(..))
+
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..),
   ScopeType(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
-import Drasil.GOOL (SharedProg, ScopeSym(..))
-
-import Control.Monad.State (State)
-import Control.Lens ((^.))
 
 -- | Puts a state-dependent value into a singleton list.
 liftS :: State a b -> State a [b]

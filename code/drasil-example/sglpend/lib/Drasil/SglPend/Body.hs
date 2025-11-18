@@ -128,25 +128,10 @@ symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = externalLinkRef : SRS.sectionReferences ++ map ref labelledContentWithInputs
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref (labelledContent ++ funcReqsTables)
 
 concIns :: [ConceptInstance]
-concIns = inputValuesRequirement : (assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs)
-
-labelledContentWithInputs :: [LabelledContent]
-labelledContentWithInputs = inputValuesTable : labelledContent
-
-inputValuesTable :: LabelledContent
-inputValuesTable = mkInputPropsTable inputs
-
-inputValuesDescription :: Sentence
-inputValuesDescription = S "the single pendulum parameters"
-
-inputValuesSentence :: Sentence
-inputValuesSentence = inReqDesc inputValuesTable inputValuesDescription
-
-inputValuesRequirement :: ConceptInstance
-inputValuesRequirement = inReq inputValuesSentence
+concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 
 ------------------------------
 -- Section : INTRODUCTION --

@@ -10,7 +10,6 @@ import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import Drasil.Generator (cdb)
-import qualified Drasil.DocLang as DocLang (inReqDesc)
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel, sectionReferences)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -144,22 +143,13 @@ symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = externalLinkRef : SRS.sectionReferences ++ map ref (inputValuesTable : funcReqsTables)
-
-inputValuesTable :: LabelledContent
-inputValuesTable = mkInputPropsTable inputs
-
-inputValuesRequirement :: ConceptInstance
-inputValuesRequirement = inReq inputValuesSentence
-
-inputValuesSentence :: Sentence
-inputValuesSentence = DocLang.inReqDesc inputValuesTable inReqDesc
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref (funcReqsTables ++ figures)
 
 concIns :: [ConceptInstance]
-concIns = inputValuesRequirement : (assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs)
+concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
 
 labCon :: [LabelledContent]
-labCon = inputValuesTable : (funcReqsTables ++ figures)
+labCon = funcReqsTables ++ figures
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

@@ -6,7 +6,6 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
-import qualified Drasil.DocLang as DocLang (inReqDesc)
 import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -102,7 +101,7 @@ abbreviationsList =
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = externalLinkRef : SRS.sectionReferences ++ map ref labelledContentWithInputs ++ uriReferences
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref (funcReqsTables ++ labelledContent) ++ uriReferences
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -155,21 +154,9 @@ tSymbIntro = [TSPurpose, SymbConvention
 insModel :: [InstanceModel]
 insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
-labelledContentWithInputs :: [LabelledContent]
-labelledContentWithInputs = inputValuesTable : labelledContent
-
-inputValuesTable :: LabelledContent
-inputValuesTable = mkInputPropsTable inputs
-
-inputValuesSentence :: Sentence
-inputValuesSentence = DocLang.inReqDesc inputValuesTable inReqDesc
-
-inputValuesRequirement :: ConceptInstance
-inputValuesRequirement = inReq inputValuesSentence
-
 concIns :: [ConceptInstance]
-concIns = inputValuesRequirement :
-  (goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nfRequirements)
+concIns =
+  assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nfRequirements
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

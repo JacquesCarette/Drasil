@@ -171,28 +171,13 @@ abbreviationsList  =
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = externalLinkRef : SRS.sectionReferences ++ map ref labelledContentWithInputs
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref (labelledContent ++ funcReqsTables)
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-labelledContentWithInputs :: [LabelledContent]
-labelledContentWithInputs = inputValuesTable : labelledContent
-
-inputValuesTable :: LabelledContent
-inputValuesTable = mkInputPropsTable inputs
-
-inputValuesDescription :: Sentence
-inputValuesDescription = S "the initial launch conditions"
-
-inputValuesSentence :: Sentence
-inputValuesSentence = inReqDesc inputValuesTable inputValuesDescription
-
-inputValuesRequirement :: ConceptInstance
-inputValuesRequirement = inReq inputValuesSentence
-
 concIns :: [ConceptInstance]
-concIns = inputValuesRequirement : (assumptions ++ funcReqs ++ goals ++ nonfuncReqs)
+concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
 
 ----------------------------------------
 -- Characteristics of Intended Reader --

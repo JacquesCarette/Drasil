@@ -3,22 +3,16 @@ module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 import Data.List ((\\))
 
 import Language.Drasil hiding (section)
-import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc, inReq, mkInputPropsTable)
+import Drasil.Metadata (inModel)
 import Drasil.Generator (cdb)
-import qualified Drasil.DocLang as DocLang (inReqDesc)
-import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
+import qualified Drasil.DocLang.SRS as SRS (inModel, inModelLabel, sectionReferences)
 import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
 
-import Drasil.Metadata (inModel)
-import Drasil.SRSDocument
-import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Drasil.Generator (cdb)
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Documentation (material_)
@@ -147,9 +141,9 @@ mkSRS = [TableOfContents,
   Bibliography]
 
 concIns :: [ConceptInstance]
-concIns = inputValuesRequirement :
-  (goals ++ funcReqs ++ nfRequirements ++ assumptions ++
-   [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs)
+concIns =
+  assumptions ++ goals ++ funcReqs ++ nfRequirements ++
+  [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -201,19 +195,9 @@ abbreviationsList =
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef, externalLinkRef'] ++ SRS.sectionReferences ++ map ref labelledContentWithInputs ++ uriReferences
-
-labelledContentWithInputs :: [LabelledContent]
-labelledContentWithInputs = inputValuesTable : labelledContent
-
-inputValuesTable :: LabelledContent
-inputValuesTable = mkInputPropsTable inputs
-
-inputValuesSentence :: Sentence
-inputValuesSentence = DocLang.inReqDesc inputValuesTable inReqDesc
-
-inputValuesRequirement :: ConceptInstance
-inputValuesRequirement = inReq inputValuesSentence
+allRefs =
+  [externalLinkRef, externalLinkRef'] ++
+  SRS.sectionReferences ++ map ref (labelledContent ++ funcReqsTables) ++ uriReferences
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -256,7 +240,7 @@ scope = phrase thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [D.toSent (atStartNP (the inModel)),
   S "to be solved" `S.is` S "referred to as" +:+. refS eBalanceOnWtr,
-  D.toSent (atStartNP (the inModel)), S "provides the", titleize ode,
+  refS SRS.inModelLabel, S "provides the", titleize ode,
   sParen (short ode), S "that models the" +:+. phrase progName,
   short progName, S "solves this", short ode]
 

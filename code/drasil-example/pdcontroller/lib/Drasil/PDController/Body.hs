@@ -141,7 +141,7 @@ symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, 
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = externalLinkRef : SRS.sectionReferences ++ map ref labelledContentWithInputs
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref (labelledContent ++ funcReqsTables)
 
 abbreviationsList  :: [IdeaDict]
 abbreviationsList  =
@@ -150,23 +150,8 @@ abbreviationsList  =
   -- QuantityDicts
   map nw symbolsAll
 
-labelledContentWithInputs :: [LabelledContent]
-labelledContentWithInputs = inputValuesTable : labelledContent
-
-inputValuesTable :: LabelledContent
-inputValuesTable = mkInputPropsTable inputs
-
-inputValuesDescription :: Sentence
-inputValuesDescription = S "the tunable controller parameters"
-
-inputValuesSentence :: Sentence
-inputValuesSentence = inReqDesc inputValuesTable inputValuesDescription
-
-inputValuesRequirement :: ConceptInstance
-inputValuesRequirement = inReq inputValuesSentence
-
 conceptInstances :: [ConceptInstance]
-conceptInstances = inputValuesRequirement : (assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs)
+conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs
 
 stdFields :: Fields
 stdFields

@@ -150,28 +150,13 @@ symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = externalLinkRef : SRS.sectionReferences ++ map ref labelledContentWithInputs
+allRefs = externalLinkRef : SRS.sectionReferences ++ map ref (labelledContent ++ funcReqsTables)
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-labelledContentWithInputs :: [LabelledContent]
-labelledContentWithInputs = inputValuesTable : labelledContent
-
-inputValuesTable :: LabelledContent
-inputValuesTable = mkInputPropsTable inputs
-
-inputValuesDescription :: Sentence
-inputValuesDescription = S "the initial double pendulum configuration"
-
-inputValuesSentence :: Sentence
-inputValuesSentence = inReqDesc inputValuesTable inputValuesDescription
-
-inputValuesRequirement :: ConceptInstance
-inputValuesRequirement = inReq inputValuesSentence
-
 concIns :: [ConceptInstance]
-concIns = inputValuesRequirement : (assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs)
+concIns = assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs
 -- ++ likelyChgs ++ unlikelyChgs
 
 ------------------------------

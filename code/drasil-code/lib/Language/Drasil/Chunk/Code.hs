@@ -16,6 +16,13 @@ import Language.Drasil.Printers (symbolDoc)
 
 import Text.PrettyPrint.HughesPJ (render)
 
+-- FIXME: This file contains:
+-- 1. Orphan instances of `CodeIdea`.
+-- 2. A `CodeVarChunk` combinator that relies on these orphan instances.
+--
+-- The contents of this file should be merged in with `Drasil.Code.CodeVar`
+-- (currently from `drasil-lang`) when this module is merged into `drasil-code`.
+
 -- | Finds the code name of a 'CodeChunk'.
 instance CodeIdea    CodeChunk where
   codeName = render . symbolDoc . codeSymb . view qc

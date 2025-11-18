@@ -20,6 +20,8 @@ import Utils.Drasil (toPlainName)
 
 import Data.List ((\\), nub)
 
+-- FIXME: This probably belongs somewhere in Imperative land.
+
 -- | Type synonym for clarity.
 type Name = String
 -- | Type synonym for clarity.
@@ -165,11 +167,11 @@ fstdecl :: ChunkDB -> [FuncStmt] -> [CodeVarChunk]
 fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declared ctx) fsts)
   where
     fstvars :: ChunkDB -> FuncStmt -> [CodeVarChunk]
-    fstvars sm (FDecDef cch e) = cch:codevars' e sm
+    fstvars sm (FDecDef cch e) = cch : codevars' e sm
     fstvars sm (FFuncDef cch ps sts) = quantvar cch : map quantvar ps
       ++ concatMap (fstvars sm) sts
-    fstvars sm (FAsg cch e) = cch:codevars' e sm
-    fstvars sm (FAsgIndex cch _ e) = cch:codevars' e sm
+    fstvars sm (FAsg cch e) = cch : codevars' e sm
+    fstvars sm (FAsgIndex cch _ e) = cch : codevars' e sm
     fstvars sm (FFor cch s e st fs) = nub $ cch : codevars' e sm ++ codevars' s sm
        ++ codevars' st sm ++ concatMap (fstvars sm) fs
     fstvars sm (FForEach cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)

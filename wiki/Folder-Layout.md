@@ -15,6 +15,7 @@ There are a lot of folders in Drasil, and it can be especially confusing to a fi
 | `drasil-lang`      | Representation language for Drasil, often with Chunks. |
 | `drasil-metadata`  | Metadata used throughout Drasil. Currently just domains. |
 | `drasil-printers`  | Document renderer. Can print for `.dot`, `.tex`, `.html`, and `.md` files |
+| `drasil-system`    | Defines types and functions related to creating a system information database |
 | `drasil-theory`    | General requirements knowledge for generating SRS with Definitions and Models |
 | `drasil-utils`     | Various utility functions. |
 | `drasil-website`   | Website generator for Drasil. |

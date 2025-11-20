@@ -14,7 +14,7 @@ module Language.Drasil.Chunk.NamedIdea (
 
 import Control.Lens ((^.), makeLenses, Lens')
 
-import Drasil.Database (mkUid, UID, HasUID(..), declareChunkType, Generically(..))
+import Drasil.Database (mkUid, UID, HasUID(..), declareHasChunkRefs, Generically(..))
 import Language.Drasil.NounPhrase.Core (NP)
 
 -- TODO: Why does a NamedIdea need a UID? It might need a UID to be registered in the chunk map.
@@ -55,7 +55,7 @@ data IdeaDict = IdeaDict {
   _np :: NP,
   mabbr :: Maybe String
 }
-declareChunkType ''IdeaDict
+declareHasChunkRefs ''IdeaDict
 makeLenses ''IdeaDict
 
 -- | Equal if 'UID's are equal.

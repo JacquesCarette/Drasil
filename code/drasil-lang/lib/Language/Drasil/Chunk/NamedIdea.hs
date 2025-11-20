@@ -15,7 +15,7 @@ module Language.Drasil.Chunk.NamedIdea (
 import Control.Lens ((^.), makeLenses, Lens')
 
 import Drasil.Database.UID (mkUid, UID, HasUID(..))
-import Drasil.Database.TH (declareChunkType, Generically(..))
+import Drasil.Database.TH (declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.NounPhrase.Core (NP)
 
@@ -57,7 +57,7 @@ data IdeaDict = IdeaDict {
   _np :: NP,
   mabbr :: Maybe String
 }
-declareChunkType ''IdeaDict
+declareHasChunkRefs ''IdeaDict
 makeLenses ''IdeaDict
 
 -- | Equal if 'UID's are equal.

@@ -11,7 +11,7 @@ import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe)
-import qualified Data.Map as Map (elems, keys)
+import qualified Data.Map as Map (keys)
 
 import Utils.Drasil (invert)
 
@@ -32,9 +32,9 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (findOrErr, ChunkDB(..))
+import Database.Drasil (findOrErr, ChunkDB(..), insertAll)
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
-  findAllInstMods, findAllTheoryMods, findAllConcInsts)
+  findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 
 import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
@@ -108,12 +108,12 @@ fillLC sd si@SI{ _sys = sn }
     chkdb = si ^. systemdb
     -- Pre-generate a copy of all required LabelledContents (i.e., traceability
     -- graphs) for insertion in the ChunkDB.
-    createdLCs = M.fromList $ map (\x -> (x ^. uid, x)) $ genTraceGraphLabCons $ programName sn
+    createdLCs = genTraceGraphLabCons $ programName sn
     -- FIXME: This is a semi-hack. This is only strictly necessary for the
     -- traceability graphs. Those are all chunks that should exist but not be
     -- handled like this. They should be created and included in the
     -- meta-ChunkDB of `drasil-docLang`.
-    chkdb2 = chkdb { labelledcontentTable = M.union (labelledcontentTable chkdb) createdLCs }
+    chkdb2 = insertAll createdLCs chkdb
     si2 = set systemdb chkdb2 si
 
     containsTraceSec :: DocDesc -> Bool
@@ -136,7 +136,7 @@ fillReferences allSections si@SI{_sys = sys} = si2
     imods   = findAllInstMods chkdb
     tmods   = findAllTheoryMods chkdb
     concIns = findAllConcInsts chkdb
-    lblCon  = Map.elems $ labelledcontentTable chkdb
+    lblCon  = findAllLabelledContent chkdb
     newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $ refsFromSRS
       ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
       ++ secRefs -- secRefs can be removed once #946 is complete

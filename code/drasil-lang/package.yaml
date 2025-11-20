@@ -18,6 +18,7 @@ dependencies:
 - aeson
 - lens
 - split
+- template-haskell
 - text
 - Decimal
 - unicode-names >= 3.2.0.0

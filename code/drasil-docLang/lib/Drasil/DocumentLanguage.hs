@@ -11,7 +11,7 @@ import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe)
-import qualified Data.Map as Map (elems, assocs, keys)
+import qualified Data.Map as Map (elems, keys)
 
 import Utils.Drasil (invert)
 
@@ -32,9 +32,9 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (findOrErr, idMap, ChunkDB(..))
+import Database.Drasil (findOrErr, idMap, ChunkDB(..), insertAll)
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
-  findAllInstMods, findAllTheoryMods, findAllConcInsts)
+  findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 
 import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
@@ -112,8 +112,7 @@ fillLC sd si@SI{ _sys = sn }
     -- traceability graphs. Those are all chunks that should exist but not be
     -- handled like this. They should be created and included in the
     -- meta-ChunkDB of `drasil-docLang`.
-    existingLC = map (fst . snd) $ Map.assocs $ labelledcontentTable chkdb
-    chkdb2 = chkdb { labelledcontentTable = idMap $ nub $ existingLC ++ createdLCs }
+    chkdb2 = insertAll createdLCs chkdb
     si2 = set systemdb chkdb2 si
 
     containsTraceSec :: DocDesc -> Bool
@@ -136,7 +135,7 @@ fillReferences allSections si@SI{_sys = sys} = si2
     imods   = findAllInstMods chkdb
     tmods   = findAllTheoryMods chkdb
     concIns = findAllConcInsts chkdb
-    lblCon  = map fst $ Map.elems $ labelledcontentTable chkdb
+    lblCon  = findAllLabelledContent chkdb
     -- search the old reference table just in case the user wants to manually add in some references
     refs    = map fst $ Map.elems $ refTable chkdb
     -- set new reference table in the chunk database

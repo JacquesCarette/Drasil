@@ -18,7 +18,6 @@ module Database.Drasil.ChunkDB (
   insertAllOutOfOrder12,
   UMap, idMap,
   refTable, refFind,
-  labelledcontentTable, labelledcontentFind,
   refbyTable, refbyLookup,
   traceTable, traceLookup
 ) where
@@ -37,7 +36,7 @@ import qualified Data.Set as S
 
 import Drasil.Database.Chunk (Chunk, HasChunkRefs(chunkRefs), IsChunk,
   mkChunk, unChunk, chunkType)
-import Language.Drasil (HasUID(..), UID, LabelledContent, Reference)
+import Language.Drasil (HasUID(..), UID, Reference)
 import Utils.Drasil (invert)
 
 -- | A chunk that depends on another.
@@ -57,12 +56,9 @@ data ChunkDB = ChunkDB {
   -- FIXME: All things below need to be rebuilt!!
 
   -- FIXME: All code in this file contains hacks specifically for the old
-  -- LabelledContent and Reference chunks. Once rebuilt, these chunks should not
-  -- have a unique 'UID' and should be registered in the 'ChunkDB' like any
-  -- other chunk.
+  -- Reference chunks. Once rebuilt, these chunks should not have a unique 'UID'
+  -- and should be registered in the 'ChunkDB' like any other chunk.
 
-  -- TODO: LabelledContent needs to be rebuilt. See JacquesCarette/Drasil#4023.
-  , labelledcontentTable :: UMap LabelledContent
   -- TODO: References need to be rebuilt. See JacquesCarette/Drasil#4022.
   , refTable             :: UMap Reference
   , traceTable           :: M.Map UID [UID]
@@ -71,7 +67,7 @@ data ChunkDB = ChunkDB {
 
 -- | An empty 'ChunkDB'.
 empty :: ChunkDB
-empty = ChunkDB M.empty M.empty M.empty M.empty M.empty M.empty
+empty = ChunkDB M.empty M.empty M.empty M.empty M.empty
 
 -- | Create a 'ChunkDB' from a list of chunks. This will insert all chunks into
 -- the database from the list, from left to right.
@@ -82,28 +78,24 @@ fromList = flip insertAll empty
 registered :: ChunkDB -> [UID]
 registered cdb =
      M.keys (chunkTable cdb)
-  ++ M.keys (labelledcontentTable cdb)
   ++ M.keys (refTable cdb)
 
 -- | Check if a 'UID' is registered in the 'ChunkDB'.
 isRegistered :: UID -> ChunkDB -> Bool
 isRegistered u cdb =
      M.member u (chunkTable cdb)
-  || M.member u (labelledcontentTable cdb)
   || M.member u (refTable cdb)
 
 -- | Enumerate all types registered in the 'ChunkDB'.
 typesRegistered :: ChunkDB -> [TypeRep]
 typesRegistered cdb =
-    typeRep (Proxy @LabelledContent)
-  : typeRep (Proxy @Reference)
+    typeRep (Proxy @Reference)
   : M.keys (chunkTypeTable cdb)
 
 -- | Get the number of chunks registered in the 'ChunkDB'.
 size :: ChunkDB -> Int
 size cdb =
     M.size (chunkTable cdb)
-  + M.size (labelledcontentTable cdb)
   + M.size (refTable cdb)
 
 -- | Filter the 'ChunkDB' for chunks that are not needed by any other chunks.
@@ -126,8 +118,6 @@ findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u ++ " (expecte
 -- | Find all chunks of a specific type in the 'ChunkDB'.
 findAll :: forall a. IsChunk a => ChunkDB -> [a]
 findAll cdb
-  | tr == typeRep (Proxy @LabelledContent) =
-      mapMaybe (cast . fst) $ M.elems $ labelledcontentTable cdb
   | tr == typeRep (Proxy @Reference) =
       mapMaybe (cast . fst) $ M.elems $ refTable cdb
   | otherwise =
@@ -139,8 +129,6 @@ findAll cdb
 -- rather than the chunks themselves.
 findAll' :: TypeRep -> ChunkDB -> [UID]
 findAll' tr cdb
-  | tr == typeRep (Proxy @LabelledContent) =
-      M.keys $ labelledcontentTable cdb
   | tr == typeRep (Proxy @Reference) =
       M.keys $ refTable cdb
   | otherwise =
@@ -235,12 +223,13 @@ insertAll as cdb = foldl' (flip insert) cdb as
 -- 'Reference's.
 insertAllOutOfOrder12 ::
   (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e,
-   IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j) =>
+   IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j,
+   IsChunk k) =>
    ChunkDB ->
    [a] -> [b] -> [c] -> [d] -> [e] ->
    [f] -> [g] -> [h] -> [i] -> [j] ->
-   [LabelledContent] -> [Reference] -> ChunkDB
-insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
+   [k] -> [Reference] -> ChunkDB
+insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js ks rs =
   let
     -- Box all of our chunks
     as' = map mkChunk as
@@ -253,12 +242,12 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
     hs' = map mkChunk hs
     is' = map mkChunk is
     js' = map mkChunk js
+    ks' = map mkChunk ks
 
     -- Put all of our chunks in a list of lists, with each list carrying a
     -- unique type of chunk, filtering out empty lists
     altogether = filter (not . null)
-                  [as', bs', cs', ds', es',
-                   fs', gs', hs', is', js']
+                  [as', bs', cs', ds', es', fs', gs', hs', is', js', ks']
     calt = concat altogether
 
     -- Calculate what chunks are depended on (i.e., UID -> Dependants)
@@ -282,7 +271,6 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
     -- Create the updated chunk database, adding the LCs and Rs, ignoring their dependencies.
     strtr { chunkTable = chTabWDeps
           , chunkTypeTable = chTT
-          , labelledcontentTable = idMap $ findAll strtr ++ lcs
           , refTable = idMap $ findAll strtr ++ rs }
 
 -- | An ordered map based on 'Data.Map.Strict' for looking up chunks by their
@@ -298,11 +286,6 @@ idMap vals = M.fromList $ zipWith (\v i -> (v ^. uid, (v, i))) vals [0..]
 uMapLookup :: String -> String -> UID -> UMap a -> a
 uMapLookup tys ms u t = getFM $ M.lookup u t
   where getFM = maybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms) fst
-
--- | Find a 'LabelledContent' by its 'UID', throwing an error if it is not
--- found.
-labelledcontentFind :: UID -> ChunkDB -> LabelledContent
-labelledcontentFind u cdb = uMapLookup "LabelledContent" "labelledcontentTable" u (labelledcontentTable cdb)
 
 -- | Find a 'Reference' by its 'UID', throwing an error if it is not found.
 refFind :: UID -> ChunkDB -> Reference

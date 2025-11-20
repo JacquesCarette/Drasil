@@ -6,21 +6,20 @@
              FlexibleContexts,
              UndecidableInstances,
              FlexibleInstances #-}
-module Drasil.Database.Chunk
-  ( Chunk,
-    IsChunk,
-    HasChunkRefs (..),
-    mkChunk, -- FIXME: mkChunk should not be exported but is temporarily because this module is NOT in `drasil-database`
-    unChunk,
-    chunkType
-  )
-where
+module Drasil.Database.Chunk (
+  Chunk,
+  IsChunk,
+  HasChunkRefs(..),
+  mkChunk, -- FIXME: mkChunk should not be exported but is temporarily because this module is NOT in `drasil-database`
+  unChunk,
+  chunkType
+) where
 
 import Control.Lens ((^.), to, Getter)
-import qualified Data.Foldable as F
 import qualified Data.Set as S
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, cast, typeOf, typeRep)
-import GHC.Generics (Generic (Rep, from), M1 (..), K1 (..), type (:*:) (..), type (:+:) (..), U1, Generically(..))
+import GHC.Generics (Generic (Rep, from), M1 (..), K1 (..), type (:*:) (..),
+  type (:+:) (..), U1, Generically(..))
 
 import Drasil.Database.UID (HasUID (..), UID)
 
@@ -64,24 +63,52 @@ chunkType (Chunk c) = typeOf c
 class HasChunkRefs a where
   chunkRefs :: a -> S.Set UID
 
-instance HasChunkRefs String where
-  chunkRefs _ = S.empty
-  {-# INLINABLE chunkRefs #-}
-
-instance HasChunkRefs a => HasChunkRefs [a] where
-  chunkRefs = F.foldl' S.union S.empty . map chunkRefs
-  {-# INLINABLE chunkRefs #-}
-
-instance HasChunkRefs (Maybe String) where
-  chunkRefs _ = S.empty
-  {-# INLINABLE chunkRefs #-}
-
 instance HasChunkRefs UID where
   -- | UIDs are UIDs, not *UID references*, a TypedUIDRef is a *reference*.
   -- Therefore, `UID` has no chunk references. They should only be used for the
   -- UID of a thing being defined, *not as a reference (unless specifically
   -- within the 'ChunkDB')*.
   chunkRefs _ = S.empty
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs Int where
+  chunkRefs _ = S.empty
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs Integer where
+  chunkRefs _ = S.empty
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs Double where
+  chunkRefs _ = S.empty
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs Bool where
+  chunkRefs _ = S.empty
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs Char where
+  chunkRefs _ = S.empty
+  {-# INLINABLE chunkRefs #-}
+
+-- NOTE: 'OVERLAPPING' instance here because [Char] is instantiated with
+-- `HasChunkRefs [a]`, but very inefficient. We already know the result will be
+-- empty.
+instance {-# OVERLAPPING #-} HasChunkRefs String where
+  chunkRefs _ = S.empty
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs a => HasChunkRefs [a] where
+  chunkRefs = S.unions . map chunkRefs
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs a => HasChunkRefs (Maybe a) where
+  chunkRefs Nothing = S.empty
+  chunkRefs (Just v) = chunkRefs v
+  {-# INLINABLE chunkRefs #-}
+
+instance (HasChunkRefs l, HasChunkRefs r) => HasChunkRefs (Either l r) where
+  chunkRefs = either chunkRefs chunkRefs
   {-# INLINABLE chunkRefs #-}
 
 instance (Generic a, GHasCRefs (Rep a)) => HasChunkRefs (Generically a) where

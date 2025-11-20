@@ -150,11 +150,11 @@ fillReferences allSections si@SI{_sys = sys} = si2
 
 -- | Recursively find all references in a section (meant for getting at 'LabelledContent').
 findAllRefs :: Section -> [Reference]
-findAllRefs (Section _ cs r) = r: concatMap findRefSecCons cs
+findAllRefs (Section _ cs r) = r : concatMap findRefSecCons cs
   where
     findRefSecCons :: SecCons -> [Reference]
     findRefSecCons (Sub s) = findAllRefs s
-    findRefSecCons (Con (LlC (LblC rf _))) = [rf]
+    findRefSecCons (Con (LlC (LblC _ rf _))) = [rf]
     findRefSecCons _ = []
 
 -- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.

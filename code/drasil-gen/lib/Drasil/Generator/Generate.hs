@@ -27,7 +27,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
   makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)
 import Drasil.SRSDocument (System, SRSDecl, defaultConfiguration, piSys,
-  PrintingInformation, fillcdbSRS, mkDoc)
+  PrintingInformation, mkDoc)
 import Drasil.System (systemdb, System(SI, _sys))
 import Utils.Drasil (createDirIfMissing)
 import Drasil.Generator.ChunkDump (dumpEverything)
@@ -37,13 +37,12 @@ import Drasil.Generator.TypeCheck (typeCheckSI)
 -- | Generate an SRS softifact.
 exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO System
 exportSmithEtAlSrs syst srsDecl srsFileName = do
-  let sd@(syst', _) = fillcdbSRS srsDecl syst
-      srs = mkDoc srsDecl S.forT sd
+  let (srs, syst') = mkDoc syst srsDecl S.forT
       printfo = piSys (syst' ^. systemdb) Equational defaultConfiguration
   dumpEverything syst' printfo ".drasil/"
   typeCheckSI syst'
   genDoc (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
-  genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
+  genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)! -- This requires the refbyTable and traceTables to be "full"
   return syst' -- FIXME: `fillcdbSRS` does some stuff that the code generator needs (or else it errors out!)! What?
 
 -- | Internal: Generate an ICO-style executable softifact.

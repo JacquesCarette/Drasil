@@ -12,7 +12,7 @@ module Drasil.System (
   -- ** Lenses
   HasSystem(..),
   -- ** Functions
-  whatsTheBigIdea, mkSystem,
+  whatsTheBigIdea, mkSystem, sysName,
   -- * Reference Database
   -- ** Types
   Purpose, Background, Scope, Motivation
@@ -94,3 +94,7 @@ mkSystem :: (CommonIdea a, Idea a,
     [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
     [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
 mkSystem = SI
+
+-- FIXME: sysName is a hack.
+sysName :: System -> IdeaDict
+sysName SI{_sys = sys} = nw sys

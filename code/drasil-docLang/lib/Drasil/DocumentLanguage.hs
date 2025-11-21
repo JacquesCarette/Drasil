@@ -75,8 +75,14 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (System, DocDesc) -> Document
 mkDoc srs comb (si@SI {_sys = sys, _authors = docauthors}, dd) =
-  Document (whatsTheBigIdea si `comb` nw sys) (foldlList Comma List $ map (S . name) docauthors)
-    (findToC srs) $ mkSections si dd
+  let heading = (whatsTheBigIdea si `comb` nw sys)
+      authorsList = (foldlList Comma List $ map (S . name) docauthors)
+      toc = findToC srs
+      cont = mkSections si dd
+  in Document heading authorsList toc cont
+
+-- FIXME: Fuse `mkDoc` with `fillcdbSRS` and explain why `fillcdbSRS` is not
+-- horrible for what we have left over.
 
 -- * Functions to Fill 'ChunkDB'
 
@@ -89,7 +95,7 @@ mkDoc srs comb (si@SI {_sys = sys, _authors = docauthors}, dd) =
 -- | Assuming a given 'ChunkDB' with no traces and minimal/no references, fill
 -- in for rest of system information. Currently fills in references,
 -- traceability matrix information and 'IdeaDict's.
-fillcdbSRS :: SRSDecl -> System -> (System , DocDesc)
+fillcdbSRS :: SRSDecl -> System -> (System, DocDesc)
 fillcdbSRS srsDec si =
   (fillLC dd $ fillReferences sections $ fillTraceMaps dd si , dd)
   where

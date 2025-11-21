@@ -32,7 +32,7 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (findOrErr, idMap, ChunkDB(..), insertAll)
+import Database.Drasil (findOrErr, ChunkDB(..), insertAll, insertRefs)
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 
@@ -137,15 +137,16 @@ fillReferences allSections si@SI{_sys = sys} = si2
     concIns = findAllConcInsts chkdb
     lblCon  = findAllLabelledContent chkdb
     -- search the old reference table just in case the user wants to manually add in some references
-    refs    = map fst $ Map.elems $ refTable chkdb
-    -- set new reference table in the chunk database
-    chkdb2 = chkdb { refTable = idMap $ nub $ refsFromSRS
+    refs    = Map.elems $ refTable chkdb
+    moreRefs = refsFromSRS
       ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
       ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (programName sys) ++ map ref cites
       ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref lblCon
-      ++ refs }
+      ++ refs
+    -- set new reference table in the chunk database
+    chkdb2 = chkdb { refTable = insertRefs moreRefs (refTable chkdb) }
     -- set new chunk database into system information
     si2 = set systemdb chkdb2 si
 

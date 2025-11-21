@@ -16,8 +16,7 @@ module Database.Drasil.ChunkDB (
   insert, insertAll,
   -- * Temporary functions
   insertAllOutOfOrder12,
-  UMap, idMap,
-  refTable, refFind,
+  insertRefs, refTable, refFind,
   refbyTable, refbyLookup,
   traceTable, traceLookup
 ) where
@@ -60,7 +59,7 @@ data ChunkDB = ChunkDB {
   -- and should be registered in the 'ChunkDB' like any other chunk.
 
   -- TODO: References need to be rebuilt. See JacquesCarette/Drasil#4022.
-  , refTable             :: UMap Reference
+  , refTable             :: M.Map UID Reference
   , traceTable           :: M.Map UID [UID]
   , refbyTable           :: M.Map UID [UID]
 }
@@ -119,7 +118,7 @@ findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u ++ " (expecte
 findAll :: forall a. IsChunk a => ChunkDB -> [a]
 findAll cdb
   | tr == typeRep (Proxy @Reference) =
-      mapMaybe (cast . fst) $ M.elems $ refTable cdb
+      mapMaybe cast $ M.elems $ refTable cdb
   | otherwise =
       maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
   where
@@ -267,29 +266,21 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js ks rs =
     -- Create the list of new chunk types and add them to the previous list of chunk types
     chTys = M.fromList (map (\chs -> (chunkType $ head chs, chs)) altogether)
     chTT = M.unionWith (++) (chunkTypeTable strtr) chTys
+
+    -- Update the references table
+    refTable' = insertRefs rs (refTable strtr)
   in
     -- Create the updated chunk database, adding the LCs and Rs, ignoring their dependencies.
     strtr { chunkTable = chTabWDeps
           , chunkTypeTable = chTT
-          , refTable = idMap $ findAll strtr ++ rs }
+          , refTable = refTable' }
 
--- | An ordered map based on 'Data.Map.Strict' for looking up chunks by their
--- 'UID's.
-type UMap a = M.Map UID (a, Int)
-
--- | Create a 'UMap' from a list of chunks. Assumes that the leftmost chunk in
--- the list has index 0, increasing by 1 each step to the right.
-idMap :: HasUID a => [a] -> UMap a
-idMap vals = M.fromList $ zipWith (\v i -> (v ^. uid, (v, i))) vals [0..]
-
--- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown.
-uMapLookup :: String -> String -> UID -> UMap a -> a
-uMapLookup tys ms u t = getFM $ M.lookup u t
-  where getFM = maybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms) fst
+insertRefs :: [Reference] -> M.Map UID Reference -> M.Map UID Reference
+insertRefs rs refTbl = M.union refTbl (M.fromList $ map (\x -> (x ^. uid, x)) rs)
 
 -- | Find a 'Reference' by its 'UID', throwing an error if it is not found.
 refFind :: UID -> ChunkDB -> Reference
-refFind u cdb = uMapLookup "Reference" "refTable" u (refTable cdb)
+refFind u = fromMaybe (error $ "`" ++ show u ++ "` not found in ChunkDB RefTable.") . M.lookup u . refTable
 
 -- | Find what chunks reference a given 'UID'.
 refbyLookup :: UID -> M.Map UID [UID] -> [UID]

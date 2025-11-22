@@ -81,10 +81,7 @@ structure (`ChunkDB`).
 
 **Note: The instructions of this tutorial were last updated for a [commit on 29 Oct 2022](https://github.com/JacquesCarette/Drasil/commit/b555167ce688040b766742b03442fbf7af750087).**
 
-After all installation tasks and forking is completed and you are able to run existing example projects in Drasil, you are ready to create your own. You can use [Visual Studio Code](https://code.visualstudio.com/), [Sublime](https://www.sublimetext.com/) or any other editor that you are familiar with.
-- VS Code makes it easier to search folders and sub-folders.
-- Sublime creates links to occurrences of parameters or functions used within your package and other example packages (it only create links to files open files on your machine when you point with your cursor).
-
+After all installation tasks and forking is completed and you are able to run existing example projects in Drasil, you are ready to create your own. You can use [Visual Studio Code](https://code.visualstudio.com/) or any other editor that you are familiar with.
 
 ## Adding a New User and Project Sub-Folder
 

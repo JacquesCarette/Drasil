@@ -13,6 +13,9 @@ This is a place to organize our "Working Notes". See [#4429](../issues/4429) for
   - [DefinedQuantityDict](DefinedQuantityDict)
   - [Concept Chunk (and Related Chunks)](<Concept-Chunk-(and-Related-Chunks)>)
 
+## Dr. Smith
+- [Getting to Know Potential Users of Drasil](Getting-to-Know-Potential-Users-of-Drasil)
+
 ## Other
 
 #### Design

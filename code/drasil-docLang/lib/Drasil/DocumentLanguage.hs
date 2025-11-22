@@ -78,7 +78,15 @@ mkDoc :: System -> SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (Document, S
 mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
       sections = mkSections si dd
+      -- Above this line, the content to be generated in the SRS artifact is
+      -- pre-generated (missing content involving 'Reference's and
+      -- 'LabelledContent'). The below line injects "traceability" maps into the
+      -- 'ChunkDB' and adds missing 'LabelledContent' (the generated
+      -- traceability-related tables).
       si'@SI{ _authors = docAuthors } = fillLC dd $ fillReferences sections $ fillTraceMaps dd si
+      -- Now, the 'real generation' of the SRS artifact can begin, with the
+      -- 'Reference' map now full (so 'Reference' references can resolve to
+      -- 'Reference's).
       heading = whatsTheBigIdea si `headingComb` sysName si'
       authorsList = foldlList Comma List $ map (S . name) docAuthors
       toc = findToC srsDecl

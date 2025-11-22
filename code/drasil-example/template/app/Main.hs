@@ -9,5 +9,4 @@ import Drasil.Template.Body (mkSRS, si)
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  _ <- exportSmithEtAlSrs si mkSRS "Template_SRS"
-  return ()
+  exportSmithEtAlSrs si mkSRS "Template_SRS"

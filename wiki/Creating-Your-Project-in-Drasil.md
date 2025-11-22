@@ -297,7 +297,16 @@ mkSRS = [
 ```
 6. Since we added a `scope` section, you will need to include the constructor name in the chunk database. `scope` is defined in the `doccon` constructor in `../drasil-data/lib/Data/Drasil/Concepts/Documentation`. The process of updating the chunk database may need to be repeated for other constructors that are created in other parts of the SRS.
 
-![image](https://user-images.githubusercontent.com/43192745/94777925-4acd2900-0392-11eb-8dbe-85caf641fd05.png)
+```hs
+doccon :: [NamedChunk]
+doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
+  caseProb, charOfIR, characteristic, class_, client, code, column, company,
+  component, concept, condition, connection, consVals, constant, constraint,
+  -- ...
+  safety, safetyReq, scenario, {-Here!-} scope, scpOfReq,
+  -- ...
+  validation, value, variable, vav, vavPlan, verification, video, year]
+```
 
 7. In the 3rd argument of `symbMap`, add the `doccon` and `doccon'` functions. The third argument should now look like:
 ```Haskell

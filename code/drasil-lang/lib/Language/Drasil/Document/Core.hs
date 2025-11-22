@@ -5,7 +5,7 @@ module Language.Drasil.Document.Core where
 import Language.Drasil.Chunk.Citation (BibRef)
 
 import Drasil.Database.Chunk (HasChunkRefs(..))
-import Drasil.Database.UID (HasUID(..))
+import Drasil.Database.UID (HasUID(..), UID)
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
@@ -86,7 +86,8 @@ data RawContent =
 type Identifier = String
 
 -- | Contains a 'Reference' and 'RawContent'.
-data LabelledContent = LblC { _ref :: Reference
+data LabelledContent = LblC { _lcUid :: UID
+                            , _ref :: Reference
                             , _ctype :: RawContent
                             }
 
@@ -106,11 +107,11 @@ instance HasChunkRefs LabelledContent where
   chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds 'UID' of the 'LabelledContent'.
-instance HasUID        LabelledContent where uid = ref . uid
+instance HasUID        LabelledContent where uid = lcUid
 -- | 'LabelledContent's are equal if their reference 'UID's are equal.
 instance Eq            LabelledContent where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the reference address contained in the 'Reference' of 'LabelledContent'.
-instance HasRefAddress LabelledContent where getRefAdd (LblC lb c) = RP (prependLabel c) $ getAdd $ getRefAdd lb
+instance HasRefAddress LabelledContent where getRefAdd (LblC _ lb c) = RP (prependLabel c) $ getAdd $ getRefAdd lb
 -- | Access the 'RawContent' within the 'LabelledContent'.
 instance HasContents   LabelledContent where accessContents = ctype
 -- | Find the shortname of the reference address used for the 'LabelledContent'.

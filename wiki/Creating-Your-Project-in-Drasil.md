@@ -197,7 +197,7 @@ You might have to update stable for all the other examples if you get the follow
 -             MORE DETAILS                -
 -------------------------------------------
 ```
-Subsequently, you need to update stable for your new project whenever you make any changes.
+Subsequently, you need to update stable for your new project whenever you make any changes. This can most easily be done by running `make stabilize`. Alternatively, you can follow these instructions manually:
 1. Make a copy of your project folder from `/Drasil/code/build/yourProjectName`.
 2. Paste in `Drasil/code/stable` to create a folder for your project. Ensure that the version in `stable` matches the version in `build` when pushing your project to your remote repository.
 

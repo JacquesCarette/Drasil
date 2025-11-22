@@ -44,7 +44,7 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
   typeCheckSI syst'
   genDoc (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
   genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
-  return syst' -- FIXME: `fillcdbSRS` does some stuff that the code generator needs (or else it errors out!)! What?
+  return syst
 
 -- | Internal: Generate an ICO-style executable softifact.
 exportCode :: System -> Choices -> [Mod] -> IO ()

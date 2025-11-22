@@ -3,12 +3,12 @@ module Language.Drasil.Printing.Import.Sentence where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Development (toSent)
-import Database.Drasil (ChunkDB, refFind)
+import Database.Drasil (ChunkDB)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation
-  (PrintingInformation, ckdb, stg)
+  (PrintingInformation, ckdb, stg, refFind)
 
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.Helpers (lookupT, lookupS, lookupP, lookupC)
@@ -40,7 +40,7 @@ spec sm (Ch ShortStyle caps s)  = P.Tooltip (spec sm $ lookupT
 spec sm (Ch TermStyle caps s)   = spec sm $ lookupT (sm ^. ckdb) s caps
 spec sm (Ch PluralTerm caps s) = spec sm $ lookupP (sm ^. ckdb) s caps
 spec sm (Ref u EmptyS notes)    =
-  let reff = refFind u (sm ^. ckdb) in
+  let reff = refFind u sm in
   case reff of
     (Reference _ (RP rp ra) sn) ->
       P.Ref P.Internal ra (spec sm $ renderShortName (sm ^. ckdb) rp sn)
@@ -49,7 +49,7 @@ spec sm (Ref u EmptyS notes)    =
     (Reference _ (URI ra) sn) ->
       P.Ref P.External    ra (spec sm $ renderURI sm sn)
 spec sm (Ref u dName notes) =
-  let reff = refFind u (sm ^. ckdb) in
+  let reff = refFind u sm in
   case reff of
     (Reference _ (RP _ ra) _) ->
       P.Ref P.Internal ra (spec sm dName)

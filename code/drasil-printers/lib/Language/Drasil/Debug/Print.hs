@@ -11,7 +11,7 @@ import Text.PrettyPrint.HughesPJ
 import qualified Data.Map as Map
 
 import Language.Drasil
-import Database.Drasil (IsChunk, findAll, ChunkDB(refbyTable, traceTable))
+import Database.Drasil (IsChunk, findAll)
 import Language.Drasil.Plain.Print
 import Language.Drasil.Printing.PrintingInformation
 
@@ -220,7 +220,7 @@ mkTableDepChunks pinfo = text
     testIndepLayout (x, ys) = text (show x) $$ nest nestNum (text $ show ys)
 
     traceMapUIDs :: [(UID, [UID])]
-    traceMapUIDs = Map.assocs $ traceTable $ pinfo ^. ckdb
+    traceMapUIDs = Map.assocs $ pinfo ^. traceTable
 
     nestNum = 30
 
@@ -236,7 +236,7 @@ mkTableReferencedChunks pinfo =
     testIsolateLayout (x, ys) = text (show x) $$ nest nestNum (text $ show ys)
 
     refbyUIDs :: [(UID, [UID])]
-    refbyUIDs = Map.assocs $ refbyTable $ pinfo ^. ckdb
+    refbyUIDs = Map.assocs $ pinfo ^. refbyTable
 
     nestNum = 30
 

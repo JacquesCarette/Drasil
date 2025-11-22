@@ -16,7 +16,7 @@ import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
 import Utils.Drasil (invert, atLeast2, createDirIfMissing)
 import Database.Drasil
 import qualified Database.Drasil as DB
-import Drasil.System (System, systemdb)
+import Drasil.System (System, systemdb, traceTable, refbyTable)
 import Drasil.Database.SearchTools (findAllIdeaDicts)
 
 
@@ -41,8 +41,8 @@ dumpEverything0 si pinfo targetPath = do
       chunkDump = DB.dumpChunkDB chunkDb
       invertedChunkDump = invert chunkDump
       (sharedUIDs, _) = SM.partition atLeast2 invertedChunkDump
-      traceDump = traceTable chunkDb
-      refByDump = refbyTable chunkDb
+      traceDump = si ^. traceTable
+      refByDump = si ^. refbyTable
       justTerms = map (^. uid) (findAllIdeaDicts chunkDb)
 
   dumpTo chunkDump $ targetPath ++ "seeds.json"

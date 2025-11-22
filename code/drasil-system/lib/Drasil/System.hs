@@ -15,17 +15,20 @@ module Drasil.System (
   whatsTheBigIdea, mkSystem,
   -- * Reference Database
   -- ** Types
-  Purpose, Background, Scope, Motivation
-  ) where
+  Purpose, Background, Scope, Motivation,
+  -- * Hacks
+  refbyLookup, traceLookup
+) where
 
+import Control.Lens (makeClassy, (^.))
+import qualified Data.Map.Strict as M
+import Data.Maybe (fromMaybe)
+
+import qualified Data.Drasil.Concepts.Documentation as Doc
 import Language.Drasil hiding (kind, Notebook)
 import Theory.Drasil
 import Database.Drasil (ChunkDB)
-
 import Drasil.Metadata (runnableSoftware, website)
-
-import Control.Lens (makeClassy)
-import qualified Data.Drasil.Concepts.Documentation as Doc
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -63,7 +66,12 @@ data System where
   Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
-  { _sys          :: a
+  { -- Hacks
+    _refTable     :: M.Map UID Reference
+  , _refbyTable   :: M.Map UID [UID]
+  , _traceTable   :: M.Map UID [UID]
+    -- 'Good' features of System
+  , _sys          :: a
   , _kind         :: SystemKind
   , _authors      :: People
   , _purpose      :: Purpose
@@ -93,4 +101,10 @@ mkSystem :: (CommonIdea a, Idea a,
   a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
     [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
     [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
-mkSystem = SI
+mkSystem = SI mempty mempty mempty
+
+refbyLookup :: UID -> System -> [UID]
+refbyLookup u = fromMaybe (error "idk") . M.lookup u . (^. refbyTable)
+
+traceLookup :: UID -> System -> [UID]
+traceLookup u = fromMaybe (error "idk") . M.lookup u . (^. traceTable)

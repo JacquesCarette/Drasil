@@ -16,7 +16,6 @@ module Database.Drasil.ChunkDB (
   insert, insertAll,
   -- * Temporary functions
   insertAllOutOfOrder12,
-  UMap, idMap,
   refTable, refFind,
   labelledcontentTable, labelledcontentFind,
   refbyTable, refbyLookup,
@@ -62,9 +61,9 @@ data ChunkDB = ChunkDB {
   -- other chunk.
 
   -- TODO: LabelledContent needs to be rebuilt. See JacquesCarette/Drasil#4023.
-  , labelledcontentTable :: UMap LabelledContent
+  , labelledcontentTable :: M.Map UID LabelledContent
   -- TODO: References need to be rebuilt. See JacquesCarette/Drasil#4022.
-  , refTable             :: UMap Reference
+  , refTable             :: M.Map UID Reference
   , traceTable           :: M.Map UID [UID]
   , refbyTable           :: M.Map UID [UID]
 }
@@ -127,9 +126,9 @@ findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u ++ " (expecte
 findAll :: forall a. IsChunk a => ChunkDB -> [a]
 findAll cdb
   | tr == typeRep (Proxy @LabelledContent) =
-      mapMaybe (cast . fst) $ M.elems $ labelledcontentTable cdb
+      mapMaybe cast $ M.elems $ labelledcontentTable cdb
   | tr == typeRep (Proxy @Reference) =
-      mapMaybe (cast . fst) $ M.elems $ refTable cdb
+      mapMaybe cast $ M.elems $ refTable cdb
   | otherwise =
       maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
   where
@@ -278,26 +277,20 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js lcs rs =
     -- Create the list of new chunk types and add them to the previous list of chunk types
     chTys = M.fromList (map (\chs -> (chunkType $ head chs, chs)) altogether)
     chTT = M.unionWith (++) (chunkTypeTable strtr) chTys
+
+    labelledcontentTable' = M.union (labelledcontentTable strtr) (M.fromList $ map (\x -> (x ^. uid, x)) lcs)
+    refTable' = M.union (refTable strtr) (M.fromList $ map (\x -> (x ^. uid, x)) rs)
   in
     -- Create the updated chunk database, adding the LCs and Rs, ignoring their dependencies.
     strtr { chunkTable = chTabWDeps
           , chunkTypeTable = chTT
-          , labelledcontentTable = idMap $ findAll strtr ++ lcs
-          , refTable = idMap $ findAll strtr ++ rs }
-
--- | An ordered map based on 'Data.Map.Strict' for looking up chunks by their
--- 'UID's.
-type UMap a = M.Map UID (a, Int)
-
--- | Create a 'UMap' from a list of chunks. Assumes that the leftmost chunk in
--- the list has index 0, increasing by 1 each step to the right.
-idMap :: HasUID a => [a] -> UMap a
-idMap vals = M.fromList $ zipWith (\v i -> (v ^. uid, (v, i))) vals [0..]
+          , labelledcontentTable = labelledcontentTable'
+          , refTable = refTable' }
 
 -- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown.
-uMapLookup :: String -> String -> UID -> UMap a -> a
+uMapLookup :: String -> String -> UID -> M.Map UID a -> a
 uMapLookup tys ms u t = getFM $ M.lookup u t
-  where getFM = maybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms) fst
+  where getFM = fromMaybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms)
 
 -- | Find a 'LabelledContent' by its 'UID', throwing an error if it is not
 -- found.

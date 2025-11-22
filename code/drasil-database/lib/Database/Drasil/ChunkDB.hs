@@ -59,10 +59,6 @@ data ChunkDB = ChunkDB {
 
   -- TODO: LabelledContent needs to be rebuilt. See JacquesCarette/Drasil#4023.
   , labelledcontentTable :: M.Map UID LabelledContent
-  -- TODO: References need to be rebuilt. See JacquesCarette/Drasil#4022.
-  -- , refTable             :: M.Map UID Reference
-  -- , traceTable           :: M.Map UID [UID]
-  -- , refbyTable           :: M.Map UID [UID]
 }
 
 -- | An empty 'ChunkDB'.
@@ -215,12 +211,11 @@ insertAll as cdb = foldl' (flip insert) cdb as
 -- built properly (i.e., using the `HasChunkRefs` typeclass).
 --------------------------------------------------------------------------------
 
--- | Insert 12 lists of /unique/ chunk types into a 'ChunkDB', assuming the
+-- | Insert 11 lists of /unique/ chunk types into a 'ChunkDB', assuming the
 -- input 'ChunkDB' does not already contain any of the chunks from the chunk
 -- lists.
 --
--- NOTE: Ignores management of dependancies related to 'LabelledContent's and
--- 'Reference's.
+-- NOTE: Ignores management of dependancies related to 'LabelledContent's.
 insertAllOutOfOrder11 ::
   (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e,
    IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j) =>
@@ -283,15 +278,3 @@ uMapLookup tys ms u t = getFM $ M.lookup u t
 -- found.
 labelledcontentFind :: UID -> ChunkDB -> LabelledContent
 labelledcontentFind u cdb = uMapLookup "LabelledContent" "labelledcontentTable" u (labelledcontentTable cdb)
-
--- -- | Find a 'Reference' by its 'UID', throwing an error if it is not found.
--- refFind :: UID -> ChunkDB -> Reference
--- refFind u cdb = uMapLookup "Reference" "refTable" u (refTable cdb)
-
--- -- | Find what chunks reference a given 'UID'.
--- refbyLookup :: UID -> M.Map UID [UID] -> [UID]
--- refbyLookup c = fromMaybe [] . M.lookup c
-
--- -- | Query a chunk for to what chunks it refers to.
--- traceLookup :: UID -> M.Map UID [UID] -> [UID]
--- traceLookup = refbyLookup -- Same implementation, just different name for code clarity.

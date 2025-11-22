@@ -40,7 +40,7 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
   let (srs, syst') = mkDoc syst srsDecl S.forT
       printfo = piSys (syst' ^. systemdb) Equational defaultConfiguration
   dumpEverything syst' printfo ".drasil/"
-  typeCheckSI syst'
+  typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   genDoc (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
   genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)! -- This requires the refbyTable and traceTables to be "full"
   return syst' -- FIXME: `fillcdbSRS` does some stuff that the code generator needs (or else it errors out!)! What?

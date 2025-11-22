@@ -47,8 +47,9 @@
 
 ## Getting Started: 
 
-- Instructions on how to build a virtual machine for [Linux on Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10) (optional)
-- Instructions on how to fork the Drasil repo and enable [continuous integration](https://gitlab.cas.mcmaster.ca/smiths/cas741/-/tree/main/Tools/VM_Instructions). This is required to create your project in Drasil. Also check out this [pull request](https://github.com/JacquesCarette/Drasil/pull/2461) for more information on setting up your own bot for GitHub Actions.
+- Instructions on how to build a virtual machine for [Linux on Windows](https://learn.microsoft.com/en-us/windows/wsl/install) (optional)
+- Instructions on how to fork the Drasil repo. This is required to create your project in Drasil. Also check out this [pull request](https://github.com/JacquesCarette/Drasil/pull/2461) for more information on setting up your own bot for GitHub Actions.
+  - TODO: Add instrutions on how to fork
 - [Setting up your workspace](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup)
 
 ## Sub-packages in Drasil:

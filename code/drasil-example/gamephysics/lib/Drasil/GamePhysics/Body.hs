@@ -1,17 +1,14 @@
 module Drasil.GamePhysics.Body where
 
-import Control.Lens ((^.))
-
 import Language.Drasil hiding (organization, section)
 import Drasil.Metadata (dataDefn, inModel)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
@@ -47,19 +44,6 @@ import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints)
 import Drasil.GamePhysics.GenDefs (generalDefns)
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize short) sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

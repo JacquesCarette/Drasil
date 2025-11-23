@@ -2,7 +2,7 @@ module Drasil.Projectile.Lesson.Body where
 
 import Data.List (nub)
 import Language.Drasil hiding (Notebook)
-import Database.Drasil (ChunkDB)
+import Drasil.Database (ChunkDB)
 import Drasil.Generator (cdb)
 import Drasil.System (System, mkSystem, SystemKind(Notebook))
 

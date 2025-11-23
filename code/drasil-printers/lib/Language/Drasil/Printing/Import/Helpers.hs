@@ -8,7 +8,7 @@ import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S)
   Symbol, UID, TermCapitalization(..), titleizeNP, titleizeNP',
   atStartNP, atStartNP', NP, DefinedQuantityDict)
 import Language.Drasil.Development (toSent)
-import Database.Drasil (ChunkDB, findOrErr)
+import Drasil.Database (ChunkDB, findOrErr)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 import Drasil.System (systemdb)
 

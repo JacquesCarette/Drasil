@@ -14,8 +14,7 @@ import Text.PrettyPrint
 
 import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
 import Utils.Drasil (invert, atLeast2, createDirIfMissing)
-import Database.Drasil
-import qualified Database.Drasil as DB
+import Drasil.Database
 import Drasil.System (System, systemdb, traceTable, refbyTable)
 import Drasil.Database.SearchTools (findAllIdeaDicts)
 
@@ -38,7 +37,7 @@ dumpEverything0 :: System -> PrintingInformation -> Path -> IO ()
 dumpEverything0 si pinfo targetPath = do
   createDirIfMissing True targetPath
   let chunkDb = si ^. systemdb
-      chunkDump = DB.dumpChunkDB chunkDb
+      chunkDump = dumpChunkDB chunkDb
       invertedChunkDump = invert chunkDump
       (sharedUIDs, _) = SM.partition atLeast2 invertedChunkDump
       traceDump = si ^. traceTable

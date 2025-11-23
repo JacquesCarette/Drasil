@@ -66,8 +66,7 @@ data System where
   Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
-  { -- 'Good' features of System
-    _sys          :: a
+  { _sys          :: a
   , _kind         :: SystemKind
   , _authors      :: People
   , _purpose      :: Purpose
@@ -85,7 +84,7 @@ data System where
   , _constraints  :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
   , _constants    :: [ConstQDef]
   , _systemdb     :: ChunkDB
-    -- Hacks
+    -- FIXME: Hacks to be removed once 'Reference's are rebuilt.
   , _refTable     :: M.Map UID Reference
   , _refbyTable   :: M.Map UID [UID]
   , _traceTable   :: M.Map UID [UID]

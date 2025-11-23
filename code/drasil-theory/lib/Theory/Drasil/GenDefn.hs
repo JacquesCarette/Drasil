@@ -8,8 +8,7 @@ module Theory.Drasil.GenDefn (
   -- * Functions
   getEqModQdsFromGd) where
 
-import Drasil.Database.Chunk (HasChunkRefs(..))
-
+import Drasil.Database (HasChunkRefs(..))
 import Language.Drasil
 import Drasil.Metadata (genDefn)
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)

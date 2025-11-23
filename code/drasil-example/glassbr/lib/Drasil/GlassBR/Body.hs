@@ -59,6 +59,7 @@ si = mkSystem progName Specification
   configFp
   inputs outputs constrained constants
   symbMap
+  allRefs
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -135,7 +136,7 @@ abbreviationsList =
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
-  GB.dataDefs iMods [] tMods concIns citations labCon allRefs
+  GB.dataDefs iMods [] tMods concIns citations labCon
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

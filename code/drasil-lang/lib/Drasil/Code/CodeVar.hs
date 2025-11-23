@@ -5,19 +5,18 @@ module Drasil.Code.CodeVar where
 import Data.Char (isSpace)
 import Control.Lens ((^.), view, makeLenses, Lens')
 
+import Drasil.Database (HasUID(uid), (+++))
+import Utils.Drasil (toPlainName)
+
 import Drasil.Code.Classes (Callable)
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
-import Drasil.Database.UID (HasUID(uid), (+++))
-
 import Language.Drasil.Classes (CommonIdea(abrv), Quantity, Idea(getA), NamedIdea(..), Definition (defn), ConceptDomain (cdom))
 import Language.Drasil.Space (HasSpace(..), Space(..))
 import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Stages (Stage(..))
-
-import Utils.Drasil (toPlainName)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, implVarAU')
--- not using lenses for now
+
 -- | A 'CodeIdea' must include some code and its name.
 class CodeIdea c where
   -- | Name of the idea.

@@ -2,8 +2,10 @@
 
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.ModelExpr where -- TODO: tighten exports
-
 -- TODO: tighten exports
+
+import Data.List (intersperse)
+
 import Language.Drasil (UID, DomainDesc(..), RealInterval(..), Inclusive(..),
   RTopology(..), LiteralC(int))
 import qualified Language.Drasil.Display as S (Symbol(..))
@@ -11,15 +13,11 @@ import Language.Drasil.Literal.Development (Literal(..))
 import Language.Drasil.ModelExpr.Development
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)
-
-import Control.Lens ((^.))
-import Data.List (intersperse)
-
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Space (space)
 import Language.Drasil.Printing.Import.Symbol (symbol)
-import Language.Drasil.Printing.Import.Helpers (lookupC, parens)
+import Language.Drasil.Printing.Import.Helpers (lookupC', parens)
 
 -- | Helper that adds parenthesis to a display expression where appropriate.
 modelExpr' :: PrintingInformation -> Int -> ModelExpr -> P.Expr
@@ -57,7 +55,7 @@ indx :: PrintingInformation -> ModelExpr -> ModelExpr -> P.Expr
 indx sm (C c) i = f s
   where
     i' = modelExpr i sm
-    s = lookupC (sm ^. stg) (sm ^. ckdb) c
+    s = lookupC' sm c
     f (S.Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
@@ -71,7 +69,7 @@ indx sm a i = P.Row [P.Row [modelExpr a sm], P.Sub $ modelExpr i sm]
 -- | For printing expressions that call something.
 call :: PrintingInformation -> UID -> [ModelExpr] -> P.Expr
 call sm f ps = P.Row [
-    symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
+    symbol $ lookupC' sm f,
     parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`modelExpr` sm) ps
   ]
 
@@ -123,14 +121,14 @@ modelExpr (Deriv 0 Total a _)        sm = P.Row [modelExpr a sm]
 modelExpr (Deriv n Part a b)         sm =
   let st = [P.Spc P.Thin, P.MO P.Partial] in
     P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
-    (P.Row (st ++ [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b] ++ sup n))
+    (P.Row (st ++ [symbol $ lookupC' sm b] ++ sup n))
 modelExpr (Deriv n Total a b)        sm =
   let st = [P.Spc P.Thin, P.Ident "d"] in
     P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
-        (P.Row (st ++ [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b] ++ sup n))
-modelExpr (C c)                      sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
+        (P.Row (st ++ [symbol $ lookupC' sm b] ++ sup n))
+modelExpr (C c)                      sm = symbol $ lookupC' sm c
 modelExpr (FCall f [x])              sm =
-  P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ modelExpr x sm]
+  P.Row [symbol $ lookupC' sm f, parens $ modelExpr x sm]
 modelExpr (FCall f l)                sm = call sm f l
 modelExpr (Case _ ps)                sm =
   if length ps < 2
@@ -180,13 +178,12 @@ modelExpr (ESSBinaryOp SAdd a b)     sm = mkBOp sm P.SAdd a b
 modelExpr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
 modelExpr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
 modelExpr (Operator o d e)           sm = eop sm o d e
-modelExpr (RealI c ri)               sm = renderRealInt sm (lookupC (sm ^. stg)
-  (sm ^. ckdb) c) ri
+modelExpr (RealI c ri)               sm = renderRealInt sm (lookupC' sm c) ri
 modelExpr (Spc s)                    sm = space sm s
 modelExpr (SpaceBinaryOp IsIn l r)   sm = P.Row [modelExpr l sm, P.MO P.IsIn, modelExpr r sm]
 modelExpr (StatBinaryOp Defines l r) sm = P.Row [modelExpr l sm, P.MO P.Eq, modelExpr r sm]
 modelExpr (ForAll c s de)            sm = P.Row [
-    P.MO P.ForAll, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c, P.MO P.IsIn, space sm s,
+    P.MO P.ForAll, symbol $ lookupC' sm c, P.MO P.IsIn, space sm s,
     P.MO P.Dot, modelExpr de sm
   ]
 
@@ -243,4 +240,3 @@ renderRealInt st s (UpTo (Inc,a))   = P.Row [symbol s, P.MO P.LEq, modelExpr a s
 renderRealInt st s (UpTo (Exc,a))   = P.Row [symbol s, P.MO P.Lt,  modelExpr a st]
 renderRealInt st s (UpFrom (Inc,a)) = P.Row [symbol s, P.MO P.GEq, modelExpr a st]
 renderRealInt st s (UpFrom (Exc,a)) = P.Row [symbol s, P.MO P.Gt,  modelExpr a st]
-

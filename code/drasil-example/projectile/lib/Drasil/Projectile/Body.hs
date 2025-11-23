@@ -127,7 +127,7 @@ si = mkSystem progName Specification
   symbols tMods genDefns dataDefs iMods
   []
   inputs outputs (map cnstrw' constrained) constants
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]
@@ -160,7 +160,7 @@ conceptChunks =
 symbMap :: ChunkDB
 symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
   dataDefs iMods genDefns tMods concIns citations
-  (labelledContent ++ funcReqsTables) allRefs
+  (labelledContent ++ funcReqsTables)
 
 abbreviationsList  :: [IdeaDict]
 abbreviationsList  =
@@ -293,4 +293,3 @@ constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 acronyms :: [CI]
 acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, Doc.srs, refBy, refName, thModel, typUnc]
-

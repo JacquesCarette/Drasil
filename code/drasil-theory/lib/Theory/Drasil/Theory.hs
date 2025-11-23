@@ -10,8 +10,7 @@ module Theory.Drasil.Theory (
 
 import Control.Lens (Lens', view, makeLenses)
 
-import Drasil.Database.Chunk (HasChunkRefs(..))
-
+import Drasil.Database (HasChunkRefs(..))
 import Language.Drasil
 import Drasil.Metadata (thModel)
 

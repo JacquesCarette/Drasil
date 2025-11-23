@@ -90,7 +90,7 @@ si = mkSystem
   theoreticalModels genDefns dataDefinitions instanceModels
   []
   inputs outputs (map cnstrw' inpConstrained)
-  pidConstants symbMap
+  pidConstants symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,
@@ -137,7 +137,6 @@ symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, 
   conceptInstances
   citations
   (labelledContent ++ funcReqsTables)
-  allRefs
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

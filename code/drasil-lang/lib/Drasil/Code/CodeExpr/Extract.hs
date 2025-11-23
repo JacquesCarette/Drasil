@@ -3,12 +3,12 @@ module Drasil.Code.CodeExpr.Extract (
     eNamesRI, eNamesRI'
 ) where
 
-import Language.Drasil.Space (RealInterval(..))
-import Drasil.Database.UID (UID)
-
-import Drasil.Code.CodeExpr.Lang (CodeExpr(..))
-
 import Data.Containers.ListUtils (nubOrd)
+
+import Drasil.Database (UID)
+
+import Language.Drasil.Space (RealInterval(..))
+import Drasil.Code.CodeExpr.Lang (CodeExpr(..))
 
 -- | Generic traverse of all expressions that could lead to names.
 eNames :: CodeExpr -> [UID]

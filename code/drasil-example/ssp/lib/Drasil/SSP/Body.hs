@@ -62,7 +62,7 @@ si = mkSystem
   tMods generalDefinitions dataDefs iMods
   []
   inputs outputs constrained []
-  symbMap
+  symbMap allRefs
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -142,7 +142,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts conceptChunks
-  [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon allRefs
+  [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

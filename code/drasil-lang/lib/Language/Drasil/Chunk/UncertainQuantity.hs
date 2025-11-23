@@ -7,6 +7,10 @@ module Language.Drasil.Chunk.UncertainQuantity (
   uq, uqc,
   uqcND) where
 
+import Control.Lens ((^.), makeLenses, view)
+
+import Drasil.Database (HasUID(..))
+
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), cuc')
 import Language.Drasil.Symbol
@@ -20,9 +24,6 @@ import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Uncertainty
-import Drasil.Database.UID (HasUID(..))
-
-import Control.Lens ((^.), makeLenses, view)
 
 -- | UncertQs are conceptual symbolic quantities with constraints and an 'Uncertainty'.
 -- Contains a 'ConstrConcept' and an 'Uncertainty'.

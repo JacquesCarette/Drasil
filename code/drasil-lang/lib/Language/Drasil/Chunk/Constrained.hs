@@ -8,6 +8,8 @@ module Language.Drasil.Chunk.Constrained (
 
 import Control.Lens ((^.), makeLenses, view)
 
+import Drasil.Database (HasUID(..))
+
 import Language.Drasil.Chunk.Concept (cw, dcc, dccWDS)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr, dqdNoUnit)
 import Language.Drasil.Chunk.Unital (uc')
@@ -23,7 +25,6 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage)
-import Drasil.Database.UID (HasUID(..))
 
 -- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')
 -- with 'Constraint's and maybe a reasonable value (no units!).

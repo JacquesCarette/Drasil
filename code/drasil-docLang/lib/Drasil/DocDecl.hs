@@ -15,7 +15,7 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), AuxConstntSec(..),
   AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
 
-import Database.Drasil
+import Drasil.Database
 import Drasil.System
 import Language.Drasil hiding (sec)
 

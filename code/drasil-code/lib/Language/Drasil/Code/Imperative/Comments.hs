@@ -17,8 +17,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), colon, empty, parens, render)
 getTermDoc :: (CodeIdea c) => c -> GenState Doc
 getTermDoc c = do
   g <- get
-  let db = codeSpec g ^. systemdbO
-  return $ sentenceDoc db Implementation OneLine $ phrase $ codeChunk c
+  return $ sentenceDoc (printfo g) OneLine $ phrase $ codeChunk c
 
 -- | Gets a plain rendering of the definition of a chunk, preceded by a colon
 -- as it is intended to follow the term for the chunk. Returns empty if the
@@ -27,7 +26,7 @@ getDefnDoc :: (CodeIdea c) => c -> GenState Doc
 getDefnDoc c = do
   g <- get
   let db = codeSpec g ^. systemdbO
-  return $ ((<+>) colon . sentenceDoc db Implementation OneLine)
+  return $ ((<+>) colon . sentenceDoc (printfo g) OneLine)
     (definition $ defResolve' db (codeChunk c ^. uid))
 
 -- | Gets a plain rendering of the unit of a chunk in parentheses,

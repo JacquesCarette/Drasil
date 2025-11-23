@@ -9,12 +9,14 @@ module Language.Drasil.DecoratedReference (
   dRef, dRefInfo
 ) where
 
+import Control.Lens ((^.), makeLenses, Lens')
+
+import Drasil.Database (HasUID(..))
+
 import Language.Drasil.Sentence (RefInfo(..))
 import Language.Drasil.Reference (Reference, ref)
 import Language.Drasil.Label.Type (HasRefAddress(..))
 import Language.Drasil.ShortName (HasShortName(..))
-import Drasil.Database.UID (HasUID(..))
-import Control.Lens ((^.), makeLenses, Lens')
 
 -- | For holding a 'Reference' that is decorated with extra information (ex. page numbers, equation sources, etc.).
 data DecRef = DR {

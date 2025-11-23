@@ -2,10 +2,10 @@
 module Drasil.Code.CodeExpr.Lang where
 
 import Prelude hiding (sqrt)
-
 import Control.Lens ((^.))
 
-import Drasil.Database.UID (UID, HasUID(..))
+import Drasil.Database (UID, HasUID(..))
+
 import Language.Drasil.Expr.Lang (Completeness(..))
 import Language.Drasil.Expr.Class (ExprC(..), square)
 import Language.Drasil.Literal.Class (LiteralC(..))

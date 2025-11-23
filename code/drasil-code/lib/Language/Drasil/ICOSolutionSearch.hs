@@ -2,7 +2,7 @@ module Language.Drasil.ICOSolutionSearch where
 
 import Language.Drasil (CodeVarChunk, showUID, DefiningCodeExpr(codeExpr))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
-import Database.Drasil (ChunkDB)
+import Drasil.Database (ChunkDB)
 import Utils.Drasil (subsetOf)
 import Language.Drasil.Chunk.CodeBase (codevars', quantvar)
 import Data.List ((\\), intercalate)

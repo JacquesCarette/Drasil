@@ -1,15 +1,15 @@
 module Drasil.Code.CodeExpr.Class where
 
+import Control.Lens ((^.))
+
+import Drasil.Database (HasUID(..))
+
 import Drasil.Code.Classes (IsArgumentName, Callable)
 import Drasil.Code.CodeExpr.Lang (CodeExpr(FCall, New, Message, Field))
 import Drasil.Code.CodeVar (CodeIdea, CodeVarChunk)
-import Drasil.Database.UID (HasUID(..))
-
 import Language.Drasil.Symbol (HasSymbol)
 import Language.Drasil.Space (Space(Actor), HasSpace(..))
 import Language.Drasil.Expr.Class (ExprC(..))
-
-import Control.Lens ( (^.) )
 
 class CodeExprC r where
   -- | Constructs a CodeExpr for actor creation (constructor call)

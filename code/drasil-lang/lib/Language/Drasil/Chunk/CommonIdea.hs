@@ -6,17 +6,18 @@ module Language.Drasil.Chunk.CommonIdea (
   -- * Constructors
   commonIdea, commonIdeaWithDict,
   -- * Functions
-  prependAbrv) where
+  prependAbrv
+) where
+
+import Control.Lens (makeLenses, (^.), view)
+
+import Drasil.Database (UID, HasUID(uid))
+import Utils.Drasil (repUnd)
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nc)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
 import Language.Drasil.NounPhrase.Core (NP)
-import Drasil.Database.UID (UID, HasUID(uid))
-
-import Utils.Drasil (repUnd)
-
-import Control.Lens (makeLenses, (^.), view)
 
 -- | The common idea (with 'NounPhrase') data type. It must have a 'UID',
 -- 'NounPhrase' for its term, an abbreviation ('String'), and a domain (['UID']).

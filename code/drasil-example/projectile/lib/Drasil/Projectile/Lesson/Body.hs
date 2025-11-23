@@ -2,7 +2,7 @@ module Drasil.Projectile.Lesson.Body where
 
 import Data.List (nub)
 import Language.Drasil hiding (Notebook)
-import Database.Drasil (ChunkDB)
+import Drasil.Database (ChunkDB)
 import Drasil.Generator (cdb)
 import Drasil.System (System, mkSystem, SystemKind(Notebook))
 
@@ -43,9 +43,10 @@ si = mkSystem
   [] [] [] [] []
   ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []
   symbMap
+  allRefs
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts conceptChunks ([] :: [UnitDefn]) [] [] [] [] [] [] [] allRefs
+symbMap = cdb symbols ideaDicts conceptChunks ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 ideaDicts :: [IdeaDict]
 ideaDicts = nw projectileMotionLesson : concepts

@@ -1,6 +1,6 @@
 module Language.Drasil.Chunk.CodeBase where
 
-import Database.Drasil (ChunkDB, findOrErr)
+import Drasil.Database (ChunkDB, findOrErr)
 import Drasil.Code.CodeExpr.Development
 import Language.Drasil
 

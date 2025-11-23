@@ -11,7 +11,7 @@ module Language.Drasil.Label.Type(
   , name, (+::+), raw, defer, prepend
 ) where
 
-import Drasil.Database.UID (UID, HasUID)
+import Drasil.Database (UID, HasUID)
 
 -- | Applying different pieces of information for a reference.
 -- An RP is a decorated internal reference.
@@ -67,4 +67,3 @@ defer = Deferred
 -- | Prepends a 'String' to an 'IRefProg'.
 prepend :: String -> IRefProg
 prepend s = RS s +::+ RS ":" +::+ Name
-

@@ -102,7 +102,7 @@ si = mkSystem progName Specification [dong]
   []
   inputs outputs inConstraints
   constants
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
@@ -146,7 +146,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables) allRefs
+  dataDefs iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

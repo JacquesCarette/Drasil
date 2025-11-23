@@ -8,6 +8,10 @@ module Language.Drasil.Chunk.Concept.Core(
   , sDom
 ) where
 
+import Control.Lens (makeLenses, (^.), view)
+
+import Drasil.Database (HasChunkRefs(..), UID, HasUID(..))
+
 import Language.Drasil.ShortName (HasShortName(..), ShortName)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom))
@@ -15,10 +19,6 @@ import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Label.Type ((+::+), defer, name, raw,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Sentence (Sentence)
-import Drasil.Database.Chunk (HasChunkRefs(..))
-import Drasil.Database.UID (UID, HasUID(..))
-
-import Control.Lens (makeLenses, (^.), view)
 
 -- | Check if something has one domain. Throws an error if there is more than one.
 sDom :: [UID] -> UID
@@ -89,4 +89,3 @@ instance HasRefAddress ConceptInstance where getRefAdd l = RP (defer (sDom $ cdo
 instance Referable     ConceptInstance where
   refAdd      = ra        -- Finds the reference address contained in a ConceptInstance.
   renderRef   = getRefAdd -- Finds the reference address but in a diferent form.
-

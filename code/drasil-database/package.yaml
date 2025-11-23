@@ -18,7 +18,7 @@ dependencies:
 - aeson
 - containers
 - lens
-- drasil-lang
+- text
 - drasil-utils
 
 ghc-options:
@@ -28,7 +28,7 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Database.Drasil
+  - Drasil.Database
   when:
   - condition: false
     other-modules: Paths_drasil_database

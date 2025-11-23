@@ -8,7 +8,7 @@ import Data.List (nub, sortBy)
 import Language.Drasil
 import Language.Drasil.Development
 import Language.Drasil.ModelExpr.Development (meDep)
-import Database.Drasil (ChunkDB, findOrErr)
+import Drasil.Database (ChunkDB, findOrErr)
 import Drasil.Database.SearchTools (defResolve', DomDefn(definition), findAllCitations)
 import Drasil.System (System, systemdb)
 

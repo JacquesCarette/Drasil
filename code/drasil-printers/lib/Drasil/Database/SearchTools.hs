@@ -2,7 +2,7 @@ module Drasil.Database.SearchTools where
 
 import Control.Lens ((^.))
 
-import Database.Drasil
+import Drasil.Database
 import Language.Drasil
 import Theory.Drasil
 

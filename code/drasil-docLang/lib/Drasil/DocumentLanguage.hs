@@ -32,7 +32,7 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Drasil.Database (findOrErr, ChunkDB(..), insertAll)
+import Drasil.Database (findOrErr, ChunkDB, insertAll)
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 

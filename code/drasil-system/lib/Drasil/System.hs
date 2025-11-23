@@ -66,12 +66,8 @@ data System where
   Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
-  { -- Hacks
-    _refTable     :: M.Map UID Reference
-  , _refbyTable   :: M.Map UID [UID]
-  , _traceTable   :: M.Map UID [UID]
-    -- 'Good' features of System
-  , _sys          :: a
+  { -- 'Good' features of System
+    _sys          :: a
   , _kind         :: SystemKind
   , _authors      :: People
   , _purpose      :: Purpose
@@ -89,6 +85,10 @@ data System where
   , _constraints  :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
   , _constants    :: [ConstQDef]
   , _systemdb     :: ChunkDB
+    -- Hacks
+  , _refTable     :: M.Map UID Reference
+  , _refbyTable   :: M.Map UID [UID]
+  , _traceTable   :: M.Map UID [UID]
   } -> System
 
 makeClassy ''System
@@ -100,11 +100,15 @@ mkSystem :: (CommonIdea a, Idea a,
   HasUID j, Constrained j) =>
   a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
     [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
-    [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
-mkSystem = SI mempty mempty mempty
+    [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
+    System
+mkSystem nm sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js cqds db refs
+    = SI nm sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js cqds db
+        refsMap mempty mempty
+  where refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
 
 refbyLookup :: UID -> System -> [UID]
-refbyLookup u = fromMaybe (error "idk") . M.lookup u . (^. refbyTable)
+refbyLookup u = fromMaybe [] . M.lookup u . (^. refbyTable)
 
 traceLookup :: UID -> System -> [UID]
-traceLookup u = fromMaybe (error "idk") . M.lookup u . (^. traceTable)
+traceLookup u = fromMaybe [] . M.lookup u . (^. traceTable)

@@ -59,6 +59,7 @@ si = mkSystem progName Specification
   configFp
   inputs outputs constrained constants
   symbMap
+  allRefs
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

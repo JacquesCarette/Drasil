@@ -13,7 +13,7 @@ import Control.Lens (makeLenses, Lens', (^.))
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
-import Database.Drasil (ChunkDB, UID)
+import Database.Drasil (UID)
 import Language.Drasil (Stage(..), Reference)
 import Drasil.System (System, refTable)
 

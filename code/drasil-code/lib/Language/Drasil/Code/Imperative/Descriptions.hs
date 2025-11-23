@@ -37,10 +37,9 @@ modDesc = fmap ((++) "Provides " . stringList)
 unmodularDesc :: GenState Description
 unmodularDesc = do
   g <- get
-  let spec = codeSpec g
-      implTypeStr Program = "program"
+  let implTypeStr Program = "program"
       implTypeStr Library = "library"
-  return $ show $ sentenceDoc (spec ^. systemdbO) Implementation OneLine $ capSent $
+  return $ show $ sentenceDoc (printfo g) OneLine $ capSent $
     foldlSent ([S "a", S (implTypeStr (implType g)), S "to"] ++ codeSpec g ^. purpose)
 
 -- | Returns description of what is contained in the Input Parameters module.

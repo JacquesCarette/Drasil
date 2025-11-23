@@ -6,7 +6,7 @@ module Database.Drasil.TypedUIDRef (
 import Data.Maybe (fromMaybe)
 import Drasil.Database.Chunk (IsChunk)
 import Drasil.Database.TypedUIDRef (TypedUIDRef(..), mkRef)
-import Database.Drasil.ChunkDB (ChunkDB, find)
+import Drasil.Database.ChunkDB (ChunkDB, find)
 
 -- | Find a chunk by its typed UID reference.
 typedFind :: IsChunk t => TypedUIDRef t -> ChunkDB -> Maybe t

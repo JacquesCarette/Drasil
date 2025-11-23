@@ -32,7 +32,7 @@ import qualified Data.Set as S
 
 import Drasil.Database.Chunk (Chunk, HasChunkRefs(chunkRefs), IsChunk,
   mkChunk, unChunk, chunkType)
-import Language.Drasil (HasUID(..), UID)
+import Drasil.Database.UID (HasUID(..), UID)
 import Utils.Drasil (invert)
 
 -- | A chunk that depends on another.

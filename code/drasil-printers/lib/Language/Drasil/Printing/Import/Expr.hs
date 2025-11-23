@@ -3,6 +3,8 @@
 -- | Defines functions for printing expressions.
 module Language.Drasil.Printing.Import.Expr (expr) where
 
+import Data.List (intersperse)
+
 import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix, Set)
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
@@ -12,14 +14,10 @@ import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
 import Language.Drasil.Literal.Development (Literal(..))
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)
-
-import Control.Lens ((^.))
-import Data.List (intersperse)
-
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Symbol (symbol)
-import Language.Drasil.Printing.Import.Helpers (lookupC, parens)
+import Language.Drasil.Printing.Import.Helpers (lookupC', parens)
 
 
 -- | Helper that creates an expression row given printing information, an operator, and an expression.
@@ -58,7 +56,7 @@ indx :: PrintingInformation -> Expr -> Expr -> P.Expr
 indx sm (C c) i = f s
   where
     i' = expr i sm
-    s = lookupC (sm ^. stg) (sm ^. ckdb) c
+    s = lookupC' sm c
     f (S.Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
@@ -72,7 +70,7 @@ indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 -- | For printing expressions that call something.
 call :: PrintingInformation -> UID -> [Expr] -> P.Expr
 call sm f ps = P.Row [
-    symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
+    symbol $ lookupC' sm f,
     parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) ps
   ]
 
@@ -113,9 +111,9 @@ expr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
 expr (AssocA Add l)           sm = P.Row $ addExpr l Add sm
 expr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
 expr (AssocC SUnion l)        sm = assocExpr P.SUnion (precC SUnion) l sm
-expr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
+expr (C c)                    sm = symbol $ lookupC' sm c
 expr (FCall f [x])            sm =
-  P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ expr x sm]
+  P.Row [symbol $ lookupC' sm f, parens $ expr x sm]
 expr (FCall f l)              sm = call sm f l
 expr (Case _ ps)              sm =
   if length ps < 2
@@ -165,8 +163,7 @@ expr (ESSBinaryOp SAdd a b)   sm = mkBOp sm P.SAdd a b
 expr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
 expr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
 expr (Operator o d e)         sm = eop sm o d e
-expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
-  (sm ^. ckdb) c) ri
+expr (RealI c ri)             sm = renderRealInt sm (lookupC' sm c) ri
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr

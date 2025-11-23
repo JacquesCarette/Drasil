@@ -160,7 +160,7 @@ si = mkSystem
   []
   inputs outputs
   (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]
@@ -184,7 +184,7 @@ conceptChunks =
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations
-  (labelledContent ++ funcReqsTables) allRefs
+  (labelledContent ++ funcReqsTables)
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

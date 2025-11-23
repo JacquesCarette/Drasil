@@ -17,7 +17,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Database.Drasil
 
-import Drasil.System
+import Drasil.System (System(_systemdb), systemdb, refbyLookup)
 import Drasil.GetChunks (vars)
 
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
@@ -112,7 +112,7 @@ mkTMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
 helperRefs :: HasUID t => t -> System -> Sentence
 helperRefs t s = foldlList Comma List $ map (`helpToRefField` (s ^. systemdb)) $ nub $
-  refbyLookup (t ^. uid) (refbyTable $ s ^. systemdb)
+  refbyLookup (t ^. uid) s
 
 -- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of
 -- the possible data sets contained in the 'System' database.

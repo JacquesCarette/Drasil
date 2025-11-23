@@ -1,6 +1,6 @@
 module Database.Drasil.Dump where
 
-import Language.Drasil (UID)
+import Drasil.Database.UID (UID)
 import Database.Drasil.ChunkDB
 
 import Data.Map.Strict (Map)

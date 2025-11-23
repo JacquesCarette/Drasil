@@ -9,6 +9,7 @@ module Drasil.Sections.TraceabilityMandGs (
   tvInsModels, tvGoals, tvReqs, tvChanges
 ) where
 
+import Control.Lens((^.))
 import Data.Foldable (foldl')
 
 import Drasil.DocumentLanguage.Core (TraceConfig(TraceConfig))
@@ -42,19 +43,19 @@ tvAssumps = traceViewCC assumpDom
 
 -- | Traceability viewing data definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvDataDefns :: TraceViewCat
-tvDataDefns = traceView findAllDataDefns
+tvDataDefns = traceView (findAllDataDefns . (^. systemdb))
 
 -- | Traceability viewing general definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGenDefns :: TraceViewCat
-tvGenDefns = traceView findAllGenDefns
+tvGenDefns = traceView (findAllGenDefns . (^. systemdb))
 
 -- | Traceability viewing theory models. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvTheoryModels :: TraceViewCat
-tvTheoryModels = traceView findAllTheoryMods
+tvTheoryModels = traceView (findAllTheoryMods . (^. systemdb))
 
 -- | Traceability viewing instance models. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvInsModels :: TraceViewCat
-tvInsModels = traceView findAllInstMods
+tvInsModels = traceView (findAllInstMods . (^. systemdb))
 
 -- | Traceability viewing goals. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGoals :: TraceViewCat
@@ -97,8 +98,7 @@ traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
   plural genDefn, plural inModel] (x titleize' +:+ S "and Other" +:+
   titleize' item) [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs]
   [tvGoals, tvReqs] where
-    x g = foldl' (\a (f,t) -> a `sC'` case traceMReferrers (flip f $ _systemdb si) $
-      _systemdb si of
+    x g = foldl' (\a (f,t) -> a `sC'` case traceMReferrers (`f` si) si of
       [] -> mempty
       _ -> g t) mempty [(tvReqs, requirement), (tvGoals, goalStmt)]
     sC' EmptyS b = b

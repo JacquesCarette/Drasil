@@ -3,9 +3,9 @@ module Drasil.Generator.BaseChunkDB (
   cdb
 ) where
 
-import Database.Drasil (empty, insertAll, ChunkDB, insertAllOutOfOrder12)
+import Database.Drasil (empty, insertAll, ChunkDB, insertAllOutOfOrder11)
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
-  DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
+  DefinedQuantityDict, UnitDefn, LabelledContent)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Education (educon)
@@ -85,5 +85,5 @@ basisCDB =
 -- our SmithEtAl-esque SRS.
 cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
     [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
-    [ConceptInstance] -> [Citation] -> [LabelledContent] -> [Reference] -> ChunkDB
-cdb = insertAllOutOfOrder12 basisCDB
+    [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
+cdb = insertAllOutOfOrder11 basisCDB

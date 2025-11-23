@@ -62,7 +62,7 @@ si = mkSystem
   tMods genDefs SWHS.dataDefs iMods
   []
   inputs outputs constrained specParamValList
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
@@ -90,7 +90,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks [] SWHS.dataDefs insModel
-  genDefs tMods concIns citations (labelledContent ++ funcReqsTables) allRefs
+  genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

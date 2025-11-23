@@ -1,4 +1,4 @@
-module Database.Drasil.Dump where
+module Drasil.Database.Dump where
 
 import Drasil.Database.UID (UID)
 import Database.Drasil.ChunkDB

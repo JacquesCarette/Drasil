@@ -21,7 +21,7 @@ module Database.Drasil.ChunkDB (
 import Control.Lens ((^.))
 import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe, mapMaybe)
-import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep, cast)
+import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep)
 
 -- NOTE: Strictness is important for (a) performance, (b) space leaks, (c)
 -- avoiding chunk dependancy cycles and (d) ensuring operation consistency with
@@ -177,18 +177,12 @@ insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
 insertAll as cdb = foldl' (flip insert) cdb as
 
 --------------------------------------------------------------------------------
--- Temporary functions for working with non-chunk tables
---
--- Everything below is temporary and should be removed once the LabelledContent
--- and Reference chunks are properly implemented and the "chunk refs" tables are
--- built properly (i.e., using the `HasChunkRefs` typeclass).
+-- Temporary functions
 --------------------------------------------------------------------------------
 
 -- | Insert 11 lists of /unique/ chunk types into a 'ChunkDB', assuming the
 -- input 'ChunkDB' does not already contain any of the chunks from the chunk
 -- lists.
---
--- NOTE: Ignores management of dependancies related to 'LabelledContent's.
 insertAllOutOfOrder11 ::
   (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e,
    IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j,
@@ -239,8 +233,3 @@ insertAllOutOfOrder11 strtr as bs cs ds es fs gs hs is js ks =
     -- Create the updated chunk database, adding the LCs and Rs, ignoring their dependencies.
     strtr { chunkTable = chTabWDeps
           , chunkTypeTable = chTT }
-
--- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown.
-uMapLookup :: String -> String -> UID -> M.Map UID a -> a
-uMapLookup tys ms u t = getFM $ M.lookup u t
-  where getFM = fromMaybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms)

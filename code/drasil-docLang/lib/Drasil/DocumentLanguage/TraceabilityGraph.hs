@@ -7,7 +7,6 @@ import Database.Drasil
 import Drasil.Database.SearchTools (termResolve', shortForm)
 import Drasil.System hiding (purpose)
 import Control.Lens ((^.))
-import qualified Data.Map as Map
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat, traceMReferees, traceMReferrers,
   traceMColumns, layoutUIDs, traceMIntro)
 import Drasil.Sections.TraceabilityMandGs (tvAssumps,
@@ -98,7 +97,6 @@ makeTGraph rowName rows cols = zip rowName [zipFTable' x cols | x <- rows]
 checkUID :: UID -> System -> UID
 checkUID t si
   | isRegistered t s = t
-  | Map.member t (labelledcontentTable s) = t
   | otherwise = error $ show t ++ "Caught."
   where s = si ^. systemdb
 
@@ -110,7 +108,7 @@ checkUIDAbbrev si t
   | Just x <- find t s :: Maybe GenDefn         = abrv x
   | Just x <- find t s :: Maybe TheoryModel     = abrv x
   | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" $ shortForm $ termResolve' s $ sDom $ cdom x
-  | Map.member t (labelledcontentTable s)       = show t
+  | Just _ <- find t s :: Maybe LabelledContent = show t
   | Just _ <- find t s :: Maybe Citation        = ""
   | otherwise = error $ show t ++ "Caught."
   where s = si ^. systemdb
@@ -123,7 +121,7 @@ checkUIDRefAdd si t
   | Just x <- find t s :: Maybe GenDefn         = getAdd $ getRefAdd x
   | Just x <- find t s :: Maybe TheoryModel     = getAdd $ getRefAdd x
   | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" (shortForm $ termResolve' s $ sDom $ cdom x) ++ ":" ++ getAdd (getRefAdd x)
-  | Map.member t (labelledcontentTable s)       = show t
+  | Just _ <- find t s :: Maybe LabelledContent = show t
   | Just _ <- find t s :: Maybe Citation        = ""
   | otherwise                                   = error $ show t ++ "Caught."
   where s = si ^. systemdb

@@ -14,6 +14,7 @@ import Language.Drasil
 import Database.Drasil (IsChunk, findAll)
 import Language.Drasil.Plain.Print
 import Language.Drasil.Printing.PrintingInformation
+import Drasil.System (systemdb, refbyTable, traceTable)
 
 import Theory.Drasil
 import Data.Typeable (Proxy (Proxy))
@@ -72,12 +73,12 @@ mkTableFromLenses pin _ ttle hsNEs =
     hdr   = foldl' (\r l -> r $$ nest (nestNum * snd l) (text $ fst l)) (text "UID")       (zip (map fst namedLenses) ins)
     col a = foldl' (\r l -> r $$ nest (nestNum * snd l) (fst l a)     ) (text $ showUID a) (zip (map snd namedLenses) ins)
 
-    chunks = findAll $ pin ^. ckdb
+    chunks = findAll $ pin ^. syst . systemdb
 
     nestNum = 30
 
 openTerm :: NamedIdea a => PrintingInformation -> (String, a -> Doc)
-openTerm pinfo = ("Term", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) MultiLine . phrase)
+openTerm pinfo = ("Term", sentenceDoc pinfo MultiLine . phrase)
 
 openSymbol :: HasSymbol a =>PrintingInformation -> (String, a -> Doc)
 openSymbol pinfo = ("Symbol", symbolDoc . flip symbol (pinfo ^. stg))
@@ -89,16 +90,16 @@ openAbbreviation :: Idea a => PrintingInformation -> (String, a -> Doc)
 openAbbreviation _ = ("Abbreviation", text . fromMaybe "" . getA)
 
 openDefinition :: Definition a => PrintingInformation -> (String, a -> Doc)
-openDefinition pinfo = ("Definition", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) OneLine . view defn)
+openDefinition pinfo = ("Definition", sentenceDoc pinfo OneLine . view defn)
 
 openUnitSymbol :: HasUnitSymbol a => PrintingInformation -> (String, a -> Doc)
-openUnitSymbol pinfo = ("Unit Symbol", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) OneLine . Sy . usymb)
+openUnitSymbol pinfo = ("Unit Symbol", sentenceDoc pinfo OneLine . Sy . usymb)
 
 openShortName :: HasShortName a => PrintingInformation -> (String, a -> Doc)
-openShortName pinfo = ("Short Name", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) OneLine . getSentSN . shortname)
+openShortName pinfo = ("Short Name", sentenceDoc pinfo OneLine . getSentSN . shortname)
 
 openTitle :: PrintingInformation -> (String, Section -> Doc)
-openTitle pinfo = ("Title", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) MultiLine . tle)
+openTitle pinfo = ("Title", sentenceDoc pinfo MultiLine . tle)
 
 cntntToStr :: RawContent -> String
 cntntToStr Table {} = "Table"
@@ -220,7 +221,7 @@ mkTableDepChunks pinfo = text
     testIndepLayout (x, ys) = text (show x) $$ nest nestNum (text $ show ys)
 
     traceMapUIDs :: [(UID, [UID])]
-    traceMapUIDs = Map.assocs $ pinfo ^. traceTable
+    traceMapUIDs = Map.assocs $ pinfo ^. syst . traceTable
 
     nestNum = 30
 
@@ -236,7 +237,7 @@ mkTableReferencedChunks pinfo =
     testIsolateLayout (x, ys) = text (show x) $$ nest nestNum (text $ show ys)
 
     refbyUIDs :: [(UID, [UID])]
-    refbyUIDs = Map.assocs $ pinfo ^. refbyTable
+    refbyUIDs = Map.assocs $ pinfo ^. syst . refbyTable
 
     nestNum = 30
 

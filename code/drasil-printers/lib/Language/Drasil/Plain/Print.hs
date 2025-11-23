@@ -7,37 +7,36 @@ module Language.Drasil.Plain.Print (
   showHasSymbImpl
 ) where
 
-import Database.Drasil (ChunkDB)
-import qualified Drasil.Code.CodeExpr.Development as C (CodeExpr)
-import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
-import qualified Language.Drasil as L (Expr, HasSymbol(..))
-import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..),
-  OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
-import Language.Drasil.Printing.Import (expr, codeExpr, spec, symbol)
-import Language.Drasil.Printing.PrintingInformation (piSys, plainConfiguration)
-
-import Utils.Drasil (toPlainName)
-
 import Prelude hiding ((<>))
 import Data.List (partition)
 import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
   doubleQuotes, empty, hcat, hsep, integer, parens, punctuate, space, text,
   vcat, render)
 
+import qualified Drasil.Code.CodeExpr.Development as C (CodeExpr)
+import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
+import qualified Language.Drasil as L (Expr, HasSymbol(..))
+import Utils.Drasil (toPlainName)
+
+import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..),
+  OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
+import Language.Drasil.Printing.Import (expr, codeExpr, spec, symbol)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+
 -- | Data is either linear or not.
 data SingleLine = OneLine | MultiLine
 
 -- | Create expressions for a document in 'Doc' format.
-exprDoc :: ChunkDB -> Stage -> SingleLine -> L.Expr -> Doc
-exprDoc db st f e = pExprDoc f (expr e (piSys db st plainConfiguration))
+exprDoc :: PrintingInformation -> SingleLine -> L.Expr -> Doc
+exprDoc pinfo sl e = pExprDoc sl (expr e pinfo)
 
 -- | Create code expressions for a document in 'Doc' format.
-codeExprDoc :: ChunkDB -> Stage -> SingleLine -> C.CodeExpr -> Doc
-codeExprDoc db st f e = pExprDoc f (codeExpr e (piSys db st plainConfiguration))
+codeExprDoc :: PrintingInformation -> SingleLine -> C.CodeExpr -> Doc
+codeExprDoc pinfo sl e = pExprDoc sl (codeExpr e pinfo)
 
 -- | Create sentences for a document in 'Doc' format.
-sentenceDoc :: ChunkDB -> Stage -> SingleLine -> Sentence -> Doc
-sentenceDoc db st f s = specDoc f (spec (piSys db st plainConfiguration) s)
+sentenceDoc :: PrintingInformation -> SingleLine -> Sentence -> Doc
+sentenceDoc pinfo sl s = specDoc sl (spec pinfo s)
 
 -- | Create symbols for a document in 'Doc' format.
 symbolDoc :: Symbol -> Doc

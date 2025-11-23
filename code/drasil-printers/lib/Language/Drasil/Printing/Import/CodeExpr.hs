@@ -3,6 +3,8 @@
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 
+import Data.List (intersperse)
+
 import Drasil.Code.CodeExpr.Development
 
 import Language.Drasil (DomainDesc(..), Inclusive(..),
@@ -11,16 +13,10 @@ import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)
-
-import Language.Drasil.Printing.Import.Helpers
-    (lookupC, parens)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Language.Drasil.Printing.Import.Helpers (lookupC', parens)
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Symbol (symbol)
-
-import Control.Lens ((^.))
-import Data.List (intersperse)
-
 
 -- | Helper that creates an expression row given printing information, an operator, and an expression.
 mkCall :: PrintingInformation -> P.Ops -> CodeExpr -> P.Expr
@@ -58,7 +54,7 @@ indx :: PrintingInformation -> CodeExpr -> CodeExpr -> P.Expr
 indx sm (C c) i = f s
   where
     i' = codeExpr i sm
-    s = lookupC (sm ^. stg) (sm ^. ckdb) c
+    s = lookupC' sm c
     f (S.Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
@@ -71,9 +67,9 @@ indx sm a i = P.Row [P.Row [codeExpr a sm], P.Sub $ codeExpr i sm]
 
 -- | For printing expressions that call something.
 call :: PrintingInformation -> UID -> [CodeExpr] -> [(UID, CodeExpr)] -> P.Expr
-call sm f ps ns = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
+call sm f ps ns = P.Row [symbol $ lookupC' sm f,
   parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`codeExpr` sm) ps ++
-  zipWith (\n a -> P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) n,
+  zipWith (\n a -> P.Row [symbol $ lookupC' sm n,
   P.MO P.Eq, codeExpr a sm]) (map fst ns) (map snd ns)]
 
 -- | Helper function for addition 'EOperator's.
@@ -112,15 +108,15 @@ codeExpr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
 codeExpr (AssocA Add l)           sm = P.Row $ addExpr l Add sm
 codeExpr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
 codeExpr (AssocC SUnion l)        sm = P.Row $ mulExpr l Mul sm
-codeExpr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
+codeExpr (C c)                    sm = symbol $ lookupC' sm c
 codeExpr (FCall f [x] [])         sm =
-  P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ codeExpr x sm]
+  P.Row [symbol $ lookupC' sm f, parens $ codeExpr x sm]
 codeExpr (FCall f l ns)           sm = call sm f l ns
 codeExpr (New c l ns)             sm = call sm c l ns
 codeExpr (Message a m l ns)       sm =
-  P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) a, P.MO P.Point, call sm m l ns]
-codeExpr (Field o f)              sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) o,
-  P.MO P.Point, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f]
+  P.Row [symbol $ lookupC' sm a, P.MO P.Point, call sm m l ns]
+codeExpr (Field o f)              sm = P.Row [symbol $ lookupC' sm o,
+  P.MO P.Point, symbol $ lookupC' sm f]
 codeExpr (Case _ ps)              sm =
   if length ps < 2
     then error "Attempting to use multi-case codeExpr incorrectly"
@@ -169,8 +165,7 @@ codeExpr (ESSBinaryOp SAdd a b)      sm = mkBOp sm P.SAdd a b
 codeExpr (ESSBinaryOp SRemove a b)   sm = mkBOp sm P.SRemove a b
 codeExpr (ESBBinaryOp SContains a b) sm = mkBOp sm P.SContains a b
 codeExpr (Operator o d e)            sm = eop sm o d e
-codeExpr (RealI c ri)                sm = renderRealInt sm (lookupC (sm ^. stg)
-  (sm ^. ckdb) c) ri
+codeExpr (RealI c ri)                sm = renderRealInt sm (lookupC' sm c) ri
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [CodeExpr] -> PrintingInformation -> P.Expr

@@ -12,8 +12,11 @@ module Language.Drasil.Chunk.DifferentialModel (
 ) where
 
 import Control.Lens (makeLenses, (^.), view)
+import Data.List (find)
+
+import Drasil.Database (HasUID(uid))
+
 import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
-import Drasil.Database.UID (HasUID(uid))
 import Language.Drasil.Classes (Express(..),
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
@@ -25,7 +28,6 @@ import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
 import Language.Drasil.Expr.Class (ExprC(..), columnVec)
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
 import Language.Drasil.Literal.Class (LiteralC(exactDbl, int))
-import Data.List (find)
 import Language.Drasil.WellTyped (RequiresChecking (requiredChecks))
 import Language.Drasil.Space (Space, HasSpace (..))
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)

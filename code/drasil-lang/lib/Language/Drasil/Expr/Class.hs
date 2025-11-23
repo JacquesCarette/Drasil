@@ -9,18 +9,17 @@ module Language.Drasil.Expr.Class (
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
-
 import Control.Lens ((^.))
 
-import Drasil.Database.UID (HasUID(..))
+import Drasil.Database (HasUID(..))
+import Utils.Drasil (toColumn)
+
 import Language.Drasil.Symbol
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Literal.Lang
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval, Space)
 import qualified Language.Drasil.ModelExpr.Lang as M
 import Language.Drasil.Literal.Class (LiteralC(..))
-
-import Utils.Drasil (toColumn)
 
 -- | Smart constructor for fractions.
 frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r

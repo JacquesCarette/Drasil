@@ -10,18 +10,19 @@ module Language.Drasil.Sentence (
   -- * Functions
   (+:+), (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
-  sentenceSymb, sentenceTerm) where
+  sentenceSymb, sentenceTerm
+) where
 
-import Drasil.Database.UID (HasUID(..), UID)
+import Control.Lens ((^.))
+import Data.Char (toUpper)
+
+import Drasil.Database (HasUID(..), UID)
+
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Symbol (HasSymbol, Symbol)
-
-import Control.Lens ((^.))
-
-import Data.Char (toUpper)
 
 -- | Used in 'Ch' constructor to determine the state of a term
 -- (can record whether something is in plural form, a singular term, or in short form).

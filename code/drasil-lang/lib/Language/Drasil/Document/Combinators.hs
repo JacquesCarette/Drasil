@@ -19,50 +19,35 @@ module Language.Drasil.Document.Combinators (
   zipSentList
 ) where
 
-import Language.Drasil.Chunk.Concept.Core ( ConceptChunk )
+import Control.Lens ((^.))
+import Data.Decimal (DecimalRaw, realFracToDecimal)
+import Data.Function (on)
+import Data.List (sortBy, transpose)
+
+import Drasil.Database (HasUID)
+
+import Language.Drasil.Chunk.Concept.Core (ConceptChunk)
 import Language.Drasil.Chunk.DefinedQuantity (DefinesQuantity(defLhs))
-import Language.Drasil.Chunk.UnitDefn ( UnitDefn, MayHaveUnit(..) )
-import Language.Drasil.Chunk.Unital ( UnitalChunk )
-import Language.Drasil.Classes
-    ( HasUnitSymbol(usymb),
-      Quantity,
-      Concept,
-      Definition(defn),
-      NamedIdea(..) )
+import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(..))
+import Language.Drasil.Chunk.Unital (UnitalChunk)
+import Language.Drasil.Classes (HasUnitSymbol(usymb), Quantity, Concept,
+  Definition(defn), NamedIdea(..))
 import Language.Drasil.ShortName (HasShortName(..))
-import Language.Drasil.Development.Sentence
-    ( short, atStart, titleize, phrase, plural )
-import Language.Drasil.Document ( Section )
-import Language.Drasil.Document.Core
-    ( ItemType(..), ListType(Bullet) )
-import Language.Drasil.ModelExpr.Lang ( ModelExpr )
-import Language.Drasil.NounPhrase.Core ( NP )
-import Language.Drasil.Reference ( refS, namedRef )
-import Language.Drasil.Sentence
-    ( Sentence(S, Percent, (:+:), Sy, EmptyS),
-      eS,
-      ch,
-      sParen,
-      sDash,
-      (+:+),
-      sC,
-      (+:+.),
-      (!.),
-      (+:),
-      capSent )
+import Language.Drasil.Development.Sentence (short, atStart, titleize,
+  phrase, plural)
+import Language.Drasil.Document (Section)
+import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet))
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
+import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.Reference (refS, namedRef)
+import Language.Drasil.Sentence (Sentence(S, Percent, (:+:), Sy, EmptyS), eS,
+  ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent)
 import Language.Drasil.Symbol.Helpers ( eqSymb )
 import Language.Drasil.Uncertainty
 import Language.Drasil.Symbol
 import Language.Drasil.Sentence.Fold
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
-import Drasil.Database.UID ( HasUID )
 import Language.Drasil.Label.Type
-
-import Control.Lens ((^.))
-
-import Data.Decimal (DecimalRaw, realFracToDecimal)
-import Data.Function (on)
-import Data.List (sortBy, transpose)
 
 -- | Sorts a list of 'HasSymbols' by 'Symbol'.
 sortBySymbol :: HasSymbol a => [a] -> [a]

@@ -2,11 +2,12 @@
 -- chunk database in order to render terms, symbols, and references properly.
 module Language.Drasil.Sentence.Extract(sdep, shortdep, lnames, lnames') where
 
-import Drasil.Database.UID (UID)
+import Data.Containers.ListUtils (nubOrd)
+
+import Drasil.Database (UID)
+
 import Language.Drasil.Sentence(Sentence(..), SentenceStyle(..))
 import Language.Drasil.ModelExpr.Extract (meNames)
-
-import Data.Containers.ListUtils (nubOrd)
 
 -- | Generic traverse of all positions that could lead to /symbolic/ 'UID's from 'Sentence's.
 getUIDs :: Sentence -> [UID]

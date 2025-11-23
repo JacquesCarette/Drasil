@@ -2,11 +2,10 @@
 -- | Contains types and functions common to aspects of generating documents.
 module Language.Drasil.Document.Core where
 
-import Language.Drasil.Chunk.Citation (BibRef)
+import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 
-import Drasil.Database.Chunk (HasChunkRefs(..))
-import Drasil.Database.UID (HasUID(..), UID)
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
+import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,

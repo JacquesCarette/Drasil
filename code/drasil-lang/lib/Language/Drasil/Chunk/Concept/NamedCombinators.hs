@@ -33,24 +33,20 @@ module Language.Drasil.Chunk.Concept.NamedCombinators (
   -- | Some are specific to 'IdeaDict's.
   compoundNC, compoundNCPP, compoundNCGen,
   compoundNCPS, compoundNCPSPP, compoundNCGenP,
-  combineNINP, combineNINI) where
+  combineNINP, combineNINI
+) where
 
-import Language.Drasil.Chunk.NamedIdea ( IdeaDict, ncUID )
-import Language.Drasil.Classes ( Idea, NamedIdea(..) )
-import Language.Drasil.NounPhrase
-    ( NP,
-      CapitalizationRule(CapWords, Replace, CapFirst),
-      NounPhrase(phraseNP, pluralNP),
-      nounPhrase'',
-      compoundPhrase,
-      compoundPhrase'',
-      compoundPhrase''' )
-import Language.Drasil.NounPhrase.Core (NPStruct(S,(:+:)))
-import Drasil.Database.UID ( (+++!) )
-import qualified Language.Drasil.NounPhrase as D
-    ( NounPhrase(pluralNP, phraseNP) )
 import Control.Lens ((^.))
 
+import Drasil.Database ((+++!))
+
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, ncUID)
+import Language.Drasil.Classes (Idea, NamedIdea(..))
+import Language.Drasil.NounPhrase (NP, CapitalizationRule(CapWords, Replace,
+  CapFirst), NounPhrase(phraseNP, pluralNP), nounPhrase'', compoundPhrase,
+  compoundPhrase'', compoundPhrase''')
+import Language.Drasil.NounPhrase.Core (NPStruct(S,(:+:)))
+import qualified Language.Drasil.NounPhrase as D (NounPhrase(pluralNP, phraseNP))
 import qualified Language.Drasil.NounPhrase.Combinators as NP (
   insertString, insertStringOp, insertStringGen)
 

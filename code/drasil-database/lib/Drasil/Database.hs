@@ -1,5 +1,5 @@
 -- | Re-export database types and functions to simplify external use.
-module Database.Drasil (
+module Drasil.Database (
   module Drasil.Database.Chunk,
   module Drasil.Database.ChunkDB,
   module Drasil.Database.Dump,

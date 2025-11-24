@@ -9,5 +9,4 @@ import Drasil.HGHC.Body (mkSRS, si)
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  _ <- exportSmithEtAlSrs si mkSRS "HGHC_SRS"
-  return ()
+  exportSmithEtAlSrs si mkSRS "HGHC_SRS"

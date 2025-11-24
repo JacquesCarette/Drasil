@@ -35,15 +35,14 @@ import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC), doc
 import Drasil.Generator.TypeCheck (typeCheckSI)
 
 -- | Generate an SRS softifact.
-exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO System
+exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO ()
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let (srs, syst') = mkDoc syst srsDecl S.forT
       printfo = piSys (syst' ^. systemdb) Equational defaultConfiguration
   dumpEverything syst' printfo ".drasil/"
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   genDoc (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
-  genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)! -- This requires the refbyTable and traceTables to be "full"
-  return syst' -- FIXME: `fillcdbSRS` does some stuff that the code generator needs (or else it errors out!)! What?
+  genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
 
 -- | Internal: Generate an ICO-style executable softifact.
 exportCode :: System -> Choices -> [Mod] -> IO ()
@@ -65,14 +64,14 @@ exportCodeZoo syst = mapM_ $ \(chcs, mods) -> do
 -- | Generate an SRS softifact with a specific solution softifact.
 exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> [Mod] -> IO ()
 exportSmithEtAlSrsWCode syst srsDecl srsFileName chcs extraModules = do
-  syst' <- exportSmithEtAlSrs syst srsDecl srsFileName
-  exportCode syst' chcs extraModules
+  exportSmithEtAlSrs syst srsDecl srsFileName
+  exportCode syst chcs extraModules
 
 -- | Generate an SRS softifact with a zoo of solution softifacts.
 exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [(Choices, [Mod])] -> IO ()
 exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcsMods = do
-  syst' <- exportSmithEtAlSrs syst srsDecl srsFileName
-  exportCodeZoo syst' chcsMods
+  exportSmithEtAlSrs syst srsDecl srsFileName
+  exportCodeZoo syst chcsMods
 
 -- | Generate a JupyterNotebook-based lesson plan.
 exportLessonPlan :: System -> LsnDecl -> String -> IO ()

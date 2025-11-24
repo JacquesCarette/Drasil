@@ -139,7 +139,9 @@ symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+-- FIXME: GlassBR needs `map ref citations` pre-created or else the code
+-- generator fails due to a missing reference to `astm2009`.
+allRefs = externalLinkRef : map ref citations
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs

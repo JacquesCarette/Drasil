@@ -7,9 +7,10 @@ module Language.Drasil.Classes (
     NamedIdea(term)
   , Idea(getA)
   , CommonIdea(abrv)
-  , Concept
   , Definition(defn)
   , ConceptDomain(cdom)
+  , Concept
+  , DrasilConcept(metaConcept)
   , Quantity
   , HasUnitSymbol(usymb)
   , HasReasVal(reasVal)
@@ -36,7 +37,7 @@ import Language.Drasil.Space (HasSpace)
 import Language.Drasil.Sentence (Sentence)
 import Drasil.Database.UID (UID)
 
-import Control.Lens (Lens')
+import Control.Lens (Lens', Getter)
 
 -- TODO: conceptual typeclass?
 -- TODO: I was thinking of splitting QDefinitions into Definitions with 2 type variables
@@ -61,11 +62,15 @@ class ConceptDomain c where
   -- ^ /cdom/ should be exported for use by the
   -- Drasil framework, but should not be exported beyond that.
 
--- TODO: conceptual type synonym?
 -- | Concepts are 'Idea's with definitions and domains.
 type Concept c = (Idea c, Definition c, ConceptDomain c)
--- TODO: Would the below make this a bit better to work with?
---        type Concept = forall c. (Idea c, Definition c, ConceptDomain c) => c
+
+-- | What does this chunk type encode?
+-- 
+-- All chunk types in Drasil should instantiate this class.
+class DrasilConcept c where
+  -- | Provide the 'UID' to the 'ConceptChunk' that explains what 'c' is.
+  metaConcept :: Getter c UID
 
 -- | CommonIdea is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation. This is the main

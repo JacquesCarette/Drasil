@@ -1023,8 +1023,8 @@ digraph alltypes {
 		ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
 		ChunkDB -> ChunkByUID;
 		ChunkDB -> ChunksByTypeRep;
-		ChunkDB -> UMapLabelledContent;
-		ChunkDB -> UMapReference;
+		ChunkDB -> MapUIDLabelledContent;
+		ChunkDB -> MapUIDReference;
 		ChunkDB -> MapUIDUID;
 		}
 		subgraph dependant{
@@ -1038,10 +1038,6 @@ digraph alltypes {
 		subgraph chunksbytyperep{
 		ChunksByTypeRep	[shape=oval, color=red2, label="ChunksByTypeRep"];
 		ChunksByTypeRep -> MapTypeRepChunk;
-		}
-		subgraph umapa{
-		UMapa	[shape=oval, color=red2, label="UMapa"];
-		UMapa -> MapUIDaInt;
 		}
 	}
 	subgraph dump {

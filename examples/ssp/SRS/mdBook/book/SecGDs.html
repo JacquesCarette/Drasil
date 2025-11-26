@@ -12,21 +12,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -38,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "searchindex-03839c0f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="toc-d3b47c7b.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -55,7 +54,7 @@
             </div>
         </div>
     </div>
-    <div id="body-container">
+    <div id="mdbook-body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -84,12 +83,12 @@
             html.classList.add("js");
         </script>
 
-        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -104,39 +103,39 @@
             }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
                 <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
             </noscript>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <div id="page-wrapper" class="page-wrapper">
+        <div id="mdbook-page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
                         </label>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
                         </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
                         </button>
                     </div>
 
@@ -144,164 +143,372 @@
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
 
                     </div>
                 </div>
 
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
                         <div class="search-wrapper">
-                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
                             <div class="spinner-wrapper">
-                                <i class="fa fa-spinner fa-spin"></i>
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
                             </div>
                         </div>
                     </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
                         </ul>
                     </div>
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script>
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
                         link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
                     });
                 </script>
 
-                <div id="content" class="content">
+                <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="Sec:GDs"><a class="header" href="#Sec:GDs">General Definitions</a></h1>
 <p>This section collects the laws and equations that will be used to build the instance models.</p>
 <div align="center">
 <h2 id="GD:normForcEq"><a class="header" href="#GD:normForcEq">Normal force equilibrium</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:normForcEq</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:normForcEq</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Normal force equilibrium</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{N}}{\text{m}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{N}}_{i}=\left({\boldsymbol{W}}_{i}-{\boldsymbol{X}}_{i-1}+{\boldsymbol{X}}_{i}+{\boldsymbol{U}_{\text{g},i}}\,\cos\left({\boldsymbol{β}}_{i}\right)+{\boldsymbol{Q}}_{i}\,\cos\left({\boldsymbol{ω}}_{i}\right)\right)\,\cos\left({\boldsymbol{α}}_{i}\right)+\left(-{K_{\text{c}}}\,{\boldsymbol{W}}_{i}-{\boldsymbol{G}}_{i}+{\boldsymbol{G}}_{i-1}-{\boldsymbol{H}}_{i}+{\boldsymbol{H}}_{i-1}+{\boldsymbol{U}_{\text{g},i}}\,\sin\left({\boldsymbol{β}}_{i}\right)+{\boldsymbol{Q}}_{i}\,\sin\left({\boldsymbol{ω}}_{i}\right)\right)\,\sin\left({\boldsymbol{α}}_{i}\right)\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{N}\) is the normal forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(i\) is the index (Unitless)</li><li>\(\boldsymbol{W}\) is the weights (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{X}\) is the interslice shear forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\({\boldsymbol{U}_{\text{g}}}\) is the surface hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{β}\) is the surface angles (\({{}^{\circ}}\))</li><li>\(\boldsymbol{Q}\) is the external forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{ω}\) is the imposed load angles (\({{}^{\circ}}\))</li><li>\(\boldsymbol{α}\) is the base angles (\({{}^{\circ}}\))</li><li>\({K_{\text{c}}}\) is the seismic coefficient (Unitless)</li><li>\(\boldsymbol{G}\) is the interslice normal forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{H}\) is the interslice normal water forces (\(\frac{\text{N}}{\text{m}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>This equation satisfies <a href="./SecTMs.html#TM:equilibrium">TM:equilibrium</a> in the normal direction. \(\boldsymbol{W}\) is defined in <a href="./SecGDs.html#GD:sliceWght">GD:sliceWght</a>, \({\boldsymbol{U}_{\text{g}}}\) is defined in <a href="./SecGDs.html#GD:srfWtrF">GD:srfWtrF</a>, \(\boldsymbol{β}\) is defined in <a href="./SecDDs.html#DD:angleB">DD:angleB</a>, and \(\boldsymbol{α}\) is defined in <a href="./SecDDs.html#DD:angleA">DD:angleA</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\(\boldsymbol{N}\) is the normal forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(i\) is the index (Unitless)</li>
+<li>\(\boldsymbol{W}\) is the weights (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{X}\) is the interslice shear forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\({\boldsymbol{U}_{\text{g}}}\) is the surface hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{β}\) is the surface angles (\({{}^{\circ}}\))</li>
+<li>\(\boldsymbol{Q}\) is the external forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{ω}\) is the imposed load angles (\({{}^{\circ}}\))</li>
+<li>\(\boldsymbol{α}\) is the base angles (\({{}^{\circ}}\))</li>
+<li>\({K_{\text{c}}}\) is the seismic coefficient (Unitless)</li>
+<li>\(\boldsymbol{G}\) is the interslice normal forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{H}\) is the interslice normal water forces (\(\frac{\text{N}}{\text{m}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>This equation satisfies <a href="./SecTMs.html#TM:equilibrium">TM:equilibrium</a> in the normal direction. \(\boldsymbol{W}\) is defined in <a href="./SecGDs.html#GD:sliceWght">GD:sliceWght</a>, \({\boldsymbol{U}_{\text{g}}}\) is defined in <a href="./SecGDs.html#GD:srfWtrF">GD:srfWtrF</a>, \(\boldsymbol{β}\) is defined in <a href="./SecDDs.html#DD:angleB">DD:angleB</a>, and \(\boldsymbol{α}\) is defined in <a href="./SecDDs.html#DD:angleA">DD:angleA</a>.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#chen2005">chen2005</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:fctSfty">IM:fctSfty</a></td></tr>
-</tbody></table>
+</tbody>
+</table>
 </div>
 <h4 id="GD:normForcEqDeriv"><a class="header" href="#GD:normForcEqDeriv"></a></h4>
 <p>Normal force equilibrium is derived from the free body diagram of <a href="./SecPhysSyst.html#Figure:ForceDiagram">Fig:ForceDiagram</a> in <a href="./SecPhysSyst.html#Sec:PhysSyst">Sec:Physical System Description</a>.</p>
 <div align="center">
 <h2 id="GD:bsShrFEq"><a class="header" href="#GD:bsShrFEq">Base shear force equilibrium</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:bsShrFEq</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:bsShrFEq</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Base shear force equilibrium</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{N}}{\text{m}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{S}}_{i}=\left({\boldsymbol{W}}_{i}-{\boldsymbol{X}}_{i-1}+{\boldsymbol{X}}_{i}+{\boldsymbol{U}_{\text{g},i}}\,\cos\left({\boldsymbol{β}}_{i}\right)+{\boldsymbol{Q}}_{i}\,\cos\left({\boldsymbol{ω}}_{i}\right)\right)\,\sin\left({\boldsymbol{α}}_{i}\right)-\left(-{K_{\text{c}}}\,{\boldsymbol{W}}_{i}-{\boldsymbol{G}}_{i}+{\boldsymbol{G}}_{i-1}-{\boldsymbol{H}}_{i}+{\boldsymbol{H}}_{i-1}+{\boldsymbol{U}_{\text{g},i}}\,\sin\left({\boldsymbol{β}}_{i}\right)+{\boldsymbol{Q}}_{i}\,\sin\left({\boldsymbol{ω}}_{i}\right)\right)\,\cos\left({\boldsymbol{α}}_{i}\right)\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{S}\) is the mobilized shear force (\(\frac{\text{N}}{\text{m}}\))</li><li>\(i\) is the index (Unitless)</li><li>\(\boldsymbol{W}\) is the weights (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{X}\) is the interslice shear forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\({\boldsymbol{U}_{\text{g}}}\) is the surface hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{β}\) is the surface angles (\({{}^{\circ}}\))</li><li>\(\boldsymbol{Q}\) is the external forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{ω}\) is the imposed load angles (\({{}^{\circ}}\))</li><li>\(\boldsymbol{α}\) is the base angles (\({{}^{\circ}}\))</li><li>\({K_{\text{c}}}\) is the seismic coefficient (Unitless)</li><li>\(\boldsymbol{G}\) is the interslice normal forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{H}\) is the interslice normal water forces (\(\frac{\text{N}}{\text{m}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>This equation satisfies <a href="./SecTMs.html#TM:equilibrium">TM:equilibrium</a> in the shear direction. \(\boldsymbol{W}\) is defined in <a href="./SecGDs.html#GD:sliceWght">GD:sliceWght</a>, \({\boldsymbol{U}_{\text{g}}}\) is defined in <a href="./SecGDs.html#GD:srfWtrF">GD:srfWtrF</a>, \(\boldsymbol{β}\) is defined in <a href="./SecDDs.html#DD:angleB">DD:angleB</a>, and \(\boldsymbol{α}\) is defined in <a href="./SecDDs.html#DD:angleA">DD:angleA</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\(\boldsymbol{S}\) is the mobilized shear force (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(i\) is the index (Unitless)</li>
+<li>\(\boldsymbol{W}\) is the weights (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{X}\) is the interslice shear forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\({\boldsymbol{U}_{\text{g}}}\) is the surface hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{β}\) is the surface angles (\({{}^{\circ}}\))</li>
+<li>\(\boldsymbol{Q}\) is the external forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{ω}\) is the imposed load angles (\({{}^{\circ}}\))</li>
+<li>\(\boldsymbol{α}\) is the base angles (\({{}^{\circ}}\))</li>
+<li>\({K_{\text{c}}}\) is the seismic coefficient (Unitless)</li>
+<li>\(\boldsymbol{G}\) is the interslice normal forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{H}\) is the interslice normal water forces (\(\frac{\text{N}}{\text{m}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>This equation satisfies <a href="./SecTMs.html#TM:equilibrium">TM:equilibrium</a> in the shear direction. \(\boldsymbol{W}\) is defined in <a href="./SecGDs.html#GD:sliceWght">GD:sliceWght</a>, \({\boldsymbol{U}_{\text{g}}}\) is defined in <a href="./SecGDs.html#GD:srfWtrF">GD:srfWtrF</a>, \(\boldsymbol{β}\) is defined in <a href="./SecDDs.html#DD:angleB">DD:angleB</a>, and \(\boldsymbol{α}\) is defined in <a href="./SecDDs.html#DD:angleA">DD:angleA</a>.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#chen2005">chen2005</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:fctSfty">IM:fctSfty</a></td></tr>
-</tbody></table>
+</tbody>
+</table>
 </div>
 <h4 id="GD:bsShrFEqDeriv"><a class="header" href="#GD:bsShrFEqDeriv"></a></h4>
 <p>Base shear force equilibrium is derived from the free body diagram of <a href="./SecPhysSyst.html#Figure:ForceDiagram">Fig:ForceDiagram</a> in <a href="./SecPhysSyst.html#Sec:PhysSyst">Sec:Physical System Description</a>.</p>
 <div align="center">
 <h2 id="GD:resShr"><a class="header" href="#GD:resShr">Resistive shear force</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:resShr</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:resShr</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Resistive shear force</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{N}}{\text{m}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{P}}_{i}={\boldsymbol{N’}}_{i}\,\tan\left({φ’}_{i}\right)+{c’}_{i}\,{\boldsymbol{L}_{b,i}}\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{P}\) is the resistive shear forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(i\) is the index (Unitless)</li><li>\(\boldsymbol{N’}\) is the effective normal forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(φ’\) is the effective angle of friction (\({{}^{\circ}}\))</li><li>\(c’\) is the effective cohesion (\({\text{Pa}}\))</li><li>\({\boldsymbol{L}_{b}}\) is the total base lengths of slices (\({\text{m}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({\boldsymbol{L}_{b}}\) is defined in <a href="./SecDDs.html#DD:lengthLb">DD:lengthLb</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\(\boldsymbol{P}\) is the resistive shear forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(i\) is the index (Unitless)</li>
+<li>\(\boldsymbol{N’}\) is the effective normal forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(φ’\) is the effective angle of friction (\({{}^{\circ}}\))</li>
+<li>\(c’\) is the effective cohesion (\({\text{Pa}}\))</li>
+<li>\({\boldsymbol{L}_{b}}\) is the total base lengths of slices (\({\text{m}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>\({\boldsymbol{L}_{b}}\) is defined in <a href="./SecDDs.html#DD:lengthLb">DD:lengthLb</a>.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#chen2005">chen2005</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:mobShr">GD:mobShr</a></td></tr>
-</tbody></table>
+</tbody>
+</table>
 </div>
 <h4 id="GD:resShrDeriv"><a class="header" href="#GD:resShrDeriv"></a></h4>
 <p>Derived by substituting <a href="./SecDDs.html#DD:normStress">DD:normStress</a> and <a href="./SecDDs.html#DD:tangStress">DD:tangStress</a> into the Mohr-Coulomb shear strength, <a href="./SecTMs.html#TM:mcShrStrgth">TM:mcShrStrgth</a>, and multiplying both sides of the equation by the area of the slice in the shear-\(z\) plane. Since the slope is assumed to extend infinitely in the \(z\)-direction (<a href="./SecAssumps.html#assumpPSC">A:Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the \(z\)-direction. The effective angle of friction \(φ’\) and the effective cohesion \(c’\) are not indexed by \(i\) because they are assumed to be isotropic (<a href="./SecAssumps.html#assumpSLI">A:Soil-Layers-Isotropic</a>) and the soil is assumed to be homogeneous, with constant soil properties throughout (<a href="./SecAssumps.html#assumpSLH">A:Soil-Layer-Homogeneous</a>, <a href="./SecAssumps.html#assumpSP">A:Soil-Properties</a>).</p>
 <div align="center">
 <h2 id="GD:mobShr"><a class="header" href="#GD:mobShr">Mobilized shear force</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:mobShr</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:mobShr</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Mobilized shear force</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{N}}{\text{m}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{S}}_{i}=\frac{{\boldsymbol{P}}_{i}}{{F_{\text{S}}}}=\frac{{\boldsymbol{N’}}_{i}\,\tan\left({φ’}_{i}\right)+{c’}_{i}\,{\boldsymbol{L}_{b,i}}}{{F_{\text{S}}}}\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{S}\) is the mobilized shear force (\(\frac{\text{N}}{\text{m}}\))</li><li>\(i\) is the index (Unitless)</li><li>\(\boldsymbol{P}\) is the resistive shear forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\({F_{\text{S}}}\) is the factor of safety (Unitless)</li><li>\(\boldsymbol{N’}\) is the effective normal forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(φ’\) is the effective angle of friction (\({{}^{\circ}}\))</li><li>\(c’\) is the effective cohesion (\({\text{Pa}}\))</li><li>\({\boldsymbol{L}_{b}}\) is the total base lengths of slices (\({\text{m}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({\boldsymbol{L}_{b}}\) is defined in <a href="./SecDDs.html#DD:lengthLb">DD:lengthLb</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\(\boldsymbol{S}\) is the mobilized shear force (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(i\) is the index (Unitless)</li>
+<li>\(\boldsymbol{P}\) is the resistive shear forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\({F_{\text{S}}}\) is the factor of safety (Unitless)</li>
+<li>\(\boldsymbol{N’}\) is the effective normal forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(φ’\) is the effective angle of friction (\({{}^{\circ}}\))</li>
+<li>\(c’\) is the effective cohesion (\({\text{Pa}}\))</li>
+<li>\({\boldsymbol{L}_{b}}\) is the total base lengths of slices (\({\text{m}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>\({\boldsymbol{L}_{b}}\) is defined in <a href="./SecDDs.html#DD:lengthLb">DD:lengthLb</a>.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#chen2005">chen2005</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:fctSfty">IM:fctSfty</a></td></tr>
-</tbody></table>
+</tbody>
+</table>
 </div>
 <h4 id="GD:mobShrDeriv"><a class="header" href="#GD:mobShrDeriv"></a></h4>
 <p>Mobilized shear forces is derived by dividing the definition of the \(\boldsymbol{P}\) from <a href="./SecGDs.html#GD:resShr">GD:resShr</a> by the definition of the factor of safety from <a href="./SecTMs.html#TM:factOfSafety">TM:factOfSafety</a>. The factor of safety \({F_{\text{S}}}\) is not indexed by \(i\) because it is assumed to be constant for the entire slip surface (<a href="./SecAssumps.html#assumpFOS">A:Factor-of-Safety</a>).</p>
 <div align="center">
 <h2 id="GD:effNormF"><a class="header" href="#GD:effNormF">Effective normal force</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:effNormF</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:effNormF</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Effective normal force</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{N}}{\text{m}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{N’}}_{i}={\boldsymbol{N}}_{i}-{\boldsymbol{U}_{\text{b},i}}\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{N’}\) is the effective normal forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(i\) is the index (Unitless)</li><li>\(\boldsymbol{N}\) is the normal forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\({\boldsymbol{U}_{\text{b}}}\) is the base hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({\boldsymbol{U}_{\text{b}}}\) is defined in <a href="./SecGDs.html#GD:baseWtrF">GD:baseWtrF</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\(\boldsymbol{N’}\) is the effective normal forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(i\) is the index (Unitless)</li>
+<li>\(\boldsymbol{N}\) is the normal forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\({\boldsymbol{U}_{\text{b}}}\) is the base hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>\({\boldsymbol{U}_{\text{b}}}\) is defined in <a href="./SecGDs.html#GD:baseWtrF">GD:baseWtrF</a>.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#chen2005">chen2005</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
-</tbody></table>
+</tbody>
+</table>
 </div>
 <h4 id="GD:effNormFDeriv"><a class="header" href="#GD:effNormFDeriv"></a></h4>
 <p>Derived by substituting <a href="./SecDDs.html#DD:normStress">DD:normStress</a> into <a href="./SecTMs.html#TM:effStress">TM:effStress</a> and multiplying both sides of the equation by the area of the slice in the shear-\(z\) plane. Since the slope is assumed to extend infinitely in the \(z\)-direction (<a href="./SecAssumps.html#assumpPSC">A:Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the \(z\)-direction.</p>
 <div align="center">
 <h2 id="GD:resShearWO"><a class="header" href="#GD:resShearWO">Resistive shear force, without interslice normal and shear forces</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:resShearWO</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:resShearWO</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Resistive shear force, without interslice normal and shear forces</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{N}}{\text{m}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{R}}_{i}=\left(\left({\boldsymbol{W}}_{i}+{\boldsymbol{U}_{\text{g},i}}\,\cos\left({\boldsymbol{β}}_{i}\right)\right)\,\cos\left({\boldsymbol{α}}_{i}\right)+\left(-{\boldsymbol{H}}_{i}+{\boldsymbol{H}}_{i-1}+{\boldsymbol{U}_{\text{g},i}}\,\sin\left({\boldsymbol{β}}_{i}\right)\right)\,\sin\left({\boldsymbol{α}}_{i}\right)-{\boldsymbol{U}_{\text{b},i}}\right)\,\tan\left({φ’}_{i}\right)+{c’}_{i}\,{\boldsymbol{L}_{b,i}}\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{R}\) is the resistive shear forces without the influence of interslice forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(i\) is the index (Unitless)</li><li>\(\boldsymbol{W}\) is the weights (\(\frac{\text{N}}{\text{m}}\))</li><li>\({\boldsymbol{U}_{\text{g}}}\) is the surface hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{β}\) is the surface angles (\({{}^{\circ}}\))</li><li>\(\boldsymbol{α}\) is the base angles (\({{}^{\circ}}\))</li><li>\(\boldsymbol{H}\) is the interslice normal water forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\({\boldsymbol{U}_{\text{b}}}\) is the base hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(φ’\) is the effective angle of friction (\({{}^{\circ}}\))</li><li>\(c’\) is the effective cohesion (\({\text{Pa}}\))</li><li>\({\boldsymbol{L}_{b}}\) is the total base lengths of slices (\({\text{m}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\(\boldsymbol{W}\) is defined in <a href="./SecGDs.html#GD:sliceWght">GD:sliceWght</a>, \({\boldsymbol{U}_{\text{g}}}\) is defined in <a href="./SecGDs.html#GD:srfWtrF">GD:srfWtrF</a>, \(\boldsymbol{β}\) is defined in <a href="./SecDDs.html#DD:angleB">DD:angleB</a>, \(\boldsymbol{α}\) is defined in <a href="./SecDDs.html#DD:angleA">DD:angleA</a>, \(\boldsymbol{H}\) is defined in <a href="./SecDDs.html#DD:intersliceWtrF">DD:intersliceWtrF</a>, \({\boldsymbol{U}_{\text{b}}}\) is defined in <a href="./SecGDs.html#GD:baseWtrF">GD:baseWtrF</a>, and \({\boldsymbol{L}_{b}}\) is defined in <a href="./SecDDs.html#DD:lengthLb">DD:lengthLb</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\(\boldsymbol{R}\) is the resistive shear forces without the influence of interslice forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(i\) is the index (Unitless)</li>
+<li>\(\boldsymbol{W}\) is the weights (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\({\boldsymbol{U}_{\text{g}}}\) is the surface hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{β}\) is the surface angles (\({{}^{\circ}}\))</li>
+<li>\(\boldsymbol{α}\) is the base angles (\({{}^{\circ}}\))</li>
+<li>\(\boldsymbol{H}\) is the interslice normal water forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\({\boldsymbol{U}_{\text{b}}}\) is the base hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(φ’\) is the effective angle of friction (\({{}^{\circ}}\))</li>
+<li>\(c’\) is the effective cohesion (\({\text{Pa}}\))</li>
+<li>\({\boldsymbol{L}_{b}}\) is the total base lengths of slices (\({\text{m}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>\(\boldsymbol{W}\) is defined in <a href="./SecGDs.html#GD:sliceWght">GD:sliceWght</a>, \({\boldsymbol{U}_{\text{g}}}\) is defined in <a href="./SecGDs.html#GD:srfWtrF">GD:srfWtrF</a>, \(\boldsymbol{β}\) is defined in <a href="./SecDDs.html#DD:angleB">DD:angleB</a>, \(\boldsymbol{α}\) is defined in <a href="./SecDDs.html#DD:angleA">DD:angleA</a>, \(\boldsymbol{H}\) is defined in <a href="./SecDDs.html#DD:intersliceWtrF">DD:intersliceWtrF</a>, \({\boldsymbol{U}_{\text{b}}}\) is defined in <a href="./SecGDs.html#GD:baseWtrF">GD:baseWtrF</a>, and \({\boldsymbol{L}_{b}}\) is defined in <a href="./SecDDs.html#DD:lengthLb">DD:lengthLb</a>.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#chen2005">chen2005</a> and <a href="./SecReferences.html#karchewski2012">karchewski2012</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:intsliceFs">IM:intsliceFs</a> and <a href="./SecIMs.html#IM:fctSfty">IM:fctSfty</a></td></tr>
-</tbody></table>
-</div><div align="center">
+</tbody>
+</table>
+</div>
+<div align="center">
 <h2 id="GD:mobShearWO"><a class="header" href="#GD:mobShearWO">Mobilized shear force, without interslice normal and shear forces</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:mobShearWO</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:mobShearWO</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Mobilized shear force, without interslice normal and shear forces</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{N}}{\text{m}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{T}}_{i}=\left({\boldsymbol{W}}_{i}+{\boldsymbol{U}_{\text{g},i}}\,\cos\left({\boldsymbol{β}}_{i}\right)\right)\,\sin\left({\boldsymbol{α}}_{i}\right)-\left(-{\boldsymbol{H}}_{i}+{\boldsymbol{H}}_{i-1}+{\boldsymbol{U}_{\text{g},i}}\,\sin\left({\boldsymbol{β}}_{i}\right)\right)\,\cos\left({\boldsymbol{α}}_{i}\right)\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{T}\) is the mobilized shear forces without the influence of interslice forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(i\) is the index (Unitless)</li><li>\(\boldsymbol{W}\) is the weights (\(\frac{\text{N}}{\text{m}}\))</li><li>\({\boldsymbol{U}_{\text{g}}}\) is the surface hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{β}\) is the surface angles (\({{}^{\circ}}\))</li><li>\(\boldsymbol{α}\) is the base angles (\({{}^{\circ}}\))</li><li>\(\boldsymbol{H}\) is the interslice normal water forces (\(\frac{\text{N}}{\text{m}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\(\boldsymbol{W}\) is defined in <a href="./SecGDs.html#GD:sliceWght">GD:sliceWght</a>, \({\boldsymbol{U}_{\text{g}}}\) is defined in <a href="./SecGDs.html#GD:srfWtrF">GD:srfWtrF</a>, \(\boldsymbol{β}\) is defined in <a href="./SecDDs.html#DD:angleB">DD:angleB</a>, \(\boldsymbol{α}\) is defined in <a href="./SecDDs.html#DD:angleA">DD:angleA</a>, and \(\boldsymbol{H}\) is defined in <a href="./SecDDs.html#DD:intersliceWtrF">DD:intersliceWtrF</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\(\boldsymbol{T}\) is the mobilized shear forces without the influence of interslice forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(i\) is the index (Unitless)</li>
+<li>\(\boldsymbol{W}\) is the weights (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\({\boldsymbol{U}_{\text{g}}}\) is the surface hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{β}\) is the surface angles (\({{}^{\circ}}\))</li>
+<li>\(\boldsymbol{α}\) is the base angles (\({{}^{\circ}}\))</li>
+<li>\(\boldsymbol{H}\) is the interslice normal water forces (\(\frac{\text{N}}{\text{m}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>\(\boldsymbol{W}\) is defined in <a href="./SecGDs.html#GD:sliceWght">GD:sliceWght</a>, \({\boldsymbol{U}_{\text{g}}}\) is defined in <a href="./SecGDs.html#GD:srfWtrF">GD:srfWtrF</a>, \(\boldsymbol{β}\) is defined in <a href="./SecDDs.html#DD:angleB">DD:angleB</a>, \(\boldsymbol{α}\) is defined in <a href="./SecDDs.html#DD:angleA">DD:angleA</a>, and \(\boldsymbol{H}\) is defined in <a href="./SecDDs.html#DD:intersliceWtrF">DD:intersliceWtrF</a>.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#chen2005">chen2005</a> and <a href="./SecReferences.html#karchewski2012">karchewski2012</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:intsliceFs">IM:intsliceFs</a> and <a href="./SecIMs.html#IM:fctSfty">IM:fctSfty</a></td></tr>
-</tbody></table>
-</div><div align="center">
+</tbody>
+</table>
+</div>
+<div align="center">
 <h2 id="GD:normShrR"><a class="header" href="#GD:normShrR">Interslice shear forces</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:normShrR</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:normShrR</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Interslice shear forces</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{N}}{\text{m}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{X}=λ\,\boldsymbol{f}\,\boldsymbol{G}\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{X}\) is the interslice shear forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(λ\) is the proportionality constant (Unitless)</li><li>\(\boldsymbol{f}\) is the interslice normal to shear force ratio variation function (Unitless)</li><li>\(\boldsymbol{G}\) is the interslice normal forces (\(\frac{\text{N}}{\text{m}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>Mathematical representation of the primary assumption for the Morgenstern-Price method (<a href="./SecAssumps.html#assumpINSFL">A:Interslice-Norm-Shear-Forces-Linear</a>). \(\boldsymbol{f}\) is defined in <a href="./SecDDs.html#DD:ratioVariation">DD:ratioVariation</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\(\boldsymbol{X}\) is the interslice shear forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(λ\) is the proportionality constant (Unitless)</li>
+<li>\(\boldsymbol{f}\) is the interslice normal to shear force ratio variation function (Unitless)</li>
+<li>\(\boldsymbol{G}\) is the interslice normal forces (\(\frac{\text{N}}{\text{m}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>Mathematical representation of the primary assumption for the Morgenstern-Price method (<a href="./SecAssumps.html#assumpINSFL">A:Interslice-Norm-Shear-Forces-Linear</a>). \(\boldsymbol{f}\) is defined in <a href="./SecDDs.html#DD:ratioVariation">DD:ratioVariation</a>.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#chen2005">chen2005</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:nrmShrFor">IM:nrmShrFor</a> and <a href="./SecIMs.html#IM:fctSfty">IM:fctSfty</a></td></tr>
-</tbody></table>
-</div><div align="center">
+</tbody>
+</table>
+</div>
+<div align="center">
 <h2 id="GD:momentEql"><a class="header" href="#GD:momentEql">Moment equilibrium</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:momentEql</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:momentEql</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Moment equilibrium</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{N}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[0=-{\boldsymbol{G}}_{i}\,\left({\boldsymbol{h}_{\text{z},i}}+\frac{{\boldsymbol{b}}_{i}}{2}\,\tan\left({\boldsymbol{α}}_{i}\right)\right)+{\boldsymbol{G}}_{i-1}\,\left({\boldsymbol{h}_{\text{z},i-1}}-\frac{{\boldsymbol{b}}_{i}}{2}\,\tan\left({\boldsymbol{α}}_{i}\right)\right)-{\boldsymbol{H}}_{i}\,\left(\frac{1}{3}\,{\boldsymbol{h}_{\text{z,w},i}}+\frac{{\boldsymbol{b}}_{i}}{2}\,\tan\left({\boldsymbol{α}}_{i}\right)\right)+{\boldsymbol{H}}_{i-1}\,\left(\frac{1}{3}\,{\boldsymbol{h}_{\text{z,w},i-1}}-\frac{{\boldsymbol{b}}_{i}}{2}\,\tan\left({\boldsymbol{α}}_{i}\right)\right)+\frac{{\boldsymbol{b}}_{i}}{2}\,\left({\boldsymbol{X}}_{i}+{\boldsymbol{X}}_{i-1}\right)+\frac{-{K_{\text{c}}}\,{\boldsymbol{W}}_{i}\,{\boldsymbol{h}}_{i}}{2}+{\boldsymbol{U}_{\text{g},i}}\,\sin\left({\boldsymbol{β}}_{i}\right)\,{\boldsymbol{h}}_{i}+{\boldsymbol{Q}}_{i}\,\sin\left({\boldsymbol{ω}}_{i}\right)\,{\boldsymbol{h}}_{i}\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{G}\) is the interslice normal forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(i\) is the index (Unitless)</li><li>\({\boldsymbol{h}_{\text{z}}}\) is the heights of interslice normal forces (\({\text{m}}\))</li><li>\(\boldsymbol{b}\) is the base width of slices (\({\text{m}}\))</li><li>\(\boldsymbol{α}\) is the base angles (\({{}^{\circ}}\))</li><li>\(\boldsymbol{H}\) is the interslice normal water forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\({\boldsymbol{h}_{\text{z,w}}}\) is the heights of the water table (\({\text{m}}\))</li><li>\(\boldsymbol{X}\) is the interslice shear forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\({K_{\text{c}}}\) is the seismic coefficient (Unitless)</li><li>\(\boldsymbol{W}\) is the weights (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{h}\) is the \(y\)-direction heights of slices (\({\text{m}}\))</li><li>\({\boldsymbol{U}_{\text{g}}}\) is the surface hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{β}\) is the surface angles (\({{}^{\circ}}\))</li><li>\(\boldsymbol{Q}\) is the external forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(\boldsymbol{ω}\) is the imposed load angles (\({{}^{\circ}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>This equation satisfies <a href="./SecTMs.html#TM:equilibrium">TM:equilibrium</a> for the net moment. \(\boldsymbol{b}\) is defined in <a href="./SecDDs.html#DD:lengthB">DD:lengthB</a>, \(\boldsymbol{α}\) is defined in <a href="./SecDDs.html#DD:angleA">DD:angleA</a>, \(\boldsymbol{W}\) is defined in <a href="./SecGDs.html#GD:sliceWght">GD:sliceWght</a>, \(\boldsymbol{h}\) is defined in <a href="./SecDDs.html#DD:slcHeight">DD:slcHeight</a>, \({\boldsymbol{U}_{\text{g}}}\) is defined in <a href="./SecGDs.html#GD:srfWtrF">GD:srfWtrF</a>, and \(\boldsymbol{β}\) is defined in <a href="./SecDDs.html#DD:angleB">DD:angleB</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\(\boldsymbol{G}\) is the interslice normal forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(i\) is the index (Unitless)</li>
+<li>\({\boldsymbol{h}_{\text{z}}}\) is the heights of interslice normal forces (\({\text{m}}\))</li>
+<li>\(\boldsymbol{b}\) is the base width of slices (\({\text{m}}\))</li>
+<li>\(\boldsymbol{α}\) is the base angles (\({{}^{\circ}}\))</li>
+<li>\(\boldsymbol{H}\) is the interslice normal water forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\({\boldsymbol{h}_{\text{z,w}}}\) is the heights of the water table (\({\text{m}}\))</li>
+<li>\(\boldsymbol{X}\) is the interslice shear forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\({K_{\text{c}}}\) is the seismic coefficient (Unitless)</li>
+<li>\(\boldsymbol{W}\) is the weights (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{h}\) is the \(y\)-direction heights of slices (\({\text{m}}\))</li>
+<li>\({\boldsymbol{U}_{\text{g}}}\) is the surface hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{β}\) is the surface angles (\({{}^{\circ}}\))</li>
+<li>\(\boldsymbol{Q}\) is the external forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(\boldsymbol{ω}\) is the imposed load angles (\({{}^{\circ}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>This equation satisfies <a href="./SecTMs.html#TM:equilibrium">TM:equilibrium</a> for the net moment. \(\boldsymbol{b}\) is defined in <a href="./SecDDs.html#DD:lengthB">DD:lengthB</a>, \(\boldsymbol{α}\) is defined in <a href="./SecDDs.html#DD:angleA">DD:angleA</a>, \(\boldsymbol{W}\) is defined in <a href="./SecGDs.html#GD:sliceWght">GD:sliceWght</a>, \(\boldsymbol{h}\) is defined in <a href="./SecDDs.html#DD:slcHeight">DD:slcHeight</a>, \({\boldsymbol{U}_{\text{g}}}\) is defined in <a href="./SecGDs.html#GD:srfWtrF">GD:srfWtrF</a>, and \(\boldsymbol{β}\) is defined in <a href="./SecDDs.html#DD:angleB">DD:angleB</a>.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#chen2005">chen2005</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:nrmShrFor">IM:nrmShrFor</a></td></tr>
-</tbody></table>
+</tbody>
+</table>
 </div>
 <h4 id="GD:momentEqlDeriv"><a class="header" href="#GD:momentEqlDeriv"></a></h4>
 <p>Moment is equal to torque, so the equation from <a href="./SecDDs.html#DD:torque">DD:torque</a> will be used to calculate moments:</p>
@@ -335,14 +542,27 @@
 <div align="center">
 <h2 id="GD:weight"><a class="header" href="#GD:weight">Weight</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:weight</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:weight</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Weight</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{N}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[W=V\,γ\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(W\) is the weight (\({\text{N}}\))</li><li>\(V\) is the volume (\({\text{m}^{3}}\))</li><li>\(γ\) is the specific weight (\(\frac{\text{N}}{\text{m}^{3}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\(W\) is the weight (\({\text{N}}\))</li>
+<li>\(V\) is the volume (\({\text{m}^{3}}\))</li>
+<li>\(γ\) is the specific weight (\(\frac{\text{N}}{\text{m}^{3}}\))</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="https://en.wikipedia.org/wiki/Weight">Definition of Weight</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:sliceWght">GD:sliceWght</a> and <a href="./SecGDs.html#GD:momentEql">GD:momentEql</a></td></tr>
-</tbody></table>
+</tbody>
+</table>
 </div>
 <h4 id="GD:weightDeriv"><a class="header" href="#GD:weightDeriv">Detailed derivation of weight:</a></h4>
 <p>Under the influence of gravity, and assuming a 2D Cartesian coordinate system with down as positive, an object has an acceleration vector of:</p>
@@ -356,15 +576,37 @@
 <div align="center">
 <h2 id="GD:sliceWght"><a class="header" href="#GD:sliceWght">Slice weight</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:sliceWght</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:sliceWght</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Slice weight</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{N}}{\text{m}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{W}}_{i}={\boldsymbol{b}}_{i}\,\frac{1}{2}\,\begin{cases}\left({\boldsymbol{y}_{\text{slope},i}}-{\boldsymbol{y}_{\text{slip},i}}+{\boldsymbol{y}_{\text{slope},i-1}}-{\boldsymbol{y}_{\text{slip},i-1}}\right)\,{γ_{\text{sat}}}, &amp; {\boldsymbol{y}_{\text{wt},i}}\gt{}{\boldsymbol{y}_{\text{slope},i}}\lor{}{\boldsymbol{y}_{\text{wt},i-1}}\gt{}{\boldsymbol{y}_{\text{slope},i-1}}\\\left({\boldsymbol{y}_{\text{slope},i}}-{\boldsymbol{y}_{\text{wt},i}}+{\boldsymbol{y}_{\text{slope},i-1}}-{\boldsymbol{y}_{\text{wt},i-1}}\right)\,{γ_{\text{dry}}}+\left({\boldsymbol{y}_{\text{wt},i}}-{\boldsymbol{y}_{\text{slip},i}}+{\boldsymbol{y}_{\text{wt},i-1}}-{\boldsymbol{y}_{\text{slip},i-1}}\right)\,{γ_{\text{sat}}}, &amp; {\boldsymbol{y}_{\text{slope},i}}\geq{}{\boldsymbol{y}_{\text{wt},i}}\geq{}{\boldsymbol{y}_{\text{slip},i}}\land{}{\boldsymbol{y}_{\text{slope},i-1}}\geq{}{\boldsymbol{y}_{\text{wt},i-1}}\geq{}{\boldsymbol{y}_{\text{slip},i-1}}\\\left({\boldsymbol{y}_{\text{slope},i}}-{\boldsymbol{y}_{\text{slip},i}}+{\boldsymbol{y}_{\text{slope},i-1}}-{\boldsymbol{y}_{\text{slip},i-1}}\right)\,{γ_{\text{dry}}}, &amp; {\boldsymbol{y}_{\text{wt},i}}\lt{}{\boldsymbol{y}_{\text{slip},i}}\lor{}{\boldsymbol{y}_{\text{wt},i-1}}\lt{}{\boldsymbol{y}_{\text{slip},i-1}}\end{cases}\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{W}\) is the weights (\(\frac{\text{N}}{\text{m}}\))</li><li>\(i\) is the index (Unitless)</li><li>\(\boldsymbol{b}\) is the base width of slices (\({\text{m}}\))</li><li>\({\boldsymbol{y}_{\text{slope}}}\) is the \(y\)-coordinates of the slope (\({\text{m}}\))</li><li>\({\boldsymbol{y}_{\text{slip}}}\) is the \(y\)-coordinates of the slip surface (\({\text{m}}\))</li><li>\({γ_{\text{sat}}}\) is the soil saturated unit weight (\(\frac{\text{N}}{\text{m}^{3}}\))</li><li>\({\boldsymbol{y}_{\text{wt}}}\) is the \(y\)-coordinates of the water table (\({\text{m}}\))</li><li>\({γ_{\text{dry}}}\) is the soil dry unit weight (\(\frac{\text{N}}{\text{m}^{3}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href="./SecAssumps.html#assumpSBSBISL">A:Surface-Base-Slice-between-Interslice-Straight-Lines</a>). The soil dry unit weight \({γ_{\text{dry}}}\) and the soil saturated unit weight \({γ_{\text{sat}}}\) are not indexed by \(i\) because the soil is assumed to be homogeneous, with constant soil properties throughout (<a href="./SecAssumps.html#assumpSLH">A:Soil-Layer-Homogeneous</a>). \(\boldsymbol{b}\) is defined in <a href="./SecDDs.html#DD:lengthB">DD:lengthB</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\(\boldsymbol{W}\) is the weights (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(i\) is the index (Unitless)</li>
+<li>\(\boldsymbol{b}\) is the base width of slices (\({\text{m}}\))</li>
+<li>\({\boldsymbol{y}_{\text{slope}}}\) is the \(y\)-coordinates of the slope (\({\text{m}}\))</li>
+<li>\({\boldsymbol{y}_{\text{slip}}}\) is the \(y\)-coordinates of the slip surface (\({\text{m}}\))</li>
+<li>\({γ_{\text{sat}}}\) is the soil saturated unit weight (\(\frac{\text{N}}{\text{m}^{3}}\))</li>
+<li>\({\boldsymbol{y}_{\text{wt}}}\) is the \(y\)-coordinates of the water table (\({\text{m}}\))</li>
+<li>\({γ_{\text{dry}}}\) is the soil dry unit weight (\(\frac{\text{N}}{\text{m}^{3}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href="./SecAssumps.html#assumpSBSBISL">A:Surface-Base-Slice-between-Interslice-Straight-Lines</a>). The soil dry unit weight \({γ_{\text{dry}}}\) and the soil saturated unit weight \({γ_{\text{sat}}}\) are not indexed by \(i\) because the soil is assumed to be homogeneous, with constant soil properties throughout (<a href="./SecAssumps.html#assumpSLH">A:Soil-Layer-Homogeneous</a>). \(\boldsymbol{b}\) is defined in <a href="./SecDDs.html#DD:lengthB">DD:lengthB</a>.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#fredlund1977">fredlund1977</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:resShearWO">GD:resShearWO</a>, <a href="./SecGDs.html#GD:normForcEq">GD:normForcEq</a>, <a href="./SecGDs.html#GD:momentEql">GD:momentEql</a>, <a href="./SecGDs.html#GD:mobShearWO">GD:mobShearWO</a>, and <a href="./SecGDs.html#GD:bsShrFEq">GD:bsShrFEq</a></td></tr>
-</tbody></table>
+</tbody>
+</table>
 </div>
 <h4 id="GD:sliceWghtDeriv"><a class="header" href="#GD:sliceWghtDeriv"></a></h4>
 <p>For the case where the water table is above the slope surface, the weights come from the weight of the saturated soil. Substituting values for saturated soil into the equation for weight from <a href="./SecGDs.html#GD:weight">GD:weight</a> yields:</p>
@@ -382,27 +624,65 @@
 <div align="center">
 <h2 id="GD:hsPressure"><a class="header" href="#GD:hsPressure">Hydrostatic pressure</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:hsPressure</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:hsPressure</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Hydrostatic pressure</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{Pa}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[p=γ\,h\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(p\) is the pressure (\({\text{Pa}}\))</li><li>\(γ\) is the specific weight (\(\frac{\text{N}}{\text{m}^{3}}\))</li><li>\(h\) is the height (\({\text{m}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>This equation is derived from Bernoulli’s equation for a slow moving fluid through a porous material.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\(p\) is the pressure (\({\text{Pa}}\))</li>
+<li>\(γ\) is the specific weight (\(\frac{\text{N}}{\text{m}^{3}}\))</li>
+<li>\(h\) is the height (\({\text{m}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>This equation is derived from Bernoulli’s equation for a slow moving fluid through a porous material.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="https://en.wikipedia.org/wiki/Pressure">Definition of Pressure</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:srfWtrF">GD:srfWtrF</a> and <a href="./SecGDs.html#GD:baseWtrF">GD:baseWtrF</a></td></tr>
-</tbody></table>
-</div><div align="center">
+</tbody>
+</table>
+</div>
+<div align="center">
 <h2 id="GD:baseWtrF"><a class="header" href="#GD:baseWtrF">Base hydrostatic force</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:baseWtrF</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:baseWtrF</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Base hydrostatic force</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{N}}{\text{m}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{U}_{\text{b},i}}={\boldsymbol{L}_{b,i}}\,{γ_{w}}\,\frac{1}{2}\,\begin{cases}{\boldsymbol{y}_{\text{wt},i}}-{\boldsymbol{y}_{\text{slip},i}}+{\boldsymbol{y}_{\text{wt},i-1}}-{\boldsymbol{y}_{\text{slip},i-1}}, &amp; {\boldsymbol{y}_{\text{wt},i}}\gt{}{\boldsymbol{y}_{\text{slip},i}}\lor{}{\boldsymbol{y}_{\text{wt},i-1}}\gt{}{\boldsymbol{y}_{\text{slip},i-1}}\\0, &amp; {\boldsymbol{y}_{\text{wt},i}}\leq{}{\boldsymbol{y}_{\text{slip},i}}\land{}{\boldsymbol{y}_{\text{wt},i-1}}\leq{}{\boldsymbol{y}_{\text{slip},i-1}}\end{cases}\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({\boldsymbol{U}_{\text{b}}}\) is the base hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(i\) is the index (Unitless)</li><li>\({\boldsymbol{L}_{b}}\) is the total base lengths of slices (\({\text{m}}\))</li><li>\({γ_{w}}\) is the unit weight of water (\(\frac{\text{N}}{\text{m}^{3}}\))</li><li>\({\boldsymbol{y}_{\text{wt}}}\) is the \(y\)-coordinates of the water table (\({\text{m}}\))</li><li>\({\boldsymbol{y}_{\text{slip}}}\) is the \(y\)-coordinates of the slip surface (\({\text{m}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>This equation is based on the assumption that the base of a slice is a straight line (<a href="./SecAssumps.html#assumpSBSBISL">A:Surface-Base-Slice-between-Interslice-Straight-Lines</a>). \({\boldsymbol{L}_{b}}\) is defined in <a href="./SecDDs.html#DD:lengthLb">DD:lengthLb</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\({\boldsymbol{U}_{\text{b}}}\) is the base hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(i\) is the index (Unitless)</li>
+<li>\({\boldsymbol{L}_{b}}\) is the total base lengths of slices (\({\text{m}}\))</li>
+<li>\({γ_{w}}\) is the unit weight of water (\(\frac{\text{N}}{\text{m}^{3}}\))</li>
+<li>\({\boldsymbol{y}_{\text{wt}}}\) is the \(y\)-coordinates of the water table (\({\text{m}}\))</li>
+<li>\({\boldsymbol{y}_{\text{slip}}}\) is the \(y\)-coordinates of the slip surface (\({\text{m}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>This equation is based on the assumption that the base of a slice is a straight line (<a href="./SecAssumps.html#assumpSBSBISL">A:Surface-Base-Slice-between-Interslice-Straight-Lines</a>). \({\boldsymbol{L}_{b}}\) is defined in <a href="./SecDDs.html#DD:lengthLb">DD:lengthLb</a>.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#fredlund1977">fredlund1977</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:resShearWO">GD:resShearWO</a>, <a href="./SecGDs.html#GD:effNormF">GD:effNormF</a>, and <a href="./SecGDs.html#GD:baseWtrF">GD:baseWtrF</a></td></tr>
-</tbody></table>
+</tbody>
+</table>
 </div>
 <h4 id="GD:baseWtrFDeriv"><a class="header" href="#GD:baseWtrFDeriv"></a></h4>
 <p>The base hydrostatic forces come from the hydrostatic pressure exerted by the water above the base of each slice. The equation for hydrostatic pressure from <a href="./SecGDs.html#GD:hsPressure">GD:hsPressure</a> is:</p>
@@ -415,15 +695,35 @@
 <div align="center">
 <h2 id="GD:srfWtrF"><a class="header" href="#GD:srfWtrF">Surface hydrostatic force</a></h2>
 </div>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:srfWtrF</th></tr></thead><tbody>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:srfWtrF</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Surface hydrostatic force</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{N}}{\text{m}}\)</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{U}_{\text{g},i}}={\boldsymbol{L}_{s,i}}\,{γ_{w}}\,\frac{1}{2}\,\begin{cases}{\boldsymbol{y}_{\text{wt},i}}-{\boldsymbol{y}_{\text{slope},i}}+{\boldsymbol{y}_{\text{wt},i-1}}-{\boldsymbol{y}_{\text{slope},i-1}}, &amp; {\boldsymbol{y}_{\text{wt},i}}\gt{}{\boldsymbol{y}_{\text{slope},i}}\lor{}{\boldsymbol{y}_{\text{wt},i-1}}\gt{}{\boldsymbol{y}_{\text{slope},i-1}}\\0, &amp; {\boldsymbol{y}_{\text{wt},i}}\leq{}{\boldsymbol{y}_{\text{slope},i}}\land{}{\boldsymbol{y}_{\text{wt},i-1}}\leq{}{\boldsymbol{y}_{\text{slope},i-1}}\end{cases}\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({\boldsymbol{U}_{\text{g}}}\) is the surface hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li><li>\(i\) is the index (Unitless)</li><li>\({\boldsymbol{L}_{s}}\) is the surface lengths of slices (\({\text{m}}\))</li><li>\({γ_{w}}\) is the unit weight of water (\(\frac{\text{N}}{\text{m}^{3}}\))</li><li>\({\boldsymbol{y}_{\text{wt}}}\) is the \(y\)-coordinates of the water table (\({\text{m}}\))</li><li>\({\boldsymbol{y}_{\text{slope}}}\) is the \(y\)-coordinates of the slope (\({\text{m}}\))</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>This equation is based on the assumption that the surface of a slice is a straight line (<a href="./SecAssumps.html#assumpSBSBISL">A:Surface-Base-Slice-between-Interslice-Straight-Lines</a>). \({\boldsymbol{L}_{s}}\) is defined in <a href="./SecDDs.html#DD:lengthLs">DD:lengthLs</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left">
+<ul>
+<li>\({\boldsymbol{U}_{\text{g}}}\) is the surface hydrostatic forces (\(\frac{\text{N}}{\text{m}}\))</li>
+<li>\(i\) is the index (Unitless)</li>
+<li>\({\boldsymbol{L}_{s}}\) is the surface lengths of slices (\({\text{m}}\))</li>
+<li>\({γ_{w}}\) is the unit weight of water (\(\frac{\text{N}}{\text{m}^{3}}\))</li>
+<li>\({\boldsymbol{y}_{\text{wt}}}\) is the \(y\)-coordinates of the water table (\({\text{m}}\))</li>
+<li>\({\boldsymbol{y}_{\text{slope}}}\) is the \(y\)-coordinates of the slope (\({\text{m}}\))</li>
+</ul>
+</td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left">
+<ul>
+<li>This equation is based on the assumption that the surface of a slice is a straight line (<a href="./SecAssumps.html#assumpSBSBISL">A:Surface-Base-Slice-between-Interslice-Straight-Lines</a>). \({\boldsymbol{L}_{s}}\) is defined in <a href="./SecDDs.html#DD:lengthLs">DD:lengthLs</a>.</li>
+</ul>
+</td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#fredlund1977">fredlund1977</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:srfWtrF">GD:srfWtrF</a>, <a href="./SecGDs.html#GD:resShearWO">GD:resShearWO</a>, <a href="./SecIMs.html#IM:nrmShrForNum">IM:nrmShrForNum</a>, <a href="./SecGDs.html#GD:normForcEq">GD:normForcEq</a>, <a href="./SecGDs.html#GD:momentEql">GD:momentEql</a>, <a href="./SecGDs.html#GD:mobShearWO">GD:mobShearWO</a>, and <a href="./SecGDs.html#GD:bsShrFEq">GD:bsShrFEq</a></td></tr>
-</tbody></table>
+</tbody>
+</table>
 </div>
 <h4 id="GD:srfWtrFDeriv"><a class="header" href="#GD:srfWtrFDeriv"></a></h4>
 <p>The surface hydrostatic forces come from the hydrostatic pressure exerted by the water above the surface of each slice. The equation for hydrostatic pressure from <a href="./SecGDs.html#GD:hsPressure">GD:hsPressure</a> is:</p>
@@ -439,11 +739,11 @@
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                             <a rel="prev" href="SecTMs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
                             <a rel="next prefetch" href="SecDDs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
                         <div style="clear: both"></div>
@@ -453,16 +753,21 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                     <a rel="prev" href="SecTMs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                        <i class="fa fa-angle-left"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
                     <a rel="next prefetch" href="SecDDs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
 
         </div>
 
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
 
 
@@ -471,13 +776,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
 

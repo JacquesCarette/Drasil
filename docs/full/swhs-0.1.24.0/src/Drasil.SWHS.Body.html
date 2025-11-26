@@ -686,11 +686,11 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-187"></span><span>
 </span><span id="line-188"></span><span class="annot"><a href="Drasil.SWHS.Body.html#introEnd"><span class="hs-identifier hs-type">introEnd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-189"></span><span id="introEnd"><span class="annot"><span class="annottext">introEnd :: Sentence -&gt; CI -&gt; Sentence
-</span><a href="Drasil.SWHS.Body.html#introEnd"><span class="hs-identifier hs-var hs-var">introEnd</span></a></span></span><span> </span><span id="local-6989586621679090719"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679090719"><span class="hs-identifier hs-var">progSent</span></a></span></span><span> </span><span id="local-6989586621679090720"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090720"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; Sentence
+</span><a href="Drasil.SWHS.Body.html#introEnd"><span class="hs-identifier hs-var hs-var">introEnd</span></a></span></span><span> </span><span id="local-6989586621679090704"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679090704"><span class="hs-identifier hs-var">progSent</span></a></span></span><span> </span><span id="local-6989586621679090705"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679090705"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679090719"><span class="hs-identifier hs-var">progSent</span></a></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679090704"><span class="hs-identifier hs-var">progSent</span></a></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The developed&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-190"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -701,11 +701,11 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-string">&quot;will be referred to as&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090720"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="#local-6989586621679090705"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090720"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679090705"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-191"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;based on the original&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -940,8 +940,8 @@ forall c. Idea c =&gt; c -&gt; Sentence
 </span><span id="line-274"></span><span>
 </span><span id="line-275"></span><span class="annot"><a href="Drasil.SWHS.Body.html#sysCntxtDesc"><span class="hs-identifier hs-type">sysCntxtDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
 </span><span id="line-276"></span><span id="sysCntxtDesc"><span class="annot"><span class="annottext">sysCntxtDesc :: CI -&gt; Contents
-</span><a href="Drasil.SWHS.Body.html#sysCntxtDesc"><span class="hs-identifier hs-var hs-var">sysCntxtDesc</span></a></span></span><span> </span><span id="local-6989586621679090732"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090732"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; Contents
+</span><a href="Drasil.SWHS.Body.html#sysCntxtDesc"><span class="hs-identifier hs-var hs-var">sysCntxtDesc</span></a></span></span><span> </span><span id="local-6989586621679090717"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679090717"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">LabelledContent -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
@@ -984,7 +984,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090732"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679090717"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Arrows&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.are`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -1006,12 +1006,12 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span id="line-282"></span><span>
 </span><span id="line-283"></span><span class="annot"><a href="Drasil.SWHS.Body.html#sysCntxtRespIntro"><span class="hs-identifier hs-type">sysCntxtRespIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
 </span><span id="line-284"></span><span id="sysCntxtRespIntro"><span class="annot"><span class="annottext">sysCntxtRespIntro :: CI -&gt; Contents
-</span><a href="Drasil.SWHS.Body.html#sysCntxtRespIntro"><span class="hs-identifier hs-var hs-var">sysCntxtRespIntro</span></a></span></span><span> </span><span id="local-6989586621679090735"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090735"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; Contents
+</span><a href="Drasil.SWHS.Body.html#sysCntxtRespIntro"><span class="hs-identifier hs-var hs-var">sysCntxtRespIntro</span></a></span></span><span> </span><span id="local-6989586621679090720"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679090720"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSPCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090735"><span class="hs-identifier hs-var">pro</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679090720"><span class="hs-identifier hs-var">pro</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is mostly self-contained&quot;</span></span><span class="hs-special">,</span><span>
@@ -1045,8 +1045,8 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span id="line-288"></span><span>
 </span><span id="line-289"></span><span class="annot"><a href="Drasil.SWHS.Body.html#systContRespBullets"><span class="hs-identifier hs-type">systContRespBullets</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
 </span><span id="line-290"></span><span id="systContRespBullets"><span class="annot"><span class="annottext">systContRespBullets :: CI -&gt; Contents
-</span><a href="Drasil.SWHS.Body.html#systContRespBullets"><span class="hs-identifier hs-var hs-var">systContRespBullets</span></a></span></span><span> </span><span id="local-6989586621679090739"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090739"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnlabelledContent -&gt; Contents
+</span><a href="Drasil.SWHS.Body.html#systContRespBullets"><span class="hs-identifier hs-var hs-var">systContRespBullets</span></a></span></span><span> </span><span id="local-6989586621679090724"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679090724"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnlabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">UlC</span></span><span> </span><span class="annot"><span class="annottext">(UnlabelledContent -&gt; Contents) -&gt; UnlabelledContent -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">RawContent -&gt; UnlabelledContent
@@ -1067,7 +1067,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-string">&quot;Responsibilities&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090739"><span class="hs-identifier hs-var">prog</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679090724"><span class="hs-identifier hs-var">prog</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Responsibilities&quot;</span></span><span class="hs-special">]</span><span>
@@ -1184,8 +1184,8 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-314"></span><span>
 </span><span id="line-315"></span><span class="annot"><a href="Drasil.SWHS.Body.html#userChars"><span class="hs-identifier hs-type">userChars</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
 </span><span id="line-316"></span><span id="userChars"><span class="annot"><span class="annottext">userChars :: CI -&gt; Contents
-</span><a href="Drasil.SWHS.Body.html#userChars"><span class="hs-identifier hs-var hs-var">userChars</span></a></span></span><span> </span><span id="local-6989586621679090752"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090752"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; Contents
+</span><a href="Drasil.SWHS.Body.html#userChars"><span class="hs-identifier hs-var hs-var">userChars</span></a></span></span><span> </span><span id="local-6989586621679090737"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679090737"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The end&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -1195,7 +1195,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090752"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679090737"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-317"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;should have an understanding&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -1289,46 +1289,46 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-355"></span><span>
 </span><span id="line-356"></span><span class="annot"><a href="Drasil.SWHS.Body.html#physSyst1"><span class="hs-identifier hs-type">physSyst1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-357"></span><span id="physSyst1"><span class="annot"><span class="annottext">physSyst1 :: ConceptChunk -&gt; ConceptChunk -&gt; Purpose
-</span><a href="Drasil.SWHS.Body.html#physSyst1"><span class="hs-identifier hs-var hs-var">physSyst1</span></a></span></span><span> </span><span id="local-6989586621679090756"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090756"><span class="hs-identifier hs-var">ta</span></a></span></span><span> </span><span id="local-6989586621679090757"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090757"><span class="hs-identifier hs-var">wa</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><a href="Drasil.SWHS.Body.html#physSyst1"><span class="hs-identifier hs-var hs-var">physSyst1</span></a></span></span><span> </span><span id="local-6989586621679090741"><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679090741"><span class="hs-identifier hs-var">ta</span></a></span></span><span> </span><span id="local-6989586621679090742"><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679090742"><span class="hs-identifier hs-var">wa</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090756"><span class="hs-identifier hs-var">ta</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679090741"><span class="hs-identifier hs-var">ta</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;containing&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090757"><span class="hs-identifier hs-var">wa</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679090742"><span class="hs-identifier hs-var">wa</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-358"></span><span>
 </span><span id="line-359"></span><span class="annot"><a href="Drasil.SWHS.Body.html#physSyst2"><span class="hs-identifier hs-type">physSyst2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-360"></span><span id="physSyst2"><span class="annot"><span class="annottext">physSyst2 :: ConceptChunk -&gt; ConceptChunk -&gt; UnitalChunk -&gt; Purpose
-</span><a href="Drasil.SWHS.Body.html#physSyst2"><span class="hs-identifier hs-var hs-var">physSyst2</span></a></span></span><span> </span><span id="local-6989586621679090758"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090758"><span class="hs-identifier hs-var">co</span></a></span></span><span> </span><span id="local-6989586621679090759"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090759"><span class="hs-identifier hs-var">ta</span></a></span></span><span> </span><span id="local-6989586621679090760"><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679090760"><span class="hs-identifier hs-var">hfc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><a href="Drasil.SWHS.Body.html#physSyst2"><span class="hs-identifier hs-var hs-var">physSyst2</span></a></span></span><span> </span><span id="local-6989586621679090743"><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679090743"><span class="hs-identifier hs-var">co</span></a></span></span><span> </span><span id="local-6989586621679090744"><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679090744"><span class="hs-identifier hs-var">ta</span></a></span></span><span> </span><span id="local-6989586621679090745"><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679090745"><span class="hs-identifier hs-var">hfc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090758"><span class="hs-identifier hs-var">co</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679090743"><span class="hs-identifier hs-var">co</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;at bottom of&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090759"><span class="hs-identifier hs-var">ta</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679090744"><span class="hs-identifier hs-var">ta</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-361"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679090760"><span class="hs-identifier hs-var">hfc</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679090745"><span class="hs-identifier hs-var">hfc</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;represents the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679090760"><span class="hs-identifier hs-var">hfc</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679090745"><span class="hs-identifier hs-var">hfc</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-362"></span><span>
 </span><span id="line-363"></span><span class="hs-comment">-- Structure of list would be same between examples but content is completely</span><span>
 </span><span id="line-364"></span><span class="hs-comment">-- different</span><span>
@@ -1713,8 +1713,8 @@ a -&gt; UnitalChunk -&gt; CI -&gt; ConceptChunk -&gt; Contents
 </span><a href="Drasil.SWHS.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">rightSide</span></span><span class="hs-special">]</span><span>
 </span><span id="line-491"></span><span>
-</span><span id="line-492"></span><span id="local-6989586621679090119"><span id="local-6989586621679090120"><span class="annot"><a href="Drasil.SWHS.Body.html#propCorSolDeriv1"><span class="hs-identifier hs-type">propCorSolDeriv1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679090119"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679090120"><span class="hs-identifier hs-type">h</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679090119"><span class="hs-identifier hs-type">b</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><span id="line-493"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679090120"><span class="hs-identifier hs-type">h</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span></span><span>
+</span><span id="line-492"></span><span id="local-6989586621679090104"><span id="local-6989586621679090105"><span class="annot"><a href="Drasil.SWHS.Body.html#propCorSolDeriv1"><span class="hs-identifier hs-type">propCorSolDeriv1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679090104"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679090105"><span class="hs-identifier hs-type">h</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679090104"><span class="hs-identifier hs-type">b</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-493"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679090105"><span class="hs-identifier hs-type">h</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span></span><span>
 </span><span id="line-494"></span><span id="propCorSolDeriv1"><span class="annot"><span class="annottext">propCorSolDeriv1 :: forall b h.
 (NamedIdea b, NamedIdea h) =&gt;
 ConceptChunk
@@ -1727,16 +1727,16 @@ ConceptChunk
 -&gt; h
 -&gt; ConceptChunk
 -&gt; Contents
-</span><a href="Drasil.SWHS.Body.html#propCorSolDeriv1"><span class="hs-identifier hs-var hs-var">propCorSolDeriv1</span></a></span></span><span> </span><span id="local-6989586621679090807"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090807"><span class="hs-identifier hs-var">lce</span></a></span></span><span> </span><span id="local-6989586621679090808"><span class="annot"><span class="annottext">b
-</span><a href="#local-6989586621679090808"><span class="hs-identifier hs-var">ewat</span></a></span></span><span> </span><span id="local-6989586621679090809"><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679090809"><span class="hs-identifier hs-var">en</span></a></span></span><span> </span><span id="local-6989586621679090810"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090810"><span class="hs-identifier hs-var">co</span></a></span></span><span> </span><span id="local-6989586621679090811"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090811"><span class="hs-identifier hs-var">pcmat</span></a></span></span><span> </span><span id="local-6989586621679090812"><span class="annot"><span class="annottext">GenDefn
-</span><a href="#local-6989586621679090812"><span class="hs-identifier hs-var">g1hfc</span></a></span></span><span> </span><span id="local-6989586621679090813"><span class="annot"><span class="annottext">GenDefn
-</span><a href="#local-6989586621679090813"><span class="hs-identifier hs-var">g2hfp</span></a></span></span><span> </span><span id="local-6989586621679090814"><span class="annot"><span class="annottext">h
-</span><a href="#local-6989586621679090814"><span class="hs-identifier hs-var">su</span></a></span></span><span> </span><span id="local-6989586621679090815"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090815"><span class="hs-identifier hs-var">ht</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="Drasil.SWHS.Body.html#propCorSolDeriv1"><span class="hs-identifier hs-var hs-var">propCorSolDeriv1</span></a></span></span><span> </span><span id="local-6989586621679090792"><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679090792"><span class="hs-identifier hs-var">lce</span></a></span></span><span> </span><span id="local-6989586621679090793"><span class="annot"><span class="annottext">b
+</span><a href="#local-6989586621679090793"><span class="hs-identifier hs-var">ewat</span></a></span></span><span> </span><span id="local-6989586621679090794"><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679090794"><span class="hs-identifier hs-var">en</span></a></span></span><span> </span><span id="local-6989586621679090795"><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679090795"><span class="hs-identifier hs-var">co</span></a></span></span><span> </span><span id="local-6989586621679090796"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679090796"><span class="hs-identifier hs-var">pcmat</span></a></span></span><span> </span><span id="local-6989586621679090797"><span class="annot"><span class="annottext">GenDefn
+</span><a href="#local-6989586621679090797"><span class="hs-identifier hs-var">g1hfc</span></a></span></span><span> </span><span id="local-6989586621679090798"><span class="annot"><span class="annottext">GenDefn
+</span><a href="#local-6989586621679090798"><span class="hs-identifier hs-var">g2hfp</span></a></span></span><span> </span><span id="local-6989586621679090799"><span class="annot"><span class="annottext">h
+</span><a href="#local-6989586621679090799"><span class="hs-identifier hs-var">su</span></a></span></span><span> </span><span id="local-6989586621679090800"><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679090800"><span class="hs-identifier hs-var">ht</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-495"></span><span>  </span><span class="annot"><span class="annottext">Purpose -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSPCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -1754,7 +1754,7 @@ forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090807"><span class="hs-identifier hs-var">lce</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679090792"><span class="hs-identifier hs-var">lce</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;This means that&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -1762,13 +1762,13 @@ forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">b -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">b
-</span><a href="#local-6989586621679090808"><span class="hs-identifier hs-var">ewat</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679090793"><span class="hs-identifier hs-var">ewat</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-497"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;should equal the difference between the total&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679090809"><span class="hs-identifier hs-var">en</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679090794"><span class="hs-identifier hs-var">en</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-498"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -1780,19 +1780,19 @@ forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090810"><span class="hs-identifier hs-var">co</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><a href="#local-6989586621679090795"><span class="hs-identifier hs-var">co</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
 </span><span class="hs-operator hs-var">`NP.andThe`</span></span><span>
 </span><span id="line-499"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; IdeaDict -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679090809"><span class="hs-identifier hs-var">en</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
+</span><a href="#local-6989586621679090794"><span class="hs-identifier hs-var">en</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">output_</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;to the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090811"><span class="hs-identifier hs-var">pcmat</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679090796"><span class="hs-identifier hs-var">pcmat</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-500"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;This can be shown as an&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -1806,26 +1806,26 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
-</span><a href="#local-6989586621679090812"><span class="hs-identifier hs-var">g1hfc</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679090797"><span class="hs-identifier hs-var">g1hfc</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">GenDefn -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
-</span><a href="#local-6989586621679090813"><span class="hs-identifier hs-var">g2hfp</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679090798"><span class="hs-identifier hs-var">g2hfp</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
 </span><span id="line-502"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;multiplying each by their respective&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">h -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">h
-</span><a href="#local-6989586621679090814"><span class="hs-identifier hs-var">su</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679090799"><span class="hs-identifier hs-var">su</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-503"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;area of&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090815"><span class="hs-identifier hs-var">ht</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679090800"><span class="hs-identifier hs-var">ht</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and integrating each&quot;</span></span><span class="hs-special">,</span><span>
@@ -1931,42 +1931,42 @@ f -&gt; a -&gt; r
 </span><a href="Drasil.SWHS.Unitals.html#tempPCM"><span class="hs-identifier hs-var">tempPCM</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-513"></span><span>
-</span><span id="line-514"></span><span id="local-6989586621679090121"><span class="annot"><a href="Drasil.SWHS.Body.html#propCorSolDeriv3"><span class="hs-identifier hs-type">propCorSolDeriv3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679090121"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679090121"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
+</span><span id="line-514"></span><span id="local-6989586621679090106"><span class="annot"><a href="Drasil.SWHS.Body.html#propCorSolDeriv3"><span class="hs-identifier hs-type">propCorSolDeriv3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679090106"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679090106"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
 </span><span id="line-515"></span><span id="propCorSolDeriv3"><span class="annot"><span class="annottext">propCorSolDeriv3 :: forall a.
 NamedIdea a =&gt;
 a -&gt; UnitalChunk -&gt; CI -&gt; ConceptChunk -&gt; Contents
-</span><a href="Drasil.SWHS.Body.html#propCorSolDeriv3"><span class="hs-identifier hs-var hs-var">propCorSolDeriv3</span></a></span></span><span> </span><span id="local-6989586621679090831"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679090831"><span class="hs-identifier hs-var">epcm</span></a></span></span><span> </span><span id="local-6989586621679090832"><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679090832"><span class="hs-identifier hs-var">en</span></a></span></span><span> </span><span id="local-6989586621679090833"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090833"><span class="hs-identifier hs-var">pcmat</span></a></span></span><span> </span><span id="local-6989586621679090834"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090834"><span class="hs-identifier hs-var">wa</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="Drasil.SWHS.Body.html#propCorSolDeriv3"><span class="hs-identifier hs-var hs-var">propCorSolDeriv3</span></a></span></span><span> </span><span id="local-6989586621679090816"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090816"><span class="hs-identifier hs-var">epcm</span></a></span></span><span> </span><span id="local-6989586621679090817"><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679090817"><span class="hs-identifier hs-var">en</span></a></span></span><span> </span><span id="local-6989586621679090818"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679090818"><span class="hs-identifier hs-var">pcmat</span></a></span></span><span> </span><span id="local-6989586621679090819"><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679090819"><span class="hs-identifier hs-var">wa</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-516"></span><span>  </span><span class="annot"><span class="annottext">Purpose -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;In addition, the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679090831"><span class="hs-identifier hs-var">epcm</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679090816"><span class="hs-identifier hs-var">epcm</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;should equal the&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-517"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679090832"><span class="hs-identifier hs-var">en</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><a href="#local-6989586621679090817"><span class="hs-identifier hs-var">en</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">input_</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090833"><span class="hs-identifier hs-var">pcmat</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679090818"><span class="hs-identifier hs-var">pcmat</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-518"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;from the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090834"><span class="hs-identifier hs-var">wa</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679090819"><span class="hs-identifier hs-var">wa</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;This can be expressed as&quot;</span></span><span class="hs-special">]</span><span>
 </span><span id="line-519"></span><span>
@@ -2024,14 +2024,14 @@ f -&gt; a -&gt; r
 </span><span id="line-525"></span><span>
 </span><span id="line-526"></span><span class="annot"><a href="Drasil.SWHS.Body.html#propCorSolDeriv5"><span class="hs-identifier hs-type">propCorSolDeriv5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
 </span><span id="line-527"></span><span id="propCorSolDeriv5"><span class="annot"><span class="annottext">propCorSolDeriv5 :: ConceptChunk -&gt; CI -&gt; CI -&gt; Contents
-</span><a href="Drasil.SWHS.Body.html#propCorSolDeriv5"><span class="hs-identifier hs-var hs-var">propCorSolDeriv5</span></a></span></span><span> </span><span id="local-6989586621679090836"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090836"><span class="hs-identifier hs-var">eq</span></a></span></span><span> </span><span id="local-6989586621679090837"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090837"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span id="local-6989586621679090838"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090838"><span class="hs-identifier hs-var">rs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; Contents
+</span><a href="Drasil.SWHS.Body.html#propCorSolDeriv5"><span class="hs-identifier hs-var hs-var">propCorSolDeriv5</span></a></span></span><span> </span><span id="local-6989586621679090821"><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679090821"><span class="hs-identifier hs-var">eq</span></a></span></span><span> </span><span id="local-6989586621679090822"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679090822"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span id="local-6989586621679090823"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679090823"><span class="hs-identifier hs-var">rs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090836"><span class="hs-identifier hs-var">eq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679090821"><span class="hs-identifier hs-var">eq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;(FIXME: Equation 7)&quot;</span></span><span>
 </span><span id="line-528"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -2054,7 +2054,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090837"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679090822"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The relative&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-531"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -2062,20 +2062,20 @@ forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-string">&quot;error between the results computed by&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090837"><span class="hs-identifier hs-var">pro</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679090822"><span class="hs-identifier hs-var">pro</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span>
 </span><span id="line-532"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the results calculated from the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679090838"><span class="hs-identifier hs-var">rs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679090823"><span class="hs-identifier hs-var">rs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;of these&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-533"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679090836"><span class="hs-identifier hs-var">eq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679090821"><span class="hs-identifier hs-var">eq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;should be less than&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence

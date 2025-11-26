@@ -81,20 +81,12 @@ insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
 --   NOTE: Ignores management of dependancies related to
 --   <a>LabelledContent</a>s and <a>Reference</a>s.
 insertAllOutOfOrder12 :: (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e, IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j) => ChunkDB -> [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [g] -> [h] -> [i] -> [j] -> [LabelledContent] -> [Reference] -> ChunkDB
-
--- | An ordered map based on <a>Strict</a> for looking up chunks by their
---   <a>UID</a>s.
-type UMap a = Map UID (a, Int)
-
--- | Create a <a>UMap</a> from a list of chunks. Assumes that the leftmost
---   chunk in the list has index 0, increasing by 1 each step to the right.
-idMap :: HasUID a => [a] -> UMap a
-refTable :: ChunkDB -> UMap Reference
+refTable :: ChunkDB -> Map UID Reference
 
 -- | Find a <a>Reference</a> by its <a>UID</a>, throwing an error if it is
 --   not found.
 refFind :: UID -> ChunkDB -> Reference
-labelledcontentTable :: ChunkDB -> UMap LabelledContent
+labelledcontentTable :: ChunkDB -> Map UID LabelledContent
 
 -- | Find a <a>LabelledContent</a> by its <a>UID</a>, throwing an error if
 --   it is not found.

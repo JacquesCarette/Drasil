@@ -61,7 +61,7 @@ type Filename = String
 docChoices :: DocType -> [Format] -> DocChoices
 
 -- | Generate an SRS softifact.
-exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO System
+exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO ()
 
 -- | Generate a JupyterNotebook-based lesson plan.
 exportLessonPlan :: System -> LsnDecl -> String -> IO ()

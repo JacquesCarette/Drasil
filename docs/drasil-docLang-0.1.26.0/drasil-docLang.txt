@@ -859,14 +859,9 @@ Derived :: TUIntro
 -- | Purpose of the table of units.
 TUPurpose :: TUIntro
 
--- | Creates a document from a document description, a title combinator
---   function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (System, DocDesc) -> Document
-
--- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
---   references, fill in for rest of system information. Currently fills in
---   references, traceability matrix information and <a>IdeaDict</a>s.
-fillcdbSRS :: SRSDecl -> System -> (System, DocDesc)
+-- | Creates a document from a <a>System</a>, a document description
+--   (<a>SRSDecl</a>), and a title combinator.
+mkDoc :: System -> SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (Document, System)
 
 -- | Recursively find all references in a section (meant for getting at
 --   <a>LabelledContent</a>).
@@ -1426,14 +1421,9 @@ Verbose :: Verbosity
 -- | Simple Description (do not redefine other symbols).
 Succinct :: Verbosity
 
--- | Creates a document from a document description, a title combinator
---   function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (System, DocDesc) -> Document
-
--- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
---   references, fill in for rest of system information. Currently fills in
---   references, traceability matrix information and <a>IdeaDict</a>s.
-fillcdbSRS :: SRSDecl -> System -> (System, DocDesc)
+-- | Creates a document from a <a>System</a>, a document description
+--   (<a>SRSDecl</a>), and a title combinator.
+mkDoc :: System -> SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (Document, System)
 
 -- | Default Reference Material section introduction.
 intro :: Contents

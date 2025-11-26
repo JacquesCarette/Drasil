@@ -23,23 +23,24 @@ Specification :: SystemKind
 RunnableSoftware :: SystemKind
 Notebook :: SystemKind
 Website :: SystemKind
-class HasSystem c_a901
-system :: HasSystem c_a901 => Lens' c_a901 System
-authors :: HasSystem c_a901 => Lens' c_a901 People
-background :: HasSystem c_a901 => Lens' c_a901 Background
-configFiles :: HasSystem c_a901 => Lens' c_a901 [String]
-constants :: HasSystem c_a901 => Lens' c_a901 [ConstQDef]
-dataDefns :: HasSystem c_a901 => Lens' c_a901 [DataDefinition]
-genDefns :: HasSystem c_a901 => Lens' c_a901 [GenDefn]
-instModels :: HasSystem c_a901 => Lens' c_a901 [InstanceModel]
-kind :: HasSystem c_a901 => Lens' c_a901 SystemKind
-motivation :: HasSystem c_a901 => Lens' c_a901 Motivation
-purpose :: HasSystem c_a901 => Lens' c_a901 Purpose
-scope :: HasSystem c_a901 => Lens' c_a901 Scope
-systemdb :: HasSystem c_a901 => Lens' c_a901 ChunkDB
-theoryModels :: HasSystem c_a901 => Lens' c_a901 [TheoryModel]
+class HasSystem c_a8ZL
+system :: HasSystem c_a8ZL => Lens' c_a8ZL System
+authors :: HasSystem c_a8ZL => Lens' c_a8ZL People
+background :: HasSystem c_a8ZL => Lens' c_a8ZL Background
+configFiles :: HasSystem c_a8ZL => Lens' c_a8ZL [String]
+constants :: HasSystem c_a8ZL => Lens' c_a8ZL [ConstQDef]
+dataDefns :: HasSystem c_a8ZL => Lens' c_a8ZL [DataDefinition]
+genDefns :: HasSystem c_a8ZL => Lens' c_a8ZL [GenDefn]
+instModels :: HasSystem c_a8ZL => Lens' c_a8ZL [InstanceModel]
+kind :: HasSystem c_a8ZL => Lens' c_a8ZL SystemKind
+motivation :: HasSystem c_a8ZL => Lens' c_a8ZL Motivation
+purpose :: HasSystem c_a8ZL => Lens' c_a8ZL Purpose
+scope :: HasSystem c_a8ZL => Lens' c_a8ZL Scope
+systemdb :: HasSystem c_a8ZL => Lens' c_a8ZL ChunkDB
+theoryModels :: HasSystem c_a8ZL => Lens' c_a8ZL [TheoryModel]
 whatsTheBigIdea :: System -> IdeaDict
 mkSystem :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
+sysName :: System -> IdeaDict
 
 -- | Project Example purpose.
 type Purpose = [Sentence]

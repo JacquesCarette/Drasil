@@ -144,13 +144,6 @@ si = SI {
 1. Update your `Main.hs` file: Your main module will load all the other modules in your project to build and generate your SRS.
 2. Open the `Main.hs` file in the current folder and replace all instances of `template` with your project name, save and close.
 
-
-## Creating Sections in Your SRS Template Within `Body.hs`
-
-1. Start constructing your chunk database i.e `symbMap` function – As you build sections of your SRS, you will be required to fill in this database function. 
-2. Add `nw program` in the second argument of `symbMap`, and import the module where the variable `program` is defined i.e `import Data.Drasil.Concepts.Software (program)`.
-
-   
 ## Update `yaml` and `cabal` Files
 The `package.yaml` file contains some information about your project, including all the modules used in your project. From there, the compiler will generate a `.cabal` file for you. The information in the `.cabal` is then needed to actually build your project and connect all the packages included. As you add more modules to you project folder, you will need to update `package.yaml` (which will automatically update the `.cabal` file). You should almost never have to manually update the `.cabal` file.
 

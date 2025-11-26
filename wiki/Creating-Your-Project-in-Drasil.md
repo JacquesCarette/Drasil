@@ -48,6 +48,7 @@
 ## Getting Started: 
 
 - Follow the [New Workspace Setup](New-Workspace-Setup) for setting up your machine for working with Drasil.
+- For more information on the contents of a Software Requirements Specification (SRS), see Dr. Smith's [template](https://github.com/smiths/capTemplate/blob/main/docs/SRS/SRS.pdf)
 - Instructions on how to fork the Drasil repo. This is required to create your project in Drasil. Also check out this [pull request](https://github.com/JacquesCarette/Drasil/pull/2461) for more information on setting up your own bot for GitHub Actions.
   - TODO: Add instrutions on how to fork
 - [Setting up your workspace](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup)

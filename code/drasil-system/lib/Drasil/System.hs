@@ -12,7 +12,7 @@ module Drasil.System (
   -- ** Lenses
   HasSystem(..),
   -- ** Functions
-  whatsTheBigIdea, mkSystem,
+  whatsTheBigIdea, mkSystem, sysName,
   -- * Reference Database
   -- ** Types
   Purpose, Background, Scope, Motivation,
@@ -111,3 +111,7 @@ refbyLookup u = fromMaybe [] . M.lookup u . (^. refbyTable)
 
 traceLookup :: UID -> System -> [UID]
 traceLookup u = fromMaybe [] . M.lookup u . (^. traceTable)
+
+-- FIXME: sysName is a hack.
+sysName :: System -> IdeaDict
+sysName SI{_sys = sys} = nw sys

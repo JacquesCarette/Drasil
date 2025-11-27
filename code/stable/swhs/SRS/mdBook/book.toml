@@ -1,6 +1,5 @@
 [book]
 language = "en"
-multilingual = false
 src = "src"
 title = "Software Requirements Specification for Solar Water Heating Systems Incorporating PCM"
 [output.html]

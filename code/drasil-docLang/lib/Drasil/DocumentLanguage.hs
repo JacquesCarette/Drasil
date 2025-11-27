@@ -5,7 +5,7 @@
 -- Over time, we'll want to have a cleaner separation, but doing that
 -- all at once would break too much for too long.  So we start here
 -- instead.
-module Drasil.DocumentLanguage (mkDoc, fillcdbSRS, findAllRefs) where
+module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 
 import Control.Lens ((^.), set)
 import Data.Function (on)
@@ -36,7 +36,8 @@ import Database.Drasil (findOrErr, ChunkDB(..))
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts)
 
-import Drasil.System (System(SI), whatsTheBigIdea, _sys, _systemdb, _quants, _authors, refTable, refbyTable, traceTable, systemdb)
+import Drasil.System (System(SI), whatsTheBigIdea, _sys, _systemdb, _quants,
+  _authors, refTable, refbyTable, traceTable, systemdb, sysName)
 import Drasil.GetChunks (ccss, ccss', citeDB)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -73,11 +74,27 @@ import qualified Data.Map.Strict as M
 
 -- * Main Function
 
--- | Creates a document from a document description, a title combinator function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (System, DocDesc) -> Document
-mkDoc srs comb (si@SI {_sys = sys, _authors = docauthors}, dd) =
-  Document (whatsTheBigIdea si `comb` nw sys) (foldlList Comma List $ map (S . name) docauthors)
-    (findToC srs) $ mkSections si dd
+-- | Creates a document from a 'System', a document description ('SRSDecl'), and
+-- a title combinator.
+mkDoc :: System -> SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (Document, System)
+mkDoc si srsDecl headingComb =
+  let dd = mkDocDesc si srsDecl
+      sections = mkSections si dd
+      -- Above this line, the content to be generated in the SRS artifact is
+      -- pre-generated (missing content involving 'Reference's and
+      -- 'LabelledContent'). The below line injects "traceability" maps into the
+      -- 'ChunkDB' and adds missing 'LabelledContent' (the generated
+      -- traceability-related tables).
+      si'@SI{ _authors = docAuthors } = fillLC dd $ fillReferences sections $ fillTraceMaps dd si
+      -- Now, the 'real generation' of the SRS artifact can begin, with the
+      -- 'Reference' map now full (so 'Reference' references can resolve to
+      -- 'Reference's).
+      heading = whatsTheBigIdea si `headingComb` sysName si'
+      authorsList = foldlList Comma List $ map (S . name) docAuthors
+      toc = findToC srsDecl
+      dd' = mkDocDesc si' srsDecl
+      sections' = mkSections si' dd'
+  in (Document heading authorsList toc sections', si')
 
 -- * Functions to Fill 'ChunkDB'
 
@@ -86,18 +103,6 @@ mkDoc srs comb (si@SI {_sys = sys, _authors = docauthors}, dd) =
 -- - The traceability-stuff should be internal to ChunkDB.
 -- - The References and LabelledContent entirely need to be rebuilt. Some will
 --   be chunks that are manually written, others will not be chunks.
-
--- | Assuming a given 'ChunkDB' with no traces and minimal/no references, fill
--- in for rest of system information. Currently fills in references,
--- traceability matrix information and 'IdeaDict's.
-fillcdbSRS :: SRSDecl -> System -> (System , DocDesc)
-fillcdbSRS srsDec si =
-  (fillLC dd $ fillReferences sections $ fillTraceMaps dd si , dd)
-  where
-    dd :: DocDesc
-    dd = mkDocDesc si srsDec
-    sections :: [Section]
-    sections = mkSections si dd
 
 -- | Fill in the 'Section's and 'LabelledContent' maps of the 'ChunkDB' from the 'SRSDecl'.
 fillLC :: DocDesc -> System -> System
@@ -314,12 +319,12 @@ mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSub
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: System -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
-  SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) SSD.imStub] $
+  SRS.solCharSpec [SSD.solutionCharSpecIntro (sysName si) SSD.imStub] $
     map (mkSubSCS si) l
   where
     mkSubSCS :: System -> SCSSub -> Section
     mkSubSCS si' (TMs intro fields ts) =
-      SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
+      SSD.thModF (sysName si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
       SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap f dds
       where f e = LlC (ddefn fields si' e) : maybeToList (derivation e)
@@ -340,8 +345,6 @@ mkSolChSpec si (SCSProg l) =
       SSD.assumpF $ mkEnumSimpleD $ map (`SSD.helperCI` si') ci
     mkSubSCS _ (Constraints end cs)  = SSD.datConF end cs
     mkSubSCS _ (CorrSolnPpties c cs) = SSD.propCorSolF c cs
-    siSys :: System -> IdeaDict
-    siSys SI {_sys = sys} = nw sys
 
 -- ** Requirements
 

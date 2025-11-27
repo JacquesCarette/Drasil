@@ -9,5 +9,4 @@ import Drasil.GamePhysics.Body (mkSRS, si)
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  _ <- exportSmithEtAlSrs si mkSRS "GamePhysics_SRS"
-  return ()
+  exportSmithEtAlSrs si mkSRS "GamePhysics_SRS"

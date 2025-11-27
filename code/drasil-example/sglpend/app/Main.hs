@@ -9,5 +9,4 @@ import Drasil.SglPend.Body (mkSRS, si)
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  _ <- exportSmithEtAlSrs si mkSRS "SglPend_SRS"
-  return ()
+  exportSmithEtAlSrs si mkSRS "SglPend_SRS"

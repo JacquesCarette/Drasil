@@ -1,4 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE StandaloneDeriving #-}
+{-# LANGUAGE DerivingVia #-}
+{-# LANGUAGE DeriveGeneric #-}
 -- | The lowest level of chunks in Drasil. It all starts with an identifier and a term.
 module Language.Drasil.Chunk.NamedIdea (
   -- * Type
@@ -9,12 +12,12 @@ module Language.Drasil.Chunk.NamedIdea (
   nc, ncUID, nw, mkIdea, mkIdeaUID
 ) where
 
-import Drasil.Database.Chunk (HasChunkRefs(..))
-import Drasil.Database.UID (mkUid, UID, HasUID(..))
-import Control.Lens ((^.), makeLenses)
+import Control.Lens ((^.), makeLenses, Lens')
 
-import Language.Drasil.NounPhrase.Core ( NP )
-import Control.Lens.Lens (Lens')
+import Drasil.Database.UID (mkUid, UID, HasUID(..))
+import Drasil.Database.TH (declareHasChunkRefs, Generically(..))
+
+import Language.Drasil.NounPhrase.Core (NP)
 
 -- TODO: Why does a NamedIdea need a UID? It might need a UID to be registered in the chunk map.
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as
@@ -54,10 +57,8 @@ data IdeaDict = IdeaDict {
   _np :: NP,
   mabbr :: Maybe String
 }
+declareHasChunkRefs ''IdeaDict
 makeLenses ''IdeaDict
-
-instance HasChunkRefs IdeaDict where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Equal if 'UID's are equal.
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid

@@ -17,7 +17,6 @@
   * [Combinators](Combinator-Documentation)
   * [Guidelines for Adding New Types and Typeclasses](Guidelines-for-Adding-New-Types-and-Typeclasses-in-Drasil)
   * [References](Reference-Design-and-Documentation)
-  * [Functions to Generate SRS Documents](Functions-to-Generate-SRS-Documents)
   * [Printing Information](Printing-Information-Guide)
   * [Sub-packages](SubPackages)
   * [Folders](Folder-layout)

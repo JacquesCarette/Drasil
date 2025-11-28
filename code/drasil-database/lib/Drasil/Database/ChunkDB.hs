@@ -60,19 +60,19 @@ fromList = flip insertAll empty
 
 -- | Query the 'ChunkDB' for all registered chunks (by their 'UID's).
 registered :: ChunkDB -> [UID]
-registered cdb = M.keys (chunkTable cdb)
+registered = M.keys . chunkTable
 
 -- | Check if a 'UID' is registered in the 'ChunkDB'.
 isRegistered :: UID -> ChunkDB -> Bool
-isRegistered u cdb = M.member u (chunkTable cdb)
+isRegistered u = M.member u . chunkTable
 
 -- | Enumerate all types registered in the 'ChunkDB'.
 typesRegistered :: ChunkDB -> [TypeRep]
-typesRegistered cdb = M.keys (chunkTypeTable cdb)
+typesRegistered = M.keys . chunkTypeTable
 
 -- | Get the number of chunks registered in the 'ChunkDB'.
 size :: ChunkDB -> Int
-size cdb = M.size (chunkTable cdb)
+size = M.size . chunkTable
 
 -- | Filter the 'ChunkDB' for chunks that are not needed by any other chunks.
 -- These are the only chunks that can safely be removed from the database,

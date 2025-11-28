@@ -131,31 +131,31 @@ lay sm (UlC x) = layUnlabelled sm (x ^. accessContents)
 -- | Helper that translates 'LabelledContent's to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'lay'.
 layLabelled :: PrintingInformation -> LabelledContent -> T.LayoutObj
-layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
+layLabelled sm x@(LblC _ _ (Table hdr lls t b)) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getAdd $ getRefAdd x)
   b (spec sm t)
-layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
+layLabelled sm x@(LblC _ _ (EqnBlock c))        = T.HDiv ["equation"]
   [T.EqnBlock (P.E (modelExpr c sm))]
   (P.S $ getAdd $ getRefAdd x)
-layLabelled sm x@(LblC _ (Figure c f wp hc))     = T.Figure
+layLabelled sm x@(LblC _ _ (Figure c f wp hc))  = T.Figure
   (P.S $ getAdd $ getRefAdd x)
   (if hc == WithCaption then Just (spec sm c) else Nothing)
   f wp
-layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph
+layLabelled sm x@(LblC _ _ (Graph ps w h t))    = T.Graph
   (map (bimap (spec sm) (spec sm)) ps) w h (spec sm t)
   (P.S $ getAdd $ getRefAdd x)
-layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
+layLabelled sm x@(LblC _ _ (Defini dtyp pairs)) = T.Definition
   dtyp (layPairs pairs)
   (P.S $ getAdd $ getRefAdd x)
   where layPairs = map (second (map (lay sm)))
-layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
-layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
+layLabelled sm (LblC _ _ (Paragraph c))         = T.Paragraph (spec sm c)
+layLabelled sm x@(LblC _ _ (DerivBlock h d))    = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
   where refr = P.S $ refAdd x ++ "Deriv"
-layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
-layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
-layLabelled sm (LblC _ (CodeBlock c))  = T.CodeBlock (P.E (codeExpr c sm))
+layLabelled sm (LblC _ _ (Enumeration cs))      = T.List $ makeL sm cs
+layLabelled  _ (LblC _ _ (Bib bib))             = T.Bib $ map layCite bib
+layLabelled sm (LblC _ _ (CodeBlock c))         = T.CodeBlock (P.E (codeExpr c sm))
 
 -- | Helper that translates 'RawContent's to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'lay'.

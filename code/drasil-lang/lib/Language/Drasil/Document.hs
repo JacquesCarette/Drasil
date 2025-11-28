@@ -87,7 +87,7 @@ checkToC (Notebook t a sc) = Notebook t a sc
 
 -- | Smart constructor for labelled content chunks.
 llcc :: Reference -> RawContent -> LabelledContent
-llcc = LblC
+llcc r = LblC (r ^. uid) r
 
 -- | Smart constructor for unlabelled content chunks (no 'Reference').
 ulcc :: RawContent -> UnlabelledContent

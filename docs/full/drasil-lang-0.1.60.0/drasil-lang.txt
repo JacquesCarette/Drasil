@@ -10,84 +10,6 @@
 @version 0.1.60.0
 
 
--- | Unique Identifier used across Drasil.
-module Drasil.Database.UID
-
--- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
---   into our database of information. We use a newtype wrapper to make
---   sure we are only using <a>UID</a>s where desired.
-data UID
-
--- | The most basic item: having a unique identifier key, here a UID.
-class HasUID c
-
--- | Provides a <i>unique</i> id for internal Drasil use.
-uid :: HasUID c => Getter c UID
-
--- | Smart constructor for <a>UID</a>s from raw <a>Value</a>s.
-mkUid :: String -> UID
-
--- | Nest a <a>UID</a> under a namespace.
-nsUid :: String -> UID -> UID
-
--- | Append a suffix to a thing with a <a>UID</a> and get the resulting
---   <a>UID</a>.
-(+++) :: HasUID a => a -> String -> UID
-
--- | Append a suffix to a <a>UID</a>.
-(+++.) :: UID -> String -> UID
-
--- | Merge the <a>UID</a>s of two chunks through simple concatenation.
-(+++!) :: (HasUID a, HasUID b) => a -> b -> UID
-
--- | Get something's <a>UID</a> as a <a>Value</a>.
-showUID :: HasUID a => a -> String
-instance Data.Aeson.Types.ToJSON.ToJSON Drasil.Database.UID.UID
-instance Data.Aeson.Types.ToJSON.ToJSONKey Drasil.Database.UID.UID
-instance GHC.Show.Show Drasil.Database.UID.UID
-instance GHC.Generics.Generic Drasil.Database.UID.UID
-instance GHC.Classes.Ord Drasil.Database.UID.UID
-instance GHC.Classes.Eq Drasil.Database.UID.UID
-
-module Drasil.Database.Chunk
-
--- | A piece of reusable knowledge, with an internal identifier
---   (<a>UID</a>), possibly dependant on other chunks.
-data Chunk
-
--- | Constraint for anything that may be considered a valid chunk type.
-type IsChunk a = (HasUID a, HasChunkRefs a, Typeable a)
-
--- | All chunks should expose what chunks they reference/rely on, so that
---   we can test <tt>ChunkDB</tt>s to ensure all presupposed chunks are
---   already registered.
-class HasChunkRefs a
-chunkRefs :: HasChunkRefs a => a -> Set UID
-
--- | Create a <a>Chunk</a>, ensuring that <a>Chunk</a>s are never placed
---   within <a>Chunk</a>s.
-mkChunk :: IsChunk a => a -> Chunk
-
--- | <a>Open</a> chunks, casting them to a specific type.
-unChunk :: Typeable a => Chunk -> Maybe a
-
--- | Ask a <a>Chunk</a> for the type of data it codifies.
-chunkType :: Chunk -> TypeRep
-instance GHC.Classes.Eq Drasil.Database.Chunk.Chunk
-instance Drasil.Database.UID.HasUID Drasil.Database.Chunk.Chunk
-instance Drasil.Database.Chunk.HasChunkRefs Drasil.Database.Chunk.Chunk
-
-module Drasil.Database.TypedUIDRef
-
--- | <a>UID</a> references that contain information about the type of data
---   the <a>UID</a> refers to, useful for type-safe dereferencing.
-newtype TypedUIDRef typ
-TypedUIDRef :: UID -> TypedUIDRef typ
-
--- | Create a <a>TypedUIDRef</a> to a chunk.
-mkRef :: IsChunk t => t -> TypedUIDRef t
-
-
 -- | Custom type for dates, in this case Month. This should, in time, be
 --   switched out in favour of a proper package designed to handle all the
 --   complexities of dates.
@@ -6687,7 +6609,7 @@ class RenderSpecial r
 special :: RenderSpecial r => Special -> r
 
 -- | The most basic item: having a unique identifier key, here a UID.
-class HasUID c
+class () => HasUID c
 
 -- | Provides a <i>unique</i> id for internal Drasil use.
 uid :: HasUID c => Getter c UID
@@ -6834,7 +6756,7 @@ class HasSymbol c => IsArgumentName c
 -- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
 --   into our database of information. We use a newtype wrapper to make
 --   sure we are only using <a>UID</a>s where desired.
-data UID
+data () => UID
 
 -- | Smart constructor for <a>UID</a>s from raw <a>Value</a>s.
 mkUid :: String -> UID

@@ -14,12 +14,12 @@
 </span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint.HughesPJ</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Doc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(&lt;+&gt;)</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">colon</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">empty</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">parens</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">render</span></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span class="annot"><span class="hs-comment">-- | Gets a plain renderering of the term for a chunk.</span></span><span>
-</span><span id="line-17"></span><span id="local-6989586621679354008"><span class="annot"><a href="Language.Drasil.Code.Imperative.Comments.html#getTermDoc"><span class="hs-identifier hs-type">getTermDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679354008"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679354008"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span></span><span>
+</span><span id="line-17"></span><span id="local-6989586621679354010"><span class="annot"><a href="Language.Drasil.Code.Imperative.Comments.html#getTermDoc"><span class="hs-identifier hs-type">getTermDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679354010"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679354010"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span></span><span>
 </span><span id="line-18"></span><span id="getTermDoc"><span class="annot"><span class="annottext">getTermDoc :: forall c. CodeIdea c =&gt; c -&gt; GenState Doc
-</span><a href="Language.Drasil.Code.Imperative.Comments.html#getTermDoc"><span class="hs-identifier hs-var hs-var">getTermDoc</span></a></span></span><span> </span><span id="local-6989586621679354096"><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354096"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-19"></span><span>  </span><span id="local-6989586621679354097"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679354097"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><a href="Language.Drasil.Code.Imperative.Comments.html#getTermDoc"><span class="hs-identifier hs-var hs-var">getTermDoc</span></a></span></span><span> </span><span id="local-6989586621679354098"><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679354098"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-19"></span><span>  </span><span id="local-6989586621679354099"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679354099"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
 </span><span id="line-20"></span><span>  </span><span class="annot"><span class="annottext">Doc -&gt; GenState Doc
@@ -30,7 +30,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; SingleLine -&gt; Sentence -&gt; Doc
 </span><span class="hs-identifier hs-var">sentenceDoc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; PrintingInformation
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#printfo"><span class="hs-identifier hs-var">printfo</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679354097"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SingleLine
+</span><a href="#local-6989586621679354099"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SingleLine
 </span><span class="hs-identifier hs-var">OneLine</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Doc) -&gt; Sentence -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Sentence
@@ -40,23 +40,23 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">c -&gt; CodeChunk
 forall c. CodeIdea c =&gt; c -&gt; CodeChunk
 </span><span class="hs-identifier hs-var">codeChunk</span></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354096"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><a href="#local-6989586621679354098"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-21"></span><span>
 </span><span id="line-22"></span><span class="hs-comment">-- | Gets a plain rendering of the definition of a chunk, preceded by a colon</span><span>
 </span><span id="line-23"></span><span class="hs-comment">-- as it is intended to follow the term for the chunk. Returns empty if the</span><span>
 </span><span id="line-24"></span><span class="hs-comment">-- chunk has no definition.</span><span>
-</span><span id="line-25"></span><span id="local-6989586621679354101"><span class="annot"><a href="Language.Drasil.Code.Imperative.Comments.html#getDefnDoc"><span class="hs-identifier hs-type">getDefnDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679354101"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679354101"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span></span><span>
+</span><span id="line-25"></span><span id="local-6989586621679354103"><span class="annot"><a href="Language.Drasil.Code.Imperative.Comments.html#getDefnDoc"><span class="hs-identifier hs-type">getDefnDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679354103"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679354103"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span></span><span>
 </span><span id="line-26"></span><span id="getDefnDoc"><span class="annot"><span class="annottext">getDefnDoc :: forall c. CodeIdea c =&gt; c -&gt; GenState Doc
-</span><a href="Language.Drasil.Code.Imperative.Comments.html#getDefnDoc"><span class="hs-identifier hs-var hs-var">getDefnDoc</span></a></span></span><span> </span><span id="local-6989586621679354115"><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354115"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-27"></span><span>  </span><span id="local-6989586621679354116"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679354116"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><a href="Language.Drasil.Code.Imperative.Comments.html#getDefnDoc"><span class="hs-identifier hs-var hs-var">getDefnDoc</span></a></span></span><span> </span><span id="local-6989586621679354117"><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679354117"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-27"></span><span>  </span><span id="local-6989586621679354118"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679354118"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-28"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679354120"><span class="annot"><span class="annottext">db :: ChunkDB
-</span><a href="#local-6989586621679354120"><span class="hs-identifier hs-var hs-var">db</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
+</span><span id="line-28"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679354122"><span class="annot"><span class="annottext">db :: ChunkDB
+</span><a href="#local-6989586621679354122"><span class="hs-identifier hs-var hs-var">db</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679354116"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; Getting ChunkDB CodeSpec ChunkDB -&gt; ChunkDB
+</span><a href="#local-6989586621679354118"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; Getting ChunkDB CodeSpec ChunkDB -&gt; ChunkDB
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB CodeSpec ChunkDB
 forall c. HasOldCodeSpec c =&gt; Lens' c ChunkDB
@@ -74,17 +74,17 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; SingleLine -&gt; Sentence -&gt; Doc
 </span><span class="hs-identifier hs-var">sentenceDoc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; PrintingInformation
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#printfo"><span class="hs-identifier hs-var">printfo</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679354116"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SingleLine
+</span><a href="#local-6989586621679354118"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SingleLine
 </span><span class="hs-identifier hs-var">OneLine</span></span><span class="hs-special">)</span><span>
 </span><span id="line-30"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DomDefn -&gt; Sentence
 </span><span class="hs-identifier hs-var">definition</span></span><span> </span><span class="annot"><span class="annottext">(DomDefn -&gt; Sentence) -&gt; DomDefn -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; DomDefn
 </span><span class="hs-identifier hs-var">defResolve'</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679354120"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">c -&gt; CodeChunk
+</span><a href="#local-6989586621679354122"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">c -&gt; CodeChunk
 forall c. CodeIdea c =&gt; c -&gt; CodeChunk
 </span><span class="hs-identifier hs-var">codeChunk</span></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354115"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Getting UID CodeChunk UID -&gt; UID
+</span><a href="#local-6989586621679354117"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Getting UID CodeChunk UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID CodeChunk UID
 forall c. HasUID c =&gt; Getter c UID
@@ -93,10 +93,10 @@ Getter CodeChunk UID
 </span><span id="line-31"></span><span>
 </span><span id="line-32"></span><span class="hs-comment">-- | Gets a plain rendering of the unit of a chunk in parentheses,</span><span>
 </span><span id="line-33"></span><span class="hs-comment">-- or empty if it has no unit.</span><span>
-</span><span id="line-34"></span><span id="local-6989586621679354056"><span class="annot"><a href="Language.Drasil.Code.Imperative.Comments.html#getUnitsDoc"><span class="hs-identifier hs-type">getUnitsDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679354056"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679354056"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span></span><span>
+</span><span id="line-34"></span><span id="local-6989586621679354058"><span class="annot"><a href="Language.Drasil.Code.Imperative.Comments.html#getUnitsDoc"><span class="hs-identifier hs-type">getUnitsDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679354058"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679354058"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span></span><span>
 </span><span id="line-35"></span><span id="getUnitsDoc"><span class="annot"><span class="annottext">getUnitsDoc :: forall c. CodeIdea c =&gt; c -&gt; Doc
-</span><a href="Language.Drasil.Code.Imperative.Comments.html#getUnitsDoc"><span class="hs-identifier hs-var hs-var">getUnitsDoc</span></a></span></span><span> </span><span id="local-6989586621679354132"><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354132"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; (UnitDefn -&gt; Doc) -&gt; Maybe UnitDefn -&gt; Doc
+</span><a href="Language.Drasil.Code.Imperative.Comments.html#getUnitsDoc"><span class="hs-identifier hs-var hs-var">getUnitsDoc</span></a></span></span><span> </span><span id="local-6989586621679354134"><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679354134"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; (UnitDefn -&gt; Doc) -&gt; Maybe UnitDefn -&gt; Doc
 forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
 </span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">empty</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc
@@ -116,29 +116,29 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">c -&gt; CodeChunk
 forall c. CodeIdea c =&gt; c -&gt; CodeChunk
 </span><span class="hs-identifier hs-var">codeChunk</span></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354132"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679354134"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-37"></span><span>
 </span><span id="line-38"></span><span class="hs-comment">-- | Generates a comment string for a chunk, including the term,</span><span>
 </span><span id="line-39"></span><span class="hs-comment">-- definition (if applicable), and unit (if applicable).</span><span>
-</span><span id="line-40"></span><span id="local-6989586621679354066"><span class="annot"><a href="Language.Drasil.Code.Imperative.Comments.html#getComment"><span class="hs-identifier hs-type">getComment</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679354066"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679354066"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span></span><span>
+</span><span id="line-40"></span><span id="local-6989586621679354068"><span class="annot"><a href="Language.Drasil.Code.Imperative.Comments.html#getComment"><span class="hs-identifier hs-type">getComment</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679354068"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679354068"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span></span><span>
 </span><span id="line-41"></span><span id="getComment"><span class="annot"><span class="annottext">getComment :: forall c. CodeIdea c =&gt; c -&gt; GenState String
-</span><a href="Language.Drasil.Code.Imperative.Comments.html#getComment"><span class="hs-identifier hs-var hs-var">getComment</span></a></span></span><span> </span><span id="local-6989586621679354145"><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354145"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-42"></span><span>  </span><span id="local-6989586621679354146"><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679354146"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">c -&gt; GenState Doc
+</span><a href="Language.Drasil.Code.Imperative.Comments.html#getComment"><span class="hs-identifier hs-var hs-var">getComment</span></a></span></span><span> </span><span id="local-6989586621679354147"><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679354147"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-42"></span><span>  </span><span id="local-6989586621679354148"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679354148"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">c -&gt; GenState Doc
 forall c. CodeIdea c =&gt; c -&gt; GenState Doc
 </span><a href="Language.Drasil.Code.Imperative.Comments.html#getTermDoc"><span class="hs-identifier hs-var">getTermDoc</span></a></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354145"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-43"></span><span>  </span><span id="local-6989586621679354147"><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679354147"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">c -&gt; GenState Doc
+</span><a href="#local-6989586621679354147"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><span id="line-43"></span><span>  </span><span id="local-6989586621679354149"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679354149"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">c -&gt; GenState Doc
 forall c. CodeIdea c =&gt; c -&gt; GenState Doc
 </span><a href="Language.Drasil.Code.Imperative.Comments.html#getDefnDoc"><span class="hs-identifier hs-var">getDefnDoc</span></a></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354145"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-44"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679354149"><span class="annot"><span class="annottext">u :: Doc
-</span><a href="#local-6989586621679354149"><span class="hs-identifier hs-var hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; Doc
+</span><a href="#local-6989586621679354147"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><span id="line-44"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679354151"><span class="annot"><span class="annottext">u :: Doc
+</span><a href="#local-6989586621679354151"><span class="hs-identifier hs-var hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; Doc
 forall c. CodeIdea c =&gt; c -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.Comments.html#getUnitsDoc"><span class="hs-identifier hs-var">getUnitsDoc</span></a></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354145"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><a href="#local-6989586621679354147"><span class="hs-identifier hs-var">l</span></a></span><span>
 </span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; GenState String
 forall a. a -&gt; StateT DrasilState Identity a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
@@ -148,27 +148,27 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">render</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; String) -&gt; Doc -&gt; String
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679354146"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679354148"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679354147"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679354149"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679354149"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><a href="#local-6989586621679354151"><span class="hs-identifier hs-var">u</span></a></span><span>
 </span><span id="line-46"></span><span>
-</span><span id="line-47"></span><span id="local-6989586621679354150"><span class="annot"><a href="Language.Drasil.Code.Imperative.Comments.html#getCommentBrief"><span class="hs-identifier hs-type">getCommentBrief</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679354150"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679354150"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span></span><span>
+</span><span id="line-47"></span><span id="local-6989586621679354152"><span class="annot"><a href="Language.Drasil.Code.Imperative.Comments.html#getCommentBrief"><span class="hs-identifier hs-type">getCommentBrief</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679354152"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679354152"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span></span><span>
 </span><span id="line-48"></span><span id="getCommentBrief"><span class="annot"><span class="annottext">getCommentBrief :: forall c. CodeIdea c =&gt; c -&gt; GenState String
-</span><a href="Language.Drasil.Code.Imperative.Comments.html#getCommentBrief"><span class="hs-identifier hs-var hs-var">getCommentBrief</span></a></span></span><span> </span><span id="local-6989586621679354156"><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354156"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-49"></span><span>  </span><span id="local-6989586621679354157"><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679354157"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">c -&gt; GenState Doc
+</span><a href="Language.Drasil.Code.Imperative.Comments.html#getCommentBrief"><span class="hs-identifier hs-var hs-var">getCommentBrief</span></a></span></span><span> </span><span id="local-6989586621679354158"><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679354158"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-49"></span><span>  </span><span id="local-6989586621679354159"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679354159"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">c -&gt; GenState Doc
 forall c. CodeIdea c =&gt; c -&gt; GenState Doc
 </span><a href="Language.Drasil.Code.Imperative.Comments.html#getTermDoc"><span class="hs-identifier hs-var">getTermDoc</span></a></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354156"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-50"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679354159"><span class="annot"><span class="annottext">u :: Doc
-</span><a href="#local-6989586621679354159"><span class="hs-identifier hs-var hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; Doc
+</span><a href="#local-6989586621679354158"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><span id="line-50"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679354161"><span class="annot"><span class="annottext">u :: Doc
+</span><a href="#local-6989586621679354161"><span class="hs-identifier hs-var hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; Doc
 forall c. CodeIdea c =&gt; c -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.Comments.html#getUnitsDoc"><span class="hs-identifier hs-var">getUnitsDoc</span></a></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679354156"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><a href="#local-6989586621679354158"><span class="hs-identifier hs-var">l</span></a></span><span>
 </span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; GenState String
 forall a. a -&gt; StateT DrasilState Identity a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
@@ -178,7 +178,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">render</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; String) -&gt; Doc -&gt; String
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679354157"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679354159"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679354159"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><a href="#local-6989586621679354161"><span class="hs-identifier hs-var">u</span></a></span><span>
 </span><span id="line-52"></span></pre></body></html>

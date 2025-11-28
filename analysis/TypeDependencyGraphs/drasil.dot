@@ -1019,6 +1019,18 @@ digraph alltypes {
 	}
 	subgraph si_units {
 	}
+	subgraph cunkh {
+		subgraph chunk{
+		Chunk	[shape=oval, color=darkviolet, label="Chunk"];
+		Chunk -> IsChunk;
+		Chunk -> a;
+		Chunk -> Chunk;
+		}
+		subgraph ischunka{
+		IsChunka	[shape=oval, color=red2, label="IsChunka"];
+		IsChunka -> HasUIDaHasChunkRefsaTypeablea;
+		}
+	}
 	subgraph cunkdbh {
 		subgraph chunkdb{
 		ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
@@ -1049,8 +1061,18 @@ digraph alltypes {
 		}
 	}
 	subgraph typeduidref {
+		subgraph typeduidreftyp{
+		TypedUIDReftyp	[shape=oval, color=darkgreen, label="TypedUIDReftyp"];
+		TypedUIDReftyp -> UID;
+		}
 	}
-	subgraph drails {
+	subgraph uid {
+		subgraph uid{
+		UID	[shape=oval, color=cyan3, label="UID"];
+		UID -> String;
+		}
+	}
+	subgraph databaes {
 	}
 	subgraph notebook {
 	}
@@ -3225,30 +3247,6 @@ digraph alltypes {
 		subgraph codefuncchunk{
 		CodeFuncChunk	[shape=oval, color=darkgreen, label="CodeFuncChunk"];
 		CodeFuncChunk -> CodeChunk;
-		}
-	}
-	subgraph cunkh {
-		subgraph chunk{
-		Chunk	[shape=oval, color=darkviolet, label="Chunk"];
-		Chunk -> IsChunk;
-		Chunk -> a;
-		Chunk -> Chunk;
-		}
-		subgraph ischunka{
-		IsChunka	[shape=oval, color=red2, label="IsChunka"];
-		IsChunka -> HasUIDaHasChunkRefsaTypeablea;
-		}
-	}
-	subgraph typeduidref {
-		subgraph typeduidreftyp{
-		TypedUIDReftyp	[shape=oval, color=darkgreen, label="TypedUIDReftyp"];
-		TypedUIDReftyp -> UID;
-		}
-	}
-	subgraph uid {
-		subgraph uid{
-		UID	[shape=oval, color=cyan3, label="UID"];
-		UID -> String;
 		}
 	}
 	subgraph core {

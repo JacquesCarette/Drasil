@@ -2,7 +2,6 @@ digraph chunkdb{
 ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
 ChunkDB -> ChunkByUID;
 ChunkDB -> ChunksByTypeRep;
-ChunkDB -> MapUIDLabelledContent;
 ChunkDB -> MapUIDReference;
 ChunkDB -> MapUIDUID;
 }

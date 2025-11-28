@@ -4079,7 +4079,8 @@ type ListTuple = -- | Formats as Title: Item. For use in lists. (Title, ItemType
 
 -- | Contains a <a>Reference</a> and <a>RawContent</a>.
 data LabelledContent
-LblC :: Reference -> RawContent -> LabelledContent
+LblC :: UID -> Reference -> RawContent -> LabelledContent
+[_lcUid] :: LabelledContent -> UID
 [_ref] :: LabelledContent -> Reference
 [_ctype] :: LabelledContent -> RawContent
 

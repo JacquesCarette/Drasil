@@ -5112,7 +5112,8 @@ type Identifier = String
 
 -- | Contains a <a>Reference</a> and <a>RawContent</a>.
 data LabelledContent
-LblC :: Reference -> RawContent -> LabelledContent
+LblC :: UID -> Reference -> RawContent -> LabelledContent
+[_lcUid] :: LabelledContent -> UID
 [_ref] :: LabelledContent -> Reference
 [_ctype] :: LabelledContent -> RawContent
 
@@ -5121,6 +5122,7 @@ newtype UnlabelledContent
 UnlblC :: RawContent -> UnlabelledContent
 [_cntnts] :: UnlabelledContent -> RawContent
 ref :: Lens' LabelledContent Reference
+lcUid :: Lens' LabelledContent UID
 ctype :: Lens' LabelledContent RawContent
 cntnts :: Iso' UnlabelledContent RawContent
 
@@ -8388,7 +8390,8 @@ type ListTuple = -- | Formats as Title: Item. For use in lists. (Title, ItemType
 
 -- | Contains a <a>Reference</a> and <a>RawContent</a>.
 data LabelledContent
-LblC :: Reference -> RawContent -> LabelledContent
+LblC :: UID -> Reference -> RawContent -> LabelledContent
+[_lcUid] :: LabelledContent -> UID
 [_ref] :: LabelledContent -> Reference
 [_ctype] :: LabelledContent -> RawContent
 

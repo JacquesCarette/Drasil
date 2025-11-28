@@ -1,5 +1,6 @@
 digraph labelledcontent{
 LabelledContent	[shape=oval, color=cyan3, label="LabelledContent"];
+LabelledContent -> UID;
 LabelledContent -> Reference;
 LabelledContent -> RawContent;
 }

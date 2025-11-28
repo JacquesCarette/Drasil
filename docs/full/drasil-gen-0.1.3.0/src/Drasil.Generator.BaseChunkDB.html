@@ -163,9 +163,9 @@ forall a. IsChunk a =&gt; [a] -&gt; ChunkDB -&gt; ChunkDB
 -&gt; [LabelledContent]
 -&gt; [Reference]
 -&gt; ChunkDB
-forall a b c d e f g h i j.
+forall a b c d e f g h i j k.
 (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e, IsChunk f,
- IsChunk g, IsChunk h, IsChunk i, IsChunk j) =&gt;
+ IsChunk g, IsChunk h, IsChunk i, IsChunk j, IsChunk k) =&gt;
 ChunkDB
 -&gt; [a]
 -&gt; [b]
@@ -177,7 +177,7 @@ ChunkDB
 -&gt; [h]
 -&gt; [i]
 -&gt; [j]
--&gt; [LabelledContent]
+-&gt; [k]
 -&gt; [Reference]
 -&gt; ChunkDB
 </span><span class="hs-identifier hs-var">insertAllOutOfOrder12</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB

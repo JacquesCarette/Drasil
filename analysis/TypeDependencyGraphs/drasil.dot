@@ -1023,7 +1023,6 @@ digraph alltypes {
 		ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
 		ChunkDB -> ChunkByUID;
 		ChunkDB -> ChunksByTypeRep;
-		ChunkDB -> MapUIDLabelledContent;
 		ChunkDB -> MapUIDReference;
 		ChunkDB -> MapUIDUID;
 		}
@@ -3431,6 +3430,7 @@ digraph alltypes {
 	subgraph core {
 		subgraph labelledcontent{
 		LabelledContent	[shape=oval, color=cyan3, label="LabelledContent"];
+		LabelledContent -> UID;
 		LabelledContent -> Reference;
 		LabelledContent -> RawContent;
 		}

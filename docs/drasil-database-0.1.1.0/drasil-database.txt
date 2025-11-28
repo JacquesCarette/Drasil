@@ -79,18 +79,13 @@ insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
 --   chunks from the chunk lists.
 --   
 --   NOTE: Ignores management of dependancies related to
---   <a>LabelledContent</a>s and <a>Reference</a>s.
-insertAllOutOfOrder12 :: (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e, IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j) => ChunkDB -> [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [g] -> [h] -> [i] -> [j] -> [LabelledContent] -> [Reference] -> ChunkDB
+--   <tt>LabelledContent</tt>s and <a>Reference</a>s.
+insertAllOutOfOrder12 :: (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e, IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j, IsChunk k) => ChunkDB -> [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [g] -> [h] -> [i] -> [j] -> [k] -> [Reference] -> ChunkDB
 refTable :: ChunkDB -> Map UID Reference
 
 -- | Find a <a>Reference</a> by its <a>UID</a>, throwing an error if it is
 --   not found.
 refFind :: UID -> ChunkDB -> Reference
-labelledcontentTable :: ChunkDB -> Map UID LabelledContent
-
--- | Find a <a>LabelledContent</a> by its <a>UID</a>, throwing an error if
---   it is not found.
-labelledcontentFind :: UID -> ChunkDB -> LabelledContent
 refbyTable :: ChunkDB -> Map UID [UID]
 
 -- | Find what chunks reference a given <a>UID</a>.

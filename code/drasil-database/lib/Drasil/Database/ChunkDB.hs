@@ -148,9 +148,9 @@ insert0 cdb c = cdb'
     -- Finally, build the updated database.
     cdb' = cdb { chunkTable = chunkTable'', chunkTypeTable = chunkTypeTable' }
 
--- | Insert a chunk into the 'ChunkDB' if it is sensibly to do so (i.e., does
--- not depend on itself and is not a 'ChunkDB'). We temporarily allow chunks to
--- overwrite other ones, but we warn when this happens.
+-- | Insert a chunk into the 'ChunkDB' if it is sensible to do so (i.e., does
+-- not depend on itself, is not a 'ChunkDB', and does not overwrite another
+-- chunk).
 insert :: IsChunk a => a -> ChunkDB -> ChunkDB
 insert c cdb
   | c ^. uid `elem` chunkRefs c =

@@ -548,7 +548,7 @@ Folder :: FilePath -> FilePath -> FilePath -> FilePath -> FilePath -> FilePath -
 si :: FolderLocation -> System
 
 -- | Needed for references and terms to work.
-symbMap :: FolderLocation -> ChunkDB
+symbMap :: ChunkDB
 
 -- | Used for the repository link.
 gitHubRef :: Reference

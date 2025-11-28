@@ -17,29 +17,32 @@ module Drasil.System
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data System
-[SI] :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
+[SI] :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
 data SystemKind
 Specification :: SystemKind
 RunnableSoftware :: SystemKind
 Notebook :: SystemKind
 Website :: SystemKind
-class HasSystem c_a8VI
-system :: HasSystem c_a8VI => Lens' c_a8VI System
-authors :: HasSystem c_a8VI => Lens' c_a8VI People
-background :: HasSystem c_a8VI => Lens' c_a8VI Background
-configFiles :: HasSystem c_a8VI => Lens' c_a8VI [String]
-constants :: HasSystem c_a8VI => Lens' c_a8VI [ConstQDef]
-dataDefns :: HasSystem c_a8VI => Lens' c_a8VI [DataDefinition]
-genDefns :: HasSystem c_a8VI => Lens' c_a8VI [GenDefn]
-instModels :: HasSystem c_a8VI => Lens' c_a8VI [InstanceModel]
-kind :: HasSystem c_a8VI => Lens' c_a8VI SystemKind
-motivation :: HasSystem c_a8VI => Lens' c_a8VI Motivation
-purpose :: HasSystem c_a8VI => Lens' c_a8VI Purpose
-scope :: HasSystem c_a8VI => Lens' c_a8VI Scope
-systemdb :: HasSystem c_a8VI => Lens' c_a8VI ChunkDB
-theoryModels :: HasSystem c_a8VI => Lens' c_a8VI [TheoryModel]
+class HasSystem c_a8Yu
+system :: HasSystem c_a8Yu => Lens' c_a8Yu System
+authors :: HasSystem c_a8Yu => Lens' c_a8Yu People
+background :: HasSystem c_a8Yu => Lens' c_a8Yu Background
+configFiles :: HasSystem c_a8Yu => Lens' c_a8Yu [String]
+constants :: HasSystem c_a8Yu => Lens' c_a8Yu [ConstQDef]
+dataDefns :: HasSystem c_a8Yu => Lens' c_a8Yu [DataDefinition]
+genDefns :: HasSystem c_a8Yu => Lens' c_a8Yu [GenDefn]
+instModels :: HasSystem c_a8Yu => Lens' c_a8Yu [InstanceModel]
+kind :: HasSystem c_a8Yu => Lens' c_a8Yu SystemKind
+motivation :: HasSystem c_a8Yu => Lens' c_a8Yu Motivation
+purpose :: HasSystem c_a8Yu => Lens' c_a8Yu Purpose
+refTable :: HasSystem c_a8Yu => Lens' c_a8Yu (Map UID Reference)
+refbyTable :: HasSystem c_a8Yu => Lens' c_a8Yu (Map UID [UID])
+scope :: HasSystem c_a8Yu => Lens' c_a8Yu Scope
+systemdb :: HasSystem c_a8Yu => Lens' c_a8Yu ChunkDB
+theoryModels :: HasSystem c_a8Yu => Lens' c_a8Yu [TheoryModel]
+traceTable :: HasSystem c_a8Yu => Lens' c_a8Yu (Map UID [UID])
 whatsTheBigIdea :: System -> IdeaDict
-mkSystem :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
+mkSystem :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] -> System
 sysName :: System -> IdeaDict
 
 -- | Project Example purpose.
@@ -54,4 +57,6 @@ type Scope = [Sentence]
 
 -- | Project Example motivation.
 type Motivation = [Sentence]
+refbyLookup :: UID -> System -> [UID]
+traceLookup :: UID -> System -> [UID]
 instance Drasil.System.HasSystem Drasil.System.System

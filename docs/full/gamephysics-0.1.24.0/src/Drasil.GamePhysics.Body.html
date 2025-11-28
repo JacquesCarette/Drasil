@@ -57,7 +57,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">intro</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RefTab
 </span><span class="hs-identifier hs-var">TUnits</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TSIntro] -&gt; RefTab
 </span><span class="hs-identifier hs-var">tsymb</span></span><span> </span><span class="annot"><span class="annottext">[TSIntro]
-</span><a href="#local-6989586621679070866"><span class="hs-identifier hs-var">tableOfSymbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; RefTab
+</span><a href="#local-6989586621679070869"><span class="hs-identifier hs-var">tableOfSymbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; RefTab
 </span><span class="hs-identifier hs-var">TAandA</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><a href="Drasil.GamePhysics.Body.html#abbreviationsList"><span class="hs-identifier hs-var">abbreviationsList</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">IntroSec -&gt; DocSection
@@ -256,8 +256,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Drasil.GamePhysics.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-84"></span><span>    </span><span class="annot"><span class="annottext">DocSection
 </span><span class="hs-identifier hs-var">Bibliography</span></span><span class="hs-special">]</span><span>
-</span><span id="line-85"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679070866"><span class="annot"><span class="annottext">tableOfSymbols :: [TSIntro]
-</span><a href="#local-6989586621679070866"><span class="hs-identifier hs-var hs-var">tableOfSymbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TSIntro
+</span><span id="line-85"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679070869"><span class="annot"><span class="annottext">tableOfSymbols :: [TSIntro]
+</span><a href="#local-6989586621679070869"><span class="hs-identifier hs-var hs-var">tableOfSymbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TSIntro
 </span><span class="hs-identifier hs-var">TSPurpose</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TConvention] -&gt; TSIntro
 </span><span class="hs-identifier hs-var">TypogConvention</span></span><span class="hs-special">[</span><span class="annot"><span class="annottext">Emphasis -&gt; TConvention
 </span><span class="hs-identifier hs-var">Vector</span></span><span> </span><span class="annot"><span class="annottext">Emphasis
@@ -285,6 +285,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 -&gt; [UncertQ]
 -&gt; [ConstQDef]
 -&gt; ChunkDB
+-&gt; [Reference]
 -&gt; System
 forall a e h i j.
 (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e,
@@ -308,6 +309,7 @@ a
 -&gt; [j]
 -&gt; [ConstQDef]
 -&gt; ChunkDB
+-&gt; [Reference]
 -&gt; System
 </span><span class="hs-identifier hs-var">mkSystem</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GamePhysics.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">SystemKind
@@ -332,7 +334,8 @@ a
 </span><a href="Drasil.GamePhysics.Unitals.html#outputSymbols"><span class="hs-identifier hs-var">outputSymbols</span></a></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.GamePhysics.Unitals.html#inputConstraints"><span class="hs-identifier hs-var">inputConstraints</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="Drasil.GamePhysics.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span>
+</span><a href="Drasil.GamePhysics.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span> </span><span class="annot"><span class="annottext">[Reference]
+</span><a href="Drasil.GamePhysics.Body.html#allRefs"><span class="hs-identifier hs-var">allRefs</span></a></span><span>
 </span><span id="line-98"></span><span>
 </span><span id="line-99"></span><span class="annot"><a href="Drasil.GamePhysics.Body.html#purp"><span class="hs-identifier hs-type">purp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-100"></span><span id="purp"><span class="annot"><span class="annottext">purp :: Sentence
@@ -473,7 +476,6 @@ forall c. Concept c =&gt; c -&gt; ConceptChunk
 -&gt; [ConceptInstance]
 -&gt; [Citation]
 -&gt; [LabelledContent]
--&gt; [Reference]
 -&gt; ChunkDB
 </span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.GamePhysics.Unitals.html#symbolsAll"><span class="hs-identifier hs-var">symbolsAll</span></a></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
@@ -486,8 +488,7 @@ forall c. Concept c =&gt; c -&gt; ConceptChunk
 </span><a href="Drasil.GamePhysics.TMods.html#tMods"><span class="hs-identifier hs-var">tMods</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="Drasil.GamePhysics.Body.html#concIns"><span class="hs-identifier hs-var">concIns</span></a></span><span> </span><span class="annot"><span class="annottext">[Citation]
 </span><a href="Drasil.GamePhysics.References.html#citations"><span class="hs-identifier hs-var">citations</span></a></span><span> </span><span class="annot"><span class="annottext">[LabelledContent]
-</span><a href="Drasil.GamePhysics.LabelledContent.html#labelledContent"><span class="hs-identifier hs-var">labelledContent</span></a></span><span> </span><span class="annot"><span class="annottext">[Reference]
-</span><a href="Drasil.GamePhysics.Body.html#allRefs"><span class="hs-identifier hs-var">allRefs</span></a></span><span>
+</span><a href="Drasil.GamePhysics.LabelledContent.html#labelledContent"><span class="hs-identifier hs-var">labelledContent</span></a></span><span>
 </span><span id="line-133"></span><span>
 </span><span id="line-134"></span><span class="annot"><a href="Drasil.GamePhysics.Body.html#abbreviationsList"><span class="hs-identifier hs-type">abbreviationsList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-135"></span><span id="abbreviationsList"><span class="annot"><span class="annottext">abbreviationsList :: [IdeaDict]

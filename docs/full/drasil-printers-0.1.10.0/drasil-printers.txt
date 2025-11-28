@@ -958,61 +958,6 @@ codeCell :: Doc -> Doc
 makeMetadata :: Doc
 
 
--- | Printing helpers.
-module Language.Drasil.Printing.Import.Helpers
-
--- | Helper for inserting parentheses.
-parens :: Expr -> Expr
-
--- | Processes the digits from the <tt>floatToDigits</tt> function, decimal
---   point position, a counter, and exponent.
-digitsProcess :: [Integer] -> Int -> Int -> Integer -> [Expr]
-
--- | Takes the exponent and the <a>Int</a> of the base and gives the
---   decimal point position and processed exponent. This function supports
---   transferring scientific notation to engineering notation. References
---   for standard of Engineering Notation:
---   
---   
---   <a>https://www.khanacademy.org/science/electrical-engineering/introduction-to-ee/</a>
---   intro-to-ee<i>a</i>ee-numbers-in-electrical-engineering
---   
---   
---   <a>https://www.calculatorsoup.com/calculators/math/scientific-notation-converter.php</a>
---   
---   <a>https://en.wikipedia.org/wiki/Scientific_notation</a>
-processExpo :: Int -> (Int, Int)
-
--- | Given the stage of the symbol, looks up a character/symbol inside a
---   chunk database that matches the given <a>UID</a>.
-lookupC :: Stage -> ChunkDB -> UID -> Symbol
-
--- | Look up a term given a chunk database and a <a>UID</a> associated with
---   the term. Also specifies capitalization
-lookupT :: ChunkDB -> UID -> TermCapitalization -> Sentence
-
--- | Look up the acronym/abbreviation of a term. Otherwise returns the
---   singular form of a term. Takes a chunk database and a <a>UID</a>
---   associated with the term.
-lookupS :: ChunkDB -> UID -> TermCapitalization -> Sentence
-
--- | Look up the plural form of a term given a chunk database and a
---   <a>UID</a> associated with the term.
-lookupP :: ChunkDB -> UID -> TermCapitalization -> Sentence
-
--- | Helper to get the proper function for capitalizing a <a>NP</a> based
---   on its <a>TermCapitalization</a>. Singular case.
-resolveCapT :: TermCapitalization -> NP -> Sentence
-
--- | Helper to get the right function for capitalizing a <a>NP</a> based on
---   its <a>TermCapitalization</a>. Plural case.
-resolveCapP :: TermCapitalization -> NP -> Sentence
-
--- | Helper to get the capital case of an abbreviation based on
---   <a>TermCapitalization</a>. For sentence and title cases.
-capHelper :: TermCapitalization -> String -> Maybe String
-
-
 -- | Defines functions for printing symbols and units.
 module Language.Drasil.Printing.Import.Symbol
 
@@ -1188,13 +1133,14 @@ notation :: Iso' PrintingConfiguration Notation
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.
 data PrintingInformation
-ckdb :: Lens' PrintingInformation ChunkDB
+syst :: Lens' PrintingInformation System
 stg :: Lens' PrintingInformation Stage
 configuration :: Lens' PrintingInformation PrintingConfiguration
 
 -- | Builds a document's printing information based on the system
 --   information.
-piSys :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
+piSys :: System -> Stage -> PrintingConfiguration -> PrintingInformation
+refFind :: UID -> PrintingInformation -> Reference
 
 -- | Default configuration is for engineering.
 defaultConfiguration :: PrintingConfiguration
@@ -1210,6 +1156,62 @@ module Language.Drasil.Printing.Import.Space
 
 -- | Render a <a>Space</a>.
 space :: PrintingInformation -> Space -> Expr
+
+
+-- | Printing helpers.
+module Language.Drasil.Printing.Import.Helpers
+
+-- | Helper for inserting parentheses.
+parens :: Expr -> Expr
+
+-- | Processes the digits from the <tt>floatToDigits</tt> function, decimal
+--   point position, a counter, and exponent.
+digitsProcess :: [Integer] -> Int -> Int -> Integer -> [Expr]
+
+-- | Takes the exponent and the <a>Int</a> of the base and gives the
+--   decimal point position and processed exponent. This function supports
+--   transferring scientific notation to engineering notation. References
+--   for standard of Engineering Notation:
+--   
+--   
+--   <a>https://www.khanacademy.org/science/electrical-engineering/introduction-to-ee/</a>
+--   intro-to-ee<i>a</i>ee-numbers-in-electrical-engineering
+--   
+--   
+--   <a>https://www.calculatorsoup.com/calculators/math/scientific-notation-converter.php</a>
+--   
+--   <a>https://en.wikipedia.org/wiki/Scientific_notation</a>
+processExpo :: Int -> (Int, Int)
+
+-- | Given the stage of the symbol, looks up a character/symbol inside a
+--   chunk database that matches the given <a>UID</a>.
+lookupC :: Stage -> ChunkDB -> UID -> Symbol
+lookupC' :: PrintingInformation -> UID -> Symbol
+
+-- | Look up a term given a chunk database and a <a>UID</a> associated with
+--   the term. Also specifies capitalization
+lookupT :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+
+-- | Look up the acronym/abbreviation of a term. Otherwise returns the
+--   singular form of a term. Takes a chunk database and a <a>UID</a>
+--   associated with the term.
+lookupS :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+
+-- | Look up the plural form of a term given a chunk database and a
+--   <a>UID</a> associated with the term.
+lookupP :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+
+-- | Helper to get the proper function for capitalizing a <a>NP</a> based
+--   on its <a>TermCapitalization</a>. Singular case.
+resolveCapT :: TermCapitalization -> NP -> Sentence
+
+-- | Helper to get the right function for capitalizing a <a>NP</a> based on
+--   its <a>TermCapitalization</a>. Plural case.
+resolveCapP :: TermCapitalization -> NP -> Sentence
+
+-- | Helper to get the capital case of an abbreviation based on
+--   <a>TermCapitalization</a>. For sentence and title cases.
+capHelper :: TermCapitalization -> String -> Maybe String
 
 module Language.Drasil.Printing.Import.Literal
 literal :: Literal -> PrintingInformation -> Expr
@@ -1288,7 +1290,7 @@ module Language.Drasil.Printing.Import.Sentence
 spec :: PrintingInformation -> Sentence -> Spec
 
 -- | Renders the shortname of a reference/domain.
-renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
+renderShortName :: PrintingInformation -> IRefProg -> ShortName -> Sentence
 
 -- | Render a uniform resource locator as a <a>Sentence</a>.
 renderURI :: ctx -> ShortName -> Sentence
@@ -1421,13 +1423,13 @@ OneLine :: SingleLine
 MultiLine :: SingleLine
 
 -- | Create expressions for a document in <a>Doc</a> format.
-exprDoc :: ChunkDB -> Stage -> SingleLine -> Expr -> Doc
+exprDoc :: PrintingInformation -> SingleLine -> Expr -> Doc
 
 -- | Create code expressions for a document in <a>Doc</a> format.
-codeExprDoc :: ChunkDB -> Stage -> SingleLine -> CodeExpr -> Doc
+codeExprDoc :: PrintingInformation -> SingleLine -> CodeExpr -> Doc
 
 -- | Create sentences for a document in <a>Doc</a> format.
-sentenceDoc :: ChunkDB -> Stage -> SingleLine -> Sentence -> Doc
+sentenceDoc :: PrintingInformation -> SingleLine -> Sentence -> Doc
 
 -- | Create symbols for a document in <a>Doc</a> format.
 symbolDoc :: Symbol -> Doc
@@ -2086,13 +2088,13 @@ OneLine :: SingleLine
 MultiLine :: SingleLine
 
 -- | Create sentences for a document in <a>Doc</a> format.
-sentenceDoc :: ChunkDB -> Stage -> SingleLine -> Sentence -> Doc
+sentenceDoc :: PrintingInformation -> SingleLine -> Sentence -> Doc
 
 -- | Create expressions for a document in <a>Doc</a> format.
-exprDoc :: ChunkDB -> Stage -> SingleLine -> Expr -> Doc
+exprDoc :: PrintingInformation -> SingleLine -> Expr -> Doc
 
 -- | Create code expressions for a document in <a>Doc</a> format.
-codeExprDoc :: ChunkDB -> Stage -> SingleLine -> CodeExpr -> Doc
+codeExprDoc :: PrintingInformation -> SingleLine -> CodeExpr -> Doc
 
 -- | Create symbols for a document in <a>Doc</a> format.
 symbolDoc :: Symbol -> Doc
@@ -2134,7 +2136,7 @@ data PrintingInformation
 
 -- | Builds a document's printing information based on the system
 --   information.
-piSys :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
+piSys :: System -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | Able to be printed.
 class HasPrintingOptions c
@@ -2149,3 +2151,6 @@ Engineering :: Notation
 
 -- | Default configuration is for engineering.
 defaultConfiguration :: PrintingConfiguration
+
+-- | Simple printing configuration is scientific.
+plainConfiguration :: PrintingConfiguration

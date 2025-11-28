@@ -520,7 +520,7 @@ readWithDataDesc :: FilePath -> DataDesc' -> IO [Expr]
 module Language.Drasil.Code.Imperative.WriteInput
 
 -- | Generate a sample input file.
-makeInputFile :: ChunkDB -> DataDesc -> [Expr] -> Doc
+makeInputFile :: PrintingInformation -> DataDesc -> [Expr] -> Doc
 
 
 -- | Defines an enumerated type of target languages for code generation.
@@ -1675,21 +1675,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aylg
-oldCodeSpec :: HasOldCodeSpec c_aylg => Lens' c_aylg OldCodeSpec
-authorsO :: HasOldCodeSpec c_aylg => Lens' c_aylg People
-cMapO :: HasOldCodeSpec c_aylg => Lens' c_aylg ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aylg => Lens' c_aylg [FilePath]
-constMapO :: HasOldCodeSpec c_aylg => Lens' c_aylg ConstantMap
-constantsO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Const]
-derivedInputsO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Derived]
-execOrderO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Def]
-extInputsO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Input]
-inputsO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Input]
-modsO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Mod]
-outputsO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Output]
-pNameO :: HasOldCodeSpec c_aylg => Lens' c_aylg Name
-systemdbO :: HasOldCodeSpec c_aylg => Lens' c_aylg ChunkDB
+class HasOldCodeSpec c_aylC
+oldCodeSpec :: HasOldCodeSpec c_aylC => Lens' c_aylC OldCodeSpec
+authorsO :: HasOldCodeSpec c_aylC => Lens' c_aylC People
+cMapO :: HasOldCodeSpec c_aylC => Lens' c_aylC ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aylC => Lens' c_aylC [FilePath]
+constMapO :: HasOldCodeSpec c_aylC => Lens' c_aylC ConstantMap
+constantsO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Const]
+derivedInputsO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Derived]
+execOrderO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Def]
+extInputsO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Input]
+inputsO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Input]
+modsO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Mod]
+outputsO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Output]
+pNameO :: HasOldCodeSpec c_aylC => Lens' c_aylC Name
+systemdbO :: HasOldCodeSpec c_aylC => Lens' c_aylC ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -1807,7 +1807,7 @@ class AuxiliarySym r where {
 }
 doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r (Auxiliary r)
 readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)
-sampleInput :: AuxiliarySym r => ChunkDB -> DataDesc -> [Expr] -> r (Auxiliary r)
+sampleInput :: AuxiliarySym r => PrintingInformation -> DataDesc -> [Expr] -> r (Auxiliary r)
 optimizeDox :: AuxiliarySym r => r (AuxHelper r)
 makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r (Auxiliary r)
 auxHelperDoc :: AuxiliarySym r => r (AuxHelper r) -> Doc
@@ -1820,8 +1820,9 @@ type GenState = State DrasilState
 
 -- | Private State, used to push these options around the generator.
 data DrasilState
-DrasilState :: CodeSpec -> Modularity -> ImplementationType -> Structure -> ConstantStructure -> ConstantRepr -> MatchedConceptMap -> MatchedSpaces -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> Verbosity -> String -> String -> [Logging] -> [AuxFile] -> [Expr] -> (InternalConcept -> Name) -> [Mod] -> [(Name, Version)] -> ExtLibMap -> [FilePath] -> ModExportMap -> ModExportMap -> ClassDefinitionMap -> Set Name -> Int -> String -> String -> Doc -> [(Space, CodeType)] -> ScopeType -> DrasilState
+DrasilState :: CodeSpec -> PrintingInformation -> Modularity -> ImplementationType -> Structure -> ConstantStructure -> ConstantRepr -> MatchedConceptMap -> MatchedSpaces -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> Verbosity -> String -> String -> [Logging] -> [AuxFile] -> [Expr] -> (InternalConcept -> Name) -> [Mod] -> [(Name, Version)] -> ExtLibMap -> [FilePath] -> ModExportMap -> ModExportMap -> ClassDefinitionMap -> Set Name -> Int -> String -> String -> Doc -> [(Space, CodeType)] -> ScopeType -> DrasilState
 [codeSpec] :: DrasilState -> CodeSpec
+[printfo] :: DrasilState -> PrintingInformation
 [modular] :: DrasilState -> Modularity
 [implType] :: DrasilState -> ImplementationType
 [inStruct] :: DrasilState -> Structure
@@ -2079,7 +2080,7 @@ doxConfig :: AuxiliarySym r => r (AuxHelper r) -> String -> GOOLState -> Verbosi
 readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)
 
 -- | Defines a sample input file.
-sampleInput :: AuxiliarySym r => ChunkDB -> DataDesc -> [Expr] -> r (Auxiliary r)
+sampleInput :: AuxiliarySym r => PrintingInformation -> DataDesc -> [Expr] -> r (Auxiliary r)
 
 -- | Defines a Makefile.
 makefile :: AuxiliarySym r => Maybe BuildConfig -> Maybe Runnable -> Maybe DocConfig -> GOOLState -> ProgData -> r (Auxiliary r)
@@ -2873,21 +2874,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_aylg
-oldCodeSpec :: HasOldCodeSpec c_aylg => Lens' c_aylg OldCodeSpec
-authorsO :: HasOldCodeSpec c_aylg => Lens' c_aylg People
-cMapO :: HasOldCodeSpec c_aylg => Lens' c_aylg ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aylg => Lens' c_aylg [FilePath]
-constMapO :: HasOldCodeSpec c_aylg => Lens' c_aylg ConstantMap
-constantsO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Const]
-derivedInputsO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Derived]
-execOrderO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Def]
-extInputsO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Input]
-inputsO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Input]
-modsO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Mod]
-outputsO :: HasOldCodeSpec c_aylg => Lens' c_aylg [Output]
-pNameO :: HasOldCodeSpec c_aylg => Lens' c_aylg Name
-systemdbO :: HasOldCodeSpec c_aylg => Lens' c_aylg ChunkDB
+class HasOldCodeSpec c_aylC
+oldCodeSpec :: HasOldCodeSpec c_aylC => Lens' c_aylC OldCodeSpec
+authorsO :: HasOldCodeSpec c_aylC => Lens' c_aylC People
+cMapO :: HasOldCodeSpec c_aylC => Lens' c_aylC ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aylC => Lens' c_aylC [FilePath]
+constMapO :: HasOldCodeSpec c_aylC => Lens' c_aylC ConstantMap
+constantsO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Const]
+derivedInputsO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Derived]
+execOrderO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Def]
+extInputsO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Input]
+inputsO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Input]
+modsO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Mod]
+outputsO :: HasOldCodeSpec c_aylC => Lens' c_aylC [Output]
+pNameO :: HasOldCodeSpec c_aylC => Lens' c_aylC Name
+systemdbO :: HasOldCodeSpec c_aylC => Lens' c_aylC ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -3339,7 +3340,7 @@ class AuxiliarySym r where {
 }
 doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r (Auxiliary r)
 readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)
-sampleInput :: AuxiliarySym r => ChunkDB -> DataDesc -> [Expr] -> r (Auxiliary r)
+sampleInput :: AuxiliarySym r => PrintingInformation -> DataDesc -> [Expr] -> r (Auxiliary r)
 optimizeDox :: AuxiliarySym r => r (AuxHelper r)
 makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r (Auxiliary r)
 auxHelperDoc :: AuxiliarySym r => r (AuxHelper r) -> Doc

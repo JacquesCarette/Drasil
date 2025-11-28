@@ -1,7 +1,6 @@
 digraph singleline{
 SingleLine	[shape=oval, color=darkviolet, label="SingleLine"];
-SingleLine -> ChunkDB;
-SingleLine -> Stage;
+SingleLine -> PrintingInformation;
 SingleLine -> SingleLine;
 SingleLine -> Expr;
 SingleLine -> Doc;

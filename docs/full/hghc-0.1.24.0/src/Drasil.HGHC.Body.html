@@ -32,6 +32,7 @@
 -&gt; [ConstrConcept]
 -&gt; [ConstQDef]
 -&gt; ChunkDB
+-&gt; [Reference]
 -&gt; System
 forall a e h i j.
 (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e,
@@ -55,6 +56,7 @@ a
 -&gt; [j]
 -&gt; [ConstQDef]
 -&gt; ChunkDB
+-&gt; [Reference]
 -&gt; System
 </span><span class="hs-identifier hs-var">mkSystem</span></span><span>
 </span><span id="line-17"></span><span>  </span><span class="annot"><span class="annottext">CI
@@ -71,7 +73,7 @@ a
 </span><a href="Drasil.HGHC.HeatTransfer.html#htInputs"><span class="hs-identifier hs-var">htInputs</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.HGHC.HeatTransfer.html#htOutputs"><span class="hs-identifier hs-var">htOutputs</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="Drasil.HGHC.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span>
+</span><a href="Drasil.HGHC.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-23"></span><span>
 </span><span id="line-24"></span><span class="annot"><a href="Drasil.HGHC.Body.html#mkSRS"><span class="hs-identifier hs-type">mkSRS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SRSDecl</span></span><span>
 </span><span id="line-25"></span><span id="mkSRS"><span class="annot"><span class="annottext">mkSRS :: SRSDecl
@@ -171,11 +173,10 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 -&gt; [ConceptInstance]
 -&gt; [Citation]
 -&gt; [LabelledContent]
--&gt; [Reference]
 -&gt; ChunkDB
 </span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.HGHC.HeatTransfer.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><a href="Drasil.HGHC.Body.html#ideaDicts"><span class="hs-identifier hs-var">ideaDicts</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-49"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
-</span><a href="Drasil.HGHC.HeatTransfer.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><a href="Drasil.HGHC.HeatTransfer.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-50"></span></pre></body></html>

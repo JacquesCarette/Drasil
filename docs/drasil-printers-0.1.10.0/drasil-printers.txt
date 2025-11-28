@@ -177,13 +177,13 @@ OneLine :: SingleLine
 MultiLine :: SingleLine
 
 -- | Create sentences for a document in <a>Doc</a> format.
-sentenceDoc :: ChunkDB -> Stage -> SingleLine -> Sentence -> Doc
+sentenceDoc :: PrintingInformation -> SingleLine -> Sentence -> Doc
 
 -- | Create expressions for a document in <a>Doc</a> format.
-exprDoc :: ChunkDB -> Stage -> SingleLine -> Expr -> Doc
+exprDoc :: PrintingInformation -> SingleLine -> Expr -> Doc
 
 -- | Create code expressions for a document in <a>Doc</a> format.
-codeExprDoc :: ChunkDB -> Stage -> SingleLine -> CodeExpr -> Doc
+codeExprDoc :: PrintingInformation -> SingleLine -> CodeExpr -> Doc
 
 -- | Create symbols for a document in <a>Doc</a> format.
 symbolDoc :: Symbol -> Doc
@@ -225,7 +225,7 @@ data PrintingInformation
 
 -- | Builds a document's printing information based on the system
 --   information.
-piSys :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
+piSys :: System -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | Able to be printed.
 class HasPrintingOptions c
@@ -240,3 +240,6 @@ Engineering :: Notation
 
 -- | Default configuration is for engineering.
 defaultConfiguration :: PrintingConfiguration
+
+-- | Simple printing configuration is scientific.
+plainConfiguration :: PrintingConfiguration

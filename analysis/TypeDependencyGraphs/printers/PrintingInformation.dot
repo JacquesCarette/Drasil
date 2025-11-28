@@ -1,6 +1,6 @@
 digraph printinginformation{
 PrintingInformation	[shape=oval, color=cyan3, label="PrintingInformation"];
-PrintingInformation -> ChunkDB;
+PrintingInformation -> System;
 PrintingInformation -> Stage;
 PrintingInformation -> PrintingConfiguration;
 }

@@ -1,6 +1,7 @@
 digraph drasilstate{
 DrasilState	[shape=oval, color=cyan3, label="DrasilState"];
 DrasilState -> CodeSpec;
+DrasilState -> PrintingInformation;
 DrasilState -> Modularity;
 DrasilState -> ImplementationType;
 DrasilState -> Structure;

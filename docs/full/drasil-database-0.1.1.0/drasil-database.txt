@@ -72,26 +72,10 @@ insert :: IsChunk a => a -> ChunkDB -> ChunkDB
 -- | Insert a list of chunks into a <a>ChunkDB</a>.
 insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
 
--- | Insert 12 lists of <i>unique</i> chunk types into a <a>ChunkDB</a>,
+-- | Insert 11 lists of <i>unique</i> chunk types into a <a>ChunkDB</a>,
 --   assuming the input <a>ChunkDB</a> does not already contain any of the
 --   chunks from the chunk lists.
---   
---   NOTE: Ignores management of dependancies related to
---   <tt>LabelledContent</tt>s and <a>Reference</a>s.
-insertAllOutOfOrder12 :: (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e, IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j, IsChunk k) => ChunkDB -> [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [g] -> [h] -> [i] -> [j] -> [k] -> [Reference] -> ChunkDB
-refTable :: ChunkDB -> Map UID Reference
-
--- | Find a <a>Reference</a> by its <a>UID</a>, throwing an error if it is
---   not found.
-refFind :: UID -> ChunkDB -> Reference
-refbyTable :: ChunkDB -> Map UID [UID]
-
--- | Find what chunks reference a given <a>UID</a>.
-refbyLookup :: UID -> Map UID [UID] -> [UID]
-traceTable :: ChunkDB -> Map UID [UID]
-
--- | Query a chunk for to what chunks it refers to.
-traceLookup :: UID -> Map UID [UID] -> [UID]
+insertAllOutOfOrder11 :: (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e, IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j, IsChunk k) => ChunkDB -> [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [g] -> [h] -> [i] -> [j] -> [k] -> ChunkDB
 
 module Database.Drasil.Dump
 type ChunkType = String

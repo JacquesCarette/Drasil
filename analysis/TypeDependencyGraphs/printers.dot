@@ -85,8 +85,7 @@ digraph alltypes {
 	subgraph print {
 		subgraph singleline{
 		SingleLine	[shape=oval, color=darkviolet, label="SingleLine"];
-		SingleLine -> ChunkDB;
-		SingleLine -> Stage;
+		SingleLine -> PrintingInformation;
 		SingleLine -> SingleLine;
 		SingleLine -> Expr;
 		SingleLine -> Doc;
@@ -264,7 +263,7 @@ digraph alltypes {
 	subgraph printinginformation {
 		subgraph printinginformation{
 		PrintingInformation	[shape=oval, color=cyan3, label="PrintingInformation"];
-		PrintingInformation -> ChunkDB;
+		PrintingInformation -> System;
 		PrintingInformation -> Stage;
 		PrintingInformation -> PrintingConfiguration;
 		}

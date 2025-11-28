@@ -364,6 +364,7 @@ digraph alltypes {
 		subgraph drasilstate{
 		DrasilState	[shape=oval, color=cyan3, label="DrasilState"];
 		DrasilState -> CodeSpec;
+		DrasilState -> PrintingInformation;
 		DrasilState -> Modularity;
 		DrasilState -> ImplementationType;
 		DrasilState -> Structure;
@@ -1023,8 +1024,6 @@ digraph alltypes {
 		ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
 		ChunkDB -> ChunkByUID;
 		ChunkDB -> ChunksByTypeRep;
-		ChunkDB -> MapUIDReference;
-		ChunkDB -> MapUIDUID;
 		}
 		subgraph dependant{
 		Dependant	[shape=oval, color=red2, label="Dependant"];
@@ -1341,7 +1340,7 @@ digraph alltypes {
 	subgraph traceabilitymatrix {
 		subgraph traceviewcat{
 		TraceViewCat	[shape=oval, color=red2, label="TraceViewCat"];
-		TraceViewCat -> UIDChunkDBUID;
+		TraceViewCat -> UIDSystemUID;
 		}
 	}
 	subgraph units {
@@ -4151,8 +4150,7 @@ digraph alltypes {
 	subgraph print {
 		subgraph singleline{
 		SingleLine	[shape=oval, color=darkviolet, label="SingleLine"];
-		SingleLine -> ChunkDB;
-		SingleLine -> Stage;
+		SingleLine -> PrintingInformation;
 		SingleLine -> SingleLine;
 		SingleLine -> Expr;
 		SingleLine -> Doc;
@@ -4330,7 +4328,7 @@ digraph alltypes {
 	subgraph printinginformation {
 		subgraph printinginformation{
 		PrintingInformation	[shape=oval, color=cyan3, label="PrintingInformation"];
-		PrintingInformation -> ChunkDB;
+		PrintingInformation -> System;
 		PrintingInformation -> Stage;
 		PrintingInformation -> PrintingConfiguration;
 		}

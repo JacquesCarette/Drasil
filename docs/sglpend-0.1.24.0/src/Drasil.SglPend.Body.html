@@ -255,6 +255,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 -&gt; [UncertQ]
 -&gt; [ConstQDef]
 -&gt; ChunkDB
+-&gt; [Reference]
 -&gt; System
 forall a e h i j.
 (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e,
@@ -278,6 +279,7 @@ a
 -&gt; [j]
 -&gt; [ConstQDef]
 -&gt; ChunkDB
+-&gt; [Reference]
 -&gt; System
 </span><span class="hs-identifier hs-var">mkSystem</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SglPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">SystemKind
@@ -298,7 +300,8 @@ a
 </span><a href="Drasil.SglPend.Unitals.html#outputs"><span class="hs-identifier hs-var">outputs</span></a></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.SglPend.Unitals.html#inConstraints"><span class="hs-identifier hs-var">inConstraints</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="Drasil.SglPend.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span>
+</span><a href="Drasil.SglPend.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span> </span><span class="annot"><span class="annottext">[Reference]
+</span><a href="Drasil.SglPend.Body.html#allRefs"><span class="hs-identifier hs-var">allRefs</span></a></span><span>
 </span><span id="line-98"></span><span>
 </span><span id="line-99"></span><span class="annot"><a href="Drasil.SglPend.Body.html#purp"><span class="hs-identifier hs-type">purp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-100"></span><span id="purp"><span class="annot"><span class="annottext">purp :: Sentence
@@ -410,7 +413,6 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 -&gt; [ConceptInstance]
 -&gt; [Citation]
 -&gt; [LabelledContent]
--&gt; [Reference]
 -&gt; ChunkDB
 </span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(InstanceModel -&gt; DefinedQuantityDict)
 -&gt; [InstanceModel] -&gt; [DefinedQuantityDict]
@@ -441,8 +443,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="Drasil.SglPend.LabelledContent.html#labelledContent"><span class="hs-identifier hs-var">labelledContent</span></a></span><span> </span><span class="annot"><span class="annottext">[LabelledContent] -&gt; [LabelledContent] -&gt; [LabelledContent]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[LabelledContent]
-</span><a href="Drasil.SglPend.Requirements.html#funcReqsTables"><span class="hs-identifier hs-var">funcReqsTables</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Reference]
-</span><a href="Drasil.SglPend.Body.html#allRefs"><span class="hs-identifier hs-var">allRefs</span></a></span><span>
+</span><a href="Drasil.SglPend.Requirements.html#funcReqsTables"><span class="hs-identifier hs-var">funcReqsTables</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-128"></span><span>
 </span><span id="line-129"></span><span class="annot"><span class="hs-comment">-- | Holds all references and links used in the document.</span></span><span>
 </span><span id="line-130"></span><span class="annot"><a href="Drasil.SglPend.Body.html#allRefs"><span class="hs-identifier hs-type">allRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>

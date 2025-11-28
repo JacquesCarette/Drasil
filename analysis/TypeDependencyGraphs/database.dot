@@ -4,8 +4,6 @@ digraph alltypes {
 		ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
 		ChunkDB -> ChunkByUID;
 		ChunkDB -> ChunksByTypeRep;
-		ChunkDB -> MapUIDReference;
-		ChunkDB -> MapUIDUID;
 		}
 		subgraph dependant{
 		Dependant	[shape=oval, color=red2, label="Dependant"];

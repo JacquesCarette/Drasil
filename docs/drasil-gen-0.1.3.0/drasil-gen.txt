@@ -13,7 +13,7 @@ module Drasil.Generator
 
 -- | Create a <a>ChunkDB</a> containing all knowledge (chunks) required to
 --   generate our SmithEtAl-esque SRS.
-cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] -> [LabelledContent] -> [Reference] -> ChunkDB
+cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
 
 -- | For debugging purposes, if the system has a <tt>DEBUG_ENV</tt>
 --   environment variable set to anything, we can dump the chunk maps in a

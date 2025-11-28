@@ -1,7 +1,7 @@
-module Database.Drasil.Dump where
+module Drasil.Database.Dump where
 
 import Drasil.Database.UID (UID)
-import Database.Drasil.ChunkDB
+import Drasil.Database.ChunkDB
 
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as SM

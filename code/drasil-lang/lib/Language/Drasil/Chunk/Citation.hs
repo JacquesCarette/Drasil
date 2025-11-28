@@ -14,18 +14,17 @@ module Language.Drasil.Chunk.Citation (
   cProceedings, cTechReport, cUnpublished
 ) where
 
-import Language.Drasil.People (People)
+import Control.Lens (makeLenses, Lens')
 
+import Drasil.Database (HasChunkRefs(..), UID, HasUID(..), showUID, mkUid)
+
+import Language.Drasil.People (People)
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Data.Citation (HasFields(..), CitationKind(..), CiteField,
   author, chapter, pages, editor, bookTitle, title,
   year, school, journal, institution, note, publisher)
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Label.Type (LblType(Citation), Referable(..), HasRefAddress(..))
-import Drasil.Database.Chunk (HasChunkRefs(..))
-import Drasil.Database.UID (UID, HasUID(..), showUID, mkUid)
-
-import Control.Lens (makeLenses, Lens')
 
 -- | A list of 'Citation's.
 type BibRef = [Citation]
@@ -202,4 +201,3 @@ stdFields t pub yr opt = title t : publisher pub : year yr : opt
 -- | Helper function (do not export) for creating thesis reference.
 thesis :: People -> String -> String -> Int -> [CiteField] -> [CiteField]
 thesis auth t sch yr opt = author auth : title t : school sch : year yr : opt
-

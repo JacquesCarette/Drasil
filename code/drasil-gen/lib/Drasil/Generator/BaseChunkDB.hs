@@ -3,7 +3,7 @@ module Drasil.Generator.BaseChunkDB (
   cdb
 ) where
 
-import Database.Drasil (empty, insertAll, ChunkDB, insertAllOutOfOrder11)
+import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder11)
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
   DefinedQuantityDict, UnitDefn, LabelledContent)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)

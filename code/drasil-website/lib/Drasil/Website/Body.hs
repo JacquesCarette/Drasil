@@ -6,7 +6,7 @@ module Drasil.Website.Body (
 
 import Control.Lens ((^.))
 
-import Database.Drasil
+import Drasil.Database
 import Drasil.Generator (cdb)
 import Drasil.System
 import Language.Drasil

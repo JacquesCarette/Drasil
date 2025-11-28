@@ -5,7 +5,11 @@
 -- | The Drasil Expression language
 module Language.Drasil.Expr.Lang where
 
-import Drasil.Database.UID (UID)
+import Data.Either (fromRight, rights)
+import qualified Data.Foldable as NE
+import Data.List (nub)
+
+import Drasil.Database (UID)
 
 import Language.Drasil.Literal.Class (LiteralC (..))
 import Language.Drasil.Literal.Lang (Literal (..))
@@ -15,10 +19,6 @@ import Language.Drasil.Space (DiscreteDomainDesc, RealInterval, Space,
   assertIndexLike, assertSet, assertReal, assertBoolean)
 import qualified Language.Drasil.Space as S
 import Language.Drasil.WellTyped
-
-import Data.Either (fromRight, rights)
-import qualified Data.Foldable as NE
-import Data.List (nub)
 
 -- * Expression Types
 

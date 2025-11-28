@@ -5,10 +5,11 @@ module Language.Drasil.ModelExpr.Lang where
 
 import Prelude hiding (sqrt)
 
+import Drasil.Database (UID)
+
 import Language.Drasil.Expr.Lang (Completeness)
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
-import Drasil.Database.UID (UID)
 import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- Binary functions

@@ -1,8 +1,7 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-
-module Database.Drasil.ChunkDB (
+module Drasil.Database.ChunkDB (
   -- * Core database types and functions.
   ChunkDB,
   empty, fromList,
@@ -32,7 +31,7 @@ import qualified Data.Set as S
 
 import Drasil.Database.Chunk (Chunk, HasChunkRefs(chunkRefs), IsChunk,
   mkChunk, unChunk, chunkType)
-import Language.Drasil (HasUID(..), UID)
+import Drasil.Database.UID (HasUID(..), UID)
 import Utils.Drasil (invert)
 
 -- | A chunk that depends on another.
@@ -61,19 +60,19 @@ fromList = flip insertAll empty
 
 -- | Query the 'ChunkDB' for all registered chunks (by their 'UID's).
 registered :: ChunkDB -> [UID]
-registered cdb = M.keys (chunkTable cdb)
+registered = M.keys . chunkTable
 
 -- | Check if a 'UID' is registered in the 'ChunkDB'.
 isRegistered :: UID -> ChunkDB -> Bool
-isRegistered u cdb = M.member u (chunkTable cdb)
+isRegistered u = M.member u . chunkTable
 
 -- | Enumerate all types registered in the 'ChunkDB'.
 typesRegistered :: ChunkDB -> [TypeRep]
-typesRegistered cdb = M.keys (chunkTypeTable cdb)
+typesRegistered = M.keys . chunkTypeTable
 
 -- | Get the number of chunks registered in the 'ChunkDB'.
 size :: ChunkDB -> Int
-size cdb = M.size (chunkTable cdb)
+size = M.size . chunkTable
 
 -- | Filter the 'ChunkDB' for chunks that are not needed by any other chunks.
 -- These are the only chunks that can safely be removed from the database,
@@ -149,9 +148,9 @@ insert0 cdb c = cdb'
     -- Finally, build the updated database.
     cdb' = cdb { chunkTable = chunkTable'', chunkTypeTable = chunkTypeTable' }
 
--- | Insert a chunk into the 'ChunkDB' if it is sensibly to do so (i.e., does
--- not depend on itself and is not a 'ChunkDB'). We temporarily allow chunks to
--- overwrite other ones, but we warn when this happens.
+-- | Insert a chunk into the 'ChunkDB' if it is sensible to do so (i.e., does
+-- not depend on itself, is not a 'ChunkDB', and does not overwrite another
+-- chunk).
 insert :: IsChunk a => a -> ChunkDB -> ChunkDB
 insert c cdb
   | c ^. uid `elem` chunkRefs c =
@@ -177,11 +176,7 @@ insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
 insertAll as cdb = foldl' (flip insert) cdb as
 
 --------------------------------------------------------------------------------
--- Temporary functions for working with non-chunk tables
---
--- Everything below is temporary and should be removed once the LabelledContent
--- and Reference chunks are properly implemented and the "chunk refs" tables are
--- built properly (i.e., using the `HasChunkRefs` typeclass).
+-- Temporary functions
 --------------------------------------------------------------------------------
 
 -- | Insert 11 lists of /unique/ chunk types into a 'ChunkDB', assuming the

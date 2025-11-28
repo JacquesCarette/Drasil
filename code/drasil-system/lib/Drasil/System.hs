@@ -25,9 +25,9 @@ import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (kind, Notebook)
 import Theory.Drasil
-import Database.Drasil (ChunkDB)
 import Drasil.Metadata (runnableSoftware, website)
 
 -- | Project Example purpose.

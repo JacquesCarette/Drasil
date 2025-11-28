@@ -7,15 +7,16 @@ module Language.Drasil.Chunk.Concept (
   ConceptInstance, cic
   ) where
 
+import Control.Lens ((^.))
+
+import Drasil.Database (HasUID(uid), nsUid)
+
 import Language.Drasil.Classes (Idea, Definition(defn), ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Chunk.NamedIdea(mkIdea,nw, nc)
 import Language.Drasil.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
-import Drasil.Database.UID (HasUID(uid), nsUid)
-
-import Control.Lens ((^.))
 
 --FIXME: Temporary ConceptDomain tag hacking to not break everything.
 

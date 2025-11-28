@@ -32,11 +32,12 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (findOrErr, ChunkDB(..), insertAll)
+import Database.Drasil (findOrErr, ChunkDB, insertAll)
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 
-import Drasil.System
+import Drasil.System (System(SI), whatsTheBigIdea, _sys, _systemdb, _quants,
+  _authors, refTable, refbyTable, traceTable, systemdb, sysName)
 import Drasil.GetChunks (ccss, ccss', citeDB)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -147,10 +148,7 @@ fillReferences allSections si@SI{_sys = sys} = si2
       ++ traceyGraphGetRefs (programName sys) ++ map ref cites
       ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref lblCon
-    -- set new reference table in the chunk database
-    chkdb2 = chkdb { refTable = M.union (refTable chkdb) newRefs }
-    -- set new chunk database into system information
-    si2 = set systemdb chkdb2 si
+    si2 = set refTable (M.union (si ^. refTable) newRefs) si
 
 -- | Recursively find all references in a section (meant for getting at 'LabelledContent').
 findAllRefs :: Section -> [Reference]
@@ -163,10 +161,11 @@ findAllRefs (Section _ cs r) = r : concatMap findRefSecCons cs
 
 -- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
 fillTraceMaps :: DocDesc -> System -> System
-fillTraceMaps dd si@SI{_systemdb = db} = si { _systemdb = newCDB }
+fillTraceMaps dd si = si''
   where
     tdb = generateTraceMap dd
-    newCDB = db { traceTable = tdb, refbyTable = invert tdb }
+    si' = set traceTable tdb si
+    si'' = set refbyTable (invert tdb) si'
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
@@ -386,13 +385,12 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
     trace = map (\(TraceConfig u _ desc cols rows) ->
       TM.generateTraceTableView u desc cols rows si) fProgs
     fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
-      not $ null (header (TM.layoutUIDs rows sidb) si)
-         || null (header (TM.layoutUIDs cols sidb) si)) progs
-    sidb = si ^. systemdb
+      not $ null (header (TM.layoutUIDs rows si) si)
+         || null (header (TM.layoutUIDs cols si) si)) progs
 
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> System -> [Sentence]
-header f = TM.traceMHeader (f . Map.keys . refbyTable)
+header f = TM.traceMHeader (f . Map.keys . (^. refbyTable))
 
 -- ** Off the Shelf Solutions
 

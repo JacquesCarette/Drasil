@@ -7,15 +7,15 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   PackageSym(..), AuxiliarySym(..)
 ) where
 
+import Text.PrettyPrint.HughesPJ (Doc)
+
+import Drasil.GOOL (ProgData, GOOLState)
+import Language.Drasil.Printers (PrintingInformation)
+
 import Language.Drasil (Expr)
-import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
-
-import Drasil.GOOL (ProgData, GOOLState)
-
-import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Members of this class must have all the information necessary for
 -- the 'AuxiliarySym' in addition to information necessary to create a package.
@@ -31,7 +31,7 @@ class AuxiliarySym r where
   type AuxHelper r
   doxConfig :: String -> GOOLState -> Verbosity -> r (Auxiliary r)
   readMe ::  ReadMeInfo -> r (Auxiliary r)
-  sampleInput :: ChunkDB -> DataDesc -> [Expr] -> r (Auxiliary r)
+  sampleInput :: PrintingInformation -> DataDesc -> [Expr] -> r (Auxiliary r)
 
   optimizeDox :: r (AuxHelper r)
 

@@ -94,7 +94,7 @@ si = mkSystem progName Specification [alex, luthfi, olu]
   tMods generalDefns dataDefs iMods
   []
   inputSymbols outputSymbols inputConstraints []
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "simulate", short twoD, phrase CP.rigidBody,
@@ -129,7 +129,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks [] dataDefs iMods generalDefns
-  tMods concIns citations labelledContent allRefs
+  tMods concIns citations labelledContent
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

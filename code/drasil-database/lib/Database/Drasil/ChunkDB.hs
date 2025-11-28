@@ -15,16 +15,13 @@ module Database.Drasil.ChunkDB (
   findTypeOf,
   insert, insertAll,
   -- * Temporary functions
-  insertAllOutOfOrder12,
-  refTable, refFind,
-  refbyTable, refbyLookup,
-  traceTable, traceLookup
+  insertAllOutOfOrder11,
 ) where
 
 import Control.Lens ((^.))
 import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe, mapMaybe)
-import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep, cast)
+import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep)
 
 -- NOTE: Strictness is important for (a) performance, (b) space leaks, (c)
 -- avoiding chunk dependancy cycles and (d) ensuring operation consistency with
@@ -35,7 +32,7 @@ import qualified Data.Set as S
 
 import Drasil.Database.Chunk (Chunk, HasChunkRefs(chunkRefs), IsChunk,
   mkChunk, unChunk, chunkType)
-import Language.Drasil (HasUID(..), UID, Reference)
+import Language.Drasil (HasUID(..), UID)
 import Utils.Drasil (invert)
 
 -- | A chunk that depends on another.
@@ -51,22 +48,11 @@ type ChunksByTypeRep = M.Map TypeRep [Chunk]
 data ChunkDB = ChunkDB {
     chunkTable     :: ChunkByUID
   , chunkTypeTable :: ChunksByTypeRep
-
-  -- FIXME: All things below need to be rebuilt!!
-
-  -- FIXME: All code in this file contains hacks specifically for the old
-  -- Reference chunks. Once rebuilt, these chunks should not have a unique 'UID'
-  -- and should be registered in the 'ChunkDB' like any other chunk.
-
-  -- TODO: References need to be rebuilt. See JacquesCarette/Drasil#4022.
-  , refTable             :: M.Map UID Reference
-  , traceTable           :: M.Map UID [UID]
-  , refbyTable           :: M.Map UID [UID]
 }
 
 -- | An empty 'ChunkDB'.
 empty :: ChunkDB
-empty = ChunkDB M.empty M.empty M.empty M.empty M.empty
+empty = ChunkDB M.empty M.empty
 
 -- | Create a 'ChunkDB' from a list of chunks. This will insert all chunks into
 -- the database from the list, from left to right.
@@ -75,27 +61,19 @@ fromList = flip insertAll empty
 
 -- | Query the 'ChunkDB' for all registered chunks (by their 'UID's).
 registered :: ChunkDB -> [UID]
-registered cdb =
-     M.keys (chunkTable cdb)
-  ++ M.keys (refTable cdb)
+registered cdb = M.keys (chunkTable cdb)
 
 -- | Check if a 'UID' is registered in the 'ChunkDB'.
 isRegistered :: UID -> ChunkDB -> Bool
-isRegistered u cdb =
-     M.member u (chunkTable cdb)
-  || M.member u (refTable cdb)
+isRegistered u cdb = M.member u (chunkTable cdb)
 
 -- | Enumerate all types registered in the 'ChunkDB'.
 typesRegistered :: ChunkDB -> [TypeRep]
-typesRegistered cdb =
-    typeRep (Proxy @Reference)
-  : M.keys (chunkTypeTable cdb)
+typesRegistered cdb = M.keys (chunkTypeTable cdb)
 
 -- | Get the number of chunks registered in the 'ChunkDB'.
 size :: ChunkDB -> Int
-size cdb =
-    M.size (chunkTable cdb)
-  + M.size (refTable cdb)
+size cdb = M.size (chunkTable cdb)
 
 -- | Filter the 'ChunkDB' for chunks that are not needed by any other chunks.
 -- These are the only chunks that can safely be removed from the database,
@@ -116,22 +94,14 @@ findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u ++ " (expecte
 
 -- | Find all chunks of a specific type in the 'ChunkDB'.
 findAll :: forall a. IsChunk a => ChunkDB -> [a]
-findAll cdb
-  | tr == typeRep (Proxy @Reference) =
-      mapMaybe cast $ M.elems $ refTable cdb
-  | otherwise =
-      maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
+findAll cdb = maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
   where
     tr = typeRep (Proxy :: Proxy a)
 
 -- | Find all chunks of a specific type in the 'ChunkDB', returning their 'UID's
 -- rather than the chunks themselves.
 findAll' :: TypeRep -> ChunkDB -> [UID]
-findAll' tr cdb
-  | tr == typeRep (Proxy @Reference) =
-      M.keys $ refTable cdb
-  | otherwise =
-      maybe [] (map (^. uid)) $ M.lookup tr (chunkTypeTable cdb)
+findAll' tr cdb = maybe [] (map (^. uid)) $ M.lookup tr (chunkTypeTable cdb)
 
 -- | Find all chunks that depend on a specific one.
 dependants :: UID -> ChunkDB -> Maybe [UID]
@@ -214,21 +184,18 @@ insertAll as cdb = foldl' (flip insert) cdb as
 -- built properly (i.e., using the `HasChunkRefs` typeclass).
 --------------------------------------------------------------------------------
 
--- | Insert 12 lists of /unique/ chunk types into a 'ChunkDB', assuming the
+-- | Insert 11 lists of /unique/ chunk types into a 'ChunkDB', assuming the
 -- input 'ChunkDB' does not already contain any of the chunks from the chunk
 -- lists.
---
--- NOTE: Ignores management of dependancies related to 'LabelledContent's and
--- 'Reference's.
-insertAllOutOfOrder12 ::
+insertAllOutOfOrder11 ::
   (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e,
    IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j,
    IsChunk k) =>
    ChunkDB ->
    [a] -> [b] -> [c] -> [d] -> [e] ->
    [f] -> [g] -> [h] -> [i] -> [j] ->
-   [k] -> [Reference] -> ChunkDB
-insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js ks rs =
+   [k] -> ChunkDB
+insertAllOutOfOrder11 strtr as bs cs ds es fs gs hs is js ks =
   let
     -- Box all of our chunks
     as' = map mkChunk as
@@ -266,27 +233,7 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js ks rs =
     -- Create the list of new chunk types and add them to the previous list of chunk types
     chTys = M.fromList (map (\chs -> (chunkType $ head chs, chs)) altogether)
     chTT = M.unionWith (++) (chunkTypeTable strtr) chTys
-
-    refTable' = M.union (refTable strtr) (M.fromList $ map (\x -> (x ^. uid, x)) rs)
   in
     -- Create the updated chunk database, adding the LCs and Rs, ignoring their dependencies.
     strtr { chunkTable = chTabWDeps
-          , chunkTypeTable = chTT
-          , refTable = refTable' }
-
--- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown.
-uMapLookup :: String -> String -> UID -> M.Map UID a -> a
-uMapLookup tys ms u t = getFM $ M.lookup u t
-  where getFM = fromMaybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms)
-
--- | Find a 'Reference' by its 'UID', throwing an error if it is not found.
-refFind :: UID -> ChunkDB -> Reference
-refFind u cdb = uMapLookup "Reference" "refTable" u (refTable cdb)
-
--- | Find what chunks reference a given 'UID'.
-refbyLookup :: UID -> M.Map UID [UID] -> [UID]
-refbyLookup c = fromMaybe [] . M.lookup c
-
--- | Query a chunk for to what chunks it refers to.
-traceLookup :: UID -> M.Map UID [UID] -> [UID]
-traceLookup = refbyLookup -- Same implementation, just different name for code clarity.
+          , chunkTypeTable = chTT }

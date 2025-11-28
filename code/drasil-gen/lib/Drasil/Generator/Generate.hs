@@ -28,7 +28,7 @@ import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
   makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)
 import Drasil.SRSDocument (System, SRSDecl, defaultConfiguration, piSys,
   PrintingInformation, mkDoc)
-import Drasil.System (systemdb, System(SI, _sys))
+import Drasil.System (System(SI, _sys))
 import Utils.Drasil (createDirIfMissing)
 import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC), docChoices)
@@ -38,7 +38,7 @@ import Drasil.Generator.TypeCheck (typeCheckSI)
 exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO ()
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let (srs, syst') = mkDoc syst srsDecl S.forT
-      printfo = piSys (syst' ^. systemdb) Equational defaultConfiguration
+      printfo = piSys syst' Equational defaultConfiguration
   dumpEverything syst' printfo ".drasil/"
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   genDoc (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
@@ -77,13 +77,13 @@ exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcsMods = do
 exportLessonPlan :: System -> LsnDecl -> String -> IO ()
 exportLessonPlan syst nbDecl lsnFileName = do
   let nb = mkNb nbDecl S.forT syst
-      printSetting = piSys (syst ^. systemdb) Equational defaultConfiguration
+      printSetting = piSys syst Equational defaultConfiguration
   genDoc (DocSpec (docChoices Lesson []) lsnFileName) nb printSetting
 
 -- | Generate a "website" (HTML file) softifact.
 exportWebsite :: System -> Document -> Filename -> IO ()
 exportWebsite syst doc fileName = do
-  let printSetting = piSys (syst ^. systemdb) Equational defaultConfiguration
+  let printSetting = piSys syst Equational defaultConfiguration
   genDoc (DocSpec (docChoices Website [HTML]) fileName) doc printSetting
 
 -- | Generate a document in one or many flavours (HTML, TeX+Makefile,

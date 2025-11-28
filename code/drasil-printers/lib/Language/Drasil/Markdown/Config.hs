@@ -5,14 +5,16 @@ import Control.Lens((^.))
 import Text.PrettyPrint (Doc, text, vcat, (<+>))
 import System.FilePath (takeFileName)
 
-import Drasil.Database.SearchTools (findAllLabelledContent)
 import Language.Drasil (Document(Document), LabelledContent(LblC, _ctype),
   RawContent(Figure), Sentence)
+import Drasil.System (systemdb)
+import Utils.Drasil (makeCSV)
+
+import Drasil.Database.SearchTools (findAllLabelledContent)
 import Language.Drasil.Markdown.Print (pSpec)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, syst)
 import Language.Drasil.Printing.Import.Sentence (spec)
 import Language.Drasil.Printing.LayoutObj (Filepath)
-import Utils.Drasil (makeCSV)
 
 -- | Prints the .toml config file for mdBook.
 makeBook :: Document -> PrintingInformation -> Doc
@@ -41,4 +43,4 @@ mkTitle sm t = text "\"" <> pSpec mempty (spec sm t) <> text "\""
 assetMat :: PrintingInformation -> [[Filepath]]
 assetMat pinfo =
   [[fp, "src/assets/" ++ takeFileName fp]
-    | LblC { _ctype = Figure _ fp _ _ } <- findAllLabelledContent (pinfo ^. ckdb)]
+    | LblC { _ctype = Figure _ fp _ _ } <- findAllLabelledContent (pinfo ^. syst . systemdb)]

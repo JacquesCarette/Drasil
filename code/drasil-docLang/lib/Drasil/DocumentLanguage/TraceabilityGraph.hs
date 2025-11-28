@@ -74,18 +74,16 @@ mkGraphNodes entry si col = NF {nodeUIDs = nodeContents, nodeLabels = map (check
         checkNodeContents :: [UID] -> String
         checkNodeContents [] = ""
         checkNodeContents (x:_) = checkUIDAbbrev si x
-        nodeContents = traceMReferees entryF cdb
-        cdb = _systemdb si
-        entryF = layoutUIDs [entry] cdb
+        nodeContents = traceMReferees entryF si
+        entryF = layoutUIDs [entry] si
 
 -- | Creates the graph edges based on the relation of the first list of sections to the second.
 -- Also needs the system information. Return value is of the form (Section, [Dependencies]).
 mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> System -> [(UID, [UID])]
-mkGraphEdges cols rows si = makeTGraph (traceGRowHeader rowf si) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb
+mkGraphEdges cols rows si = makeTGraph (traceGRowHeader rowf si) (traceMColumns colf rowf si) $ traceMReferees colf si
     where
-        cdb = _systemdb si
-        colf = layoutUIDs cols cdb
-        rowf = layoutUIDs rows cdb
+        colf = layoutUIDs cols si
+        rowf = layoutUIDs rows si
 
 -- | Helper for making graph edges. Taken from Utils.Drasil's traceability matrix relation finder.
 -- But, instead of marking "X" on two related ideas, it makes them an edge.
@@ -130,8 +128,8 @@ checkUIDRefAdd si t
 
 -- | Helper that finds the header of a traceability matrix.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.
-traceGHeader :: (ChunkDB -> [UID]) -> System -> [UID]
-traceGHeader f c = map (`checkUID` c) $ f $ _systemdb c
+traceGHeader :: (System -> [UID]) -> System -> [UID]
+traceGHeader f c = map (`checkUID` c) $ f c
 
 -- | Helper that finds the headers of the traceability matrix rows.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.

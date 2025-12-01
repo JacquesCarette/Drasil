@@ -4,7 +4,7 @@
 - [Issues related to Drasil](#issues-related-to-drasil)
     - [Problem Analysis](#problem-analysis)
         - [`grep` Summary](#grep-summary)
-        - [`make test`](#using-make-test)
+        - [Makefile Options](#makefile-options)
         - [Generated Chunk Logs](#using-generated-chunk-logs)
     - [Example Problem](#example)
         - [`ChunkDB` Information](#now-what-is-the-chunkdb)
@@ -13,15 +13,11 @@
     - [Errors of the form `Reference: not found in ReferenceMap`](#notes-for-reference-not-found-in-referencemap-errors)
 - Also see the [Workflow](Workflow) page
 
-# Issues related to `git`
-Below are some of the commonly encountered issues or errors when working on Drasil:
-Here are also some errors that have happened in the past but should be fixed (due to updates from stack, GHC, git, etc.):
-- I made changes to a file on my local branch and built, the build was successful but when I checked to see my changes in the .html file, the changes I made were not visible. What can I do?
-    - Make sure that your code change is valid and correct.
-    - run `make stackArgs=-force-dirty`, this command will your machine to recompile, using the packages on your local branch.
-- I made changes to the code and stable folder files on my local branch. The build build was successful. I staged and committed all changed files (in one pull request), but the GitHub Actions tests failed. What can I do?
-    - See the [`make test` section](#using-make-test)
-    - Also see this [comment](https://github.com/JacquesCarette/Drasil/pull/2151#issuecomment-635750650) on different types of Continuous Integration (CI) errors.
+## GitHub Actions
+If you open a PR and the Continuous Integration (CI) build fails, there are a few helpful places that can help you understand why.
+- The easiest place is to check the build logs. Beside the failed test case, there should be a button to view details, which will show you the command run and the output from it. The error messages are usually helpful and should help you get a sense of what went wrong.
+- For more tips, see the [Makefile Options section](#makefile-options)
+- Also see this [comment](https://github.com/JacquesCarette/Drasil/pull/2151#issuecomment-635750650) on different types of  CI errors.
 
 
 # Issues related to Drasil
@@ -45,13 +41,26 @@ drasil-docLang/Drasil/DocumentLanguage.hs:mkTraceabilitySec (TraceabilityProg pr
 
 - `--color` will highlight the word searched in a different colour. This is useful for larger `grep` searches, where each occurrence is not instantly apparent. 
 
-### Using `make test`
+### Makefile Options
+
+The makefile has various options that can help you find the sources of a few types of bugs.
+
+##### `make test`
+
 Running the following set of commands may help you debug any elusive errors:
 ```
 make clean
 make test >& make.log
 ```
 Check for any warnings or errors in the logs; these are treated as errors in GitHub Actions. Just remember to delete the log file once you are finished with it!
+
+##### `make stabilize`
+
+This re-generates the examples and updates stable. Forgetting to update stable is one of the main sources of CI build failure, so this is a good one to know!
+
+##### `make pr_ready`
+
+This command (more-or-less) runs the CI actions on your local machine, which should allow you to reproduce the errors from CI. It's usually worth running before opening a PR or pushing changes to a PR.
 
 ### Using Generated Chunk Logs
 If a [chunk](Chunks) is not behaving as expected, try checking out the chunk logs (under `code/debug`) for the specific example. Specifically, keep an eye out for duplicate `UID`s attached to different terms or any other pieces of information. It may be a signal for a deeper problem. The first three tables contain traceability information from one chunk to the next, while the rest are listed from the fields of the `ChunkDB` type. `ChunkDB`s are usually stored in the `_sysinfodb` field of `System`.

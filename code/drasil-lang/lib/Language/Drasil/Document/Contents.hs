@@ -10,24 +10,19 @@ module Language.Drasil.Document.Contents (
   unlbldCode
 ) where
 
-import Drasil.Code.CodeExpr.Lang (CodeExpr)
+import Control.Lens ((^.))
+
 import Language.Drasil.Classes (Definition(..))
 import Language.Drasil.ShortName (HasShortName(..), getSentSN)
 import Language.Drasil.Document (llcc, ulcc)
-import Language.Drasil.Document.Core
-    (LabelledContent,
-     RawContent(Enumeration, EqnBlock, CodeBlock),
-     Contents(UlC),
-     ListTuple,
-     ItemType(Flat),
-     ListType(Simple))
+import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)
+import Language.Drasil.Document.Core (LabelledContent, RawContent(Enumeration,
+  EqnBlock, CodeBlock), Contents(UlC), ListTuple, ItemType(Flat), ListType(Simple))
+import Language.Drasil.Expr.Lang (Expr)
+import Language.Drasil.Label.Type ( Referable(refAdd) )
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Reference (Reference)
 import Language.Drasil.Sentence (Sentence (..))
-import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)
-import Language.Drasil.Label.Type ( Referable(refAdd) )
-
-import Control.Lens ((^.))
 
 -- | Displays a given expression and attaches a 'Reference' to it.
 lbldExpr :: ModelExpr -> Reference -> LabelledContent
@@ -38,7 +33,7 @@ unlbldExpr :: ModelExpr -> Contents
 unlbldExpr c = UlC $ ulcc $ EqnBlock c
 
 -- | Unlabelled code expression
-unlbldCode :: CodeExpr -> Contents
+unlbldCode :: Expr -> Contents
 unlbldCode c = UlC $ ulcc $ CodeBlock c
 
 -- | Creates a bulleted list.

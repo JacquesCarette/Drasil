@@ -20,8 +20,9 @@ module Drasil.Sections.SpecificSystemDescription (
   helperCI,
   -- * Subsection Stubs
   tmStub, ddStub, gdStub, imStub, pdStub
-  ) where
+) where
 
+import Drasil.Database (UID, HasUID(..), showUID)
 import Language.Drasil hiding (variable)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP

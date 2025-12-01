@@ -2,6 +2,8 @@
 -- | Contains types and functions common to aspects of generating documents.
 module Language.Drasil.Document.Core where
 
+import Control.Lens ((^.), makeLenses, Lens', set, view)
+
 import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
@@ -12,8 +14,6 @@ import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Reference (Reference)
 import Language.Drasil.Sentence (Sentence)
-
-import Control.Lens ((^.), makeLenses, Lens', set, view)
 
 -- * Lists
 

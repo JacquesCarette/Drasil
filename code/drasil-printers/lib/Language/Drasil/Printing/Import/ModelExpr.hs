@@ -1,12 +1,11 @@
 {-# LANGUAGE GADTs #-}
-
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
-module Language.Drasil.Printing.Import.ModelExpr where -- TODO: tighten exports
--- TODO: tighten exports
+module Language.Drasil.Printing.Import.ModelExpr where
 
 import Data.List (intersperse)
 
-import Language.Drasil (UID, DomainDesc(..), RealInterval(..), Inclusive(..),
+import Drasil.Database (UID)
+import Language.Drasil (DomainDesc(..), RealInterval(..), Inclusive(..),
   RTopology(..), LiteralC(int))
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development (Literal(..))

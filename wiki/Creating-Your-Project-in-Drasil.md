@@ -193,7 +193,6 @@ You might have to update stable for all the other examples if you get the follow
 Subsequently, you need to update stable for your new project whenever you make any changes. This can most easily be done by running `make stabilize`. Alternatively, you can follow these instructions manually:
 1. Make a copy of your project folder from `/Drasil/code/build/yourProjectName`.
 2. Paste in `Drasil/code/stable` to create a folder for your project. Ensure that the version in `stable` matches the version in `build` when pushing your project to your remote repository.
-
 3. Rename your folder with the name you used for `_sys` from the `si` variable in `Body.hs`. This should be the same as what appeared in the `build` folder.
 4. Update `.html` and `.tex` files (copy and replace) only.
 5. When you build your project, and it says `GENERATED OUTPUT MATCHES STABLE VERSION`, then stable is up to date, no need to update. Here is what a stabilized output will look like:

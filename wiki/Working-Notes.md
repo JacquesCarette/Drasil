@@ -17,6 +17,10 @@ This is a place to organize our "Working Notes". See [#4429](../issues/4429) for
 
 - [Questions](Questions)
 
+## Dr. Smith
+
+- [Getting to Know Potential Users of Drasil](Getting-to-Know-Potential-Users-of-Drasil)
+
 ## Other
 
 #### Design

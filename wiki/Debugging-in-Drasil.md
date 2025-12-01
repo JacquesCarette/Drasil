@@ -106,7 +106,7 @@ Using a similar `grep` to the above (searching with `ChunkDB`), we find the type
 
 ### So, what does this ultimately mean?
 
-This means that some example (likely the named one throwing the error in the first place) is missing some chunk information in it's `ChunkDB`!
+This means that some example (likely the named one throwing the error in the first place) is missing some chunk information in its `ChunkDB`!
 
 ## Solution
 

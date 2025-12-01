@@ -1,3 +1,5 @@
+**Note**: the following is a history of changes made at a certain point in Drasil's development. It may be helpful for anyone who needs to know that history, but should not be treated as an up-to-date description of Drasil's current state.
+
 This wiki page consists of a breakdown of what changed after the split of Drasil into subpackages and acts as an FAQ section. Questions can be asked by creating issues and assigning them to @samm82.
 
 # Packages Overview

@@ -31,6 +31,7 @@ This is a place to organize our "Working Notes". See [#4429](../issues/4429) for
 - [Purpose of Document](Recipe-for-Purpose-of-Document-Section)
 - [How to Define Unitals](WIP-How-to-define-Unitals)
 - [File Input Patterns](File-Input-Patterns-Design-Discussion)
+- [Sub-packages](SubPackages)
 
 #### WIP Projects
 

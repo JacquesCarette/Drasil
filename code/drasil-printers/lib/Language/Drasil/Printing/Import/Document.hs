@@ -1,22 +1,20 @@
 -- | Defines functions to transform Drasil-based documents into a printable version.
 module Language.Drasil.Printing.Import.Document where
 
+import Control.Lens ((^.))
+import Data.Bifunctor (bimap, second)
 import Data.Map (fromList)
 
 import Language.Drasil hiding (neg, sec, symbol, isIn, codeExpr)
 
+import Drasil.Database (showUID)
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
-import Language.Drasil.Printing.PrintingInformation
-  (PrintingInformation)
-
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
 import Language.Drasil.Printing.Import.Sentence (spec)
-
-import Control.Lens ((^.))
-import Data.Bifunctor (bimap, second)
 
 -- * Main Function
 

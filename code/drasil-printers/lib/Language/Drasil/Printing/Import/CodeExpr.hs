@@ -7,8 +7,9 @@ import Data.List (intersperse)
 
 import Drasil.Code.CodeExpr.Development
 
+import Drasil.Database (UID)
 import Language.Drasil (DomainDesc(..), Inclusive(..),
-  RTopology(..), RealInterval(..), UID, LiteralC (int))
+  RTopology(..), RealInterval(..), LiteralC (int))
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development
 

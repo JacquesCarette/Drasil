@@ -17,6 +17,7 @@ import Utils.Drasil (stringList, mkTable)
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
 
+import Drasil.Database (HasUID(..))
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S

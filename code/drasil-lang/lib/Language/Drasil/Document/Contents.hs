@@ -10,6 +10,8 @@ module Language.Drasil.Document.Contents (
   unlbldCode
 ) where
 
+import Control.Lens ((^.))
+
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.Classes (Definition(..))
 import Language.Drasil.ShortName (HasShortName(..), getSentSN)
@@ -26,8 +28,6 @@ import Language.Drasil.Reference (Reference)
 import Language.Drasil.Sentence (Sentence (..))
 import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)
 import Language.Drasil.Label.Type ( Referable(refAdd) )
-
-import Control.Lens ((^.))
 
 -- | Displays a given expression and attaches a 'Reference' to it.
 lbldExpr :: ModelExpr -> Reference -> LabelledContent

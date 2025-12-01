@@ -11,10 +11,13 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
   odeInfoChunks
 ) where
 
-import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
+import Control.Lens ((^.), _1, _2, over)
+
+import Drasil.Database (HasUID(..), (+++))
+import Language.Drasil (HasSymbol(symbol), MayHaveUnit(getUnit),
   HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar, implVar',
   compoundPhrase, nounPhrase, nounPhraseSP, label, sub, Idea(getA), NamedIdea(term), Stage(..),
-  (+++), Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
+  Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
@@ -42,8 +45,6 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
 
 import Drasil.Code.CodeExpr
 import Drasil.Code.CodeExpr.Development
-
-import Control.Lens ((^.), _1, _2, over)
 
 -- SciPy Library (Python)
 

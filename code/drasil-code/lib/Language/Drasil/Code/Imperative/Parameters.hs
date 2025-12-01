@@ -3,6 +3,13 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
   getConstraintParams, getCalcParams, getOutputParams
 ) where
 
+import Control.Lens ((^.))
+import Control.Monad.State (get)
+import Data.List (nub, (\\), delete)
+import Data.Map (member, notMember)
+import qualified Data.Map as Map (lookup)
+
+import Drasil.Database (HasUID(..))
 import Language.Drasil hiding (isIn, Var)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Language.Drasil.Chunk.CodeBase
@@ -13,12 +20,6 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName)
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..), constraintvars, getConstraints)
 import Language.Drasil.Mod (Name)
-
-import Data.List (nub, (\\), delete)
-import Data.Map (member, notMember)
-import qualified Data.Map as Map (lookup)
-import Control.Monad.State (get)
-import Control.Lens ((^.))
 
 -- | Parameters may be inputs or outputs.
 data ParamType = In | Out deriving Eq

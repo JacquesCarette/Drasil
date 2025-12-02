@@ -14,10 +14,8 @@ import Drasil.SglPend.Unitals (lenRod, initialPendAngle)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
 import Drasil.DblPend.Concepts (horizontalPos, verticalPos)
 
-
 dataDefs :: [DataDefinition]
 dataDefs = [positionIX, positionIY, frequencyDD, angFrequencyDD, periodSHMDD]
-
 
 ------------------------------------------------------
 positionIX :: DataDefinition
@@ -61,7 +59,6 @@ frequencyDDQD = mkQuantDef QP.frequency frequencyDDEqn
 
 frequencyDDEqn :: Expr
 frequencyDDEqn = recip_ $ sy QP.period
-
 
 frequencyRef :: Sentence
 frequencyRef = ch QP.frequency `S.isThe` S "number of back and forth swings in one" +:+ phrase second

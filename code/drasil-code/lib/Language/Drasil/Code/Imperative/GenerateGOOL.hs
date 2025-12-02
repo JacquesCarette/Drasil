@@ -120,7 +120,6 @@ mkArg v = do
       mkArg' _ = id
   mkArg' (getType $ valueType vl) (return vl)
 
-
 -- | Gets the current module and calls mkArg on the arguments.
 -- Called by more specific function call generators ('fApp' and 'ctorCall').
 fCall :: (SharedProg r) => (Name -> [SValue r] -> NamedArgs r -> SValue r) ->

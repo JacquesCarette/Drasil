@@ -51,7 +51,6 @@ instance DataTypeDeclaration TypeDecl where
   getTypeName = tdName
   getContents = tdContent
 
-
 -- new EntryData data type with strict fields to enforce strict file reading
 data EntryData = EntryData { dRNs :: ![DataDeclRecord]    -- Record datatypes will be shown differently on a dot graph
                            , dCNs :: ![DataDeclConstruct] -- compared to these datatypes that use constructors.
@@ -164,7 +163,6 @@ formatNewtype sfLines = getNewtypes $ sortNewtypesR newtypeRec ++ sortNewtypesC 
 formatType :: [String] -> [TypeDecl]
              -- sorting functions   -- cleanup functions
 formatType = getTypes . sortTypes . removeComments . isType
-
 
 -----------------
 -- Sorting and filtering for functions that use @data@ syntax (for record types)

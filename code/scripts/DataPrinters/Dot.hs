@@ -4,7 +4,6 @@ module DataPrinters.Dot (digraph, subgraph,
 
 import System.IO
 
-
 -- type synonyms for clarity.
 type Name = String
 type Nodes = (Colour, [String])

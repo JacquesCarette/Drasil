@@ -182,7 +182,6 @@ verticalMotion = dccWDS "verticalMotion" (cn "vertical motion")
 weight = dcc "weight" (cn' "weight")
   "the gravitational force acting on an object"
 
-
 -- Some variants of distance, speed, velocity, and scalar acceleration
 -- FIXME: Complete all variants?
 -- FIXME: Pull out commonalities?
@@ -217,7 +216,6 @@ yAccel = dccWDS "yScalAcc" (yComp `of_` acceleration) (S "The" +:+ NP (yComp `of
 constAccelV = dccWDS "constAccelV" (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
 xConstAccel = dccWDS "xConstAccel" (xComp `of_` constAccel) (S "The" +:+ NP (xComp `of_` constAccel))
 yConstAccel = dccWDS "yConstAccel" (yComp `of_` constAccel) (S "The" +:+ NP (yComp `of_` constAccel))
-
 
 --FIXME: COMBINATION HACK (for all below)
 --FIXME: should use compoundPhrase instead? Or better yet, use combineNINI instead of interacting with the terms directly?

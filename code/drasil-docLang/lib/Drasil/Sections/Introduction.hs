@@ -24,7 +24,6 @@ import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
   smithKoothoor2016, smithLai2005, koothoor2013)
 import Data.Drasil.Software.Products
 
-
 -----------------------
 --     Constants     --
 -----------------------
@@ -72,7 +71,6 @@ introductionSection EmptyS              programDefinition = SRS.intro
 introductionSection problemIntroduction programDefinition = SRS.intro
   [mkParagraph problemIntroduction, overviewParagraph programDefinition]
 
-
 -- | Constructor for the overview paragraph for the Introduction.
 -- Takes the definition of the specific example being generated ('Sentence').
 overviewParagraph :: Sentence -> Contents
@@ -80,7 +78,6 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
   S "provides an overview of the", introduceAbb srs, S "for" +:+.
   programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
   S "of this", phrase document `sC` introductionSubsections]
-
 
 -- | Constructor for Purpose of Document section that each example controls.
 purpDocPara1 :: CI -> Sentence
@@ -155,7 +152,6 @@ intReaderIntro progName assumed topic asset sectionRef =
 -- and any other relevant information ('Sentence').
 orgSec :: NamedIdea c => c -> Section -> Sentence -> Section
 orgSec b s t = SRS.orgOfDoc (orgIntro b s t) []
-
 
 -- | Helper function that creates the introduction for the Organization of the Document section. Parameters should be
 -- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),

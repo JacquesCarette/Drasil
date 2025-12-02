@@ -75,7 +75,6 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
   S "(expr6)"
   ]
 
-
 accelerationDueToGravityGDef :: RelationConcept
 accelerationDueToGravityGDef = makeRC "accelDueToGrav"
   (nounPhraseSP "Acceleration due to gravity")
@@ -116,7 +115,6 @@ accelerationDueToGravityDeriv = foldlSent [S "From Newton's law of universal",
   S "(expr6)"
   ]
 
-
 relativeVelocityInCollisionsGDef :: RelationConcept
 relativeVelocityInCollisionsGDef = makeRC "relVeloInColl"
   (nounPhraseSP "Relative velocity in collision")
@@ -156,7 +154,6 @@ coefficientOfRestitutionRel :: Relation
 coefficientOfRestitutionRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*
   FCall (C temp_diff) [C QP.time] -- replace with proper Expr
 
-
 torqueGDef :: RelationConcept
 torqueGDef = makeRC "torque"
   (nounPhraseSP "Torque")
@@ -181,7 +178,6 @@ momentOfInertiaGDef = makeRC "momentOfInertia"
 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent []
-
 
 --[momentOfInertia, numOfParticles, massj, distanceBtwParticleI]
 

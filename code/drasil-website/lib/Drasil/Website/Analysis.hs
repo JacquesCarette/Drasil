@@ -5,14 +5,12 @@ module Drasil.Website.Analysis where
 
 import Language.Drasil
 
-
 -- * Analysis Section
 --
 -- $analysis
 --
 -- Holds functions that are made for the Analysis section of the Drasil Website,
 -- including the section creator functions, title & introduction, and references.
-
 
 -- | Creates the Analysis of Drasil Section. This section is split into the following sub-sections:
 --

@@ -13,7 +13,6 @@ import Drasil.Sections.Requirements (reqInputsRef)
 import Drasil.Sections.AuxiliaryConstants (tableOfConstantsRef)
 import Drasil.Sections.SpecificSystemDescription (tInDataCstRef, tOutDataCstRef)
 
-
 -- | All section references used in creating a Software Requirements Specification (SRS).
 secRefs :: [Reference]
 secRefs = sectionReferences ++ [tableAbbAccRef, reqInputsRef, symbTableRef,

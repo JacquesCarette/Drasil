@@ -68,7 +68,6 @@ derivedInputDataConstraints = derivedInsWUnitsUncrtn
 dataConstraints :: [UncertQ]
 dataConstraints = inputDataConstraints ++ derivedInputDataConstraints
 
-
 plateLen = uqc "plateLen" (nounPhraseSP "plate length (long dimension)")
   "the length (long dimension) of the glass plate" lA metre Real
   [ gtZeroConstr,
@@ -112,7 +111,6 @@ nomThick = cuc' "nomThick" (nounPhraseSP "nominal thickness")
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
   [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
 
-
 outputs :: [DefinedQuantityDict]
 outputs = map dqdWr [isSafePb, isSafeLR] ++ map dqdWr [probBr, stressDistFac]
 
@@ -139,7 +137,6 @@ pbTolfail = cucNoUnit' "pbTolfail" (nounPhraseSP "tolerable probability of failu
   "the tolerable probability of failure of the glass plate"
   (sub cP (Concat [lFail, lTol])) Real
   [probConstr] (dbl 0.008)
-
 
   --FIXME: no typical value!
 
@@ -279,7 +276,6 @@ interpY = dqdNoUnit (dcc "interpY" (nounPhraseSP "interpY")
 interpZ = dqdNoUnit (dcc "interpZ" (nounPhraseSP "interpZ")
   "interpolated z") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
-
 loadDF        = dqdNoUnit loadDurFac (variable "LDF") Real
 loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
@@ -291,8 +287,6 @@ sdfTol = dqdNoUnit (dcc "sdfTol" (nounPhraseSP "tolerable stress distribution fa
 
 tolLoad = dqdNoUnit (dcc "tolLoad" (nounPhraseSP "tolerable load")
   "the tolerable load") (sub (eqSymb dimlessLoad) lTol) Real
-
-
 
 lBreak, lDur, lFail, lTol :: Symbol
 lBreak = label "b"

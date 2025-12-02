@@ -9,7 +9,6 @@ import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
 import Drasil.Metadata (progLanguage)
 
-
 prodtcon :: [IdeaDict]
 prodtcon = [sciCompS, videoGame, openSource, compPro]
 

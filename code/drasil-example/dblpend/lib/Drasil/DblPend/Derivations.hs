@@ -54,7 +54,6 @@ accelXDerivEqn3_2 = sy xAccel_2 $= deriv velXExpr_2 time
 accelYDerivEqn3_2 :: ModelExpr
 accelYDerivEqn3_2 = sy yAccel_2 $= deriv velYExpr_2 time
 
-
 -- Angular acceleration explanation in IM
 angularAccelDerivEqns :: [ModelExpr]
 angularAccelDerivEqns = [angularAccelDerivEqn1, angularAccelDerivEqn2, angularAccelDerivEqn3, angularAccelDerivEqn4,

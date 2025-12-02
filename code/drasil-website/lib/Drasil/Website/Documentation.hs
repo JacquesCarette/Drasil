@@ -3,7 +3,6 @@ module Drasil.Website.Documentation where
 
 import Language.Drasil
 
-
 -- * Haddock Documentation for Drasil Section
 
 -- | Creates the Haddock documentation for all of Drasil.

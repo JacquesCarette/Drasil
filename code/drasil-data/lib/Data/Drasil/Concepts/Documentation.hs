@@ -4,7 +4,6 @@
 -- 'Creating Your Project in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 
-
 module Data.Drasil.Concepts.Documentation where
 
 import Control.Lens ((^.))
@@ -16,7 +15,6 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import Drasil.Metadata (documentc, softEng, dataDefn, genDefn, inModel, thModel)
 
 import Data.Drasil.Concepts.Math (graph, unit_)
-
 
 -- | Collects all documentation-related named chunks (not concept-level yet).
 doccon :: [IdeaDict]
@@ -239,7 +237,6 @@ verification    = nc "verification"   (cn'    "verification"       )
 video           = nc "video"          (cn'    "video"              )
 year            = nc "year"           (cn'    "year"               )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
-
 
 abbAcc, caseProb, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc,
   refMat, reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,

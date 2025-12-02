@@ -7,7 +7,6 @@ import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat)
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
-
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
 -- | Type synonym for clarity.

@@ -104,7 +104,6 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
-
 pyExt :: String
 pyExt = "py"
 

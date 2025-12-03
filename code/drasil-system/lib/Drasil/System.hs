@@ -12,7 +12,7 @@ module Drasil.System (
   -- ** Lenses
   HasSystem(..),
   -- ** Functions
-  whatsTheBigIdea, mkSystem, sysName,
+  whatsTheBigIdea, mkSystem,
   -- * Reference Database
   -- ** Types
   Purpose, Background, Scope, Motivation,
@@ -26,8 +26,9 @@ import Data.Maybe (fromMaybe)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (kind, Notebook)
-import Theory.Drasil
+import Language.Drasil (Quantity, MayHaveUnit, HasUID(..), Sentence, Concept,
+  Reference, UID, People, IdeaDict, CI, Constrained, ConstQDef, nw)
+import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Drasil.Metadata (runnableSoftware, website)
 
 -- | Project Example purpose.
@@ -61,12 +62,11 @@ data System where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
- SI :: (CommonIdea a, Idea a,
-  Quantity e, Eq e, MayHaveUnit e, Concept e,
+ SI :: (Quantity e, Eq e, MayHaveUnit e, Concept e,
   Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
-  { _sys          :: a
+  { _sysName      :: CI
   , _kind         :: SystemKind
   , _authors      :: People
   , _purpose      :: Purpose
@@ -92,12 +92,11 @@ data System where
 
 makeClassy ''System
 
-mkSystem :: (CommonIdea a, Idea a,
-  Quantity e, Eq e, MayHaveUnit e, Concept e,
+mkSystem :: (Quantity e, Eq e, MayHaveUnit e, Concept e,
   Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
-  a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
+  CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
     [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
     [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
     System
@@ -111,7 +110,3 @@ refbyLookup u = fromMaybe [] . M.lookup u . (^. refbyTable)
 
 traceLookup :: UID -> System -> [UID]
 traceLookup u = fromMaybe [] . M.lookup u . (^. traceTable)
-
--- FIXME: sysName is a hack.
-sysName :: System -> IdeaDict
-sysName SI{_sys = sys} = nw sys

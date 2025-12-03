@@ -3,6 +3,8 @@
 -- To be used in the Drasil website.
 module Drasil.Website.CaseStudy where
 
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (E, Var)
 import Language.Drasil.Code hiding (CS)
 import Drasil.System
@@ -59,8 +61,8 @@ data CaseStudy = CS {
 -- so we take the naming scheme from there.
 mkCaseStudy :: Example -> [CaseStudy]
 mkCaseStudy E{choicesE = []} = []
-mkCaseStudy E{systemE = si@SI{_sys = sys}, choicesE = [x]} = [CS{systemCS = si, progName = S $ programName sys, choicesCS = x}]
-mkCaseStudy E{systemE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{systemCS = si, progName = S $ codedDirName (programName sys) x, choicesCS = x}) xs
+mkCaseStudy E{systemE = si, choicesE = [x]} = [CS{systemCS = si, progName = S $ programName $ si ^. sysName, choicesCS = x}]
+mkCaseStudy E{systemE = si, choicesE = xs} = map (\x -> CS{systemCS = si, progName = S $ codedDirName (programName $ si ^. sysName) x, choicesCS = x}) xs
 
 -- * Display 'CaseStudy' Information as a Table
 --

@@ -174,16 +174,15 @@ codeSpec si chs ms = CS {
 -- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
 -- from 'System' to populate the 'OldCodeSpec' structure.
 oldcodeSpec :: S.System -> Choices -> [Mod] -> OldCodeSpec
-oldcodeSpec sys@S.SI{ S._sys = sysIdea
-                 , S._authors = as
-                 , S._configFiles = cfp
-                 , S._inputs = ins
-                 , S._outputs = outs
-                 , S._constraints = cs
-                 , S._constants = cnsts
-                 , S._systemdb = db } chs ms =
+oldcodeSpec sys@S.SI{ S._authors = as
+                    , S._configFiles = cfp
+                    , S._inputs = ins
+                    , S._outputs = outs
+                    , S._constraints = cs
+                    , S._constants = cnsts
+                    , S._systemdb = db } chs ms =
   let ddefs = sys ^. dataDefns
-      n = programName sysIdea
+      n = programName $ sys ^. sysName
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)

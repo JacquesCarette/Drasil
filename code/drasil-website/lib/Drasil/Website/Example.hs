@@ -3,6 +3,7 @@
 -- | Create the list of Generated Examples for the Drasil website.
 module Drasil.Website.Example where
 
+import Drasil.Code.CodeVar (programName)
 import Language.Drasil hiding (E)
 import Drasil.System (System(..))
 import Language.Drasil.Code (Choices(..), Lang(..))

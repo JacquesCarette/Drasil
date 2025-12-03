@@ -17,11 +17,12 @@ import System.Directory (getCurrentDirectory, setCurrentDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 
+import Drasil.Code.CodeVar (programName)
 import Build.Drasil (genMake)
 import Drasil.DocLang (mkGraphInfo, LsnDecl, mkNb)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
-import Language.Drasil (Stage(Equational), Document, Space(..), programName)
+import Language.Drasil (Stage(Equational), Document, Space(..))
 import Language.Drasil.Code
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),

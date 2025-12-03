@@ -1,12 +1,15 @@
 module Language.Drasil.ICOSolutionSearch where
 
-import Language.Drasil (CodeVarChunk, showUID, DefiningCodeExpr(codeExpr))
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
-import Drasil.Database (ChunkDB)
-import Utils.Drasil (subsetOf)
-import Language.Drasil.Chunk.CodeBase (codevars', quantvar)
-import Data.List ((\\), intercalate)
 import Control.Lens ((^.))
+import Data.List ((\\), intercalate)
+
+import Drasil.Database (ChunkDB)
+import Language.Drasil
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
+import Utils.Drasil (subsetOf)
+
+import Drasil.Code.CodeVar (DefiningCodeExpr(..), CodeVarChunk)
+import Language.Drasil.Chunk.CodeBase (codevars', quantvar)
 
 -- | Mathematical definition.
 type Def = CodeDefinition

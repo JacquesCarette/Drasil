@@ -5,7 +5,7 @@ import Drasil.DocumentLanguage.Notebook.LsnDecl (LsnDecl, mkLsnDesc)
 import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
 
-import Language.Drasil hiding (kind)
+import Language.Drasil
 
 import Drasil.System (System(SI), _authors, whatsTheBigIdea, sysName)
 import Drasil.GetChunks (citeDB)

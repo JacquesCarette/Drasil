@@ -20,14 +20,15 @@ dependencies:
 - pretty
 - transformers
 - multiplate
-- drasil-lang
+- drasil-code
 - drasil-data
 - drasil-database
+- drasil-lang
 - drasil-metadata
 - drasil-printers
 - drasil-system
 - drasil-theory
-- drasil-utils 
+- drasil-utils
 
 ghc-options:
 - -Wall

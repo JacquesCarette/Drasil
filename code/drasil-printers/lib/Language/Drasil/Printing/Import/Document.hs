@@ -3,7 +3,7 @@ module Language.Drasil.Printing.Import.Document where
 
 import Data.Map (fromList)
 
-import Language.Drasil hiding (neg, sec, symbol, isIn, codeExpr)
+import Language.Drasil hiding (neg, sec, symbol, isIn)
 
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P

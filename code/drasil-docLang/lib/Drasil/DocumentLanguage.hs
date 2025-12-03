@@ -13,6 +13,7 @@ import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe)
 import qualified Data.Map as Map (keys)
 
+import Drasil.Code.CodeVar (programName)
 import Utils.Drasil (invert)
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
@@ -29,7 +30,7 @@ import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 
-import Language.Drasil hiding (kind)
+import Language.Drasil
 import Language.Drasil.Display (compsy)
 
 import Drasil.Database (findOrErr, ChunkDB, insertAll)

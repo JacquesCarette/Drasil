@@ -26,7 +26,7 @@ import Data.Maybe (fromMaybe)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (kind, Notebook)
+import Language.Drasil hiding (Notebook)
 import Theory.Drasil
 import Drasil.Metadata (runnableSoftware, website)
 

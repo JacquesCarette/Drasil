@@ -3,9 +3,9 @@ module Language.Drasil.Chunk.CodeDefinition (
   CodeDefinition, DefinitionType(..), qtoc, qtov, odeDef, auxExprs, defType,
 ) where
 
-import Drasil.Code.CodeExpr.Development (expr, CanGenCode(..))
+import Drasil.Code.CodeExpr.Development (CodeExpr, expr, CanGenCode(..))
 import Language.Drasil
-import Language.Drasil.Chunk.Code (quantvar, quantfunc)
+import Language.Drasil.Chunk.Code
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..))
 
 import Control.Lens ((^.), makeLenses, view)

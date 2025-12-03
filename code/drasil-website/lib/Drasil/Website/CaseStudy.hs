@@ -3,7 +3,8 @@
 -- To be used in the Drasil website.
 module Drasil.Website.CaseStudy where
 
-import Language.Drasil hiding (E, Var)
+import Drasil.Code.CodeVar (programName)
+import Language.Drasil hiding (E)
 import Language.Drasil.Code hiding (CS)
 import Drasil.System
 import Drasil.Generator (codedDirName)

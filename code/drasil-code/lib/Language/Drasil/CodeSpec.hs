@@ -10,7 +10,7 @@ import Data.List (nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
 
-import Language.Drasil hiding (None, new)
+import Language.Drasil hiding (None)
 import Language.Drasil.Display (Symbol(Variable))
 import Drasil.Database
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
@@ -19,6 +19,7 @@ import Drasil.System (HasSystem(..))
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Utils.Drasil (subsetOf)
 
+import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk, programName)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))

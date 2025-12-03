@@ -12,13 +12,13 @@ module Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   fixedStatementFill, fixedStatementFill', initSolWithValFill
 ) where
 
+import Data.List.NonEmpty (NonEmpty(..), fromList)
+
+import Drasil.Code.CodeExpr (CodeExpr)
 import Language.Drasil.Chunk.Code (CodeVarChunk)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto, pcVal)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
-import Language.Drasil (CodeExpr)
 import Language.Drasil.Mod (Initializer, StateVariable)
-
-import Data.List.NonEmpty (NonEmpty(..), fromList)
 
 -- | External library call holds a group of step groups.
 type ExternalLibraryCall = [StepGroupFill]

@@ -15,12 +15,11 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig, doxygenDocConfig)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
-import Language.Drasil.Code.Imperative.WriteReadMe (makeReadMe)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName,
   makefileName, sampleInputName, readMeName)
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..), makeReadMe)
 import Language.Drasil.Printers (PrintingInformation)
 
 -- | Defines a Doxygen configuration file.

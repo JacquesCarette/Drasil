@@ -19,7 +19,7 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName,
   makefileName, sampleInputName, readMeName)
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..), makeReadMe)
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..), makeReadMe)
 import Language.Drasil.Printers (PrintingInformation)
 
 -- | Defines a Doxygen configuration file.

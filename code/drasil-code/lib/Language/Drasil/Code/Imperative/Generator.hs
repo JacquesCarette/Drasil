@@ -4,6 +4,7 @@ module Language.Drasil.Code.Imperative.Generator (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Code.Code (createCodeFiles, makeCode)
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
@@ -23,10 +24,9 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer(sampleInputName)
-import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),

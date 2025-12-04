@@ -8,6 +8,10 @@ import Language.Drasil.Chunk.CodeBase (codevars', quantvar)
 import Data.List ((\\), intercalate)
 import Control.Lens ((^.))
 
+-- FIXME: This really belongs in `drasil-gen`. The specific order of selection
+-- is a kind of *choice* that is from the 'Family -> Specific Member' stage
+-- (which we currently approximately 'host' in `drasil-gen`).
+
 -- | Mathematical definition.
 type Def = CodeDefinition
 -- | Known values.

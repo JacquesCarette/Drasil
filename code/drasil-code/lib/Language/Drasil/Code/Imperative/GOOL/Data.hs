@@ -7,6 +7,9 @@ import Drasil.GOOL (ProgData)
 
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 
+-- FIXME: This is either named poorly or should not belong in the GOOL folder,
+-- despite importing something from GOOL.
+
 -- | The underlying data type for auxiliary files in all renderers.
 data AuxData = AD {auxFilePath :: FilePath, auxDoc :: Doc}
 

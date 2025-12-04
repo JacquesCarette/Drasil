@@ -182,7 +182,7 @@ oldcodeSpec sys@S.SI{ S._authors = as
                     , S._constants = cnsts
                     , S._systemdb = db } chs ms =
   let ddefs = sys ^. dataDefns
-      n = programName $ sys ^. sysName
+      n = sys ^. programName
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)

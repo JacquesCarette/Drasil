@@ -21,15 +21,17 @@ module Drasil.System (
 ) where
 
 import Control.Lens (makeClassy, (^.))
+import Data.Char (isSpace)
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Drasil.Database (ChunkDB)
 import Language.Drasil (Quantity, MayHaveUnit, HasUID(..), Sentence, Concept,
-  Reference, UID, People, IdeaDict, CI, Constrained, ConstQDef, nw)
+  Reference, UID, People, IdeaDict, CI, Constrained, ConstQDef, nw, abrv)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Drasil.Metadata (runnableSoftware, website)
+import Utils.Drasil (toPlainName)
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -67,6 +69,7 @@ data System where
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
   { _sysName      :: CI
+  , _programName  :: String
   , _kind         :: SystemKind
   , _authors      :: People
   , _purpose      :: Purpose
@@ -101,9 +104,11 @@ mkSystem :: (Quantity e, Eq e, MayHaveUnit e, Concept e,
     [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
     System
 mkSystem nm sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js cqds db refs
-    = SI nm sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js cqds db
-        refsMap mempty mempty
-  where refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
+  = SI nm progName sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js
+      cqds db refsMap mempty mempty
+  where
+    refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
+    progName = toPlainName $ filter (not . isSpace) $ abrv nm
 
 refbyLookup :: UID -> System -> [UID]
 refbyLookup u = fromMaybe [] . M.lookup u . (^. refbyTable)

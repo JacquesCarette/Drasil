@@ -37,7 +37,7 @@ import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 
 import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, _quants,
-  _authors, refTable, refbyTable, traceTable, systemdb, sysName)
+  _authors, refTable, refbyTable, traceTable, systemdb, sysName, programName)
 import Drasil.GetChunks (ccss, ccss', citeDB)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -113,7 +113,7 @@ fillLC sd si
     chkdb = si ^. systemdb
     -- Pre-generate a copy of all required LabelledContents (i.e., traceability
     -- graphs) for insertion in the ChunkDB.
-    createdLCs = genTraceGraphLabCons $ programName $ si ^. sysName
+    createdLCs = genTraceGraphLabCons $ si ^. programName
     -- FIXME: This is a semi-hack. This is only strictly necessary for the
     -- traceability graphs. Those are all chunks that should exist but not be
     -- handled like this. They should be created and included in the
@@ -145,7 +145,7 @@ fillReferences allSections si = si2
     newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $ refsFromSRS
       ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
       ++ secRefs -- secRefs can be removed once #946 is complete
-      ++ traceyGraphGetRefs (programName $ si ^. sysName) ++ map ref cites
+      ++ traceyGraphGetRefs (si ^. programName) ++ map ref cites
       ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref lblCon
     si2 = set refTable (M.union (si ^. refTable) newRefs) si
@@ -380,7 +380,7 @@ introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
 mkTraceabilitySec :: TraceabilitySec -> System -> Section
 mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
-  (map LlC trace) (programName $ si ^. sysName) []
+  (map LlC trace) (si ^. programName) []
   where
     trace = map (\(TraceConfig u _ desc cols rows) ->
       TM.generateTraceTableView u desc cols rows si) fProgs

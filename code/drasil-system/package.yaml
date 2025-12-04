@@ -23,6 +23,7 @@ dependencies:
 - drasil-lang
 - drasil-metadata
 - drasil-theory
+- drasil-utils
 
 ghc-options:
 - -Wall

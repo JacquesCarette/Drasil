@@ -16,7 +16,7 @@ import Language.Drasil.Mod (Class, StateVariable, Func(..), Mod, Name,
   funcDefParams, ctorDef)
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   FunctionInterface(..), Result(..), Argument(..), ArgumentInfo(..),
-  Parameter(..), ClassInfo(..), MethodInfo(..), FuncType(..))
+  Parameter(..), ClassInfo(..), MethodInfo(..), FuncType(..), isConstructor)
 import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   StepGroupFill(..), StepFill(..), FunctionIntFill(..), ArgumentFill(..),
   ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..))
@@ -276,11 +276,6 @@ withLocalState st = do
   newS <- get
   modify (returnLocal s)
   return (st', newS)
-
--- | Predicate that is true only if then MethodInfo is a constructor.
-isConstructor :: MethodInfo -> Bool
-isConstructor CI{} = True
-isConstructor _    = False
 
 -- Error messages
 -- | Various error messages.

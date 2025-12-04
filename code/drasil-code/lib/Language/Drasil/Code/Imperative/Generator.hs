@@ -24,7 +24,7 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer(sampleInputName)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)

@@ -1,6 +1,6 @@
 -- | This module defines structures and functions for handling README files,
 -- which are used as auxiliary documentation files for the system.
-module Language.Drasil.Code.Imperative.ReadMe.Import (
+module Language.Drasil.Code.Imperative.README (
   ReadMeInfo(..), makeReadMe
 ) where
 

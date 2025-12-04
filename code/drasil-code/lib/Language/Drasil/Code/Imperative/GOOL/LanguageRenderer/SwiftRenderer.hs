@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as

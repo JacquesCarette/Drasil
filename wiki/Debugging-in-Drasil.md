@@ -62,8 +62,9 @@ This re-generates the examples and updates stable. Forgetting to update stable i
 
 This command (more-or-less) runs the CI actions on your local machine, which should allow you to reproduce the errors from CI. It's usually worth running before opening a PR or pushing changes to a PR.
 
-### Using Generated Chunk Logs
-If a [chunk](Chunks) is not behaving as expected, try checking out the chunk logs (under `code/debug`) for the specific example. Specifically, keep an eye out for duplicate `UID`s attached to different terms or any other pieces of information. It may be a signal for a deeper problem. The first three tables contain traceability information from one chunk to the next, while the rest are listed from the fields of the `ChunkDB` type. `ChunkDB`s are usually stored in the `_sysinfodb` field of `System`.
+### Debugging the `ChunkDB`
+
+If you think weird stuff is going on with the `ChunkDB` or want to know about what is or isn't contained, you can run `make debug` and then check `build/myExample/.drasil`.
 
 # Example
 

@@ -72,7 +72,7 @@ Let's say you are working on adding a new section to an example (specifically, w
 ```
 Reference: parnasClements1986 not found in ReferenceMap
 ```
-It will be quite difficult to manually search through all the files to find this exact error message, so let's try using `grep` on a small part of the error message. Using `grep "not found in" -r * --include "*.hs"` (meaning that I want to traverse all files, looking only through the `.hs` files for lines containing the characters "not found in") shows us that the errors starts in `code/drasil-database/Database/Drasil/ChunkDB.hs`:
+It will be quite difficult to manually search through all the files to find this exact error message, so let's try using `grep` on a small part of the error message. Specifically, "not found in" is a good candidate: it's a generic enough piece of text that we should be able to find its source regardless of the specific chunk that's causing problems. Using `grep "not found in" -r * --include "*.hs"` (meaning that I want to traverse all files, looking only through the `.hs` files for lines containing the characters "not found in") shows us that the errors starts in `code/drasil-database/Database/Drasil/ChunkDB.hs`:
 ```Haskell
  -- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown. 
  uMapLookup :: String -> String -> UID -> UMap a -> a 

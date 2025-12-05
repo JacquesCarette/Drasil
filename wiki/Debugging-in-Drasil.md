@@ -39,7 +39,9 @@ drasil-docLang/Drasil/DocumentLanguage.hs:import qualified Drasil.DocumentLangua
 drasil-docLang/Drasil/DocumentLanguage.hs:mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
 ```
 
-- `--color` will highlight the word searched in a different colour. This is useful for larger `grep` searches, where each occurrence is not instantly apparent. 
+- `--color` will highlight the word searched in a different colour. This is useful for larger `grep` searches, where each occurrence is not instantly apparent.
+
+Note that many of us use [ripgrep](https://github.com/BurntSushi/ripgrep), a `grep` alternative.
 
 ### Makefile Options
 

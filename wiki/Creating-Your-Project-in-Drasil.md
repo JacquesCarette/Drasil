@@ -53,29 +53,20 @@
 - [Setting up your workspace](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup)
 
 ## Sub-packages in Drasil:
+
+See [Folder Layout](Folder-Layout) for a more in-depth discussion. There are three sub-packages that you will primarily be working with:
+
+- `drasil-gen` defines the entry point for artifact generation.
 - `drasil-lang` contains language primitives focused on mathematical
 knowledge capture. This package also includes a language for symbols (`Symbol`) and a language for mathematical expressions embedding symbols (`Expr`). It describes the layout of a document and much more.
-
-- `drasil-data` contains common (reusable) knowledge such as mathematical constants and documentation concepts. You can add new concepts here.
-
-- `drasil-utils` contains common utilities used by non-`drasil-lang` sub-packages.
-
-- `drasil-database` contains System and a chunk database
-structure (`ChunkDB`).
-
-- `drasil-docLang` contains a DSL describing the Software Requirement Specification (SRS) template. It includes a translation routine for converting to a Document DSL from `drasil-lang`.
-
 - `drasil-theory` contains chunk types for describing refinements of mathematical theories and instantiation of definitions.
 
-- `drasil-code` contains a DSL for describing (and generating) object-oriented code. 
+There are several other sub-packages that you will need to work with on a smaller scale:
 
-- `drasil-printers` contains set of routines to translate `drasil-lang` Documents to a common markup language such as HTML or LATEX.
-
-- `drasil-gen` defines the entry point for artefact generation.
-
-- `drasil-example` contains a set of examples maintained in Drasil to demonstrate the capabilities of the language. For consistency, you can create a sub-folder for your project here. You will be working mostly in your new subfolder.
-
-- `drasil-website` generates the homepage for the Drasil website.
+- `drasil-code` and `drasil-docLang`: for generating code and documentation, respectively. You will mainly need them for `Choices` and `SRSDecl`.
+- `drasil-database` and `drasil-system`: for gathering pieces of information and bundling them together.
+- `drasil-example` and `drasil-website`: good reference material if you need it.
+- `drasil-data`: for knowing what things you can reuse (e.g. mathematical concepts and documentation concepts), and adding new things that others can reuse.
 
 # Creating Your Project in Drasil
 

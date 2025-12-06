@@ -73,7 +73,6 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << ", but is suggested to be ";
         std::cout << "below ";
         std::cout << Constants::A_C_max;
-        std::cout << " (A_C_max)";
         std::cout << "." << std::endl;
     }
     if (!(Constants::C_W_min < C_W && C_W < Constants::C_W_max)) {
@@ -83,10 +82,8 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::C_W_min;
-        std::cout << " (C_W_min)";
         std::cout << " and ";
         std::cout << Constants::C_W_max;
-        std::cout << " (C_W_max)";
         std::cout << "." << std::endl;
     }
     if (!(Constants::h_C_min <= h_C && h_C <= Constants::h_C_max)) {
@@ -96,10 +93,8 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::h_C_min;
-        std::cout << " (h_C_min)";
         std::cout << " and ";
         std::cout << Constants::h_C_max;
-        std::cout << " (h_C_max)";
         std::cout << "." << std::endl;
     }
     if (!(t_final < Constants::t_final_max)) {
@@ -109,7 +104,6 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << ", but is suggested to be ";
         std::cout << "below ";
         std::cout << Constants::t_final_max;
-        std::cout << " (t_final_max)";
         std::cout << "." << std::endl;
     }
     if (!(Constants::L_min <= L && L <= Constants::L_max)) {
@@ -119,10 +113,8 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::L_min;
-        std::cout << " (L_min)";
         std::cout << " and ";
         std::cout << Constants::L_max;
-        std::cout << " (L_max)";
         std::cout << "." << std::endl;
     }
     if (!(Constants::rho_W_min < rho_W && rho_W <= Constants::rho_W_max)) {
@@ -132,10 +124,8 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::rho_W_min;
-        std::cout << " (rho_W_min)";
         std::cout << " and ";
         std::cout << Constants::rho_W_max;
-        std::cout << " (rho_W_max)";
         std::cout << "." << std::endl;
     }
     if (!(Constants::AR_min <= D && D <= Constants::AR_max)) {
@@ -145,10 +135,8 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::AR_min;
-        std::cout << " (AR_min)";
         std::cout << " and ";
         std::cout << Constants::AR_max;
-        std::cout << " (AR_max)";
         std::cout << "." << std::endl;
     }
     
@@ -228,7 +216,6 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << 0.0;
         std::cout << " and ";
         std::cout << t_final;
-        std::cout << " (t_final)";
         std::cout << "." << std::endl;
     }
     if (!(rho_W > 0.0)) {

@@ -91,7 +91,6 @@ public class InputParameters {
             Console.Write(", but is suggested to be ");
             Console.Write("below ");
             Console.Write(Constants.A_C_max);
-            Console.Write(" (A_C_max)");
             Console.WriteLine(".");
         }
         if (!(Constants.C_W_min < C_W && C_W < Constants.C_W_max)) {
@@ -101,10 +100,8 @@ public class InputParameters {
             Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(Constants.C_W_min);
-            Console.Write(" (C_W_min)");
             Console.Write(" and ");
             Console.Write(Constants.C_W_max);
-            Console.Write(" (C_W_max)");
             Console.WriteLine(".");
         }
         if (!(Constants.h_C_min <= h_C && h_C <= Constants.h_C_max)) {
@@ -114,10 +111,8 @@ public class InputParameters {
             Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(Constants.h_C_min);
-            Console.Write(" (h_C_min)");
             Console.Write(" and ");
             Console.Write(Constants.h_C_max);
-            Console.Write(" (h_C_max)");
             Console.WriteLine(".");
         }
         if (!(t_final < Constants.t_final_max)) {
@@ -127,7 +122,6 @@ public class InputParameters {
             Console.Write(", but is suggested to be ");
             Console.Write("below ");
             Console.Write(Constants.t_final_max);
-            Console.Write(" (t_final_max)");
             Console.WriteLine(".");
         }
         if (!(Constants.L_min <= L && L <= Constants.L_max)) {
@@ -137,10 +131,8 @@ public class InputParameters {
             Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(Constants.L_min);
-            Console.Write(" (L_min)");
             Console.Write(" and ");
             Console.Write(Constants.L_max);
-            Console.Write(" (L_max)");
             Console.WriteLine(".");
         }
         if (!(Constants.rho_W_min < rho_W && rho_W <= Constants.rho_W_max)) {
@@ -150,10 +142,8 @@ public class InputParameters {
             Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(Constants.rho_W_min);
-            Console.Write(" (rho_W_min)");
             Console.Write(" and ");
             Console.Write(Constants.rho_W_max);
-            Console.Write(" (rho_W_max)");
             Console.WriteLine(".");
         }
         if (!(Constants.AR_min <= D && D <= Constants.AR_max)) {
@@ -163,10 +153,8 @@ public class InputParameters {
             Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(Constants.AR_min);
-            Console.Write(" (AR_min)");
             Console.Write(" and ");
             Console.Write(Constants.AR_max);
-            Console.Write(" (AR_max)");
             Console.WriteLine(".");
         }
         
@@ -246,7 +234,6 @@ public class InputParameters {
             Console.Write(0.0);
             Console.Write(" and ");
             Console.Write(t_final);
-            Console.Write(" (t_final)");
             Console.WriteLine(".");
         }
         if (!(rho_W > 0.0)) {

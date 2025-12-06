@@ -81,7 +81,6 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(", but is suggested to be ", end="")
         print("below ", end="")
         print(Constants.Constants.A_C_MAX, end="")
-        print(" (A_C_max)", end="")
         print(".")
     if not(Constants.Constants.C_W_MIN < C_W and C_W < Constants.Constants.C_W_MAX):
         print("Warning: ", end="")
@@ -90,10 +89,8 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(", but is suggested to be ", end="")
         print("between ", end="")
         print(Constants.Constants.C_W_MIN, end="")
-        print(" (C_W_min)", end="")
         print(" and ", end="")
         print(Constants.Constants.C_W_MAX, end="")
-        print(" (C_W_max)", end="")
         print(".")
     if not(Constants.Constants.H_C_MIN <= h_C and h_C <= Constants.Constants.H_C_MAX):
         print("Warning: ", end="")
@@ -102,10 +99,8 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(", but is suggested to be ", end="")
         print("between ", end="")
         print(Constants.Constants.H_C_MIN, end="")
-        print(" (h_C_min)", end="")
         print(" and ", end="")
         print(Constants.Constants.H_C_MAX, end="")
-        print(" (h_C_max)", end="")
         print(".")
     if not(t_final < Constants.Constants.T_FINAL_MAX):
         print("Warning: ", end="")
@@ -114,7 +109,6 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(", but is suggested to be ", end="")
         print("below ", end="")
         print(Constants.Constants.T_FINAL_MAX, end="")
-        print(" (t_final_max)", end="")
         print(".")
     if not(Constants.Constants.L_MIN <= L and L <= Constants.Constants.L_MAX):
         print("Warning: ", end="")
@@ -123,10 +117,8 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(", but is suggested to be ", end="")
         print("between ", end="")
         print(Constants.Constants.L_MIN, end="")
-        print(" (L_min)", end="")
         print(" and ", end="")
         print(Constants.Constants.L_MAX, end="")
-        print(" (L_max)", end="")
         print(".")
     if not(Constants.Constants.RHO_W_MIN < rho_W and rho_W <= Constants.Constants.RHO_W_MAX):
         print("Warning: ", end="")
@@ -135,10 +127,8 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(", but is suggested to be ", end="")
         print("between ", end="")
         print(Constants.Constants.RHO_W_MIN, end="")
-        print(" (rho_W_min)", end="")
         print(" and ", end="")
         print(Constants.Constants.RHO_W_MAX, end="")
-        print(" (rho_W_max)", end="")
         print(".")
     if not(Constants.Constants.AR_MIN <= D and D <= Constants.Constants.AR_MAX):
         print("Warning: ", end="")
@@ -147,10 +137,8 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(", but is suggested to be ", end="")
         print("between ", end="")
         print(Constants.Constants.AR_MIN, end="")
-        print(" (AR_min)", end="")
         print(" and ", end="")
         print(Constants.Constants.AR_MAX, end="")
-        print(" (AR_max)", end="")
         print(".")
     
     if not(A_C > 0.0):
@@ -222,7 +210,6 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(0.0, end="")
         print(" and ", end="")
         print(t_final, end="")
-        print(" (t_final)", end="")
         print(".")
     if not(rho_W > 0.0):
         print("Warning: ", end="")

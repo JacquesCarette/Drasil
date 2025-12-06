@@ -92,10 +92,8 @@ public class InputParameters {
             System.out.print(", but is expected to be ");
             System.out.print("between ");
             System.out.print(1.0 / 1000.0);
-            System.out.print(" ((1)/(1000))");
             System.out.print(" and ");
             System.out.print(t_sim);
-            System.out.print(" (t_sim)");
             System.out.println(".");
             throw new Exception("InputError");
         }

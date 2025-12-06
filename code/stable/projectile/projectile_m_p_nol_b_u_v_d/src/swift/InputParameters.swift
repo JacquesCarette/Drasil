@@ -61,7 +61,6 @@ class InputParameters {
             print(0.0, terminator: "")
             print(" and ", terminator: "")
             print(Double.pi / 2.0, terminator: "")
-            print(" ((pi)/(2))", terminator: "")
             print(".")
         }
         if !(self.p_target > 0.0) {

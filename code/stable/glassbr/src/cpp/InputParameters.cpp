@@ -205,10 +205,8 @@ void InputParameters::input_constraints() {
         std::cout << ", but is expected to be ";
         std::cout << "between ";
         std::cout << 0.1;
-        std::cout << " (d_min)";
         std::cout << " and ";
         std::cout << 5.0;
-        std::cout << " (d_max)";
         std::cout << "." << std::endl;
         throw("InputError");
     }
@@ -218,10 +216,8 @@ void InputParameters::input_constraints() {
         std::cout << ", but is expected to be ";
         std::cout << "between ";
         std::cout << 0.1;
-        std::cout << " (d_min)";
         std::cout << " and ";
         std::cout << 5.0;
-        std::cout << " (d_max)";
         std::cout << "." << std::endl;
         throw("InputError");
     }
@@ -231,10 +227,8 @@ void InputParameters::input_constraints() {
         std::cout << ", but is expected to be ";
         std::cout << "between ";
         std::cout << 4.5;
-        std::cout << " (w_min)";
         std::cout << " and ";
         std::cout << 910.0;
-        std::cout << " (w_max)";
         std::cout << "." << std::endl;
         throw("InputError");
     }
@@ -274,10 +268,8 @@ void InputParameters::input_constraints() {
         std::cout << ", but is expected to be ";
         std::cout << "between ";
         std::cout << 6.0;
-        std::cout << " (SD_min)";
         std::cout << " and ";
         std::cout << 130.0;
-        std::cout << " (SD_max)";
         std::cout << "." << std::endl;
         throw("InputError");
     }
@@ -287,7 +279,6 @@ void InputParameters::input_constraints() {
         std::cout << ", but is expected to be ";
         std::cout << "below ";
         std::cout << 5.0;
-        std::cout << " (AR_max)";
         std::cout << "." << std::endl;
         throw("InputError");
     }
@@ -307,7 +298,6 @@ void InputParameters::input_constraints() {
         std::cout << ", but is expected to be ";
         std::cout << "above ";
         std::cout << this->b;
-        std::cout << " (b)";
         std::cout << "." << std::endl;
         throw("InputError");
     }
@@ -319,7 +309,6 @@ void InputParameters::input_constraints() {
         std::cout << 0.0;
         std::cout << " and ";
         std::cout << this->a;
-        std::cout << " (a)";
         std::cout << "." << std::endl;
         throw("InputError");
     }

@@ -64,10 +64,8 @@ void input_constraints(double r_t, double K_d, double K_p, double t_step, double
         std::cout << ", but is expected to be ";
         std::cout << "between ";
         std::cout << (1.0 / 1000.0);
-        std::cout << " ((1)/(1000))";
         std::cout << " and ";
         std::cout << t_sim;
-        std::cout << " (t_sim)";
         std::cout << "." << std::endl;
         throw("InputError");
     }

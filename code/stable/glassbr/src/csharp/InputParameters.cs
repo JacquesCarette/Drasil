@@ -220,10 +220,8 @@ public class InputParameters {
             Console.Write(", but is expected to be ");
             Console.Write("between ");
             Console.Write(0.1);
-            Console.Write(" (d_min)");
             Console.Write(" and ");
             Console.Write(5.0);
-            Console.Write(" (d_max)");
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
@@ -233,10 +231,8 @@ public class InputParameters {
             Console.Write(", but is expected to be ");
             Console.Write("between ");
             Console.Write(0.1);
-            Console.Write(" (d_min)");
             Console.Write(" and ");
             Console.Write(5.0);
-            Console.Write(" (d_max)");
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
@@ -246,10 +242,8 @@ public class InputParameters {
             Console.Write(", but is expected to be ");
             Console.Write("between ");
             Console.Write(4.5);
-            Console.Write(" (w_min)");
             Console.Write(" and ");
             Console.Write(910.0);
-            Console.Write(" (w_max)");
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
@@ -289,10 +283,8 @@ public class InputParameters {
             Console.Write(", but is expected to be ");
             Console.Write("between ");
             Console.Write(6.0);
-            Console.Write(" (SD_min)");
             Console.Write(" and ");
             Console.Write(130.0);
-            Console.Write(" (SD_max)");
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
@@ -302,7 +294,6 @@ public class InputParameters {
             Console.Write(", but is expected to be ");
             Console.Write("below ");
             Console.Write(5.0);
-            Console.Write(" (AR_max)");
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
@@ -322,7 +313,6 @@ public class InputParameters {
             Console.Write(", but is expected to be ");
             Console.Write("above ");
             Console.Write(this.b);
-            Console.Write(" (b)");
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
@@ -334,7 +324,6 @@ public class InputParameters {
             Console.Write(0.0);
             Console.Write(" and ");
             Console.Write(this.a);
-            Console.Write(" (a)");
             Console.WriteLine(".");
             throw new Exception("InputError");
         }

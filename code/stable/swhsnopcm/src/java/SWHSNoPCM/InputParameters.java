@@ -125,7 +125,6 @@ public class InputParameters {
             System.out.print(", but is suggested to be ");
             System.out.print("below ");
             System.out.print(Constants.A_C_max);
-            System.out.print(" (A_C_max)");
             System.out.println(".");
         }
         if (!(Constants.C_W_min < C_W && C_W < Constants.C_W_max)) {
@@ -135,10 +134,8 @@ public class InputParameters {
             System.out.print(", but is suggested to be ");
             System.out.print("between ");
             System.out.print(Constants.C_W_min);
-            System.out.print(" (C_W_min)");
             System.out.print(" and ");
             System.out.print(Constants.C_W_max);
-            System.out.print(" (C_W_max)");
             System.out.println(".");
         }
         if (!(Constants.h_C_min <= h_C && h_C <= Constants.h_C_max)) {
@@ -148,10 +145,8 @@ public class InputParameters {
             System.out.print(", but is suggested to be ");
             System.out.print("between ");
             System.out.print(Constants.h_C_min);
-            System.out.print(" (h_C_min)");
             System.out.print(" and ");
             System.out.print(Constants.h_C_max);
-            System.out.print(" (h_C_max)");
             System.out.println(".");
         }
         if (!(t_final < Constants.t_final_max)) {
@@ -161,7 +156,6 @@ public class InputParameters {
             System.out.print(", but is suggested to be ");
             System.out.print("below ");
             System.out.print(Constants.t_final_max);
-            System.out.print(" (t_final_max)");
             System.out.println(".");
         }
         if (!(Constants.L_min <= L && L <= Constants.L_max)) {
@@ -171,10 +165,8 @@ public class InputParameters {
             System.out.print(", but is suggested to be ");
             System.out.print("between ");
             System.out.print(Constants.L_min);
-            System.out.print(" (L_min)");
             System.out.print(" and ");
             System.out.print(Constants.L_max);
-            System.out.print(" (L_max)");
             System.out.println(".");
         }
         if (!(Constants.rho_W_min < rho_W && rho_W <= Constants.rho_W_max)) {
@@ -184,10 +176,8 @@ public class InputParameters {
             System.out.print(", but is suggested to be ");
             System.out.print("between ");
             System.out.print(Constants.rho_W_min);
-            System.out.print(" (rho_W_min)");
             System.out.print(" and ");
             System.out.print(Constants.rho_W_max);
-            System.out.print(" (rho_W_max)");
             System.out.println(".");
         }
         if (!(Constants.AR_min <= D && D <= Constants.AR_max)) {
@@ -197,10 +187,8 @@ public class InputParameters {
             System.out.print(", but is suggested to be ");
             System.out.print("between ");
             System.out.print(Constants.AR_min);
-            System.out.print(" (AR_min)");
             System.out.print(" and ");
             System.out.print(Constants.AR_max);
-            System.out.print(" (AR_max)");
             System.out.println(".");
         }
         
@@ -280,7 +268,6 @@ public class InputParameters {
             System.out.print(0.0);
             System.out.print(" and ");
             System.out.print(t_final);
-            System.out.print(" (t_final)");
             System.out.println(".");
         }
         if (!(rho_W > 0.0)) {

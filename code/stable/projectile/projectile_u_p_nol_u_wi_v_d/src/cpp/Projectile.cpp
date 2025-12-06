@@ -87,7 +87,6 @@ void input_constraints(double v_launch, double theta, double p_target) {
         std::cout << 0.0;
         std::cout << " and ";
         std::cout << (M_PI / 2.0);
-        std::cout << " ((pi)/(2))";
         std::cout << "." << std::endl;
     }
     if (!(p_target > 0.0)) {

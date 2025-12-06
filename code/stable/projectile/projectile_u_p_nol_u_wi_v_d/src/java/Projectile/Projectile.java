@@ -118,7 +118,6 @@ public class Projectile {
             System.out.print(0.0);
             System.out.print(" and ");
             System.out.print(Math.PI / 2.0);
-            System.out.print(" ((pi)/(2))");
             System.out.println(".");
         }
         if (!(p_target > 0.0)) {

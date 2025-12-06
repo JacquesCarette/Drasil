@@ -183,10 +183,8 @@ class InputParameters:
             print(", but is expected to be ", end="")
             print("between ", end="")
             print(0.1, end="")
-            print(" (d_min)", end="")
             print(" and ", end="")
             print(5.0, end="")
-            print(" (d_max)", end="")
             print(".")
             raise Exception("InputError")
         if not(0.1 <= self.b and self.b <= 5.0):
@@ -195,10 +193,8 @@ class InputParameters:
             print(", but is expected to be ", end="")
             print("between ", end="")
             print(0.1, end="")
-            print(" (d_min)", end="")
             print(" and ", end="")
             print(5.0, end="")
-            print(" (d_max)", end="")
             print(".")
             raise Exception("InputError")
         if not(4.5 <= self.w and self.w <= 910.0):
@@ -207,10 +203,8 @@ class InputParameters:
             print(", but is expected to be ", end="")
             print("between ", end="")
             print(4.5, end="")
-            print(" (w_min)", end="")
             print(" and ", end="")
             print(910.0, end="")
-            print(" (w_max)", end="")
             print(".")
             raise Exception("InputError")
         set_g = {"AN", "FT", "HS"}
@@ -245,10 +239,8 @@ class InputParameters:
             print(", but is expected to be ", end="")
             print("between ", end="")
             print(6.0, end="")
-            print(" (SD_min)", end="")
             print(" and ", end="")
             print(130.0, end="")
-            print(" (SD_max)", end="")
             print(".")
             raise Exception("InputError")
         if not(self.AR <= 5.0):
@@ -257,7 +249,6 @@ class InputParameters:
             print(", but is expected to be ", end="")
             print("below ", end="")
             print(5.0, end="")
-            print(" (AR_max)", end="")
             print(".")
             raise Exception("InputError")
         
@@ -275,7 +266,6 @@ class InputParameters:
             print(", but is expected to be ", end="")
             print("above ", end="")
             print(self.b, end="")
-            print(" (b)", end="")
             print(".")
             raise Exception("InputError")
         if not(0.0 < self.b and self.b <= self.a):
@@ -286,7 +276,6 @@ class InputParameters:
             print(0.0, end="")
             print(" and ", end="")
             print(self.a, end="")
-            print(" (a)", end="")
             print(".")
             raise Exception("InputError")
         if not(self.w > 0.0):

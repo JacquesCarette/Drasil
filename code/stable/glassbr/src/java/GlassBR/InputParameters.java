@@ -226,10 +226,8 @@ public class InputParameters {
             System.out.print(", but is expected to be ");
             System.out.print("between ");
             System.out.print(0.1);
-            System.out.print(" (d_min)");
             System.out.print(" and ");
             System.out.print(5.0);
-            System.out.print(" (d_max)");
             System.out.println(".");
             throw new Exception("InputError");
         }
@@ -239,10 +237,8 @@ public class InputParameters {
             System.out.print(", but is expected to be ");
             System.out.print("between ");
             System.out.print(0.1);
-            System.out.print(" (d_min)");
             System.out.print(" and ");
             System.out.print(5.0);
-            System.out.print(" (d_max)");
             System.out.println(".");
             throw new Exception("InputError");
         }
@@ -252,10 +248,8 @@ public class InputParameters {
             System.out.print(", but is expected to be ");
             System.out.print("between ");
             System.out.print(4.5);
-            System.out.print(" (w_min)");
             System.out.print(" and ");
             System.out.print(910.0);
-            System.out.print(" (w_max)");
             System.out.println(".");
             throw new Exception("InputError");
         }
@@ -295,10 +289,8 @@ public class InputParameters {
             System.out.print(", but is expected to be ");
             System.out.print("between ");
             System.out.print(6.0);
-            System.out.print(" (SD_min)");
             System.out.print(" and ");
             System.out.print(130.0);
-            System.out.print(" (SD_max)");
             System.out.println(".");
             throw new Exception("InputError");
         }
@@ -308,7 +300,6 @@ public class InputParameters {
             System.out.print(", but is expected to be ");
             System.out.print("below ");
             System.out.print(5.0);
-            System.out.print(" (AR_max)");
             System.out.println(".");
             throw new Exception("InputError");
         }
@@ -328,7 +319,6 @@ public class InputParameters {
             System.out.print(", but is expected to be ");
             System.out.print("above ");
             System.out.print(this.b);
-            System.out.print(" (b)");
             System.out.println(".");
             throw new Exception("InputError");
         }
@@ -340,7 +330,6 @@ public class InputParameters {
             System.out.print(0.0);
             System.out.print(" and ");
             System.out.print(this.a);
-            System.out.print(" (a)");
             System.out.println(".");
             throw new Exception("InputError");
         }

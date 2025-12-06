@@ -49,7 +49,6 @@ function input_constraints(v_launch::Float32, theta::Float32, p_target::Float32)
         print(Float32(0.0))
         print(" and ")
         print(pi / Float32(2.0))
-        print(" ((pi)/(2))")
         println(".")
     end
     if !(p_target > Float32(0.0))

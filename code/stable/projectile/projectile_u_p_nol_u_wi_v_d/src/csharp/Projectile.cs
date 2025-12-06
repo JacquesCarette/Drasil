@@ -98,7 +98,6 @@ public class Projectile {
             Console.Write(0.0);
             Console.Write(" and ");
             Console.Write(Math.PI / 2.0);
-            Console.Write(" ((pi)/(2))");
             Console.WriteLine(".");
         }
         if (!(p_target > 0.0)) {

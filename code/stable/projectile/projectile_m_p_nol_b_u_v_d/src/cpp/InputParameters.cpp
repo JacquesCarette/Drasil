@@ -51,7 +51,6 @@ void InputParameters::input_constraints() {
         std::cout << 0.0;
         std::cout << " and ";
         std::cout << (M_PI / 2.0);
-        std::cout << " ((pi)/(2))";
         std::cout << "." << std::endl;
     }
     if (!(this->p_target > 0.0)) {

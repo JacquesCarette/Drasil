@@ -79,7 +79,6 @@ class InputParameters:
             print(0.0, end="")
             print(" and ", end="")
             print(math.pi / 2.0, end="")
-            print(" ((pi)/(2))", end="")
             print(".")
         if not(self.p_target > 0.0):
             print("Warning: ", end="")

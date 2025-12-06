@@ -65,7 +65,6 @@ public class InputParameters {
             System.out.print(0.0f);
             System.out.print(" and ");
             System.out.print(Math.PI / 2.0f);
-            System.out.print(" ((pi)/(2))");
             System.out.println(".");
         }
         if (!(p_target > 0.0f)) {

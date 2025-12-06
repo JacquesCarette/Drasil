@@ -703,10 +703,8 @@ class InputParameters {
             print(", but is expected to be ", terminator: "")
             print("between ", terminator: "")
             print(0.1, terminator: "")
-            print(" (d_min)", terminator: "")
             print(" and ", terminator: "")
             print(5.0, terminator: "")
-            print(" (d_max)", terminator: "")
             print(".")
             throw "InputError"
         }
@@ -716,10 +714,8 @@ class InputParameters {
             print(", but is expected to be ", terminator: "")
             print("between ", terminator: "")
             print(0.1, terminator: "")
-            print(" (d_min)", terminator: "")
             print(" and ", terminator: "")
             print(5.0, terminator: "")
-            print(" (d_max)", terminator: "")
             print(".")
             throw "InputError"
         }
@@ -729,10 +725,8 @@ class InputParameters {
             print(", but is expected to be ", terminator: "")
             print("between ", terminator: "")
             print(4.5, terminator: "")
-            print(" (w_min)", terminator: "")
             print(" and ", terminator: "")
             print(910.0, terminator: "")
-            print(" (w_max)", terminator: "")
             print(".")
             throw "InputError"
         }
@@ -762,10 +756,8 @@ class InputParameters {
             print(", but is expected to be ", terminator: "")
             print("between ", terminator: "")
             print(6.0, terminator: "")
-            print(" (SD_min)", terminator: "")
             print(" and ", terminator: "")
             print(130.0, terminator: "")
-            print(" (SD_max)", terminator: "")
             print(".")
             throw "InputError"
         }
@@ -775,7 +767,6 @@ class InputParameters {
             print(", but is expected to be ", terminator: "")
             print("below ", terminator: "")
             print(5.0, terminator: "")
-            print(" (AR_max)", terminator: "")
             print(".")
             throw "InputError"
         }
@@ -795,7 +786,6 @@ class InputParameters {
             print(", but is expected to be ", terminator: "")
             print("above ", terminator: "")
             print(self.b, terminator: "")
-            print(" (b)", terminator: "")
             print(".")
             throw "InputError"
         }
@@ -807,7 +797,6 @@ class InputParameters {
             print(0.0, terminator: "")
             print(" and ", terminator: "")
             print(self.a, terminator: "")
-            print(" (a)", terminator: "")
             print(".")
             throw "InputError"
         }

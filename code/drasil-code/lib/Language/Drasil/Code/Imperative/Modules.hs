@@ -51,7 +51,7 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   Logging(..), Structure(..), hasSampleInput, InternalConcept(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
-import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl, PrintingInformation)
+import Language.Drasil.Printers (SingleLine(OneLine), showHasSymbImpl, PrintingInformation)
 
 import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
@@ -63,7 +63,7 @@ import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
   VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
     convTypeOO, VisibilityTag(..))
 
-import qualified Drasil.GOOL as OO (SFile)
+import qualified Drasil.GOOL as OO (SFile, SValue)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile)
 
@@ -419,15 +419,15 @@ printConstraint v c = do
       printConstraint' _ (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
-        return $ [printStr "between ", print lb] ++ printExpr e1 db ++
-          [printStr " and ", print ub] ++ printExpr e2 db ++ [printStrLn "."]
+        return $ [printStr "between "] ++ printExpr lb db ++
+          [printStr " and "] ++ printExpr ub db ++ [printStrLn "."]
       printConstraint' _ (Range _ (UpTo (_, e))) = do
         ub <- convExpr e
-        return $ [printStr "below ", print ub] ++ printExpr e db ++
+        return $ [printStr "below "] ++ printExpr ub db ++
           [printStrLn "."]
       printConstraint' _ (Range _ (UpFrom (_, e))) = do
         lb <- convExpr e
-        return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
+        return $ [printStr "above "] ++ printExpr lb db ++ [printStrLn "."]
       printConstraint' name (Elem _ e) = do
         lb <- convExpr (Variable ("set_" ++ name) e)
         return $ [printStr "an element of the set ", print lb] ++ [printStrLn "."]
@@ -437,9 +437,8 @@ printConstraint v c = do
 -- | Don't print expressions that are just literals, because that would be
 -- redundant (the values are already printed by printConstraint).
 -- If expression is more than just a literal, print it in parentheses.
-printExpr :: (SharedProg r) => CodeExpr -> PrintingInformation -> [MSStatement r]
-printExpr Lit{} _  = []
-printExpr e     db = [printStr $ " (" ++ render (codeExprDoc db OneLine e) ++ ")"]
+printExpr :: (SharedProg r) => OO.SValue r -> PrintingInformation -> [MSStatement r]
+printExpr e db = [print e] -- [printStr " (", print e, printStr ")"] -- ++ render (codeExprDoc db OneLine e) ++ ")"]
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat :: (OOProg r) => VisibilityTag ->
@@ -984,15 +983,15 @@ printConstraintProc c = do
       printConstraint' (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExprProc e1
         ub <- convExprProc e2
-        return $ [printStr "between ", print lb] ++ printExpr e1 db ++
-          [printStr " and ", print ub] ++ printExpr e2 db ++ [printStrLn "."]
+        return $ [printStr "between "] ++ printExpr lb db ++
+          [printStr " and "] ++ printExpr ub db ++ [printStrLn "."]
       printConstraint' (Range _ (UpTo (_, e))) = do
         ub <- convExprProc e
-        return $ [printStr "below ", print ub] ++ printExpr e db ++
+        return $ [printStr "below "] ++ printExpr ub db ++
           [printStrLn "."]
       printConstraint' (Range _ (UpFrom (_, e))) = do
         lb <- convExprProc e
-        return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
+        return $ [printStr "above "] ++ printExpr lb db ++ [printStrLn "."]
       printConstraint' (Elem _ e) = do
         lb <- convExprProc e
         return $ [printStr "an element of the set ", print lb] ++ [printStrLn "."]

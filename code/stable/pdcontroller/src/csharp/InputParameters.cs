@@ -74,10 +74,8 @@ public class InputParameters {
             Console.Write(", but is expected to be ");
             Console.Write("between ");
             Console.Write(1.0 / 1000.0);
-            Console.Write(" ((1)/(1000))");
             Console.Write(" and ");
             Console.Write(t_sim);
-            Console.Write(" (t_sim)");
             Console.WriteLine(".");
             throw new Exception("InputError");
         }

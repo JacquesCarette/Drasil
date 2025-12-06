@@ -63,10 +63,8 @@ def input_constraints(r_t, K_d, K_p, t_step, t_sim):
         print(", but is expected to be ", end="")
         print("between ", end="")
         print(1.0 / 1000.0, end="")
-        print(" ((1)/(1000))", end="")
         print(" and ", end="")
         print(t_sim, end="")
-        print(" (t_sim)", end="")
         print(".")
         raise Exception("InputError")
     if not(1.0 <= t_sim and t_sim <= 60.0):

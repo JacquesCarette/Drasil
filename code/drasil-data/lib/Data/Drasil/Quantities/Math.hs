@@ -21,7 +21,6 @@ mathunitals = [area, diameter, surface, surArea, orientation]
 gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect,
   pi_, posInf, negInf, uNormalVect :: DefinedQuantityDict
 
-
 gradient    = dqdNoUnit CM.gradient lNabla         Real
 normalVect  = dqdNoUnit CM.normalV  (vec lN)       Real
 uNormalVect = dqdNoUnit CM.normalV  (vec $ hat lN) Real

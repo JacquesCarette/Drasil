@@ -23,7 +23,6 @@ import Drasil.GamePhysics.References (accelGravitySrc, impulseSrc)
 generalDefns :: [GenDefn]
 generalDefns = [accelGravityGD, impulseGD]
 
-
 {-conservationOfMomentGDef :: RelationConcept
 conservationOfMomentGDef = makeRC "conservOfMoment" (nounPhraseSP "Conservation of Momentum")
   conservationOfMomentDesc conservationOfMomentRel
@@ -91,7 +90,6 @@ accelGravityDerivSentence1 :: [Sentence]
 accelGravityDerivSentence1 = [S "From",
         namedRef newtonLUG (S "Newton's law" `S.of_` S "universal gravitation") `sC` S "we have"]
 
-
 accelGravityDerivSentence2 :: [Sentence]
 accelGravityDerivSentence2 = [(S "The above equation governs the gravitational attraction between two bodies" !.),
         S "Suppose that one of the bodies is significantly more massive than the other" `sC`
@@ -137,8 +135,6 @@ accelGravityDerivEqn5 = sy QP.gravitationalAccel $= neg (sy QP.gravitationalCons
 accelGravityDerivEqns :: (ExprC r, LiteralC r) => [r]
 accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGravityDerivEqn3,
                          accelGravityDerivEqn4, accelGravityDerivEqn5]
-
-
 
 ----------------------------Impulse for Collision--------------------------------------------
 

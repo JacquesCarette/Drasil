@@ -172,7 +172,6 @@ concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------
 -- System Constraints automatically generated in SystCons
 
-
 --------------------------------------------
 -- Section 4: Specific System Description --
 --------------------------------------------

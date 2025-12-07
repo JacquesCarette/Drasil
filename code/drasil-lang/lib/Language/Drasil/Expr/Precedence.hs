@@ -65,7 +65,6 @@ precB Or = 110
 precC :: AssocConcatOper -> Int
 precC SUnion = 120
 
-
 -- | prec1 - precedence of unary operators.
 prec1 :: UFunc -> Int
 prec1 Neg = 230

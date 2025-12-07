@@ -11,7 +11,6 @@ import Drasil.GOOL (CodeType(..))
 
 import Drasil.Website.Example (examples, Example(..))
 
-
 -- * Case Studies Section
 
 -- | Creates the Case Study Section.

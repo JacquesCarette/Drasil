@@ -9,7 +9,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time, velocity,
 
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 
-
 impulseVDerivEqn1 :: ModelExpr
 impulseVDerivEqn1 = sy QP.force $= sy QPP.mass $* sy QP.acceleration
                      $= sy QPP.mass $* deriv (sy QP.velocity) QP.time

@@ -29,7 +29,6 @@ import qualified Drasil.PDController.Choices as PDController (choices)
 import qualified Drasil.Projectile.Choices as Projectile (choiceCombos)
 -- the other examples currently do not generate any code.
 
-
 -- * Gather Example Information
 --
 -- $example

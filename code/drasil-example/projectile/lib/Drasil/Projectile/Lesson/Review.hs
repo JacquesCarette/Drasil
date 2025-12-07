@@ -29,4 +29,3 @@ reviewContextP2
       [S "Only two of these", plural equation, S "are independent" `sC` S "since the third" +:+
        phrase equation, S "can always be derived from the other two"]
 
-

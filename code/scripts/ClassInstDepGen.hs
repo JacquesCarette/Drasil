@@ -389,7 +389,6 @@ compileEntryData ordClassInsts entry filename = do
   -- mapM_ print (lines output)
   return output
 
-
 -- gets folder from dictionary using folder name (iff it exists in dictionary)
 getFolder :: Map.Map DC.FolderName DC.Folder -> DC.FolderName -> DC.Folder
 getFolder dict name = fromMaybe (error $ "Could not find " ++ name) $ Map.lookup name dict

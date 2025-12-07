@@ -250,16 +250,15 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span>
 </span><span id="line-35"></span><span>
-</span><span id="line-36"></span><span>
-</span><span id="line-37"></span><span class="hs-comment">--</span><span>
-</span><span id="line-38"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectVelDeriv"><span class="hs-identifier hs-type">rectVelDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
-</span><span id="line-39"></span><span id="rectVelDeriv"><span class="annot"><span class="annottext">rectVelDeriv :: [ModelExpr]
+</span><span id="line-36"></span><span class="hs-comment">--</span><span>
+</span><span id="line-37"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectVelDeriv"><span class="hs-identifier hs-type">rectVelDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
+</span><span id="line-38"></span><span id="rectVelDeriv"><span class="annot"><span class="annottext">rectVelDeriv :: [ModelExpr]
 </span><a href="Drasil.Projectile.Derivations.html#rectVelDeriv"><span class="hs-identifier hs-var hs-var">rectVelDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn1"><span class="hs-identifier hs-var">rectVelDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn2"><span class="hs-identifier hs-var">rectVelDerivEqn2</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-40"></span><span>
-</span><span id="line-41"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn1"><span class="hs-identifier hs-type">rectVelDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn2"><span class="hs-identifier hs-type">rectVelDerivEqn2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-42"></span><span id="rectVelDerivEqn1"><span class="annot"><span class="annottext">rectVelDerivEqn1 :: ModelExpr
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn1"><span class="hs-identifier hs-type">rectVelDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn2"><span class="hs-identifier hs-type">rectVelDerivEqn2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-41"></span><span id="rectVelDerivEqn1"><span class="annot"><span class="annottext">rectVelDerivEqn1 :: ModelExpr
 </span><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn1"><span class="hs-identifier hs-var hs-var">rectVelDerivEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -275,7 +274,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">speed</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span>
-</span><span id="line-43"></span><span id="rectVelDerivEqn2"><span class="annot"><span class="annottext">rectVelDerivEqn2 :: ModelExpr
+</span><span id="line-42"></span><span id="rectVelDerivEqn2"><span class="annot"><span class="annottext">rectVelDerivEqn2 :: ModelExpr
 </span><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn2"><span class="hs-identifier hs-var hs-var">rectVelDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
@@ -295,7 +294,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span>
-</span><span id="line-44"></span><span>                   </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-43"></span><span>                   </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -312,17 +311,17 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.constAccel</span></span><span class="hs-special">)</span><span>
-</span><span id="line-45"></span><span>
-</span><span id="line-46"></span><span class="hs-comment">--</span><span>
-</span><span id="line-47"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectPosDeriv"><span class="hs-identifier hs-type">rectPosDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
-</span><span id="line-48"></span><span id="rectPosDeriv"><span class="annot"><span class="annottext">rectPosDeriv :: [ModelExpr]
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span><span class="hs-comment">--</span><span>
+</span><span id="line-46"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectPosDeriv"><span class="hs-identifier hs-type">rectPosDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
+</span><span id="line-47"></span><span id="rectPosDeriv"><span class="annot"><span class="annottext">rectPosDeriv :: [ModelExpr]
 </span><a href="Drasil.Projectile.Derivations.html#rectPosDeriv"><span class="hs-identifier hs-var hs-var">rectPosDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn1"><span class="hs-identifier hs-var">rectPosDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn2"><span class="hs-identifier hs-var">rectPosDerivEqn2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn3"><span class="hs-identifier hs-var">rectPosDerivEqn3</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn1"><span class="hs-identifier hs-type">rectPosDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn2"><span class="hs-identifier hs-type">rectPosDerivEqn2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn3"><span class="hs-identifier hs-type">rectPosDerivEqn3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-51"></span><span id="rectPosDerivEqn1"><span class="annot"><span class="annottext">rectPosDerivEqn1 :: ModelExpr
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn1"><span class="hs-identifier hs-type">rectPosDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn2"><span class="hs-identifier hs-type">rectPosDerivEqn2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn3"><span class="hs-identifier hs-type">rectPosDerivEqn3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-50"></span><span id="rectPosDerivEqn1"><span class="annot"><span class="annottext">rectPosDerivEqn1 :: ModelExpr
 </span><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn1"><span class="hs-identifier hs-var hs-var">rectPosDerivEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -338,7 +337,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">scalarPos</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span>
-</span><span id="line-52"></span><span id="rectPosDerivEqn2"><span class="annot"><span class="annottext">rectPosDerivEqn2 :: ModelExpr
+</span><span id="line-51"></span><span id="rectPosDerivEqn2"><span class="annot"><span class="annottext">rectPosDerivEqn2 :: ModelExpr
 </span><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn2"><span class="hs-identifier hs-var hs-var">rectPosDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
@@ -358,7 +357,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span>
-</span><span id="line-53"></span><span>                   </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-52"></span><span>                   </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -375,7 +374,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">speed</span></span><span class="hs-special">)</span><span>
-</span><span id="line-54"></span><span id="rectPosDerivEqn3"><span class="annot"><span class="annottext">rectPosDerivEqn3 :: ModelExpr
+</span><span id="line-53"></span><span id="rectPosDerivEqn3"><span class="annot"><span class="annottext">rectPosDerivEqn3 :: ModelExpr
 </span><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn3"><span class="hs-identifier hs-var hs-var">rectPosDerivEqn3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
@@ -395,7 +394,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span>
-</span><span id="line-55"></span><span>                   </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-54"></span><span>                   </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -424,4 +423,4 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-56"></span></pre></body></html>
+</span><span id="line-55"></span></pre></body></html>

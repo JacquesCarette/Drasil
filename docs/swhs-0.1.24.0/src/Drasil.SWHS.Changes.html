@@ -317,15 +317,14 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-string">&quot;Water-PCM-Fixed-States&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">unlikeChgDom</span></span><span>
 </span><span id="line-75"></span><span>
-</span><span id="line-76"></span><span>
-</span><span id="line-77"></span><span id="unlikeChgNIHG"><span class="annot"><span class="annottext">unlikeChgNIHG :: ConceptInstance
+</span><span id="line-76"></span><span id="unlikeChgNIHG"><span class="annot"><span class="annottext">unlikeChgNIHG :: ConceptInstance
 </span><a href="Drasil.SWHS.Changes.html#unlikeChgNIHG"><span class="hs-identifier hs-var hs-var">unlikeChgNIHG</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;unlikeChgNIHG&quot;</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-77"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
 forall x.
 (HasShortName x, Referable x) =&gt;
@@ -337,7 +336,7 @@ x -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.for`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the derivations of&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
+</span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
@@ -349,18 +348,18 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.SWHS.IMods.html#eBalanceOnPCM"><span class="hs-identifier hs-var">eBalanceOnPCM</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">)</span><span>
-</span><span id="line-80"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;No-Internal-Heat-Generation&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">unlikeChgDom</span></span><span>
-</span><span id="line-81"></span><span>
-</span><span id="line-82"></span><span id="unlikeChgNGS"><span class="annot"><span class="annottext">unlikeChgNGS :: ConceptInstance
+</span><span id="line-80"></span><span>
+</span><span id="line-81"></span><span id="unlikeChgNGS"><span class="annot"><span class="annottext">unlikeChgNGS :: ConceptInstance
 </span><a href="Drasil.SWHS.Changes.html#unlikeChgNGS"><span class="hs-identifier hs-var hs-var">unlikeChgNGS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;unlikeChgNGS&quot;</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-83"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-82"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
 forall x.
 (HasShortName x, Referable x) =&gt;
@@ -377,7 +376,7 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.SWHS.IMods.html#eBalanceOnPCM"><span class="hs-identifier hs-var">eBalanceOnPCM</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-84"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-83"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and for the equation given by&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
 forall r.
@@ -387,7 +386,7 @@ r -&gt; Sentence
 </span><a href="Drasil.SWHS.IMods.html#heatEInPCM"><span class="hs-identifier hs-var">heatEInPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;to be valid&quot;</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">)</span><span>
-</span><span id="line-85"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-84"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;No-Gaseous-State&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">unlikeChgDom</span></span><span>
-</span><span id="line-86"></span></pre></body></html>
+</span><span id="line-85"></span></pre></body></html>

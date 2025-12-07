@@ -14,20 +14,18 @@
 </span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Math</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QM</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">pi_</span></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Concepts</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">horizontalPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">verticalPos</span></span><span class="hs-special">)</span><span>
 </span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#dataDefs"><span class="hs-identifier hs-type">dataDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span>
-</span><span id="line-19"></span><span id="dataDefs"><span class="annot"><span class="annottext">dataDefs :: [DataDefinition]
+</span><span id="line-17"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#dataDefs"><span class="hs-identifier hs-type">dataDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span>
+</span><span id="line-18"></span><span id="dataDefs"><span class="annot"><span class="annottext">dataDefs :: [DataDefinition]
 </span><a href="Drasil.SglPend.DataDefs.html#dataDefs"><span class="hs-identifier hs-var hs-var">dataDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SglPend.DataDefs.html#positionIX"><span class="hs-identifier hs-var">positionIX</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SglPend.DataDefs.html#positionIY"><span class="hs-identifier hs-var">positionIY</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SglPend.DataDefs.html#frequencyDD"><span class="hs-identifier hs-var">frequencyDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SglPend.DataDefs.html#angFrequencyDD"><span class="hs-identifier hs-var">angFrequencyDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SglPend.DataDefs.html#periodSHMDD"><span class="hs-identifier hs-var">periodSHMDD</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-20"></span><span>
-</span><span id="line-21"></span><span>
-</span><span id="line-22"></span><span class="hs-comment">------------------------------------------------------</span><span>
-</span><span id="line-23"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIX"><span class="hs-identifier hs-type">positionIX</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-24"></span><span id="positionIX"><span class="annot"><span class="annottext">positionIX :: DataDefinition
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="hs-comment">------------------------------------------------------</span><span>
+</span><span id="line-21"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIX"><span class="hs-identifier hs-type">positionIX</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-22"></span><span id="positionIX"><span class="annot"><span class="annottext">positionIX :: DataDefinition
 </span><a href="Drasil.SglPend.DataDefs.html#positionIX"><span class="hs-identifier hs-var hs-var">positionIX</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddENoRefs</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
@@ -37,9 +35,9 @@ forall a. Maybe a
 </span><span class="hs-string">&quot;positionIX&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#positionRef"><span class="hs-identifier hs-var">positionRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#figRef"><span class="hs-identifier hs-var">figRef</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-25"></span><span>
-</span><span id="line-26"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIXQD"><span class="hs-identifier hs-type">positionIXQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-27"></span><span id="positionIXQD"><span class="annot"><span class="annottext">positionIXQD :: SimpleQDef
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIXQD"><span class="hs-identifier hs-type">positionIXQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-25"></span><span id="positionIXQD"><span class="annot"><span class="annottext">positionIXQD :: SimpleQDef
 </span><a href="Drasil.SglPend.DataDefs.html#positionIXQD"><span class="hs-identifier hs-var hs-var">positionIXQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -47,9 +45,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.ixPos</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPend.DataDefs.html#positionIXEqn"><span class="hs-identifier hs-var">positionIXEqn</span></a></span><span>
-</span><span id="line-28"></span><span>
-</span><span id="line-29"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIXEqn"><span class="hs-identifier hs-type">positionIXEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-30"></span><span id="positionIXEqn"><span class="annot"><span class="annottext">positionIXEqn :: Expr
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIXEqn"><span class="hs-identifier hs-type">positionIXEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-28"></span><span id="positionIXEqn"><span class="annot"><span class="annottext">positionIXEqn :: Expr
 </span><a href="Drasil.SglPend.DataDefs.html#positionIXEqn"><span class="hs-identifier hs-var hs-var">positionIXEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -63,9 +61,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPend.Unitals.html#initialPendAngle"><span class="hs-identifier hs-var">initialPendAngle</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-31"></span><span>
-</span><span id="line-32"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#figRef"><span class="hs-identifier hs-type">figRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-33"></span><span id="figRef"><span class="annot"><span class="annottext">figRef :: Sentence
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#figRef"><span class="hs-identifier hs-type">figRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-31"></span><span id="figRef"><span class="annot"><span class="annottext">figRef :: Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#figRef"><span class="hs-identifier hs-var hs-var">figRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -79,9 +77,9 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.SglPend.LabelledContent.html#figMotion"><span class="hs-identifier hs-var">figMotion</span></a></span><span>
-</span><span id="line-34"></span><span>
-</span><span id="line-35"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionRef"><span class="hs-identifier hs-type">positionRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-36"></span><span id="positionRef"><span class="annot"><span class="annottext">positionRef :: Sentence
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionRef"><span class="hs-identifier hs-type">positionRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-34"></span><span id="positionRef"><span class="annot"><span class="annottext">positionRef :: Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#positionRef"><span class="hs-identifier hs-var hs-var">positionRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -90,10 +88,10 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">horizontalPos</span></span><span>
-</span><span id="line-37"></span><span>
-</span><span id="line-38"></span><span class="hs-comment">------------------------------------------------------</span><span>
-</span><span id="line-39"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIY"><span class="hs-identifier hs-type">positionIY</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-40"></span><span id="positionIY"><span class="annot"><span class="annottext">positionIY :: DataDefinition
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span class="hs-comment">------------------------------------------------------</span><span>
+</span><span id="line-37"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIY"><span class="hs-identifier hs-type">positionIY</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-38"></span><span id="positionIY"><span class="annot"><span class="annottext">positionIY :: DataDefinition
 </span><a href="Drasil.SglPend.DataDefs.html#positionIY"><span class="hs-identifier hs-var hs-var">positionIY</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddENoRefs</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
@@ -103,9 +101,9 @@ forall a. Maybe a
 </span><span class="hs-string">&quot;positionIY&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#positionReff"><span class="hs-identifier hs-var">positionReff</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#figReff"><span class="hs-identifier hs-var">figReff</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-41"></span><span>
-</span><span id="line-42"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIYQD"><span class="hs-identifier hs-type">positionIYQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-43"></span><span id="positionIYQD"><span class="annot"><span class="annottext">positionIYQD :: SimpleQDef
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIYQD"><span class="hs-identifier hs-type">positionIYQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-41"></span><span id="positionIYQD"><span class="annot"><span class="annottext">positionIYQD :: SimpleQDef
 </span><a href="Drasil.SglPend.DataDefs.html#positionIYQD"><span class="hs-identifier hs-var hs-var">positionIYQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -113,9 +111,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.iyPos</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPend.DataDefs.html#positionIYEqn"><span class="hs-identifier hs-var">positionIYEqn</span></a></span><span>
-</span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIYEqn"><span class="hs-identifier hs-type">positionIYEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-46"></span><span id="positionIYEqn"><span class="annot"><span class="annottext">positionIYEqn :: Expr
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIYEqn"><span class="hs-identifier hs-type">positionIYEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-44"></span><span id="positionIYEqn"><span class="annot"><span class="annottext">positionIYEqn :: Expr
 </span><a href="Drasil.SglPend.DataDefs.html#positionIYEqn"><span class="hs-identifier hs-var hs-var">positionIYEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
@@ -131,9 +129,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPend.Unitals.html#initialPendAngle"><span class="hs-identifier hs-var">initialPendAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-47"></span><span>
-</span><span id="line-48"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#figReff"><span class="hs-identifier hs-type">figReff</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-49"></span><span id="figReff"><span class="annot"><span class="annottext">figReff :: Sentence
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#figReff"><span class="hs-identifier hs-type">figReff</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-47"></span><span id="figReff"><span class="annot"><span class="annottext">figReff :: Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#figReff"><span class="hs-identifier hs-var hs-var">figReff</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -147,9 +145,9 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.SglPend.LabelledContent.html#figMotion"><span class="hs-identifier hs-var">figMotion</span></a></span><span>
-</span><span id="line-50"></span><span>
-</span><span id="line-51"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionReff"><span class="hs-identifier hs-type">positionReff</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-52"></span><span id="positionReff"><span class="annot"><span class="annottext">positionReff :: Sentence
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionReff"><span class="hs-identifier hs-type">positionReff</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-50"></span><span id="positionReff"><span class="annot"><span class="annottext">positionReff :: Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#positionReff"><span class="hs-identifier hs-var hs-var">positionReff</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -158,11 +156,11 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">verticalPos</span></span><span>
+</span><span id="line-51"></span><span>
+</span><span id="line-52"></span><span class="hs-comment">------------------------------------------------------</span><span>
 </span><span id="line-53"></span><span>
-</span><span id="line-54"></span><span class="hs-comment">------------------------------------------------------</span><span>
-</span><span id="line-55"></span><span>
-</span><span id="line-56"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#frequencyDD"><span class="hs-identifier hs-type">frequencyDD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-57"></span><span id="frequencyDD"><span class="annot"><span class="annottext">frequencyDD :: DataDefinition
+</span><span id="line-54"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#frequencyDD"><span class="hs-identifier hs-type">frequencyDD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-55"></span><span id="frequencyDD"><span class="annot"><span class="annottext">frequencyDD :: DataDefinition
 </span><a href="Drasil.SglPend.DataDefs.html#frequencyDD"><span class="hs-identifier hs-var hs-var">frequencyDD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddENoRefs</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
@@ -171,9 +169,9 @@ forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;frequencyDD&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#frequencyRef"><span class="hs-identifier hs-var">frequencyRef</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-58"></span><span>
-</span><span id="line-59"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#frequencyDDQD"><span class="hs-identifier hs-type">frequencyDDQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-60"></span><span id="frequencyDDQD"><span class="annot"><span class="annottext">frequencyDDQD :: SimpleQDef
+</span><span id="line-56"></span><span>
+</span><span id="line-57"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#frequencyDDQD"><span class="hs-identifier hs-type">frequencyDDQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-58"></span><span id="frequencyDDQD"><span class="annot"><span class="annottext">frequencyDDQD :: SimpleQDef
 </span><a href="Drasil.SglPend.DataDefs.html#frequencyDDQD"><span class="hs-identifier hs-var hs-var">frequencyDDQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -181,9 +179,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.frequency</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPend.DataDefs.html#frequencyDDEqn"><span class="hs-identifier hs-var">frequencyDDEqn</span></a></span><span>
-</span><span id="line-61"></span><span>
-</span><span id="line-62"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#frequencyDDEqn"><span class="hs-identifier hs-type">frequencyDDEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-63"></span><span id="frequencyDDEqn"><span class="annot"><span class="annottext">frequencyDDEqn :: Expr
+</span><span id="line-59"></span><span>
+</span><span id="line-60"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#frequencyDDEqn"><span class="hs-identifier hs-type">frequencyDDEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-61"></span><span id="frequencyDDEqn"><span class="annot"><span class="annottext">frequencyDDEqn :: Expr
 </span><a href="Drasil.SglPend.DataDefs.html#frequencyDDEqn"><span class="hs-identifier hs-var hs-var">frequencyDDEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Expr) -&gt; Expr -&gt; Expr
@@ -193,10 +191,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.period</span></span><span>
-</span><span id="line-64"></span><span>
-</span><span id="line-65"></span><span>
-</span><span id="line-66"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#frequencyRef"><span class="hs-identifier hs-type">frequencyRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-67"></span><span id="frequencyRef"><span class="annot"><span class="annottext">frequencyRef :: Sentence
+</span><span id="line-62"></span><span>
+</span><span id="line-63"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#frequencyRef"><span class="hs-identifier hs-type">frequencyRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-64"></span><span id="frequencyRef"><span class="annot"><span class="annottext">frequencyRef :: Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#frequencyRef"><span class="hs-identifier hs-var hs-var">frequencyRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -208,11 +205,11 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">second</span></span><span>
-</span><span id="line-68"></span><span>
-</span><span id="line-69"></span><span class="hs-comment">------------------------------------------------------</span><span>
-</span><span id="line-70"></span><span>
-</span><span id="line-71"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#angFrequencyDD"><span class="hs-identifier hs-type">angFrequencyDD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-72"></span><span id="angFrequencyDD"><span class="annot"><span class="annottext">angFrequencyDD :: DataDefinition
+</span><span id="line-65"></span><span>
+</span><span id="line-66"></span><span class="hs-comment">------------------------------------------------------</span><span>
+</span><span id="line-67"></span><span>
+</span><span id="line-68"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#angFrequencyDD"><span class="hs-identifier hs-type">angFrequencyDD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-69"></span><span id="angFrequencyDD"><span class="annot"><span class="annottext">angFrequencyDD :: DataDefinition
 </span><a href="Drasil.SglPend.DataDefs.html#angFrequencyDD"><span class="hs-identifier hs-var hs-var">angFrequencyDD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddENoRefs</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
@@ -221,9 +218,9 @@ forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;angFrequencyDD&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#angFrequencyRef"><span class="hs-identifier hs-var">angFrequencyRef</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-73"></span><span>
-</span><span id="line-74"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#angFrequencyDDQD"><span class="hs-identifier hs-type">angFrequencyDDQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-75"></span><span id="angFrequencyDDQD"><span class="annot"><span class="annottext">angFrequencyDDQD :: SimpleQDef
+</span><span id="line-70"></span><span>
+</span><span id="line-71"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#angFrequencyDDQD"><span class="hs-identifier hs-type">angFrequencyDDQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-72"></span><span id="angFrequencyDDQD"><span class="annot"><span class="annottext">angFrequencyDDQD :: SimpleQDef
 </span><a href="Drasil.SglPend.DataDefs.html#angFrequencyDDQD"><span class="hs-identifier hs-var hs-var">angFrequencyDDQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -231,9 +228,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.angularFrequency</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPend.DataDefs.html#angFrequencyDDEqn"><span class="hs-identifier hs-var">angFrequencyDDEqn</span></a></span><span>
-</span><span id="line-76"></span><span>
-</span><span id="line-77"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#angFrequencyDDEqn"><span class="hs-identifier hs-type">angFrequencyDDEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-78"></span><span id="angFrequencyDDEqn"><span class="annot"><span class="annottext">angFrequencyDDEqn :: Expr
+</span><span id="line-73"></span><span>
+</span><span id="line-74"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#angFrequencyDDEqn"><span class="hs-identifier hs-type">angFrequencyDDEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-75"></span><span id="angFrequencyDDEqn"><span class="annot"><span class="annottext">angFrequencyDDEqn :: Expr
 </span><a href="Drasil.SglPend.DataDefs.html#angFrequencyDDEqn"><span class="hs-identifier hs-var hs-var">angFrequencyDDEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
@@ -250,9 +247,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.period</span></span><span>
-</span><span id="line-79"></span><span>
-</span><span id="line-80"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#angFrequencyRef"><span class="hs-identifier hs-type">angFrequencyRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-81"></span><span id="angFrequencyRef"><span class="annot"><span class="annottext">angFrequencyRef :: Sentence
+</span><span id="line-76"></span><span>
+</span><span id="line-77"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#angFrequencyRef"><span class="hs-identifier hs-type">angFrequencyRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-78"></span><span id="angFrequencyRef"><span class="annot"><span class="annottext">angFrequencyRef :: Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#angFrequencyRef"><span class="hs-identifier hs-var hs-var">angFrequencyRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -266,11 +263,11 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SglPend.DataDefs.html#periodSHMDD"><span class="hs-identifier hs-var">periodSHMDD</span></a></span><span>
-</span><span id="line-82"></span><span>
-</span><span id="line-83"></span><span class="hs-comment">------------------------------------------------------</span><span>
-</span><span id="line-84"></span><span>
-</span><span id="line-85"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#periodSHMDD"><span class="hs-identifier hs-type">periodSHMDD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
-</span><span id="line-86"></span><span id="periodSHMDD"><span class="annot"><span class="annottext">periodSHMDD :: DataDefinition
+</span><span id="line-79"></span><span>
+</span><span id="line-80"></span><span class="hs-comment">------------------------------------------------------</span><span>
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#periodSHMDD"><span class="hs-identifier hs-type">periodSHMDD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-83"></span><span id="periodSHMDD"><span class="annot"><span class="annottext">periodSHMDD :: DataDefinition
 </span><a href="Drasil.SglPend.DataDefs.html#periodSHMDD"><span class="hs-identifier hs-var hs-var">periodSHMDD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddENoRefs</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
@@ -279,9 +276,9 @@ forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;periodSHMDD&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#periodSHMRef"><span class="hs-identifier hs-var">periodSHMRef</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-87"></span><span>
-</span><span id="line-88"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#periodSHMDDQD"><span class="hs-identifier hs-type">periodSHMDDQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-89"></span><span id="periodSHMDDQD"><span class="annot"><span class="annottext">periodSHMDDQD :: SimpleQDef
+</span><span id="line-84"></span><span>
+</span><span id="line-85"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#periodSHMDDQD"><span class="hs-identifier hs-type">periodSHMDDQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-86"></span><span id="periodSHMDDQD"><span class="annot"><span class="annottext">periodSHMDDQD :: SimpleQDef
 </span><a href="Drasil.SglPend.DataDefs.html#periodSHMDDQD"><span class="hs-identifier hs-var hs-var">periodSHMDDQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -289,9 +286,9 @@ c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.period</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPend.DataDefs.html#periodSHMDDEqn"><span class="hs-identifier hs-var">periodSHMDDEqn</span></a></span><span>
-</span><span id="line-90"></span><span>
-</span><span id="line-91"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#periodSHMDDEqn"><span class="hs-identifier hs-type">periodSHMDDEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-92"></span><span id="periodSHMDDEqn"><span class="annot"><span class="annottext">periodSHMDDEqn :: Expr
+</span><span id="line-87"></span><span>
+</span><span id="line-88"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#periodSHMDDEqn"><span class="hs-identifier hs-type">periodSHMDDEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-89"></span><span id="periodSHMDDEqn"><span class="annot"><span class="annottext">periodSHMDDEqn :: Expr
 </span><a href="Drasil.SglPend.DataDefs.html#periodSHMDDEqn"><span class="hs-identifier hs-var hs-var">periodSHMDDEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Expr) -&gt; Expr -&gt; Expr
@@ -301,9 +298,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.frequency</span></span><span>
-</span><span id="line-93"></span><span>
-</span><span id="line-94"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#periodSHMRef"><span class="hs-identifier hs-type">periodSHMRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-95"></span><span id="periodSHMRef"><span class="annot"><span class="annottext">periodSHMRef :: Sentence
+</span><span id="line-90"></span><span>
+</span><span id="line-91"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#periodSHMRef"><span class="hs-identifier hs-type">periodSHMRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-92"></span><span id="periodSHMRef"><span class="annot"><span class="annottext">periodSHMRef :: Sentence
 </span><a href="Drasil.SglPend.DataDefs.html#periodSHMRef"><span class="hs-identifier hs-var hs-var">periodSHMRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -317,4 +314,4 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SglPend.DataDefs.html#frequencyDD"><span class="hs-identifier hs-var">frequencyDD</span></a></span><span>
-</span><span id="line-96"></span></pre></body></html>
+</span><span id="line-93"></span></pre></body></html>

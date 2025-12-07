@@ -495,12 +495,11 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;```&quot;</span></span><span>
 </span><span id="line-129"></span><span>
-</span><span id="line-130"></span><span>
-</span><span id="line-131"></span><span class="hs-comment">-- FIXME as explained in #2224 we still need to add in the purpose section,</span><span>
-</span><span id="line-132"></span><span class="hs-comment">-- this could be done by adding a third parameter to introSec</span><span>
-</span><span id="line-133"></span><span class="annot"><span class="hs-comment">-- | Constructs introduction section from header and message.</span></span><span>
-</span><span id="line-134"></span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#introSec"><span class="hs-identifier hs-type">introSec</span></a></span><span> </span><span class="hs-glyph">::</span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-135"></span><span id="introSec"><span class="annot"><span class="annottext">introSec :: Doc -&gt; Doc -&gt; Int -&gt; Doc -&gt; Doc -&gt; Doc
+</span><span id="line-130"></span><span class="hs-comment">-- FIXME as explained in #2224 we still need to add in the purpose section,</span><span>
+</span><span id="line-131"></span><span class="hs-comment">-- this could be done by adding a third parameter to introSec</span><span>
+</span><span id="line-132"></span><span class="annot"><span class="hs-comment">-- | Constructs introduction section from header and message.</span></span><span>
+</span><span id="line-133"></span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#introSec"><span class="hs-identifier hs-type">introSec</span></a></span><span> </span><span class="hs-glyph">::</span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
+</span><span id="line-134"></span><span id="introSec"><span class="annot"><span class="annottext">introSec :: Doc -&gt; Doc -&gt; Int -&gt; Doc -&gt; Doc -&gt; Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#introSec"><span class="hs-identifier hs-var hs-var">introSec</span></a></span></span><span> </span><span id="local-6989586621679099568"><span class="annot"><span class="annottext">Doc
 </span><a href="#local-6989586621679099568"><span class="hs-identifier hs-var">hd</span></a></span></span><span> </span><span id="local-6989586621679099569"><span class="annot"><span class="annottext">Doc
 </span><a href="#local-6989586621679099569"><span class="hs-identifier hs-var">ms1</span></a></span></span><span> </span><span id="local-6989586621679099570"><span class="annot"><span class="annottext">Int
@@ -522,17 +521,17 @@ forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-string">&quot;&gt; Author:&quot;</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&gt; Authors: &quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-136"></span><span>  </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><span id="line-135"></span><span>  </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="#local-6989586621679099569"><span class="hs-identifier hs-var">ms1</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="#local-6989586621679099571"><span class="hs-identifier hs-var">motiv</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="#local-6989586621679099572"><span class="hs-identifier hs-var">purp</span></a></span><span>
-</span><span id="line-137"></span><span>
-</span><span id="line-138"></span><span class="annot"><span class="hs-comment">-- | Constructs regular section section from header and message.</span></span><span>
-</span><span id="line-139"></span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#regularSec"><span class="hs-identifier hs-type">regularSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-140"></span><span id="regularSec"><span class="annot"><span class="annottext">regularSec :: Doc -&gt; Doc -&gt; Doc
+</span><span id="line-136"></span><span>
+</span><span id="line-137"></span><span class="annot"><span class="hs-comment">-- | Constructs regular section section from header and message.</span></span><span>
+</span><span id="line-138"></span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#regularSec"><span class="hs-identifier hs-type">regularSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
+</span><span id="line-139"></span><span id="regularSec"><span class="annot"><span class="annottext">regularSec :: Doc -&gt; Doc -&gt; Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#regularSec"><span class="hs-identifier hs-var hs-var">regularSec</span></a></span></span><span> </span><span id="local-6989586621679099573"><span class="annot"><span class="annottext">Doc
 </span><a href="#local-6989586621679099573"><span class="hs-identifier hs-var">hd</span></a></span></span><span> </span><span id="local-6989586621679099574"><span class="annot"><span class="annottext">Doc
 </span><a href="#local-6989586621679099574"><span class="hs-identifier hs-var">ms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
@@ -544,10 +543,10 @@ forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-identifier hs-var">contSep</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="#local-6989586621679099574"><span class="hs-identifier hs-var">ms</span></a></span><span>
-</span><span id="line-141"></span><span>
-</span><span id="line-142"></span><span class="hs-comment">-- Function to create the prefix for the path of the Drasil Logo</span><span>
-</span><span id="line-143"></span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#buildPath"><span class="hs-identifier hs-type">buildPath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-144"></span><span id="buildPath"><span class="annot"><span class="annottext">buildPath :: Int -&gt; String
+</span><span id="line-140"></span><span>
+</span><span id="line-141"></span><span class="hs-comment">-- Function to create the prefix for the path of the Drasil Logo</span><span>
+</span><span id="line-142"></span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#buildPath"><span class="hs-identifier hs-type">buildPath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-143"></span><span id="buildPath"><span class="annot"><span class="annottext">buildPath :: Int -&gt; String
 </span><a href="Language.Drasil.Markdown.CreateMd.html#buildPath"><span class="hs-identifier hs-var hs-var">buildPath</span></a></span></span><span> </span><span id="local-6989586621679099576"><span class="annot"><span class="annottext">Int
 </span><a href="#local-6989586621679099576"><span class="hs-identifier hs-var">num</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Char -&gt; Bool) -&gt; String -&gt; String
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
@@ -564,10 +563,10 @@ forall a. Int -&gt; a -&gt; [a]
 </span><span class="hs-identifier hs-var">replicate</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><a href="#local-6989586621679099576"><span class="hs-identifier hs-var">num</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;../&quot;</span></span><span>
-</span><span id="line-145"></span><span>
-</span><span id="line-146"></span><span class="annot"><span class="hs-comment">-- | Drasil Tree icon. Uses HTML directly to format image since normal markdown doesn't support it.</span></span><span>
-</span><span id="line-147"></span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#drasilImage"><span class="hs-identifier hs-type">drasilImage</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-148"></span><span id="drasilImage"><span class="annot"><span class="annottext">drasilImage :: Int -&gt; Doc
+</span><span id="line-144"></span><span>
+</span><span id="line-145"></span><span class="annot"><span class="hs-comment">-- | Drasil Tree icon. Uses HTML directly to format image since normal markdown doesn't support it.</span></span><span>
+</span><span id="line-146"></span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#drasilImage"><span class="hs-identifier hs-type">drasilImage</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
+</span><span id="line-147"></span><span id="drasilImage"><span class="annot"><span class="annottext">drasilImage :: Int -&gt; Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#drasilImage"><span class="hs-identifier hs-var hs-var">drasilImage</span></a></span></span><span> </span><span id="local-6989586621679099580"><span class="annot"><span class="annottext">Int
 </span><a href="#local-6989586621679099580"><span class="hs-identifier hs-var">num</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#alignImage"><span class="hs-identifier hs-var">alignImage</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; String
@@ -575,12 +574,12 @@ forall a. Int -&gt; a -&gt; [a]
 </span><a href="#local-6989586621679099580"><span class="hs-identifier hs-var">num</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-149"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-148"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;drasil-website/WebInfo/images/Icon.png&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-150"></span><span>
-</span><span id="line-151"></span><span class="annot"><span class="hs-comment">-- | Aligns an image to the center using HTML, since markdown doesn't support it.</span></span><span>
-</span><span id="line-152"></span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#alignImage"><span class="hs-identifier hs-type">alignImage</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-153"></span><span id="alignImage"><span class="annot"><span class="annottext">alignImage :: String -&gt; Doc
+</span><span id="line-149"></span><span>
+</span><span id="line-150"></span><span class="annot"><span class="hs-comment">-- | Aligns an image to the center using HTML, since markdown doesn't support it.</span></span><span>
+</span><span id="line-151"></span><span class="annot"><a href="Language.Drasil.Markdown.CreateMd.html#alignImage"><span class="hs-identifier hs-type">alignImage</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
+</span><span id="line-152"></span><span id="alignImage"><span class="annot"><span class="annottext">alignImage :: String -&gt; Doc
 </span><a href="Language.Drasil.Markdown.CreateMd.html#alignImage"><span class="hs-identifier hs-var hs-var">alignImage</span></a></span></span><span> </span><span id="local-6989586621679099583"><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679099583"><span class="hs-identifier hs-var">img</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -590,7 +589,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;img src=\&quot;&quot;</span></span><span>
-</span><span id="line-154"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><span id="line-153"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679099583"><span class="hs-identifier hs-var">img</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
@@ -602,4 +601,4 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;/p&gt;&quot;</span></span><span>
-</span><span id="line-155"></span></pre></body></html>
+</span><span id="line-154"></span></pre></body></html>

@@ -884,12 +884,11 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-183"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the gravitational force acting on an object&quot;</span></span><span>
 </span><span id="line-184"></span><span>
-</span><span id="line-185"></span><span>
-</span><span id="line-186"></span><span class="hs-comment">-- Some variants of distance, speed, velocity, and scalar acceleration</span><span>
-</span><span id="line-187"></span><span class="hs-comment">-- FIXME: Complete all variants?</span><span>
-</span><span id="line-188"></span><span class="hs-comment">-- FIXME: Pull out commonalities?</span><span>
-</span><span id="line-189"></span><span>
-</span><span id="line-190"></span><span id="xDist"><span class="annot"><span class="annottext">xDist :: ConceptChunk
+</span><span id="line-185"></span><span class="hs-comment">-- Some variants of distance, speed, velocity, and scalar acceleration</span><span>
+</span><span id="line-186"></span><span class="hs-comment">-- FIXME: Complete all variants?</span><span>
+</span><span id="line-187"></span><span class="hs-comment">-- FIXME: Pull out commonalities?</span><span>
+</span><span id="line-188"></span><span>
+</span><span id="line-189"></span><span id="xDist"><span class="annot"><span class="annottext">xDist :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#xDist"><span class="hs-identifier hs-var hs-var">xDist</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;xDist&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -904,7 +903,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#xDir"><span class="hs-identifier hs-var">xDir</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-191"></span><span id="yDist"><span class="annot"><span class="annottext">yDist :: ConceptChunk
+</span><span id="line-190"></span><span id="yDist"><span class="annot"><span class="annottext">yDist :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#yDist"><span class="hs-identifier hs-var hs-var">yDist</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yDist&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -919,8 +918,8 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#yDir"><span class="hs-identifier hs-var">yDir</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-192"></span><span>
-</span><span id="line-193"></span><span id="iPos"><span class="annot"><span class="annottext">iPos :: ConceptChunk
+</span><span id="line-191"></span><span>
+</span><span id="line-192"></span><span id="iPos"><span class="annot"><span class="annottext">iPos :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#iPos"><span class="hs-identifier hs-var hs-var">iPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;iPos&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -935,7 +934,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;at the body's initial point&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-194"></span><span id="xPos"><span class="annot"><span class="annottext">xPos :: ConceptChunk
+</span><span id="line-193"></span><span id="xPos"><span class="annot"><span class="annottext">xPos :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#xPos"><span class="hs-identifier hs-var hs-var">xPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;xPos&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -951,7 +950,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#position"><span class="hs-identifier hs-var">position</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-195"></span><span id="yPos"><span class="annot"><span class="annottext">yPos :: ConceptChunk
+</span><span id="line-194"></span><span id="yPos"><span class="annot"><span class="annottext">yPos :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#yPos"><span class="hs-identifier hs-var hs-var">yPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yPos&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -967,8 +966,8 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#position"><span class="hs-identifier hs-var">position</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-196"></span><span>
-</span><span id="line-197"></span><span id="ixPos"><span class="annot"><span class="annottext">ixPos :: ConceptChunk
+</span><span id="line-195"></span><span>
+</span><span id="line-196"></span><span id="ixPos"><span class="annot"><span class="annottext">ixPos :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#ixPos"><span class="hs-identifier hs-var hs-var">ixPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ixPos&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -984,7 +983,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#iPos"><span class="hs-identifier hs-var">iPos</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-198"></span><span id="iyPos"><span class="annot"><span class="annottext">iyPos :: ConceptChunk
+</span><span id="line-197"></span><span id="iyPos"><span class="annot"><span class="annottext">iyPos :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#iyPos"><span class="hs-identifier hs-var hs-var">iyPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;iyPos&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -1000,8 +999,8 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#iPos"><span class="hs-identifier hs-var">iPos</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-199"></span><span>
-</span><span id="line-200"></span><span id="fSpeed"><span class="annot"><span class="annottext">fSpeed :: ConceptChunk
+</span><span id="line-198"></span><span>
+</span><span id="line-199"></span><span id="fSpeed"><span class="annot"><span class="annottext">fSpeed :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#fSpeed"><span class="hs-identifier hs-var hs-var">fSpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;fSpeed&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -1016,7 +1015,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;at the body's final point&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-201"></span><span id="iSpeed"><span class="annot"><span class="annottext">iSpeed :: ConceptChunk
+</span><span id="line-200"></span><span id="iSpeed"><span class="annot"><span class="annottext">iSpeed :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#iSpeed"><span class="hs-identifier hs-var hs-var">iSpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;iSpeed&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -1031,8 +1030,8 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;at the body's initial point&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-202"></span><span>
-</span><span id="line-203"></span><span id="ixSpeed"><span class="annot"><span class="annottext">ixSpeed :: ConceptChunk
+</span><span id="line-201"></span><span>
+</span><span id="line-202"></span><span id="ixSpeed"><span class="annot"><span class="annottext">ixSpeed :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#ixSpeed"><span class="hs-identifier hs-var hs-var">ixSpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ixSpeed&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -1048,7 +1047,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#iSpeed"><span class="hs-identifier hs-var">iSpeed</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-204"></span><span id="iySpeed"><span class="annot"><span class="annottext">iySpeed :: ConceptChunk
+</span><span id="line-203"></span><span id="iySpeed"><span class="annot"><span class="annottext">iySpeed :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#iySpeed"><span class="hs-identifier hs-var hs-var">iySpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;iySpeed&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -1064,8 +1063,8 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#iSpeed"><span class="hs-identifier hs-var">iSpeed</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-205"></span><span>
-</span><span id="line-206"></span><span id="fVel"><span class="annot"><span class="annottext">fVel :: ConceptChunk
+</span><span id="line-204"></span><span>
+</span><span id="line-205"></span><span id="fVel"><span class="annot"><span class="annottext">fVel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#fVel"><span class="hs-identifier hs-var hs-var">fVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;fVel&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -1080,7 +1079,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;at the body's final point&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-207"></span><span id="iVel"><span class="annot"><span class="annottext">iVel :: ConceptChunk
+</span><span id="line-206"></span><span id="iVel"><span class="annot"><span class="annottext">iVel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#iVel"><span class="hs-identifier hs-var hs-var">iVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;iVel&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -1095,7 +1094,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;at the body's initial point&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-208"></span><span id="xVel"><span class="annot"><span class="annottext">xVel :: ConceptChunk
+</span><span id="line-207"></span><span id="xVel"><span class="annot"><span class="annottext">xVel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#xVel"><span class="hs-identifier hs-var hs-var">xVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;xVel&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -1111,7 +1110,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#velocity"><span class="hs-identifier hs-var">velocity</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-209"></span><span id="yVel"><span class="annot"><span class="annottext">yVel :: ConceptChunk
+</span><span id="line-208"></span><span id="yVel"><span class="annot"><span class="annottext">yVel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#yVel"><span class="hs-identifier hs-var hs-var">yVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yVel&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -1127,8 +1126,8 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#velocity"><span class="hs-identifier hs-var">velocity</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-210"></span><span>
-</span><span id="line-211"></span><span id="ixVel"><span class="annot"><span class="annottext">ixVel :: ConceptChunk
+</span><span id="line-209"></span><span>
+</span><span id="line-210"></span><span id="ixVel"><span class="annot"><span class="annottext">ixVel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#ixVel"><span class="hs-identifier hs-var hs-var">ixVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ixVel&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -1144,7 +1143,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#iVel"><span class="hs-identifier hs-var">iVel</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-212"></span><span id="iyVel"><span class="annot"><span class="annottext">iyVel :: ConceptChunk
+</span><span id="line-211"></span><span id="iyVel"><span class="annot"><span class="annottext">iyVel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#iyVel"><span class="hs-identifier hs-var hs-var">iyVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;iyVel&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -1160,8 +1159,8 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#iVel"><span class="hs-identifier hs-var">iVel</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-213"></span><span>
-</span><span id="line-214"></span><span id="xAccel"><span class="annot"><span class="annottext">xAccel :: ConceptChunk
+</span><span id="line-212"></span><span>
+</span><span id="line-213"></span><span id="xAccel"><span class="annot"><span class="annottext">xAccel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#xAccel"><span class="hs-identifier hs-var hs-var">xAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;xScalAcc&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -1177,7 +1176,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#acceleration"><span class="hs-identifier hs-var">acceleration</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-215"></span><span id="yAccel"><span class="annot"><span class="annottext">yAccel :: ConceptChunk
+</span><span id="line-214"></span><span id="yAccel"><span class="annot"><span class="annottext">yAccel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#yAccel"><span class="hs-identifier hs-var hs-var">yAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yScalAcc&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -1193,8 +1192,8 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#acceleration"><span class="hs-identifier hs-var">acceleration</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-216"></span><span>
-</span><span id="line-217"></span><span id="constAccelV"><span class="annot"><span class="annottext">constAccelV :: ConceptChunk
+</span><span id="line-215"></span><span>
+</span><span id="line-216"></span><span id="constAccelV"><span class="annot"><span class="annottext">constAccelV :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#constAccelV"><span class="hs-identifier hs-var hs-var">constAccelV</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;constAccelV&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -1209,7 +1208,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;vector&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-218"></span><span id="xConstAccel"><span class="annot"><span class="annottext">xConstAccel :: ConceptChunk
+</span><span id="line-217"></span><span id="xConstAccel"><span class="annot"><span class="annottext">xConstAccel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#xConstAccel"><span class="hs-identifier hs-var hs-var">xConstAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;xConstAccel&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -1225,7 +1224,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#constAccel"><span class="hs-identifier hs-var">constAccel</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-219"></span><span id="yConstAccel"><span class="annot"><span class="annottext">yConstAccel :: ConceptChunk
+</span><span id="line-218"></span><span id="yConstAccel"><span class="annot"><span class="annottext">yConstAccel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#yConstAccel"><span class="hs-identifier hs-var hs-var">yConstAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yConstAccel&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -1241,11 +1240,10 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#constAccel"><span class="hs-identifier hs-var">constAccel</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-220"></span><span>
-</span><span id="line-221"></span><span>
-</span><span id="line-222"></span><span class="hs-comment">--FIXME: COMBINATION HACK (for all below)</span><span>
-</span><span id="line-223"></span><span class="hs-comment">--FIXME: should use compoundPhrase instead? Or better yet, use combineNINI instead of interacting with the terms directly?</span><span>
-</span><span id="line-224"></span><span id="angDisp"><span class="annot"><span class="annottext">angDisp :: ConceptChunk
+</span><span id="line-219"></span><span>
+</span><span id="line-220"></span><span class="hs-comment">--FIXME: COMBINATION HACK (for all below)</span><span>
+</span><span id="line-221"></span><span class="hs-comment">--FIXME: should use compoundPhrase instead? Or better yet, use combineNINI instead of interacting with the terms directly?</span><span>
+</span><span id="line-222"></span><span id="angDisp"><span class="annot"><span class="annottext">angDisp :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#angDisp"><span class="hs-identifier hs-var hs-var">angDisp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;angularDisplacement&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
@@ -1253,9 +1251,9 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#angular"><span class="hs-identifier hs-var">angular</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#displacement"><span class="hs-identifier hs-var">displacement</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-225"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-223"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the angle through which an object moves on a circular path&quot;</span></span><span>
-</span><span id="line-226"></span><span id="angVelo"><span class="annot"><span class="annottext">angVelo :: ConceptChunk
+</span><span id="line-224"></span><span id="angVelo"><span class="annot"><span class="annottext">angVelo :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#angVelo"><span class="hs-identifier hs-var hs-var">angVelo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;angularVelocity&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
@@ -1263,9 +1261,9 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#angular"><span class="hs-identifier hs-var">angular</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#velocity"><span class="hs-identifier hs-var">velocity</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-227"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-225"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the rate of change of angular position of a rotating body&quot;</span></span><span>
-</span><span id="line-228"></span><span id="angAccel"><span class="annot"><span class="annottext">angAccel :: ConceptChunk
+</span><span id="line-226"></span><span id="angAccel"><span class="annot"><span class="annottext">angAccel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#angAccel"><span class="hs-identifier hs-var hs-var">angAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;angularAcceleration&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
@@ -1273,17 +1271,17 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#angular"><span class="hs-identifier hs-var">angular</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#acceleration"><span class="hs-identifier hs-var">acceleration</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-229"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-227"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the rate of change of angular velocity&quot;</span></span><span>
-</span><span id="line-230"></span><span id="constAccel"><span class="annot"><span class="annottext">constAccel :: ConceptChunk
+</span><span id="line-228"></span><span id="constAccel"><span class="annot"><span class="annottext">constAccel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#constAccel"><span class="hs-identifier hs-var hs-var">constAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;constantAcceleration&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;constant acceleration&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-231"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-229"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a one-dimensional acceleration that is constant&quot;</span></span><span>
-</span><span id="line-232"></span><span id="linDisp"><span class="annot"><span class="annottext">linDisp :: ConceptChunk
+</span><span id="line-230"></span><span id="linDisp"><span class="annot"><span class="annottext">linDisp :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#linDisp"><span class="hs-identifier hs-var hs-var">linDisp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;linearDisplacement&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
@@ -1291,9 +1289,9 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#linear"><span class="hs-identifier hs-var">linear</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#displacement"><span class="hs-identifier hs-var">displacement</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-233"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-231"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;movement in one direction along a single axis&quot;</span></span><span>
-</span><span id="line-234"></span><span id="linVelo"><span class="annot"><span class="annottext">linVelo :: ConceptChunk
+</span><span id="line-232"></span><span id="linVelo"><span class="annot"><span class="annottext">linVelo :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#linVelo"><span class="hs-identifier hs-var hs-var">linVelo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;linearVelocity&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
@@ -1301,9 +1299,9 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#linear"><span class="hs-identifier hs-var">linear</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#velocity"><span class="hs-identifier hs-var">velocity</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-235"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-233"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the speed of a moving object, dependent on the perspective taken&quot;</span></span><span>
-</span><span id="line-236"></span><span id="linAccel"><span class="annot"><span class="annottext">linAccel :: ConceptChunk
+</span><span id="line-234"></span><span id="linAccel"><span class="annot"><span class="annottext">linAccel :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#linAccel"><span class="hs-identifier hs-var hs-var">linAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;linearAcceleration&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
@@ -1311,51 +1309,51 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#linear"><span class="hs-identifier hs-var">linear</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#acceleration"><span class="hs-identifier hs-var">acceleration</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-237"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-235"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the rate of change of velocity without a change in direction&quot;</span></span><span>
-</span><span id="line-238"></span><span>
-</span><span id="line-239"></span><span class="hs-comment">-- The following feel like they're missing something/need to be more</span><span>
-</span><span id="line-240"></span><span class="hs-comment">-- descriptive. See issue tracker for details.</span><span>
-</span><span id="line-241"></span><span class="hs-comment">-- FIXME: plurals below?</span><span>
-</span><span id="line-242"></span><span id="restitutionCoef"><span class="annot"><span class="annottext">restitutionCoef :: ConceptChunk
+</span><span id="line-236"></span><span>
+</span><span id="line-237"></span><span class="hs-comment">-- The following feel like they're missing something/need to be more</span><span>
+</span><span id="line-238"></span><span class="hs-comment">-- descriptive. See issue tracker for details.</span><span>
+</span><span id="line-239"></span><span class="hs-comment">-- FIXME: plurals below?</span><span>
+</span><span id="line-240"></span><span id="restitutionCoef"><span class="annot"><span class="annottext">restitutionCoef :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#restitutionCoef"><span class="hs-identifier hs-var hs-var">restitutionCoef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;restitutionCoef&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;coefficient of restitution&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-243"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-241"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a measure of the restitution of a collision between two objects&quot;</span></span><span>
-</span><span id="line-244"></span><span id="momentOfInertia"><span class="annot"><span class="annottext">momentOfInertia :: ConceptChunk
+</span><span id="line-242"></span><span id="momentOfInertia"><span class="annot"><span class="annottext">momentOfInertia :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#momentOfInertia"><span class="hs-identifier hs-var hs-var">momentOfInertia</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;momentOfInertia&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;moment of inertia&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-245"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-243"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a quantity expressing a body's tendency to resist angular acceleration&quot;</span></span><span>
-</span><span id="line-246"></span><span id="angFreq"><span class="annot"><span class="annottext">angFreq :: ConceptChunk
+</span><span id="line-244"></span><span id="angFreq"><span class="annot"><span class="annottext">angFreq :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#angFreq"><span class="hs-identifier hs-var hs-var">angFreq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;angularFrequency&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;angular frequency&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-247"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-245"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the frequency of a periodic process, wave system etc, per unit time.&quot;</span></span><span>
-</span><span id="line-248"></span><span class="hs-comment">--FIXME: These two should be built off &quot;impulse&quot;</span><span>
-</span><span id="line-249"></span><span id="impulseV"><span class="annot"><span class="annottext">impulseV :: ConceptChunk
+</span><span id="line-246"></span><span class="hs-comment">--FIXME: These two should be built off &quot;impulse&quot;</span><span>
+</span><span id="line-247"></span><span id="impulseV"><span class="annot"><span class="annottext">impulseV :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#impulseV"><span class="hs-identifier hs-var hs-var">impulseV</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;impulseV&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;impulse (vector)&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-250"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-248"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a force acting briefly on a body and producing a finite change of momentum in a given direction&quot;</span></span><span>
-</span><span id="line-251"></span><span id="impulseS"><span class="annot"><span class="annottext">impulseS :: ConceptChunk
+</span><span id="line-249"></span><span id="impulseS"><span class="annot"><span class="annottext">impulseS :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#impulseS"><span class="hs-identifier hs-var hs-var">impulseS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;impulseS&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;impulse (scalar)&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-252"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-250"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a force acting briefly on a body and producing a finite change of momentum&quot;</span></span><span>
-</span><span id="line-253"></span></pre></body></html>
+</span><span id="line-251"></span></pre></body></html>

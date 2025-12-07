@@ -841,12 +841,10 @@ forall a. Eq a =&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679102477"><span class="hs-identifier hs-var">ideas</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-243"></span><span>        </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-244"></span><span>
-</span><span id="line-245"></span><span>
-</span><span id="line-246"></span><span>
-</span><span id="line-247"></span><span class="annot"><span class="hs-comment">-- | Helper for creating the table of symbols.</span></span><span>
-</span><span id="line-248"></span><span id="local-6989586621679101871"><span class="annot"><a href="Drasil.DocumentLanguage.html#mkTSymb"><span class="hs-identifier hs-type">mkTSymb</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679101871"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Concept</span></span><span> </span><span class="annot"><a href="#local-6989586621679101871"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="annot"><a href="#local-6989586621679101871"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679101871"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span>
-</span><span id="line-249"></span><span>  </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679101871"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#LFunc"><span class="hs-identifier hs-type">LFunc</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TSIntro"><span class="hs-identifier hs-type">TSIntro</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
-</span><span id="line-250"></span><span id="mkTSymb"><span class="annot"><span class="annottext">mkTSymb :: forall e.
+</span><span id="line-245"></span><span class="annot"><span class="hs-comment">-- | Helper for creating the table of symbols.</span></span><span>
+</span><span id="line-246"></span><span id="local-6989586621679101871"><span class="annot"><a href="Drasil.DocumentLanguage.html#mkTSymb"><span class="hs-identifier hs-type">mkTSymb</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679101871"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Concept</span></span><span> </span><span class="annot"><a href="#local-6989586621679101871"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="annot"><a href="#local-6989586621679101871"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679101871"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span>
+</span><span id="line-247"></span><span>  </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679101871"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#LFunc"><span class="hs-identifier hs-type">LFunc</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TSIntro"><span class="hs-identifier hs-type">TSIntro</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
+</span><span id="line-248"></span><span id="mkTSymb"><span class="annot"><span class="annottext">mkTSymb :: forall e.
 (Quantity e, Concept e, Eq e, MayHaveUnit e) =&gt;
 [e] -&gt; LFunc -&gt; [TSIntro] -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkTSymb"><span class="hs-identifier hs-var hs-var">mkTSymb</span></a></span></span><span> </span><span id="local-6989586621679102494"><span class="annot"><span class="annottext">[e]
@@ -856,7 +854,7 @@ forall a. Eq a =&gt; [a] -&gt; [a]
 </span><a href="Drasil.DocLang.SRS.html#tOfSymb"><span class="hs-identifier hs-var">SRS.tOfSymb</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[TSIntro] -&gt; Contents
 </span><a href="Drasil.Sections.TableOfSymbols.html#tsIntro"><span class="hs-identifier hs-var">tsIntro</span></a></span><span> </span><span class="annot"><span class="annottext">[TSIntro]
 </span><a href="#local-6989586621679102496"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-251"></span><span>  </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
+</span><span id="line-249"></span><span>  </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="annot"><span class="annottext">(LabelledContent -&gt; Contents) -&gt; LabelledContent -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Stage -&gt; [e] -&gt; (e -&gt; Sentence) -&gt; LabelledContent
@@ -865,7 +863,7 @@ forall s.
 Stage -&gt; [s] -&gt; (s -&gt; Sentence) -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfSymbols.html#table"><span class="hs-identifier hs-var">table</span></a></span><span> </span><span class="annot"><span class="annottext">Stage
 </span><span class="hs-identifier hs-var">Equational</span></span><span>
-</span><span id="line-252"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(e -&gt; e -&gt; Ordering) -&gt; [e] -&gt; [e]
+</span><span id="line-250"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(e -&gt; e -&gt; Ordering) -&gt; [e] -&gt; [e]
 forall a. (a -&gt; a -&gt; Ordering) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">sortBy</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
 </span><span class="hs-identifier hs-var">compsy</span></span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol -&gt; Ordering)
@@ -884,17 +882,17 @@ forall q. HasSymbol q =&gt; q -&gt; Stage -&gt; Bool
 forall a. Eq a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">nub</span></span><span> </span><span class="annot"><span class="annottext">[e]
 </span><a href="#local-6989586621679102494"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-253"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">LFunc -&gt; e -&gt; Sentence
+</span><span id="line-251"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">LFunc -&gt; e -&gt; Sentence
 forall {n}. (NamedIdea n, Definition n) =&gt; LFunc -&gt; n -&gt; Sentence
 </span><a href="#local-6989586621679102498"><span class="hs-identifier hs-var">lf</span></a></span><span> </span><span class="annot"><span class="annottext">LFunc
 </span><a href="#local-6989586621679102495"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-254"></span><span>    </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-255"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679102498"><span class="annot"><span class="annottext">lf :: LFunc -&gt; n -&gt; Sentence
+</span><span id="line-252"></span><span>    </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-253"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679102498"><span class="annot"><span class="annottext">lf :: LFunc -&gt; n -&gt; Sentence
 </span><a href="#local-6989586621679102498"><span class="hs-identifier hs-var hs-var">lf</span></a></span></span><span> </span><span class="annot"><span class="annottext">LFunc
 </span><a href="Drasil.DocumentLanguage.Core.html#Term"><span class="hs-identifier hs-var">Term</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStart</span></span><span>
-</span><span id="line-256"></span><span>        </span><span class="annot"><a href="#local-6989586621679102498"><span class="hs-identifier hs-var">lf</span></a></span><span> </span><span class="annot"><span class="annottext">LFunc
+</span><span id="line-254"></span><span>        </span><span class="annot"><a href="#local-6989586621679102498"><span class="hs-identifier hs-var">lf</span></a></span><span> </span><span class="annot"><span class="annottext">LFunc
 </span><a href="Drasil.DocumentLanguage.Core.html#Defn"><span class="hs-identifier hs-var">Defn</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">capSent</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence) -&gt; (n -&gt; Sentence) -&gt; n -&gt; Sentence
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
@@ -904,7 +902,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. Definition c =&gt; Lens' c Sentence
 Lens' n Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span>
-</span><span id="line-257"></span><span>        </span><span class="annot"><a href="#local-6989586621679102498"><span class="hs-identifier hs-var">lf</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TermExcept"><span class="hs-identifier hs-type">TermExcept</span></a></span><span> </span><span id="local-6989586621679102538"><span class="annot"><span class="annottext">[DefinedQuantityDict]
+</span><span id="line-255"></span><span>        </span><span class="annot"><a href="#local-6989586621679102498"><span class="hs-identifier hs-var">lf</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TermExcept"><span class="hs-identifier hs-type">TermExcept</span></a></span><span> </span><span id="local-6989586621679102538"><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="#local-6989586621679102538"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679102539"><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679102539"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679102539"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">n -&gt; Getting UID n UID -&gt; UID
@@ -924,7 +922,7 @@ forall c. HasUID c =&gt; Getter c UID
 Getter DefinedQuantityDict UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="#local-6989586621679102538"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="hs-keyword">then</span><span>
-</span><span id="line-258"></span><span>          </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-256"></span><span>          </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">capSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679102539"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">n -&gt; Getting Sentence n Sentence -&gt; Sentence
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -935,8 +933,8 @@ Lens' n Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679102539"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-comment">--Compare chunk uids, since we don't</span><span>
-</span><span id="line-259"></span><span>          </span><span class="hs-comment">--actually care about the chunks themselves in LFunc.</span><span>
-</span><span id="line-260"></span><span>        </span><span class="annot"><a href="#local-6989586621679102498"><span class="hs-identifier hs-var">lf</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#DefnExcept"><span class="hs-identifier hs-type">DefnExcept</span></a></span><span> </span><span id="local-6989586621679102542"><span class="annot"><span class="annottext">[DefinedQuantityDict]
+</span><span id="line-257"></span><span>          </span><span class="hs-comment">--actually care about the chunks themselves in LFunc.</span><span>
+</span><span id="line-258"></span><span>        </span><span class="annot"><a href="#local-6989586621679102498"><span class="hs-identifier hs-var">lf</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#DefnExcept"><span class="hs-identifier hs-type">DefnExcept</span></a></span><span> </span><span id="local-6989586621679102542"><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="#local-6989586621679102542"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679102543"><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679102543"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679102543"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">n -&gt; Getting UID n UID -&gt; UID
@@ -956,7 +954,7 @@ forall c. HasUID c =&gt; Getter c UID
 Getter DefinedQuantityDict UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="#local-6989586621679102542"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="hs-keyword">then</span><span>
-</span><span id="line-261"></span><span>          </span><span class="annot"><span class="annottext">n -&gt; Sentence
+</span><span id="line-259"></span><span>          </span><span class="annot"><span class="annottext">n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679102543"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
@@ -967,7 +965,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. Definition c =&gt; Lens' c Sentence
 Lens' n Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span>
-</span><span id="line-262"></span><span>        </span><span class="annot"><a href="#local-6989586621679102498"><span class="hs-identifier hs-var">lf</span></a></span><span> </span><span class="annot"><span class="annottext">LFunc
+</span><span id="line-260"></span><span>        </span><span class="annot"><a href="#local-6989586621679102498"><span class="hs-identifier hs-var">lf</span></a></span><span> </span><span class="annot"><span class="annottext">LFunc
 </span><a href="Drasil.DocumentLanguage.Core.html#TAD"><span class="hs-identifier hs-var">TAD</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679102545"><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679102545"><span class="hs-identifier hs-var">tDef</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -983,18 +981,18 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. Definition c =&gt; Lens' c Sentence
 Lens' n Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span>
+</span><span id="line-261"></span><span>
+</span><span id="line-262"></span><span class="annot"><span class="hs-comment">-- ** Introduction</span></span><span>
 </span><span id="line-263"></span><span>
-</span><span id="line-264"></span><span class="annot"><span class="hs-comment">-- ** Introduction</span></span><span>
-</span><span id="line-265"></span><span>
-</span><span id="line-266"></span><span class="annot"><span class="hs-comment">-- | Makes the Introduction section into a 'Section'.</span></span><span>
-</span><span id="line-267"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkIntroSec"><span class="hs-identifier hs-type">mkIntroSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#IntroSec"><span class="hs-identifier hs-type">IntroSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-268"></span><span id="mkIntroSec"><span class="annot"><span class="annottext">mkIntroSec :: System -&gt; IntroSec -&gt; Section
+</span><span id="line-264"></span><span class="annot"><span class="hs-comment">-- | Makes the Introduction section into a 'Section'.</span></span><span>
+</span><span id="line-265"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkIntroSec"><span class="hs-identifier hs-type">mkIntroSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#IntroSec"><span class="hs-identifier hs-type">IntroSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-266"></span><span id="mkIntroSec"><span class="annot"><span class="annottext">mkIntroSec :: System -&gt; IntroSec -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkIntroSec"><span class="hs-identifier hs-var hs-var">mkIntroSec</span></a></span></span><span> </span><span id="local-6989586621679102550"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102550"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#IntroProg"><span class="hs-identifier hs-type">IntroProg</span></a></span><span> </span><span id="local-6989586621679102552"><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679102552"><span class="hs-identifier hs-var">probIntro</span></a></span></span><span> </span><span id="local-6989586621679102553"><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679102553"><span class="hs-identifier hs-var">progDefn</span></a></span></span><span> </span><span id="local-6989586621679102554"><span class="annot"><span class="annottext">[IntroSub]
 </span><a href="#local-6989586621679102554"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-269"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; [Section] -&gt; Section
+</span><span id="line-267"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; [Section] -&gt; Section
 </span><a href="Drasil.Sections.Introduction.html#introductionSection"><span class="hs-identifier hs-var">Intro.introductionSection</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679102552"><span class="hs-identifier hs-var">probIntro</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679102553"><span class="hs-identifier hs-var">progDefn</span></a></span><span> </span><span class="annot"><span class="annottext">([Section] -&gt; Section) -&gt; [Section] -&gt; Section
@@ -1005,26 +1003,26 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="#local-6989586621679102555"><span class="hs-identifier hs-var">mkSubIntro</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102550"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[IntroSub]
 </span><a href="#local-6989586621679102554"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-270"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-271"></span><span>    </span><span class="annot"><a href="#local-6989586621679102555"><span class="hs-identifier hs-type">mkSubIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#IntroSub"><span class="hs-identifier hs-type">IntroSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-272"></span><span>    </span><span id="local-6989586621679102555"><span class="annot"><span class="annottext">mkSubIntro :: System -&gt; IntroSub -&gt; Section
+</span><span id="line-268"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-269"></span><span>    </span><span class="annot"><a href="#local-6989586621679102555"><span class="hs-identifier hs-type">mkSubIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#IntroSub"><span class="hs-identifier hs-type">IntroSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-270"></span><span>    </span><span id="local-6989586621679102555"><span class="annot"><span class="annottext">mkSubIntro :: System -&gt; IntroSub -&gt; Section
 </span><a href="#local-6989586621679102555"><span class="hs-identifier hs-var hs-var">mkSubIntro</span></a></span></span><span> </span><span class="annot"><span class="annottext">System
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#IPurpose"><span class="hs-identifier hs-type">IPurpose</span></a></span><span> </span><span id="local-6989586621679102557"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102557"><span class="hs-identifier hs-var">intro</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Section
 </span><a href="Drasil.Sections.Introduction.html#purposeOfDoc"><span class="hs-identifier hs-var">Intro.purposeOfDoc</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102557"><span class="hs-identifier hs-var">intro</span></a></span><span>
-</span><span id="line-273"></span><span>    </span><span class="annot"><a href="#local-6989586621679102555"><span class="hs-identifier hs-var">mkSubIntro</span></a></span><span> </span><span class="annot"><span class="annottext">System
+</span><span id="line-271"></span><span>    </span><span class="annot"><a href="#local-6989586621679102555"><span class="hs-identifier hs-var">mkSubIntro</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#IScope"><span class="hs-identifier hs-type">IScope</span></a></span><span> </span><span id="local-6989586621679102559"><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679102559"><span class="hs-identifier hs-var">main</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Section
 </span><a href="Drasil.Sections.Introduction.html#scopeOfRequirements"><span class="hs-identifier hs-var">Intro.scopeOfRequirements</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679102559"><span class="hs-identifier hs-var">main</span></a></span><span>
-</span><span id="line-274"></span><span>    </span><span class="annot"><a href="#local-6989586621679102555"><span class="hs-identifier hs-var">mkSubIntro</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span> </span><span class="hs-special">{</span><span class="annot"><span class="annottext">_sys :: ()
+</span><span id="line-272"></span><span>    </span><span class="annot"><a href="#local-6989586621679102555"><span class="hs-identifier hs-var">mkSubIntro</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span> </span><span class="hs-special">{</span><span class="annot"><span class="annottext">_sys :: ()
 </span><span class="hs-identifier hs-var">_sys</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679102575"><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679102575"><span class="hs-identifier hs-var">sys</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#IChar"><span class="hs-identifier hs-type">IChar</span></a></span><span> </span><span id="local-6989586621679102577"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102577"><span class="hs-identifier hs-var">assumed</span></a></span></span><span> </span><span id="local-6989586621679102578"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102578"><span class="hs-identifier hs-var">topic</span></a></span></span><span> </span><span id="local-6989586621679102579"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102579"><span class="hs-identifier hs-var">asset</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-275"></span><span>      </span><span class="annot"><span class="annottext">a -&gt; [Sentence] -&gt; [Sentence] -&gt; [Sentence] -&gt; Section -&gt; Section
+</span><span id="line-273"></span><span>      </span><span class="annot"><span class="annottext">a -&gt; [Sentence] -&gt; [Sentence] -&gt; [Sentence] -&gt; Section -&gt; Section
 forall a.
 Idea a =&gt;
 a -&gt; [Sentence] -&gt; [Sentence] -&gt; [Sentence] -&gt; Section -&gt; Section
@@ -1034,7 +1032,7 @@ a -&gt; [Sentence] -&gt; [Sentence] -&gt; [Sentence] -&gt; Section -&gt; Section
 </span><a href="#local-6989586621679102578"><span class="hs-identifier hs-var">topic</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102579"><span class="hs-identifier hs-var">asset</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#userChar"><span class="hs-identifier hs-var">SRS.userChar</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-276"></span><span>    </span><span class="annot"><a href="#local-6989586621679102555"><span class="hs-identifier hs-var">mkSubIntro</span></a></span><span> </span><span class="annot"><span class="annottext">System
+</span><span id="line-274"></span><span>    </span><span class="annot"><a href="#local-6989586621679102555"><span class="hs-identifier hs-var">mkSubIntro</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#IOrgSec"><span class="hs-identifier hs-type">IOrgSec</span></a></span><span> </span><span id="local-6989586621679102581"><span class="annot"><span class="annottext">CI
 </span><a href="#local-6989586621679102581"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679102582"><span class="annot"><span class="annottext">Section
 </span><a href="#local-6989586621679102582"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679102583"><span class="annot"><span class="annottext">Sentence
@@ -1044,13 +1042,13 @@ forall c. NamedIdea c =&gt; c -&gt; Section -&gt; Sentence -&gt; Section
 </span><a href="#local-6989586621679102581"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Section
 </span><a href="#local-6989586621679102582"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679102583"><span class="hs-identifier hs-var">t</span></a></span><span>
-</span><span id="line-277"></span><span>    </span><span class="hs-comment">-- FIXME: s should be &quot;looked up&quot; using &quot;b&quot; once we have all sections being generated</span><span>
+</span><span id="line-275"></span><span>    </span><span class="hs-comment">-- FIXME: s should be &quot;looked up&quot; using &quot;b&quot; once we have all sections being generated</span><span>
+</span><span id="line-276"></span><span>
+</span><span id="line-277"></span><span class="annot"><span class="hs-comment">-- ** Stakeholders</span></span><span>
 </span><span id="line-278"></span><span>
-</span><span id="line-279"></span><span class="annot"><span class="hs-comment">-- ** Stakeholders</span></span><span>
-</span><span id="line-280"></span><span>
-</span><span id="line-281"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Stakeholders section.</span></span><span>
-</span><span id="line-282"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkStkhldrSec"><span class="hs-identifier hs-type">mkStkhldrSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#StkhldrSec"><span class="hs-identifier hs-type">StkhldrSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-283"></span><span id="mkStkhldrSec"><span class="annot"><span class="annottext">mkStkhldrSec :: StkhldrSec -&gt; Section
+</span><span id="line-279"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Stakeholders section.</span></span><span>
+</span><span id="line-280"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkStkhldrSec"><span class="hs-identifier hs-type">mkStkhldrSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#StkhldrSec"><span class="hs-identifier hs-type">StkhldrSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-281"></span><span id="mkStkhldrSec"><span class="annot"><span class="annottext">mkStkhldrSec :: StkhldrSec -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkStkhldrSec"><span class="hs-identifier hs-var hs-var">mkStkhldrSec</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#StkhldrProg"><span class="hs-identifier hs-type">StkhldrProg</span></a></span><span> </span><span id="local-6989586621679102585"><span class="annot"><span class="annottext">[StkhldrSub]
 </span><a href="#local-6989586621679102585"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#stakeholder"><span class="hs-identifier hs-var">SRS.stakeholder</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Contents
@@ -1061,9 +1059,9 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">StkhldrSub -&gt; Section
 </span><a href="#local-6989586621679102586"><span class="hs-identifier hs-var">mkSubs</span></a></span><span> </span><span class="annot"><span class="annottext">[StkhldrSub]
 </span><a href="#local-6989586621679102585"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-284"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-285"></span><span>    </span><span class="annot"><a href="#local-6989586621679102586"><span class="hs-identifier hs-type">mkSubs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#StkhldrSub"><span class="hs-identifier hs-type">StkhldrSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-286"></span><span>    </span><span id="local-6989586621679102586"><span class="annot"><span class="annottext">mkSubs :: StkhldrSub -&gt; Section
+</span><span id="line-282"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-283"></span><span>    </span><span class="annot"><a href="#local-6989586621679102586"><span class="hs-identifier hs-type">mkSubs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#StkhldrSub"><span class="hs-identifier hs-type">StkhldrSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-284"></span><span>    </span><span id="local-6989586621679102586"><span class="annot"><span class="annottext">mkSubs :: StkhldrSub -&gt; Section
 </span><a href="#local-6989586621679102586"><span class="hs-identifier hs-var hs-var">mkSubs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#Client"><span class="hs-identifier hs-type">Client</span></a></span><span> </span><span id="local-6989586621679102588"><span class="annot"><span class="annottext">CI
 </span><a href="#local-6989586621679102588"><span class="hs-identifier hs-var">kWrd</span></a></span></span><span> </span><span id="local-6989586621679102589"><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679102589"><span class="hs-identifier hs-var">details</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence -&gt; Section
@@ -1071,17 +1069,17 @@ forall a. Idea a =&gt; a -&gt; Sentence -&gt; Section
 </span><a href="Drasil.Sections.Stakeholders.html#tClientF"><span class="hs-identifier hs-var">Stk.tClientF</span></a></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="#local-6989586621679102588"><span class="hs-identifier hs-var">kWrd</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679102589"><span class="hs-identifier hs-var">details</span></a></span><span>
-</span><span id="line-287"></span><span>    </span><span class="annot"><a href="#local-6989586621679102586"><span class="hs-identifier hs-var">mkSubs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#Cstmr"><span class="hs-identifier hs-type">Cstmr</span></a></span><span> </span><span id="local-6989586621679102591"><span class="annot"><span class="annottext">CI
+</span><span id="line-285"></span><span>    </span><span class="annot"><a href="#local-6989586621679102586"><span class="hs-identifier hs-var">mkSubs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#Cstmr"><span class="hs-identifier hs-type">Cstmr</span></a></span><span> </span><span id="local-6989586621679102591"><span class="annot"><span class="annottext">CI
 </span><a href="#local-6989586621679102591"><span class="hs-identifier hs-var">kWrd</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Section
 forall a. Idea a =&gt; a -&gt; Section
 </span><a href="Drasil.Sections.Stakeholders.html#tCustomerF"><span class="hs-identifier hs-var">Stk.tCustomerF</span></a></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="#local-6989586621679102591"><span class="hs-identifier hs-var">kWrd</span></a></span><span>
+</span><span id="line-286"></span><span>
+</span><span id="line-287"></span><span class="annot"><span class="hs-comment">-- ** General System Description</span></span><span>
 </span><span id="line-288"></span><span>
-</span><span id="line-289"></span><span class="annot"><span class="hs-comment">-- ** General System Description</span></span><span>
-</span><span id="line-290"></span><span>
-</span><span id="line-291"></span><span class="annot"><span class="hs-comment">-- | Helper for making the General System Description section.</span></span><span>
-</span><span id="line-292"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkGSDSec"><span class="hs-identifier hs-type">mkGSDSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#GSDSec"><span class="hs-identifier hs-type">GSDSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-293"></span><span id="mkGSDSec"><span class="annot"><span class="annottext">mkGSDSec :: GSDSec -&gt; Section
+</span><span id="line-289"></span><span class="annot"><span class="hs-comment">-- | Helper for making the General System Description section.</span></span><span>
+</span><span id="line-290"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkGSDSec"><span class="hs-identifier hs-type">mkGSDSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#GSDSec"><span class="hs-identifier hs-type">GSDSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-291"></span><span id="mkGSDSec"><span class="annot"><span class="annottext">mkGSDSec :: GSDSec -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkGSDSec"><span class="hs-identifier hs-var hs-var">mkGSDSec</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#GSDProg"><span class="hs-identifier hs-type">GSDProg</span></a></span><span> </span><span id="local-6989586621679102593"><span class="annot"><span class="annottext">[GSDSub]
 </span><a href="#local-6989586621679102593"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#genSysDes"><span class="hs-identifier hs-var">SRS.genSysDes</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Contents
@@ -1092,33 +1090,33 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">GSDSub -&gt; Section
 </span><a href="#local-6989586621679102594"><span class="hs-identifier hs-var">mkSubs</span></a></span><span> </span><span class="annot"><span class="annottext">[GSDSub]
 </span><a href="#local-6989586621679102593"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-294"></span><span>   </span><span class="hs-keyword">where</span><span>
-</span><span id="line-295"></span><span>     </span><span class="annot"><a href="#local-6989586621679102594"><span class="hs-identifier hs-type">mkSubs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#GSDSub"><span class="hs-identifier hs-type">GSDSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-296"></span><span>     </span><span id="local-6989586621679102594"><span class="annot"><span class="annottext">mkSubs :: GSDSub -&gt; Section
+</span><span id="line-292"></span><span>   </span><span class="hs-keyword">where</span><span>
+</span><span id="line-293"></span><span>     </span><span class="annot"><a href="#local-6989586621679102594"><span class="hs-identifier hs-type">mkSubs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#GSDSub"><span class="hs-identifier hs-type">GSDSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-294"></span><span>     </span><span id="local-6989586621679102594"><span class="annot"><span class="annottext">mkSubs :: GSDSub -&gt; Section
 </span><a href="#local-6989586621679102594"><span class="hs-identifier hs-var hs-var">mkSubs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SysCntxt"><span class="hs-identifier hs-type">SysCntxt</span></a></span><span> </span><span id="local-6989586621679102596"><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102596"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; Section
 </span><a href="Drasil.Sections.GeneralSystDesc.html#sysContxt"><span class="hs-identifier hs-var">GSD.sysContxt</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102596"><span class="hs-identifier hs-var">cs</span></a></span><span>
-</span><span id="line-297"></span><span>     </span><span class="annot"><a href="#local-6989586621679102594"><span class="hs-identifier hs-var">mkSubs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#UsrChars"><span class="hs-identifier hs-type">UsrChars</span></a></span><span> </span><span id="local-6989586621679102598"><span class="annot"><span class="annottext">[Contents]
+</span><span id="line-295"></span><span>     </span><span class="annot"><a href="#local-6989586621679102594"><span class="hs-identifier hs-var">mkSubs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#UsrChars"><span class="hs-identifier hs-type">UsrChars</span></a></span><span> </span><span id="local-6989586621679102598"><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102598"><span class="hs-identifier hs-var">intro</span></a></span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; Section
 </span><a href="Drasil.Sections.GeneralSystDesc.html#usrCharsF"><span class="hs-identifier hs-var">GSD.usrCharsF</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102598"><span class="hs-identifier hs-var">intro</span></a></span><span>
-</span><span id="line-298"></span><span>     </span><span class="annot"><a href="#local-6989586621679102594"><span class="hs-identifier hs-var">mkSubs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SystCons"><span class="hs-identifier hs-type">SystCons</span></a></span><span> </span><span id="local-6989586621679102600"><span class="annot"><span class="annottext">[Contents]
+</span><span id="line-296"></span><span>     </span><span class="annot"><a href="#local-6989586621679102594"><span class="hs-identifier hs-var">mkSubs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SystCons"><span class="hs-identifier hs-type">SystCons</span></a></span><span> </span><span id="local-6989586621679102600"><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102600"><span class="hs-identifier hs-var">cntnts</span></a></span></span><span> </span><span id="local-6989586621679102601"><span class="annot"><span class="annottext">[Section]
 </span><a href="#local-6989586621679102601"><span class="hs-identifier hs-var">subsec</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.Sections.GeneralSystDesc.html#systCon"><span class="hs-identifier hs-var">GSD.systCon</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102600"><span class="hs-identifier hs-var">cntnts</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
 </span><a href="#local-6989586621679102601"><span class="hs-identifier hs-var">subsec</span></a></span><span>
+</span><span id="line-297"></span><span>
+</span><span id="line-298"></span><span class="annot"><span class="hs-comment">-- ** Specific System Description</span></span><span>
 </span><span id="line-299"></span><span>
-</span><span id="line-300"></span><span class="annot"><span class="hs-comment">-- ** Specific System Description</span></span><span>
-</span><span id="line-301"></span><span>
-</span><span id="line-302"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Specific System Description section.</span></span><span>
-</span><span id="line-303"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkSSDSec"><span class="hs-identifier hs-type">mkSSDSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SSDSec"><span class="hs-identifier hs-type">SSDSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-304"></span><span id="mkSSDSec"><span class="annot"><span class="annottext">mkSSDSec :: System -&gt; SSDSec -&gt; Section
+</span><span id="line-300"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Specific System Description section.</span></span><span>
+</span><span id="line-301"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkSSDSec"><span class="hs-identifier hs-type">mkSSDSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SSDSec"><span class="hs-identifier hs-type">SSDSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-302"></span><span id="mkSSDSec"><span class="annot"><span class="annottext">mkSSDSec :: System -&gt; SSDSec -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkSSDSec"><span class="hs-identifier hs-var hs-var">mkSSDSec</span></a></span></span><span> </span><span id="local-6989586621679102602"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102602"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SSDProg"><span class="hs-identifier hs-type">SSDProg</span></a></span><span> </span><span id="local-6989586621679102604"><span class="annot"><span class="annottext">[SSDSub]
 </span><a href="#local-6989586621679102604"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-305"></span><span>  </span><span class="annot"><span class="annottext">[Section] -&gt; Section
+</span><span id="line-303"></span><span>  </span><span class="annot"><span class="annottext">[Section] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#specSysDescr"><span class="hs-identifier hs-var">SSD.specSysDescr</span></a></span><span> </span><span class="annot"><span class="annottext">([Section] -&gt; Section) -&gt; [Section] -&gt; Section
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(SSDSub -&gt; Section) -&gt; [SSDSub] -&gt; [Section]
@@ -1127,25 +1125,25 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="#local-6989586621679102605"><span class="hs-identifier hs-var">mkSubSSD</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102602"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SSDSub]
 </span><a href="#local-6989586621679102604"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-306"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-307"></span><span>    </span><span class="annot"><a href="#local-6989586621679102605"><span class="hs-identifier hs-type">mkSubSSD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SSDSub"><span class="hs-identifier hs-type">SSDSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-308"></span><span>    </span><span id="local-6989586621679102605"><span class="annot"><span class="annottext">mkSubSSD :: System -&gt; SSDSub -&gt; Section
+</span><span id="line-304"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-305"></span><span>    </span><span class="annot"><a href="#local-6989586621679102605"><span class="hs-identifier hs-type">mkSubSSD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SSDSub"><span class="hs-identifier hs-type">SSDSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-306"></span><span>    </span><span id="local-6989586621679102605"><span class="annot"><span class="annottext">mkSubSSD :: System -&gt; SSDSub -&gt; Section
 </span><a href="#local-6989586621679102605"><span class="hs-identifier hs-var hs-var">mkSubSSD</span></a></span></span><span> </span><span id="local-6989586621679102606"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102606"><span class="hs-identifier hs-var">sysi</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SSDProblem"><span class="hs-identifier hs-type">SSDProblem</span></a></span><span> </span><span id="local-6989586621679102608"><span class="annot"><span class="annottext">ProblemDescription
 </span><a href="#local-6989586621679102608"><span class="hs-identifier hs-var">pd</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">System -&gt; ProblemDescription -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkSSDProb"><span class="hs-identifier hs-var">mkSSDProb</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102606"><span class="hs-identifier hs-var">sysi</span></a></span><span> </span><span class="annot"><span class="annottext">ProblemDescription
 </span><a href="#local-6989586621679102608"><span class="hs-identifier hs-var">pd</span></a></span><span>
-</span><span id="line-309"></span><span>    </span><span class="annot"><a href="#local-6989586621679102605"><span class="hs-identifier hs-var">mkSubSSD</span></a></span><span> </span><span id="local-6989586621679102610"><span class="annot"><span class="annottext">System
+</span><span id="line-307"></span><span>    </span><span class="annot"><a href="#local-6989586621679102605"><span class="hs-identifier hs-var">mkSubSSD</span></a></span><span> </span><span id="local-6989586621679102610"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102610"><span class="hs-identifier hs-var">sysi</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SSDSolChSpec"><span class="hs-identifier hs-type">SSDSolChSpec</span></a></span><span> </span><span id="local-6989586621679102612"><span class="annot"><span class="annottext">SolChSpec
 </span><a href="#local-6989586621679102612"><span class="hs-identifier hs-var">scs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">System -&gt; SolChSpec -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkSolChSpec"><span class="hs-identifier hs-var">mkSolChSpec</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102610"><span class="hs-identifier hs-var">sysi</span></a></span><span> </span><span class="annot"><span class="annottext">SolChSpec
 </span><a href="#local-6989586621679102612"><span class="hs-identifier hs-var">scs</span></a></span><span>
-</span><span id="line-310"></span><span>
-</span><span id="line-311"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Specific System Description Problem section.</span></span><span>
-</span><span id="line-312"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkSSDProb"><span class="hs-identifier hs-type">mkSSDProb</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#ProblemDescription"><span class="hs-identifier hs-type">ProblemDescription</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-313"></span><span id="mkSSDProb"><span class="annot"><span class="annottext">mkSSDProb :: System -&gt; ProblemDescription -&gt; Section
+</span><span id="line-308"></span><span>
+</span><span id="line-309"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Specific System Description Problem section.</span></span><span>
+</span><span id="line-310"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkSSDProb"><span class="hs-identifier hs-type">mkSSDProb</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#ProblemDescription"><span class="hs-identifier hs-type">ProblemDescription</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-311"></span><span id="mkSSDProb"><span class="annot"><span class="annottext">mkSSDProb :: System -&gt; ProblemDescription -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkSSDProb"><span class="hs-identifier hs-var hs-var">mkSSDProb</span></a></span></span><span> </span><span class="annot"><span class="annottext">System
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#PDProg"><span class="hs-identifier hs-type">PDProg</span></a></span><span> </span><span id="local-6989586621679102615"><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679102615"><span class="hs-identifier hs-var">prob</span></a></span></span><span> </span><span id="local-6989586621679102616"><span class="annot"><span class="annottext">[Section]
@@ -1160,7 +1158,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">PDSub -&gt; Section
 </span><a href="#local-6989586621679102618"><span class="hs-identifier hs-var">mkSubPD</span></a></span><span> </span><span class="annot"><span class="annottext">[PDSub]
 </span><a href="#local-6989586621679102617"><span class="hs-identifier hs-var">subPD</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-314"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679102618"><span class="annot"><span class="annottext">mkSubPD :: PDSub -&gt; Section
+</span><span id="line-312"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679102618"><span class="annot"><span class="annottext">mkSubPD :: PDSub -&gt; Section
 </span><a href="#local-6989586621679102618"><span class="hs-identifier hs-var hs-var">mkSubPD</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TermsAndDefs"><span class="hs-identifier hs-type">TermsAndDefs</span></a></span><span> </span><span id="local-6989586621679102626"><span class="annot"><span class="annottext">Maybe Sentence
 </span><a href="#local-6989586621679102626"><span class="hs-identifier hs-var">sen</span></a></span></span><span> </span><span id="local-6989586621679102627"><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679102627"><span class="hs-identifier hs-var">concepts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Sentence -&gt; [c] -&gt; Section
@@ -1168,7 +1166,7 @@ forall c. Concept c =&gt; Maybe Sentence -&gt; [c] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#termDefnF"><span class="hs-identifier hs-var">SSD.termDefnF</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Sentence
 </span><a href="#local-6989586621679102626"><span class="hs-identifier hs-var">sen</span></a></span><span> </span><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679102627"><span class="hs-identifier hs-var">concepts</span></a></span><span>
-</span><span id="line-315"></span><span>        </span><span class="annot"><a href="#local-6989586621679102618"><span class="hs-identifier hs-var">mkSubPD</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#PhySysDesc"><span class="hs-identifier hs-type">PhySysDesc</span></a></span><span> </span><span id="local-6989586621679102631"><span class="annot"><span class="annottext">a
+</span><span id="line-313"></span><span>        </span><span class="annot"><a href="#local-6989586621679102618"><span class="hs-identifier hs-var">mkSubPD</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#PhySysDesc"><span class="hs-identifier hs-type">PhySysDesc</span></a></span><span> </span><span id="local-6989586621679102631"><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679102631"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span id="local-6989586621679102632"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102632"><span class="hs-identifier hs-var">parts</span></a></span></span><span> </span><span id="local-6989586621679102633"><span class="annot"><span class="annottext">LabelledContent
 </span><a href="#local-6989586621679102633"><span class="hs-identifier hs-var">dif</span></a></span></span><span> </span><span id="local-6989586621679102634"><span class="annot"><span class="annottext">[Contents]
@@ -1181,7 +1179,7 @@ a -&gt; [Sentence] -&gt; LabelledContent -&gt; [Contents] -&gt; Section
 </span><a href="#local-6989586621679102632"><span class="hs-identifier hs-var">parts</span></a></span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="#local-6989586621679102633"><span class="hs-identifier hs-var">dif</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102634"><span class="hs-identifier hs-var">extra</span></a></span><span>
-</span><span id="line-316"></span><span>        </span><span class="annot"><a href="#local-6989586621679102618"><span class="hs-identifier hs-var">mkSubPD</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#Goals"><span class="hs-identifier hs-type">Goals</span></a></span><span> </span><span id="local-6989586621679102636"><span class="annot"><span class="annottext">[Sentence]
+</span><span id="line-314"></span><span>        </span><span class="annot"><a href="#local-6989586621679102618"><span class="hs-identifier hs-var">mkSubPD</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#Goals"><span class="hs-identifier hs-type">Goals</span></a></span><span> </span><span id="local-6989586621679102636"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102636"><span class="hs-identifier hs-var">ins</span></a></span></span><span> </span><span id="local-6989586621679102637"><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="#local-6989586621679102637"><span class="hs-identifier hs-var">g</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Contents] -&gt; Int -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#goalStmtF"><span class="hs-identifier hs-var">SSD.goalStmtF</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
@@ -1195,15 +1193,14 @@ forall a. [a] -&gt; Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="#local-6989586621679102637"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-317"></span><span>
-</span><span id="line-318"></span><span>
-</span><span id="line-319"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Solution Characteristics Specification section.</span></span><span>
-</span><span id="line-320"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkSolChSpec"><span class="hs-identifier hs-type">mkSolChSpec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SolChSpec"><span class="hs-identifier hs-type">SolChSpec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-321"></span><span id="mkSolChSpec"><span class="annot"><span class="annottext">mkSolChSpec :: System -&gt; SolChSpec -&gt; Section
+</span><span id="line-315"></span><span>
+</span><span id="line-316"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Solution Characteristics Specification section.</span></span><span>
+</span><span id="line-317"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkSolChSpec"><span class="hs-identifier hs-type">mkSolChSpec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SolChSpec"><span class="hs-identifier hs-type">SolChSpec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-318"></span><span id="mkSolChSpec"><span class="annot"><span class="annottext">mkSolChSpec :: System -&gt; SolChSpec -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkSolChSpec"><span class="hs-identifier hs-var hs-var">mkSolChSpec</span></a></span></span><span> </span><span id="local-6989586621679102640"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102640"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SCSProg"><span class="hs-identifier hs-type">SCSProg</span></a></span><span> </span><span id="local-6989586621679102642"><span class="annot"><span class="annottext">[SCSSub]
 </span><a href="#local-6989586621679102642"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-322"></span><span>  </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
+</span><span id="line-319"></span><span>  </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#solCharSpec"><span class="hs-identifier hs-var">SRS.solCharSpec</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict -&gt; Section -&gt; Contents
 forall a. Idea a =&gt; a -&gt; Section -&gt; Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#solutionCharSpecIntro"><span class="hs-identifier hs-var">SSD.solutionCharSpecIntro</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System -&gt; IdeaDict
@@ -1212,21 +1209,21 @@ forall a. Idea a =&gt; a -&gt; Section -&gt; Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#imStub"><span class="hs-identifier hs-var">SSD.imStub</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">([Section] -&gt; Section) -&gt; [Section] -&gt; Section
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-323"></span><span>    </span><span class="annot"><span class="annottext">(SCSSub -&gt; Section) -&gt; [SCSSub] -&gt; [Section]
+</span><span id="line-320"></span><span>    </span><span class="annot"><span class="annottext">(SCSSub -&gt; Section) -&gt; [SCSSub] -&gt; [Section]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System -&gt; SCSSub -&gt; Section
 </span><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102640"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SCSSub]
 </span><a href="#local-6989586621679102642"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-324"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-325"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-type">mkSubSCS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SCSSub"><span class="hs-identifier hs-type">SCSSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-326"></span><span>    </span><span id="local-6989586621679102643"><span class="annot"><span class="annottext">mkSubSCS :: System -&gt; SCSSub -&gt; Section
+</span><span id="line-321"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-322"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-type">mkSubSCS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#SCSSub"><span class="hs-identifier hs-type">SCSSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-323"></span><span>    </span><span id="local-6989586621679102643"><span class="annot"><span class="annottext">mkSubSCS :: System -&gt; SCSSub -&gt; Section
 </span><a href="#local-6989586621679102643"><span class="hs-identifier hs-var hs-var">mkSubSCS</span></a></span></span><span> </span><span id="local-6989586621679102644"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102644"><span class="hs-identifier hs-var">si'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TMs"><span class="hs-identifier hs-type">TMs</span></a></span><span> </span><span id="local-6989586621679102646"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102646"><span class="hs-identifier hs-var">intro</span></a></span></span><span> </span><span id="local-6989586621679102647"><span class="annot"><span class="annottext">Fields
 </span><a href="#local-6989586621679102647"><span class="hs-identifier hs-var">fields</span></a></span></span><span> </span><span id="local-6989586621679102648"><span class="annot"><span class="annottext">[TheoryModel]
 </span><a href="#local-6989586621679102648"><span class="hs-identifier hs-var">ts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-327"></span><span>      </span><span class="annot"><span class="annottext">IdeaDict -&gt; [Contents] -&gt; Section
+</span><span id="line-324"></span><span>      </span><span class="annot"><span class="annottext">IdeaDict -&gt; [Contents] -&gt; Section
 forall a. Idea a =&gt; a -&gt; [Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#thModF"><span class="hs-identifier hs-var">SSD.thModF</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">sysName</span></span><span> </span><span class="annot"><span class="annottext">System
@@ -1249,13 +1246,13 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><a href="#local-6989586621679102647"><span class="hs-identifier hs-var">fields</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102644"><span class="hs-identifier hs-var">si'</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[TheoryModel]
 </span><a href="#local-6989586621679102648"><span class="hs-identifier hs-var">ts</span></a></span><span>
-</span><span id="line-328"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102649"><span class="annot"><span class="annottext">System
+</span><span id="line-325"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102649"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102649"><span class="hs-identifier hs-var">si'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#DDs"><span class="hs-identifier hs-type">DDs</span></a></span><span> </span><span id="local-6989586621679102651"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102651"><span class="hs-identifier hs-var">intro</span></a></span></span><span> </span><span id="local-6989586621679102652"><span class="annot"><span class="annottext">Fields
 </span><a href="#local-6989586621679102652"><span class="hs-identifier hs-var">fields</span></a></span></span><span> </span><span id="local-6989586621679102653"><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="#local-6989586621679102653"><span class="hs-identifier hs-var">dds</span></a></span></span><span> </span><span class="annot"><span class="annottext">DerivationDisplay
 </span><a href="Drasil.DocumentLanguage.Core.html#ShowDerivation"><span class="hs-identifier hs-var">ShowDerivation</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-comment">--FIXME: need to keep track of DD intro.</span><span>
-</span><span id="line-329"></span><span>      </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; Section
+</span><span id="line-326"></span><span>      </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefnF"><span class="hs-identifier hs-var">SSD.dataDefnF</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">([Contents] -&gt; Section) -&gt; [Contents] -&gt; Section
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -1270,7 +1267,7 @@ forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; [Contents]
 </span><a href="#local-6989586621679102655"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="#local-6989586621679102653"><span class="hs-identifier hs-var">dds</span></a></span><span>
-</span><span id="line-330"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679102655"><span class="annot"><span class="annottext">f :: DataDefinition -&gt; [Contents]
+</span><span id="line-327"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679102655"><span class="annot"><span class="annottext">f :: DataDefinition -&gt; [Contents]
 </span><a href="#local-6989586621679102655"><span class="hs-identifier hs-var hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679102661"><span class="annot"><span class="annottext">DataDefinition
 </span><a href="#local-6989586621679102661"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Fields -&gt; System -&gt; DataDefinition -&gt; LabelledContent
@@ -1287,13 +1284,13 @@ forall c.
 c -&gt; Maybe Contents
 </span><a href="Drasil.DocumentLanguage.Definitions.html#derivation"><span class="hs-identifier hs-var">derivation</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="#local-6989586621679102661"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-331"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102662"><span class="annot"><span class="annottext">System
+</span><span id="line-328"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102662"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102662"><span class="hs-identifier hs-var">si'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#DDs"><span class="hs-identifier hs-type">DDs</span></a></span><span> </span><span id="local-6989586621679102663"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102663"><span class="hs-identifier hs-var">intro</span></a></span></span><span> </span><span id="local-6989586621679102664"><span class="annot"><span class="annottext">Fields
 </span><a href="#local-6989586621679102664"><span class="hs-identifier hs-var">fields</span></a></span></span><span> </span><span id="local-6989586621679102665"><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="#local-6989586621679102665"><span class="hs-identifier hs-var">dds</span></a></span></span><span> </span><span class="annot"><span class="annottext">DerivationDisplay
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-332"></span><span>      </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; Section
+</span><span id="line-329"></span><span>      </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefnF"><span class="hs-identifier hs-var">SSD.dataDefnF</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">([Contents] -&gt; Section) -&gt; [Contents] -&gt; Section
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -1308,7 +1305,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Contents
 </span><a href="#local-6989586621679102666"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="#local-6989586621679102665"><span class="hs-identifier hs-var">dds</span></a></span><span>
-</span><span id="line-333"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679102666"><span class="annot"><span class="annottext">f :: DataDefinition -&gt; Contents
+</span><span id="line-330"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679102666"><span class="annot"><span class="annottext">f :: DataDefinition -&gt; Contents
 </span><a href="#local-6989586621679102666"><span class="hs-identifier hs-var hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679102667"><span class="annot"><span class="annottext">DataDefinition
 </span><a href="#local-6989586621679102667"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="annot"><span class="annottext">(LabelledContent -&gt; Contents) -&gt; LabelledContent -&gt; Contents
@@ -1318,13 +1315,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="#local-6989586621679102664"><span class="hs-identifier hs-var">fields</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102662"><span class="hs-identifier hs-var">si'</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="#local-6989586621679102667"><span class="hs-identifier hs-var">e</span></a></span><span>
-</span><span id="line-334"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102668"><span class="annot"><span class="annottext">System
+</span><span id="line-331"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102668"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102668"><span class="hs-identifier hs-var">si'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#GDs"><span class="hs-identifier hs-type">GDs</span></a></span><span> </span><span id="local-6989586621679102670"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102670"><span class="hs-identifier hs-var">intro</span></a></span></span><span> </span><span id="local-6989586621679102671"><span class="annot"><span class="annottext">Fields
 </span><a href="#local-6989586621679102671"><span class="hs-identifier hs-var">fields</span></a></span></span><span> </span><span id="local-6989586621679102672"><span class="annot"><span class="annottext">[GenDefn]
 </span><a href="#local-6989586621679102672"><span class="hs-identifier hs-var">gs'</span></a></span></span><span> </span><span class="annot"><span class="annottext">DerivationDisplay
 </span><a href="Drasil.DocumentLanguage.Core.html#ShowDerivation"><span class="hs-identifier hs-var">ShowDerivation</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-335"></span><span>      </span><span class="annot"><span class="annottext">[Contents] -&gt; Section
+</span><span id="line-332"></span><span>      </span><span class="annot"><span class="annottext">[Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#genDefnF"><span class="hs-identifier hs-var">SSD.genDefnF</span></a></span><span> </span><span class="annot"><span class="annottext">([Contents] -&gt; Section) -&gt; [Contents] -&gt; Section
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Contents) -&gt; [Sentence] -&gt; [Contents]
@@ -1352,13 +1349,13 @@ c -&gt; Maybe Contents
 </span><a href="Drasil.DocumentLanguage.Definitions.html#derivation"><span class="hs-identifier hs-var">derivation</span></a></span><span> </span><span class="annot"><span class="annottext">GenDefn
 </span><a href="#local-6989586621679102673"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[GenDefn]
 </span><a href="#local-6989586621679102672"><span class="hs-identifier hs-var">gs'</span></a></span><span>
-</span><span id="line-336"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102674"><span class="annot"><span class="annottext">System
+</span><span id="line-333"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102674"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102674"><span class="hs-identifier hs-var">si'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#GDs"><span class="hs-identifier hs-type">GDs</span></a></span><span> </span><span id="local-6989586621679102675"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102675"><span class="hs-identifier hs-var">intro</span></a></span></span><span> </span><span id="local-6989586621679102676"><span class="annot"><span class="annottext">Fields
 </span><a href="#local-6989586621679102676"><span class="hs-identifier hs-var">fields</span></a></span></span><span> </span><span id="local-6989586621679102677"><span class="annot"><span class="annottext">[GenDefn]
 </span><a href="#local-6989586621679102677"><span class="hs-identifier hs-var">gs'</span></a></span></span><span> </span><span class="annot"><span class="annottext">DerivationDisplay
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-337"></span><span>      </span><span class="annot"><span class="annottext">[Contents] -&gt; Section
+</span><span id="line-334"></span><span>      </span><span class="annot"><span class="annottext">[Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#genDefnF"><span class="hs-identifier hs-var">SSD.genDefnF</span></a></span><span> </span><span class="annot"><span class="annottext">([Contents] -&gt; Section) -&gt; [Contents] -&gt; Section
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Contents) -&gt; [Sentence] -&gt; [Contents]
@@ -1378,13 +1375,13 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><a href="#local-6989586621679102676"><span class="hs-identifier hs-var">fields</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102674"><span class="hs-identifier hs-var">si'</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[GenDefn]
 </span><a href="#local-6989586621679102677"><span class="hs-identifier hs-var">gs'</span></a></span><span>
-</span><span id="line-338"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102678"><span class="annot"><span class="annottext">System
+</span><span id="line-335"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102678"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102678"><span class="hs-identifier hs-var">si'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#IMs"><span class="hs-identifier hs-type">IMs</span></a></span><span> </span><span id="local-6989586621679102680"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102680"><span class="hs-identifier hs-var">intro</span></a></span></span><span> </span><span id="local-6989586621679102681"><span class="annot"><span class="annottext">Fields
 </span><a href="#local-6989586621679102681"><span class="hs-identifier hs-var">fields</span></a></span></span><span> </span><span id="local-6989586621679102682"><span class="annot"><span class="annottext">[InstanceModel]
 </span><a href="#local-6989586621679102682"><span class="hs-identifier hs-var">ims</span></a></span></span><span> </span><span class="annot"><span class="annottext">DerivationDisplay
 </span><a href="Drasil.DocumentLanguage.Core.html#ShowDerivation"><span class="hs-identifier hs-var">ShowDerivation</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-339"></span><span>      </span><span class="annot"><span class="annottext">Section -&gt; Section -&gt; Section -&gt; Section -&gt; [Contents] -&gt; Section
+</span><span id="line-336"></span><span>      </span><span class="annot"><span class="annottext">Section -&gt; Section -&gt; Section -&gt; Section -&gt; [Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#inModelF"><span class="hs-identifier hs-var">SSD.inModelF</span></a></span><span> </span><span class="annot"><span class="annottext">Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#pdStub"><span class="hs-identifier hs-var">SSD.pdStub</span></a></span><span> </span><span class="annot"><span class="annottext">Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#ddStub"><span class="hs-identifier hs-var">SSD.ddStub</span></a></span><span> </span><span class="annot"><span class="annottext">Section
@@ -1398,7 +1395,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="#local-6989586621679102680"><span class="hs-identifier hs-var">intro</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Contents] -&gt; [Contents]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-340"></span><span>      </span><span class="annot"><span class="annottext">(InstanceModel -&gt; [Contents]) -&gt; [InstanceModel] -&gt; [Contents]
+</span><span id="line-337"></span><span>      </span><span class="annot"><span class="annottext">(InstanceModel -&gt; [Contents]) -&gt; [InstanceModel] -&gt; [Contents]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679102683"><span class="annot"><span class="annottext">InstanceModel
 </span><a href="#local-6989586621679102683"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
@@ -1417,13 +1414,13 @@ c -&gt; Maybe Contents
 </span><a href="Drasil.DocumentLanguage.Definitions.html#derivation"><span class="hs-identifier hs-var">derivation</span></a></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="#local-6989586621679102683"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
 </span><a href="#local-6989586621679102682"><span class="hs-identifier hs-var">ims</span></a></span><span>
-</span><span id="line-341"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102684"><span class="annot"><span class="annottext">System
+</span><span id="line-338"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102684"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102684"><span class="hs-identifier hs-var">si'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#IMs"><span class="hs-identifier hs-type">IMs</span></a></span><span> </span><span id="local-6989586621679102685"><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102685"><span class="hs-identifier hs-var">intro</span></a></span></span><span> </span><span id="local-6989586621679102686"><span class="annot"><span class="annottext">Fields
 </span><a href="#local-6989586621679102686"><span class="hs-identifier hs-var">fields</span></a></span></span><span> </span><span id="local-6989586621679102687"><span class="annot"><span class="annottext">[InstanceModel]
 </span><a href="#local-6989586621679102687"><span class="hs-identifier hs-var">ims</span></a></span></span><span> </span><span class="annot"><span class="annottext">DerivationDisplay
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-342"></span><span>      </span><span class="annot"><span class="annottext">Section -&gt; Section -&gt; Section -&gt; Section -&gt; [Contents] -&gt; Section
+</span><span id="line-339"></span><span>      </span><span class="annot"><span class="annottext">Section -&gt; Section -&gt; Section -&gt; Section -&gt; [Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#inModelF"><span class="hs-identifier hs-var">SSD.inModelF</span></a></span><span> </span><span class="annot"><span class="annottext">Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#pdStub"><span class="hs-identifier hs-var">SSD.pdStub</span></a></span><span> </span><span class="annot"><span class="annottext">Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#ddStub"><span class="hs-identifier hs-var">SSD.ddStub</span></a></span><span> </span><span class="annot"><span class="annottext">Section
@@ -1437,7 +1434,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="#local-6989586621679102685"><span class="hs-identifier hs-var">intro</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Contents] -&gt; [Contents]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-343"></span><span>      </span><span class="annot"><span class="annottext">(InstanceModel -&gt; Contents) -&gt; [InstanceModel] -&gt; [Contents]
+</span><span id="line-340"></span><span>      </span><span class="annot"><span class="annottext">(InstanceModel -&gt; Contents) -&gt; [InstanceModel] -&gt; [Contents]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="annot"><span class="annottext">(LabelledContent -&gt; Contents)
@@ -1448,10 +1445,10 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><a href="#local-6989586621679102686"><span class="hs-identifier hs-var">fields</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102684"><span class="hs-identifier hs-var">si'</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
 </span><a href="#local-6989586621679102687"><span class="hs-identifier hs-var">ims</span></a></span><span>
-</span><span id="line-344"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102688"><span class="annot"><span class="annottext">System
+</span><span id="line-341"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span id="local-6989586621679102688"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102688"><span class="hs-identifier hs-var">si'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#Assumptions"><span class="hs-identifier hs-type">Assumptions</span></a></span><span> </span><span id="local-6989586621679102690"><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="#local-6989586621679102690"><span class="hs-identifier hs-var">ci</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-345"></span><span>      </span><span class="annot"><span class="annottext">[Contents] -&gt; Section
+</span><span id="line-342"></span><span>      </span><span class="annot"><span class="annottext">[Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#assumpF"><span class="hs-identifier hs-var">SSD.assumpF</span></a></span><span> </span><span class="annot"><span class="annottext">([Contents] -&gt; Section) -&gt; [Contents] -&gt; Section
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance] -&gt; [Contents]
@@ -1468,7 +1465,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#helperCI"><span class="hs-operator hs-var">`SSD.helperCI`</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102688"><span class="hs-identifier hs-var">si'</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="#local-6989586621679102690"><span class="hs-identifier hs-var">ci</span></a></span><span>
-</span><span id="line-346"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span class="annot"><span class="annottext">System
+</span><span id="line-343"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#Constraints"><span class="hs-identifier hs-type">Constraints</span></a></span><span> </span><span id="local-6989586621679102702"><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679102702"><span class="hs-identifier hs-var">end</span></a></span></span><span> </span><span id="local-6989586621679102703"><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679102703"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [c] -&gt; Section
@@ -1479,7 +1476,7 @@ Sentence -&gt; [c] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#datConF"><span class="hs-identifier hs-var">SSD.datConF</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679102702"><span class="hs-identifier hs-var">end</span></a></span><span> </span><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679102703"><span class="hs-identifier hs-var">cs</span></a></span><span>
-</span><span id="line-347"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span class="annot"><span class="annottext">System
+</span><span id="line-344"></span><span>    </span><span class="annot"><a href="#local-6989586621679102643"><span class="hs-identifier hs-var">mkSubSCS</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#CorrSolnPpties"><span class="hs-identifier hs-type">CorrSolnPpties</span></a></span><span> </span><span id="local-6989586621679102709"><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679102709"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679102710"><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102710"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[c] -&gt; [Contents] -&gt; Section
@@ -1489,12 +1486,12 @@ forall c.
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#propCorSolF"><span class="hs-identifier hs-var">SSD.propCorSolF</span></a></span><span> </span><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679102709"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102710"><span class="hs-identifier hs-var">cs</span></a></span><span>
-</span><span id="line-348"></span><span>
-</span><span id="line-349"></span><span class="annot"><span class="hs-comment">-- ** Requirements</span></span><span>
-</span><span id="line-350"></span><span>
-</span><span id="line-351"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Requirements section.</span></span><span>
-</span><span id="line-352"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkReqrmntSec"><span class="hs-identifier hs-type">mkReqrmntSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#ReqrmntSec"><span class="hs-identifier hs-type">ReqrmntSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-353"></span><span id="mkReqrmntSec"><span class="annot"><span class="annottext">mkReqrmntSec :: ReqrmntSec -&gt; Section
+</span><span id="line-345"></span><span>
+</span><span id="line-346"></span><span class="annot"><span class="hs-comment">-- ** Requirements</span></span><span>
+</span><span id="line-347"></span><span>
+</span><span id="line-348"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Requirements section.</span></span><span>
+</span><span id="line-349"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkReqrmntSec"><span class="hs-identifier hs-type">mkReqrmntSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#ReqrmntSec"><span class="hs-identifier hs-type">ReqrmntSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-350"></span><span id="mkReqrmntSec"><span class="annot"><span class="annottext">mkReqrmntSec :: ReqrmntSec -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkReqrmntSec"><span class="hs-identifier hs-var hs-var">mkReqrmntSec</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#ReqsProg"><span class="hs-identifier hs-type">ReqsProg</span></a></span><span> </span><span id="local-6989586621679102712"><span class="annot"><span class="annottext">[ReqsSub]
 </span><a href="#local-6989586621679102712"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Section] -&gt; Section
 </span><a href="Drasil.Sections.Requirements.html#reqF"><span class="hs-identifier hs-var">R.reqF</span></a></span><span> </span><span class="annot"><span class="annottext">([Section] -&gt; Section) -&gt; [Section] -&gt; Section
@@ -1504,9 +1501,9 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ReqsSub -&gt; Section
 </span><a href="#local-6989586621679102713"><span class="hs-identifier hs-var">mkSubs</span></a></span><span> </span><span class="annot"><span class="annottext">[ReqsSub]
 </span><a href="#local-6989586621679102712"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-354"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-355"></span><span>    </span><span class="annot"><a href="#local-6989586621679102713"><span class="hs-identifier hs-type">mkSubs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#ReqsSub"><span class="hs-identifier hs-type">ReqsSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-356"></span><span>    </span><span id="local-6989586621679102713"><span class="annot"><span class="annottext">mkSubs :: ReqsSub -&gt; Section
+</span><span id="line-351"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-352"></span><span>    </span><span class="annot"><a href="#local-6989586621679102713"><span class="hs-identifier hs-type">mkSubs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#ReqsSub"><span class="hs-identifier hs-type">ReqsSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-353"></span><span>    </span><span id="local-6989586621679102713"><span class="annot"><span class="annottext">mkSubs :: ReqsSub -&gt; Section
 </span><a href="#local-6989586621679102713"><span class="hs-identifier hs-var hs-var">mkSubs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#FReqsSub"><span class="hs-identifier hs-type">FReqsSub</span></a></span><span>  </span><span id="local-6989586621679102715"><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="#local-6989586621679102715"><span class="hs-identifier hs-var">frs</span></a></span></span><span> </span><span id="local-6989586621679102716"><span class="annot"><span class="annottext">[LabelledContent]
 </span><a href="#local-6989586621679102716"><span class="hs-identifier hs-var">tbs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; Section
@@ -1522,7 +1519,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="annot"><span class="annottext">[LabelledContent]
 </span><a href="#local-6989586621679102716"><span class="hs-identifier hs-var">tbs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-357"></span><span>    </span><span class="annot"><a href="#local-6989586621679102713"><span class="hs-identifier hs-var">mkSubs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#NonFReqsSub"><span class="hs-identifier hs-type">NonFReqsSub</span></a></span><span> </span><span id="local-6989586621679102718"><span class="annot"><span class="annottext">[ConceptInstance]
+</span><span id="line-354"></span><span>    </span><span class="annot"><a href="#local-6989586621679102713"><span class="hs-identifier hs-var">mkSubs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#NonFReqsSub"><span class="hs-identifier hs-type">NonFReqsSub</span></a></span><span> </span><span id="local-6989586621679102718"><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="#local-6989586621679102718"><span class="hs-identifier hs-var">nfrs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; Section
 </span><a href="Drasil.Sections.Requirements.html#nfReqF"><span class="hs-identifier hs-var">R.nfReqF</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[ConceptInstance] -&gt; [Contents]
 forall c.
@@ -1530,12 +1527,12 @@ forall c.
 [c] -&gt; [Contents]
 </span><span class="hs-identifier hs-var">mkEnumSimpleD</span></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="#local-6989586621679102718"><span class="hs-identifier hs-var">nfrs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-358"></span><span>
-</span><span id="line-359"></span><span class="annot"><span class="hs-comment">-- ** Likely Changes</span></span><span>
-</span><span id="line-360"></span><span>
-</span><span id="line-361"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Likely Changes section.</span></span><span>
-</span><span id="line-362"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkLCsSec"><span class="hs-identifier hs-type">mkLCsSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#LCsSec"><span class="hs-identifier hs-type">LCsSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-363"></span><span id="mkLCsSec"><span class="annot"><span class="annottext">mkLCsSec :: LCsSec -&gt; Section
+</span><span id="line-355"></span><span>
+</span><span id="line-356"></span><span class="annot"><span class="hs-comment">-- ** Likely Changes</span></span><span>
+</span><span id="line-357"></span><span>
+</span><span id="line-358"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Likely Changes section.</span></span><span>
+</span><span id="line-359"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkLCsSec"><span class="hs-identifier hs-type">mkLCsSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#LCsSec"><span class="hs-identifier hs-type">LCsSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-360"></span><span id="mkLCsSec"><span class="annot"><span class="annottext">mkLCsSec :: LCsSec -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkLCsSec"><span class="hs-identifier hs-var hs-var">mkLCsSec</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#LCsProg"><span class="hs-identifier hs-type">LCsProg</span></a></span><span> </span><span id="local-6989586621679102720"><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="#local-6989586621679102720"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#likeChg"><span class="hs-identifier hs-var">SRS.likeChg</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; [ConceptInstance] -&gt; Contents
@@ -1550,12 +1547,12 @@ forall c.
 [c] -&gt; [Contents]
 </span><span class="hs-identifier hs-var">mkEnumSimpleD</span></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="#local-6989586621679102720"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-364"></span><span>
-</span><span id="line-365"></span><span class="annot"><span class="hs-comment">-- ** Unlikely Changes</span></span><span>
-</span><span id="line-366"></span><span>
-</span><span id="line-367"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Unikely Changes section.</span></span><span>
-</span><span id="line-368"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkUCsSec"><span class="hs-identifier hs-type">mkUCsSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#UCsSec"><span class="hs-identifier hs-type">UCsSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-369"></span><span id="mkUCsSec"><span class="annot"><span class="annottext">mkUCsSec :: UCsSec -&gt; Section
+</span><span id="line-361"></span><span>
+</span><span id="line-362"></span><span class="annot"><span class="hs-comment">-- ** Unlikely Changes</span></span><span>
+</span><span id="line-363"></span><span>
+</span><span id="line-364"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Unikely Changes section.</span></span><span>
+</span><span id="line-365"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkUCsSec"><span class="hs-identifier hs-type">mkUCsSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#UCsSec"><span class="hs-identifier hs-type">UCsSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-366"></span><span id="mkUCsSec"><span class="annot"><span class="annottext">mkUCsSec :: UCsSec -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkUCsSec"><span class="hs-identifier hs-var hs-var">mkUCsSec</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#UCsProg"><span class="hs-identifier hs-type">UCsProg</span></a></span><span> </span><span id="local-6989586621679102723"><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="#local-6989586621679102723"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#unlikeChg"><span class="hs-identifier hs-var">SRS.unlikeChg</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; [ConceptInstance] -&gt; Contents
@@ -1570,10 +1567,10 @@ forall c.
 [c] -&gt; [Contents]
 </span><span class="hs-identifier hs-var">mkEnumSimpleD</span></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="#local-6989586621679102723"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-370"></span><span>
-</span><span id="line-371"></span><span class="annot"><span class="hs-comment">-- | Intro paragraph for likely and unlikely changes</span></span><span>
-</span><span id="line-372"></span><span id="local-6989586621679101919"><span class="annot"><a href="Drasil.DocumentLanguage.html#introChgs"><span class="hs-identifier hs-type">introChgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679101919"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679101919"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
-</span><span id="line-373"></span><span id="introChgs"><span class="annot"><span class="annottext">introChgs :: forall n. NamedIdea n =&gt; n -&gt; [ConceptInstance] -&gt; Contents
+</span><span id="line-367"></span><span>
+</span><span id="line-368"></span><span class="annot"><span class="hs-comment">-- | Intro paragraph for likely and unlikely changes</span></span><span>
+</span><span id="line-369"></span><span id="local-6989586621679101919"><span class="annot"><a href="Drasil.DocumentLanguage.html#introChgs"><span class="hs-identifier hs-type">introChgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679101919"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679101919"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
+</span><span id="line-370"></span><span id="introChgs"><span class="annot"><span class="annottext">introChgs :: forall n. NamedIdea n =&gt; n -&gt; [ConceptInstance] -&gt; Contents
 </span><a href="Drasil.DocumentLanguage.html#introChgs"><span class="hs-identifier hs-var hs-var">introChgs</span></a></span></span><span> </span><span id="local-6989586621679102730"><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679102730"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Contents) -&gt; Sentence -&gt; Contents
@@ -1582,7 +1579,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall n. NamedIdea n =&gt; [n] -&gt; Sentence
 </span><a href="Drasil.Sections.ReferenceMaterial.html#emptySectSentPlu"><span class="hs-identifier hs-var">emptySectSentPlu</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679102730"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-374"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#introChgs"><span class="hs-identifier hs-var">introChgs</span></a></span><span> </span><span id="local-6989586621679102731"><span class="annot"><span class="annottext">n
+</span><span id="line-371"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#introChgs"><span class="hs-identifier hs-var">introChgs</span></a></span><span> </span><span id="local-6989586621679102731"><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679102731"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -1593,7 +1590,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">Doc.section_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;lists the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-375"></span><span>  </span><span class="annot"><span class="annottext">n -&gt; Sentence
+</span><span id="line-372"></span><span>  </span><span class="annot"><span class="annottext">n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679102731"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -1602,12 +1599,12 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.software</span></span><span class="hs-special">]</span><span>
-</span><span id="line-376"></span><span>
-</span><span id="line-377"></span><span class="annot"><span class="hs-comment">-- ** Traceability</span></span><span>
-</span><span id="line-378"></span><span>
-</span><span id="line-379"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Traceability Matrices and Graphs section.</span></span><span>
-</span><span id="line-380"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkTraceabilitySec"><span class="hs-identifier hs-type">mkTraceabilitySec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TraceabilitySec"><span class="hs-identifier hs-type">TraceabilitySec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-381"></span><span id="mkTraceabilitySec"><span class="annot"><span class="annottext">mkTraceabilitySec :: TraceabilitySec -&gt; System -&gt; Section
+</span><span id="line-373"></span><span>
+</span><span id="line-374"></span><span class="annot"><span class="hs-comment">-- ** Traceability</span></span><span>
+</span><span id="line-375"></span><span>
+</span><span id="line-376"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Traceability Matrices and Graphs section.</span></span><span>
+</span><span id="line-377"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkTraceabilitySec"><span class="hs-identifier hs-type">mkTraceabilitySec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TraceabilitySec"><span class="hs-identifier hs-type">TraceabilitySec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-378"></span><span id="mkTraceabilitySec"><span class="annot"><span class="annottext">mkTraceabilitySec :: TraceabilitySec -&gt; System -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkTraceabilitySec"><span class="hs-identifier hs-var hs-var">mkTraceabilitySec</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TraceabilityProg"><span class="hs-identifier hs-type">TraceabilityProg</span></a></span><span> </span><span id="local-6989586621679102736"><span class="annot"><span class="annottext">[TraceConfig]
 </span><a href="#local-6989586621679102736"><span class="hs-identifier hs-var">progs</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679102737"><span class="annot"><span class="annottext">si :: System
 </span><a href="#local-6989586621679102737"><span class="hs-identifier hs-var">si</span></a></span></span><span class="hs-glyph">@</span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span class="hs-special">{</span><span class="annot"><span class="annottext">_sys :: ()
@@ -1616,7 +1613,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 -&gt; [Sentence] -&gt; [Contents] -&gt; String -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceMGF"><span class="hs-identifier hs-var">TG.traceMGF</span></a></span><span> </span><span class="annot"><span class="annottext">[LabelledContent]
 </span><a href="#local-6989586621679102754"><span class="hs-identifier hs-var">trace</span></a></span><span>
-</span><span id="line-382"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(TraceConfig -&gt; Sentence) -&gt; [TraceConfig] -&gt; [Sentence]
+</span><span id="line-379"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(TraceConfig -&gt; Sentence) -&gt; [TraceConfig] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TraceConfig"><span class="hs-identifier hs-type">TraceConfig</span></a></span><span> </span><span class="annot"><span class="annottext">UID
 </span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679102756"><span class="annot"><span class="annottext">[Sentence]
@@ -1629,7 +1626,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="#local-6989586621679102756"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[TraceConfig]
 </span><a href="#local-6989586621679102757"><span class="hs-identifier hs-var">fProgs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-383"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(LabelledContent -&gt; Contents) -&gt; [LabelledContent] -&gt; [Contents]
+</span><span id="line-380"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(LabelledContent -&gt; Contents) -&gt; [LabelledContent] -&gt; [Contents]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="annot"><span class="annottext">[LabelledContent]
@@ -1637,8 +1634,8 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">programName</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679102753"><span class="hs-identifier hs-var">sys</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-384"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-385"></span><span>    </span><span id="local-6989586621679102754"><span class="annot"><span class="annottext">trace :: [LabelledContent]
+</span><span id="line-381"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-382"></span><span>    </span><span id="local-6989586621679102754"><span class="annot"><span class="annottext">trace :: [LabelledContent]
 </span><a href="#local-6989586621679102754"><span class="hs-identifier hs-var hs-var">trace</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TraceConfig -&gt; LabelledContent)
 -&gt; [TraceConfig] -&gt; [LabelledContent]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -1648,7 +1645,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="#local-6989586621679102759"><span class="hs-identifier hs-var">desc</span></a></span></span><span> </span><span id="local-6989586621679102760"><span class="annot"><span class="annottext">[TraceViewCat]
 </span><a href="#local-6989586621679102760"><span class="hs-identifier hs-var">cols</span></a></span></span><span> </span><span id="local-6989586621679102761"><span class="annot"><span class="annottext">[TraceViewCat]
 </span><a href="#local-6989586621679102761"><span class="hs-identifier hs-var">rows</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><span id="line-386"></span><span>      </span><span class="annot"><span class="annottext">UID
+</span><span id="line-383"></span><span>      </span><span class="annot"><span class="annottext">UID
 -&gt; Sentence
 -&gt; [TraceViewCat]
 -&gt; [TraceViewCat]
@@ -1661,7 +1658,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="#local-6989586621679102761"><span class="hs-identifier hs-var">rows</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102737"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[TraceConfig]
 </span><a href="#local-6989586621679102757"><span class="hs-identifier hs-var">fProgs</span></a></span><span>
-</span><span id="line-387"></span><span>    </span><span id="local-6989586621679102757"><span class="annot"><span class="annottext">fProgs :: [TraceConfig]
+</span><span id="line-384"></span><span>    </span><span id="local-6989586621679102757"><span class="annot"><span class="annottext">fProgs :: [TraceConfig]
 </span><a href="#local-6989586621679102757"><span class="hs-identifier hs-var hs-var">fProgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TraceConfig -&gt; Bool) -&gt; [TraceConfig] -&gt; [TraceConfig]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TraceConfig"><span class="hs-identifier hs-type">TraceConfig</span></a></span><span> </span><span class="annot"><span class="annottext">UID
@@ -1670,7 +1667,7 @@ forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679102764"><span class="annot"><span class="annottext">[TraceViewCat]
 </span><a href="#local-6989586621679102764"><span class="hs-identifier hs-var">cols</span></a></span></span><span> </span><span id="local-6989586621679102765"><span class="annot"><span class="annottext">[TraceViewCat]
 </span><a href="#local-6989586621679102765"><span class="hs-identifier hs-var">rows</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><span id="line-388"></span><span>      </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span id="line-385"></span><span>      </span><span class="annot"><span class="annottext">Bool -&gt; Bool
 </span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; Bool -&gt; Bool
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Bool
@@ -1682,7 +1679,7 @@ forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><a href="#local-6989586621679102765"><span class="hs-identifier hs-var">rows</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102737"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102737"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-389"></span><span>         </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span id="line-386"></span><span>         </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">||</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Bool
 forall a. [a] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
@@ -1693,10 +1690,10 @@ forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><a href="#local-6989586621679102737"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679102737"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[TraceConfig]
 </span><a href="#local-6989586621679102736"><span class="hs-identifier hs-var">progs</span></a></span><span>
-</span><span id="line-390"></span><span>
-</span><span id="line-391"></span><span class="annot"><span class="hs-comment">-- | Helper to get headers of rows and columns</span></span><span>
-</span><span id="line-392"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#header"><span class="hs-identifier hs-type">header</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-393"></span><span id="header"><span class="annot"><span class="annottext">header :: ([UID] -&gt; [UID]) -&gt; System -&gt; [Sentence]
+</span><span id="line-387"></span><span>
+</span><span id="line-388"></span><span class="annot"><span class="hs-comment">-- | Helper to get headers of rows and columns</span></span><span>
+</span><span id="line-389"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#header"><span class="hs-identifier hs-type">header</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-390"></span><span id="header"><span class="annot"><span class="annottext">header :: ([UID] -&gt; [UID]) -&gt; System -&gt; [Sentence]
 </span><a href="Drasil.DocumentLanguage.html#header"><span class="hs-identifier hs-var hs-var">header</span></a></span></span><span> </span><span id="local-6989586621679102770"><span class="annot"><span class="annottext">[UID] -&gt; [UID]
 </span><a href="#local-6989586621679102770"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(System -&gt; [UID]) -&gt; System -&gt; [Sentence]
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMHeader"><span class="hs-identifier hs-var">TM.traceMHeader</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[UID] -&gt; [UID]
@@ -1714,22 +1711,22 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasSystem c =&gt; Lens' c (Map UID [UID])
 Lens' System (Map UID [UID])
 </span><span class="hs-identifier hs-var">refbyTable</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-394"></span><span>
-</span><span id="line-395"></span><span class="annot"><span class="hs-comment">-- ** Off the Shelf Solutions</span></span><span>
-</span><span id="line-396"></span><span>
-</span><span id="line-397"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Off-the-Shelf Solutions section.</span></span><span>
-</span><span id="line-398"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkOffShelfSolnSec"><span class="hs-identifier hs-type">mkOffShelfSolnSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#OffShelfSolnsSec"><span class="hs-identifier hs-type">OffShelfSolnsSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-399"></span><span id="mkOffShelfSolnSec"><span class="annot"><span class="annottext">mkOffShelfSolnSec :: OffShelfSolnsSec -&gt; Section
+</span><span id="line-391"></span><span>
+</span><span id="line-392"></span><span class="annot"><span class="hs-comment">-- ** Off the Shelf Solutions</span></span><span>
+</span><span id="line-393"></span><span>
+</span><span id="line-394"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Off-the-Shelf Solutions section.</span></span><span>
+</span><span id="line-395"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkOffShelfSolnSec"><span class="hs-identifier hs-type">mkOffShelfSolnSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#OffShelfSolnsSec"><span class="hs-identifier hs-type">OffShelfSolnsSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-396"></span><span id="mkOffShelfSolnSec"><span class="annot"><span class="annottext">mkOffShelfSolnSec :: OffShelfSolnsSec -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkOffShelfSolnSec"><span class="hs-identifier hs-var hs-var">mkOffShelfSolnSec</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#OffShelfSolnsProg"><span class="hs-identifier hs-type">OffShelfSolnsProg</span></a></span><span> </span><span id="local-6989586621679102772"><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102772"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#offShelfSol"><span class="hs-identifier hs-var">SRS.offShelfSol</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102772"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-400"></span><span>
-</span><span id="line-401"></span><span class="annot"><span class="hs-comment">-- ** Auxiliary Constants</span></span><span>
-</span><span id="line-402"></span><span>
-</span><span id="line-403"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Values of Auxiliary Constants section.</span></span><span>
-</span><span id="line-404"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkAuxConsSec"><span class="hs-identifier hs-type">mkAuxConsSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#AuxConstntSec"><span class="hs-identifier hs-type">AuxConstntSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-405"></span><span id="mkAuxConsSec"><span class="annot"><span class="annottext">mkAuxConsSec :: AuxConstntSec -&gt; Section
+</span><span id="line-397"></span><span>
+</span><span id="line-398"></span><span class="annot"><span class="hs-comment">-- ** Auxiliary Constants</span></span><span>
+</span><span id="line-399"></span><span>
+</span><span id="line-400"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Values of Auxiliary Constants section.</span></span><span>
+</span><span id="line-401"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkAuxConsSec"><span class="hs-identifier hs-type">mkAuxConsSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#AuxConstntSec"><span class="hs-identifier hs-type">AuxConstntSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-402"></span><span id="mkAuxConsSec"><span class="annot"><span class="annottext">mkAuxConsSec :: AuxConstntSec -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkAuxConsSec"><span class="hs-identifier hs-var hs-var">mkAuxConsSec</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#AuxConsProg"><span class="hs-identifier hs-type">AuxConsProg</span></a></span><span> </span><span id="local-6989586621679102774"><span class="annot"><span class="annottext">CI
 </span><a href="#local-6989586621679102774"><span class="hs-identifier hs-var">key</span></a></span></span><span> </span><span id="local-6989586621679102775"><span class="annot"><span class="annottext">[ConstQDef]
 </span><a href="#local-6989586621679102775"><span class="hs-identifier hs-var">listOfCons</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; [ConstQDef] -&gt; Section
@@ -1741,12 +1738,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. HasSymbol a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">sortBySymbol</span></span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
 </span><a href="#local-6989586621679102775"><span class="hs-identifier hs-var">listOfCons</span></a></span><span>
-</span><span id="line-406"></span><span>
-</span><span id="line-407"></span><span class="annot"><span class="hs-comment">-- ** References</span></span><span>
-</span><span id="line-408"></span><span>
-</span><span id="line-409"></span><span class="annot"><span class="hs-comment">-- | Helper for making the References section.</span></span><span>
-</span><span id="line-410"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkBib"><span class="hs-identifier hs-type">mkBib</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-411"></span><span id="mkBib"><span class="annot"><span class="annottext">mkBib :: BibRef -&gt; Section
+</span><span id="line-403"></span><span>
+</span><span id="line-404"></span><span class="annot"><span class="hs-comment">-- ** References</span></span><span>
+</span><span id="line-405"></span><span>
+</span><span id="line-406"></span><span class="annot"><span class="hs-comment">-- | Helper for making the References section.</span></span><span>
+</span><span id="line-407"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkBib"><span class="hs-identifier hs-type">mkBib</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-408"></span><span id="mkBib"><span class="annot"><span class="annottext">mkBib :: BibRef -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkBib"><span class="hs-identifier hs-var hs-var">mkBib</span></a></span></span><span> </span><span id="local-6989586621679102776"><span class="annot"><span class="annottext">BibRef
 </span><a href="#local-6989586621679102776"><span class="hs-identifier hs-var">bib</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#reference"><span class="hs-identifier hs-var">SRS.reference</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnlabelledContent -&gt; Contents
@@ -1756,32 +1753,32 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">ulcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">BibRef -&gt; RawContent
 </span><span class="hs-identifier hs-var">Bib</span></span><span> </span><span class="annot"><span class="annottext">BibRef
 </span><a href="#local-6989586621679102776"><span class="hs-identifier hs-var">bib</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-412"></span><span>
-</span><span id="line-413"></span><span class="annot"><span class="hs-comment">-- ** Appendix</span></span><span>
-</span><span id="line-414"></span><span>
-</span><span id="line-415"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Appendix section.</span></span><span>
-</span><span id="line-416"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkAppndxSec"><span class="hs-identifier hs-type">mkAppndxSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#AppndxSec"><span class="hs-identifier hs-type">AppndxSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-417"></span><span id="mkAppndxSec"><span class="annot"><span class="annottext">mkAppndxSec :: AppndxSec -&gt; Section
+</span><span id="line-409"></span><span>
+</span><span id="line-410"></span><span class="annot"><span class="hs-comment">-- ** Appendix</span></span><span>
+</span><span id="line-411"></span><span>
+</span><span id="line-412"></span><span class="annot"><span class="hs-comment">-- | Helper for making the Appendix section.</span></span><span>
+</span><span id="line-413"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#mkAppndxSec"><span class="hs-identifier hs-type">mkAppndxSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#AppndxSec"><span class="hs-identifier hs-type">AppndxSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-414"></span><span id="mkAppndxSec"><span class="annot"><span class="annottext">mkAppndxSec :: AppndxSec -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#mkAppndxSec"><span class="hs-identifier hs-var hs-var">mkAppndxSec</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#AppndxProg"><span class="hs-identifier hs-type">AppndxProg</span></a></span><span> </span><span id="local-6989586621679102779"><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102779"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#appendix"><span class="hs-identifier hs-var">SRS.appendix</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679102779"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-418"></span><span>
-</span><span id="line-419"></span><span class="annot"><span class="hs-comment">-- ** Find Table of Contents</span></span><span>
-</span><span id="line-420"></span><span>
-</span><span id="line-421"></span><span class="hs-comment">-- Find more concise way to do this</span><span>
-</span><span id="line-422"></span><span class="annot"><span class="hs-comment">-- | Finds whether the Table of Contents is in a SRSDecl.</span></span><span>
-</span><span id="line-423"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#findToC"><span class="hs-identifier hs-type">findToC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocDecl.html#SRSDecl"><span class="hs-identifier hs-type">SRSDecl</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ShowTableOfContents</span></span><span>
-</span><span id="line-424"></span><span id="findToC"><span class="annot"><span class="annottext">findToC :: SRSDecl -&gt; ShowTableOfContents
+</span><span id="line-415"></span><span>
+</span><span id="line-416"></span><span class="annot"><span class="hs-comment">-- ** Find Table of Contents</span></span><span>
+</span><span id="line-417"></span><span>
+</span><span id="line-418"></span><span class="hs-comment">-- Find more concise way to do this</span><span>
+</span><span id="line-419"></span><span class="annot"><span class="hs-comment">-- | Finds whether the Table of Contents is in a SRSDecl.</span></span><span>
+</span><span id="line-420"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#findToC"><span class="hs-identifier hs-type">findToC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocDecl.html#SRSDecl"><span class="hs-identifier hs-type">SRSDecl</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ShowTableOfContents</span></span><span>
+</span><span id="line-421"></span><span id="findToC"><span class="annot"><span class="annottext">findToC :: SRSDecl -&gt; ShowTableOfContents
 </span><a href="Drasil.DocumentLanguage.html#findToC"><span class="hs-identifier hs-var hs-var">findToC</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ShowTableOfContents
 </span><span class="hs-identifier hs-var">NoToC</span></span><span>
-</span><span id="line-425"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#findToC"><span class="hs-identifier hs-var">findToC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DocSection
+</span><span id="line-422"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#findToC"><span class="hs-identifier hs-var">findToC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DocSection
 </span><a href="Drasil.DocDecl.html#TableOfContents"><span class="hs-identifier hs-var">DD.TableOfContents</span></a></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="annot"><span class="annottext">SRSDecl
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ShowTableOfContents
 </span><span class="hs-identifier hs-var">ToC</span></span><span>
-</span><span id="line-426"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#findToC"><span class="hs-identifier hs-var">findToC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DocSection
+</span><span id="line-423"></span><span class="annot"><a href="Drasil.DocumentLanguage.html#findToC"><span class="hs-identifier hs-var">findToC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DocSection
 </span><span class="hs-identifier">_</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679102783"><span class="annot"><span class="annottext">SRSDecl
 </span><a href="#local-6989586621679102783"><span class="hs-identifier hs-var">dds</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SRSDecl -&gt; ShowTableOfContents
 </span><a href="Drasil.DocumentLanguage.html#findToC"><span class="hs-identifier hs-var">findToC</span></a></span><span> </span><span class="annot"><span class="annottext">SRSDecl
 </span><a href="#local-6989586621679102783"><span class="hs-identifier hs-var">dds</span></a></span><span>
-</span><span id="line-427"></span></pre></body></html>
+</span><span id="line-424"></span></pre></body></html>

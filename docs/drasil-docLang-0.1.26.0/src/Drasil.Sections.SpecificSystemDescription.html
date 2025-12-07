@@ -480,11 +480,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;can be verified&quot;</span></span><span class="hs-special">]</span><span>
 </span><span id="line-121"></span><span>
-</span><span id="line-122"></span><span>
-</span><span id="line-123"></span><span class="hs-comment">-- Wrappers for assumpIntro. Use assumpF' if genDefs is not needed</span><span>
-</span><span id="line-124"></span><span class="annot"><span class="hs-comment">-- | Creates an Assumptions section by prepending a general introduction to other related 'Contents'.</span></span><span>
-</span><span id="line-125"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#assumpF"><span class="hs-identifier hs-type">assumpF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-126"></span><span id="assumpF"><span class="annot"><span class="annottext">assumpF :: [Contents] -&gt; Section
+</span><span id="line-122"></span><span class="hs-comment">-- Wrappers for assumpIntro. Use assumpF' if genDefs is not needed</span><span>
+</span><span id="line-123"></span><span class="annot"><span class="hs-comment">-- | Creates an Assumptions section by prepending a general introduction to other related 'Contents'.</span></span><span>
+</span><span id="line-124"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#assumpF"><span class="hs-identifier hs-type">assumpF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-125"></span><span id="assumpF"><span class="annot"><span class="annottext">assumpF :: [Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#assumpF"><span class="hs-identifier hs-var hs-var">assumpF</span></a></span></span><span> </span><span id="local-6989586621679099023"><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099023"><span class="hs-identifier hs-var">otherContents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#assumpt"><span class="hs-identifier hs-var">SRS.assumpt</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Contents] -&gt; Contents
@@ -494,9 +493,9 @@ forall a. [a] -&gt; Contents
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099023"><span class="hs-identifier hs-var">otherContents</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-127"></span><span>
-</span><span id="line-128"></span><span id="local-6989586621679098627"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#assumpIntro"><span class="hs-identifier hs-type">assumpIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098627"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
-</span><span id="line-129"></span><span id="assumpIntro"><span class="annot"><span class="annottext">assumpIntro :: forall a. [a] -&gt; Contents
+</span><span id="line-126"></span><span>
+</span><span id="line-127"></span><span id="local-6989586621679098627"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#assumpIntro"><span class="hs-identifier hs-type">assumpIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098627"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
+</span><span id="line-128"></span><span id="assumpIntro"><span class="annot"><span class="annottext">assumpIntro :: forall a. [a] -&gt; Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#assumpIntro"><span class="hs-identifier hs-var hs-var">assumpIntro</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Contents) -&gt; Sentence -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -504,13 +503,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall n. NamedIdea n =&gt; [n] -&gt; Sentence
 </span><a href="Drasil.Sections.ReferenceMaterial.html#emptySectSentPlu"><span class="hs-identifier hs-var">emptySectSentPlu</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">assumption</span></span><span class="hs-special">]</span><span>
-</span><span id="line-130"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#assumpIntro"><span class="hs-identifier hs-var">assumpIntro</span></a></span><span> </span><span class="annot"><span class="annottext">[a]
+</span><span id="line-129"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#assumpIntro"><span class="hs-identifier hs-var">assumpIntro</span></a></span><span> </span><span class="annot"><span class="annottext">[a]
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Contents) -&gt; Sentence -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-131"></span><span>                  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-130"></span><span>                  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;This&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -521,7 +520,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">problem</span></span><span class="hs-special">,</span><span>
-</span><span id="line-132"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-131"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and helps in developing the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -529,7 +528,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;by filling in the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-133"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-132"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;missing&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -541,7 +540,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">physicalSystem</span></span><span class="hs-special">,</span><span>
-</span><span id="line-134"></span><span>                  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span id="line-133"></span><span>                  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="annot"><span class="annottext">(NPStruct -&gt; Sentence) -&gt; NPStruct -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -555,18 +554,18 @@ forall c. NamedIdea c =&gt; c -&gt; NP
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">scope</span></span><span class="hs-special">,</span><span>
-</span><span id="line-135"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-134"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;by providing more detail&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-136"></span><span>
-</span><span id="line-137"></span><span class="annot"><span class="hs-comment">-- | Wrapper for 'thModelIntro'. Takes the program name and other 'Contents'.</span></span><span>
-</span><span id="line-138"></span><span id="local-6989586621679098629"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#thModF"><span class="hs-identifier hs-type">thModF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679098629"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679098629"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
-</span><span id="line-139"></span><span id="thModF"><span class="annot"><span class="annottext">thModF :: forall a. Idea a =&gt; a -&gt; [Contents] -&gt; Section
+</span><span id="line-135"></span><span>
+</span><span id="line-136"></span><span class="annot"><span class="hs-comment">-- | Wrapper for 'thModelIntro'. Takes the program name and other 'Contents'.</span></span><span>
+</span><span id="line-137"></span><span id="local-6989586621679098629"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#thModF"><span class="hs-identifier hs-type">thModF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679098629"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679098629"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
+</span><span id="line-138"></span><span id="thModF"><span class="annot"><span class="annottext">thModF :: forall a. Idea a =&gt; a -&gt; [Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#thModF"><span class="hs-identifier hs-var hs-var">thModF</span></a></span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-identifier">_</span></span><span>        </span><span class="hs-special">[</span><span class="hs-special">]</span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#thModel"><span class="hs-identifier hs-var">SRS.thModel</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#thModIntroNoContent"><span class="hs-identifier hs-var">thModIntroNoContent</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-140"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#thModF"><span class="hs-identifier hs-var">thModF</span></a></span><span> </span><span id="local-6989586621679099039"><span class="annot"><span class="annottext">a
+</span><span id="line-139"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#thModF"><span class="hs-identifier hs-var">thModF</span></a></span><span> </span><span id="local-6989586621679099039"><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679099039"><span class="hs-identifier hs-var">progName</span></a></span></span><span> </span><span id="local-6989586621679099040"><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099040"><span class="hs-identifier hs-var">otherContents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#thModel"><span class="hs-identifier hs-var">SRS.thModel</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; Contents
@@ -575,12 +574,12 @@ forall a. Idea a =&gt; a -&gt; Contents
 </span><a href="#local-6989586621679099039"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">Contents -&gt; [Contents] -&gt; [Contents]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span>
-</span><span id="line-141"></span><span>                                              </span><span class="annot"><span class="annottext">[Contents]
+</span><span id="line-140"></span><span>                                              </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099040"><span class="hs-identifier hs-var">otherContents</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-142"></span><span>
-</span><span id="line-143"></span><span class="annot"><span class="hs-comment">-- | Creates a eneralized Theoretical Model introduction given the program name.</span></span><span>
-</span><span id="line-144"></span><span id="local-6989586621679098631"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#thModIntro"><span class="hs-identifier hs-type">thModIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679098631"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679098631"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
-</span><span id="line-145"></span><span id="thModIntro"><span class="annot"><span class="annottext">thModIntro :: forall a. Idea a =&gt; a -&gt; Contents
+</span><span id="line-141"></span><span>
+</span><span id="line-142"></span><span class="annot"><span class="hs-comment">-- | Creates a eneralized Theoretical Model introduction given the program name.</span></span><span>
+</span><span id="line-143"></span><span id="local-6989586621679098631"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#thModIntro"><span class="hs-identifier hs-type">thModIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679098631"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679098631"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
+</span><span id="line-144"></span><span id="thModIntro"><span class="annot"><span class="annottext">thModIntro :: forall a. Idea a =&gt; a -&gt; Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#thModIntro"><span class="hs-identifier hs-var hs-var">thModIntro</span></a></span></span><span> </span><span id="local-6989586621679099047"><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679099047"><span class="hs-identifier hs-var">progName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -591,7 +590,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">section_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;focuses on the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-146"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-145"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">general</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -606,9 +605,9 @@ forall c. Idea c =&gt; c -&gt; Sentence
 </span><a href="#local-6989586621679099047"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is based on&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-147"></span><span>
-</span><span id="line-148"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#thModIntroNoContent"><span class="hs-identifier hs-type">thModIntroNoContent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-149"></span><span id="thModIntroNoContent"><span class="annot"><span class="annottext">thModIntroNoContent :: Contents
+</span><span id="line-146"></span><span>
+</span><span id="line-147"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#thModIntroNoContent"><span class="hs-identifier hs-type">thModIntroNoContent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-148"></span><span id="thModIntroNoContent"><span class="annot"><span class="annottext">thModIntroNoContent :: Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#thModIntroNoContent"><span class="hs-identifier hs-var hs-var">thModIntroNoContent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Contents) -&gt; Sentence -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -616,11 +615,11 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall n. NamedIdea n =&gt; [n] -&gt; Sentence
 </span><a href="Drasil.Sections.ReferenceMaterial.html#emptySectSentPlu"><span class="hs-identifier hs-var">emptySectSentPlu</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">thModel</span></span><span class="hs-special">]</span><span>
-</span><span id="line-150"></span><span>
-</span><span id="line-151"></span><span class="hs-comment">-- | Creates a General Definitions section with a general introduction.</span><span>
-</span><span id="line-152"></span><span class="hs-comment">-- Takes in relevant general definitions ('Contents'). Use empty list if none are needed.</span><span>
-</span><span id="line-153"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#genDefnF"><span class="hs-identifier hs-type">genDefnF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-154"></span><span id="genDefnF"><span class="annot"><span class="annottext">genDefnF :: [Contents] -&gt; Section
+</span><span id="line-149"></span><span>
+</span><span id="line-150"></span><span class="hs-comment">-- | Creates a General Definitions section with a general introduction.</span><span>
+</span><span id="line-151"></span><span class="hs-comment">-- Takes in relevant general definitions ('Contents'). Use empty list if none are needed.</span><span>
+</span><span id="line-152"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#genDefnF"><span class="hs-identifier hs-type">genDefnF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-153"></span><span id="genDefnF"><span class="annot"><span class="annottext">genDefnF :: [Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#genDefnF"><span class="hs-identifier hs-var hs-var">genDefnF</span></a></span></span><span> </span><span id="local-6989586621679099048"><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099048"><span class="hs-identifier hs-var">otherContents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#genDefn"><span class="hs-identifier hs-var">SRS.genDefn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Contents] -&gt; Contents
@@ -630,10 +629,10 @@ forall a. [a] -&gt; Contents
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099048"><span class="hs-identifier hs-var">otherContents</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-155"></span><span>
-</span><span id="line-156"></span><span class="annot"><span class="hs-comment">-- | Creates the introduction used in 'genDefnF'. If the given list is empty, the returned 'Sentence' is &quot;There are no general definitions.&quot;</span></span><span>
-</span><span id="line-157"></span><span id="local-6989586621679099051"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#generalDefinitionIntro"><span class="hs-identifier hs-type">generalDefinitionIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679099051"><span class="hs-identifier hs-type">t</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
-</span><span id="line-158"></span><span id="generalDefinitionIntro"><span class="annot"><span class="annottext">generalDefinitionIntro :: forall a. [a] -&gt; Contents
+</span><span id="line-154"></span><span>
+</span><span id="line-155"></span><span class="annot"><span class="hs-comment">-- | Creates the introduction used in 'genDefnF'. If the given list is empty, the returned 'Sentence' is &quot;There are no general definitions.&quot;</span></span><span>
+</span><span id="line-156"></span><span id="local-6989586621679099051"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#generalDefinitionIntro"><span class="hs-identifier hs-type">generalDefinitionIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679099051"><span class="hs-identifier hs-type">t</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
+</span><span id="line-157"></span><span id="generalDefinitionIntro"><span class="annot"><span class="annottext">generalDefinitionIntro :: forall a. [a] -&gt; Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#generalDefinitionIntro"><span class="hs-identifier hs-var hs-var">generalDefinitionIntro</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Contents) -&gt; Sentence -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -641,7 +640,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall n. NamedIdea n =&gt; [n] -&gt; Sentence
 </span><a href="Drasil.Sections.ReferenceMaterial.html#emptySectSentPlu"><span class="hs-identifier hs-var">emptySectSentPlu</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">genDefn</span></span><span class="hs-special">]</span><span>
-</span><span id="line-159"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#generalDefinitionIntro"><span class="hs-identifier hs-var">generalDefinitionIntro</span></a></span><span> </span><span class="annot"><span class="annottext">[t]
+</span><span id="line-158"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#generalDefinitionIntro"><span class="hs-identifier hs-var">generalDefinitionIntro</span></a></span><span> </span><span class="annot"><span class="annottext">[t]
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -649,41 +648,40 @@ forall n. NamedIdea n =&gt; [n] -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">section_</span></span><span class="hs-special">,</span><span>
-</span><span id="line-160"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-159"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;collects the laws and&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">,</span><span>
-</span><span id="line-161"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-160"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;that will be used to build the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">inModel</span></span><span class="hs-special">]</span><span>
-</span><span id="line-162"></span><span>
-</span><span id="line-163"></span><span>
-</span><span id="line-164"></span><span class="annot"><span class="hs-comment">-- | Similar to 'genDefnF', but for Data Definitions. It also uses 'EmptyS' if the ending 'Sentence' is not needed rather than an empty list.</span></span><span>
-</span><span id="line-165"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefnF"><span class="hs-identifier hs-type">dataDefnF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-166"></span><span id="dataDefnF"><span class="annot"><span class="annottext">dataDefnF :: Sentence -&gt; [Contents] -&gt; Section
+</span><span id="line-161"></span><span>
+</span><span id="line-162"></span><span class="annot"><span class="hs-comment">-- | Similar to 'genDefnF', but for Data Definitions. It also uses 'EmptyS' if the ending 'Sentence' is not needed rather than an empty list.</span></span><span>
+</span><span id="line-163"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefnF"><span class="hs-identifier hs-type">dataDefnF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-164"></span><span id="dataDefnF"><span class="annot"><span class="annottext">dataDefnF :: Sentence -&gt; [Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefnF"><span class="hs-identifier hs-var hs-var">dataDefnF</span></a></span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier">_</span></span><span>          </span><span class="hs-special">[</span><span class="hs-special">]</span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#dataDefn"><span class="hs-identifier hs-var">SRS.dataDefn</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefnIntroNoContent"><span class="hs-identifier hs-var">dataDefnIntroNoContent</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-167"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefnF"><span class="hs-identifier hs-var">dataDefnF</span></a></span><span> </span><span id="local-6989586621679099058"><span class="annot"><span class="annottext">Sentence
+</span><span id="line-165"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefnF"><span class="hs-identifier hs-var">dataDefnF</span></a></span><span> </span><span id="local-6989586621679099058"><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679099058"><span class="hs-identifier hs-var">endingSent</span></a></span></span><span> </span><span id="local-6989586621679099059"><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099059"><span class="hs-identifier hs-var">otherContents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#dataDefn"><span class="hs-identifier hs-var">SRS.dataDefn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefinitionIntro"><span class="hs-identifier hs-var">dataDefinitionIntro</span></a></span><span>
-</span><span id="line-168"></span><span>                                        </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-166"></span><span>                                        </span><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679099058"><span class="hs-identifier hs-var">endingSent</span></a></span><span> </span><span class="annot"><span class="annottext">Contents -&gt; [Contents] -&gt; [Contents]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099059"><span class="hs-identifier hs-var">otherContents</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-169"></span><span>
-</span><span id="line-170"></span><span class="annot"><span class="hs-comment">-- | Creates a general Data Definition introduction. Appends the given 'Sentence' to the end.</span></span><span>
-</span><span id="line-171"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefinitionIntro"><span class="hs-identifier hs-type">dataDefinitionIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-172"></span><span id="dataDefinitionIntro"><span class="annot"><span class="annottext">dataDefinitionIntro :: Sentence -&gt; Contents
+</span><span id="line-167"></span><span>
+</span><span id="line-168"></span><span class="annot"><span class="hs-comment">-- | Creates a general Data Definition introduction. Appends the given 'Sentence' to the end.</span></span><span>
+</span><span id="line-169"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefinitionIntro"><span class="hs-identifier hs-type">dataDefinitionIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-170"></span><span id="dataDefinitionIntro"><span class="annot"><span class="annottext">dataDefinitionIntro :: Sentence -&gt; Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefinitionIntro"><span class="hs-identifier hs-var hs-var">dataDefinitionIntro</span></a></span></span><span> </span><span id="local-6989586621679099061"><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679099061"><span class="hs-identifier hs-var">closingSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
@@ -693,13 +691,13 @@ forall a. a -&gt; [a] -&gt; [a]
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">section_</span></span><span class="hs-special">,</span><span>
-</span><span id="line-173"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-171"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;collects and defines all the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">datum</span></span><span class="hs-special">,</span><span>
-</span><span id="line-174"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-172"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;needed to build the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -707,9 +705,9 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">inModel</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679099061"><span class="hs-identifier hs-var">closingSent</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-175"></span><span>
-</span><span id="line-176"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefnIntroNoContent"><span class="hs-identifier hs-type">dataDefnIntroNoContent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-177"></span><span id="dataDefnIntroNoContent"><span class="annot"><span class="annottext">dataDefnIntroNoContent :: Contents
+</span><span id="line-173"></span><span>
+</span><span id="line-174"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefnIntroNoContent"><span class="hs-identifier hs-type">dataDefnIntroNoContent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-175"></span><span id="dataDefnIntroNoContent"><span class="annot"><span class="annottext">dataDefnIntroNoContent :: Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#dataDefnIntroNoContent"><span class="hs-identifier hs-var hs-var">dataDefnIntroNoContent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Contents) -&gt; Sentence -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -717,26 +715,26 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall n. NamedIdea n =&gt; [n] -&gt; Sentence
 </span><a href="Drasil.Sections.ReferenceMaterial.html#emptySectSentPlu"><span class="hs-identifier hs-var">emptySectSentPlu</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">dataDefn</span></span><span class="hs-special">]</span><span>
-</span><span id="line-178"></span><span>
-</span><span id="line-179"></span><span class="hs-comment">-- wrappers for inModelIntro. Use inModelF' if genDef are not needed</span><span>
-</span><span id="line-180"></span><span class="hs-comment">-- | Constructor for Instance Models. Takes the problem description,</span><span>
-</span><span id="line-181"></span><span class="hs-comment">-- data definition, theoretical model, general definition, and any other relevant contents.</span><span>
-</span><span id="line-182"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#inModelF"><span class="hs-identifier hs-type">inModelF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-183"></span><span id="inModelF"><span class="annot"><span class="annottext">inModelF :: Section -&gt; Section -&gt; Section -&gt; Section -&gt; [Contents] -&gt; Section
+</span><span id="line-176"></span><span>
+</span><span id="line-177"></span><span class="hs-comment">-- wrappers for inModelIntro. Use inModelF' if genDef are not needed</span><span>
+</span><span id="line-178"></span><span class="hs-comment">-- | Constructor for Instance Models. Takes the problem description,</span><span>
+</span><span id="line-179"></span><span class="hs-comment">-- data definition, theoretical model, general definition, and any other relevant contents.</span><span>
+</span><span id="line-180"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#inModelF"><span class="hs-identifier hs-type">inModelF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-181"></span><span id="inModelF"><span class="annot"><span class="annottext">inModelF :: Section -&gt; Section -&gt; Section -&gt; Section -&gt; [Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#inModelF"><span class="hs-identifier hs-var hs-var">inModelF</span></a></span></span><span> </span><span class="annot"><span class="annottext">Section
 </span><span class="hs-identifier">_</span></span><span>       </span><span class="annot"><span class="annottext">Section
 </span><span class="hs-identifier">_</span></span><span>      </span><span class="annot"><span class="annottext">Section
 </span><span class="hs-identifier">_</span></span><span>      </span><span class="annot"><span class="annottext">Section
 </span><span class="hs-identifier">_</span></span><span>      </span><span class="hs-special">[</span><span class="hs-special">]</span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#inModel"><span class="hs-identifier hs-var">SRS.inModel</span></a></span><span>
-</span><span id="line-184"></span><span>                                                        </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence -&gt; Contents
+</span><span id="line-182"></span><span>                                                        </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Contents) -&gt; Sentence -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[CI] -&gt; Sentence
 forall n. NamedIdea n =&gt; [n] -&gt; Sentence
 </span><a href="Drasil.Sections.ReferenceMaterial.html#emptySectSentPlu"><span class="hs-identifier hs-var">emptySectSentPlu</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">inModel</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-185"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#inModelF"><span class="hs-identifier hs-var">inModelF</span></a></span><span> </span><span id="local-6989586621679099063"><span class="annot"><span class="annottext">Section
+</span><span id="line-183"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#inModelF"><span class="hs-identifier hs-var">inModelF</span></a></span><span> </span><span id="local-6989586621679099063"><span class="annot"><span class="annottext">Section
 </span><a href="#local-6989586621679099063"><span class="hs-identifier hs-var">probDes</span></a></span></span><span> </span><span id="local-6989586621679099064"><span class="annot"><span class="annottext">Section
 </span><a href="#local-6989586621679099064"><span class="hs-identifier hs-var">datDef</span></a></span></span><span> </span><span id="local-6989586621679099065"><span class="annot"><span class="annottext">Section
 </span><a href="#local-6989586621679099065"><span class="hs-identifier hs-var">theMod</span></a></span></span><span> </span><span id="local-6989586621679099066"><span class="annot"><span class="annottext">Section
@@ -744,21 +742,20 @@ forall n. NamedIdea n =&gt; [n] -&gt; Sentence
 </span><a href="#local-6989586621679099067"><span class="hs-identifier hs-var">otherContents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#inModel"><span class="hs-identifier hs-var">SRS.inModel</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Section -&gt; Section -&gt; Section -&gt; Section -&gt; Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#inModelIntro"><span class="hs-identifier hs-var">inModelIntro</span></a></span><span>
-</span><span id="line-186"></span><span>                                                        </span><span class="annot"><span class="annottext">Section
+</span><span id="line-184"></span><span>                                                        </span><span class="annot"><span class="annottext">Section
 </span><a href="#local-6989586621679099063"><span class="hs-identifier hs-var">probDes</span></a></span><span> </span><span class="annot"><span class="annottext">Section
 </span><a href="#local-6989586621679099064"><span class="hs-identifier hs-var">datDef</span></a></span><span> </span><span class="annot"><span class="annottext">Section
 </span><a href="#local-6989586621679099065"><span class="hs-identifier hs-var">theMod</span></a></span><span>
-</span><span id="line-187"></span><span>                                                        </span><span class="annot"><span class="annottext">Section
+</span><span id="line-185"></span><span>                                                        </span><span class="annot"><span class="annottext">Section
 </span><a href="#local-6989586621679099066"><span class="hs-identifier hs-var">genDef</span></a></span><span> </span><span class="annot"><span class="annottext">Contents -&gt; [Contents] -&gt; [Contents]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099067"><span class="hs-identifier hs-var">otherContents</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-188"></span><span>                                                        </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-189"></span><span>
-</span><span id="line-190"></span><span>
-</span><span id="line-191"></span><span class="annot"><span class="hs-comment">-- | Creates a general Instance Model introduction. Requires four references to function. Nothing can be input into the last reference if only three tables are present.</span></span><span>
-</span><span id="line-192"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#inModelIntro"><span class="hs-identifier hs-type">inModelIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-193"></span><span id="inModelIntro"><span class="annot"><span class="annottext">inModelIntro :: Section -&gt; Section -&gt; Section -&gt; Section -&gt; Contents
+</span><span id="line-186"></span><span>                                                        </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-187"></span><span>
+</span><span id="line-188"></span><span class="annot"><span class="hs-comment">-- | Creates a general Instance Model introduction. Requires four references to function. Nothing can be input into the last reference if only three tables are present.</span></span><span>
+</span><span id="line-189"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#inModelIntro"><span class="hs-identifier hs-type">inModelIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-190"></span><span id="inModelIntro"><span class="annot"><span class="annottext">inModelIntro :: Section -&gt; Section -&gt; Section -&gt; Section -&gt; Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#inModelIntro"><span class="hs-identifier hs-var hs-var">inModelIntro</span></a></span></span><span> </span><span id="local-6989586621679099069"><span class="annot"><span class="annottext">Section
 </span><a href="#local-6989586621679099069"><span class="hs-identifier hs-var">r1</span></a></span></span><span> </span><span id="local-6989586621679099070"><span class="annot"><span class="annottext">Section
 </span><a href="#local-6989586621679099070"><span class="hs-identifier hs-var">r2</span></a></span></span><span> </span><span id="local-6989586621679099071"><span class="annot"><span class="annottext">Section
@@ -770,7 +767,7 @@ forall a. a -&gt; [a] -&gt; [a]
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">section_</span></span><span class="hs-special">,</span><span>
-</span><span id="line-194"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-191"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;transforms the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -788,10 +785,10 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">problemDescription</span></span><span class="hs-special">,</span><span>
-</span><span id="line-195"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-192"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;into one which is expressed in mathematical terms. It uses concrete&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-196"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-193"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">symbol_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -809,7 +806,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">dataDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;to replace the abstract&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-197"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span id="line-194"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="annot"><span class="annottext">(NPStruct -&gt; Sentence) -&gt; NPStruct -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -832,7 +829,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">thModel</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span>
-</span><span id="line-198"></span><span>  </span><span class="annot"><span class="annottext">Section -&gt; Sentence -&gt; Sentence
+</span><span id="line-195"></span><span>  </span><span class="annot"><span class="annottext">Section -&gt; Sentence -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence -&gt; Sentence
@@ -841,11 +838,11 @@ r -&gt; Sentence -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">genDefn</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-199"></span><span>
-</span><span id="line-200"></span><span class="annot"><span class="hs-comment">-- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.</span></span><span>
-</span><span id="line-201"></span><span id="local-6989586621679098636"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#datConF"><span class="hs-identifier hs-type">datConF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasUncertainty</span></span><span> </span><span class="annot"><a href="#local-6989586621679098636"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679098636"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679098636"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasReasVal</span></span><span> </span><span class="annot"><a href="#local-6989586621679098636"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679098636"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span>
-</span><span id="line-202"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098636"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
-</span><span id="line-203"></span><span id="datConF"><span class="annot"><span class="annottext">datConF :: forall c.
+</span><span id="line-196"></span><span>
+</span><span id="line-197"></span><span class="annot"><span class="hs-comment">-- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.</span></span><span>
+</span><span id="line-198"></span><span id="local-6989586621679098636"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#datConF"><span class="hs-identifier hs-type">datConF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasUncertainty</span></span><span> </span><span class="annot"><a href="#local-6989586621679098636"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679098636"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679098636"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasReasVal</span></span><span> </span><span class="annot"><a href="#local-6989586621679098636"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679098636"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span>
+</span><span id="line-199"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098636"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
+</span><span id="line-200"></span><span id="datConF"><span class="annot"><span class="annottext">datConF :: forall c.
 (HasUncertainty c, Quantity c, Constrained c, HasReasVal c,
  MayHaveUnit c) =&gt;
 Sentence -&gt; [c] -&gt; Section
@@ -858,7 +855,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall n. NamedIdea n =&gt; [n] -&gt; Sentence
 </span><a href="Drasil.Sections.ReferenceMaterial.html#emptySectSentPlu"><span class="hs-identifier hs-var">emptySectSentPlu</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">datumConstraint</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-204"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#datConF"><span class="hs-identifier hs-var">datConF</span></a></span><span> </span><span id="local-6989586621679099086"><span class="annot"><span class="annottext">Sentence
+</span><span id="line-201"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#datConF"><span class="hs-identifier hs-var">datConF</span></a></span><span> </span><span id="local-6989586621679099086"><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679099086"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679099087"><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679099087"><span class="hs-identifier hs-var">c</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#datCon"><span class="hs-identifier hs-var">SRS.datCon</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence -&gt; Contents
@@ -873,25 +870,25 @@ forall c.
 [c] -&gt; LabelledContent
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#inDataConstTbl"><span class="hs-identifier hs-var">inDataConstTbl</span></a></span><span> </span><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679099087"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-205"></span><span>
-</span><span id="line-206"></span><span class="hs-comment">-- optional trailing sentence(s) -&gt; data constraints tables -&gt; Contents</span><span>
-</span><span id="line-207"></span><span class="annot"><span class="hs-comment">-- | Constructor for the paragraph of the Data Constraints section. Takes in a trailing 'Sentence'.</span></span><span>
-</span><span id="line-208"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#dataConstraintParagraph"><span class="hs-identifier hs-type">dataConstraintParagraph</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-209"></span><span id="dataConstraintParagraph"><span class="annot"><span class="annottext">dataConstraintParagraph :: Sentence -&gt; Contents
+</span><span id="line-202"></span><span>
+</span><span id="line-203"></span><span class="hs-comment">-- optional trailing sentence(s) -&gt; data constraints tables -&gt; Contents</span><span>
+</span><span id="line-204"></span><span class="annot"><span class="hs-comment">-- | Constructor for the paragraph of the Data Constraints section. Takes in a trailing 'Sentence'.</span></span><span>
+</span><span id="line-205"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#dataConstraintParagraph"><span class="hs-identifier hs-type">dataConstraintParagraph</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-206"></span><span id="dataConstraintParagraph"><span class="annot"><span class="annottext">dataConstraintParagraph :: Sentence -&gt; Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#dataConstraintParagraph"><span class="hs-identifier hs-var hs-var">dataConstraintParagraph</span></a></span></span><span> </span><span id="local-6989586621679099089"><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679099089"><span class="hs-identifier hs-var">trailingSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#inputTableSent"><span class="hs-identifier hs-var">inputTableSent</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#physConsSent"><span class="hs-identifier hs-var">physConsSent</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-210"></span><span>  </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-207"></span><span>  </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#uncertSent"><span class="hs-identifier hs-var">uncertSent</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#conservConsSent"><span class="hs-identifier hs-var">conservConsSent</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#typValSent"><span class="hs-identifier hs-var">typValSent</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679099089"><span class="hs-identifier hs-var">trailingSent</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-211"></span><span>
-</span><span id="line-212"></span><span class="annot"><span class="hs-comment">-- | General 'Sentence' that describes the data constraints on the input variables.</span></span><span>
-</span><span id="line-213"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#inputTableSent"><span class="hs-identifier hs-type">inputTableSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-214"></span><span id="inputTableSent"><span class="annot"><span class="annottext">inputTableSent :: Sentence
+</span><span id="line-208"></span><span>
+</span><span id="line-209"></span><span class="annot"><span class="hs-comment">-- | General 'Sentence' that describes the data constraints on the input variables.</span></span><span>
+</span><span id="line-210"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#inputTableSent"><span class="hs-identifier hs-type">inputTableSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-211"></span><span id="inputTableSent"><span class="annot"><span class="annottext">inputTableSent :: Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#inputTableSent"><span class="hs-identifier hs-var hs-var">inputTableSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -916,7 +913,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">table_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;shows the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-215"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span id="line-212"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="annot"><span class="annottext">(NPStruct -&gt; Sentence) -&gt; NPStruct -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -929,10 +926,10 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">variable</span></span><span class="hs-special">]</span><span>
-</span><span id="line-216"></span><span>
-</span><span id="line-217"></span><span class="annot"><span class="hs-comment">-- | General 'Sentence' that describes the physical constraints/limitations on the variables.</span></span><span>
-</span><span id="line-218"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#physConsSent"><span class="hs-identifier hs-type">physConsSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-219"></span><span id="physConsSent"><span class="annot"><span class="annottext">physConsSent :: Sentence
+</span><span id="line-213"></span><span>
+</span><span id="line-214"></span><span class="annot"><span class="hs-comment">-- | General 'Sentence' that describes the physical constraints/limitations on the variables.</span></span><span>
+</span><span id="line-215"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#physConsSent"><span class="hs-identifier hs-type">physConsSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-216"></span><span id="physConsSent"><span class="annot"><span class="annottext">physConsSent :: Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#physConsSent"><span class="hs-identifier hs-var hs-var">physConsSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -947,7 +944,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`for`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">physical</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-220"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-217"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -959,7 +956,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">limitation</span></span><span class="hs-special">,</span><span>
-</span><span id="line-221"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-218"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;on the range&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -971,10 +968,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">variable</span></span><span class="hs-special">]</span><span>
-</span><span id="line-222"></span><span>
-</span><span id="line-223"></span><span class="annot"><span class="hs-comment">-- | General 'Sentence' that describes the uncertainty on the input variables.</span></span><span>
-</span><span id="line-224"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#uncertSent"><span class="hs-identifier hs-type">uncertSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-225"></span><span id="uncertSent"><span class="annot"><span class="annottext">uncertSent :: Sentence
+</span><span id="line-219"></span><span>
+</span><span id="line-220"></span><span class="annot"><span class="hs-comment">-- | General 'Sentence' that describes the uncertainty on the input variables.</span></span><span>
+</span><span id="line-221"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#uncertSent"><span class="hs-identifier hs-type">uncertSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-222"></span><span id="uncertSent"><span class="annot"><span class="annottext">uncertSent :: Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#uncertSent"><span class="hs-identifier hs-var hs-var">uncertSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="annot"><span class="annottext">(NPStruct -&gt; Sentence) -&gt; NPStruct -&gt; Sentence
@@ -988,13 +985,13 @@ forall c. NamedIdea c =&gt; c -&gt; NP
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">column</span></span><span class="hs-special">,</span><span>
-</span><span id="line-226"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-223"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;provides an estimate of the confidence with which the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">physical</span></span><span class="hs-special">,</span><span>
-</span><span id="line-227"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-224"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">quantity</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -1006,7 +1003,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">information</span></span><span class="hs-special">,</span><span>
-</span><span id="line-228"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-225"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;would be part of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -1014,16 +1011,16 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">input_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;if one were performing an&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-229"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-226"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">uncertainty</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;quantification exercise&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-230"></span><span>
-</span><span id="line-231"></span><span class="annot"><span class="hs-comment">-- | General 'Sentence' that describes some conservative constraints on the model.</span></span><span>
-</span><span id="line-232"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#conservConsSent"><span class="hs-identifier hs-type">conservConsSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-233"></span><span id="conservConsSent"><span class="annot"><span class="annottext">conservConsSent :: Sentence
+</span><span id="line-227"></span><span>
+</span><span id="line-228"></span><span class="annot"><span class="hs-comment">-- | General 'Sentence' that describes some conservative constraints on the model.</span></span><span>
+</span><span id="line-229"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#conservConsSent"><span class="hs-identifier hs-type">conservConsSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-230"></span><span id="conservConsSent"><span class="annot"><span class="annottext">conservConsSent :: Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#conservConsSent"><span class="hs-identifier hs-var hs-var">conservConsSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -1036,7 +1033,7 @@ forall c. NamedIdea c =&gt; c -&gt; NP
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;conservative&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-234"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-231"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;to give&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -1046,13 +1043,13 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">model</span></span><span class="hs-special">,</span><span>
-</span><span id="line-235"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-232"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the flexibility to experiment with unusual situations&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-236"></span><span>
-</span><span id="line-237"></span><span class="annot"><span class="hs-comment">-- | General 'Sentence' that describes the typical values.</span></span><span>
-</span><span id="line-238"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#typValSent"><span class="hs-identifier hs-type">typValSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-239"></span><span id="typValSent"><span class="annot"><span class="annottext">typValSent :: Sentence
+</span><span id="line-233"></span><span>
+</span><span id="line-234"></span><span class="annot"><span class="hs-comment">-- | General 'Sentence' that describes the typical values.</span></span><span>
+</span><span id="line-235"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#typValSent"><span class="hs-identifier hs-type">typValSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-236"></span><span id="typValSent"><span class="annot"><span class="annottext">typValSent :: Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#typValSent"><span class="hs-identifier hs-var hs-var">typValSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -1064,17 +1061,17 @@ forall c. NamedIdea c =&gt; c -&gt; NP
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;typical&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-240"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-237"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">value</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;intended to provide a feel for a common scenario&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-241"></span><span>
-</span><span id="line-242"></span><span class="annot"><span class="hs-comment">-- | General 'Sentence' that describes some auxiliary specifications of the system.</span></span><span>
-</span><span id="line-243"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#auxSpecSent"><span class="hs-identifier hs-type">auxSpecSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-244"></span><span id="auxSpecSent"><span class="annot"><span class="annottext">auxSpecSent :: Sentence
+</span><span id="line-238"></span><span>
+</span><span id="line-239"></span><span class="annot"><span class="hs-comment">-- | General 'Sentence' that describes some auxiliary specifications of the system.</span></span><span>
+</span><span id="line-240"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#auxSpecSent"><span class="hs-identifier hs-type">auxSpecSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-241"></span><span id="auxSpecSent"><span class="annot"><span class="annottext">auxSpecSent :: Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#auxSpecSent"><span class="hs-identifier hs-var hs-var">auxSpecSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -1090,7 +1087,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-string">&quot;auxiliary constants&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;give&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-245"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-242"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">value</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -1103,7 +1100,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">parameter</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;used in the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-246"></span><span>  </span><span class="annot"><span class="annottext">LabelledContent -&gt; Sentence -&gt; Sentence
+</span><span id="line-243"></span><span>  </span><span class="annot"><span class="annottext">LabelledContent -&gt; Sentence -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence -&gt; Sentence
@@ -1122,10 +1119,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">table_</span></span><span class="hs-special">]</span><span>
-</span><span id="line-247"></span><span>
-</span><span id="line-248"></span><span class="annot"><span class="hs-comment">-- | Creates a Data Constraints table. Takes in Columns, reference, and a label.</span></span><span>
-</span><span id="line-249"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#mkDataConstraintTable"><span class="hs-identifier hs-type">mkDataConstraintTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
-</span><span id="line-250"></span><span id="mkDataConstraintTable"><span class="annot"><span class="annottext">mkDataConstraintTable :: [(Sentence, [Sentence])] -&gt; UID -&gt; Sentence -&gt; LabelledContent
+</span><span id="line-244"></span><span>
+</span><span id="line-245"></span><span class="annot"><span class="hs-comment">-- | Creates a Data Constraints table. Takes in Columns, reference, and a label.</span></span><span>
+</span><span id="line-246"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#mkDataConstraintTable"><span class="hs-identifier hs-type">mkDataConstraintTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
+</span><span id="line-247"></span><span id="mkDataConstraintTable"><span class="annot"><span class="annottext">mkDataConstraintTable :: [(Sentence, [Sentence])] -&gt; UID -&gt; Sentence -&gt; LabelledContent
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#mkDataConstraintTable"><span class="hs-identifier hs-var hs-var">mkDataConstraintTable</span></a></span></span><span> </span><span id="local-6989586621679099102"><span class="annot"><span class="annottext">[(Sentence, [Sentence])]
 </span><a href="#local-6989586621679099102"><span class="hs-identifier hs-var">col</span></a></span></span><span> </span><span id="local-6989586621679099103"><span class="annot"><span class="annottext">UID
 </span><a href="#local-6989586621679099103"><span class="hs-identifier hs-var">rf</span></a></span></span><span> </span><span id="local-6989586621679099104"><span class="annot"><span class="annottext">Sentence
@@ -1139,16 +1136,16 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b c. (a -&gt; b -&gt; c) -&gt; (a, b) -&gt; c
 </span><span class="hs-identifier hs-var">uncurry</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [[Sentence]] -&gt; Sentence -&gt; Bool -&gt; RawContent
 </span><span class="hs-identifier hs-var">Table</span></span><span>
-</span><span id="line-251"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[(Sentence, [Sentence])] -&gt; ([Sentence], [[Sentence]])
+</span><span id="line-248"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[(Sentence, [Sentence])] -&gt; ([Sentence], [[Sentence]])
 </span><span class="hs-identifier hs-var">mkTableFromColumns</span></span><span> </span><span class="annot"><span class="annottext">[(Sentence, [Sentence])]
 </span><a href="#local-6989586621679099102"><span class="hs-identifier hs-var">col</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679099104"><span class="hs-identifier hs-var">lab</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-252"></span><span>
-</span><span id="line-253"></span><span class="annot"><span class="hs-comment">-- | Creates the input Data Constraints Table.</span></span><span>
-</span><span id="line-254"></span><span id="local-6989586621679098638"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#inDataConstTbl"><span class="hs-identifier hs-type">inDataConstTbl</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasUncertainty</span></span><span> </span><span class="annot"><a href="#local-6989586621679098638"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679098638"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679098638"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasReasVal</span></span><span> </span><span class="annot"><a href="#local-6989586621679098638"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679098638"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span>
-</span><span id="line-255"></span><span>  </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098638"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
-</span><span id="line-256"></span><span id="inDataConstTbl"><span class="annot"><span class="annottext">inDataConstTbl :: forall c.
+</span><span id="line-249"></span><span>
+</span><span id="line-250"></span><span class="annot"><span class="hs-comment">-- | Creates the input Data Constraints Table.</span></span><span>
+</span><span id="line-251"></span><span id="local-6989586621679098638"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#inDataConstTbl"><span class="hs-identifier hs-type">inDataConstTbl</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasUncertainty</span></span><span> </span><span class="annot"><a href="#local-6989586621679098638"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679098638"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679098638"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasReasVal</span></span><span> </span><span class="annot"><a href="#local-6989586621679098638"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679098638"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span>
+</span><span id="line-252"></span><span>  </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098638"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
+</span><span id="line-253"></span><span id="inDataConstTbl"><span class="annot"><span class="annottext">inDataConstTbl :: forall c.
 (HasUncertainty c, Quantity c, Constrained c, HasReasVal c,
  MayHaveUnit c) =&gt;
 [c] -&gt; LabelledContent
@@ -1166,7 +1163,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. HasSymbol a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">sortBySymbol</span></span><span> </span><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679099145"><span class="hs-identifier hs-var">qlst</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-257"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-254"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">physicalConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(c -&gt; Sentence) -&gt; [c] -&gt; [Sentence]
@@ -1179,7 +1176,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. HasSymbol a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">sortBySymbol</span></span><span> </span><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679099145"><span class="hs-identifier hs-var">qlst</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-258"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-255"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">softwareConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(c -&gt; Sentence) -&gt; [c] -&gt; [Sentence]
@@ -1192,7 +1189,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. HasSymbol a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">sortBySymbol</span></span><span> </span><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679099145"><span class="hs-identifier hs-var">qlst</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-259"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-256"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Typical Value&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(c -&gt; Sentence) -&gt; [c] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -1216,7 +1213,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. HasSymbol a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">sortBySymbol</span></span><span> </span><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679099145"><span class="hs-identifier hs-var">qlst</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-260"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><span id="line-257"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">typUnc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(c -&gt; Sentence) -&gt; [c] -&gt; [Sentence]
@@ -1237,12 +1234,12 @@ Getter IdeaDict UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; LabelledContent) -&gt; Sentence -&gt; LabelledContent
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-261"></span><span>            </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-258"></span><span>            </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">inDatumConstraint</span></span><span>
-</span><span id="line-262"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-263"></span><span>    </span><span id="local-6989586621679099154"><span class="annot"><span class="annottext">getRVal :: s -&gt; Expr
+</span><span id="line-259"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-260"></span><span>    </span><span id="local-6989586621679099154"><span class="annot"><span class="annottext">getRVal :: s -&gt; Expr
 </span><a href="#local-6989586621679099154"><span class="hs-identifier hs-var hs-var">getRVal</span></a></span></span><span> </span><span id="local-6989586621679099164"><span class="annot"><span class="annottext">s
 </span><a href="#local-6989586621679099164"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Maybe Expr -&gt; Expr
 forall a. a -&gt; Maybe a -&gt; a
@@ -1263,10 +1260,10 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasReasVal c =&gt; Lens' c (Maybe Expr)
 Lens' s (Maybe Expr)
 </span><span class="hs-identifier hs-var">reasVal</span></span><span class="hs-special">)</span><span>
-</span><span id="line-264"></span><span>
-</span><span id="line-265"></span><span class="annot"><span class="hs-comment">-- | Creates the output Data Constraints Table.</span></span><span>
-</span><span id="line-266"></span><span id="local-6989586621679098665"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#outDataConstTbl"><span class="hs-identifier hs-type">outDataConstTbl</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679098665"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679098665"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098665"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
-</span><span id="line-267"></span><span id="outDataConstTbl"><span class="annot"><span class="annottext">outDataConstTbl :: forall c. (Quantity c, Constrained c) =&gt; [c] -&gt; LabelledContent
+</span><span id="line-261"></span><span>
+</span><span id="line-262"></span><span class="annot"><span class="hs-comment">-- | Creates the output Data Constraints Table.</span></span><span>
+</span><span id="line-263"></span><span id="local-6989586621679098665"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#outDataConstTbl"><span class="hs-identifier hs-type">outDataConstTbl</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679098665"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679098665"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098665"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
+</span><span id="line-264"></span><span id="outDataConstTbl"><span class="annot"><span class="annottext">outDataConstTbl :: forall c. (Quantity c, Constrained c) =&gt; [c] -&gt; LabelledContent
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#outDataConstTbl"><span class="hs-identifier hs-var hs-var">outDataConstTbl</span></a></span></span><span> </span><span id="local-6989586621679099186"><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679099186"><span class="hs-identifier hs-var">qlst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(Sentence, [Sentence])] -&gt; UID -&gt; Sentence -&gt; LabelledContent
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#mkDataConstraintTable"><span class="hs-identifier hs-var">mkDataConstraintTable</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -1277,7 +1274,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679099186"><span class="hs-identifier hs-var">qlst</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-268"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-265"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">physicalConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(c -&gt; Sentence) -&gt; [c] -&gt; [Sentence]
@@ -1286,7 +1283,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall c. (Constrained c, Quantity c) =&gt; c -&gt; Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#fmtPhys"><span class="hs-identifier hs-var">fmtPhys</span></a></span><span> </span><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679099186"><span class="hs-identifier hs-var">qlst</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-269"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-266"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">softwareConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(c -&gt; Sentence) -&gt; [c] -&gt; [Sentence]
@@ -1303,15 +1300,15 @@ Getter IdeaDict UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; LabelledContent) -&gt; Sentence -&gt; LabelledContent
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-270"></span><span>            </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-267"></span><span>            </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">outDatumConstraint</span></span><span>
-</span><span id="line-271"></span><span>
-</span><span id="line-272"></span><span class="hs-comment">--Not actually used here, for exporting references</span><span>
-</span><span id="line-273"></span><span class="annot"><span class="hs-comment">-- | Input/Output Data Constraint Table references.</span></span><span>
-</span><span id="line-274"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#tInDataCstRef"><span class="hs-identifier hs-type">tInDataCstRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#tOutDataCstRef"><span class="hs-identifier hs-type">tOutDataCstRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
-</span><span id="line-275"></span><span id="tInDataCstRef"><span class="annot"><span class="annottext">tInDataCstRef :: Reference
+</span><span id="line-268"></span><span>
+</span><span id="line-269"></span><span class="hs-comment">--Not actually used here, for exporting references</span><span>
+</span><span id="line-270"></span><span class="annot"><span class="hs-comment">-- | Input/Output Data Constraint Table references.</span></span><span>
+</span><span id="line-271"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#tInDataCstRef"><span class="hs-identifier hs-type">tInDataCstRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#tOutDataCstRef"><span class="hs-identifier hs-type">tOutDataCstRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-272"></span><span id="tInDataCstRef"><span class="annot"><span class="annottext">tInDataCstRef :: Reference
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#tInDataCstRef"><span class="hs-identifier hs-var hs-var">tInDataCstRef</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Reference
 </span><span class="hs-identifier hs-var">makeTabRef'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">inDatumConstraint</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Getting UID IdeaDict UID -&gt; UID
@@ -1320,7 +1317,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasUID c =&gt; Getter c UID
 Getter IdeaDict UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span>
-</span><span id="line-276"></span><span id="tOutDataCstRef"><span class="annot"><span class="annottext">tOutDataCstRef :: Reference
+</span><span id="line-273"></span><span id="tOutDataCstRef"><span class="annot"><span class="annottext">tOutDataCstRef :: Reference
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#tOutDataCstRef"><span class="hs-identifier hs-var hs-var">tOutDataCstRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Reference
 </span><span class="hs-identifier hs-var">makeTabRef'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">outDatumConstraint</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Getting UID IdeaDict UID -&gt; UID
@@ -1329,10 +1326,10 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasUID c =&gt; Getter c UID
 Getter IdeaDict UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span>
-</span><span id="line-277"></span><span>
-</span><span id="line-278"></span><span class="annot"><span class="hs-comment">-- | Formats Physical Constraints into a 'Sentence'.</span></span><span>
-</span><span id="line-279"></span><span id="local-6989586621679098651"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#fmtPhys"><span class="hs-identifier hs-type">fmtPhys</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679098651"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679098651"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679098651"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
-</span><span id="line-280"></span><span id="fmtPhys"><span class="annot"><span class="annottext">fmtPhys :: forall c. (Constrained c, Quantity c) =&gt; c -&gt; Sentence
+</span><span id="line-274"></span><span>
+</span><span id="line-275"></span><span class="annot"><span class="hs-comment">-- | Formats Physical Constraints into a 'Sentence'.</span></span><span>
+</span><span id="line-276"></span><span id="local-6989586621679098651"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#fmtPhys"><span class="hs-identifier hs-type">fmtPhys</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679098651"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679098651"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679098651"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
+</span><span id="line-277"></span><span id="fmtPhys"><span class="annot"><span class="annottext">fmtPhys :: forall c. (Constrained c, Quantity c) =&gt; c -&gt; Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#fmtPhys"><span class="hs-identifier hs-var hs-var">fmtPhys</span></a></span></span><span> </span><span id="local-6989586621679099192"><span class="annot"><span class="annottext">c
 </span><a href="#local-6989586621679099192"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; [ConstraintE] -&gt; Sentence
 forall c. Quantity c =&gt; c -&gt; [ConstraintE] -&gt; Sentence
@@ -1350,10 +1347,10 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. Constrained c =&gt; Lens' c [ConstraintE]
 Lens' c [ConstraintE]
 </span><span class="hs-identifier hs-var">constraints</span></span><span class="hs-special">)</span><span>
-</span><span id="line-281"></span><span>
-</span><span id="line-282"></span><span class="annot"><span class="hs-comment">-- | Formats Software Constraints into a 'Sentence'.</span></span><span>
-</span><span id="line-283"></span><span id="local-6989586621679099196"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#fmtSfwr"><span class="hs-identifier hs-type">fmtSfwr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679099196"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679099196"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679099196"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
-</span><span id="line-284"></span><span id="fmtSfwr"><span class="annot"><span class="annottext">fmtSfwr :: forall c. (Constrained c, Quantity c) =&gt; c -&gt; Sentence
+</span><span id="line-278"></span><span>
+</span><span id="line-279"></span><span class="annot"><span class="hs-comment">-- | Formats Software Constraints into a 'Sentence'.</span></span><span>
+</span><span id="line-280"></span><span id="local-6989586621679099196"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#fmtSfwr"><span class="hs-identifier hs-type">fmtSfwr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679099196"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679099196"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679099196"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
+</span><span id="line-281"></span><span id="fmtSfwr"><span class="annot"><span class="annottext">fmtSfwr :: forall c. (Constrained c, Quantity c) =&gt; c -&gt; Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#fmtSfwr"><span class="hs-identifier hs-var hs-var">fmtSfwr</span></a></span></span><span> </span><span id="local-6989586621679099202"><span class="annot"><span class="annottext">c
 </span><a href="#local-6989586621679099202"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; [ConstraintE] -&gt; Sentence
 forall c. Quantity c =&gt; c -&gt; [ConstraintE] -&gt; Sentence
@@ -1371,10 +1368,10 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. Constrained c =&gt; Lens' c [ConstraintE]
 Lens' c [ConstraintE]
 </span><span class="hs-identifier hs-var">constraints</span></span><span class="hs-special">)</span><span>
-</span><span id="line-285"></span><span>
-</span><span id="line-286"></span><span class="annot"><span class="hs-comment">-- | Creates the Properties of a Correct Solution section.</span></span><span>
-</span><span id="line-287"></span><span id="local-6989586621679098675"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#propCorSolF"><span class="hs-identifier hs-type">propCorSolF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679098675"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679098675"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098675"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
-</span><span id="line-288"></span><span id="propCorSolF"><span class="annot"><span class="annottext">propCorSolF :: forall c.
+</span><span id="line-282"></span><span>
+</span><span id="line-283"></span><span class="annot"><span class="hs-comment">-- | Creates the Properties of a Correct Solution section.</span></span><span>
+</span><span id="line-284"></span><span id="local-6989586621679098675"><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#propCorSolF"><span class="hs-identifier hs-type">propCorSolF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679098675"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679098675"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098675"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
+</span><span id="line-285"></span><span id="propCorSolF"><span class="annot"><span class="annottext">propCorSolF :: forall c.
 (Quantity c, Constrained c) =&gt;
 [c] -&gt; [Contents] -&gt; Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#propCorSolF"><span class="hs-identifier hs-var hs-var">propCorSolF</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
@@ -1385,11 +1382,11 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall n. NamedIdea n =&gt; [n] -&gt; Sentence
 </span><a href="Drasil.Sections.ReferenceMaterial.html#emptySectSentPlu"><span class="hs-identifier hs-var">emptySectSentPlu</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">propOfCorSol</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-289"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#propCorSolF"><span class="hs-identifier hs-var">propCorSolF</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span id="local-6989586621679099210"><span class="annot"><span class="annottext">[Contents]
+</span><span id="line-286"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#propCorSolF"><span class="hs-identifier hs-var">propCorSolF</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span id="local-6989586621679099210"><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099210"><span class="hs-identifier hs-var">con</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#propCorSol"><span class="hs-identifier hs-var">SRS.propCorSol</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099210"><span class="hs-identifier hs-var">con</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-290"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#propCorSolF"><span class="hs-identifier hs-var">propCorSolF</span></a></span><span> </span><span id="local-6989586621679099211"><span class="annot"><span class="annottext">[c]
+</span><span id="line-287"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#propCorSolF"><span class="hs-identifier hs-var">propCorSolF</span></a></span><span> </span><span id="local-6989586621679099211"><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679099211"><span class="hs-identifier hs-var">c</span></a></span></span><span>  </span><span id="local-6989586621679099212"><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099212"><span class="hs-identifier hs-var">con</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#propCorSol"><span class="hs-identifier hs-var">SRS.propCorSol</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Contents
@@ -1403,18 +1400,18 @@ forall c. (Quantity c, Constrained c) =&gt; [c] -&gt; LabelledContent
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Contents]
 </span><a href="#local-6989586621679099212"><span class="hs-identifier hs-var">con</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-291"></span><span>
-</span><span id="line-292"></span><span class="annot"><span class="hs-comment">-- | Creates the Properties of a Correct Solution introduction.</span></span><span>
-</span><span id="line-293"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#propsIntro"><span class="hs-identifier hs-type">propsIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-294"></span><span id="propsIntro"><span class="annot"><span class="annottext">propsIntro :: Contents
+</span><span id="line-288"></span><span>
+</span><span id="line-289"></span><span class="annot"><span class="hs-comment">-- | Creates the Properties of a Correct Solution introduction.</span></span><span>
+</span><span id="line-290"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#propsIntro"><span class="hs-identifier hs-type">propsIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-291"></span><span id="propsIntro"><span class="annot"><span class="annottext">propsIntro :: Contents
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#propsIntro"><span class="hs-identifier hs-var hs-var">propsIntro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#outputTableSent"><span class="hs-identifier hs-var">outputTableSent</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#physConsSent"><span class="hs-identifier hs-var">physConsSent</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-295"></span><span>
-</span><span id="line-296"></span><span class="annot"><span class="hs-comment">-- | Outputs a data constraint table as a 'Sentence'.</span></span><span>
-</span><span id="line-297"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#outputTableSent"><span class="hs-identifier hs-type">outputTableSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-298"></span><span id="outputTableSent"><span class="annot"><span class="annottext">outputTableSent :: Sentence
+</span><span id="line-292"></span><span>
+</span><span id="line-293"></span><span class="annot"><span class="hs-comment">-- | Outputs a data constraint table as a 'Sentence'.</span></span><span>
+</span><span id="line-294"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#outputTableSent"><span class="hs-identifier hs-type">outputTableSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-295"></span><span id="outputTableSent"><span class="annot"><span class="annottext">outputTableSent :: Sentence
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#outputTableSent"><span class="hs-identifier hs-var hs-var">outputTableSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -1436,7 +1433,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">table_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;shows the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-299"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span id="line-296"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="annot"><span class="annottext">(NPStruct -&gt; Sentence) -&gt; NPStruct -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -1449,11 +1446,11 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">variable</span></span><span class="hs-special">]</span><span>
-</span><span id="line-300"></span><span>
-</span><span id="line-301"></span><span class="hs-comment">-- | Helper for making a 'ConceptInstance' with a reference to the system information.</span><span>
-</span><span id="line-302"></span><span class="hs-comment">-- Used to find where a particular assumption is referenced.</span><span>
-</span><span id="line-303"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#helperCI"><span class="hs-identifier hs-type">helperCI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-304"></span><span id="helperCI"><span class="annot"><span class="annottext">helperCI :: ConceptInstance -&gt; System -&gt; ConceptInstance
+</span><span id="line-297"></span><span>
+</span><span id="line-298"></span><span class="hs-comment">-- | Helper for making a 'ConceptInstance' with a reference to the system information.</span><span>
+</span><span id="line-299"></span><span class="hs-comment">-- Used to find where a particular assumption is referenced.</span><span>
+</span><span id="line-300"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#helperCI"><span class="hs-identifier hs-type">helperCI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-301"></span><span id="helperCI"><span class="annot"><span class="annottext">helperCI :: ConceptInstance -&gt; System -&gt; ConceptInstance
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#helperCI"><span class="hs-identifier hs-var hs-var">helperCI</span></a></span></span><span> </span><span id="local-6989586621679099215"><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="#local-6989586621679099215"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679099216"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679099216"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ASetter ConceptInstance ConceptInstance Sentence Sentence
@@ -1474,12 +1471,12 @@ forall t. HasUID t =&gt; t -&gt; System -&gt; Sentence
 </span><a href="#local-6989586621679099215"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679099216"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="#local-6989586621679099215"><span class="hs-identifier hs-var">a</span></a></span><span>
-</span><span id="line-305"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-306"></span><span>    </span><span id="local-6989586621679099219"><span class="annot"><span class="annottext">refby :: Sentence -&gt; Sentence
+</span><span id="line-302"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-303"></span><span>    </span><span id="local-6989586621679099219"><span class="annot"><span class="annottext">refby :: Sentence -&gt; Sentence
 </span><a href="#local-6989586621679099219"><span class="hs-identifier hs-var hs-var">refby</span></a></span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
-</span><span id="line-307"></span><span>    </span><span class="annot"><a href="#local-6989586621679099219"><span class="hs-identifier hs-var">refby</span></a></span><span> </span><span id="local-6989586621679099220"><span class="annot"><span class="annottext">Sentence
+</span><span id="line-304"></span><span>    </span><span class="annot"><a href="#local-6989586621679099219"><span class="hs-identifier hs-var">refby</span></a></span><span> </span><span id="local-6989586621679099220"><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679099220"><span class="hs-identifier hs-var">sent</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence) -&gt; Sentence -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -1488,22 +1485,22 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-string">&quot;RefBy:&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="#local-6989586621679099220"><span class="hs-identifier hs-var">sent</span></a></span><span>
-</span><span id="line-308"></span><span>
-</span><span id="line-309"></span><span class="annot"><span class="hs-comment">-- | Section stubs for implicit referencing of different models and definitions.</span></span><span>
-</span><span id="line-310"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#tmStub"><span class="hs-identifier hs-type">tmStub</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#ddStub"><span class="hs-identifier hs-type">ddStub</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#gdStub"><span class="hs-identifier hs-type">gdStub</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#imStub"><span class="hs-identifier hs-type">imStub</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#pdStub"><span class="hs-identifier hs-type">pdStub</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-311"></span><span id="tmStub"><span class="annot"><span class="annottext">tmStub :: Section
+</span><span id="line-305"></span><span>
+</span><span id="line-306"></span><span class="annot"><span class="hs-comment">-- | Section stubs for implicit referencing of different models and definitions.</span></span><span>
+</span><span id="line-307"></span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#tmStub"><span class="hs-identifier hs-type">tmStub</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#ddStub"><span class="hs-identifier hs-type">ddStub</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#gdStub"><span class="hs-identifier hs-type">gdStub</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#imStub"><span class="hs-identifier hs-type">imStub</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#pdStub"><span class="hs-identifier hs-type">pdStub</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-308"></span><span id="tmStub"><span class="annot"><span class="annottext">tmStub :: Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#tmStub"><span class="hs-identifier hs-var hs-var">tmStub</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#thModel"><span class="hs-identifier hs-var">SRS.thModel</span></a></span><span>   </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-312"></span><span id="ddStub"><span class="annot"><span class="annottext">ddStub :: Section
+</span><span id="line-309"></span><span id="ddStub"><span class="annot"><span class="annottext">ddStub :: Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#ddStub"><span class="hs-identifier hs-var hs-var">ddStub</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#dataDefn"><span class="hs-identifier hs-var">SRS.dataDefn</span></a></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-313"></span><span id="gdStub"><span class="annot"><span class="annottext">gdStub :: Section
+</span><span id="line-310"></span><span id="gdStub"><span class="annot"><span class="annottext">gdStub :: Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#gdStub"><span class="hs-identifier hs-var hs-var">gdStub</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#genDefn"><span class="hs-identifier hs-var">SRS.genDefn</span></a></span><span>   </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-314"></span><span id="imStub"><span class="annot"><span class="annottext">imStub :: Section
+</span><span id="line-311"></span><span id="imStub"><span class="annot"><span class="annottext">imStub :: Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#imStub"><span class="hs-identifier hs-var hs-var">imStub</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#inModel"><span class="hs-identifier hs-var">SRS.inModel</span></a></span><span>   </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-315"></span><span id="pdStub"><span class="annot"><span class="annottext">pdStub :: Section
+</span><span id="line-312"></span><span id="pdStub"><span class="annot"><span class="annottext">pdStub :: Section
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#pdStub"><span class="hs-identifier hs-var hs-var">pdStub</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#probDesc"><span class="hs-identifier hs-var">SRS.probDesc</span></a></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-316"></span></pre></body></html>
+</span><span id="line-313"></span></pre></body></html>

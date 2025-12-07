@@ -4100,8 +4100,8 @@ Bib :: BibRef -> RawContent
 --   height, and a label (<a>Sentence</a>).
 Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
 
--- | Block for codes TODO: Fill this one in.
-CodeBlock :: CodeExpr -> RawContent
+-- | Block for codes
+CodeBlock :: Expr -> RawContent
 
 -- | Smart constructor that wraps <a>LabelledContent</a> into
 --   <a>Contents</a>.
@@ -4196,7 +4196,7 @@ lbldExpr :: ModelExpr -> Reference -> LabelledContent
 unlbldExpr :: ModelExpr -> Contents
 
 -- | Unlabelled code expression
-unlbldCode :: CodeExpr -> Contents
+unlbldCode :: Expr -> Contents
 
 -- | Output is of the form "<tt>reference - sentence</tt>".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

@@ -3646,6 +3646,270 @@ instance Language.Drasil.Expr.Class.ExprC Language.Drasil.Expr.Lang.Expr
 instance Language.Drasil.Expr.Class.ExprC Language.Drasil.ModelExpr.Lang.ModelExpr
 
 
+-- | Contains types and functions common to aspects of generating
+--   documents.
+module Language.Drasil.Document.Core
+
+-- | Denotes the different possible types that can be used as a list.
+data ListType
+
+-- | Bulleted list.
+Bullet :: [(ItemType, Maybe String)] -> ListType
+
+-- | Enumerated list.
+Numeric :: [(ItemType, Maybe String)] -> ListType
+
+-- | Simple list with items denoted by <tt>:</tt>. Renders as "Title: Item"
+Simple :: [ListTuple] -> ListType
+
+-- | Descriptive list, renders as "<b>Title</b>: Item" (see
+--   <a>ListTuple</a>).
+Desc :: [ListTuple] -> ListType
+
+-- | Renders a list of "<tt><a>Title</a></tt> is the <tt>Item</tt>".
+Definitions :: [ListTuple] -> ListType
+
+-- | Denotes how something should behave in a list (<a>ListType</a>).
+data ItemType
+
+-- | Standard singular item.
+Flat :: Sentence -> ItemType
+
+-- | Nest a list (<a>ListType</a>) as an item.
+Nested :: Header -> ListType -> ItemType
+
+-- | MaxWidthPercent should be kept in the range 1-100. Values outside this
+--   range may have unexpected results. Used for specifying max figure
+--   width as <tt>pagewidth*MaxWidthPercent/100</tt>.
+type MaxWidthPercent = Float
+type Title = Sentence
+type Author = Sentence
+type Header = -- | Used when creating sublists. Sentence
+type Depth = Int
+type Width = Float
+type Height = Float
+type ListTuple = -- | Formats as Title: Item. For use in lists. (Title, ItemType, Maybe String)
+type Filepath = String
+type Lbl = -- | Label. Sentence
+
+-- | Contents may be labelled or unlabelled.
+data Contents
+UlC :: UnlabelledContent -> Contents
+LlC :: LabelledContent -> Contents
+
+-- | Types of definitions (general, instance, theory, or data).
+data DType
+General :: DType
+Instance :: DType
+Theory :: DType
+Data :: DType
+
+-- | Indicates whether a figure has a caption or not.
+data HasCaption
+NoCaption :: HasCaption
+WithCaption :: HasCaption
+
+-- | Types of layout objects we deal with explicitly.
+data RawContent
+
+-- | table has: header-row, data(rows), label/caption, and a bool that
+--   determines whether or not to show label.
+Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
+
+-- | Paragraphs are just sentences.
+Paragraph :: Sentence -> RawContent
+
+-- | Block of Equations holds an expression.
+EqnBlock :: ModelExpr -> RawContent
+
+-- | Grants the ability to label a group of <a>RawContent</a>.
+DerivBlock :: Sentence -> [RawContent] -> RawContent
+
+-- | For enumerated lists.
+Enumeration :: ListType -> RawContent
+
+-- | Defines something with a type, identifier, and <a>Contents</a>.
+Defini :: DType -> [(Identifier, [Contents])] -> RawContent
+
+-- | For creating figures in a document includes whether the figure has a
+--   caption.
+Figure :: Lbl -> Filepath -> MaxWidthPercent -> HasCaption -> RawContent
+
+-- | Grants the ability to reference something.
+Bib :: BibRef -> RawContent
+
+-- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
+--   height, and a label (<a>Sentence</a>).
+Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
+
+-- | Block for codes
+CodeBlock :: Expr -> RawContent
+
+-- | An identifier is just a <a>String</a>.
+type Identifier = String
+
+-- | Contains a <a>Reference</a> and <a>RawContent</a>.
+data LabelledContent
+LblC :: UID -> Reference -> RawContent -> LabelledContent
+[_lcUid] :: LabelledContent -> UID
+[_ref] :: LabelledContent -> Reference
+[_ctype] :: LabelledContent -> RawContent
+
+-- | Only contains <a>RawContent</a>.
+newtype UnlabelledContent
+UnlblC :: RawContent -> UnlabelledContent
+[_cntnts] :: UnlabelledContent -> RawContent
+ref :: Lens' LabelledContent Reference
+lcUid :: Lens' LabelledContent UID
+ctype :: Lens' LabelledContent RawContent
+cntnts :: Iso' UnlabelledContent RawContent
+
+-- | Members of this class must have <a>RawContent</a>.
+class HasContents c
+
+-- | Provides a <tt>Lens</tt> to the <a>RawContent</a>.
+accessContents :: HasContents c => Lens' c RawContent
+
+-- | Helper to prepend labels to <a>LabelledContent</a> when referencing.
+prependLabel :: RawContent -> IRefProg
+instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
+instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Document.Core.LabelledContent
+instance Drasil.Database.UID.HasUID Language.Drasil.Document.Core.LabelledContent
+instance GHC.Classes.Eq Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Core.LabelledContent
+instance GHC.Classes.Eq Language.Drasil.Document.Core.HasCaption
+
+
+-- | Document Description Language.
+module Language.Drasil.Document
+
+-- | Section Contents are split into subsections or contents, where
+--   contents are standard layout objects (see <a>Contents</a>).
+data SecCons
+Sub :: Section -> SecCons
+Con :: Contents -> SecCons
+data Partition
+Sections :: Partition
+Part :: Partition
+Chapter :: Partition
+
+-- | Sections have a title (<a>Sentence</a>), a list of contents
+--   (<a>SecCons</a>) and a shortname (<a>Reference</a>).
+data Section
+Section :: Title -> [SecCons] -> Reference -> Section
+[tle] :: Section -> Title
+[cons] :: Section -> [SecCons]
+[_lab] :: Section -> Reference
+lab :: Lens' Section Reference
+
+-- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
+--   and <a>Section</a>s which hold the contents of the document.
+data Document
+Document :: Title -> Author -> ShowTableOfContents -> [Section] -> Document
+Notebook :: Title -> Author -> [Section] -> Document
+
+-- | Determines whether or not the table of contents appears on the
+--   generated artifacts.
+data ShowTableOfContents
+ToC :: ShowTableOfContents
+NoToC :: ShowTableOfContents
+
+-- | Manually removes the first section of a document (table of contents
+--   section). temp fix for Notebook (see if we need this in notebook
+--   later)
+checkToC :: Document -> Document
+
+-- | Smart constructor for labelled content chunks.
+llcc :: Reference -> RawContent -> LabelledContent
+
+-- | Smart constructor for unlabelled content chunks (no <a>Reference</a>).
+ulcc :: RawContent -> UnlabelledContent
+
+-- | Smart constructor that wraps <a>UnlabelledContent</a> into
+--   <a>Contents</a>.
+mkParagraph :: Sentence -> Contents
+
+-- | Smart constructor that wraps <a>LabelledContent</a> into
+--   <a>Contents</a>.
+mkFig :: Reference -> RawContent -> Contents
+
+-- | Smart constructor similar to <a>llcc</a>, but takes in
+--   <a>RawContent</a> first.
+mkRawLC :: RawContent -> Reference -> LabelledContent
+
+-- | Smart constructor for creating <a>Section</a>s with a title
+--   (<a>Sentence</a>), introductory contents (ie. paragraphs, tables,
+--   etc.), a list of subsections, and a shortname (<a>Reference</a>).
+section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
+
+-- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
+--   <a>Filepath</a>. Assumes 100% of page width as max width. Defaults to
+--   <a>WithCaption</a>.
+fig :: Lbl -> Filepath -> RawContent
+
+-- | <a>Figure</a> smart constructor without a caption.
+figNoCap :: Lbl -> Filepath -> RawContent
+
+-- | <a>Figure</a> smart constructor that allows for customized max widths.
+--   Defaults to <a>WithCaption</a>.
+figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+
+-- | <a>Figure</a> smart constructor with customized max widths and no
+--   caption.
+figNoCapWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+docNs :: UID -> UID
+docUid :: String -> UID
+
+-- | Create a reference for a table. Takes in the name of a table (which
+--   will also be used for its shortname).
+makeTabRef :: String -> Reference
+
+-- | Create a reference for a figure. Takes in the name of a figure (which
+--   will also be used for its shortname).
+makeFigRef :: String -> Reference
+
+-- | Create a reference for a section. Takes in the name of a section and a
+--   shortname for the section.
+makeSecRef :: String -> Sentence -> Reference
+
+-- | Create a reference for a equation. Takes in the name of the equation
+--   (which will also be used for its shortname).
+makeEqnRef :: String -> Reference
+
+-- | Create a reference for a <a>URI</a>. Takes in a <a>UID</a> (as a
+--   <a>String</a>), a reference address, and a shortname.
+makeURI :: String -> String -> ShortName -> Reference
+
+-- | Variants of <a>makeTabRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeTabRef' :: UID -> Reference
+
+-- | Variants of <a>makeFigRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeFigRef' :: UID -> Reference
+
+-- | Variants of <a>makeSecRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeSecRef' :: UID -> Sentence -> Reference
+
+-- | Variants of <a>makeEqnRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeEqnRef' :: UID -> Reference
+
+-- | Variants of <a>makeURI</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeURI' :: UID -> String -> ShortName -> Reference
+instance Drasil.Database.UID.HasUID Language.Drasil.Document.Section
+instance GHC.Classes.Eq Language.Drasil.Document.Section
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Section
+instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Section
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Section
+
+
 -- | Defines types and functions for constrained values.
 module Language.Drasil.Constraint
 
@@ -3952,6 +4216,76 @@ versus :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the words "with respect to" between two Sentences.
 wrt :: Sentence -> Sentence -> Sentence
+
+
+-- | Folding-related functions and types.
+module Language.Drasil.Sentence.Fold
+
+-- | Type that helps determine enumeration method. Can use either numbers,
+--   uppercase letters, or lowercase letters.
+data EnumType
+Numb :: EnumType
+Upper :: EnumType
+Lower :: EnumType
+
+-- | Type to help wrap a sentence with parenthesis or to add a period at
+--   the end.
+data WrapType
+Parens :: WrapType
+Period :: WrapType
+
+-- | Type to help separate words with commas or semicolons.
+data SepType
+Comma :: SepType
+SemiCol :: SepType
+
+-- | Type to help fold differently between listed items, or if there are
+--   options (ex. using "and" or "or" at the end of a list of words).
+data FoldType
+List :: FoldType
+Options :: FoldType
+
+-- | Helper for formatting a list of constraints.
+foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
+
+-- | Creates a list of elements with "enumerators" in "wrappers" using
+--   foldlList.
+foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
+
+-- | Creates a list of elements separated by a "separator", ending with
+--   "and" or "or".
+foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
+
+-- | Fold sentences then turns into content using <a>foldlSent</a>.
+foldlSP :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
+foldlSP_ :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
+foldlSPCol :: [Sentence] -> Contents
+
+-- | Partial function application of <a>foldle</a> for sentences
+--   specifically. Folds with spaces and adds a period (".") at the end.
+foldlSent :: [Sentence] -> Sentence
+
+-- | <a>foldlSent</a> but does not add a period.
+foldlSent_ :: [Sentence] -> Sentence
+
+-- | <a>foldlSent</a> but ends with colon.
+foldlSentCol :: [Sentence] -> Sentence
+
+-- | Folds a list of elements separated by commas, including the last
+--   element.
+foldlsC :: [Sentence] -> Sentence
+
+-- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and
+--   13").
+foldNums :: String -> [Int] -> Sentence
+
+-- | Parses a list of integers into a list of strings (ie. ["1", "4-7",
+--   "13"]).
+numList :: String -> [Int] -> [String]
 
 
 -- | Developing the expression language in Drasil. Re-export many things to
@@ -4573,6 +4907,235 @@ instance GHC.Classes.Eq Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Unital.UnitalChunk
 
 
+-- | Miscellaneous utility functions for use throughout Drasil.
+module Language.Drasil.Document.Combinators
+
+-- | Output is of the form "<tt>reference - sentence</tt>".
+chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
+
+-- | Takes a <a>HasSymbol</a> that is also <a>Referable</a> and outputs as
+--   a <a>Sentence</a>: "<tt>symbol</tt> is defined in <tt>reference</tt>."
+definedIn :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence
+
+-- | Same as <a>definedIn</a>, but allows for additional information to be
+--   appended to the <a>Sentence</a>.
+definedIn' :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence -> Sentence
+
+-- | Takes a <a>Referable</a> and outputs as a <a>Sentence</a> "defined in
+--   <tt>reference</tt>" (no <a>HasSymbol</a>).
+definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
+
+-- | Takes a <a>Symbol</a> and its <tt>Reference</tt> (does not append a
+--   period at the end!). Outputs as "<tt>symbol</tt> is defined in
+--   <tt>source</tt>".
+definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
+
+-- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
+--   "expression (source)".
+eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
+
+-- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
+--   as a <a>Sentence</a>: "From <tt>source</tt> we can replace
+--   <tt>symbol</tt>:".
+fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
+
+-- | Wraps "from <tt>reference</tt>" in parentheses.
+fromSource :: (Referable r, HasShortName r) => r -> Sentence
+
+-- | Similar to <a>fromSource</a> but takes a list of references instead of
+--   one.
+fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
+
+-- | Takes an amount as a <a>Sentence</a> and appends a unit to it.
+fmtU :: MayHaveUnit a => Sentence -> a -> Sentence
+
+-- | Appends "following <tt>reference</tt>" to the end of a
+--   <a>Sentence</a>.
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+
+-- | Takes a list and a <a>Section</a>, then generates a list of that
+--   section's reference to match the length of the list.
+makeListRef :: [a] -> Section -> [Sentence]
+
+-- | Converts input to a <a>Sentence</a> and appends %.
+addPercent :: Show a => a -> Sentence
+
+-- | Prepends the word <a>Equation</a> to an <a>Int</a>.
+eqN :: Int -> Sentence
+
+-- | Uses an <a>Either</a> type to check if a <a>String</a> is valid -
+--   <a>Left</a> with error message if there is an invalid <a>Char</a> in
+--   <a>String</a>, else <a>Right</a> with <a>String</a>.
+checkValidStr :: String -> String -> Either String String
+
+-- | Used when you want to say a term followed by its symbol. ex. "...using
+--   the Force F in...".
+getTandS :: Quantity a => a -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeChanged :: Sentence -> Sentence -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeExpanded :: Sentence -> Sentence -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeWOVerb :: Sentence -> Sentence -> Sentence
+
+-- | Returns the <a>Sentence</a> "<tt>(<a>titleize</a> aNamedIdea)</tt>
+--   Showing the Connections Between <tt>contents</tt>".
+showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
+
+-- | Takes a list of <a>Referable</a>s and <a>Symbol</a>s and outputs as a
+--   Sentence "By substituting <tt>symbols</tt>, this can be written as:".
+substitute :: (Referable r, HasShortName r, DefinesQuantity r) => [r] -> Sentence
+
+-- | Extracts the typical uncertainty to be displayed from something that
+--   has an uncertainty.
+typUncr :: HasUncertainty c => c -> Sentence
+
+-- | Returns the <a>Sentence</a> "The <tt>chunk</tt> under consideration is
+--   <tt>chunkDefinition</tt>".
+underConsidertn :: ConceptChunk -> Sentence
+
+-- | Get a unit symbol if there is one.
+unwrap :: Maybe UnitDefn -> Sentence
+
+-- | Apply a binary function to the terms of two named ideas, instead of to
+--   the named ideas themselves. Ex. <tt>fterms compoundPhrase t1 t2</tt>
+--   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>.
+fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
+
+-- | Applies <a>Bullet</a> and <a>Flat</a> to a list.
+bulletFlat :: [Sentence] -> ListType
+
+-- | Applies <a>Bullet</a>s and headers to a <a>Nested</a> <a>ListType</a>.
+--   The first argument is the headers of the <a>Nested</a> lists.
+bulletNested :: [Sentence] -> [ListType] -> ListType
+
+-- | Makes <a>Sentence</a>s from an item and its reference. Takes the title
+--   of reference as a <a>String</a> and a <a>Sentence</a> containing the
+--   full reference. Wraps the full reference in parenthesis.
+itemRefToSent :: String -> Sentence -> Sentence
+
+-- | Makes a traceability matrix from a list of row titles, a list of rows
+--   of "checked" columns, and a list of columns.
+makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
+
+-- | Zip helper function enumerates abbreviations and zips it with list of
+--   <a>ItemType</a>:
+--   
+--   <ul>
+--   <li>s - the number from which the enumeration should start from
+--   (<a>Integer</a>),</li>
+--   <li>t - the title of the list (<a>Sentence</a>),</li>
+--   <li>l - the list to be enumerated ([<a>Sentence</a>]).</li>
+--   </ul>
+mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
+
+-- | Helper for making a table from a columns.
+mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
+
+-- | Converts lists of simple <a>ItemType</a>s into a list which may be
+--   used in <tt>Contents</tt> but is not directly referable.
+noRefs :: [ItemType] -> [(ItemType, Maybe String)]
+
+-- | Create a list in the pattern of "The __ are refined to the __". Note:
+--   Order matters!
+refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+
+-- | Sorts a list of <tt>HasSymbols</tt> by <a>Symbol</a>.
+sortBySymbol :: HasSymbol a => [a] -> [a]
+
+-- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the
+--   tuple.
+sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term -
+--   termDefinition</tt>".
+tAndDOnly :: Concept s => s -> ItemType
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term (abbreviation) -
+--   termDefinition</tt>".
+tAndDWAcc :: Concept s => s -> ItemType
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term (symbol) -
+--   termDefinition</tt>".
+tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
+
+-- | Distributes a list of Sentences by prepending individual Sentences
+--   once to an existing list of Sentences.
+--   
+--   For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; zipSentList [S "Hi", S "Hey", S "Hi"] [[S "Hello"], [S "World"], [S "Hello", S "World"]]
+--   [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
+--   </pre>
+zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
+
+
+-- | General functions that are useful in manipulating some Drasil types
+--   into printable <a>Contents</a>.
+module Language.Drasil.Document.Contents
+
+-- | Creates a bulleted list.
+enumBullet :: Reference -> [Sentence] -> LabelledContent
+
+-- | Same as <a>enumBullet</a> but unlabelled.
+enumBulletU :: [Sentence] -> Contents
+
+-- | Currently Unused. Creates a simple bulleted list that labels things
+--   with a title and number:
+--   
+--   <ul>
+--   <li>lb - Reference,</li>
+--   <li>s - start index for the enumeration,</li>
+--   <li>t - title of the list,</li>
+--   <li>l - list to be enumerated.</li>
+--   </ul>
+--   
+--   For example, if we want to create a list of data definitions, we could
+--   call the function as follows:
+--   
+--   <pre>
+--   enumSimple _ 2 (S "DD") [def1, def2, ...]
+--   </pre>
+--   
+--   And the resulting <a>LabelledContent</a> would be rendered as:
+--   
+--   <ul>
+--   <li>DD2: def1</li>
+--   <li>DD3: def2</li>
+--   <li>DD4: def3 ...</li>
+--   </ul>
+enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent
+
+-- | Same as <a>enumSimple</a> but unlabelled.
+enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
+
+-- | Convenience function for transforming referable concepts into a
+--   bulleted list. Used in drasil-docLang in making the assumptions,
+--   goals, and requirements sections. Output is of the kind <tt>Concept
+--   Name: definition of concept</tt>.
+mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
+
+-- | Displays a given expression and attaches a <a>Reference</a> to it.
+lbldExpr :: ModelExpr -> Reference -> LabelledContent
+
+-- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
+--   <a>Reference</a>).
+unlbldExpr :: ModelExpr -> Contents
+
+-- | Unlabelled code expression
+unlbldCode :: Expr -> Contents
+
+
 -- | Contains the common idea type and respective constructors.
 module Language.Drasil.Chunk.CommonIdea
 
@@ -4928,569 +5491,6 @@ instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFuncVV
 instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFuncVN
 instance Language.Drasil.Literal.Class.LiteralC Drasil.Code.CodeExpr.Lang.CodeExpr
 instance Language.Drasil.Expr.Class.ExprC Drasil.Code.CodeExpr.Lang.CodeExpr
-
-
--- | Contains types and functions common to aspects of generating
---   documents.
-module Language.Drasil.Document.Core
-
--- | Denotes the different possible types that can be used as a list.
-data ListType
-
--- | Bulleted list.
-Bullet :: [(ItemType, Maybe String)] -> ListType
-
--- | Enumerated list.
-Numeric :: [(ItemType, Maybe String)] -> ListType
-
--- | Simple list with items denoted by <tt>:</tt>. Renders as "Title: Item"
-Simple :: [ListTuple] -> ListType
-
--- | Descriptive list, renders as "<b>Title</b>: Item" (see
---   <a>ListTuple</a>).
-Desc :: [ListTuple] -> ListType
-
--- | Renders a list of "<tt><a>Title</a></tt> is the <tt>Item</tt>".
-Definitions :: [ListTuple] -> ListType
-
--- | Denotes how something should behave in a list (<a>ListType</a>).
-data ItemType
-
--- | Standard singular item.
-Flat :: Sentence -> ItemType
-
--- | Nest a list (<a>ListType</a>) as an item.
-Nested :: Header -> ListType -> ItemType
-
--- | MaxWidthPercent should be kept in the range 1-100. Values outside this
---   range may have unexpected results. Used for specifying max figure
---   width as <tt>pagewidth*MaxWidthPercent/100</tt>.
-type MaxWidthPercent = Float
-type Title = Sentence
-type Author = Sentence
-type Header = -- | Used when creating sublists. Sentence
-type Depth = Int
-type Width = Float
-type Height = Float
-type ListTuple = -- | Formats as Title: Item. For use in lists. (Title, ItemType, Maybe String)
-type Filepath = String
-type Lbl = -- | Label. Sentence
-
--- | Contents may be labelled or unlabelled.
-data Contents
-UlC :: UnlabelledContent -> Contents
-LlC :: LabelledContent -> Contents
-
--- | Types of definitions (general, instance, theory, or data).
-data DType
-General :: DType
-Instance :: DType
-Theory :: DType
-Data :: DType
-
--- | Indicates whether a figure has a caption or not.
-data HasCaption
-NoCaption :: HasCaption
-WithCaption :: HasCaption
-
--- | Types of layout objects we deal with explicitly.
-data RawContent
-
--- | table has: header-row, data(rows), label/caption, and a bool that
---   determines whether or not to show label.
-Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
-
--- | Paragraphs are just sentences.
-Paragraph :: Sentence -> RawContent
-
--- | Block of Equations holds an expression.
-EqnBlock :: ModelExpr -> RawContent
-
--- | Grants the ability to label a group of <a>RawContent</a>.
-DerivBlock :: Sentence -> [RawContent] -> RawContent
-
--- | For enumerated lists.
-Enumeration :: ListType -> RawContent
-
--- | Defines something with a type, identifier, and <a>Contents</a>.
-Defini :: DType -> [(Identifier, [Contents])] -> RawContent
-
--- | For creating figures in a document includes whether the figure has a
---   caption.
-Figure :: Lbl -> Filepath -> MaxWidthPercent -> HasCaption -> RawContent
-
--- | Grants the ability to reference something.
-Bib :: BibRef -> RawContent
-
--- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
---   height, and a label (<a>Sentence</a>).
-Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
-
--- | Block for codes TODO: Fill this one in.
-CodeBlock :: CodeExpr -> RawContent
-
--- | An identifier is just a <a>String</a>.
-type Identifier = String
-
--- | Contains a <a>Reference</a> and <a>RawContent</a>.
-data LabelledContent
-LblC :: UID -> Reference -> RawContent -> LabelledContent
-[_lcUid] :: LabelledContent -> UID
-[_ref] :: LabelledContent -> Reference
-[_ctype] :: LabelledContent -> RawContent
-
--- | Only contains <a>RawContent</a>.
-newtype UnlabelledContent
-UnlblC :: RawContent -> UnlabelledContent
-[_cntnts] :: UnlabelledContent -> RawContent
-ref :: Lens' LabelledContent Reference
-lcUid :: Lens' LabelledContent UID
-ctype :: Lens' LabelledContent RawContent
-cntnts :: Iso' UnlabelledContent RawContent
-
--- | Members of this class must have <a>RawContent</a>.
-class HasContents c
-
--- | Provides a <tt>Lens</tt> to the <a>RawContent</a>.
-accessContents :: HasContents c => Lens' c RawContent
-
--- | Helper to prepend labels to <a>LabelledContent</a> when referencing.
-prependLabel :: RawContent -> IRefProg
-instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
-instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
-instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Document.Core.LabelledContent
-instance Drasil.Database.UID.HasUID Language.Drasil.Document.Core.LabelledContent
-instance GHC.Classes.Eq Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Core.LabelledContent
-instance GHC.Classes.Eq Language.Drasil.Document.Core.HasCaption
-
-
--- | Document Description Language.
-module Language.Drasil.Document
-
--- | Section Contents are split into subsections or contents, where
---   contents are standard layout objects (see <a>Contents</a>).
-data SecCons
-Sub :: Section -> SecCons
-Con :: Contents -> SecCons
-data Partition
-Sections :: Partition
-Part :: Partition
-Chapter :: Partition
-
--- | Sections have a title (<a>Sentence</a>), a list of contents
---   (<a>SecCons</a>) and a shortname (<a>Reference</a>).
-data Section
-Section :: Title -> [SecCons] -> Reference -> Section
-[tle] :: Section -> Title
-[cons] :: Section -> [SecCons]
-[_lab] :: Section -> Reference
-lab :: Lens' Section Reference
-
--- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
---   and <a>Section</a>s which hold the contents of the document.
-data Document
-Document :: Title -> Author -> ShowTableOfContents -> [Section] -> Document
-Notebook :: Title -> Author -> [Section] -> Document
-
--- | Determines whether or not the table of contents appears on the
---   generated artifacts.
-data ShowTableOfContents
-ToC :: ShowTableOfContents
-NoToC :: ShowTableOfContents
-
--- | Manually removes the first section of a document (table of contents
---   section). temp fix for Notebook (see if we need this in notebook
---   later)
-checkToC :: Document -> Document
-
--- | Smart constructor for labelled content chunks.
-llcc :: Reference -> RawContent -> LabelledContent
-
--- | Smart constructor for unlabelled content chunks (no <a>Reference</a>).
-ulcc :: RawContent -> UnlabelledContent
-
--- | Smart constructor that wraps <a>UnlabelledContent</a> into
---   <a>Contents</a>.
-mkParagraph :: Sentence -> Contents
-
--- | Smart constructor that wraps <a>LabelledContent</a> into
---   <a>Contents</a>.
-mkFig :: Reference -> RawContent -> Contents
-
--- | Smart constructor similar to <a>llcc</a>, but takes in
---   <a>RawContent</a> first.
-mkRawLC :: RawContent -> Reference -> LabelledContent
-
--- | Smart constructor for creating <a>Section</a>s with a title
---   (<a>Sentence</a>), introductory contents (ie. paragraphs, tables,
---   etc.), a list of subsections, and a shortname (<a>Reference</a>).
-section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
-
--- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
---   <a>Filepath</a>. Assumes 100% of page width as max width. Defaults to
---   <a>WithCaption</a>.
-fig :: Lbl -> Filepath -> RawContent
-
--- | <a>Figure</a> smart constructor without a caption.
-figNoCap :: Lbl -> Filepath -> RawContent
-
--- | <a>Figure</a> smart constructor that allows for customized max widths.
---   Defaults to <a>WithCaption</a>.
-figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
-
--- | <a>Figure</a> smart constructor with customized max widths and no
---   caption.
-figNoCapWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
-docNs :: UID -> UID
-docUid :: String -> UID
-
--- | Create a reference for a table. Takes in the name of a table (which
---   will also be used for its shortname).
-makeTabRef :: String -> Reference
-
--- | Create a reference for a figure. Takes in the name of a figure (which
---   will also be used for its shortname).
-makeFigRef :: String -> Reference
-
--- | Create a reference for a section. Takes in the name of a section and a
---   shortname for the section.
-makeSecRef :: String -> Sentence -> Reference
-
--- | Create a reference for a equation. Takes in the name of the equation
---   (which will also be used for its shortname).
-makeEqnRef :: String -> Reference
-
--- | Create a reference for a <a>URI</a>. Takes in a <a>UID</a> (as a
---   <a>String</a>), a reference address, and a shortname.
-makeURI :: String -> String -> ShortName -> Reference
-
--- | Variants of <a>makeTabRef</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeTabRef' :: UID -> Reference
-
--- | Variants of <a>makeFigRef</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeFigRef' :: UID -> Reference
-
--- | Variants of <a>makeSecRef</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeSecRef' :: UID -> Sentence -> Reference
-
--- | Variants of <a>makeEqnRef</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeEqnRef' :: UID -> Reference
-
--- | Variants of <a>makeURI</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeURI' :: UID -> String -> ShortName -> Reference
-instance Drasil.Database.UID.HasUID Language.Drasil.Document.Section
-instance GHC.Classes.Eq Language.Drasil.Document.Section
-instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Section
-instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Section
-instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Section
-
-
--- | Folding-related functions and types.
-module Language.Drasil.Sentence.Fold
-
--- | Type that helps determine enumeration method. Can use either numbers,
---   uppercase letters, or lowercase letters.
-data EnumType
-Numb :: EnumType
-Upper :: EnumType
-Lower :: EnumType
-
--- | Type to help wrap a sentence with parenthesis or to add a period at
---   the end.
-data WrapType
-Parens :: WrapType
-Period :: WrapType
-
--- | Type to help separate words with commas or semicolons.
-data SepType
-Comma :: SepType
-SemiCol :: SepType
-
--- | Type to help fold differently between listed items, or if there are
---   options (ex. using "and" or "or" at the end of a list of words).
-data FoldType
-List :: FoldType
-Options :: FoldType
-
--- | Helper for formatting a list of constraints.
-foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
-
--- | Creates a list of elements with "enumerators" in "wrappers" using
---   foldlList.
-foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
-
--- | Creates a list of elements separated by a "separator", ending with
---   "and" or "or".
-foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
-
--- | Fold sentences then turns into content using <a>foldlSent</a>.
-foldlSP :: [Sentence] -> Contents
-
--- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
-foldlSP_ :: [Sentence] -> Contents
-
--- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
-foldlSPCol :: [Sentence] -> Contents
-
--- | Partial function application of <a>foldle</a> for sentences
---   specifically. Folds with spaces and adds a period (".") at the end.
-foldlSent :: [Sentence] -> Sentence
-
--- | <a>foldlSent</a> but does not add a period.
-foldlSent_ :: [Sentence] -> Sentence
-
--- | <a>foldlSent</a> but ends with colon.
-foldlSentCol :: [Sentence] -> Sentence
-
--- | Folds a list of elements separated by commas, including the last
---   element.
-foldlsC :: [Sentence] -> Sentence
-
--- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and
---   13").
-foldNums :: String -> [Int] -> Sentence
-
--- | Parses a list of integers into a list of strings (ie. ["1", "4-7",
---   "13"]).
-numList :: String -> [Int] -> [String]
-
-
--- | Miscellaneous utility functions for use throughout Drasil.
-module Language.Drasil.Document.Combinators
-
--- | Output is of the form "<tt>reference - sentence</tt>".
-chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
-
--- | Takes a <a>HasSymbol</a> that is also <a>Referable</a> and outputs as
---   a <a>Sentence</a>: "<tt>symbol</tt> is defined in <tt>reference</tt>."
-definedIn :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence
-
--- | Same as <a>definedIn</a>, but allows for additional information to be
---   appended to the <a>Sentence</a>.
-definedIn' :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence -> Sentence
-
--- | Takes a <a>Referable</a> and outputs as a <a>Sentence</a> "defined in
---   <tt>reference</tt>" (no <a>HasSymbol</a>).
-definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
-
--- | Takes a <a>Symbol</a> and its <tt>Reference</tt> (does not append a
---   period at the end!). Outputs as "<tt>symbol</tt> is defined in
---   <tt>source</tt>".
-definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
-
--- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
---   "expression (source)".
-eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
-
--- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
---   as a <a>Sentence</a>: "From <tt>source</tt> we can replace
---   <tt>symbol</tt>:".
-fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
-
--- | Wraps "from <tt>reference</tt>" in parentheses.
-fromSource :: (Referable r, HasShortName r) => r -> Sentence
-
--- | Similar to <a>fromSource</a> but takes a list of references instead of
---   one.
-fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
-
--- | Takes an amount as a <a>Sentence</a> and appends a unit to it.
-fmtU :: MayHaveUnit a => Sentence -> a -> Sentence
-
--- | Appends "following <tt>reference</tt>" to the end of a
---   <a>Sentence</a>.
-follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
-
--- | Takes a list and a <a>Section</a>, then generates a list of that
---   section's reference to match the length of the list.
-makeListRef :: [a] -> Section -> [Sentence]
-
--- | Converts input to a <a>Sentence</a> and appends %.
-addPercent :: Show a => a -> Sentence
-
--- | Prepends the word <a>Equation</a> to an <a>Int</a>.
-eqN :: Int -> Sentence
-
--- | Uses an <a>Either</a> type to check if a <a>String</a> is valid -
---   <a>Left</a> with error message if there is an invalid <a>Char</a> in
---   <a>String</a>, else <a>Right</a> with <a>String</a>.
-checkValidStr :: String -> String -> Either String String
-
--- | Used when you want to say a term followed by its symbol. ex. "...using
---   the Force F in...".
-getTandS :: Quantity a => a -> Sentence
-
--- | Helper functions for making likely change statements. Uses form
---   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
-maybeChanged :: Sentence -> Sentence -> Sentence
-
--- | Helper functions for making likely change statements. Uses form
---   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
-maybeExpanded :: Sentence -> Sentence -> Sentence
-
--- | Helper functions for making likely change statements. Uses form
---   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
-maybeWOVerb :: Sentence -> Sentence -> Sentence
-
--- | Returns the <a>Sentence</a> "<tt>(<a>titleize</a> aNamedIdea)</tt>
---   Showing the Connections Between <tt>contents</tt>".
-showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
-
--- | Takes a list of <a>Referable</a>s and <a>Symbol</a>s and outputs as a
---   Sentence "By substituting <tt>symbols</tt>, this can be written as:".
-substitute :: (Referable r, HasShortName r, DefinesQuantity r) => [r] -> Sentence
-
--- | Extracts the typical uncertainty to be displayed from something that
---   has an uncertainty.
-typUncr :: HasUncertainty c => c -> Sentence
-
--- | Returns the <a>Sentence</a> "The <tt>chunk</tt> under consideration is
---   <tt>chunkDefinition</tt>".
-underConsidertn :: ConceptChunk -> Sentence
-
--- | Get a unit symbol if there is one.
-unwrap :: Maybe UnitDefn -> Sentence
-
--- | Apply a binary function to the terms of two named ideas, instead of to
---   the named ideas themselves. Ex. <tt>fterms compoundPhrase t1 t2</tt>
---   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>.
-fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
-
--- | Applies <a>Bullet</a> and <a>Flat</a> to a list.
-bulletFlat :: [Sentence] -> ListType
-
--- | Applies <a>Bullet</a>s and headers to a <a>Nested</a> <a>ListType</a>.
---   The first argument is the headers of the <a>Nested</a> lists.
-bulletNested :: [Sentence] -> [ListType] -> ListType
-
--- | Makes <a>Sentence</a>s from an item and its reference. Takes the title
---   of reference as a <a>String</a> and a <a>Sentence</a> containing the
---   full reference. Wraps the full reference in parenthesis.
-itemRefToSent :: String -> Sentence -> Sentence
-
--- | Makes a traceability matrix from a list of row titles, a list of rows
---   of "checked" columns, and a list of columns.
-makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
-
--- | Zip helper function enumerates abbreviations and zips it with list of
---   <a>ItemType</a>:
---   
---   <ul>
---   <li>s - the number from which the enumeration should start from
---   (<a>Integer</a>),</li>
---   <li>t - the title of the list (<a>Sentence</a>),</li>
---   <li>l - the list to be enumerated ([<a>Sentence</a>]).</li>
---   </ul>
-mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
-
--- | Helper for making a table from a columns.
-mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
-
--- | Converts lists of simple <a>ItemType</a>s into a list which may be
---   used in <tt>Contents</tt> but is not directly referable.
-noRefs :: [ItemType] -> [(ItemType, Maybe String)]
-
--- | Create a list in the pattern of "The __ are refined to the __". Note:
---   Order matters!
-refineChain :: NamedIdea c => [(c, Section)] -> Sentence
-
--- | Sorts a list of <tt>HasSymbols</tt> by <a>Symbol</a>.
-sortBySymbol :: HasSymbol a => [a] -> [a]
-
--- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the
---   tuple.
-sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
-
--- | Helpful combinators for making <a>Sentence</a>s into Terminologies
---   with Definitions. Returns of the form: "<tt>term -
---   termDefinition</tt>".
-tAndDOnly :: Concept s => s -> ItemType
-
--- | Helpful combinators for making <a>Sentence</a>s into Terminologies
---   with Definitions. Returns of the form: "<tt>term (abbreviation) -
---   termDefinition</tt>".
-tAndDWAcc :: Concept s => s -> ItemType
-
--- | Helpful combinators for making <a>Sentence</a>s into Terminologies
---   with Definitions. Returns of the form: "<tt>term (symbol) -
---   termDefinition</tt>".
-tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
-
--- | Distributes a list of Sentences by prepending individual Sentences
---   once to an existing list of Sentences.
---   
---   For example:
---   
---   <pre>
---   &gt;&gt;&gt; zipSentList [S "Hi", S "Hey", S "Hi"] [[S "Hello"], [S "World"], [S "Hello", S "World"]]
---   [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
---   </pre>
-zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
-
-
--- | General functions that are useful in manipulating some Drasil types
---   into printable <a>Contents</a>.
-module Language.Drasil.Document.Contents
-
--- | Creates a bulleted list.
-enumBullet :: Reference -> [Sentence] -> LabelledContent
-
--- | Same as <a>enumBullet</a> but unlabelled.
-enumBulletU :: [Sentence] -> Contents
-
--- | Currently Unused. Creates a simple bulleted list that labels things
---   with a title and number:
---   
---   <ul>
---   <li>lb - Reference,</li>
---   <li>s - start index for the enumeration,</li>
---   <li>t - title of the list,</li>
---   <li>l - list to be enumerated.</li>
---   </ul>
---   
---   For example, if we want to create a list of data definitions, we could
---   call the function as follows:
---   
---   <pre>
---   enumSimple _ 2 (S "DD") [def1, def2, ...]
---   </pre>
---   
---   And the resulting <a>LabelledContent</a> would be rendered as:
---   
---   <ul>
---   <li>DD2: def1</li>
---   <li>DD3: def2</li>
---   <li>DD4: def3 ...</li>
---   </ul>
-enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent
-
--- | Same as <a>enumSimple</a> but unlabelled.
-enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
-
--- | Convenience function for transforming referable concepts into a
---   bulleted list. Used in drasil-docLang in making the assumptions,
---   goals, and requirements sections. Output is of the kind <tt>Concept
---   Name: definition of concept</tt>.
-mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
-
--- | Displays a given expression and attaches a <a>Reference</a> to it.
-lbldExpr :: ModelExpr -> Reference -> LabelledContent
-
--- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
---   <a>Reference</a>).
-unlbldExpr :: ModelExpr -> Contents
-
--- | Unlabelled code expression
-unlbldCode :: CodeExpr -> Contents
 
 
 -- | Defines chunk types for use in code generation.
@@ -8411,8 +8411,8 @@ Bib :: BibRef -> RawContent
 --   height, and a label (<a>Sentence</a>).
 Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
 
--- | Block for codes TODO: Fill this one in.
-CodeBlock :: CodeExpr -> RawContent
+-- | Block for codes
+CodeBlock :: Expr -> RawContent
 
 -- | Smart constructor that wraps <a>LabelledContent</a> into
 --   <a>Contents</a>.
@@ -8507,7 +8507,7 @@ lbldExpr :: ModelExpr -> Reference -> LabelledContent
 unlbldExpr :: ModelExpr -> Contents
 
 -- | Unlabelled code expression
-unlbldCode :: CodeExpr -> Contents
+unlbldCode :: Expr -> Contents
 
 -- | Output is of the form "<tt>reference - sentence</tt>".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

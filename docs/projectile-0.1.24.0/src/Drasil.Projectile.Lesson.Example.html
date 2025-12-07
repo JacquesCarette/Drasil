@@ -99,38 +99,38 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-21"></span><span>
 </span><span id="line-22"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#codeC1"><span class="hs-identifier hs-type">codeC1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#codeC2"><span class="hs-identifier hs-type">codeC2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#codeC3"><span class="hs-identifier hs-type">codeC3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
 </span><span id="line-23"></span><span id="codeC1"><span class="annot"><span class="annottext">codeC1 :: Contents
-</span><a href="Drasil.Projectile.Lesson.Example.html#codeC1"><span class="hs-identifier hs-var hs-var">codeC1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; Contents
-</span><span class="hs-identifier hs-var">unlbldCode</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; CodeExpr
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; CodeExpr
+</span><a href="Drasil.Projectile.Lesson.Example.html#codeC1"><span class="hs-identifier hs-var hs-var">codeC1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Contents
+</span><span class="hs-identifier hs-var">unlbldCode</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.Projectile.Lesson.Example.html#horiz_velo"><span class="hs-identifier hs-var">horiz_velo</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+</span><a href="Drasil.Projectile.Lesson.Example.html#horiz_velo"><span class="hs-identifier hs-var">horiz_velo</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">17</span></span><span class="hs-special">)</span><span>
 </span><span id="line-24"></span><span id="codeC2"><span class="annot"><span class="annottext">codeC2 :: Contents
-</span><a href="Drasil.Projectile.Lesson.Example.html#codeC2"><span class="hs-identifier hs-var hs-var">codeC2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; Contents
-</span><span class="hs-identifier hs-var">unlbldCode</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; CodeExpr
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; CodeExpr
+</span><a href="Drasil.Projectile.Lesson.Example.html#codeC2"><span class="hs-identifier hs-var hs-var">codeC2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Contents
+</span><span class="hs-identifier hs-var">unlbldCode</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QP.height</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">QP.height</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">6</span></span><span class="hs-special">)</span><span>
 </span><span id="line-25"></span><span id="codeC3"><span class="annot"><span class="annottext">codeC3 :: Contents
-</span><a href="Drasil.Projectile.Lesson.Example.html#codeC3"><span class="hs-identifier hs-var hs-var">codeC3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; Contents
-</span><span class="hs-identifier hs-var">unlbldCode</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; CodeExpr
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; CodeExpr
+</span><a href="Drasil.Projectile.Lesson.Example.html#codeC3"><span class="hs-identifier hs-var hs-var">codeC3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Contents
+</span><span class="hs-identifier hs-var">unlbldCode</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QP.gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">QP.gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; CodeExpr
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Expr
 forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">9.81</span></span><span class="hs-special">)</span><span>

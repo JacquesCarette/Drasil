@@ -224,7 +224,6 @@ scope = foldlSent_ [S "determining the safety" `S.ofA` phrase glaSlab,
 {--Purpose of Document--}
 -- Purpose of Document automatically generated in IPurpose
 
-
 {--Scope of Requirements--}
 
 {--Organization of Document--}

@@ -6,7 +6,7 @@ import Control.Lens ((^.), makeLenses, Lens', set, view)
 
 import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 
-import Drasil.Code.CodeExpr.Lang (CodeExpr)
+import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
@@ -78,8 +78,7 @@ data RawContent =
                                              -- ^ For creating figures in a document includes whether the figure has a caption.
   | Bib BibRef                               -- ^ Grants the ability to reference something.
   | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl -- ^ Contain a graph with coordinates ('Sentence's), maybe a width and height, and a label ('Sentence').
-  | CodeBlock CodeExpr                       -- ^ Block for codes
-               -- TODO: Fill this one in.
+  | CodeBlock Expr                           -- ^ Block for codes
 
 -- | An identifier is just a 'String'.
 type Identifier = String

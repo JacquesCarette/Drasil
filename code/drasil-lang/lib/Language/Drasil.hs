@@ -215,7 +215,6 @@ module Language.Drasil (
   , foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent
   , foldlSent_,foldlSentCol, foldlsC, foldNums, numList
 
-
   -- * Basic Document Language
   -- | Holds all the types and helper functions needed especially in @drasil-docLang@
   -- Language.Drasil.Document

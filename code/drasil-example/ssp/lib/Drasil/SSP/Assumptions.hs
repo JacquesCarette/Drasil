@@ -19,7 +19,6 @@ import Data.Drasil.Concepts.Documentation (analysis, assumpDom, assumption,
 import Data.Drasil.Concepts.Physics (force, position, stress, twoD)
 import Data.Drasil.Concepts.Math (surface, unit_)
 
-
 assumptions :: [ConceptInstance]
 assumptions = [assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF,

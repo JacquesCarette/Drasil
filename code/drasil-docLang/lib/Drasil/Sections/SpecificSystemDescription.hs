@@ -120,7 +120,6 @@ solutionCharSpecIntro progName instModelSection = foldlSP [D.toSent $ atStartNP'
   S "and their derivation is also presented, so that the", plural inModel,
   S "can be verified"]
 
-
 -- Wrappers for assumpIntro. Use assumpF' if genDefs is not needed
 -- | Creates an Assumptions section by prepending a general introduction to other related 'Contents'.
 assumpF :: [Contents] -> Section
@@ -161,7 +160,6 @@ generalDefinitionIntro _  = foldlSP [S "This", phrase section_,
   S "collects the laws and", plural equation,
   S "that will be used to build the", plural inModel]
 
-
 -- | Similar to 'genDefnF', but for Data Definitions. It also uses 'EmptyS' if the ending 'Sentence' is not needed rather than an empty list.
 dataDefnF :: Sentence -> [Contents] -> Section
 dataDefnF _          []            = SRS.dataDefn [dataDefnIntroNoContent] []
@@ -187,7 +185,6 @@ inModelF probDes datDef theMod genDef otherContents = SRS.inModel (inModelIntro
                                                         probDes datDef theMod
                                                         genDef : otherContents)
                                                         []
-
 
 -- | Creates a general Instance Model introduction. Requires four references to function. Nothing can be input into the last reference if only three tables are present.
 inModelIntro :: Section -> Section -> Section -> Section -> Contents

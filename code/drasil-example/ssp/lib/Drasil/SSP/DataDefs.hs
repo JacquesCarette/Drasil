@@ -138,7 +138,6 @@ lengthLsNotes :: Sentence
 lengthLsNotes = foldlSent [baseWthX `definedIn'''`
   lengthB `S.and_` (surfAngle `definedIn'''` angleB)]
 
-
 --DD slcHeight: y-direction heights of slices
 
 slcHeight :: DataDefinition
@@ -443,7 +442,6 @@ mobShr_deriv_sentences_ssp_s3 = [S "The" +:+ plural value +:+ S "of" +:+
   refS newA10 +:+ S "and" +:+ refS newA12 `sC`
   S "which state that the seismic coefficient and the external force" `sC` S "respectively"
   `sC` S "are0" +:+ S "Removing seismic and external forces yields " +:+ eqN 7]
-
 
 mobShrDerivation_sentence :: [Sentence]
 mobShrDerivation_sentence = map foldlSentCol [mobShr_deriv_sentences_ssp_s1, mobShr_deriv_sentences_ssp_s2,

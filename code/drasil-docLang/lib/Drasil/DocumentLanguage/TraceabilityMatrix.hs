@@ -6,6 +6,7 @@ import Control.Lens ((^.))
 import Data.Containers.ListUtils (nubOrd)
 import qualified Data.Map as Map
 
+import Drasil.Database (UID, HasUID(..))
 import Drasil.Database.SearchTools (defResolve', findAllConcInsts, DomDefn(domain))
 import Language.Drasil
 import Drasil.System hiding (purpose)

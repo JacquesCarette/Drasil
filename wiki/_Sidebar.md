@@ -18,7 +18,6 @@
   * [Guidelines for Adding New Types and Typeclasses](Guidelines-for-Adding-New-Types-and-Typeclasses-in-Drasil)
   * [References](Reference-Design-and-Documentation)
   * [Printing Information](Printing-Information-Guide)
-  * [Sub-packages](SubPackages)
   * [Folders](Folder-layout)
     * [GOOL/GProc Overview](GOOL-GProc%20Overview)
   * [Quantifying Productivity and Ease of Use](Quantifying-Productivity-and-Ease-of-Use)

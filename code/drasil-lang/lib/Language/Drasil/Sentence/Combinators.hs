@@ -19,7 +19,6 @@ import Language.Drasil.Classes ( NamedIdea )
 import Language.Drasil.Development.Sentence ( titleize, titleize' )
 import Language.Drasil.Sentence ( Sentence(S), (+:+) )
 
-
 sentHelper :: String -> Sentence -> Sentence -> Sentence
 -- | Inserts a String between two Sentences
 sentHelper inStr a b = a +:+ S inStr +:+ b

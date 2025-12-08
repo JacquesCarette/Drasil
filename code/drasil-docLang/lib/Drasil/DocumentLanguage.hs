@@ -243,8 +243,6 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
         [LlC $ tableAbbAccGen $ nub ideas]
         []
 
-
-
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
   [e] -> LFunc -> [TSIntro] -> Section
@@ -315,7 +313,6 @@ mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSub
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
         mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
         mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
-
 
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: System -> SolChSpec -> Section

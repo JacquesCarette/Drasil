@@ -23,7 +23,6 @@ import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject, 
 import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
 
-
 symbols:: [DefinedQuantityDict]
 symbols = map dqdWr unitalChunks ++ unitless ++ [dqdWr pendDisAngle] ++ map dqdWr constants
 

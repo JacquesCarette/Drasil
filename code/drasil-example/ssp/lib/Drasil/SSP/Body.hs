@@ -208,7 +208,6 @@ externalLinkRef = makeURI "SSP"
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in IPurpose
 
-
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope
 scope :: Sentence

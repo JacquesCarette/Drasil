@@ -15,7 +15,6 @@ import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod,
 import qualified Drasil.GlassBR.Unitals as U
 import Language.Drasil.Printers
 
-
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]
 

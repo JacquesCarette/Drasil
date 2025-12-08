@@ -15,7 +15,6 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, unitDoc)
 
-
 -- | Gets a plain renderering of the term for a chunk.
 getTermDoc :: (CodeIdea c) => c -> GenState Doc
 getTermDoc c = do

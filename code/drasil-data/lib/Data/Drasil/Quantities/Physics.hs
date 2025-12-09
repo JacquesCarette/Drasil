@@ -10,7 +10,6 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   gravitationalMagnitude, height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV,
   ixPos, ixVel, iyPos, iyVel, kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position,
   potEnergy, pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
-<<<<<<< HEAD
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angFreq, period,
   frequency, chgMomentum)

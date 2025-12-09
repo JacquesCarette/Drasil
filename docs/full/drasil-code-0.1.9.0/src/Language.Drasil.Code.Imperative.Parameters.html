@@ -3,25 +3,26 @@
 </span><span id="line-3"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstraintParams"><span class="hs-identifier">getConstraintParams</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getCalcParams"><span class="hs-identifier">getCalcParams</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getOutputParams"><span class="hs-identifier">getOutputParams</span></a></span><span>
 </span><span id="line-4"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-5"></span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">isIn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Var</span></span><span class="hs-special">)</span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.CodeDefinition.html"><span class="hs-identifier">Language.Drasil.Chunk.CodeDefinition</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Chunk.CodeDefinition.html#CodeDefinition"><span class="hs-identifier">CodeDefinition</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.CodeDefinition.html#auxExprs"><span class="hs-identifier">auxExprs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.CodeBase.html"><span class="hs-identifier">Language.Drasil.Chunk.CodeBase</span></a></span><span>
-</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html"><span class="hs-identifier">Language.Drasil.Choices</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Choices.html#Structure"><span class="hs-identifier">Structure</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#ConstantStructure"><span class="hs-identifier">ConstantStructure</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-10"></span><span>  </span><span class="annot"><a href="Language.Drasil.Choices.html#ConstantRepr"><span class="hs-identifier">ConstantRepr</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#InternalConcept"><span class="hs-identifier">InternalConcept</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.CodeQuantityDicts.html"><span class="hs-identifier">Language.Drasil.Code.CodeQuantityDicts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.CodeQuantityDicts.html#inFileName"><span class="hs-identifier">inFileName</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.CodeQuantityDicts.html#inParams"><span class="hs-identifier">inParams</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.CodeQuantityDicts.html#consts"><span class="hs-identifier">consts</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.DrasilState</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier">GenState</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#DrasilState"><span class="hs-identifier">DrasilState</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-13"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#genICName"><span class="hs-identifier">genICName</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.CodeSpec.html"><span class="hs-identifier">Language.Drasil.CodeSpec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.CodeSpec.html#HasOldCodeSpec"><span class="hs-identifier">HasOldCodeSpec</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.CodeSpec.html#constraintvars"><span class="hs-identifier">constraintvars</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.CodeSpec.html#getConstraints"><span class="hs-identifier">getConstraints</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html"><span class="hs-identifier">Language.Drasil.Mod</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Mod.html#Name"><span class="hs-identifier">Name</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">nub</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(\\)</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">delete</span></span><span class="hs-special">)</span><span>
-</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">member</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">notMember</span></span><span class="hs-special">)</span><span>
-</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">lookup</span></span><span class="hs-special">)</span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.State</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">get</span></span><span class="hs-special">)</span><span>
-</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
-</span><span id="line-22"></span><span>
-</span><span id="line-23"></span><span class="annot"><span class="hs-comment">-- | Parameters may be inputs or outputs.</span></span><span>
-</span><span id="line-24"></span><span class="hs-keyword">data</span><span> </span><span id="ParamType"><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#ParamType"><span class="hs-identifier hs-var">ParamType</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="In"><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#In"><span class="hs-identifier hs-var">In</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Out"><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#Out"><span class="hs-identifier hs-var">Out</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679352147"><span id="local-6989586621679352149"><span class="annot"><span class="annottext">ParamType -&gt; ParamType -&gt; Bool
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.State</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">get</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">nub</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(\\)</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">delete</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">member</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">notMember</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">lookup</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Database</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">HasUID</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">isIn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Var</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.CodeDefinition.html"><span class="hs-identifier">Language.Drasil.Chunk.CodeDefinition</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Chunk.CodeDefinition.html#CodeDefinition"><span class="hs-identifier">CodeDefinition</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.CodeDefinition.html#auxExprs"><span class="hs-identifier">auxExprs</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.CodeBase.html"><span class="hs-identifier">Language.Drasil.Chunk.CodeBase</span></a></span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html"><span class="hs-identifier">Language.Drasil.Choices</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Choices.html#Structure"><span class="hs-identifier">Structure</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#ConstantStructure"><span class="hs-identifier">ConstantStructure</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-17"></span><span>  </span><span class="annot"><a href="Language.Drasil.Choices.html#ConstantRepr"><span class="hs-identifier">ConstantRepr</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#InternalConcept"><span class="hs-identifier">InternalConcept</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.CodeQuantityDicts.html"><span class="hs-identifier">Language.Drasil.Code.CodeQuantityDicts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.CodeQuantityDicts.html#inFileName"><span class="hs-identifier">inFileName</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.CodeQuantityDicts.html#inParams"><span class="hs-identifier">inParams</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.CodeQuantityDicts.html#consts"><span class="hs-identifier">consts</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.DrasilState</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier">GenState</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#DrasilState"><span class="hs-identifier">DrasilState</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-20"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#genICName"><span class="hs-identifier">genICName</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.CodeSpec.html"><span class="hs-identifier">Language.Drasil.CodeSpec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.CodeSpec.html#HasOldCodeSpec"><span class="hs-identifier">HasOldCodeSpec</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.CodeSpec.html#constraintvars"><span class="hs-identifier">constraintvars</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.CodeSpec.html#getConstraints"><span class="hs-identifier">getConstraints</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html"><span class="hs-identifier">Language.Drasil.Mod</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Mod.html#Name"><span class="hs-identifier">Name</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><span class="hs-comment">-- | Parameters may be inputs or outputs.</span></span><span>
+</span><span id="line-25"></span><span class="hs-keyword">data</span><span> </span><span id="ParamType"><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#ParamType"><span class="hs-identifier hs-var">ParamType</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="In"><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#In"><span class="hs-identifier hs-var">In</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Out"><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#Out"><span class="hs-identifier hs-var">Out</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679352147"><span id="local-6989586621679352149"><span class="annot"><span class="annottext">ParamType -&gt; ParamType -&gt; Bool
 (ParamType -&gt; ParamType -&gt; Bool)
 -&gt; (ParamType -&gt; ParamType -&gt; Bool) -&gt; Eq ParamType
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -30,45 +31,45 @@ $c== :: ParamType -&gt; ParamType -&gt; Bool
 $c/= :: ParamType -&gt; ParamType -&gt; Bool
 /= :: ParamType -&gt; ParamType -&gt; Bool
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span>
-</span><span id="line-25"></span><span>
-</span><span id="line-26"></span><span class="annot"><span class="hs-comment">-- | Useful to see if a parameter is for 'In'put or output.</span></span><span>
-</span><span id="line-27"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#isIn"><span class="hs-identifier hs-type">isIn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#ParamType"><span class="hs-identifier hs-type">ParamType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
-</span><span id="line-28"></span><span id="isIn"><span class="annot"><span class="annottext">isIn :: ParamType -&gt; Bool
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="annot"><span class="hs-comment">-- | Useful to see if a parameter is for 'In'put or output.</span></span><span>
+</span><span id="line-28"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#isIn"><span class="hs-identifier hs-type">isIn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#ParamType"><span class="hs-identifier hs-type">ParamType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
+</span><span id="line-29"></span><span id="isIn"><span class="annot"><span class="annottext">isIn :: ParamType -&gt; Bool
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#isIn"><span class="hs-identifier hs-var hs-var">isIn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ParamType
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#In"><span class="hs-identifier hs-var">In</span></a></span><span> </span><span class="annot"><span class="annottext">ParamType -&gt; ParamType -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span class="hs-special">)</span><span>
-</span><span id="line-29"></span><span>
-</span><span id="line-30"></span><span class="hs-comment">-- | Since the input constructor calls the three input-related methods, the</span><span>
-</span><span id="line-31"></span><span class="hs-comment">-- parameters to the constructor are the parameters to the three methods,</span><span>
-</span><span id="line-32"></span><span class="hs-comment">-- except excluding any of variables that are state variables in the class,</span><span>
-</span><span id="line-33"></span><span class="hs-comment">-- since they are already in scope.</span><span>
-</span><span id="line-34"></span><span class="hs-comment">-- If InputParameters is not in the definition list, then the default</span><span>
-</span><span id="line-35"></span><span class="hs-comment">-- constructor is used, which takes no parameters.</span><span>
-</span><span id="line-36"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInConstructorParams"><span class="hs-identifier hs-type">getInConstructorParams</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-37"></span><span id="getInConstructorParams"><span class="annot"><span class="annottext">getInConstructorParams :: GenState [CodeVarChunk]
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span class="hs-comment">-- | Since the input constructor calls the three input-related methods, the</span><span>
+</span><span id="line-32"></span><span class="hs-comment">-- parameters to the constructor are the parameters to the three methods,</span><span>
+</span><span id="line-33"></span><span class="hs-comment">-- except excluding any of variables that are state variables in the class,</span><span>
+</span><span id="line-34"></span><span class="hs-comment">-- since they are already in scope.</span><span>
+</span><span id="line-35"></span><span class="hs-comment">-- If InputParameters is not in the definition list, then the default</span><span>
+</span><span id="line-36"></span><span class="hs-comment">-- constructor is used, which takes no parameters.</span><span>
+</span><span id="line-37"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInConstructorParams"><span class="hs-identifier hs-type">getInConstructorParams</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-38"></span><span id="getInConstructorParams"><span class="annot"><span class="annottext">getInConstructorParams :: GenState [CodeVarChunk]
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#getInConstructorParams"><span class="hs-identifier hs-var hs-var">getInConstructorParams</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-38"></span><span>  </span><span id="local-6989586621679352153"><span class="annot"><span class="annottext">DrasilState
+</span><span id="line-39"></span><span>  </span><span id="local-6989586621679352153"><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352153"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-39"></span><span>  </span><span id="local-6989586621679352154"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><span id="line-40"></span><span>  </span><span id="local-6989586621679352154"><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352154"><span class="hs-identifier hs-var">ifPs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState [CodeVarChunk]
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputFormatIns"><span class="hs-identifier hs-var">getInputFormatIns</span></a></span><span>
-</span><span id="line-40"></span><span>  </span><span id="local-6989586621679352155"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><span id="line-41"></span><span>  </span><span id="local-6989586621679352155"><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352155"><span class="hs-identifier hs-var">dvPs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState [CodeVarChunk]
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#getDerivedIns"><span class="hs-identifier hs-var">getDerivedIns</span></a></span><span>
-</span><span id="line-41"></span><span>  </span><span id="local-6989586621679352156"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><span id="line-42"></span><span>  </span><span id="local-6989586621679352156"><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352156"><span class="hs-identifier hs-var">icPs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState [CodeVarChunk]
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstraintParams"><span class="hs-identifier hs-var">getConstraintParams</span></a></span><span>
-</span><span id="line-42"></span><span>  </span><span id="local-6989586621679352157"><span class="annot"><span class="annottext">String
+</span><span id="line-43"></span><span>  </span><span id="local-6989586621679352157"><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679352157"><span class="hs-identifier hs-var">ipName</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">InternalConcept -&gt; GenState String
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#genICName"><span class="hs-identifier hs-var">genICName</span></a></span><span> </span><span class="annot"><span class="annottext">InternalConcept
 </span><a href="Language.Drasil.Choices.html#InputParameters"><span class="hs-identifier hs-var">InputParameters</span></a></span><span>
-</span><span id="line-43"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679352159"><span class="annot"><span class="annottext">getCParams :: Bool -&gt; [CodeVarChunk]
+</span><span id="line-44"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679352159"><span class="annot"><span class="annottext">getCParams :: Bool -&gt; [CodeVarChunk]
 </span><a href="#local-6989586621679352159"><span class="hs-identifier hs-var hs-var">getCParams</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-44"></span><span>      </span><span class="annot"><a href="#local-6989586621679352159"><span class="hs-identifier hs-var">getCParams</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-45"></span><span>      </span><span class="annot"><a href="#local-6989586621679352159"><span class="hs-identifier hs-var">getCParams</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352154"><span class="hs-identifier hs-var">ifPs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
 forall a. [a] -&gt; [a] -&gt; [a]
@@ -77,7 +78,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352156"><span class="hs-identifier hs-var">icPs</span></a></span><span>
-</span><span id="line-45"></span><span>  </span><span id="local-6989586621679352160"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><span id="line-46"></span><span>  </span><span id="local-6989586621679352160"><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352160"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -95,7 +96,7 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; Set String
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defSet"><span class="hs-identifier hs-var">defSet</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352153"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; GenState [CodeVarChunk]
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; GenState [CodeVarChunk]
 forall a. a -&gt; StateT DrasilState Identity a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; GenState [CodeVarChunk])
@@ -125,16 +126,16 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. CodeIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">codeName</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352160"><span class="hs-identifier hs-var">ps</span></a></span><span>
-</span><span id="line-47"></span><span>
-</span><span id="line-48"></span><span class="annot"><span class="hs-comment">-- | The inputs to the function for reading inputs are the input file name.</span></span><span>
-</span><span id="line-49"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputFormatIns"><span class="hs-identifier hs-type">getInputFormatIns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-50"></span><span id="getInputFormatIns"><span class="annot"><span class="annottext">getInputFormatIns :: GenState [CodeVarChunk]
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="annot"><span class="hs-comment">-- | The inputs to the function for reading inputs are the input file name.</span></span><span>
+</span><span id="line-50"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputFormatIns"><span class="hs-identifier hs-type">getInputFormatIns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-51"></span><span id="getInputFormatIns"><span class="annot"><span class="annottext">getInputFormatIns :: GenState [CodeVarChunk]
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputFormatIns"><span class="hs-identifier hs-var hs-var">getInputFormatIns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-51"></span><span>  </span><span id="local-6989586621679352169"><span class="annot"><span class="annottext">String
+</span><span id="line-52"></span><span>  </span><span id="local-6989586621679352169"><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679352169"><span class="hs-identifier hs-var">giName</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">InternalConcept -&gt; GenState String
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#genICName"><span class="hs-identifier hs-var">genICName</span></a></span><span> </span><span class="annot"><span class="annottext">InternalConcept
 </span><a href="Language.Drasil.Choices.html#GetInput"><span class="hs-identifier hs-var">GetInput</span></a></span><span>
-</span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
+</span><span id="line-53"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 String -&gt; ParamType -&gt; [c] -&gt; GenState [CodeVarChunk]
@@ -146,20 +147,20 @@ forall c.
 c -&gt; CodeVarChunk
 </span><a href="Language.Drasil.Chunk.CodeBase.html#quantvar"><span class="hs-identifier hs-var">quantvar</span></a></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Language.Drasil.Code.CodeQuantityDicts.html#inFileName"><span class="hs-identifier hs-var">inFileName</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-53"></span><span>
-</span><span id="line-54"></span><span class="annot"><span class="hs-comment">-- | The outputs from the function for reading inputs are the inputs.</span></span><span>
-</span><span id="line-55"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputFormatOuts"><span class="hs-identifier hs-type">getInputFormatOuts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-56"></span><span id="getInputFormatOuts"><span class="annot"><span class="annottext">getInputFormatOuts :: GenState [CodeVarChunk]
+</span><span id="line-54"></span><span>
+</span><span id="line-55"></span><span class="annot"><span class="hs-comment">-- | The outputs from the function for reading inputs are the inputs.</span></span><span>
+</span><span id="line-56"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputFormatOuts"><span class="hs-identifier hs-type">getInputFormatOuts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-57"></span><span id="getInputFormatOuts"><span class="annot"><span class="annottext">getInputFormatOuts :: GenState [CodeVarChunk]
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputFormatOuts"><span class="hs-identifier hs-var hs-var">getInputFormatOuts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-57"></span><span>  </span><span id="local-6989586621679352172"><span class="annot"><span class="annottext">DrasilState
+</span><span id="line-58"></span><span>  </span><span id="local-6989586621679352172"><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352172"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-58"></span><span>  </span><span id="local-6989586621679352173"><span class="annot"><span class="annottext">String
+</span><span id="line-59"></span><span>  </span><span id="local-6989586621679352173"><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679352173"><span class="hs-identifier hs-var">giName</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">InternalConcept -&gt; GenState String
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#genICName"><span class="hs-identifier hs-var">genICName</span></a></span><span> </span><span class="annot"><span class="annottext">InternalConcept
 </span><a href="Language.Drasil.Choices.html#GetInput"><span class="hs-identifier hs-var">GetInput</span></a></span><span>
-</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
+</span><span id="line-60"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 String -&gt; ParamType -&gt; [c] -&gt; GenState [CodeVarChunk]
@@ -177,21 +178,21 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasOldCodeSpec c =&gt; Lens' c [CodeVarChunk]
 Lens' CodeSpec [CodeVarChunk]
 </span><a href="Language.Drasil.CodeSpec.html#extInputsO"><span class="hs-identifier hs-var">extInputsO</span></a></span><span>
-</span><span id="line-60"></span><span>
-</span><span id="line-61"></span><span class="hs-comment">-- | The inputs to the function for calculating derived inputs are any variables</span><span>
-</span><span id="line-62"></span><span class="hs-comment">-- used in the equations for the derived inputs.</span><span>
-</span><span id="line-63"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getDerivedIns"><span class="hs-identifier hs-type">getDerivedIns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-64"></span><span id="getDerivedIns"><span class="annot"><span class="annottext">getDerivedIns :: GenState [CodeVarChunk]
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span class="hs-comment">-- | The inputs to the function for calculating derived inputs are any variables</span><span>
+</span><span id="line-63"></span><span class="hs-comment">-- used in the equations for the derived inputs.</span><span>
+</span><span id="line-64"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getDerivedIns"><span class="hs-identifier hs-type">getDerivedIns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-65"></span><span id="getDerivedIns"><span class="annot"><span class="annottext">getDerivedIns :: GenState [CodeVarChunk]
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#getDerivedIns"><span class="hs-identifier hs-var hs-var">getDerivedIns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-65"></span><span>  </span><span id="local-6989586621679352176"><span class="annot"><span class="annottext">DrasilState
+</span><span id="line-66"></span><span>  </span><span id="local-6989586621679352176"><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352176"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-66"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679352177"><span class="annot"><span class="annottext">s :: CodeSpec
+</span><span id="line-67"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679352177"><span class="annot"><span class="annottext">s :: CodeSpec
 </span><a href="#local-6989586621679352177"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352176"><span class="hs-identifier hs-var">g</span></a></span><span>
-</span><span id="line-67"></span><span>      </span><span id="local-6989586621679352180"><span class="annot"><span class="annottext">dvals :: [Derived]
+</span><span id="line-68"></span><span>      </span><span id="local-6989586621679352180"><span class="annot"><span class="annottext">dvals :: [Derived]
 </span><a href="#local-6989586621679352180"><span class="hs-identifier hs-var hs-var">dvals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec
 </span><a href="#local-6989586621679352177"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; Getting [Derived] CodeSpec [Derived] -&gt; [Derived]
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -199,7 +200,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasOldCodeSpec c =&gt; Lens' c [Derived]
 Lens' CodeSpec [Derived]
 </span><a href="Language.Drasil.CodeSpec.html#derivedInputsO"><span class="hs-identifier hs-var">derivedInputsO</span></a></span><span>
-</span><span id="line-68"></span><span>      </span><span id="local-6989586621679352187"><span class="annot"><span class="annottext">reqdVals :: [CodeVarChunk]
+</span><span id="line-69"></span><span>      </span><span id="local-6989586621679352187"><span class="annot"><span class="annottext">reqdVals :: [CodeVarChunk]
 </span><a href="#local-6989586621679352187"><span class="hs-identifier hs-var hs-var">reqdVals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Derived -&gt; [CodeVarChunk]) -&gt; [Derived] -&gt; [CodeVarChunk]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(CodeExpr -&gt; ChunkDB -&gt; [CodeVarChunk])
@@ -222,11 +223,11 @@ forall c. DefiningCodeExpr c =&gt; Lens' c CodeExpr
 Lens' Derived CodeExpr
 </span><span class="hs-identifier hs-var">codeExpr</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Derived]
 </span><a href="#local-6989586621679352180"><span class="hs-identifier hs-var">dvals</span></a></span><span>
-</span><span id="line-69"></span><span>  </span><span id="local-6989586621679352192"><span class="annot"><span class="annottext">String
+</span><span id="line-70"></span><span>  </span><span id="local-6989586621679352192"><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679352192"><span class="hs-identifier hs-var">dvName</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">InternalConcept -&gt; GenState String
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#genICName"><span class="hs-identifier hs-var">genICName</span></a></span><span> </span><span class="annot"><span class="annottext">InternalConcept
 </span><a href="Language.Drasil.Choices.html#DerivedValuesFn"><span class="hs-identifier hs-var">DerivedValuesFn</span></a></span><span>
-</span><span id="line-70"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
+</span><span id="line-71"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 String -&gt; ParamType -&gt; [c] -&gt; GenState [CodeVarChunk]
@@ -234,20 +235,20 @@ String -&gt; ParamType -&gt; [c] -&gt; GenState [CodeVarChunk]
 </span><a href="#local-6989586621679352192"><span class="hs-identifier hs-var">dvName</span></a></span><span> </span><span class="annot"><span class="annottext">ParamType
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#In"><span class="hs-identifier hs-var">In</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352187"><span class="hs-identifier hs-var">reqdVals</span></a></span><span>
-</span><span id="line-71"></span><span>
-</span><span id="line-72"></span><span class="annot"><span class="hs-comment">-- | The outputs from the function for calculating derived inputs are the derived inputs.</span></span><span>
-</span><span id="line-73"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getDerivedOuts"><span class="hs-identifier hs-type">getDerivedOuts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-74"></span><span id="getDerivedOuts"><span class="annot"><span class="annottext">getDerivedOuts :: GenState [CodeVarChunk]
+</span><span id="line-72"></span><span>
+</span><span id="line-73"></span><span class="annot"><span class="hs-comment">-- | The outputs from the function for calculating derived inputs are the derived inputs.</span></span><span>
+</span><span id="line-74"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getDerivedOuts"><span class="hs-identifier hs-type">getDerivedOuts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-75"></span><span id="getDerivedOuts"><span class="annot"><span class="annottext">getDerivedOuts :: GenState [CodeVarChunk]
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#getDerivedOuts"><span class="hs-identifier hs-var hs-var">getDerivedOuts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-75"></span><span>  </span><span id="local-6989586621679352194"><span class="annot"><span class="annottext">DrasilState
+</span><span id="line-76"></span><span>  </span><span id="local-6989586621679352194"><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352194"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-76"></span><span>  </span><span id="local-6989586621679352195"><span class="annot"><span class="annottext">String
+</span><span id="line-77"></span><span>  </span><span id="local-6989586621679352195"><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679352195"><span class="hs-identifier hs-var">dvName</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">InternalConcept -&gt; GenState String
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#genICName"><span class="hs-identifier hs-var">genICName</span></a></span><span> </span><span class="annot"><span class="annottext">InternalConcept
 </span><a href="Language.Drasil.Choices.html#DerivedValuesFn"><span class="hs-identifier hs-var">DerivedValuesFn</span></a></span><span>
-</span><span id="line-77"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeChunk] -&gt; GenState [CodeVarChunk]
+</span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeChunk] -&gt; GenState [CodeVarChunk]
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 String -&gt; ParamType -&gt; [c] -&gt; GenState [CodeVarChunk]
@@ -270,22 +271,22 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasOldCodeSpec c =&gt; Lens' c [Derived]
 Lens' CodeSpec [Derived]
 </span><a href="Language.Drasil.CodeSpec.html#derivedInputsO"><span class="hs-identifier hs-var">derivedInputsO</span></a></span><span>
-</span><span id="line-78"></span><span>
-</span><span id="line-79"></span><span class="hs-comment">-- | The parameters to the function for checking constraints on the inputs are</span><span>
-</span><span id="line-80"></span><span class="hs-comment">-- any inputs with constraints, and any variables used in the expressions of</span><span>
-</span><span id="line-81"></span><span class="hs-comment">-- the constraints.</span><span>
-</span><span id="line-82"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstraintParams"><span class="hs-identifier hs-type">getConstraintParams</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-83"></span><span id="getConstraintParams"><span class="annot"><span class="annottext">getConstraintParams :: GenState [CodeVarChunk]
+</span><span id="line-79"></span><span>
+</span><span id="line-80"></span><span class="hs-comment">-- | The parameters to the function for checking constraints on the inputs are</span><span>
+</span><span id="line-81"></span><span class="hs-comment">-- any inputs with constraints, and any variables used in the expressions of</span><span>
+</span><span id="line-82"></span><span class="hs-comment">-- the constraints.</span><span>
+</span><span id="line-83"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstraintParams"><span class="hs-identifier hs-type">getConstraintParams</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-84"></span><span id="getConstraintParams"><span class="annot"><span class="annottext">getConstraintParams :: GenState [CodeVarChunk]
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstraintParams"><span class="hs-identifier hs-var hs-var">getConstraintParams</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-84"></span><span>  </span><span id="local-6989586621679352197"><span class="annot"><span class="annottext">DrasilState
+</span><span id="line-85"></span><span>  </span><span id="local-6989586621679352197"><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352197"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-85"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679352198"><span class="annot"><span class="annottext">s :: CodeSpec
+</span><span id="line-86"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679352198"><span class="annot"><span class="annottext">s :: CodeSpec
 </span><a href="#local-6989586621679352198"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352197"><span class="hs-identifier hs-var">g</span></a></span><span>
-</span><span id="line-86"></span><span>      </span><span id="local-6989586621679352201"><span class="annot"><span class="annottext">cm :: ConstraintCEMap
+</span><span id="line-87"></span><span>      </span><span id="local-6989586621679352201"><span class="annot"><span class="annottext">cm :: ConstraintCEMap
 </span><a href="#local-6989586621679352201"><span class="hs-identifier hs-var hs-var">cm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec
 </span><a href="#local-6989586621679352198"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
 -&gt; Getting ConstraintCEMap CodeSpec ConstraintCEMap
@@ -295,7 +296,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasOldCodeSpec c =&gt; Lens' c ConstraintCEMap
 Lens' CodeSpec ConstraintCEMap
 </span><a href="Language.Drasil.CodeSpec.html#cMapO"><span class="hs-identifier hs-var">cMapO</span></a></span><span>
-</span><span id="line-87"></span><span>      </span><span id="local-6989586621679352205"><span class="annot"><span class="annottext">db :: ChunkDB
+</span><span id="line-88"></span><span>      </span><span id="local-6989586621679352205"><span class="annot"><span class="annottext">db :: ChunkDB
 </span><a href="#local-6989586621679352205"><span class="hs-identifier hs-var hs-var">db</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec
 </span><a href="#local-6989586621679352198"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; Getting ChunkDB CodeSpec ChunkDB -&gt; ChunkDB
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -303,7 +304,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasOldCodeSpec c =&gt; Lens' c ChunkDB
 Lens' CodeSpec ChunkDB
 </span><a href="Language.Drasil.CodeSpec.html#systemdbO"><span class="hs-identifier hs-var">systemdbO</span></a></span><span>
-</span><span id="line-88"></span><span>      </span><span id="local-6989586621679352215"><span class="annot"><span class="annottext">varsList :: [CodeVarChunk]
+</span><span id="line-89"></span><span>      </span><span id="local-6989586621679352215"><span class="annot"><span class="annottext">varsList :: [CodeVarChunk]
 </span><a href="#local-6989586621679352215"><span class="hs-identifier hs-var hs-var">varsList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeVarChunk -&gt; Bool) -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679352216"><span class="annot"><span class="annottext">CodeVarChunk
@@ -324,7 +325,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasOldCodeSpec c =&gt; Lens' c [CodeVarChunk]
 Lens' CodeSpec [CodeVarChunk]
 </span><a href="Language.Drasil.CodeSpec.html#inputsO"><span class="hs-identifier hs-var">inputsO</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-89"></span><span>      </span><span id="local-6989586621679352228"><span class="annot"><span class="annottext">reqdVals :: [CodeVarChunk]
+</span><span id="line-90"></span><span>      </span><span id="local-6989586621679352228"><span class="annot"><span class="annottext">reqdVals :: [CodeVarChunk]
 </span><a href="#local-6989586621679352228"><span class="hs-identifier hs-var hs-var">reqdVals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk]
 forall a. Eq a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">nub</span></span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [CodeVarChunk])
@@ -344,16 +345,16 @@ forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstraintCE -&gt; ChunkDB -&gt; [CodeChunk]
 </span><a href="Language.Drasil.CodeSpec.html#constraintvars"><span class="hs-operator hs-var">`constraintvars`</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="#local-6989586621679352205"><span class="hs-identifier hs-var">db</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-90"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstraintCEMap -&gt; [CodeVarChunk] -&gt; [ConstraintCE]
+</span><span id="line-91"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstraintCEMap -&gt; [CodeVarChunk] -&gt; [ConstraintCE]
 forall c. HasUID c =&gt; ConstraintCEMap -&gt; [c] -&gt; [ConstraintCE]
 </span><a href="Language.Drasil.CodeSpec.html#getConstraints"><span class="hs-identifier hs-var">getConstraints</span></a></span><span> </span><span class="annot"><span class="annottext">ConstraintCEMap
 </span><a href="#local-6989586621679352201"><span class="hs-identifier hs-var">cm</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352215"><span class="hs-identifier hs-var">varsList</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-91"></span><span>  </span><span id="local-6989586621679352229"><span class="annot"><span class="annottext">String
+</span><span id="line-92"></span><span>  </span><span id="local-6989586621679352229"><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679352229"><span class="hs-identifier hs-var">icName</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">InternalConcept -&gt; GenState String
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#genICName"><span class="hs-identifier hs-var">genICName</span></a></span><span> </span><span class="annot"><span class="annottext">InternalConcept
 </span><a href="Language.Drasil.Choices.html#InputConstraintsFn"><span class="hs-identifier hs-var">InputConstraintsFn</span></a></span><span>
-</span><span id="line-92"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
+</span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 String -&gt; ParamType -&gt; [c] -&gt; GenState [CodeVarChunk]
@@ -361,18 +362,18 @@ String -&gt; ParamType -&gt; [c] -&gt; GenState [CodeVarChunk]
 </span><a href="#local-6989586621679352229"><span class="hs-identifier hs-var">icName</span></a></span><span> </span><span class="annot"><span class="annottext">ParamType
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#In"><span class="hs-identifier hs-var">In</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352228"><span class="hs-identifier hs-var">reqdVals</span></a></span><span>
-</span><span id="line-93"></span><span>
-</span><span id="line-94"></span><span class="hs-comment">-- | The parameters to a calculation function are any variables used in the</span><span>
-</span><span id="line-95"></span><span class="hs-comment">-- expression representing the calculation.</span><span>
-</span><span id="line-96"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getCalcParams"><span class="hs-identifier hs-type">getCalcParams</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.CodeDefinition.html#CodeDefinition"><span class="hs-identifier hs-type">CodeDefinition</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-97"></span><span id="getCalcParams"><span class="annot"><span class="annottext">getCalcParams :: Derived -&gt; GenState [CodeVarChunk]
+</span><span id="line-94"></span><span>
+</span><span id="line-95"></span><span class="hs-comment">-- | The parameters to a calculation function are any variables used in the</span><span>
+</span><span id="line-96"></span><span class="hs-comment">-- expression representing the calculation.</span><span>
+</span><span id="line-97"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getCalcParams"><span class="hs-identifier hs-type">getCalcParams</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.CodeDefinition.html#CodeDefinition"><span class="hs-identifier hs-type">CodeDefinition</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-98"></span><span id="getCalcParams"><span class="annot"><span class="annottext">getCalcParams :: Derived -&gt; GenState [CodeVarChunk]
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#getCalcParams"><span class="hs-identifier hs-var hs-var">getCalcParams</span></a></span></span><span> </span><span id="local-6989586621679352231"><span class="annot"><span class="annottext">Derived
 </span><a href="#local-6989586621679352231"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-98"></span><span>  </span><span id="local-6989586621679352232"><span class="annot"><span class="annottext">DrasilState
+</span><span id="line-99"></span><span>  </span><span id="local-6989586621679352232"><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352232"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
+</span><span id="line-100"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 String -&gt; ParamType -&gt; [c] -&gt; GenState [CodeVarChunk]
@@ -397,7 +398,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeExpr -&gt; ChunkDB -&gt; [CodeVarChunk]
 </span><a href="Language.Drasil.Chunk.CodeBase.html#codevars%27"><span class="hs-operator hs-var">`codevars'`</span></a></span><span>
-</span><span id="line-100"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
+</span><span id="line-101"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352232"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; Getting ChunkDB CodeSpec ChunkDB -&gt; ChunkDB
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -418,20 +419,20 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [CodeExpr] Derived [CodeExpr]
 Lens' Derived [CodeExpr]
 </span><a href="Language.Drasil.Chunk.CodeDefinition.html#auxExprs"><span class="hs-identifier hs-var">auxExprs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-101"></span><span>
-</span><span id="line-102"></span><span class="annot"><span class="hs-comment">-- | The parameters to the function for printing outputs are the outputs.</span></span><span>
-</span><span id="line-103"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getOutputParams"><span class="hs-identifier hs-type">getOutputParams</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-104"></span><span id="getOutputParams"><span class="annot"><span class="annottext">getOutputParams :: GenState [CodeVarChunk]
+</span><span id="line-102"></span><span>
+</span><span id="line-103"></span><span class="annot"><span class="hs-comment">-- | The parameters to the function for printing outputs are the outputs.</span></span><span>
+</span><span id="line-104"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getOutputParams"><span class="hs-identifier hs-type">getOutputParams</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-105"></span><span id="getOutputParams"><span class="annot"><span class="annottext">getOutputParams :: GenState [CodeVarChunk]
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#getOutputParams"><span class="hs-identifier hs-var hs-var">getOutputParams</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-105"></span><span>  </span><span id="local-6989586621679352234"><span class="annot"><span class="annottext">DrasilState
+</span><span id="line-106"></span><span>  </span><span id="local-6989586621679352234"><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352234"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-106"></span><span>  </span><span id="local-6989586621679352235"><span class="annot"><span class="annottext">String
+</span><span id="line-107"></span><span>  </span><span id="local-6989586621679352235"><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679352235"><span class="hs-identifier hs-var">woName</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">InternalConcept -&gt; GenState String
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#genICName"><span class="hs-identifier hs-var">genICName</span></a></span><span> </span><span class="annot"><span class="annottext">InternalConcept
 </span><a href="Language.Drasil.Choices.html#WriteOutput"><span class="hs-identifier hs-var">WriteOutput</span></a></span><span>
-</span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
+</span><span id="line-108"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParamType -&gt; [CodeVarChunk] -&gt; GenState [CodeVarChunk]
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 String -&gt; ParamType -&gt; [c] -&gt; GenState [CodeVarChunk]
@@ -449,29 +450,29 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasOldCodeSpec c =&gt; Lens' c [CodeVarChunk]
 Lens' CodeSpec [CodeVarChunk]
 </span><a href="Language.Drasil.CodeSpec.html#outputsO"><span class="hs-identifier hs-var">outputsO</span></a></span><span>
-</span><span id="line-108"></span><span>
-</span><span id="line-109"></span><span class="hs-comment">-- | Passes parameters that are inputs to 'getInputVars' for further processing.</span><span>
-</span><span id="line-110"></span><span class="hs-comment">-- Passes parameters that are constants to 'getConstVars' for further processing.</span><span>
-</span><span id="line-111"></span><span class="hs-comment">-- Other parameters are put into the returned parameter list as long as they</span><span>
-</span><span id="line-112"></span><span class="hs-comment">-- are not matched to a code concept.</span><span>
-</span><span id="line-113"></span><span id="local-6989586621679351908"><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getParams"><span class="hs-identifier hs-type">getParams</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679351908"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679351908"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Concept</span></span><span> </span><span class="annot"><a href="#local-6989586621679351908"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Name"><span class="hs-identifier hs-type">Name</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#ParamType"><span class="hs-identifier hs-type">ParamType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679351908"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><span id="line-114"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span></span><span>
-</span><span id="line-115"></span><span id="getParams"><span class="annot"><span class="annottext">getParams :: forall c.
+</span><span id="line-109"></span><span>
+</span><span id="line-110"></span><span class="hs-comment">-- | Passes parameters that are inputs to 'getInputVars' for further processing.</span><span>
+</span><span id="line-111"></span><span class="hs-comment">-- Passes parameters that are constants to 'getConstVars' for further processing.</span><span>
+</span><span id="line-112"></span><span class="hs-comment">-- Other parameters are put into the returned parameter list as long as they</span><span>
+</span><span id="line-113"></span><span class="hs-comment">-- are not matched to a code concept.</span><span>
+</span><span id="line-114"></span><span id="local-6989586621679351908"><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getParams"><span class="hs-identifier hs-type">getParams</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679351908"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679351908"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Concept</span></span><span> </span><span class="annot"><a href="#local-6989586621679351908"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Name"><span class="hs-identifier hs-type">Name</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#ParamType"><span class="hs-identifier hs-type">ParamType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679351908"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-115"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span></span><span>
+</span><span id="line-116"></span><span id="getParams"><span class="annot"><span class="annottext">getParams :: forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 String -&gt; ParamType -&gt; [c] -&gt; GenState [CodeVarChunk]
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#getParams"><span class="hs-identifier hs-var hs-var">getParams</span></a></span></span><span> </span><span id="local-6989586621679352260"><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679352260"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679352261"><span class="annot"><span class="annottext">ParamType
 </span><a href="#local-6989586621679352261"><span class="hs-identifier hs-var">pt</span></a></span></span><span> </span><span id="local-6989586621679352262"><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679352262"><span class="hs-identifier hs-var">cs'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-116"></span><span>  </span><span id="local-6989586621679352263"><span class="annot"><span class="annottext">DrasilState
+</span><span id="line-117"></span><span>  </span><span id="local-6989586621679352263"><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352263"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-117"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679352264"><span class="annot"><span class="annottext">s :: CodeSpec
+</span><span id="line-118"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679352264"><span class="annot"><span class="annottext">s :: CodeSpec
 </span><a href="#local-6989586621679352264"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352263"><span class="hs-identifier hs-var">g</span></a></span><span>
-</span><span id="line-118"></span><span>      </span><span id="local-6989586621679352278"><span class="annot"><span class="annottext">cs :: [CodeVarChunk]
+</span><span id="line-119"></span><span>      </span><span id="local-6989586621679352278"><span class="annot"><span class="annottext">cs :: [CodeVarChunk]
 </span><a href="#local-6989586621679352278"><span class="hs-identifier hs-var hs-var">cs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(c -&gt; CodeVarChunk) -&gt; [c] -&gt; [CodeVarChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">c -&gt; CodeVarChunk
@@ -480,7 +481,7 @@ forall c.
 c -&gt; CodeVarChunk
 </span><a href="Language.Drasil.Chunk.CodeBase.html#quantvar"><span class="hs-identifier hs-var">quantvar</span></a></span><span> </span><span class="annot"><span class="annottext">[c]
 </span><a href="#local-6989586621679352262"><span class="hs-identifier hs-var">cs'</span></a></span><span>
-</span><span id="line-119"></span><span>      </span><span id="local-6989586621679352281"><span class="annot"><span class="annottext">ins :: [CodeVarChunk]
+</span><span id="line-120"></span><span>      </span><span id="local-6989586621679352281"><span class="annot"><span class="annottext">ins :: [CodeVarChunk]
 </span><a href="#local-6989586621679352281"><span class="hs-identifier hs-var hs-var">ins</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec
 </span><a href="#local-6989586621679352264"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
 -&gt; Getting [CodeVarChunk] CodeSpec [CodeVarChunk] -&gt; [CodeVarChunk]
@@ -489,7 +490,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasOldCodeSpec c =&gt; Lens' c [CodeVarChunk]
 Lens' CodeSpec [CodeVarChunk]
 </span><a href="Language.Drasil.CodeSpec.html#inputsO"><span class="hs-identifier hs-var">inputsO</span></a></span><span>
-</span><span id="line-120"></span><span>      </span><span id="local-6989586621679352290"><span class="annot"><span class="annottext">cnsnts :: [CodeVarChunk]
+</span><span id="line-121"></span><span>      </span><span id="local-6989586621679352290"><span class="annot"><span class="annottext">cnsnts :: [CodeVarChunk]
 </span><a href="#local-6989586621679352290"><span class="hs-identifier hs-var hs-var">cnsnts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Derived -&gt; CodeVarChunk) -&gt; [Derived] -&gt; [CodeVarChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Derived -&gt; CodeVarChunk
@@ -505,7 +506,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasOldCodeSpec c =&gt; Lens' c [Derived]
 Lens' CodeSpec [Derived]
 </span><a href="Language.Drasil.CodeSpec.html#constantsO"><span class="hs-identifier hs-var">constantsO</span></a></span><span>
-</span><span id="line-121"></span><span>      </span><span id="local-6989586621679352294"><span class="annot"><span class="annottext">inpVars :: [CodeVarChunk]
+</span><span id="line-122"></span><span>      </span><span id="local-6989586621679352294"><span class="annot"><span class="annottext">inpVars :: [CodeVarChunk]
 </span><a href="#local-6989586621679352294"><span class="hs-identifier hs-var hs-var">inpVars</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeVarChunk -&gt; Bool) -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; [CodeVarChunk] -&gt; Bool
@@ -514,7 +515,7 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352281"><span class="hs-identifier hs-var">ins</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352278"><span class="hs-identifier hs-var">cs</span></a></span><span>
-</span><span id="line-122"></span><span>      </span><span id="local-6989586621679352297"><span class="annot"><span class="annottext">conVars :: [CodeVarChunk]
+</span><span id="line-123"></span><span>      </span><span id="local-6989586621679352297"><span class="annot"><span class="annottext">conVars :: [CodeVarChunk]
 </span><a href="#local-6989586621679352297"><span class="hs-identifier hs-var hs-var">conVars</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeVarChunk -&gt; Bool) -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; [CodeVarChunk] -&gt; Bool
@@ -523,7 +524,7 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352290"><span class="hs-identifier hs-var">cnsnts</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352278"><span class="hs-identifier hs-var">cs</span></a></span><span>
-</span><span id="line-123"></span><span>      </span><span id="local-6989586621679352303"><span class="annot"><span class="annottext">csSubIns :: [CodeVarChunk]
+</span><span id="line-124"></span><span>      </span><span id="local-6989586621679352303"><span class="annot"><span class="annottext">csSubIns :: [CodeVarChunk]
 </span><a href="#local-6989586621679352303"><span class="hs-identifier hs-var hs-var">csSubIns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeVarChunk -&gt; Bool) -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; Map UID CodeConcept -&gt; Bool
@@ -538,7 +539,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasUID c =&gt; Getter c UID
 Getter CodeVarChunk UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-124"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><span id="line-125"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352278"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
 forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">\\</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
@@ -546,7 +547,7 @@ forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352290"><span class="hs-identifier hs-var">cnsnts</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-125"></span><span>  </span><span id="local-6989586621679352305"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><span id="line-126"></span><span>  </span><span id="local-6989586621679352305"><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352305"><span class="hs-identifier hs-var">inVs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; ParamType
 -&gt; Structure
@@ -560,7 +561,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679352263"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConstantRepr
 </span><a href="Language.Drasil.Choices.html#Var"><span class="hs-identifier hs-var">Var</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352294"><span class="hs-identifier hs-var">inpVars</span></a></span><span>
-</span><span id="line-126"></span><span>  </span><span id="local-6989586621679352308"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><span id="line-127"></span><span>  </span><span id="local-6989586621679352308"><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352308"><span class="hs-identifier hs-var">conVs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; ParamType
 -&gt; ConstantStructure
@@ -575,7 +576,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#conRepr"><span class="hs-identifier hs-var">conRepr</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352263"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352297"><span class="hs-identifier hs-var">conVars</span></a></span><span>
-</span><span id="line-127"></span><span>  </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; GenState [CodeVarChunk]
+</span><span id="line-128"></span><span>  </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; GenState [CodeVarChunk]
 forall a. a -&gt; StateT DrasilState Identity a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; GenState [CodeVarChunk])
@@ -594,25 +595,25 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352303"><span class="hs-identifier hs-var">csSubIns</span></a></span><span>
-</span><span id="line-128"></span><span>
-</span><span id="line-129"></span><span class="hs-comment">-- | If the passed list of input variables is empty, then return empty list.</span><span>
-</span><span id="line-130"></span><span class="hs-comment">-- If the user has chosen 'Unbundled' inputs, then the input variables are</span><span>
-</span><span id="line-131"></span><span class="hs-comment">-- returned as-is.</span><span>
-</span><span id="line-132"></span><span class="hs-comment">-- If the user has chosen 'Bundled' inputs, and the parameters are inputs to the</span><span>
-</span><span id="line-133"></span><span class="hs-comment">-- function (as opposed to outputs), then the 'inParams' object is returned</span><span>
-</span><span id="line-134"></span><span class="hs-comment">-- instead of the individual input variables, unless the function being</span><span>
-</span><span id="line-135"></span><span class="hs-comment">-- parameterized is itself defined in the InputParameters class, in which case</span><span>
-</span><span id="line-136"></span><span class="hs-comment">-- the inputs are already in scope and thus no parameter is required.</span><span>
-</span><span id="line-137"></span><span class="hs-comment">-- If the 'ParamType' is 'Out', the 'inParams' object is not an output parameter</span><span>
-</span><span id="line-138"></span><span class="hs-comment">-- because it undergoes state transitions, so is not actually an output.</span><span>
-</span><span id="line-139"></span><span class="hs-comment">-- The final case only happens when getInputVars is called by 'getConstVars'</span><span>
-</span><span id="line-140"></span><span class="hs-comment">-- because the user has chosen 'WithInputs' as their constant structure. If they</span><span>
-</span><span id="line-141"></span><span class="hs-comment">-- have chosen 'Bundled' inputs and a constant const representation, then the</span><span>
-</span><span id="line-142"></span><span class="hs-comment">-- constant variables are static and can be accessed through the class, without</span><span>
-</span><span id="line-143"></span><span class="hs-comment">-- an object, so no parameters are required.</span><span>
-</span><span id="line-144"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputVars"><span class="hs-identifier hs-type">getInputVars</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Name"><span class="hs-identifier hs-type">Name</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#ParamType"><span class="hs-identifier hs-type">ParamType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Structure"><span class="hs-identifier hs-type">Structure</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#ConstantRepr"><span class="hs-identifier hs-type">ConstantRepr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><span id="line-145"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-146"></span><span id="getInputVars"><span class="annot"><span class="annottext">getInputVars :: String
+</span><span id="line-129"></span><span>
+</span><span id="line-130"></span><span class="hs-comment">-- | If the passed list of input variables is empty, then return empty list.</span><span>
+</span><span id="line-131"></span><span class="hs-comment">-- If the user has chosen 'Unbundled' inputs, then the input variables are</span><span>
+</span><span id="line-132"></span><span class="hs-comment">-- returned as-is.</span><span>
+</span><span id="line-133"></span><span class="hs-comment">-- If the user has chosen 'Bundled' inputs, and the parameters are inputs to the</span><span>
+</span><span id="line-134"></span><span class="hs-comment">-- function (as opposed to outputs), then the 'inParams' object is returned</span><span>
+</span><span id="line-135"></span><span class="hs-comment">-- instead of the individual input variables, unless the function being</span><span>
+</span><span id="line-136"></span><span class="hs-comment">-- parameterized is itself defined in the InputParameters class, in which case</span><span>
+</span><span id="line-137"></span><span class="hs-comment">-- the inputs are already in scope and thus no parameter is required.</span><span>
+</span><span id="line-138"></span><span class="hs-comment">-- If the 'ParamType' is 'Out', the 'inParams' object is not an output parameter</span><span>
+</span><span id="line-139"></span><span class="hs-comment">-- because it undergoes state transitions, so is not actually an output.</span><span>
+</span><span id="line-140"></span><span class="hs-comment">-- The final case only happens when getInputVars is called by 'getConstVars'</span><span>
+</span><span id="line-141"></span><span class="hs-comment">-- because the user has chosen 'WithInputs' as their constant structure. If they</span><span>
+</span><span id="line-142"></span><span class="hs-comment">-- have chosen 'Bundled' inputs and a constant const representation, then the</span><span>
+</span><span id="line-143"></span><span class="hs-comment">-- constant variables are static and can be accessed through the class, without</span><span>
+</span><span id="line-144"></span><span class="hs-comment">-- an object, so no parameters are required.</span><span>
+</span><span id="line-145"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputVars"><span class="hs-identifier hs-type">getInputVars</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Name"><span class="hs-identifier hs-type">Name</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#ParamType"><span class="hs-identifier hs-type">ParamType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Structure"><span class="hs-identifier hs-type">Structure</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#ConstantRepr"><span class="hs-identifier hs-type">ConstantRepr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-146"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-147"></span><span id="getInputVars"><span class="annot"><span class="annottext">getInputVars :: String
 -&gt; ParamType
 -&gt; Structure
 -&gt; ConstantRepr
@@ -626,7 +627,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. a -&gt; StateT DrasilState Identity a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-147"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputVars"><span class="hs-identifier hs-var">getInputVars</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-148"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputVars"><span class="hs-identifier hs-var">getInputVars</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">ParamType
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Structure
 </span><a href="Language.Drasil.Choices.html#Unbundled"><span class="hs-identifier hs-var">Unbundled</span></a></span><span> </span><span class="annot"><span class="annottext">ConstantRepr
@@ -636,21 +637,21 @@ forall a. a -&gt; StateT DrasilState Identity a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352314"><span class="hs-identifier hs-var">cs</span></a></span><span>
-</span><span id="line-148"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputVars"><span class="hs-identifier hs-var">getInputVars</span></a></span><span> </span><span id="local-6989586621679352315"><span class="annot"><span class="annottext">String
+</span><span id="line-149"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputVars"><span class="hs-identifier hs-var">getInputVars</span></a></span><span> </span><span id="local-6989586621679352315"><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679352315"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679352316"><span class="annot"><span class="annottext">ParamType
 </span><a href="#local-6989586621679352316"><span class="hs-identifier hs-var">pt</span></a></span></span><span> </span><span class="annot"><span class="annottext">Structure
 </span><a href="Language.Drasil.Choices.html#Bundled"><span class="hs-identifier hs-var">Bundled</span></a></span><span> </span><span class="annot"><span class="annottext">ConstantRepr
 </span><a href="Language.Drasil.Choices.html#Var"><span class="hs-identifier hs-var">Var</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-149"></span><span>  </span><span id="local-6989586621679352317"><span class="annot"><span class="annottext">DrasilState
+</span><span id="line-150"></span><span>  </span><span id="local-6989586621679352317"><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352317"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-150"></span><span>  </span><span id="local-6989586621679352318"><span class="annot"><span class="annottext">String
+</span><span id="line-151"></span><span>  </span><span id="local-6989586621679352318"><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679352318"><span class="hs-identifier hs-var">cname</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">InternalConcept -&gt; GenState String
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#genICName"><span class="hs-identifier hs-var">genICName</span></a></span><span> </span><span class="annot"><span class="annottext">InternalConcept
 </span><a href="Language.Drasil.Choices.html#InputParameters"><span class="hs-identifier hs-var">InputParameters</span></a></span><span>
-</span><span id="line-151"></span><span>  </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; GenState [CodeVarChunk]
+</span><span id="line-152"></span><span>  </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; GenState [CodeVarChunk]
 forall a. a -&gt; StateT DrasilState Identity a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; CodeVarChunk
@@ -672,7 +673,7 @@ forall a. a -&gt; Maybe a
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ParamType -&gt; Bool
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#isIn"><span class="hs-identifier hs-var">isIn</span></a></span><span> </span><span class="annot"><span class="annottext">ParamType
 </span><a href="#local-6989586621679352316"><span class="hs-identifier hs-var">pt</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-152"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputVars"><span class="hs-identifier hs-var">getInputVars</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-153"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getInputVars"><span class="hs-identifier hs-var">getInputVars</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">ParamType
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Structure
 </span><a href="Language.Drasil.Choices.html#Bundled"><span class="hs-identifier hs-var">Bundled</span></a></span><span> </span><span class="annot"><span class="annottext">ConstantRepr
@@ -681,23 +682,23 @@ forall a. a -&gt; Maybe a
 forall a. a -&gt; StateT DrasilState Identity a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-153"></span><span>
-</span><span id="line-154"></span><span class="hs-comment">-- | If the passed list of constant variables is empty, then return empty list.</span><span>
-</span><span id="line-155"></span><span class="hs-comment">-- If the user has chosen 'Unbundled' constants, then the constant variables are</span><span>
-</span><span id="line-156"></span><span class="hs-comment">-- returned as-is.</span><span>
-</span><span id="line-157"></span><span class="hs-comment">-- If the user has chosen 'Bundled' constants and 'Var' representation, and the</span><span>
-</span><span id="line-158"></span><span class="hs-comment">-- parameters are inputs to the function (as opposed to outputs), then the</span><span>
-</span><span id="line-159"></span><span class="hs-comment">-- 'consts' object is returned instead of the individual constant variables.</span><span>
-</span><span id="line-160"></span><span class="hs-comment">-- If the 'ParamType' is 'Out', the 'consts' object is not an output parameter</span><span>
-</span><span id="line-161"></span><span class="hs-comment">-- because it undergoes state transitions, so is not actually an output.</span><span>
-</span><span id="line-162"></span><span class="hs-comment">-- The final case only happens when 'getInputVars' is called by 'getConstVars'</span><span>
-</span><span id="line-163"></span><span class="hs-comment">-- because the user has chosen 'WithInputs' as their constant structure. If they</span><span>
-</span><span id="line-164"></span><span class="hs-comment">-- have chosen 'Bundled' inputs and a constant const representation, then the</span><span>
-</span><span id="line-165"></span><span class="hs-comment">-- constant variables are static and can be accessed through the class, without</span><span>
-</span><span id="line-166"></span><span class="hs-comment">-- an object, so no parameters are required.</span><span>
-</span><span id="line-167"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstVars"><span class="hs-identifier hs-type">getConstVars</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Name"><span class="hs-identifier hs-type">Name</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#ParamType"><span class="hs-identifier hs-type">ParamType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#ConstantStructure"><span class="hs-identifier hs-type">ConstantStructure</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#ConstantRepr"><span class="hs-identifier hs-type">ConstantRepr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><span id="line-168"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-169"></span><span id="getConstVars"><span class="annot"><span class="annottext">getConstVars :: String
+</span><span id="line-154"></span><span>
+</span><span id="line-155"></span><span class="hs-comment">-- | If the passed list of constant variables is empty, then return empty list.</span><span>
+</span><span id="line-156"></span><span class="hs-comment">-- If the user has chosen 'Unbundled' constants, then the constant variables are</span><span>
+</span><span id="line-157"></span><span class="hs-comment">-- returned as-is.</span><span>
+</span><span id="line-158"></span><span class="hs-comment">-- If the user has chosen 'Bundled' constants and 'Var' representation, and the</span><span>
+</span><span id="line-159"></span><span class="hs-comment">-- parameters are inputs to the function (as opposed to outputs), then the</span><span>
+</span><span id="line-160"></span><span class="hs-comment">-- 'consts' object is returned instead of the individual constant variables.</span><span>
+</span><span id="line-161"></span><span class="hs-comment">-- If the 'ParamType' is 'Out', the 'consts' object is not an output parameter</span><span>
+</span><span id="line-162"></span><span class="hs-comment">-- because it undergoes state transitions, so is not actually an output.</span><span>
+</span><span id="line-163"></span><span class="hs-comment">-- The final case only happens when 'getInputVars' is called by 'getConstVars'</span><span>
+</span><span id="line-164"></span><span class="hs-comment">-- because the user has chosen 'WithInputs' as their constant structure. If they</span><span>
+</span><span id="line-165"></span><span class="hs-comment">-- have chosen 'Bundled' inputs and a constant const representation, then the</span><span>
+</span><span id="line-166"></span><span class="hs-comment">-- constant variables are static and can be accessed through the class, without</span><span>
+</span><span id="line-167"></span><span class="hs-comment">-- an object, so no parameters are required.</span><span>
+</span><span id="line-168"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstVars"><span class="hs-identifier hs-type">getConstVars</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Name"><span class="hs-identifier hs-type">Name</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#ParamType"><span class="hs-identifier hs-type">ParamType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#ConstantStructure"><span class="hs-identifier hs-type">ConstantStructure</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#ConstantRepr"><span class="hs-identifier hs-type">ConstantRepr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-169"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-170"></span><span id="getConstVars"><span class="annot"><span class="annottext">getConstVars :: String
 -&gt; ParamType
 -&gt; ConstantStructure
 -&gt; ConstantRepr
@@ -711,7 +712,7 @@ forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 forall a. a -&gt; StateT DrasilState Identity a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-170"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstVars"><span class="hs-identifier hs-var">getConstVars</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-171"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstVars"><span class="hs-identifier hs-var">getConstVars</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">ParamType
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Choices.html#Store"><span class="hs-identifier hs-type">Store</span></a></span><span> </span><span class="annot"><span class="annottext">Structure
 </span><a href="Language.Drasil.Choices.html#Unbundled"><span class="hs-identifier hs-var">Unbundled</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConstantRepr
@@ -721,7 +722,7 @@ forall a. a -&gt; StateT DrasilState Identity a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352322"><span class="hs-identifier hs-var">cs</span></a></span><span>
-</span><span id="line-171"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstVars"><span class="hs-identifier hs-var">getConstVars</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-172"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstVars"><span class="hs-identifier hs-var">getConstVars</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679352323"><span class="annot"><span class="annottext">ParamType
 </span><a href="#local-6989586621679352323"><span class="hs-identifier hs-var">pt</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Choices.html#Store"><span class="hs-identifier hs-type">Store</span></a></span><span> </span><span class="annot"><span class="annottext">Structure
 </span><a href="Language.Drasil.Choices.html#Bundled"><span class="hs-identifier hs-var">Bundled</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConstantRepr
@@ -737,7 +738,7 @@ c -&gt; CodeVarChunk
 </span><a href="Language.Drasil.Code.CodeQuantityDicts.html#consts"><span class="hs-identifier hs-var">consts</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">ParamType -&gt; Bool
 </span><a href="Language.Drasil.Code.Imperative.Parameters.html#isIn"><span class="hs-identifier hs-var">isIn</span></a></span><span> </span><span class="annot"><span class="annottext">ParamType
 </span><a href="#local-6989586621679352323"><span class="hs-identifier hs-var">pt</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-172"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstVars"><span class="hs-identifier hs-var">getConstVars</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-173"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstVars"><span class="hs-identifier hs-var">getConstVars</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">ParamType
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Choices.html#Store"><span class="hs-identifier hs-type">Store</span></a></span><span> </span><span class="annot"><span class="annottext">Structure
 </span><a href="Language.Drasil.Choices.html#Bundled"><span class="hs-identifier hs-var">Bundled</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConstantRepr
@@ -746,17 +747,17 @@ c -&gt; CodeVarChunk
 forall a. a -&gt; StateT DrasilState Identity a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-173"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstVars"><span class="hs-identifier hs-var">getConstVars</span></a></span><span> </span><span id="local-6989586621679352324"><span class="annot"><span class="annottext">String
+</span><span id="line-174"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstVars"><span class="hs-identifier hs-var">getConstVars</span></a></span><span> </span><span id="local-6989586621679352324"><span class="annot"><span class="annottext">String
 </span><a href="#local-6989586621679352324"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679352325"><span class="annot"><span class="annottext">ParamType
 </span><a href="#local-6989586621679352325"><span class="hs-identifier hs-var">pt</span></a></span></span><span> </span><span class="annot"><span class="annottext">ConstantStructure
 </span><a href="Language.Drasil.Choices.html#WithInputs"><span class="hs-identifier hs-var">WithInputs</span></a></span><span> </span><span id="local-6989586621679352326"><span class="annot"><span class="annottext">ConstantRepr
 </span><a href="#local-6989586621679352326"><span class="hs-identifier hs-var">cr</span></a></span></span><span> </span><span id="local-6989586621679352327"><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352327"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-174"></span><span>  </span><span id="local-6989586621679352328"><span class="annot"><span class="annottext">DrasilState
+</span><span id="line-175"></span><span>  </span><span id="local-6989586621679352328"><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679352328"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-175"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-176"></span><span>  </span><span class="annot"><span class="annottext">String
 -&gt; ParamType
 -&gt; Structure
 -&gt; ConstantRepr
@@ -769,7 +770,7 @@ forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><a href="#local-6989586621679352328"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConstantRepr
 </span><a href="#local-6989586621679352326"><span class="hs-identifier hs-var">cr</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 </span><a href="#local-6989586621679352327"><span class="hs-identifier hs-var">cs</span></a></span><span>
-</span><span id="line-176"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstVars"><span class="hs-identifier hs-var">getConstVars</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-177"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Parameters.html#getConstVars"><span class="hs-identifier hs-var">getConstVars</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">ParamType
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">ConstantStructure
 </span><a href="Language.Drasil.Choices.html#Inline"><span class="hs-identifier hs-var">Inline</span></a></span><span> </span><span class="annot"><span class="annottext">ConstantRepr
@@ -778,4 +779,4 @@ forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 forall a. a -&gt; StateT DrasilState Identity a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-177"></span></pre></body></html>
+</span><span id="line-178"></span></pre></body></html>

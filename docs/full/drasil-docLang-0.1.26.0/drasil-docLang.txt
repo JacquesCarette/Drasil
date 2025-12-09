@@ -531,7 +531,7 @@ toSentenceUnitless :: MayHaveUnit u => u -> Sentence
 
 
 -- | Utilities to get grab certain chunks (from <a>Expr</a>,
---   <a>Sentence</a>, etc) by <a>UID</a> and dereference the chunk it
+--   <a>Sentence</a>, etc) by <tt>UID</tt> and dereference the chunk it
 --   refers to.
 module Drasil.GetChunks
 
@@ -1406,7 +1406,7 @@ pdStub :: Section
 
 
 -- | Defines functions to extract certain kinds of information from a
---   document. Mainly used to pull the <a>UID</a>s of chunks out of
+--   document. Mainly used to pull the <tt>UID</tt>s of chunks out of
 --   <a>Sentence</a>s and <a>Expr</a>s.
 module Drasil.ExtractDocDesc
 

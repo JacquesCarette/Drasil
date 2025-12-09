@@ -6608,12 +6608,6 @@ Circle :: Special
 class RenderSpecial r
 special :: RenderSpecial r => Special -> r
 
--- | The most basic item: having a unique identifier key, here a UID.
-class () => HasUID c
-
--- | Provides a <i>unique</i> id for internal Drasil use.
-uid :: HasUID c => Getter c UID
-
 -- | A HasSymbol is anything which has a <a>Symbol</a>.
 class HasSymbol c
 
@@ -6752,30 +6746,6 @@ class HasSymbol c => Callable c
 
 -- | Members must have a named argument.
 class HasSymbol c => IsArgumentName c
-
--- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
---   into our database of information. We use a newtype wrapper to make
---   sure we are only using <a>UID</a>s where desired.
-data () => UID
-
--- | Smart constructor for <a>UID</a>s from raw <a>Value</a>s.
-mkUid :: String -> UID
-
--- | Nest a <a>UID</a> under a namespace.
-nsUid :: String -> UID -> UID
-
--- | Get something's <a>UID</a> as a <a>Value</a>.
-showUID :: HasUID a => a -> String
-
--- | Append a suffix to a thing with a <a>UID</a> and get the resulting
---   <a>UID</a>.
-(+++) :: HasUID a => a -> String -> UID
-
--- | Append a suffix to a <a>UID</a>.
-(+++.) :: UID -> String -> UID
-
--- | Merge the <a>UID</a>s of two chunks through simple concatenation.
-(+++!) :: (HasUID a, HasUID b) => a -> b -> UID
 
 -- | <a>IdeaDict</a> constructor, takes a <a>String</a> for its <a>UID</a>
 --   and a term.

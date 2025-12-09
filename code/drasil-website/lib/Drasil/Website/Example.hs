@@ -99,16 +99,16 @@ individualExList :: Example -> [ItemType]
 -- No choices mean no generated code, so we do not need to display generated code and thus do not call versionList.
 individualExList ex@E{choicesE = [], codePath = srsP} =
   [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
-  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ getAbrv ex) (S "[HTML]")
-  +:+ namedRef (getSRSRef srsP TeX $ getAbrv ex) (S "[PDF]")
-  +:+ namedRef (getSRSRef srsP MDBook $ getAbrv ex) (S "[mdBook]")]
+  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ exName ex) (S "[HTML]")
+  +:+ namedRef (getSRSRef srsP TeX $ exName ex) (S "[PDF]")
+  +:+ namedRef (getSRSRef srsP MDBook $ exName ex) (S "[mdBook]")]
 -- Anything else means we need to display program information, so use versionList.
 individualExList ex@E{codePath = srsP} =
   [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
-  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ getAbrv ex) (S "[HTML]")
-  +:+ namedRef (getSRSRef srsP TeX $ getAbrv ex) (S "[PDF]")
-  +:+ namedRef (getSRSRef srsP MDBook $ getAbrv ex) (S "[mdBook]")
-  +:+ namedRef (getSRSRef srsP Jupyter $ getAbrv ex) (S "[Jupyter (HTML)]"),
+  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ exName ex) (S "[HTML]")
+  +:+ namedRef (getSRSRef srsP TeX $ exName ex) (S "[PDF]")
+  +:+ namedRef (getSRSRef srsP MDBook $ exName ex) (S "[mdBook]")
+  +:+ namedRef (getSRSRef srsP Jupyter $ exName ex) (S "[Jupyter (HTML)]"),
   Nested (S generatedCodeTitle) $ Bullet $ map (, Nothing) (versionList getCodeRef ex),
   Nested (S generatedCodeDocsTitle) $ Bullet $ map (, Nothing) (versionList getDoxRef noSwiftJlEx)]
     where
@@ -134,9 +134,9 @@ versionList getRef ex@E{choicesE = chcs} =
     -- Determine the version name based on the system name and if there is more than one set of choices.
     verName chc = case chcs of
       -- If there is one set of choices, then the program does not have multiple versions.
-      [_] -> getAbrv ex
+      [_] -> exName ex
       -- If the above two don't match, we have more than one set of choices and must display every version.
-      _   -> codedDirName (getAbrv ex) chc
+      _   -> codedDirName (exName ex) chc
 
 -- | Show function to display program languages to user.
 showLang :: Lang -> String
@@ -200,8 +200,8 @@ getCodeRef ex@E{choicesE = chcs} l verName =
 
     -- System name, different between one set of choices and multiple sets.
     sysName' = case chcs of
-      [_] -> map toLower $ getAbrv ex
-      _   -> map toLower (getAbrv ex) ++ "/" ++ verName
+      [_] -> map toLower $ exName ex
+      _   -> map toLower (exName ex) ++ "/" ++ verName
     -- Program language converted for use in file folder navigation.
     programLang = convertLang l
 
@@ -213,7 +213,7 @@ buildDrasilExSrcRef ex =
     refUID = "srcCodeRef" ++ sysName'
     refURI = path ++ "code/drasil-example/" ++ sysName'
     refShortNm = shortname' $ S refUID
-    sysName' = map toLower $ getAbrv ex
+    sysName' = map toLower $ exName ex
     path = codePath ex
 
 -- | Similar to 'getCodeRef', but gets the doxygen references and uses 'getDoxRef' instead.
@@ -225,7 +225,7 @@ getDoxRef ex@E{choicesE = chcs} l verName =
     refURI = getDoxPath (srsDoxPath ex) progName programLang
     refShortNm = shortname' $ S refUID
 
-    progName = getAbrv ex
+    progName = exName ex
     -- Here is the only difference from getCodeRef. When there is more than one set of choices,
     -- we append version name to program language since the organization of folders follows this way.
     programLang = case chcs of
@@ -261,10 +261,10 @@ exampleRefs :: FilePath -> FilePath -> [Reference]
 exampleRefs codePth srsDoxPth =
   concatMap getCodeRefDB (examples codePth srsDoxPth) ++
   concatMap getDoxRefDB (examples codePth srsDoxPth) ++
-  map (getSRSRef srsDoxPth HTML . getAbrv) (examples codePth srsDoxPth) ++
-  map (getSRSRef srsDoxPth TeX . getAbrv) (examples codePth srsDoxPth) ++
-  map (getSRSRef srsDoxPth MDBook . getAbrv) (examples codePth srsDoxPth) ++
-  map (getSRSRef srsDoxPth Jupyter . getAbrv) (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth HTML . exName) (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth TeX . exName) (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth MDBook . exName) (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth Jupyter . exName) (examples codePth srsDoxPth) ++
   map buildDrasilExSrcRef (examples codePth srsDoxPth)
 
 -- | Helpers to pull code and doxygen references from an example.
@@ -272,11 +272,11 @@ exampleRefs codePth srsDoxPth =
 getCodeRefDB, getDoxRefDB :: Example -> [Reference]
 getCodeRefDB ex = concatMap (\x -> map (\y -> getCodeRef ex y $ verName x) $ lang x) $ choicesE ex
   where
-    verName = codedDirName (getAbrv ex)
+    verName = codedDirName (exName ex)
 getDoxRefDB ex = concatMap (\x -> map (\y -> getDoxRef ex y $ verName x) $ lang x) $ choicesE ex
   where
-    verName = codedDirName (getAbrv ex)
+    verName = codedDirName (exName ex)
 
 -- | Helper to pull the system name (abbreviation) from an 'Example'.
-getAbrv :: Example -> String
-getAbrv E{systemE = si} = si ^. programName
+exName :: Example -> String
+exName E{systemE = si} = si ^. programName

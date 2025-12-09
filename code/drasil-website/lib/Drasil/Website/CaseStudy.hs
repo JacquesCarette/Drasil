@@ -9,7 +9,7 @@ import Drasil.System
 import Drasil.Generator (codedDirName)
 import Drasil.GOOL (CodeType(..))
 
-import Drasil.Website.Example (examples, Example(..), getAbrv)
+import Drasil.Website.Example (examples, Example(..), exName)
 
 -- * Case Studies Section
 
@@ -59,11 +59,11 @@ data CaseStudy = CS {
 mkCaseStudy :: Example -> [CaseStudy]
 mkCaseStudy E{choicesE = []} = []
 mkCaseStudy ex@E{systemE = si, choicesE = [x]}
-  = [CS{systemCS = si, progName = S $ getAbrv ex, choicesCS = x}]
+  = [CS{systemCS = si, progName = S $ exName ex, choicesCS = x}]
 mkCaseStudy ex@E{systemE = si, choicesE = xs}
   = map (\x -> CS{
       systemCS = si,
-      progName = S $ codedDirName (getAbrv ex) x, choicesCS = x
+      progName = S $ codedDirName (exName ex) x, choicesCS = x
     }) xs
 
 -- * Display 'CaseStudy' Information as a Table

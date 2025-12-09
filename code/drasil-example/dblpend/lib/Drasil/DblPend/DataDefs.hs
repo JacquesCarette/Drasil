@@ -119,14 +119,9 @@ accelVecEqn_2 = deriv (sy mvVel_2) time
 -- Force Vectors --
 --------------------------------------------
 
-<<<<<<< HEAD
 forceVecDD_1 :: DataDefinition
 forceVecDD_1 =
   ddMENoRefs forceVecQD_1 Nothing "forceVecDD1" []
-=======
-accelGEqn :: ModelExpr
-accelGEqn = deriv (sy velocity) time
->>>>>>> origin/main
 
 forceVecQD_1 :: ModelQDef
 forceVecQD_1 = mkQuantDef mvForce_1 forceVecEqn_1

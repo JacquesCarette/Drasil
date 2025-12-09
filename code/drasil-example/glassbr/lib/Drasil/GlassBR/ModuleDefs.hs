@@ -63,7 +63,6 @@ v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
   i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename :: DefinedQuantityDict
 i = var "i" "index" "the index" lI Natural
 j = var "j" "index" "the index" lJ Natural
-<<<<<<< HEAD
 k = var "k" "index" "the index" (sub lK two) Natural     
 v = var "v" "value whose index will be found" "the value whose index will be found" lV Real
 y = var "y" "y-coordinate to interpolate at" "the y-coordinate to interpolate at" lY Real
@@ -91,38 +90,6 @@ col     = var "col"     "extracted column" "the extracted column"
   (label "col")             (vect3DS Real)               
 filename = var "filename" "name of file with x y and z data" "the name of file with x y and z data"
   (label "filename")        String
-=======
-k = var "k" "index" "the index" (sub lK two) Natural
-v = var "v" "value whose index will be found"
-  "the value whose index will be found" lV Real
-y = var "y" "y-coordinate to interpolate at"
-  "the y-coordinate to interpolate at" lY Real
-z = var "z" "z-coordinate to interpolate at"
-  "the z-coordinate to interpolate at" lZ Real
-
-zVector = var "zVector" "list of z values"
-  "the list of z values" (sub lZ (label "vector")) (Vect Real)
-yMatrix = var "yMatrix" "lists of y values at different z values"
-  "the lists of y values at different z values" (sub lY (label "matrix")) (Vect $ Vect Real)
-xMatrix = var "xMatrix" "lists of x values at different z values"
-  "the lists of x values at different z values" (sub lX (label "matrix")) (Vect $ Vect Real)
-arr     = var "arr" "array in which value should be found"
-  "the array in which a value should be found" (label "arr") (Vect Real)  --FIXME: temporary variable for findCT?
-x_z_1   = var "x_z_1" "list of x values at a specific z value"
-  "the list of x values at a specific z value" (sub lX (sub lZ one)) (Vect Real)
-y_z_1   = var "y_z_1" "list of y values at a specific z value"
-  "the list of y values at a specific z value" (sub lY (sub lZ one)) (Vect Real)
-x_z_2   = var "x_z_2" "list of x values at a specific z value"
-  "the list of x values at a specific z value" (sub lX (sub lZ two)) (Vect Real)
-y_z_2   = var "y_z_2" "list of y values at a specific z value"
-  "the list of y values at a specific z value" (sub lY (sub lZ two)) (Vect Real)
-mat     = var "mat" "matrix from which column will be extracted"
-  "the matrix from which columns will be extracted" (label "mat") (Vect $ Vect Real)
-col     = var "col" "extracted column"
-  "the extracted column" (label "col") (Vect Real)
-filename = var "filename" "name of file with x y and z data"
-  "the name of the file with x, y, and z data" (label "filename") String
->>>>>>> origin/main
 
 ------------------------------------------------------------------------------------------
 --
@@ -189,13 +156,8 @@ findCT = funcDef "find"
   ]
 
 extractColumnCT :: Func
-<<<<<<< HEAD
 extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
   [mat, j] (vect3DS Real) (Just "column of the given matrix at the given index")
-=======
-extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix"
-  [mat, j] (Vect Real) (Just "column of the given matrix at the given index")
->>>>>>> origin/main
   [
     fDecDef col (matrix [[]]),
     --

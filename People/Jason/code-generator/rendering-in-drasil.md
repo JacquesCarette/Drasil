@@ -60,13 +60,14 @@ each.
 
 #### Tagless embedding
 
-The tagless embedding allows us to avoid writing duplicate expressions by
-allowing us to write expressions without forcing a decision about which langauge
-the expression belongs to. For example, $\sin(e)$ can belong to any of them.
-With the tagless embedding, this expression has the type `ExprC r => r`. With
-the deep embedding, we would write $\sin(e)$ as `UnaryOp Sin e`, but `UnaryOp`
-would be a constructor of one of the 3 languages that would indicate which
-expression language this expression strictly belongs to.
+The tagless embedding allows us to be polymorphic about the representation type,
+avoid writing duplicate expressions by allowing us to write expressions without
+forcing a decision about which langauge the expression belongs to. For example,
+$\sin(e)$ can belong to any of them. With the tagless embedding, this expression
+has the type `ExprC r => r`. With the deep embedding, we would write $\sin(e)$
+as `UnaryOp Sin e`, but `UnaryOp` would be a constructor of one of the 3
+languages that would indicate which expression language this expression strictly
+belongs to.
 
 #### Further Duplication
 
@@ -94,6 +95,7 @@ it currently relies on duplicate code, much like that previous.
 
 It goes without saying in our circle, but with duplication comes fragile
 maintenance and development, and increased maintenance costs (time and money).
+We try to avoid it as much as we can.
 
 #### Commentary on Duplication
 
@@ -107,17 +109,20 @@ captured anything about "sin," we've only gained the ability to _use it_.
 
 First, an example: to capture kinematics equations, we use a mixture of
 `TheoryModel`s, `GenDefn`s and `DataDefinition`s which contain instances of
-`Expr` and `ModelExpr`. We capture quantities like velocity and we create a
-"velocity" word chunk (an `IdeaDict`) that lets us reference the word "velocity"
-in the context of writing an SRS document. We also capture a structured
-mathematical meaning of "velocity" that lets us ascribe it any number of
-definitions we choose and for a variety of contexts. For example, in different
-Drasil projects, we might need individual instances of velocity for each "world
-object," or we might use different coordinate systems. Regardless, all carry
-different definitions of velocity. For `sin`, when we want to reference the
-word, we resort to hacks, such as in `SglPend/GenDefs.hs` (see below snippet) or
-relying on injecting expression terms into `Sentence`s and them being renderable
-to human language as well (again, a kind of duplication, here in our renderers).
+`Expr` and `ModelExpr`. We capture quantities like velocity with
+`DefinedQuantityDict`s and we create a "velocity" word chunk (an `IdeaDict`)
+that lets us reference the word "velocity" in the context of writing an SRS
+document. We also capture a structured mathematical meaning of "velocity" that
+lets us assign it any number of formulas we choose and for a variety of
+contexts. For example, in different Drasil projects, we might need individual
+instances of velocity for each entity in our problem model, or we might use
+different coordinate systems. Regardless, all carry different definitions of
+velocity. For `sin`, when we want to reference the word, we resort to hacks,
+such as in `SglPend/GenDefs.hs` (see below snippet) or relying on injecting
+expression terms into `Sentence`s (which will *always* appear in math-mode --
+what if we wanted code-mode, say, in the design document?) and them being
+renderable to human language as well (again, a kind of duplication in our
+renderers).
 
 ```text
 drasil-example/sglpend/lib/Drasil/SglPend/GenDefs.hs:
@@ -125,15 +130,15 @@ drasil-example/sglpend/lib/Drasil/SglPend/GenDefs.hs:
 ```
 
 In different applications, we might want a different definition of `sin`. For
-example, in the context of the Java application I'm looking to generate, I might
-want it to generate code corresponding to `StrictMath.sin` rather than
-`Math.sin` (our default implementation). If we had more sophisticated software
-design `Choices`, we might be able to pick `StrictMath` instead of `Math`, but
-what if I wanted my own custom definition that I know is faster than both
-`StrictMath` and `Math` for my needs of `sin`? I would probably need to argue
-(derive) for a custom definition of `sin` in the SRS (or maybe this belongs in
-the prospective SDS phase... but location does not matter much). I cannot
-currently do this in Drasil.
+example, in the context of some arbitrary Java application I'm looking to
+generate, I might want it to generate code corresponding to `StrictMath.sin`
+rather than `Math.sin` (our default implementation). If we had more
+sophisticated software design in `Choices`, we might be able to pick
+`StrictMath` instead of `Math`, but what if I wanted my own custom definition
+that I know is faster than both `StrictMath` and `Math` for my needs of `sin`? I
+would probably need to argue (derive) for a custom definition of `sin` in the
+SRS (or maybe this belongs in the prospective SDS phase... but location does not
+matter much). We cannot do this in Drasil.
 
 At this point, you might recall $\pi$. From the math-side, we have a definition
 of $3.14159...$ but we generate $Math.pi$ (or whatever else language-native
@@ -333,8 +338,7 @@ project for a long time and currently, we default all of our chunk depenency
 lists to `[]`. More recently, Xinlu started [filling in these
 lists](https://github.com/JacquesCarette/Drasil/pull/4434) and highlighted to us
 that producing these lists could perhaps be
-[automated](https://github.com/JacquesCarette/Drasil/pull/4476) (incomplete
-work).
+[automated](https://github.com/JacquesCarette/Drasil/pull/4476) (incomplete).
 
 The nice thing about this is that when we generate an SRS, we generate chunks
 (!), and so, if/when above PRs are merged, we should be able to replace the code
@@ -413,25 +417,27 @@ our languages, we should:
 
 ### 4. `drasil-printers`: Duplication in printers and high coupling
 
-**Duplication**: In the first section, we discussed duplication across the
-languages. This includes in `drasil-printers` where we have renders for each of
-our 3 expression languages into the printing-focused expression language (again,
-this code has significant duplication). However, if you look at any of the
-output formats between the renderers, there is also duplication that begs
-someone to mine through it and de-duplicate it. For example, Markdown rendering
-could be better shared between Jupyter and the Markdown renderer.
+**Duplication**: In the first section, we discussed duplication across our
+mathematical expression languages. This includes in `drasil-printers` where we
+have renders for each of our 3 expression languages into the printing-focused
+expression language (again, this code has significant duplication). However, if
+you look at any of the output formats between the renderers, there is also
+duplication that begs someone to mine through it and de-duplicate it. For
+example, Markdown rendering could be better shared between Jupyter and the
+Markdown renderer.
 
 **High coupling**: As a package, `drasil-printers` seems to be highly coupled
 with the needs of our other packages, but not quite in the right way, as a
-library of tools at their disposal, but as a series of modules that are perhaps
-better placed within the coupled libraries.
+library of tools at their disposal. Rather, excluding the generic printing
+languages, `drasil-printers` is more of a series of modules that are better
+placed within the coupled libraries.
 
 The names of modules would make one think they are made for generic use.
 However, looking at them in vacuum (including dependencies), it contains
 features that `drasil-docLang` and `drasil-code` specifically depend on that
 they should be doing instead. That is, for Drasil, as an SCS generator, all of
-these files exist for good reason, but the library is highly coupled with by
-other packages. For example...
+these files exist for good reason, but the library is highly coupled with all
+other packages. For example:
 
 1. The [`.dot` file
    renderer](https://github.com/JacquesCarette/Drasil/blob/5ab30a2ba1915b17d9102ff6c86d28eb212512e2/code/drasil-printers/lib/Language/Drasil/DOT/Print.hs#L31-L65)
@@ -445,10 +451,10 @@ other packages. For example...
    CSS to disk' tool. It should likely be moved elsewhere.
 3. The
    [`JSON`](https://github.com/JacquesCarette/Drasil/blob/5ab30a2ba1915b17d9102ff6c86d28eb212512e2/code/drasil-printers/lib/Language/Drasil/JSON/Print.hs#L1-L2)
-   renderer is really a JupyterNotebook generator. It doesn't use a JSON
-   renderer in the backend [to create new new
+   renderer is really a Jupyter Notebook generator. It doesn't use a JSON
+   renderer in the backend [to create new
    cells](https://github.com/JacquesCarette/Drasil/blob/5ab30a2ba1915b17d9102ff6c86d28eb212512e2/code/drasil-printers/lib/Language/Drasil/JSON/Helpers.hs#L128-L142).
-   We should rename it.
+   We should rename it, at least.
 4. The
    [`Markdown`](https://github.com/JacquesCarette/Drasil/blob/5ab30a2ba1915b17d9102ff6c86d28eb212512e2/code/drasil-printers/lib/Language/Drasil/Markdown/Print.hs#L36-L42)
    renderer is also really an `mdBook` generator.
@@ -458,9 +464,9 @@ other packages. For example...
    Shouldn't this information be erased by the time we render into the various
    generic rendering languages we expose in `drasil-printers`?
 
-A complete audit of the code will show more things (for example, "Motivation"
-and "Purpose" are very unlikely keywords to appear in a generic printing
-library).
+A complete audit of the code will show more discussion topics and issues (for
+example, "Motivation" and "Purpose" are very unlikely keywords to appear in a
+generic printing library).
 
 ### 5. `drasil-artifacts`: A prospective library to support chunk _rendering_
 
@@ -514,8 +520,25 @@ not end up being easy, and it is forcing us to deal with our ongoing issues with
 
 ### Action Plan
 
-FIXME: Write more rationale!
-
-1. See [How should we resolve the cycle?](#how-should-we-resolve-the-cycle).
-2. ?
-
+1. **`drasil-printers`**: The steps in [How should we resolve the
+   cycle?](#how-should-we-resolve-the-cycle) are perhaps optimistic. What could
+   be moved into `drasil-printlang`, for example? `PrintingInformation` (or some
+   printing configuration type variable) would need to be moved there, as well
+   as the various 'printing ASTs'. Afterwards, we would move the individual
+   renderers closer to the definitions of the data types they render. This will
+   involve moving code to `drasil-lang`, `drasil-code`, and `drasil-docLang`.
+2. (tangential to the core issues with `drasil-code`; not strictly necessary)
+   **`drasil-artifacts`** is really just a renamed copy of `drasil-printers`. At
+   this point, so we would look towards 'upgrading' it with stateful rendering
+   and, while we're at it, switching the backend from `pretty` `Doc`s
+   (`String`-based) to `Prettyprint` `Doc`s (`Text`-based). So, we can drop
+   `drasil-artifacts` in favour of keeping our existing package name;
+   `drasil-printers` (which now becomes a 'base' package in all other packages,
+   except for `drasil-database`).
+3. **`drasil-code`**: De-coupling from `drasil-lang` and continuously cleaning
+   up the code. This will involve cutting as many dependencies on `drasil-lang`
+   as possible. In particular, replacing reliance on `DefinedQuantityDict`s with
+   some other (internally held) data type. Moving 'translation' logic of IMs,
+   DDs, GDs, and TMs from `drasil-code` to `drasil-gen`.
+4. **`drasil-lang`**: Continuing to move code out from `drasil-lang` and into
+   other packages.

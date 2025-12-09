@@ -18,7 +18,6 @@ import Data.Drasil.Quantities.Math as QM (unitVect, pi_)
 import Drasil.DblPend.Concepts (rod)
 import Drasil.DblPend.Unitals (lRod)
 
-
 symbols:: [DefinedQuantityDict]
 symbols = map dqdWr unitalChunks ++ unitless
 

@@ -11,7 +11,6 @@ import Data.Drasil.Concepts.Thermodynamics (htFlux)
 import Drasil.SWHS.Concepts (coil, sWHT)
 import Drasil.SWHS.Unitals (htFluxC)
 
-
 resourcePath :: String
 resourcePath = "../../../../datafiles/swhsnopcm/"
 

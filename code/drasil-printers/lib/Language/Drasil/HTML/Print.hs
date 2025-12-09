@@ -113,7 +113,6 @@ printLO Graph{}                = empty -- FIXME
 printLO Cell{}                 = empty
 printLO CodeBlock{}            = empty
 
-
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in 'Doc' format.
 print :: [LayoutObj] -> Doc
@@ -154,11 +153,9 @@ pSpec (Quote q) = doubleQuotes $ pSpec q
 --pSpec (Acc Grave c) = text $ '&' : c : "grave;" --Only works on vowels.
 --pSpec (Acc Acute c) = text $ '&' : c : "acute;" --Only works on vowels.
 
-
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
-
 
 -- | Renders expressions in the HTML document (called by multiple functions).
 pExpr :: Expr -> Doc

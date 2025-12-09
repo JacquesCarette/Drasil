@@ -8,7 +8,6 @@ module Drasil.SWHS.Choices where
 --   Visibility(..), defaultChoices)
 -- import Drasil.SWHS.Body (fullSI)
 
-
 -- code :: CodeSpec
 -- code = codeSpec fullSI choices []
 

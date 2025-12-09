@@ -1,12 +1,11 @@
 {-# LANGUAGE GADTs #-}
-
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
-module Language.Drasil.Printing.Import.ModelExpr where -- TODO: tighten exports
--- TODO: tighten exports
+module Language.Drasil.Printing.Import.ModelExpr where
 
 import Data.List (intersperse)
 
-import Language.Drasil (UID, DomainDesc(..), RealInterval(..), Inclusive(..),
+import Drasil.Database (UID)
+import Language.Drasil (DomainDesc(..), RealInterval(..), Inclusive(..),
   RTopology(..), LiteralC(int))
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development (Literal(..))
@@ -94,7 +93,6 @@ eopMuls sm (BoundedDD v Discrete l h) e =
 eopMuls sm (AllDD _ Discrete) e = P.Row [P.MO P.Prod, P.Row [modelExpr e sm]]
 eopMuls _ (AllDD _ Continuous) _ = error "Printing/Import.hs Product-Integral not implemented."
 eopMuls _ (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Integral not implemented."
-
 
 -- | Helper function for translating 'EOperator's.
 eop :: PrintingInformation -> AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> P.Expr
@@ -210,7 +208,6 @@ mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
   (a, _)                ->  [modelExpr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
 mulExpr [hd]         o sm = [modelExpr' sm (precA o) hd]
 mulExpr []           o sm = [modelExpr' sm (precA o) (int 1)]
-
 
 -- | Helper that adds parenthesis to the first expression. The second expression
 -- is written as a superscript attached to the first.

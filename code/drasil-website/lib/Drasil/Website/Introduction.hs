@@ -4,7 +4,6 @@ module Drasil.Website.Introduction where
 
 import Language.Drasil
 
-
 -- * Introduction Section
 
 -- | Creates the about section.

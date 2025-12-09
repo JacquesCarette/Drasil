@@ -3,16 +3,16 @@ module Language.Drasil.Code.Imperative.ConceptMatch (
   chooseConcept, conceptToGOOL
 ) where
 
-import Language.Drasil (UID, Sentence(S), (+:+), (+:+.))
-
-import Language.Drasil.Choices (Choices(..), CodeConcept(..),
-    MatchedConceptMap, showChs, Maps(..))
-
-import Drasil.GOOL (SValue, SharedProg, MathConstant(..))
-
 import Prelude hiding (pi)
 import qualified Data.Map as Map (mapWithKey)
 import Control.Monad.State (State, modify)
+
+import Drasil.Database (UID)
+import Language.Drasil (Sentence(S), (+:+), (+:+.))
+import Drasil.GOOL (SValue, SharedProg, MathConstant(..))
+
+import Language.Drasil.Choices (Choices(..), CodeConcept(..),
+    MatchedConceptMap, showChs, Maps(..))
 
 -- | Concretizes the ConceptMatchMap in Choices to a 'MatchedConceptMap'.
 -- Currently we don't have any Choices that would prevent a 'CodeConcept' from

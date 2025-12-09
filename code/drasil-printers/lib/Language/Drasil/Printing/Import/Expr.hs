@@ -5,6 +5,7 @@ module Language.Drasil.Printing.Import.Expr (expr) where
 
 import Data.List (intersperse)
 
+import Drasil.Database (UID)
 import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix, Set)
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
@@ -18,7 +19,6 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Symbol (symbol)
 import Language.Drasil.Printing.Import.Helpers (lookupC', parens)
-
 
 -- | Helper that creates an expression row given printing information, an operator, and an expression.
 mkCall :: PrintingInformation -> P.Ops -> Expr -> P.Expr
@@ -96,12 +96,10 @@ eopMuls sm (AllDD _ Discrete) e = P.Row [P.MO P.Prod, P.Row [expr e sm]]
 eopMuls _ (AllDD _ Continuous) _ = error "Printing/Import.hs Product-Integral not implemented."
 eopMuls _ (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Integral not implemented."
 
-
 -- | Helper function for translating 'EOperator's.
 eop :: PrintingInformation -> AssocArithOper -> DomainDesc t Expr Expr -> Expr -> P.Expr
 eop sm Add = eopAdds sm
 eop sm Mul = eopMuls sm
-
 
 -- | Translate Exprs to printable layout AST.
 expr :: Expr -> PrintingInformation -> P.Expr
@@ -189,7 +187,6 @@ mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
   (a, _)                ->  [expr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
 mulExpr [hd]         o sm = [expr' sm (precA o) hd]
 mulExpr []           o sm = [expr' sm (precA o) (int 1)]
-
 
 -- | Helper that adds parenthesis to the first expression. The second expression
 -- is written as a superscript attached to the first.

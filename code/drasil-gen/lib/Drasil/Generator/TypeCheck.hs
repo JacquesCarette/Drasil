@@ -10,9 +10,10 @@ import Data.Either (isLeft, lefts)
 import Data.List (partition)
 import qualified Data.Map.Strict as M
 
+import Drasil.Database (UID, HasUID(..))
+import Drasil.Database.SearchTools (findAllDefinedQuantities)
 import Language.Drasil
 import Drasil.System (System, HasSystem (instModels, dataDefns, systemdb))
-import Drasil.Database.SearchTools (findAllDefinedQuantities)
 
 typeCheckSI :: System -> IO ()
 typeCheckSI sys = do

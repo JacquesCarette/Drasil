@@ -33,7 +33,6 @@ landPosDerivEqn1 = sy xPos    $= sy ixVel $* sy time
 landPosDerivEqn2 = sy landPos $= sy ixVel $* exactDbl 2 $* sy launSpeed $* sin (sy launAngle) $/ sy gravitationalAccelConst
 landPosDerivEqn3 = sy landPos $= sy launSpeed $* cos (sy launAngle) $* exactDbl 2 $* sy launSpeed $* sin (sy launAngle) $/ sy gravitationalAccelConst
 
-
 --
 rectVelDeriv :: [ModelExpr]
 rectVelDeriv = [rectVelDerivEqn1, rectVelDerivEqn2]

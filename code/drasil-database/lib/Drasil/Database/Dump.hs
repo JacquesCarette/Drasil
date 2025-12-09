@@ -1,7 +1,9 @@
-module Drasil.Database.Dump where
+module Drasil.Database.Dump (
+    ChunkType, DumpedChunkDB, dumpChunkDB
+) where
 
 import Drasil.Database.UID (UID)
-import Drasil.Database.ChunkDB
+import Drasil.Database.ChunkDB (findAll', typesRegistered, ChunkDB)
 
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as SM

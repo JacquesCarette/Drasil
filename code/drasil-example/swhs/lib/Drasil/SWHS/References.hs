@@ -37,7 +37,6 @@ lightstone2012 = cMisc [
   note "From Marilyn Lightstone's Personal Notes"]
   "lightstone2012"
 
-
 uriReferences :: [Reference]
 uriReferences = [consThemESrc, latHtESrc, sensHtESrc]
 

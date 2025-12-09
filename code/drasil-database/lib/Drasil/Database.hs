@@ -11,6 +11,6 @@ module Drasil.Database (
 import Drasil.Database.Chunk
 import Drasil.Database.ChunkDB
 import Drasil.Database.Dump
-import Drasil.Database.UID
 import Drasil.Database.TH
 import Drasil.Database.TypedUIDRef
+import Drasil.Database.UID

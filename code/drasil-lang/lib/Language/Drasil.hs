@@ -49,7 +49,6 @@ module Language.Drasil (
 
   -- *** Chunk-related
   -- Language.Drasil.Symbol
-  , HasUID(uid)
   , HasSymbol(symbol)
   -- Language.Drasil.Classes
   , NamedIdea(term)
@@ -82,9 +81,7 @@ module Language.Drasil (
   -- Similar types are grouped together.
 
   -- *** Basic types
-  , UID, mkUid, nsUid, showUID
   -- Language.Drasil.Chunk.NamedIdea
-  , (+++), (+++.), (+++!)
   , nc, ncUID, IdeaDict , mkIdea
   , nw -- bad name (historical)
   , CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..)
@@ -218,7 +215,6 @@ module Language.Drasil (
   , foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent
   , foldlSent_,foldlSentCol, foldlsC, foldNums, numList
 
-
   -- * Basic Document Language
   -- | Holds all the types and helper functions needed especially in @drasil-docLang@
   -- Language.Drasil.Document
@@ -328,8 +324,6 @@ import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr, unlbldCode
   , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD)
 import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
-import Drasil.Database
-    (UID, HasUID(..), (+++), (+++.), (+++!), mkUid, nsUid, showUID)
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),

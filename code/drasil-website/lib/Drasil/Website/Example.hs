@@ -192,16 +192,15 @@ getCodeRef ex@E{choicesE = chcs} l verName =
   makeURI refUID refURI refShortNm
   where
     -- Append system name and program language to ensure a unique id for each.
-    refUID = "codeRef" ++ sysName' ++ programLang
+    refUID = "codeRef" ++ exFolder ++ programLang
     -- Finds the folder path that holds code for the respective program and system.
-    refURI = getCodePath (codePath ex) sysName' programLang
+    refURI = getCodePath (codePath ex) exFolder programLang
     -- Shortname is the same as the UID, just converted to a Sentence.
     refShortNm = shortname' $ S refUID
 
     -- System name, different between one set of choices and multiple sets.
-    sysName' = case chcs of
-      [_] -> map toLower $ exName ex
-      _   -> map toLower (exName ex) ++ "/" ++ verName
+    exFolder = map toLower $ exName ex ++
+      if length chcs > 1 then "/" ++ verName else ""
     -- Program language converted for use in file folder navigation.
     programLang = convertLang l
 
@@ -210,10 +209,10 @@ buildDrasilExSrcRef :: Example -> Reference
 buildDrasilExSrcRef ex =
   makeURI refUID refURI refShortNm
   where
-    refUID = "srcCodeRef" ++ sysName'
-    refURI = path ++ "code/drasil-example/" ++ sysName'
+    refUID = "srcCodeRef" ++ exFolder
+    refURI = path ++ "code/drasil-example/" ++ exFolder
     refShortNm = shortname' $ S refUID
-    sysName' = map toLower $ exName ex
+    exFolder = map toLower $ exName ex
     path = codePath ex
 
 -- | Similar to 'getCodeRef', but gets the doxygen references and uses 'getDoxRef' instead.

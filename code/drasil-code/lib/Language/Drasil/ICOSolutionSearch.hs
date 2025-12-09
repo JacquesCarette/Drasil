@@ -3,8 +3,7 @@ module Language.Drasil.ICOSolutionSearch where
 import Control.Lens ((^.))
 import Data.List ((\\), intercalate)
 
-import Drasil.Database (ChunkDB)
-import Language.Drasil
+import Drasil.Database (ChunkDB, showUID)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Utils.Drasil (subsetOf)
 

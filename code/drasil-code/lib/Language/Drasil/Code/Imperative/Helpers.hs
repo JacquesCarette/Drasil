@@ -2,8 +2,8 @@ module Language.Drasil.Code.Imperative.Helpers (
   liftS, lookupC, convScope
 ) where
 
-import Drasil.Database (findOrErr)
-import Language.Drasil (UID, DefinedQuantityDict)
+import Drasil.Database (UID, findOrErr)
+import Language.Drasil (DefinedQuantityDict)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..),
   ScopeType(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))

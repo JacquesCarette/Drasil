@@ -11,8 +11,8 @@ module Language.Drasil.Code.Imperative.Modules (
 
 import Drasil.Code.CodeExpr.Development
 
-import Language.Drasil (Constraint(..), RealInterval(..),
-  HasUID(uid))
+import Drasil.Database (HasUID(..))
+import Language.Drasil (Constraint(..), RealInterval(..))
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   constModDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc,

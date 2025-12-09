@@ -13,6 +13,7 @@ import Data.Map (member)
 import qualified Data.Map as Map (filter, lookup, null)
 import Data.Maybe (mapMaybe)
 
+import Drasil.Database (HasUID(..))
 import Language.Drasil
 import Drasil.System hiding (systemdb)
 import Utils.Drasil (stringList)

@@ -8,7 +8,7 @@ module Theory.Drasil.DataDefinition (
 
 import Control.Lens
 
-import Drasil.Database (HasChunkRefs(chunkRefs))
+import Drasil.Database (UID, HasUID(..), showUID, HasChunkRefs(..), nsUid)
 import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Theory.Drasil.Classes (HasOutput(..))

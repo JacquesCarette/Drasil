@@ -184,7 +184,6 @@ getInnerType _        = error "getInnerType called on non-vector space"
 
 -- | Is this Space a basic numeric space?
 isBasicNumSpace :: Space -> Bool
-<<<<<<< HEAD
 isBasicNumSpace Integer      = True
 isBasicNumSpace Rational     = True
 isBasicNumSpace Real         = True
@@ -281,4 +280,3 @@ assertFunction s                     msg = Left $ msg $ show s
 assertNonFunction :: Space -> (String -> String) -> Either String ()
 assertNonFunction f@Function{} msg = Left $ msg $ show f
 assertNonFunction _            _   = Right ()
->>>>>>> origin/main

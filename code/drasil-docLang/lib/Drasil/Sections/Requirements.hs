@@ -5,7 +5,7 @@ module Drasil.Sections.Requirements (
   -- * Functional Requirements
   fReqF,
   -- ** Input Requirements
-  inReqWTab,
+  fullReqs, fullTables, inReq, inReqWTab,
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- * Non-functional Requirements
   nfReqF, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
@@ -14,44 +14,62 @@ module Drasil.Sections.Requirements (
 
 import Utils.Drasil (stringList, mkTable)
 
-import Control.Lens ((^.))
-import Data.Bifunctor (bimap)
-
-import Drasil.Database (HasUID(..))
 import Language.Drasil
+import Language.Drasil.Development (toSent)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Language.Drasil.Development as D
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.Database (HasUID(..))
 import Theory.Drasil (HasOutput(output))
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom, nonFuncReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, output_, section_,
-  software, symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis)
+  software, symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis, likelyChg)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)
+import Data.List (nub)
+import Data.Maybe (fromMaybe)
+
+import Control.Lens ((^.))
+import Data.Bifunctor (bimap)
 
 -- | Wrapper for 'reqIntro'.
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
 
--- | Creates an "input-values" functional requirement ('ConceptInstance') and an
--- associated table of input variables ('LabelledContent') from a list of
--- quantities. The 'Maybe Sentence' provides an optional description for what
--- the inputs define.
---
--- The resulting requirement sentence is of the form: "Inputs the values from
--- @table_ref@, which define @description@". If the description is 'Nothing',
--- the sentence is: "Inputs the values from @table_ref@".
-inReqWTab :: (Quantity q, MayHaveUnit q) => Maybe Sentence -> [q] -> (ConceptInstance, LabelledContent)
-inReqWTab mdesc qs = (ci, tbl)
-  where
-    tbl = mkInputPropsTable qs
-    desc = foldlSent $ [atStart input_,  S "the", plural value, S "from"]
-      ++ maybe [refS tbl] (\d -> [refS tbl `sC` S "which define", d]) mdesc
-    ci = cic "inputValues" desc "Input-Values" funcReqDom
+-- | Prepends a 'ConceptInstance' referencing an input-value table to a list of other 'ConceptInstance's.
+-- For listing input requirements.
+fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> [ConceptInstance] -> [ConceptInstance]
+fullReqs [] _ _ = []
+fullReqs i d r = nub $ inReq (inReqDesc (mkInputPropsTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
+
+-- | Prepends given LabelledContent to an input-value table.
+fullTables :: (Quantity i, MayHaveUnit i) => [i] -> [LabelledContent] -> [LabelledContent]
+fullTables [] _ = []
+fullTables i t = mkInputPropsTable i : t
+
+-- | Creates a Sentence from a Referable and possible description. Output is of the form
+-- "Inputs the values from @reference@, which define @description@". If no description is given,
+-- there will be nothing after the word "@reference@".
+inReqDesc :: (HasShortName r, Referable r) => r -> Sentence -> Sentence
+inReqDesc  t desc = foldlSent [atStart input_,  S "the", plural value, S "from", end]
+  where end = case desc of EmptyS -> refS t
+                           sent   -> refS t `sC` S "which define" +:+ sent
+--outReqDesc t = foldlSent [atStart output_, S "the", plural value, S "from", refS t]
+
+-- | Creates a 'ConceptInstance' of input values.
+inReq :: Sentence -> ConceptInstance
+inReq  s = cic "inputValues"  s "Input-Values"  funcReqDom
+--outReq s = cic "inputValues" s "Output-Values" funcReqDom
+
+-- | Creates both a 'ConceptInstance' and a 'LabelledContent' table for input requirements.
+-- Takes an optional description and a list of input quantities.
+inReqWTab :: (Quantity i, MayHaveUnit i) => Maybe Sentence -> [i] -> (ConceptInstance, LabelledContent)
+inReqWTab mbDesc inputs = (inReq desc, table)
+  where table = mkInputPropsTable inputs
+        desc = inReqDesc table $ fromMaybe EmptyS mbDesc
 
 -- | Adds a generalized introduction for a Non-Fucntional Requirements section. Takes in the contents of that section.
 fReqF :: [Contents] -> Section
@@ -67,12 +85,12 @@ reqIntroStart = foldlSent_ [S "This", phrase section_, S "provides"]
 
 -- | General 'Sentence' for use in the Functional Requirements subsection introduction.
 frReqIntroBody :: Sentence
-frReqIntroBody = foldlSent_ [D.toSent (pluralNP (the functionalRequirement)) `sC`
+frReqIntroBody = foldlSent_ [toSent (pluralNP (the functionalRequirement)) `sC`
   S "the tasks and behaviours that the", phrase software, S "is expected to complete"]
 
 -- | General 'Sentence' for use in the Non-Functional Requirements subsection introduction.
 nfrReqIntroBody :: Sentence
-nfrReqIntroBody = foldlSent_ [D.toSent (pluralNP (the nonfunctionalRequirement)) `sC`
+nfrReqIntroBody = foldlSent_ [toSent (pluralNP (the nonfunctionalRequirement)) `sC`
   S "the qualities that the", phrase software, S "is expected to exhibit"]
 
 -- | Generalized Requirements section introduction.
@@ -94,7 +112,7 @@ nfReqIntro _  = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 -- and a label ('String').
 mkMaintainableNFR :: String -> Integer -> String -> ConceptInstance
 mkMaintainableNFR refAddress percent lbl = cic refAddress (foldlSent [
-  S "If a likely change is made" `S.toThe`
+  S "If a", phrase likelyChg, S "is made" `S.toThe`
   S "finished software, it will take at most", addPercent percent `S.ofThe`
   S "original development time,",
   S "assuming the same development resources are available"
@@ -112,26 +130,26 @@ mkPortableNFR refAddress osList lbl = cic refAddress (foldlSent [
 -- | Common Non-Functional Requirement for Correctness.
 mkCorrectNFR :: String -> String -> ConceptInstance
 mkCorrectNFR refAddress lbl = cic refAddress (foldlSent [
-  D.toSent $ atStartNP' (output_ `the_ofThePS` code), S "have the",
+  toSent (atStartNP' (output_ `the_ofThePS` code)), S "have the",
   namedRef (SRS.propCorSol [] []) (plural propOfCorSol)
   ]) lbl nonFuncReqDom
 
 -- | Common Non-Functional Requirement for Verifiability.
 mkVerifiableNFR :: String -> String -> ConceptInstance
 mkVerifiableNFR refAddress lbl = cic refAddress (foldlSent [
-  D.toSent $ atStartNP (the code), S "is tested with complete",
+  toSent (atStartNP (the code)), S "is tested with complete",
   phrase vavPlan]) lbl nonFuncReqDom
 
 -- | Common Non-Functional Requirement for Understandability.
 mkUnderstandableNFR :: String -> String -> ConceptInstance
 mkUnderstandableNFR refAddress lbl = cic refAddress (foldlSent [
-  D.toSent $ atStartNP (the code), S "is modularized with complete",
+  toSent (atStartNP (the code)), S "is modularized with complete",
   phrase mg `S.and_` phrase mis]) lbl nonFuncReqDom
 
 -- | Common Non-Functional Requirement for Reusability.
 mkReusableNFR :: String -> String -> ConceptInstance
 mkReusableNFR refAddress lbl = cic refAddress (foldlSent [
-  D.toSent $ atStartNP (the code), S "is modularized"]) lbl nonFuncReqDom
+  toSent (atStartNP (the code)), S "is modularized"]) lbl nonFuncReqDom
 
 -- | Common Non-Functional Requirement for Security.
 mkSecurityNFR :: String -> String -> ConceptInstance

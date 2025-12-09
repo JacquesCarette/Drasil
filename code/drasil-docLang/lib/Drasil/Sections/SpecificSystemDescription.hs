@@ -36,7 +36,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   physical, physicalConstraint, physicalSystem, physSyst, problem,
   problemDescription, propOfCorSol, purpose, quantity, requirement, scope,
   section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
-  system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
+  system, table_, term_, theory, typUnc, uncertainty, user, value, variable, refBy)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
 import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
@@ -242,6 +242,7 @@ auxSpecSent :: Sentence
 auxSpecSent = foldlSent [S "The", namedRef (SRS.valsOfAuxCons [] []) $ S "auxiliary constants", S "give",
   plural value `S.the_ofThe` phrase specification, plural parameter, S "used in the",
   namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_]
+  -- FIXME: inDataConstTbl is abused to get a table reference label.
 
 -- | Creates a Data Constraints table. Takes in Columns, reference, and a label.
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> UID -> Sentence -> LabelledContent
@@ -302,7 +303,7 @@ helperCI :: ConceptInstance -> System -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
   where
     refby EmptyS = EmptyS
-    refby sent   = sParen $ S "RefBy:" +:+. sent
+    refby sent   = sParen $ short refBy :+: S ":" +:+. sent
 
 -- | Section stubs for implicit referencing of different models and definitions.
 tmStub, ddStub, gdStub, imStub, pdStub :: Section

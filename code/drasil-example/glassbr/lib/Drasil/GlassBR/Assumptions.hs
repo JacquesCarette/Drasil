@@ -38,7 +38,7 @@ assumpSV           = cic "assumpSV"   (standardValuesDesc loadDur)      "standar
 assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom
 assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
 assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
-assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc loadDF)         "ldfConstant"         Doc.assumpDom
+assumpLDFC         = cic "assumpLDFC" ldfConstantDesc                   "ldfConstant"         Doc.assumpDom
 
 glassTypeDesc :: Sentence
 glassTypeDesc = foldlSent [S "The standard E1300-09a for",
@@ -84,8 +84,8 @@ responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [D.toSent $ atStartNP (the responseTy), S "considered in",
   short progName, S "is flexural"]
 
-ldfConstantDesc :: (HasSymbol c, NamedIdea c) => c -> Sentence
-ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
+ldfConstantDesc :: Sentence
+ldfConstantDesc = foldlSent [S "With", phrase reference, S "to",
   refS assumpSV `sC` D.toSent (phraseNP (NP.the (value `of_`
-  mainConcept))), sParen (ch mainConcept) `S.is` D.toSent (phraseNP (a_ constant))
+  loadDF))), sParen (short loadDF) `S.is` D.toSent (phraseNP (a_ constant))
   `S.in_` short progName]

@@ -54,7 +54,7 @@ data RefTab where
   -- | Allows Lens functions in addition to an introduction for a table of symbols.
   TSymb' :: LFunc -> [TSIntro] -> RefTab
   -- | Default.
-  TAandA :: [IdeaDict] -> RefTab
+  TAandA :: RefTab
   -- add more here
 
 -- | For creating a table of symbols introduction
@@ -114,7 +114,7 @@ data IntroSub where
   -- | Describes characteristics of the system.
   IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
   -- | Organises the section.
-  IOrgSec  :: CI -> Section -> Sentence -> IntroSub
+  IOrgSec  :: CI -> Section -> Maybe Sentence -> IntroSub
 
 -- ** Stakeholders Section
 

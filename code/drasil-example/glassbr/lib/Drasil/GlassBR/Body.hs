@@ -2,18 +2,16 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-
 import Language.Drasil hiding (organization, section, variable)
-import qualified Language.Drasil.Development as D
-
+import Language.Drasil.Development (toSent)
 import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
-import Drasil.DocLang (auxSpecSent, termDefnF')
 import Drasil.Generator (cdb)
+import Drasil.DocLang (auxSpecSent, termDefnF', fillcdbSRS, DocDesc, ReqsSub(..))
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
@@ -23,18 +21,18 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   system, term_, user, value, variable, reference, definition)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, mathcon')
+import Data.Drasil.Quantities.Math (mathquants, mathunitals)
+import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability, softwarecon)
-import Data.Drasil.Quantities.Math (mathquants, mathunitals)
-import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab,
+import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab,
   ptOfExplsn, con', glass, iGlass, lGlass)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
@@ -43,13 +41,22 @@ import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
-import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
+import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForSymbolTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
+
+srs :: Document
+srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
+
+fullSI :: (System, DocDesc)
+fullSI = fillcdbSRS mkSRS si
+
+printSetting :: PrintingInformation
+printSetting = piSys (fst fullSI) Equational defaultConfiguration
 
 si :: System
 si = mkSystem progName Specification
@@ -58,22 +65,21 @@ si = mkSystem progName Specification
   tMods [] GB.dataDefs iMods
   configFp
   inputs outputs constrained constants
-  symbMap
-  allRefs
+  symbMap allRefs
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
+  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA ],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab progName)
       (short progName)
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec M.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
+     IOrgSec M.dataDefn (SRS.inModel [] []) (Just orgOfDocIntroEnd)],
   StkhldrSec $
     StkhldrProg
-      [Client progName $ D.toSent (phraseNP (a_ company))
+      [Client progName $ toSent (phraseNP (a_ company))
         +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (name mCampidelli),
       Cstmr progName],
   GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
@@ -129,20 +135,13 @@ conceptChunks =
   -- DefinedQuantityDicts
   map cw mathquants
 
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  map nw acronyms
-
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
   GB.dataDefs iMods [] tMods concIns citations labCon
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
--- FIXME: GlassBR needs `map ref citations` pre-created or else the code
--- generator fails due to a missing reference to `astm2009`.
-allRefs = externalLinkRef : map ref citations
+allRefs = [externalLinkRef]
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -210,7 +209,7 @@ externalLinkRef = makeURI "glassBRSRSLink"
 
 undIR, appStanddIR :: [Sentence]
 undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
-  phrase blastRisk, D.toSent $ pluralNP (computerApp `in_PS` Edu.civilEng)]
+  phrase blastRisk, toSent (pluralNP (computerApp `in_PS` Edu.civilEng))]
 appStanddIR = [S "applicable" +:+ plural standard +:+
   S "for constructions using glass from" +:+ foldlList Comma List
   (map refS [astm2009, astm2012, astm2016]) `S.in_`
@@ -229,7 +228,7 @@ scope = foldlSent_ [S "determining the safety" `S.ofA` phrase glaSlab,
 {--Organization of Document--}
 
 orgOfDocIntroEnd :: Sentence
-orgOfDocIntroEnd = foldlSent_ [D.toSent (atStartNP' (the dataDefn)) `S.are`
+orgOfDocIntroEnd = foldlSent [toSent (atStartNP' (the dataDefn)) `S.are`
   S "used to support", plural definition `S.the_ofThe` S "different", plural model]
 
 {--STAKEHOLDERS--}
@@ -245,24 +244,24 @@ sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
-   `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
+   `sC` toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", (sParen (short progName) !.),
-   S "Arrows are used to show the data flow between the" +:+ D.toSent (phraseNP (system
+   S "Arrows are used to show the data flow between the" +:+ toSent (phraseNP (system
    `andIts` environment))]
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
-  [S "The interaction between the", D.toSent $ phraseNP (product_ `andThe` user),
+  [S "The interaction between the", toSent (phraseNP (product_ `andThe` user)),
    S "is through a user" +:+. phrase interface,
-   S "The responsibilities" `S.ofThe` D.toSent (phraseNP (user `andThe` system)),
+   S "The responsibilities" `S.ofThe` toSent (phraseNP (user `andThe` system)),
    S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
-  D.toSent (phraseNP (glaSlab `and_` blastTy)) `sC` S "ensuring no errors" `S.inThe` plural datum +:+. S "entry",
-  S "Ensure that consistent units are used for" +:+. D.toSent (pluralNP (combineNINI input_ variable)),
+  toSent (phraseNP (glaSlab `and_` blastTy)) `sC` S "ensuring no errors" `S.inThe` plural datum +:+. S "entry",
+  S "Ensure that consistent units are used for" +:+. toSent (pluralNP (combineNINI input_ variable)),
   S "Ensure required" +:+
-  namedRef (SRS.assumpt [] []) (D.toSent $ pluralNP (combineNINI software assumption))
+  namedRef (SRS.assumpt [] []) (toSent (pluralNP (combineNINI software assumption)))
     +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+. phrase software]
 
@@ -270,7 +269,7 @@ sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
   phrase input_ +:+. S "instead of a floating point number",
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
-  D.toSent (pluralNP (physical `and_` softwareConstraint)),
+  toSent (pluralNP (physical `and_` softwareConstraint)),
   S "Predict whether the" +:+ phrase glaSlab +:+. S "is safe or not"]
 
 sysCtxResp :: [Sentence]
@@ -310,16 +309,16 @@ termsAndDesc = termDefnF' (Just (S "All of the" +:+ plural term_ +:+
 {--Physical System Description--}
 
 physSystParts :: [Sentence]
-physSystParts = [(D.toSent (atStartNP (the glaSlab))!.),
-  foldlSent [(D.toSent (atStartNP (the ptOfExplsn)) !.), S "Where the", phrase bomb `sC`
-  S "or", (blast ^. defn) `sC` (S "is located" !.), D.toSent (atStartNP (the sD)) `S.isThe`
-  phrase distance, S "between the", phrase ptOfExplsn `S.and_` D.toSent (phraseNP (the glass))]]
+physSystParts = [((toSent (atStartNP (the glaSlab)))!.),
+  foldlSent [((toSent (atStartNP (the ptOfExplsn))) !.), S "Where the", phrase bomb `sC`
+  S "or", (blast ^. defn) `sC` (S "is located" !.), (toSent (atStartNP (the sD))) `S.isThe`
+  phrase distance, S "between the", phrase ptOfExplsn `S.and_` toSent (phraseNP (the glass))]]
 
 {--Goal Statements--}
 
 goalInputs :: [Sentence]
-goalInputs = [D.toSent $ pluralNP (dimension `the_ofThePS` glaPlane), D.toSent $ phraseNP (the glassTy),
-  D.toSent $ pluralNP (characteristic `the_ofThePS` explosion), D.toSent $ phraseNP (the pbTol)]
+goalInputs = [toSent (pluralNP (dimension `the_ofThePS` glaPlane)), toSent (phraseNP (the glassTy)),
+  toSent (pluralNP (characteristic `the_ofThePS` explosion)), toSent (phraseNP (the pbTol))]
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 

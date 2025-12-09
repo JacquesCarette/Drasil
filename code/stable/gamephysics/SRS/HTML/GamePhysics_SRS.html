@@ -495,11 +495,6 @@
                   <td><em>rad</em></td>
                 </tr>
                 <tr>
-                  <td><em>π</em></td>
-                  <td>Ratio of circumference to diameter for any circle</td>
-                  <td>--</td>
-                </tr>
-                <tr>
                   <td><em><b>τ</b></em></td>
                   <td>Torque</td>
                   <td><em>Nm</em></td>
@@ -546,10 +541,6 @@
                   <td>Assumption</td>
                 </tr>
                 <tr>
-                  <td>CM</td>
-                  <td>Centre of Mass</td>
-                </tr>
-                <tr>
                   <td>DD</td>
                   <td>Data Definition</td>
                 </tr>
@@ -562,6 +553,10 @@
                   <td>Goal Statement</td>
                 </tr>
                 <tr>
+                  <td>GamePhysics</td>
+                  <td>GamePhysics</td>
+                </tr>
+                <tr>
                   <td>IM</td>
                   <td>Instance Model</td>
                 </tr>
@@ -572,6 +567,10 @@
                 <tr>
                   <td>ODE</td>
                   <td>Ordinary Differential Equation</td>
+                </tr>
+                <tr>
+                  <td>PS</td>
+                  <td>Physical System Description</td>
                 </tr>
                 <tr>
                   <td>R</td>
@@ -652,6 +651,9 @@
             </p>
             <p class="paragraph">
               The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>.
+            </p>
+            <p class="paragraph">
+              The Goal Statements (<span title="goal statement">GS</span>) are systematically refined into the Theoretical Models (<span title="theoretical model">TM</span>), which in turn are refined into the Instance Models (<span title="instance model">IM</span>). This refinement process is guided by the Assumptions (<span title="assumption">A</span>) that constrain the system, as well as the supporting General Definitions (<span title="general definition">GD</span>) and Data Definitions (<span title="data definition">DD</span>) that provide the necessary mathematical and physical context. The Requirements (<span title="requirement">R</span>) are traced back through the <span title="goal statement">GS</span>, <span title="theoretical model">TM</span>, and <span title="instance model">IM</span> to ensure consistency and completeness. Furthermore, the Physical System Descriptions (<span title="physical system description">PS</span>) establishes the overall context in which the <span title="goal statement">GS</span> are formulated and the <span title="assumption">A</span> are validated. Finally, the Typical Uncertainties (<span title="typical uncertainty">Uncert.</span>) are documented and linked to the relevant <span title="instance model">IM</span> and <span title="data definition">DD</span>, ensuring transparency in the modeling process.
             </p>
           </div>
         </div>
@@ -809,12 +811,12 @@
                 <div class="list">
                   <p>
                     <div id="assumpOT">
-                      objectTy: All objects are rigid bodies. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
+                      objectTy: All objects are rigid bodies. (<span title="referenced by">RefBy</span>: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpOD">
-                      objectDimension: All objects are <span title="two-dimensional">2D</span>. (RefBy: <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
+                      objectDimension: All objects are <span title="two-dimensional">2D</span>. (<span title="referenced by">RefBy</span>: <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
                     </div>
                   </p>
                   <p>
@@ -824,22 +826,22 @@
                   </p>
                   <p>
                     <div id="assumpAD">
-                      axesDefined: The axes are defined using right-handed coordinate system. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#IM:rotMot>IM:rotMot</a>.)
+                      axesDefined: The axes are defined using right-handed coordinate system. (<span title="referenced by">RefBy</span>: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#IM:rotMot>IM:rotMot</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCT">
-                      collisionType: All rigid bodies collisions are vertex-to-edge collisions. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#lcEC>LC:Expanded-Collisions</a>.)
+                      collisionType: All rigid bodies collisions are vertex-to-edge collisions. (<span title="referenced by">RefBy</span>: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#lcEC>LC:Expanded-Collisions</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpDI">
-                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#lcID>LC:Include-Dampening</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, and <a href=#DD:kEnergy>DD:kEnergy</a>.)
+                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (<span title="referenced by">RefBy</span>: <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#lcID>LC:Include-Dampening</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, and <a href=#DD:kEnergy>DD:kEnergy</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCAJI">
-                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:transMot>IM:transMot</a>, and <a href=#lcIJC>LC:Include-Joints-Constraints</a>.)
+                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (<span title="referenced by">RefBy</span>: <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:transMot>IM:transMot</a>, and <a href=#lcIJC>LC:Include-Joints-Constraints</a>.)
                     </div>
                   </p>
                 </div>
@@ -2668,7 +2670,7 @@
       <div class="section">
         <h1>Likely Changes</h1>
         <p class="paragraph">
-          This section lists the likely changes to be made to the software.
+          This section lists the Likely Changes (<span title="likely change">LC</span>) to be made to the software.
         </p>
         <div class="list">
           <p>
@@ -2698,7 +2700,7 @@
       <div class="section">
         <h1>Unlikely Changes</h1>
         <p class="paragraph">
-          This section lists the unlikely changes to be made to the software.
+          This section lists the Unlikely Changes (<span title="unlikely change">UC</span>) to be made to the software.
         </p>
         <div class="list">
           <p>

@@ -12,6 +12,7 @@
 |GS          |Goal Statement                     |
 |IM          |Instance Model                     |
 |PS          |Physical System Description        |
+|Projectile  |Projectile                         |
 |R           |Requirement                        |
 |RefBy       |Referenced by                      |
 |Refname     |Reference Name                     |

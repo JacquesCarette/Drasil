@@ -1,17 +1,18 @@
-module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
+module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
+import Control.Lens ((^.))
 import Data.List ((\\))
 
 import Language.Drasil hiding (section)
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Development as D
-import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem)
-
 import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
-import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Drasil.Generator (cdb)
+import qualified Drasil.DocLang.SRS as SRS (inModel)
+import Theory.Drasil (TheoryModel)
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Documentation as Doc (material_)
@@ -32,8 +33,6 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy)
 
-import Theory.Drasil (TheoryModel)
-
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
@@ -41,7 +40,7 @@ import Drasil.SWHS.Body (charsOfReader, dataContMid, motivation,
   introStart, externalLinkRef, physSyst1, physSyst2, sysCntxtDesc,
   systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
-import Drasil.SWHS.Concepts (acronyms, coil, sWHT, tank, transient, water, con, phsChgMtrl)
+import Drasil.SWHS.Concepts (coil, sWHT, tank, transient, water, con, phsChgMtrl)
 import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
 import Drasil.SWHS.Unitals (deltaT, htFluxC, htFluxIn,
@@ -61,14 +60,24 @@ import Drasil.SWHSNoPCM.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHSNoPCM.MetaConcepts (progName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
-import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
+import Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
-  specParamValList, outputs)
+  specParamValList)
+
+srs :: Document
+srs = mkDoc mkSRS S.forT fullSI
+
+fullSI :: System
+fullSI = fillcdbSRS mkSRS si
+
+printSetting :: PrintingInformation
+printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained
+symbols = map dqdWr concepts ++ map dqdWr constrained
+ ++ map dqdWr [tempW, watE]
 
 symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
@@ -101,13 +110,13 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
-  TAandA abbreviationsList],
+  TAandA ],
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
     [ IPurpose $ purpDoc progName Verbose
     , IScope scope
     , IChar [] charsOfReader []
-    , IOrgSec inModel (SRS.inModel [] []) orgDocEnd
+    , IOrgSec inModel (SRS.inModel [] []) (Just orgDocEnd)
     ],
   GSDSec $
     GSDProg
@@ -132,7 +141,7 @@ mkSRS = [TableOfContents,
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqsTables,
+    FReqsSub inReqDesc [],
     NonFReqsSub
   ],
   LCsSec,
@@ -158,12 +167,12 @@ si = mkSystem
   ((map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   []
-  inputs outputs
+  (inputs ++ [dqdWr watE]) [tempW, watE]
   (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
-  symbMap allRefs
+  symbMap
 
 purp :: Sentence
-purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]
+purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
@@ -183,15 +192,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns citations
-  (labelledContent ++ funcReqsTables)
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  nw progName : map nw acronyms ++
-  -- DefinedQuantityDicts
-  map nw symbols
+  NoPCM.iMods genDefs tMods concIns labelledContent allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -236,9 +237,9 @@ scope = phrase thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
 ---------------------------------------
 
 orgDocEnd :: Sentence
-orgDocEnd = foldlSent_ [D.toSent (atStartNP (the inModel)),
+orgDocEnd = foldlSent [atStartNP (the inModel),
   S "to be solved" `S.is` S "referred to as" +:+. refS eBalanceOnWtr,
-  D.toSent (atStartNP (the inModel)), S "provides the", titleize ode,
+  atStartNP (the inModel), S "provides the", titleize ode,
   sParen (short ode), S "that models the" +:+. phrase progName,
   short progName, S "solves this", short ode]
 
@@ -285,8 +286,8 @@ physSystParts :: [Sentence]
 physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
 goalInputs :: [Sentence]
-goalInputs = [D.toSent (phraseNP (temp `the_ofThe` coil)),
-  S "the initial" +:+ phrase tempW, D.toSent (pluralNP (the materialProprty))]
+goalInputs = [phraseNP (temp `the_ofThe` coil),
+  S "the initial" +:+ phrase tempW, pluralNP (the materialProprty)]
 
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION

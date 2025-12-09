@@ -5,11 +5,13 @@ import Control.Lens ((^.))
 
 import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
 import Language.Drasil hiding (organization, section)
+import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
-import Database.Drasil.ChunkDB (cdb)
+import Drasil.Generator.BaseChunkDB (cdb)
 import Data.Drasil.SI_Units (siUnits)
 import qualified Drasil.DocLang.SRS as SRS
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
@@ -31,35 +33,22 @@ import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
+import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.DblPend.Assumptions (assumpDouble)
-import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject,
-  multivectorDef, cliffordAlgebraDef, geometricProductDef, 
-  basisVectorDef, cliffordSpace, bivectorDef)
+import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject)
 import Drasil.DblPend.Goals (goals, goalsInputs)
 import Drasil.DblPend.DataDefs (dataDefs)
 import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
-import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms, constants)
-import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
+import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs, funcReqsTables)
 import Drasil.DblPend.References (citations)
-import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
+import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks, scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar, diffCodeChunk)
 import Language.Drasil.Code (ODEInfo (..))
 import Drasil.DblPend.ODEs (dblPenODEInfo)
-
-import Drasil.System (SystemKind(Specification), mkSystem)
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) si
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
@@ -67,7 +56,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     RefProg intro      -- This add the introduction blob to the reference section
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
-      -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
+      -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
       , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
       ],
   IntroSec $
@@ -75,21 +64,13 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) (foldlSent [
-         S "This document demonstrates a novel approach to modeling the double pendulum using",
-         phrase cliffordAlgebraDef +:+. EmptyS,
-         S "The traditional vector-based approach is enhanced by representing physical quantities as",
-         plural multivectorDef `S.in_` S "a unified geometric framework" +:+. EmptyS,
-         S "Section 4.2.3 presents", plural genDefn, S "that showcase how velocity, acceleration, and force",
-         S "are naturally expressed using", phrase cliffordAlgebraDef, S "operations such as the",
-         phrase geometricProductDef `S.and_` S "basis vector representations"
-       ])],
-  GSDSec $ 
+       IOrgSec inModel (SRS.inModel [] []) EmptyS],
+  GSDSec $
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
-      UsrChars [userCharacteristicsIntro progName], 
-      SystCons [] []],                            
-  SSDSec $ 
+      UsrChars [userCharacteristicsIntro progName],
+      SystCons [] []],
+  SSDSec $
     SSDProg
       [ SSDProblem $ PDProg purp []                -- This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
@@ -107,7 +88,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
         ]
       ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub EmptyS []
+    [ FReqsSub funcReqsTables
     , NonFReqsSub
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -124,42 +105,35 @@ si = mkSystem progName Specification [dong]
   []  -- assumptions as strings
   inputs outputs inConstraints
   constants
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
-purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum,
-  S "using", phrase cliffordAlgebraDef, S "formulation"]
+purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
 
 motivation :: Sentence
-motivation = foldlSent_ [S "To simulate", phraseNP (motion `the_ofThe` pendulum),
-  S "and exhibit its chaotic characteristics using", phrase cliffordAlgebraDef,
-  S "for geometric representation"]
+motivation = foldlSent_ [S "To simulate", D.toSent $ phraseNP (motion `the_ofThe` pendulum),
+  S "and exhibit its chaotic characteristics"]
 
 background :: Sentence
-background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
+background = foldlSent_ [D.toSent $ phraseNP (a_ pendulum), S "consists" `S.of_` phrase mass,
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
-  S "highly sensitive to initial conditions" +:+. EmptyS,
-  S "This analysis uses", phrase cliffordAlgebraDef, S "to represent",
-  S "velocities, accelerations, and forces as", plural multivectorDef,
-  S "providing a unified geometric framework"]
+  S "highly sensitive to initial conditions" ]
 
 -- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is added to symbolsAll as it is used to create new chunks with pendDisAngle's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
-symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ map dqdWr [listToArray dp, arrayVecDepVar dblPenODEInfo, diffCodeChunk dp,
-  listToArray $ diffCodeChunk dp]
-  where dp = depVar dblPenODEInfo
+symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
+  ++ odeInfoChunks dblPenODEInfo
 
 ideaDicts :: [IdeaDict]
-ideaDicts = 
+ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
   nw progName : map nw mathcon' ++ map nw physicCon'
 
 abbreviationsList :: [IdeaDict]
-abbreviationsList = 
+abbreviationsList =
   -- DefinedQuantityDict abbreviations
   map nw symbols ++
   -- Document structure abbreviations
@@ -168,7 +142,7 @@ abbreviationsList =
   nw progName : map nw acronyms
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = 
+conceptChunks =
   -- ConceptChunks
   physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
   gravitationalConst, gravity] ++ terms ++
@@ -176,13 +150,8 @@ conceptChunks =
   [cw len]
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map dqdWr symbolsAll)
-  ideaDicts conceptChunks siUnits
-  dataDefs iMods genDefns tMods concIns [] allRefs citations  -- Re-enabled genDefns to show Clifford algebra content
-
--- symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
---   dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
-
+symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
+  dataDefs iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -199,19 +168,21 @@ concIns = assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs
 -- Section : INTRODUCTION --
 ------------------------------
 justification :: CI -> Sentence
-justification prog = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
-                            S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
-                            (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
-                            S "it is useful to have a", phrase program, S "to simulate", phraseNP (motion
-                            `the_ofThe` pendulum), (S "to exhibit its chaotic characteristics" !.),
-                            S "The document describes the program called", phrase prog,
-                            S ", which is based on the original, manually created version of" +:+
-                            namedRef externalLinkRef (S "Double Pendulum")]
-                            
+justification prog = foldlSent
+  [ D.toSent $ atStartNP (a_ pendulum), S "consists" `S.of_` phrase mass,
+    S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
+   (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
+    S "it is useful to have a", phrase program, S "to simulate",
+    D.toSent $ phraseNP (motion `the_ofThe` pendulum),
+   (S "to exhibit its chaotic characteristics" !.),
+    S "The document describes the program called", phrase prog,
+    S ", which is based on the original, manually created version of" +:+
+    namedRef externalLinkRef (S "Double Pendulum")]
+
 externalLinkRef :: Reference
-externalLinkRef = makeURI "DblPendSRSLink" 
-  "https://github.com/Zhang-Zhi-ZZ/CAS741Project/tree/master/Double%20Pendulum" 
-  (shortname' $ S "DblPendSRSLink")                            
+externalLinkRef = makeURI "DblPendSRSLink"
+  "https://github.com/Zhang-Zhi-ZZ/CAS741Project/tree/master/Double%20Pendulum"
+  (shortname' $ S "DblPendSRSLink")
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------
@@ -221,10 +192,9 @@ externalLinkRef = makeURI "DblPendSRSLink"
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 scope :: Sentence
-scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
+scope = foldlSent_ [D.toSent $ phraseNP (NP.the (analysis `ofA` twoD)),
   sParen (short twoD), phrase pendMotion, phrase problem,
-  S "with various initial conditions using", phrase cliffordAlgebraDef,
-  S "for geometric representation of physical quantities"]
+  S "with various initial conditions using"]
 
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --
@@ -233,7 +203,7 @@ charsOfReader :: [Sentence]
 charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
                  phrase undergraduate +:+ S "level 1" +:+ phrase calculus,
                  plural ode]
-                 
+
 -------------------------------------
 -- 2.4 : Organization of Documents --
 -------------------------------------
@@ -252,23 +222,23 @@ sysCtxIntro :: CI -> Contents
 sysCtxIntro prog = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external" `S.toThe` phrase software
-   `sC` phraseNP (the user), S "in this case. A rectangle represents the",
+   `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", sParen (short prog) +:+. EmptyS,
-   S "Arrows" `S.are` S "used to show the data flow between the", phraseNP (system
-   `andIts` environment)]
+   S "Arrows" `S.are` S "used to show the data flow between the", D.toSent (phraseNP (system
+   `andIts` environment))]
 
 sysCtxDesc :: Contents
-sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
-   `andThe` user), S "is through an application programming" +:+.
-   phrase interface, S "The responsibilities" `S.ofThe` phraseNP (user 
-   `andThe` system), S "are as follows"]
+sysCtxDesc = foldlSPCol [S "The interaction between the", D.toSent (phraseNP (product_
+   `andThe` user)), S "is through an application programming" +:+.
+   phrase interface, S "The responsibilities" `S.ofThe` D.toSent (phraseNP (user
+   `andThe` system)), S "are as follows"]
 
 sysCtxUsrResp :: CI -> [Sentence]
-sysCtxUsrResp prog = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
-  physical) +:+ S "state" `S.ofThe` phrase motion +:+ S "and the" +:+ plural inDatum +:+ S "related to the" +:+
+sysCtxUsrResp prog = [S "Provide initial" +:+ D.toSent (pluralNP (condition `ofThePS`
+  physical)) +:+ S "state" `S.ofThe` phrase motion +:+ S "and the" +:+ plural inDatum +:+ S "related to the" +:+
   phrase prog `sC` S "ensuring no errors in the" +:+
   plural datum +:+. S "entry",
-  S "Ensure that consistent units" `S.are` S "used for" +:+. pluralNP (combineNINI input_ Doc.variable),
+  S "Ensure that consistent units" `S.are` S "used for" +:+. D.toSent (pluralNP (combineNINI input_ Doc.variable)),
   S "Ensure required" +:+
   namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
   S "are appropriate for any particular" +:+
@@ -278,8 +248,8 @@ sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
   phrase input_ +:+. (S "instead" `S.ofA` S "floating point number"),
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
-  pluralNP (physical `and_` softwareConstraint),
-  S "Calculate the required" +:+. plural output_, 
+  D.toSent (pluralNP (physical `and_` softwareConstraint)),
+  S "Calculate the required" +:+. plural output_,
   S "Generate the required" +:+. plural graph]
 
 sysCtxResp :: CI -> [Sentence]
@@ -296,14 +266,13 @@ sysCtxList prog = UlC $ ulcc $ Enumeration $ bulletNested (sysCtxResp prog) $
 userCharacteristicsIntro :: CI -> Contents
 userCharacteristicsIntro prog = foldlSP
   [S "The", phrase endUser `S.of_` short prog,
-   S "should have an understanding of", 
+   S "should have an understanding of",
    phrase highSchoolPhysics `sC` phrase highSchoolCalculus `S.and_` plural ode]
 
 -------------------------------
 -- 3.3 : System Constraints  --
 -------------------------------
 -- System Constraints automatically generated in SystCons
-
 
 --------------------------------------------
 -- Section 4: Specific System Description --
@@ -319,20 +288,17 @@ userCharacteristicsIntro prog = foldlSP
 -- 4.1.1 Terminology and Definitions --
 ---------------------------------
 terms :: [ConceptChunk]
-terms = [gravity, cartesian, multivectorDef, cliffordAlgebraDef, geometricProductDef, basisVectorDef,
-         cliffordSpace, bivectorDef]
+terms = [gravity, cartesian]
 
 -----------------------------------
 -- 4.1.2 Physical System Description --
 -----------------------------------
 physSystParts :: [Sentence]
 physSystParts = map (!.)
-  [atStartNP (the firstRod) +:+ sParen (S "with" +:+ getTandS lenRod_1),
-   atStartNP (the secondRod) +:+ sParen (S "with" +:+ getTandS lenRod_2),
-   atStartNP (the firstObject),
-   atStartNP (the secondObject),
-   S "Each object's motion is described using" +:+ plural multivectorDef +:+ S "in 2D" +:+ phrase cliffordAlgebraDef +:+ S "space Cl(2,0)",
-   S "Physical quantities (velocity, acceleration, force) are unified as geometric entities with basis vectors e₁ and e₂"]
+  [D.toSent (atStartNP (the firstRod)) +:+ sParen (S "with" +:+ getTandS lenRod_1),
+   D.toSent (atStartNP (the secondRod)) +:+ sParen (S "with" +:+ getTandS lenRod_2),
+   D.toSent $ atStartNP (the firstObject),
+   D.toSent $ atStartNP (the secondObject)]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --

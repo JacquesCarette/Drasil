@@ -5,7 +5,6 @@
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
 |2D          |Two-Dimensional                    |
-|3D          |Three-Dimensional                  |
 |A           |Assumption                         |
 |DD          |Data Definition                    |
 |GD          |General Definition                 |

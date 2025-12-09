@@ -1,10 +1,9 @@
 {-# LANGUAGE GADTs, TemplateHaskell, RankNTypes #-}
 -- | Define types and functions related to creating a system information database.
 
--- Changes to System should be reflected in the 'Creating Your Project 
+-- Changes to System should be reflected in the 'Creating Your Project
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
-
 module Drasil.System (
   -- * System
   -- ** Types
@@ -12,20 +11,23 @@ module Drasil.System (
   -- ** Lenses
   HasSystem(..),
   -- ** Functions
-  whatsTheBigIdea, mkSystem,
+  whatsTheBigIdea, mkSystem, sysName,
   -- * Reference Database
   -- ** Types
-  Purpose, Background, Scope, Motivation
-  ) where
+  Purpose, Background, Scope, Motivation,
+  -- * Hacks
+  refbyLookup, traceLookup
+) where
 
+import Control.Lens (makeClassy, (^.))
+import qualified Data.Map.Strict as M
+import Data.Maybe (fromMaybe)
+
+import qualified Data.Drasil.Concepts.Documentation as Doc
+import Drasil.Database (UID, HasUID(..), ChunkDB)
 import Language.Drasil hiding (kind, Notebook)
 import Theory.Drasil
-import Database.Drasil (ChunkDB)
-
 import Drasil.Metadata (runnableSoftware, website)
-
-import Control.Lens (makeClassy)
-import qualified Data.Drasil.Concepts.Documentation as Doc
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -62,7 +64,7 @@ data System where
   Quantity e, Eq e, MayHaveUnit e, Concept e,
   Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
-  HasUID j, Constrained j) => 
+  HasUID j, Constrained j) =>
   { _sys          :: a
   , _kind         :: SystemKind
   , _authors      :: People
@@ -81,6 +83,10 @@ data System where
   , _constraints  :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
   , _constants    :: [ConstQDef]
   , _systemdb     :: ChunkDB
+    -- FIXME: Hacks to be removed once 'Reference's are rebuilt.
+  , _refTable     :: M.Map UID Reference
+  , _refbyTable   :: M.Map UID [UID]
+  , _traceTable   :: M.Map UID [UID]
   } -> System
 
 makeClassy ''System
@@ -92,5 +98,19 @@ mkSystem :: (CommonIdea a, Idea a,
   HasUID j, Constrained j) =>
   a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
     [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
-    [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
-mkSystem = SI
+    [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
+    System
+mkSystem nm sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js cqds db refs
+    = SI nm sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js cqds db
+        refsMap mempty mempty
+  where refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
+
+refbyLookup :: UID -> System -> [UID]
+refbyLookup u = fromMaybe [] . M.lookup u . (^. refbyTable)
+
+traceLookup :: UID -> System -> [UID]
+traceLookup u = fromMaybe [] . M.lookup u . (^. traceTable)
+
+-- FIXME: sysName is a hack.
+sysName :: System -> IdeaDict
+sysName SI{_sys = sys} = nw sys

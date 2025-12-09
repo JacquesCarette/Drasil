@@ -1,15 +1,20 @@
 -- | Printing helpers.
 module Language.Drasil.Printing.Import.Helpers where
 
+import Control.Lens ((^.))
+import Data.Char (toUpper)
+
 import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S),
-  Symbol, UID, TermCapitalization(..), titleizeNP, titleizeNP',
+  Symbol, TermCapitalization(..), titleizeNP, titleizeNP',
   atStartNP, atStartNP', NP, DefinedQuantityDict)
-import Database.Drasil (ChunkDB, findOrErr)
+import Language.Drasil.Development (toSent)
+import Drasil.Database (UID, ChunkDB, findOrErr)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
+import Drasil.System (systemdb)
 
 import qualified Language.Drasil.Printing.AST as P
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, stg, syst)
 
-import Data.Char (toUpper)
 
 -- * Expr-related
 
@@ -38,50 +43,53 @@ digitsProcess [] pos coun ex
 -- References for standard of Engineering Notation:
 --
 -- https://www.khanacademy.org/science/electrical-engineering/introduction-to-ee/
---    intro-to-ee/a/ee-numbers-in-electrical-engineering 
+--    intro-to-ee/a/ee-numbers-in-electrical-engineering
 --
 -- https://www.calculatorsoup.com/calculators/math/scientific-notation-converter.php
 --
 -- https://en.wikipedia.org/wiki/Scientific_notation
 processExpo :: Int -> (Int, Int)
 processExpo a
-  | mod (a-1) 3 == 0 = (1, a-1)
-  | mod (a-1) 3 == 1 = (2, a-2)
-  | mod (a-1) 3 == 2 = (3, a-3)
+  | mod (a - 1) 3 == 0 = (1, a - 1)
+  | mod (a - 1) 3 == 1 = (2, a - 2)
+  | mod (a - 1) 3 == 2 = (3, a - 3)
   | otherwise = error "The cases of processExpo should be exhaustive!"
 
 -- * Lookup/Term Resolution Functions
 
 -- | Given the stage of the symbol, looks up a character/symbol
--- inside a chunk database that matches the given 'UID'. 
+-- inside a chunk database that matches the given 'UID'.
 lookupC :: Stage -> ChunkDB -> UID -> Symbol
 lookupC Equational     sm c = eqSymb   (findOrErr c sm :: DefinedQuantityDict)
 lookupC Implementation sm c = codeSymb (findOrErr c sm :: DefinedQuantityDict)
 
+lookupC' :: PrintingInformation -> UID -> Symbol
+lookupC' pinfo = lookupC (pinfo ^. stg) (pinfo ^. syst . systemdb)
+
 -- | Look up a term given a chunk database and a 'UID' associated with the term. Also specifies capitalization
-lookupT :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' sm c
+lookupT :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' (sm ^. syst . systemdb) c
 
 -- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
-lookupS :: ChunkDB -> UID -> TermCapitalization -> Sentence
+lookupS :: PrintingInformation -> UID -> TermCapitalization -> Sentence
 lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= capHelper sCap
-  where l = termResolve' sm c
+  where l = termResolve' (sm ^. syst . systemdb) c
 
 -- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
-lookupP :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' sm c
+lookupP :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' (sm ^. syst . systemdb) c
 
 -- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
 resolveCapT :: TermCapitalization -> (NP -> Sentence)
-resolveCapT NoCap = phraseNP
-resolveCapT CapF = atStartNP
-resolveCapT CapW = titleizeNP
+resolveCapT NoCap = toSent . phraseNP
+resolveCapT CapF = toSent . atStartNP
+resolveCapT CapW = toSent . titleizeNP
 
 -- | Helper to get the right function for capitalizing a 'NP' based on its 'TermCapitalization'. Plural case.
 resolveCapP :: TermCapitalization -> (NP -> Sentence)
-resolveCapP NoCap = pluralNP
-resolveCapP CapF = atStartNP'
-resolveCapP CapW = titleizeNP'
+resolveCapP NoCap = toSent . pluralNP
+resolveCapP CapF = toSent . atStartNP'
+resolveCapP CapW = toSent . titleizeNP'
 
 -- | Helper to get the capital case of an abbreviation based on 'TermCapitalization'. For sentence and title cases.
 capHelper :: TermCapitalization -> String -> Maybe String

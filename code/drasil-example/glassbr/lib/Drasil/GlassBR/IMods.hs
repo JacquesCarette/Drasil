@@ -2,11 +2,13 @@ module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) wher
 
 import Control.Lens ((^.))
 import Prelude hiding (exp)
+
+import Drasil.Database (HasUID)
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN,
-  output)
+import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN, output)
 
 import Data.Drasil.Citations (campidelli)
 import Data.Drasil.Concepts.Documentation (goal, user, datum)
@@ -26,8 +28,6 @@ iMods = [risk, strDisFac, nonFL, dimLL, tolPre, tolStrDisFac, probOfBreak,
 symb :: [UnitalChunk]
 symb = [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram,
   ucuc standOffDist metre] -- this is temporary
--- ++
- -- [dqdQd (qw calofDemand) demandq]
 
 abInputConstraints :: [(DefinedQuantityDict, Maybe (RealInterval Expr Expr))]
 abInputConstraints = [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
@@ -51,7 +51,7 @@ risk = imNoDeriv (equationalModelN (riskFun ^. term) riskQD)
 -- FIXME [4] !!!
 riskQD :: SimpleQDef
 riskQD = mkQuantDef riskFun ((sy sflawParamK $/
-  (sy plateLen $* sy plateWidth $^ (sy sflawParamM $- exactDbl 1))) $* 
+  (sy plateLen $* sy plateWidth $^ (sy sflawParamM $- exactDbl 1))) $*
   ((sy modElas $* square (sy minThick)) $^ sy sflawParamM) $* sy loadDF $* exp (sy stressDistFac))
 
 {--}
@@ -123,12 +123,12 @@ tolStrDisFac = imNoDeriv (equationalModelN (sdfTol ^. term) tolStrDisFacQD)
   ((loadDF, Nothing) : qwC pbTol probConstraint : qwUC modElas : abInputConstraints ++
     map qwUC [sflawParamM, sflawParamK, minThick]) sdfTol []
   [dRef astm2009] "sdfTol" [pbTolUsr, aGrtrThanB, stdVals [sflawParamM,
-      sflawParamK, modElas], hRef, ldfRef]  
+      sflawParamK, modElas], hRef, ldfRef]
 
 tolStrDisFacQD :: SimpleQDef
 tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))
   $* ((sy plateLen $* sy plateWidth) $^ (sy sflawParamM $- exactDbl 1) $/
-    (sy sflawParamK $* ((sy modElas $* 
+    (sy sflawParamK $* ((sy modElas $*
     square (sy minThick)) $^ sy sflawParamM) $* sy loadDF)))
 
 {--}
@@ -170,17 +170,17 @@ lrIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-LR") lrIsSafeQD
   [dRef astm2009] "isSafeLR"
   [lrIsSafeDesc, capRef, qRef]
 
-lrIsSafeQD :: SimpleQDef 
+lrIsSafeQD :: SimpleQDef
 lrIsSafeQD = mkQuantDef isSafeLR (sy lRe $> sy demand)
 
 iModDesc :: DefinedQuantityDict -> Sentence -> Sentence
 iModDesc main s = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
     S "considered safe", s `S.are` S "either both True or both False"]
-  
+
 -- Intro --
 
 instModIntro :: Sentence
-instModIntro = foldlSent [atStartNP (the goal), refS willBreakGS, 
+instModIntro = foldlSent [D.toSent $ atStartNP (the goal), refS willBreakGS,
   S "is met by", refS pbIsSafe `sC` refS lrIsSafe]
 
 -- Notes --

@@ -1,11 +1,13 @@
 -- | Gathers and organizes all the information for the [Drasil website](https://jacquescarette.github.io/Drasil/).
-module Drasil.Website.Body where
+module Drasil.Website.Body (
+  FolderLocation(..), si, symbMap,
+  gitHubRef, sections, websiteTitle,
+) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil
-import Database.Drasil.ChunkDB (cdb)
+import Drasil.Database
+import Drasil.Generator (cdb)
 import Drasil.System
 import Language.Drasil
 import Drasil.DocLang (findAllRefs)
@@ -18,7 +20,6 @@ import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs)
 import Drasil.Website.GettingStarted (gettingStartedSec)
 import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody, twoD)
-import Data.Drasil.Concepts.Documentation (game, physics, condition, safety)
 import Drasil.GlassBR.Unitals (blast)
 import Drasil.GlassBR.Concepts (glaSlab)
 import Data.Drasil.Concepts.Thermodynamics (heatTrans)
@@ -30,16 +31,6 @@ import Data.Drasil.Concepts.SolidMechanics (shearForce, normForce)
 import Drasil.SSP.IMods (fctSfty)
 
 -- * Functions to Generate the Website Through Drasil
-
--- | Printing info to get document to generate. Takes in the 'FolderLocation'.
-printSetting :: FolderLocation -> PrintingInformation
-printSetting fl = PI (symbMap fl) Equational defaultConfiguration
-
--- | Instead of being an 'SRSDecl', this takes the folder locations and generates the document from there.
-mkWebsite :: FolderLocation -> Document
-mkWebsite fl =
-    --Document  -- Title  --  author  (hack for now to show up in proper spot) -- no table of contents -- [Section]
-    Document (S websiteTitle) (namedRef gitHubRef (S "Link to GitHub Repository")) NoToC $ sections fl
 
 -- | Folder locations based on environment variables (using 'getEnv' in "Drasil.Website.Main").
 data FolderLocation = Folder {
@@ -79,36 +70,36 @@ si fl = mkSystem
   [] [] [] []
   []
   ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []
-  (symbMap fl)
+  symbMap (allRefs fl)
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
-sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspaceSetupWiki contribGuideWiki workflowWiki 
-  createProjWiki debuggingWiki, aboutSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl) 
-  (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef infoEncodingWiki chunksWiki recipesWiki 
+sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspaceSetupWiki contribGuideWiki workflowWiki
+  createProjWiki debuggingWiki, aboutSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl)
+  (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef infoEncodingWiki chunksWiki recipesWiki
   paperGOOL papersWiki icsePositionPaper danPoster wellUnderstoodPaper, exampleSec (repoRt fl) (exRt fl), caseStudySec, docsSec (docsRt fl),
   analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl, footer fl]
 
 -- | Needed for references and terms to work.
-symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, phsChgMtrl, twoD] ++ 
-  map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast, 
-  heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
-  normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,
-  slope, safety, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] 
-  [] [] (allRefs fl) []
+symbMap :: ChunkDB
+symbMap = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, phsChgMtrl, twoD] ++
+  map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast,
+  heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce,
+  normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [glaSlab, intrslce,
+  slope, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] []
+  [] [] []
 
 -- | Helper to get the system name as an 'IdeaDict' from 'System'.
 getSysName :: System -> IdeaDict
-getSysName SI{_sys = nm} = nw nm 
+getSysName SI{_sys = nm} = nw nm
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
-allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, paperGOOL, papersWiki, 
+allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, paperGOOL, papersWiki,
   quickStartWiki, newWorkspaceSetupWiki, contribGuideWiki, workflowWiki, createProjWiki, debuggingWiki,
   icsePositionPaper, danPoster, wellUnderstoodPaper]
   ++ exampleRefs (repoRt fl) (exRt fl)
-  ++ docRefs (docsRt fl) 
+  ++ docRefs (docsRt fl)
   ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
   ++ concatMap findAllRefs (sections fl)
 
@@ -120,7 +111,7 @@ webName = commonIdea "websiteName" (cn websiteTitle) "Drasil" [] -- FIXME: Impro
 
 -- | Header section creator.
 headerSec :: Section
-headerSec = 
+headerSec =
   section EmptyS -- No title
   [LlC imageContent] -- Contents
   [] $ makeSecRef "Header" $ S "Header" -- Section reference
@@ -151,7 +142,7 @@ danPoster :: Reference
 danPoster = makeURI "danPoster" (danContributionPath
   ++ "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
 wellUnderstoodPaper :: Reference
-wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL 
+wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL
   ++ "/blob/master/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
 quickStartWiki :: Reference
 quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL ++ "#quick-start") (shortname' $ S "quickStartWiki")
@@ -183,7 +174,3 @@ footer _ = section EmptyS [mkParagraph copyrightInfo] [] $ makeSecRef "Footer" $
 -- | 'footer' contents.
 copyrightInfo :: Sentence
 copyrightInfo = S "Copyright (c) Jacques Carette, 2021. All rights reserved. This website is a software artifact generated by Drasil."
-
--- uncomment to add in build number and path information
---buildInfo :: String -> String -> Sentence
---buildInfo bnum bPath = S $ "Build number: " ++ bnum ++ ". Generated from " ++ bPath ++ "."

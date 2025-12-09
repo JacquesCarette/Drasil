@@ -14,8 +14,9 @@ import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncCC(..), UFuncCN(..),
   CCNBinOp(..), CCCBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..))
-import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
-  Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
+import Drasil.Database (UID, HasUID(..))
+import Language.Drasil (HasSymbol, HasSpace(..),
+  Space (Rational, Real), RealInterval(..), Constraint(..), Inclusive (..))
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
@@ -384,7 +385,7 @@ convExpr (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExpr Matrix{} = error "convExpr: Matrix"
-convExpr (S.Set s l) = do 
+convExpr (S.Set s l) = do
   ar <- mapM convExpr l
   sm <- spaceCodeType s
   return $ litSet (convTypeOO sm) ar
@@ -947,7 +948,7 @@ genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MSStatement's.
-readDataProc :: (OOProg r) => DataDesc -> GenState [MSBlock r]
+readDataProc :: (SharedProg r) => DataDesc -> GenState [MSBlock r]
 readDataProc ddef = do
   g <- get
   let localScope = convScope $ currentScope g
@@ -959,7 +960,7 @@ readDataProc ddef = do
     listDec 0 var_linetokens localScope] else []) ++
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
-  where inData :: (OOProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
+  where inData :: (SharedProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
         inData (Singleton v) _ = do
             vv <- mkVarProc v
             l <- maybeLog vv
@@ -985,7 +986,7 @@ readDataProc ddef = do
                   ] ++ lnV)]
           return $ readLines ls ++ logs
         ---------------
-        lineData :: (OOProg r) => Maybe String -> LinePattern -> r (Scope r) ->
+        lineData :: (SharedProg r) => Maybe String -> LinePattern -> r (Scope r) ->
           GenState [MSStatement r]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVarsProc s p
@@ -995,27 +996,27 @@ readDataProc ddef = do
           sequence $ clearTemps s ds scp ++ return
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
-        clearTemps :: (OOProg r) => Maybe String -> [DataItem] -> r (Scope r) ->
+        clearTemps :: (SharedProg r) => Maybe String -> [DataItem] -> r (Scope r) ->
           [GenState (MSStatement r)]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
-        clearTemp :: (OOProg r) => String -> DataItem -> r (Scope r) ->
+        clearTemp :: (SharedProg r) => String -> DataItem -> r (Scope r) ->
           GenState (MSStatement r)
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
-          (listInnerType $ convTypeOO t)) scp []) (codeType v)
+          (listInnerType $ convType t)) scp []) (codeType v)
         ---------------
-        appendTemps :: (OOProg r) => Maybe String -> [DataItem]
+        appendTemps :: (SharedProg r) => Maybe String -> [DataItem]
           -> [GenState (MSStatement r)]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
-        appendTemp :: (OOProg r) => String -> DataItem ->
+        appendTemp :: (SharedProg r) => String -> DataItem ->
           GenState (MSStatement r)
         appendTemp sfx v = fmap (\t -> valStmt $ listAppend
-          (valueOf $ var (codeName v) (convTypeOO t))
-          (valueOf $ var (codeName v ++ sfx) (convTypeOO t))) (codeType v)
-
+          (valueOf $ var (codeName v) (convType t))
+          (valueOf $ var (codeName v ++ sfx) (convType t))) (codeType v)
+          
 -- | Get entry variables.
 getEntryVarsProc :: (SharedProg r) => Maybe String -> LinePattern ->
   GenState [SVariable r]
@@ -1091,7 +1092,7 @@ convExprProc (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExprProc Matrix{} = error "convExprProc: Matrix"
-convExprProc (S.Set s l) = do 
+convExprProc (S.Set s l) = do
   ar <- mapM convExprProc l
   sm <- spaceCodeType s
   return $ litSet (convType sm) ar

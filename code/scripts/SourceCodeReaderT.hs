@@ -51,7 +51,6 @@ instance DataTypeDeclaration TypeDecl where
   getTypeName = tdName
   getContents = tdContent
 
-
 -- new EntryData data type with strict fields to enforce strict file reading
 data EntryData = EntryData { dRNs :: ![DataDeclRecord]    -- Record datatypes will be shown differently on a dot graph
                            , dCNs :: ![DataDeclConstruct] -- compared to these datatypes that use constructors.
@@ -113,7 +112,7 @@ removeNewlineBrace = filterNewline prefixCheck (isInfixOf "{")
 
 -- for those few cases of data declarations that use constructors with guards on a newline.
 removeNewlineGuard :: [String] -> [String]
-removeNewlineGuard = filterNewline (const True) (isPrefixOf "|") 
+removeNewlineGuard = filterNewline (const True) (isPrefixOf "|")
 
 -- Gets rid of automatically derived instances since we only care about type dependencies.
 removeDeriving :: [String] -> [String]
@@ -149,7 +148,7 @@ formatDataRec = getDataContainedRec . sortDataRec . filterEmptyS . L.splitOn "}\
 -- combine constructor data sorting & cleanup functions for cleaner code in extractEntryData
 formatDataCon :: [String] -> [DataDeclConstruct]
                 -- sorting functions                    -- cleanup functions
-formatDataCon = getDataContainedConst . sortDataConst . removeComments . isDataConst . map useEqForm . useGuardForm 
+formatDataCon = getDataContainedConst . sortDataConst . removeComments . isDataConst . map useEqForm . useGuardForm
 
 -- combine newtype sorting & cleanup functions for cleaner code in extractEntryData
 formatNewtype :: [String] -> [NewtypeDecl]
@@ -165,12 +164,11 @@ formatType :: [String] -> [TypeDecl]
              -- sorting functions   -- cleanup functions
 formatType = getTypes . sortTypes . removeComments . isType
 
-
 -----------------
 -- Sorting and filtering for functions that use @data@ syntax (for record types)
 ----------------
 
--- Attach booleans to see if a line is a part of a record data type declaration. 
+-- Attach booleans to see if a line is a part of a record data type declaration.
 -- This is needed to organize and arrage data types.
 isDataRec :: [String] -> [String]
 isDataRec dataRecs = isDataRecAux dataRecs False
@@ -183,34 +181,34 @@ isDataRec dataRecs = isDataRecAux dataRecs False
       | dtStill = l: isDataRecAux ls True                                    -- if a line is still part of record datatype and none of the above happens, keep going with the datatype.
       | otherwise = isDataRecAux ls False                                    -- otherwise, it is not a datatype and keep going as if the next line is not a datatype.
     -- Trying fold style, gave me different .dot graphs so probably is not right
-    {-output = map fst $ filter snd $ zip dataRecs doit 
+    {-output = map fst $ filter snd $ zip dataRecs doit
     doit = foldl (\x y -> ((++) x (someFunc (myHead (reverse x)) y))) [] dataRecs
     someFunc :: Bool -> String -> [Bool]
     someFunc dtStill l
       | "data " `isPrefixOf` l && "{" `isInfixOf` l && "}" `isInfixOf` l = [False]
       | "data " `isPrefixOf` l && "{" `isInfixOf` l = [True]
-      | dtStill && "}" `isInfixOf` l = [False]              
-      | dtStill = [True]                                    
-      | otherwise = [False]                                 
+      | dtStill && "}" `isInfixOf` l = [False]
+      | dtStill = [True]
+      | otherwise = [False]
     myHead [] = False
     myHead (x:xs) = x-}
-  
+
 -- Record types may be defined in the form:
 -- data Type where
 --    Constructor :: (ClassConstraint a) => { record1 :: Type1
 --        , record2 = [a]
 --        , record3 = Type3
---        } -> Type 
+--        } -> Type
 -- This is used in the CodeSpec and System types.
 useConstructFormRec :: Bool -> [String]  -> [String]
 useConstructFormRec _ [] = []
-useConstructFormRec isSameRec (l1:l2:ls) 
+useConstructFormRec isSameRec (l1:l2:ls)
   | "data " `isPrefixOf` l1 && "where " `isInfixOf` l1 = useConstructFormRec True ((l1Construct ++ l2) : ls)
   | "}" `isInfixOf` l2 && "->" `isInfixOf` l2 = useConstructFormRec False ((l1 ++ "}") : ls) -- may need to be changed to account for other possible variance in type declaratios, but for now it should work
   | isSameRec = useConstructFormRec True ((l1 ++ l2):ls)
   | otherwise = l1 : useConstructFormRec False (l2:ls)
   where
-      l1Construct 
+      l1Construct
         | "=>" `isInfixOf` l1 = T.unpack (T.replace (T.pack "where") (T.pack "=") $ T.pack $ unwords $ take (fromJust (findIndex  (isInfixOf "::") (words l1))) $ words l1) ++ " {" --has a class constraint, but we can just ignore that for now
         | otherwise = T.unpack (T.replace (T.pack "where") (T.pack "=") $ T.pack l1) ++ " {" -- no class constraint in data type
 useConstructFormRec _ ls = ls
@@ -222,7 +220,7 @@ removeNewlineComma = filterNewline (const True) (isPrefixOf ",")
 
 -- filter through records of the form rec :: Type1 -> f Type2. Only accepts the first type though, so this will eventually need to be changed
 filterFuncForm :: String -> String
-filterFuncForm l 
+filterFuncForm l
   | "->" `isInfixOf` l = unwords $ filter (isUpper . head) $ nub $ words l
   | otherwise = l
 
@@ -259,7 +257,7 @@ isDataConst = filter (\dt -> isPrefixOf "data " dt && not ("{" `isInfixOf` dt))
 -- Helper that takes a list of datatype declarations (not record type) and sorts them so that a list of the datatype name and the datatype constructor values is made.
 sortDataConst :: [String] -> [(String, [String])]
 sortDataConst = map (\l -> (head $ typeContents l, typeDependencies l))
-  where 
+  where
     typeContents l = map stripWS $ L.splitOneOf "|=" $ l \\ "data "
     typeDependencies l = concatMap (tail . words) $ tail $ filter (not . null) $ typeContents l
 
@@ -332,7 +330,7 @@ filterInvalidChars = filter (`notElem` invalidChars)
 
 -- Primes are not legal syntax in .dot files, so replace @'@ with @_@ instead.
 filterPrimeTypes :: String -> String
-filterPrimeTypes = T.unpack . T.replace (T.pack "\'") (T.pack "_") . T.pack 
+filterPrimeTypes = T.unpack . T.replace (T.pack "\'") (T.pack "_") . T.pack
 
 -- We don't need to know which types are qualified, so just get rid of the extra information.
 filterQualifiedTypes :: String -> String

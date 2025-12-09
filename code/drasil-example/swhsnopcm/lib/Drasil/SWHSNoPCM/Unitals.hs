@@ -1,4 +1,4 @@
-module Drasil.SWHSNoPCM.Unitals where
+module Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained, specParamValList, tempInit, outputs) where
 
 import Language.Drasil
 
@@ -8,10 +8,13 @@ import Data.Drasil.Quantities.Thermodynamics (temp)
 import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTC, coilHTCMax,
   coilHTCMin, coilSA, coilSAMax, diam, htCapW, htCapWMax, htCapWMin, lInit,
   relTol, tankLength, tankLengthMax, tankLengthMin, tempC, timeFinal,
-  timeFinalMax, timeStep, wDensity, wDensityMax, wDensityMin)
+  timeFinalMax, timeStep, wDensity, wDensityMax, wDensityMin, watE, tempW)
 
 inputs :: [DefinedQuantityDict]
-inputs = map dqdWr constrained ++ map dqdWr unconstrained
+inputs = map dqdWr constrained ++ map dqdWr unconstrained ++ [dqdWr watE]
+
+outputs :: [ConstrConcept]
+outputs = [tempW, watE]
 
 unconstrained :: [UncertQ]
 unconstrained = [absTol, relTol]
@@ -27,7 +30,10 @@ tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
   (sub (eqSymb temp) lInit) centigrade Real
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)] (exactDbl 40) defaultUncrt
 
+outputs :: [ConstrConcept]
+outputs = [tempW, watE]
+
 specParamValList :: [ConstQDef]
 specParamValList = [tankLengthMin, tankLengthMax,
-  wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax, 
+  wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax,
   coilHTCMin, coilHTCMax, timeFinalMax, arMin, arMax]

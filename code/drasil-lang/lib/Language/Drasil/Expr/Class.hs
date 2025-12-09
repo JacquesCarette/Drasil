@@ -11,9 +11,10 @@ module Language.Drasil.Expr.Class (
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
-
 import Control.Lens ((^.))
 
+import Drasil.Database (HasUID(..))
+import Utils.Drasil (toColumn)
 import Language.Drasil.Symbol
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Literal.Lang
@@ -25,8 +26,6 @@ import Drasil.Database.UID (HasUID(..))
 import qualified Language.Drasil.Space         as S
 import           Numeric.Natural               (Natural)
 import qualified Data.Map.Ordered              as OM
-
-import Utils.Drasil (toColumn)
 
 -- | Smart constructor for fractions.
 frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
@@ -182,6 +181,7 @@ class ExprC r where
   -- | Smart constructor for the exponential (base e) function.
   exp :: r -> r
 
+<<<<<<< HEAD
   -- | Smart constructor for calculating the dimension of a vector (or general clif).
   dim :: r -> r
 
@@ -273,8 +273,6 @@ instance ExprC Expr where
   -- | Smart constructor for the dot product of two equations.
   ($.) = CCNBinaryOp Dot
 
-
-
   -- | Add two expressions.
   ($+) (Lit (Int 0)) r = r
   ($+) l (Lit (Int 0)) = l
@@ -363,17 +361,29 @@ instance ExprC Expr where
   -- | Smart constructor for the exponential (base e) function.
   exp = UnaryOp Exp
 
+<<<<<<< HEAD
   -- | Smart constructor for calculating the dimension of a clif.
   dim = UnaryOpCN Dim
 
   -- | Smart constructor for calculating the normal form of a clif.
   norm = UnaryOpCN Norm
+=======
+  -- | Smart constructor for calculating the dimension of a vector.
+  dim = UnaryOpVN Dim
+
+  -- | Smart constructor for calculating the normal form of a vector.
+  norm = UnaryOpVN Norm
+>>>>>>> origin/main
 
   -- | Smart constructor for negating vectors.
   negClif = UnaryOpCC NegC
 
   -- | And more general scaling
+<<<<<<< HEAD
   cScale = NCCBinaryOp Scale
+=======
+  vScale = NVVBinaryOp Scale
+>>>>>>> origin/main
 
   -- | Smart constructor for applying logical negation to an expression.
   not_ = UnaryOpB Not
@@ -403,11 +413,15 @@ instance ExprC Expr where
   -- | Adding vectors
   cAdd  = CCCBinaryOp CAdd
   -- | Subtracting vectors
+<<<<<<< HEAD
   cSub  = CCCBinaryOp CSub
 
   geometricProd = CCCBinaryOp GeometricProd
   wedgeProd     = CCCBinaryOp WedgeProd
   gradeSelect   = NatCCBinaryOp GradeSelect
+=======
+  vSub  = VVVBinaryOp VSub
+>>>>>>> origin/main
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = Case Complete
@@ -425,6 +439,7 @@ instance ExprC Expr where
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = C (x ^. uid)
 
+<<<<<<< HEAD
   -- | Vectors with known components
   --   This will create a Clifford space with dimension equal to the length of the list
   vect es =
@@ -440,6 +455,8 @@ mapWithIndex f = go 0
     go _ [] = []
     go n (x:xs) = f n x : go (n+1) xs
 
+=======
+>>>>>>> origin/main
 instance ExprC M.ModelExpr where
   lit = M.Lit
 
@@ -590,7 +607,11 @@ instance ExprC M.ModelExpr where
   -- | Adding vectors
   cAdd  = M.CCCBinaryOp M.CAdd
   -- | Subtracting vectors
+<<<<<<< HEAD
   cSub  = M.CCCBinaryOp M.CSub
+=======
+  vSub  = M.VVVBinaryOp M.VSub
+>>>>>>> origin/main
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = M.Case Complete
@@ -608,6 +629,7 @@ instance ExprC M.ModelExpr where
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = M.C (x ^. uid)
+<<<<<<< HEAD
 
   -- | Vectors with known components
   --   This will create a Clifford space with dimension equal to the length of the list
@@ -805,3 +827,5 @@ instance ExprC C.CodeExpr where
   geometricProd = C.CCCBinaryOp C.GeometricProd
   wedgeProd     = C.CCCBinaryOp C.WedgeProd
   gradeSelect   = C.NatCCBinaryOp C.GradeSelect
+=======
+>>>>>>> origin/main

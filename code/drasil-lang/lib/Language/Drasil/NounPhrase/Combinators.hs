@@ -3,7 +3,7 @@
 -- See the [Wiki](https://github.com/JacquesCarette/Drasil/wiki/Combinator-Documentation)
 -- for more information and details about the naming process for combinators.
 -- A summary of the function naming scheme is as follows:
--- 
+--
 --    * Combinators that conflict with haskell-native functions have an underscore appended.
 --    * Default plural case for combinators will be first term singular, second term plural.
 --    * @P@ and @S@ denote the plural case of the combinator when it does not follow the above default.
@@ -13,7 +13,7 @@
 -- as many function names clash with those in Concepts.hs and Sentence.hs.
 module Language.Drasil.NounPhrase.Combinators (
   -- * General Combinator Helper Functions
-  insertString, prependString, insertSent, prependSent,
+  insertString, prependString, insertStringOp, insertStringGen,
   -- * Prepositions
   -- ** \"The\" Combinators
   the, theGen,
@@ -21,131 +21,149 @@ module Language.Drasil.NounPhrase.Combinators (
   a_, a_Gen,
   -- * Conjunctions
   -- ** \"And\" Combinators
-  and_, and_PS, and_Gen, and_GenGen, andThe,
+  and_, and_PS, and_Gen, andThe,
   -- ** \"The\" Combinators
   ofThe, ofThePS, ofTheGen, inThe, inThePS, inTheGen,
   the_ofThe, the_ofThePS, the_ofTheGen,
   -- ** \"For\" Combinators
   for, forPS, forGen,
   -- ** \"Of\" Combinators
-  of_, of_PS, of_Gen, of_GenGen,
+  of_, of_PS, of_Gen,
   -- ** Other Combinators
-  with
+  with, parensNP,
+  -- re-exports
+  NPStruct((:+:), S, P)
 ) where
 
 import Language.Drasil.NounPhrase
     ( NP,
-      CapitalizationRule(CapWords, CapFirst),
+      CapitalizationRule(CapWords, CapFirst, CapNothing),
       NounPhrase(phraseNP, pluralNP),
-      nounPhrase'' )
-import Language.Drasil.Sentence ( Sentence(S), (+:+) )
-import qualified Language.Drasil.Sentence.Combinators as S
-
+      nounPhrase'', surroundNPStruct)
+import Language.Drasil.NounPhrase.Core (NPStruct((:+:),S,P))
 
 --Maybe move these to a separate Drasil.NounPhrase section
 -- | Helper function that places a 'String' in between two 'NP's. Plural case is
--- @(phraseNP t1) +:+ S s +:+ (pluralNP t2)@.
-insertString :: String -> NP -> NP -> NP 
-insertString s t1 t2 = nounPhrase'' (phraseNP t1 +:+ S s +:+ phraseNP t2) (phraseNP t1 +:+ S s +:+ pluralNP t2) CapFirst CapWords
+-- @(phraseNP t1) :+: S s :+: (pluralNP t2)@.
+insertString :: String -> NP -> NP -> NP
+insertString s t1 t2 = nounPhrase'' (phraseNP t1 :+: S s :+: phraseNP t2) (phraseNP t1 :+: S s :+: pluralNP t2) CapFirst CapWords
+
+-- | Helper function that places a 'String' in between two 'NP's. Plural case is
+-- @(pluralNP t1) :+: S s :+: (phraseNP t2)@, i.e. opposite of 'insertString'
+insertStringOp :: String -> NP -> NP -> NP
+insertStringOp s t1 t2 = nounPhrase'' (phraseNP t1 :+: S s :+: phraseNP t2) (pluralNP t1 :+: S s :+: phraseNP t2) CapFirst CapWords
+
+-- | Helper function that places a 'String' in between two 'NP's. Plural case is
+-- given by two generic functions.
+insertStringGen :: String -> (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+insertStringGen s f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 :+: S s :+: phraseNP t2) (f1 t1 :+: S s :+: f2 t2) CapFirst CapWords
 
 -- | Helper function that prepends a 'String' to a 'NP'.
 prependString :: String -> NP -> NP
-prependString s t1 = nounPhrase'' (S s +:+ phraseNP t1) (S s +:+ pluralNP t1) CapFirst CapWords
+prependString s t1 = nounPhrase'' (S s :+: phraseNP t1) (S s :+: pluralNP t1) CapFirst CapWords
 
+-- | Prepends a 'String' to an 'NP' and adjust the plural
+prependStringGen :: String -> (NP -> NPStruct) -> NP -> NP
+prependStringGen s f t = nounPhrase'' (S s :+: phraseNP t) (S s :+: f t) CapFirst CapWords
+
+-- surrounding something makes it no capitalizatble at all
+surround :: String -> String -> NP -> NP
+surround l r t = nounPhrase'' (surroundNPStruct l r (phraseNP t)) (surroundNPStruct l r (pluralNP t)) CapNothing CapNothing
+
+{-
 -- | Helper function that places a 'Sentence' in between two 'NP's. Plural case is
--- @(phraseNP t1) +:+ s +:+ (pluralNP t2)@.
+-- @(phraseNP t1) :+: s :+: (pluralNP t2)@.
 insertSent :: Sentence -> NP -> NP -> NP
-insertSent s t1 t2 = nounPhrase'' (phraseNP t1 +:+ s +:+ phraseNP t2) (phraseNP t1 +:+ s +:+ pluralNP t2) CapFirst CapWords
+insertSent s t1 t2 = nounPhrase'' (phraseNP t1 :+: s :+: phraseNP t2) (phraseNP t1 :+: s :+: pluralNP t2) CapFirst CapWords
 
 -- | Helper function that prepends a 'Sentence' to a 'NP'.
 prependSent :: Sentence -> NP -> NP
-prependSent s t1 = nounPhrase'' (s +:+ phraseNP t1) (s +:+ pluralNP t1) CapFirst CapWords
-
+prependSent s t1 = nounPhrase'' (s :+: phraseNP t1) (s :+: pluralNP t1) CapFirst CapWords
+-}
 
 -- | Prepends "the" to a 'NP'.
 the :: NP -> NP
-the = prependString "the" 
+the = prependString "the"
 -- | Similar to 'the', but accepts a function that determines the plural case.
-theGen :: (NP -> Sentence) -> NP -> NP
-theGen f1 t1 = nounPhrase'' (S "the" +:+ phraseNP t1) (S "the" +:+ f1 t1) CapFirst CapWords
+theGen :: (NP -> NPStruct) -> NP -> NP
+theGen = prependStringGen "the"
 
 -- | Prepends "a" to a 'NP'.
 a_ :: NP -> NP
-a_ = prependString "a" 
+a_ = prependString "a"
 -- | Similar to 'a', but accepts a function that determines the plural case.
-a_Gen :: (NP -> Sentence) -> NP -> NP
-a_Gen f1 t1 = nounPhrase'' (S "a" +:+ phraseNP t1) (S "a" +:+ f1 t1) CapFirst CapWords
+a_Gen :: (NP -> NPStruct) -> NP -> NP
+a_Gen = prependStringGen "a"
 
--- | Inserts "of the" between two 'NP's. Plural case is @(phraseNP t1) +:+ "of the" +:+ (pluralNP t2)@.
+-- | Inserts "of the" between two 'NP's. Plural case is @(phraseNP t1) :+: "of the" :+: (pluralNP t2)@.
 ofThe :: NP -> NP -> NP
 ofThe = insertString "of the"
--- | Similar to 'ofThe', but the plural case is now @(pluralNP t1) `S.ofThe` (phraseNP t2)@.
+-- | Similar to 'ofThe', but the plural case is now @(pluralNP t1) `ofThe` (phraseNP t2)@.
+--
 ofThePS :: NP -> NP -> NP
-ofThePS t1 t2 = nounPhrase'' (phraseNP t1 `S.ofThe` phraseNP t2) (pluralNP t1 `S.ofThe` phraseNP t2) CapFirst CapWords
+ofThePS = insertStringOp "of the"
 -- | Similar to 'ofThe', but accepts two functions for the plural case.
-ofTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-ofTheGen f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 `S.ofThe` phraseNP t2) (f1 t1 `S.ofThe` f2 t2) CapFirst CapWords
+ofTheGen :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+ofTheGen = insertStringGen "of the"
 
--- | Inserts "in the" between two 'NP's. Plural case is @(phraseNP t1) +:+ "in the" +:+ (pluralNP t2)@.
+-- | Inserts "in the" between two 'NP's. Plural case is @(phraseNP t1) :+: "in the" :+: (pluralNP t2)@.
 inThe :: NP -> NP -> NP
 inThe = insertString "in the"
--- | Similar to 'ofThe', but the plural case is now @(pluralNP t1) `S.inThe` (phraseNP t2)@.
+-- | Similar to 'ofThe', but the plural case is now @(pluralNP t1) `inThe` (phraseNP t2)@.
 inThePS :: NP -> NP -> NP
-inThePS t1 t2 = nounPhrase'' (phraseNP t1 `S.inThe` phraseNP t2) (pluralNP t1 `S.inThe` phraseNP t2) CapFirst CapWords
+inThePS = insertStringOp "in the"
 -- | Similar to 'ofThe', but accepts two functions for the plural case.
-inTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-inTheGen f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 `S.inThe` phraseNP t2) (f1 t1 `S.inThe` f2 t2) CapFirst CapWords
+inTheGen :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+inTheGen = insertStringGen "in the"
 
--- | Prepends "the" and inserts "of the". Plural case is @"the" +:+ (phraseNP t1) +:+ "of the" +:+ (pluralNP t2)@.
+-- | Prepends "the" and inserts "of the". Plural case is @"the" :+: (phraseNP t1) :+: "of the" :+: (pluralNP t2)@.
 the_ofThe :: NP -> NP -> NP
 the_ofThe t1 t2 = the t1 `ofThe` t2
--- | Similar to 'the_ofThe', but the plural case is now @ S "the" +:+ (pluralNP t1) `S.ofThe` (phraseNP t2)@.
+-- | Similar to 'the_ofThe', but the plural case is now @ S "the" :+: (pluralNP t1) `ofThe` (phraseNP t2)@.
 the_ofThePS :: NP -> NP -> NP
 the_ofThePS t1 t2 = the t1 `ofThePS` t2
 -- | Similar to 'the_ofThe'', but takes two functions for the plural case.
-the_ofTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+the_ofTheGen :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
 the_ofTheGen f1 f2 t1 = ofTheGen f1 f2 (the t1)
 
--- | Inserts "for" between two 'NP's. Plural case is @(phraseNP t1) +:+ "for" +:+ (pluralNP t2)@.
+-- | Inserts "for" between two 'NP's. Plural case is @(phraseNP t1) :+: "for" :+: (pluralNP t2)@.
 for :: NP -> NP -> NP
 for = insertString "for"
--- | Same as 'for', but plural case is now @(pluralNP t1) `S.for` (phraseNP t2)@.
+-- | Same as 'for', but plural case is now @(pluralNP t1) `for` (phraseNP t2)@.
 forPS :: NP -> NP -> NP
-forPS t1 t2 = nounPhrase'' (phraseNP t1 `S.for` phraseNP t2) (pluralNP t1 `S.for` phraseNP t2) CapFirst CapWords
+forPS = insertStringOp "for"
 -- | Same as 'for'', but takes two functions for the plural case.
-forGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-forGen f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 `S.for` phraseNP t2) (f1 t1 `S.for` f2 t2) CapFirst CapWords
+forGen :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+forGen = insertStringGen "for"
 
--- | Inserts "of" between two 'NP's. Plural case is @(phraseNP t1) +:+ "of" +:+ (pluralNP t2)@.
+-- | Inserts "of" between two 'NP's. Plural case is @(phraseNP t1) :+: "of" :+: (pluralNP t2)@.
 of_ :: NP -> NP -> NP
 of_ = insertString "of"
--- | Same as 'of_', but plural case is now @(pluralNP t1) `S.of_` (phraseNP t2)@.
+-- | Same as 'of_', but plural case is now @(pluralNP t1) `of_` (phraseNP t2)@.
 of_PS :: NP -> NP -> NP
-of_PS t1 t2 = nounPhrase'' (phraseNP t1 `S.of_` phraseNP t2) (pluralNP t1 `S.of_` phraseNP t2) CapFirst CapWords
+of_PS = insertStringOp "of"
 -- | Same as 'of_', but takes two functions for the plural case.
-of_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-of_Gen f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 `S.of_` phraseNP t2) (f1 t1 `S.of_` f2 t2) CapFirst CapWords
--- | Same as 'of_', but takes two functions for the singular case and two for the plural case.
-of_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-of_GenGen f1 f2 p1 p2 t1 t2 = nounPhrase'' (f1 t1 `S.of_` f2 t2) (p1 t1 `S.of_` p2 t2) CapFirst CapWords
+of_Gen :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+of_Gen = insertStringGen "of"
 
--- | Inserts "with" between two 'NP's. Plural case is @(phraseNP t1) +:+ "with" +:+ (pluralNP t2)@.
+-- | Inserts "with" between two 'NP's. Plural case is @(phraseNP t1) :+: "with" :+: (pluralNP t2)@.
 with :: NP -> NP -> NP
 with = insertString "with"
 
--- | Inserts "and" between two 'NP's. Plural case is @(phraseNP t1) +:+ "and" +:+ (pluralNP t2)@.
+-- | Inserts "and" between two 'NP's. Plural case is @(phraseNP t1) :+: "and" :+: (pluralNP t2)@.
 and_ :: NP -> NP -> NP
 and_ = insertString "and"
--- | Same as 'and_', but plural case is now @(pluralNP t1) `S.and_` (phraseNP t2)@.
+-- | Same as 'and_', but plural case is now @(pluralNP t1) `and_` (phraseNP t2)@.
 and_PS :: NP -> NP -> NP
-and_PS t1 t2 = nounPhrase'' (phraseNP t1 `S.and_` phraseNP t2) (pluralNP t1 `S.and_` phraseNP t2) CapFirst CapWords
+and_PS = insertStringOp "and"
 -- | Same as 'and_', but takes two functions for the plural case.
-and_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-and_Gen f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 `S.and_` phraseNP t2) (f1 t1 `S.and_` f2 t2) CapFirst CapWords
--- | Same as 'and_', but takes two functions for the singular case and two for the plural case.
-and_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-and_GenGen f1 f2 p1 p2 t1 t2 = nounPhrase'' (f1 t1 `S.and_` f2 t2) (p1 t1 `S.and_` p2 t2) CapFirst CapWords
+and_Gen :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
+and_Gen = insertStringGen "and"
 
--- | Inserts "and the" between two 'NP's. Plural case is @(phraseNP t1) +:+ "and the" +:+ (pluralNP t2)@.
+-- | Inserts "and the" between two 'NP's. Plural case is @(phraseNP t1) :+: "and the" :+: (pluralNP t2)@.
 andThe :: NP -> NP -> NP
 andThe = insertString "and the"
+
+-- | Puts parentheses around a word; to be used as a kind of postfix qualifier
+parensNP :: NP -> NP
+parensNP = surround "(" ")"

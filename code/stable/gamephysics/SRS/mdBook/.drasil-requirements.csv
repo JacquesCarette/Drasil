@@ -1,7 +1,7 @@
 Original,Copy
-../../../../traceygraphs/gamephysics/allvsall.svg,src/assets/allvsall.svg
-../../../../traceygraphs/gamephysics/allvsr.svg,src/assets/allvsr.svg
+../../../../datafiles/gamephysics/sysctx.png,src/assets/sysctx.png
 ../../../../traceygraphs/gamephysics/avsa.svg,src/assets/avsa.svg
 ../../../../traceygraphs/gamephysics/avsall.svg,src/assets/avsall.svg
 ../../../../traceygraphs/gamephysics/refvsref.svg,src/assets/refvsref.svg
-../../../../datafiles/gamephysics/sysctx.png,src/assets/sysctx.png
+../../../../traceygraphs/gamephysics/allvsr.svg,src/assets/allvsr.svg
+../../../../traceygraphs/gamephysics/allvsall.svg,src/assets/allvsall.svg

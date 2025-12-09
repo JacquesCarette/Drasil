@@ -8,7 +8,7 @@ update_files() {
     local replace="$4"
 
     find "$dir" -type f -name "$targets" | while read -r file; do
-        sed -i -E "s|$search|$replace|g" "$file"
+        sed -i '' -E "s|$search|$replace|g" "$file"
         echo "Updated: $file"
     done
 }

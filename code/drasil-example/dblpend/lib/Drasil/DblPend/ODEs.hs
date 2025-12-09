@@ -20,7 +20,7 @@ dblPenODEInfo = odeInfo
   [quantvar massObj_1, quantvar massObj_2, quantvar lenRod_1, quantvar lenRod_2]
   (exactDbl 0)
   (exactDbl 20) -- final time
-    [dbl 1.3463968515384828, exactDbl 0, dbl 2.356194490192345, exactDbl 0] -- unit in radian [3*pi/7, 0, 3*pi/4, 0]
+  [dbl 1.3463968515384828, exactDbl 0, dbl 2.356194490192345, exactDbl 0] -- unit in radian [3*pi/7, 0, 3*pi/4, 0]
   [
     sy angularVel_1,      -- d(theta1)/dt = angular velocity 1
     sy angularAccel_1,    -- d(omega1)/dt = angular acceleration 1

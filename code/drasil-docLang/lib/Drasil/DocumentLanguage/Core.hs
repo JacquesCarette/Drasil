@@ -2,13 +2,14 @@
 -- | Defines core types for use with the Drasil document language ("Drasil.DocumentLanguage").
 module Drasil.DocumentLanguage.Core where
 
-import Drasil.DocumentLanguage.Definitions (Fields)
-import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat)
+import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
+
+import Drasil.Database (UID)
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
-
-import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
+import Drasil.DocumentLanguage.Definitions (Fields)
+import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat)
 
 -- | Type synonym for clarity.
 type System = Sentence
@@ -123,9 +124,9 @@ newtype StkhldrSec = StkhldrProg [StkhldrSub]
 -- | Stakeholders subsections.
 data StkhldrSub where
   -- | May have a client.
-  Client :: CI -> Sentence -> StkhldrSub 
+  Client :: CI -> Sentence -> StkhldrSub
   -- | May have a customer.
-  Cstmr  :: CI -> StkhldrSub 
+  Cstmr  :: CI -> StkhldrSub
 
 -- ** General System Description Section
 
@@ -137,9 +138,9 @@ data GSDSub where
   -- | System context.
   SysCntxt   :: [Contents] -> GSDSub --FIXME: partially automate
   -- | User characteristics.
-  UsrChars   :: [Contents] -> GSDSub 
+  UsrChars   :: [Contents] -> GSDSub
   -- | System constraints.
-  SystCons   :: [Contents] -> [Section] -> GSDSub 
+  SystCons   :: [Contents] -> [Section] -> GSDSub
 
 -- ** Specific System Description Section
 
@@ -184,7 +185,7 @@ data SCSSub where
   -- | Instance Models.
   IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   -- | Constraints.
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub 
+  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
   --                  Sentence -> [LabelledContent] Fields  -> [UncertainWrapper] -> [ConstrainedChunk] -> SCSSub --FIXME: temporary definition?
   --FIXME: Work in Progress ^
   -- | Properties of a correct solution.
@@ -199,10 +200,8 @@ data DerivationDisplay = ShowDerivation
 -- | Requirements section. Contains a list of subsections ('ReqsSub').
 newtype ReqrmntSec = ReqsProg [ReqsSub]
 
--- | Requirements subsections. 
+-- | Requirements subsections.
 data ReqsSub where
-  -- | Functional requirements. LabelledContent needed for tables.  
-  FReqsSub'   :: [ConceptInstance] -> [LabelledContent] -> ReqsSub
   -- | Functional requirements. LabelledContent needed for tables.
   FReqsSub    :: [ConceptInstance] -> [LabelledContent] -> ReqsSub
   -- | Non-functional requirements.
@@ -315,12 +314,11 @@ instance Multiplate DLPlate where
     sc (TMs s f t) = pure $ TMs s f t
     sc (GDs s f g d) = pure $ GDs s f g d
     sc (DDs s f dd d) = pure $ DDs s f dd d
-    sc (IMs s f i d) = pure $ IMs s f i d 
+    sc (IMs s f i d) = pure $ IMs s f i d
     sc (Constraints s c) = pure $ Constraints s c
     sc (CorrSolnPpties c cs) = pure $ CorrSolnPpties c cs
     rs (ReqsProg reqs) = ReqsProg <$> traverse (reqSub p) reqs
     rs' (FReqsSub ci con) = pure $ FReqsSub ci con
-    rs' (FReqsSub' ci con) = pure $ FReqsSub' ci con
     rs' (NonFReqsSub c) = pure $ NonFReqsSub c
     lcp (LCsProg c) = pure $ LCsProg c
     ucp (UCsProg c) = pure $ UCsProg c

@@ -10,9 +10,9 @@ import Language.Drasil
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
 import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalAccelConst,
-  ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, 
+  ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position,
   velocity, acceleration, constAccelV, speed)
-import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, offset)
+import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, landPos)
 
 flightDur', iyPos, yConstAccel, iSpeed :: PExpr
 flightDur' = exactDbl 2 $* sy launSpeed $* sin (sy launAngle) $/ sy gravitationalAccelConst
@@ -22,12 +22,6 @@ iSpeed = sy launSpeed
 
 offset' :: PExpr
 offset' = sy landPos $- sy targPos
-
-message :: PExpr
-message = completeCase [case1, case2, case3]
-  where case1 = (str "The target was hit.",        abs_ (sy offset $/ sy targPos) $< sy tol)
-        case2 = (str "The projectile fell short.", sy offset $< exactDbl 0)
-        case3 = (str "The projectile went long.",  sy offset $> exactDbl 0)
 
 --
 speed' :: PExpr
@@ -68,7 +62,7 @@ horizPos = sy xPos $= sy QP.ixPos $+ (sy ixVel $* sy time)
 vertVel, vertPos, vertNoTime :: PExpr
 vertVel = sy yVel $= sy iyVel $- (sy gravitationalAccel $* sy time)
 vertPos = sy yPos $= sy QP.iyPos $+ (sy iyVel $* sy time) $- (sy gravitationalAccel $* square (sy time) $/ exactDbl 2)
-vertNoTime = square (sy yVel) $= square (sy iyVel) $- (exactDbl 2 $* sy gravitationalAccel $* (sy yPos $- sy QP.iyPos)) 
+vertNoTime = square (sy yVel) $= square (sy iyVel) $- (exactDbl 2 $* sy gravitationalAccel $* (sy yPos $- sy QP.iyPos))
 
 lcrectVel, lcrectPos, lcrectNoTime, lchorizVel, lchorizPos, lcvertVel, lcvertPos, lcvertNoTime :: LabelledContent
 lcrectVel = lbldExpr (sy speed $= speed') (makeEqnRef "rectVel")

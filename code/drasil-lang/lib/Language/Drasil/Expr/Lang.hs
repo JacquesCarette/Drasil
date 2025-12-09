@@ -13,7 +13,7 @@ import Language.Drasil.Space (DiscreteDomainDesc, RealInterval, Space)
 import qualified Language.Drasil.Space as S
 import Language.Drasil.WellTyped
 
-import Data.Either (fromRight, rights)
+import Data.Either (fromRight, rights, lefts)
 import qualified Data.Foldable as NE
 import Data.List (nub)
 
@@ -21,6 +21,7 @@ import Numeric.Natural (Natural)
 import Data.Map.Ordered (OrderedMap)
 
 import qualified Data.Map.Ordered as OM
+import Debug.Trace (trace)
 
 -- * Helper Functions for Type Checking
 
@@ -552,13 +553,17 @@ instance Typed Expr Space where
     (Left le, _) -> Left le
 
   infer cxt (NCCBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
-    (Right lt, Right (S.ClifS _ _ rsp)) -> if S.isBasicNumSpace lt && lt == rsp
-      then Right rsp
-      else if lt /= rsp then
-        Left $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
-      else
-        Left $ "Vector scaling expects a numeric scaling, but found `" ++ show lt ++ "`."
-    (Right _, Right rsp) -> Left $ "Vector scaling expects vector as second operand. Received `" ++ show rsp ++ "`."
+    (Right lt, Right rt@(S.ClifS _ _ rsp)) ->
+      trace ("[DEBUG] NCCBinaryOp Scale: l type = " ++ show lt ++ ", r type = " ++ show rt) $
+        if S.isBasicNumSpace lt && lt == rsp
+          then Right rt
+          else if lt /= rsp then
+            Left $ "Vector scaling expects a scalar of the same numeric type as the vector components; found scalar `" ++ show lt ++ "` and clif components `" ++ show rsp ++ "`."
+          else
+            Left $ "Vector scaling expects a numeric scalar as the first operand, but found `" ++ show lt ++ "`."
+    (Right lsp, Right rt) ->
+      trace ("[DEBUG] NCCBinaryOp Scale unexpected: l type = " ++ show lsp ++ ", r type = " ++ show rt) $
+        Left $ "Vector scaling expects a numeric scalar as the first operand and a clif/vector as the second operand. Received `" ++ show lsp ++ "` and `" ++ show rt ++ "`."
     (_, Left rx) -> Left rx
     (Left lx, _) -> Left lx
 
@@ -639,24 +644,36 @@ instance Typed Expr Space where
   -- 2. Have a dimension of at least the grade (a 0-dimensional vector makes no sense)
   infer ctx (Clif d es) =
     -- A clif with no explicit compile/"specification"-time expressions in the components
-    if OM.null es then Right $ S.ClifS d S.Vector S.Real
+    if OM.null es then
+      case d of
+        S.Fixed _ -> Right $ S.ClifS d S.Vector S.Real -- No components, but fixed dimension is allowed
+        S.VDim _   -> Right $ S.ClifS d S.Vector S.Real -- Variable dimension, allowed
     else
-      case eitherLists (infer ctx <$> OM.elems es) of
-        Left _ ->
-          let
-            -- Check the dimensions of a clif to ensure it makes sense
-            isValidDim =
-              case d of
-                -- If it's a fixed dimension, the number of expressions must be dimension ^ 2
-                S.Fixed fD -> OM.size es == fromIntegral ((2 :: Integer) ^ fD)
-                -- We don't know enough to say for sure
-                S.VDim _  -> True
-          in
-          -- `Clif`s must store a basic number space, not things like other clifs
-          if isValidDim then
-            Right $ S.ClifS d S.Vector S.Real
-          else Left $ "The number of components in a clif of dimension " ++ show d ++ " must be 2 ^ " ++ show d
-        Right x -> Right x
+      let
+        compResults = map (infer ctx) (OM.elems es)
+        compErrs = lefts compResults
+        compTys  = rights compResults
+        isValidDim = case d of
+          -- Allow a clif to be partially specified (only non-zero components provided).
+          -- The total number of possible components is 2^d, so require the provided
+          -- components to be at most that, and at least one component present.
+          S.Fixed fD -> let maxComps = fromIntegral ((2 :: Integer) ^ fD) in OM.size es <= maxComps && OM.size es > 0
+          S.VDim _   -> OM.size es > 0
+      in
+        if not (null compErrs) then
+          -- Return the first component error we encountered
+          Left (head compErrs)
+        else if null compTys then
+          Left "Clif contains no component types to infer from."
+        else
+          let firstTy = head compTys
+          in if all (== firstTy) compTys && S.isBasicNumSpace firstTy then
+               if isValidDim then Right $ S.ClifS d S.Vector firstTy
+               else case d of
+                      S.Fixed fD -> Left $ "The number of components in a clif of dimension " ++ show d ++ " must be between 1 and " ++ show ((2 :: Integer) ^ fD)
+                      S.VDim _    -> Left "Clif must have at least one component."
+             else
+               Left $ "Clif components must all have the same basic numeric type; found: " ++ show compTys
 
 
 eitherLists :: [Either a b] -> Either [a] b
@@ -667,4 +684,3 @@ eitherLists = eitherLists' (Left [])
     eitherLists' _ (Right r : _) = Right r
     eitherLists' _ (Left _ : _) = error "eitherLists impl. non-exhaustive pattern: _ [Left, ...]"
     eitherLists' ls [] = ls
-

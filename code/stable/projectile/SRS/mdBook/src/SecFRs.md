@@ -12,11 +12,11 @@ Verify-Input-Values: Check the entered input values to ensure that they do not e
 
 <div id="calcValues"></div>
 
-Calculate-Values: Calculate the following values: \\({t\_{\text{flight}}}\\) (from [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime)), \\({p\_{\text{land}}}\\) (from [IM:calOfLandingDist](./SecIMs.md#IM:calOfLandingDist)), \\({d\_{\text{offset}}}\\) (from [IM:offsetIM](./SecIMs.md#IM:offsetIM)), and \\(s\\) (from [IM:messageIM](./SecIMs.md#IM:messageIM)).
+Calculate-Values: Calculate the following values: \\({t\_{\text{flight}}}\\) (from [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime)), \\({p\_{\text{land}}}\\) (from [IM:calOfLandingDist](./SecIMs.md#IM:calOfLandingDist)), and \\({d\_{\text{offset}}}\\) (from [IM:offsetIM](./SecIMs.md#IM:offsetIM)).
 
 <div id="outputValues"></div>
 
-Output-Values: Output \\({t\_{\text{flight}}}\\) (from [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime)), \\(s\\) (from [IM:messageIM](./SecIMs.md#IM:messageIM)), and \\({d\_{\text{offset}}}\\) (from [IM:offsetIM](./SecIMs.md#IM:offsetIM)).
+Output-Values: Output \\({t\_{\text{flight}}}\\) (from [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime)) and \\({d\_{\text{offset}}}\\) (from [IM:offsetIM](./SecIMs.md#IM:offsetIM)).
 
 <div id="Table:ReqInputs"></div>
 

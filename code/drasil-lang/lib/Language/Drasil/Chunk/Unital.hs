@@ -8,6 +8,8 @@ module Language.Drasil.Chunk.Unital (
 
 import Control.Lens (makeLenses, view, (^.))
 
+import Drasil.Database (HasUID(..))
+
 import Language.Drasil.Chunk.Concept (dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Unitary (Unitary(..))
@@ -20,7 +22,6 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Stages (Stage)
-import Drasil.Database.UID (HasUID(..))
 
 -- | Similar to a `DefinedQuantityDict`, UnitalChunks are concepts
 -- with quantities that must have a unit definition.
@@ -47,13 +48,13 @@ instance HasSpace      UnitalChunk where typ = defq' . typ
 -- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
 -- | 'UnitalChunk's have a 'Quantity'.
-instance Quantity      UnitalChunk where 
+instance Quantity      UnitalChunk where
 -- | Finds the unit definition of a 'UnitalChunk'.
 instance Unitary       UnitalChunk where unit = view uni
 -- | Finds the units used to make the 'UnitalChunk'.
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 -- | Finds the units used to make the 'UnitalChunk'.
-instance TempHasUnit       UnitalChunk where findUnit = view uni   
+instance TempHasUnit       UnitalChunk where findUnit = view uni
 -- | Equal if 'UID's are equal.
 instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Convert the symbol of the 'UnitalChunk' to a 'ModelExpr'.

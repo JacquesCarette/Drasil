@@ -1,17 +1,9 @@
 module Drasil.GamePhysics.DesignDec.Vector where
 
-import Language.Drasil hiding (vect)  -- Hide vect to avoid conflicts
-import Language.Drasil.ShortHands (lV, lX, lY, lS, lT)
-import Language.Drasil.Space (ClifKind(..))
-import Language.Drasil.Code (FuncStmt(..), Func, funcDef, funcUID)
-import Data.Drasil.Quantities.Physics (vecDim)
-
--- | Helper function to create Clifford vector spaces of a given dimension
-realVect :: Dimension -> Space
-realVect d = ClifS d Multivector Real
+import Language.Drasil
 
 vV1, vV2, vX, vY, vV, vS, vLength, vDist, vDblMin, vV1X,
-  vV1Y, vV2X, vV2Y, vRad, v_v, vLen, t, rad, dist :: CodeVarChunk
+  vV1Y, vV2X, vV2Y, vRad :: VarChunk
 
 vV1      = makeVC "v1"      (nounPhrase "v1")      (sub lV (Atomic "1"))
 vV2      = makeVC "v2"      (nounPhrase "v2")      (sub lV (Atomic "2"))
@@ -27,22 +19,11 @@ vV1Y     = makeVC "v1Y"     (nounPhrase "v1Y")     (Atomic "v1Y")
 vV2X     = makeVC "v2X"     (nounPhrase "v2X")     (Atomic "v2X")
 vV2Y     = makeVC "v2Y"     (nounPhrase "v2Y")     (Atomic "v2Y")
 vRad     = makeVC "vRad"    (nounPhrase "rad" )    (Atomic "rad")
-v_v      = makeVC "v"       (nounPhrase "v")       lV
-vLen     = makeVC "len"     (nounPhrase "length")  (Atomic "len")
-t        = makeVC "t"       (nounPhrase "t")       lT
-rad      = makeVC "rad"     (nounPhrase "rad")     (Atomic "rad")
-dist     = makeVC "dist"    (nounPhrase "dist")    (Atomic "dist") 
 
 vectEqual, vectAdd, vectSub, vectMult, vectNeg, vectDot, vectCross, vectPerp,
   vectRPerp, vectProject, vectForAngle, vectToAngle, vectRotate, vectUnrotate,
-  vectLengthSq, vectLength, vectNormalize, vectClamp, vectLerp, vectDistSq, 
-  vectDist, vectNear :: Func
-
--- Helper functions that will be used in function calls
-getX, getY, vect :: Func
-getX = funcDef "getX" "Get X component of vector" [v_v] Real Nothing []
-getY = funcDef "getY" "Get Y component of vector" [v_v] Real Nothing []
-vect = funcDef "vect" "Create vector from components" [vX, vY] (realVect vecDim) Nothing []
+  vectLengthSq, vectLength, vectNormalize, vectClamp, vectLerp, vectDistSq,
+  vectDist, vectNear, getX, getY, vect :: FuncDef
 
 vectEqual = funcDef "vectEqual" [vV1, vV2] Boolean
   [
@@ -51,17 +32,17 @@ vectEqual = funcDef "vectEqual" [vV1, vV2] Boolean
          )
   ]
 
-vectAdd = funcDef "vectAdd" [vV1, vV2] (realVect vecDim)
+vectAdd = funcDef "vectAdd" [vV1, vV2] (Vect Real)
   [
-    FRet (FCall (funcUID vect) 
+    FRet (FCall (funcUID vect)
       [
         FCall (funcUID getX) [vV1] + FCall (funcUID getX) [vV2],
         FCall (funcUID getY) [vV1] + FCall (funcUID getY) [vV2]
       ]
     )
   ]
-  
-vectSub = funcDef "vectSub" [vV1, vV2] (realVect vecDim)
+
+vectSub = funcDef "vectSub" [vV1, vV2] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -70,8 +51,8 @@ vectSub = funcDef "vectSub" [vV1, vV2] (realVect vecDim)
       ]
     )
   ]
-  
-vectMult = funcDef "vectMult" [vV1, vV2] (realVect vecDim)
+
+vectMult = funcDef "vectMult" [vV1, vV2] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -81,7 +62,7 @@ vectMult = funcDef "vectMult" [vV1, vV2] (realVect vecDim)
     )
   ]
 
-vectNeg = funcDef "vectNeg" [v_v] (realVect vecDim)
+vectNeg = funcDef "vectNeg" [v_v] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       $ map Neg [
@@ -107,13 +88,13 @@ vectCross = funcDef "vectCross" [vV1, vV2] Real
       (FCall (funcUID getX) [vV1] *
       FCall (funcUID getY) [vV2]) -
       (FCall (funcUID getY) [vV1] *
-      FCall (funcUID getX) [vV2]) 
+      FCall (funcUID getX) [vV2])
     )
   ]
-  
-vectPerp = funcDef "vectPerp" [v_v] (realVect vecDim)
+
+vectPerp = funcDef "vectPerp" [v_v] (Vect Real)
   [
-    FRet (FCall (funcUID vect) 
+    FRet (FCall (funcUID vect)
       [
         Neg (FCall (funcUID getY) [v_v]),
         FCall (funcUID getX) [v_v]
@@ -121,7 +102,7 @@ vectPerp = funcDef "vectPerp" [v_v] (realVect vecDim)
     )
   ]
 
-vectRPerp = funcDef "vectRPerp" [v_v] (realVect vecDim)
+vectRPerp = funcDef "vectRPerp" [v_v] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -130,10 +111,10 @@ vectRPerp = funcDef "vectRPerp" [v_v] (realVect vecDim)
       ]
     )
   ]
-   
-vectProject = funcDef "vectProject" [vV1, vV2] (realVect vecDim)   
-  [ 
-    FRet (FCall (funcUID vectMult) 
+
+vectProject = funcDef "vectProject" [vV1, vV2] (Vect Real)
+  [
+    FRet (FCall (funcUID vectMult)
       [
         vV2,
         FCall (funcUID vectDot) [vV1, vV2] / FCall (funcUID vectDot) [vV2, vV2]
@@ -141,7 +122,7 @@ vectProject = funcDef "vectProject" [vV1, vV2] (realVect vecDim)
     )
   ]
 
-vectForAngle = funcDef "vectForAngle" [rad] (realVect vecDim)
+vectForAngle = funcDef "vectForAngle" [rad] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -161,7 +142,7 @@ vectToAngle = funcDef "vectToAngle" [v_v] Real
     )
   ]
 
-vectRotate = funcDef "vectRotate" [vV1, vV2] (realVect vecDim)
+vectRotate = funcDef "vectRotate" [vV1, vV2] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -172,8 +153,8 @@ vectRotate = funcDef "vectRotate" [vV1, vV2] (realVect vecDim)
       ]
     )
   ]
-  
-vectUnrotate = funcDef "vectUnrotate" [vV1, vV2] (realVect vecDim)
+
+vectUnrotate = funcDef "vectUnrotate" [vV1, vV2] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -184,27 +165,27 @@ vectUnrotate = funcDef "vectUnrotate" [vV1, vV2] (realVect vecDim)
       ]
     )
   ]
-  
+
 vectLengthSq = funcDef "vectLengthSq" [v_v] Real
   [
     FRet (FCall (funcUID vectDot) [v_v, v_v])
   ]
-  
+
 vectLength = funcDef "vectLength" [v_v] Real
   [
     FRet (Sqrt (FCall (funcUID vectLengthSq) [v_v]))
   ]
-  
-vectClamp = funcDef "vectClamp" [v_v, vLen] (realVect vecDim)
+
+vectClamp = funcDef "vectClamp" [v_v, length] (Vect Real)
   [
-    (FCond (FCall (funcUID vectLength) [v_v]) :< vLen) 
+    (FCond (FCall (funcUID vectLength) [v_v]) :< length)
       [FRet v_v]
-      [FRet (FCall (funcUID vectMult) 
-        [FCall (funcUID vectNormalize) [v_v], vLen])
+      [FRet (FCall (funcUID vectMult)
+        [FCall (funcUID vectNormalize) [v_v], length])
       ]
   ]
 
-vectLerp = funcDef "vectLerp" [vV1, vV2, t] (realVect vecDim)
+vectLerp = funcDef "vectLerp" [vV1, vV2, t] (Vect Real)
   [
     FRet (FCall (funcUID vectAdd)
       [
@@ -213,9 +194,9 @@ vectLerp = funcDef "vectLerp" [vV1, vV2, t] (realVect vecDim)
       ])
   ]
 
-vectNormalize = funcDef "vectNormalize" [v_v] (realVect vecDim)
+vectNormalize = funcDef "vectNormalize" [v_v] (Vect Real)
   [
-    FRet (FCall (funcUID vectMult) 
+    FRet (FCall (funcUID vectMult)
       [v_v, 1.0 / FCall (funcUID vectLength) [v_v] + DBL_MIN]
     )
   ]
@@ -230,17 +211,12 @@ vectDist = funcDef "vectDist" [vV1, vV2] Real
     FRet (Sqrt (FCall (funcUID vectDistSq) [vV1, vV2]))
   ]
 
-
 vectNear = funcDef "vectNear" [vV1, vV2, dist] Boolean
   [
-    FRet (FCall (funcUID vectDist) [vV1, vV2] :< dist) 
+    FRet (FCall (funcUID vectDist) [vV1, vV2] :< dist)
   ]
 
--- Variable for DBL_MIN value
-v_DBL_MIN :: CodeVarChunk 
-v_DBL_MIN = makeVC "DBL_MIN" (nounPhraseSP "minimum positive normalized double")
-                (Atomic "DBL_MIN")
+DBL_MIN = fasg v_DBL_MIN 2.2250738585072014e-308
 
--- Assignment of DBL_MIN constant value
-dbl_min_assignment :: FuncStmt
-dbl_min_assignment = FAsg v_DBL_MIN (C (lit (dbl 2.2250738585072014e-308)))
+funcUID :: FuncDef -> Expr
+funcUID (FuncDef n _ _ _) = C $ makeVC n (nounPhraseSP n) (Atomic n)

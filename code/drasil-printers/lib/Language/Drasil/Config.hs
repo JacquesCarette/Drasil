@@ -36,7 +36,7 @@ numberedSections = True
 --  (UsePackages ["fullpage","booktabs","longtable","listings","graphics","hyperref","caption",
 --  "amsmath"])
 
--- | TeX Only - column width for data definitions 
+-- | TeX Only - column width for data definitions
 -- (fraction of LaTeX textwidth).
 colAwidth, colBwidth :: Double
 colAwidth = 0.13

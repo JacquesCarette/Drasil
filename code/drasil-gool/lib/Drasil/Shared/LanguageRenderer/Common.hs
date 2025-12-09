@@ -2,13 +2,13 @@
 module Drasil.Shared.LanguageRenderer.Common where
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon 
+import Drasil.Shared.InterfaceCommon
 import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, typeFromData, call, RenderFunction(funcFromData))
 import Control.Monad (join)
 import Drasil.Shared.LanguageRenderer
 import qualified Drasil.Shared.LanguageRenderer as R
 import qualified Drasil.Shared.RendererClassesCommon as RC (value, functionType, function)
-import Drasil.Shared.LanguageRenderer.Constructors 
+import Drasil.Shared.LanguageRenderer.Constructors
 import Prelude hiding (print,pi,(<>))
 import Drasil.Shared.Helpers
 import Text.PrettyPrint.HughesPJ (text, empty, Doc)
@@ -16,9 +16,7 @@ import Control.Lens.Zoom (zoom)
 import Drasil.Shared.State
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Control.Monad.State (modify)
-import qualified Drasil.Shared.RendererClassesCommon as S 
-
-
+import qualified Drasil.Shared.RendererClassesCommon as S
 
 -- Swift and Julia --
 
@@ -27,7 +25,6 @@ boolRender = "Bool"
 
 bool :: (CommonRenderSym r) => VSType r
 bool = typeFromData Boolean boolRender (text boolRender)
-
 
 -- Python, Java, C#, and Julia --
 
@@ -79,7 +76,6 @@ varDecDef v scp e = do
   where
     def Nothing = IC.emptyStmt
     def (Just d) = IC.assign v d
-
 
 -- Python, Julia, and MATLAB --
 

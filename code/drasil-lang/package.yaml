@@ -21,6 +21,7 @@ dependencies:
 - text
 - Decimal
 - unicode-names >= 3.2.0.0
+- drasil-database
 - drasil-utils
 - containers
 
@@ -31,9 +32,6 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Drasil.Database.Chunk
-  - Drasil.Database.TypedUIDRef
-  - Drasil.Database.UID
   - Drasil.Code.CodeExpr
   - Drasil.Code.CodeExpr.Development
   - Language.Drasil
@@ -47,6 +45,8 @@ library:
   - Language.Drasil.Sentence.Combinators
   - Language.Drasil.ShortHands
   - Language.Drasil.Space
+  - Data.Map.Ordered
+  - Language.Drasil.Expr.Lang
   when:
   - condition: false
     other-modules: Paths_drasil_lang

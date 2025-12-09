@@ -14,19 +14,18 @@ reviewHead, reviewContextP1, reviewEqns, reviewContextP2 :: Contents
 reviewHead = foldlSP_ [headSent 2 (S "Rectilinear Kinematics: Continuous Motion")]
 reviewContextP1
   = foldlSP_
-      [S "As covered previously, the", plural equation, S "relating", phrase velocity, sParen (eS (sy QP.speed)) `sC` 
-        phrase position, sParen (eS (sy QP.scalarPos)) `S.and_` phrase time, sParen (eS (sy QP.time)) 
-        `S.for` phrase motion `S.in_` S "one dimension with", phrase QP.constAccel, 
+      [S "As covered previously, the", plural equation, S "relating", phrase velocity, sParen (eS (sy QP.speed)) `sC`
+        phrase position, sParen (eS (sy QP.scalarPos)) `S.and_` phrase time, sParen (eS (sy QP.time))
+        `S.for` phrase motion `S.in_` S "one dimension with", phrase QP.constAccel,
         sParen (eS (sy QP.constAccel)) +:+ S "are as follows:"]
 
-reviewEqns 
-  = foldlSP 
-      [S "where", eS (sy QP.iSpeed) `S.and_` eS (sy QP.iPos), 
+reviewEqns
+  = foldlSP
+      [S "where", eS (sy QP.iSpeed) `S.and_` eS (sy QP.iPos),
        S "are the initial", phrase velocity `S.and_` phrase position, S ",respectively"]
 
 reviewContextP2
-  = foldlSP 
+  = foldlSP
       [S "Only two of these", plural equation, S "are independent" `sC` S "since the third" +:+
        phrase equation, S "can always be derived from the other two"]
-
 

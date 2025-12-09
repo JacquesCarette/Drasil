@@ -35,22 +35,6 @@ function func_d_offset(p_target::Float64, p_land::Float64)
     return p_land - p_target
 end
 
-""" Calculates output message as a string
-    - Parameter p_target: target position (m)
-    - Parameter epsilon: hit tolerance
-    - Parameter d_offset: distance between the target position and the landing position (m)
-    - Returns: output message as a string
-"""
-function func_s(p_target::Float64, epsilon::Float64, d_offset::Float64)
-    if abs(d_offset / p_target) < epsilon
-        return "The target was hit."
-    elseif d_offset < 0.0
-        return "The projectile fell short."
-    else
-        return "The projectile went long."
-    end
-end
-
 """ Reads input from a file with the given file name
     - Parameter filename: name of the input file
     - Returns: launch speed (m/s)
@@ -100,14 +84,11 @@ function input_constraints(v_launch::Float64, theta::Float64, p_target::Float64)
 end
 
 """ Writes the output values to output.txt
-    - Parameter s: output message as a string
     - Parameter d_offset: distance between the target position and the landing position (m)
     - Parameter t_flight: flight duration (s)
 """
-function write_output(s::String, d_offset::Float64, t_flight::Float64)
+function write_output(d_offset::Float64, t_flight::Float64)
     outputfile = open("output.txt", "w")
-    print(outputfile, "s = ")
-    println(outputfile, s)
     print(outputfile, "d_offset = ")
     println(outputfile, d_offset)
     print(outputfile, "t_flight = ")
@@ -123,7 +104,6 @@ input_constraints(v_launch, theta, p_target)
 global t_flight = func_t_flight(v_launch, theta, g)
 global p_land = func_p_land(v_launch, theta, g)
 global d_offset = func_d_offset(p_target, p_land)
-global s = func_s(p_target, epsilon, d_offset)
-write_output(s, d_offset, t_flight)
+write_output(d_offset, t_flight)
 
 end

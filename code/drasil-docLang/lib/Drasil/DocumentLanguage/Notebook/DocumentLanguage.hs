@@ -2,27 +2,27 @@
 module Drasil.DocumentLanguage.Notebook.DocumentLanguage(mkNb) where
 
 import Drasil.DocumentLanguage.Notebook.LsnDecl (LsnDecl, mkLsnDesc)
-import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..), 
+import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
 
 import Language.Drasil hiding (kind)
 
-import Drasil.System (System(SI), _authors, _sys, whatsTheBigIdea)
+import Drasil.System (System(SI), _authors, whatsTheBigIdea, sysName)
 import Drasil.GetChunks (citeDB)
 
-import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, example, 
+import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, example,
   appendix, review, reference, summary)
 
 -- | Creates a notebook from a lesson description and system information.
 mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
-mkNb dd comb si@SI {_sys = sys, _authors = authors} =
-  Notebook (whatsTheBigIdea si `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
+mkNb dd comb si@SI { _authors = authors } =
+  Notebook (whatsTheBigIdea si `comb` sysName si) (foldlList Comma List $ map (S . name) authors) $
   mkSections si l where
     l = mkLsnDesc si dd
 
 -- | Helper for creating the notebook sections.
 mkSections :: System -> LsnDesc -> [Section]
-mkSections si = map doit  
+mkSections si = map doit
   where
     doit :: LsnChapter -> Section
     doit (Intro i)     = mkIntro i
@@ -37,18 +37,18 @@ mkSections si = map doit
 -- | Helper for making the 'Introduction' section.
 mkIntro :: Intro -> Section
 mkIntro (IntrodProg i) = Lsn.intro i []
-  
+
 -- | Helper for making the 'Learning Objectives' section.
 mkLearnObj :: LearnObj -> Section
 mkLearnObj (LrnObjProg cs) = Lsn.learnObj cs []
 
 -- | Helper for making the 'Review' section.
 mkReview :: Review -> Section
-mkReview (ReviewProg r) = Lsn.review r [] 
+mkReview (ReviewProg r) = Lsn.review r []
 
 -- | Helper for making the 'Case Problem' section.
 mkCaseProb :: CaseProb -> Section
-mkCaseProb (CaseProbProg cp) = Lsn.caseProb cp [] 
+mkCaseProb (CaseProbProg cp) = Lsn.caseProb cp []
 
 -- | Helper for making the 'Example' section.
 mkExample:: Example -> Section
@@ -65,5 +65,3 @@ mkBib bib = Lsn.reference [UlC $ ulcc (Bib bib)] []
 -- | Helper for making the 'Appendix' section.
 mkAppndx :: Apndx -> Section
 mkAppndx (ApndxProg cs) = Lsn.appendix cs []
-
-    

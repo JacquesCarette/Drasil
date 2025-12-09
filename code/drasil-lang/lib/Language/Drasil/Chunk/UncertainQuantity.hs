@@ -6,7 +6,11 @@ module Language.Drasil.Chunk.UncertainQuantity (
   -- * Constructors
   uq, uqc,
   uqcND) where
- 
+
+import Control.Lens ((^.), makeLenses, view)
+
+import Drasil.Database (HasUID(..))
+
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), cuc')
 import Language.Drasil.Symbol
@@ -20,9 +24,6 @@ import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Uncertainty
-import Drasil.Database.UID (HasUID(..))
-
-import Control.Lens ((^.), makeLenses, view)
 
 -- | UncertQs are conceptual symbolic quantities with constraints and an 'Uncertainty'.
 -- Contains a 'ConstrConcept' and an 'Uncertainty'.
@@ -30,7 +31,7 @@ import Control.Lens ((^.), makeLenses, view)
 -- Ex. Measuring the length of a pendulum arm may be recorded with an uncertainty value.
 data UncertQ = UQ { _coco :: ConstrConcept , _unc'' :: Uncertainty }
 makeLenses ''UncertQ
-  
+
 -- | Equal if 'UID's are equal.
 instance Eq             UncertQ where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds 'UID' of the 'ConstrConcept' used to make the 'UncertQ'.
@@ -44,7 +45,7 @@ instance HasSpace       UncertQ where typ = coco . typ
 -- | Finds the 'Symbol' of the 'ConstrConcept' used to make the 'UncertQ'.
 instance HasSymbol      UncertQ where symbol c = symbol (c^.coco)
 -- | 'UncertQ's have a 'Quantity'.
-instance Quantity       UncertQ where 
+instance Quantity       UncertQ where
 -- | Finds the uncertainty of an 'UncertQ'.
 instance HasUncertainty UncertQ where unc = unc''
 -- | Finds the 'Constraint's of a 'ConstrConcept' used to make the 'UncertQ'.

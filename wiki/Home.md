@@ -22,7 +22,7 @@ If you're looking to build your project with Drasil, please have a look at the [
 <!-- TODO: At some point we should document the requirements for Drasil and its design. -->
 
 ## What is Drasil? (cont.)
-*Note: Please see the brief description in the [README](https://github.com/JacquesCarette/Drasil) before reading this.*
+*Note: Please see the brief description in the [README](https://github.com/JacquesCarette/Drasil) before reading this. See also [What If](What-If) for a more conversational explanation*
 
 Drasil is a framework for generating all of the software artifacts from a stable knowledge base, focusing currently on scientific software. The main goals are to reduce knowledge duplication and improve traceability. The artifacts are generated from a common knowledge-base using recipes written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of knowledge should be used in which artifacts, how to transform them, and more.
 
@@ -40,10 +40,4 @@ To learn more about Drasil, please read our [collection of papers](Drasil-Papers
 
 ## Issues we would like to return to
 
-- Emphasis in text, likely for definitions: [#12](../issues/12) (and comments therein)
-- Generation code for integration/summation [#72](../issues/72).
-- Addition of friction and collisions to Game physics engine: [#298](../issues/298)
-- Formatting options of lists: see side discussion in [#327](../issues/327)
-- When we get back to code generation, esp. for SSP and GamePhys, some features are missing [#372](../issues/372)
-- Add a Design Document [#417](../issues/417); should probably also use Grounded Theory do to it? [#430](../issues/430)
-- Adding the option to use other documentation-tools, besides Doxygen, such as Javadoc, in generated code [#1794](../issues/1794)
+See [Cold Issues](Cold-Issues).

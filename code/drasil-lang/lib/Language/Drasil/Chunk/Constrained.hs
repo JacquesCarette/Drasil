@@ -8,6 +8,8 @@ module Language.Drasil.Chunk.Constrained (
 
 import Control.Lens ((^.), makeLenses, view)
 
+import Drasil.Database (HasUID(..))
+
 import Language.Drasil.Chunk.Concept (cw, dcc, dccWDS)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr, dqdNoUnit)
 import Language.Drasil.Chunk.Unital (uc')
@@ -23,11 +25,10 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage)
-import Drasil.Database.UID (HasUID(..))
 
 -- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')
 -- with 'Constraint's and maybe a reasonable value (no units!).
--- Similar to 'ConstrainedChunk' but includes a definition and domain. 
+-- Similar to 'ConstrainedChunk' but includes a definition and domain.
 --
 -- Ex. Measuring the length of a pendulum arm could be a concept that has some reasonable value
 -- (between 1 cm and 2 m) and the constraint that the length cannot be a negative value.
@@ -47,7 +48,7 @@ instance Idea          ConstrConcept where getA = getA . view defq
 instance HasSpace      ConstrConcept where typ = defq . typ
 -- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
--- | 'ConstrConcept's have a 'Quantity'. 
+-- | 'ConstrConcept's have a 'Quantity'.
 instance Quantity      ConstrConcept where
 -- | Finds definition of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance Definition    ConstrConcept where defn = defq . defn

@@ -1,13 +1,12 @@
 module Drasil.SWHS.Choices where
 
 -- import Language.Drasil (QDefinition)
--- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
---   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),  
---   Modularity(..), Structure(..), ConstantStructure(..), 
---   ConstantRepr(..), matchConcepts, AuxFile(..), 
+-- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
+--   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
+--   Modularity(..), Structure(..), ConstantStructure(..),
+--   ConstantRepr(..), matchConcepts, AuxFile(..),
 --   Visibility(..), defaultChoices)
 -- import Drasil.SWHS.Body (fullSI)
-
 
 -- code :: CodeSpec
 -- code = codeSpec fullSI choices []

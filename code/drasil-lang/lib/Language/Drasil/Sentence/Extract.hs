@@ -2,11 +2,12 @@
 -- chunk database in order to render terms, symbols, and references properly.
 module Language.Drasil.Sentence.Extract(sdep, shortdep, lnames, lnames') where
 
-import Drasil.Database.UID (UID)
+import Data.Containers.ListUtils (nubOrd)
+
+import Drasil.Database (UID)
+
 import Language.Drasil.Sentence(Sentence(..), SentenceStyle(..))
 import Language.Drasil.ModelExpr.Extract (meNames)
-
-import Data.Containers.ListUtils (nubOrd)
 
 -- | Generic traverse of all positions that could lead to /symbolic/ 'UID's from 'Sentence's.
 getUIDs :: Sentence -> [UID]
@@ -15,6 +16,7 @@ getUIDs (Ch TermStyle _ _)  = []
 getUIDs (Ch PluralTerm _ _) = []
 getUIDs (SyCh a)            = [a]
 getUIDs Sy {}               = []
+getUIDs NP {}               = []
 getUIDs S {}                = []
 getUIDs P {}                = []
 getUIDs Ref {}              = []
@@ -32,6 +34,7 @@ getUIDshort (Ch TermStyle _ _)  = []
 getUIDshort (Ch PluralTerm _ _) = []
 getUIDshort SyCh {}             = []
 getUIDshort Sy {}               = []
+getUIDshort NP {}               = []
 getUIDshort S {}                = []
 getUIDshort Percent             = []
 getUIDshort P {}                = []
@@ -56,6 +59,7 @@ lnames :: Sentence -> [UID]
 lnames Ch {}       = []
 lnames SyCh {}     = []
 lnames Sy {}       = []
+lnames NP {}       = []
 lnames S {}        = []
 lnames Percent     = []
 lnames P {}        = []

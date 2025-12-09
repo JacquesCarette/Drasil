@@ -1,15 +1,14 @@
 module Drasil.DblPend.Choices where
 
-import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
-  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
+import Language.Drasil.Code (Choices(..), Comments(..), ExtLib(..),
+  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
+  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..),
   AuxFile(..), Visibility(..), defaultChoices, makeArchit, makeData,
-  makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats)
+  makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats)
+import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg,
+  apacheODEPckg, odeintPckg)
 
-import Drasil.DblPend.Body (fullSI)
-
-code :: CodeSpec
-code = codeSpec fullSI choices []
+import Drasil.DblPend.ODEs (dblPenODEInfo)
 
 choices :: Choices
 choices = defaultChoices {

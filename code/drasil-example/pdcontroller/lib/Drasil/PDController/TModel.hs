@@ -1,19 +1,25 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.PDController.TModel where
 
+import Control.Lens ((^.))
+
+import Language.Drasil
+import qualified Language.Drasil as DrasilLang
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
+import qualified Language.Drasil.Sentence.Combinators as S
+
+import Data.Drasil.Citations(laplaceWiki)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.Math (posInf, negInf)
+
+import Theory.Drasil (TheoryModel, tm, othModel')
+
 import Drasil.PDController.Assumptions
 import Drasil.PDController.Concepts
 import Drasil.PDController.References
-import Language.Drasil
-import qualified Language.Drasil as DrasilLang
-import Theory.Drasil (TheoryModel, tm, othModel')
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.Citations(laplaceWiki)
 import Drasil.PDController.Unitals
-import Data.Drasil.Quantities.Math (posInf, negInf)
 
 theoreticalModels :: [TheoryModel]
 theoreticalModels = [tmLaplace, tmInvLaplace, tmSOSystem]
@@ -36,14 +42,14 @@ laplaceRC = makeRC "laplaceRC" (cn' "Laplace Transform") EmptyS laplaceRel
 laplaceRel :: Relation
 laplaceRel
   = sy dqdLaplaceTransform $=
-      defint (eqSymb time) (sy negInf) (sy posInf) (sy dqdFxnTDomain 
+      defint (eqSymb time) (sy negInf) (sy posInf) (sy dqdFxnTDomain
       $* DrasilLang.exp (neg (sy dqdFreqDomain) $* sy time))
 
 laplaceDesc :: Sentence
 laplaceDesc
   = foldlSent
       [(S "Bilateral Laplace Transform" !.),
-       atStartNP (theGen atStart' ccLaplaceTransform),
+       D.toSent (atStartNP (theGen (\ x -> atStartNP' (x ^. term)) ccLaplaceTransform)),
          S "are typically inferred from a pre-computed table of", titleize' ccLaplaceTransform,
          sParen (refS laplaceWiki)]
 
@@ -97,16 +103,16 @@ tmSOSystemRC
 
 soSystemRel :: Relation
 soSystemRel
-  = exactDbl 1 
-    $/ (sy mass $* square (sy dqdFreqDomain) 
+  = exactDbl 1
+    $/ (sy mass $* square (sy dqdFreqDomain)
     $+ (sy dqdDampingCoeff $* sy dqdFreqDomain)
     $+ sy dqdStiffnessCoeff)
 
 soSystemDesc :: Sentence
 soSystemDesc
   = foldlSent
-      [atStartNP (the ccTransferFxn), 
+      [D.toSent (atStartNP (the ccTransferFxn)),
         fromSource apwrPlantTxFnx
         `S.ofA` phrase secondOrderSystem,
-        sParen (S "mass-spring-damper"), 
+        sParen (S "mass-spring-damper"),
         S "is characterized by this equation"]

@@ -1,10 +1,9 @@
-module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
+module Drasil.HGHC.Body (si, mkSRS) where
 
-import Drasil.System (mkSystem, SystemKind(Specification))
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.SRSDocument
-import Database.Drasil.ChunkDB (cdb)
-import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Generator (cdb)
+import Drasil.System (mkSystem, SystemKind(Specification))
 
 import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
@@ -13,15 +12,6 @@ import Drasil.HGHC.MetaConcepts (progName)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
 
-srs :: Document
-srs = mkDoc mkSRS S.forT si
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
-
 si :: System
 si = mkSystem
   progName Specification [spencerSmith]
@@ -29,8 +19,7 @@ si = mkSystem
   symbols
   [] [] dataDefs [] []
   htInputs htOutputs ([] :: [ConstrConcept]) []
-  symbMap
-
+  symbMap []
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -57,4 +46,4 @@ ideaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) dataDefs [] [] [] [] [] [] []
+  ([] :: [UnitDefn]) dataDefs [] [] [] [] [] []

@@ -18,7 +18,7 @@ module Language.Drasil.Space (
   Dimension(..), scalarS, vect2DS, vect3DS, vectS, vectNDS, 
   bivector2DS, bivector3DS, bivectorS, bivectorNDS,
   multivector2DS, multivector3DS, multivectorS, multivectorNDS,
-  ClifKind(..)
+  ClifKind(..), realVect, vecDim, vect2D, vect3D
 
 ) where
 
@@ -51,25 +51,12 @@ data Space where
     Void      :: Space
     -- | Clifford algebra objects (Clifs) with a dimension and kind (e.g., Scalar, Vector, Bivector, Multivector)
     ClifS     :: Dimension -> ClifKind -> Space -> Space
-    -- ClifS (Fixed 3) [0,1,2] Real  -- Contains grades 0, 1, 2
-    -- ClifS (Fixed 3) [1] Real  --pure vector 
-
+    Vect      :: Space -> Space
   deriving (Eq, Show)
-
-  -- grade selection can be undefined if we want to create pure grade objects (vectors..) bc clifkinf implies the grade
-  -- gradeselect fct handles grade extraction at runtime
 
 -- | Kinds of Clifford algebra objects.
-data ClifKind = Scalar | Vector | Bivector | Multivector --here the grade is implicit but 
--- with the gradeSelect function i have a type lvl and runtime lvl inconsistency
+data ClifKind = Scalar | Vector | Bivector | Multivector
   deriving (Eq, Show)
-
--- To explicitly define the grade its either I change the ClifKind to Natural
--- i add both grade and kind
-
--- Suggestion: In order to support things like Fixed (a + b) in the future, 
--- we want to use an Expr or symbolic type instead of Natural / String. 
--- Not needed now, but worth keeping in mind.
 
 -- | The dimension of a clif
 data Dimension where
@@ -78,25 +65,25 @@ data Dimension where
   -- | Variable dimension
   VDim  :: String -> Dimension
   deriving (Eq, Show)
-
--- Example of a 3D vector of real numbers using ClifS
--- exampleVector :: Space
--- exampleVector = ClifS (Fixed 3) Vector Real
-
--- A scalar (real number) using ClifS
--- exampleScalar :: Space
--- exampleScalar = ClifS (Fixed 1) Scalar Real
-
--- An n-dimensional multivector of real numbers:
--- ClifS (VDim "n") Multivector Real
-
--- TODO: check if non-real numbers in Clifs make any sense; allowing for now to avoid errors in offending examples
--- as we figure out matrices
--- | Only allow Real as the inner space for now.
 checkClifSpace :: Space -> Bool
 checkClifSpace Real = True
 checkClifSpace _ = True --error $ "Non-real clif spaces unsupported"
 
+-- | Helper function to create Clifford vector spaces of a given dimension
+realVect :: Dimension -> Space
+realVect d = ClifS d Vector Real
+
+-- | Common dimension constants
+vecDim :: Dimension
+vecDim = Fixed 2
+
+-- | Direct 2D vector space (optimized)
+vect2D :: Space
+vect2D = ClifS (Fixed 2) Vector Real
+
+-- | Direct 3D vector space (optimized)
+vect3D :: Space
+vect3D = ClifS (Fixed 3) Vector Real
 -- | Helper that constructs a scalar Clifford object
 scalarS :: Space -> Space
 scalarS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 1) Scalar s
@@ -214,3 +201,85 @@ isBasicNumSpace Actor {}     = False
 isBasicNumSpace Function {}  = False
 isBasicNumSpace Void         = False
 isBasicNumSpace (ClifS _ _ s) = isBasicNumSpace s
+isBasicNumSpace (Vect s)     = isBasicNumSpace s
+
+-- | Assert that a 'Space' is 'Real' or return a formatted error message.
+assertReal :: Space -> (String -> String) -> Either String ()
+assertReal Real _   = Right ()
+assertReal s    msg = Left $ msg $ show s
+
+-- | Assert that a 'Space' is "numeric" or return a formatted error message.
+assertNumeric :: Space -> (String -> String) -> Either String ()
+assertNumeric s msg
+  | isBasicNumSpace s = Right ()
+  | otherwise         = Left $ msg $ show s
+
+-- | Assert that a numeric 'Space' is not 'Natural' or return a formatted error
+-- message.
+assertNonNatNumeric :: Space -> (String -> String) -> Either String ()
+assertNonNatNumeric s msg
+  | isBasicNumSpace s && s /= Natural = Right ()
+  | otherwise                         = Left $ msg $ show s
+
+-- | Assert that two numeric 'Space's are equivalent or return a formatted error
+-- message.
+assertEquivNumeric ::  Space -> Space -> (String -> String -> String) -> Either String ()
+assertEquivNumeric l r msg
+  | isBasicNumSpace l && l == r = Right ()
+  | otherwise                   = Left $ msg (show l) (show r)
+
+-- | Assert that a 'Space' is an index-like type (Integer or Natural) or return a
+-- formatted error message.
+assertIndexLike :: Space -> (String -> String) -> Either String ()
+assertIndexLike Integer _   = Right ()
+assertIndexLike Natural _   = Right ()
+assertIndexLike t       msg = Left $ msg $ show t
+
+-- | Assert that a 'Space' is a 'Boolean' or return a formatted error message.
+assertBoolean :: Space -> (String -> String) -> Either String ()
+assertBoolean Boolean _   = Right ()
+assertBoolean sp      msg = Left $ msg $ show sp
+
+-- | Assert that a 'Space' is a 'Set' and return either the element type or a
+-- formatted error message.
+assertSet :: Space -> (String -> String) -> Either String Space
+assertSet (Set t) _   = Right t
+assertSet s       msg = Left $ msg $ show s
+
+-- | Assert that a 'Space' is a 'Vect' and return either the element type or a
+-- formatted error message.
+assertVector :: Space -> (String -> String) -> Either String Space
+assertVector (Vect t) _   = Right t
+assertVector s        msg = Left $ msg $ show s
+
+-- | Assert that a 'Space' is a numeric vector (i.e., a vector of a basic
+-- numeric type) and return either the numeric type or a formatted error
+-- message.
+assertNumericVector :: Space -> (String -> String) -> Either String Space
+assertNumericVector (Vect t) _ | isBasicNumSpace t = Right t
+assertNumericVector s msg                          = Left $ msg $ show s
+
+-- | Assert that a 'Space' is a non-'Natural' numeric vector and return either
+-- the numeric type or a formatted error message.
+assertNonNatNumVector :: (String -> String) -> Space -> Either String Space
+assertNonNatNumVector msg vn@(Vect Natural)              = Left $ msg $ show vn
+assertNonNatNumVector _   (Vect et) | isBasicNumSpace et = Right et
+assertNonNatNumVector msg t                              = Left $ msg $ show t
+
+-- | Assert that a 'Space' is a 'Vect' of 'Real's or return a formatted error
+-- message.
+assertRealVector :: Space -> (String -> String) -> Either String ()
+assertRealVector (Vect Real) _   = Right ()
+assertRealVector t           msg = Left $ msg $ show t
+
+-- | Assert that a 'Space' is a 'Function', returning either the parameters and
+-- output type or a formatted error message.
+assertFunction :: Space -> (String -> String) -> Either String (NE.NonEmpty Primitive, Primitive)
+assertFunction (Function params out) _   = Right (params, out)
+assertFunction s                     msg = Left $ msg $ show s
+
+-- | Assert that a 'Space' is anything but a 'Function' or return a formatted
+-- error message.
+assertNonFunction :: Space -> (String -> String) -> Either String ()
+assertNonFunction f@Function{} msg = Left $ msg $ show f
+assertNonFunction _            _   = Right ()

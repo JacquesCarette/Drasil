@@ -38,4 +38,3 @@ spaceToCodeType S.Void           = [Void]
 spaceToCodeType (S.Function i t) = [Func is ts | is <- ins, ts <- trgs]
   where trgs = spaceToCodeType t
         ins  = map spaceToCodeType (toList i)
-

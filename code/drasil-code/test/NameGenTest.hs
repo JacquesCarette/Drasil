@@ -22,7 +22,7 @@ helper :: SharedProg r => SMethod r
 helper = function "helper" private void [param temp] $ body
   [block [listDec 2 result local],
     listSlice result (valueOf temp) (Just (litInt 1)) (Just (litInt 3)) Nothing,
-    block [assert (listSize (valueOf result) ?== litInt 2) (litString "Result list should have 2 elements after slicing.")]]  
+    block [assert (listSize (valueOf result) ?== litInt 2) (litString "Result list should have 2 elements after slicing.")]]
   where
     temp = var "temp" (listType int)
     result = var "result" (listType int)

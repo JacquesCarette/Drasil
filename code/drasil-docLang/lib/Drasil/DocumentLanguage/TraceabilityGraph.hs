@@ -3,11 +3,10 @@
 module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
-import Database.Drasil
+import Drasil.Database
 import Drasil.Database.SearchTools (termResolve', shortForm)
 import Drasil.System hiding (purpose)
 import Control.Lens ((^.))
-import qualified Data.Map as Map
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat, traceMReferees, traceMReferrers,
   traceMColumns, layoutUIDs, traceMIntro)
 import Drasil.Sections.TraceabilityMandGs (tvAssumps,
@@ -75,18 +74,16 @@ mkGraphNodes entry si col = NF {nodeUIDs = nodeContents, nodeLabels = map (check
         checkNodeContents :: [UID] -> String
         checkNodeContents [] = ""
         checkNodeContents (x:_) = checkUIDAbbrev si x
-        nodeContents = traceMReferees entryF cdb
-        cdb = _systemdb si
-        entryF = layoutUIDs [entry] cdb
+        nodeContents = traceMReferees entryF si
+        entryF = layoutUIDs [entry] si
 
 -- | Creates the graph edges based on the relation of the first list of sections to the second.
 -- Also needs the system information. Return value is of the form (Section, [Dependencies]).
 mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> System -> [(UID, [UID])]
-mkGraphEdges cols rows si = makeTGraph (traceGRowHeader rowf si) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb
+mkGraphEdges cols rows si = makeTGraph (traceGRowHeader rowf si) (traceMColumns colf rowf si) $ traceMReferees colf si
     where
-        cdb = _systemdb si
-        colf = layoutUIDs cols cdb
-        rowf = layoutUIDs rows cdb
+        colf = layoutUIDs cols si
+        rowf = layoutUIDs rows si
 
 -- | Helper for making graph edges. Taken from Utils.Drasil's traceability matrix relation finder.
 -- But, instead of marking "X" on two related ideas, it makes them an edge.
@@ -100,7 +97,6 @@ makeTGraph rowName rows cols = zip rowName [zipFTable' x cols | x <- rows]
 checkUID :: UID -> System -> UID
 checkUID t si
   | isRegistered t s = t
-  | Map.member t (labelledcontentTable s) = t
   | otherwise = error $ show t ++ "Caught."
   where s = si ^. systemdb
 
@@ -112,7 +108,7 @@ checkUIDAbbrev si t
   | Just x <- find t s :: Maybe GenDefn         = abrv x
   | Just x <- find t s :: Maybe TheoryModel     = abrv x
   | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" $ shortForm $ termResolve' s $ sDom $ cdom x
-  | Map.member t (labelledcontentTable s)       = show t
+  | Just _ <- find t s :: Maybe LabelledContent = show t
   | Just _ <- find t s :: Maybe Citation        = ""
   | otherwise = error $ show t ++ "Caught."
   where s = si ^. systemdb
@@ -125,15 +121,15 @@ checkUIDRefAdd si t
   | Just x <- find t s :: Maybe GenDefn         = getAdd $ getRefAdd x
   | Just x <- find t s :: Maybe TheoryModel     = getAdd $ getRefAdd x
   | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" (shortForm $ termResolve' s $ sDom $ cdom x) ++ ":" ++ getAdd (getRefAdd x)
-  | Map.member t (labelledcontentTable s)       = show t
+  | Just _ <- find t s :: Maybe LabelledContent = show t
   | Just _ <- find t s :: Maybe Citation        = ""
   | otherwise                                   = error $ show t ++ "Caught."
   where s = si ^. systemdb
 
 -- | Helper that finds the header of a traceability matrix.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.
-traceGHeader :: (ChunkDB -> [UID]) -> System -> [UID]
-traceGHeader f c = map (`checkUID` c) $ f $ _systemdb c
+traceGHeader :: (System -> [UID]) -> System -> [UID]
+traceGHeader f c = map (`checkUID` c) $ f c
 
 -- | Helper that finds the headers of the traceability matrix rows.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.
@@ -162,9 +158,14 @@ traceGLst = UlC $ ulcc $ Enumeration $ Bullet $ map (, Nothing) folderList'
 
 -- | The Traceability Graph contents.
 traceGCon :: String -> [Contents] -- FIXME: HACK: We're generating "LlC"s of the traceability graphs multiple times... See DocumentLanguage.hs' mkTraceabilitySec for the other spot.
-traceGCon ex = map LlC (zipWith (traceGraphLC ex) traceGFiles traceGUIDs)
+traceGCon ex = map LlC (genTraceGraphLabCons ex)
             ++ [mkParagraph $ S "For convenience, the following graphs can be\
                \ found at the links below:", traceGLst]
+
+-- | Generate the `LabelledContent` chunks, specialized to a specific example
+-- (and its path).
+genTraceGraphLabCons :: String -> [LabelledContent]
+genTraceGraphLabCons ex = zipWith (traceGraphLC ex) traceGFiles traceGUIDs
 
 -- | Generates traceability graphs as figures on an SRS document.
 traceGraphLC :: String -> FilePath -> UID -> LabelledContent

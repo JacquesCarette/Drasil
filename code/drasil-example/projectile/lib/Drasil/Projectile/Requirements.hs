@@ -1,10 +1,12 @@
-module Drasil.Projectile.Requirements (funcReqs, nonfuncReqs) where
+module Drasil.Projectile.Requirements (
+  funcReqs, nonfuncReqs, funcReqsTables
+) where
 
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, 
-  mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR)
+import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
+  mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, inReqWTab)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (datumConstraint,
@@ -12,13 +14,20 @@ import Data.Drasil.Concepts.Documentation (datumConstraint,
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
 
-import Drasil.Projectile.IMods (landPosIM, messageIM, offsetIM, timeIM)
-import Drasil.Projectile.Unitals (flightDur, landPos, message, offset)
+import Drasil.Projectile.IMods (landPosIM, offsetIM, timeIM)
+import Drasil.Projectile.Unitals (flightDur, landPos, offset, inputs)
 
 {--Functional Requirements--}
 
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInVals, calcValues, outputValues]
+funcReqs = [inputValues, verifyInVals, calcValues, outputValues]
+
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab Nothing inputs
 
 verifyInVals, calcValues, outputValues :: ConceptInstance
 
@@ -35,14 +44,12 @@ calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
   foldlList Comma List [
     ch flightDur +:+ fromSource timeIM,
     ch landPos   +:+ fromSource landPosIM,
-    ch offset    +:+ fromSource offsetIM,
-    ch message   +:+ fromSource messageIM
+    ch offset    +:+ fromSource offsetIM
   ]]
 outputValuesDesc = atStart output_ +:+. outputs
   where
-    outputs = foldlList Comma List $ map foldlSent_ [ 
+    outputs = foldlList Comma List $ map foldlSent_ [
         [ch flightDur, fromSource timeIM],
-        [ch message, fromSource messageIM], 
         [ch offset, fromSource offsetIM]
       ]
 
@@ -53,7 +60,7 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 
 correct :: ConceptInstance
 correct = mkCorrectNFR "correct" "Correctness"
- 
+
 verifiable :: ConceptInstance
 verifiable = mkVerifiableNFR "verifiable" "Verifiability"
 
@@ -68,4 +75,3 @@ maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"
 
 portable :: ConceptInstance
 portable = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portability"
-  

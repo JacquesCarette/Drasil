@@ -1,9 +1,9 @@
 -- | Defines operator precedence.
 module Language.Drasil.ModelExpr.Precedence where
 
-import Language.Drasil.ModelExpr.Lang 
+import Language.Drasil.ModelExpr.Lang
 
--- These precedences are inspired from Haskell/F# 
+-- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
 

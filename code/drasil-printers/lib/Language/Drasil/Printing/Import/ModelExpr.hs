@@ -249,4 +249,3 @@ renderRealInt st s (UpTo (Inc,a))   = P.Row [symbol s, P.MO P.LEq, modelExpr a s
 renderRealInt st s (UpTo (Exc,a))   = P.Row [symbol s, P.MO P.Lt,  modelExpr a st]
 renderRealInt st s (UpFrom (Inc,a)) = P.Row [symbol s, P.MO P.GEq, modelExpr a st]
 renderRealInt st s (UpFrom (Exc,a)) = P.Row [symbol s, P.MO P.Gt,  modelExpr a st]
-

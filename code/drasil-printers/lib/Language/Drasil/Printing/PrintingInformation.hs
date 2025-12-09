@@ -1,13 +1,21 @@
 {-# LANGUAGE TemplateHaskell #-}
 -- | Defines types and functions to gather all the information needed for printing.
-module Language.Drasil.Printing.PrintingInformation where
+module Language.Drasil.Printing.PrintingInformation (
+    Notation(..), HasPrintingOptions(..)
+  , PrintingConfiguration, notation
+  , PrintingInformation
+  , syst, stg, configuration
+  , piSys, refFind
+  , defaultConfiguration, plainConfiguration
+) where
 
 import Control.Lens (makeLenses, Lens', (^.))
+import qualified Data.Map.Strict as M
+import Data.Maybe (fromMaybe)
 
-import Drasil.System (systemdb, System)
-import Database.Drasil (ChunkDB)
-
-import Language.Drasil (Stage(..))
+import Drasil.Database (UID)
+import Language.Drasil (Stage(..), Reference)
+import Drasil.System (System, refTable)
 
 -- | Notation can be scientific or for engineering.
 data Notation = Scientific
@@ -27,7 +35,7 @@ instance HasPrintingOptions  PrintingConfiguration where getSetting = notation
 
 -- | Printing information contains a database, a stage, and a printing configuration.
 data PrintingInformation = PI
-                         { _ckdb :: ChunkDB
+                         { _syst :: System
                          , _stg :: Stage
                          , _configuration :: PrintingConfiguration
                          }
@@ -38,8 +46,16 @@ instance HasPrintingOptions  PrintingInformation where getSetting  = configurati
 
 -- | Builds a document's printing information based on the system information.
 piSys :: System -> Stage -> PrintingConfiguration -> PrintingInformation
-piSys si = PI (si ^. systemdb)
+piSys = PI
+
+refFind :: UID -> PrintingInformation -> Reference
+refFind u pinfo = fromMaybe (error $ "`" ++ show u ++ "` not found in Reference table!!!")
+  $ M.lookup u $ pinfo ^. syst . refTable
 
 -- | Default configuration is for engineering.
 defaultConfiguration :: PrintingConfiguration
 defaultConfiguration = PC Engineering
+
+-- | Simple printing configuration is scientific.
+plainConfiguration :: PrintingConfiguration
+plainConfiguration = PC Scientific

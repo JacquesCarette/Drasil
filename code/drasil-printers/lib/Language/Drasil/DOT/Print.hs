@@ -1,11 +1,11 @@
 -- | Defines printer types and functions for generating traceability graphs (as .dot files).
 module Language.Drasil.DOT.Print where
 
-import Language.Drasil
 import Data.List (intercalate)
-import System.IO
-import System.Directory
+import System.IO (Handle, IOMode(WriteMode), openFile, hPutStrLn, hClose)
+import System.Directory (setCurrentDirectory)
 
+import Drasil.Database (UID)
 import Utils.Drasil (createDirIfMissing)
 
 -- * Types

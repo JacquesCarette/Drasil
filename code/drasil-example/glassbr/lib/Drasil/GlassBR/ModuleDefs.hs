@@ -5,17 +5,16 @@
 module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Drasil.Code.CodeExpr (CodeExpr, LiteralC(int))
-import Language.Drasil (DefinedQuantityDict, Space(..), implVar, nounPhraseSP, vect3DS,
-  label, sub, HasSymbol(..), HasUID, Symbol, ExprC(..))
-
+import Drasil.Database (HasUID)
+import Language.Drasil (Space(..), nounPhraseSP,
+  label, sub, HasSymbol(..), Symbol, ExprC(..), DefinedQuantityDict, implVar, vect3DS)
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
-import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
-  asVC, funcDef, fDecDef, ffor, funcData, quantvar, 
+import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod,
+  asVC, funcDef, fDecDef, ffor, funcData, quantvar,
   multiLine, packmod, repeated, singleLine)
 import qualified Drasil.GlassBR.Unitals as U
 import Language.Drasil.Printers
-
 
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]
@@ -23,7 +22,7 @@ allMods = [readTableMod, interpMod]
 -- It's a bit odd that this has to be explicitly built here...
 implVars :: [DefinedQuantityDict]
 implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
-  i, j, k, z, zvect3DSor, yMatrix, xMatrix, y, arr, filename,
+  i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename,
   y_2, y_1, x_2, x_1, x]
 
 --from TSD.txt:
@@ -35,7 +34,7 @@ readTableMod = packmod "ReadTable"
 readTable :: Func
 readTable = funcData "read_table"
   "Reads glass ASTM data from a file with the given file name"
-  [ singleLine (repeated [quantvar zvect3DSor]) ',',
+  [ singleLine (repeated [quantvar zVector]) ',',
     multiLine (repeated (map quantvar [xMatrix, yMatrix])) ','
   ]
 
@@ -61,7 +60,7 @@ x    = var "x"  "x-coordinate to interpolate at"
   "the x-coordinate to interpolate at" lX Real -- = params.wtnt from mainFun.py
 
 v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
-  i, j, k, z, zvect3DSor, yMatrix, xMatrix, y, arr, filename :: DefinedQuantityDict
+  i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename :: DefinedQuantityDict
 i = var "i" "index" "the index" lI Natural
 j = var "j" "index" "the index" lJ Natural
 k = var "k" "index" "the index" (sub lK two) Natural     
@@ -69,8 +68,8 @@ v = var "v" "value whose index will be found" "the value whose index will be fou
 y = var "y" "y-coordinate to interpolate at" "the y-coordinate to interpolate at" lY Real
 z = var "z" "z-coordinate to interpolate at" "the z-coordinate to interpolate at" lZ Real
 
-zvect3DSor = var "zvect3DSor" "list of z values" "the list of z values"
-  (sub lZ (label "vect3DSor")) (vect3DS Real)               
+zVector = var "zVector" "list of z values" "the list of z values"
+  (sub lZ (label "vector")) (vect3DS Real)               
 yMatrix = var "yMatrix" "lists of y values at different z values" "the lists of y values at different z values"
   (sub lY (label "matrix")) (vect3DS $ vect3DS Real)        
 xMatrix = var "xMatrix" "lists of x values at different z values" "the lists of x values at different z values"
@@ -141,13 +140,13 @@ interpOver ptx pty ind vv =
 -- Note how this one uses a semantic function in its body
 -- But it is also 'wrong' in the sense that it assumes x_1 <= x <= x_2
 linInterpCT :: Func
-linInterpCT = funcDef "lin_interp" "Performs linear interpolation" 
+linInterpCT = funcDef "lin_interp" "Performs linear interpolation"
   [x_1, y_1, x_2, y_2, x] Real (Just "y value interpolated at given x value")
   [ FRet $ onLine (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
 
 findCT :: Func
-findCT = funcDef "find" 
-  "Finds the array index for a value closest to the given value" 
+findCT = funcDef "find"
+  "Finds the array index for a value closest to the given value"
   [arr, v] Natural (Just "index of given value in given array")
   [
     ffor i (dim (sy arr) $- int 1)
@@ -169,17 +168,17 @@ extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix"
 
 interpY :: Func
 interpY = funcDef (showHasSymbImpl U.interpY)
-  "Linearly interpolates a y value at given x and z values" 
+  "Linearly interpolates a y value at given x and z values"
   [filename, x, z] Real (Just "y value interpolated at given x and z values")
   [
   -- hack
   fDecDef xMatrix (matrix [[]]),
   fDecDef yMatrix (matrix [[]]),
-  fDecDef zvect3DSor (matrix [[]]),
+  fDecDef zVector (matrix [[]]),
   --
-  call readTable [filename, zvect3DSor, xMatrix, yMatrix],
+  call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
-    i     $:= find zvect3DSor z,
+    i     $:= find zVector z,
     x_z_1 $:= getCol xMatrix i (int 0),
     y_z_1 $:= getCol yMatrix i (int 0),
     x_z_2 $:= getCol xMatrix i (int 1),
@@ -190,22 +189,22 @@ interpY = funcDef (showHasSymbImpl U.interpY)
       [ FThrow "Interpolation of y failed" ],
     y_1 $:= linInterp (interpOver x_z_1 y_z_1 j x),
     y_2 $:= linInterp (interpOver x_z_2 y_z_2 k x),
-    FRet $ linInterp [ vLook zvect3DSor i (int 0), sy y_1, vLook zvect3DSor i (int 1), sy y_2, sy z ]
+    FRet $ linInterp [ vLook zVector i (int 0), sy y_1, vLook zVector i (int 1), sy y_2, sy z ]
   ]
 
 interpZ :: Func
 interpZ = funcDef (showHasSymbImpl U.interpZ)
-  "Linearly interpolates a z value at given x and y values" 
+  "Linearly interpolates a z value at given x and y values"
   [filename, x, y] Real (Just "z value interpolated at given x and y values")
   [
     -- hack
   fDecDef xMatrix (matrix [[]]),
   fDecDef yMatrix (matrix [[]]),
-  fDecDef zvect3DSor (matrix [[]]),
+  fDecDef zVector (matrix [[]]),
   --
-  call readTable [filename, zvect3DSor, xMatrix, yMatrix],
+  call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
-    ffor i (dim (sy zvect3DSor) $- int 1)
+    ffor i (dim (sy zVector) $- int 1)
       [
         x_z_1 $:= getCol xMatrix i (int 0),
         y_z_1 $:= getCol yMatrix i (int 0),
@@ -218,13 +217,13 @@ interpZ = funcDef (showHasSymbImpl U.interpZ)
         y_1 $:= linInterp (interpOver x_z_1 y_z_1 j x),
         y_2 $:= linInterp (interpOver x_z_2 y_z_2 k x),
         FCond ((sy y_1 $<= sy y) $&& (sy y $<= sy y_2))
-          [ FRet $ linInterp [ sy y_1, vLook zvect3DSor i (int 0), sy y_2, vLook zvect3DSor i (int 1), sy y ]
+          [ FRet $ linInterp [ sy y_1, vLook zVector i (int 0), sy y_2, vLook zVector i (int 1), sy y ]
           ] []
       ],
     FThrow "Interpolation of z failed"
   ]
 
 interpMod :: Mod
-interpMod = packmod "Interpolation" 
+interpMod = packmod "Interpolation"
   "Provides functions for linear interpolation on three-dimensional data" []
   [linInterpCT, findCT, extractColumnCT, interpY, interpZ]

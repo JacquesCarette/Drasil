@@ -7,6 +7,7 @@ import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil
 import Utils.Drasil (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
@@ -21,7 +22,6 @@ import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
 import Drasil.GamePhysics.Unitals (accj, forcej, massA, massj, normalVect,
   timeC, torquej, velA, velj, angAccj)
 
-
 import Data.Drasil.Concepts.Documentation (condition, goal, output_)
 import Data.Drasil.Concepts.Math (equation, ode)
 import Data.Drasil.Concepts.Physics (rigidBody, motion)
@@ -34,7 +34,7 @@ iMods = [transMot, rotMot, col2D]
 
 {-- Force on the translational motion  --}
 transMot :: InstanceModel
-transMot = imNoRefs (equationalModel' transMotQD) 
+transMot = imNoRefs (equationalModel' transMotQD)
   [ qwC velj               $ UpFrom (Exc, exactDbl 0)
   , qwC time               $ UpFrom (Exc, exactDbl 0)
   , qwC gravitationalAccel $ UpFrom (Exc, exactDbl 0)
@@ -49,27 +49,27 @@ transMotQD = mkQuantDef accj transMotExpr
 
 transMotDesc, transMotOutputs :: Sentence
 transMotDesc = foldlSent [S "The above", phrase equation, S "expresses the total",
-  phraseNP (acceleration `ofThe` rigidBody), P lJ,
+  D.toSent (phraseNP (acceleration `ofThe` rigidBody)), P lJ,
   S "as the sum" `S.of_` phrase gravitationalAccel, fromSource accelGravityGD `S.and_`
   phrase acceleration, S "due to applied", phrase force, eS (apply1 forcej time) +:+.
   fromSource newtonSL, S "The resultant", plural output_ `S.are`
   S "then obtained from this", phrase equation, S "using",
   foldlList Comma List (map refS [linDispDD, linVelDD, linAccDD])]
-transMotOutputs = foldlSent [atStartNP (output_ `the_ofThe` inModel),
- S "will be the functions" `S.of_` phraseNP (position `and_` velocity),
- S "over time that satisfy the", short ode `S.for` phraseNP (the acceleration) `sC`
- S "with the given initial", (plural condition `S.for` phraseNP (position `and_`
- velocity) !.), atStartNP (the motion), S "is translational" `sC` S "so the",
- phraseNP (position `and_` velocity), S "functions are for the",
+transMotOutputs = foldlSent [D.toSent (atStartNP (output_ `the_ofThe` inModel)),
+ S "will be the functions" `S.of_` D.toSent (phraseNP (position `and_` velocity)),
+ S "over time that satisfy the", short ode `S.for` D.toSent (phraseNP (the acceleration)) `sC`
+ S "with the given initial", (plural condition `S.for` D.toSent (phraseNP (position `and_`
+ velocity)) !.), D.toSent (atStartNP (the motion)), S "is translational" `sC` S "so the",
+ D.toSent (phraseNP (position `and_` velocity)), S "functions are for the",
  phrase centreMass, fromSource ctrOfMassDD]
 
-transMotDeriv :: Derivation 
+transMotDeriv :: Derivation
 transMotDeriv = mkDerivName (phrase transMot)
       (weave [transMotDerivStmts, transMotDerivEqns])
 
 transMotDerivStmts :: [Sentence]
 transMotDerivStmts = [
-    foldlSent [S "We may calculate the total acceleration" `S.of_` S "rigid body", 
+    foldlSent [S "We may calculate the total acceleration" `S.of_` S "rigid body",
       P lJ, S "by calculating the derivative" `S.of_` S "it's velocity with respect to time", fromSource linAccDD],
     S "Performing the derivative, we obtain:"
   ]
@@ -80,13 +80,13 @@ transMotDerivEqns = map eS [transMotExprDeriv1, express transMotQD]
 {-- Rotational Motion --}
 
 rotMot :: InstanceModel
-rotMot = imNoRefs (equationalModel' rotMotQD) 
+rotMot = imNoRefs (equationalModel' rotMotQD)
   [ qwC angularVelocity $ UpFrom (Exc, exactDbl 0)
   , qwC time            $ UpFrom (Exc, exactDbl 0)
   , qwC torquej         $ UpFrom (Exc, exactDbl 0)
   , qwC momentOfInertia $ UpFrom (Exc, exactDbl 0)
   ]
-  (dqdWr angAccj) [UpFrom (Exc, exactDbl 0)] 
+  (dqdWr angAccj) [UpFrom (Exc, exactDbl 0)]
   (Just rotMotDeriv) "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
@@ -95,18 +95,18 @@ rotMotQD = mkQuantDef angAccj rotMotExpr
 
 rotMotDesc :: Sentence
 rotMotDesc = foldlSent [S "The above", phrase equation, S "for the total",
-  phraseNP (angularAccel `ofThe` rigidBody), P lJ `S.is`
+  D.toSent (phraseNP (angularAccel `ofThe` rigidBody)), P lJ `S.is`
   S "derived from", refS newtonSLR `sC` EmptyS `S.andThe` S "resultant",
   plural output_ `S.are` S "then obtained from this", phrase equation, S "using",
   foldlList Comma List (map refS [angDispDD, angVelDD, angAccelDD])]
 
-rotMotDeriv :: Derivation 
+rotMotDeriv :: Derivation
 rotMotDeriv = mkDerivName (phrase rotMot)
       (weave [rotMotDerivStmts, rotMotDerivEqns])
 
 rotMotDerivStmts :: [Sentence]
 rotMotDerivStmts = [
-    foldlSent [S "We may calculate the total angular acceleration" `S.of_` S "rigid body", 
+    foldlSent [S "We may calculate the total angular acceleration" `S.of_` S "rigid body",
       P lJ, S "by calculating the derivative" `S.of_` S "its angular velocity with respect to time", fromSource angAccelDD],
     S "Performing the derivative, we obtain:"
   ]
@@ -139,12 +139,11 @@ col2DExpr {-, im3Rel2, im3Rel3, im3Rel4 -} :: Expr -- FIXME: add proper equation
 col2DExpr = apply1 velA time $+
   ((sy impulseS $/ sy massA) $* sy normalVect)
 
-
 col2DOutputs, impulseNote :: Sentence
-col2DOutputs = foldlSent [atStartNP (output_ `the_ofThe` inModel),
+col2DOutputs = foldlSent [D.toSent (atStartNP (output_ `the_ofThe` inModel)),
   S "will be the functions" `S.of_` vals, S "over time that satisfy the",
-  plural equation, S "for the", phraseNP (velocity `and_` angularAccel) `sC`
-  S "with the given initial", plural condition, S "for" +:+. vals, atStartNP (the motion),
+  plural equation, S "for the", D.toSent (phraseNP (velocity `and_` angularAccel)) `sC`
+  S "with the given initial", plural condition, S "for" +:+. vals, D.toSent (atStartNP (the motion)),
   S "is translational" `sC` S "so the", vals, S "functions are for the",
   phrase centreMass, fromSource ctrOfMassDD]
     where vals = foldlList Comma List (map phrase [position, velocity,
@@ -152,26 +151,26 @@ col2DOutputs = foldlSent [atStartNP (output_ `the_ofThe` inModel),
 impulseNote = ch impulseS `S.is` definedIn'' impulseGD
 
 {--S "Ik is the moment of inertia of the k-th rigid body (kg m2)",
-  S "t is a point in time, t0 denotes the initial time" `sC` 
+  S "t is a point in time, t0 denotes the initial time" `sC`
   S "and tc denotes the time at collision (s)",
   S "P is the point of collision (m)"
 --}
 
-{--displaceVectBtw  = cvR (ddcWDS "dispBtwVect" (compoundPhrase' 
+{--displaceVectBtw  = cvR (ddcWDS "dispBtwVect" (compoundPhrase'
   (displacement ^. term) (cn "vector between the centre of mass of the k-th
-  body and point P"))) (sub (displacement ^. symbol) ) 
+  body and point P"))) (sub (displacement ^. symbol) )
 --}
 
 {- Intro -}
 
 instModIntro :: Sentence
-instModIntro = foldlSent [atStartNP (the goal), refS linearGS, 
+instModIntro = foldlSent [D.toSent (atStartNP (the goal)), refS linearGS,
   S "is met by" +:+. (refS transMot `S.and_` refS col2D),
-  atStartNP (the goal), refS angularGS, S "is met by",
+  D.toSent (atStartNP (the goal)), refS angularGS, S "is met by",
   refS rotMot `S.and_` refS col2D]
 
 {- Notes -}
 noDampConsAssumps :: Sentence
 noDampConsAssumps = foldlSent [S "It is currently assumed that no damping",
-  S "occurs during the simulation", fromSource assumpDI `S.and_` S "that no", 
+  S "occurs during the simulation", fromSource assumpDI `S.and_` S "that no",
   S "constraints are involved", fromSource assumpCAJI]

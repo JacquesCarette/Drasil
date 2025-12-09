@@ -3,8 +3,10 @@ module Drasil.GlassBR.DataDefs (dataDefs, aspRat, glaTyFac, glaTyFacQD, gtfRef,
   arRef, hRef, configFp, stdVals) where
 
 import Control.Lens ((^.))
-import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
+
+import Drasil.Database (HasUID(..))
+import Language.Drasil
 import Theory.Drasil (DataDefinition, ddE)
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -37,7 +39,8 @@ hFromtQD :: SimpleQDef
 hFromtQD = mkQuantDef minThick hFromtEq
 
 hFromt :: DataDefinition
-hFromt = ddE hFromtQD [dRef astm2009] Nothing "minThick" [hMin]
+hFromt = ddE hFromtQD [dRef astm2009] Nothing "minThick"
+  [hMin, S "nominal thickness t is in" +:+ eS (mkSet Rational (map dbl nominalThicknesses)) ]
 
 {--}
 

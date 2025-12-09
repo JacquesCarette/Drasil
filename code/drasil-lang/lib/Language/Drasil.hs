@@ -23,7 +23,7 @@ module Language.Drasil (
   , Literal
   , LiteralC(..)
 
-  -- ** Expression Modelling Language 
+  -- ** Expression Modelling Language
   -- | Defines display-related expression functions. Used in models.
 
   -- Language.Drasil.ModelExpr
@@ -52,7 +52,6 @@ module Language.Drasil (
 
   -- *** Chunk-related
   -- Language.Drasil.Symbol
-  , HasUID(uid)
   , HasSymbol(symbol)
   -- Language.Drasil.Classes
   , NamedIdea(term)
@@ -85,9 +84,7 @@ module Language.Drasil (
   -- Similar types are grouped together.
 
   -- *** Basic types
-  , UID, mkUid, nsUid, showUID
   -- Language.Drasil.Chunk.NamedIdea
-  , (+++), (+++.), (+++!)
   , nc, ncUID, IdeaDict , mkIdea
   , nw -- bad name (historical)
   , CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..)
@@ -110,7 +107,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
-  , mkFuncDef, mkFuncDef', mkFuncDefByQ 
+  , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.Unitary
   , unit_symb
   -- Language.Drasil.Chunk.DefinedQuantity
@@ -219,8 +216,7 @@ module Language.Drasil (
 
   -- *** Sentence-related
   , foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent
-  , foldlSent_,foldlSentCol, foldlsC, foldNums, numList 
-
+  , foldlSent_,foldlSentCol, foldlsC, foldNums, numList
 
   -- * Basic Document Language
   -- | Holds all the types and helper functions needed especially in @drasil-docLang@
@@ -303,8 +299,8 @@ module Language.Drasil (
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 
 import Drasil.Code.Classes (Callable, IsArgumentName)
-import Drasil.Code.CodeVar (CodeIdea(..), CodeChunk(..), 
-  CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
+import Drasil.Code.CodeVar (CodeIdea(..), CodeChunk(..),
+  CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv,
   listToArray, programName, funcPrefix, DefiningCodeExpr(..))
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.Expr.Class (ExprC(..),
@@ -333,8 +329,6 @@ import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr, unlbldCode
   , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD)
 import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
-import Drasil.Database.UID
-    (UID, HasUID(..), (+++), (+++.), (+++!), mkUid, nsUid, showUID)
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
@@ -351,7 +345,7 @@ import Language.Drasil.Chunk.Citation (
   , cProceedings, cTechReport, cUnpublished)
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.Concept.Core (sDom) -- exported for drasil-database FIXME: move to development package?
+import Language.Drasil.Chunk.Concept.Core (sDom)
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Constraint (physRange, sfwrRange, physElem, sfwrElem, isSfwrC, isPhysC,
   Constraint(..), ConstraintE, ConstraintReason(..))
@@ -362,7 +356,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.DifferentialModel(DifferentialModel(..), ODESolverFormat(..),
-  InitialValueProblem(..), ($^^), ($**), ($++), makeAODESolverFormat, makeAIVP, makeASystemDE, 
+  InitialValueProblem(..), ($^^), ($**), ($++), makeAODESolverFormat, makeAIVP, makeASystemDE,
   makeASingleDE, formEquations)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), uc, uc', ucStaged, ucStaged',
@@ -408,4 +402,3 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , unitWrapper, getCu, MayHaveUnit(getUnit))
 
 import Drasil.Code.CodeExpr.Class (CodeExprC(..))
-

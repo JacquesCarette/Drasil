@@ -1,24 +1,26 @@
 -- | Defines functions to create .toml and .csv config files for mdBook.
 module Language.Drasil.Markdown.Config where
 
+import Control.Lens((^.))
 import Text.PrettyPrint (Doc, text, vcat, (<+>))
 import System.FilePath (takeFileName)
 
-import Drasil.Database.SearchTools (findAllLabelledContent)
 import Language.Drasil (Document(Document), LabelledContent(LblC, _ctype),
   RawContent(Figure), Sentence)
-import Language.Drasil.Markdown.Print (pSpec)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..))
-import Language.Drasil.Printing.Import.Sentence (spec)
-import Language.Drasil.Printing.LayoutObj (Filepath)
+import Drasil.System (systemdb)
 import Utils.Drasil (makeCSV)
 
+import Drasil.Database.SearchTools (findAllLabelledContent)
+import Language.Drasil.Markdown.Print (pSpec)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, syst)
+import Language.Drasil.Printing.Import.Sentence (spec)
+import Language.Drasil.Printing.LayoutObj (Filepath)
+
 -- | Prints the .toml config file for mdBook.
-makeBook :: Document -> PrintingInformation -> Doc  
+makeBook :: Document -> PrintingInformation -> Doc
 makeBook (Document t _ _ _) sm = vcat [
   text "[book]",
   text "language = \"en\"",
-  text "multilingual = false",
   text "src = \"src\"",
   text "title =" <+> mkTitle sm t,
   text "[output.html]",
@@ -39,6 +41,6 @@ mkTitle sm t = text "\"" <> pSpec mempty (spec sm t) <> text "\""
 -- | Map the original filepaths of assets to the location mdBook generator
 -- needs.
 assetMat :: PrintingInformation -> [[Filepath]]
-assetMat (PI {_ckdb = cdb}) = 
-  [[fp, "src/assets/" ++ takeFileName fp] 
-    | LblC { _ctype = Figure _ fp _ _ } <- findAllLabelledContent cdb]
+assetMat pinfo =
+  [[fp, "src/assets/" ++ takeFileName fp]
+    | LblC { _ctype = Figure _ fp _ _ } <- findAllLabelledContent (pinfo ^. syst . systemdb)]

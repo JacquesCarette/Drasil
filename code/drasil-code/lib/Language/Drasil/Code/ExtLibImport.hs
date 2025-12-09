@@ -210,12 +210,12 @@ genArguments _ _ = error argumentMismatch
 genClassInfo :: CodeVarChunk -> CodeFuncChunk -> Name -> Description ->
   [StateVariable] -> ClassInfo -> ClassInfoFill ->
   State ExtLibState (Class, [String])
-genClassInfo o c n desc svs ci cif = let 
-  (mis, mifs, f) = genCI ci cif 
+genClassInfo o c n desc svs ci cif = let
+  (mis, mifs, f) = genCI ci cif
   zMs = zip mis mifs
   (zCtrs, zMths) = partition (\(mi, _) -> isConstructor mi) zMs
   (ctrIs, ctrIFs) = unzip zCtrs
-  (mthIs, mthIFs) = unzip zMths 
+  (mthIs, mthIFs) = unzip zMths
   in
     if length mis /= length mifs then error methodInfoNumberMismatch else do
       cs <- zipWithM (genMethodInfo o c) ctrIs ctrIFs

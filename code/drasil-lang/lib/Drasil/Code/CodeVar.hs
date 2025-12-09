@@ -5,27 +5,26 @@ module Drasil.Code.CodeVar where
 import Data.Char (isSpace)
 import Control.Lens ((^.), view, makeLenses, Lens')
 
+import Drasil.Database (HasUID(uid), (+++))
+import Utils.Drasil (toPlainName)
+
 import Drasil.Code.Classes (Callable)
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
-import Drasil.Database.UID (HasUID(uid), (+++))
-
 import Language.Drasil.Classes (CommonIdea(abrv), Quantity, Idea(getA), NamedIdea(..), Definition (defn), ConceptDomain (cdom))
 import Language.Drasil.Space (HasSpace(..), Space(..))
 import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Stages (Stage(..))
-
-import Utils.Drasil (toPlainName)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, implVarAU')
--- not using lenses for now
--- | A 'CodeIdea' must include some code and its name. 
+
+-- | A 'CodeIdea' must include some code and its name.
 class CodeIdea c where
   -- | Name of the idea.
   codeName  :: c -> String
   -- | Code chunk associated with the idea.
   codeChunk :: c -> CodeChunk
 
--- | A 'DefiningCodeExpr' must have it's underlying chunk 
+-- | A 'DefiningCodeExpr' must have it's underlying chunk
 --   defined in the CodeExpr language.
 class CodeIdea c => DefiningCodeExpr c where
   codeExpr  :: Lens' c CodeExpr
@@ -41,7 +40,7 @@ programName = toPlainName . filter (not . isSpace) . abrv
 -- | Used when a function name needs to be distinguishable from a variable name.
 funcPrefix :: String
 funcPrefix = "func_"
- 
+
 -- | Details if a piece of code is meant to be a variable or a function.
 data VarOrFunc = Var | Func
 
@@ -73,7 +72,7 @@ instance Eq            CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance MayHaveUnit   CodeChunk where getUnit = getUnit . view qc
 
--- | Chunk representing a variable. The @obv@ field represents the object containing 
+-- | Chunk representing a variable. The @obv@ field represents the object containing
 -- this variable, if it is an object field.
 data CodeVarChunk = CodeVC {_ccv :: CodeChunk,
                             _obv :: Maybe CodeChunk}

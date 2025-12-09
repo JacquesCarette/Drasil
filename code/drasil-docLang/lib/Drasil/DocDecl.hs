@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 -- | Document declaration types and functions for generating Software Requirement Specifications.
 
--- Changes to DocSection and its subections should be reflected in the 'Creating Your Project 
+-- Changes to DocSection and its subections should be reflected in the 'Creating Your Project
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 
@@ -14,9 +14,8 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   ProblemDescription(..), PDSub(..), SolChSpec(..), SCSSub(..), ReqrmntSec(..),
   ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), AuxConstntSec(..),
   AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
-import Drasil.Sections.Requirements (fullReqs, fullTables)
 
-import Database.Drasil
+import Drasil.Database
 import Drasil.System
 import Language.Drasil hiding (sec)
 
@@ -95,10 +94,8 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 -- | Requirements subsections.
 data ReqsSub where
-  -- | Functional requirements. 'LabelledContent' for tables (includes input values).
-  FReqsSub    :: Sentence -> [LabelledContent] -> ReqsSub
-  -- | Functional requirements. 'LabelledContent' for tables (no input values).
-  FReqsSub'   :: [LabelledContent] -> ReqsSub
+  -- | Functional requirements. 'LabelledContent' for tables.
+  FReqsSub    :: [LabelledContent] -> ReqsSub
   -- | Non-Functional requirements.
   NonFReqsSub :: ReqsSub
 
@@ -106,7 +103,7 @@ data ReqsSub where
 
 -- | Creates the document description (translates 'SRSDecl' into a more usable form for generating documents).
 mkDocDesc :: System -> SRSDecl -> DocDesc
-mkDocDesc sys@SI{_inputs = is, _systemdb = db} = map sec where
+mkDocDesc sys@SI{_systemdb = db} = map sec where
   sec :: DocSection -> DL.DocSection
   sec TableOfContents = DL.TableOfContents
   sec (RefSec r) = DL.RefSec r
@@ -124,8 +121,7 @@ mkDocDesc sys@SI{_inputs = is, _systemdb = db} = map sec where
   sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e
 
   reqSec :: ReqsSub -> DL.ReqsSub
-  reqSec (FReqsSub d t) = DL.FReqsSub (fullReqs is d $ fromConcInsDB funcReqDom) (fullTables is t)
-  reqSec (FReqsSub' t) = DL.FReqsSub' (fromConcInsDB funcReqDom) t
+  reqSec (FReqsSub t) = DL.FReqsSub (fromConcInsDB funcReqDom) t
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
 
   ssdSec :: SSDSub -> DL.SSDSub
@@ -148,3 +144,4 @@ mkDocDesc sys@SI{_inputs = is, _systemdb = db} = map sec where
 
   fromConcInsDB :: Concept c => c -> [ConceptInstance]
   fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid) $ findAll db
+  

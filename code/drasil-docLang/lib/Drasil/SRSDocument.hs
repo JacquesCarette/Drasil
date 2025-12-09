@@ -7,7 +7,7 @@ module Drasil.SRSDocument (
   ChunkDB, System(..),
   -- * Printing Information needed to generate all documents
   -- | Imported from "Language.Drasil.Printers"
-  PrintingInformation(..), defaultConfiguration, piSys,
+  PrintingInformation, defaultConfiguration, piSys,
   -- * Document section types needed for a SRS
   -- | Imported from "Drasil.DocDecl"
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
@@ -26,7 +26,7 @@ module Drasil.SRSDocument (
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..),
   -- * SRS Document creator functions
   -- | Imported from "Drasil.DocumentLanguage"
-  mkDoc, fillcdbSRS,
+  mkDoc,
   -- ** Helper functions to make an SRS Document
   -- | Imports from various sections of @drasil-docLang@
   intro,            -- Drasil.Sections.ReferenceMaterial
@@ -35,8 +35,8 @@ module Drasil.SRSDocument (
   purpDoc           -- Drasil.Sections.Introduction
   ) where
 
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Database.Drasil
+import Language.Drasil.Printers (PrintingInformation, defaultConfiguration, piSys)
+import Drasil.Database
 import Drasil.System
 import Drasil.DocLang (
   -- Drasil.DocumentLanguage.Core
@@ -53,7 +53,7 @@ import Drasil.DocLang (
   -- Drasil.Sections.ReferenceMaterial
   intro,
   -- DocumentLanguage
-  mkDoc, fillcdbSRS,
+  mkDoc,
   -- Sections.TraceabilityMandGs
   traceMatStandard,
   -- Sections.TableOfSymbols
@@ -62,4 +62,3 @@ import Drasil.DocLang (
   purpDoc,
   -- DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..))
-  

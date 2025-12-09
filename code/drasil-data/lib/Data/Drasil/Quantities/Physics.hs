@@ -3,21 +3,22 @@ module Data.Drasil.Quantities.Physics where
 
 import Language.Drasil
 import Language.Drasil.Display
-import qualified Language.Drasil.Space as S
 import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   angDisp, angVelo, chgInVelocity, constAccel, constAccelV, displacement,
-  distance, energy, fSpeed, fVel, force, frequency, gravitationalAccel, gravitationalConst, 
-  gravitationalMagnitude, height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV, 
-  ixPos, ixVel, iyPos, iyVel, kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, 
+  distance, energy, fSpeed, fVel, force, frequency, gravitationalAccel, gravitationalConst,
+  gravitationalMagnitude, height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV,
+  ixPos, ixVel, iyPos, iyVel, kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position,
   potEnergy, pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
-  velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, 
-  yPos, yVel, momentum, moment, fOfGravity, positionVec, tension, angFreq, period, 
+  velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
+  yPos, yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angFreq, period,
   frequency, chgMomentum)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second, hertz)
-import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
+import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU,
     impulseU, momtInertU, torqueU, velU)
+import Language.Drasil.Space (realVect, vecDim)
+
 
 restitutionCoef :: DefinedQuantityDict
 restitutionCoef = dqdNoUnit CP.restitutionCoef (sub cC (label "R")) Real
@@ -27,8 +28,8 @@ physicscon :: [UnitalChunk]
 physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   chgInVelocity, constAccel, constAccelV, displacement, distance, energy, frequency,
   fSpeed, fVel, force, gravitationalAccel, gravitationalConst, gravitationalMagnitude,
-  height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, 
-  iyVel, kEnergy, linearAccel, linearDisplacement, linearVelocity, momentOfInertia, 
+  height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos,
+  iyVel, kEnergy, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
   position, potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
   weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel,momentum, moment, moment2D, fOfGravity, positionVec, tension,
@@ -38,20 +39,13 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
 
 acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   constAccel, constAccelV, displacement, distance, energy, fSpeed, fVel, force,
-  gravitationalAccel, gravitationalConst, gravitationalMagnitude, height, iPos, 
-  iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, iyVel, 
-  kEnergy, linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position, 
-  potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity, weight, 
-  xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, yPos, 
-  yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, 
+  gravitationalAccel, gravitationalConst, gravitationalMagnitude, height, iPos,
+  iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, iyVel,
+  kEnergy, linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position,
+  potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity, weight,
+  xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, yPos,
+  yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency,
   period, frequency, chgMomentum :: UnitalChunk
-
-vecDim :: S.Dimension
-vecDim = S.Fixed 2
-
--- | Helper function to create Clifford vector spaces of a given dimension
-realVect :: S.Dimension -> Space
-realVect d = S.ClifS d S.Vector Real
 
 acceleration           = uc CP.acceleration           (Concat [vec lA, label "(", lT, label ")"])(realVect vecDim)                                    accelU
 angularAccel           = uc CP.angAccel               lAlpha                                      Real                                                angAccelU

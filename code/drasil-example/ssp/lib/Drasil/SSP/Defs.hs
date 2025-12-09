@@ -1,13 +1,17 @@
 module Drasil.SSP.Defs where --export all of this file
 
+import Control.Lens ((^.))
+
 import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+import Language.Drasil.ShortHands (lX,lY)
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,
-  likelyChg, physSyst, property, requirement, refBy, refName, safety, srs, typUnc, 
+  likelyChg, physSyst, property, requirement, refBy, refName, safety, srs, typUnc,
   unlikelyChg)
 import Data.Drasil.Concepts.Education (mechanics)
 import Data.Drasil.Concepts.Math (surface)
@@ -17,12 +21,12 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,shearR
 
 ----Acronyms-----
 acronyms :: [CI]
-acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
+acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
   physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 defs :: [IdeaDict]
 defs = [factor, soil, intrslce, layer, slip, slope, slice, morPrice,
-  soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
+  soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics,
   stabAnalysis, ssa]
 
 defs' :: [ConceptChunk]
@@ -35,7 +39,7 @@ intrslce = nc "interslice" (cn' "interslice")
 layer    = nc "layer"      (cn' "layer")
 material = nc "material"   (cn' "material")
 slice    = nc "slice"      (cn' "slice")
-slip     = nc "slip"       (cn  "slip") --FIXME: verb (escape or get loose from (a means of restraint))/noun 
+slip     = nc "slip"       (cn  "slip") --FIXME: verb (escape or get loose from (a means of restraint))/noun
                                         --       (an act of sliding unintentionally for a short distance)?
                                         --       (related to issue #129)
 slope    = nc "slope"      (cn' "slope")
@@ -44,9 +48,9 @@ stability = nc "stability" (cn "stability")
 
 morPrice = nc "morPrice"   (pn  "Morgenstern-Price")
 
-soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
-  stabAnalysis, ssa :: IdeaDict
---slpSrf    = compoundNC slip surface
+soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics,
+  stabAnalysis, ssa, slpSrfCon :: IdeaDict
+slpSrfCon = compoundNC slip surface
 soilPrpty = compoundNC soil     property
 mtrlPrpty = compoundNC material property
 itslPrpty = compoundNC intrslce property
@@ -57,36 +61,36 @@ stabAnalysis = compoundNC stability analysis
 ssa = compoundNC slope stabAnalysis
 
 effFandS, slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable :: ConceptChunk
-effFandS = dccWDS "effective forces and stresses" 
-  (cn "effective forces and stresses") 
-  (atStartNP (the normForce) `S.or_` phrase nrmStrss +:+
+effFandS = dccWDS "effective forces and stresses"
+  (cn "effective forces and stresses")
+  (D.toSent (atStartNP (the normForce)) `S.or_` phrase nrmStrss +:+
   S "carried by the" +:+ phrase soil +:+ S "skeleton" `sC`
   S "composed of the effective" +:+ phrase force `S.or_` phrase stress `S.andThe`
   phrase force `S.or_` phrase stress +:+ S "exerted by water")
 
-slpSrf = dccWDS "slip surface" (cn' "slip surface")
-  (atStartNP (a_ surface) +:+ S "within a" +:+ phrase slope +:+ S "that has the" +:+
+slpSrf = dccWDS "slip surface" (slpSrfCon ^. term)
+  (D.toSent (atStartNP (a_ surface)) +:+ S "within a" +:+ phrase slope +:+ S "that has the" +:+
   S "potential to fail or displace due to load or other" +:+ plural force)
 
 --FIXME: move to Concepts/soldMechanics.hs? They are too specific though
-plnStrn = dccWDS "plane strain" (cn' "plane strain") 
+plnStrn = dccWDS "plane strain" (cn' "plane strain")
   (S "A condition where the resultant" +:+ plural stress +:+ S "in one of" +:+
   S "the directions" `S.ofA` phrase threeD +:+ S "material can be" +:+
-  S "approximated as zero. This condition results when a body is" +:+ 
-  S "constrained to not deform in one direction, or when the" +:+ 
+  S "approximated as zero. This condition results when a body is" +:+
+  S "constrained to not deform in one direction, or when the" +:+
   phrase len +:+ S "of one" +:+ phrase dimension `S.ofThe` S "body" +:+
   S "dominates the others" `sC` S "to the point where it can be assumed as" +:+.
-  S "infinite" +:+ atStart' stress +:+ S "in the direction" `S.ofThe` S "dominant" +:+ 
+  S "infinite" +:+ atStart' stress +:+ S "in the direction" `S.ofThe` S "dominant" +:+
   phrase dimension +:+ S "can be approximated as zero")
 
-crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
-  (atStartNP (slpSrf `ofThe` slope) +:+
+crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface")
+  (D.toSent (atStartNP (slpSrf `ofThe` slope)) +:+
   S "that has the lowest" +:+ phrase fsConcept `sC`
   S "and is therefore most likely to experience failure")
 
 fsConcept = dccWDS "FS" factorOfSafety
-  (S "The global stability metric" `S.ofA` phraseNP (slpSrf `ofA` slope) `sC` 
-  S "defined as the ratio" `S.of_` phrase shearRes +:+ 
+  (S "The global stability metric" `S.ofA` D.toSent (phraseNP (slpSrf `ofA` slope)) `sC`
+  S "defined as the ratio" `S.of_` phrase shearRes +:+
   S "to" +:+ phrase mobShear)
 -- OLD DEFN: Stability metric. How likely a slip surface is to
 -- experience failure through slipping.
@@ -101,3 +105,14 @@ factor = nc "factor" (cn' "factor") -- possible use this everywhere
                                       -- (fs, fs_rc, fsConcept...)
 factorOfSafety :: NP
 factorOfSafety = factor `of_PS` safety
+
+---------
+-- HACK: this belongs in drasil-data
+minim, maxim :: IdeaDict -- else clashes with Prelude
+minim = nc "minimum" (cn' "minimum")
+maxim = nc "maximum" (cn' "maximum")
+
+-- Some sentences want plurals (because of arrays) of things that are normally singular.
+xCoords, yCoords :: ConceptChunk
+xCoords = dcc "xCoords" (nounPhraseSent $ D.P lX D.:-: D.S "-coordinates") "the location of the points on the x-axis"
+yCoords = dcc "yCoords" (nounPhraseSent $ D.P lY D.:-: D.S "-coordinates") "the location of the points on the y-axis"

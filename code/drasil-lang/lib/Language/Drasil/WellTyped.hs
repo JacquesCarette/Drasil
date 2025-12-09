@@ -4,9 +4,10 @@
 
 module Language.Drasil.WellTyped where
 
-import qualified Data.Map.Strict as M
-import Drasil.Database.UID (UID)
 import Data.List (intercalate)
+import qualified Data.Map.Strict as M
+
+import Drasil.Database (UID)
 
 -- TODO: Rather than using a flat String, it would be better to a
 --       ``breadcrumb''-style error data type that can provide a traceable path
@@ -58,7 +59,7 @@ infix 4 ~==
 typeCheckByInfer :: Typed e t => TypingContext t -> e -> t -> Either TypeError t
 typeCheckByInfer cxt e t = do
   et <- infer cxt e
-  et ~== t 
+  et ~== t
     $ \lt rt -> "Inferred type `" ++ lt ++ "` does not match expected type `" ++ rt ++ "`"
   pure et
 

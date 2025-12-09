@@ -3,6 +3,7 @@ module Drasil.SWHSNoPCM.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (model, likeChgDom, unlikeChgDom)
@@ -22,10 +23,10 @@ likeChgDT :: ConceptInstance
 likeChgDT = cic "likeChgDT" (
   foldlSent [chgsStart assumpCTNTD (S "The"), phrase model,
   S "currently only accounts" `S.for` S "charging of the tank. That is" `sC` S "increasing the",
-  phraseNP (temp `ofThe` water), S "to match the",(phrase temp `S.ofThe` S "coil" !.),
-  S "A more complete", phrase model, S "would also account" `S.for` S "discharging" `S.of_` phraseNP (the tank)]) 
+  D.toSent (phraseNP (temp `ofThe` water)), S "to match the",(phrase temp `S.ofThe` S "coil" !.),
+  S "A more complete", phrase model,
+  S "would also account" `S.for` S "discharging" `S.of_` D.toSent (phraseNP (the tank))])
   "Discharging-Tank" likeChgDom
-
 
 unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [unlikeChgWFS, unlikeChgNIHG]

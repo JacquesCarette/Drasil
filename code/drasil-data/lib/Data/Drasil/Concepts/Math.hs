@@ -1,7 +1,9 @@
 -- | Defines concepts used in the field of math.
 module Data.Drasil.Concepts.Math where
 
-import Language.Drasil hiding (number, norm, matrix)
+import Language.Drasil hiding (number, norm, matrix, Sentence(P, S, (:+:)))
+import qualified Language.Drasil as D
+import Language.Drasil.Development (NPStruct(P, S, (:-:)))
 import Language.Drasil.ShortHands (lX, lY, lZ)
 import Drasil.Metadata (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
@@ -13,7 +15,7 @@ mathcon :: [ConceptChunk]
 mathcon = [amplitude, angle, axis, calculation, cartesian, centre, change, component,
   constraint, direction, equation, euclidSpace, graph, laplaceTransform, law, line, matrix,
   norm, normal, number, origin, parameter, perp, positive, negative,
-  point, probability, rOfChng, rate, rightHand, shape, unit_, vector, 
+  point, probability, rOfChng, rate, rightHand, shape, unit_, vector,
   xAxis, xCoord, xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
 
 -- | Collects all math-related common ideas (like a concept, but with no definition).
@@ -23,20 +25,19 @@ mathcon' = [de, leftSide, ode, pde, rightSide]
 -- * Mathematical Concepts
 
 amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint, diameter,
-  direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix, norm, normal, normalV, 
+  direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix, norm, normal, normalV,
   number, orient, origin, parameter, perp, perpV, pi_, negInf, posInf, positive, negative, point, probability,
   rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
-  
 amplitude   = dcc "amplitude"    (nounPhraseSP "amplitude")      "The peak deviation of a function from zero"
 angle       = dcc "angle"        (cn' "angle")                   "the amount of rotation needed to bring one line or plane into coincidence with another"
 area        = dcc "area"         (cn' "area")                    "a part of an object or surface"
-axis        = dcc "axis"         (cn' "axis")                    "a fixed reference line for the measurement of coordinates" 
+axis        = dcc "axis"         (cn' "axis")                    "a fixed reference line for the measurement of coordinates"
 calculation = dcc "calculation"  (cn' "calculation")             "a mathematical determination of the size or number of something"
-cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coordinate system that specifies each point uniquely in a plane by a set" `S.of_`
-                                                                  S "numerical coordinates, which are the signed distances to the point from" +:+
-                                                                  S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+
+cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ D.S "a coordinate system that specifies each point uniquely in a plane by a set" `S.of_`
+                                                                  D.S "numerical coordinates, which are the signed distances to the point from" +:+
+                                                                  D.S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+
                                                                   fromSource cartesianWiki
 centre       = dcc "centre"       (cn' "centre")                  "the middle point of an object"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
@@ -54,8 +55,9 @@ graph        = dcc "graph"        (cn' "graph")                   "A diagram sho
 laplaceTransform = dcc "laplaceTransform" (cn' "laplace transform") ("An integral transform that converts a function of a real variable t " ++
                                                                      "(often time) to a function of a complex variable s (complex frequency)")
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
-line         = dccWDS "line"      (pn' "line")                    $ S "An interval between two points" +:+
+line         = dccWDS "line"      (pn' "line")                    $ D.S "An interval between two points" +:+
                                                                   fromSource lineSource
+magnitude    = dcc "magnitude"    (cn' "magnitude")              "the size or extent of a quantity; the absolute value of a vector"
 matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
                                                                  "is treated as a single entity and manipulated according to particular rules")
 norm        = dcc "norm"         (cn' "norm")                    "the positive length or size of a vector"
@@ -71,7 +73,7 @@ posInf       = dcc "PosInf"       (cn' "Positive Infinity")      "the limit of a
 negInf       = dcc "NegInf"       (cn' "Negative Infinity")      "Opposite of positive infinity"
 positive     = dcc "positive"     (cn' "positive")               "greater than zero"
 negative     = dcc "negative"     (cn' "negative")               "less than zero"
-point        = dccWDS "point"     (pn' "point")                   $ S "An exact location, it has no size, only position" +:+
+point        = dccWDS "point"     (pn' "point")                   $ D.S "An exact location, it has no size, only position" +:+
                                                                   fromSource pointSource
 probability  = dcc "probability"  (cnIES "probability")          "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                   "Ratio that compares two quantities having different units of measure"
@@ -81,21 +83,21 @@ surface      = dcc "surface"      (cn' "surface")                "The outer or t
 unit_        = dcc "unit"         (cn' "unit")                   "Identity element"
 vector       = dcc "vector"       (cn' "vector")                 "Object with magnitude and direction"
 
-xAxis = dcc "xAxis" (nounPhraseSent $ P lX :+: S "-axis") "the primary axis of a system of coordinates"
-yAxis = dcc "yAxis" (nounPhraseSent $ P lY :+: S "-axis") "the secondary axis of a system of coordinates"
-zAxis = dcc "zAxis" (nounPhraseSent $ P lZ :+: S "-axis") "the tertiary axis of a system of coordinates"
+xAxis = dcc "xAxis" (nounPhraseSent $ P lX :-: S "-axis") "the primary axis of a system of coordinates"
+yAxis = dcc "yAxis" (nounPhraseSent $ P lY :-: S "-axis") "the secondary axis of a system of coordinates"
+zAxis = dcc "zAxis" (nounPhraseSent $ P lZ :-: S "-axis") "the tertiary axis of a system of coordinates"
 
-xCoord = dcc "xCoord" (nounPhraseSent $ P lX :+: S "-coordinate") "the location of the point on the x-axis"
-yCoord = dcc "yCoord" (nounPhraseSent $ P lY :+: S "-coordinate") "the location of the point on the y-axis"
-zCoord = dcc "zCoord" (nounPhraseSent $ P lZ :+: S "-coordinate") "the location of the point on the z-axis"
+xCoord = dcc "xCoord" (nounPhraseSent $ P lX :-: S "-coordinate") "the location of the point on the x-axis"
+yCoord = dcc "yCoord" (nounPhraseSent $ P lY :-: S "-coordinate") "the location of the point on the y-axis"
+zCoord = dcc "zCoord" (nounPhraseSent $ P lZ :-: S "-coordinate") "the location of the point on the z-axis"
 
-xComp = dcc "xComp" (nounPhraseSent $ P lX :+: S "-component") "the component of a vector in the x-direction"
-yComp = dcc "yComp" (nounPhraseSent $ P lY :+: S "-component") "the component of a vector in the y-direction"
-zComp = dcc "zComp" (nounPhraseSent $ P lZ :+: S "-component") "the component of a vector in the z-direction"
+xComp = dcc "xComp" (nounPhraseSent $ P lX :-: S "-component") "the component of a vector in the x-direction"
+yComp = dcc "yComp" (nounPhraseSent $ P lY :-: S "-component") "the component of a vector in the y-direction"
+zComp = dcc "zComp" (nounPhraseSent $ P lZ :-: S "-component") "the component of a vector in the z-direction"
 
-xDir = dcc "xDir" (nounPhraseSent $ P lX :+: S "-direction") "the direction aligned with the x-axis"
-yDir = dcc "yDir" (nounPhraseSent $ P lY :+: S "-direction") "the direction aligned with the y-axis"
-zDir = dcc "zDir" (nounPhraseSent $ P lZ :+: S "-direction") "the direction aligned with the z-axis"
+xDir = dcc "xDir" (nounPhraseSent $ P lX :-: S "-direction") "the direction aligned with the x-axis"
+yDir = dcc "yDir" (nounPhraseSent $ P lY :-: S "-direction") "the direction aligned with the y-axis"
+zDir = dcc "zDir" (nounPhraseSent $ P lZ :-: S "-direction") "the direction aligned with the z-axis"
 iAngle = dcc "iAngle" (cn "initial angle")                      "The initial angle where the body is being displaced"
 
 de, leftSide, ode, pde, rightSide :: CI

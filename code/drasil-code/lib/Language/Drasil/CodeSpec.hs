@@ -3,30 +3,28 @@
 -- | Defines the CodeSpec structure and related functions.
 module Language.Drasil.CodeSpec where
 
-import Language.Drasil hiding (None, new)
-import Language.Drasil.Display (Symbol(Variable))
-import Database.Drasil
-import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
-import qualified Drasil.System as S
-import Drasil.System (HasSystem(..))
-
-import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
-
-import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
-  auxExprs)
-import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))
-import Language.Drasil.Chunk.CodeBase
-import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
-
-import Utils.Drasil (subsetOf)
+import Prelude hiding (const)
 
 import Control.Lens ((^.), makeLenses, Lens', makeClassyFor)
-import Data.List (intercalate, nub, (\\))
+import Data.List (nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
 
-import Prelude hiding (const)
+import Language.Drasil hiding (None, new)
+import Language.Drasil.Display (Symbol(Variable))
+import Drasil.Database
+import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
+import qualified Drasil.System as S
+import Drasil.System (HasSystem(..))
+import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
+import Utils.Drasil (subsetOf)
+
+import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
+import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))
+import Language.Drasil.Chunk.CodeBase (quantvar, codevars, varResolve)
+import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
+import Language.Drasil.ICOSolutionSearch (Def, getExecOrder)
 
 -- | Program input.
 type Input = CodeVarChunk
@@ -36,8 +34,6 @@ type Output = CodeVarChunk
 type Const = CodeDefinition
 -- | Derived inputs.
 type Derived = CodeDefinition
--- | Mathematical definition.
-type Def = CodeDefinition
 -- | Maps constants to their respective 'CodeDefinition'.
 type ConstantMap = Map.Map UID CodeDefinition
 
@@ -80,7 +76,7 @@ makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
     , ("_extInputs", "extInputsO")
     , ("_derivedInputs", "derivedInputsO")
     , ("_outputs", "outputsO")
-    , ("_configFiles", "configFilesO") 
+    , ("_configFiles", "configFilesO")
     , ("_execOrder", "execOrderO")
     , ("_cMap", "cMapO")
     , ("_constants", "constantsO")
@@ -213,8 +209,7 @@ oldcodeSpec sys@S.SI{ S._sys = sysIdea
         _constMap = assocToMap const',
         _mods = ms,
         _systemdb = db
-      } 
-
+      }
 
 -- medium hacks ---
 
@@ -237,32 +232,6 @@ getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
 getDerivedInputs ddefs ins cnsts sm =
   filter ((`subsetOf` refSet) . flip codevars sm . expr . (^. defnExpr)) (mapMaybe qdEFromDD ddefs)
   where refSet = ins ++ map quantvar cnsts
-
--- | Known values.
-type Known = CodeVarChunk
--- | Calculated values.
-type Need  = CodeVarChunk
-
--- | Orders a list of definitions such that they form a path between 'Known' values
--- and values that 'Need' to be calculated.
-getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
-getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
-  where getExecOrder' ord _ _ []   = ord
-        getExecOrder' ord defs' k n =
-          let new  = filter (\def -> (`subsetOf` k) (concatMap (`codevars'` sm)
-                (def ^. codeExpr : def ^. auxExprs) \\ [quantvar def])) defs'
-              cnew = map quantvar new
-              kNew = k ++ cnew
-              nNew = n \\ cnew
-          in  if null new
-              then error ("The following outputs cannot be computed: " ++
-                       intercalate ", " (map showUID n) ++ "\n"
-                     ++ "Unused definitions are: "
-                       ++ intercalate ", " (map showUID defs') ++ "\n"
-                     ++ "Known values are: "
-                       ++ intercalate ", " (map showUID k))
-              else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
-
 
 -- | Get a list of 'Constraint's for a list of 'CodeChunk's.
 getConstraints :: (HasUID c) => ConstraintCEMap -> [c] -> [ConstraintCE]

@@ -10,18 +10,18 @@ module Language.Drasil.Choices (
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
   choicesSent, showChs, InternalConcept(..)) where
 
+import Control.Lens ((^.))
+import Data.Map (Map)
+import qualified Data.Map as Map
+
+import Drasil.Database (UID, HasUID (..))
+import Drasil.GOOL (CodeType)
 import Language.Drasil hiding (None, Var)
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)
 import Language.Drasil.Mod (Name)
-import Data.Map (Map)
-import qualified Data.Map as Map
-
-import Drasil.GOOL (CodeType)
-
-import Control.Lens ((^.))
 
 -- | The instruction indicates how the generated program should be written down.
 -- Full details of Choices documentation https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
@@ -361,13 +361,13 @@ chsFieldSent :: (Sentence, Sentence) -> Sentence
 chsFieldSent (rec, chc) = rec +:+ S "selected as" +:+. chc
 
 -- | Data type of internal concepts
-data InternalConcept = 
+data InternalConcept =
     InputConstraintsFn
   | InputConstraintsMod
-  | WriteOutput 
+  | WriteOutput
   | DerivedValuesFn
   | DerivedValuesMod
-  | GetInput 
+  | GetInput
   | InputParameters
   | InputFormat
   | OutputFormat

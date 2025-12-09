@@ -4,12 +4,11 @@ module Drasil.Website.Introduction where
 
 import Language.Drasil
 
-
 -- * Introduction Section
 
 -- | Creates the about section.
 introSec :: Section
-introSec = 
+introSec =
   section (S "Introduction") -- Title
   [mkParagraph introParagraph1] -- Contents
   [] $ makeSecRef "Introduction" $ S "Introduction" -- Section reference

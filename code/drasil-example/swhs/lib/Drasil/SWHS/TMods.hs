@@ -2,13 +2,11 @@
 module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
   nwtnCooling, sensHtE, sensHtETemplate, tMods, consThemESrc) where
 
+import Control.Lens ((^.))
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Control.Lens ((^.))
-import Theory.Drasil (ConstraintSet, mkConstraintSet,
-  TheoryModel, tm, equationalModel', equationalConstraints',
-  ModelKind, equationalModel)
+import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -23,6 +21,10 @@ import Data.Drasil.Quantities.PhysicalProperties (density, mass)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (boilPt, heatCapSpec,
   htFlux, latentHeat, meltPt, sensHeat, temp)
+
+import Theory.Drasil (ConstraintSet, mkConstraintSet,
+  TheoryModel, tm, equationalModel', equationalConstraints',
+  ModelKind, equationalModel)
 
 import Drasil.SWHS.Assumptions (assumpHTCC, assumpTEO)
 import Drasil.SWHS.Concepts (transient)
@@ -77,7 +79,6 @@ sensHtETemplate pc desc = tm (equationalModel' qd)
       qd = sensHtEQD pc eqn desc
       eqn = sensHtEEqn pc
 
-
 sensHtEQD :: PhaseChange -> ModelExpr -> Sentence -> ModelQDef
 sensHtEQD pc eqn desc = fromEqnSt'' "sensHeat" np desc (symbol sensHeat) (sensHeat ^. typ) eqn
   where np = nounPhraseSP ("Sensible heat energy" ++ case pc of
@@ -89,7 +90,7 @@ sensHtEEqn pChange = case pChange of
   Liquid -> liquidFormula
   AllPhases -> incompleteCase [(sy htCapS $* sy mass $* sy deltaT,
       sy temp $< sy meltPt), (liquidFormula, sy meltPt $< sy temp $<
-      sy boilPt), (sy htCapV $* sy mass $* 
+      sy boilPt), (sy htCapV $* sy mass $*
       sy deltaT, sy boilPt $< sy temp)]
   where
     liquidFormula = sy htCapL $* sy mass $* sy deltaT
@@ -101,7 +102,7 @@ sensHtEEqn pChange = case pChange of
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
   atStart sensHeat :+: S "ing occurs as long as the material does not reach a",
-  phrase temp, S "where a", phrase phaseChange, (S "occurs" !.), atStartNP (a_ phaseChange),
+  phrase temp, S "where a", phrase phaseChange, (S "occurs" !.), D.toSent (atStartNP (a_ phaseChange)),
   S "occurs if" +:+. (eS (sy temp $= sy boilPt) `S.or_` eS (sy temp $= sy meltPt)),
   S "If this" `S.is` S "the case" `sC` S "refer to", refS latentHtE]
 
@@ -134,7 +135,7 @@ latentHtENotes :: [Sentence]
 latentHtENotes = map foldlSent [
   [ch latentHeat `S.isThe` S "change" `S.in_` phrase thermalEnergy,
    sParen (phrase latentHeat +:+ phrase energy)],
-  [eS' latentHtEFD `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt` 
+  [eS' latentHtEFD `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt`
    phrase time, ch tau],
   [ch time `S.isThe` phrase time, S "elapsed" `sC` S "as long as the",
    phrase phaseChange `S.is` S "not complete"],

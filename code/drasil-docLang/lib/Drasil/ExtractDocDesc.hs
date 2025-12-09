@@ -8,7 +8,6 @@ import Drasil.DocumentLanguage.Core
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 import Language.Drasil hiding (Manual, Verb)
 import Theory.Drasil
-import Data.List(transpose)
 
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
@@ -37,7 +36,6 @@ secConPlate mCon mSec = preorderFold $ purePlate {
     (CorrSolnPpties c cs) -> mCon [outDataConstTbl c] `mappend` mCon cs
     _ -> mempty,
   reqSub = Constant <$> \case
-    (FReqsSub' _ c) -> mCon c
     (FReqsSub _ c) -> mCon c
     (NonFReqsSub _) -> mempty,
   offShelfSec = Constant <$> \(OffShelfSolnsProg c) -> mCon c,
@@ -128,7 +126,6 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (Constraints s _) -> [s]
       (CorrSolnPpties _ _) -> [],
     reqSub = Constant . f <$> \case
-      (FReqsSub' c _) -> def c
       (FReqsSub c _) -> def c
       (NonFReqsSub c) -> def c,
     lcsSec = Constant . f <$> \(LCsProg c) -> def c,
@@ -166,7 +163,7 @@ getCon' = getCon . (^. accessContents)
 
 -- | Extracts 'Sentence's from raw content.
 getCon :: RawContent -> [Sentence]
-getCon (Table s1 s2 t _) = isVar (s1, transpose s2) ++ [t]
+getCon (Table s1 s2 t _)   = t : s1 ++ concat s2
 getCon (Paragraph s)       = [s]
 getCon EqnBlock{}          = []
 getCon CodeBlock{}         = []
@@ -178,15 +175,6 @@ getCon (Graph [(s1, s2)] _ _ l) = [s1, s2, l]
 getCon Graph{}             = []
 getCon (Defini _ [])       = []
 getCon (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
-
--- | This function is used in collecting 'Sentence's from a table.
--- Since only the table's first Column titled "Var" should be collected,
--- this function is used to filter out only the first column of 'Sentence's.
-isVar :: ([Sentence], [[Sentence]]) -> [Sentence]
-isVar (S "Var" : _, hd1 : _) = hd1
-isVar (_ : tl, _ : tl1) = isVar (tl, tl1)
-isVar ([], _) = []
-isVar (_, []) = []
 
 -- | Get the bibliography from something that has a field.
 getBib :: (HasFields c) => [c] -> [Sentence]
@@ -233,7 +221,7 @@ getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
 
--- ciPlate is not currently used. 
+-- ciPlate is not currently used.
 -- | A common idea plate.
 -- ciPlate :: DLPlate (Constant [CI])
 -- ciPlate = preorderFold $ purePlate {

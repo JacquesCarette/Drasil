@@ -8,9 +8,8 @@ import Drasil.PDController.Unitals (dqdSetPointTD, dqdPropGain, dqdDerivGain,
     dqdSimTime, dqdStepTime, odeRelTolConst, odeAbsTolConst)
 import Drasil.PDController.IModel(imPDRC)
 
-
 pidODEOptions :: ODEOptions
-pidODEOptions = odeOptions 
+pidODEOptions = odeOptions
   RK45 (sy odeAbsTolConst) (sy odeRelTolConst) (sy dqdStepTime)
 
 pdIVP :: InitialValueProblem

@@ -1,18 +1,18 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | Implementations for C-like renderers are defined here.
-module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char, 
-  listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  decrement1, varDec, varDecDef, setDecDef, listDec, extObjDecNew, switch, for, while, 
+module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
+  listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1,
+  decrement1, varDec, varDecDef, setDecDef, listDec, extObjDecNew, switch, for, while,
   intFunc, multiAssignError, multiReturnError, multiTypeError
 ) where
 
 import Utils.Drasil (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSType, SVariable, 
-  SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
+import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
+  SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall,
   TypeElim(getType, getTypeString), ScopeSym(..),
   VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..))
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float),
@@ -21,7 +21,7 @@ import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData), 
+  RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   ValueElim(valuePrec), ScopeElim(scopeData))
 import qualified Drasil.Shared.RendererClassesCommon as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
@@ -34,9 +34,9 @@ import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
 import Drasil.Shared.AST (Binding(..), Terminator(..))
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
-import qualified Drasil.Shared.LanguageRenderer as R (switch, increment, 
+import qualified Drasil.Shared.LanguageRenderer as R (switch, increment,
   decrement, this', this)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import Drasil.Shared.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
   useVarName, setVarScope)
@@ -45,7 +45,7 @@ import Prelude hiding (break,(<>))
 import Control.Applicative ((<|>))
 import Control.Monad.State (modify)
 import Control.Lens.Zoom (zoom)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, vcat, semi, 
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, vcat, semi,
   equals, empty)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
 
@@ -67,16 +67,16 @@ char :: (CommonRenderSym r) => VSType r
 char = typeFromData Char charRender (text charRender)
 
 listType :: (CommonRenderSym r) => String -> VSType r -> VSType r
-listType lst t' = do 
+listType lst t' = do
   t <- t'
-  typeFromData (List (getType t)) (lst 
-    `containing` getTypeString t) $ text lst <> angles (RC.type' t) 
+  typeFromData (List (getType t)) (lst
+    `containing` getTypeString t) $ text lst <> angles (RC.type' t)
 
 setType :: (OORenderSym r) => String -> VSType r -> VSType r
-setType lst t' = do 
+setType lst t' = do
   t <- t'
-  typeFromData (Set (getType t)) (lst 
-    `containing` getTypeString t) $ text lst <> angles (RC.type' t) 
+  typeFromData (Set (getType t)) (lst
+    `containing` getTypeString t) $ text lst <> angles (RC.type' t)
 
 void :: (CommonRenderSym r) => VSType r
 void = typeFromData Void voidRender (text voidRender)
@@ -96,8 +96,8 @@ orOp = orPrec "||"
 -- Variables --
 
 self :: (OORenderSym r) => SVariable r
-self = do 
-  l <- zoom lensVStoMS getClassName 
+self = do
+  l <- zoom lensVStoMS getClassName
   mkStateVar R.this (IG.obj l) R.this'
 
 -- Values --
@@ -115,17 +115,17 @@ inlineIf :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 inlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
-  v2 <- v2' 
-  valFromData (prec c) Nothing (toState $ valueType v1) 
-    (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2) 
+  v2 <- v2'
+  valFromData (prec c) Nothing (toState $ valueType v1)
+    (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2)
   where prec cd = valuePrec cd <|> Just 0
 
 libFuncAppMixedArgs :: (CommonRenderSym r) => Library -> MixedCall r
-libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >> 
+libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >>
   IC.funcAppMixedArgs n t vs ns
-  
+
 libNewObjMixedArgs :: (OORenderSym r) => Library -> MixedCtorCall r
-libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >> 
+libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
   IG.newObjMixedArgs tp vs ns
 
 -- Functions --
@@ -136,23 +136,23 @@ listSize v = v $. S.listSizeFunc v
 -- Statements --
 
 increment1 :: (CommonRenderSym r) => SVariable r -> MSStatement r
-increment1 vr' = do 
+increment1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.increment) vr
 
 decrement1 :: (CommonRenderSym r) => SVariable r -> MSStatement r
-decrement1 vr' = do 
+decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
 
-varDec :: (OORenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc -> 
+varDec :: (OORenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc ->
   SVariable r -> r (Scope r) -> MSStatement r
-varDec s d pdoc v' scp = do 
-  v <- zoom lensMStoVS v' 
+varDec s d pdoc v' scp = do
+  v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
   mkStmt (RC.perm (bind $ variableBind v)
-    <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <> 
+    <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <>
     RC.variable v))
   where bind Static = s
         bind Dynamic = d
@@ -162,16 +162,16 @@ varDec s d pdoc v' scp = do
 
 varDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> r (Scope r) ->
   SValue r -> MSStatement r
-varDecDef t vr scp vl' = do 
+varDecDef t vr scp vl' = do
   vd <- IC.varDec vr scp
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
-setDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> r (Scope r) -> SValue r -> 
+setDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> r (Scope r) -> SValue r ->
   MSStatement r
-setDecDef t vr scp vl' = do 
+setDecDef t vr scp vl' = do
   vd <- IC.setDec vr scp
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
@@ -180,11 +180,11 @@ setDecDef t vr scp vl' = do
 
 listDec :: (CommonRenderSym r) => (r (Value r) -> Doc) -> SValue r ->
   SVariable r -> r (Scope r) -> MSStatement r
-listDec f vl v scp = do 
+listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
   mkStmt (RC.statement vd <> f sz)
-  
+
 extObjDecNew :: (OORenderSym r) => Library -> SVariable r -> r (Scope r) ->
   [SValue r] -> MSStatement r
 extObjDecNew l v scp vs = IC.varDecDef v scp
@@ -192,7 +192,7 @@ extObjDecNew l v scp vs = IC.varDecDef v scp
 
 -- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)
 -- 2nd parameter is a statement to end every case with
-switch :: (CommonRenderSym r) => (Doc -> Doc) -> MSStatement r -> SValue r -> 
+switch :: (CommonRenderSym r) => (Doc -> Doc) -> MSStatement r -> SValue r ->
   [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 switch f st v cs bod = do
   s <- S.stmt st
@@ -202,7 +202,7 @@ switch f st v cs bod = do
   dflt <- bod
   mkStmt $ R.switch f s val dflt (zip vals bods)
 
-for :: (CommonRenderSym r) => Doc -> Doc -> MSStatement r -> SValue r -> 
+for :: (CommonRenderSym r) => Doc -> Doc -> MSStatement r -> SValue r ->
   MSStatement r -> MSBody r -> MSStatement r
 for bStart bEnd sInit vGuard sUpdate b = do
   initl <- S.loopStmt sInit
@@ -210,20 +210,20 @@ for bStart bEnd sInit vGuard sUpdate b = do
   upd <- S.loopStmt sUpdate
   bod <- b
   mkStmtNoEnd $ vcat [
-    forLabel <+> parens (RC.statement initl <> semi <+> RC.value guard <> 
+    forLabel <+> parens (RC.statement initl <> semi <+> RC.value guard <>
       semi <+> RC.statement upd) <+> bStart,
     indent $ RC.body bod,
     bEnd]
-  
+
 -- Doc function parameter is applied to the render of the while-condition
-while :: (CommonRenderSym r) => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MSBody r -> 
+while :: (CommonRenderSym r) => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MSBody r ->
   MSStatement r
-while f bStart bEnd v' b'= do 
+while f bStart bEnd v' b'= do
   v <- zoom lensMStoVS v'
   b <- b'
-  mkStmtNoEnd (vcat [whileLabel <+> f (RC.value v) <+> bStart, 
-    indent $ RC.body b, 
-    bEnd]) 
+  mkStmtNoEnd (vcat [whileLabel <+> f (RC.value v) <+> bStart,
+    indent $ RC.body b,
+    bEnd])
 
 -- Methods --
 

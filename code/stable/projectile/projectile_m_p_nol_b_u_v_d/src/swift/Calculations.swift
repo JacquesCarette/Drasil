@@ -32,21 +32,3 @@ func func_p_land(_ inParams: inout InputParameters, _ g: Double) -> Double {
 func func_d_offset(_ inParams: inout InputParameters, _ p_land: Double) -> Double {
     return p_land - inParams.p_target
 }
-
-/** Calculates output message as a string
-    - Parameter inParams: structure holding the input values
-    - Parameter epsilon: hit tolerance
-    - Parameter d_offset: distance between the target position and the landing position (m)
-    - Returns: output message as a string
-*/
-func func_s(_ inParams: inout InputParameters, _ epsilon: Double, _ d_offset: Double) -> String {
-    if abs(d_offset / inParams.p_target) < epsilon {
-        return "The target was hit."
-    }
-    else if d_offset < 0.0 {
-        return "The projectile fell short."
-    }
-    else {
-        return "The projectile went long."
-    }
-}

@@ -17,8 +17,8 @@ import qualified Language.Drasil.Printing.Helpers as H
 -- to extend, so start there.
 
 -- | There are two proper contexts, Text and Math; Curr is the current context.
--- There are multiple ways of getting there: for Text, either being at the top-level 
--- or inside \text. For Math, either surrounded by $ or 
+-- There are multiple ways of getting there: for Text, either being at the top-level
+-- or inside \text. For Math, either surrounded by $ or
 -- in \begin{equation} .. \end{equation}.
 -- Curr is when the current context is fine.
 data MathContext = Text | Math | Curr deriving Eq
@@ -38,7 +38,7 @@ instance Applicative PrintLaTeX where
 -- | Define the printing monad.
 instance Monad PrintLaTeX where
   return = pure
-  m >>= k = PL $ \ctx -> 
+  m >>= k = PL $ \ctx ->
     let a = runPrint m ctx in
     runPrint (k a) ctx
 
@@ -61,7 +61,7 @@ switch f (PL g) = PL $ \c -> adjust c (f c) g
     adjust Text Math gen = H.dollarDoc $ gen Math
     adjust Curr Curr gen = gen Text -- default
     adjust Curr x gen = gen x
-    adjust x Curr gen = gen x 
+    adjust x Curr gen = gen x
 
 toMath, toText :: D -> D
 -- | Change context to Math.

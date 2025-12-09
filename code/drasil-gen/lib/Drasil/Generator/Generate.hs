@@ -18,7 +18,7 @@ import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 
 import Build.Drasil (genMake)
-import Drasil.DocLang (mkGraphInfo, LsnDecl, mkNb)
+import Drasil.DocLang (mkGraphInfo, LsnDecl, mkNb, fillcdbSRS, mkDoc)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Stage(Equational), Document, Space(..), programName)
@@ -27,7 +27,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
   makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)
 import Drasil.SRSDocument (System, SRSDecl, defaultConfiguration, piSys,
-  PrintingInformation, mkDoc)
+  PrintingInformation)
 import Drasil.System (System(SI, _sys))
 import Utils.Drasil (createDirIfMissing)
 import Drasil.Generator.ChunkDump (dumpEverything)
@@ -37,7 +37,8 @@ import Drasil.Generator.TypeCheck (typeCheckSI)
 -- | Generate an SRS softifact.
 exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO ()
 exportSmithEtAlSrs syst srsDecl srsFileName = do
-  let (srs, syst') = mkDoc syst srsDecl S.forT
+  let (syst', dd) = fillcdbSRS srsDecl syst
+      srs = mkDoc srsDecl S.forT (syst', dd)
       printfo = piSys syst' Equational defaultConfiguration
   dumpEverything syst' printfo ".drasil/"
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!

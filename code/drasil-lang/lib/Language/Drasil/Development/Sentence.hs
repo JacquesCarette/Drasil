@@ -22,7 +22,7 @@ import Language.Drasil.Sentence ((+:+), sParen, sentenceTerm,
 import qualified Language.Drasil.Sentence as S
 import qualified Language.Drasil.NounPhrase as NP
 import Language.Drasil.NounPhrase.Core (NPStruct(..))
-import Drasil.Database.UID (HasUID(..))
+import Drasil.Database (HasUID(..))
 
 -- | Translate from NPStruct to Sentence
 toSent :: NPStruct -> S.Sentence

@@ -11,7 +11,8 @@ import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe, isJust)
-import qualified Data.Map as Map (elems, assocs, keys)
+import qualified Data.Map.Strict as Map
+import Data.Map.Strict (elems, assocs, keys)
 
 import Utils.Drasil (invert, splitAtAll, mergeAll)
 
@@ -32,9 +33,10 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (findOrErr, idMap, insertAll, ChunkDB(..))
+import Drasil.Database (findOrErr, insertAll, ChunkDB(..), HasUID(..), UID)
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
-  findAllInstMods, findAllTheoryMods, findAllConcInsts, TermAbbr, shortForm, termResolve')
+  findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent,
+  TermAbbr, shortForm, termResolve')
 
 import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
@@ -72,6 +74,12 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
 import Data.Drasil.Concepts.Documentation (refBy)
 
 import Language.Drasil.Development (shortdep)
+
+-- * Helper Functions
+
+-- | Create a Map from UID to value from a list of items with UIDs
+idMap :: HasUID a => [a] -> Map.Map UID a
+idMap = Map.fromList . map (\x -> (x ^. uid, x))
 
 -- * Main Function
 
@@ -115,8 +123,9 @@ fillLC sd si@SI{ _sys = sn }
     -- traceability graphs. Those are all chunks that should exist but not be
     -- handled like this. They should be created and included in the
     -- meta-ChunkDB of `drasil-docLang`.
-    existingLC = map (fst . snd) $ Map.assocs $ labelledcontentTable chkdb
-    chkdb2 = chkdb { labelledcontentTable = idMap $ nub $ existingLC ++ createdLCs }
+    existingLC = findAllLabelledContent chkdb
+    -- Insert new labelled content into ChunkDB
+    chkdb2 = insertAll (nub $ createdLCs) chkdb
     si2 = set systemdb chkdb2 si
 
     containsTraceSec :: DocDesc -> Bool
@@ -139,19 +148,17 @@ fillReferences allSections si@SI{_sys = sys} = si2
     imods   = findAllInstMods chkdb
     tmods   = findAllTheoryMods chkdb
     concIns = findAllConcInsts chkdb
-    lblCon  = map fst $ Map.elems $ labelledcontentTable chkdb
+    lblCon  = findAllLabelledContent chkdb
     -- search the old reference table just in case the user wants to manually add in some references
-    refs    = map fst $ Map.elems $ refTable chkdb
-    -- set new reference table in the chunk database
-    chkdb2 = chkdb { refTable = idMap $ nub $ refsFromSRS
+    refs    = Map.elems $ si ^. refTable
+    -- set new reference table in the system (not ChunkDB)
+    si2 = si { _refTable = idMap $ nub $ refsFromSRS
       ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
       ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (programName sys) ++ map ref cites
       ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref lblCon
       ++ refs }
-    -- set new chunk database into system information
-    si2 = set systemdb chkdb2 si
 
 -- | Recursively find all references in a section (meant for getting at 'LabelledContent').
 findAllRefs :: Section -> [Reference]
@@ -159,7 +166,7 @@ findAllRefs (Section _ cs r) = r: concatMap findRefSecCons cs
   where
     findRefSecCons :: SecCons -> [Reference]
     findRefSecCons (Sub s) = findAllRefs s
-    findRefSecCons (Con (LlC (LblC rf _))) = [rf]
+    findRefSecCons (Con (LlC (LblC _ rf _))) = [rf]
     findRefSecCons _ = []
 
 -- | Helper for filling in the traceability matrix and graph information into the system.
@@ -168,10 +175,9 @@ fillTraceSI dd si = fillTraceMaps dd $ fillReqs dd si
 
 -- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
 fillTraceMaps :: DocDesc -> System -> System
-fillTraceMaps dd si@SI{_systemdb = db} = si { _systemdb = newCDB }
+fillTraceMaps dd si = si { _traceTable = tdb, _refbyTable = invert tdb }
   where
     tdb = generateTraceMap dd
-    newCDB = db { traceTable = tdb, refbyTable = invert tdb }
 
 -- FIXME: ChunkDB-related work: `fillReqs` should not be used at all. It is a
 -- remnant of the old document-based derivation of System. See the note on the
@@ -365,7 +371,6 @@ mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSub
         mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
         mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
 
-
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: System -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
@@ -406,7 +411,6 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub  frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
-    mkSubs (FReqsSub' frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
     mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
 -- ** Likely Changes
@@ -440,11 +444,11 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
     fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
       not $ null (header (TM.layoutUIDs rows sidb) si)
          || null (header (TM.layoutUIDs cols sidb) si)) progs
-    sidb = si ^. systemdb
+    sidb = si
 
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> System -> [Sentence]
-header f = TM.traceMHeader (f . Map.keys . refbyTable)
+header f = TM.traceMHeader (f . Map.keys . (^. refbyTable))
 
 -- ** Off the Shelf Solutions
 

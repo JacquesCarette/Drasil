@@ -4,6 +4,7 @@ module Drasil.Sections.Introduction (orgSec, introductionSection,
   purposeOfDoc, scopeOfRequirements, charIntRdrF, purpDoc) where
 
 import Language.Drasil hiding (organization)
+import Language.Drasil.Development (toSent)
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
 import Drasil.DocumentLanguage.Definitions(Verbosity(..))
@@ -25,7 +26,6 @@ import Data.Drasil.Software.Products (sciCompS)
 import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
 import Data.Maybe (maybeToList)
 
-
 -----------------------
 --     Constants     --
 -----------------------
@@ -34,13 +34,13 @@ import Data.Maybe (maybeToList)
 developmentProcessParagraph :: Sentence
 developmentProcessParagraph = foldlSent [S "This", phrase document,
   S "will be used as a starting point for subsequent development",
-  S "phases, including writing the", phraseNP (desSpec `andThe` softwareVAV) +:+.
-  S "plan", atStartNP (the designDoc), S "will show how the",
+  S "phases, including writing the", toSent (phraseNP (desSpec `andThe` softwareVAV)) +:+.
+  S "plan", toSent (atStartNP (the designDoc)), S "will show how the",
   plural requirement, S "are to be realized, including", plural decision,
   S "on the numerical", plural algorithm, S "and programming" +:+.
   phrase environment, S "The", phrase vavPlan,
   S "will show the steps that will be used to increase confidence in the",
-  (phraseNP (softwareDoc `andThe` implementation) !.), S "Although",
+  (toSent (phraseNP (softwareDoc `andThe` implementation)) !.), S "Although",
   S "the", short srs, S "fits in a series of", plural document,
   S "that follow the so-called waterfall", phrase model `sC`
   S "the actual development process is not constrained",
@@ -73,7 +73,6 @@ introductionSection EmptyS              programDefinition = SRS.intro
 introductionSection problemIntroduction programDefinition = SRS.intro
   [mkParagraph problemIntroduction, overviewParagraph programDefinition]
 
-
 -- | Constructor for the overview paragraph for the Introduction.
 -- Takes the definition of the specific example being generated ('Sentence').
 overviewParagraph :: Sentence -> Contents
@@ -81,7 +80,6 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
   S "provides an overview of the", introduceAbb srs, S "for" +:+.
   programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
   S "of this", phrase document `sC` introductionSubsections]
-
 
 -- | Constructor for Purpose of Document section that each example controls.
 purpDocPara1 :: CI -> Sentence
@@ -144,7 +142,7 @@ intReaderIntro progName assumed topic asset sectionRef =
   [foldlSP [S "Reviewers of this", phrase documentation,
   S "should have an understanding of" +:+.
   foldlList Comma List (assumed ++ topic), assetSent,
-  atStartNP' (the user) `S.of_` short progName, S "can have a lower level" `S.of_`
+  toSent (atStartNP' (the user)) `S.of_` short progName, S "can have a lower level" `S.of_`
   S "expertise, as explained" `S.in_` refS sectionRef]]
   where
     assetSent = case asset of
@@ -172,7 +170,7 @@ orgIntro bottom bottomSec trailingSentence =
 
 orgOfDocIntro :: Sentence
 orgOfDocIntro = foldlSent
-  [atStartNP (the organization), S "of this", phrase document,
+  [toSent (atStartNP (the organization)), S "of this", phrase document,
   S "follows the", phrase template, S "for an", short srs, S "for",
   phrase sciCompS, S "proposed by", foldlList Comma List $
     map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]

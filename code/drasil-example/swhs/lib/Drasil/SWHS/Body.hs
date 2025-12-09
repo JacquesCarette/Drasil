@@ -54,7 +54,6 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
   tempW, thickness, watE)
 
-
 -------------------------------------------------------------------------------
 
 srs :: Document
@@ -426,7 +425,7 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
   s4_2_3_deriv_10 density mass vol,
   s4_2_3_deriv_11]-}
 
--- General Definitions is automatically generated 
+-- General Definitions is automatically generated
 
 ------------------------------
 -- 4.2.4 : Data Definitions --

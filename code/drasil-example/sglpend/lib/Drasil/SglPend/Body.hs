@@ -38,7 +38,6 @@ import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
 import Drasil.SglPend.Requirements (funcReqs)
 
-
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
 
@@ -51,7 +50,7 @@ printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
   RefSec $      --This creates the Reference section of the SRS
-    RefProg intro      -- This add the introduction blob to the reference section  
+    RefProg intro      -- This add the introduction blob to the reference section
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
@@ -66,9 +65,9 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   GSDSec $
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
-      UsrChars [userCharacteristicsIntro progName], 
-      SystCons [] []],                            
-  SSDSec $ 
+      UsrChars [userCharacteristicsIntro progName],
+      SystCons [] []],
+  SSDSec $
     SSDProg
       [ SSDProblem $ PDProg purp []                -- This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
@@ -108,7 +107,7 @@ purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]
 
 ideaDicts :: [IdeaDict]
-ideaDicts = 
+ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
@@ -171,7 +170,6 @@ concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 -- 3.3 : System Constraints --
 ------------------------------
 -- System Constraints automatically generated in SystCons
-
 
 --------------------------------------------
 -- Section 4: Specific System Description --

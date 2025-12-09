@@ -50,6 +50,7 @@ data Space where
     Function  :: (NE.NonEmpty Primitive) -> Primitive -> Space
     Void      :: Space
     ClifS     :: Dimension -> ClifKind -> Space -> Space
+    Vect      :: Space -> Space
   deriving (Eq, Show)
 
 data ClifKind = Scalar | Vector | Bivector | Multivector 
@@ -197,3 +198,4 @@ isBasicNumSpace Actor {}     = False
 isBasicNumSpace Function {}  = False
 isBasicNumSpace Void         = False
 isBasicNumSpace (ClifS _ _ s) = isBasicNumSpace s
+isBasicNumSpace (Vect s)     = isBasicNumSpace s

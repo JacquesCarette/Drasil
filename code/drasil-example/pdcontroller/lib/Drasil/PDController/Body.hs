@@ -1,20 +1,17 @@
-module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
-
-import Control.Lens ((^.))
+module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
 import Language.Drasil
-import Language.Drasil.Code (ODEInfo(..))
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
-import Drasil.Generator.BaseChunkDB (cdb)
+import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.ExternalLibraries.ODELibraries
-       (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
-        scipyODESymbols, diffCodeChunk)
+       (apacheODESymbols, odeintSymbols, osloSymbols,
+        scipyODESymbols, odeInfoChunks)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
@@ -34,7 +31,7 @@ import Drasil.PDController.IModel (instanceModels, imPD)
 import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc, externalLinkRef,
        introUserChar1, introUserChar2, introscopeOfReq, scope)
 import Drasil.PDController.References (citations)
-import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
+import Drasil.PDController.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
@@ -43,15 +40,6 @@ import Drasil.PDController.ODEs (pidODEInfo)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS
@@ -91,7 +79,7 @@ mkSRS
                  ShowDerivation,
                Constraints EmptyS inputsUC]],
 
-     ReqrmntSec $ ReqsProg [FReqsSub EmptyS [], NonFReqsSub], LCsSec,
+     ReqrmntSec $ ReqsProg [FReqsSub funcReqsTables, NonFReqsSub], LCsSec,
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
 si :: System
@@ -118,14 +106,12 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
               S "in a variety of applications such as thermostats, automobile",
               S "cruise-control, etc"]
 
--- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is added to symbolsAll as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
+-- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is currently added to symbolsAll automatically as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ map dqdWr pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
-  ++ map dqdWr [listToArray dp, arrayVecDepVar pidODEInfo,
-  listToArray $ diffCodeChunk dp, diffCodeChunk dp]
-  where dp = depVar pidODEInfo
+  ++ odeInfoChunks pidODEInfo
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
@@ -149,9 +135,9 @@ symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, 
   genDefns
   theoreticalModels
   conceptInstances
-  labelledContent
-  allRefs
   citations
+  (labelledContent ++ funcReqsTables)
+  allRefs
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -170,3 +156,4 @@ conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs
 stdFields :: Fields
 stdFields
   = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
+  

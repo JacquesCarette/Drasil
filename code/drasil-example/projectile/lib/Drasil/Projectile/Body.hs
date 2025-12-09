@@ -1,6 +1,4 @@
-module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
-
-import Control.Lens ((^.))
+module Drasil.Projectile.Body (si, mkSRS) where
 
 import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Language.Drasil
@@ -11,7 +9,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics,
@@ -46,19 +44,10 @@ import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.LabelledContent (figLaunch, sysCtxFig1, labelledContent)
 import Drasil.Projectile.MetaConcepts (progName)
 import Drasil.Projectile.References (citations)
-import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
+import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -98,7 +87,7 @@ mkSRS = [TableOfContents,
       ],
   ReqrmntSec $
     ReqsProg
-      [ FReqsSub EmptyS []
+      [ FReqsSub funcReqsTables
       , NonFReqsSub
       ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -170,7 +159,8 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
-  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
+  dataDefs iMods genDefns tMods concIns citations
+  (labelledContent ++ funcReqsTables) allRefs
 
 abbreviationsList  :: [IdeaDict]
 abbreviationsList  =
@@ -288,12 +278,6 @@ symbols = unitalQuants ++ map dqdWr [gravitationalAccelConst, tol] ++
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst, tol]
 
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr [launSpeed, launAngle, targPos]
-
-outputs :: [DefinedQuantityDict]
-outputs = [dqdWr offset, dqdWr flightDur]
-
 unitalQuants :: [DefinedQuantityDict]
 unitalQuants = map dqdWr constrained
 
@@ -309,4 +293,3 @@ constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 acronyms :: [CI]
 acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, Doc.srs, refBy, refName, thModel, typUnc]
-

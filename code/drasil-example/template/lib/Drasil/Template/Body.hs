@@ -1,41 +1,29 @@
--- Changes to this template should be reflected in the 'Creating Your Project 
+-- Changes to this template should be reflected in the 'Creating Your Project
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 -- This comment can be removed after copying this template to build your own example.
 
-module Drasil.Template.Body where
-  
-import Control.Lens ((^.))
+module Drasil.Template.Body (mkSRS, si) where
 
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
+import Drasil.DocLang (tunitNone)
 import Drasil.Generator (cdb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
-import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
-import Drasil.DocLang (tunitNone)
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $      --This creates the Reference section of the SRS
-  RefProg intro      -- This add the introduction blob to the reference section  
+  RefProg intro      -- This add the introduction blob to the reference section
     [ tunitNone []      -- Adds table of unit section with a table frame
     , tsymb [] -- Adds table of symbol section with a table frame
-    --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
+    --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
     ],
   IntroSec $
   IntroProg EmptyS (phrase progName)
@@ -71,7 +59,7 @@ mkSRS = [TableOfContents,
       ],
   ReqrmntSec $ ReqsProg
     [
-       FReqsSub EmptyS []
+       FReqsSub []
      , NonFReqsSub
     ],
   LCsSec,
@@ -103,22 +91,15 @@ symbMap :: ChunkDB
 symbMap = cdb ([] :: [DefinedQuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [LabelledContent]) ([] :: [Reference]) citations
+  citations ([] :: [LabelledContent]) ([] :: [Reference])
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,
              smithKoothoor2016]
 
-inConstraints :: [UncertQ]
-inConstraints = []
-
-outConstraints :: [UncertQ]
-outConstraints = []
-
 figTemp :: LabelledContent
 figTemp = llcc (makeFigRef "dblpend") $ figWithWidth EmptyS
   (resourcePath ++ "dblpend.png") 60
-
 
 -- MOVE TO CONCEPTS
 progName :: CI

@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SWHS.Body where
+module Drasil.SWHS.Body (srs, si, symbMap, printSetting, fullSI, charsOfReader, dataContMid, motivation, introStart, externalLinkRef, physSyst1, physSyst2, sysCntxtDesc, systContRespBullets, sysCntxtRespIntro, userChars) where
 
 import Control.Lens ((^.))
 
@@ -23,8 +23,7 @@ import Data.Drasil.Concepts.Education (calculus, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
-import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
-  understandability, reusability, maintainability, verifiability)
+import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans, htFlux,
   htTransTheo, lawConsEnergy, thermalAnalysis, thermalConduction, thermalEnergy,
   thermocon)
@@ -47,25 +46,13 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
 import Drasil.SWHS.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHS.MetaConcepts (progName, progName')
 import Drasil.SWHS.References (citations, uriReferences)
-import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements,
-  verifyEnergyOutput)
+import Drasil.SWHS.Requirements (funcReqs, nfRequirements,
+  verifyEnergyOutput, funcReqsTables)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
   simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
   tempW, thickness, watE)
-
-
--------------------------------------------------------------------------------
-
-srs :: Document
-srs = mkDoc mkSRS S.forT fullSI
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 si :: System
 si = mkSystem
@@ -103,7 +90,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks [] SWHS.dataDefs insModel
-  genDefs tMods concIns labelledContent allRefs citations
+  genDefs tMods concIns (labelledContent ++ funcReqsTables) allRefs citations
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
@@ -151,7 +138,7 @@ mkSRS = [TableOfContents,
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub inReqDesc [],
+    FReqsSub funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,
@@ -159,6 +146,15 @@ mkSRS = [TableOfContents,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]
+
+fullSI :: System
+fullSI = fillcdbSRS mkSRS si
+
+srs :: Document
+srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
+
+printSetting :: PrintingInformation
+printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 tSymbIntro :: [TSIntro]
 tSymbIntro = [TSPurpose, SymbConvention
@@ -173,11 +169,6 @@ concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
-priorityNFReqs :: [ConceptChunk]
-priorityNFReqs = [correctness, verifiability, understandability, reusability,
-  maintainability]
--- It is sometimes hard to remember to add new sections both here and above.
 
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --

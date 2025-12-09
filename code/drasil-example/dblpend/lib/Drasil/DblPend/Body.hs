@@ -45,7 +45,7 @@ import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
-import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
+import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks, scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar, diffCodeChunk)
 import Language.Drasil.Code (ODEInfo (..))
 import Drasil.DblPend.ODEs (dblPenODEInfo)
@@ -97,7 +97,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
         ]
       ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub EmptyS []
+    [ FReqsSub []
     , NonFReqsSub
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,

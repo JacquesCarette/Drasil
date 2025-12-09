@@ -3,279 +3,154 @@ module Drasil.DblPend.GenDefs (genDefns, mvVelGD_1, mvVelGD_2,
          mvAccelGD_1, mvAccelGD_2, mvForceGD_1, mvForceGD_2) where
 
 import Prelude hiding (cos, sin, sqrt)
-import Language.Drasil
-import qualified Language.Drasil.Development as D
+
+import Language.Drasil (ModelQDef, Derivation, Sentence(..), mkDerivName, eS, nounPhraseSP,
+  (+:+), phrase, getUnit, mkQuantDef', sy, ($=))
 import Utils.Drasil (weave)
-import Theory.Drasil
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Language.Drasil.NounPhrase.Combinators as NP
-import Data.Drasil.Quantities.Physics (velocity, acceleration, force, time)
-import Drasil.DblPend.Unitals (lenRod_1, mvVel_1, mvVel_2,
-    mvAccel_1, mvAccel_2, mvForce_1, mvForce_2,
-    posVec_1, posVec_2, lenRod_2, pendDisAngle_1, pendDisAngle_2,
-    angularVel_1, angularVel_2, tension_1, tension_2, massObj_1, massObj_2)
-import qualified Data.Drasil.Quantities.Physics as QP (gravitationalAccel)
-import Data.Drasil.Concepts.Math (vector)
+import Theory.Drasil (GenDefn, equationalModel', gdNoRefs)
+import Data.Drasil.Quantities.Physics (velocity, acceleration, force)
 import qualified Drasil.DblPend.Expressions as E
-import Drasil.DblPend.Concepts
-import Drasil.DblPend.LabelledContent (figMotion) 
+import Drasil.DblPend.Unitals (mvVel_1, mvVel_2, mvAccel_1, mvAccel_2, mvForce_1, mvForce_2)
 
 genDefns :: [GenDefn]
 genDefns = [mvVelGD_1, mvVelGD_2, mvAccelGD_1, mvAccelGD_2, mvForceGD_1, mvForceGD_2]
 
-velXDeriv_1 :: Derivation
-velXDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` velocity))) (weave [velXDerivSents_1, velXDerivEqns_1])
--- title paragraph and weave the explained words and refined equation
+-----------------------------------------------
+-- Multivector Velocity for First Object    --
+-----------------------------------------------
+mvVelGD_1 :: GenDefn
+mvVelGD_1 = gdNoRefs (equationalModel' mvVelQD_1) (getUnit velocity) (Just mvVelDeriv_1) "multivectorVelocity1" []
 
-mvVelQD_1 :: ModelQDef
-mvVelQD_1 = mkQuantDef' mvVel_1 (the vector `NP.of_` (velocity `ofThe` firstObject)) E.mvVelExpr_1
--- lable and equation
+mvVelQD_1 :: ModelQDef  
+mvVelQD_1 = mkQuantDef' mvVel_1 (nounPhraseSP "multivector velocity of the first object") E.mvVelExpr_1
 
 mvVelDeriv_1 :: Derivation
-mvVelDeriv_1 = mkDerivName (phraseNP (NP.the (vector`of_` velocity))) (weave [mvVelDerivSents_1, mvVelDerivEqns_1])
--- title paragraph and weave the explained words and refined equation
+mvVelDeriv_1 = mkDerivName (phrase velocity +:+ S "of the first object") (weave [mvVelDerivSents_1, mvVelDerivEqns_1])
 
--- Derivation step sentences (vector -> component -> vector form)
-velDerivSent1, velXDerivSent2_1, velDerivSent3, velDerivSent4, velDerivSent5 :: Sentence
-velDerivSent1 = S "At a given point in time" `sC` phrase velocity `S.is` S "the time derivative of the position vector"
-velXDerivSent2_1 = S "The position vector is defined as" +:+ eS' posVec_1 +:+ sParen (S "shown in" +:+. refS figMotion)
-velDerivSent3 = S "Applying this,"
-velDerivSent4 = eS' lenRod_1 `S.is` S "constant" `S.wrt` S "time, so"
-velDerivSent5 = S "Therefore, using the chain rule,"
+mvVelDerivSents_1 :: [Sentence]
+mvVelDerivSents_1 = [S "The multivector velocity in Clifford algebra represents both magnitude and direction as a unified geometric entity.",
+                     S "Using the 2D Clifford space Cl(2,0), the velocity is expressed as a vector multivector with components in the e₁ and e₂ basis directions.",
+                     S "This approach provides a natural geometric representation that preserves rotational relationships.",
+                     S "The angular velocity ω₁ and rod length L₁ combine with the direction vector to form the complete velocity multivector.",
+                     S "Unlike traditional component-wise vector addition, this geometric product maintains the intrinsic geometric structure."]
 
-------------------------------------------------
--- Velocity in Y Direction in the First Object--
-------------------------------------------------
-velYGD_1 :: GenDefn
-velYGD_1 = gdNoRefs (equationalModel' velYQD_1) (getUnit velocity) (Just velYDeriv_1) "velocityY1" []
+mvVelDerivEqns_1 :: [Sentence]  
+mvVelDerivEqns_1 = [eS $ sy mvVel_1 $= E.mvVelExpr_1,
+                    S "where the velocity multivector combines angular velocity and rod length in Clifford space",
+                    S "Direction vector = cos(θ₁)e₁ + sin(θ₁)e₂ using basis vectors e₁, e₂",
+                    S "The geometric product preserves both magnitude and geometric orientation"]
 
-velYQD_1 :: ModelQDef
-velYQD_1 = mkQuantDef' yVel_1 (the yComp `NP.of_` (velocity `ofThe` firstObject)) E.velYExpr_1
+-----------------------------------------------
+-- Multivector Velocity for Second Object   --
+-----------------------------------------------
+mvVelGD_2 :: GenDefn
+mvVelGD_2 = gdNoRefs (equationalModel' mvVelQD_2) (getUnit velocity) (Just mvVelDeriv_2) "multivectorVelocity2" []
 
-velYDeriv_1 :: Derivation
-velYDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` velocity))) (weave [velYDerivSents_1, velYDerivEqns_1])
+mvVelQD_2 :: ModelQDef
+mvVelQD_2 = mkQuantDef' mvVel_2 (nounPhraseSP "multivector velocity of the second object") E.mvVelExpr_2
 
-velYDerivSents_1 :: [Sentence]
-velYDerivSents_1 = [velDerivSent1, velYDerivSent2_1, velDerivSent3, velDerivSent4, velDerivSent5]
+mvVelDeriv_2 :: Derivation
+mvVelDeriv_2 = mkDerivName (phrase velocity +:+ S "of the second object") (weave [mvVelDerivSents_2, mvVelDerivEqns_2])
 
-velYDerivEqns_1 :: [Sentence]
-velYDerivEqns_1 = map eS [D.velDerivEqn1, D.velYDerivEqn2_1, D.velYDerivEqn3_1, D.velYDerivEqn4_1] ++ [eS' velYQD_1]
+mvVelDerivSents_2 :: [Sentence]
+mvVelDerivSents_2 = [S "The multivector velocity for the second object combines the velocity from the first pendulum with its own rotational motion.",
+                     S "In Clifford algebra, this vector addition preserves the geometric relationships between the two connected pendulums.",
+                     S "The total velocity is expressed as the sum of two vector multivectors in the same geometric space."]
 
-velYDerivSent2_1 :: Sentence
-velYDerivSent2_1 = S "We also know the" +:+ phrase verticalPos +:+ S "that" `S.is` definedIn'' positionYDD_1
+mvVelDerivEqns_2 :: [Sentence]
+mvVelDerivEqns_2 = [eS $ sy mvVel_2 $= E.mvVelExpr_2,
+                    S "This represents the geometric sum of the first pendulum's velocity and the second pendulum's relative velocity"]
 
--------------------------------------------------
--- Velocity in X Direction in the Second Object--
--------------------------------------------------
-velXGD_2 :: GenDefn
-velXGD_2 = gdNoRefs (equationalModel' velXQD_2) (getUnit velocity) (Just velXDeriv_2) "velocityX2" []
+-----------------------------------------------
+-- Multivector Acceleration for First Object--
+-----------------------------------------------
+mvAccelGD_1 :: GenDefn
+mvAccelGD_1 = gdNoRefs (equationalModel' mvAccelQD_1) (getUnit acceleration) (Just mvAccelDeriv_1) "multivectorAcceleration1" []
 
-velXQD_2 :: ModelQDef
-velXQD_2 = mkQuantDef' xVel_2 (the xComp `NP.of_` (velocity `ofThe` secondObject)) E.velXExpr_2
+mvAccelQD_1 :: ModelQDef
+mvAccelQD_1 = mkQuantDef' mvAccel_1 (nounPhraseSP "multivector acceleration of the first object") E.mvAccelExpr_1
 
-velXDeriv_2 :: Derivation
-velXDeriv_2 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` velocity))) (weave [velXDerivSents_2, velXDerivEqns_2])
+mvAccelDeriv_1 :: Derivation
+mvAccelDeriv_1 = mkDerivName (phrase acceleration +:+ S "of the first object") (weave [mvAccelDerivSents_1, mvAccelDerivEqns_1])
 
-velXDerivSents_2 :: [Sentence]
-velXDerivSents_2 = [velDerivSent1, velXDerivSent2_2, velDerivSent3, velDerivSent4]
+mvAccelDerivSents_1 :: [Sentence]
+mvAccelDerivSents_1 = [S "The multivector acceleration in Clifford algebra combines centripetal and tangential acceleration components.",
+                       S "The centripetal acceleration points radially inward, while tangential acceleration is perpendicular to the rod.",
+                       S "Both components are naturally expressed as vector multivectors and added using Clifford geometric operations.",
+                       S "Centripetal component: -ω₁²L₁ × direction_vector (radial inward)",
+                       S "Tangential component: α₁L₁ × perpendicular_direction_vector (tangential)",
+                       S "The geometric sum preserves the underlying geometric relationships without component-wise decomposition."]
 
-velXDerivEqns_2 :: [Sentence]
-velXDerivEqns_2 = map eS [D.velDerivEqn1, D.velXDerivEqn2_2, D.velXDerivEqn3_2] ++ [eS' velXQD_2]
+mvAccelDerivEqns_1 :: [Sentence]
+mvAccelDerivEqns_1 = [eS $ sy mvAccel_1 $= E.mvAccelExpr_1,
+                      S "where the acceleration combines centripetal and tangential components in Clifford space",
+                      S "= centripetal_multivector + tangential_multivector",
+                      S "Both terms maintain their geometric significance through the Clifford algebra representation"]
 
-velXDerivSent2_2 :: Sentence
-velXDerivSent2_2 = S "We also know the" +:+ phrase horizontalPos +:+ S "that" `S.is` definedIn'' positionXDD_2
+-----------------------------------------------
+-- Multivector Acceleration for Second Object--
+-----------------------------------------------
+mvAccelGD_2 :: GenDefn  
+mvAccelGD_2 = gdNoRefs (equationalModel' mvAccelQD_2) (getUnit acceleration) (Just mvAccelDeriv_2) "multivectorAcceleration2" []
 
--------------------------------------------------
--- Velocity in Y Direction in the Second Object--
--------------------------------------------------
-velYGD_2 :: GenDefn
-velYGD_2 = gdNoRefs (equationalModel' velYQD_2) (getUnit velocity) (Just velYDeriv_2) "velocityY2" []
+mvAccelQD_2 :: ModelQDef
+mvAccelQD_2 = mkQuantDef' mvAccel_2 (nounPhraseSP "multivector acceleration of the second object") E.mvAccelExpr_2
 
-velYQD_2 :: ModelQDef
-velYQD_2 = mkQuantDef' yVel_2 (the yComp `NP.of_` (velocity `ofThe` secondObject)) E.velYExpr_2
+mvAccelDeriv_2 :: Derivation
+mvAccelDeriv_2 = mkDerivName (phrase acceleration +:+ S "of the second object") (weave [mvAccelDerivSents_2, mvAccelDerivEqns_2])
 
-velYDeriv_2 :: Derivation
-velYDeriv_2 = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` velocity))) (weave [velYDerivSents_2, velYDerivEqns_2])
+mvAccelDerivSents_2 :: [Sentence]
+mvAccelDerivSents_2 = [S "The second object's acceleration is the geometric sum of the first object's acceleration and its own relative acceleration.",
+                       S "This captures the coupling between the two pendulums through their mechanical connection.",
+                       S "The Clifford algebra representation preserves the geometric relationships in this coupled system."]
 
-velYDerivSents_2 :: [Sentence]
-velYDerivSents_2 = [velDerivSent1,velYDerivSent2_2,velDerivSent3,velDerivSent5]
+mvAccelDerivEqns_2 :: [Sentence]
+mvAccelDerivEqns_2 = [eS $ sy mvAccel_2 $= E.mvAccelExpr_2,
+                      S "This represents the total acceleration as a vector sum in Clifford geometric space"]
 
-velYDerivEqns_2 :: [Sentence]
-velYDerivEqns_2 = map eS [D.velDerivEqn1, D.velYDerivEqn2_2, D.velYDerivEqn3_2] ++ [eS' velYQD_2]
+-----------------------------------------------
+-- Multivector Force for First Object       --
+-----------------------------------------------
+mvForceGD_1 :: GenDefn
+mvForceGD_1 = gdNoRefs (equationalModel' mvForceQD_1) (getUnit force) (Just mvForceDeriv_1) "multivectorForce1" []
 
-velYDerivSent2_2 :: Sentence
-velYDerivSent2_2 = S "We also know the" +:+ phrase verticalPos +:+ S "that" `S.is` definedIn'' positionYDD_2
+mvForceQD_1 :: ModelQDef
+mvForceQD_1 = mkQuantDef' mvForce_1 (nounPhraseSP "multivector force on the first object") E.mvForceExpr_1
 
-----------------------------------------------------
--- Acceleration in X direction in the First Object--
-----------------------------------------------------
-accelXGD_1 :: GenDefn
-accelXGD_1 = gdNoRefs (equationalModel' accelXQD_1) (getUnit acceleration) (Just accelXDeriv_1) "accelerationX1" []
+mvForceDeriv_1 :: Derivation
+mvForceDeriv_1 = mkDerivName (phrase force +:+ S "on the first object") (weave [mvForceDerivSents_1, mvForceDerivEqns_1])
 
-accelXQD_1 :: ModelQDef
-accelXQD_1 = mkQuantDef' xAccel_1 (the xComp `NP.of_` (acceleration `ofThe` firstObject)) E.accelXExpr_1
+mvForceDerivSents_1 :: [Sentence]
+mvForceDerivSents_1 = [S "The multivector force in Clifford algebra combines inertial and gravitational forces as vector multivectors.",
+                       S "The inertial force is proportional to the multivector acceleration, preserving Newton's second law in geometric form.",
+                       S "Gravitational force acts vertically downward and is naturally represented as a vector multivector."]
 
-accelXDeriv_1:: Derivation
-accelXDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelXDerivSents_1, accelXDerivEqns_1])
+mvForceDerivEqns_1 :: [Sentence]
+mvForceDerivEqns_1 = [eS $ sy mvForce_1 $= E.mvForceExpr_1,
+                      S "where force equals mass times acceleration plus gravitational force in vector form"]
 
-accelXDerivSents_1:: [Sentence]
-accelXDerivSents_1 = [accelDerivSent1, accelXDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5]
+-----------------------------------------------
+-- Multivector Force for Second Object      --
+-----------------------------------------------
+mvForceGD_2 :: GenDefn
+mvForceGD_2 = gdNoRefs (equationalModel' mvForceQD_2) (getUnit force) (Just mvForceDeriv_2) "multivectorForce2" []
 
-accelXDerivEqns_1 :: [Sentence]
-accelXDerivEqns_1 = eS D.accelDerivEqn1 : eS' velXQD_1 : map eS [D.accelXDerivEqn3_1, D.accelXDerivEqn4_1] ++ [eS' accelXQD_1]
+mvForceQD_2 :: ModelQDef
+mvForceQD_2 = mkQuantDef' mvForce_2 (nounPhraseSP "multivector force on the second object") E.mvForceExpr_2
 
-accelDerivSent1, accelXDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5 :: Sentence
+mvForceDeriv_2 :: Derivation
+mvForceDeriv_2 = mkDerivName (phrase force +:+ S "on the second object") (weave [mvForceDerivSents_2, mvForceDerivEqns_2])
 
-accelDerivSent1 = S "Our" +:+ phrase acceleration +: S "is"
-accelXDerivSent2_1 = S "Earlier" `sC` S "we found the" +:+ phrase horizontalVel +:+ S "to be"
-accelDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
-accelDerivSent4 = S "By the product and chain rules, we find"
-accelDerivSent5 = S "Simplifying,"
+mvForceDerivSents_2 :: [Sentence]
+mvForceDerivSents_2 = [S "The force on the second object combines its inertial response with gravitational effects.",
+                       S "The Clifford algebra representation maintains the geometric consistency between force and acceleration.",
+                       S "This approach naturally handles the coupling forces between the connected pendulum objects.",
+                       S "Key GA operations demonstrated: geometric product (combines magnitude and direction),",
+                       S "vector addition in Clifford space (preserves geometric relationships),",
+                       S "scalar multiplication with multivectors (maintains geometric structure)."]
 
-----------------------------------------------------
--- Acceleration in Y direction in the First Object--
-----------------------------------------------------
-accelYGD_1 :: GenDefn
-accelYGD_1 = gdNoRefs (equationalModel' accelYQD_1) (getUnit acceleration) (Just accelYDeriv_1) "accelerationY1" []
-
-accelYQD_1 :: ModelQDef
-accelYQD_1 = mkQuantDef' yAccel_1 (the yComp `NP.of_` (acceleration `ofThe` firstObject)) E.accelYExpr_1
-
-accelYDeriv_1:: Derivation
-accelYDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelYDerivSents_1, accelYDerivEqns_1])
-
-accelYDerivSents_1 :: [Sentence]
-accelYDerivSents_1 = [accelDerivSent1, accelYDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5]
-
-accelYDerivEqns_1 :: [Sentence]
-accelYDerivEqns_1 = eS D.accelDerivEqn1 : eS' velYQD_1 : map eS [D.accelYDerivEqn3_1, D.accelYDerivEqn4_1] ++ [eS' accelYQD_1]
-
-accelYDerivSent2_1 :: Sentence
-accelYDerivSent2_1 = S "Earlier" `sC` S "we found the" +:+ phrase verticalVel +:+ S "to be"
-
------------------------------------------------------
--- Acceleration in X direction in the Second Object--
------------------------------------------------------
-accelXGD_2 :: GenDefn
-accelXGD_2 = gdNoRefs (equationalModel' accelXQD_2) (getUnit acceleration) (Just accelXDeriv_2) "accelerationX2" []
-
-accelXQD_2 :: ModelQDef
-accelXQD_2 = mkQuantDef' xAccel_2 (the xComp `NP.of_` (acceleration `ofThe` secondObject)) E.accelXExpr_2
-
-accelXDeriv_2 :: Derivation
-accelXDeriv_2 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelXDerivSents_2, accelXDerivEqns_2])
-
-accelXDerivSents_2 :: [Sentence]
-accelXDerivSents_2 = [accelDerivSent1, accelXDerivSent2_2, accelDerivSent3, accelDerivSent4]
-
-accelXDerivEqns_2 :: [Sentence]
-accelXDerivEqns_2 = eS D.accelDerivEqn1 : eS' velXQD_2 : [eS D.accelXDerivEqn3_2, eS' accelXQD_2]
-
-accelXDerivSent2_2 :: Sentence
-accelXDerivSent2_2 = S "Earlier" `sC` S "we found the" +:+ phrase horizontalVel +:+ S "to be"
-
------------------------------------------------------
--- Acceleration in Y direction in the Second Object--
------------------------------------------------------
-accelYGD_2 :: GenDefn
-accelYGD_2 = gdNoRefs (equationalModel' accelYQD_2) (getUnit acceleration) (Just accelYDeriv_2) "accelerationY2" []
-
-accelYQD_2 :: ModelQDef
-accelYQD_2 = mkQuantDef' yAccel_2 (the yComp `NP.of_` (acceleration `ofThe` secondObject)) E.accelYExpr_2
-
-accelYDeriv_2 :: Derivation
-accelYDeriv_2 = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelYDerivSents_2, accelYDerivEqns_2])
-
-accelYDerivSents_2 :: [Sentence]
-accelYDerivSents_2 = [accelDerivSent1, accelYDerivSent2_2, accelDerivSent3, accelDerivSent4]
-
-accelYDerivEqns_2 :: [Sentence]
-accelYDerivEqns_2 = eS D.accelDerivEqn1 : eS' velYQD_2 : [eS D.accelYDerivEqn3_2, eS' accelYQD_2]
-
-accelYDerivSent2_2 :: Sentence
-accelYDerivSent2_2 = S "Earlier" `sC` S "we found the" +:+ phrase horizontalVel +:+ S "to be"
-
--------------------------------------------------
--- Horizontal force acting on the first object --
--------------------------------------------------
-xForceGD_1 :: GenDefn
-xForceGD_1 = gdNoRefs (equationalRealmU "xForce1" xForceMD_1)
-        (getUnit force) (Just xForceDeriv_1) "xForce1" []
-
-xForceMD_1 :: MultiDefn ModelExpr
-xForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
-    where quant = dqd' (dccA "force" (horizontalForce `onThe` firstObject)
-                    "the horizontal force acting on the first object"
-                    Nothing) (symbol force) Real (getUnit force)
-          defns = NE.fromList [
-                    mkDefiningExpr "xForceWithMass1"
-                      [] EmptyS $ express $ forceGQD ^. defnExpr,
-                    mkDefiningExpr "xForceWithAngle1"
-                      [] EmptyS E.xForceWithAngle_1]
-
-xForceDeriv_1 :: Derivation
-xForceDeriv_1 = mkDerivName (D.toSent $ phraseNP (force `onThe` firstObject)) [eS' xForceMD_1]
-
--------------------------------------------------
--- Vertical force acting on the first object --
--------------------------------------------------
-yForceGD_1 :: GenDefn
-yForceGD_1 = gdNoRefs (equationalRealmU "yForce1" yForceMD_1)
-        (getUnit force) (Just yForceDeriv_1) "yForce1" []
-
-yForceMD_1 :: MultiDefn ModelExpr
-yForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
-    where quant = dqd' (dccA "force" (verticalForce `onThe` firstObject)
-                    "the vertical force acting on the first object"
-                    Nothing) (symbol force) Real (getUnit force)
-          defns = NE.fromList [
-                    mkDefiningExpr "yForceWithMass1"
-                      [] EmptyS $ express $ forceGQD ^. defnExpr,
-                    mkDefiningExpr "yForceWithAngle1"
-                      [] EmptyS E.yForceWithAngle_1]
-
-yForceDeriv_1 :: Derivation
-yForceDeriv_1 = mkDerivName (D.toSent $ phraseNP (force `onThe` firstObject)) [eS' yForceMD_1]
-
--------------------------------------------------
--- Horizontal force acting on the second object --
--------------------------------------------------
-xForceGD_2 :: GenDefn
-xForceGD_2 = gdNoRefs (equationalRealmU "xForce2" xForceMD_2)
-        (getUnit force) (Just xForceDeriv_2) "xForce2" []
-
-xForceMD_2 :: MultiDefn ModelExpr
-xForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
-    where quant = dqd' (dccA "force" (horizontalForce `onThe` secondObject)
-                    "the horizontal force acting on the second object"
-                    Nothing) (symbol force) Real (getUnit force)
-          defns = NE.fromList [
-                    mkDefiningExpr "xForceWithMass2"
-                      [] EmptyS $ express $ forceGQD ^. defnExpr,
-                    mkDefiningExpr "xForceWithAngle2"
-                      [] EmptyS E.xForceWithAngle_2]
-
-xForceDeriv_2 :: Derivation
-xForceDeriv_2 = mkDerivName (D.toSent $ phraseNP (force `onThe` secondObject)) [eS' xForceMD_2]
-
--------------------------------------------------
--- Vertical force acting on the first object --
--------------------------------------------------
-yForceGD_2 :: GenDefn
-yForceGD_2 = gdNoRefs (equationalRealmU "yForce2" yForceMD_2)
-        (getUnit force) (Just yForceDeriv_2) "yForce2" []
-
-yForceMD_2 :: MultiDefn ModelExpr
-yForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
-    where quant = dqd' (dccA "force" (verticalForce `onThe` secondObject)
-                    "the vertical force acting on the second object"
-                    Nothing) (symbol force) Real (getUnit force)
-          defns = NE.fromList [
-                    mkDefiningExpr "yForceWithMass2"
-                      [] EmptyS $ express $ forceGQD ^. defnExpr,
-                    mkDefiningExpr "yForceWithAngle2"
-                      [] EmptyS E.yForceWithAngle_2]
-
-yForceDeriv_2 :: Derivation
-yForceDeriv_2 = mkDerivName (D.toSent $ phraseNP (force `onThe` secondObject)) [eS' yForceMD_2]
+mvForceDerivEqns_2 :: [Sentence]
+mvForceDerivEqns_2 = [eS $ sy mvForce_2 $= E.mvForceExpr_2,
+                      S "This represents the total force as a vector sum in Clifford geometric space",
+                      S "= mass × acceleration_multivector + gravitational_force_multivector",
+                      S "Demonstrating how Newton's second law extends naturally to geometric algebra"]

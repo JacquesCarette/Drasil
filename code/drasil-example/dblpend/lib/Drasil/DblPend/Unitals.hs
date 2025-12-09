@@ -10,8 +10,6 @@ import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
   ( lM, lP, lV, lA, lW, lAlpha, lTheta, cL, cT, cF )
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NounPhrase.Combinators as NP
-import Control.Lens ((^.))
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
   requirement, refBy, refName, srs, typUnc)
@@ -21,11 +19,13 @@ import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, acceleration, tension, time, gravitationalAccelConst)
 import Data.Drasil.Concepts.Physics (twoD)
-import Data.Drasil.Concepts.Math as CM (angle, magnitude)
+import Data.Drasil.Concepts.Math as CM (angle, xDir, yDir)
 import Data.Drasil.Quantities.Math as QM (unitVect, pi_)
-import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject)
+import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject,
+        horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalAccel, verticalAccel)
 import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
 import Language.Drasil.Space (vect2D)
+import qualified Language.Drasil.Sentence.Combinators as S
 
 ----------------------------------------
 -- ACRONYMS, SYMBOLS, INPUTS, OUTPUTS
@@ -61,17 +61,8 @@ unitalChunks = [
   xVel_1, xVel_2, yVel_1, yVel_2, xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1,
   yAccel_1, xAccel_2, yAccel_2, angularAccel_1, angularAccel_2, tension_1,
   tension_2, QPP.mass, QP.force, QP.gravitationalAccel, QP.tension, QP.acceleration,
-  QP.time, QP.velocity, QP.position]
-
-lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
-  pendDisAngle_1, pendDisAngle_2,
-  xPos_1, xPos_2, yPos_1, yPos_2, xVel_1, yVel_1, xVel_2, yVel_2, xAccel_1,
-  yAccel_1, xAccel_2, yAccel_2,
-  angularAccel_1, angularAccel_2, tension_1, tension_2 :: UnitalChunk
-
-unitalChunks :: [UnitalChunk]
-unitalChunks =
-  [ lenRod_1, lenRod_2
+  QP.time, QP.velocity, QP.position,
+  lenRod_1, lenRod_2
   , massObj_1, massObj_2
   , pendDisAngle_1, pendDisAngle_2
   , angularVel_1, angularVel_2
@@ -82,12 +73,19 @@ unitalChunks =
   , angularAccel_1, angularAccel_2
   , tension_1, tension_2
   , QPP.mass, QP.force, QP.gravitationalAccel
-  , QP.acceleration, QP.time, QP.velocity, QP.position, QP.tension
-  ]
+  , QP.acceleration, QP.time, QP.velocity, QP.position, QP.tension]
 
+lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
+        pendDisAngle_1, pendDisAngle_2,
+        posVec_1, posVec_2,
+        mvVel_1, mvVel_2,
+        mvAccel_1, mvAccel_2,
+        mvForce_1, mvForce_2,
+        xPos_1, xPos_2, yPos_1, yPos_2, xVel_1, yVel_1, xVel_2, yVel_2, xAccel_1,
+        yAccel_1, xAccel_2, yAccel_2,
+        angularAccel_1, angularAccel_2, tension_1, tension_2 :: UnitalChunk
 
 -- Rod lengths
-lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisAngle_1, pendDisAngle_2 :: UnitalChunk
 lenRod_1 = uc' "l_1" (len `ofThe` firstRod)
         (D.toSent $ phraseNP (len `the_ofThe` firstRod)) -- Fix me, can have more information
         (sub cL label1) Real metre
@@ -184,10 +182,43 @@ pendDisAngle_2 = uc' "theta_2" (angle `ofThe` secondRod)
         (D.toSent $ phraseNP (angle `the_ofThe` secondRod))
         (sub lTheta label2) Real radian
 
+-- Vector quantities (position, velocity, acceleration, force) for each object
+posVec_1 = uc' "r_1" (QP.position `ofThe` firstObject)
+        (D.toSent $ phraseNP (QP.position `the_ofThe` firstObject))
+        (sub (eqSymb QP.position) label1) (Vect Real) metre
+
+posVec_2 = uc' "r_2" (QP.position `ofThe` secondObject)
+        (D.toSent $ phraseNP (QP.position `the_ofThe` secondObject))
+        (sub (eqSymb QP.position) label2) (Vect Real) metre
+
+mvVel_1 = uc' "vvec_1" (QP.velocity `ofThe` firstObject)
+        (D.toSent $ phraseNP (QP.velocity `the_ofThe` firstObject))
+        (sub (eqSymb QP.velocity) label1) (Vect Real) velU
+
+mvVel_2 = uc' "vvec_2" (QP.velocity `ofThe` secondObject)
+        (D.toSent $ phraseNP (QP.velocity `the_ofThe` secondObject))
+        (sub (eqSymb QP.velocity) label2) (Vect Real) velU
+
+mvAccel_1 = uc' "avec_1" (QP.acceleration `ofThe` firstObject)
+        (D.toSent $ phraseNP (QP.acceleration `the_ofThe` firstObject))
+        (sub (eqSymb QP.acceleration) label1) (Vect Real) accelU
+
+mvAccel_2 = uc' "avec_2" (QP.acceleration `ofThe` secondObject)
+        (D.toSent $ phraseNP (QP.acceleration `the_ofThe` secondObject))
+        (sub (eqSymb QP.acceleration) label2) (Vect Real) accelU
+
+mvForce_1 = uc' "F_1" (QP.force `ofThe` firstObject)
+        (D.toSent $ phraseNP (QP.force `the_ofThe` firstObject))
+        (sub (vec cF) label1) (Vect Real) newton
+
+mvForce_2 = uc' "F_2" (QP.force `ofThe` secondObject)
+        (D.toSent $ phraseNP (QP.force `the_ofThe` secondObject))
+        (sub (vec cF) label2) (Vect Real) newton
+
 unitless :: [DefinedQuantityDict]
 unitless = [QM.unitVect, QM.pi_]
 
-lRod, label1, label2, lTheta' :: Symbol
+lRod, labelx, labely, initial, label1, label2, lTheta' :: Symbol
 lRod = label "rod"
 labelx = label "x"
 labely = label "y"

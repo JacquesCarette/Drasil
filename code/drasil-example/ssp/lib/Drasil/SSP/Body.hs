@@ -1,17 +1,17 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
+module Drasil.SSP.Body (si, mkSRS, srs, printSetting, fullSI) where
 
 import Prelude hiding (sin, cos, tan)
-import Control.Lens ((^.))
 
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
+import Control.Lens ((^.))
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 import Drasil.Metadata (inModel)
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
@@ -51,17 +51,6 @@ import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
 import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
   inputs, inputsWUncrtn, outputs, symbols)
-
---Document Setup--
-
-srs :: Document
-srs = mkDoc mkSRS S.forT fullSI
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
 
 resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
@@ -109,9 +98,18 @@ mkSRS = [TableOfContents,
         , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
         , CorrSolnPpties outputs []
         ]
+
+        fullSI :: System
+        fullSI = si
+
+        srs :: Document
+        srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
+
+        printSetting :: PrintingInformation
+        printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
       ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub' funcReqTables
+    [ FReqsSub funcReqTables
     , NonFReqsSub
     ],
   LCsSec,

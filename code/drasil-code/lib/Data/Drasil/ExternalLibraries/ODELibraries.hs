@@ -7,7 +7,7 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
   -- * Apache Commons (Java)
   apacheODEPckg, apacheODESymbols,
   -- * Odeint (C++)
-  odeintPckg, odeintSymbols, diffCodeChunk
+  odeintPckg, odeintSymbols, diffCodeChunk, odeInfoChunks
 ) where
 import Language.Drasil hiding (dim)
 import Language.Drasil.Space (ClifKind(..))
@@ -681,7 +681,7 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (CE.CCCBinaryOp b e1 e2)   = CE.CCCBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (Operator ao dd e)      = Operator ao dd $ replaceDepVar e
+    replaceDepVar (CE.Operator ao dd e)      = CE.Operator ao dd $ replaceDepVar e
     replaceDepVar e = e
 
 -- | Collect all chunks related to a specific ODE

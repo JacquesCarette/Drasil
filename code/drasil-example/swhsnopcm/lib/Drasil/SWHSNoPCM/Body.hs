@@ -1,7 +1,7 @@
-module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
+module Drasil.SWHSNoPCM.Body (srs, si, symbMap, printSetting, fullSI, mkSRS, noPCMODEInfo) where
 
-import Control.Lens ((^.))
 import Data.List ((\\))
+import Control.Lens ((^.))
 
 import Language.Drasil hiding (section)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -24,7 +24,7 @@ import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
-  arrayVecDepVar, apacheODESymbols, odeintSymbols, diffCodeChunk)
+  apacheODESymbols, odeintSymbols, odeInfoChunks)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
@@ -54,7 +54,7 @@ import Drasil.SWHS.References (uriReferences)
 import Drasil.SWHSNoPCM.Assumptions
 import Drasil.SWHSNoPCM.Changes (likelyChgs, unlikelyChgs)
 import qualified Drasil.SWHSNoPCM.DataDefs as NoPCM (dataDefs)
-import Drasil.SWHSNoPCM.Definitions (srsSWHS, htTrans)
+import Drasil.SWHSNoPCM.Definitions (htTrans)
 import Drasil.SWHSNoPCM.GenDefs (genDefs)
 import Drasil.SWHSNoPCM.Goals (goals)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
@@ -62,36 +62,24 @@ import Drasil.SWHSNoPCM.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHSNoPCM.MetaConcepts (progName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
-import Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc)
+import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
-  specParamValList)
-
-srs :: Document
-srs = mkDoc mkSRS S.forT fullSI
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
+  specParamValList, outputs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = map dqdWr concepts ++ map dqdWr constrained
- ++ map dqdWr [tempW, watE]
+symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained
 
 symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
--- FIXME: the dependent variable of noPCMODEInfo (tempW) is added to symbolsAll as it is used to create new chunks with tempW's UID suffixed in ODELibraries.hs.
+-- FIXME: the dependent variable of noPCMODEInfo (tempW) is currently added to symbolsAll automatically as it is used to create new chunks with tempW's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll = [gradient, pi_, uNormalVect, dqdWr surface] ++ symbols ++
   map dqdWr symbolConcepts ++ map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
-  map dqdWr [listToArray dp, arrayVecDepVar noPCMODEInfo, 
-  diffCodeChunk dp, listToArray $ diffCodeChunk dp]
-  where dp = depVar noPCMODEInfo
+  odeInfoChunks noPCMODEInfo
 
 concepts :: [UnitalChunk]
 concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
@@ -145,7 +133,7 @@ mkSRS = [TableOfContents,
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub inReqDesc [],
+    FReqsSub funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,
@@ -153,6 +141,15 @@ mkSRS = [TableOfContents,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]
+
+fullSI :: System
+fullSI = fillcdbSRS mkSRS si
+
+srs :: Document
+srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
+
+printSetting :: PrintingInformation
+printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 concIns :: [ConceptInstance]
 concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
@@ -163,7 +160,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 si :: System
 si = mkSystem
-  srsSWHS Specification [thulasi]
+  progName Specification [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but
@@ -171,7 +168,7 @@ si = mkSystem
   ((map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   []
-  (inputs ++ [dqdWr watE]) [tempW, watE]
+  inputs outputs
   (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
   symbMap
 
@@ -183,7 +180,7 @@ ideaDicts =
   -- Actual IdeaDicts
   [htTrans, materialProprty] ++
   -- CIs
-  map nw [srsSWHS, progName, phsChgMtrl] ++
+  map nw [progName, phsChgMtrl] ++
   map nw CP.physicCon' ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
@@ -196,7 +193,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns labelledContent allRefs citations
+  NoPCM.iMods genDefs tMods concIns (labelledContent ++ funcReqsTables) allRefs citations
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

@@ -14,8 +14,9 @@ import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
-import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
-  Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
+import Drasil.Database (UID, HasUID(..))
+import Language.Drasil (HasSymbol, HasSpace(..),
+  Space (Rational, Real), RealInterval(..), Constraint(..), Inclusive (..))
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,

@@ -6,14 +6,15 @@ module Theory.Drasil.GenDefn (
   -- * Constructors
   gd, gdNoRefs,
   -- * Functions
-  getEqModQdsFromGd) where
+  getEqModQdsFromGd
+) where
 
-import Drasil.Database (HasChunkRefs(..))
+import Control.Lens ((^.), view, makeLenses)
+
+import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
 import Drasil.Metadata (genDefn)
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
-
-import Control.Lens ((^.), view, makeLenses)
 
 -- | A general definition is a 'ModelKind' that may have units, a derivation,
 -- references (as 'DecRef's), a shortname, a reference address, and notes.

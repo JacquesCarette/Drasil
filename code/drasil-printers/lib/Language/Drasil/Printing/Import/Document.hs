@@ -8,6 +8,7 @@ import Data.Map (fromList)
 import Language.Drasil hiding (neg, sec, symbol, isIn, codeExpr)
 import Drasil.Code.CodeExpr.Development (expr)
 
+import Drasil.Database (showUID)
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T

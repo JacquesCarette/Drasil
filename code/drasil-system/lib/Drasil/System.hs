@@ -4,7 +4,6 @@
 -- Changes to System should be reflected in the 'Creating Your Project
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
-
 module Drasil.System (
   -- * System
   -- ** Types
@@ -26,9 +25,9 @@ import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc
-import Drasil.Database (ChunkDB)
-import Language.Drasil (Quantity, MayHaveUnit, HasUID(..), Sentence, Concept,
-  Reference, UID, People, IdeaDict, CI, Constrained, ConstQDef, nw, abrv)
+import Drasil.Database (UID, HasUID(..), ChunkDB)
+import Language.Drasil (Quantity, MayHaveUnit, Sentence, Concept,
+  Reference, People, IdeaDict, CI, Constrained, ConstQDef, nw, abrv)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Drasil.Metadata (runnableSoftware, website)
 import Utils.Drasil (toPlainName)

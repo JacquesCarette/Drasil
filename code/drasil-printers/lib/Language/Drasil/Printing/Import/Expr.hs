@@ -5,6 +5,7 @@ module Language.Drasil.Printing.Import.Expr (expr) where
 
 import Data.List (intersperse)
 
+import Drasil.Database (UID)
 import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix, Set)
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),

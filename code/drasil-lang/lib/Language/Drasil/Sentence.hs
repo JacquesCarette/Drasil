@@ -11,7 +11,7 @@ module Language.Drasil.Sentence (
   (+:+), (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
   sentenceSymb, sentenceTerm,
-  sdep, shortdep, lnames, lnames'
+  sdep, shortdep, lnames, lnames', sentenceRefs
 ) where
 
 import Control.Lens ((^.))
@@ -22,7 +22,7 @@ import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ModelExpr.Extract (meNames)
-import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.NounPhrase.Types (NP)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Symbol (HasSymbol, Symbol)
 

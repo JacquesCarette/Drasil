@@ -1,55 +1,49 @@
 -- | Noun phrases are used to hold terms with knowledge of proper capitalization and pluralization.
+{-# OPTIONS_GHC -Wno-orphans #-}
 module Language.Drasil.NounPhrase.Core (
-  -- * Types
-  CapitalizationRule(..), NP(..),
-  PluralForm, PluralRule(..),
-  NPStruct(S,(:-:),(:+:),P)
+  module Language.Drasil.NounPhrase.Types
 ) where
 
-import Drasil.Database (HasChunkRefs(..))
+import Drasil.Database (HasChunkRefs(..), UID)
 
-import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.NounPhrase.Types
+import qualified Language.Drasil.Sentence as Sent
+import Language.Drasil.Sentence (Sentence, sentenceRefs)
 
--- | Essentially a subset of 'Sentence' that contains only the parts
--- that make sense for a NounPhrase
-data NPStruct =
-    S String
-  | NPStruct :-: NPStruct -- no space
-  | NPStruct :+: NPStruct -- a space
-  | P Symbol
+import qualified Data.Set as Set
 
--- | Synonym for 'NPStruct typically used for plural forms.
-type PluralForm = NPStruct
-
--- | Capitalization rules.
-data CapitalizationRule =
-    CapFirst -- ^ Capitalize the first letter of the first word only.
-  | CapWords -- ^ Capitalize the first letter of each word.
-  | Replace NPStruct -- ^ Replace the noun phrase with the given
-                     -- 'NPStruct. Used for custom capitalization.
-  | CapNothing    -- some parts of speech don't capitalize at all but still a full phrase
-
--- | Pluralization rules.
-data PluralRule =
-    AddS -- ^ Add "s" to the end of the noun phrase.
-  | AddE -- ^ Add "e" to the end of the noun phrase.
-  | AddES -- ^ Add "es" to the end of the noun phrase.
-  | SelfPlur -- ^ The noun phrase is already plural.
-  | IrregPlur (String -> String) -- ^ Apply the given function to
-                                               -- the noun phrase to get the plural.
-
--- | For nouns and 'NounPhrase's. May be constructed from a
--- proper noun, common noun, or phrase ('Sentence') and their
--- respective pluralization and capitalization rules.
-data NP =
-    ProperNoun String PluralRule -- ^ Stores a proper noun and its pluralization.
-  | CommonNoun String PluralRule CapitalizationRule -- ^ Stores a common noun and its pluralization.
-  | Phrase     NPStruct PluralForm CapitalizationRule CapitalizationRule -- ^ Stores noun phrase and its pluralization.
-  --Phrase plurals can get very odd, so it seems best (for now) to encode
-  --them directly. FIXME: If the singular/plural phrase has special (replace)
-  --capitalization, one of the two cannot be capitalized right now.
-  --The two capitalization rules are for sentenceCase / titleCase respectively
-
+-- | Gather the chunk references mentioned within an 'NP'.
 instance HasChunkRefs NP where
-    chunkRefs _ = mempty
+    chunkRefs = npRefs
     {-# INLINABLE chunkRefs #-}
+
+-- | Collect references contained in a noun phrase.
+npRefs :: NP -> Set.Set UID
+npRefs (ProperNoun _ _)         = Set.empty
+npRefs (CommonNoun _ _ cRule)   = capRuleRefs cRule
+npRefs (Phrase sing plural c1 c2) =
+  npStructRefs sing `Set.union`
+  npStructRefs plural `Set.union`
+  capRuleRefs c1 `Set.union`
+  capRuleRefs c2
+{-# INLINABLE npRefs #-}
+
+-- | Extract references embedded in capitalization rules (only 'Replace').
+capRuleRefs :: CapitalizationRule -> Set.Set UID
+capRuleRefs CapFirst     = Set.empty
+capRuleRefs CapWords     = Set.empty
+capRuleRefs CapNothing   = Set.empty
+capRuleRefs (Replace s)  = npStructRefs s
+{-# INLINABLE capRuleRefs #-}
+
+-- | Convert a noun-phrase structure into a sentence and reuse 'sentenceRefs'.
+npStructRefs :: NPStruct -> Set.Set UID
+npStructRefs = sentenceRefs . npStructToSentence
+{-# INLINABLE npStructRefs #-}
+
+-- | Translate 'NPStruct' into a 'Sentence' so that sentence helpers can traverse it.
+npStructToSentence :: NPStruct -> Sentence
+npStructToSentence (S s)       = Sent.S s
+npStructToSentence (a :-: b)   = npStructToSentence a Sent.:+: npStructToSentence b
+npStructToSentence (a :+: b)   = npStructToSentence a Sent.+:+ npStructToSentence b
+npStructToSentence (P sym)     = Sent.P sym

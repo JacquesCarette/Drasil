@@ -10,7 +10,6 @@ module Language.Drasil.Choices (
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
   choicesSent, showChs, InternalConcept(..)) where
 
-
 import Control.Lens ((^.))
 import Data.Map (Map)
 import qualified Data.Map as Map

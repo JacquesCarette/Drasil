@@ -13,7 +13,7 @@ import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
@@ -59,6 +59,7 @@ si = mkSystem progName Specification
   configFp
   inputs outputs constrained constants
   symbMap
+  allRefs
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -144,11 +145,13 @@ abbreviationsList =
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
-  GB.dataDefs iMods [] tMods concIns labCon allRefs citations
+  GB.dataDefs iMods [] tMods concIns citations labCon
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+-- FIXME: GlassBR needs `map ref citations` pre-created or else the code
+-- generator fails due to a missing reference to `astm2009`.
+allRefs = externalLinkRef : map ref citations
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -229,7 +232,6 @@ scope = foldlSent_ [S "determining the safety" `S.ofA` phrase glaSlab,
 
 {--Purpose of Document--}
 -- Purpose of Document automatically generated in IPurpose
-
 
 {--Scope of Requirements--}
 

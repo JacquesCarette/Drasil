@@ -12,7 +12,6 @@ import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
   angularAccel_1, angularAccel_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2, tension_1, tension_2)
 
-
 cosAngleExpr1, sinAngleExpr1, cosAngleExpr2, sinAngleExpr2 :: PExpr
 cosAngleExpr1 = cos (sy pendDisAngle_1)
 sinAngleExpr1 = sin (sy pendDisAngle_1)

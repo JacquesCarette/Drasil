@@ -29,7 +29,7 @@ jobs:
     name: "Build & Deploy"
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: "Update apt package list"
         run: |
@@ -129,7 +129,7 @@ jobs:
 
       - name: "Extract HTML copies of Jupyter Notebooks"
         run: |
-          sudo apt-get install -y --fix-missing jupyter
+          pip install jupyterlab
           make jupyter_html
         if: ${{ steps.changes.outputs.md == 'true' || fromJSON(env.is_deployment) }}
 
@@ -144,7 +144,7 @@ jobs:
 
       - name: "Deploy 🚀"
         if: ${{ fromJSON(env.is_deployment) }}
-        uses: JamesIves/github-pages-deploy-action@v4.7.3
+        uses: JamesIves/github-pages-deploy-action@v4.7.4
         with:
           git-config-name: ${{ secrets.BOT_NAME }}
           git-config-email: ${{ secrets.BOT_EMAIL }}

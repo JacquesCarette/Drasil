@@ -2,6 +2,11 @@
 -- | Document Description Language.
 module Language.Drasil.Document where
 
+import Control.Lens ((^.), makeLenses, view)
+
+import Drasil.Database (UID, HasUID(..), (+++.), mkUid, nsUid)
+import Utils.Drasil (repUnd)
+
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
   LabelledContent(LblC), HasCaption(..), RawContent(Figure, Paragraph),
@@ -10,11 +15,6 @@ import Language.Drasil.Label.Type (getAdd, prepend, LblType(..),
   Referable(..), HasRefAddress(..) )
 import Language.Drasil.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))
-import Drasil.Database.UID (UID, HasUID(..), (+++.), mkUid, nsUid)
-
-import Utils.Drasil (repUnd)
-
-import Control.Lens ((^.), makeLenses, view)
 
 -- * Section Types
 
@@ -39,7 +39,7 @@ makeLenses ''Section
 {-
 data Section = Section
              { depth  :: Depth
-             , header :: SecHeader 
+             , header :: SecHeader
              , cons   :: Content
              }
 
@@ -87,7 +87,7 @@ checkToC (Notebook t a sc) = Notebook t a sc
 
 -- | Smart constructor for labelled content chunks.
 llcc :: Reference -> RawContent -> LabelledContent
-llcc = LblC
+llcc r = LblC (r ^. uid) r
 
 -- | Smart constructor for unlabelled content chunks (no 'Reference').
 ulcc :: RawContent -> UnlabelledContent

@@ -8,6 +8,12 @@ import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
 import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force, acceleration)
 
 -- | Basic Concepts
+concepts :: [IdeaDict]
+concepts = map nw [rod, horizontal, vertical,
+  pendMotion, horizontalPos, verticalPos, horizontalVel,horizontalAccel, verticalAccel,
+  verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject]
+  ++ map nw defs
+
 rod, horizontal, vertical :: IdeaDict
 rod = nc "rod" (cn' "rod")
 horizontal = nc "horizontal" (cn "horizontal")

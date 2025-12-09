@@ -7,7 +7,12 @@ module Language.Drasil.Chunk.DefinedQuantity (
   DefinesQuantity(defLhs),
   -- * Constructors
   dqd, dqdNoUnit, dqdNoUnit', dqd', dqdQd, dqdWr,
-  implVar, implVar', implVarAU, implVarAU') where
+  implVar, implVar', implVarAU, implVarAU'
+) where
+
+import Control.Lens ((^.), makeLenses, view, Getter)
+
+import Drasil.Database (HasChunkRefs(..), HasUID(..))
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
@@ -18,10 +23,6 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage (Implementation, Equational))
-import Drasil.Database.Chunk (HasChunkRefs(..))
-import Drasil.Database.UID (HasUID(uid))
-
-import Control.Lens ((^.), makeLenses, view, Getter)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
 
@@ -60,7 +61,7 @@ instance ConceptDomain DefinedQuantityDict where cdom = cdom . view con
 instance HasSpace      DefinedQuantityDict where typ = spa
 -- | Finds the 'Stage' -> 'Symbol' of the 'DefinedQuantityDict'.
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
--- | 'DefinedQuantityDict's have a 'Quantity'. 
+-- | 'DefinedQuantityDict's have a 'Quantity'.
 instance Quantity      DefinedQuantityDict where
 -- | Finds the units of the 'DefinedQuantityDict'.
 instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
@@ -107,7 +108,7 @@ implVar' i ter desc sp sym = dqdNoUnit' (dccWDS i ter desc) f sp
     f Equational = Empty
 
 -- | Similar to 'implVar' but allows specification of abbreviation and unit.
-implVarAU :: String -> NP -> String -> Maybe String -> Space -> Symbol -> 
+implVarAU :: String -> NP -> String -> Maybe String -> Space -> Symbol ->
   Maybe UnitDefn -> DefinedQuantityDict
 implVarAU s np desc a t sym = dqd' (dccA s np desc a) f t
   where f :: Stage -> Symbol
@@ -115,7 +116,7 @@ implVarAU s np desc a t sym = dqd' (dccA s np desc a) f t
         f Equational = Empty
 
 -- | Similar to 'implVarAU' but takes a Sentence for the description rather than a String.
-implVarAU' :: String -> NP -> Sentence -> Maybe String -> Space -> Symbol -> 
+implVarAU' :: String -> NP -> Sentence -> Maybe String -> Space -> Symbol ->
   Maybe UnitDefn -> DefinedQuantityDict
 implVarAU' s np desc a t sym = dqd' (dccAWDS s np desc a) f t
   where f :: Stage -> Symbol

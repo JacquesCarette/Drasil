@@ -12,7 +12,7 @@ import Data.Maybe (mapMaybe)
 
 import Language.Drasil hiding (None, new)
 import Language.Drasil.Display (Symbol(Variable))
-import Database.Drasil
+import Drasil.Database
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
 import Drasil.System (HasSystem(..))
@@ -76,7 +76,7 @@ makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
     , ("_extInputs", "extInputsO")
     , ("_derivedInputs", "derivedInputsO")
     , ("_outputs", "outputsO")
-    , ("_configFiles", "configFilesO") 
+    , ("_configFiles", "configFilesO")
     , ("_execOrder", "execOrderO")
     , ("_cMap", "cMapO")
     , ("_constants", "constantsO")
@@ -209,7 +209,7 @@ oldcodeSpec sys@S.SI{ S._sys = sysIdea
         _constMap = assocToMap const',
         _mods = ms,
         _systemdb = db
-      } 
+      }
 
 -- medium hacks ---
 

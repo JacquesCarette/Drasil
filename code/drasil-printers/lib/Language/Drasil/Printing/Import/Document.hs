@@ -1,22 +1,21 @@
 -- | Defines functions to transform Drasil-based documents into a printable version.
 module Language.Drasil.Printing.Import.Document where
 
+import Control.Lens ((^.))
+import Data.Bifunctor (bimap, second)
 import Data.Map (fromList)
 
 import Language.Drasil hiding (neg, sec, symbol, isIn, codeExpr)
+import Drasil.Code.CodeExpr.Development (expr)
 
+import Drasil.Database (showUID)
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
-import Language.Drasil.Printing.PrintingInformation
-  (PrintingInformation)
-
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
 import Language.Drasil.Printing.Import.Sentence (spec)
-
-import Control.Lens ((^.))
-import Data.Bifunctor (bimap, second)
 
 -- * Main Function
 
@@ -65,7 +64,7 @@ createRefMap fn (T.List t)           = pass t
     process' = concatMap (\(_, _, l) -> maybe [] (createRef fn) l)
 createRefMap fn (T.Figure l _ _ _)   = createRef fn l
 createRefMap fn (T.Bib ls)           = map bibRefs ls
-  where 
+  where
     bibRefs (P.Cite l _ _) = (l, fn)
 createRefMap _ _                     = []
 
@@ -85,9 +84,9 @@ createLayout' sm = map (cel sm 0)
 extractSubS :: Int -> Section -> [(T.Depth, Section)]
 extractSubS d x@(Section tl c r)
   | d > 1 = [(d, x)]
-  | otherwise = (d, Section tl (filter isCon c) r) : 
+  | otherwise = (d, Section tl (filter isCon c) r) :
       concatMap (sepSub (d + 1)) c
-  where 
+  where
     isCon (Con _)        = True
     isCon  _             = False
     sepSub _   (Con _)   = []
@@ -95,7 +94,7 @@ extractSubS d x@(Section tl c r)
 
 -- | Helper for converting a Section to a File
 file :: PrintingInformation -> (T.Depth, Section) -> T.File
-file sm (d, x@(Section titleLb contents _)) = 
+file sm (d, x@(Section titleLb contents _)) =
   T.File (spec sm titleLb) fn d los
   where
     refr = refAdd x
@@ -112,10 +111,10 @@ sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used 
    map (layout sm depth) contents) refr
 
 cel :: PrintingInformation -> Int -> Section -> T.LayoutObj
-cel sm depth x@(Section titleLb contents _) = 
+cel sm depth x@(Section titleLb contents _) =
   let refr = P.S (refAdd x) in
   T.Cell (T.Header depth (spec sm titleLb) refr :
-   map (layout sm depth) contents) 
+   map (layout sm depth) contents)
 
 -- | Helper for translating sections into a printable representation of layout objects ('T.LayoutObj').
 layout :: PrintingInformation -> Int -> SecCons -> T.LayoutObj
@@ -131,31 +130,31 @@ lay sm (UlC x) = layUnlabelled sm (x ^. accessContents)
 -- | Helper that translates 'LabelledContent's to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'lay'.
 layLabelled :: PrintingInformation -> LabelledContent -> T.LayoutObj
-layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
+layLabelled sm x@(LblC _ _ (Table hdr lls t b)) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getAdd $ getRefAdd x)
   b (spec sm t)
-layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
+layLabelled sm x@(LblC _ _ (EqnBlock c))        = T.HDiv ["equation"]
   [T.EqnBlock (P.E (modelExpr c sm))]
   (P.S $ getAdd $ getRefAdd x)
-layLabelled sm x@(LblC _ (Figure c f wp hc))     = T.Figure
+layLabelled sm x@(LblC _ _ (Figure c f wp hc))  = T.Figure
   (P.S $ getAdd $ getRefAdd x)
   (if hc == WithCaption then Just (spec sm c) else Nothing)
   f wp
-layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph
+layLabelled sm x@(LblC _ _ (Graph ps w h t))    = T.Graph
   (map (bimap (spec sm) (spec sm)) ps) w h (spec sm t)
   (P.S $ getAdd $ getRefAdd x)
-layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
+layLabelled sm x@(LblC _ _ (Defini dtyp pairs)) = T.Definition
   dtyp (layPairs pairs)
   (P.S $ getAdd $ getRefAdd x)
   where layPairs = map (second (map (lay sm)))
-layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
-layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
+layLabelled sm (LblC _ _ (Paragraph c))         = T.Paragraph (spec sm c)
+layLabelled sm x@(LblC _ _ (DerivBlock h d))    = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
   where refr = P.S $ refAdd x ++ "Deriv"
-layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
-layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
-layLabelled sm (LblC _ (CodeBlock c))  = T.CodeBlock (P.E (codeExpr c sm))
+layLabelled sm (LblC _ _ (Enumeration cs))      = T.List $ makeL sm cs
+layLabelled  _ (LblC _ _ (Bib bib))             = T.Bib $ map layCite bib
+layLabelled sm (LblC _ _ (CodeBlock c))         = T.CodeBlock (P.E (codeExpr (expr c) sm))
 
 -- | Helper that translates 'RawContent's to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'lay'.
@@ -168,7 +167,7 @@ layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
   where refr = P.S "nolabel1"
 layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
-layUnlabelled sm (Figure c f wp hc)  = T.Figure (P.S "nolabel2") 
+layUnlabelled sm (Figure c f wp hc)  = T.Figure (P.S "nolabel2")
   (if hc == WithCaption then Just (spec sm c) else Nothing) f wp
 layUnlabelled sm (Graph ps w h t) = T.Graph (map (bimap (spec sm) (spec sm)) ps)
                                w h (spec sm t) (P.S "nolabel6")
@@ -176,7 +175,7 @@ layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S 
   where layPairs = map (second (map temp))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
-layUnlabelled sm (CodeBlock c)     = T.CodeBlock (P.E (codeExpr c sm))
+layUnlabelled sm (CodeBlock c)     = T.CodeBlock (P.E (codeExpr (expr c) sm))
 
 -- | For importing a bibliography.
 layCite :: Citation -> P.Citation

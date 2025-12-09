@@ -33,7 +33,6 @@ foldConstraints c e  = E $ foldr1 ($&&) $ map constraintToExpr e
     constraintToExpr (Range _ ri) = express $ realInterval c ri
     constraintToExpr (Elem _ set) = express set
 
-
 -- | Partial function application of 'foldle' for sentences specifically.
 -- Folds with spaces and adds a period (".") at the end.
 foldlSent :: [Sentence] -> Sentence
@@ -60,7 +59,7 @@ foldlSPCol :: [Sentence] -> Contents
 foldlSPCol = mkParagraph . foldlSentCol
 
 -- | Folds a list of elements separated by commas, including the last element.
-foldlsC :: [Sentence] -> Sentence 
+foldlsC :: [Sentence] -> Sentence
 foldlsC [] = EmptyS
 foldlsC xs = foldl1 sC xs
 

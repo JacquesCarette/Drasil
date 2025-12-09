@@ -4,9 +4,10 @@ module Language.Drasil.Expr.Extract where
 import Data.Containers.ListUtils (nubOrd)
 import qualified Data.Map.Ordered as OM
 
+import Drasil.Database (UID)
+
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Space (RealInterval(..))
-import Drasil.Database.UID (UID)
 
 -- | Generic traverse of all expressions that could lead to names.
 eNames :: Expr -> [UID]
@@ -56,7 +57,7 @@ eNames' (AssocC _ l)          = concatMap eNames' l
 eNames' (C c)                 = [c]
 eNames' Lit{}                 = []
 eNames' (FCall _ x)           = concatMap eNames' x
-eNames' (Case _ ls)           = concatMap (eNames' . fst) ls ++ 
+eNames' (Case _ ls)           = concatMap (eNames' . fst) ls ++
                                 concatMap (eNames' . snd) ls
 eNames' (UnaryOp _ u)         = eNames' u
 eNames' (UnaryOpB _ u)        = eNames' u
@@ -89,6 +90,6 @@ eNamesRI' (UpFrom il)     = eNames' (snd il)
 ---------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
 
--- | Get dependencies from an equation.  
+-- | Get dependencies from an equation.
 eDep :: Expr -> [UID]
 eDep = nubOrd . eNames

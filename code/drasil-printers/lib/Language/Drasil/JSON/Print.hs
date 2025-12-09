@@ -27,7 +27,7 @@ import Language.Drasil.HTML.Print (renderCite, OpenClose(Open, Close), fence,
   htmlBibFormatter)
 
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, codeformat,
- tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv, 
+ tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv,
  markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
 
 -- | Generate a python notebook document (using json).
@@ -39,7 +39,7 @@ genJupyter sm _      doc = build' (makeDocument sm doc)
 
 -- | Build the JSON Document, called by genJSON
 build :: Document -> Doc
-build (Document t a c) = 
+build (Document t a c) =
   markdownB $$
   nbformat (text "# " <> pSpec t) $$
   nbformat (text "## " <> pSpec a) $$
@@ -48,19 +48,19 @@ build (Document t a c) =
   markdownB' $$
   markdownE' $$
   makeMetadata $$
-  text "}" 
+  text "}"
 
 build' :: Document -> Doc
-build' (Document t a c) = 
+build' (Document t a c) =
   markdownB $$
   nbformat (text "# " <> pSpec t) $$
   nbformat (text "## " <> pSpec a) $$
   markdownE $$
-  markdownB' $$ 
+  markdownB' $$
   print c $$
   markdownE' $$
   makeMetadata $$
-  text "}" 
+  text "}"
 
 -- | Helper for rendering a D from Latex print
 printMath :: D -> Doc
@@ -76,14 +76,14 @@ printLO (Paragraph contents)             = nbformat empty $$ nbformat (stripnewL
 printLO (EqnBlock contents)              = nbformat mathEqn
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
+    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$"
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 printLO (Table _ rows r _ _)            = nbformat empty $$ makeTable rows (pSpec r)
 printLO (Definition dt ssPs l)          = nbformat (text "<br>") $$ makeDefn dt ssPs (pSpec l)
 printLO (List t)                        = nbformat empty $$ makeList t False
 printLO (Figure r c f wp)               = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
 printLO (Bib bib)                       = makeBib bib
-printLO Graph{}                         = empty 
+printLO Graph{}                         = empty
 printLO CodeBlock {}                    = empty
 
 -- printLO' is used for generating general notebook (lesson plans)
@@ -96,16 +96,15 @@ printLO' (Paragraph contents)             = markdownCell $ nbformat (stripnewLin
 printLO' (EqnBlock contents)              = nbformat mathEqn
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
+    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$"
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 printLO' (Table _ rows r _ _)            = markdownCell $ makeTable rows (pSpec r)
 printLO' Definition {}                   = empty
 printLO' (List t)                        = markdownCell $ makeList t False
 printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (fmap pSpec c) (text f) wp
 printLO' (Bib bib)                       = markdownCell $ makeBib bib
-printLO' Graph{}                         = empty 
+printLO' Graph{}                         = empty
 printLO' (CodeBlock contents)            = codeCell $ codeformat $ cSpec contents
-
 
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
@@ -135,9 +134,8 @@ pSpec EmptyS    = text "" -- Expected in the output
 pSpec (Quote q) = doubleQuotes $ pSpec q
 
 cSpec :: Spec -> Doc
-cSpec (E e)  = pExpr e 
+cSpec (E e)  = pExpr e
 cSpec _      = empty
-
 
 -- | Renders expressions in JSON (called by multiple functions)
 pExpr :: Expr -> Doc
@@ -159,10 +157,8 @@ pExpr (Font Bold e)  = pExpr e
 --pExpr (Font Bold e)  = bold $ pExpr e -- used before
 --pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- HTML used
 --pExpr (Spc Thin)     = text "&#8239;" -- HTML used
--- Uses TeX for Mathjax for all other exprs 
+-- Uses TeX for Mathjax for all other exprs
 pExpr e              = printMath $ toMath $ TeX.pExpr e
-
-
 
 -- TODO: edit all operations in markdown format
 pOps :: Ops -> String
@@ -237,7 +233,7 @@ makeRows = foldr (($$) . makeColumns) empty
 -- | makeColumns: Helper for creating table columns
 makeHeaderCols, makeColumns :: [Spec] -> Doc
 makeHeaderCols l = nbformat (text header) $$ nbformat (text $ genMDtable ++ "|")
-  where header = show(text "|" <> hcat(punctuate (text "|") (map pSpec l)) <> text "|")        
+  where header = show(text "|" <> hcat(punctuate (text "|") (map pSpec l)) <> text "|")
         c = count '|' header
         genMDtable = concat (replicate (c-1) "|:--- ")
 
@@ -245,7 +241,7 @@ makeColumns ls = nbformat (text "|" <> hcat(punctuate (text "|") (map pSpec ls))
 
 count :: Char -> String -> Int
 count _ [] = 0
-count c (x:xs) 
+count c (x:xs)
   | c == x = 1 + count c xs
   | otherwise = count c xs
 
@@ -265,16 +261,15 @@ makeDRows []         = error "No fields to create defn table"
 makeDRows [(f,d)]    = tr (nbformat (th (text f)) $$ td (vcat $ map printLO d))
 makeDRows ((f,d):ps) = tr (nbformat (th (text f)) $$ td (vcat $ map printLO d)) $$ makeDRows ps
 
-
 -- | Renders lists
 makeList :: ListType -> Bool -> Doc -- FIXME: ref id's should be folded into the li
-makeList (Simple items) _      = vcat $ 
+makeList (Simple items) _      = vcat $
   map (\(b,e,l) -> mlref l $ nbformat (pSpec b <> text ": " <> sItem e) $$ nbformat empty) items
-makeList (Desc items) bl       = vcat $ 
+makeList (Desc items) bl       = vcat $
   map (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b <> text ": " <> pItem e bl) items
 makeList (Ordered items) bl    = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
 makeList (Unordered items) bl  = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
---makeList (Definitions items) _ = ul ["hide-list-style-no-indent"] $ vcat $ 
+--makeList (Definitions items) _ = ul ["hide-list-style-no-indent"] $ vcat $
   --map (\(b,e,l) -> li $ mlref l $ quote(pSpec b <> text " is the" <+> sItem e)) items
 makeList (Definitions items) _ = vcat $ map (\(b,e,l) -> nbformat $ li $ mlref l $ pSpec b <> text " is the" <+> sItem e) items
 

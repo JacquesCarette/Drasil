@@ -6,9 +6,9 @@ module Theory.Drasil.DataDefinition (
   qdFromDD, qdEFromDD
 ) where
 
-import Database.Drasil (HasChunkRefs(chunkRefs))
-
 import Control.Lens
+
+import Drasil.Database (UID, HasUID(..), showUID, HasChunkRefs(..), nsUid)
 import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Theory.Drasil.Classes (HasOutput(..))
@@ -25,7 +25,7 @@ data DDPkt = DDPkt {
 }
 makeLenses ''DDPkt
 
--- | A data definition is a 'QDefinition' that may have additional notes: 
+-- | A data definition is a 'QDefinition' that may have additional notes:
 -- the scope, any references (as 'DecRef's), maybe a derivation, a label ('ShortName'), a reference address, and other notes ('Sentence's).
 data DataDefinition where
   DDE  :: SimpleQDef -> DDPkt -> DataDefinition

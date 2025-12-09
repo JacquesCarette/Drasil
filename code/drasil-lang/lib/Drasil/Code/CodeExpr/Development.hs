@@ -1,7 +1,7 @@
 -- | Re-exporting modules
 module Drasil.Code.CodeExpr.Development (
     -- CodeExpr
-    CodeExpr(..), 
+    CodeExpr(..),
     ArithBinOp(..), EqBinOp(..), BoolBinOp(..), LABinOp(..), OrdBinOp(..),
     CCCBinOp(..), CCNBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..),
     UFunc(..), UFuncB(..), UFuncCC(..), UFuncCN(..),

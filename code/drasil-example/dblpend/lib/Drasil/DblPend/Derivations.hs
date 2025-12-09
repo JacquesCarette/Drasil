@@ -3,6 +3,7 @@
 module Drasil.DblPend.Derivations where
 
 import Prelude hiding (sin, cos)
+import Control.Lens ((^.))
 
 import Language.Drasil (ModelExprC(..), ExprC(..), ModelExpr)
 import Data.Drasil.Quantities.Physics (gravitationalMagnitude, time)
@@ -27,12 +28,10 @@ posVecDerivEqn_2 = sy posVec_2 $=
   vector (sy lenRod_2 $* sin (sy pendDisAngle_2))
          (neg (sy lenRod_2 $* cos (sy pendDisAngle_2)))
 
-
 -- | Velocity vectors (first derivatives of position)
 velVecDerivEqn_1, velVecDerivEqn_2 :: ModelExpr
 velVecDerivEqn_1 = sy mvVel_1 $= deriv (sy posVec_1) time
 velVecDerivEqn_2 = sy mvVel_2 $= deriv (sy posVec_2) time
-
 
 -- | Acceleration vectors (derivatives of velocity)
 accelVecDerivEqn_1, accelVecDerivEqn_2 :: ModelExpr

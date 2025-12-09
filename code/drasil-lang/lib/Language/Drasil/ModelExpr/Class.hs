@@ -2,23 +2,22 @@
 module Language.Drasil.ModelExpr.Class where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
-
 import Control.Lens ((^.))
 
-import Drasil.Database.UID (HasUID(..))
+import Drasil.Database (HasUID(..))
+
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..), DerivType(..),
   SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..), AssocArithOper(..))
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), Space)
 import Language.Drasil.Symbol (Symbol, HasSymbol)
 
-  
 -- | Helper for creating new smart constructors for Associative Binary
---   operations that require at least 1 expression.
+-- operations that require at least 1 expression.
 assocCreate :: AssocBoolOper -> [ModelExpr] -> ModelExpr
 assocCreate abo [] = error $ "Need at least 1 expression to create " ++ show abo
 assocCreate _ [x]  = x
 assocCreate b des  = AssocB b $ assocSanitize b des
-  
+
 -- | Helper for associative operations, removes embedded variants of the same kind
 assocSanitize :: AssocBoolOper -> [ModelExpr] -> [ModelExpr]
 assocSanitize _ [] = []
@@ -31,22 +30,22 @@ class ModelExprC r where
   -- This also wants a symbol constraint.
   -- | Gets the derivative of an 'ModelExpr' with respect to a 'Symbol'.
   deriv, pderiv :: (HasUID c, HasSymbol c) => r -> c -> r
-  
+
   -- | Gets the nthderivative of an 'ModelExpr' with respect to a 'Symbol'.
   nthderiv, nthpderiv :: (HasUID c, HasSymbol c) => Integer -> r -> c -> r
 
   -- | One expression is "defined" by another.
   defines :: r -> r -> r
-  
+
   -- | Space literals.
   space :: Space -> r
 
   -- | Check if a value belongs to a Space.
   isIn :: r -> Space -> r
-  
+
   -- | Binary associative "Equivalence".
   equiv :: [r] -> r
-  
+
   -- | Smart constructor for the summation, product, and integral functions over all Real numbers.
   intAll, sumAll, prodAll :: Symbol -> r -> r
 
@@ -72,7 +71,7 @@ instance ModelExprC ModelExpr where
   equiv des
     | length des >= 2 = assocCreate Equivalence des
     | otherwise       = error $ "Need at least 2 expressions to create " ++ show Equivalence
- 
+
   -- TODO: All of the below only allow for Reals! Will be easier to fix while we add typing.
   -- | Integrate over some expression (∫).
   intAll v = Operator Add (AllDD v Continuous)

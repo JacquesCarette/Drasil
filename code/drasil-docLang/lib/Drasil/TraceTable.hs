@@ -2,17 +2,17 @@
 -- | Defines a DLPlate for tracability between pieces of information.
 module Drasil.TraceTable where
 
-import Drasil.DocumentLanguage.Core
+import Control.Lens ((^.))
+import Data.Functor.Constant (Constant(Constant))
+import Data.Generics.Multiplate (foldFor, preorderFold, purePlate)
+import qualified Data.Map.Strict as M
 
+import Drasil.Database (UID, HasUID(..))
 import Language.Drasil
 import Language.Drasil.Development (lnames')
 import Theory.Drasil (Theory(..))
 
-import qualified Data.Map.Strict as M
-
-import Control.Lens ((^.))
-import Data.Functor.Constant (Constant(Constant))
-import Data.Generics.Multiplate (foldFor, preorderFold, purePlate)
+import Drasil.DocumentLanguage.Core
 
 -- | Creates a dependency plate for 'UID's.
 dependencyPlate :: DLPlate (Constant [(UID, [UID])])
@@ -29,7 +29,6 @@ dependencyPlate = preorderFold $ purePlate {
     (IMs _ _ i _) -> getDependenciesOf [derivs, notes] i
     _ -> [],
   reqSub = Constant . getDependenciesOf [defs] <$> \case
-    (FReqsSub' c _) -> c
     (FReqsSub c _) -> c
     (NonFReqsSub c) -> c,
   lcsSec = Constant . getDependenciesOf [defs] <$> \(LCsProg c) -> c,

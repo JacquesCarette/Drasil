@@ -1,20 +1,29 @@
-module Drasil.SglPend.Requirements where
+module Drasil.SglPend.Requirements (
+  funcReqs, funcReqsTables
+) where
 
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.DocLang (inReqWTab)
 import Data.Drasil.Concepts.Documentation (funcReqDom, output_, value)
 import Drasil.SglPend.IMods (angularDisplacementIM)
-import Drasil.SglPend.Unitals (lenRod, pendDisplacementAngle)
+import Drasil.SglPend.Unitals (lenRod, pendDisplacementAngle, inputs)
 import Data.Drasil.Quantities.Physics (angularDisplacement)
-import Drasil.DblPend.Requirements(verifyInptValsDesc)
+import Drasil.DblPend.Requirements(verifyInptVals)
 
 --Functional Requirements--
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInptVals, calcAngPos, outputValues]
+funcReqs = [inputValues, verifyInptVals, calcAngPos, outputValues]
 
-verifyInptVals, calcAngPos, outputValues :: ConceptInstance
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
 
-verifyInptVals = cic "verifyInptVals" verifyInptValsDesc "Verify-Input-Values" funcReqDom
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab Nothing inputs
+
+calcAngPos, outputValues :: ConceptInstance
+
 calcAngPos = cic "calcAngPos" calcAngPosDesc "Calculate-Angular-Position-Of-Mass" funcReqDom
 outputValues = cic "outputValues" outputValuesDesc "Output-Values" funcReqDom
 

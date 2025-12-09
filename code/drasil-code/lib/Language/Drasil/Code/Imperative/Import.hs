@@ -14,8 +14,9 @@ import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncCC(..), UFuncCN(..),
   CCNBinOp(..), CCCBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..))
-import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
-  Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
+import Drasil.Database (UID, HasUID(..))
+import Language.Drasil (HasSymbol, HasSpace(..),
+  Space (Rational, Real), RealInterval(..), Constraint(..), Inclusive (..))
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
@@ -384,7 +385,7 @@ convExpr (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExpr Matrix{} = error "convExpr: Matrix"
-convExpr (S.Set s l) = do 
+convExpr (S.Set s l) = do
   ar <- mapM convExpr l
   sm <- spaceCodeType s
   return $ litSet (convTypeOO sm) ar
@@ -1091,7 +1092,7 @@ convExprProc (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExprProc Matrix{} = error "convExprProc: Matrix"
-convExprProc (S.Set s l) = do 
+convExprProc (S.Set s l) = do
   ar <- mapM convExprProc l
   sm <- spaceCodeType s
   return $ litSet (convType sm) ar

@@ -2,7 +2,7 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 
--- | Contains chunks related to adding an expression to a quantitative concept. 
+-- | Contains chunks related to adding an expression to a quantitative concept.
 module Language.Drasil.Chunk.Eq (
   -- * Types
   QDefinition,
@@ -13,8 +13,9 @@ module Language.Drasil.Chunk.Eq (
 ) where
 
 import Control.Lens ((^.), view, lens, Lens', to)
-import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
+import Drasil.Database (UID, HasUID(..))
 
+import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity,
@@ -22,7 +23,6 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs), dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
-
 import Language.Drasil.Expr.Lang (Expr)
 import qualified Language.Drasil.Expr.Lang as E (Expr(C))
 import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
@@ -32,7 +32,6 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
-import Drasil.Database.UID (UID, HasUID(..))
 import Language.Drasil.WellTyped (RequiresChecking(..))
 
 data QDefinition e where
@@ -121,8 +120,8 @@ mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> e -> QDefinition e
 mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 
 -- HACK - makes the definition EmptyS !!! FIXME
--- | Smart constructor for QDefinitions. Requires a quantity and its defining 
--- equation. 
+-- | Smart constructor for QDefinitions. Requires a quantity and its defining
+-- equation.
 ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
 ec c = QD (dqd' (cc' (nw c) EmptyS) (symbol c) (c ^. typ) (getUnit c)) []
 

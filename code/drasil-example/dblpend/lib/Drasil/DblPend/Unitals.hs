@@ -31,8 +31,8 @@ import qualified Language.Drasil.Sentence.Combinators as S
 -- ACRONYMS, SYMBOLS, INPUTS, OUTPUTS
 ----------------------------------------
 
-symbols :: [DefinedQuantityDict]
-symbols = map dqdWr unitalChunks ++ unitless ++ map dqdWr constants
+symbols:: [DefinedQuantityDict]
+symbols = map dqdWr unitalChunks ++ unitless ++ [dqdWr pendDisAngle] ++ map dqdWr constants
 
 acronyms :: [CI]
 acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,

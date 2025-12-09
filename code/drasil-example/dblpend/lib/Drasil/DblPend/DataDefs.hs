@@ -7,7 +7,7 @@ import Prelude hiding (sin, cos, sqrt)
 
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
-import Theory.Drasil (DataDefinition, ddMENoRefs, ddENoRefs)
+import Theory.Drasil (DataDefinition, ddENoRefs, ddMENoRefs)
 
 import Drasil.DblPend.LabelledContent (figMotion)
 import Drasil.DblPend.Unitals
@@ -119,9 +119,14 @@ accelVecEqn_2 = deriv (sy mvVel_2) time
 -- Force Vectors --
 --------------------------------------------
 
+<<<<<<< HEAD
 forceVecDD_1 :: DataDefinition
 forceVecDD_1 =
   ddMENoRefs forceVecQD_1 Nothing "forceVecDD1" []
+=======
+accelGEqn :: ModelExpr
+accelGEqn = deriv (sy velocity) time
+>>>>>>> origin/main
 
 forceVecQD_1 :: ModelQDef
 forceVecQD_1 = mkQuantDef mvForce_1 forceVecEqn_1

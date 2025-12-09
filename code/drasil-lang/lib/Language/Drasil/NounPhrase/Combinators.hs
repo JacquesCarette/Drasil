@@ -42,7 +42,6 @@ import Language.Drasil.NounPhrase
       nounPhrase'', surroundNPStruct)
 import Language.Drasil.NounPhrase.Core (NPStruct((:+:),S,P))
 
-
 --Maybe move these to a separate Drasil.NounPhrase section
 -- | Helper function that places a 'String' in between two 'NP's. Plural case is
 -- @(phraseNP t1) :+: S s :+: (pluralNP t2)@.
@@ -81,7 +80,6 @@ insertSent s t1 t2 = nounPhrase'' (phraseNP t1 :+: s :+: phraseNP t2) (phraseNP 
 prependSent :: Sentence -> NP -> NP
 prependSent s t1 = nounPhrase'' (s :+: phraseNP t1) (s :+: pluralNP t1) CapFirst CapWords
 -}
-
 
 -- | Prepends "the" to a 'NP'.
 the :: NP -> NP

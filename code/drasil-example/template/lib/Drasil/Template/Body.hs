@@ -78,6 +78,7 @@ si = mkSystem
   []
   ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef])
   symbMap
+  []
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
@@ -91,7 +92,7 @@ symbMap :: ChunkDB
 symbMap = cdb ([] :: [DefinedQuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  citations ([] :: [LabelledContent]) ([] :: [Reference])
+  citations ([] :: [LabelledContent])
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,

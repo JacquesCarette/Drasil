@@ -21,7 +21,7 @@ import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Nested, Flat),
   Ops(..), Spacing(Thin), Fonts(Emph, Bold),
   Expr(..), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
-import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
+import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished,
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
   Author, Address), Citation(Cite), BibRef)
@@ -29,7 +29,7 @@ import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (br, paren, sq, sqbrac)
 import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
-  cite, command, command0, commandD, command2D, description, description', document, 
+  cite, command, command0, commandD, command2D, description, description', document,
   empty, enumerate, externalref, figure, fraction, includegraphics, item, item',
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgBr, mkEnvArgSq,
   mkMinipage, newline, newpage, parens, quote, sec, snref, sq, superscript,
@@ -42,7 +42,7 @@ import Data.Foldable (foldl')
 
 -- | Generates a LaTeX document.
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
-genTeX doc@(L.Document _ _ toC _) sm = 
+genTeX doc@(L.Document _ _ toC _) sm =
   runPrint (buildStd sm toC $ I.makeDocument sm $ L.checkToC doc) Text
 genTeX L.Notebook{} _ = TP.empty
 
@@ -52,7 +52,7 @@ buildStd sm toC (Document t a c) =
   genPreamble c %%
   title (spec t) %%
   author (spec a) %%
-  case toC of 
+  case toC of
     L.ToC -> document (maketitle %% maketoc %% newpage %% print sm c) -- includes ToC generation
     _ -> document (maketitle %% newpage %% print sm c) -- omits ToC generation
 
@@ -358,8 +358,8 @@ makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\a
 -- | Helper that makes the rows of a definition table.
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []      = error "No fields to create Defn table"
-makeDRows sm ls      = foldl1 (%%) $ map (\(f, d) -> 
-  pure (dbs <+> text "\\midrule") %% 
+makeDRows sm ls      = foldl1 (%%) $ map (\(f, d) ->
+  pure (dbs <+> text "\\midrule") %%
   pure (text (f ++ " & ")) <> print sm d) ls
 
 -----------------------------------------------------------------
@@ -402,7 +402,7 @@ lspec :: Spec -> D  -- FIXME: Should be option rolled in to spec
 lspec (S s) = pure $ text s
 lspec r = spec r
 
--- | Helper that renders labels in 'plItem'. 
+-- | Helper that renders labels in 'plItem'.
 mlref :: Maybe Label -> D
 mlref = maybe empty $ (<>) (command0 "phantomsection") . label . lspec
 

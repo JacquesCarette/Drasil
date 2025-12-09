@@ -10,13 +10,12 @@ module Theory.Drasil.InstanceModel(
   , qwUC, qwC
   ) where
 
-import Drasil.Database.Chunk (HasChunkRefs(..))
-
+import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
 import Drasil.Metadata (inModel)
 
-import Control.Lens ((^.), makeLenses, _1, _2) 
+import Control.Lens ((^.), makeLenses, _1, _2)
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
 
 type Input = (DefinedQuantityDict, Maybe (RealInterval Expr Expr))
@@ -88,37 +87,37 @@ instance RequiresChecking InstanceModel Expr Space where
   requiredChecks = requiredChecks . (^. mk)
 
 -- | Smart constructor for instance models with everything defined.
-im :: ModelKind Expr -> Inputs -> Output -> 
+im :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 im mkind _  _ _  [] _  _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
-im mkind i o oc r der sn = 
+im mkind i o oc r der sn =
   IM mkind i (o, oc) r der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivation.
-imNoDeriv :: ModelKind Expr -> Inputs -> Output -> 
+imNoDeriv :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> [DecRef] -> String -> [Sentence] -> InstanceModel
 imNoDeriv mkind _ _ _  [] _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
 imNoDeriv mkind i o oc r  sn =
   IM mkind i (o, oc) r Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no references.
-imNoRefs :: ModelKind Expr -> Inputs -> Output -> 
+imNoRefs :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-imNoRefs mkind i o oc der sn = 
+imNoRefs mkind i o oc der sn =
   IM mkind i (o, oc) [] der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivations or references.
-imNoDerivNoRefs :: ModelKind Expr -> Inputs -> Output -> 
+imNoDerivNoRefs :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> String -> [Sentence] -> InstanceModel
-imNoDerivNoRefs mkind i o oc sn = 
+imNoDerivNoRefs mkind i o oc sn =
   IM mkind i (o, oc) [] Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | For building a quantity with no constraint.
-qwUC :: (Quantity q, MayHaveUnit q, Concept q) => q -> Input 
+qwUC :: (Quantity q, MayHaveUnit q, Concept q) => q -> Input
 qwUC x = (dqdWr x, Nothing)
 
 -- | For building a quantity with a constraint.
-qwC :: (Quantity q, MayHaveUnit q, Concept q) => q -> RealInterval Expr Expr -> Input 
+qwC :: (Quantity q, MayHaveUnit q, Concept q) => q -> RealInterval Expr Expr -> Input
 qwC x y = (dqdWr x, Just y)
 
 -- | Grab all related 'QDefinition's from a list of instance models.

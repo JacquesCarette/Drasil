@@ -4,7 +4,7 @@ import Drasil.Code.CodeExpr.Lang (CodeExpr(..), UFuncB(..), NatCCBinOp,
     UFunc(..), AssocBoolOper(..), AssocArithOper(..), CCNBinOp, NCCBinOp,
     CCCBinOp, OrdBinOp, LABinOp, BoolBinOp, EqBinOp, ArithBinOp(..), AssocConcatOper(..), ESSBinOp, ESBBinOp)
 
--- These precedences are inspired from Haskell/F# 
+-- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
 

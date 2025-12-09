@@ -59,7 +59,7 @@ finder folder = do
 
   let bakedFiles = concat rawFiles
 
-  let files 
+  let files
         | null folders = snd rawData
         | otherwise = bakedFiles ++ snd rawData
   return files

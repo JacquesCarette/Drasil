@@ -5,7 +5,7 @@ import Language.Drasil
 import Language.Drasil.Display
 import Language.Drasil.ShortHands
 
-import qualified Data.Drasil.Concepts.Math as CM (area, diameter, euclidN, gradient, 
+import qualified Data.Drasil.Concepts.Math as CM (area, diameter, euclidN, gradient,
     normalV, orient, perpV, pi_, posInf, negInf, surArea, surface, unitV)
 import Data.Drasil.SI_Units (metre, m_2, radian)
 
@@ -20,7 +20,6 @@ mathunitals = [area, diameter, surface, surArea, orientation]
 
 gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect,
   pi_, posInf, negInf, uNormalVect :: DefinedQuantityDict
- 
 
 gradient    = dqdNoUnit CM.gradient lNabla         Real
 normalVect  = dqdNoUnit CM.normalV  (vec lN)       Real

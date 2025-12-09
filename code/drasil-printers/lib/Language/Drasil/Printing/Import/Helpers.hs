@@ -1,16 +1,19 @@
 -- | Printing helpers.
 module Language.Drasil.Printing.Import.Helpers where
 
+import Control.Lens ((^.))
+import Data.Char (toUpper)
+
 import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S),
-  Symbol, UID, TermCapitalization(..), titleizeNP, titleizeNP',
+  Symbol, TermCapitalization(..), titleizeNP, titleizeNP',
   atStartNP, atStartNP', NP, DefinedQuantityDict)
 import Language.Drasil.Development (toSent)
-import Database.Drasil (ChunkDB, findOrErr)
+import Drasil.Database (UID, ChunkDB, findOrErr)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
+import Drasil.System (systemdb)
 
 import qualified Language.Drasil.Printing.AST as P
-
-import Data.Char (toUpper)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, stg, syst)
 
 
 -- * Expr-related
@@ -47,9 +50,9 @@ digitsProcess [] pos coun ex
 -- https://en.wikipedia.org/wiki/Scientific_notation
 processExpo :: Int -> (Int, Int)
 processExpo a
-  | mod (a-1) 3 == 0 = (1, a-1)
-  | mod (a-1) 3 == 1 = (2, a-2)
-  | mod (a-1) 3 == 2 = (3, a-3)
+  | mod (a - 1) 3 == 0 = (1, a - 1)
+  | mod (a - 1) 3 == 1 = (2, a - 2)
+  | mod (a - 1) 3 == 2 = (3, a - 3)
   | otherwise = error "The cases of processExpo should be exhaustive!"
 
 -- * Lookup/Term Resolution Functions
@@ -60,18 +63,21 @@ lookupC :: Stage -> ChunkDB -> UID -> Symbol
 lookupC Equational     sm c = eqSymb   (findOrErr c sm :: DefinedQuantityDict)
 lookupC Implementation sm c = codeSymb (findOrErr c sm :: DefinedQuantityDict)
 
+lookupC' :: PrintingInformation -> UID -> Symbol
+lookupC' pinfo = lookupC (pinfo ^. stg) (pinfo ^. syst . systemdb)
+
 -- | Look up a term given a chunk database and a 'UID' associated with the term. Also specifies capitalization
-lookupT :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' sm c
+lookupT :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' (sm ^. syst . systemdb) c
 
 -- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
-lookupS :: ChunkDB -> UID -> TermCapitalization -> Sentence
+lookupS :: PrintingInformation -> UID -> TermCapitalization -> Sentence
 lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= capHelper sCap
-  where l = termResolve' sm c
+  where l = termResolve' (sm ^. syst . systemdb) c
 
 -- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
-lookupP :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' sm c
+lookupP :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' (sm ^. syst . systemdb) c
 
 -- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
 resolveCapT :: TermCapitalization -> (NP -> Sentence)

@@ -11,7 +11,7 @@ import Drasil.SRSDocument
 import Drasil.Generator.BaseChunkDB (cdb)
 import Data.Drasil.SI_Units (siUnits)
 import qualified Drasil.DocLang.SRS as SRS
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
@@ -33,7 +33,7 @@ import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
-import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1)
+import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.DblPend.Assumptions (assumpDouble)
 import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject)
 import Drasil.DblPend.Goals (goals, goalsInputs)
@@ -43,21 +43,12 @@ import Drasil.DblPend.GenDefs (genDefns)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms, constants)
-import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
+import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs, funcReqsTables)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks, scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar, diffCodeChunk)
 import Language.Drasil.Code (ODEInfo (..))
 import Drasil.DblPend.ODEs (dblPenODEInfo)
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
@@ -97,7 +88,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
         ]
       ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub []
+    [ FReqsSub funcReqsTables
     , NonFReqsSub
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -114,7 +105,7 @@ si = mkSystem progName Specification [dong]
   []  -- assumptions as strings
   inputs outputs inConstraints
   constants
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
@@ -159,10 +150,8 @@ conceptChunks =
   [cw len]
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map dqdWr symbolsAll)
-  ideaDicts conceptChunks siUnits
-  dataDefs iMods genDefns tMods concIns [] allRefs citations  -- Re-enabled genDefns to show Clifford algebra content
-
+symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
+  dataDefs iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -284,7 +273,6 @@ userCharacteristicsIntro prog = foldlSP
 -- 3.3 : System Constraints  --
 -------------------------------
 -- System Constraints automatically generated in SystCons
-
 
 --------------------------------------------
 -- Section 4: Specific System Description --

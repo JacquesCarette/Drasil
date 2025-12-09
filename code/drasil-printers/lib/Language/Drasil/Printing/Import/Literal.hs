@@ -1,6 +1,5 @@
 module Language.Drasil.Printing.Import.Literal (literal) where
 
-
 import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Literal.Development (Literal(..))
 

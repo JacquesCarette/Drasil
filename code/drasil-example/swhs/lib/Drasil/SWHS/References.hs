@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.People (jBueche, fIncropera, dDewitt, tBergman, aLavine,
   mLightstone)
 
-import Data.Drasil.Citations (koothoor2013, parnasClements1986, 
+import Data.Drasil.Citations (koothoor2013, parnasClements1986,
   smithEtAl2007, smithLai2005, smithKoothoor2016)
 
 ----------------------------
@@ -13,7 +13,7 @@ import Data.Drasil.Citations (koothoor2013, parnasClements1986,
 ----------------------------
 citations :: BibRef
 citations = [bueche1986, incroperaEtAl2007, koothoor2013, lightstone2012,
-             parnasClements1986, smithEtAl2007, smithLai2005, 
+             parnasClements1986, smithEtAl2007, smithLai2005,
              smithKoothoor2016]
 
 bueche1986, incroperaEtAl2007, lightstone2012 :: Citation
@@ -36,7 +36,6 @@ lightstone2012 = cMisc [
   year 2012,
   note "From Marilyn Lightstone's Personal Notes"]
   "lightstone2012"
-
 
 uriReferences :: [Reference]
 uriReferences = [consThemESrc, latHtESrc, sensHtESrc]

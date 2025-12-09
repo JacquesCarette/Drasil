@@ -17,7 +17,7 @@ module Drasil.DocLang (
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
   -- *** Functions
   -- Drasil.DocumentLanguage
-  mkDoc, fillcdbSRS, findAllRefs,
+  mkDoc, findAllRefs,
   -- ** Notebook
   -- | For generating Jupyter notebook lesson plans.
 
@@ -73,7 +73,11 @@ module Drasil.DocLang (
 import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..))
+<<<<<<< HEAD
 import Drasil.DocumentLanguage (mkDoc, fillcdbSRS, findAllRefs)
+=======
+import Drasil.DocumentLanguage (mkDoc, findAllRefs)
+>>>>>>> origin/main
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),

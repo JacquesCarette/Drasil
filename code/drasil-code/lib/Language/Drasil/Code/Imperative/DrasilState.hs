@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   AuxFile, Modularity(..), ImplementationType(..), Comments, Verbosity,
-  MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging, 
+  MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging,
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
   CodeSpec(..),  OldCodeSpec(..), getConstraints)
@@ -28,6 +28,7 @@ import Data.Set (Set)
 import Data.Map (Map, fromList)
 import Text.PrettyPrint.HughesPJ (Doc, ($$))
 import Language.Drasil.ICOSolutionSearch (Def)
+import Language.Drasil.Printers (PrintingInformation)
 
 -- | Type for the mapping between 'Space's and 'CodeType's.
 type MatchedSpaces = Space -> GenState CodeType
@@ -50,6 +51,7 @@ type GenState = State DrasilState
 -- | Private State, used to push these options around the generator.
 data DrasilState = DrasilState {
   codeSpec :: CodeSpec,
+  printfo :: PrintingInformation,
   -- Choices
   modular :: Modularity,
   implType :: ImplementationType,

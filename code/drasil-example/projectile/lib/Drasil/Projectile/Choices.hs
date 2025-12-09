@@ -1,84 +1,22 @@
 {-# LANGUAGE TupleSections #-}
 module Drasil.Projectile.Choices where
 
-import Language.Drasil (Space(..), programName)
-import Language.Drasil.Code (Choices(..), Comments(..), 
-  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
+import Language.Drasil (Space(..))
+import Language.Drasil.Code (Choices(..), Comments(..), Mod,
+  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
+  Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
   ConstantRepr(..), CodeConcept(..), matchConcepts, SpaceMatch,
-  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit, 
-  Architecture(..), makeData, DataInfo(..), Maps(..), makeMaps, spaceToCodeType,
-  makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
-  makeOptFeats)
-import Drasil.Generator (genCode)
+  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, makeArchit,
+  makeData, makeMaps, spaceToCodeType, makeConstraints,
+  makeDocConfig, makeLogConfig, makeOptFeats)
 import Drasil.GOOL (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
-import Drasil.Projectile.Body (fullSI)
-import Drasil.System (System(SI, _sys))
 
-import Data.List (intercalate)
-import System.Directory (getCurrentDirectory, setCurrentDirectory)
-import Data.Char (toLower)
-import Utils.Drasil (createDirIfMissing)
-
-genCodeWithChoices :: [Choices] -> IO ()
-genCodeWithChoices [] = return ()
-genCodeWithChoices (c:cs) = let dir = map toLower $ codedDirName (getSysName fullSI) c
-                                getSysName SI{_sys = sysName} = programName sysName
-  in do
-    workingDir <- getCurrentDirectory
-    createDirIfMissing False dir
-    setCurrentDirectory dir
-    genCode c (codeSpec fullSI c [])
-    setCurrentDirectory workingDir
-    genCodeWithChoices cs
-
-codedDirName :: String -> Choices -> String
-codedDirName n Choices {
-  architecture = a,
-  optFeats = o,
-  dataInfo = d,
-  maps = m} = 
-  intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging $ logConfig o, 
-    codedStruct $ inputStructure d, codedConStruct $ constStructure d, 
-    codedConRepr $ constRepr d, codedSpaceMatch $ spaceMatch m]
-
-codedMod :: Modularity -> String
-codedMod Unmodular = "U"
-codedMod Modular = "M"
-
-codedImpTp :: ImplementationType -> String
-codedImpTp Program = "P"
-codedImpTp Library = "L"
-
-codedLog :: [Logging] -> String
-codedLog [] = "NoL"
-codedLog _ = "L"
-
-codedStruct :: Structure -> String
-codedStruct Bundled = "B"
-codedStruct Unbundled = "U"
-
-codedConStruct :: ConstantStructure -> String
-codedConStruct Inline = "I"
-codedConStruct WithInputs = "WI"
-codedConStruct (Store s) = codedStruct s
-
-codedConRepr :: ConstantRepr -> String
-codedConRepr Var = "V"
-codedConRepr Const = "C"
-
-codedSpaceMatch :: SpaceMatch -> String
-codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
-                                     [Float, Double] -> "F" 
-                                     _ -> error 
-                                       "Unexpected SpaceMatch for Projectile"
-
-choiceCombos :: [Choices]
-choiceCombos = [
+choiceCombos :: [(Choices, [Mod])]
+choiceCombos = map (,[]) [
   baseChoices {
     lang = [Python, Cpp, CSharp, Java, Swift, Julia]
-  }, 
+  },
   baseChoices {
     architecture = makeArchit Modular Program,
     dataInfo = makeData Bundled (Store Unbundled) Var

@@ -6,7 +6,7 @@ import Language.Drasil.Expr.Lang (Expr(..),
   UFunc(..), UFuncB(..),
   AssocBoolOper(..), AssocArithOper(..), CCCBinOp, NCCBinOp, ESSBinOp, ESBBinOp, AssocConcatOper(..))
 
--- These precedences are inspired from Haskell/F# 
+-- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
 
@@ -64,7 +64,6 @@ precB Or = 110
 
 precC :: AssocConcatOper -> Int
 precC SUnion = 120
-
 
 -- | prec1 - precedence of unary operators.
 prec1 :: UFunc -> Int

@@ -27,7 +27,7 @@ type People = [Person]
 -- | Naming conventions.
 data Conv = Western -- ^ Western style conventions are given name followed
                     -- by middle names, followed by surname.
-          | Eastern -- ^ Eastern style conventions are surname followed by middle names, 
+          | Eastern -- ^ Eastern style conventions are surname followed by middle names,
                     -- followed by given name.
           | Mono  -- ^ Mononyms are for those people who have only one name (ex. Madonna).
           deriving (Eq)
@@ -35,20 +35,20 @@ data Conv = Western -- ^ Western style conventions are given name followed
 -- | Orderes different groups of 'Person's. If two lists are the same up to a point, the citation with more 'Person's will go last.
 comparePeople :: [Person] -> [Person] -> Ordering
 comparePeople [] [] = EQ
-comparePeople _  [] = GT -- this makes sure that if the authors are the same 
+comparePeople _  [] = GT -- this makes sure that if the authors are the same
 comparePeople []  _ = LT -- up to a point, the citation with more goes last
 comparePeople (Person f1 l1 _ _:xs) (Person f2 l2 _ _:ys)
   | l1 /= l2  = l1 `compare` l2
   | f1 /= f2  = f1 `compare` f2
   | otherwise = comparePeople xs ys
 
--- | Constructor for a person using Western naming conventions. 
+-- | Constructor for a person using Western naming conventions.
 -- Used for a person with only a given name and surname.
 -- Arguments are in the order: given name, surname.
 person :: String -> String -> Person
 person f l = Person f l [] Western
 
--- | Constructor for a person using Eastern naming conventions. 
+-- | Constructor for a person using Eastern naming conventions.
 -- Used for a person with only a given name and surname.
 -- Arguments are in the order: surname, given name.
 person' :: String -> String -> Person

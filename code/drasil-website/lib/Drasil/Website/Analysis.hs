@@ -5,14 +5,12 @@ module Drasil.Website.Analysis where
 
 import Language.Drasil
 
-
 -- * Analysis Section
 --
 -- $analysis
 --
 -- Holds functions that are made for the Analysis section of the Drasil Website,
 -- including the section creator functions, title & introduction, and references.
-
 
 -- | Creates the Analysis of Drasil Section. This section is split into the following sub-sections:
 --
@@ -21,7 +19,7 @@ import Language.Drasil
 --    * Class Instance Graphs (graphs showing the relationships between types and classes, taken from Data Table)
 --    * Package Dependency Graphs (structure of modules within each @drasil-@ package)
 analysisSec :: FilePath -> FilePath -> FilePath -> FilePath -> [String] -> Section
-analysisSec analysisPath typePath clsIPath graphPath pkgs = 
+analysisSec analysisPath typePath clsIPath graphPath pkgs =
     section drasilAnalysisTitle -- Section title
     [mkParagraph analysisIntro] -- Section introduction
     [dataTableSec analysisPath, tableOfGraphsSec typePath clsIPath pkgs,
@@ -41,7 +39,7 @@ analysisIntro = S "This section contains graphs and tables that may be used to a
 
 -- | Gathers all references used in this file.
 analysisRefs :: FilePath -> FilePath -> FilePath -> FilePath -> [String] -> [Reference]
-analysisRefs analysisPath typePath clsIPath graphPath pkgs = 
+analysisRefs analysisPath typePath clsIPath graphPath pkgs =
   [dataTableHTMLRef analysisPath, dataTableCSVRef analysisPath]
   ++ map (getGraphsInTableRef "datatype" "" typePath) pkgs
   ++ map (getGraphsInTableRef "classInst" "" clsIPath) pkgs
@@ -58,7 +56,7 @@ analysisRefs analysisPath typePath clsIPath graphPath pkgs =
 
 -- | Data Table subsection.
 dataTableSec :: FilePath -> Section
-dataTableSec path = 
+dataTableSec path =
   section dataTableTitle -- Title
   [mkParagraph $ dataTableDesc path] -- Contents
   [] $ makeSecRef "DataTable" $ S "DataTable" -- Section reference
@@ -98,7 +96,7 @@ dataTableCSVRef path = makeURI "dataTableCSV" (path ++ "ClassInstDep/DataTable.c
 
 -- | Table of Graphs section. Contains a table for Type dependencies and Class-Instance relations.
 tableOfGraphsSec :: FilePath -> FilePath -> [String] -> Section
-tableOfGraphsSec typePath clsIPath pkgs = 
+tableOfGraphsSec typePath clsIPath pkgs =
   section tableOfGraphsTitle -- Title
   [mkParagraph tableOfGraphsDescType, mkParagraph tableOfGraphsDescClassInst, mkGraphsTable typePath clsIPath pkgs] -- Contents
   [] $ makeSecRef "TypeAndClassGraphs" $ S "TypeAndClassGraphs" -- Section reference
@@ -115,7 +113,7 @@ graphTable knd1 path1 knd2 path2 = map (graphTableEntry knd1 path1 knd2 path2)
 -- | Helper to create a row in a graph table. Based on the kind of table we want,
 -- the file path to that graph, and the package name.
 graphTableEntry :: String -> FilePath -> String -> FilePath -> String -> [Sentence]
-graphTableEntry knd1 path1 knd2 path2 pkg = 
+graphTableEntry knd1 path1 knd2 path2 pkg =
   [namedRef (getGraphsInTableRef knd1 "" path1 pkg) (S "drasil-" :+: S pkg +:+ S "Types"),
   namedRef (getGraphsInTableRef knd2 "" path2 pkg) (S "drasil-" :+: S pkg +:+ S "Class Instances")]
 
@@ -146,7 +144,7 @@ tableOfGraphsDescClassInst = S "The class instance graphs aim to look at the str
 
 -- | Creates a table that links to all generated type and class instance graphs.
 mkGraphsTable :: FilePath -> FilePath -> [String] -> Contents
-mkGraphsTable typePath clsInstPath pkgs = LlC $ llcc tableGraphRef $ Table 
+mkGraphsTable typePath clsInstPath pkgs = LlC $ llcc tableGraphRef $ Table
   [S "Generated Type Graphs", S "Generated Class Instance Graphs"] -- Header row
   (graphTable "datatype" typePath "classInst" clsInstPath pkgs) -- Create the body of the table
   (S "Type Graphs") True -- Label the table
@@ -165,7 +163,7 @@ tableGraphRef = makeTabRef "TableOfGraphs"
 
 -- | Creates the Package Dependency Graphs section.
 graphSec :: FilePath -> [String] -> Section
-graphSec path pkgs = 
+graphSec path pkgs =
   section packDepGraphTitle -- Title
   (mkParagraph (S graphSecIntro) : displayGraphs ++ listOfLinkedGraphs ++ mkParagraph (S graphSecBwPkgs) : displayPkgsDepGraph) -- Contents
   [] $ makeSecRef "DependencyGraphs" $ S "Dependency Graphs" -- Section Reference

@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Drasil.Metadata (inModel)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
@@ -62,7 +62,7 @@ si = mkSystem
   tMods genDefs SWHS.dataDefs iMods
   []
   inputs outputs constrained specParamValList
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
@@ -90,7 +90,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks [] SWHS.dataDefs insModel
-  genDefs tMods concIns (labelledContent ++ funcReqsTables) allRefs citations
+  genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

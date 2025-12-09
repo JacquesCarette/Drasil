@@ -212,7 +212,7 @@ debug: setup_debug_vars test ##@Examples Run test target with better debugging t
 # Debugging individual examples
 $(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): setup_debug_vars %$(TEST_E_SUFFIX)
 
-pr_ready: all stan hlint ##@General Check if your current work is ready to for a PR via `all` and `hlint` and stan.
+pr_ready: all stan hlint check_whitespace ##@General Check if your current work is ready to for a PR via `all` and `hlint` and stan.
 	@echo "Your build/ and stable/ match, and your code currently passes HLint tests."
 	@echo "Feel free to create a PR for your code if you feel it's ready."
 
@@ -475,6 +475,9 @@ hlint: check_stack ##@Linters Run HLint through the drasil packages. Uses a loca
 hot_hlint: ##@Linters Run HLint through the drasil packages. Uses the latest HLint version, downloading the binary each time.
 	curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
 
+check_whitespace: ##@Linters Check whitespace rules in all Haskell code (i.e., no per-line trailing whitespace and always trailing newline)
+	scripts/check_whitespace.sh
+
 shellcheck: ##@Linters Run ShellCheck static analyzer on all shell script files.
 	find . -type f -name '*.sh' -exec shellcheck {} +
 
@@ -627,4 +630,4 @@ help_packages: ##@Help Lists all packages.
 		echo "  $$package"; \
 	done
 
-.PHONY: help setup_debug_vars clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install examples tracegraphs doxygen shellcheck mdbook_build jupyter_html $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: help setup_debug_vars clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint check_whitespace analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install examples tracegraphs doxygen shellcheck mdbook_build jupyter_html $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

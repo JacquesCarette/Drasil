@@ -19,50 +19,35 @@ module Language.Drasil.Document.Combinators (
   zipSentList
 ) where
 
-import Language.Drasil.Chunk.Concept.Core ( ConceptChunk )
+import Control.Lens ((^.))
+import Data.Decimal (DecimalRaw, realFracToDecimal)
+import Data.Function (on)
+import Data.List (sortBy, transpose)
+
+import Drasil.Database (HasUID)
+
+import Language.Drasil.Chunk.Concept.Core (ConceptChunk)
 import Language.Drasil.Chunk.DefinedQuantity (DefinesQuantity(defLhs))
-import Language.Drasil.Chunk.UnitDefn ( UnitDefn, MayHaveUnit(..) )
-import Language.Drasil.Chunk.Unital ( UnitalChunk )
-import Language.Drasil.Classes
-    ( HasUnitSymbol(usymb),
-      Quantity,
-      Concept,
-      Definition(defn),
-      NamedIdea(..) )
+import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(..))
+import Language.Drasil.Chunk.Unital (UnitalChunk)
+import Language.Drasil.Classes (HasUnitSymbol(usymb), Quantity, Concept,
+  Definition(defn), NamedIdea(..))
 import Language.Drasil.ShortName (HasShortName(..))
-import Language.Drasil.Development.Sentence
-    ( short, atStart, titleize, phrase, plural )
-import Language.Drasil.Document ( Section )
-import Language.Drasil.Document.Core
-    ( ItemType(..), ListType(Bullet) )
-import Language.Drasil.ModelExpr.Lang ( ModelExpr )
-import Language.Drasil.NounPhrase.Core ( NP )
-import Language.Drasil.Reference ( refS, namedRef )
-import Language.Drasil.Sentence
-    ( Sentence(S, Percent, (:+:), Sy, EmptyS),
-      eS,
-      ch,
-      sParen,
-      sDash,
-      (+:+),
-      sC,
-      (+:+.),
-      (!.),
-      (+:),
-      capSent )
+import Language.Drasil.Development.Sentence (short, atStart, titleize,
+  phrase, plural)
+import Language.Drasil.Document (Section)
+import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet))
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
+import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.Reference (refS, namedRef)
+import Language.Drasil.Sentence (Sentence(S, Percent, (:+:), Sy, EmptyS), eS,
+  ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent)
 import Language.Drasil.Symbol.Helpers ( eqSymb )
 import Language.Drasil.Uncertainty
 import Language.Drasil.Symbol
 import Language.Drasil.Sentence.Fold
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
-import Drasil.Database.UID ( HasUID )
 import Language.Drasil.Label.Type
-
-import Control.Lens ((^.))
-
-import Data.Decimal (DecimalRaw, realFracToDecimal)
-import Data.Function (on)
-import Data.List (sortBy, transpose)
 
 -- | Sorts a list of 'HasSymbols' by 'Symbol'.
 sortBySymbol :: HasSymbol a => [a] -> [a]
@@ -134,13 +119,13 @@ typUncr x = found (uncVal x) (uncPrec x)
 addPercent :: Show a => a -> Sentence
 addPercent num = S (show num) :+: Percent
 
--- | Distributes a list of Sentences by prepending individual Sentences once to an existing list of Sentences. 
--- 
--- For example: 
+-- | Distributes a list of Sentences by prepending individual Sentences once to an existing list of Sentences.
+--
+-- For example:
 --
 -- >>> zipSentList [S "Hi", S "Hey", S "Hi"] [[S "Hello"], [S "World"], [S "Hello", S "World"]]
 -- [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
-zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 
+zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
 zipSentList acc _ []           = acc
 zipSentList acc [] r           = acc ++ map (EmptyS:) r
 zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
@@ -154,8 +139,8 @@ makeTMatrix rowName rows cols = zipSentList [] rowName [zipFTable' x cols | x <-
 
 -- | Helper for making a table from a columns.
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
-mkTableFromColumns l = 
-  let l' = filter (not . all isEmpty . snd) l in 
+mkTableFromColumns l =
+  let l' = filter (not . all isEmpty . snd) l in
   (map fst l', transpose $ map (map replaceEmptyS . snd) l')
   where
     isEmpty       EmptyS = True
@@ -163,13 +148,13 @@ mkTableFromColumns l =
     replaceEmptyS EmptyS = S "--"
     replaceEmptyS s      = s
 
--- | Makes 'Sentence's from an item and its reference. 
--- Takes the title of reference as a 'String' and a 
+-- | Makes 'Sentence's from an item and its reference.
+-- Takes the title of reference as a 'String' and a
 -- 'Sentence' containing the full reference. Wraps the full reference in parenthesis.
 itemRefToSent :: String -> Sentence -> Sentence
 itemRefToSent a b = S a +:+ sParen b
 
--- | Takes a list and a 'Section', then generates a list of that section's reference to 
+-- | Takes a list and a 'Section', then generates a list of that section's reference to
 -- match the length of the list.
 makeListRef :: [a] -> Section -> [Sentence]
 makeListRef l = replicate (length l) . refS
@@ -178,7 +163,7 @@ makeListRef l = replicate (length l) . refS
 bulletFlat :: [Sentence] -> ListType
 bulletFlat = Bullet . noRefs . map Flat
 
--- | Applies 'Bullet's and headers to a 'Nested' 'ListType'. 
+-- | Applies 'Bullet's and headers to a 'Nested' 'ListType'.
 -- The first argument is the headers of the 'Nested' lists.
 bulletNested :: [Sentence] -> [ListType] -> ListType
 bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
@@ -201,7 +186,7 @@ showingCxnBw traceyVar contents = titleize traceyVar +:+
 
 -- | Returns the 'Sentence' "The @chunk@ under consideration is @chunkDefinition@".
 underConsidertn :: ConceptChunk -> Sentence
-underConsidertn chunk = S "The" +:+ phrase chunk +:+ 
+underConsidertn chunk = S "The" +:+ phrase chunk +:+
   S "under consideration is" +:+. (chunk ^. defn)
 
 -- | Create a list in the pattern of "The \_\_ are refined to the \_\_".
@@ -261,7 +246,7 @@ getTandS a = phrase a +:+ ch a
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
 chgsStart = sDash . refS
 
--- | Uses an 'Either' type to check if a 'String' is valid - 
+-- | Uses an 'Either' type to check if a 'String' is valid -
 -- 'Left' with error message if there is an invalid 'Char' in 'String', else 'Right' with 'String'.
 checkValidStr :: String -> String -> Either String String
 checkValidStr s [] = Right s

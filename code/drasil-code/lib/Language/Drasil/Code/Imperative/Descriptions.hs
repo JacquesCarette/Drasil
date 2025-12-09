@@ -7,24 +7,24 @@ module Language.Drasil.Code.Imperative.Descriptions (
   inConsFuncDesc, dvFuncDesc, calcModDesc, woFuncDesc
 ) where
 
-import Utils.Drasil (stringList)
+import Control.Lens ((^.))
+import Control.Monad.State (get)
+import Data.Map (member)
+import qualified Data.Map as Map (filter, lookup, null)
+import Data.Maybe (mapMaybe)
 
+import Drasil.Database (HasUID(..))
 import Language.Drasil
 import Language.Drasil.Chunk.CodeBase
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName)
-import Language.Drasil.Choices (ImplementationType(..), Structure(..), 
+import Language.Drasil.Choices (ImplementationType(..), Structure(..),
   InternalConcept(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Description)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
-
-import Data.Map (member)
-import qualified Data.Map as Map (filter, lookup, null)
-import Data.Maybe (mapMaybe)
-import Control.Lens ((^.))
-import Control.Monad.State (get)
 import Drasil.System hiding (systemdb)
+import Utils.Drasil (stringList)
 
 -- | Returns a module description based on a list of descriptions of what is
 -- contained in the module.
@@ -37,10 +37,9 @@ modDesc = fmap ((++) "Provides " . stringList)
 unmodularDesc :: GenState Description
 unmodularDesc = do
   g <- get
-  let spec = codeSpec g
-      implTypeStr Program = "program"
+  let implTypeStr Program = "program"
       implTypeStr Library = "library"
-  return $ show $ sentenceDoc (spec ^. systemdbO) Implementation OneLine $ capSent $
+  return $ show $ sentenceDoc (printfo g) OneLine $ capSent $
     foldlSent ([S "a", S (implTypeStr (implType g)), S "to"] ++ codeSpec g ^. purpose)
 
 -- | Returns description of what is contained in the Input Parameters module.

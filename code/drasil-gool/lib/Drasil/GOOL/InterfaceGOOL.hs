@@ -43,7 +43,7 @@ class (FileSym r) => ProgramSym r where
 
 type SFile a = FS (a (File a))
 
-class (ModuleSym r) => FileSym r where 
+class (ModuleSym r) => FileSym r where
   type File r
   fileDoc :: FSModule r -> SFile r
 
@@ -63,15 +63,15 @@ class (OOMethodSym r, StateVarSym r) => ClassSym r where
   type Class r
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] ->
     [SMethod r] -> SClass r
   -- | Creates an extra class.
   --   Inputs: class name, the rest are the same as buildClass.
-  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] ->
     [SMethod r] -> SClass r
   -- | Creates a class implementing interfaces.
   --   Inputs: class name, interface names, variables, constructor(s), methods
-  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> 
+  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] ->
     [SMethod r] -> SClass r
 
   docClass :: String -> SClass r -> SClass r
@@ -79,21 +79,21 @@ class (OOMethodSym r, StateVarSym r) => ClassSym r where
 type Initializers r = [(SVariable r, SValue r)]
 
 class (MethodSym r, PermanenceSym r) => OOMethodSym r where
-  method      :: Label -> r (Visibility r) -> r (Permanence r) -> VSType r -> 
+  method      :: Label -> r (Visibility r) -> r (Permanence r) -> VSType r ->
     [MSParameter r] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
-  setMethod   :: SVariable r -> SMethod r 
+  setMethod   :: SVariable r -> SMethod r
   constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
 
   -- inOutMethod and docInOutMethod both need the Permanence parameter
   inOutMethod :: Label -> r (Visibility r) -> r (Permanence r) -> InOutFunc r
   docInOutMethod :: Label -> r (Visibility r) -> r (Permanence r) -> DocInOutFunc r
 
-privMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
+privMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r
   -> SMethod r
 privMethod n = method n private dynamic
 
-pubMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
+pubMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r
   -> SMethod r
 pubMethod n = method n public dynamic
 
@@ -108,7 +108,7 @@ type CSStateVar a = CS (a (StateVar a))
 class (VisibilitySym r, PermanenceSym r, VariableSym r) => StateVarSym r where
   type StateVar r
   stateVar :: r (Visibility r) -> r (Permanence r) -> SVariable r -> CSStateVar r
-  stateVarDef :: r (Visibility r) -> r (Permanence r) -> SVariable r -> 
+  stateVarDef :: r (Visibility r) -> r (Permanence r) -> SVariable r ->
     SValue r -> CSStateVar r
   constVar :: r (Visibility r) ->  SVariable r -> SValue r -> CSStateVar r
 
@@ -173,29 +173,29 @@ libNewObj l t vs = libNewObjMixedArgs l t vs []
 
 class (ValueSym r) => InternalValueExp r where
   -- | Generic function for calling a method.
-  --   Takes the function name, the return type, the object, a list of 
+  --   Takes the function name, the return type, the object, a list of
   --   positional arguments, and a list of named arguments.
-  objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
+  objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] ->
     NamedArgs r -> SValue r
 
 -- | Calling a method. t is the return type of the method, o is the
 --   object, f is the method name, and ps is a list of positional arguments.
-objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
+objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label ->
   [SValue r] -> SValue r
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
 -- | Calling a method with named arguments.
-objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label
   -> NamedArgs r -> SValue r
 objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
 
 -- | Calling a method with a mix of positional and named arguments.
-objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label
   -> [SValue r] -> NamedArgs r -> SValue r
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
 -- | Calling a method with no parameters.
-objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label
   -> SValue r
 objMethodCallNoParams t o f = objMethodCall t o f []
 
@@ -212,7 +212,7 @@ objDecNewNoParams :: (OODeclStatement r) => SVariable r -> r (Scope r)
   -> MSStatement r
 objDecNewNoParams v s = objDecNew v s []
 
-extObjDecNewNoParams :: (OODeclStatement r) => Library -> SVariable r -> 
+extObjDecNewNoParams :: (OODeclStatement r) => Library -> SVariable r ->
   r (Scope r) -> MSStatement r
 extObjDecNewNoParams l v s = extObjDecNew l v s []
 

@@ -1,6 +1,6 @@
 {-# Language TupleSections #-}
 -- | Standard code to make a table of contents.
-module Drasil.Sections.TableOfContents (toToC, findToC) where
+module Drasil.Sections.TableOfContents (toToC) where
 
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import qualified Drasil.DocLang.SRS as SRS
@@ -156,7 +156,6 @@ mktReqrmntSec (ReqsProg l) =
   mkHeaderItem (namedRef SRS.requirementsLabel $ titleize' Doc.requirement) $ map mktSubs l
   where
     mktSubs :: ReqsSub -> Sentence
-    mktSubs (FReqsSub' _ _) = namedRef SRS.funcReqLabel    $ titleize' Doc.functionalRequirement
     mktSubs (FReqsSub _ _)  = namedRef SRS.funcReqLabel    $ titleize' Doc.functionalRequirement
     mktSubs (NonFReqsSub _) = namedRef SRS.nonfuncReqLabel $ titleize' Doc.nonfunctionalRequirement
 
@@ -188,9 +187,3 @@ mktAppndxSec (AppndxProg _) = Flat $ namedRef SRS.appendixLabel $ titleize  Doc.
 mktOffShelfSolnSec :: OffShelfSolnsSec -> ItemType
 mktOffShelfSolnSec (OffShelfSolnsProg _) = Flat $ namedRef SRS.offShelfSolnsLabel $ titleize' Doc.offShelfSolution
 
--- Find more concise way to do this
--- | Finds whether the Table of Contents is in a SRSDecl.
-findToC :: [DocSection] -> ShowTableOfContents
-findToC [] = NoToC
-findToC (TableOfContents:_) = ToC
-findToC (_:dds) = findToC dds

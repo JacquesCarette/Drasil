@@ -2,19 +2,18 @@
 -- | Contains types and functions common to aspects of generating documents.
 module Language.Drasil.Document.Core where
 
-import Language.Drasil.Chunk.Citation (BibRef)
+import Control.Lens ((^.), makeLenses, Lens', set, view)
 
-import Drasil.Database.Chunk (HasChunkRefs(..))
-import Drasil.Database.UID (HasUID(..))
-import Drasil.Code.CodeExpr.Lang (CodeExpr)
+import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
+
+import Language.Drasil.Expr.Lang (Expr)
+import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Reference (Reference)
 import Language.Drasil.Sentence (Sentence)
-
-import Control.Lens ((^.), makeLenses, Lens', set, view)
 
 -- * Lists
 
@@ -65,7 +64,7 @@ data DType = General
 
 -- | Indicates whether a figure has a caption or not.
 data HasCaption = NoCaption | WithCaption
-  deriving (Eq) 
+  deriving (Eq)
 
 -- | Types of layout objects we deal with explicitly.
 data RawContent =
@@ -79,18 +78,18 @@ data RawContent =
                                              -- ^ For creating figures in a document includes whether the figure has a caption.
   | Bib BibRef                               -- ^ Grants the ability to reference something.
   | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl -- ^ Contain a graph with coordinates ('Sentence's), maybe a width and height, and a label ('Sentence').
-  | CodeBlock CodeExpr                       -- ^ Block for codes
-               -- TODO: Fill this one in.
+  | CodeBlock Expr                           -- ^ Block for codes
 
 -- | An identifier is just a 'String'.
 type Identifier = String
 
 -- | Contains a 'Reference' and 'RawContent'.
-data LabelledContent = LblC { _ref :: Reference
+data LabelledContent = LblC { _lcUid :: UID
+                            , _ref :: Reference
                             , _ctype :: RawContent
                             }
 
--- | Only contains 'RawContent'.                         
+-- | Only contains 'RawContent'.
 newtype UnlabelledContent = UnlblC { _cntnts :: RawContent }
 
 makeLenses ''LabelledContent
@@ -106,11 +105,11 @@ instance HasChunkRefs LabelledContent where
   chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds 'UID' of the 'LabelledContent'.
-instance HasUID        LabelledContent where uid = ref . uid
+instance HasUID        LabelledContent where uid = lcUid
 -- | 'LabelledContent's are equal if their reference 'UID's are equal.
-instance Eq            LabelledContent where a == b = (a ^. uid) == (b ^. uid) 
+instance Eq            LabelledContent where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the reference address contained in the 'Reference' of 'LabelledContent'.
-instance HasRefAddress LabelledContent where getRefAdd (LblC lb c) = RP (prependLabel c) $ getAdd $ getRefAdd lb
+instance HasRefAddress LabelledContent where getRefAdd (LblC _ lb c) = RP (prependLabel c) $ getAdd $ getRefAdd lb
 -- | Access the 'RawContent' within the 'LabelledContent'.
 instance HasContents   LabelledContent where accessContents = ctype
 -- | Find the shortname of the reference address used for the 'LabelledContent'.
@@ -142,6 +141,6 @@ prependLabel CodeBlock{}    = prepend "CodeB"
 prependLabel DerivBlock{}   = prepend "Deriv"
 prependLabel Enumeration{}  = prepend "Lst"
 prependLabel Paragraph{}    = error "Shouldn't reference paragraphs"
-prependLabel Bib{}          = error $ 
+prependLabel Bib{}          = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."

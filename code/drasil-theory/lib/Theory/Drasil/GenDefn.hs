@@ -6,15 +6,15 @@ module Theory.Drasil.GenDefn (
   -- * Constructors
   gd, gdNoRefs,
   -- * Functions
-  getEqModQdsFromGd) where
+  getEqModQdsFromGd
+) where
 
-import Drasil.Database.Chunk (HasChunkRefs(..))
+import Control.Lens ((^.), view, makeLenses)
 
+import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
 import Drasil.Metadata (genDefn)
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
-
-import Control.Lens ((^.), view, makeLenses)
 
 -- | A general definition is a 'ModelKind' that may have units, a derivation,
 -- references (as 'DecRef's), a shortname, a reference address, and notes.
@@ -68,13 +68,13 @@ instance Referable          GenDefn where
 gd :: IsUnit u => ModelKind ModelExpr -> Maybe u ->
   Maybe Derivation -> [DecRef] -> String -> [Sentence] -> GenDefn
 gd mkind _   _     []   _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
-gd mkind u derivs refs sn_ = 
+gd mkind u derivs refs sn_ =
   GD mkind (fmap unitWrapper u) derivs refs (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Smart constructor for general definitions with no references.
 gdNoRefs :: IsUnit u => ModelKind ModelExpr -> Maybe u ->
   Maybe Derivation -> String -> [Sentence] -> GenDefn
-gdNoRefs mkind u derivs sn_ = 
+gdNoRefs mkind u derivs sn_ =
   GD mkind (fmap unitWrapper u) derivs [] (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Grab all related 'QDefinitions' from a list of general definitions.

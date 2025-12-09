@@ -94,7 +94,7 @@ helloInitVariables = block [comment "Initializing variables",
     (litString "Set s should contain 7")]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
-  mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9, 
+  mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
   mySlicedList10, mySlicedList11 :: (SharedProg r) => SVariable r
 mySlicedList = var "mySlicedList" (listType double)
 mySlicedList2 = var "mySlicedList2" (listType double)
@@ -244,7 +244,7 @@ helloIfBody = addComments "If body" (body [
     (&++) (var "d" int),
     (&--) (var "c" int),
     (&--) (var "b" int),
-  
+
     listDec 5 (var "myList" (listType int)) mainFn,
     constDecDef (constant "myConst" string) mainFn (litString "Imconstant"),
 
@@ -255,7 +255,7 @@ helloIfBody = addComments "If body" (body [
     printLn (valueOf $ var "d" int),
     printLn (valueOf myOtherList),
     printLn (valueOf mySlicedList),
-  
+
     printStrLn "Type an int",
     getInput (var "d" int),
     printStrLn "Type another",
@@ -293,7 +293,6 @@ helloIfBody = addComments "If body" (body [
     printLn (valueOf $ var "a" int),
     printLn (inlineIf litTrue (litInt 5) (litInt 0)),
     printLn (cot (litDouble 1.0))]])
-
 
 -- | Print the 5th given argument.
 helloElseBody :: (SharedProg r) => MSBody r

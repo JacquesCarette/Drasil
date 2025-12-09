@@ -2,15 +2,12 @@ module Main (main) where
 
 import GHC.IO.Encoding
 
-import Drasil.Generator (gen, typeCheckSI, genDot,
-  DocSpec(DocSpec), DocType(SRS), Format(..), docChoices, dumpEverything)
-import Drasil.DblPend.Body (srs, printSetting, fullSI)
+import Drasil.Generator (exportSmithEtAlSrsWCode)
 
-main :: IO()
+import Drasil.DblPend.Body (mkSRS, si)
+import Drasil.DblPend.Choices (choices)
+
+main :: IO ()
 main = do
   setLocaleEncoding utf8
-  dumpEverything fullSI printSetting ".drasil/"
-  typeCheckSI fullSI
-  gen (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) "DblPend_SRS") srs printSetting
-  -- genCode choices code
-  genDot fullSI
+  exportSmithEtAlSrsWCode si mkSRS "DblPend_SRS" choices []

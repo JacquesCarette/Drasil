@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SSP.Body (si, mkSRS, srs, printSetting, fullSI) where
+module Drasil.SSP.Body (si, mkSRS) where
 
 import Prelude hiding (sin, cos, tan)
 
@@ -63,7 +63,7 @@ si = mkSystem
   tMods generalDefinitions dataDefs iMods
   []
   inputs outputs constrained []
-  symbMap
+  symbMap allRefs
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -152,7 +152,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts conceptChunks
-  [degree] dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
+  [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
@@ -217,7 +217,6 @@ externalLinkRef = makeURI "SSP"
 
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in IPurpose
-
 
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope

@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SglPend.Body where
+module Drasil.SglPend.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
@@ -12,7 +12,7 @@ import Drasil.Generator.BaseChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Math (mathcon')
@@ -31,24 +31,14 @@ import Drasil.DblPend.Unitals (acronyms)
 import Drasil.DblPend.References (citations)
 
 import Drasil.SglPend.Assumptions (assumpSingle)
-import Drasil.SglPend.LabelledContent (figMotion, sysCtxFig1)
+import Drasil.SglPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.SglPend.Goals (goals, goalsInputs)
 import Drasil.SglPend.DataDefs (dataDefs)
 import Drasil.SglPend.IMods (iMods)
 import Drasil.SglPend.MetaConcepts (progName)
 import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
-import Drasil.SglPend.Requirements (funcReqs)
-
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) fullSI
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
+import Drasil.SglPend.Requirements (funcReqs, funcReqsTables)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
@@ -88,7 +78,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
        ]
      ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub EmptyS []
+    [ FReqsSub funcReqsTables
     , NonFReqsSub
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -104,7 +94,7 @@ si = mkSystem progName Specification [olu]
   tMods genDefns dataDefs iMods
   []
   inputs outputs inConstraints []
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]
@@ -132,8 +122,9 @@ abbreviationsList =
   map nw symbols
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks
-  ([] :: [UnitDefn]) dataDefs iMods genDefns tMods concIns [] allRefs citations
+symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []
+  dataDefs iMods genDefns tMods concIns citations
+  (labelledContent ++ funcReqsTables)
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -180,7 +171,6 @@ concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 -- 3.3 : System Constraints --
 ------------------------------
 -- System Constraints automatically generated in SystCons
-
 
 --------------------------------------------
 -- Section 4: Specific System Description --

@@ -1,18 +1,18 @@
 -- | Standard code to make a table of symbols.
 module Drasil.Sections.TableOfSymbols (table, symbTableRef, tsymb, tsymb', tsymb'', tsIntro) where
 
-import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-                                               -- Vector - Name conflict (defined in file)
-
 import Data.List (nub, (\\))
 import Control.Lens (view)
 import Text.PrettyPrint.HughesPJ (text, render, vcat, (<+>))
 
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 
+import Drasil.Database (HasUID(..))
 import Drasil.DocumentLanguage.Units (toSentence)
 import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
 import Data.Drasil.Concepts.Math (unit_)
+import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
+                                             -- Vector - Name conflict (defined in file)
 import Language.Drasil.Printers (symbolDoc)
 import Drasil.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), LFunc(..), RefTab(..))
 import Utils.Drasil (mkTable)
@@ -27,8 +27,8 @@ table st ls f
       Table [atStart symbol_, atStart description, atStart' unit_]
       (mkTable [P . (`symbol` st), f, toSentence] filteredChunks)
       (titleize' tOfSymb) True
-    | otherwise = error errorMessage 
-    where 
+    | otherwise = error errorMessage
+    where
         filteredChunks = filter (`hasStageSymbol`st) ls
         symbolsCol     = map (`symbol` st) filteredChunks
         uidCol         = map (view uid)    filteredChunks
@@ -39,7 +39,7 @@ table st ls f
         extractPairs symb = filter (\x -> fst x == symb) symUidPair
         extractUid  = map snd
         extractUidFromPairs = text . show . extractUid . extractPairs
-        errSymUidDuplicates = vcat $ map (\symb -> 
+        errSymUidDuplicates = vcat $ map (\symb ->
           extractUidFromPairs symb<+>text "all have symbol"<+>symbolDoc symb) symDuplicates
         errorMessage = "Same symbols for different quantities found: " ++ render errSymUidDuplicates
 

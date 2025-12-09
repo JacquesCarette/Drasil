@@ -11,7 +11,10 @@ import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTC, coilHTCMax,
   timeFinalMax, timeStep, wDensity, wDensityMax, wDensityMin, watE, tempW)
 
 inputs :: [DefinedQuantityDict]
-inputs = map dqdWr constrained ++ map dqdWr unconstrained
+inputs = map dqdWr constrained ++ map dqdWr unconstrained ++ [dqdWr watE]
+
+outputs :: [ConstrConcept]
+outputs = [tempW, watE]
 
 unconstrained :: [UncertQ]
 unconstrained = [absTol, relTol]
@@ -32,5 +35,5 @@ outputs = [tempW, watE]
 
 specParamValList :: [ConstQDef]
 specParamValList = [tankLengthMin, tankLengthMax,
-  wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax, 
+  wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax,
   coilHTCMin, coilHTCMax, timeFinalMax, arMin, arMax]

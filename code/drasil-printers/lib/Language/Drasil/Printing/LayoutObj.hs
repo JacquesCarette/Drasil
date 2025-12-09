@@ -37,7 +37,7 @@ type Caption  = Spec
 -- | A mapping of refs to the file that contains them.
 type RefMap   = Map String Filename
 
-data LayoutObj = 
+data LayoutObj =
      Table Tags [[Spec]] Label Bool Caption                          -- ^ Holds all information needed for a table.
    | Header Depth Title Label                                        -- ^ Holds all information needed for a header.
    | Paragraph Contents                                              -- ^ Paragraph.
@@ -48,6 +48,6 @@ data LayoutObj =
    | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label -- ^ Holds all information needed for a graph.
    | CodeBlock Contents                                              -- ^ Code block.
    | HDiv Tags [LayoutObj] Label                                     -- ^ Holds tags, more contents, and a label.
-   | Cell [LayoutObj] 
+   | Cell [LayoutObj]
    -- this shouldn't be here, it should have been expanded.
    | Bib BibRef                                                      -- ^ Bibliography section.

@@ -3,7 +3,7 @@ module Drasil.GamePhysics.Expressions where
 import Language.Drasil
 
 import Drasil.GamePhysics.Unitals (massj, velj, torquej, forcej, angAccj)
-import Data.Drasil.Quantities.Physics (time, momentOfInertia, 
+import Data.Drasil.Quantities.Physics (time, momentOfInertia,
     gravitationalAccel, angularVelocity)
 
 transMotExpr :: PExpr

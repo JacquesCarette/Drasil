@@ -64,7 +64,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
-  listDec, listDecDef, 
+  listDec, listDecDef,
   notNull, functionDoc, listAdd,
   listAppend, intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError,
   openFileR', openFileW', openFileA', multiReturn, multiAssign,
@@ -72,7 +72,6 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
-
 
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   fileFromData, buildModule, docMod, modFromData, listInnerType, arrayElem,

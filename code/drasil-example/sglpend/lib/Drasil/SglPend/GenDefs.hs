@@ -194,7 +194,6 @@ angFrequencyDeriv :: Derivation
 angFrequencyDeriv = mkDerivName (D.toSent $ phraseNP (angularFrequency `the_ofThe` pendulum))
   (weave [angFrequencyDerivSents, map eS D.angFrequencyDerivEqns])
 
-
 angFrequencyDerivSents :: [Sentence]
 angFrequencyDerivSents = [angFrequencyDerivSent1, angFrequencyDerivSent2, angFrequencyDerivSent3,
                       angFrequencyDerivSent4, angFrequencyDerivSent5, angFrequencyDerivSent6, angFrequencyDerivSent7]

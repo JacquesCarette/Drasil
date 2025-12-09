@@ -1,4 +1,4 @@
-module Drasil.SWHSNoPCM.Body (srs, si, symbMap, printSetting, fullSI, mkSRS, noPCMODEInfo) where
+module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 
 import Data.List ((\\))
 import Control.Lens ((^.))
@@ -7,7 +7,7 @@ import Language.Drasil hiding (section)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
@@ -170,7 +170,7 @@ si = mkSystem
   []
   inputs outputs
   (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]
@@ -193,7 +193,8 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns (labelledContent ++ funcReqsTables) allRefs citations
+  NoPCM.iMods genDefs tMods concIns citations
+  (labelledContent ++ funcReqsTables)
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

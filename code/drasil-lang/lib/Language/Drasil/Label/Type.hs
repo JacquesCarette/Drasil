@@ -11,7 +11,7 @@ module Language.Drasil.Label.Type(
   , name, (+::+), raw, defer, prepend
 ) where
 
-import Drasil.Database.UID (UID, HasUID)
+import Drasil.Database (UID, HasUID)
 
 -- | Applying different pieces of information for a reference.
 -- An RP is a decorated internal reference.
@@ -22,7 +22,7 @@ data LblType =
   | Citation String
   | URI String
 
--- | Created for different forms of references. Used in 'LblType'. 
+-- | Created for different forms of references. Used in 'LblType'.
 data IRefProg =
     Deferred UID                -- ^ Deferred lookup; done later. Used for domains in a 'ConceptInstance'.
   | RS String                   -- ^ Lifts a 'String' into a 'RefProg'.
@@ -38,9 +38,9 @@ class HasRefAddress b where
 class (HasUID s, HasRefAddress s) => Referable s where
   -- | The referencing address (what we're linking to).
   -- Only visible in the source (tex/html).
-  refAdd    :: s -> String 
+  refAdd    :: s -> String
   -- | Alternate form of reference.
-  renderRef :: s -> LblType 
+  renderRef :: s -> LblType
 
 -- | Retrieves the 'String' contained in a 'LblType'.
 getAdd :: LblType -> String
@@ -67,4 +67,3 @@ defer = Deferred
 -- | Prepends a 'String' to an 'IRefProg'.
 prepend :: String -> IRefProg
 prepend s = RS s +::+ RS ":" +::+ Name
-

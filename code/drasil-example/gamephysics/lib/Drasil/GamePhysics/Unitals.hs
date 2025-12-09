@@ -53,7 +53,6 @@ inputSymbols = map dqdWr [QP.position, QP.velocity, QP.force, QM.orientation,
 outputSymbols = map dqdWr [QP.position, QP.velocity, QM.orientation,
   QP.angularVelocity, QP.chgMomentum, QP.chgInVelocity]
 
-
 unitalSymbols :: [UnitalChunk]
 unitalSymbols = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   QP.force, QP.impulseV, QP.impulseS, QP.distance, QP.displacement,

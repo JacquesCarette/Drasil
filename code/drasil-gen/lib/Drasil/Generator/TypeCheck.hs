@@ -10,9 +10,10 @@ import Data.Either (isLeft, lefts)
 import Data.List (partition)
 import qualified Data.Map.Strict as M
 
+import Drasil.Database (UID, HasUID(..))
+import Drasil.Database.SearchTools (findAllDefinedQuantities)
 import Language.Drasil
 import Drasil.System (System, HasSystem (instModels, dataDefns, systemdb))
-import Drasil.Database.SearchTools (findAllDefinedQuantities)
 
 typeCheckSI :: System -> IO ()
 typeCheckSI sys = do
@@ -28,7 +29,7 @@ typeCheckSI sys = do
 
     putStrLn "=====[ Start type checking ]====="
     let
-      exprSpaceTups :: (HasUID t, RequiresChecking t Expr Space) => [t] -> [(UID, [(Expr, Space)])] 
+      exprSpaceTups :: (HasUID t, RequiresChecking t Expr Space) => [t] -> [(UID, [(Expr, Space)])]
       exprSpaceTups = map (\t -> (t ^. uid, requiredChecks t))
 
     -- grab all type-check-able expressions (w.r.t. Space) from DDs and IMs
@@ -39,7 +40,7 @@ typeCheckSI sys = do
     let (notChkd, chkd) = partition (\(_, exsps) -> null exsps) toChk
 
     -- note that some theories didn't expose anything to type-check
-    mapM_ 
+    mapM_
       (\(t, _) -> putStrLn $ "WARNING: `" ++ show t ++ "` does not expose any expressions to type check.")
       notChkd
 
@@ -48,13 +49,13 @@ typeCheckSI sys = do
 
     -- format 'ok' messages and 'type error' messages, as applicable
     let formattedChkd :: [Either (String, [Either TypeError Space]) String]
-        formattedChkd = map 
+        formattedChkd = map
                           (\(t, tcs) -> if any isLeft tcs
                             then Left ("`" ++ show t ++ "` exposes ill-typed expressions!", filter isLeft tcs)
-                            else pure $ "`" ++ show t ++ "` OK!") 
+                            else pure $ "`" ++ show t ++ "` OK!")
                           chkdd
 
-    let errConsumer s = do 
+    let errConsumer s = do
           putStr "  - ERROR: "
           putStrLn $ temporaryIndent "  " s
 

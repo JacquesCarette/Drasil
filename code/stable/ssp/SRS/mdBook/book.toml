@@ -1,6 +1,5 @@
 [book]
 language = "en"
-multilingual = false
 src = "src"
 title = "Software Requirements Specification for Slope Stability analysis Program"
 [output.html]

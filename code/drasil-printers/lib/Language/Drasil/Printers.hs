@@ -1,6 +1,6 @@
 module Language.Drasil.Printers (
   -- * Formats
-  DocType(SRS, Website, Lesson), 
+  DocType(SRS, Website, Lesson),
   Format(..)
   -- * DOT
   -- ** Types
@@ -8,7 +8,7 @@ module Language.Drasil.Printers (
   -- ** Functions
   , outputDot
   -- * HTML
-  -- ** Printer 
+  -- ** Printer
   , genHTML
   -- ** Helpers
   , makeCSS
@@ -35,10 +35,10 @@ module Language.Drasil.Printers (
   , PrintingInformation, piSys
   , HasPrintingOptions (..)
   , Notation(..)
-  , defaultConfiguration
+  , defaultConfiguration, plainConfiguration
 ) where
 
-import Language.Drasil.Format (DocType(SRS, Website, Lesson), 
+import Language.Drasil.Format (DocType(SRS, Website, Lesson),
   Format(..))
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
@@ -51,6 +51,7 @@ import Language.Drasil.Plain.Print (SingleLine(..), sentenceDoc, exprDoc,
   codeExprDoc, symbolDoc, unitDoc, showSymb, showHasSymbImpl)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
-  HasPrintingOptions(..), Notation(..), defaultConfiguration, piSys)
+  HasPrintingOptions(..), Notation(..), piSys,
+  defaultConfiguration, plainConfiguration)
 import Language.Drasil.DOT.Print (outputDot, GraphInfo(..), NodeFamily(..))
 import Language.Drasil.Debug.Print (printAllDebugInfo)

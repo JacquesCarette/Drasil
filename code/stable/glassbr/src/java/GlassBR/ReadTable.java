@@ -19,19 +19,19 @@ public class ReadTable {
     
     /** \brief Reads glass ASTM data from a file with the given file name
         \param filename name of the input file
-        \param z_vector list of z values
+        \param z_vect3DSor list of z values
         \param x_matrix lists of x values at different z values
         \param y_matrix lists of y values at different z values
     */
-    public static void read_table(String filename, ArrayList<Double> z_vector, ArrayList<ArrayList<Double>> x_matrix, ArrayList<ArrayList<Double>> y_matrix) throws FileNotFoundException, IOException {
+    public static void read_table(String filename, ArrayList<Double> z_vect3DSor, ArrayList<ArrayList<Double>> x_matrix, ArrayList<ArrayList<Double>> y_matrix) throws FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function read_table called with inputs: {");
         outfile.print("  filename = ");
         outfile.print(filename);
         outfile.println(", ");
-        outfile.print("  z_vector = ");
-        outfile.print(z_vector);
+        outfile.print("  z_vect3DSor = ");
+        outfile.print(z_vect3DSor);
         outfile.println(", ");
         outfile.print("  x_matrix = ");
         outfile.print(x_matrix);
@@ -49,11 +49,11 @@ public class ReadTable {
         line = infile.nextLine();
         linetokens = new ArrayList<String>(Arrays.asList(line.split(",")));
         for (int i = 0; i < linetokens.size() / 1; i += 1) {
-            z_vector.add(Double.parseDouble(linetokens.get(i * 1 + 0)));
+            z_vect3DSor.add(Double.parseDouble(linetokens.get(i * 1 + 0)));
         }
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'z_vector' assigned ");
-        outfile.print(z_vector);
+        outfile.print("var 'z_vect3DSor' assigned ");
+        outfile.print(z_vect3DSor);
         outfile.println(" in module ReadTable");
         outfile.close();
         while (infile.hasNextLine()) {

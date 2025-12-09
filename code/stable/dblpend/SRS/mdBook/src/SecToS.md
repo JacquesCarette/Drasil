@@ -6,12 +6,16 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 
 |Symbol                               |Description                                      |Units                                |
 |:------------------------------------|:------------------------------------------------|:------------------------------------|
+|\\({a\_{1}}\\)                       |Acceleration of the first object                 |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
+|\\({a\_{2}}\\)                       |Acceleration of the second object                |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
+|\\({a\_{\text{x}1}}\\)               |Horizontal acceleration of the first object      |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
+|\\({a\_{\text{x}2}}\\)               |Horizontal acceleration of the second object     |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
+|\\({a\_{\text{y}1}}\\)               |Vertical acceleration of the first object        |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
+|\\({a\_{\text{y}2}}\\)               |Vertical acceleration of the second object       |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{a}\text{(}t\text{)}\\)|Acceleration                                     |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
-|\\({\boldsymbol{a}\_{1}}\\)          |Acceleration of the first object                 |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
-|\\({\boldsymbol{a}\_{2}}\\)          |Acceleration of the second object                |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{F}\\)                 |Force                                            |\\({\text{N}}\\)                     |
-|\\({\boldsymbol{F}\_{1}}\\)          |Force of the first object                        |\\({\text{N}}\\)                     |
-|\\({\boldsymbol{F}\_{2}}\\)          |Force of the second object                       |\\({\text{N}}\\)                     |
+|\\({f\_{1}}\\)                       |Force of the first object                        |\\({\text{N}}\\)                     |
+|\\({f\_{2}}\\)                       |Force of the second object                       |\\({\text{N}}\\)                     |
 |\\(g\\)                              |Magnitude of gravitational acceleration          |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{g}\\)                 |Gravitational acceleration                       |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{\hat{i}}\\)           |Unit vector                                      |--                                   |
@@ -20,16 +24,23 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\(m\\)                              |Mass                                             |\\({\text{kg}}\\)                    |
 |\\({m\_{1}}\\)                       |Mass of the first object                         |\\({\text{kg}}\\)                    |
 |\\({m\_{2}}\\)                       |Mass of the second object                        |\\({\text{kg}}\\)                    |
+|\\({p\_{\text{x}1}}\\)               |Horizontal position of the first object          |\\({\text{m}}\\)                     |
+|\\({p\_{\text{x}2}}\\)               |Horizontal position of the second object         |\\({\text{m}}\\)                     |
+|\\({p\_{\text{y}1}}\\)               |Vertical position of the first object            |\\({\text{m}}\\)                     |
+|\\({p\_{\text{y}2}}\\)               |Vertical position of the second object           |\\({\text{m}}\\)                     |
 |\\(\boldsymbol{p}\text{(}t\text{)}\\)|Position                                         |\\({\text{m}}\\)                     |
-|\\({\boldsymbol{p}\_{1}}\\)          |Position of the first object                     |\\({\text{m}}\\)                     |
-|\\({\boldsymbol{p}\_{2}}\\)          |Position of the second object                    |\\({\text{m}}\\)                     |
 |\\(\boldsymbol{T}\\)                 |Tension                                          |\\({\text{N}}\\)                     |
-|\\({\boldsymbol{T}\_{1}}\\)          |Magnitude of the tension in the first rod        |\\({\text{N}}\\)                     |
-|\\({\boldsymbol{T}\_{2}}\\)          |Magnitude of the tension in the second rod       |\\({\text{N}}\\)                     |
+|\\({\boldsymbol{T}\_{1}}\\)          |Tension of the first rod                         |\\({\text{N}}\\)                     |
+|\\({\boldsymbol{T}\_{2}}\\)          |Tension of the second rod                        |\\({\text{N}}\\)                     |
 |\\(t\\)                              |Time                                             |\\({\text{s}}\\)                     |
+|\\(\text{theta}\\)                   |Dependent variables                              |\\({\text{rad}}\\)                   |
+|\\({v\_{1}}\\)                       |Velocity of the first object                     |\\(\frac{\text{m}}{\text{s}}\\)      |
+|\\({v\_{2}}\\)                       |Velocity of the second object                    |\\(\frac{\text{m}}{\text{s}}\\)      |
+|\\({v\_{\text{x}1}}\\)               |Horizontal velocity of the first object          |\\(\frac{\text{m}}{\text{s}}\\)      |
+|\\({v\_{\text{x}2}}\\)               |Horizontal velocity of the second object         |\\(\frac{\text{m}}{\text{s}}\\)      |
+|\\({v\_{\text{y}1}}\\)               |Vertical velocity of the first object            |\\(\frac{\text{m}}{\text{s}}\\)      |
+|\\({v\_{\text{y}2}}\\)               |Vertical velocity of the second object           |\\(\frac{\text{m}}{\text{s}}\\)      |
 |\\(\boldsymbol{v}\text{(}t\text{)}\\)|Velocity                                         |\\(\frac{\text{m}}{\text{s}}\\)      |
-|\\({\boldsymbol{v}\_{1}}\\)          |Velocity of the first object                     |\\(\frac{\text{m}}{\text{s}}\\)      |
-|\\({\boldsymbol{v}\_{2}}\\)          |Velocity of the second object                    |\\(\frac{\text{m}}{\text{s}}\\)      |
 |\\({w\_{1}}\\)                       |Angular velocity of the first object             |\\(\frac{\text{rad}}{\text{s}}\\)    |
 |\\({w\_{2}}\\)                       |Angular velocity of the second object            |\\(\frac{\text{rad}}{\text{s}}\\)    |
 |\\({α\_{1}}\\)                       |Angular acceleration of the first object         |\\(\frac{\text{rad}}{\text{s}^{2}}\\)|

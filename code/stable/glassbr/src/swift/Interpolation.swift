@@ -336,9 +336,9 @@ func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
     
     var x_matrix: [[Double]] = []
     var y_matrix: [[Double]] = []
-    var z_vector: [Double] = []
-    try read_table(filename, &z_vector, &x_matrix, &y_matrix)
-    i = try find(&z_vector, z)
+    var z_vect3DSor: [Double] = []
+    try read_table(filename, &z_vect3DSor, &x_matrix, &y_matrix)
+    i = try find(&z_vect3DSor, z)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -594,7 +594,7 @@ func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
     } catch {
         throw "Error closing file."
     }
-    return try lin_interp(z_vector[i], y_1, z_vector[i + 1], y_2, z)
+    return try lin_interp(z_vect3DSor[i], y_1, z_vect3DSor[i + 1], y_2, z)
 }
 
 /** Linearly interpolates a z value at given x and y values
@@ -683,9 +683,9 @@ func interpZ(_ filename: String, _ x: Double, _ y: Double) throws -> Double {
     
     var x_matrix: [[Double]] = []
     var y_matrix: [[Double]] = []
-    var z_vector: [Double] = []
-    try read_table(filename, &z_vector, &x_matrix, &y_matrix)
-    for i in [Int](stride(from: 0, to: z_vector.count - 1, by: 1)) {
+    var z_vect3DSor: [Double] = []
+    try read_table(filename, &z_vect3DSor, &x_matrix, &y_matrix)
+    for i in [Int](stride(from: 0, to: z_vect3DSor.count - 1, by: 1)) {
         x_z_1 = try extractColumn(&x_matrix, i)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -915,7 +915,7 @@ func interpZ(_ filename: String, _ x: Double, _ y: Double) throws -> Double {
             throw "Error closing file."
         }
         if y_1 <= y && y <= y_2 {
-            return try lin_interp(y_1, z_vector[i], y_2, z_vector[i + 1], y)
+            return try lin_interp(y_1, z_vect3DSor[i], y_2, z_vect3DSor[i + 1], y)
         }
     }
     throw "Interpolation of z failed"

@@ -49,18 +49,22 @@ data Space where
     Actor     :: String -> Space
     Function  :: (NE.NonEmpty Primitive) -> Primitive -> Space
     Void      :: Space
+    -- | Clifford algebra objects (Clifs) with a dimension and kind (e.g., Scalar, Vector, Bivector, Multivector)
     ClifS     :: Dimension -> ClifKind -> Space -> Space
     Vect      :: Space -> Space
   deriving (Eq, Show)
 
-data ClifKind = Scalar | Vector | Bivector | Multivector 
+-- | Kinds of Clifford algebra objects.
+data ClifKind = Scalar | Vector | Bivector | Multivector
   deriving (Eq, Show)
 
+-- | The dimension of a clif
 data Dimension where
+  -- | Fixed dimension
   Fixed :: Natural -> Dimension
+  -- | Variable dimension
   VDim  :: String -> Dimension
   deriving (Eq, Show)
-
 checkClifSpace :: Space -> Bool
 checkClifSpace Real = True
 checkClifSpace _ = True --error $ "Non-real clif spaces unsupported"
@@ -80,7 +84,6 @@ vect2D = ClifS (Fixed 2) Vector Real
 -- | Direct 3D vector space (optimized)
 vect3D :: Space
 vect3D = ClifS (Fixed 3) Vector Real
-
 -- | Helper that constructs a scalar Clifford object
 scalarS :: Space -> Space
 scalarS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 1) Scalar s

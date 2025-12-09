@@ -30,6 +30,7 @@ import Data.Drasil.Concepts.Math (unit_)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)
 import Data.List (nub)
+import Data.Maybe (fromMaybe)
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
@@ -68,7 +69,7 @@ inReq  s = cic "inputValues"  s "Input-Values"  funcReqDom
 inReqWTab :: (Quantity i, MayHaveUnit i) => Maybe Sentence -> [i] -> (ConceptInstance, LabelledContent)
 inReqWTab mbDesc inputs = (inReq desc, table)
   where table = mkInputPropsTable inputs
-        desc = inReqDesc table $ maybe EmptyS id mbDesc
+        desc = inReqDesc table $ fromMaybe EmptyS mbDesc
 
 -- | Adds a generalized introduction for a Non-Fucntional Requirements section. Takes in the contents of that section.
 fReqF :: [Contents] -> Section

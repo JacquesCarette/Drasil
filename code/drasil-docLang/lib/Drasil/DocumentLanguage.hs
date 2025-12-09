@@ -125,7 +125,7 @@ fillLC sd si@SI{ _sys = sn }
     -- meta-ChunkDB of `drasil-docLang`.
     existingLC = findAllLabelledContent chkdb
     -- Insert new labelled content into ChunkDB
-    chkdb2 = insertAll (nub $ createdLCs) chkdb
+    chkdb2 = insertAll (nub createdLCs) chkdb
     si2 = set systemdb chkdb2 si
 
     containsTraceSec :: DocDesc -> Bool

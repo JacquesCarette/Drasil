@@ -16,10 +16,9 @@ import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
-import Drasil.DocLang (mkQRTuple, mkQRTupleRef, mkValsSourceTable,
+import Drasil.DocLang (inReqWTab, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR)
-import Drasil.Sections.Requirements (inReqWTab)
 import Drasil.DocLang.SRS (datCon)
 
 import Theory.Drasil (DataDefinition)

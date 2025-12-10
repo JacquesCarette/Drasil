@@ -257,11 +257,11 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 -&gt; ChunkDB
 -&gt; [Reference]
 -&gt; System
-forall a e h i j.
-(CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e,
- Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i,
- Concept i, HasUID j, Constrained j) =&gt;
-a
+forall e h i j.
+(Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h,
+ MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i,
+ HasUID j, Constrained j) =&gt;
+CI
 -&gt; SystemKind
 -&gt; People
 -&gt; [Sentence]

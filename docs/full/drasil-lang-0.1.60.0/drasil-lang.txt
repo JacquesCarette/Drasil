@@ -5510,13 +5510,6 @@ codeChunk :: CodeIdea c => c -> CodeChunk
 class CodeIdea c => DefiningCodeExpr c
 codeExpr :: DefiningCodeExpr c => Lens' c CodeExpr
 
--- | Convert an abbreviation into one deemed 'code-friendly', removing
---   spaces, and replacing special characters with underscores.
---   
---   FIXME: This should NOT be treated as a <tt>getter</tt>, but something
---   we cache local to something that has a 'program name'.
-programName :: CommonIdea c => c -> String
-
 -- | Used when a function name needs to be distinguishable from a variable
 --   name.
 funcPrefix :: String
@@ -6811,13 +6804,6 @@ qc :: Lens' CodeChunk DefinedQuantityDict
 ccf :: Iso' CodeFuncChunk CodeChunk
 ccv :: Lens' CodeVarChunk CodeChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
-
--- | Convert an abbreviation into one deemed 'code-friendly', removing
---   spaces, and replacing special characters with underscores.
---   
---   FIXME: This should NOT be treated as a <tt>getter</tt>, but something
---   we cache local to something that has a 'program name'.
-programName :: CommonIdea c => c -> String
 
 -- | Used when a function name needs to be distinguishable from a variable
 --   name.

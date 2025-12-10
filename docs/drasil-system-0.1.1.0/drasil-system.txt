@@ -17,33 +17,34 @@ module Drasil.System
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data System
-[SI] :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
+[SI] :: (Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> String -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
 data SystemKind
 Specification :: SystemKind
 RunnableSoftware :: SystemKind
 Notebook :: SystemKind
 Website :: SystemKind
-class HasSystem c_a8Yt
-system :: HasSystem c_a8Yt => Lens' c_a8Yt System
-authors :: HasSystem c_a8Yt => Lens' c_a8Yt People
-background :: HasSystem c_a8Yt => Lens' c_a8Yt Background
-configFiles :: HasSystem c_a8Yt => Lens' c_a8Yt [String]
-constants :: HasSystem c_a8Yt => Lens' c_a8Yt [ConstQDef]
-dataDefns :: HasSystem c_a8Yt => Lens' c_a8Yt [DataDefinition]
-genDefns :: HasSystem c_a8Yt => Lens' c_a8Yt [GenDefn]
-instModels :: HasSystem c_a8Yt => Lens' c_a8Yt [InstanceModel]
-kind :: HasSystem c_a8Yt => Lens' c_a8Yt SystemKind
-motivation :: HasSystem c_a8Yt => Lens' c_a8Yt Motivation
-purpose :: HasSystem c_a8Yt => Lens' c_a8Yt Purpose
-refTable :: HasSystem c_a8Yt => Lens' c_a8Yt (Map UID Reference)
-refbyTable :: HasSystem c_a8Yt => Lens' c_a8Yt (Map UID [UID])
-scope :: HasSystem c_a8Yt => Lens' c_a8Yt Scope
-systemdb :: HasSystem c_a8Yt => Lens' c_a8Yt ChunkDB
-theoryModels :: HasSystem c_a8Yt => Lens' c_a8Yt [TheoryModel]
-traceTable :: HasSystem c_a8Yt => Lens' c_a8Yt (Map UID [UID])
+class HasSystem c_a905
+system :: HasSystem c_a905 => Lens' c_a905 System
+authors :: HasSystem c_a905 => Lens' c_a905 People
+background :: HasSystem c_a905 => Lens' c_a905 Background
+configFiles :: HasSystem c_a905 => Lens' c_a905 [String]
+constants :: HasSystem c_a905 => Lens' c_a905 [ConstQDef]
+dataDefns :: HasSystem c_a905 => Lens' c_a905 [DataDefinition]
+genDefns :: HasSystem c_a905 => Lens' c_a905 [GenDefn]
+instModels :: HasSystem c_a905 => Lens' c_a905 [InstanceModel]
+kind :: HasSystem c_a905 => Lens' c_a905 SystemKind
+motivation :: HasSystem c_a905 => Lens' c_a905 Motivation
+programName :: HasSystem c_a905 => Lens' c_a905 String
+purpose :: HasSystem c_a905 => Lens' c_a905 Purpose
+refTable :: HasSystem c_a905 => Lens' c_a905 (Map UID Reference)
+refbyTable :: HasSystem c_a905 => Lens' c_a905 (Map UID [UID])
+scope :: HasSystem c_a905 => Lens' c_a905 Scope
+sysName :: HasSystem c_a905 => Lens' c_a905 CI
+systemdb :: HasSystem c_a905 => Lens' c_a905 ChunkDB
+theoryModels :: HasSystem c_a905 => Lens' c_a905 [TheoryModel]
+traceTable :: HasSystem c_a905 => Lens' c_a905 (Map UID [UID])
 whatsTheBigIdea :: System -> IdeaDict
-mkSystem :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] -> System
-sysName :: System -> IdeaDict
+mkSystem :: (Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] -> System
 
 -- | Project Example purpose.
 type Purpose = [Sentence]

@@ -561,7 +561,7 @@ citeDB :: System -> BibRef
 module Drasil.DocumentLanguage.Notebook.DocumentLanguage
 
 -- | Creates a notebook from a lesson description and system information.
-mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
+mkNb :: LsnDecl -> (IdeaDict -> CI -> Sentence) -> System -> Document
 
 
 -- | Defines helper functions for creating subsections within the Solution
@@ -1709,7 +1709,7 @@ module Drasil.DocumentLanguage
 
 -- | Creates a document from a <a>System</a>, a document description
 --   (<a>SRSDecl</a>), and a title combinator.
-mkDoc :: System -> SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (Document, System)
+mkDoc :: System -> SRSDecl -> (IdeaDict -> CI -> Sentence) -> (Document, System)
 
 -- | Recursively find all references in a section (meant for getting at
 --   <a>LabelledContent</a>).
@@ -2010,7 +2010,7 @@ TUPurpose :: TUIntro
 
 -- | Creates a document from a <a>System</a>, a document description
 --   (<a>SRSDecl</a>), and a title combinator.
-mkDoc :: System -> SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (Document, System)
+mkDoc :: System -> SRSDecl -> (IdeaDict -> CI -> Sentence) -> (Document, System)
 
 -- | Recursively find all references in a section (meant for getting at
 --   <a>LabelledContent</a>).
@@ -2047,7 +2047,7 @@ newtype Apndx
 ApndxProg :: [Contents] -> Apndx
 
 -- | Creates a notebook from a lesson description and system information.
-mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
+mkNb :: LsnDecl -> (IdeaDict -> CI -> Sentence) -> System -> Document
 
 -- | Fields that should be displayed in definitions.
 data Field
@@ -2239,7 +2239,7 @@ data () => ChunkDB
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data () => System
-[SI] :: forall a e h i j. (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
+[SI] :: forall e h i j. (Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> String -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
 
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.
@@ -2572,7 +2572,7 @@ Succinct :: Verbosity
 
 -- | Creates a document from a <a>System</a>, a document description
 --   (<a>SRSDecl</a>), and a title combinator.
-mkDoc :: System -> SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (Document, System)
+mkDoc :: System -> SRSDecl -> (IdeaDict -> CI -> Sentence) -> (Document, System)
 
 -- | Default Reference Material section introduction.
 intro :: Contents

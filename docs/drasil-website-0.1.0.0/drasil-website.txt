@@ -303,7 +303,7 @@ getCodeRefDB :: Example -> [Reference]
 getDoxRefDB :: Example -> [Reference]
 
 -- | Helper to pull the system name (abbreviation) from an <a>Example</a>.
-getAbrv :: Example -> String
+exName :: Example -> String
 
 
 -- | Case Studies table for the different choices available when generating

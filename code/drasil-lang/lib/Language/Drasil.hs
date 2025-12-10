@@ -85,7 +85,7 @@ module Language.Drasil (
   , nc, ncUID, IdeaDict , mkIdea
   , nw -- bad name (historical)
   , CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..)
-  , obv, qc, ccf, ccv, listToArray, programName, funcPrefix, DefiningCodeExpr(..)
+  , obv, qc, ccf, ccv, listToArray, funcPrefix, DefiningCodeExpr(..)
   -- Language.Drasil.Chunk.CommonIdea
   , CI, commonIdea, commonIdeaWithDict, prependAbrv
 
@@ -296,7 +296,7 @@ import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, 
 import Drasil.Code.Classes (Callable, IsArgumentName)
 import Drasil.Code.CodeVar (CodeIdea(..), CodeChunk(..),
   CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv,
-  listToArray, programName, funcPrefix, DefiningCodeExpr(..))
+  listToArray, funcPrefix, DefiningCodeExpr(..))
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Drasil.Code.CodeExpr.Class (CodeExprC(..))
 

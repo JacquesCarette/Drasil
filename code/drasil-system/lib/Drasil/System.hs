@@ -11,7 +11,7 @@ module Drasil.System (
   -- ** Lenses
   HasSystem(..),
   -- ** Functions
-  whatsTheBigIdea, mkSystem, sysName,
+  whatsTheBigIdea, mkSystem,
   -- * Reference Database
   -- ** Types
   Purpose, Background, Scope, Motivation,
@@ -20,14 +20,17 @@ module Drasil.System (
 ) where
 
 import Control.Lens (makeClassy, (^.))
+import Data.Char (isSpace)
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Drasil.Database (UID, HasUID(..), ChunkDB)
-import Language.Drasil hiding (kind, Notebook)
-import Theory.Drasil
+import Language.Drasil (Quantity, MayHaveUnit, Sentence, Concept,
+  Reference, People, IdeaDict, CI, Constrained, ConstQDef, nw, abrv)
+import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Drasil.Metadata (runnableSoftware, website)
+import Utils.Drasil (toPlainName)
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -60,12 +63,12 @@ data System where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
- SI :: (CommonIdea a, Idea a,
-  Quantity e, Eq e, MayHaveUnit e, Concept e,
+ SI :: (Quantity e, Eq e, MayHaveUnit e, Concept e,
   Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
-  { _sys          :: a
+  { _sysName      :: CI
+  , _programName  :: String
   , _kind         :: SystemKind
   , _authors      :: People
   , _purpose      :: Purpose
@@ -91,26 +94,23 @@ data System where
 
 makeClassy ''System
 
-mkSystem :: (CommonIdea a, Idea a,
-  Quantity e, Eq e, MayHaveUnit e, Concept e,
+mkSystem :: (Quantity e, Eq e, MayHaveUnit e, Concept e,
   Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
-  a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
+  CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
     [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
     [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
     System
 mkSystem nm sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js cqds db refs
-    = SI nm sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js cqds db
-        refsMap mempty mempty
-  where refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
+  = SI nm progName sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js
+      cqds db refsMap mempty mempty
+  where
+    refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
+    progName = toPlainName $ filter (not . isSpace) $ abrv nm
 
 refbyLookup :: UID -> System -> [UID]
 refbyLookup u = fromMaybe [] . M.lookup u . (^. refbyTable)
 
 traceLookup :: UID -> System -> [UID]
 traceLookup u = fromMaybe [] . M.lookup u . (^. traceTable)
-
--- FIXME: sysName is a hack.
-sysName :: System -> IdeaDict
-sysName SI{_sys = sys} = nw sys

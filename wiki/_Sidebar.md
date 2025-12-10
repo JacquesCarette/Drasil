@@ -15,7 +15,6 @@
   * [Recipes](Recipes)
   * [Expr](Expr)
   * [Combinators](Combinator-Documentation)
-  * [Guidelines for Adding New Types and Typeclasses](Guidelines-for-Adding-New-Types-and-Typeclasses-in-Drasil)
   * [References](Reference-Design-and-Documentation)
   * [Printing Information](Printing-Information-Guide)
   * [Folders](Folder-layout)
@@ -24,6 +23,7 @@
 * Design
   * [Code Generation](Code-Generation)
   * [Design Choices](Design-Choices)
+  * [Guidelines for Adding New Types and Typeclasses](Guidelines-for-Adding-New-Types-and-Typeclasses-in-Drasil)
 * [Readings](Readings)
   * [Drasil Papers and Documents](Drasil-Papers-and-Documents)
   * [Related Work](Related-Work) and [Inspiration](Inspiration)

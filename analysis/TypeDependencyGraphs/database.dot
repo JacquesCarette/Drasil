@@ -40,6 +40,8 @@ digraph alltypes {
 		DumpedChunkDB -> MapChunkTypeUID;
 		}
 	}
+	subgraph th {
+	}
 	subgraph typeduidref {
 		subgraph typeduidreftyp{
 		TypedUIDReftyp	[shape=oval, color=darkgreen, label="TypedUIDReftyp"];

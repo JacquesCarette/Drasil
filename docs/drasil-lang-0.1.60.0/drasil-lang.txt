@@ -687,6 +687,14 @@ Empty :: Symbol
 --   <tt>v_f</tt> as it is logical to place it with its parent concept.
 compsy :: Symbol -> Symbol -> Ordering
 
+module Drasil.Code.Classes
+
+-- | Members must have a named argument.
+class HasSymbol c => IsArgumentName c
+
+-- | Some chunks can be called like functions.
+class HasSymbol c => Callable c
+
 module Language.Drasil.Literal.Development
 data Literal
 [Int] :: Integer -> Literal
@@ -1507,6 +1515,88 @@ combineNINP :: NamedIdea c => c -> NP -> NP
 combineNINI :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 
+-- | Defines chunk types for use in code generation.
+module Drasil.Code.CodeVar
+
+-- | A <a>CodeIdea</a> must include some code and its name.
+class CodeIdea c
+
+-- | Name of the idea.
+codeName :: CodeIdea c => c -> String
+
+-- | Code chunk associated with the idea.
+codeChunk :: CodeIdea c => c -> CodeChunk
+
+-- | A <a>DefiningCodeExpr</a> must have it's underlying chunk defined in
+--   the CodeExpr language.
+class CodeIdea c => DefiningCodeExpr c
+codeExpr :: DefiningCodeExpr c => Lens' c CodeExpr
+
+-- | Used when a function name needs to be distinguishable from a variable
+--   name.
+funcPrefix :: String
+
+-- | Details if a piece of code is meant to be a variable or a function.
+data VarOrFunc
+Var :: VarOrFunc
+Func :: VarOrFunc
+
+-- | Basic chunk representation in the code generation context. Contains a
+--   DefinedQuantityDict and the kind of code (variable or function).
+data CodeChunk
+CodeC :: DefinedQuantityDict -> VarOrFunc -> CodeChunk
+[_qc] :: CodeChunk -> DefinedQuantityDict
+[kind] :: CodeChunk -> VarOrFunc
+qc :: Lens' CodeChunk DefinedQuantityDict
+
+-- | Chunk representing a variable. The <tt>obv</tt> field represents the
+--   object containing this variable, if it is an object field.
+data CodeVarChunk
+CodeVC :: CodeChunk -> Maybe CodeChunk -> CodeVarChunk
+[_ccv] :: CodeVarChunk -> CodeChunk
+[_obv] :: CodeVarChunk -> Maybe CodeChunk
+obv :: Lens' CodeVarChunk (Maybe CodeChunk)
+ccv :: Lens' CodeVarChunk CodeChunk
+
+-- | Chunk representing a function.
+newtype CodeFuncChunk
+CodeFC :: CodeChunk -> CodeFuncChunk
+[_ccf] :: CodeFuncChunk -> CodeChunk
+ccf :: Iso' CodeFuncChunk CodeChunk
+listToArray :: CodeVarChunk -> CodeVarChunk
+instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Classes.Definition Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Classes.ConceptDomain Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Space.HasSpace Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Symbol.HasSymbol Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeFuncChunk
+instance Drasil.Code.Classes.Callable Drasil.Code.CodeVar.CodeFuncChunk
+instance GHC.Classes.Eq Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Drasil.Code.CodeVar.CodeFuncChunk
+instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Classes.Definition Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Classes.ConceptDomain Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Space.HasSpace Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Symbol.HasSymbol Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeVarChunk
+instance GHC.Classes.Eq Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Drasil.Code.CodeVar.CodeVarChunk
+instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Classes.Definition Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Classes.ConceptDomain Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Space.HasSpace Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Symbol.HasSymbol Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeChunk
+instance GHC.Classes.Eq Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Drasil.Code.CodeVar.CodeChunk
+
+
 -- | Re-exporting modules
 module Drasil.Code.CodeExpr.Development
 
@@ -2263,32 +2353,6 @@ sumAll :: ModelExprC r => Symbol -> r -> r
 --   over all Real numbers.
 prodAll :: ModelExprC r => Symbol -> r -> r
 
--- | Expression language where all terms also denote a term in GOOL (i.e.
---   translation is total and meaning preserving).
-data CodeExpr
-class CodeExprC r
-
--- | Constructs a CodeExpr for actor creation (constructor call)
-new :: (CodeExprC r, Callable f, HasUID f, CodeIdea f) => f -> [r] -> r
-
--- | Constructs a CodeExpr for actor creation (constructor call) that uses
---   named arguments
-newWithNamedArgs :: (CodeExprC r, Callable f, HasUID f, CodeIdea f, HasUID a, IsArgumentName a) => f -> [r] -> [(a, r)] -> r
-
--- | Constructs a CodeExpr for actor messaging (method call)
-msg :: (CodeExprC r, Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, CodeIdea c) => c -> f -> [r] -> r
-
--- | Constructs a CodeExpr for actor messaging (method call) that uses
---   named arguments
-msgWithNamedArgs :: (CodeExprC r, Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, CodeIdea c, HasUID a, IsArgumentName a) => c -> f -> [r] -> [(a, r)] -> r
-
--- | Constructs a CodeExpr representing the field of an actor
-field :: CodeExprC r => CodeVarChunk -> CodeVarChunk -> r
-
--- | Similar to <a>apply</a>, but takes a relation to apply to
---   <a>FCall</a>.
-applyWithNamedArgs :: (CodeExprC r, HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f -> [r] -> [(a, r)] -> r
-
 -- | Special characters include partial derivatives and the degree circle.
 data Special
 Circle :: Special
@@ -2430,12 +2494,6 @@ class HasReference c
 -- | Provides a <tt>Lens</tt> to the <a>Reference</a>s.
 getReferences :: HasReference c => Lens' c [Reference]
 
--- | Some chunks can be called like functions.
-class HasSymbol c => Callable c
-
--- | Members must have a named argument.
-class HasSymbol c => IsArgumentName c
-
 -- | <a>IdeaDict</a> constructor, takes a <a>String</a> for its <a>UID</a>
 --   and a term.
 nc :: String -> NP -> IdeaDict
@@ -2462,53 +2520,6 @@ mkIdea :: String -> NP -> Maybe String -> IdeaDict
 --   an <a>Idea</a> and places its <a>UID</a> and <a>NP</a> into an
 --   <a>IdeaDict</a> with <a>Nothing</a> for an abbreviation.
 nw :: Idea c => c -> IdeaDict
-
--- | A <a>CodeIdea</a> must include some code and its name.
-class CodeIdea c
-
--- | Name of the idea.
-codeName :: CodeIdea c => c -> String
-
--- | Code chunk associated with the idea.
-codeChunk :: CodeIdea c => c -> CodeChunk
-
--- | Basic chunk representation in the code generation context. Contains a
---   DefinedQuantityDict and the kind of code (variable or function).
-data CodeChunk
-CodeC :: DefinedQuantityDict -> VarOrFunc -> CodeChunk
-[_qc] :: CodeChunk -> DefinedQuantityDict
-[kind] :: CodeChunk -> VarOrFunc
-
--- | Chunk representing a variable. The <tt>obv</tt> field represents the
---   object containing this variable, if it is an object field.
-data CodeVarChunk
-CodeVC :: CodeChunk -> Maybe CodeChunk -> CodeVarChunk
-[_ccv] :: CodeVarChunk -> CodeChunk
-[_obv] :: CodeVarChunk -> Maybe CodeChunk
-
--- | Chunk representing a function.
-newtype CodeFuncChunk
-CodeFC :: CodeChunk -> CodeFuncChunk
-[_ccf] :: CodeFuncChunk -> CodeChunk
-
--- | Details if a piece of code is meant to be a variable or a function.
-data VarOrFunc
-Var :: VarOrFunc
-Func :: VarOrFunc
-obv :: Lens' CodeVarChunk (Maybe CodeChunk)
-qc :: Lens' CodeChunk DefinedQuantityDict
-ccf :: Iso' CodeFuncChunk CodeChunk
-ccv :: Lens' CodeVarChunk CodeChunk
-listToArray :: CodeVarChunk -> CodeVarChunk
-
--- | Used when a function name needs to be distinguishable from a variable
---   name.
-funcPrefix :: String
-
--- | A <a>DefiningCodeExpr</a> must have it's underlying chunk defined in
---   the CodeExpr language.
-class CodeIdea c => DefiningCodeExpr c
-codeExpr :: DefiningCodeExpr c => Lens' c CodeExpr
 
 -- | The common idea (with <tt>NounPhrase</tt>) data type. It must have a
 --   <a>UID</a>, <tt>NounPhrase</tt> for its term, an abbreviation

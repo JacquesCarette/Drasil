@@ -20,9 +20,10 @@ data Chunk
 -- | Constraint for anything that may be considered a valid chunk type.
 type IsChunk a = (HasUID a, HasChunkRefs a, Typeable a)
 
--- | All chunks should expose what chunks they reference/rely on, so that
---   we can test <tt>ChunkDB</tt>s to ensure all presupposed chunks are
---   already registered.
+-- | The majority of chunks will relate other chunks in some way. In other
+--   words, the majority of our chunks *depend* on others.
+--   <a>HasChunkRefs</a> is meant as a way to capture what things a chunk
+--   *directly* refers to (i.e., depends on directly).
 class HasChunkRefs a
 chunkRefs :: HasChunkRefs a => a -> Set UID
 
@@ -112,10 +113,10 @@ dumpChunkDB :: ChunkDB -> DumpedChunkDB
 --   sure we are only using <a>UID</a>s where desired.
 data UID
 
--- | The most basic item: having a unique identifier key, here a UID.
+-- | The most basic item: having a unique identifier key, a <a>UID</a>.
 class HasUID c
 
--- | Provides a <i>unique</i> id for internal Drasil use.
+-- | The <i>unique</i> id of the chunk (for internal Drasil use only).
 uid :: HasUID c => Getter c UID
 
 -- | Smart constructor for <a>UID</a>s from raw <a>Value</a>s.
@@ -136,6 +137,64 @@ nsUid :: String -> UID -> UID
 
 -- | Get something's <a>UID</a> as a <a>Value</a>.
 showUID :: HasUID a => a -> String
+
+-- | Declares that a type is a chunk type; Generates an instance of
+--   <a>HasChunkRefs</a>.
+declareHasChunkRefs :: Name -> Q [Dec]
+
+-- | Representable types of kind <tt>*</tt>. This class is derivable in GHC
+--   with the <tt>DeriveGeneric</tt> flag on.
+--   
+--   A <a>Generic</a> instance must satisfy the following laws:
+--   
+--   <pre>
+--   <a>from</a> . <a>to</a> ≡ <a>id</a>
+--   <a>to</a> . <a>from</a> ≡ <a>id</a>
+--   </pre>
+class () => Generic a
+
+-- | A datatype whose instances are defined generically, using the
+--   <a>Generic</a> representation. <a>Generically1</a> is a higher-kinded
+--   version of <a>Generically</a> that uses <a>Generic1</a>.
+--   
+--   Generic instances can be derived via <tt><a>Generically</a> A</tt>
+--   using <tt>-XDerivingVia</tt>.
+--   
+--   <pre>
+--   {-# LANGUAGE DeriveGeneric      #-}
+--   {-# LANGUAGE DerivingStrategies #-}
+--   {-# LANGUAGE DerivingVia        #-}
+--   
+--   import GHC.Generics (Generic)
+--   
+--   data V4 a = V4 a a a a
+--     deriving stock Generic
+--   
+--     deriving (Semigroup, Monoid)
+--     via Generically (V4 a)
+--   </pre>
+--   
+--   This corresponds to <a>Semigroup</a> and <a>Monoid</a> instances
+--   defined by pointwise lifting:
+--   
+--   <pre>
+--   instance Semigroup a =&gt; Semigroup (V4 a) where
+--     (&lt;&gt;) :: V4 a -&gt; V4 a -&gt; V4 a
+--     V4 a1 b1 c1 d1 &lt;&gt; V4 a2 b2 c2 d2 =
+--       V4 (a1 &lt;&gt; a2) (b1 &lt;&gt; b2) (c1 &lt;&gt; c2) (d1 &lt;&gt; d2)
+--   
+--   instance Monoid a =&gt; Monoid (V4 a) where
+--     mempty :: V4 a
+--     mempty = V4 mempty mempty mempty mempty
+--   </pre>
+--   
+--   Historically this required modifying the type class to include generic
+--   method definitions (<tt>-XDefaultSignatures</tt>) and deriving it with
+--   the <tt>anyclass</tt> strategy (<tt>-XDeriveAnyClass</tt>). Having a
+--   /via type/ like <a>Generically</a> decouples the instance from the
+--   type class.
+newtype () => Generically a
+Generically :: a -> Generically a
 
 -- | <a>UID</a> references that contain information about the type of data
 --   the <a>UID</a> refers to, useful for type-safe dereferencing.

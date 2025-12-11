@@ -17,7 +17,6 @@ import System.Directory (getCurrentDirectory, setCurrentDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 
-import Drasil.Code.CodeVar (programName)
 import Build.Drasil (genMake)
 import Drasil.DocLang (mkGraphInfo, LsnDecl, mkNb)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
@@ -27,9 +26,9 @@ import Language.Drasil.Code
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
   makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)
-import Drasil.SRSDocument (System, SRSDecl, defaultConfiguration, piSys,
+import Drasil.SRSDocument (SRSDecl, defaultConfiguration, piSys,
   PrintingInformation, mkDoc)
-import Drasil.System (System(SI, _sys))
+import Drasil.System (System, programName)
 import Utils.Drasil (createDirIfMissing)
 import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC), docChoices)
@@ -54,8 +53,7 @@ exportCode syst chcs extraModules = do
 -- | Internal: Generate a zoo of ICO-style executable softifact.
 exportCodeZoo :: System -> [(Choices, [Mod])] -> IO ()
 exportCodeZoo syst = mapM_ $ \(chcs, mods) -> do
-  let dir = map toLower $ codedDirName (getSysName syst) chcs
-      getSysName SI{_sys = sysName} = programName sysName
+  let dir = map toLower $ codedDirName (syst ^. programName) chcs
   workingDir <- getCurrentDirectory
   createDirIfMissing False dir
   setCurrentDirectory dir

@@ -13,7 +13,6 @@ import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe)
 import qualified Data.Map as Map (keys)
 
-import Drasil.Code.CodeVar (programName)
 import Utils.Drasil (invert)
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
@@ -37,8 +36,8 @@ import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..))
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 
-import Drasil.System (System(SI), whatsTheBigIdea, _sys, _systemdb, _quants,
-  _authors, refTable, refbyTable, traceTable, systemdb, sysName)
+import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, _quants,
+  _authors, refTable, refbyTable, traceTable, systemdb, sysName, programName)
 import Drasil.GetChunks (ccss, ccss', citeDB)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -77,7 +76,7 @@ import qualified Data.Map.Strict as M
 
 -- | Creates a document from a 'System', a document description ('SRSDecl'), and
 -- a title combinator.
-mkDoc :: System -> SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> (Document, System)
+mkDoc :: System -> SRSDecl -> (IdeaDict -> CI -> Sentence) -> (Document, System)
 mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
       sections = mkSections si dd
@@ -90,7 +89,7 @@ mkDoc si srsDecl headingComb =
       -- Now, the 'real generation' of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's).
-      heading = whatsTheBigIdea si `headingComb` sysName si'
+      heading = whatsTheBigIdea si `headingComb` (si' ^. sysName)
       authorsList = foldlList Comma List $ map (S . name) docAuthors
       toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl
@@ -107,14 +106,14 @@ mkDoc si srsDecl headingComb =
 
 -- | Fill in the 'Section's and 'LabelledContent' maps of the 'ChunkDB' from the 'SRSDecl'.
 fillLC :: DocDesc -> System -> System
-fillLC sd si@SI{ _sys = sn }
+fillLC sd si
   | containsTraceSec sd = si2
   | otherwise = si
   where
     chkdb = si ^. systemdb
     -- Pre-generate a copy of all required LabelledContents (i.e., traceability
     -- graphs) for insertion in the ChunkDB.
-    createdLCs = genTraceGraphLabCons $ programName sn
+    createdLCs = genTraceGraphLabCons $ si ^. programName
     -- FIXME: This is a semi-hack. This is only strictly necessary for the
     -- traceability graphs. Those are all chunks that should exist but not be
     -- handled like this. They should be created and included in the
@@ -129,7 +128,7 @@ fillLC sd si@SI{ _sys = sn }
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
 fillReferences :: [Section] -> System -> System
-fillReferences allSections si@SI{_sys = sys} = si2
+fillReferences allSections si = si2
   where
     -- get old chunk database + ref database
     chkdb = si ^. systemdb
@@ -146,7 +145,7 @@ fillReferences allSections si@SI{_sys = sys} = si2
     newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $ refsFromSRS
       ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
       ++ secRefs -- secRefs can be removed once #946 is complete
-      ++ traceyGraphGetRefs (programName sys) ++ map ref cites
+      ++ traceyGraphGetRefs (si ^. programName) ++ map ref cites
       ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref lblCon
     si2 = set refTable (M.union (si ^. refTable) newRefs) si
@@ -265,14 +264,14 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 -- | Makes the Introduction section into a 'Section'.
 mkIntroSec :: System -> IntroSec -> Section
 mkIntroSec si (IntroProg probIntro progDefn l) =
-  Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
+  Intro.introductionSection probIntro progDefn $ map mkSubIntro l
   where
-    mkSubIntro :: System -> IntroSub -> Section
-    mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
-    mkSubIntro _ (IScope main) = Intro.scopeOfRequirements main
-    mkSubIntro SI {_sys = sys} (IChar assumed topic asset) =
-      Intro.charIntRdrF sys assumed topic asset (SRS.userChar [] [])
-    mkSubIntro _ (IOrgSec b s t) = Intro.orgSec b s t
+    mkSubIntro :: IntroSub -> Section
+    mkSubIntro (IPurpose intro) = Intro.purposeOfDoc intro
+    mkSubIntro (IScope main) = Intro.scopeOfRequirements main
+    mkSubIntro (IChar assumed topic asset) =
+      Intro.charIntRdrF (si ^. sysName) assumed topic asset (SRS.userChar [] [])
+    mkSubIntro (IOrgSec b s t) = Intro.orgSec b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
 -- ** Stakeholders
@@ -317,12 +316,12 @@ mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSub
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: System -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
-  SRS.solCharSpec [SSD.solutionCharSpecIntro (sysName si) SSD.imStub] $
+  SRS.solCharSpec [SSD.solutionCharSpecIntro (si ^. sysName) SSD.imStub] $
     map (mkSubSCS si) l
   where
     mkSubSCS :: System -> SCSSub -> Section
     mkSubSCS si' (TMs intro fields ts) =
-      SSD.thModF (sysName si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
+      SSD.thModF (si' ^. sysName) $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
       SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap f dds
       where f e = LlC (ddefn fields si' e) : maybeToList (derivation e)
@@ -376,9 +375,9 @@ introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
 
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> System -> Section
-mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
+mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
-  (map LlC trace) (programName sys) []
+  (map LlC trace) (si ^. programName) []
   where
     trace = map (\(TraceConfig u _ desc cols rows) ->
       TM.generateTraceTableView u desc cols rows si) fProgs

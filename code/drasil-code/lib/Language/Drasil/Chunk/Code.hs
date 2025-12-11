@@ -3,7 +3,7 @@
 module Language.Drasil.Chunk.Code (
   CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..),
   VarOrFunc(..), obv, quantvar, quantfunc, ccObjVar, codevars, codevars',
-  funcResolve, varResolve, listToArray, programName, funcPrefix,
+  funcResolve, varResolve, listToArray, funcPrefix,
   DefiningCodeExpr(..)
 ) where
 
@@ -16,7 +16,7 @@ import Language.Drasil.Printers (symbolDoc)
 
 import Drasil.Code.CodeVar (CodeChunk(..), CodeIdea(..), VarOrFunc(..),
   DefiningCodeExpr(..), CodeFuncChunk(..), CodeVarChunk(..), funcPrefix, obv,
-  listToArray, programName, qc, ccv, ccf)
+  listToArray, qc, ccv, ccf)
 
 -- | Finds the code name of a 'CodeChunk'.
 instance CodeIdea    CodeChunk where

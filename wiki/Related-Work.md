@@ -63,7 +63,7 @@ Fundamentally Draco **aims too high** by trying to **automate the hard / creativ
 
 ### Description
 
-Semantic Design's [DMS page](http://www.semdesigns.com/Products/DMS/index.html) provides a good high-level (marketing-oriented) summary. While DMS was [widely presented in 1992](https://dl.acm.org/doi/pdf/10.1145/129852.129859), based on a 1990 PhD of the author, Ira Baxter, it continued to evolve for a number of years (eg [paper at IWPSE 2002](https://dl.acm.org/doi/pdf/10.1145/512035.512047?casa_token=eBlPfmJ6YNsAAAAA:q4Uw_jSAJptobAdYMK7r-ws4dQjcK7D5qGJnx_6A_htXROF9YTbGtj5xx0lgIw9Zk2WeMfuoBGDsuQ)) but has not been talked about much since.
+Semantic Design's [DMS page](https://www.semanticdesigns.com/Products/DMS/DMSToolkit.html) provides a good high-level (marketing-oriented) summary. While DMS was [widely presented in 1992](https://dl.acm.org/doi/pdf/10.1145/129852.129859), based on a 1990 PhD of the author, Ira Baxter, it continued to evolve for a number of years (eg [paper at IWPSE 2002](https://dl.acm.org/doi/pdf/10.1145/512035.512047?casa_token=eBlPfmJ6YNsAAAAA:q4Uw_jSAJptobAdYMK7r-ws4dQjcK7D5qGJnx_6A_htXROF9YTbGtj5xx0lgIw9Zk2WeMfuoBGDsuQ)) but has not been talked about much since.
 
 The general vision is centered around the concept of **design maintenance**. In its own words *for large software systems, the design information that rationalizes its implementation given its specification is the fundamental artifact to capture and modify*.
 

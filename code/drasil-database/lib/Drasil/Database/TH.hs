@@ -15,24 +15,36 @@ import Drasil.Database.Chunk (HasChunkRefs)
 -- | Declares that a type is a chunk type; Generates an instance of
 -- 'HasChunkRefs'.
 declareHasChunkRefs :: Name -> Q [Dec]
-declareHasChunkRefs = deriveGenerically ''HasChunkRefs
-
--- TODO: Create a 'declareChunkType' that creates a `HasUID` instance along with
--- the `HasChunkRefs` instance.
+declareHasChunkRefs = deriveGenerically [''HasChunkRefs]
 
 -- | Generates:
+--
+-- 1. A 'Generic' instance for the type:
+-- @
 --   deriving stock instance Generic Ty
+-- @
+--
+-- 2. For all type classes to be derived generically:
+-- @
 --   deriving via Generically Ty instance TheClass Ty
-deriveGenerically :: Name -> Name -> Q [Dec]
-deriveGenerically cls ty = do
+-- @
+deriveGenerically :: [Name] -> Name -> Q [Dec]
+deriveGenerically clss ty = do
   let typeCon = ConT ty
 
-  return
-    [ -- deriving stock instance Generic Ty
-      StandaloneDerivD (Just StockStrategy) [] (AppT (ConT ''Generic) typeCon)
+      -- deriving stock instance Generic Ty
+      drvGeneric = StandaloneDerivD
+        (Just StockStrategy)
+        []
+        (AppT (ConT ''Generic) typeCon)
+
       -- deriving via Generically Ty instance TheClass Ty
-    , StandaloneDerivD
+      drvCls cls = StandaloneDerivD
         (Just (ViaStrategy (AppT (ConT ''Generically) typeCon)))
         []
         (AppT (ConT cls) typeCon)
-    ]
+
+      -- Gather all classes we want to derive generically
+      clsDrvs = map drvCls clss
+
+  return $ drvGeneric : clsDrvs

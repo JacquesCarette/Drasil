@@ -20,9 +20,6 @@ declareHasChunkRefs = deriveGenerically ''HasChunkRefs
 -- TODO: Create a 'declareChunkType' that creates a `HasUID` instance along with
 -- the `HasChunkRefs` instance.
 
--- FIXME: 'deriveGenerically' should belong in `drasil-utils` because it is for
--- Generically, nothing specific to the database :)
-
 -- | Generates:
 --   deriving stock instance Generic Ty
 --   deriving via Generically Ty instance TheClass Ty

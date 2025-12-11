@@ -1,7 +1,4 @@
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE DerivingVia #-}
-{-# LANGUAGE DeriveGeneric #-}
 -- | The lowest level of chunks in Drasil. It all starts with an identifier and a term.
 module Language.Drasil.Chunk.NamedIdea (
   -- * Type

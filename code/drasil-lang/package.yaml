@@ -10,6 +10,9 @@ description: Please see the README on GitHub at <https://github.com/JacquesCaret
 language: Haskell2010
 default-extensions:
 - StrictData
+- StandaloneDeriving
+- DerivingVia
+- DeriveGeneric
 
 extra-source-files: []
 

@@ -18,7 +18,7 @@
   - Solving a second-order system of ODE with one dependent variable
     - In order to do it, we can reform it into two first-order odes.
       - [Example of solving a system ODE with one dependent variable](https://tutorial.math.lamar.edu/classes/de/systemsde.aspx)
-      - Example in Drasil, [PDController](https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html#Sec:IMs)
+      - Example in Drasil, [PDController](https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/HTML/PDController_SRS.html#Sec:IMs)
   - Solving a system of ODE with two dependent variables
     - Usually, with two dependent variables, we will have at least two DEs. To take the rising population with the number of prey and predators as an example, a system of ODEs contains two equations, and the increasing number of prey and predators depends on the current number of prey and the current number of predators. 
       - [Double pendulum, Example of solving a system ODE with two dependent variable](https://www.myphysicslab.com/pendulum/double-pendulum-en.html) Eventually, we get two second-order ODEs. In order to solve it, each second-order ode reformed to two equations, and together, we get four equations. 

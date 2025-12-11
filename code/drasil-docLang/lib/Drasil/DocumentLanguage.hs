@@ -29,7 +29,7 @@ import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 
-import Language.Drasil hiding (kind)
+import Language.Drasil
 import Language.Drasil.Display (compsy)
 
 import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..))

@@ -3,7 +3,6 @@
 module Language.Drasil (
   -- * The Drasil Expression Language
   -- | Encodes mathematical and display related expressions.
-  -- To see the code-related expressions, look in "Language.Drasil.Code".
 
   -- ** Base Expression Language
   -- | Defines the expression types and common operators.
@@ -29,10 +28,6 @@ module Language.Drasil (
   , ModelExpr(Spc)
   , DerivType
   , ModelExprC(..)
-
-  --Language.Drasil.CodeExpr
-  , CodeExpr
-  , CodeExprC(..)
 
   -- ** Unicode symbols
   -- | Some expressions need special unicode characters.
@@ -73,9 +68,6 @@ module Language.Drasil (
   , Referable(..)
   -- Language.Drasil.Classes
   , HasReference(getReferences)
-  -- *** Programming-related
-  , Callable
-  , IsArgumentName
   -- ** Types
   -- | Contains helper functions and smart constructors for each type.
   -- Similar types are grouped together.
@@ -84,8 +76,6 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.NamedIdea
   , nc, ncUID, IdeaDict , mkIdea
   , nw -- bad name (historical)
-  , CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..)
-  , obv, qc, ccf, ccv, listToArray, funcPrefix, DefiningCodeExpr(..)
   -- Language.Drasil.Chunk.CommonIdea
   , CI, commonIdea, commonIdeaWithDict, prependAbrv
 
@@ -292,13 +282,6 @@ module Language.Drasil (
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
-
-import Drasil.Code.Classes (Callable, IsArgumentName)
-import Drasil.Code.CodeVar (CodeIdea(..), CodeChunk(..),
-  CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv,
-  listToArray, funcPrefix, DefiningCodeExpr(..))
-import Drasil.Code.CodeExpr.Lang (CodeExpr)
-import Drasil.Code.CodeExpr.Class (CodeExprC(..))
 
 import Language.Drasil.WellTyped (RequiresChecking(..), Typed(..), TypingContext,
   TypeError, inferFromContext, temporaryIndent)

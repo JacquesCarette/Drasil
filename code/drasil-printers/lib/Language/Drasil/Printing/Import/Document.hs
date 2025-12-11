@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
 import Data.Map (fromList)
 
-import Language.Drasil hiding (neg, sec, symbol, isIn, codeExpr)
+import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Drasil.Code.CodeExpr.Development (expr)
 
 import Drasil.Database (showUID)

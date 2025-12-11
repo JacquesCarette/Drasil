@@ -15,6 +15,10 @@ import Data.Maybe (mapMaybe)
 
 import Drasil.Database (HasUID(..))
 import Language.Drasil
+import Drasil.System hiding (systemdb)
+import Utils.Drasil (stringList)
+
+import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName)
@@ -23,8 +27,6 @@ import Language.Drasil.Choices (ImplementationType(..), Structure(..),
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Description)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
-import Drasil.System hiding (systemdb)
-import Utils.Drasil (stringList)
 
 -- | Returns a module description based on a list of descriptions of what is
 -- contained in the module.

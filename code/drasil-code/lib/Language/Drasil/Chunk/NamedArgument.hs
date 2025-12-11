@@ -4,14 +4,15 @@ module Language.Drasil.Chunk.NamedArgument (
   -- * Chunk Type
   NamedArgument(..),
   -- * Constructor
-  narg
-) where
+  narg) where
 
 import Control.Lens ((^.), makeLenses, view)
 
+import Drasil.Code.Classes (IsArgumentName)
+
 import Drasil.Database (HasUID(..))
 import Language.Drasil (HasSpace(..), HasSymbol(..),
-  Idea(..), MayHaveUnit(..), NamedIdea(..), Quantity, IsArgumentName,
+  Idea(..), MayHaveUnit(..), NamedIdea(..), Quantity,
   DefinedQuantityDict, Concept, dqdWr, Definition (defn), ConceptDomain (cdom))
 
 -- | Any quantity can be a named argument (wrapper for 'DefinedQuantityDict'),

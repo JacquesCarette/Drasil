@@ -7,6 +7,7 @@ import Control.Monad.State (get)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), colon, empty, parens, render)
 
+import Drasil.Code.CodeVar (CodeIdea(..))
 import Drasil.Database (HasUID(..))
 import Drasil.Database.SearchTools (DomDefn (definition), defResolve')
 import Language.Drasil

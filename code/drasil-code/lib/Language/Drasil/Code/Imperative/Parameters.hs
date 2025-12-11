@@ -9,8 +9,10 @@ import Data.List (nub, (\\), delete)
 import Data.Map (member, notMember)
 import qualified Data.Map as Map (lookup)
 
+import Drasil.Code.CodeVar (CodeIdea(..), DefiningCodeExpr(..), CodeVarChunk)
 import Drasil.Database (HasUID(..))
-import Language.Drasil hiding (isIn, Var)
+
+import Language.Drasil hiding (isIn)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Choices (Structure(..), ConstantStructure(..),

@@ -91,7 +91,7 @@ symbMap = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, phsChgMtrl, twoD] 
 
 -- | Helper to get the system name as an 'IdeaDict' from 'System'.
 getSysName :: System -> IdeaDict
-getSysName SI{_sys = nm} = nw nm
+getSysName = nw . (^. sysName)
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]

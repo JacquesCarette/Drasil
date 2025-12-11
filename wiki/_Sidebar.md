@@ -22,7 +22,6 @@
     * [GOOL/GProc Overview](GOOL-GProc%20Overview)
   * [Quantifying Productivity and Ease of Use](Quantifying-Productivity-and-Ease-of-Use)
 * Design
-  * [Code Generation](Code-Generation)
   * [Design Choices](Design-Choices)
 * [Readings](Readings)
   * [Drasil Papers and Documents](Drasil-Papers-and-Documents)

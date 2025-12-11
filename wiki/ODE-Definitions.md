@@ -12,8 +12,8 @@
 - Solution: a "solution" to an ODE is a function such that, when it is "plugged in" to the equation, you reduce to "0 = 0".
 
 ### Different Differential Equations
-- Ordinary Differential Equations are equations with an unknown function(only depends on a single independent variable) and one or more of its derivatives. Or, the relation between an unknown function(only depends on a single independent variable) and its derivatives.
-- Partial Differential Equations are equations with an unknown function(depends on several independent variables) and one or more of its derivatives. Or, the relation between an unknown function(depends on several independent variables) and its derivatives.
+- Ordinary Differential Equations are equations with an unknown function (only depends on a single independent variable) and one or more of its derivatives. Or, the relation between an unknown function (only depends on a single independent variable) and its derivatives.
+- Partial Differential Equations are equations with an unknown function (depends on several independent variables) and one or more of its derivatives. Or, the relation between an unknown function (depends on several independent variables) and its derivatives.
 - Systems of Differential Equations are multiple differential equations that describe the relationship between multiple unknown functions and their derivatives, each differential equation with multiple unknown functions and one or more of its derivatives.
   - Solving a second-order system of ODE with one dependent variable
     - In order to do it, we can reform it into two first-order odes.

@@ -22,7 +22,6 @@ A good rule of thumb is to limit your summary of a paper's content (including th
 - [Model Transformation Languages](Model-Transformation-Languages)
 - [ODE Definitions](ODE-Definitions)
 - [The Code Generator](The-Code-Generator)
-- [Suggested Reading](Suggested-Reading)
 - [Sustainability](Sustainability)
 - [Productivity](Productivity)
 - [Reuse](Reuse)

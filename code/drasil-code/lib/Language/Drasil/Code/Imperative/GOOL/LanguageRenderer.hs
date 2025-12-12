@@ -17,4 +17,3 @@ makefileName = "Makefile"
 sampleInputName = "input.txt"
 -- | "README.md".
 readMeName = "README.md"
-

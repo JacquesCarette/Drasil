@@ -2,21 +2,21 @@
 module Language.Drasil.Code.Imperative.DrasilState (
   GenState, DrasilState(..), designLog, MatchedSpaces, ModExportMap,
   ClassDefinitionMap, ScopeType(..), modExportMap, clsDefMap, addToDesignLog,
-  addLoggedSpace, genICName
+  addLoggedSpace, genICName, lookupC
 ) where
 
 import Control.Lens ((^.), makeLenses, over)
 import Control.Monad.State (State, gets)
+import Data.Containers.ListUtils (nubOrd)
 import Data.List (nub)
-import Data.Set (Set)
 import Data.Map (Map, fromList)
+import Data.Set (Set)
 import Text.PrettyPrint.HughesPJ (Doc, ($$))
 
-import Language.Drasil (Space, Expr)
+import Drasil.Database (UID, findOrErr)
+import Language.Drasil (Space, Expr, DefinedQuantityDict)
 import Language.Drasil.Printers (PrintingInformation)
 import Drasil.GOOL (VisibilityTag(..), CodeType)
-
-import Data.Containers.ListUtils (nubOrd)
 
 import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
@@ -26,7 +26,7 @@ import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging,
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
-  CodeSpec(..),  OldCodeSpec(..), getConstraints)
+  CodeSpec(..),  OldCodeSpec(..), getConstraints, systemdbO)
 import Language.Drasil.ICOSolutionSearch (Def)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
@@ -293,3 +293,7 @@ getExpOutput n chs _ = [(icNames chs WriteOutput, oMod $ modularity $ architectu
 -- | Get InternalConcept name using DrasilState
 genICName :: InternalConcept -> GenState Name
 genICName ic = gets (`dsICNames` ic)
+
+-- | Gets the 'DefinedQuantityDict' corresponding to a 'UID'.
+lookupC :: DrasilState -> UID -> DefinedQuantityDict
+lookupC g u = findOrErr u (codeSpec g ^. systemdbO)

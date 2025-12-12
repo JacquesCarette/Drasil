@@ -4,6 +4,14 @@
 module Language.Drasil.Code.ExtLibImport (ExtLibState(..), auxMods, defs,
   imports, modExports, steps, genExternalLibraryCall) where
 
+import Prelude hiding ((!!))
+import Control.Lens (makeLenses, (^.), over)
+import Control.Monad (zipWithM)
+import Control.Monad.State (State, execState, get, modify)
+import Data.List (nub, partition)
+import Data.List.NonEmpty (NonEmpty(..), (!!), toList)
+import Data.Maybe (isJust)
+
 import Drasil.Code.CodeExpr (CodeExpr, ($&&), applyWithNamedArgs,
   msgWithNamedArgs, new, newWithNamedArgs, sy)
 import Language.Drasil (HasSpace(typ), getActorName)
@@ -16,18 +24,10 @@ import Language.Drasil.Mod (Class, StateVariable, Func(..), Mod, Name,
   funcDefParams, ctorDef)
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   FunctionInterface(..), Result(..), Argument(..), ArgumentInfo(..),
-  Parameter(..), ClassInfo(..), MethodInfo(..), FuncType(..))
+  Parameter(..), ClassInfo(..), MethodInfo(..), FuncType(..), isConstructor)
 import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   StepGroupFill(..), StepFill(..), FunctionIntFill(..), ArgumentFill(..),
   ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..))
-
-import Control.Lens (makeLenses, (^.), over)
-import Control.Monad (zipWithM)
-import Control.Monad.State (State, execState, get, modify)
-import Data.List (nub, partition)
-import Data.List.NonEmpty (NonEmpty(..), (!!), toList)
-import Data.Maybe (isJust)
-import Prelude hiding ((!!))
 
 -- | State object used during interpretation of an 'ExternalLibrary' and
 -- 'ExternalLibraryCall'.
@@ -67,13 +67,13 @@ initELS = ELS {
 addMod :: Mod -> ExtLibState -> ExtLibState
 addMod m = over auxMods (m:)
 
--- | Adds a defining statement for the given 'CodeVarChunk' and 'CodeExpr' to the
--- 'ExtLibState' and adds the 'CodeVarChunk''s name to the defined field of the
--- state, but only if it was not already in the defined field.
+-- | Adds a defining statement for the given 'CodeVarChunk' and 'CodeExpr' to
+-- the 'ExtLibState' and adds the 'CodeVarChunk''s name to the defined field of
+-- the state, but only if it was not already in the defined field.
 addDef :: CodeExpr -> CodeVarChunk -> ExtLibState -> ExtLibState
-addDef e c s = if n `elem` (s ^. defined)
-               then s
-               else over defs (++ [FDecDef c e]) (addDefined n s)
+addDef e c s
+  | n `elem` (s ^. defined) = s
+  | otherwise = over defs (++ [FDecDef c e]) (addDefined n s)
   where n = codeName c
 
 -- | Adds a defining statement for a local function, represented by the given
@@ -251,8 +251,8 @@ genMethodInfo _ _ _ _ = error methodInfoMismatch
 genParameters :: [Parameter] -> [ParameterFill] -> [ParameterChunk]
 genParameters (LockedParam c:ps) pfs = c : genParameters ps pfs
 genParameters ps (UserDefined c:pfs) = c : genParameters ps pfs
-genParameters (NameableParam _:ps) (NameableParamF c:pfs) = c :
-  genParameters ps pfs
+genParameters (NameableParam _:ps) (NameableParamF c:pfs) =
+  c : genParameters ps pfs
 genParameters [] [] = []
 genParameters _ _ = error paramMismatch
 
@@ -261,9 +261,9 @@ genParameters _ _ = error paramMismatch
 -- for the function call. If result is assigned, the statement is an
 -- assignment. If the result is returned, the statement is a return statement.
 maybeGenAssg :: Maybe Result -> (CodeExpr -> FuncStmt)
-maybeGenAssg Nothing = FVal
+maybeGenAssg Nothing           = FVal
 maybeGenAssg (Just (Assign c)) = FDecDef c
-maybeGenAssg (Just Return)  = FRet
+maybeGenAssg (Just Return)     = FRet
 
 -- Helpers
 
@@ -276,11 +276,6 @@ withLocalState st = do
   newS <- get
   modify (returnLocal s)
   return (st', newS)
-
--- | Predicate that is true only if then MethodInfo is a constructor.
-isConstructor :: MethodInfo -> Bool
-isConstructor CI{} = True
-isConstructor _    = False
 
 -- Error messages
 -- | Various error messages.

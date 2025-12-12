@@ -8,20 +8,61 @@ module Language.Drasil.Choices (
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs, InternalConcept(..)) where
+  choicesSent, showChs, InternalConcept(..)
+) where
 
 import Control.Lens ((^.))
+import Data.List.NonEmpty (toList)
 import Data.Map (Map)
 import qualified Data.Map as Map
 
+import qualified Drasil.GOOL as C (CodeType(..))
+import Language.Drasil (Space, (+:+), (+:+.), foldlSent_, Sentence(S), SimpleQDef)
+import qualified Language.Drasil as S (Space(..))
+
 import Drasil.Database (UID, HasUID (..))
-import Drasil.GOOL (CodeType)
-import Language.Drasil hiding (None)
-import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)
 import Language.Drasil.Mod (Name)
+
+-- FIXME: The way the code generator works involved too much `IO ()` and
+-- switching working directories at the program level. We shouldn't be doing
+-- that at all. // TODO: (a) we lose knowledge, (b) we lose opportunity to fill
+-- in holes, (c) [eh...] encourages hacky generation (more single-pass,
+-- template-like generation).
+
+-- FIXME: I'm not convinced that `Choices` should be passed around at all, nor
+-- that it should even show up in `drasil-code`. Rather, I'd like to see it
+-- exclusively in `drasil-gen`, which then interprets it into a series of
+-- transformers handpicked from `drasil-code`, merging them into a single one.
+--
+-- `icNames` is a great example for 'why'. `icNames` is a map of
+-- "InternalConcepts" to names to be used in code generation. Now, two aside
+-- matters: (1) this should be influenced by the naming policy permitted by the
+-- target language and (2) these should be chunks. But, the more important thing
+-- is that these really want to be chunks, and these options aren't always
+-- available. Why must I pick the module name for "InputParameters" when I'm
+-- choosing to build an `Unmodular` program?
+--
+-- The real `Choices` I'd like to see primarily used in other packages should be
+-- about the ICO problem definition.
+--
+-- I'm not so sure I understand the goal of this package. Why is not a part of
+-- `drasil-gen`? Ignoring all other packages in Drasil, what is the goal of
+-- `drasil-code` on its own? To help build software for ICO problems?
+
+-- FIXME: `lang` should not be a list of choices. That creates too many options
+-- all at once to consider in the code generator. There should only be one
+-- allowed per `Choices`.
+
+-- FIXME: `folderVal`. StringAssumption chunk? Nah. We can do better than that.
+-- It's about an external asset. We need to capture those better.
+
+-- FIXME: `extLibs` is pure genius, but can be captured better. It is really
+-- about providing an alternative method for calculating things. We need to
+-- capture *that* -- options on how to translate specific calculations. This
+-- should probably be in the optional features area.
 
 -- | The instruction indicates how the generated program should be written down.
 -- Full details of Choices documentation https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
@@ -167,21 +208,42 @@ matchConcepts = Map.fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
 -- | Specifies which 'CodeType' should be used to represent each mathematical
 -- 'Space'. ['CodeType'] is preferentially-ordered, first 'CodeType' that does not
 -- conflict with other choices will be selected.
-type SpaceMatch = Space -> [CodeType]
+type SpaceMatch = Space -> [C.CodeType]
 
 -- | Updates a 'SpaceMatch' by matching the given 'Space' with the given ['CodeType'].
-matchSpace :: Space -> [CodeType] -> SpaceMatch -> SpaceMatch
+matchSpace :: Space -> [C.CodeType] -> SpaceMatch -> SpaceMatch
 matchSpace _ [] _ = error "Must match each Space to at least one CodeType"
 matchSpace s ts sm = \sp -> if sp == s then ts else sm sp
 
 -- | Builds a 'SpaceMatch' from an association list of 'Spaces' and 'CodeTypes'.
-matchSpaces :: [(Space, [CodeType])] -> SpaceMatch
+matchSpaces :: [(Space, [C.CodeType])] -> SpaceMatch
 matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
   where matchSpaces' ((s,ct):sms) sm = matchSpaces' sms $ matchSpace s ct sm
         matchSpaces' [] sm = sm
 
+-- | Default mapping between 'Space' and 'CodeType'.
+--
+-- FIXME: Why is this a list of outputs? Fallback choices?
+spaceToCodeType :: S.Space -> [C.CodeType]
+spaceToCodeType S.Integer        = [C.Integer]
+spaceToCodeType S.Natural        = [C.Integer]
+spaceToCodeType S.Real           = [C.Double, C.Float]
+spaceToCodeType S.Rational       = [C.Double, C.Float]
+spaceToCodeType S.Boolean        = [C.Boolean]
+spaceToCodeType S.Char           = [C.Char]
+spaceToCodeType S.String         = [C.String]
+spaceToCodeType (S.Vect s)       = map C.List (spaceToCodeType s)
+spaceToCodeType (S.Matrix _ _ s) = map (C.List . C.List) (spaceToCodeType s)
+spaceToCodeType (S.Set s)        = map C.List (spaceToCodeType s)
+spaceToCodeType (S.Array s)      = map C.Array (spaceToCodeType s)
+spaceToCodeType (S.Actor s)      = [C.Object s]
+spaceToCodeType S.Void           = [C.Void]
+spaceToCodeType (S.Function i t) = [C.Func is ts | is <- ins, ts <- trgs]
+    where trgs = spaceToCodeType t
+          ins  = map spaceToCodeType (toList i)
+
 -- Optional Features can be added to the program or left it out
-data OptionalFeatures = OptFeats{
+data OptionalFeatures = OptFeats {
   docConfig :: DocConfig,
   logConfig :: LogConfig,
   -- | Turns generation of different auxiliary (non-source-code) files on or off.

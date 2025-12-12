@@ -36,7 +36,6 @@ data ConceptChunk = ConDict { _idea :: IdeaDict -- ^ Contains the idea of the co
                             }
 makeLenses ''ConceptChunk
 
-
 instance HasChunkRefs ConceptChunk where
   chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 

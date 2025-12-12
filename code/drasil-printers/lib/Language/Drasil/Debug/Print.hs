@@ -7,17 +7,17 @@ import Prelude hiding ((<>))
 import Control.Lens ((^.), view)
 import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe)
-import Text.PrettyPrint.HughesPJ
 import qualified Data.Map as Map
+import Data.Typeable (Proxy (Proxy))
+import Text.PrettyPrint.HughesPJ
 
+import Drasil.Database (UID, showUID, IsChunk, findAll)
 import Language.Drasil
-import Drasil.Database (IsChunk, findAll)
+import Drasil.System (systemdb, refbyTable, traceTable)
+import Theory.Drasil
+
 import Language.Drasil.Plain.Print
 import Language.Drasil.Printing.PrintingInformation
-import Drasil.System (systemdb, refbyTable, traceTable)
-
-import Theory.Drasil
-import Data.Typeable (Proxy (Proxy))
 
 -- * Main Function
 -- | Gathers all printing functions and creates the debugging tables from them.

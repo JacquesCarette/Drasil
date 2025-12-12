@@ -10,7 +10,7 @@ module Theory.Drasil.InstanceModel(
   , qwUC, qwC
   ) where
 
-import Drasil.Database (HasChunkRefs(..))
+import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
 import Drasil.Metadata (inModel)

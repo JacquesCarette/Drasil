@@ -5,15 +5,15 @@ import Control.Lens ((^.))
 import Data.Char (toUpper)
 
 import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S),
-  Symbol, UID, TermCapitalization(..), titleizeNP, titleizeNP',
+  Symbol, TermCapitalization(..), titleizeNP, titleizeNP',
   atStartNP, atStartNP', NP, DefinedQuantityDict)
 import Language.Drasil.Development (toSent)
-import Drasil.Database (ChunkDB, findOrErr)
+import Drasil.Database (UID, ChunkDB, findOrErr)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 import Drasil.System (systemdb)
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, stg, syst)
 
 -- * Expr-related
 

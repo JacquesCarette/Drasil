@@ -862,7 +862,6 @@ swiftListType t' = do
   typeFromData (List $ getType t) ("[" ++ getTypeString t ++ "]")
     (brackets $ RC.type' t)
 
-
 swiftFuncType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
 swiftFuncType ps r = do
   pts <- sequence ps

@@ -5,8 +5,9 @@
 module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Drasil.Code.CodeExpr (CodeExpr, LiteralC(int))
+import Drasil.Database (HasUID)
 import Language.Drasil (Space(..), nounPhraseSP,
-  label, sub, HasSymbol(..), HasUID, Symbol, ExprC(..), DefinedQuantityDict, implVar)
+  label, sub, HasSymbol(..), Symbol, ExprC(..), DefinedQuantityDict, implVar)
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod,
@@ -14,7 +15,6 @@ import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod,
   multiLine, packmod, repeated, singleLine)
 import qualified Drasil.GlassBR.Unitals as U
 import Language.Drasil.Printers
-
 
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]

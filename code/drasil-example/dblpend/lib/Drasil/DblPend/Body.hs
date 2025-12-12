@@ -269,7 +269,6 @@ userCharacteristicsIntro prog = foldlSP
 -------------------------------
 -- System Constraints automatically generated in SystCons
 
-
 --------------------------------------------
 -- Section 4: Specific System Description --
 --------------------------------------------

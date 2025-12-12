@@ -3,15 +3,17 @@ module Language.Drasil.Code.Imperative.Comments (
   getComment, getCommentBrief
 ) where
 
+import Control.Monad.State (get)
+import Control.Lens ((^.))
+import Text.PrettyPrint.HughesPJ (Doc, (<+>), colon, empty, parens, render)
+
+import Drasil.Code.CodeVar (CodeIdea(..))
+import Drasil.Database (HasUID(..))
 import Drasil.Database.SearchTools (DomDefn (definition), defResolve')
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, unitDoc)
-
-import Control.Monad.State (get)
-import Control.Lens ((^.))
-import Text.PrettyPrint.HughesPJ (Doc, (<+>), colon, empty, parens, render)
 
 -- | Gets a plain renderering of the term for a chunk.
 getTermDoc :: (CodeIdea c) => c -> GenState Doc

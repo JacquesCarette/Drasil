@@ -3,7 +3,6 @@
 module Language.Drasil (
   -- * The Drasil Expression Language
   -- | Encodes mathematical and display related expressions.
-  -- To see the code-related expressions, look in "Language.Drasil.Code".
 
   -- ** Base Expression Language
   -- | Defines the expression types and common operators.
@@ -30,10 +29,6 @@ module Language.Drasil (
   , DerivType
   , ModelExprC(..)
 
-  --Language.Drasil.CodeExpr
-  , CodeExpr
-  , CodeExprC(..)
-
   -- ** Unicode symbols
   -- | Some expressions need special unicode characters.
 
@@ -49,7 +44,6 @@ module Language.Drasil (
 
   -- *** Chunk-related
   -- Language.Drasil.Symbol
-  , HasUID(uid)
   , HasSymbol(symbol)
   -- Language.Drasil.Classes
   , NamedIdea(term)
@@ -74,21 +68,14 @@ module Language.Drasil (
   , Referable(..)
   -- Language.Drasil.Classes
   , HasReference(getReferences)
-  -- *** Programming-related
-  , Callable
-  , IsArgumentName
   -- ** Types
   -- | Contains helper functions and smart constructors for each type.
   -- Similar types are grouped together.
 
   -- *** Basic types
-  , UID, mkUid, nsUid, showUID
   -- Language.Drasil.Chunk.NamedIdea
-  , (+++), (+++.), (+++!)
   , nc, ncUID, IdeaDict , mkIdea
   , nw -- bad name (historical)
-  , CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..)
-  , obv, qc, ccf, ccv, listToArray, programName, funcPrefix, DefiningCodeExpr(..)
   -- Language.Drasil.Chunk.CommonIdea
   , CI, commonIdea, commonIdeaWithDict, prependAbrv
 
@@ -218,7 +205,6 @@ module Language.Drasil (
   , foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent
   , foldlSent_,foldlSentCol, foldlsC, foldNums, numList
 
-
   -- * Basic Document Language
   -- | Holds all the types and helper functions needed especially in @drasil-docLang@
   -- Language.Drasil.Document
@@ -297,13 +283,6 @@ module Language.Drasil (
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 
-import Drasil.Code.Classes (Callable, IsArgumentName)
-import Drasil.Code.CodeVar (CodeIdea(..), CodeChunk(..),
-  CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv,
-  listToArray, programName, funcPrefix, DefiningCodeExpr(..))
-import Drasil.Code.CodeExpr.Lang (CodeExpr)
-import Drasil.Code.CodeExpr.Class (CodeExprC(..))
-
 import Language.Drasil.WellTyped (RequiresChecking(..), Typed(..), TypingContext,
   TypeError, inferFromContext, temporaryIndent)
 
@@ -328,8 +307,6 @@ import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr, unlbldCode
   , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD)
 import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
-import Drasil.Database
-    (UID, HasUID(..), (+++), (+++.), (+++!), mkUid, nsUid, showUID)
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),

@@ -211,7 +211,6 @@ vectDist = funcDef "vectDist" [vV1, vV2] Real
     FRet (Sqrt (FCall (funcUID vectDistSq) [vV1, vV2]))
   ]
 
-
 vectNear = funcDef "vectNear" [vV1, vV2, dist] Boolean
   [
     FRet (FCall (funcUID vectDist) [vV1, vV2] :< dist)

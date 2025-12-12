@@ -28,7 +28,6 @@ import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
   force, gravitationalAccel, height, moment2D, pressure, subX, subY, subZ,
   supMax, supMin, torque, weight, positionVec)
 
-
 symbols :: [DefinedQuantityDict]
 symbols = dqdWr coords : map dqdWr inputs ++ map dqdWr outputs
   ++ map dqdWr units ++ map dqdWr unitless
@@ -94,7 +93,6 @@ monotonicIn = [physRange $ \_ -> -- FIXME: Hack with "index" !
 slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip,
   xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, fricAngle,
   dryWeight, satWeight, waterWeight :: UncertQ
-
 
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals

@@ -18,7 +18,6 @@ import Drasil.Database
 import Drasil.System (System, systemdb, traceTable, refbyTable)
 import Drasil.Database.SearchTools (findAllIdeaDicts)
 
-
 type Path = String
 type TargetFile = String
 

@@ -2,12 +2,14 @@
 module Drasil.Sections.AuxiliaryConstants
   (valsOfAuxConstantsF, tableOfConstants, tableOfConstantsRef) where
 
+import Control.Lens ((^.))
+
+import Drasil.Database (HasUID(..))
 import Language.Drasil
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 import Drasil.DocumentLanguage.Units (toSentence)
 import Data.Drasil.Concepts.Documentation (value, description, symbol_, tAuxConsts)
 import qualified Data.Drasil.Concepts.Math as CM (unit_)
-import Control.Lens ((^.))
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 import Utils.Drasil (mkTable)
 

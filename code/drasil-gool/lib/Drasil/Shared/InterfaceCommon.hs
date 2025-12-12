@@ -392,7 +392,6 @@ class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
   funcDecDef   :: SVariable r -> r (Scope r) -> [SVariable r] -> MSBody r
     -> MSStatement r
 
-
 class (VariableSym r, StatementSym r) => IOStatement r where
   print      :: SValue r -> MSStatement r
   printLn    :: SValue r -> MSStatement r

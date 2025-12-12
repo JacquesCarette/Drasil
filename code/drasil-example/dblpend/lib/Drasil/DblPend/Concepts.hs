@@ -5,7 +5,6 @@ import Data.Drasil.Concepts.Documentation (first, second_, object)
 import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
 import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force, acceleration)
 
-
 concepts :: [IdeaDict]
 concepts = map nw [rod, horizontal, vertical,
   pendMotion, horizontalPos, verticalPos, horizontalVel,horizontalAccel, verticalAccel,

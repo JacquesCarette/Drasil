@@ -18,8 +18,6 @@ import qualified Drasil.Shared.InterfaceCommon as IC
 import Control.Monad.State (modify)
 import qualified Drasil.Shared.RendererClassesCommon as S
 
-
-
 -- Swift and Julia --
 
 boolRender :: String
@@ -27,7 +25,6 @@ boolRender = "Bool"
 
 bool :: (CommonRenderSym r) => VSType r
 bool = typeFromData Boolean boolRender (text boolRender)
-
 
 -- Python, Java, C#, and Julia --
 
@@ -79,7 +76,6 @@ varDecDef v scp e = do
   where
     def Nothing = IC.emptyStmt
     def (Just d) = IC.assign v d
-
 
 -- Python, Julia, and MATLAB --
 

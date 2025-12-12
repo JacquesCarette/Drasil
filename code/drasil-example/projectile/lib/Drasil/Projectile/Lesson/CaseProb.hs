@@ -150,7 +150,6 @@ stepFiveCont = foldlSP [S "Use the equations from Step 4" `sC` S "together with 
   S "We can do this systematically by going through each equation and determining how many unknowns are in that equation",
   S "Any equations with one unknown can be used to solve for that unknown directly"]
 
-
 equationsSents :: [Sentence]
 equationsSents = [S "From Equation" +: refS lcrectVel,
                   S "From Equation" +: refS lcrectPos,

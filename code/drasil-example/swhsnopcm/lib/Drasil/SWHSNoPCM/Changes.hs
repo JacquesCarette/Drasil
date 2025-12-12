@@ -28,7 +28,6 @@ likeChgDT = cic "likeChgDT" (
   S "would also account" `S.for` S "discharging" `S.of_` D.toSent (phraseNP (the tank))])
   "Discharging-Tank" likeChgDom
 
-
 unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [unlikeChgWFS, unlikeChgNIHG]
 

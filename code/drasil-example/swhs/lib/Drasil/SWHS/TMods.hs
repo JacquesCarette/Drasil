@@ -79,7 +79,6 @@ sensHtETemplate pc desc = tm (equationalModel' qd)
       qd = sensHtEQD pc eqn desc
       eqn = sensHtEEqn pc
 
-
 sensHtEQD :: PhaseChange -> ModelExpr -> Sentence -> ModelQDef
 sensHtEQD pc eqn desc = fromEqnSt'' "sensHeat" np desc (symbol sensHeat) (sensHeat ^. typ) eqn
   where np = nounPhraseSP ("Sensible heat energy" ++ case pc of

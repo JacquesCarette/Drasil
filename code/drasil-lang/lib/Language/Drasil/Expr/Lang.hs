@@ -236,7 +236,6 @@ instance LiteralC Expr where
   exactDbl = Lit . exactDbl
   perc l r = Lit $ perc l r
 
-
 -- helper function for typechecking to help reduce duplication
 vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either TypeError Space
 vvvInfer ctx op l r = do

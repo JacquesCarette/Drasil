@@ -10,15 +10,16 @@ import Data.List (nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
 
-import Language.Drasil hiding (None, new)
+import Language.Drasil hiding (None)
 import Language.Drasil.Display (Symbol(Variable))
 import Drasil.Database
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
-import Drasil.System (HasSystem(..))
+import Drasil.System (HasSystem(..), programName)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Utils.Drasil (subsetOf)
 
+import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))
@@ -174,16 +175,15 @@ codeSpec si chs ms = CS {
 -- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
 -- from 'System' to populate the 'OldCodeSpec' structure.
 oldcodeSpec :: S.System -> Choices -> [Mod] -> OldCodeSpec
-oldcodeSpec sys@S.SI{ S._sys = sysIdea
-                 , S._authors = as
-                 , S._configFiles = cfp
-                 , S._inputs = ins
-                 , S._outputs = outs
-                 , S._constraints = cs
-                 , S._constants = cnsts
-                 , S._systemdb = db } chs ms =
+oldcodeSpec sys@S.SI{ S._authors = as
+                    , S._configFiles = cfp
+                    , S._inputs = ins
+                    , S._outputs = outs
+                    , S._constraints = cs
+                    , S._constants = cnsts
+                    , S._systemdb = db } chs ms =
   let ddefs = sys ^. dataDefns
-      n = programName sysIdea
+      n = sys ^. programName
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)

@@ -11,10 +11,13 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
   odeInfoChunks
 ) where
 
-import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
+import Control.Lens ((^.), _1, _2, over)
+
+import Drasil.Database (HasUID(..), (+++))
+import Language.Drasil (HasSymbol(symbol), MayHaveUnit(getUnit),
   HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar, implVar',
   compoundPhrase, nounPhrase, nounPhraseSP, label, sub, Idea(getA), NamedIdea(term), Stage(..),
-  (+++), Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
+  Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
@@ -42,8 +45,6 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
 
 import Drasil.Code.CodeExpr
 import Drasil.Code.CodeExpr.Development
-
-import Control.Lens ((^.), _1, _2, over)
 
 -- SciPy Library (Python)
 
@@ -124,7 +125,6 @@ rtolArg = narg $ implVar "rtol_scipy" (nounPhrase
   "the relative tolerance for the ODE solution"
   Real (label "rtol")
 
-
 r, xAxis, ut, transpose :: CodeVarChunk
 r = quantvar $ implVar "r_scipy" (nounPhrase "ODE object" "ODE objects")
   "the ODE object"
@@ -140,7 +140,6 @@ transpose = quantvar $ implVar "transpose_numpy"
   (nounPhrase "Numpy Array Transpose" "Numpy Array Transpose")
   "the Numpy Array Transpose"
   (Array Real) (label "u_t.T") -- (ccObjVar ut transpose) does not seem to work.
-
 
 f, odefunc, setIntegrator, setInitVal, successful,
   integrateStep, arange, odeintFunc :: CodeFuncChunk

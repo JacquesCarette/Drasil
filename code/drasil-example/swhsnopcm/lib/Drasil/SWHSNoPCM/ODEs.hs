@@ -6,7 +6,6 @@ import Language.Drasil.Code (odeInfo', odeOptions, quantvar, ODEInfo,
 import Drasil.SWHS.Unitals (tauW, tempC, tempInit, timeFinal, timeStep, absTol, relTol)
 import Drasil.SWHSNoPCM.IMods(eBalanceOnWtrRC)
 
-
 noPCMODEOpts :: ODEOptions
 noPCMODEOpts = odeOptions
   RK45 (sy absTol) (sy relTol) (sy timeStep)

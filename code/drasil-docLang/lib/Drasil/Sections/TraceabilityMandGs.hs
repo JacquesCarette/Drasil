@@ -27,7 +27,6 @@ import Language.Drasil.Chunk.Concept.NamedCombinators as NC
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Sentence.Combinators as S
 
-
 -- | Makes a Traceability Table/Matrix that contains Items of Different Sections.
 generateTraceTable :: System -> LabelledContent
 generateTraceTable = generateTraceTableView (mkUid "Tracey")
@@ -106,7 +105,6 @@ traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
     sC' a b = sC a b
 
 -- | Helpers to check if given argument has more than one peice of information
-
 
 -- | Contains traceability matrix assumptions, other assumptions, refinement, and other requirements.
 traceMatStandard :: System -> [TraceConfig]

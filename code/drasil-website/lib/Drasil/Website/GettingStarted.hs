@@ -2,7 +2,6 @@ module Drasil.Website.GettingStarted where
 
 import Language.Drasil
 
-
 -- * Getting Started Section
 
 gettingStartedSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Section

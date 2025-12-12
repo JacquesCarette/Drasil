@@ -17,8 +17,10 @@ import Data.Map (Map)
 import qualified Data.Map as Map
 
 import qualified Drasil.GOOL as C (CodeType(..))
-import Language.Drasil hiding (Var)
+import Language.Drasil (Space, (+:+), (+:+.), foldlSent_, Sentence(S), SimpleQDef)
 import qualified Language.Drasil as S (Space(..))
+
+import Drasil.Database (UID, HasUID (..))
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)

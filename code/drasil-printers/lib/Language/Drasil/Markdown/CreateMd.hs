@@ -127,7 +127,6 @@ bkQuote = text "`"
 -- | Triple backquote separator.
 bkQuote3 = text "```"
 
-
 -- FIXME as explained in #2224 we still need to add in the purpose section,
 -- this could be done by adding a third parameter to introSec
 -- | Constructs introduction section from header and message.

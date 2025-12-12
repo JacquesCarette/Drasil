@@ -7,9 +7,18 @@ module Language.Drasil.Code.Imperative.Descriptions (
   inConsFuncDesc, dvFuncDesc, calcModDesc, woFuncDesc
 ) where
 
+import Control.Lens ((^.))
+import Control.Monad.State (get)
+import Data.Map (member)
+import qualified Data.Map as Map (filter, lookup, null)
+import Data.Maybe (mapMaybe)
+
+import Drasil.Database (HasUID(..))
+import Language.Drasil
+import Drasil.System hiding (systemdb)
 import Utils.Drasil (stringList)
 
-import Language.Drasil
+import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName)
@@ -18,13 +27,6 @@ import Language.Drasil.Choices (ImplementationType(..), Structure(..),
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Description)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
-
-import Data.Map (member)
-import qualified Data.Map as Map (filter, lookup, null)
-import Data.Maybe (mapMaybe)
-import Control.Lens ((^.))
-import Control.Monad.State (get)
-import Drasil.System hiding (systemdb)
 
 -- | Returns a module description based on a list of descriptions of what is
 -- contained in the module.

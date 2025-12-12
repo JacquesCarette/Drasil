@@ -11,8 +11,8 @@ module Language.Drasil.Code.Imperative.Modules (
 
 import Drasil.Code.CodeExpr.Development
 
-import Language.Drasil (Constraint(..), RealInterval(..),
-  HasUID(uid))
+import Drasil.Database (HasUID(..))
+import Language.Drasil (Constraint(..), RealInterval(..))
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   constModDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc,
@@ -361,7 +361,6 @@ chooseConstr cb cs = do
   where chooseCB Warning = constrWarn
         chooseCB Exception = constrExc
 
-
 -- | Generates body defining constraint violation behaviour if Warning chosen from 'chooseConstr'.
 -- Prints a \"Warning\" message followed by a message that says
 -- what value was \"suggested\".
@@ -372,7 +371,6 @@ constrWarn c = do
       cs = snd c
   msgs <- mapM (constraintViolatedMsg q "suggested") cs
   return $ map (bodyStatements . (printStr "Warning: " :)) msgs
-
 
 -- | Generates body defining constraint violation behaviour if Exception chosen from 'chooseConstr'.
 -- Prints a message that says what value was \"expected\",
@@ -432,7 +430,6 @@ printConstraint v c = do
         lb <- convExpr (Variable ("set_" ++ name) e)
         return $ [printStr "an element of the set ", print lb] ++ [printStrLn "."]
   printConstraint' v c
-
 
 -- | Don't print expressions that are just literals, because that would be
 -- redundant (the values are already printed by printConstraint).

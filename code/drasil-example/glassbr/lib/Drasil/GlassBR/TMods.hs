@@ -19,7 +19,6 @@ tMods = [pbIsSafe, lrIsSafe]
 -- glass_concept :: [ConceptInstance]
 -- glass_concept = []
 
-
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (equationalModel' lrIsSafeQD)
    ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])

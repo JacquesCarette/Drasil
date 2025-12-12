@@ -1,4 +1,4 @@
-There are a lot of folders in Drasil, and it can be especially confusing to a first-time contributor which folders we should change, and which folders are generated artifacts. This article will only document the subfolders within `Drasil/code`.
+There are a lot of folders in Drasil, and it can be especially confusing to a first-time contributor which folders we should change, and which folders are generated artifacts. This article will only document the subfolders within `Drasil/code`. Note that this wiki page might not always be perfectly up-to-date, and you can visit the Drasil website for [updated dependency graphs](https://jacquescarette.github.io/Drasil/#Sec:Documentation) This list has been updated as of November 2025.
 
 ## Hand-made Folders
 | Folder | Description |

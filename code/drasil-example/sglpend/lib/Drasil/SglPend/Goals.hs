@@ -13,7 +13,6 @@ import Data.Drasil.Concepts.Physics (gravitationalConst, motion)
 import Data.Drasil.Concepts.Math (iAngle)
 import Drasil.DblPend.Concepts (rod)
 
-
 goals :: [ConceptInstance]
 goals = [motionMass]
 

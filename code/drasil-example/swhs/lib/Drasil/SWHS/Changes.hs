@@ -73,7 +73,6 @@ unlikeChgWPFS = cic "unlikeChgWPFS" (
   phrase water, S "from liquid to a solid or the state change" `S.ofThe` phrase phsChgMtrl,
   S "from a liquid to a gas to be considered"] ) "Water-PCM-Fixed-States" unlikeChgDom
 
-
 unlikeChgNIHG = cic "unlikeChgNIHG" (
   foldlSent [chgsStart assumpNIHGBWP (S "Is used" `S.for` S "the derivations of"),
   refS eBalanceOnWtr `S.and_` refS eBalanceOnPCM] )

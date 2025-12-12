@@ -17,6 +17,13 @@ do
 
         exit_code=1
     fi
-done < <(find . -type f -name "*.hs" -print0)
+
+    # Note: This relies on GNU grep for '-P'! BSD grep, which macOS
+    # installations ship with by default, does not.
+    if grep -qzP '\n\n\n' "$f" ; then
+        echo "$f CONTAINS EXCESSIVE CONSECUTIVE NEWLINE CHARACTERS (i.e., 3 NEWLINES IN A ROW)"
+        exit_code=1
+    fi
+done < <(find . -type f -name "*.hs" -not -path "*/.stack-work/*" -print0)
 
 exit $exit_code

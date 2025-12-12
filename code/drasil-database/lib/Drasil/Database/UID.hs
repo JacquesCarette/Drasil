@@ -18,9 +18,9 @@ import GHC.Generics
 
 import Control.Lens (Getter, makeLenses, (^.), view, over)
 
--- | The most basic item: having a unique identifier key, here a UID.
+-- | The most basic item: having a unique identifier key, a 'UID'.
 class HasUID c where
-  -- | Provides a /unique/ id for internal Drasil use.
+  -- | The /unique/ id of the chunk (for internal Drasil use only).
   uid :: Getter c UID
 
 -- | A @UID@ is a 'unique identifier' for things that we will put into our

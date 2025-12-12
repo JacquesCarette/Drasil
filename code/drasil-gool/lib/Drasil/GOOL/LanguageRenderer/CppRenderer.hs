@@ -53,7 +53,6 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 
-
 import Drasil.Shared.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart,
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
@@ -124,7 +123,6 @@ import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, brackets,
   braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes, semi)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
-
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -678,7 +676,6 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
   tryCatch = pair2 tryCatch tryCatch
 
   assert cond errMsg = pair2 assert assert (zoom lensMStoVS cond) (zoom lensMStoVS errMsg)
-
 
 instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) where
   notifyObservers f t = pair2 notifyObservers notifyObservers

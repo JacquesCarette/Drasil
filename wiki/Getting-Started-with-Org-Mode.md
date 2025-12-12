@@ -1,6 +1,6 @@
 # Org Mode
 
-Given that we may expand Drasil in the future so that it can generate org mode files for emaccs, we will paste some relevant "getting started" links and information here.  With org mode we can write our documentation using a "markdown notation like" notation and we can mix the documentation with code as a literate document.  The org mode document (mixing documentation and code) can be exported to multiple formats, including html, LaTeX and code.
+Given that we may expand Drasil in the future so that it can generate org mode files for emacs, we will paste some relevant "getting started" links and information here.  With org mode we can write our documentation using a "markdown notation like" notation and we can mix the documentation with code as a literate document.  The org mode document (mixing documentation and code) can be exported to multiple formats, including html, LaTeX and code.
 
 ## Emacs links
 
@@ -10,7 +10,7 @@ Given that we may expand Drasil in the future so that it can generate org mode f
 
 [Musas: A Life Configuring Emacs](https://alhassy.github.io/emacs.d/)
 
-[Elisp Cheat Sheet](https://github.com/alhassy/ElispCheatSheet/blob/main/CheatSheet.pdf)
+[Elisp Cheat Sheet](https://github.com/alhassy/ElispCheatSheet/blob/master/CheatSheet.pdf)
 
 
 ## Org Mode links
@@ -19,7 +19,7 @@ Given that we may expand Drasil in the future so that it can generate org mode f
 
 [Literate Programming with Org Mode](http://howardism.org/Technical/Emacs/literate-programming-tutorial.html)
 
-[Use Emacs Org mode to easily create LaTeX documents](https://github.com/JacquesCarette/Drasil/wiki/Getting-Started-with-Org-Mode/_edit)
+[Use Emacs Org mode to easily create LaTeX documents](https://opensource.com/article/20/4/emacs-org-mode)
 
 [Images in LaTeX export](https://orgmode.org/manual/Images-in-LaTeX-export.html)
 
@@ -31,7 +31,7 @@ Given that we may expand Drasil in the future so that it can generate org mode f
 
 ## Projectile example
 
-To learn org mode, and to provide an illustrative example, the [Jupyter Notebook version](https://github.com/smiths/caseStudies/blob/main/CaseStudies/projectile/projectileLesson/ProjectileLesson.ipynb) of the projectile motion lesson has been converted into an [org mode version](https://github.com/smiths/caseStudies/blob/main/CaseStudies/projectile/projectileLesson/orgModeVersion/projMotLesson.org).
+To learn org mode, and to provide an illustrative example, the [Jupyter Notebook version](https://github.com/smiths/caseStudies/blob/master/CaseStudies/projectile/projectileLesson/ProjectileLesson.ipynb) of the projectile motion lesson has been converted into an [org mode version](https://github.com/smiths/caseStudies/blob/master/CaseStudies/projectile/projectileLesson/orgModeVersion/projMotLesson.org).
 
 ## Technical Notes
 

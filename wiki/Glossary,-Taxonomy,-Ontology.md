@@ -1,7 +1,7 @@
 To assist with progress on Drasil, we need to know the best practices for capturing and documenting (scientific and computing) knowledge.  We should also take advantage of any previous classifications and organizations of (scientific) knowledge.
 
 # Glossary, Dictionary, Taxonomy and Ontology
-We should have a good understanding of the definitions, and differences, between glossary, dictionary, taxonomy and ontology.  [The Data Maven](https://thedatamaven.net/2017/04/whats-the-difference-glossary-dictionary-taxonomy-ontology/) has an interesting take on the topic; another take is the paper [Clarity in the usage of terms Ontology, Taxonomy and Classification](https://pdfs.semanticscholar.org/b3e0/86fade8cbf248a3633e96b244611bbba26ce.pdf?_ga=2.165503295.1242279257.1537186598-259700611.1537186598). The headers below link to the appropriate page on Wikipedia (or W3C), and the definition is adapted from both those sources:
+We should have a good understanding of the definitions, and differences, between glossary, dictionary, taxonomy and ontology.  [The Data Maven](https://thedatamaven.net/2017/04/whats-the-difference-glossary-dictionary-taxonomy-ontology/) has an interesting take on the topic; another take is the paper [Clarity in the usage of terms Ontology, Taxonomy and Classification](https://itc.scix.net/paper/w78-2003-432). The headers below link to the appropriate page on Wikipedia (or W3C), and the definition is adapted from both those sources:
 
 <dl>
   <dt><a href="https://en.wikipedia.org/wiki/Glossary">Glossary</a></dt>
@@ -15,8 +15,7 @@ A broad distinction is made between general and specialized dictionaries. Specia
 There is also a contrast between prescriptive or descriptive dictionaries; the former reflect what is seen as correct use of the language while the latter reflect recorded actual use.</dd>
 
   <dt><a href="https://en.wikipedia.org/wiki/Taxonomy_(general)">Taxonomy</a></dt>
-  <dd>Taxonomy is the practice and science of classification. A nice example: a
-[taxonomy for static analysis](https://www.researchgate.net/publication/251940397_Taxonomy_of_static_code_analysis_tools).</dd>
+  <dd>Taxonomy is the practice and science of classification. A nice example: a <a href="https://www.researchgate.net/publication/251940397_Taxonomy_of_static_code_analysis_tools">taxonomy for static analysis</a>.</dd>
 
   <dt><a href="https://en.wikipedia.org/wiki/Ontology">Ontology</a>&nbsp;(philosophy)</dt>
   <dd>Ontology is the philosophical study of being. More broadly, it studies concepts that directly relate to being, in particular becoming, existence, reality, as well as the basic categories of being and their relations. Traditionally listed as a part of the major branch of philosophy known as metaphysics, ontology often deals with questions concerning what entities exist or may be said to exist and how such entities may be grouped, related within a hierarchy, and subdivided according to similarities and differences.</dd>
@@ -43,7 +42,6 @@ There is also a contrast between prescriptive or descriptive dictionaries; the f
 4. https://pdfs.semanticscholar.org/7753/2e4ecc6ab2f0ff38922d5dc39413a370ad13.pdf
 5. Natalya F Noy and Deborah L McGuinness.  Ontology development 101: A guide to creating your first
 ontology, 2001
-6. http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.41.7834&rep=rep1&type=pdf
 
 ## Research (Work In Progress)
 ### [VanRess2008](https://pdfs.semanticscholar.org/ecd5/fd6495da16f6b09a063c16029877151c9466.pdf) (Supplement to the link provided above)

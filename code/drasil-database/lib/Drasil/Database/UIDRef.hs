@@ -1,4 +1,4 @@
-module Drasil.Database.TypedUIDRef (
+module Drasil.Database.UIDRef (
   TypedUIDRef, mkRef,
   typedFind, typedFindOrErr,
 ) where

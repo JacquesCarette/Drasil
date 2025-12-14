@@ -5,7 +5,6 @@ module Language.Drasil.Code.Imperative.Generator (
 
 import Language.Drasil
 import Language.Drasil.Code.Code (createCodeFiles, makeCode)
-import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
@@ -31,7 +30,7 @@ import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
-  LogConfig(..), OptionalFeatures(..), InternalConcept(..))
+  LogConfig(..), OptionalFeatures(..), InternalConcept(..), chooseConcept)
 import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE, system')
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
 

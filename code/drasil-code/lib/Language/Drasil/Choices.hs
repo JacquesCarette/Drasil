@@ -5,18 +5,23 @@ module Language.Drasil.Choices (
   DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..),
   makeOptFeats, ExtLib(..), Modularity(..), Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
-  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
+  CodeConcept(..), matchConcepts, chooseConcept, conceptToGOOL,
+  SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
   choicesSent, showChs, InternalConcept(..)
 ) where
 
+import Prelude hiding (pi)
+
 import Control.Lens ((^.))
+import Control.Monad.State (State, modify)
 import Data.List.NonEmpty (toList)
 import Data.Map (Map)
 import qualified Data.Map as Map
 
 import Drasil.Database (UID, HasUID (..))
+import Drasil.GOOL (SValue, SharedProg, MathConstant(..))
 import qualified Drasil.GOOL as C (CodeType(..))
 import Language.Drasil (Sentence(S), (+:+.), (+:+), foldlSent_, Space, SimpleQDef)
 import qualified Language.Drasil as S (Space(..))
@@ -165,6 +170,24 @@ instance RenderChoices CodeConcept where
 -- | Builds a 'ConceptMatchMap' from an association list of chunks and 'CodeConcepts'.
 matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
 matchConcepts = Map.fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
+
+-- | Concretizes the ConceptMatchMap in Choices to a 'MatchedConceptMap'.
+-- Currently we don't have any Choices that would prevent a 'CodeConcept' from
+-- being mapped, so we just take the head of the list of 'CodeConcept's
+-- The ConceptMatchMap from choices is passed to chooseConcept' internally, this way
+-- any 'CodeConcept' list can be matched to its appropiate 'UID'.
+chooseConcept :: Choices -> State [Sentence] MatchedConceptMap
+chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch $ maps chs)
+  where chooseConcept' :: UID -> [CodeConcept] -> State [Sentence] CodeConcept
+        chooseConcept' _ [] = error $ "Empty list of CodeConcepts in the " ++
+          "ConceptMatchMap"
+        chooseConcept' concUid (c:_) = do
+            modify (++ [S "Code Concept" +:+ S (show concUid) +:+ S "selected as" +:+. showChs c])
+            return c
+
+-- | Translates a 'CodeConcept' into GOOL.
+conceptToGOOL :: (SharedProg r) => CodeConcept -> SValue r
+conceptToGOOL Pi = pi
 
 -- | Specifies which 'CodeType' should be used to represent each mathematical
 -- 'Space'. ['CodeType'] is preferentially-ordered, first 'CodeType' that does not

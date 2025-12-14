@@ -18,7 +18,6 @@ import Drasil.Database (UID, HasUID(..))
 import Language.Drasil (HasSymbol, HasSpace(..),
   Space (Rational, Real), RealInterval(..), Constraint(..), Inclusive (..))
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
-import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
   ctorCall, genModuleWithImports, genModuleWithImportsProc, primaryClass)
 import Language.Drasil.Code.Imperative.Helpers (convScope)
@@ -29,7 +28,7 @@ import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
   quantvar, quantfunc, ccObjVar, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
-import Language.Drasil.Choices (Comments(..), ConstantRepr(..),
+import Language.Drasil.Choices (Comments(..), ConstantRepr(..), conceptToGOOL,
   ConstantStructure(..), Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),

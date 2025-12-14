@@ -51,7 +51,7 @@ import Drasil.SWHS.Requirements (funcReqs, nfRequirements,
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
-  simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
+  simTime, specParamValList, symbols, tempC, tempPCM,
   tempW, thickness, watE)
 
 si :: System
@@ -89,7 +89,7 @@ conceptChunks =
   map cw [surArea, area]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks [] SWHS.dataDefs insModel
+symbMap = cdb symbols ideaDicts conceptChunks [] SWHS.dataDefs insModel
   genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
 
 abbreviationsList :: [IdeaDict]

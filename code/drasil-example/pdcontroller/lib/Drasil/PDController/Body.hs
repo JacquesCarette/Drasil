@@ -86,7 +86,9 @@ si :: System
 si = mkSystem
   progName Specification [naveen]
   [purp] [background] [scope] [motivation]
-  symbolsAll
+  symbolsWCodeSymbols
+  -- FIXME: ^ This should be 'symbols', but changing it removes 2 symbols from
+  -- the table of symbols in the SRS!
   theoreticalModels genDefns dataDefinitions instanceModels
   []
   inputs outputs (map cnstrw' inpConstrained)
@@ -106,10 +108,10 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
               S "in a variety of applications such as thermostats, automobile",
               S "cruise-control, etc"]
 
--- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is currently added to symbolsAll automatically as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
--- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
-symbolsAll :: [DefinedQuantityDict]
-symbolsAll = symbols ++ map dqdWr pidConstants
+-- FIXME: 'symbolsWCodeSymbols' shouldn't exist. See DblPend's discussion of its
+-- 'symbolsWCodeSymbols'.
+symbolsWCodeSymbols :: [DefinedQuantityDict]
+symbolsWCodeSymbols = symbols ++ map dqdWr pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
   ++ odeInfoChunks pidODEInfo
 
@@ -126,7 +128,7 @@ conceptChunks =
   physicalcon ++ [linear, angular]
 
 symbMap :: ChunkDB
-symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, dqdWr negInf])
+symbMap = cdb (map dqdWr physicscon ++ symbolsWCodeSymbols ++ [dqdWr mass, dqdWr posInf, dqdWr negInf])
   ideaDicts
   conceptChunks
   ([] :: [UnitDefn])
@@ -147,7 +149,7 @@ abbreviationsList  =
   -- CIs
   map nw acronyms ++
   -- QuantityDicts
-  map nw symbolsAll
+  map nw symbols
 
 conceptInstances :: [ConceptInstance]
 conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs

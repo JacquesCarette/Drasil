@@ -48,7 +48,6 @@ commonIdea s np = CI (nc s np)
 commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
 commonIdeaWithDict x y z = commonIdea x y z . map (^.uid)
 
-
 -- | Prepends the abbreviation from a 'CommonIdea' to a 'String'.
 prependAbrv :: CommonIdea c => c -> String -> String
 prependAbrv c s = abrv c ++ (':' : repUnd s)

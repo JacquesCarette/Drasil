@@ -1,22 +1,21 @@
 -- | Defines functions to transform Drasil-based documents into a printable version.
 module Language.Drasil.Printing.Import.Document where
 
+import Control.Lens ((^.))
+import Data.Bifunctor (bimap, second)
 import Data.Map (fromList)
 
-import Language.Drasil hiding (neg, sec, symbol, isIn, codeExpr)
+import Language.Drasil hiding (neg, sec, symbol, isIn)
+import Drasil.Code.CodeExpr.Development (expr)
 
+import Drasil.Database (showUID)
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
-import Language.Drasil.Printing.PrintingInformation
-  (PrintingInformation)
-
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
 import Language.Drasil.Printing.Import.Sentence (spec)
-
-import Control.Lens ((^.))
-import Data.Bifunctor (bimap, second)
 
 -- * Main Function
 
@@ -155,7 +154,7 @@ layLabelled sm x@(LblC _ _ (DerivBlock h d))    = T.HDiv ["subsubsubsection"]
   where refr = P.S $ refAdd x ++ "Deriv"
 layLabelled sm (LblC _ _ (Enumeration cs))      = T.List $ makeL sm cs
 layLabelled  _ (LblC _ _ (Bib bib))             = T.Bib $ map layCite bib
-layLabelled sm (LblC _ _ (CodeBlock c))         = T.CodeBlock (P.E (codeExpr c sm))
+layLabelled sm (LblC _ _ (CodeBlock c))         = T.CodeBlock (P.E (codeExpr (expr c) sm))
 
 -- | Helper that translates 'RawContent's to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'lay'.
@@ -176,7 +175,7 @@ layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S 
   where layPairs = map (second (map temp))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
-layUnlabelled sm (CodeBlock c)     = T.CodeBlock (P.E (codeExpr c sm))
+layUnlabelled sm (CodeBlock c)     = T.CodeBlock (P.E (codeExpr (expr c) sm))
 
 -- | For importing a bibliography.
 layCite :: Citation -> P.Citation

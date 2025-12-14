@@ -17,7 +17,7 @@ The work above is 'related' in the sense that there is some overlap of goals. Ot
 
 ### Description
 
-Jim Neighbors' [Draco](https://www.semanticdesigns.com/Company/Publications/Draco_Approach_to_Software_1983.pdf) is an early 80s project that had very similar goals to Drasil (see also the later [Draco: A Method for Engineering Reusable Software Systems](https://homepages.cwi.nl/~storm/teaching/reader/Neighbors89.pdf). The abstract says "In particular, we are concerned with the reuse of analysis and design information in addition to programming language code", and "The goal of the work on Draco has been to increase the productivity of software specialists in the construction of *similar* systems" (where the emphasis was in the original).
+Jim Neighbors' [Draco](https://www.semanticdesigns.com/Company/Publications/Draco_Approach_to_Software_1983.pdf) is an early 80s project that had very similar goals to Drasil (see also the later [Draco: A Method for Engineering Reusable Software Systems](https://homepages.cwi.nl/~storm/teaching/reader/Neighbors89.pdf)). The abstract says "In particular, we are concerned with the reuse of analysis and design information in addition to programming language code", and "The goal of the work on Draco has been to increase the productivity of software specialists in the construction of *similar* systems" (where the emphasis was in the original).
 
 Informative is the whole section: **What does Draco Do?**, reproduced here in its entirety:
 1. Draso accepts a definition of a problem domain as a high-level domain-specific language which we call a *domain language*. Both the syntax and semantics of the domain language must be described.
@@ -63,11 +63,11 @@ Fundamentally Draco **aims too high** by trying to **automate the hard / creativ
 
 ### Description
 
-Semantic Design's [DMS page](http://www.semdesigns.com/Products/DMS/index.html) provides a good high-level (marketing-oriented) summary. While DMS was [widely presented in 1992](https://dl.acm.org/doi/pdf/10.1145/129852.129859), based on a 1990 PhD of the author, Ira Baxter, it continued to evolve for a number of years (eg [paper at IWPSE 2002](https://dl.acm.org/doi/pdf/10.1145/512035.512047?casa_token=eBlPfmJ6YNsAAAAA:q4Uw_jSAJptobAdYMK7r-ws4dQjcK7D5qGJnx_6A_htXROF9YTbGtj5xx0lgIw9Zk2WeMfuoBGDsuQ)) but has not been talked about much since.
+Semantic Design's [DMS page](https://www.semanticdesigns.com/Products/DMS/DMSToolkit.html) provides a good high-level (marketing-oriented) summary. While DMS was [widely presented in 1992](https://dl.acm.org/doi/pdf/10.1145/129852.129859), based on a 1990 PhD of the author, Ira Baxter, it continued to evolve for a number of years (eg [paper at IWPSE 2002](https://dl.acm.org/doi/pdf/10.1145/512035.512047?casa_token=eBlPfmJ6YNsAAAAA:q4Uw_jSAJptobAdYMK7r-ws4dQjcK7D5qGJnx_6A_htXROF9YTbGtj5xx0lgIw9Zk2WeMfuoBGDsuQ)) but has not been talked about much since.
 
 The general vision is centered around the concept of **design maintenance**. In its own words *for large software systems, the design information that rationalizes its implementation given its specification is the fundamental artifact to capture and modify*.
 
-DMS fundamentally assumes a fairly high level of formality, i..e that a specification exists, that there might be multiple implementation in multiple languages, that the implementation(s) are derived from the specification *in a justified manner*. DMS follows the Draco model.
+DMS fundamentally assumes a fairly high level of formality, i.e. that a specification exists, that there might be multiple implementation in multiple languages, that the implementation(s) are derived from the specification *in a justified manner*. DMS follows the Draco model.
 
 ### Analysis
 
@@ -87,7 +87,7 @@ GLisp goes further and provides a graphical development environment as well.
 
 Part of the modelling goes through hierarchical inheritance (see section 6 of [Data Abstraction in GLisp](https://dl.acm.org/doi/pdf/10.1145/872728.806863) ). The modelling is very ad hoc, in the same way that early OO modeling was as well.
 
-Most notable as its worked examples in physics, which are well shown in [Generating Programs from Connections of Physical Models](https://www.cs.utexas.edu/~novak/caia94.pdf). Amusingly, the first example is a simple variant of Projectile. The other examples are nice too, and could quite likely be borrowed for Drasil.
+Most notable are its worked examples in physics, which are well shown in [Generating Programs from Connections of Physical Models](https://www.cs.utexas.edu/~novak/caia94.pdf). Amusingly, the first example is a simple variant of Projectile. The other examples are nice too, and could quite likely be borrowed for Drasil.
 
 ### Analysis
 

@@ -16,8 +16,9 @@ import Data.List.NonEmpty (toList)
 import Data.Map (Map)
 import qualified Data.Map as Map
 
+import Drasil.Database (UID, HasUID (..))
 import qualified Drasil.GOOL as C (CodeType(..))
-import Language.Drasil hiding (Var)
+import Language.Drasil (Sentence(S), (+:+.), (+:+), foldlSent_, Space, SimpleQDef)
 import qualified Language.Drasil as S (Space(..))
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)

@@ -25,6 +25,5 @@ consts = implVar' "consts" (nounPhrase
   (S "the structure holding the constant values")
   (Actor "Constants") (label "consts")
 
-
 codeDQDs :: [DefinedQuantityDict]
 codeDQDs = [inFileName, inParams, consts]

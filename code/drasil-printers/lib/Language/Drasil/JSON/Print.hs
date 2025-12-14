@@ -106,7 +106,6 @@ printLO' (Bib bib)                       = markdownCell $ makeBib bib
 printLO' Graph{}                         = empty
 printLO' (CodeBlock contents)            = codeCell $ codeformat $ cSpec contents
 
-
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
 print :: [LayoutObj] -> Doc
@@ -138,7 +137,6 @@ cSpec :: Spec -> Doc
 cSpec (E e)  = pExpr e
 cSpec _      = empty
 
-
 -- | Renders expressions in JSON (called by multiple functions)
 pExpr :: Expr -> Doc
 pExpr (Dbl d)        = text $ showEFloat Nothing d ""
@@ -161,8 +159,6 @@ pExpr (Font Bold e)  = pExpr e
 --pExpr (Spc Thin)     = text "&#8239;" -- HTML used
 -- Uses TeX for Mathjax for all other exprs
 pExpr e              = printMath $ toMath $ TeX.pExpr e
-
-
 
 -- TODO: edit all operations in markdown format
 pOps :: Ops -> String
@@ -261,7 +257,6 @@ makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
 makeDRows [(f,d)]    = tr (nbformat (th (text f)) $$ td (vcat $ map printLO d))
 makeDRows ((f,d):ps) = tr (nbformat (th (text f)) $$ td (vcat $ map printLO d)) $$ makeDRows ps
-
 
 -- | Renders lists
 makeList :: ListType -> Bool -> Doc -- FIXME: ref id's should be folded into the li

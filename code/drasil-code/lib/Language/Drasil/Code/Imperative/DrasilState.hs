@@ -14,10 +14,11 @@ import Data.Set (Set)
 import Text.PrettyPrint.HughesPJ (Doc, ($$))
 
 import Drasil.Database (UID, findOrErr)
-import Language.Drasil (Space, Expr, codeName, DefinedQuantityDict)
+import Language.Drasil (Space, Expr, DefinedQuantityDict)
 import Language.Drasil.Printers (PrintingInformation)
 import Drasil.GOOL (VisibilityTag(..), CodeType)
 
+import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),

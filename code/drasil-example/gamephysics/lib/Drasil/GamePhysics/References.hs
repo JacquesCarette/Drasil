@@ -43,14 +43,12 @@ sciComp2013 = cArticle
   "PLoS Biol" 2013
   [volume 12, number 1] "sciComp2013"
 
-
 uriReferences :: [Reference]
 uriReferences = [accelGravitySrc, impulseSrc]
 
 accelGravitySrc :: Reference
 accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
   shortname' $ S "Definition" `S.of_` S "Gravitational Acceleration"
-
 
 impulseSrc :: Reference
 impulseSrc = makeURI "impulseSrc" "http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf" $

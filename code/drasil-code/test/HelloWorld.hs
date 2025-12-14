@@ -294,7 +294,6 @@ helloIfBody = addComments "If body" (body [
     printLn (inlineIf litTrue (litInt 5) (litInt 0)),
     printLn (cot (litDouble 1.0))]])
 
-
 -- | Print the 5th given argument.
 helloElseBody :: (SharedProg r) => MSBody r
 helloElseBody = bodyStatements [printLn (arg 5)]

@@ -31,6 +31,5 @@
   * [Projectile Example](Projectile-Example)
   * [Forking Drasil & Deploying to your GitHub Pages](Forking-Drasil-&-Deploying-to-your-GitHub-Pages)
   * [Getting Started with Org Mode](Getting-Started-with-Org-Mode)
-  * [Promoting Drasil](Promoting-Drasil)
   * [Benefits of Drasil](Benefits-of-Drasil)
 * [Working Notes](Working-Notes)

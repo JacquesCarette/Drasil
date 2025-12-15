@@ -6,6 +6,8 @@ To see a more in-depth list of all documents about Drasil, visit the [`Presentat
 - Manual versions for some of the other examples within Drasil: [Manual Case Studies of Documentation for Scientific Computing Software](https://github.com/smiths/caseStudies)
 - Well-Understood: [submission: When Capturing Knowledge Improves Productivity](https://github.com/JacquesCarette/Drasil/blob/main/Papers/WellUnderstood/wu.pdf)
 - [Beyond Software Carpentry](https://gitlab.cas.mcmaster.ca/smiths/pub/-/blob/main/Smith2018.pdf) ([also available on ACM](https://dl.acm.org/doi/10.1145/3194747.3194749))
+- [Jason's Poster](../Posters/Jason%20-%20Technical.Poster.pdf)
+- [Jack's Poster](../People/JackWyand/Wyand_Jack_2025_Poster.pdf)
 
 And other interesting papers:
 - [Drasil: A Framework for Scientific Knowledge Capture and Artifact Generation](https://github.com/JacquesCarette/Drasil/blob/main/Presentations/SE-CSE_SE-CoDeSE2017/SzymczakEtAl2017.pdf)

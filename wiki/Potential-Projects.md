@@ -254,6 +254,10 @@ physics based paper like the following:
 (The paper title might sound like a joke, but it is actually a real world
 application of the use of physics.)  :smile:
 
+## Generate the Drasil Wiki
+
+While the ideal method of using Drasil-in-Drasil to generate the wiki is still far-off, there are other things we can do to de-duplicate knowledge and make the wiki more maintainable. For example, we can use the comments used to generate Haddock documentation as the basis for sections of some wiki pages.
+
 ## Add Support for External Libraries to Drasil
 
 Drasil currently supports one task as implemented by an external library: solving 

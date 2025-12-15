@@ -256,7 +256,7 @@ application of the use of physics.)  :smile:
 
 ## Generate the Drasil Wiki
 
-While the ideal method of using Drasil-in-Drasil to generate the wiki is still far-off, there are other things we can do to de-duplicate knowledge and make the wiki more maintainable. For example, we can use the comments used to generate Haddock documentation as the basis for sections of some wiki pages.
+While the ideal method of using Drasil-in-Drasil to generate the wiki is still far-off, there are other things we can do to de-duplicate knowledge and make the wiki more maintainable. For example, we can use the comments that form the Haddock documentation as the basis for sections of some wiki pages.
 
 ## Add Support for External Libraries to Drasil
 
@@ -351,11 +351,11 @@ Drasil currently uses external libraries, like scipy, for their ODE solvers.  As
 
 ## Improve Automation of Formatting Long Equations in LaTeX Generated pdfs
 
-In the Drasil generated LaTeX code long equations can run off the edge of the page.  For instance, the equation is cut off in the [double pendulum example for IM:calOfAngularAcceleration1](https://jacquescarette.github.io/Drasil/examples/dblpendulum/SRS/srs/DblPendulum_SRS.pdf)):
+In the Drasil generated LaTeX code long equations can be squished in order to fit properly.  For instance, the equation is scaled down in the [double pendulum example for IM:calOfAngularAcceleration1](https://jacquescarette.github.io/Drasil/examples/dblpend/SRS/PDF/DblPend_SRS.pdf):
 
-![LongEquation](https://user-images.githubusercontent.com/1422000/186962397-7ae7ac6f-69fe-4c9c-b450-20f8053c209f.png)
+![LongEquation](https://github.com/user-attachments/assets/fca1f830-1497-482b-a035-4c7c59514a84)
 
-Ideally we would like to generate code that is automatically formatted to fit on the page.  As discussed in #718, full automation is likely too difficult with the information Drasil currently has access to.  Drasil would need to know more, like the page width, font size etc.  Rather than full automation, we can aim for providing the user with access to options that more aggressively break equations across lines.  This topic, and some ideas for how to split equations across lines are discussed in #718.
+Ideally we would like to generate code that is automatically formatted to fit on the page without scaling.  As discussed in #718, full automation is likely too difficult with the information Drasil currently has access to.  Drasil would need to know more, like the page width, font size etc.  Rather than full automation, we can aim for providing the user with access to options that more aggressively break equations across lines.  This topic, and some ideas for how to split equations across lines are discussed in #718.
 
 ## Generate Graphs in Drasil
 

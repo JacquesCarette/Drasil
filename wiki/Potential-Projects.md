@@ -1,5 +1,4 @@
-For anyone getting started with developing for Drasil, the following thread discusses good candidate first/early issues:
-[Starting issues](https://github.com/JacquesCarette/Drasil/issues/2096).
+For anyone getting started with developing for Drasil, it might be helpful to check out "[newcomers](https://github.com/JacquesCarette/Drasil/issues?q=is%3Aissue%20state%3Aopen%20label%3Anewcomers)" and "[easy](https://github.com/JacquesCarette/Drasil/issues?q=is%3Aissue%20state%3Aopen%20label%3Aeasy)" issues.
 
 The projects listed below are intended to improve Drasil; the scope of these 
 projects is generally larger than a single issue 

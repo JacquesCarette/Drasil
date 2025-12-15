@@ -25,7 +25,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))
 import Language.Drasil.Chunk.CodeBase (quantvar, codevars, varResolve)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
-import Language.Drasil.ICOSolutionSearch (Def, getExecOrder)
+import Language.Drasil.ICOSolutionSearch (Def, solveExecOrder)
 
 -- | Program input.
 type Input = CodeVarChunk
@@ -194,7 +194,7 @@ oldcodeSpec sys@S.SI{ S._authors = as
       --       directly from the instance models (ims) instead of directly from the choices.
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
-      exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
+      exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
   in OldCodeSpec {
         _pName = n,
         _authors = as,

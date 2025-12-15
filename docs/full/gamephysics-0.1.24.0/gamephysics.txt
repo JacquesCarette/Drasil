@@ -67,7 +67,7 @@ pymunk :: Reference
 module Drasil.GamePhysics.Unitals
 defSymbols :: [DefinedQuantityDict]
 unitSymbs :: [UnitalChunk]
-symbolsAll :: [DefinedQuantityDict]
+symbols :: [DefinedQuantityDict]
 inputSymbols :: [DefinedQuantityDict]
 outputSymbols :: [DefinedQuantityDict]
 unitalSymbols :: [UnitalChunk]

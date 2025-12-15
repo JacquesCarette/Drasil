@@ -45,7 +45,6 @@ sensHtESrc :: Reference
 
 module Drasil.SWHS.Unitals
 symbols :: [DefinedQuantityDict]
-symbolsAll :: [DefinedQuantityDict]
 units :: [UnitalChunk]
 unitalChuncks :: [UnitalChunk]
 inSA :: UnitalChunk

@@ -204,10 +204,7 @@ cases where the user wants to ignore the warnings.
 
 ## Complete and Fix Incomplete Case Studies
 
-The following Drasil case studies do not generate code: Game Physics, SSP and
-SWHS.  These examples should be completed.  The SRS for Game Physics also needs
-to be carefully reviewed.  As it is right now, the inputs and outputs for the
-game physics library are not complete, or consistent.
+The following Drasil case studies do not generate code: Game Physics, SSP, Single Pendulum, and SWHS.  These examples should be completed.  The SRS for Game Physics also needs to be carefully reviewed.  As it is right now, the inputs and outputs for the game physics library are not complete, or consistent.
 
 To get SSP working will mainly require hooking it into an external library for
 optimization.  The same pattern as for using external libraries with noPCM can

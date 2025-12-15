@@ -13,6 +13,10 @@ This is a place to organize our "Working Notes". See [#4429](../issues/4429) for
   - [DefinedQuantityDict](DefinedQuantityDict)
   - [Concept Chunk (and Related Chunks)](<Concept-Chunk-(and-Related-Chunks)>)
 
+## Brandon
+
+- [File Input Patterns Design Discussion](File-Input-Patterns-Design-Discussion)
+
 ## Dr. Carette
 
 - [Questions](Questions)

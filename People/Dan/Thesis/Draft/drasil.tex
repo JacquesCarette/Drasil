@@ -25,7 +25,8 @@ relevant to software generation.
 
 Manually writing and maintaining a full range of \sfs{} is redundant, tedious, 
 and often leads to divergent \sfs{}. Drasil is a purpose-built framework 
-created to tackle these problems.
+created to tackle these problems. \ds{Add something here about what Drasil is 
+before the isn't}
 
 Unlike documentation generators like Doxygen, Javadoc, and Pandoc
 which take a code-centric view of the problem and rely on manual redundancy -- 
@@ -406,9 +407,9 @@ the encoded property relationships}{fig:chunkClasses}
 
 \fig{\begin{center}
 \includegraphics[width=0.75\linewidth]{figures/ChunkClassified.png}
-\end{center}
-}{A subset of Drasil's chunks showing how different chunks may belong to 
-multiple classifications}{fig:chunksClassified}
+\end{center}}{A subset of Drasil's chunks showing how different chunks may belong to 
+multiple classifications \ds{with specific conceptual 
+properties}}{fig:chunksClassified}
 
 We now have a compact, well-typed vocabulary for representing domain knowledge: 
 chunks and classifications give us named concepts, quantities, units, and 
@@ -505,7 +506,8 @@ studies (\gb{}).
 
 The recipe for the \gb{} SRS can be seen in Figure~\ref{fig:glassBRSRSRecipe}.
 This should look familiar, as it follows a similar structure to the \smithea{} 
-template table of contents. We use a number of helper functions and data types 
+template table of contents\ds{Link to the ToC figure or embed here}. We use a 
+number of helper functions and data types 
 to condense and collect the chunks we require and avoid writing any generic 
 boilerplate text. The structure of the document can be rearranged to an extent, 
 in that we can add, remove, or reorder sections at will by simply moving them 
@@ -647,7 +649,7 @@ The executable-code recipe for GlassBR somewhat mirrors the document recipe in
 structure but emphasizes implementation choices: module layout, data 
 representation, target languages, optional features, and constraint-handling 
 strategies. Practically, we supply the modules and computational relationships 
-(the mathematical execution order), target languages (e.g. Python, C++, Java), 
+(the mathematical execution order), target languages (ex. Python, C++, Java), 
 modularity (single file or separated modules), data bundling (structs/classes), 
 and logging/documentation options. 
 
@@ -854,7 +856,7 @@ end-users and stakeholders. This stage bridges the gap between the high-level,
 reusable knowledge representations and the diverse forms required for practical 
 use (ex. \LaTeX{}, HTML, PDF, or source code in various programming 
 languages).Drasil achieves this through a set of dedicated \emph{printers} and, 
-for code, through the use of the General Object-Oriented Language 
+for code, through the use of the Generic Object-Oriented Language 
 (GOOL)\cite{??} library. Each printer is designed to interpret the structured 
 data produced by the recipe and knowledge projection stages and emit output in 
 the desired format, handling both content and layout\footnote{To some respect, 
@@ -1139,7 +1141,7 @@ but an error in the source document we had accepted as our starting point. Once
 the SSP material was encoded as chunks in Drasil the fix was minimal: ensure we 
 had encoded the correct definitions of $S_i$, $P_i$, and $\tau_i$ and used them 
 in the appropriate equations. Then the correction automatically propagated to 
-all generated artifacts (Table of Symbols, cross‑references, and any code that 
+all generated artifacts (Table of Symbols, cross-references, and any code that 
 referenced the symbol).
 
 We also noticed a unit mismatch during the investigation of that issue, which 
@@ -1154,7 +1156,7 @@ This pattern repeats across many issues: we would find a mismatch between a
 case study and our Drasil output, or some as-yet unencoded knowledge (ex. 
 implicit assumptions) that made the generated artifacts inconsistent or 
 unclear, update the chunk(s) that encoded the offending knowledge, and 
-re‑generate. That workflow was the dominant mode of refinement of the original 
+re-generate. That workflow was the dominant mode of refinement of the original 
 case studies and their Drasil implementations. It kept fixes small, localized, 
 and low cost while producing broad, immediate benefits in every artifact that 
 depended on the corrected knowledge.
@@ -1181,11 +1183,11 @@ knowledge or relationships between chunks).
 \section{Summary}
 
 In this chapter we have described the architecture and implementation choices 
-that make Drasil practical: a knowledge‑centric pipeline built from reusable, 
+that make Drasil practical: a knowledge-centric pipeline built from reusable, 
 typed ``chunks'', lightweight DSLs for expressions and natural language 
 fragments, and a recipe language that codifies how knowledge is projected into 
 concrete artifacts. The design is intentionally pragmatic: we capture what is 
-needed to reproduce real case studies, provide well‑typed building blocks for 
+needed to reproduce real case studies, provide well-typed building blocks for 
 assembling that knowledge, and offer generators (printers and the GOOL back 
 end) that render the same source into multiple, consistent outputs. The result 
 is a single source of truth that spans documentation and executable code.
@@ -1200,10 +1202,10 @@ The chunk hierarchy and its classification system give us the levers we need to
 balance expressivity and reuse. Simple chunks (NamedChunk, ConceptChunk) let us 
 represent terminology and definitions; richer chunks (UnitalChunk, UnitDefn, 
 DataDefn, InstanceModel) let us attach units, symbols, and executable 
-expressions; and the Expr / Sentence DSLs give us language‑agnostic ways to 
+expressions; and the Expr / Sentence DSLs give us language-agnostic ways to 
 express mathematics and narrative. Recipes then select and arrange those chunks 
 for particular stakeholders so that the same underlying knowledge can be 
-rendered as an SRS, a module guide, or multi‑language source code with full 
+rendered as an SRS, a module guide, or multi-language source code with full 
 traceability between pieces.
 
 The iterative approach to Drasil's development ensured modularized components 
@@ -1213,11 +1215,11 @@ practical lesson is that encoding case studies into Drasil exposes errors
 and implicit assumptions in the original artifacts but makes them trivial to 
 fix. Fixes are usually local edits to the knowledge base and those edits 
 automatically propagate through all generated artifacts. This demonstrates the 
-principal payoff of the single‑source, chunk‑based approach: small, cheap 
+principal payoff of the single-source, chunk-based approach: small, cheap 
 changes at the source yield broad, consistent improvements everywhere.
 
 Drasil is not a universal solution — it is a tool targeted at domains where the 
-models are well understood, long‑lived, and shared across multiple 
+models are well understood, long-lived, and shared across multiple 
 stakeholders. Within that scope, Drasil shifts effort from repetitive editing 
 of many artifacts to careful modeling of domain knowledge. The framework we 
 have presented allows that modeling to pay dividends immediately (consistent 

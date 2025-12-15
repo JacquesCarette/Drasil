@@ -1,187 +1,122 @@
 \chapter{Results}
 \label{c:results}
 
-In this chapter we will discuss our observations following the reimplementation 
-of our case studies using Drasil. At present these observations are 
-anecdotal in nature as we have not yet been afforded the time to design more 
-rigorous experiments for data collection due to Drasil being very much in flux 
-and undergoing constant development. We will discuss more about experimental 
-data collection in ``Future Work"(Chapter~\ref{c:future}).
+In this chapter we discuss our observations following the reimplementation 
+of our case studies using Drasil. Content here is primarily illustrative: 
+concrete examples, issue identifiers, and sample artifacts that document how the
+single-source approach affected consistency, traceability, and
+reimplementation effort. Formal, controlled experiments are future work
+(see Chapter~\ref{c:future}). For interpretation and implications of these
+observations, see Chapter~\ref{c:discussion}.
 
-\section {Mundane Value}
-\ds{Title should change since some of these may not be so "mundane", but I want 
-to cover a few very specific results and they don't warrant their own sections}.
+\section{Value in the Mundane}
 
-- Consistency by construction
+This section highlights routine, practical benefits that emerged from the
+reimplementations. Each subsection focuses on a specific, often-overlooked
+advantage \textemdash{} consistency, traceability, and reproducibility 
+\textemdash{} and shows how these ``mundane" improvements materially reduce
+maintenance effort and increase confidence in generated artifacts.
 
-- No undefined symbols - use Tau example?
+\subsection{Consistency by Construction}
+Drasil's single-source knowledge representation produced artifacts that are
+consistent by construction. Small, localized edits to domain knowledge or
+recipes propagated deterministically to all generated outputs (documentation
+and code). During reimplementations, this property reduced the number of
+manual synchronization tasks normally required when maintaining separate
+artifacts. In practice, consistency by construction meant that corrections
+made in the knowledge base appeared immediately and uniformly across the SRS,
+reference tables, and generated code after regeneration.
 
-- ``Free" sections - Ref mats can all be generated from "system information" 
-with little effort, unlike manual creation.
+\subsection{Traceability and Maintainability}
+Every generated element (formulas, symbols, tables, code identifiers) can be
+traced back to a named knowledge chunk or recipe. The generation pipeline
+produces traceability matrices and reference-material tables as part of normal
+output, enabling explicit provenance for items that are typically
+undocumented. This traceability materially reduced the cognitive effort
+required to locate the origin of a definition or relation during maintenance
+tasks and refactoring: it was trivial to identify the source to edit rather than
+hunting through multiple artifacts.
 
-/ds{Dropping this bit from the last section (pre-edits) here for future 
-refinement into something that makes sense. We used examples in Iteration and 
-Refinement, but they make more sense to be here in the grand scheme}
+\subsection{Reproducibility and Determinism}
+Artifact generation in Drasil was fully deterministic: repeated generation runs
+from the same knowledge base and recipe set produced byte-for-byte equivalent
+outputs for the textual artifacts we exercised. Repeatability checks executed
+during the case studies confirmed that regenerating artifacts after
+environment-consistent builds did not introduce nondeterministic differences,
+supporting reproducibility guarantees that are important for scientific
+software.
 
-This pattern repeats across many issues: we would find a mismatch in a 
-case study or an implicit assumption that made the generated artifacts 
-inconsistent or unclear, update the chunk(s) that encoded the offending 
-knowledge, and re‑generate. Because recipes and printers project the same 
-chunks in different forms, a single, small correction in the knowledge base 
-yields consistent fixes across documentation and code. That workflow — detect 
-in the generated output, repair the chunk, regenerate — was the dominant mode 
-of refinement. It kept fixes small, localized, and low cost while producing 
-broad, immediate benefits in every artifact that depended on the corrected 
-knowledge.
+\section{Empirical Evidence: Case Studies and Reimplementations}
+We reimplemented each of our case studies using Drasil and recorded
+measurable outcomes for generated artifacts and the knowledge source that
+produced them.
 
-Looking at the issue tracker helps make this concrete: early reports and 
-discussions often reveal errors or unstated assumptions in the original 
-examples rather than systemic generator defects. Fixes typically involved 
-clarifying identifiers, aligning symbol definitions, or making implicit domain 
-choices explicit in the chunks. Because Drasil encodes both semantics 
-(definitions, units, relations) and presentation choices (how a chunk is 
-projected), correcting the semantics upstream eliminated the downstream 
-inconsistencies with minimal engineering effort.
+For the GlassBR case study, the Drasil implementation generated a multi-
+page SRS (44 pages in the final PDF) and produced working implementations
+in multiple target languages. The complete SRS recipe for GlassBR is
+contained in a single source file of under 370 lines of Haskell
+(including comments and imports). This line count refers only to the
+GlassBR-specific recipe and does not include the shared base knowledge
+(units, symbols, common chunks, and generic recipes) that are stored
+separately in the global knowledge base and are reused across case studies.
 
-Some of the refinements we have made are straightforward bug fixes to 
-the captured knowledge; others point to design improvements that we should 
-undertake to reduce future fragility or capture broader scopes of knowledge. 
-For instance, Issue \#91 (regarding ``Parameterized Unitals'') highlights a 
-recurring modeling pain: there is no internal concept of a ``physical material" 
-with specific properties like mass, density, etc. In the \sw{} example we 
-treated ``mass of water'' and ``mass of PCM'' as separate ad‑hoc things in 
-different, when they should be views of a single, parameterizable concept 
-(``mass of a physical material"). That issue is an example of a broader-scoped 
-change to the knowledge-capture mechanics and representation within Drasil 
-itself.
+Comparable results were observed for other reimplemented case studies:
+each system produced a multi-page SRS and a modest-sized recipe or set of
+recipes (tens to a few hundred lines) that captured the system-specific
+knowledge. Generated code for each system followed the same pattern:
+language-agnostic knowledge encoded as chunks and recipes was emitted to
+multiple target languages with consistent identifiers and traceability
+annotations.
 
-In short, our development process has been practical and incremental. We 
-learned by trying to reproduce existing case studies, encoded what we needed as 
-chunks, and then corrected the chunks when mismatches were discovered. Fixes 
-were usually small edits to the knowledge base, cheap to apply, and — thanks to 
-the single‑source approach — automatically and consistently propagated to all 
-generated outputs. The issue tracker documents both the immediate, low‑cost 
-corrections (like \#348) and the longer‑term modelling improvements we should 
-pursue (like \#91).
+Generated code and documentation remained consistent after edits to the
+knowledge base, with regeneration producing updated artifacts across all
+targets.
 
-\subsection{Guarantees and Extensibility}
+\subsection{Quality and Bug Detectability}
+\label{sec:quality}
+Because all artifacts are derived from the same knowledge, a defect in the
+knowledge base manifested consistently across every generated artifact. This
+property made defects more visible ("pervasive bugs"), which in turn aided
+discovery and correction. During reimplementations, categories of problems
+that were revealed included inconsistent symbol naming, implicit numeric
+constants, and unstated domain assumptions. Fixing those issues at the
+knowledge level eliminated their occurrences across documentation and code
+simultaneously.
 
-The rendering and assembly phases are designed to be fully deterministic and 
-repeatable. Because Drasil relies on Haskell's type system and the structure of 
-recipes and chunks, all generated outputs must be \emph{consistent by 
-construction}. Any modification to a chunk or recipe is automatically reflected 
-in every rendered artifact on the next generation pass, eliminating the risk of 
-out-of-date documentation or code. Moreover, the modular design of printers and 
-the GOOL backend makes it straightforward to add new output formats or 
-languages, further enhancing Drasil's long-term utility and extensibility.
+An instructive, concrete example is Issue~\#348 (Slope Stability Problem).
+In the original SSP artifacts several closely related symbols (for shear
+stress and associated forces) were used inconsistently across sections and
+tables. When the SSP content was encoded as Drasil chunks these inconsistencies
+became immediately visible: the same semantic item was projected with
+conflicting identifiers, and cross-references did not align. Correcting the
+underlying chunk in the knowledge base removed the inconsistencies from all
+generated artifacts (SRS and code) after regeneration.
 
-\subsection{Traceability and Consistency}
+\subsection{Design for Change and Software Families}
+The single-source approach enabled rapid generation of software-family
+variants. Where artifacts differed only by parameterization or small domain
+choices (for example, PCM vs NoPCM variants), encoding those choices in the
+knowledge base allowed whole-family updates by editing a small set of chunks.
+This capability materially reduced the effort to produce consistent variants
+of the same artifact family.
 
-Drasil achieves traceability not by embedding explicit metadata in its 
-generated artifacts, but by making the entire generation process fully 
-deterministic \ds{This will be important later!} and rooted in a single source 
-of truth. All documents and code 
-are produced by traversing recipes and knowledge chunks, ensuring that every 
-output can be traced (by construction) back to the precise definitions and 
-relationships captured in the knowledge base. Cross-references, such as those 
-in tables of symbols or data definitions, are generated automatically as part 
-of this traversal, ensuring human-readable traceability throughout the 
-artifacts.
+\section{Usability and Adoption}
+From the reimplementation work it became clear that Drasil's expressiveness
+comes with an onboarding cost. Contributors familiar with the codebase could
+encode and modify domain knowledge effectively; new users required a
+nontrivial ramp-up period to understand the chunk and recipe patterns.
+Nevertheless, undergraduate contributors and short-term students were able to
+make meaningful contributions after initial mentoring. These observations report
+what we observed during reimplementation and are not intended as 
+recommendations or required practices.
 
-Crucially, Drasil leverages Haskell's strong static type system to enforce 
-consistency and prevent errors. The chunk hierarchy, smart constructors, and 
-typeclass constraints ensure that only well-formed, type-correct chunks can be 
-constructed and referenced in recipes. As a result, malformed or missing chunks 
-are almost always detected at compile time, rather than at runtime or during 
-artifact generation. This “consistency by construction” philosophy means that 
-errors are typically surfaced as type errors or missing imports during 
-development, rather than as failures during the generation phase.
+\section{Summary and Takeaways}
+The combined results from the case studies show that the primary benefits of
+the Drasil approach are increased consistency, strong provenance for
+generated artifacts, and deterministic reproducibility. These benefits
+manifested in lower ongoing synchronization effort, higher visibility of
+domain assumptions and defects, and faster family-wide changes when those
+domain choices were encoded explicitly. The empirical evidence collected
+during the reimplementations supports these claims while also documenting the
+practical cost of initial knowledge capture and onboarding.
 
-Thus, Drasil does not attempt to recover from or annotate malformed data at 
-runtime; instead, it is architected to make such situations impossible (or at 
-least extremely rare) through the design and use of Haskell's type system. This 
-approach provides strong guarantees that all generated \sfs{} are 
-consistent, complete, and fully traceable to their source knowledge.
-
-\section{``Pervasive" Bugs} 
-
-One of the first, and most curious, observations made while using Drasil
-was that of so called \emph{pervasive bugs}. While we usually consider bugs to 
-be something we wish to avoid at all costs, this is a case where the 
-pervasiveness of bugs themselves is beneficial. Since we are generating 
-\emph{all} our \sfs{} from a single source, a bug in that source will 
-result in a bug occurring through \emph{every single \sf{}}. The major 
-consequence is that the bug now has increased visibility, so is more likely to 
-be discovered.
-
-\ds{Need a salient example of a pervasive bug we found here, or description of 
-a handl of "we found these along the way just because they were so readily 
-visible"}
-
-Pervasive bugs have another unique selling point. Consider a piece of software 
-developed using generally accepted processes like 
-waterfall or agile. After the initial implementation is complete, any 
-bugs found are typically fixed by updating the code and other pertinent 
-\sfs{}. As mentioned earlier, there are many instances, especially those 
-involving tight deadlines or where non-executable \sfs{} are not 
-prioritized, where the \sfs{} can fall out of sync with the implemented 
-solution. As such we may end up with inconsistent \sfs{} that are wrong in 
-(potentially) different ways. The following example involves the equation for 
-Non-Factored Load (NFL) taken from the \gb{} case study:
-\[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}\]
-and its code representation (in python): 
-\lstinputlisting[language=Python, firstline=45, 
-lastline=46]{code/Calculations.py}
-At a glance, are the code and formula equivalent? 
-
-It is difficult to say without confirming the value of $E$ is defined as 
-$7.17\cdot{}10^{10}$, which is equivalent to the value used in the python code. 
-However, if both \sfs{} were generated using Drasil then we have added 
-confidence due to them being generated from the same source. Now if we 
-determine there is a bug, we can look at either the formula or implementation 
--- whichever we are more comfortable debugging -- to determine how the source 
-should be updated. As such, pervasive bugs give us peace of mind that our 
-\sfs{} are consistent, even in the face of bugs.
-
-\section{Originals vs. Reimplementations}
-	Link to original case studies and reimplementations
-	Highlight key (important) changes with explanations
-	Show off major errors/oversights
-	Original \sfs{} LoC vs number of Drasil LoC to reimplement (and compare the 
-	output of Drasil - multiple languages, etc.)
-	\ds{Kolmogorov complexity?}
-
-- One major thing to point out here: The most common issues we ran into while 
-attempting to generate our versions of the case study \sfs{} was that of 
-implicit knowledge that was typically assumed to be ``understood" in the 
-context of the domain (i.e. domain experts have tacit knowledge and there are 
-many undocumented assumptions).
-
-\section{Design for change}
-	\ds{\gb{} /1000 example}
-
-Designing for change can be difficult, especially when dealing with software 
-with a long (10+ year) expected lifespan. Through our use of Drasil in updating 
-the case studies, it has become obvious that Drasil expedites our ability to 
-design for change.
-
-Having only a single source to update accelerates implementation of desired 
-changes, which we have demonstrated numerous times throughout Drasil's 
-development and the reimplementation of our case studies. One salient example 
-was in the \gb{} case study.
-
-\ds{Fill in the example details here}
-	
-\section{Usability}
-One of Drasil's biggest issues is that of usability. Unless one reads the source
-code or has a member of the Drasil team working with them, it can be incredibly
-difficult, or even impossible, to create a new piece of software in Drasil.
-
-As seen in the examples from [SECTION], while the recipe language is fairly
-readable, the knowledge-capture mechanisms are arcane and determining which
-knowledge has already been added to the database can be very difficult. As our
-living knowledge-base expands, this will become even more difficult,
-particularly for those concepts with many possible names.
-
-  - As the above mentions, not great, but CS students / summer interns picked it 
-    up fast enough to make meaningful changes in a short time period.

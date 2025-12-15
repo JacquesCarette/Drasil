@@ -1,0 +1,114 @@
+\chapter{Discussion}
+\label{c:discussion}
+
+This chapter interprets the results reported in Chapter~\ref{c:results}.
+We synthesise the practical benefits observed \textemdash{} automation, 
+traceability, and rapid adaptation \textemdash{} evaluate costs such as 
+onboarding and modelling effort, and outline limitations and directions for 
+formal validation. We refer back to evidence in Chapter~\ref{c:results} and 
+cite illustrative issue examples.
+
+\section{Interpreting the Results}
+
+This section organises the principal outcomes from
+Chapter~\ref{c:results} into interpretation themes that mirror the
+empirical observations: consistency, traceability, reproducibility, and the
+tradeoffs that follow from centralizing knowledge.
+
+\subsection{Consistency by construction}
+
+Drasil projects a single knowledge base into diverse artifacts. The case
+studies show that local edits to domain knowledge yield system-wide
+corrections. Practically, this reduces the maintenance surface area: a
+single canonical edit replaces repeated, artifact-level fixes. The primary
+tradeoff is increased upfront modelling effort and the need for disciplined
+knowledge capture.
+
+\subsection{Traceability and refactoring}
+
+Centralized knowledge makes provenance explicit: formulas, symbols, and
+identifiers trace back to named chunks or recipes. That provenance eases
+refactoring because changes localized to chunks produce immediate updates
+across downstream artifacts. The recipe DSL allows reorganizing output
+structures (documentation sections, code modules) without manual edits to
+each target artifact.
+
+\subsection{Reproducibility and error visibility}
+
+Artifact generation was deterministic in our case studies: regenerating from
+the same knowledge base produced consistent textual outputs. At the same
+time, defects in the knowledge base appear across all generated artifacts,
+which increases visibility and simplifies root-cause correction.
+
+Recall Issue \#348 from \sp{} mentioned in Section~\ref{sec:quality}. To 
+summarize, the issue was that some closely related symbols had their uses mixed 
+up in several places in the original case study. In more detail, the \sp{} 
+inconsistencies manifested in three concrete ways:
+\begin{enumerate}
+\item Multiple names and short identifiers for the same physical quantity 
+across equations and tables.
+\item Implicit or mismatched units appearing in different tables.
+\item References and captions that used variant labels, breaking 
+cross-references.
+\end{enumerate}
+
+Encoding the \sp{} concepts as chunks forced a 
+single canonical name, an explicit unit declaration, and a
+consistent label for each concept that could not get switched to a different 
+symbol.
+
+Using Drasil, the remediation followed a small, local workflow: identify the 
+semantic chunk representing the quantity, unify the identifier and unit within 
+that chunk, and regenerate. The result was immediate and verifiable: the SRS,
+tables, and generated code all used the same identifier and unit, table
+cross-references resolved, and no further manual edits were necessary. This 
+example illustrates how centralized knowledge surfacing both increases error 
+visibility and enables concise, single-point fixes.
+
+\section{Human Factors and Usability}
+
+Experienced contributors adapted quickly to Drasil's patterns, but new users
+found the knowledge-capture DSL challenging. Two priorities emerge: improved
+discovery and search tools for the knowledge base, and higher-level authoring
+interfaces that present domain concepts in more familiar terms. In short: 
+Drasil desperately needs better tooling for authoring.
+
+Onboarding metrics (time to first meaningful edit, number of support
+interactions) should be measured in future studies to quantify this overhead
+and to guide UX and tooling improvements.
+
+\section{Limitations and Directions for Validation}
+
+The current evidence is largely qualitative and anecdotal. Formal,
+controlled experiments are required to measure productivity gains,
+maintenance cost reduction, and error rates across larger teams. Until such
+studies are performed, claims about absolute gains should be framed as
+preliminary.
+
+Scalability concerns also merit attention: as the knowledge base grows,
+improved tools for discovery, efficient projection, and modularization will
+be essential to maintain developer productivity.
+
+\section{Lessons Learned}
+
+\begin{enumerate}
+\item Many dangerous inconsistencies in legacy artifacts trace back to tacit
+  assumptions and implicit knowledge during requirements capture; making
+  those assumptions explicit in chunks forces clarification and improves 
+  both maintainability and traceability.
+\item Drasil's architecture shifts the correctness burden from artifact authors 
+  to knowledge-base modelers: this trades repeated artifact-level maintenance
+  for concentrated, knowledge-level review.
+\item Rapid case-study reimplementation and ease of propagation suggest the
+  approach can scale across domains given improved onboarding and
+  validation, provided the domain knowledge can be effectively captured.
+\end{enumerate}
+
+\section{Summary and Takeaways}
+
+Drasil's single-source approach delivers clear benefits in consistency,
+provenance, and reproducibility while imposing an upfront modelling and
+onboarding cost. The observations in Chapter~\ref{c:results} support these 
+conclusions and point to concrete next steps: measure onboarding overhead, 
+report regeneration timings, and develop discovery and authoring tools to 
+reduce the initial ramp-up.

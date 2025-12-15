@@ -1,9 +1,11 @@
-module Language.Drasil.ICOSolutionSearch where
+module Language.Drasil.ICOSolutionSearch (
+    Def, Known, Need, solveExecOrder
+) where
 
 import Control.Lens ((^.))
-import Data.List ((\\), intercalate)
+import Data.List ((\\), intercalate, partition)
 
-import Drasil.Database (ChunkDB, showUID)
+import Drasil.Database (ChunkDB, showUID, HasUID)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Utils.Drasil (subsetOf)
 
@@ -17,22 +19,42 @@ type Known = CodeVarChunk
 -- | Calculated values.
 type Need  = CodeVarChunk
 
--- | Orders a list of definitions such that they form a path between 'Known' values
--- and values that 'Need' to be calculated.
-getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
-getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
-  where getExecOrder' ord _ _ []   = ord
-        getExecOrder' ord defs' k n =
-          let new  = filter (\def -> (`subsetOf` k) (concatMap (`codevars'` sm)
-                (def ^. codeExpr : def ^. auxExprs) \\ [quantvar def])) defs'
-              cnew = map quantvar new
-              kNew = k ++ cnew
-              nNew = n \\ cnew
-          in  if null new
-              then error ("The following outputs cannot be computed: " ++
-                       intercalate ", " (map showUID n) ++ "\n"
-                     ++ "Unused definitions are: "
-                       ++ intercalate ", " (map showUID defs') ++ "\n"
-                     ++ "Known values are: "
-                       ++ intercalate ", " (map showUID k))
-              else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
+-- | Topologically sort a list of 'Def's to form a path from 'Known' values to
+-- values that 'Need' to be calculated.
+solveExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
+solveExecOrder allDefs knowns needs = solve [] allDefs knowns (needs \\ knowns)
+
+solve :: [Def] -> [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
+solve foundOrder allDefs knowns needs db
+  -- Successfully found a path
+  | null needs = foundOrder
+  -- Path impossible (missing pieces)
+  | null nextCalcs = prettyError allDefs knowns needs
+  -- Continuously looks for the next possible set of 'Needs' that can be
+  -- computed until all are consumed.
+  | otherwise = solve
+                  (foundOrder ++ nextCalcs)
+                  notReady
+                  (knowns ++ newlyCalculated)
+                  (needs \\ newlyCalculated)
+                  db
+  where
+    (nextCalcs, notReady) = partition (computable db knowns) allDefs
+    newlyCalculated = map quantvar nextCalcs
+
+computable :: ChunkDB -> [Known] -> Def -> Bool
+computable db knowns def = requiredInputs `subsetOf` knowns
+  where
+    inputs = concatMap (`codevars'` db) (def ^. codeExpr : def ^. auxExprs)
+    -- FIXME: This allows variables to be defined in terms of themselves, but is
+    -- this the right spot for this sanity check?
+    requiredInputs = inputs \\ [quantvar def]
+
+prettyError :: [Def] -> [Known] -> [Need] -> a
+prettyError defs knowns needs = error $
+  "The following outputs cannot be computed: " ++ lm needs ++ "\n" ++
+  "Unused definitions are: " ++ lm defs ++ "\n" ++
+  "Known values are: " ++ lm knowns
+  where
+    lm :: HasUID c => [c] -> String
+    lm = intercalate ", " . map showUID

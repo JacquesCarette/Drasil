@@ -20,6 +20,8 @@ of several of the potential projects is given in the
 [SE4SC Repo](https://gitlab.cas.mcmaster.ca/SEforSC/se4sc/-/tree/git-svn/Planning/PotGradStdProj).
 The SE4SC repo (not public) provides some additional brainstormed ideas.
 
+Lastly, there may be other potential projects hiding in [Cold Issues](Cold-Issues). Feel free to take a look there!
+
 ## Incorporate Pandoc into DocLang
 
 Pandoc is a Haskell library for converting from one markup format to another.

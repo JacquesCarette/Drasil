@@ -27,7 +27,6 @@
   * [Journals and Societies](Journals-and-Societies)
   * [Miscellaneous Ideas](Miscellaneous-ideas)
   * [Open Science](Open-Science)
-  * [Projectile Example](Projectile-Example)
   * [Forking Drasil & Deploying to your GitHub Pages](Forking-Drasil-&-Deploying-to-your-GitHub-Pages)
   * [Getting Started with Org Mode](Getting-Started-with-Org-Mode)
   * [Promoting Drasil](Promoting-Drasil)

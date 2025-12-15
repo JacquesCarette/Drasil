@@ -29,7 +29,9 @@ Instructions on using Pandoc are available at:
 [Pandoc Web-page for Users](https://pandoc.org/), while the code itself is
 maintained in the following repo:
 [Pandoc GitHub Repo](https://github.com/jgm/pandoc). From the Pandoc GitHub
-page: > Pandoc has a modular design: it consists of a set of readers, which
+page: 
+
+> Pandoc has a modular design: it consists of a set of readers, which
 parse text in a given format and produce a native representation of the document
 (an abstract syntax tree or AST), and a set of writers, which convert this
 native representation into a target format.
@@ -369,7 +371,7 @@ For example, [myPhysicsLab](https://www.myphysicslab.com/) and [JavaLab](https:/
 ## Investigate / Add Hackage Dimensional Package
 Moved here from Issue [#1182](https://github.com/JacquesCarette/Drasil/issues/1182). 
 
-Currently, Drasil has a home-growm 'units' handling module. This project would investigate if we can switch to a third-party solution.
+Currently, Drasil has a home-grown 'units' handling module. This project would investigate if we can switch to a third-party solution.
 
 [dimensional](https://github.com/bjornbm/dimensional) is a potential third-party package.
 

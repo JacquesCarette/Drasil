@@ -9,7 +9,7 @@
 @package drasil-codeLang
 @version 0.1.0.0
 
-module CodeLang.Drasil
+module Drasil.CodeLang
 
 -- | A Comment is a String
 type Comment = String

@@ -3,9 +3,10 @@ module Build.Drasil.Make.Print where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), ($$), hsep, vcat)
-
 import qualified Data.Text as T
 import Text.Wrap
+
+import Drasil.CodeLang (Comment)
 
 import Build.Drasil.Make.AST (Annotation, Command(C),
   CommandOpts(IgnoreReturnCode), Dependencies, Makefile(M), Rule(R), Target,
@@ -13,7 +14,6 @@ import Build.Drasil.Make.AST (Annotation, Command(C),
 import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
 import Build.Drasil.Make.Import (RuleTransformer, toMake)
 import Build.Drasil.Make.MakeString (renderMS)
-import CodeLang.Drasil (Comment)
 
 -- | Generates the makefile by calling 'build' after 'toMake'.
 genMake :: RuleTransformer c => [c] -> Doc

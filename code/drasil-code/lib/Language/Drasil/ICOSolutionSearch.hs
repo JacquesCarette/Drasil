@@ -12,6 +12,10 @@ import Utils.Drasil (subsetOf)
 import Drasil.Code.CodeVar (DefiningCodeExpr(..), CodeVarChunk)
 import Language.Drasil.Chunk.CodeBase (codevars', quantvar)
 
+-- FIXME: This really belongs in `drasil-gen`. The specific order of selection
+-- is a kind of *choice* that is from the 'Family -> Specific Member' stage
+-- (which we currently approximately 'host' in `drasil-gen`).
+
 -- | Mathematical definition.
 type Def = CodeDefinition
 -- | Known values.

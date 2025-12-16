@@ -1,9 +1,9 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: December, 2024
+Last updated: Dec. 15th, 2025
 --------------------------------------------------
 
-LanguageStructure.hs
+Drasil.hs
   - Contains a `Comment` type (alias of `String`), representing "comments" as in
     code.
 

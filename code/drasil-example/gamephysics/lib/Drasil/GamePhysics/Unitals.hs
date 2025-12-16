@@ -41,9 +41,9 @@ unitSymbs = map ucw [iVect, jVect, normalVect,
 -- TABLE OF SYMBOLS --
 ----------------------
 
-symbolsAll, inputSymbols, outputSymbols :: [DefinedQuantityDict]
+symbols, inputSymbols, outputSymbols :: [DefinedQuantityDict]
 
-symbolsAll = unitless ++ map dqdWr unitalSymbols ++ [QP.restitutionCoef]
+symbols = unitless ++ map dqdWr unitalSymbols ++ [QP.restitutionCoef]
 
 inputSymbols = map dqdWr [QP.position, QP.velocity, QP.force, QM.orientation,
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass,
@@ -349,4 +349,3 @@ angVeloOutCons    = constrained' QP.angularVelocity    [] (exactDbl 0)
 ---------------------
 -- GOAL STATEMENTS --
 ---------------------
-

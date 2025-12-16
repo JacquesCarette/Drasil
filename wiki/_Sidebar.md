@@ -19,7 +19,6 @@
   * [Printing Information](Printing-Information-Guide)
   * [Folders](Folder-layout)
     * [GOOL/GProc Overview](GOOL-GProc%20Overview)
-  * [Quantifying Productivity and Ease of Use](Quantifying-Productivity-and-Ease-of-Use)
 * Design
   * [Design Choices](Design-Choices)
   * [Guidelines for Adding New Types and Typeclasses](Guidelines-for-Adding-New-Types-and-Typeclasses-in-Drasil)
@@ -28,8 +27,7 @@
   * [Journals and Societies](Journals-and-Societies)
   * [Miscellaneous Ideas](Miscellaneous-ideas)
   * [Open Science](Open-Science)
-  * [Projectile Example](Projectile-Example)
   * [Forking Drasil & Deploying to your GitHub Pages](Forking-Drasil-&-Deploying-to-your-GitHub-Pages)
   * [Getting Started with Org Mode](Getting-Started-with-Org-Mode)
-  * [Benefits of Drasil](Benefits-of-Drasil)
+  * [Benefits of Drasil](Benefits-of-Drasil) and [Quantifying Productivity and Ease of Use](Quantifying-Productivity-and-Ease-of-Use)
 * [Working Notes](Working-Notes)

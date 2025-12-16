@@ -154,15 +154,6 @@ Many potential simple physics problems are given at: [My Physics Lab](https://ww
 Another great place for Physics is [Dyna-Kinematics](https://github.com/diegomacario/Dyna-Kinematics),
 which also has very pretty animations. Would make a good showcase.
 
-## Generate Markdown
-
-[Markdown](https://en.wikipedia.org/wiki/Markdown) is a small markup language for creating formatted
-text.  It is easier for humans to write, read and edit than html.  Jupyter notebooks often use markdown
-for their text, rather than more complicated html code.  Drasil generating Markdown should be relatively
-easy and it would give another nice example.  We could incorporate it into the generated Jupyter notebooks.
-Moreover, Markdown would give us a nice example of an internal program family, since there are several
-variants including the GitHub Flavoured Markdown and Markdown Extra.
-
 ## Automatic Check for Completeness, Correctness, and Consistency
 
 If information is missing, Drasil should inform the user.  The following

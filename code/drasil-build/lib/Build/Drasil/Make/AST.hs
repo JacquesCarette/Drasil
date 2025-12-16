@@ -1,7 +1,9 @@
 -- | Defines a Makefile abstract syntax tree.
 module Build.Drasil.Make.AST where
+
+import Drasil.CodeLang (Comment)
+
 import Build.Drasil.Make.MakeString (MakeString)
-import CodeLang.Drasil (Comment)
 
 -- * Types
 

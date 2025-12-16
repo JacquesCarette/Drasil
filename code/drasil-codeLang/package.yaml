@@ -23,7 +23,7 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - CodeLang.Drasil
+  - Drasil.CodeLang
   when:
   - condition: false
     other-modules: Paths_drasil_codeLang

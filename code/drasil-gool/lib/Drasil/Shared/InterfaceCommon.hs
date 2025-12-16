@@ -21,13 +21,14 @@ module Drasil.Shared.InterfaceCommon (
   VisibilitySym(..), ParameterSym(..), MethodSym(..), convType
   ) where
 
+import Data.Bifunctor (first)
+import qualified Data.Kind as K (Type)
+
+import Drasil.CodeLang (Comment)
+
+import Drasil.Shared.AST (ScopeData(..), ScopeTag(..))
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.State (MS, VS)
-
-import qualified Data.Kind as K (Type)
-import Data.Bifunctor (first)
-import CodeLang.Drasil (Comment)
-import Drasil.Shared.AST (ScopeData(..), ScopeTag(..))
 
 type Label = String
 type Library = String

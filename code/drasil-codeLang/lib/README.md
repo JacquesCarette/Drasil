@@ -1,9 +1,9 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 17, 2023
+Last updated: Dec. 15th, 2025
 --------------------------------------------------
 
-**CodeLang**
+**Drasil**
   - Contains the files for the code language for Drasil
 
 README.md

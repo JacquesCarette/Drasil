@@ -256,7 +256,9 @@ application of the use of physics.)  :smile:
 
 ## Generate the Drasil Wiki
 
-While the ideal method of using Drasil-in-Drasil to generate the wiki is still far-off, there are other things we can do to de-duplicate knowledge and make the wiki more maintainable. For example, we can use the comments used to generate Haddock documentation as the basis for sections of some wiki pages.
+The [Drasil Wiki](https://github.com/JacquesCarette/Drasil/wiki) is a great place to store information about Drasil. It is a known problem, however, that the Wiki easily falls out-of-date. Two of the reasons for this are that the Wiki for Drasil is separate from the code for Drasil, and that the Wiki often contains the same information in multiple places. We would like to generate the wiki, or at least parts of it, directly from the code for Drasil. This would make it much more maintainable.
+
+While the ideal method of using Drasil-in-Drasil to generate the Wiki is still far-off, there are other things we can do to de-duplicate knowledge and make the Wiki more maintainable. For example, we can use the comments used to generate Haddock documentation as the basis for sections of some Wiki pages.
 
 ## Add Support for External Libraries to Drasil
 

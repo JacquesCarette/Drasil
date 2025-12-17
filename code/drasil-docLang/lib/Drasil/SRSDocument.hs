@@ -36,7 +36,7 @@ module Drasil.SRSDocument (
   ) where
 
 import Language.Drasil.Printers (PrintingInformation, defaultConfiguration, piSys)
-import Drasil.Database
+import Drasil.Database (ChunkDB)
 import Drasil.System
 import Drasil.DocLang (
   -- Drasil.DocumentLanguage.Core

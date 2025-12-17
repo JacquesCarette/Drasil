@@ -12,7 +12,7 @@ import Data.Maybe (mapMaybe)
 
 import Language.Drasil hiding (None)
 import Language.Drasil.Display (Symbol(Variable))
-import Drasil.Database
+import Drasil.Database (ChunkDB, UID, HasUID(..))
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
 import Drasil.System (HasSystem(..), programName)

@@ -15,7 +15,7 @@ import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Drasil.Database
+import Drasil.Database (ChunkDB, UID, HasUID(..), find)
 
 import Drasil.System (System(_systemdb), systemdb, refbyLookup)
 import Drasil.GetChunks (vars)

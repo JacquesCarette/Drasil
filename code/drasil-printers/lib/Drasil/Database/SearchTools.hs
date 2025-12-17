@@ -2,7 +2,7 @@ module Drasil.Database.SearchTools where
 
 import Control.Lens ((^.))
 
-import Drasil.Database
+import Drasil.Database (ChunkDB, UID, find, findAll)
 import Language.Drasil
 import Theory.Drasil
 

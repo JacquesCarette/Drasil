@@ -3,7 +3,7 @@
 module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
-import Drasil.Database
+import Drasil.Database (UID, find, isRegistered, (+++.), mkUid)
 import Drasil.Database.SearchTools (termResolve', shortForm)
 import Drasil.System hiding (purpose)
 import Control.Lens ((^.))

@@ -29,6 +29,5 @@
   * [Open Science](Open-Science)
   * [Forking Drasil & Deploying to your GitHub Pages](Forking-Drasil-&-Deploying-to-your-GitHub-Pages)
   * [Getting Started with Org Mode](Getting-Started-with-Org-Mode)
-  * [Promoting Drasil](Promoting-Drasil)
   * [Benefits of Drasil](Benefits-of-Drasil) and [Quantifying Productivity and Ease of Use](Quantifying-Productivity-and-Ease-of-Use)
 * [Working Notes](Working-Notes)

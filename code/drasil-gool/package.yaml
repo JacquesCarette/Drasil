@@ -16,7 +16,6 @@ dependencies:
 - pretty
 - mtl
 - composition
-- drasil-codeLang
 - drasil-metadata
 - drasil-utils
 

@@ -44,7 +44,6 @@ packages:
 - drasil-gool
 - drasil-build
 - drasil-code
-- drasil-codeLang
 - drasil-system
 - drasil-theory
 - drasil-database

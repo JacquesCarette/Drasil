@@ -24,8 +24,6 @@ module Drasil.Shared.InterfaceCommon (
 import Data.Bifunctor (first)
 import qualified Data.Kind as K (Type)
 
-import Drasil.CodeLang (Comment)
-
 import Drasil.Shared.AST (ScopeData(..), ScopeTag(..))
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.State (MS, VS)
@@ -440,7 +438,7 @@ class (VariableSym r, StatementSym r) => FuncAppStatement r where
   extInOutCall :: Library -> InOutCall r
 
 class (StatementSym r) => CommentStatement r where
-  comment :: Comment -> MSStatement r
+  comment :: String -> MSStatement r
 
 class (BodySym r, VariableSym r) => ControlStatement r where
   break :: MSStatement r

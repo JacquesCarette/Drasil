@@ -30,7 +30,6 @@ resolver: lts-22.44
 #   - wai
 packages:
 - .
-- ../drasil-codeLang
 - ../drasil-lang
 - ../drasil-metadata
 - ../drasil-utils

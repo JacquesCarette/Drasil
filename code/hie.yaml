@@ -30,9 +30,6 @@ cradle:
     - path: "drasil-code/test/NameGenTest.hs"
       component: "drasil-code:exe:codegenTest"
 
-    - path: "drasil-codeLang/lib"
-      component: "drasil-codeLang:lib"
-
     - path: "drasil-data/lib"
       component: "drasil-data:lib"
 

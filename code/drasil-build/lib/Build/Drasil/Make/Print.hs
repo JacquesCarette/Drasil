@@ -6,8 +6,6 @@ import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), ($$), hsep, vcat)
 import qualified Data.Text as T
 import Text.Wrap
 
-import Drasil.CodeLang (Comment)
-
 import Build.Drasil.Make.AST (Annotation, Command(C),
   CommandOpts(IgnoreReturnCode), Dependencies, Makefile(M), Rule(R), Target,
   Type(Abstract))
@@ -29,7 +27,7 @@ printRule :: Rule -> Doc
 printRule (R c t d _ cmd) = printComments c $+$ printTarget t d $+$ printCmds cmd
 
 -- | Renders a makefile comment
-printComment :: Comment -> Doc
+printComment :: String -> Doc
 printComment [] = empty
 printComment c  = text $ T.unpack (wrapText wrapSettings 80 $ T.pack c) ++ "\n"
 

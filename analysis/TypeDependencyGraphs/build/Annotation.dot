@@ -1,4 +1,4 @@
 digraph annotation{
 Annotation	[shape=oval, color=red2, label="Annotation"];
-Annotation -> Comment;
+Annotation -> String;
 }

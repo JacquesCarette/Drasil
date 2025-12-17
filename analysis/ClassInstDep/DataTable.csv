@@ -136,8 +136,6 @@ code,test/,Main.hs,	,	,
 code,test/,NameGenTest.hs,	,	,	
 code,test/,VectorTest.hs,	,	,	
 	
-codeLang,lib/Drasil/,CodeLang.hs,	,	,	
-	
 data,lib/Data/Drasil/Concepts/,Computation.hs,	,	,	
 data,lib/Data/Drasil/Concepts/,Documentation.hs,	,	,	
 data,lib/Data/Drasil/Concepts/,Education.hs,	,	,	

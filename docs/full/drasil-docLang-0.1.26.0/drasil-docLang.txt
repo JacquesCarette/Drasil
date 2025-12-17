@@ -1549,36 +1549,36 @@ traceMatOtherReq :: System -> TraceConfig
 --   refinement, and other requirements.
 traceMatStandard :: System -> [TraceConfig]
 
--- | Traceability viewing assumptions. Takes a <a>UID</a> and a
---   <a>ChunkDB</a>. Returns a list of <a>UID</a>s.
+-- | Traceability viewing assumptions. Takes a <tt>UID</tt> and a
+--   <tt>ChunkDB</tt>. Returns a list of <tt>UID</tt>s.
 tvAssumps :: TraceViewCat
 
--- | Traceability viewing data definitions. Takes a <a>UID</a> and a
---   <a>ChunkDB</a>. Returns a list of <a>UID</a>s.
+-- | Traceability viewing data definitions. Takes a <tt>UID</tt> and a
+--   <tt>ChunkDB</tt>. Returns a list of <tt>UID</tt>s.
 tvDataDefns :: TraceViewCat
 
--- | Traceability viewing general definitions. Takes a <a>UID</a> and a
---   <a>ChunkDB</a>. Returns a list of <a>UID</a>s.
+-- | Traceability viewing general definitions. Takes a <tt>UID</tt> and a
+--   <tt>ChunkDB</tt>. Returns a list of <tt>UID</tt>s.
 tvGenDefns :: TraceViewCat
 
--- | Traceability viewing theory models. Takes a <a>UID</a> and a
---   <a>ChunkDB</a>. Returns a list of <a>UID</a>s.
+-- | Traceability viewing theory models. Takes a <tt>UID</tt> and a
+--   <tt>ChunkDB</tt>. Returns a list of <tt>UID</tt>s.
 tvTheoryModels :: TraceViewCat
 
--- | Traceability viewing instance models. Takes a <a>UID</a> and a
---   <a>ChunkDB</a>. Returns a list of <a>UID</a>s.
+-- | Traceability viewing instance models. Takes a <tt>UID</tt> and a
+--   <tt>ChunkDB</tt>. Returns a list of <tt>UID</tt>s.
 tvInsModels :: TraceViewCat
 
--- | Traceability viewing goals. Takes a <a>UID</a> and a <a>ChunkDB</a>.
---   Returns a list of <a>UID</a>s.
+-- | Traceability viewing goals. Takes a <tt>UID</tt> and a
+--   <tt>ChunkDB</tt>. Returns a list of <tt>UID</tt>s.
 tvGoals :: TraceViewCat
 
--- | Traceability viewing requirements. Takes a <a>UID</a> and a
---   <a>ChunkDB</a>. Returns a list of <a>UID</a>s.
+-- | Traceability viewing requirements. Takes a <tt>UID</tt> and a
+--   <tt>ChunkDB</tt>. Returns a list of <tt>UID</tt>s.
 tvReqs :: TraceViewCat
 
--- | Traceability viewing changes. Takes a <a>UID</a> and a <a>ChunkDB</a>.
---   Returns a list of <a>UID</a>s.
+-- | Traceability viewing changes. Takes a <tt>UID</tt> and a
+--   <tt>ChunkDB</tt>. Returns a list of <tt>UID</tt>s.
 tvChanges :: TraceViewCat
 
 

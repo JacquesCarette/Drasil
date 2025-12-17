@@ -97,8 +97,8 @@ data Type
 Abstract :: Type
 File :: Type
 
--- | A Makefile Annotation is made of 0 or more <a>Comment</a>s
-type Annotation = [Comment]
+-- | A Makefile Annotation is made of 0 or more <a>String</a>s
+type Annotation = [String]
 
 -- | A Makefile target is made from a <a>MakeString</a>.
 type Target = MakeString
@@ -196,7 +196,7 @@ build :: Makefile -> Doc
 printRule :: Rule -> Doc
 
 -- | Renders a makefile comment
-printComment :: Comment -> Doc
+printComment :: String -> Doc
 wrapSettings :: WrapSettings
 
 -- | Renders multiple comments
@@ -222,8 +222,8 @@ module Build.Drasil
 class RuleTransformer c
 makeRule :: RuleTransformer c => c -> [Rule]
 
--- | A Makefile Annotation is made of 0 or more <a>Comment</a>s
-type Annotation = [Comment]
+-- | A Makefile Annotation is made of 0 or more <a>String</a>s
+type Annotation = [String]
 
 -- | A command is made up of <a>MakeString</a>s and command operators.
 data Command

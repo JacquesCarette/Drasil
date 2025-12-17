@@ -1,4 +1,0 @@
-digraph comment{
-Comment	[shape=oval, color=red2, label="Comment"];
-Comment -> String;
-}

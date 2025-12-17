@@ -25,7 +25,7 @@ digraph alltypes {
 		}
 		subgraph annotation{
 		Annotation	[shape=oval, color=red2, label="Annotation"];
-		Annotation -> Comment;
+		Annotation -> String;
 		}
 		subgraph target{
 		Target	[shape=oval, color=red2, label="Target"];
@@ -958,12 +958,6 @@ digraph alltypes {
 	subgraph namegentets {
 	}
 	subgraph vectortets {
-	}
-	subgraph codelang {
-		subgraph comment{
-		Comment	[shape=oval, color=red2, label="Comment"];
-		Comment -> String;
-		}
 	}
 	subgraph computation {
 	}

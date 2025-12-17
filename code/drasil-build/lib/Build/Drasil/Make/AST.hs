@@ -23,7 +23,7 @@ data CommandOpts =
 data Type = Abstract
           | File deriving Eq
 
--- | A Makefile Annotation is made of 0 or more 'Comment's
+-- | A Makefile Annotation is made of 0 or more 'String's
 type Annotation = [String]
 
 -- | A Makefile target is made from a 'MakeString'.

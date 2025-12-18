@@ -309,6 +309,10 @@ If you prefer to use a different shell (e.g., Cygwin or Git Bash instead of Powe
 
 Switch out CTRL for CMD if you’re using MacOS.
 
+# Optional Utilities
+
+The following utilities are not required for the core functionality of Drasil, but may be helpful or even necessary depending on which pieces of Drasil you are working with. Read each section to decide if it's something you need for your purposes.
+
 ## LaTeX
 
 LaTeX is a language for typesetting documents, similar to Word and PowerPoint but with much more flexibility. While you might not often handle LaTeX manually while working with Drasil, it may still be a useful piece of software to learn. Feel free to check out some [tutorials](https://latex-tutorial.com/tutorials/), or a [different tutorial with an online editor](https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes), or even a [table generator](https://www.tablesgenerator.com/#).
@@ -388,7 +392,7 @@ Hopefully, it should work now, but if it doesn't, please file an issue.
 * [Creating LaTeX tables](https://www.tablesgenerator.com/)
 
 ## Inkscape
-We use Inkscape in order to get `svg` diagrams to render in LaTeX. The program itself is actually an `svg` image creator, but Drasil uses it on the command line instead.
+We use Inkscape to get `svg` diagrams to render in LaTeX. The program itself is actually an `svg` image creator, but Drasil uses it on the command line instead.
 
 ### Installation Instructions
 Please visit the [Inkscape website](https://inkscape.org/release/) for more detailed instructions. For convenience, we have a summary for Linux, Windows, and Mac below.

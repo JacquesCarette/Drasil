@@ -308,8 +308,8 @@ aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
 annealedGl    = cc' annealed
   (S "a flat, monolithic, glass lite which has uniform thickness where" +:+
   S "the residual surface stresses are almost zero, as defined in"+:+ refS astm2016)
-aspectRatioCon   = cc aR
-  ("the ratio of the long dimension of the glass to the short dimension of " ++
+aspectRatioCon   = cc' aR
+  (S $ "the ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
     "always equal to or greater than 1.0. For glass supported on three " ++
     "sides, the ratio of the length of one of the supported edges " ++

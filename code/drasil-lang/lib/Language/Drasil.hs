@@ -83,7 +83,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.Concept.Core
   , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
-  , dcc, dccAWDS, dccA, dccWDS, cc, cc', ccs, cw, cic
+  , dcc, dccAWDS, dccA, dccWDS, cc', ccs, cw, cic
   -- Language.Drasil.Chunk.Relation
   , RelationConcept, makeRC
   -- Language.Drasil.Chunk.DifferentialModel

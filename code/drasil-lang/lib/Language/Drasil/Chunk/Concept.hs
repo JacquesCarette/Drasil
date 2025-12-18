@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.Concept (
   -- * Concept Chunks
   -- ** From an idea ('IdeaDict')
-  ConceptChunk, dcc, dccA, dccAWDS, dccWDS, cc, cc', ccs, cw,
+  ConceptChunk, dcc, dccA, dccAWDS, dccWDS, cc', ccs, cw,
   -- ** From a 'ConceptChunk'
   ConceptInstance, cic
   ) where
@@ -39,11 +39,7 @@ dccWDS :: String -> NP -> Sentence -> ConceptChunk
 dccWDS i t d = dccAWDS i t d Nothing
 
 -- | Constructor for projecting an idea into a 'ConceptChunk'. Takes the definition of the
--- 'ConceptChunk' as a 'String'. Does not allow concept domain tagging.
-cc :: Idea c => c -> String -> ConceptChunk
-cc n d = ConDict (nw n) (S d) []
-
--- | Same as 'cc', except definition is a 'Sentence'.
+-- 'ConceptChunk' as a 'Sentence. Does not allow concept domain tagging.
 cc' :: Idea c => c -> Sentence -> ConceptChunk
 cc' n d = ConDict (nw n) d []
 

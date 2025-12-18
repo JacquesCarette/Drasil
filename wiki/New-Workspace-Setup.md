@@ -139,80 +139,27 @@ To copy/clone `Drasil`'s software on your machine, please open up your terminal 
 
 If you use GPG, you can also protect your commits by [signing them with GPG](https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification/signing-commits).
 
-## Stack
+## Stack (Via GHCup)
 
 Stack is an easy to use toolkit for building, executing, testing, and benchmarking your Haskell software, including tooling for isolated GHC installations and dependency management (similar to Python's `virtualenv` using a [curated listed of packages](https://www.stackage.org/)).
 
 Stack has an amazing document repository available on their [Read the Docs Official Website](https://docs.haskellstack.org/en/stable/README/). It has an [Installation Guide](https://docs.haskellstack.org/en/stable/README/#how-to-install-stack), [Quickstart Guide](https://docs.haskellstack.org/en/stable/README/#quick-start-guide), [User Guide](https://docs.haskellstack.org/en/stable/GUIDE/), and much more!
 
+The recommended way to install stack is through [GHCup](https://www.haskell.org/ghcup/), which also installs a bunch of other useful tools for Haskell.
+
 ### Installation
 
-Please follow the related instructions to your operating system.
+Regardless of your operating system, you should be able to follow the Linux/MacOS/WSL2 [install instructions](https://www.haskell.org/ghcup/install/). It's as simple as entering this into your terminal:
 
-<details>
-
-<summary><h4>Windows</h4></summary>
-
-Run the [Stack installer](https://get.haskellstack.org/stable/windows-x86_64-installer.exe) executable file and follow the on-screen steps. While going through the installer, don't change any of the default settings. The default settings will ensure that "stack" is available in your PATH, and hence usable in your Git Bash.
-
-##### Confirm Installation
-To confirm you've successfully installed stack, press the four-flagged Windows key, search for ```Git Bash```, and click the Git Bash application that shows up. A blue/black window should pop up. Finally, to confirm that "stack" has been successfully installed, type in ```stack --help``` into the terminal window. If some manual information appears, then you have successfully installed stack! Otherwise, you will need to go through these steps again.
-
-##### Windows Security
-After installing/running Stack, you might notice that Windows Security blocks or even deletes the **stack.exe** executable. If this happens, add an exclusion to Windows Security by going to **Start > Settings > Update & Security > Windows Security > Virus & threat protection > Manage settings** (under **Virus & threat protection settings**) **> Add or remove exclusions** (under **Exclusions**), then selecting the **bin/** folder with your **stack.exe** file. If Windows Security deletes the executable, simply reinstall it. (This issue was encountered in Windows 10).
-</details>
-
-<details>
-
-<summary><h4>Mac</h4></summary>
-
-For Mac users, open up your terminal (Apple logo + Space, then search "Terminal"), and run:
 ```
-xcode-select --install
+curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 ```
-Note: It may take a while to run.
 
-Finally, run:
-```
-curl -sSL https://get.haskellstack.org/ | sh
-```
-(from [Official Stack Webpage](https://docs.haskellstack.org/en/stable/README/)) inside the terminal window. This will fully install Stack. It might ask you for permissions while installing, this is normal, please give it permission.
+Follow the prompts, wait for it to finish, then open a fresh terminal and enter `stack --version` to check that it has successfully installed the Haskell compiler.
 
-##### Using homebrew (Alternative)
-If you prefer to use Homebrew to install software on your machine, please run:
-```
-brew install haskell-stack
-```
-However, the homebrew Stack package is unofficial and may not be up-to-date.
+### Installing Dependencies
 
-##### Confirm Installation
-To confirm you've successfully installed stack, you should run ```stack --help``` in your terminal window. If some manual information appears, then you have successfully installed stack! Otherwise, you will need to go through these steps again.
-
-#### Important Note about PATH environment variable
-If you later find errors in your `make` logs similar to:
-```
-Warning: Installation path /Users/YOUR_USERNAME/.local/bin
-         not found on the PATH environment variable.
-```
-1. (MacOS)You may need to add the path listed above to your [`$PATH` environment](https://apple.stackexchange.com/questions/358687/right-way-to-add-paths-to-path-in-mojave/358873#358873).
-2. (Linux-Ubuntu)After installing stack, it is necessary to restart the terminal or run ```source ~/.profile```. Also, you can manually add the path listed above to your [`$PATH` environment](https://askubuntu.com/questions/60218/how-to-add-a-directory-to-the-path).
-
-</details>
-
-<details>
-
-<summary><h4>Linux</h4></summary>
-
-For Linux users, please run:
-```
-curl -sSL https://get.haskellstack.org/ | sh
-```
-(from [Official Stack Webpage](https://docs.haskellstack.org/en/stable/README/)) inside a terminal window. This will fully install Stack. It might ask you for permissions while installing, this is normal, please give it permission.
-
-##### Confirm Installation
-To confirm you've successfully installed stack, you should run ```stack --help``` in your terminal window. If some manual information appears, then you have successfully installed stack! Otherwise, you will need to go through these steps again.
-
-</details>
+If the GHCup installer fails, the most likely cause is that there are missing dependencies. Scroll to your system's section in the GHCup [System Requirements](https://www.haskell.org/ghcup/install/#system-requirements) page and make sure everything there is installed, then retry the GHCup installer.
 
 ### Pinning your Stack Version
 If you later experience issues with `.cabal` files being frequently rebuilt, you may pin your `stack` version against our LTS's preferred version. In your terminal window, please run `stack upgrade --binary-version CURRENT_STACK_VERSION` (e.g., `2.5.1`) and it should stop frequently rebuilding the `.cabal` files.

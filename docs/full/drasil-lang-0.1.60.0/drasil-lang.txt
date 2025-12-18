@@ -4597,11 +4597,8 @@ dccAWDS :: String -> NP -> Sentence -> Maybe String -> ConceptChunk
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
 
 -- | Constructor for projecting an idea into a <a>ConceptChunk</a>. Takes
---   the definition of the <a>ConceptChunk</a> as a <a>String</a>. Does not
+--   the definition of the <a>ConceptChunk</a> as a 'Sentence. Does not
 --   allow concept domain tagging.
-cc :: Idea c => c -> String -> ConceptChunk
-
--- | Same as <a>cc</a>, except definition is a <a>Sentence</a>.
 cc' :: Idea c => c -> Sentence -> ConceptChunk
 
 -- | Similar to <a>cc'</a>, but allows explicit domain tagging.
@@ -6795,11 +6792,8 @@ dccA :: String -> NP -> String -> Maybe String -> ConceptChunk
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
 
 -- | Constructor for projecting an idea into a <a>ConceptChunk</a>. Takes
---   the definition of the <a>ConceptChunk</a> as a <a>String</a>. Does not
+--   the definition of the <a>ConceptChunk</a> as a 'Sentence. Does not
 --   allow concept domain tagging.
-cc :: Idea c => c -> String -> ConceptChunk
-
--- | Same as <a>cc</a>, except definition is a <a>Sentence</a>.
 cc' :: Idea c => c -> Sentence -> ConceptChunk
 
 -- | Similar to <a>cc'</a>, but allows explicit domain tagging.

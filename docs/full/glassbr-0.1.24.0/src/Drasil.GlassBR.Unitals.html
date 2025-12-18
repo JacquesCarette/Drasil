@@ -1552,11 +1552,14 @@ r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><a href="Drasil.GlassBR.References.html#astm2016"><span class="hs-identifier hs-var">astm2016</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-311"></span><span id="aspectRatioCon"><span class="annot"><span class="annottext">aspectRatioCon :: ConceptChunk
-</span><a href="Drasil.GlassBR.Unitals.html#aspectRatioCon"><span class="hs-identifier hs-var hs-var">aspectRatioCon</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; String -&gt; ConceptChunk
-forall c. Idea c =&gt; c -&gt; String -&gt; ConceptChunk
-</span><span class="hs-identifier hs-var">cc</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.GlassBR.Unitals.html#aspectRatioCon"><span class="hs-identifier hs-var hs-var">aspectRatioCon</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence -&gt; ConceptChunk
+forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GlassBR.Concepts.html#aR"><span class="hs-identifier hs-var">aR</span></a></span><span>
-</span><span id="line-312"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span id="line-312"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Sentence) -&gt; String -&gt; Sentence
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the ratio of the long dimension of the glass to the short dimension of &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>

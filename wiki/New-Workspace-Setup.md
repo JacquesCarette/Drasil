@@ -4,7 +4,7 @@ Collaboratively working on any software, you generally need a few things; a comp
 
 In order, you should be installing:
 1. [Basic Development Tools](#basic-development-tools)
-2. [Stack](#stack)
+2. [Stack](#stack-via-ghcup)
 3. [VSCode](#vscode) + [Extensions](#extensions)
 4. [LaTeX](#latex)
 5. [Inkscape](#inkscape)

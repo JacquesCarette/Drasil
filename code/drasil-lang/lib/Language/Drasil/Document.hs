@@ -86,8 +86,33 @@ checkToC (Notebook t a sc) = Notebook t a sc
 -- * Content Constructors
 
 -- | Smart constructor for labelled content chunks.
-llcc :: Reference -> RawContent -> LabelledContent
-llcc r = LblC (r ^. uid) r
+-- Now builds a Reference using the provided UID instead of extracting it from the Reference.
+llcc :: UID -> LblType -> ShortName -> RawContent -> LabelledContent
+llcc u lbl sn rc = LblC u (Reference u lbl sn) rc
+
+-- | Helper for creating labelled content with a figure reference.
+llccFig :: String -> RawContent -> LabelledContent
+llccFig rs rc = llcc (docUid rs) (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs)) rc
+
+-- | Helper for creating labelled content with a table reference.
+llccTab :: String -> RawContent -> LabelledContent
+llccTab rs rc = llcc (docUid rs) (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs)) rc
+
+-- | Helper for creating labelled content with an equation reference.
+llccEqn :: String -> RawContent -> LabelledContent
+llccEqn rs rc = llcc (docUid rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' (S rs)) rc
+
+-- | Helper for creating labelled content with a UID-based figure reference.
+llccFig' :: UID -> RawContent -> LabelledContent
+llccFig' rs rc = llcc (docNs rs) (RP (prepend "Fig") ("Figure:" ++ repUnd (show rs))) (shortname' (S $ show rs)) rc
+
+-- | Helper for creating labelled content with a UID-based table reference.
+llccTab' :: UID -> RawContent -> LabelledContent
+llccTab' rs rc = llcc (docNs rs) (RP (prepend "Tab") ("Table:" ++ repUnd (show rs))) (shortname' (S $ show rs)) rc
+
+-- | Helper for creating labelled content with a UID-based equation reference.
+llccEqn' :: UID -> RawContent -> LabelledContent
+llccEqn' rs rc = llcc (docNs rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd (show rs))) (shortname' (S $ show rs)) rc
 
 -- | Smart constructor for unlabelled content chunks (no 'Reference').
 ulcc :: RawContent -> UnlabelledContent
@@ -99,13 +124,15 @@ mkParagraph :: Sentence -> Contents
 mkParagraph x = UlC $ ulcc $ Paragraph x
 
 -- | Smart constructor that wraps 'LabelledContent' into 'Contents'.
+-- Takes a Reference to extract UID, LblType, and ShortName for the labelled content.
 mkFig :: Reference -> RawContent -> Contents
-mkFig x y = LlC $ llcc x y
+mkFig r rc = LlC $ llcc (r ^. uid) (getRefAdd r) (shortname r) rc
 
 --Fixme: use mkRawLc or llcc?
 -- | Smart constructor similar to 'llcc', but takes in 'RawContent' first.
+-- Takes a Reference to extract UID, LblType, and ShortName for the labelled content.
 mkRawLC :: RawContent -> Reference -> LabelledContent
-mkRawLC x lb = llcc lb x
+mkRawLC rc r = llcc (r ^. uid) (getRefAdd r) (shortname r) rc
 
 ---------------------------------------------------------------------------
 -- * Section Constructors

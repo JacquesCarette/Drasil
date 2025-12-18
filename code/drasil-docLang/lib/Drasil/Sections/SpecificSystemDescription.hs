@@ -245,7 +245,7 @@ auxSpecSent = foldlSent [S "The", namedRef (SRS.valsOfAuxCons [] []) $ S "auxili
 
 -- | Creates a Data Constraints table. Takes in Columns, reference, and a label.
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> UID -> Sentence -> LabelledContent
-mkDataConstraintTable col rf lab = llcc (makeTabRef' rf) $ uncurry Table
+mkDataConstraintTable col rf lab = llccTab' rf $ uncurry Table
   (mkTableFromColumns col) lab True
 
 -- | Creates the input Data Constraints Table.

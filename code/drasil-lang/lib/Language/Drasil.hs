@@ -212,7 +212,7 @@ module Language.Drasil (
   , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..), HasCaption(..)
   , mkParagraph, mkRawLC, checkToC
-  , llcc, ulcc
+  , llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn', ulcc
   , section, fig, figNoCap, figWithWidth, figNoCapWithWidth
   , MaxWidthPercent
   , HasContents(accessContents)
@@ -295,7 +295,7 @@ import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType, ModelExpr(Spc))
 import Language.Drasil.Document (section, fig, figNoCap, figWithWidth, figNoCapWithWidth
-  , Section(..), SecCons(..) , llcc, ulcc, Document(..)
+  , Section(..), SecCons(..) , llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn', ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC
   , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
   , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI')

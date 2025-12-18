@@ -101,7 +101,7 @@ inputsToOutput = constF : map dqdWr [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip,
   xMinEtrSlip, yMaxSlip, yMinSlip]
 
 inputsToOutputTable :: LabelledContent
-inputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
+inputsToOutputTable = llccTab "inputsToOutputTable" $
   Table [titleize symbol_, titleize name_] (mkTable [ch, phrase] inputsToOutput)
   (atStart' input_ +:+ S "to be Returned as" +:+ titleize output_) True
 

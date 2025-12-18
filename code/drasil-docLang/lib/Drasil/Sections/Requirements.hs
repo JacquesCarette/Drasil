@@ -143,11 +143,10 @@ mkSecurityNFR refAddress lbl = cic refAddress (foldlSent [
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i) =>
                           [i] -> LabelledContent
-mkInputPropsTable []        = llcc reqInputsRef $ Paragraph EmptyS
-mkInputPropsTable reqInputs = llcc reqInputsRef $
-  Table [atStart symbol_, atStart description, atStart' unit_]
+mkInputPropsTable []        = mkRawLC (Paragraph EmptyS) reqInputsRef
+mkInputPropsTable reqInputs = mkRawLC (Table [atStart symbol_, atStart description, atStart' unit_]
   (mkTable [ch, atStart, toSentence] $ sortBySymbol reqInputs)
-  (titleize' reqInput) True
+  (titleize' reqInput) True) reqInputsRef
 
 -- | Reference for the Required Inputs table.
 reqInputsRef :: Reference
@@ -156,7 +155,7 @@ reqInputsRef = makeTabRef' (reqInput ^. uid)
 -- | Creates a table for use in the Functional Requirments section. Takes a list of tuples containing variables and sources, a label, and a caption.
 mkValsSourceTable :: (Quantity i, MayHaveUnit i, Concept i) =>
                           [(i, Sentence)] -> String -> Sentence -> LabelledContent
-mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $
+mkValsSourceTable vals labl cap = llccTab labl $
   Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 

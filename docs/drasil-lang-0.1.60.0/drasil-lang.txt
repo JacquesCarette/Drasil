@@ -2518,7 +2518,7 @@ mkIdea :: String -> NP -> Maybe String -> IdeaDict
 --   <a>NamedIdea</a> exported <a>getA</a> (now in <a>Idea</a>). But there
 --   are no more wrappers, instead we have explicit dictionaries. Unwraps
 --   an <a>Idea</a> and places its <a>UID</a> and <a>NP</a> into an
---   <a>IdeaDict</a> with <a>Nothing</a> for an abbreviation.
+--   <a>IdeaDict</a>
 nw :: Idea c => c -> IdeaDict
 
 -- | The common idea (with <tt>NounPhrase</tt>) data type. It must have a

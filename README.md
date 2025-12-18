@@ -50,6 +50,7 @@ After this, you can:
     - e.g. **./Users/.../GitHub/Drasil/code** (on MacOS)
 2. Use the basic `make` command to build Drasil and run **all** examples.
     - Run `make help` for a list of available commands.
+    - Note that when building the examples, Drasil will output some "errors" in the terminal log. These are expected consequences of current development, and as long as the process finishes successfully you shouldn't be concerned.
     - **Warning**: this entire process takes around 10-15 minutes to complete (MacOS estimate)
 3. You can find the generated output in the build folder that appears in the **./code/** folder. Each example will have its own subdirectory.
 

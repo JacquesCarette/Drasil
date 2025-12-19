@@ -49,7 +49,7 @@ data Content   = Content   Contents
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
 -- | 'Section's are equal if 'UID's are equal.
-instance Eq Section where a == b = (a ^. uid) == (b ^. uid)
+instance Eq Section where a == b = a ^. uid == b ^. uid
 -- | Finds the short name of a 'Section'.
 instance HasShortName  Section where shortname = shortname . view lab
 -- | Finds the reference information of a 'Section'.
@@ -88,31 +88,31 @@ checkToC (Notebook t a sc) = Notebook t a sc
 -- | Smart constructor for labelled content chunks.
 -- Now builds a Reference using the provided UID instead of extracting it from the Reference.
 llcc :: UID -> LblType -> ShortName -> RawContent -> LabelledContent
-llcc u lbl sn rc = LblC u (Reference u lbl sn) rc
+llcc u lbl sn = LblC u (Reference u lbl sn)
 
 -- | Helper for creating labelled content with a figure reference.
 llccFig :: String -> RawContent -> LabelledContent
-llccFig rs rc = llcc (docUid rs) (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs)) rc
+llccFig rs = llcc (docUid rs) (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Helper for creating labelled content with a table reference.
 llccTab :: String -> RawContent -> LabelledContent
-llccTab rs rc = llcc (docUid rs) (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs)) rc
+llccTab rs = llcc (docUid rs) (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Helper for creating labelled content with an equation reference.
 llccEqn :: String -> RawContent -> LabelledContent
-llccEqn rs rc = llcc (docUid rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' (S rs)) rc
+llccEqn rs = llcc (docUid rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Helper for creating labelled content with a UID-based figure reference.
 llccFig' :: UID -> RawContent -> LabelledContent
-llccFig' rs rc = llcc (docNs rs) (RP (prepend "Fig") ("Figure:" ++ repUnd (show rs))) (shortname' (S $ show rs)) rc
+llccFig' rs = llcc (docNs rs) (RP (prepend "Fig") ("Figure:" ++ repUnd (show rs))) (shortname' (S $ show rs))
 
 -- | Helper for creating labelled content with a UID-based table reference.
 llccTab' :: UID -> RawContent -> LabelledContent
-llccTab' rs rc = llcc (docNs rs) (RP (prepend "Tab") ("Table:" ++ repUnd (show rs))) (shortname' (S $ show rs)) rc
+llccTab' rs = llcc (docNs rs) (RP (prepend "Tab") ("Table:" ++ repUnd (show rs))) (shortname' (S $ show rs))
 
 -- | Helper for creating labelled content with a UID-based equation reference.
 llccEqn' :: UID -> RawContent -> LabelledContent
-llccEqn' rs rc = llcc (docNs rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd (show rs))) (shortname' (S $ show rs)) rc
+llccEqn' rs = llcc (docNs rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd (show rs))) (shortname' (S $ show rs))
 
 -- | Smart constructor for unlabelled content chunks (no 'Reference').
 ulcc :: RawContent -> UnlabelledContent

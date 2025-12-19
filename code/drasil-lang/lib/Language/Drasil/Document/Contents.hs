@@ -26,7 +26,7 @@ import Language.Drasil.Sentence (Sentence (..))
 
 -- | Displays a given expression and attaches a 'Reference' to it.
 lbldExpr :: ModelExpr -> Reference -> LabelledContent
-lbldExpr c lbl = mkRawLC (EqnBlock c) lbl
+lbldExpr c = mkRawLC (EqnBlock c)
 
 -- | Same as 'eqUnR' except content is unlabelled (does not attach a 'Reference').
 unlbldExpr :: ModelExpr -> Contents

@@ -39,7 +39,7 @@ We wrote a [position paper](https://github.com/JacquesCarette/Drasil/blob/main/P
 
 ## Quick Start
 
-Start by installing the build tools as directed in [New Workspace Setup](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup). For a minimal setup, only the [System Prerequisites](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup#system-prerequisites), [Basic Development Tools](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup#basic-development-tools), [Stack](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup#stack), and [VS Code](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup#vscode) sections are required.
+Start by installing the build tools as directed in [New Workspace Setup](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup). For a minimal setup, follow everything up to [Optional Utilities](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup#optional-utilities).
 
 After this, you can:
 

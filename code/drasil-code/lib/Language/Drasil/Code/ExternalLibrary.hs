@@ -8,7 +8,7 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   libConstructor, libConstructorMultiReqs, constructAndReturn, lockedArg,
   lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg,
   functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass,
-  implementation, constructorInfo, methodInfo, methodInfoNoReturn,
+  implementation, constructorInfo, isConstructor, methodInfo, methodInfoNoReturn,
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj,
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile,
   returnExprList, fixedReturn, fixedReturn', initSolWithVal
@@ -230,6 +230,11 @@ implementation = Implements
 -- | Specifies a constructor.
 constructorInfo :: CodeFuncChunk -> [Parameter] -> [Step] -> MethodInfo
 constructorInfo c = CI ("Constructor for " ++ codeName c ++ " objects")
+
+-- | Check if a 'MethodInfo' captures a constructor.
+isConstructor :: MethodInfo -> Bool
+isConstructor CI{} = True
+isConstructor _    = False
 
 -- | Specifies a method.
 methodInfo :: CodeFuncChunk -> Description -> [Parameter] -> Description ->

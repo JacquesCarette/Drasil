@@ -149,6 +149,15 @@ The recommended way to install stack is through [GHCup](https://www.haskell.org/
 
 ### Installation
 
+> #### MacOS
+> If you are using MacOS, start by opening your terminal (Apple logo + Space, then search "Terminal"), and running:
+> ```
+> xcode-select --install
+> ```
+> Note: It may take a while to run.
+>
+> You can then continue with the instructions below.
+
 Regardless of your operating system, you should be able to follow the Linux/MacOS/WSL2 [install instructions](https://www.haskell.org/ghcup/install/). It's as simple as entering this into your terminal:
 
 ```

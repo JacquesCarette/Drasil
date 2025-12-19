@@ -6,7 +6,7 @@ To see a more in-depth list of all documents about Drasil, visit the [`Presentat
 - Manual versions for some of the other examples within Drasil: [Manual Case Studies of Documentation for Scientific Computing Software](https://github.com/smiths/caseStudies)
 - Well-Understood: [submission: When Capturing Knowledge Improves Productivity](https://github.com/JacquesCarette/Drasil/blob/main/Papers/WellUnderstood/wu.pdf)
 - [Beyond Software Carpentry](https://gitlab.cas.mcmaster.ca/smiths/pub/-/blob/main/Smith2018.pdf) ([also available on ACM](https://dl.acm.org/doi/10.1145/3194747.3194749))
-- [Brandon Bosman's Poster](../blob/main/People/Brandon-Bosman/Julia Poster/Poster.pdf)
+- [Brandon Bosman's Poster](../blob/main/People/Brandon-Bosman/Julia%20Poster/Poster.pdf)
 - [Mohammad Bilal's Poster](../blob/main/People/Mohd-Bilal/research-poster/MohammadBilal_Poster.pdf)
 - [Jack Wyand's Poster](../blob/main/People/JackWyand/Wyand_Jack_2025_Poster.pdf)
 

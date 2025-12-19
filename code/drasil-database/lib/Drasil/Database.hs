@@ -3,14 +3,14 @@ module Drasil.Database (
   module Drasil.Database.Chunk,
   module Drasil.Database.ChunkDB,
   module Drasil.Database.Dump,
-  module Drasil.Database.UID,
   module Drasil.Database.TH,
-  module Drasil.Database.TypedUIDRef
+  module Drasil.Database.UID,
+  module Drasil.Database.UIDRef
 ) where
 
 import Drasil.Database.Chunk
 import Drasil.Database.ChunkDB
 import Drasil.Database.Dump
 import Drasil.Database.TH
-import Drasil.Database.TypedUIDRef
 import Drasil.Database.UID
+import Drasil.Database.UIDRef

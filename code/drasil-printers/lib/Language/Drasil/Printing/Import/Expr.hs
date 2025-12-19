@@ -5,7 +5,7 @@ module Language.Drasil.Printing.Import.Expr (expr) where
 
 import Data.List (intersperse)
 
-import Drasil.Database (UID)
+import Drasil.Database (UID, UnitypedUIDRef(..))
 import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix, Set)
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
@@ -53,7 +53,7 @@ neg sm a = P.Row [P.MO P.Neg, (if neg' a then id else parens) $ expr a sm]
 
 -- | For printing indexes.
 indx :: PrintingInformation -> Expr -> Expr -> P.Expr
-indx sm (C c) i = f s
+indx sm (C (UnitypedUIDRef c)) i = f s
   where
     i' = expr i sm
     s = lookupC' sm c
@@ -109,10 +109,10 @@ expr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
 expr (AssocA Add l)           sm = P.Row $ addExpr l Add sm
 expr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
 expr (AssocC SUnion l)        sm = assocExpr P.SUnion (precC SUnion) l sm
-expr (C c)                    sm = symbol $ lookupC' sm c
-expr (FCall f [x])            sm =
+expr (C (UnitypedUIDRef c))                    sm = symbol $ lookupC' sm c
+expr (FCall (UnitypedUIDRef f) [x])            sm =
   P.Row [symbol $ lookupC' sm f, parens $ expr x sm]
-expr (FCall f l)              sm = call sm f l
+expr (FCall (UnitypedUIDRef f) l)              sm = call sm f l
 expr (Case _ ps)              sm =
   if length ps < 2
     then error "Attempting to use multi-case expr incorrectly"
@@ -161,7 +161,7 @@ expr (ESSBinaryOp SAdd a b)   sm = mkBOp sm P.SAdd a b
 expr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
 expr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
 expr (Operator o d e)         sm = eop sm o d e
-expr (RealI c ri)             sm = renderRealInt sm (lookupC' sm c) ri
+expr (RealI (UnitypedUIDRef c) ri)             sm = renderRealInt sm (lookupC' sm c) ri
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr

@@ -4,7 +4,7 @@ module Language.Drasil.Printing.Import.ModelExpr where
 
 import Data.List (intersperse)
 
-import Drasil.Database (UID)
+import Drasil.Database (UID, UnitypedUIDRef(..))
 import Language.Drasil (DomainDesc(..), RealInterval(..), Inclusive(..),
   RTopology(..), LiteralC(int))
 import qualified Language.Drasil.Display as S (Symbol(..))
@@ -51,7 +51,7 @@ neg sm a = P.Row [P.MO P.Neg, (if neg' a then id else parens) $ modelExpr a sm]
 
 -- | For printing indexes.
 indx :: PrintingInformation -> ModelExpr -> ModelExpr -> P.Expr
-indx sm (C c) i = f s
+indx sm (C (UnitypedUIDRef c)) i = f s
   where
     i' = modelExpr i sm
     s = lookupC' sm c
@@ -116,18 +116,18 @@ modelExpr (AssocA Mul l)             sm = P.Row $ mulExpr l Mul sm
 modelExpr (AssocC SUnion l)          sm = assocExpr P.SUnion (precC SUnion) l sm
 modelExpr (Deriv 0 Part a _)         sm = P.Row [modelExpr a sm]
 modelExpr (Deriv 0 Total a _)        sm = P.Row [modelExpr a sm]
-modelExpr (Deriv n Part a b)         sm =
+modelExpr (Deriv n Part a (UnitypedUIDRef b))         sm =
   let st = [P.Spc P.Thin, P.MO P.Partial] in
     P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
     (P.Row (st ++ [symbol $ lookupC' sm b] ++ sup n))
-modelExpr (Deriv n Total a b)        sm =
+modelExpr (Deriv n Total a (UnitypedUIDRef b))        sm =
   let st = [P.Spc P.Thin, P.Ident "d"] in
     P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
         (P.Row (st ++ [symbol $ lookupC' sm b] ++ sup n))
-modelExpr (C c)                      sm = symbol $ lookupC' sm c
-modelExpr (FCall f [x])              sm =
+modelExpr (C (UnitypedUIDRef c))                      sm = symbol $ lookupC' sm c
+modelExpr (FCall (UnitypedUIDRef f) [x])              sm =
   P.Row [symbol $ lookupC' sm f, parens $ modelExpr x sm]
-modelExpr (FCall f l)                sm = call sm f l
+modelExpr (FCall (UnitypedUIDRef f) l)                sm = call sm f l
 modelExpr (Case _ ps)                sm =
   if length ps < 2
     then error "Attempting to use multi-case modelExpr incorrectly"
@@ -176,11 +176,11 @@ modelExpr (ESSBinaryOp SAdd a b)     sm = mkBOp sm P.SAdd a b
 modelExpr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
 modelExpr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
 modelExpr (Operator o d e)           sm = eop sm o d e
-modelExpr (RealI c ri)               sm = renderRealInt sm (lookupC' sm c) ri
+modelExpr (RealI (UnitypedUIDRef c) ri)               sm = renderRealInt sm (lookupC' sm c) ri
 modelExpr (Spc s)                    sm = space sm s
 modelExpr (SpaceBinaryOp IsIn l r)   sm = P.Row [modelExpr l sm, P.MO P.IsIn, modelExpr r sm]
 modelExpr (StatBinaryOp Defines l r) sm = P.Row [modelExpr l sm, P.MO P.Eq, modelExpr r sm]
-modelExpr (ForAll c s de)            sm = P.Row [
+modelExpr (ForAll (UnitypedUIDRef c) s de)            sm = P.Row [
     P.MO P.ForAll, symbol $ lookupC' sm c, P.MO P.IsIn, space sm s,
     P.MO P.Dot, modelExpr de sm
   ]

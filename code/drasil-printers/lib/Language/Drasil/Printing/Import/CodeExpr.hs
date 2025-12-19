@@ -7,7 +7,7 @@ import Data.List (intersperse)
 
 import Drasil.Code.CodeExpr.Development
 
-import Drasil.Database (UID)
+import Drasil.Database (UID, UnitypedUIDRef(..))
 import Language.Drasil (DomainDesc(..), Inclusive(..),
   RTopology(..), RealInterval(..), LiteralC (int))
 import qualified Language.Drasil.Display as S (Symbol(..))
@@ -52,7 +52,7 @@ neg sm a = P.Row [P.MO P.Neg, (if neg' a then id else parens) $ codeExpr a sm]
 
 -- | For printing indexes.
 indx :: PrintingInformation -> CodeExpr -> CodeExpr -> P.Expr
-indx sm (C c) i = f s
+indx sm (C (UnitypedUIDRef c)) i = f s
   where
     i' = codeExpr i sm
     s = lookupC' sm c
@@ -67,10 +67,10 @@ indx sm (C c) i = f s
 indx sm a i = P.Row [P.Row [codeExpr a sm], P.Sub $ codeExpr i sm]
 
 -- | For printing expressions that call something.
-call :: PrintingInformation -> UID -> [CodeExpr] -> [(UID, CodeExpr)] -> P.Expr
+call :: PrintingInformation -> UID -> [CodeExpr] -> [(UnitypedUIDRef, CodeExpr)] -> P.Expr
 call sm f ps ns = P.Row [symbol $ lookupC' sm f,
   parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`codeExpr` sm) ps ++
-  zipWith (\n a -> P.Row [symbol $ lookupC' sm n,
+  zipWith (\(UnitypedUIDRef n) a -> P.Row [symbol $ lookupC' sm n,
   P.MO P.Eq, codeExpr a sm]) (map fst ns) (map snd ns)]
 
 -- | Helper function for addition 'EOperator's.
@@ -108,14 +108,14 @@ codeExpr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
 codeExpr (AssocA Add l)           sm = P.Row $ addExpr l Add sm
 codeExpr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
 codeExpr (AssocC SUnion l)        sm = P.Row $ mulExpr l Mul sm
-codeExpr (C c)                    sm = symbol $ lookupC' sm c
-codeExpr (FCall f [x] [])         sm =
+codeExpr (C (UnitypedUIDRef c))                    sm = symbol $ lookupC' sm c
+codeExpr (FCall (UnitypedUIDRef f) [x] [])         sm =
   P.Row [symbol $ lookupC' sm f, parens $ codeExpr x sm]
-codeExpr (FCall f l ns)           sm = call sm f l ns
-codeExpr (New c l ns)             sm = call sm c l ns
-codeExpr (Message a m l ns)       sm =
+codeExpr (FCall (UnitypedUIDRef f) l ns)           sm = call sm f l ns
+codeExpr (New (UnitypedUIDRef c) l ns)             sm = call sm c l ns
+codeExpr (Message (UnitypedUIDRef a) (UnitypedUIDRef m) l ns)       sm =
   P.Row [symbol $ lookupC' sm a, P.MO P.Point, call sm m l ns]
-codeExpr (Field o f)              sm = P.Row [symbol $ lookupC' sm o,
+codeExpr (Field (UnitypedUIDRef o) (UnitypedUIDRef f))              sm = P.Row [symbol $ lookupC' sm o,
   P.MO P.Point, symbol $ lookupC' sm f]
 codeExpr (Case _ ps)              sm =
   if length ps < 2
@@ -165,7 +165,7 @@ codeExpr (ESSBinaryOp SAdd a b)      sm = mkBOp sm P.SAdd a b
 codeExpr (ESSBinaryOp SRemove a b)   sm = mkBOp sm P.SRemove a b
 codeExpr (ESBBinaryOp SContains a b) sm = mkBOp sm P.SContains a b
 codeExpr (Operator o d e)            sm = eop sm o d e
-codeExpr (RealI c ri)                sm = renderRealInt sm (lookupC' sm c) ri
+codeExpr (RealI (UnitypedUIDRef c) ri)                sm = renderRealInt sm (lookupC' sm c) ri
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [CodeExpr] -> PrintingInformation -> P.Expr

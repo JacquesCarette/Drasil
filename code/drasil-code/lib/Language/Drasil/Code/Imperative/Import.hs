@@ -14,7 +14,7 @@ import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
-import Drasil.Database (UID, HasUID(..))
+import Drasil.Database (UID, HasUID(..), UnitypedUIDRef(..))
 import Language.Drasil (HasSymbol, HasSpace(..),
   Space (Rational, Real), RealInterval(..), Constraint(..), Inclusive (..))
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
@@ -314,21 +314,21 @@ convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
 convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
 convExpr (AssocC SUnion l)  = foldl1 (#+) <$> mapM convExpr l
-convExpr (C c)   = do
+convExpr (C (UnitypedUIDRef c))   = do
   g <- get
   let v = quantvar (lookupC g c)
   mkVal v
-convExpr (FCall c x ns) = convCall c x ns fApp libFuncAppMixedArgs
-convExpr (New c x ns) = convCall c x ns (\m _ -> ctorCall m)
+convExpr (FCall (UnitypedUIDRef c) x ns) = convCall c x ns fApp libFuncAppMixedArgs
+convExpr (New (UnitypedUIDRef c) x ns) = convCall c x ns (\m _ -> ctorCall m)
   (\m _ -> libNewObjMixedArgs m)
-convExpr (Message a m x ns) = do
+convExpr (Message (UnitypedUIDRef a) (UnitypedUIDRef m) x ns) = do
   g <- get
   let objCd = quantvar (lookupC g a)
   o <- mkVal objCd
   convCall m x ns
     (\_ n t ps nas -> return (objMethodCallMixedArgs t o n ps nas))
     (\_ n t -> objMethodCallMixedArgs t o n)
-convExpr (Field o f) = do
+convExpr (Field (UnitypedUIDRef o) (UnitypedUIDRef f)) = do
   g <- get
   let ob  = quantvar (lookupC g o)
       fld = quantvar (lookupC g f)
@@ -375,7 +375,7 @@ convExpr(Variable s (S.Set l _)) = do
   return $ valueOf varSet
 convExpr(Variable _ _) = error "convExpr: Variable"
 convExpr Operator{} = error "convExpr: Operator"
-convExpr (RealI c ri)  = do
+convExpr (RealI (UnitypedUIDRef c) ri)  = do
   g <- get
   convExpr $ renderRealInt (lookupC g c) ri
 
@@ -1026,11 +1026,11 @@ convExprProc (AssocA Mul l) = foldl1 (#*)  <$> mapM convExprProc l
 convExprProc (AssocB And l) = foldl1 (?&&) <$> mapM convExprProc l
 convExprProc (AssocB Or l)  = foldl1 (?||) <$> mapM convExprProc l
 convExprProc (AssocC SUnion l)  = foldl1 (#+) <$> mapM convExprProc l
-convExprProc (C c) = do
+convExprProc (C (UnitypedUIDRef c)) = do
   g <- get
   let v = quantvar (lookupC g c)
   mkValProc v
-convExprProc (FCall c x ns) = convCallProc c x ns fAppProc libFuncAppMixedArgs
+convExprProc (FCall (UnitypedUIDRef c) x ns) = convCallProc c x ns fAppProc libFuncAppMixedArgs
 convExprProc (New {}) = error "convExprProc: Procedural renderers do not support object creation"
 convExprProc (Message {}) = error "convExprProc: Procedural renderers do not support methods"
 convExprProc (Field _ _) = error "convExprProc: Procedural renderers do not support object field access"
@@ -1075,7 +1075,7 @@ convExprProc (Variable s (S.Set l _)) = do
   return $ valueOf varSet
 convExprProc (Variable _ _) = error "convExpr: Variable"
 convExprProc Operator{} = error "convExprProc: Operator"
-convExprProc (RealI c ri)  = do
+convExprProc (RealI (UnitypedUIDRef c) ri)  = do
   g <- get
   convExprProc $ renderRealInt (lookupC g c) ri
 

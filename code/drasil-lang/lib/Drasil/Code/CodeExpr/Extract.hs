@@ -5,7 +5,7 @@ module Drasil.Code.CodeExpr.Extract (
 
 import Data.Containers.ListUtils (nubOrd)
 
-import Drasil.Database (UID)
+import Drasil.Database (UID, UnitypedUIDRef(..))
 
 import Language.Drasil.Space (RealInterval(..))
 import Drasil.Code.CodeExpr.Lang (CodeExpr(..))
@@ -15,15 +15,15 @@ eNames :: CodeExpr -> [UID]
 eNames (AssocA _ l)          = concatMap eNames l
 eNames (AssocB _ l)          = concatMap eNames l
 eNames (AssocC _ l)          = concatMap eNames l
-eNames (C c)                 = [c]
+eNames (C (UnitypedUIDRef c))                 = [c]
 eNames Lit{}                 = []
-eNames (FCall f x ns)        = f : concatMap eNames x ++ map fst ns ++
+eNames (FCall (UnitypedUIDRef f) x ns)        = f : concatMap eNames x ++ map (\(UnitypedUIDRef u) -> u) (map fst ns) ++
                               concatMap (eNames . snd) ns
-eNames (New c x ns)          = c : concatMap eNames x ++ map fst ns ++
+eNames (New (UnitypedUIDRef c) x ns)          = c : concatMap eNames x ++ map (\(UnitypedUIDRef u) -> u) (map fst ns) ++
                               concatMap (eNames . snd) ns
-eNames (Message a m x ns)    = a : m : concatMap eNames x ++ map fst ns ++
+eNames (Message (UnitypedUIDRef a) (UnitypedUIDRef m) x ns)    = a : m : concatMap eNames x ++ map (\(UnitypedUIDRef u) -> u) (map fst ns) ++
                               concatMap (eNames . snd) ns
-eNames (Field o f)           = [o, f]
+eNames (Field (UnitypedUIDRef o) (UnitypedUIDRef f))           = [o, f]
 eNames (Case _ ls)           = concatMap (eNames . fst) ls ++ concatMap (eNames . snd) ls
 eNames (UnaryOp _ u)         = eNames u
 eNames (UnaryOpB _ u)        = eNames u
@@ -43,7 +43,7 @@ eNames (Operator _ _ e)      = eNames e
 eNames (Matrix a)            = concatMap (concatMap eNames) a
 eNames (Set _ a)             = concatMap eNames a
 eNames (Variable _ e)        = eNames e
-eNames (RealI c b)           = c : eNamesRI b
+eNames (RealI (UnitypedUIDRef c) b)           = c : eNamesRI b
 
 -- | Generic traversal of everything that could come from an interval to names (similar to 'eNames').
 eNamesRI :: RealInterval CodeExpr CodeExpr -> [UID]
@@ -58,15 +58,15 @@ eNames' :: CodeExpr -> [UID]
 eNames' (AssocA _ l)          = concatMap eNames' l
 eNames' (AssocB _ l)          = concatMap eNames' l
 eNames' (AssocC _ l)          = concatMap eNames' l
-eNames' (C c)                 = [c]
+eNames' (C (UnitypedUIDRef c))                 = [c]
 eNames' Lit{}                 = []
-eNames' (FCall _ x ns)        = concatMap eNames' x ++ map fst ns ++
+eNames' (FCall _ x ns)        = concatMap eNames' x ++ map (\(UnitypedUIDRef u) -> u) (map fst ns) ++
                                concatMap (eNames .snd) ns
-eNames' (New _ x ns)          = concatMap eNames' x ++ map fst ns ++
+eNames' (New _ x ns)          = concatMap eNames' x ++ map (\(UnitypedUIDRef u) -> u) (map fst ns) ++
                                concatMap (eNames .snd) ns
-eNames' (Message a _ x ns)    = a : concatMap eNames' x ++ map fst ns ++
+eNames' (Message (UnitypedUIDRef a) _ x ns)    = a : concatMap eNames' x ++ map (\(UnitypedUIDRef u) -> u) (map fst ns) ++
                                concatMap (eNames .snd) ns
-eNames' (Field o f)           = [o, f]
+eNames' (Field (UnitypedUIDRef o) (UnitypedUIDRef f))           = [o, f]
 eNames' (Case _ ls)           = concatMap (eNames' . fst) ls ++
                                concatMap (eNames' . snd) ls
 eNames' (UnaryOp _ u)         = eNames' u
@@ -87,7 +87,7 @@ eNames' (Operator _ _ e)      = eNames' e
 eNames' (Matrix a)            = concatMap (concatMap eNames') a
 eNames' (Set _ a)             = concatMap eNames' a
 eNames' (Variable _ e)        = eNames' e
-eNames' (RealI c b)           = c : eNamesRI' b
+eNames' (RealI (UnitypedUIDRef c) b)           = c : eNamesRI' b
 
 -- | Generic traversal of everything that could come from an interval to names without functions (similar to 'eNames'').
 eNamesRI' :: RealInterval CodeExpr CodeExpr -> [UID]

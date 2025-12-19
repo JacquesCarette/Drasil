@@ -3,7 +3,7 @@ module Language.Drasil.Expr.Extract where
 
 import Data.Containers.ListUtils (nubOrd)
 
-import Drasil.Database (UID)
+import Drasil.Database (UID, UnitypedUIDRef(..))
 
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Space (RealInterval(..))
@@ -13,9 +13,9 @@ eNames :: Expr -> [UID]
 eNames (AssocA _ l)          = concatMap eNames l
 eNames (AssocB _ l)          = concatMap eNames l
 eNames (AssocC _ l)          = concatMap eNames l
-eNames (C c)                 = [c]
+eNames (C (UnitypedUIDRef c))                 = [c]
 eNames Lit{}                 = []
-eNames (FCall f x)           = f : concatMap eNames x
+eNames (FCall (UnitypedUIDRef f) x)           = f : concatMap eNames x
 eNames (Case _ ls)           = concatMap (eNames . fst) ls ++
                                concatMap (eNames . snd) ls
 eNames (UnaryOp _ u)         = eNames u
@@ -36,7 +36,7 @@ eNames (Operator _ _ e)      = eNames e
 eNames (Matrix a)            = concatMap (concatMap eNames) a
 eNames (Set _ a)             = concatMap eNames a
 eNames (Variable _ e)        = eNames e
-eNames (RealI c b)           = c : eNamesRI b
+eNames (RealI (UnitypedUIDRef c) b)           = c : eNamesRI b
 
 -- | Generic traversal of everything that could come from an interval to names (similar to 'eNames').
 eNamesRI :: RealInterval Expr Expr -> [UID]
@@ -51,7 +51,7 @@ eNames' :: Expr -> [UID]
 eNames' (AssocA _ l)          = concatMap eNames' l
 eNames' (AssocB _ l)          = concatMap eNames' l
 eNames' (AssocC _ l)          = concatMap eNames' l
-eNames' (C c)                 = [c]
+eNames' (C (UnitypedUIDRef c))                 = [c]
 eNames' Lit{}                 = []
 eNames' (FCall _ x)           = concatMap eNames' x
 eNames' (Case _ ls)           = concatMap (eNames' . fst) ls ++
@@ -74,7 +74,7 @@ eNames' (Operator _ _ e)      = eNames' e
 eNames' (Matrix a)            = concatMap (concatMap eNames') a
 eNames' (Set _ a)             = concatMap eNames' a
 eNames' (Variable _ e)        = eNames' e
-eNames' (RealI c b)           = c : eNamesRI' b
+eNames' (RealI (UnitypedUIDRef c) b)           = c : eNamesRI' b
 
 -- | Generic traversal of everything that could come from an interval to names without functions (similar to 'eNames'').
 eNamesRI' :: RealInterval Expr Expr -> [UID]

@@ -37,6 +37,7 @@ unhideOrErr tu cdb = fromMaybe (error "Typed UID dereference failed.") (unhide t
 -- | A variant of 'UIDRef' without type information about the chunk being
 -- referred to, effectively treating chunks as being "unityped."
 newtype UnitypedUIDRef = UnitypedUIDRef UID
+  deriving (Eq, Show)
 
 instance HasChunkRefs UnitypedUIDRef where
   -- | A 'UnitypedUIDRef t' carries a 'UID' referring to another chunk.

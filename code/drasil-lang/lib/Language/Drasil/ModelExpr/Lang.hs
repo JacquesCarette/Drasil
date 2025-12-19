@@ -5,7 +5,7 @@ module Language.Drasil.ModelExpr.Lang where
 
 import Prelude hiding (sqrt)
 
-import Drasil.Database (UID)
+import Drasil.Database (UnitypedUIDRef)
 
 import Language.Drasil.Expr.Lang (Completeness)
 import Language.Drasil.Literal.Lang (Literal(..))
@@ -114,12 +114,12 @@ data ModelExpr where
   -- | Derivative syntax is:
   --   Type ('Part'ial or 'Total') -> principal part of change -> with respect to
   --   For example: Deriv Part y x1 would be (dy/dx1).
-  Deriv     :: Integer -> DerivType -> ModelExpr -> UID -> ModelExpr
+  Deriv     :: Integer -> DerivType -> ModelExpr -> UnitypedUIDRef -> ModelExpr
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
-  C         :: UID -> ModelExpr
+  C         :: UnitypedUIDRef -> ModelExpr
   -- | Function applications.
-  FCall     :: UID -> [ModelExpr] -> ModelExpr
+  FCall     :: UnitypedUIDRef -> [ModelExpr] -> ModelExpr
   -- | For multi-case expressions, each pair represents one case.
   Case      :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
   -- | Represents a matrix of expressions.
@@ -166,11 +166,11 @@ data ModelExpr where
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
   Operator :: AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> ModelExpr
-  -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
-  RealI    :: UID -> RealInterval ModelExpr ModelExpr -> ModelExpr
+  -- | A different kind of 'IsIn'. A 'UnitypedUIDRef' is an element of an interval.
+  RealI    :: UnitypedUIDRef -> RealInterval ModelExpr ModelExpr -> ModelExpr
 
   -- | Universal quantification
-  ForAll   :: UID -> Space -> ModelExpr -> ModelExpr
+  ForAll   :: UnitypedUIDRef -> Space -> ModelExpr -> ModelExpr
 
 -- | The variable type is just a renamed 'String'.
 type Variable = String

@@ -3,7 +3,7 @@ module Language.Drasil.ModelExpr.Extract where
 
 import Data.Containers.ListUtils (nubOrd)
 
-import Drasil.Database (UID)
+import Drasil.Database (UID, UnitypedUIDRef(..))
 
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..))
 import Language.Drasil.Space (RealInterval(..))
@@ -13,11 +13,11 @@ meNames :: ModelExpr -> [UID]
 meNames (AssocA _ l)          = concatMap meNames l
 meNames (AssocB _ l)          = concatMap meNames l
 meNames (AssocC _ l)          = concatMap meNames l
-meNames (Deriv _ _ a b)       = b : meNames a
-meNames (C c)                 = [c]
+meNames (Deriv _ _ a (UnitypedUIDRef b))       = b : meNames a
+meNames (C (UnitypedUIDRef c))                 = [c]
 meNames Lit{}                 = []
 meNames Spc{}                 = []
-meNames (FCall f x)           = f : concatMap meNames x
+meNames (FCall (UnitypedUIDRef f) x)           = f : concatMap meNames x
 meNames (Case _ ls)           = concatMap (meNames . fst) ls ++
                                 concatMap (meNames . snd) ls
 meNames (UnaryOp _ u)         = meNames u
@@ -40,8 +40,8 @@ meNames (Operator _ _ e)      = meNames e
 meNames (Matrix a)            = concatMap (concatMap meNames) a
 meNames (Set _ a)             = concatMap meNames a
 meNames (Variable _ e)        = meNames e
-meNames (RealI c b)           = c : meNamesRI b
-meNames (ForAll _ _ de)       = meNames de
+meNames (RealI (UnitypedUIDRef c) b)           = c : meNamesRI b
+meNames (ForAll (UnitypedUIDRef _) _ de)       = meNames de
 
 -- | Generic traversal of everything that could come from an interval to names (similar to 'meNames').
 meNamesRI :: RealInterval ModelExpr ModelExpr -> [UID]
@@ -56,8 +56,8 @@ meNames' :: ModelExpr -> [UID]
 meNames' (AssocA _ l)          = concatMap meNames' l
 meNames' (AssocB _ l)          = concatMap meNames' l
 meNames' (AssocC _ l)          = concatMap meNames' l
-meNames' (Deriv _ _ a b)       = b : meNames' a
-meNames' (C c)                 = [c]
+meNames' (Deriv _ _ a (UnitypedUIDRef b))       = b : meNames' a
+meNames' (C (UnitypedUIDRef c))                 = [c]
 meNames' Lit{}                 = []
 meNames' Spc{}                 = []
 meNames' (FCall _ x)           = concatMap meNames' x
@@ -83,8 +83,8 @@ meNames' (Operator _ _ e)      = meNames' e
 meNames' (Matrix a)            = concatMap (concatMap meNames') a
 meNames' (Set _ a)             = concatMap meNames' a
 meNames' (Variable _ e)        = meNames' e
-meNames' (RealI c b)           = c : meNamesRI' b
-meNames' (ForAll _ _ de)       = meNames' de
+meNames' (RealI (UnitypedUIDRef c) b)           = c : meNamesRI' b
+meNames' (ForAll (UnitypedUIDRef _) _ de)       = meNames' de
 
 -- | Generic traversal of everything that could come from an interval to names without functions (similar to 'meNames'').
 meNamesRI' :: RealInterval ModelExpr ModelExpr -> [UID]

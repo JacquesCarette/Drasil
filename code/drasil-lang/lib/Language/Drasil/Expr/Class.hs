@@ -11,7 +11,7 @@ module Language.Drasil.Expr.Class (
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 import Control.Lens ((^.))
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), hideUni)
 import Utils.Drasil (toColumn)
 
 import Language.Drasil.Symbol
@@ -358,7 +358,7 @@ instance ExprC Expr where
   defprod v low high = Operator Mul (BoundedDD v Discrete low high)
 
   -- | Smart constructor for 'real interval' membership.
-  realInterval c = RealI (c ^. uid)
+  realInterval c = RealI (hideUni c)
 
   -- TODO: Move euclidean to smart constructor
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
@@ -382,10 +382,10 @@ instance ExprC Expr where
   set' = Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
-  apply f ps = FCall (f ^. uid) ps
+  apply f ps = FCall (hideUni f) ps
 
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
-  sy x = C (x ^. uid)
+  sy x = C (hideUni x)
 
 instance ExprC M.ModelExpr where
   lit = M.Lit
@@ -525,7 +525,7 @@ instance ExprC M.ModelExpr where
   defprod v low high = M.Operator M.Mul (BoundedDD v Discrete low high)
 
   -- | Smart constructor for 'real interval' membership.
-  realInterval c = M.RealI (c ^. uid)
+  realInterval c = M.RealI (hideUni c)
 
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
   euclidean = sqrt . foldr1 ($+) . map square
@@ -549,8 +549,8 @@ instance ExprC M.ModelExpr where
   set' = M.Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
-  apply f ps = M.FCall (f ^. uid) ps
+  apply f ps = M.FCall (hideUni f) ps
 
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
-  sy x = M.C (x ^. uid)
+  sy x = M.C (hideUni x)

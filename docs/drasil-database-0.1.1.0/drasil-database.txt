@@ -108,36 +108,6 @@ type ChunkType = String
 type DumpedChunkDB = Map ChunkType [UID]
 dumpChunkDB :: ChunkDB -> DumpedChunkDB
 
--- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
---   into our database of information. We use a newtype wrapper to make
---   sure we are only using <a>UID</a>s where desired.
-data UID
-
--- | The most basic item: having a unique identifier key, a <a>UID</a>.
-class HasUID c
-
--- | The <i>unique</i> id of the chunk (for internal Drasil use only).
-uid :: HasUID c => Getter c UID
-
--- | Smart constructor for <a>UID</a>s from raw <a>Value</a>s.
-mkUid :: String -> UID
-
--- | Nest a <a>UID</a> under a namespace.
-nsUid :: String -> UID -> UID
-
--- | Append a suffix to a thing with a <a>UID</a> and get the resulting
---   <a>UID</a>.
-(+++) :: HasUID a => a -> String -> UID
-
--- | Append a suffix to a <a>UID</a>.
-(+++.) :: UID -> String -> UID
-
--- | Merge the <a>UID</a>s of two chunks through simple concatenation.
-(+++!) :: (HasUID a, HasUID b) => a -> b -> UID
-
--- | Get something's <a>UID</a> as a <a>Value</a>.
-showUID :: HasUID a => a -> String
-
 -- | Declares that a type is a chunk type; Generates an instance of
 --   <a>HasChunkRefs</a>.
 declareHasChunkRefs :: Name -> Q [Dec]
@@ -196,15 +166,59 @@ class () => Generic a
 newtype () => Generically a
 Generically :: a -> Generically a
 
--- | <a>UID</a> references that contain information about the type of data
---   the <a>UID</a> refers to, useful for type-safe dereferencing.
-data TypedUIDRef typ
+-- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
+--   into our database of information. We use a newtype wrapper to make
+--   sure we are only using <a>UID</a>s where desired.
+data UID
 
--- | Create a <a>TypedUIDRef</a> to a chunk.
-mkRef :: IsChunk t => t -> TypedUIDRef t
+-- | The most basic item: having a unique identifier key, a <a>UID</a>.
+class HasUID c
 
--- | Find a chunk by its typed UID reference.
-typedFind :: IsChunk t => TypedUIDRef t -> ChunkDB -> Maybe t
+-- | The <i>unique</i> id of the chunk (for internal Drasil use only).
+uid :: HasUID c => Getter c UID
 
--- | Find a chunk by its typed UID reference, erroring if not found.
-typedFindOrErr :: IsChunk t => TypedUIDRef t -> ChunkDB -> t
+-- | Smart constructor for <a>UID</a>s from raw <a>Value</a>s.
+mkUid :: String -> UID
+
+-- | Nest a <a>UID</a> under a namespace.
+nsUid :: String -> UID -> UID
+
+-- | Append a suffix to a thing with a <a>UID</a> and get the resulting
+--   <a>UID</a>.
+(+++) :: HasUID a => a -> String -> UID
+
+-- | Append a suffix to a <a>UID</a>.
+(+++.) :: UID -> String -> UID
+
+-- | Merge the <a>UID</a>s of two chunks through simple concatenation.
+(+++!) :: (HasUID a, HasUID b) => a -> b -> UID
+
+-- | Get something's <a>UID</a> as a <a>Value</a>.
+showUID :: HasUID a => a -> String
+
+-- | A reference to another chunk through its <a>UID</a>, with a type
+--   variable to retain information about the original chunk's type, useful
+--   for type-safe dereferencing.
+data UIDRef typ
+
+-- | Create a <a>UIDRef</a> to a chunk.
+hide :: IsChunk t => t -> UIDRef t
+
+-- | Find a chunk by a <a>UIDRef</a>.
+unhide :: IsChunk t => UIDRef t -> ChunkDB -> Maybe t
+
+-- | Find a chunk by a <a>UIDRef</a>, erroring if not found.
+unhideOrErr :: IsChunk t => UIDRef t -> ChunkDB -> t
+
+-- | A variant of <a>UIDRef</a> without type information about the chunk
+--   being referred to, effectively treating chunks as being "unityped."
+data UnitypedUIDRef
+
+-- | Create a <a>UnitypedUIDRef</a> to a chunk.
+hideUni :: IsChunk t => t -> UnitypedUIDRef
+
+-- | Find a chunk by its <a>UnitypedUIDRef</a>.
+unhideUni :: IsChunk t => UnitypedUIDRef -> ChunkDB -> Maybe t
+
+-- | Find a chunk by its <a>UnitypedUIDRef</a>, erroring if not found.
+unhideUniOrErr :: IsChunk t => UnitypedUIDRef -> ChunkDB -> t

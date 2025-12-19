@@ -1,17 +1,18 @@
 digraph database{
 Chunk	[shape=oval, color=turquoise4, label="Chunk"];
 ChunkDB	[shape=oval, color=turquoise4, label="ChunkDB"];
-TypedUIDRef	[shape=oval, color=turquoise4, label="TypedUIDRef"];
 UID	[shape=oval, color=turquoise4, label="UID"];
+UIDRef	[shape=oval, color=turquoise4, label="UIDRef"];
+UnitypedUIDRef	[shape=oval, color=turquoise4, label="UnitypedUIDRef"];
 Eq	[shape=oval, color=pink, label="Eq"];
 HasUID	[shape=oval, color=pink, label="HasUID"];
 HasChunkRefs	[shape=oval, color=pink, label="HasChunkRefs"];
 __#	[shape=oval, color=pink, label="{-#"];
 GHasCRefs	[shape=oval, color=pink, label="GHasCRefs"];
-HasChunkRefs	[shape=oval, color=pink, label="HasChunkRefs"];
 ToJSON	[shape=oval, color=pink, label="ToJSON"];
 ToJSONKey	[shape=oval, color=pink, label="ToJSONKey"];
 Show	[shape=oval, color=pink, label="Show"];
+HasChunkRefs	[shape=oval, color=pink, label="HasChunkRefs"];
 HasChunkRefs	[shape=oval, color=magenta, label="HasChunkRefs"];
 GHasCRefs	[shape=oval, color=magenta, label="GHasCRefs"];
 HasUID	[shape=oval, color=magenta, label="HasUID"];
@@ -34,8 +35,9 @@ a_:*:_b -> GHasCRefs;
 a_:+:_b -> GHasCRefs;
 K1_i_c -> GHasCRefs;
 U1 -> GHasCRefs;
-_TypedUIDRef -> HasChunkRefs;
 UID -> ToJSON;
 UID -> ToJSONKey;
 UID -> Show;
+_UIDRef -> HasChunkRefs;
+UnitypedUIDRef -> HasChunkRefs;
 }

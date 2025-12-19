@@ -221,22 +221,6 @@ insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
 --   chunks from the chunk lists.
 insertAllOutOfOrder11 :: (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e, IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j, IsChunk k) => ChunkDB -> [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [g] -> [h] -> [i] -> [j] -> [k] -> ChunkDB
 
-module Drasil.Database.TypedUIDRef
-
--- | <a>UID</a> references that contain information about the type of data
---   the <a>UID</a> refers to, useful for type-safe dereferencing.
-data TypedUIDRef typ
-
--- | Create a <a>TypedUIDRef</a> to a chunk.
-mkRef :: IsChunk t => t -> TypedUIDRef t
-
--- | Find a chunk by its typed UID reference.
-typedFind :: IsChunk t => TypedUIDRef t -> ChunkDB -> Maybe t
-
--- | Find a chunk by its typed UID reference, erroring if not found.
-typedFindOrErr :: IsChunk t => TypedUIDRef t -> ChunkDB -> t
-instance Drasil.Database.Chunk.HasChunkRefs (Drasil.Database.TypedUIDRef.TypedUIDRef t)
-
 module Drasil.Database.Dump
 type ChunkType = String
 
@@ -244,6 +228,37 @@ type ChunkType = String
 --   (<a>String</a>s) to lists of <a>UID</a>s.
 type DumpedChunkDB = Map ChunkType [UID]
 dumpChunkDB :: ChunkDB -> DumpedChunkDB
+
+module Drasil.Database.UIDRef
+
+-- | A reference to another chunk through its <a>UID</a>, with a type
+--   variable to retain information about the original chunk's type, useful
+--   for type-safe dereferencing.
+data UIDRef typ
+
+-- | Create a <a>UIDRef</a> to a chunk.
+hide :: IsChunk t => t -> UIDRef t
+
+-- | Find a chunk by a <a>UIDRef</a>.
+unhide :: IsChunk t => UIDRef t -> ChunkDB -> Maybe t
+
+-- | Find a chunk by a <a>UIDRef</a>, erroring if not found.
+unhideOrErr :: IsChunk t => UIDRef t -> ChunkDB -> t
+
+-- | A variant of <a>UIDRef</a> without type information about the chunk
+--   being referred to, effectively treating chunks as being "unityped."
+data UnitypedUIDRef
+
+-- | Create a <a>UnitypedUIDRef</a> to a chunk.
+hideUni :: IsChunk t => t -> UnitypedUIDRef
+
+-- | Find a chunk by its <a>UnitypedUIDRef</a>.
+unhideUni :: IsChunk t => UnitypedUIDRef -> ChunkDB -> Maybe t
+
+-- | Find a chunk by its <a>UnitypedUIDRef</a>, erroring if not found.
+unhideUniOrErr :: IsChunk t => UnitypedUIDRef -> ChunkDB -> t
+instance Drasil.Database.Chunk.HasChunkRefs Drasil.Database.UIDRef.UnitypedUIDRef
+instance Drasil.Database.Chunk.HasChunkRefs (Drasil.Database.UIDRef.UIDRef t)
 
 
 -- | Re-export database types and functions to simplify external use.

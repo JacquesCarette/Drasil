@@ -1054,16 +1054,20 @@ digraph alltypes {
 	}
 	subgraph th {
 	}
-	subgraph typeduidref {
-		subgraph typeduidreftyp{
-		TypedUIDReftyp	[shape=oval, color=darkgreen, label="TypedUIDReftyp"];
-		TypedUIDReftyp -> UID;
-		}
-	}
 	subgraph uid {
 		subgraph uid{
 		UID	[shape=oval, color=cyan3, label="UID"];
 		UID -> String;
+		}
+	}
+	subgraph uidref {
+		subgraph uidreftyp{
+		UIDReftyp	[shape=oval, color=darkgreen, label="UIDReftyp"];
+		UIDReftyp -> UID;
+		}
+		subgraph unitypeduidref{
+		UnitypedUIDRef	[shape=oval, color=darkgreen, label="UnitypedUIDRef"];
+		UnitypedUIDRef -> UID;
 		}
 	}
 	subgraph databaes {

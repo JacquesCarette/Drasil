@@ -37,7 +37,7 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
 
 -- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'System'.
 generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> System -> LabelledContent
-generateTraceTableView u desc cols rows c = llcc (makeTabRef' u) $ Table
+generateTraceTableView u desc cols rows c = llccTab' u $ Table
   (EmptyS : traceMColHeader colf c)
   (makeTMatrix (traceMRowHeader rowf c) (traceMColumns colf rowf c) $ traceMReferees colf c)
   (showingCxnBw traceyMatrix desc) True

@@ -14,7 +14,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Classes (Definition(..))
 import Language.Drasil.ShortName (HasShortName(..), getSentSN)
-import Language.Drasil.Document (llcc, ulcc)
+import Language.Drasil.Document (mkRawLC, ulcc)
 import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)
 import Language.Drasil.Document.Core (LabelledContent, RawContent(Enumeration,
   EqnBlock, CodeBlock), Contents(UlC), ListTuple, ItemType(Flat), ListType(Simple))
@@ -26,7 +26,7 @@ import Language.Drasil.Sentence (Sentence (..))
 
 -- | Displays a given expression and attaches a 'Reference' to it.
 lbldExpr :: ModelExpr -> Reference -> LabelledContent
-lbldExpr c lbl = llcc lbl $ EqnBlock c
+lbldExpr c = mkRawLC (EqnBlock c)
 
 -- | Same as 'eqUnR' except content is unlabelled (does not attach a 'Reference').
 unlbldExpr :: ModelExpr -> Contents
@@ -38,7 +38,7 @@ unlbldCode c = UlC $ ulcc $ CodeBlock c
 
 -- | Creates a bulleted list.
 enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
-enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
+enumBullet lb s = mkRawLC (Enumeration $ bulletFlat s) lb
 
 -- | Same as 'enumBullet' but unlabelled.
 enumBulletU :: [Sentence] -> Contents --FIXME: should Enumeration be labelled?
@@ -62,7 +62,7 @@ enumBulletU s =  UlC $ ulcc $ Enumeration $ bulletFlat s
 --     * DD3: def2
 --     * DD4: def3 ...
 enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
-enumSimple lb s t l = llcc lb $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
+enumSimple lb s t l = mkRawLC (Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l) lb
 
 -- | Same as 'enumSimple' but unlabelled.
 enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?

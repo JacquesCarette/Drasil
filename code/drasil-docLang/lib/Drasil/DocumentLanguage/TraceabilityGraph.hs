@@ -169,7 +169,7 @@ genTraceGraphLabCons ex = zipWith (traceGraphLC ex) traceGFiles traceGUIDs
 
 -- | Generates traceability graphs as figures on an SRS document.
 traceGraphLC :: String -> FilePath -> UID -> LabelledContent
-traceGraphLC ex fp u = llcc (makeFigRef' u) $ fig (S $ show u) (traceyGraphPath ex fp)
+traceGraphLC ex fp u = llccFig' u $ fig (S $ show u) (traceyGraphPath ex fp)
 
 -- | Traceability graph file names.
 traceGFiles :: [String]

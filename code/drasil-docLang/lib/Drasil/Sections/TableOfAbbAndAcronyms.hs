@@ -22,14 +22,14 @@ select (x:xs) = case getA x of
 
 -- | The actual table creation function.
 tableAbbAccGen :: (Idea s) => [s] -> LabelledContent
-tableAbbAccGen [] = llcc tableAbbAccRef $ Paragraph $ emptySectSentPlu [abbAcc]
+tableAbbAccGen [] = mkRawLC (Paragraph $ emptySectSentPlu [abbAcc]) tableAbbAccRef
 tableAbbAccGen ls = let chunks = sortBy (compare `on` fst) $ select ls in
-  llcc tableAbbAccRef $ Table
+  mkRawLC (Table
   (map titleize [abbreviation, fullForm]) (mkTable
   [\(a,_) -> S a,
    \(_,b) -> titleize b]
   chunks)
-  (titleize' abbAcc) True
+  (titleize' abbAcc) True) tableAbbAccRef
 
 -- | Table of abbreviations and acronyms reference.
 tableAbbAccRef :: Reference

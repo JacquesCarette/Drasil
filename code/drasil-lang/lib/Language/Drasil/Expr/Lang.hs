@@ -9,7 +9,7 @@ import Data.Either (fromRight, rights)
 import qualified Data.Foldable as NE
 import Data.List (nub)
 
-import Drasil.Database (UID)
+import Drasil.Database (UnitypedUIDRef)
 
 import Language.Drasil.Literal.Class (LiteralC (..))
 import Language.Drasil.Literal.Lang (Literal (..))
@@ -120,9 +120,9 @@ data Expr where
   AssocC   :: AssocConcatOper -> [Expr] -> Expr
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
-  C        :: UID -> Expr
+  C        :: UnitypedUIDRef -> Expr
   -- | Function applications.
-  FCall    :: UID -> [Expr] -> Expr
+  FCall    :: UnitypedUIDRef -> [Expr] -> Expr
   -- | For multi-case expressions, each pair represents one case.
   Case     :: Completeness -> [(Expr, Relation)] -> Expr
   -- | Represents a matrix of expressions.
@@ -164,8 +164,8 @@ data Expr where
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
   Operator :: AssocArithOper -> DiscreteDomainDesc Expr Expr -> Expr -> Expr
-  -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
-  RealI    :: UID -> RealInterval Expr Expr -> Expr
+  -- | A different kind of 'IsIn'. A 'UnitypedUIDRef' is an element of an interval.
+  RealI    :: UnitypedUIDRef -> RealInterval Expr Expr -> Expr
 
 -- | Expressions are equal if their constructors and contents are equal.
 instance Eq Expr where
@@ -292,11 +292,11 @@ instance Typed Expr Space where
 
   infer _ (AssocC SUnion _) = Left "Associative addition requires at least one operand."
 
-  infer cxt (C uid) = inferFromContext cxt uid
+  infer cxt (C (UnitypedUIDRef uid)) = inferFromContext cxt uid
 
   infer cxt (Variable _ n) = infer cxt n
 
-  infer cxt (FCall uid exs) = do
+  infer cxt (FCall (UnitypedUIDRef uid) exs) = do
     ft <- inferFromContext cxt uid
     (params, out) <- assertFunction ft $ \t -> "Function application on non-function `" ++ show uid ++ "` (" ++ t ++ ")."
     let exst = map (infer cxt) exs
@@ -501,7 +501,7 @@ instance Typed Expr Space where
     -- FIXME: We have a `Symbol` in the `S.BoundedDD` but it's not used in type-checking.
     pure bodyTy
 
-  infer cxt (RealI uid ri) = do
+  infer cxt (RealI (UnitypedUIDRef uid) ri) = do
     uidT <- inferFromContext cxt uid
     riT <- riTy ri
     assertReal uidT $

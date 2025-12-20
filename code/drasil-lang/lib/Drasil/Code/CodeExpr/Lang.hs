@@ -4,7 +4,7 @@ module Drasil.Code.CodeExpr.Lang where
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 
-import Drasil.Database (UID, HasUID(..))
+import Drasil.Database (UID, HasUID(..), hideUni, UnitypedUIDRef)
 
 import Language.Drasil.Expr.Lang (Completeness(..))
 import Language.Drasil.Expr.Class (ExprC(..), square)
@@ -99,26 +99,26 @@ data CodeExpr where
   AssocC :: AssocConcatOper -> [CodeExpr] -> CodeExpr
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
-  C        :: UID -> CodeExpr
+  C        :: UnitypedUIDRef -> CodeExpr
   -- | A function call accepts a list of parameters and a list of named parameters.
   --   For example
   --
   --   * F(x) is (FCall F [x] []).
   --   * F(x,y) would be (FCall F [x,y]).
   --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
-  FCall    :: UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
-  -- | Actor creation given 'UID', parameters, and named parameters.
-  New      :: UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
+  FCall    :: UnitypedUIDRef -> [CodeExpr] -> [(UnitypedUIDRef, CodeExpr)] -> CodeExpr
+  -- | Actor creation given 'UnitypedUIDRef', parameters, and named parameters.
+  New      :: UnitypedUIDRef -> [CodeExpr] -> [(UnitypedUIDRef, CodeExpr)] -> CodeExpr
   -- | Message an actor:
   --
-  --   * 1st 'UID' is the actor,
-  --   * 2nd 'UID' is the method.
-  Message  :: UID -> UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
+  --   * 1st 'UnitypedUIDRef' is the actor,
+  --   * 2nd 'UnitypedUIDRef' is the method.
+  Message  :: UnitypedUIDRef -> UnitypedUIDRef -> [CodeExpr] -> [(UnitypedUIDRef, CodeExpr)] -> CodeExpr
   -- | Access a field of an actor:
   --
-  --   * 1st 'UID' is the actor,
-  --   * 2nd 'UID' is the field.
-  Field    :: UID -> UID -> CodeExpr
+  --   * 1st 'UnitypedUIDRef' is the actor,
+  --   * 2nd 'UnitypedUIDRef' is the field.
+  Field    :: UnitypedUIDRef -> UnitypedUIDRef -> CodeExpr
   -- | For multi-case expressions, each pair represents one case.
   Case     :: Completeness -> [(CodeExpr, CodeExpr)] -> CodeExpr
   -- | Represents a matrix of expressions.
@@ -163,8 +163,8 @@ data CodeExpr where
   Operator :: AssocArithOper -> DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
   -- | The expression is an element of a space.
   -- IsIn     :: Expr -> Space -> Expr
-  -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
-  RealI    :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr
+  -- | A different kind of 'IsIn'. A 'UnitypedUIDRef' is an element of an interval.
+  RealI    :: UnitypedUIDRef -> RealInterval CodeExpr CodeExpr -> CodeExpr
 
 instance LiteralC CodeExpr where
   str      = Lit . str
@@ -310,7 +310,7 @@ instance ExprC CodeExpr where
   defprod v low high = Operator Mul (BoundedDD v Discrete low high)
 
   -- | Smart constructor for 'real interval' membership.
-  realInterval c = RealI (c ^. uid)
+  realInterval c = RealI (hideUni c)
 
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
   euclidean = sqrt . foldr1 ($+) . map square
@@ -334,8 +334,8 @@ instance ExprC CodeExpr where
   set' = Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
-  apply f ps = FCall (f ^. uid) ps []
+  apply f ps = FCall (hideUni f) ps []
 
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
-  sy x = C (x ^. uid)
+  sy x = C (hideUni x)

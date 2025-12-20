@@ -3821,8 +3821,29 @@ NoToC :: ShowTableOfContents
 --   later)
 checkToC :: Document -> Document
 
--- | Smart constructor for labelled content chunks.
-llcc :: Reference -> RawContent -> LabelledContent
+-- | Smart constructor for labelled content chunks. Now builds a Reference
+--   using the provided UID instead of extracting it from the Reference.
+llcc :: UID -> LblType -> ShortName -> RawContent -> LabelledContent
+
+-- | Helper for creating labelled content with a figure reference.
+llccFig :: String -> RawContent -> LabelledContent
+
+-- | Helper for creating labelled content with a table reference.
+llccTab :: String -> RawContent -> LabelledContent
+
+-- | Helper for creating labelled content with an equation reference.
+llccEqn :: String -> RawContent -> LabelledContent
+
+-- | Helper for creating labelled content with a UID-based figure
+--   reference.
+llccFig' :: UID -> RawContent -> LabelledContent
+
+-- | Helper for creating labelled content with a UID-based table reference.
+llccTab' :: UID -> RawContent -> LabelledContent
+
+-- | Helper for creating labelled content with a UID-based equation
+--   reference.
+llccEqn' :: UID -> RawContent -> LabelledContent
 
 -- | Smart constructor for unlabelled content chunks (no <a>Reference</a>).
 ulcc :: RawContent -> UnlabelledContent
@@ -3832,11 +3853,13 @@ ulcc :: RawContent -> UnlabelledContent
 mkParagraph :: Sentence -> Contents
 
 -- | Smart constructor that wraps <a>LabelledContent</a> into
---   <a>Contents</a>.
+--   <a>Contents</a>. Takes a Reference to extract UID, LblType, and
+--   ShortName for the labelled content.
 mkFig :: Reference -> RawContent -> Contents
 
 -- | Smart constructor similar to <a>llcc</a>, but takes in
---   <a>RawContent</a> first.
+--   <a>RawContent</a> first. Takes a Reference to extract UID, LblType,
+--   and ShortName for the labelled content.
 mkRawLC :: RawContent -> Reference -> LabelledContent
 
 -- | Smart constructor for creating <a>Section</a>s with a title
@@ -8201,7 +8224,8 @@ WithCaption :: HasCaption
 mkParagraph :: Sentence -> Contents
 
 -- | Smart constructor similar to <a>llcc</a>, but takes in
---   <a>RawContent</a> first.
+--   <a>RawContent</a> first. Takes a Reference to extract UID, LblType,
+--   and ShortName for the labelled content.
 mkRawLC :: RawContent -> Reference -> LabelledContent
 
 -- | Manually removes the first section of a document (table of contents
@@ -8209,8 +8233,29 @@ mkRawLC :: RawContent -> Reference -> LabelledContent
 --   later)
 checkToC :: Document -> Document
 
--- | Smart constructor for labelled content chunks.
-llcc :: Reference -> RawContent -> LabelledContent
+-- | Smart constructor for labelled content chunks. Now builds a Reference
+--   using the provided UID instead of extracting it from the Reference.
+llcc :: UID -> LblType -> ShortName -> RawContent -> LabelledContent
+
+-- | Helper for creating labelled content with a figure reference.
+llccFig :: String -> RawContent -> LabelledContent
+
+-- | Helper for creating labelled content with a table reference.
+llccTab :: String -> RawContent -> LabelledContent
+
+-- | Helper for creating labelled content with an equation reference.
+llccEqn :: String -> RawContent -> LabelledContent
+
+-- | Helper for creating labelled content with a UID-based figure
+--   reference.
+llccFig' :: UID -> RawContent -> LabelledContent
+
+-- | Helper for creating labelled content with a UID-based table reference.
+llccTab' :: UID -> RawContent -> LabelledContent
+
+-- | Helper for creating labelled content with a UID-based equation
+--   reference.
+llccEqn' :: UID -> RawContent -> LabelledContent
 
 -- | Smart constructor for unlabelled content chunks (no <a>Reference</a>).
 ulcc :: RawContent -> UnlabelledContent
@@ -8284,7 +8329,8 @@ Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawCont
 CodeBlock :: Expr -> RawContent
 
 -- | Smart constructor that wraps <a>LabelledContent</a> into
---   <a>Contents</a>.
+--   <a>Contents</a>. Takes a Reference to extract UID, LblType, and
+--   ShortName for the labelled content.
 mkFig :: Reference -> RawContent -> Contents
 
 -- | Create a reference for a table. Takes in the name of a table (which

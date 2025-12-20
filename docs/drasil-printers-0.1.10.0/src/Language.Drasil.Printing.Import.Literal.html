@@ -15,10 +15,10 @@
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Literal.html#literal"><span class="hs-identifier hs-type">literal</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Literal</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier hs-type">PrintingInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.AST.html#Expr"><span class="hs-identifier hs-type">P.Expr</span></a></span><span>
 </span><span id="line-17"></span><span id="literal"><span class="annot"><span class="annottext">literal :: Literal -&gt; PrintingInformation -&gt; Expr
-</span><a href="Language.Drasil.Printing.Import.Literal.html#literal"><span class="hs-identifier hs-var hs-var">literal</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Dbl</span></span><span> </span><span id="local-6989586621679099871"><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679099871"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">)</span><span>                  </span><span id="local-6989586621679099872"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679099872"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679099872"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="Language.Drasil.Printing.Import.Literal.html#literal"><span class="hs-identifier hs-var hs-var">literal</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Dbl</span></span><span> </span><span id="local-6989586621679099878"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679099878"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">)</span><span>                  </span><span id="local-6989586621679099879"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679099879"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679099879"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 -&gt; Getting Notation PrintingInformation Notation -&gt; Notation
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Notation PrintingInformation Notation
@@ -44,7 +44,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. RealFloat a =&gt; Integer -&gt; a -&gt; ([Int], Int)
 </span><span class="hs-identifier hs-var">floatToDigits</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">10</span></span><span> </span><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679099871"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679099878"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-19"></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Int, Int) -&gt; Int
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">((Int, Int) -&gt; Int) -&gt; (Int, Int) -&gt; Int
@@ -60,7 +60,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. RealFloat a =&gt; Integer -&gt; a -&gt; ([Int], Int)
 </span><span class="hs-identifier hs-var">floatToDigits</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">10</span></span><span> </span><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679099871"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679099878"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span>
 </span><span id="line-20"></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; Integer
 forall a. Integral a =&gt; a -&gt; Integer
@@ -81,44 +81,44 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. RealFloat a =&gt; Integer -&gt; a -&gt; ([Int], Int)
 </span><span class="hs-identifier hs-var">floatToDigits</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">10</span></span><span> </span><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679099871"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679099878"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">Notation
 </span><a href="Language.Drasil.Printing.PrintingInformation.html#Scientific"><span class="hs-identifier hs-var">Scientific</span></a></span><span>  </span><span class="hs-glyph">-&gt;</span><span>  </span><span class="annot"><span class="annottext">Double -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Dbl"><span class="hs-identifier hs-var">P.Dbl</span></a></span><span> </span><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679099871"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-22"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Literal.html#literal"><span class="hs-identifier hs-var">literal</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span id="local-6989586621679099879"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679099879"><span class="hs-identifier hs-var">i</span></a></span></span><span class="hs-special">)</span><span>                   </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679099878"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-22"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Literal.html#literal"><span class="hs-identifier hs-var">literal</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span id="local-6989586621679099886"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679099886"><span class="hs-identifier hs-var">i</span></a></span></span><span class="hs-special">)</span><span>                   </span><span class="annot"><span class="annottext">PrintingInformation
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679099879"><span class="hs-identifier hs-var">i</span></a></span><span>
-</span><span id="line-23"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Literal.html#literal"><span class="hs-identifier hs-var">literal</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExactDbl</span></span><span> </span><span id="local-6989586621679099882"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679099882"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">)</span><span>              </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679099886"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-23"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Literal.html#literal"><span class="hs-identifier hs-var">literal</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExactDbl</span></span><span> </span><span id="local-6989586621679099889"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679099889"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">)</span><span>              </span><span class="annot"><span class="annottext">PrintingInformation
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679099882"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-24"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Literal.html#literal"><span class="hs-identifier hs-var">literal</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Str</span></span><span> </span><span id="local-6989586621679099884"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679099884"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>                   </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679099889"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Literal.html#literal"><span class="hs-identifier hs-var">literal</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Str</span></span><span> </span><span id="local-6989586621679099891"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679099891"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>                   </span><span class="annot"><span class="annottext">PrintingInformation
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Str"><span class="hs-identifier hs-var">P.Str</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679099884"><span class="hs-identifier hs-var">s</span></a></span><span>
-</span><span id="line-25"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Literal.html#literal"><span class="hs-identifier hs-var">literal</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Perc</span></span><span> </span><span id="local-6989586621679099887"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679099887"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679099888"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679099888"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>               </span><span id="local-6989586621679099889"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679099889"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; Expr
+</span><a href="#local-6989586621679099891"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-25"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Literal.html#literal"><span class="hs-identifier hs-var">literal</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Perc</span></span><span> </span><span id="local-6989586621679099894"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679099894"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679099895"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679099895"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>               </span><span id="local-6989586621679099896"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679099896"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Row"><span class="hs-identifier hs-var">P.Row</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Literal -&gt; PrintingInformation -&gt; Expr
 </span><a href="Language.Drasil.Printing.Import.Literal.html#literal"><span class="hs-identifier hs-var">literal</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Literal
 forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679099891"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679099889"><span class="hs-identifier hs-var">sm</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Ops -&gt; Expr
+</span><a href="#local-6989586621679099898"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679099896"><span class="hs-identifier hs-var">sm</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Ops -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#MO"><span class="hs-identifier hs-var">P.MO</span></a></span><span> </span><span class="annot"><span class="annottext">Ops
 </span><a href="Language.Drasil.Printing.AST.html#Perc"><span class="hs-identifier hs-var">P.Perc</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-26"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-27"></span><span>    </span><span id="local-6989586621679099891"><span class="annot"><span class="annottext">val :: Double
-</span><a href="#local-6989586621679099891"><span class="hs-identifier hs-var hs-var">val</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Double
+</span><span id="line-27"></span><span>    </span><span id="local-6989586621679099898"><span class="annot"><span class="annottext">val :: Double
+</span><a href="#local-6989586621679099898"><span class="hs-identifier hs-var hs-var">val</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Double
 forall a b. (Integral a, Num b) =&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">fromIntegral</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679099887"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Double
+</span><a href="#local-6989586621679099894"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Double
 forall a. Fractional a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">/</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">10</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Double
@@ -126,7 +126,7 @@ forall a. Floating a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">**</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Double
 forall a b. (Integral a, Num b) =&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">fromIntegral</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679099888"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
+</span><a href="#local-6989586621679099895"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">2</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>

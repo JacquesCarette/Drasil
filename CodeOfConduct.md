@@ -9,7 +9,7 @@ race, religion, or sexual identity and orientation.
 ## Our Standards
 Examples of behavior that contributes to a positive environment include:
 - Being respectful and considerate
-- Giving constructive feedback
+- Gracefully giving and accepting constructive feedback
 - Assuming good intent
 
 Examples of unacceptable behavior include:
@@ -22,4 +22,4 @@ Project maintainers are responsible for clarifying and enforcing standards.
 Reports can be made by contacting the maintainers directly.
 
 ## Attribution
-This Code of Conduct is adapted from the Contributor Covenant, version 2.1, and based on advice from ChatGPT.
+This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org/version/3/0/code_of_conduct/), version 3.0, and based on advice from ChatGPT.

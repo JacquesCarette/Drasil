@@ -30,7 +30,6 @@ import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib, mkODELibNoPath)
 import Language.Drasil.Mod (pubStateVar, privStateVar)
 
-
 import Drasil.Code.CodeExpr
 import Drasil.Code.CodeExpr.Development
 

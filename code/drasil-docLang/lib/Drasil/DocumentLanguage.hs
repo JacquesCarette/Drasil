@@ -13,8 +13,6 @@ import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe)
 import qualified Data.Map as Map (keys)
 
-import Utils.Drasil (invert)
-
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import qualified Drasil.DocDecl as DD
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
@@ -32,7 +30,7 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil
 import Language.Drasil.Display (compsy)
 
-import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..))
+import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 

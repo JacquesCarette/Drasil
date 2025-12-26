@@ -26,7 +26,6 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
 import Drasil.GetChunks (vars)
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
-
 -- | Synonym for a list of 'Field's.
 type Fields = [Field]
 

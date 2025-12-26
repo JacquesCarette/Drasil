@@ -2,21 +2,19 @@ module Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, iMods, instModIntro, eBalanceOnWtr
 
 import Control.Lens ((^.))
 
-import Language.Drasil
-import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel')
-import Utils.Drasil (weave)
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Development as D
-import qualified Language.Drasil.Sentence.Combinators as S
-
 import Data.Drasil.Citations (koothoor2013)
 import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Thermodynamics (melting, boilPt)
-
 import Data.Drasil.Quantities.Physics (energy, time)
-
+import Language.Drasil
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
+import qualified Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel',
+  Derivation, mkDerivName)
+import Utils.Drasil (weave)
 import Drasil.SWHS.Concepts (water)
 import Drasil.SWHS.DataDefs (balanceDecayRate)
 import Drasil.SWHS.GenDefs (htFluxWaterFromCoil)

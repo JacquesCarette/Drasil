@@ -10,20 +10,22 @@ module Drasil.DocumentLanguage.Definitions (
   -- * Helpers
   helperRefs, helpToRefField) where
 
+import Control.Lens ((^.))
 import Data.List (nub)
 import Data.Maybe (mapMaybe)
-import Control.Lens ((^.))
 
+-- rest of Drasil
 import Language.Drasil
 import Drasil.Database (ChunkDB, UID, HasUID(..), find)
-
 import Drasil.System (System(_systemdb), systemdb, refbyLookup)
-import Drasil.GetChunks (vars)
-
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
-  TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD)
+  TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD,
+  Derivation(Derivation), MayHaveDerivation(derivations))
 
+-- local
+import Drasil.GetChunks (vars)
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
+
 
 -- | Synonym for a list of 'Field's.
 type Fields = [Field]

@@ -1,7 +1,7 @@
 -- | For deriving equations in examples.
-module Language.Drasil.Derivation where
+module Theory.Drasil.Components.Derivation where
 
-import Language.Drasil.Sentence (Sentence(EmptyS, S), (+:))
+import Language.Drasil (Sentence(EmptyS, S), (+:))
 import Control.Lens (Lens')
 
 -- * Type

@@ -58,7 +58,6 @@ module Language.Drasil (
   , HasReasVal(reasVal)
   , Constrained(constraints)
   , HasAdditionalNotes(getNotes)
-  , MayHaveDerivation(derivations)
   , IsUnit(getUnits)
   , DefiningExpr(defnExpr)
   , Express(express)
@@ -187,8 +186,6 @@ module Language.Drasil (
   , titleize, titleize', short
   -- Language.Drasil.ShortName
   , ShortName, shortname', getSentSN, HasShortName(..)
-  -- Language.Drasil.Derivation
-  , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
 
   -- * Sentence Fold-type utilities.
   -- | From "Utils.Drasil.Fold". Defines many general fold functions
@@ -311,7 +308,6 @@ import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
   HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity, Express(..))
-import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader, MayHaveDerivation(..))
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
     Citation, EntryID, BibRef

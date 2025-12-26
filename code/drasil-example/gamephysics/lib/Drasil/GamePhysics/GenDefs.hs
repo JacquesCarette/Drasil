@@ -1,22 +1,23 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD) where
 
-import Language.Drasil
-import qualified Language.Drasil.Sentence.Combinators as S
-import Theory.Drasil (GenDefn, gd, equationalModel')
-import Utils.Drasil (weave)
+import Data.Drasil.Concepts.Math as CM (line, cartesian)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
  fOfGravity)
+import Language.Drasil
+import qualified Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil (GenDefn, gd, equationalModel', Derivation, mkDerivName)
+import Utils.Drasil (weave)
+
+import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
+  rigidTwoDAssump)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+import Drasil.GamePhysics.References (accelGravitySrc, impulseSrc)
+import Drasil.GamePhysics.TMods (newtonLUG)
 import Drasil.GamePhysics.Unitals (mLarger, dispNorm, dVect, massA, massB,
   momtInertA, momtInertB, normalLen, normalVect, perpLenA, perpLenB, initRelVel,
   mass_1, mass_2, sqrDist, distMass)
-import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
-  rigidTwoDAssump)
-import Data.Drasil.Concepts.Math as CM (line, cartesian)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import Drasil.GamePhysics.TMods (newtonLUG)
-import Drasil.GamePhysics.References (accelGravitySrc, impulseSrc)
 
 ----- General Models -----
 

@@ -13,8 +13,8 @@ import System.Environment (lookupEnv)
 import Text.PrettyPrint
 
 import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
-import Utils.Drasil (invert, atLeast2, createDirIfMissing)
-import Drasil.Database (HasUID(..), dumpChunkDB)
+import Utils.Drasil (atLeast2, createDirIfMissing)
+import Drasil.Database (HasUID(..), dumpChunkDB, invert)
 import Drasil.System (System, systemdb, traceTable, refbyTable)
 import Drasil.Database.SearchTools (findAllIdeaDicts)
 

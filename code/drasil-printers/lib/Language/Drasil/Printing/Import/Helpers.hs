@@ -48,11 +48,8 @@ digitsProcess [] pos coun ex
 --
 -- https://en.wikipedia.org/wiki/Scientific_notation
 processExpo :: Int -> (Int, Int)
-processExpo a
-  | mod (a - 1) 3 == 0 = (1, a - 1)
-  | mod (a - 1) 3 == 1 = (2, a - 2)
-  | mod (a - 1) 3 == 2 = (3, a - 3)
-  | otherwise = error "The cases of processExpo should be exhaustive!"
+processExpo a = (r, a - r)
+  where r = 1 + mod (a -1) 3
 
 -- * Lookup/Term Resolution Functions
 

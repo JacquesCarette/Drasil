@@ -10,19 +10,24 @@ module Language.Drasil.Sentence (
   -- * Functions
   (+:+), (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
-  sentenceSymb, sentenceTerm
+  sentenceSymb, sentenceTerm,
+  sdep, shortdep, lnames, lnames'
 ) where
 
 import Control.Lens ((^.))
 import Data.Char (toUpper)
 
-import Drasil.Database (HasUID(..), UID)
+import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
+import Language.Drasil.ModelExpr.Extract (meNames)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Symbol (HasSymbol, Symbol)
+
+import Data.Containers.ListUtils (nubOrd)
+import qualified Data.Set as Set
 
 -- | Used in 'Ch' constructor to determine the state of a term
 -- (can record whether something is in plural form, a singular term, or in short form).
@@ -149,3 +154,81 @@ capSent x          = x
 -- | Helper which creates a Header with size s of the 'Sentence'.
 headSent :: Int -> Sentence -> Sentence
 headSent s x = S (concat (replicate s "#")) :+: S " " :+: x
+
+-- | Helpers for extracting references -----------------------------------------
+
+-- | Generic traverse of all positions that could lead to /symbolic/ 'UID's from 'Sentence's.
+getUIDs :: Sentence -> [UID]
+getUIDs (Ch ShortStyle _ _) = []
+getUIDs (Ch TermStyle _ _)  = []
+getUIDs (Ch PluralTerm _ _) = []
+getUIDs (SyCh a)            = [a]
+getUIDs Sy {}               = []
+getUIDs NP {}               = []
+getUIDs S {}                = []
+getUIDs P {}                = []
+getUIDs Ref {}              = []
+getUIDs Percent             = []
+getUIDs ((:+:) a b)         = getUIDs a ++ getUIDs b
+getUIDs (Quote a)           = getUIDs a
+getUIDs (E a)               = meNames a
+getUIDs EmptyS              = []
+
+-- | Generic traverse of all positions that could lead to /symbolic/ and /abbreviated/ 'UID's from 'Sentence's
+-- but doesn't go into expressions.
+getUIDshort :: Sentence -> [UID]
+getUIDshort (Ch ShortStyle _ a) = [a]
+getUIDshort (Ch TermStyle _ _)  = []
+getUIDshort (Ch PluralTerm _ _) = []
+getUIDshort SyCh {}             = []
+getUIDshort Sy {}               = []
+getUIDshort NP {}               = []
+getUIDshort S {}                = []
+getUIDshort Percent             = []
+getUIDshort P {}                = []
+getUIDshort Ref {}              = []
+getUIDshort ((:+:) a b)         = getUIDshort a ++ getUIDshort b
+getUIDshort (Quote a)           = getUIDshort a
+getUIDshort E {}                = []
+getUIDshort EmptyS              = []
+
+-----------------------------------------------------------------------------
+-- And now implement the exported traversals all in terms of the above
+-- | This is to collect /symbolic/ 'UID's that are printed out as a 'Symbol'.
+sdep :: Sentence -> [UID]
+sdep = nubOrd . getUIDs
+{-# INLINE sdep #-}
+
+-- This is to collect symbolic 'UID's that are printed out as an /abbreviation/.
+shortdep :: Sentence -> [UID]
+shortdep = nubOrd . getUIDshort
+{-# INLINE shortdep #-}
+
+-- | Generic traverse of all positions that could lead to /reference/ 'UID's from 'Sentence's.
+lnames :: Sentence -> [UID]
+lnames Ch {}       = []
+lnames SyCh {}     = []
+lnames Sy {}       = []
+lnames NP {}       = []
+lnames S {}        = []
+lnames Percent     = []
+lnames P {}        = []
+lnames (Ref a _ _) = [a]
+lnames ((:+:) a b) = lnames a ++ lnames b
+lnames Quote {}    = []
+lnames E {}        = []
+lnames EmptyS      = []
+{-# INLINE lnames #-}
+
+-- | Get /reference/ 'UID's from 'Sentence's.
+lnames' :: [Sentence] -> [UID]
+lnames' = concatMap lnames
+{-# INLINE lnames' #-}
+
+sentenceRefs :: Sentence -> Set.Set UID
+sentenceRefs sent = Set.fromList (lnames sent ++ sdep sent ++ shortdep sent)
+{-# INLINE sentenceRefs #-}
+
+instance HasChunkRefs Sentence where
+  chunkRefs = sentenceRefs
+  {-# INLINABLE chunkRefs #-}

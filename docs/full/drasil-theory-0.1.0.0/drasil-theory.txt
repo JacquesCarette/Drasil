@@ -31,6 +31,32 @@ output :: HasOutput c => Getter c DefinedQuantityDict
 out_constraints :: HasOutput c => Getter c [RealInterval Expr Expr]
 
 
+-- | For deriving equations in examples.
+module Theory.Drasil.Components.Derivation
+
+-- | Derivations are an ordered list of sentences and expressions. They are
+--   rendered in order as paragraphs and equation blocks to display the
+--   derivation.
+data Derivation
+Derivation :: Sentence -> [Sentence] -> Derivation
+
+-- | A class that might have a <a>Derivation</a>.
+class MayHaveDerivation c
+
+-- | Provides a <tt>Lens</tt> to a possible derivation.
+derivations :: MayHaveDerivation c => Lens' c (Maybe Derivation)
+
+-- | Smart constructor for creating a <a>Derivation</a>.
+mkDeriv :: Sentence -> [Sentence] -> Derivation
+
+-- | Similar to <a>mkDeriv</a>, but prepends "Detailed derivation of" to
+--   the header.
+mkDerivName :: Sentence -> [Sentence] -> Derivation
+
+-- | Similar to <a>mkDeriv</a>, but without a header <a>Sentence</a>.
+mkDerivNoHeader :: [Sentence] -> Derivation
+
+
 -- | Defines types used in models and theories.
 module Theory.Drasil.ConstraintSet
 
@@ -83,7 +109,7 @@ instance Theory.Drasil.Classes.HasOutput Theory.Drasil.DataDefinition.DataDefini
 instance Language.Drasil.ExprClasses.Express Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.DecoratedReference.HasDecRef Theory.Drasil.DataDefinition.DataDefinition
 instance GHC.Classes.Eq Theory.Drasil.DataDefinition.DataDefinition
-instance Language.Drasil.Derivation.MayHaveDerivation Theory.Drasil.DataDefinition.DataDefinition
+instance Theory.Drasil.Components.Derivation.MayHaveDerivation Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.ShortName.HasShortName Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Label.Type.HasRefAddress Theory.Drasil.DataDefinition.DataDefinition
@@ -307,7 +333,7 @@ instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.InstanceModel.Instan
 instance Language.Drasil.Classes.Definition Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.ExprClasses.Express Theory.Drasil.InstanceModel.InstanceModel
-instance Language.Drasil.Derivation.MayHaveDerivation Theory.Drasil.InstanceModel.InstanceModel
+instance Theory.Drasil.Components.Derivation.MayHaveDerivation Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.DecoratedReference.HasDecRef Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.ShortName.HasShortName Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Label.Type.HasRefAddress Theory.Drasil.InstanceModel.InstanceModel
@@ -344,7 +370,7 @@ instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.Definition Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.ExprClasses.Express Theory.Drasil.GenDefn.GenDefn
-instance Language.Drasil.Derivation.MayHaveDerivation Theory.Drasil.GenDefn.GenDefn
+instance Theory.Drasil.Components.Derivation.MayHaveDerivation Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.DecoratedReference.HasDecRef Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.ShortName.HasShortName Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Label.Type.HasRefAddress Theory.Drasil.GenDefn.GenDefn
@@ -438,6 +464,28 @@ data ConstraintSet e
 
 -- | Smart constructor for building ConstraintSets
 mkConstraintSet :: ConceptChunk -> NonEmpty e -> ConstraintSet e
+
+-- | Derivations are an ordered list of sentences and expressions. They are
+--   rendered in order as paragraphs and equation blocks to display the
+--   derivation.
+data Derivation
+Derivation :: Sentence -> [Sentence] -> Derivation
+
+-- | Smart constructor for creating a <a>Derivation</a>.
+mkDeriv :: Sentence -> [Sentence] -> Derivation
+
+-- | Similar to <a>mkDeriv</a>, but prepends "Detailed derivation of" to
+--   the header.
+mkDerivName :: Sentence -> [Sentence] -> Derivation
+
+-- | Similar to <a>mkDeriv</a>, but without a header <a>Sentence</a>.
+mkDerivNoHeader :: [Sentence] -> Derivation
+
+-- | A class that might have a <a>Derivation</a>.
+class MayHaveDerivation c
+
+-- | Provides a <tt>Lens</tt> to a possible derivation.
+derivations :: MayHaveDerivation c => Lens' c (Maybe Derivation)
 
 -- | A data definition is a <a>QDefinition</a> that may have additional
 --   notes: the scope, any references (as <a>DecRef</a>s), maybe a

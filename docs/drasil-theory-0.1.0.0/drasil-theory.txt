@@ -37,6 +37,28 @@ data ConstraintSet e
 -- | Smart constructor for building ConstraintSets
 mkConstraintSet :: ConceptChunk -> NonEmpty e -> ConstraintSet e
 
+-- | Derivations are an ordered list of sentences and expressions. They are
+--   rendered in order as paragraphs and equation blocks to display the
+--   derivation.
+data Derivation
+Derivation :: Sentence -> [Sentence] -> Derivation
+
+-- | Smart constructor for creating a <a>Derivation</a>.
+mkDeriv :: Sentence -> [Sentence] -> Derivation
+
+-- | Similar to <a>mkDeriv</a>, but prepends "Detailed derivation of" to
+--   the header.
+mkDerivName :: Sentence -> [Sentence] -> Derivation
+
+-- | Similar to <a>mkDeriv</a>, but without a header <a>Sentence</a>.
+mkDerivNoHeader :: [Sentence] -> Derivation
+
+-- | A class that might have a <a>Derivation</a>.
+class MayHaveDerivation c
+
+-- | Provides a <tt>Lens</tt> to a possible derivation.
+derivations :: MayHaveDerivation c => Lens' c (Maybe Derivation)
+
 -- | A data definition is a <a>QDefinition</a> that may have additional
 --   notes: the scope, any references (as <a>DecRef</a>s), maybe a
 --   derivation, a label (<a>ShortName</a>), a reference address, and other

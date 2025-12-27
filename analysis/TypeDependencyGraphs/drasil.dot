@@ -3818,12 +3818,6 @@ digraph alltypes {
 		DecRef -> RefInfo;
 		}
 	}
-	subgraph derivation {
-		subgraph derivation{
-		Derivation	[shape=oval, color=darkviolet, label="Derivation"];
-		Derivation -> Sentence;
-		}
-	}
 	subgraph development {
 	}
 	subgraph diplays {
@@ -4418,6 +4412,12 @@ digraph alltypes {
 		subgraph motivation{
 		Motivation	[shape=oval, color=red2, label="Motivation"];
 		Motivation -> Sentence;
+		}
+	}
+	subgraph derivation {
+		subgraph derivation{
+		Derivation	[shape=oval, color=darkviolet, label="Derivation"];
+		Derivation -> Sentence;
 		}
 	}
 	subgraph clasess {

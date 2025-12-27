@@ -1,4 +1,5 @@
 digraph theory{
+Derivation	[shape=oval, color=turquoise4, label="Derivation"];
 ConstraintSet	[shape=oval, color=turquoise4, label="ConstraintSet"];
 DDPkt	[shape=oval, color=turquoise4, label="DDPkt"];
 DataDefinition	[shape=oval, color=turquoise4, label="DataDefinition"];
@@ -102,6 +103,7 @@ HasShortName	[shape=oval, color=pink, label="HasShortName"];
 HasRefAddress	[shape=oval, color=pink, label="HasRefAddress"];
 CommonIdea	[shape=oval, color=pink, label="CommonIdea"];
 Referable	[shape=oval, color=pink, label="Referable"];
+MayHaveDerivation	[shape=oval, color=magenta, label="MayHaveDerivation"];
 HasInputs	[shape=oval, color=magenta, label="HasInputs"];
 HasOutput	[shape=oval, color=magenta, label="HasOutput"];
 Theory	[shape=oval, color=magenta, label="Theory"];

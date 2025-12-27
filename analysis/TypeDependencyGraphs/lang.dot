@@ -681,12 +681,6 @@ digraph alltypes {
 		DecRef -> RefInfo;
 		}
 	}
-	subgraph derivation {
-		subgraph derivation{
-		Derivation	[shape=oval, color=darkviolet, label="Derivation"];
-		Derivation -> Sentence;
-		}
-	}
 	subgraph development {
 	}
 	subgraph diplays {

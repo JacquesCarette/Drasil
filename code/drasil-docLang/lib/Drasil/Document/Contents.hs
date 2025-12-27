@@ -1,6 +1,6 @@
 -- | General functions that are useful in manipulating some Drasil types into
 -- printable 'Contents'.
-module Language.Drasil.Document.Contents (
+module Drasil.Document.Contents (
   -- * List Creation Functions
   enumBullet, enumBulletU, enumSimple,
   enumSimpleU, mkEnumSimpleD,
@@ -12,17 +12,10 @@ module Language.Drasil.Document.Contents (
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Classes (Definition(..))
-import Language.Drasil.ShortName (HasShortName(..), getSentSN)
-import Language.Drasil.Document (mkRawLC, ulcc)
-import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)
-import Language.Drasil.Document.Core (LabelledContent, RawContent(Enumeration,
-  EqnBlock, CodeBlock), Contents(UlC), ListTuple, ItemType(Flat), ListType(Simple))
-import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.Label.Type ( Referable(refAdd) )
-import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.Reference (Reference)
-import Language.Drasil.Sentence (Sentence (..))
+import Language.Drasil
+  ( Definition(..), HasShortName(..), getSentSN, mkRawLC, ulcc, bulletFlat, mkEnumAbbrevList
+  , LabelledContent, RawContent(Enumeration, EqnBlock, CodeBlock), Contents(UlC), ListTuple
+  , ItemType(Flat), ListType(Simple), Expr, Referable(refAdd), ModelExpr, Reference, Sentence (..))
 
 -- | Displays a given expression and attaches a 'Reference' to it.
 lbldExpr :: ModelExpr -> Reference -> LabelledContent

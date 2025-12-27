@@ -39,6 +39,7 @@ library:
   - Drasil.DocLang
   - Drasil.DocLang.Notebook
   - Drasil.DocLang.SRS
+  - Drasil.Document.Contents
   - Drasil.DocumentLanguage.Units
   - Drasil.DocumentLanguage.TraceabilityGraph
   - Drasil.SRSDocument

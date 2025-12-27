@@ -22,14 +22,11 @@ module Drasil.Sections.SpecificSystemDescription (
   tmStub, ddStub, gdStub, imStub, pdStub
 ) where
 
-import Drasil.Database (UID, HasUID(..), showUID)
-import Language.Drasil hiding (variable)
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NounPhrase.Combinators as NP
-import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Language.Drasil.Development as D
-import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
+import Control.Lens ((^.), over)
+import Data.Maybe
 
+-- rest of Drasil
+import Drasil.Database (UID, HasUID(..), showUID)
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
   element, general, goalStmt, information, input_, limitation, model, output_,
@@ -41,11 +38,17 @@ import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
 import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
 import Drasil.System (System)
+import Language.Drasil hiding (variable)
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Language.Drasil.Development as D
+
+-- local
+import Drasil.Document.Contents (enumBulletU, enumSimpleU)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
-
-import Control.Lens ((^.), over)
-import Data.Maybe
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 
 -- Takes the system and subsections.
 -- | Specific System Description section builder.

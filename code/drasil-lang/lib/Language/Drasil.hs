@@ -218,10 +218,6 @@ module Language.Drasil (
   , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
   , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI'
 
-  -- | Language.Drasil.Document.Contents
-  , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD
-  , lbldExpr, unlbldExpr, unlbldCode
-
   -- * Document combinators
   -- | From "Language.Drasil.Document.Combinators". General sorting functions, useful combinators,
   -- and various functions to work with Drasil [Chunk](https://github.com/JacquesCarette/Drasil/wiki/Chunks) types.
@@ -300,8 +296,6 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..), HasCaption(..))
-import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr, unlbldCode
-  , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD)
 import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)

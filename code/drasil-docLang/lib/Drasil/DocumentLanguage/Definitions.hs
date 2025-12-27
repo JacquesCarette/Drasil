@@ -15,15 +15,16 @@ import Data.List (nub)
 import Data.Maybe (mapMaybe)
 
 -- rest of Drasil
-import Language.Drasil
 import Drasil.Database (ChunkDB, UID, HasUID(..), find)
 import Drasil.System (System(_systemdb), systemdb, refbyLookup)
+import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD,
   Derivation(Derivation), MayHaveDerivation(derivations))
 
 -- local
 import Drasil.GetChunks (vars)
+import Drasil.Document.Contents (unlbldExpr)
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
 -- | Synonym for a list of 'Field's.

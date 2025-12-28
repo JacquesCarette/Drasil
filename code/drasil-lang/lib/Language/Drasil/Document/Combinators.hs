@@ -97,7 +97,7 @@ fmtU n u  = n +:+ unwrap (getUnit u)
 typUncr :: (Double, Maybe Int) -> Sentence
 typUncr (u, p) =
   maybe (addPercent $ u * 100)
-        (\q -> addPercent $ (realFracToDecimal (fromIntegral q) (u * 100) :: DecimalRaw Integer))
+        (\q -> addPercent (realFracToDecimal (fromIntegral q) (u * 100) :: DecimalRaw Integer))
         p
 
 -- | Converts input to a 'Sentence' and appends %.

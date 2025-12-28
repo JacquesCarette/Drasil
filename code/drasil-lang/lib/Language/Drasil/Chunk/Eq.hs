@@ -13,7 +13,7 @@ module Language.Drasil.Chunk.Eq (
 ) where
 
 import Control.Lens ((^.), view, lens, Lens', to)
-import Drasil.Database (UID, HasUID(..))
+import Drasil.Database (UID, HasUID(..), UnitypedUIDRef(..))
 
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
@@ -62,7 +62,7 @@ instance Express e => Express (QDefinition e) where
     where
       f = case q ^. qdInputs of
         [] -> defines (sy q)
-        is -> defines $ apply q (map M.C is)
+        is -> defines $ apply q (map (M.C . UnitypedUIDRef) is)
         -- FIXME: The fact that we have to manually use `C` here is because our
         -- UID references don't carry enough information. This feels hacky at
         -- the moment, and should eventually be fixed.
@@ -74,7 +74,7 @@ instance RequiresChecking (QDefinition Expr) Expr Space where
   -- "normal" way does not work for Functions because it leaves function input
   -- parameters left unchecked. It's probably preferred to be doing type
   -- checking at time of chunk creation rather than here, really.
-  requiredChecks (QD q is e) = pure (apply q (map E.C is) $= e, Boolean)
+  requiredChecks (QD q is e) = pure (apply q (map (E.C . UnitypedUIDRef) is) $= e, Boolean)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.

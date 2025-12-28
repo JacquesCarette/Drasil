@@ -241,7 +241,7 @@ module Language.Drasil (
 
   -- ** List-related functions
   , bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList
-  , mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple
+  , mkTableFromColumns, noRefs, refineChain
   , tAndDOnly, tAndDWAcc, tAndDWSym
   , zipSentList
 
@@ -262,6 +262,7 @@ module Language.Drasil (
   , Stage(Equational,Implementation)
   -- Language.Drasil.Symbol.Helpers
   , eqSymb, codeSymb, hasStageSymbol
+  , sortBySymbol, sortBySymbolTuple
   , autoStage, hat, prime, staged, sub, subStr, sup , unicodeConv, upperLeft, vec
   , label, variable
 
@@ -354,7 +355,7 @@ import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComp
 import Language.Drasil.DecoratedReference(DecRef(refInfo), dRefInfo, dRef, HasDecRef(..))
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,
-  label, variable)
+  label, variable, sortBySymbol, sortBySymbolTuple)
 import Language.Drasil.Synonyms (ConstQDef, SimpleQDef, ModelQDef, PExpr)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.People (People, Person, person, HasName(..),

@@ -18,7 +18,7 @@ import Drasil.Database (HasUID(uid))
 
 import Language.Drasil
   (ConceptChunk, dccWDS, Express(..), ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..)
-  , ModelExpr, NP, Sentence, Expr(..), UnitalChunk, ModelExprC(nthderiv, equiv)
+  , ModelExpr, NP, Sentence, Expr, UnitalChunk, ModelExprC(nthderiv, equiv)
   , ExprC(..), columnVec, ConstrConcept, LiteralC(exactDbl, int), RequiresChecking (requiredChecks)
   , Space, HasSpace (..), dqdWr)
 

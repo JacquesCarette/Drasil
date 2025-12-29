@@ -13,6 +13,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.Document.Contents (unlbldExpr)
 
 import Drasil.Metadata (inModel)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,

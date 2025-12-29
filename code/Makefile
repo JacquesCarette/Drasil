@@ -172,7 +172,7 @@ PROFEXEC := --profile --rts-options '-xc -P'
 # GHC build options
 GHCTHREADS ?= 2
 
-override GHCFLAGS += -Wall -j$(GHCTHREADS)
+override GHCFLAGS += -Wall -Wdodgy-imports -j$(GHCTHREADS)
 override stackArgs += --ghc-options="$(GHCFLAGS)"
 
 # When running 'stack exec', the following stack arguments should be passed.

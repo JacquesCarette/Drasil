@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TupleSections #-}
-module Language.Drasil.Chunk.DifferentialModel (
+module Theory.Drasil.DifferentialModel (
   -- * Export Data Type
   DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..),
   -- * Input Language
@@ -16,21 +16,11 @@ import Data.List (find)
 
 import Drasil.Database (HasUID(uid))
 
-import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
-import Language.Drasil.Classes (Express(..),
-  ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
-import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.Expr.Lang (Expr(..))
-import Language.Drasil.Chunk.Unital (UnitalChunk)
-import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
-import Language.Drasil.Expr.Class (ExprC(..), columnVec)
-import Language.Drasil.Chunk.Constrained (ConstrConcept)
-import Language.Drasil.Literal.Class (LiteralC(exactDbl, int))
-import Language.Drasil.WellTyped (RequiresChecking (requiredChecks))
-import Language.Drasil.Space (Space, HasSpace (..))
-import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
+import Language.Drasil
+  (ConceptChunk, dccWDS, Express(..), ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..)
+  , ModelExpr, NP, Sentence, Expr(..), UnitalChunk, ModelExprC(nthderiv, equiv)
+  , ExprC(..), columnVec, ConstrConcept, LiteralC(exactDbl, int), RequiresChecking (requiredChecks)
+  , Space, HasSpace (..), dqdWr)
 
 -- | Unknown is nth order of the dependent variable
 type Unknown = Integer

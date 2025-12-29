@@ -3,21 +3,22 @@ module Drasil.SglPend.IMods (iMods, angularDisplacementIM) where
 
 import Prelude hiding (cos, sin)
 
-import Language.Drasil
-import qualified Language.Drasil.Development as D
-import Theory.Drasil
-import Utils.Drasil (weave)
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Language.Drasil.NounPhrase.Combinators as NP
 import Data.Drasil.Quantities.Physics (gravitationalAccel,
          angularAccel, momentOfInertia,
          time, angularDisplacement, angularFrequency, torque, angularDisplacement, time)
 import Data.Drasil.Concepts.Math (constraint, equation, amplitude, iAngle, angle)
 import Data.Drasil.Concepts.Physics (pendulum, motion, shm)
 import Data.Drasil.Theories.Physics (newtonSLR)
-import Drasil.SglPend.GenDefs (angFrequencyGD)
+import Drasil.Sentence.Combinators (definedIn'')
+import Language.Drasil
+import qualified Language.Drasil.Development as D
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Language.Drasil.NounPhrase.Combinators as NP
+import Theory.Drasil
+import Utils.Drasil (weave)
 
+import Drasil.SglPend.GenDefs (angFrequencyGD)
 import Drasil.SglPend.Derivations (angularDisplacementDerivEqns)
 import Drasil.SglPend.Expressions (angularDisplacementExpr)
 import Drasil.SglPend.Unitals (lenRod, pendDisplacementAngle, initialPendAngle)

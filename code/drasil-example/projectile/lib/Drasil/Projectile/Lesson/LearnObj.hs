@@ -1,10 +1,13 @@
 module Drasil.Projectile.Lesson.LearnObj where
 
+-- Drasil
 import Data.Drasil.Concepts.Physics (motion)
 import Data.Drasil.Concepts.Math (cartesian, equation)
-import Drasil.Projectile.Concepts (projMotion)
-
+import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 import Language.Drasil
+
+-- local
+import Drasil.Projectile.Concepts (projMotion)
 
 learnObjContext :: Contents
 learnObjContext = UlC $ ulcc $ Enumeration $ bulletNested learnObjList $

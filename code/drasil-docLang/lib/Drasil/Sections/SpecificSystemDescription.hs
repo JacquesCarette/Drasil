@@ -49,6 +49,7 @@ import Drasil.Document.Contents (enumBulletU, enumSimpleU)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.Sentence.Combinators (mkTableFromColumns, fmtU, typUncr)
 
 -- Takes the system and subsections.
 -- | Specific System Description section builder.

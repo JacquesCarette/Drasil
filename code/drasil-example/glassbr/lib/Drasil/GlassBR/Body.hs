@@ -14,6 +14,8 @@ import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Sentence.Combinators (bulletFlat, bulletNested, tAndDOnly, tAndDWAcc, noRefs,
+  tAndDWSym)
 import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)

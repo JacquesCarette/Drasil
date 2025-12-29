@@ -8,6 +8,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Sentence.Combinators (eqN, unwrap, substitute, follows, fromSources)
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',
   equationalModel, ModelKind, Derivation, mkDerivName)
 import Utils.Drasil (weave)

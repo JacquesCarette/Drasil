@@ -174,6 +174,8 @@ module Language.Drasil (
   -- Language.Drasil.Sentence
   , Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+), (+:+.), (+:), (!.), capSent, headSent
   , ch, eS, eS', sC, sDash, sParen
+  -- Language.Drasil.Sentence.Generators
+  , fromSource, fterms, getTandS, checkValidStr
   -- Language.Drasil.NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
@@ -217,29 +219,6 @@ module Language.Drasil (
   , mkFig
   , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
   , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI'
-
-  -- * Document combinators
-  -- | From "Language.Drasil.Document.Combinators". General sorting functions, useful combinators,
-  -- and various functions to work with Drasil [Chunk](https://github.com/JacquesCarette/Drasil/wiki/Chunks) types.
-
-  -- ** Reference-related functions
-  -- | Attach a 'Reference' and a 'Sentence' in different ways.
-  , chgsStart, definedIn, definedIn', definedIn'', definedIn'''
-  , eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows
-  , makeListRef
-
-  -- ** Sentence-related functions
-  -- | See Reference-related functions as well.
-  , addPercent
-  , eqN, checkValidStr, getTandS, maybeChanged, maybeExpanded
-  , maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn
-  , unwrap, fterms
-
-  -- ** List-related functions
-  , bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList
-  , mkTableFromColumns, noRefs, refineChain
-  , tAndDOnly, tAndDWAcc, tAndDWSym
-  , zipSentList
 
   -- * Symbols, Stages, Spaces
   -- | Used for rendering mathematical symbols in Drasil.
@@ -297,7 +276,6 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..), HasCaption(..))
-import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
@@ -345,6 +323,7 @@ import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
   (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Fold
+import Language.Drasil.Sentence.Generators (fromSource, fterms, getTandS, checkValidStr)
 import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS, HasReference(..))
 import Language.Drasil.DecoratedReference(DecRef(refInfo), dRefInfo, dRef, HasDecRef(..))
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,

@@ -12,6 +12,7 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
   time, velocity, positionVec, speed)
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
+import Drasil.Sentence.Combinators (fromReplace)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S

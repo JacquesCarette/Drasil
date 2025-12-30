@@ -8,6 +8,7 @@ import Drasil.Database (HasUID(..))
 import Language.Drasil
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 import Drasil.DocumentLanguage.Units (toSentence)
+import Drasil.Document.Contents (foldlSP)
 import Data.Drasil.Concepts.Documentation (value, description, symbol_, tAuxConsts)
 import qualified Data.Drasil.Concepts.Math as CM (unit_)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)

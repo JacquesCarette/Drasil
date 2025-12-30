@@ -45,7 +45,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 
 -- local
-import Drasil.Document.Contents (enumBulletU, enumSimpleU)
+import Drasil.Document.Contents (enumBulletU, enumSimpleU, foldlSP, foldlSP_)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)

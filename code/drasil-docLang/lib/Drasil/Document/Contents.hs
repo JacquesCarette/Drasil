@@ -6,14 +6,17 @@ module Drasil.Document.Contents (
   enumSimpleU, mkEnumSimpleD,
 
   -- * Displaying Expressions
-  lbldExpr, unlbldExpr,
-  unlbldCode
+  lbldExpr, unlbldExpr, unlbldCode,
+
+  -- * Folds
+  foldlSP, foldlSP_, foldlSPCol
 ) where
 
 import Control.Lens ((^.))
 
 import Language.Drasil
-  ( Definition(..), HasShortName(..), getSentSN, mkRawLC, ulcc
+  ( Definition(..), HasShortName(..), getSentSN, mkRawLC, ulcc, mkParagraph, foldlSent_
+  , foldlSent, foldlSentCol
   , LabelledContent, RawContent(Enumeration, EqnBlock, CodeBlock), Contents(UlC), ListTuple
   , ItemType(Flat), ListType(Simple), Expr, Referable(refAdd), ModelExpr, Reference, Sentence (..))
 import Drasil.Sentence.Combinators (bulletFlat, mkEnumAbbrevList)
@@ -83,3 +86,16 @@ mkEnumSimple f xs = [UlC $ ulcc $ Enumeration $ Simple $ map f xs]
 -- Used in 'mkEnumSimpleD'.
 mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
 mkListTuple f x = (getSentSN $ shortname x, f x, Just $ refAdd x)
+
+-- | Fold sentences then turns into content using 'foldlSent'.
+foldlSP :: [Sentence] -> Contents
+foldlSP = mkParagraph . foldlSent
+
+-- | Same as 'foldlSP' but uses 'foldlSent_'.
+foldlSP_ :: [Sentence] -> Contents
+foldlSP_ = mkParagraph . foldlSent_
+
+-- | Same as 'foldlSP' but uses 'foldlSentCol'.
+foldlSPCol :: [Sentence] -> Contents
+foldlSPCol = mkParagraph . foldlSentCol
+

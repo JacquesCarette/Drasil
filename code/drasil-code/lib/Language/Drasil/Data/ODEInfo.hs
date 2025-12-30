@@ -5,7 +5,7 @@ module Language.Drasil.Data.ODEInfo (
 
 import Drasil.Code.CodeExpr.Development
 import Language.Drasil.Chunk.Code (CodeVarChunk)
-import Language.Drasil(makeAODESolverFormat, formEquations,
+import Theory.Drasil (makeAODESolverFormat, formEquations,
   DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..))
 import Language.Drasil.Chunk.CodeBase (quantvar)
 

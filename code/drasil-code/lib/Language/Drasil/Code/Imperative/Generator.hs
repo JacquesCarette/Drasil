@@ -32,7 +32,7 @@ import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
   LogConfig(..), OptionalFeatures(..), InternalConcept(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE, system')
+import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
 
 import Drasil.GOOL (OOProg, VisibilityTag(..),
@@ -40,7 +40,7 @@ import Drasil.GOOL (OOProg, VisibilityTag(..),
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
-import Drasil.System hiding (systemdb)
+import Drasil.System
 
 import Utils.Drasil (createDirIfMissing)
 
@@ -93,7 +93,7 @@ generator l dt sd chs spec = DrasilState {
   _loggedSpaces = [], -- Used to prevent duplicate logs added to design log
   currentScope = Global
 }
-  where pinfo = piSys (spec ^. system') Implementation plainConfiguration
+  where pinfo = piSys (spec ^. systemdb) (spec ^. refTable) Implementation plainConfiguration
         (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt
         showDate Hide = ""

@@ -3,7 +3,7 @@
 module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
-import Drasil.Database (UID, find, isRegistered, (+++.), mkUid)
+import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, uidRef)
 import Drasil.Database.SearchTools (termResolve', shortForm)
 import Drasil.System hiding (purpose)
 import Control.Lens ((^.))
@@ -195,4 +195,4 @@ resourcePath = "../../../../traceygraphs/"
 
 -- | Helper to create a list of traceability graph references.
 folderList' :: [ItemType]
-folderList' = map (Flat . (\x -> Ref (x +++. "Link") EmptyS None)) traceGUIDs
+folderList' = map (Flat . (\x -> Ref (uidRef (x +++. "Link")) EmptyS None)) traceGUIDs

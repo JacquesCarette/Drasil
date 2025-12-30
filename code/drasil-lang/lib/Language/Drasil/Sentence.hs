@@ -10,19 +10,24 @@ module Language.Drasil.Sentence (
   -- * Functions
   (+:+), (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
-  sentenceSymb, sentenceTerm
+  sentenceSymb, sentenceTerm,
+  sdep, shortdep, lnames, lnames'
 ) where
 
 import Control.Lens ((^.))
 import Data.Char (toUpper)
 
-import Drasil.Database (HasUID(..), UID)
+import Drasil.Database (HasChunkRefs(..), HasUID(..), UID, UIDRef, uidRef, unRef)
 
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
+import Language.Drasil.ModelExpr.Extract (meNames)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Symbol (HasSymbol, Symbol)
+
+import Data.Containers.ListUtils (nubOrd)
+import qualified Data.Set as Set
 
 -- | Used in 'Ch' constructor to determine the state of a term
 -- (can record whether something is in plural form, a singular term, or in short form).
@@ -54,9 +59,9 @@ infixr 5 :+:
 data Sentence where
   -- | Ch looks up the term for a given 'UID' and displays the term with a given 'SentenceStyle' and 'CapitalizationRule'.
   -- This allows Sentences to hold plural forms of 'NamedIdea's.
-  Ch    :: SentenceStyle -> TermCapitalization -> UID -> Sentence
+  Ch    :: SentenceStyle -> TermCapitalization -> UIDRef typ -> Sentence
   -- | A branch of Ch dedicated to SymbolStyle only.
-  SyCh  :: UID -> Sentence
+  SyCh  :: UIDRef typ -> Sentence
   -- | Converts a unit symbol into a usable Sentence form.
   Sy    :: USymb -> Sentence
   -- | Directly embeds a 'NP'
@@ -68,7 +73,7 @@ data Sentence where
   -- | Lifts an expression into a Sentence.
   E     :: ModelExpr -> Sentence
   -- | Takes a 'UID' to a reference, a display name ('Sentence'), and any additional reference display information ('RefInfo'). Resolves the reference later (similar to Ch).
-  Ref   :: UID -> Sentence -> RefInfo -> Sentence
+  Ref   :: UIDRef typ -> Sentence -> RefInfo -> Sentence
   -- | Adds quotation marks around a Sentence.
   Quote :: Sentence -> Sentence
   -- | Used for a % symbol.
@@ -87,7 +92,7 @@ eS' = E . express
 -- The HasSymbol is redundant, but on purpose
 -- | Gets a symbol and places it in a 'Sentence'.
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
-ch x = SyCh (x ^. uid)
+ch x = SyCh (uidRef (x ^. uid))
 
 -- | Sentences can be concatenated.
 instance Semigroup Sentence where
@@ -97,8 +102,8 @@ instance Semigroup Sentence where
 instance Monoid Sentence where
   mempty = EmptyS
 
--- | Smart constructors for turning a 'UID' into a 'Sentence'.
-sentencePlural, sentenceShort, sentenceSymb, sentenceTerm :: UID -> Sentence
+-- | Smart constructors for turning a 'UID' reference into a 'Sentence'.
+sentencePlural, sentenceShort, sentenceSymb, sentenceTerm :: UIDRef typ -> Sentence
 -- | Gets plural term of 'UID'.
 sentencePlural = Ch PluralTerm NoCap
 -- | Gets short form of 'UID'.
@@ -149,3 +154,95 @@ capSent x          = x
 -- | Helper which creates a Header with size s of the 'Sentence'.
 headSent :: Int -> Sentence -> Sentence
 headSent s x = S (concat (replicate s "#")) :+: S " " :+: x
+
+-- | Helpers for extracting references -----------------------------------------
+
+-- | Generic traverse of all positions that could lead to /symbolic/ 'UID's from 'Sentence's.
+getUIDs :: Sentence -> [UID]
+getUIDs (Ch ShortStyle _ _) = []
+getUIDs (Ch TermStyle _ _)  = []
+getUIDs (Ch PluralTerm _ _) = []
+getUIDs (SyCh a)            = [unRef a]
+getUIDs Sy {}               = []
+getUIDs NP {}               = []
+getUIDs S {}                = []
+getUIDs P {}                = []
+getUIDs Ref {}              = []
+getUIDs Percent             = []
+getUIDs ((:+:) a b)         = getUIDs a ++ getUIDs b
+getUIDs (Quote a)           = getUIDs a
+getUIDs (E a)               = meNames a
+getUIDs EmptyS              = []
+
+-- | Generic traverse of all positions that could lead to /symbolic/ and /abbreviated/ 'UID's from 'Sentence's
+-- but doesn't go into expressions.
+getUIDshort :: Sentence -> [UID]
+getUIDshort (Ch ShortStyle _ a) = [unRef a]
+getUIDshort (Ch TermStyle _ _)  = []
+getUIDshort (Ch PluralTerm _ _) = []
+getUIDshort SyCh {}             = []
+getUIDshort Sy {}               = []
+getUIDshort NP {}               = []
+getUIDshort S {}                = []
+getUIDshort Percent             = []
+getUIDshort P {}                = []
+getUIDshort Ref {}              = []
+getUIDshort ((:+:) a b)         = getUIDshort a ++ getUIDshort b
+getUIDshort (Quote a)           = getUIDshort a
+getUIDshort E {}                = []
+getUIDshort EmptyS              = []
+
+-----------------------------------------------------------------------------
+-- And now implement the exported traversals all in terms of the above
+-- | This is to collect /symbolic/ 'UID's that are printed out as a 'Symbol'.
+sdep :: Sentence -> [UID]
+sdep = nubOrd . getUIDs
+{-# INLINE sdep #-}
+
+-- This is to collect symbolic 'UID's that are printed out as an /abbreviation/.
+shortdep :: Sentence -> [UID]
+shortdep = nubOrd . getUIDshort
+{-# INLINE shortdep #-}
+
+-- | Generic traverse of all positions that could lead to /reference/ 'UID's from 'Sentence's.
+lnames :: Sentence -> [UID]
+lnames Ch {}       = []
+lnames SyCh {}     = []
+lnames Sy {}       = []
+lnames NP {}       = []
+lnames S {}        = []
+lnames Percent     = []
+lnames P {}        = []
+lnames (Ref a _ _) = [unRef a]
+lnames ((:+:) a b) = lnames a ++ lnames b
+lnames Quote {}    = []
+lnames E {}        = []
+lnames EmptyS      = []
+{-# INLINE lnames #-}
+
+-- | Get /reference/ 'UID's from 'Sentence's.
+lnames' :: [Sentence] -> [UID]
+lnames' = concatMap lnames
+{-# INLINE lnames' #-}
+
+-- | Generic traverse of all positions that could lead to any 'UID's from 'Sentence's.
+getAllUIDs :: Sentence -> [UID]
+getAllUIDs (Ch ShortStyle _ a) = [unRef a]
+getAllUIDs (Ch TermStyle _ _)  = []
+getAllUIDs (Ch PluralTerm _ _) = []
+getAllUIDs (SyCh a)            = [unRef a]
+getAllUIDs Sy {}               = []
+getAllUIDs NP {}               = []
+getAllUIDs S {}                = []
+getAllUIDs P {}                = []
+getAllUIDs (Ref a _ _)         = [unRef a]
+getAllUIDs Percent             = []
+getAllUIDs ((:+:) a b)         = getAllUIDs a ++ getAllUIDs b
+getAllUIDs (Quote a)           = getAllUIDs a
+getAllUIDs (E a)               = meNames a
+getAllUIDs EmptyS              = []
+{-# INLINE getAllUIDs #-}
+
+instance HasChunkRefs Sentence where
+  chunkRefs = Set.fromList . getAllUIDs
+  {-# INLINABLE chunkRefs #-}

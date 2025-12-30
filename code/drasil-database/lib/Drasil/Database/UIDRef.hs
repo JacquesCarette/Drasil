@@ -1,6 +1,6 @@
 module Drasil.Database.UIDRef (
   -- * 'UID' References
-  UIDRef, hide, unhide, unhideOrErr,
+  UIDRef, hide, unhide, unhideOrErr, uidRef, unRef,
   UnitypedUIDRef, hideUni, unhideUni, unhideUniOrErr
 ) where
 
@@ -25,6 +25,14 @@ instance HasChunkRefs (UIDRef t) where
 -- | Create a 'UIDRef' to a chunk.
 hide :: IsChunk t => t -> UIDRef t
 hide = UIDRef . (^. uid)
+
+-- | Create a 'UIDRef' from a raw 'UID'.
+uidRef :: UID -> UIDRef t
+uidRef = UIDRef
+
+-- | Extract the 'UID' from a 'UIDRef'.
+unRef :: UIDRef t -> UID
+unRef (UIDRef u) = u
 
 -- | Find a chunk by a 'UIDRef'.
 unhide :: IsChunk t => UIDRef t -> ChunkDB -> Maybe t

@@ -6,11 +6,13 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Sentence.Combinators (chgsStart)
 
 import Data.Drasil.Concepts.Documentation (analysis, likeChgDom, model, system, unlikeChgDom)
 import Data.Drasil.Concepts.Math (calculation, zDir)
 import Data.Drasil.Concepts.Physics (force, stress, threeD, twoD)
 
+-- local
 import Drasil.SSP.Assumptions (assumpSLH, assumpINSFL, assumpENSL,
   assumpSF, assumpSL)
 import Drasil.SSP.Defs (slope, soil, soilPrpty)

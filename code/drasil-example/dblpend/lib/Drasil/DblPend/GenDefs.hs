@@ -15,6 +15,9 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import Data.Drasil.Concepts.Math (xComp, yComp)
 import Data.Drasil.Quantities.Physics (velocity, acceleration, force)
+import Drasil.Sentence.Combinators (definedIn'')
+
+-- local
 import Drasil.DblPend.DataDefs
 import qualified Drasil.DblPend.Expressions as E
 import qualified Drasil.DblPend.Derivations as D

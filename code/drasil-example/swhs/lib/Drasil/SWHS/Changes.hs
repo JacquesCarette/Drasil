@@ -8,6 +8,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model, likeChgDom, unlikeChgDom)
+import Drasil.Sentence.Combinators (chgsStart)
 
 import Drasil.SWHS.Concepts (tank, phsChgMtrl, water)
 import Drasil.SWHS.Unitals (tempInit, tempC, tempPCM)

@@ -1,17 +1,17 @@
 {-# Language PostfixOperators, TupleSections #-}
--- | Miscellaneous utility functions for use throughout Drasil.
-module Language.Drasil.Document.Combinators (
+-- | Miscellaneous utility functions for use in various parts of document creation,
+-- but focused mainly on the 'Sentence' level
+module Drasil.Sentence.Combinators (
   -- * Reference-related Functions
   -- | Attach a 'Reference' and a 'Sentence' in different ways.
   chgsStart, definedIn, definedIn', definedIn'', definedIn''',
-  eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows,
+  fromReplace, fromSource, fromSources, fmtU, follows,
   makeListRef,
   -- * Sentence-related Functions
   -- | See Reference-related Functions as well.
-  addPercent,
-  eqN, checkValidStr, getTandS, maybeChanged, maybeExpanded,
+  addPercent, maybeChanged, maybeExpanded,
   maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
-  unwrap, fterms,
+  unwrap, fterms, eqN, eqnWSource,
   -- * List-related Functions
   bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, refineChain,
@@ -25,26 +25,15 @@ import Data.List (transpose)
 
 import Drasil.Database (HasUID)
 
-import Language.Drasil.Chunk.Concept.Core (ConceptChunk)
-import Language.Drasil.Chunk.DefinedQuantity (DefinesQuantity(defLhs))
-import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(..))
-import Language.Drasil.Chunk.Unital (UnitalChunk)
-import Language.Drasil.Classes (HasUnitSymbol(usymb), Quantity, Concept,
-  Definition(defn), NamedIdea(..))
-import Language.Drasil.ShortName (HasShortName(..))
-import Language.Drasil.Development.Sentence (short, atStart, titleize,
-  phrase, plural)
-import Language.Drasil.Document (Section)
-import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet))
-import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Reference (refS, namedRef)
-import Language.Drasil.Sentence (Sentence(S, Percent, (:+:), Sy, EmptyS), eS,
-  ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent)
-import Language.Drasil.Symbol
-import Language.Drasil.Sentence.Fold (foldlList, SepType(Comma), FoldType(List), foldlSent)
+import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs) , UnitDefn, MayHaveUnit(..)
+  , UnitalChunk , HasUnitSymbol(usymb), Quantity, Concept, Definition(defn), NamedIdea(..)
+  , HasSymbol
+  , HasShortName(..) , short, atStart, titleize, phrase, plural , Section , ItemType(..), ListType(Bullet)
+  , ModelExpr , refS, namedRef
+  , Sentence(S, Percent, (:+:), Sy, EmptyS), eS
+  , ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent, fromSource, fterms
+  , foldlList, SepType(Comma), FoldType(List), foldlSent , Referable)
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
-import Language.Drasil.Label.Type
 
 -- Ideally this would create a reference to the equation too.
 -- Doesn't use equation concept so utils doesn't depend on data
@@ -215,32 +204,10 @@ tAndDOnly chunk  = Flat $ atStart chunk `sDash` EmptyS +:+. capSent (chunk ^. de
 follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
 preceding `follows` r = preceding +:+ S "following" +:+ refS r
 
--- | Wraps "from @reference@" in parentheses.
-fromSource :: (Referable r, HasShortName r) => r -> Sentence
-fromSource r = sParen (S "from" +:+ refS r)
-
 -- | Similar to `fromSource` but takes a list of references instead of one.
 fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
 fromSources rs = sParen (S "from" +:+ foldlList Comma List (map refS rs))
 
--- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in...".
-getTandS :: (Quantity a) => a -> Sentence
-getTandS a = phrase a +:+ ch a
-
 -- | Output is of the form "@reference - sentence@".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
 chgsStart = sDash . refS
-
--- | Uses an 'Either' type to check if a 'String' is valid -
--- 'Left' with error message if there is an invalid 'Char' in 'String', else 'Right' with 'String'.
-checkValidStr :: String -> String -> Either String String
-checkValidStr s [] = Right s
-checkValidStr s (x:xs)
-  | x `elem` s = Left $ "Invalid character: \'" ++ [x] ++ "\' in string \"" ++ s ++ ['\"']
-  | otherwise  = checkValidStr s xs
-
--- | Apply a binary function to the terms of two named ideas, instead of to the named
--- ideas themselves. Ex. @fterms compoundPhrase t1 t2@ instead of
--- @compoundPhrase (t1 ^. term) (t2 ^. term)@.
-fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
-fterms f a b = f (a ^. term) (b ^. term)

@@ -10,6 +10,7 @@ import Data.Drasil.Concepts.Documentation (condition, goal, input_, likeChgDom,
   software, system, unlikeChgDom, value, variable)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (flexure)
+import Drasil.Sentence.Combinators (chgsStart)
 
 import Drasil.GlassBR.Assumptions (assumpGC, assumpES, assumpSV, assumpGL,
   assumpBC, assumpRT, assumpLDFC, assumptionConstants)

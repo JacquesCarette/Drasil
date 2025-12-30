@@ -1,6 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHSNoPCM.Changes (likelyChgs, unlikelyChgs) where
 
+import Drasil.Sentence.Combinators (chgsStart)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D

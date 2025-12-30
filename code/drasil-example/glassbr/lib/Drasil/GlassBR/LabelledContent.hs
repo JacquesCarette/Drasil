@@ -6,6 +6,7 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Sentence.Combinators (showingCxnBw)
 
 import Data.Drasil.Concepts.Documentation (assumption, item, physicalSystem,
   requirement, section_, sysCont, traceyMatrix)

@@ -3,6 +3,7 @@ module Drasil.PDController.Changes where
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
+import Drasil.Sentence.Combinators (fromSources)
 
 import Data.Drasil.Concepts.Documentation (likeChgDom)
 import Data.Drasil.Concepts.PhysicalProperties (mass)

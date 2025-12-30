@@ -12,6 +12,7 @@ import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Math as QM (pi_)
 import Data.Drasil.Theories.Physics (torqueDD)
+import Drasil.Sentence.Combinators (definedIn''')
 
 import Drasil.SSP.Assumptions (assumpSBSBISL)
 import Drasil.SSP.Defs (slice)

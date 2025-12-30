@@ -15,6 +15,7 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
+- Decimal
 - lens
 - containers
 - pretty
@@ -42,6 +43,7 @@ library:
   - Drasil.Document.Contents
   - Drasil.DocumentLanguage.Units
   - Drasil.DocumentLanguage.TraceabilityGraph
+  - Drasil.Sentence.Combinators
   - Drasil.SRSDocument
   when:
   - condition: false

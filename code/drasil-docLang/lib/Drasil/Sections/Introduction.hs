@@ -11,6 +11,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
+import Drasil.Sentence.Combinators (refineChain)
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,

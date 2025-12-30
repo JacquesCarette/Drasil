@@ -325,6 +325,8 @@ digraph alltypes {
 	}
 	subgraph traceabilitymandgs {
 	}
+	subgraph combinators {
+	}
 	subgraph docdecl {
 		subgraph docsection{
 		DocSection	[shape=oval, color=darkviolet, label="DocSection"];

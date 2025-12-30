@@ -107,6 +107,7 @@ type ChunkType = String
 --   (<a>String</a>s) to lists of <a>UID</a>s.
 type DumpedChunkDB = Map ChunkType [UID]
 dumpChunkDB :: ChunkDB -> DumpedChunkDB
+invert :: Ord v => Map k [v] -> Map v [k]
 
 -- | Declares that a type is a chunk type; Generates an instance of
 --   <a>HasChunkRefs</a>.

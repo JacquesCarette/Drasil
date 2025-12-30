@@ -19,21 +19,17 @@
 </span><span id="line-19"></span><span>  </span><span class="annot"><a href="Utils.Drasil.Lists.html#foldle"><span class="hs-identifier">foldle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Lists.html#foldle1"><span class="hs-identifier">foldle1</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-20"></span><span>  </span><span class="annot"><a href="Utils.Drasil.Lists.html#toColumn"><span class="hs-identifier">toColumn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Lists.html#mkTable"><span class="hs-identifier">mkTable</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-21"></span><span>
-</span><span id="line-22"></span><span>  </span><span class="annot"><span class="hs-comment">-- * Maps</span></span><span>
-</span><span id="line-23"></span><span>  </span><span class="annot"><a href="Utils.Drasil.Maps.html#invert"><span class="hs-identifier">invert</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="hs-comment">-- ** Strings</span></span><span>
+</span><span id="line-23"></span><span>  </span><span class="annot"><a href="Utils.Drasil.Strings.html#toPlainName"><span class="hs-identifier">toPlainName</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Strings.html#repUnd"><span class="hs-identifier">repUnd</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span>  </span><span class="annot"><span class="hs-comment">-- ** Strings</span></span><span>
-</span><span id="line-26"></span><span>  </span><span class="annot"><a href="Utils.Drasil.Strings.html#toPlainName"><span class="hs-identifier">toPlainName</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Strings.html#repUnd"><span class="hs-identifier">repUnd</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span>
-</span><span id="line-28"></span><span>  </span><span class="annot"><span class="hs-comment">-- ** CSV</span></span><span>
-</span><span id="line-29"></span><span>  </span><span class="annot"><a href="Utils.Drasil.CSV.html#makeCSV"><span class="hs-identifier">makeCSV</span></a></span><span>
-</span><span id="line-30"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-31"></span><span>
-</span><span id="line-32"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Directory.html"><span class="hs-identifier">Utils.Drasil.Directory</span></a></span><span>
-</span><span id="line-33"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html"><span class="hs-identifier">Utils.Drasil.Document</span></a></span><span>
-</span><span id="line-34"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.English.html"><span class="hs-identifier">Utils.Drasil.English</span></a></span><span>
-</span><span id="line-35"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Lists.html"><span class="hs-identifier">Utils.Drasil.Lists</span></a></span><span>
-</span><span id="line-36"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Maps.html"><span class="hs-identifier">Utils.Drasil.Maps</span></a></span><span>
-</span><span id="line-37"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Strings.html"><span class="hs-identifier">Utils.Drasil.Strings</span></a></span><span>
-</span><span id="line-38"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.CSV.html"><span class="hs-identifier">Utils.Drasil.CSV</span></a></span><span>
-</span><span id="line-39"></span></pre></body></html>
+</span><span id="line-25"></span><span>  </span><span class="annot"><span class="hs-comment">-- ** CSV</span></span><span>
+</span><span id="line-26"></span><span>  </span><span class="annot"><a href="Utils.Drasil.CSV.html#makeCSV"><span class="hs-identifier">makeCSV</span></a></span><span>
+</span><span id="line-27"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Directory.html"><span class="hs-identifier">Utils.Drasil.Directory</span></a></span><span>
+</span><span id="line-30"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html"><span class="hs-identifier">Utils.Drasil.Document</span></a></span><span>
+</span><span id="line-31"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.English.html"><span class="hs-identifier">Utils.Drasil.English</span></a></span><span>
+</span><span id="line-32"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Lists.html"><span class="hs-identifier">Utils.Drasil.Lists</span></a></span><span>
+</span><span id="line-33"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Strings.html"><span class="hs-identifier">Utils.Drasil.Strings</span></a></span><span>
+</span><span id="line-34"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.CSV.html"><span class="hs-identifier">Utils.Drasil.CSV</span></a></span><span>
+</span><span id="line-35"></span></pre></body></html>

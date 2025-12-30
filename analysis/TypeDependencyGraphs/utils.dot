@@ -13,8 +13,6 @@ digraph alltypes {
 	}
 	subgraph litss {
 	}
-	subgraph maps {
-	}
 	subgraph strings {
 	}
 	subgraph drails {

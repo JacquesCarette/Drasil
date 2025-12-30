@@ -1,13 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.Projectile.Lesson.LearnObj</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-2"></span><span>
-</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">motion</span></span><span class="hs-special">)</span><span>
-</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cartesian</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">equation</span></span><span class="hs-special">)</span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html"><span class="hs-identifier">Drasil.Projectile.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Concepts.html#projMotion"><span class="hs-identifier">projMotion</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-6"></span><span>
+</span><span id="line-3"></span><span class="hs-comment">-- Drasil</span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">motion</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cartesian</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">equation</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">bulletNested</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">bulletFlat</span></span><span class="hs-special">)</span><span>
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-8"></span><span>
-</span><span id="line-9"></span><span class="annot"><a href="Drasil.Projectile.Lesson.LearnObj.html#learnObjContext"><span class="hs-identifier hs-type">learnObjContext</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-10"></span><span id="learnObjContext"><span class="annot"><span class="annottext">learnObjContext :: Contents
+</span><span id="line-9"></span><span class="hs-comment">-- local</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html"><span class="hs-identifier">Drasil.Projectile.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Concepts.html#projMotion"><span class="hs-identifier">projMotion</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="annot"><a href="Drasil.Projectile.Lesson.LearnObj.html#learnObjContext"><span class="hs-identifier hs-type">learnObjContext</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-13"></span><span id="learnObjContext"><span class="annot"><span class="annottext">learnObjContext :: Contents
 </span><a href="Drasil.Projectile.Lesson.LearnObj.html#learnObjContext"><span class="hs-identifier hs-var hs-var">learnObjContext</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnlabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">UlC</span></span><span> </span><span class="annot"><span class="annottext">(UnlabelledContent -&gt; Contents) -&gt; UnlabelledContent -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -23,15 +26,15 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Drasil.Projectile.Lesson.LearnObj.html#learnObjList"><span class="hs-identifier hs-var">learnObjList</span></a></span><span> </span><span class="annot"><span class="annottext">([ListType] -&gt; ListType) -&gt; [ListType] -&gt; ListType
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-11"></span><span>  </span><span class="annot"><span class="annottext">([Sentence] -&gt; ListType) -&gt; [[Sentence]] -&gt; [ListType]
+</span><span id="line-14"></span><span>  </span><span class="annot"><span class="annottext">([Sentence] -&gt; ListType) -&gt; [[Sentence]] -&gt; [ListType]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; ListType
 </span><span class="hs-identifier hs-var">bulletFlat</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.Projectile.Lesson.LearnObj.html#assumpResp"><span class="hs-identifier hs-var">assumpResp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.Projectile.Lesson.LearnObj.html#solveResp"><span class="hs-identifier hs-var">solveResp</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="annot"><a href="Drasil.Projectile.Lesson.LearnObj.html#learnObjList"><span class="hs-identifier hs-type">learnObjList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-14"></span><span id="learnObjList"><span class="annot"><span class="annottext">learnObjList :: [Sentence]
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="annot"><a href="Drasil.Projectile.Lesson.LearnObj.html#learnObjList"><span class="hs-identifier hs-type">learnObjList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span><span id="learnObjList"><span class="annot"><span class="annottext">learnObjList :: [Sentence]
 </span><a href="Drasil.Projectile.Lesson.LearnObj.html#learnObjList"><span class="hs-identifier hs-var hs-var">learnObjList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Derive kinematic&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -46,7 +49,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.Projectile.Concepts.html#projMotion"><span class="hs-identifier hs-var">projMotion</span></a></span><span>
-</span><span id="line-15"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-18"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;from kinematic&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -61,7 +64,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">motion</span></span><span class="hs-special">,</span><span>
-</span><span id="line-16"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-19"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Identify the assumptions required for the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -69,14 +72,14 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.Projectile.Concepts.html#projMotion"><span class="hs-identifier hs-var">projMotion</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-17"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span id="line-20"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">equation</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;to hold:&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-18"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Solve any given (well-defined) free-flight&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -84,21 +87,21 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.Projectile.Concepts.html#projMotion"><span class="hs-identifier hs-var">projMotion</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-19"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;problems by:&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-20"></span><span>
-</span><span id="line-21"></span><span class="annot"><a href="Drasil.Projectile.Lesson.LearnObj.html#assumpResp"><span class="hs-identifier hs-type">assumpResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-22"></span><span id="assumpResp"><span class="annot"><span class="annottext">assumpResp :: [Sentence]
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Drasil.Projectile.Lesson.LearnObj.html#assumpResp"><span class="hs-identifier hs-type">assumpResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-25"></span><span id="assumpResp"><span class="annot"><span class="annottext">assumpResp :: [Sentence]
 </span><a href="Drasil.Projectile.Lesson.LearnObj.html#assumpResp"><span class="hs-identifier hs-var hs-var">assumpResp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Air resistance is neglected&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Gravitational acceleration acts downward and is constant, regardless of altitude&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span class="annot"><a href="Drasil.Projectile.Lesson.LearnObj.html#solveResp"><span class="hs-identifier hs-type">solveResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-26"></span><span id="solveResp"><span class="annot"><span class="annottext">solveResp :: [Sentence]
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span class="annot"><a href="Drasil.Projectile.Lesson.LearnObj.html#solveResp"><span class="hs-identifier hs-type">solveResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-29"></span><span id="solveResp"><span class="annot"><span class="annottext">solveResp :: [Sentence]
 </span><a href="Drasil.Projectile.Lesson.LearnObj.html#solveResp"><span class="hs-identifier hs-var hs-var">solveResp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Able to select an appropriate&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -106,17 +109,17 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">cartesian</span></span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;to simplify the problem as much as possible&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Able to identify the known variables&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Able to identify the unknown variables&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Able to write&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -130,7 +133,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;for the given problem&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Able to solve the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -144,4 +147,4 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;for the unknown quantities&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-32"></span></pre></body></html>
+</span><span id="line-35"></span></pre></body></html>

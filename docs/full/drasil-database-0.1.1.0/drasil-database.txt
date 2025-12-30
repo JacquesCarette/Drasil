@@ -9,6 +9,9 @@
 @package drasil-database
 @version 0.1.1.0
 
+module Drasil.Database.Maps
+invert :: Ord v => Map k [v] -> Map v [k]
+
 
 -- | Unique Identifier used across Drasil.
 module Drasil.Database.UID

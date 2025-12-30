@@ -9,36 +9,37 @@
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Development</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
 </span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
-</span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html"><span class="hs-identifier">Drasil.GamePhysics.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpDI"><span class="hs-identifier">assumpDI</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpCAJI"><span class="hs-identifier">assumpCAJI</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Concepts.html"><span class="hs-identifier">Drasil.GamePhysics.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Concepts.html#centreMass"><span class="hs-identifier">centreMass</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html"><span class="hs-identifier">Drasil.GamePhysics.DataDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassDD"><span class="hs-identifier">ctrOfMassDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#linDispDD"><span class="hs-identifier">linDispDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#linVelDD"><span class="hs-identifier">linVelDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#linAccDD"><span class="hs-identifier">linAccDD</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-16"></span><span>  </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#angDispDD"><span class="hs-identifier">angDispDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#angVelDD"><span class="hs-identifier">angVelDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#angAccelDD"><span class="hs-identifier">angAccelDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#collisionAssump"><span class="hs-identifier">collisionAssump</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#rightHandAssump"><span class="hs-identifier">rightHandAssump</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-17"></span><span>  </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#rigidTwoDAssump"><span class="hs-identifier">rigidTwoDAssump</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Expressions.html"><span class="hs-identifier">Drasil.GamePhysics.Expressions</span></a></span><span>
-</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.GenDefs.html"><span class="hs-identifier">Drasil.GamePhysics.GenDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.GenDefs.html#accelGravityGD"><span class="hs-identifier">accelGravityGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.GenDefs.html#impulseGD"><span class="hs-identifier">impulseGD</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Goals.html"><span class="hs-identifier">Drasil.GamePhysics.Goals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Goals.html#linearGS"><span class="hs-identifier">linearGS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Goals.html#angularGS"><span class="hs-identifier">angularGS</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.TMods.html"><span class="hs-identifier">Drasil.GamePhysics.TMods</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">newtonSL</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonSLR"><span class="hs-identifier">newtonSLR</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html"><span class="hs-identifier">Drasil.GamePhysics.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#accj"><span class="hs-identifier">accj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#forcej"><span class="hs-identifier">forcej</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#massA"><span class="hs-identifier">massA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#massj"><span class="hs-identifier">massj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#normalVect"><span class="hs-identifier">normalVect</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-23"></span><span>  </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#timeC"><span class="hs-identifier">timeC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#torquej"><span class="hs-identifier">torquej</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#velA"><span class="hs-identifier">velA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#velj"><span class="hs-identifier">velj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#angAccj"><span class="hs-identifier">angAccj</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">condition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">goal</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">output_</span></span><span class="hs-special">)</span><span>
-</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ode</span></span><span class="hs-special">)</span><span>
-</span><span id="line-27"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">rigidBody</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">motion</span></span><span class="hs-special">)</span><span>
-</span><span id="line-28"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">orientation</span></span><span class="hs-special">)</span><span>
-</span><span id="line-29"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">acceleration</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularVelocity</span></span><span class="hs-special">,</span><span>
-</span><span id="line-30"></span><span>  </span><span class="annot"><span class="hs-identifier">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gravitationalAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">impulseS</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">momentOfInertia</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">position</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">velocity</span></span><span class="hs-special">)</span><span>
-</span><span id="line-31"></span><span>
-</span><span id="line-32"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#iMods"><span class="hs-identifier hs-type">iMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span class="hs-special">]</span><span>
-</span><span id="line-33"></span><span id="iMods"><span class="annot"><span class="annottext">iMods :: [InstanceModel]
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">definedIn''</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html"><span class="hs-identifier">Drasil.GamePhysics.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpDI"><span class="hs-identifier">assumpDI</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpCAJI"><span class="hs-identifier">assumpCAJI</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Concepts.html"><span class="hs-identifier">Drasil.GamePhysics.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Concepts.html#centreMass"><span class="hs-identifier">centreMass</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html"><span class="hs-identifier">Drasil.GamePhysics.DataDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassDD"><span class="hs-identifier">ctrOfMassDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#linDispDD"><span class="hs-identifier">linDispDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#linVelDD"><span class="hs-identifier">linVelDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#linAccDD"><span class="hs-identifier">linAccDD</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-17"></span><span>  </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#angDispDD"><span class="hs-identifier">angDispDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#angVelDD"><span class="hs-identifier">angVelDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#angAccelDD"><span class="hs-identifier">angAccelDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#collisionAssump"><span class="hs-identifier">collisionAssump</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#rightHandAssump"><span class="hs-identifier">rightHandAssump</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-18"></span><span>  </span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#rigidTwoDAssump"><span class="hs-identifier">rigidTwoDAssump</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Expressions.html"><span class="hs-identifier">Drasil.GamePhysics.Expressions</span></a></span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.GenDefs.html"><span class="hs-identifier">Drasil.GamePhysics.GenDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.GenDefs.html#accelGravityGD"><span class="hs-identifier">accelGravityGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.GenDefs.html#impulseGD"><span class="hs-identifier">impulseGD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Goals.html"><span class="hs-identifier">Drasil.GamePhysics.Goals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Goals.html#linearGS"><span class="hs-identifier">linearGS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Goals.html#angularGS"><span class="hs-identifier">angularGS</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.TMods.html"><span class="hs-identifier">Drasil.GamePhysics.TMods</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">newtonSL</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonSLR"><span class="hs-identifier">newtonSLR</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html"><span class="hs-identifier">Drasil.GamePhysics.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#accj"><span class="hs-identifier">accj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#forcej"><span class="hs-identifier">forcej</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#massA"><span class="hs-identifier">massA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#massj"><span class="hs-identifier">massj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#normalVect"><span class="hs-identifier">normalVect</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-24"></span><span>  </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#timeC"><span class="hs-identifier">timeC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#torquej"><span class="hs-identifier">torquej</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#velA"><span class="hs-identifier">velA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#velj"><span class="hs-identifier">velj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#angAccj"><span class="hs-identifier">angAccj</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">condition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">goal</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">output_</span></span><span class="hs-special">)</span><span>
+</span><span id="line-27"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ode</span></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">rigidBody</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">motion</span></span><span class="hs-special">)</span><span>
+</span><span id="line-29"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">orientation</span></span><span class="hs-special">)</span><span>
+</span><span id="line-30"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">acceleration</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularVelocity</span></span><span class="hs-special">,</span><span>
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="hs-identifier">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gravitationalAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">impulseS</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">momentOfInertia</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">position</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">velocity</span></span><span class="hs-special">)</span><span>
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#iMods"><span class="hs-identifier hs-type">iMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span class="hs-special">]</span><span>
+</span><span id="line-34"></span><span id="iMods"><span class="annot"><span class="annottext">iMods :: [InstanceModel]
 </span><a href="Drasil.GamePhysics.IMods.html#iMods"><span class="hs-identifier hs-var hs-var">iMods</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.GamePhysics.IMods.html#transMot"><span class="hs-identifier hs-var">transMot</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.GamePhysics.IMods.html#rotMot"><span class="hs-identifier hs-var">rotMot</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.GamePhysics.IMods.html#col2D"><span class="hs-identifier hs-var">col2D</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-34"></span><span>
-</span><span id="line-35"></span><span class="hs-comment">{-- Force on the translational motion  --}</span><span>
-</span><span id="line-36"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMot"><span class="hs-identifier hs-type">transMot</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
-</span><span id="line-37"></span><span id="transMot"><span class="annot"><span class="annottext">transMot :: InstanceModel
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span class="hs-comment">{-- Force on the translational motion  --}</span><span>
+</span><span id="line-37"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMot"><span class="hs-identifier hs-type">transMot</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
+</span><span id="line-38"></span><span id="transMot"><span class="annot"><span class="annottext">transMot :: InstanceModel
 </span><a href="Drasil.GamePhysics.IMods.html#transMot"><span class="hs-identifier hs-var hs-var">transMot</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 -&gt; Inputs
 -&gt; Output
@@ -51,7 +52,7 @@
 forall e. QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.GamePhysics.IMods.html#transMotQD"><span class="hs-identifier hs-var">transMotQD</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-38"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-39"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -66,7 +67,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-39"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-40"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -81,7 +82,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-40"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-41"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -96,7 +97,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-41"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-42"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -111,7 +112,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-42"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-43"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -126,23 +127,23 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-43"></span><span>  </span><span class="hs-special">]</span><span>
-</span><span id="line-44"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Output
+</span><span id="line-44"></span><span>  </span><span class="hs-special">]</span><span>
+</span><span id="line-45"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Output
 forall c. (Quantity c, Concept c, MayHaveUnit c) =&gt; c -&gt; Output
 </span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#accj"><span class="hs-identifier hs-var">accj</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
 </span><a href="Drasil.GamePhysics.IMods.html#transMotDeriv"><span class="hs-identifier hs-var">transMotDeriv</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;transMot&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#transMotDesc"><span class="hs-identifier hs-var">transMotDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#transMotOutputs"><span class="hs-identifier hs-var">transMotOutputs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.DataDefs.html#rigidTwoDAssump"><span class="hs-identifier hs-var">rigidTwoDAssump</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#noDampConsAssumps"><span class="hs-identifier hs-var">noDampConsAssumps</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-46"></span><span>
-</span><span id="line-47"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMotQD"><span class="hs-identifier hs-type">transMotQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-48"></span><span id="transMotQD"><span class="annot"><span class="annottext">transMotQD :: SimpleQDef
+</span><span id="line-47"></span><span>
+</span><span id="line-48"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMotQD"><span class="hs-identifier hs-type">transMotQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-49"></span><span id="transMotQD"><span class="annot"><span class="annottext">transMotQD :: SimpleQDef
 </span><a href="Drasil.GamePhysics.IMods.html#transMotQD"><span class="hs-identifier hs-var hs-var">transMotQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -151,9 +152,9 @@ c -&gt; e -&gt; QDefinition e
 </span><a href="Drasil.GamePhysics.Unitals.html#accj"><span class="hs-identifier hs-var">accj</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
 </span><a href="Drasil.GamePhysics.Expressions.html#transMotExpr"><span class="hs-identifier hs-var">transMotExpr</span></a></span><span>
-</span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMotDesc"><span class="hs-identifier hs-type">transMotDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMotOutputs"><span class="hs-identifier hs-type">transMotOutputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-51"></span><span id="transMotDesc"><span class="annot"><span class="annottext">transMotDesc :: Sentence
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMotDesc"><span class="hs-identifier hs-type">transMotDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMotOutputs"><span class="hs-identifier hs-type">transMotOutputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-52"></span><span id="transMotDesc"><span class="annot"><span class="annottext">transMotDesc :: Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#transMotDesc"><span class="hs-identifier hs-var hs-var">transMotDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -163,7 +164,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;expresses the total&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span id="line-53"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
 forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
@@ -173,7 +174,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">rigidBody</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Sentence
 </span><span class="hs-identifier hs-var">P</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lJ</span></span><span class="hs-special">,</span><span>
-</span><span id="line-53"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-54"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;as the sum&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -184,7 +185,7 @@ forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
 </span><a href="Drasil.GamePhysics.GenDefs.html#accelGravityGD"><span class="hs-identifier hs-var">accelGravityGD</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span>
-</span><span id="line-54"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">acceleration</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -201,7 +202,7 @@ f -&gt; a -&gt; r
 </span><a href="Drasil.GamePhysics.Unitals.html#forcej"><span class="hs-identifier hs-var">forcej</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
-</span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
+</span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">newtonSL</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -211,7 +212,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">output_</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.are`</span></span><span>
-</span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-57"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;then obtained from this&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -219,7 +220,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;using&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-57"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(DataDefinition -&gt; Sentence) -&gt; [DataDefinition] -&gt; [Sentence]
@@ -232,7 +233,7 @@ r -&gt; Sentence
 </span><a href="Drasil.GamePhysics.DataDefs.html#linDispDD"><span class="hs-identifier hs-var">linDispDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GamePhysics.DataDefs.html#linVelDD"><span class="hs-identifier hs-var">linVelDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GamePhysics.DataDefs.html#linAccDD"><span class="hs-identifier hs-var">linAccDD</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-58"></span><span id="transMotOutputs"><span class="annot"><span class="annottext">transMotOutputs :: Sentence
+</span><span id="line-59"></span><span id="transMotOutputs"><span class="annot"><span class="annottext">transMotOutputs :: Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#transMotOutputs"><span class="hs-identifier hs-var hs-var">transMotOutputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -242,7 +243,7 @@ forall n. NounPhrase n =&gt; n -&gt; NPStruct
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">inModel</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-59"></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-60"></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;will be the functions&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
@@ -253,7 +254,7 @@ forall n. NounPhrase n =&gt; n -&gt; NPStruct
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">velocity</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-60"></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-61"></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;over time that satisfy the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
@@ -267,7 +268,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">acceleration</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-61"></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-62"></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;with the given initial&quot;</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -280,7 +281,7 @@ forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">position</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`and_`</span></span><span>
-</span><span id="line-62"></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span id="line-63"></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">velocity</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
 forall n. NounPhrase n =&gt; n -&gt; NPStruct
@@ -293,7 +294,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;so the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-63"></span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span id="line-64"></span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
 forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
@@ -303,38 +304,38 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">velocity</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;functions are for the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-64"></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><span id="line-65"></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GamePhysics.Concepts.html#centreMass"><span class="hs-identifier hs-var">centreMass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassDD"><span class="hs-identifier hs-var">ctrOfMassDD</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-65"></span><span>
-</span><span id="line-66"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMotDeriv"><span class="hs-identifier hs-type">transMotDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
-</span><span id="line-67"></span><span id="transMotDeriv"><span class="annot"><span class="annottext">transMotDeriv :: Derivation
+</span><span id="line-66"></span><span>
+</span><span id="line-67"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMotDeriv"><span class="hs-identifier hs-type">transMotDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-68"></span><span id="transMotDeriv"><span class="annot"><span class="annottext">transMotDeriv :: Derivation
 </span><a href="Drasil.GamePhysics.IMods.html#transMotDeriv"><span class="hs-identifier hs-var hs-var">transMotDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.GamePhysics.IMods.html#transMot"><span class="hs-identifier hs-var">transMot</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-68"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
+</span><span id="line-69"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
 forall a. [[a]] -&gt; [a]
 </span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.GamePhysics.IMods.html#transMotDerivStmts"><span class="hs-identifier hs-var">transMotDerivStmts</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.GamePhysics.IMods.html#transMotDerivEqns"><span class="hs-identifier hs-var">transMotDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-69"></span><span>
-</span><span id="line-70"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMotDerivStmts"><span class="hs-identifier hs-type">transMotDerivStmts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-71"></span><span id="transMotDerivStmts"><span class="annot"><span class="annottext">transMotDerivStmts :: [Sentence]
+</span><span id="line-70"></span><span>
+</span><span id="line-71"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMotDerivStmts"><span class="hs-identifier hs-type">transMotDerivStmts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-72"></span><span id="transMotDerivStmts"><span class="annot"><span class="annottext">transMotDerivStmts :: [Sentence]
 </span><a href="Drasil.GamePhysics.IMods.html#transMotDerivStmts"><span class="hs-identifier hs-var hs-var">transMotDerivStmts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-72"></span><span>    </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-73"></span><span>    </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;We may calculate the total acceleration&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;rigid body&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-73"></span><span>      </span><span class="annot"><span class="annottext">Symbol -&gt; Sentence
+</span><span id="line-74"></span><span>      </span><span class="annot"><span class="annottext">Symbol -&gt; Sentence
 </span><span class="hs-identifier hs-var">P</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lJ</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -345,13 +346,13 @@ forall a. [[a]] -&gt; [a]
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GamePhysics.DataDefs.html#linAccDD"><span class="hs-identifier hs-var">linAccDD</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-74"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-75"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Performing the derivative, we obtain:&quot;</span></span><span>
-</span><span id="line-75"></span><span>  </span><span class="hs-special">]</span><span>
-</span><span id="line-76"></span><span>
-</span><span id="line-77"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMotDerivEqns"><span class="hs-identifier hs-type">transMotDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-78"></span><span id="transMotDerivEqns"><span class="annot"><span class="annottext">transMotDerivEqns :: [Sentence]
+</span><span id="line-76"></span><span>  </span><span class="hs-special">]</span><span>
+</span><span id="line-77"></span><span>
+</span><span id="line-78"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#transMotDerivEqns"><span class="hs-identifier hs-type">transMotDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-79"></span><span id="transMotDerivEqns"><span class="annot"><span class="annottext">transMotDerivEqns :: [Sentence]
 </span><a href="Drasil.GamePhysics.IMods.html#transMotDerivEqns"><span class="hs-identifier hs-var hs-var">transMotDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
@@ -361,11 +362,11 @@ forall r. (ModelExprC r, ExprC r) =&gt; r
 forall c. Express c =&gt; c -&gt; ModelExpr
 </span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.GamePhysics.IMods.html#transMotQD"><span class="hs-identifier hs-var">transMotQD</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-79"></span><span>
-</span><span id="line-80"></span><span class="hs-comment">{-- Rotational Motion --}</span><span>
-</span><span id="line-81"></span><span>
-</span><span id="line-82"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#rotMot"><span class="hs-identifier hs-type">rotMot</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
-</span><span id="line-83"></span><span id="rotMot"><span class="annot"><span class="annottext">rotMot :: InstanceModel
+</span><span id="line-80"></span><span>
+</span><span id="line-81"></span><span class="hs-comment">{-- Rotational Motion --}</span><span>
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#rotMot"><span class="hs-identifier hs-type">rotMot</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
+</span><span id="line-84"></span><span id="rotMot"><span class="annot"><span class="annottext">rotMot :: InstanceModel
 </span><a href="Drasil.GamePhysics.IMods.html#rotMot"><span class="hs-identifier hs-var hs-var">rotMot</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 -&gt; Inputs
 -&gt; Output
@@ -378,7 +379,7 @@ forall c. Express c =&gt; c -&gt; ModelExpr
 forall e. QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.GamePhysics.IMods.html#rotMotQD"><span class="hs-identifier hs-var">rotMotQD</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-84"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-85"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -393,7 +394,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-85"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-86"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -408,7 +409,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-86"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-87"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -423,7 +424,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-87"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-88"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -438,8 +439,8 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-88"></span><span>  </span><span class="hs-special">]</span><span>
-</span><span id="line-89"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Output
+</span><span id="line-89"></span><span>  </span><span class="hs-special">]</span><span>
+</span><span id="line-90"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Output
 forall c. (Quantity c, Concept c, MayHaveUnit c) =&gt; c -&gt; Output
 </span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#angAccj"><span class="hs-identifier hs-var">angAccj</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -449,18 +450,18 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-90"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+</span><span id="line-91"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
 </span><a href="Drasil.GamePhysics.IMods.html#rotMotDeriv"><span class="hs-identifier hs-var">rotMotDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;rotMot&quot;</span></span><span>
-</span><span id="line-91"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-92"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#rotMotDesc"><span class="hs-identifier hs-var">rotMotDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.DataDefs.html#rigidTwoDAssump"><span class="hs-identifier hs-var">rigidTwoDAssump</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.DataDefs.html#rightHandAssump"><span class="hs-identifier hs-var">rightHandAssump</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-92"></span><span>
-</span><span id="line-93"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#rotMotQD"><span class="hs-identifier hs-type">rotMotQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-94"></span><span id="rotMotQD"><span class="annot"><span class="annottext">rotMotQD :: SimpleQDef
+</span><span id="line-93"></span><span>
+</span><span id="line-94"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#rotMotQD"><span class="hs-identifier hs-type">rotMotQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-95"></span><span id="rotMotQD"><span class="annot"><span class="annottext">rotMotQD :: SimpleQDef
 </span><a href="Drasil.GamePhysics.IMods.html#rotMotQD"><span class="hs-identifier hs-var hs-var">rotMotQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
@@ -469,9 +470,9 @@ c -&gt; e -&gt; QDefinition e
 </span><a href="Drasil.GamePhysics.Unitals.html#angAccj"><span class="hs-identifier hs-var">angAccj</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
 </span><a href="Drasil.GamePhysics.Expressions.html#rotMotExpr"><span class="hs-identifier hs-var">rotMotExpr</span></a></span><span>
-</span><span id="line-95"></span><span>
-</span><span id="line-96"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#rotMotDesc"><span class="hs-identifier hs-type">rotMotDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-97"></span><span id="rotMotDesc"><span class="annot"><span class="annottext">rotMotDesc :: Sentence
+</span><span id="line-96"></span><span>
+</span><span id="line-97"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#rotMotDesc"><span class="hs-identifier hs-type">rotMotDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-98"></span><span id="rotMotDesc"><span class="annot"><span class="annottext">rotMotDesc :: Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#rotMotDesc"><span class="hs-identifier hs-var hs-var">rotMotDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -481,7 +482,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;for the total&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-98"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
 forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
@@ -492,7 +493,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">P</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lJ</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span>
-</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-100"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;derived from&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
 forall r.
@@ -505,7 +506,7 @@ r -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.andThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;resultant&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-100"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">output_</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -517,7 +518,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;using&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><span id="line-102"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(DataDefinition -&gt; Sentence) -&gt; [DataDefinition] -&gt; [Sentence]
@@ -530,31 +531,31 @@ r -&gt; Sentence
 </span><a href="Drasil.GamePhysics.DataDefs.html#angDispDD"><span class="hs-identifier hs-var">angDispDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GamePhysics.DataDefs.html#angVelDD"><span class="hs-identifier hs-var">angVelDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GamePhysics.DataDefs.html#angAccelDD"><span class="hs-identifier hs-var">angAccelDD</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-102"></span><span>
-</span><span id="line-103"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#rotMotDeriv"><span class="hs-identifier hs-type">rotMotDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
-</span><span id="line-104"></span><span id="rotMotDeriv"><span class="annot"><span class="annottext">rotMotDeriv :: Derivation
+</span><span id="line-103"></span><span>
+</span><span id="line-104"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#rotMotDeriv"><span class="hs-identifier hs-type">rotMotDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-105"></span><span id="rotMotDeriv"><span class="annot"><span class="annottext">rotMotDeriv :: Derivation
 </span><a href="Drasil.GamePhysics.IMods.html#rotMotDeriv"><span class="hs-identifier hs-var hs-var">rotMotDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.GamePhysics.IMods.html#rotMot"><span class="hs-identifier hs-var">rotMot</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-105"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
+</span><span id="line-106"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
 forall a. [[a]] -&gt; [a]
 </span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.GamePhysics.IMods.html#rotMotDerivStmts"><span class="hs-identifier hs-var">rotMotDerivStmts</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.GamePhysics.IMods.html#rotMotDerivEqns"><span class="hs-identifier hs-var">rotMotDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-106"></span><span>
-</span><span id="line-107"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#rotMotDerivStmts"><span class="hs-identifier hs-type">rotMotDerivStmts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-108"></span><span id="rotMotDerivStmts"><span class="annot"><span class="annottext">rotMotDerivStmts :: [Sentence]
+</span><span id="line-107"></span><span>
+</span><span id="line-108"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#rotMotDerivStmts"><span class="hs-identifier hs-type">rotMotDerivStmts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-109"></span><span id="rotMotDerivStmts"><span class="annot"><span class="annottext">rotMotDerivStmts :: [Sentence]
 </span><a href="Drasil.GamePhysics.IMods.html#rotMotDerivStmts"><span class="hs-identifier hs-var hs-var">rotMotDerivStmts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-109"></span><span>    </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-110"></span><span>    </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;We may calculate the total angular acceleration&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;rigid body&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-110"></span><span>      </span><span class="annot"><span class="annottext">Symbol -&gt; Sentence
+</span><span id="line-111"></span><span>      </span><span class="annot"><span class="annottext">Symbol -&gt; Sentence
 </span><span class="hs-identifier hs-var">P</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lJ</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -565,13 +566,13 @@ forall a. [[a]] -&gt; [a]
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GamePhysics.DataDefs.html#angAccelDD"><span class="hs-identifier hs-var">angAccelDD</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-111"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-112"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Performing the derivative, we obtain:&quot;</span></span><span>
-</span><span id="line-112"></span><span>  </span><span class="hs-special">]</span><span>
-</span><span id="line-113"></span><span>
-</span><span id="line-114"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#rotMotDerivEqns"><span class="hs-identifier hs-type">rotMotDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-115"></span><span id="rotMotDerivEqns"><span class="annot"><span class="annottext">rotMotDerivEqns :: [Sentence]
+</span><span id="line-113"></span><span>  </span><span class="hs-special">]</span><span>
+</span><span id="line-114"></span><span>
+</span><span id="line-115"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#rotMotDerivEqns"><span class="hs-identifier hs-type">rotMotDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-116"></span><span id="rotMotDerivEqns"><span class="annot"><span class="annottext">rotMotDerivEqns :: [Sentence]
 </span><a href="Drasil.GamePhysics.IMods.html#rotMotDerivEqns"><span class="hs-identifier hs-var hs-var">rotMotDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
@@ -581,11 +582,11 @@ forall r. (ModelExprC r, ExprC r) =&gt; r
 forall c. Express c =&gt; c -&gt; ModelExpr
 </span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.GamePhysics.IMods.html#rotMotQD"><span class="hs-identifier hs-var">rotMotQD</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-116"></span><span>
-</span><span id="line-117"></span><span class="hs-comment">{-- 2D Collision --}</span><span>
-</span><span id="line-118"></span><span>
-</span><span id="line-119"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#col2D"><span class="hs-identifier hs-type">col2D</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
-</span><span id="line-120"></span><span id="col2D"><span class="annot"><span class="annottext">col2D :: InstanceModel
+</span><span id="line-117"></span><span>
+</span><span id="line-118"></span><span class="hs-comment">{-- 2D Collision --}</span><span>
+</span><span id="line-119"></span><span>
+</span><span id="line-120"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#col2D"><span class="hs-identifier hs-type">col2D</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
+</span><span id="line-121"></span><span id="col2D"><span class="annot"><span class="annottext">col2D :: InstanceModel
 </span><a href="Drasil.GamePhysics.IMods.html#col2D"><span class="hs-identifier hs-var hs-var">col2D</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 -&gt; Inputs
 -&gt; Output
@@ -599,7 +600,7 @@ forall e. String -&gt; NP -&gt; QDefinition e -&gt; ModelKind e
 </span><span class="hs-string">&quot;col2DIM&quot;</span></span><span> </span><span class="annot"><span class="annottext">NP
 </span><a href="Drasil.GamePhysics.IMods.html#col2DNP"><span class="hs-identifier hs-var">col2DNP</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><a href="Drasil.GamePhysics.IMods.html#col2DFD"><span class="hs-identifier hs-var">col2DFD</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-121"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-122"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -614,7 +615,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-122"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-123"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -629,7 +630,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-123"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-124"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -644,7 +645,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-124"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-125"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -659,10 +660,10 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-125"></span><span>  </span><span class="hs-special">]</span><span>
-</span><span id="line-126"></span><span>  </span><span class="hs-comment">-- why a constraint on velA if velA is not an output?</span><span>
-</span><span id="line-127"></span><span>  </span><span class="hs-comment">-- (qw timeC) [sy velA $&gt; 0, sy timeC $&gt; 0] &quot;col2D&quot;</span><span>
-</span><span id="line-128"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Output
+</span><span id="line-126"></span><span>  </span><span class="hs-special">]</span><span>
+</span><span id="line-127"></span><span>  </span><span class="hs-comment">-- why a constraint on velA if velA is not an output?</span><span>
+</span><span id="line-128"></span><span>  </span><span class="hs-comment">-- (qw timeC) [sy velA $&gt; 0, sy timeC $&gt; 0] &quot;col2D&quot;</span><span>
+</span><span id="line-129"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Output
 forall c. (Quantity c, Concept c, MayHaveUnit c) =&gt; c -&gt; Output
 </span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#timeC"><span class="hs-identifier hs-var">timeC</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -673,17 +674,17 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;col2D&quot;</span></span><span>
-</span><span id="line-129"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-130"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#col2DOutputs"><span class="hs-identifier hs-var">col2DOutputs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.DataDefs.html#rigidTwoDAssump"><span class="hs-identifier hs-var">rigidTwoDAssump</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.DataDefs.html#rightHandAssump"><span class="hs-identifier hs-var">rightHandAssump</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.DataDefs.html#collisionAssump"><span class="hs-identifier hs-var">collisionAssump</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-130"></span><span>    </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-131"></span><span>    </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#noDampConsAssumps"><span class="hs-identifier hs-var">noDampConsAssumps</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#impulseNote"><span class="hs-identifier hs-var">impulseNote</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-131"></span><span>
-</span><span id="line-132"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#col2DFD"><span class="hs-identifier hs-type">col2DFD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-133"></span><span id="col2DFD"><span class="annot"><span class="annottext">col2DFD :: SimpleQDef
+</span><span id="line-132"></span><span>
+</span><span id="line-133"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#col2DFD"><span class="hs-identifier hs-type">col2DFD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-134"></span><span id="col2DFD"><span class="annot"><span class="annottext">col2DFD :: SimpleQDef
 </span><a href="Drasil.GamePhysics.IMods.html#col2DFD"><span class="hs-identifier hs-var hs-var">col2DFD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; [UnitalChunk] -&gt; Expr -&gt; SimpleQDef
 forall c i e.
 (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) =&gt;
@@ -692,15 +693,15 @@ c -&gt; [i] -&gt; e -&gt; QDefinition e
 </span><a href="Drasil.GamePhysics.Unitals.html#velA"><span class="hs-identifier hs-var">velA</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#timeC"><span class="hs-identifier hs-var">timeC</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GamePhysics.IMods.html#col2DExpr"><span class="hs-identifier hs-var">col2DExpr</span></a></span><span>
-</span><span id="line-134"></span><span>
-</span><span id="line-135"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#col2DNP"><span class="hs-identifier hs-type">col2DNP</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
-</span><span id="line-136"></span><span id="col2DNP"><span class="annot"><span class="annottext">col2DNP :: NP
+</span><span id="line-135"></span><span>
+</span><span id="line-136"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#col2DNP"><span class="hs-identifier hs-type">col2DNP</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
+</span><span id="line-137"></span><span id="col2DNP"><span class="annot"><span class="annottext">col2DNP :: NP
 </span><a href="Drasil.GamePhysics.IMods.html#col2DNP"><span class="hs-identifier hs-var hs-var">col2DNP</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Collisions on 2D rigid bodies&quot;</span></span><span>
-</span><span id="line-137"></span><span>
-</span><span id="line-138"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#col2DExpr"><span class="hs-identifier hs-type">col2DExpr</span></a></span><span> </span><span class="hs-comment">{-, im3Rel2, im3Rel3, im3Rel4 -}</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-comment">-- FIXME: add proper equation</span><span>
-</span><span id="line-139"></span><span id="col2DExpr"><span class="annot"><span class="annottext">col2DExpr :: Expr
+</span><span id="line-138"></span><span>
+</span><span id="line-139"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#col2DExpr"><span class="hs-identifier hs-type">col2DExpr</span></a></span><span> </span><span class="hs-comment">{-, im3Rel2, im3Rel3, im3Rel4 -}</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-comment">-- FIXME: add proper equation</span><span>
+</span><span id="line-140"></span><span id="col2DExpr"><span class="annot"><span class="annottext">col2DExpr :: Expr
 </span><a href="Drasil.GamePhysics.IMods.html#col2DExpr"><span class="hs-identifier hs-var hs-var">col2DExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Expr
 forall r f a.
 (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) =&gt;
@@ -710,7 +711,7 @@ f -&gt; a -&gt; r
 </span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span>
-</span><span id="line-140"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><span id="line-141"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -727,9 +728,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#normalVect"><span class="hs-identifier hs-var">normalVect</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-141"></span><span>
-</span><span id="line-142"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#col2DOutputs"><span class="hs-identifier hs-type">col2DOutputs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#impulseNote"><span class="hs-identifier hs-type">impulseNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-143"></span><span id="col2DOutputs"><span class="annot"><span class="annottext">col2DOutputs :: Sentence
+</span><span id="line-142"></span><span>
+</span><span id="line-143"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#col2DOutputs"><span class="hs-identifier hs-type">col2DOutputs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#impulseNote"><span class="hs-identifier hs-type">impulseNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-144"></span><span id="col2DOutputs"><span class="annot"><span class="annottext">col2DOutputs :: Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#col2DOutputs"><span class="hs-identifier hs-var hs-var">col2DOutputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -739,14 +740,14 @@ forall n. NounPhrase n =&gt; n -&gt; NPStruct
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">inModel</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-144"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-145"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;will be the functions&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679068743"><span class="hs-identifier hs-var">vals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679068747"><span class="hs-identifier hs-var">vals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;over time that satisfy the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-145"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span id="line-146"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -760,7 +761,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">angularAccel</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-146"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-147"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;with the given initial&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -769,31 +770,31 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;for&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679068743"><span class="hs-identifier hs-var">vals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><a href="#local-6989586621679068747"><span class="hs-identifier hs-var">vals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
 forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">motion</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-147"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-148"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is translational&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;so the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679068743"><span class="hs-identifier hs-var">vals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679068747"><span class="hs-identifier hs-var">vals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;functions are for the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-148"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><span id="line-149"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GamePhysics.Concepts.html#centreMass"><span class="hs-identifier hs-var">centreMass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassDD"><span class="hs-identifier hs-var">ctrOfMassDD</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-149"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679068743"><span class="annot"><span class="annottext">vals :: Sentence
-</span><a href="#local-6989586621679068743"><span class="hs-identifier hs-var hs-var">vals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><span id="line-150"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679068747"><span class="annot"><span class="annottext">vals :: Sentence
+</span><a href="#local-6989586621679068747"><span class="hs-identifier hs-var hs-var">vals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(UnitalChunk -&gt; Sentence) -&gt; [UnitalChunk] -&gt; [Sentence]
@@ -803,10 +804,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">position</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">velocity</span></span><span class="hs-special">,</span><span>
-</span><span id="line-150"></span><span>                                                   </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span id="line-151"></span><span>                                                   </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">orientation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">angularAccel</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-151"></span><span id="impulseNote"><span class="annot"><span class="annottext">impulseNote :: Sentence
+</span><span id="line-152"></span><span id="impulseNote"><span class="annot"><span class="annottext">impulseNote :: Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#impulseNote"><span class="hs-identifier hs-var hs-var">impulseNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -815,22 +816,22 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">definedIn''</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
 </span><a href="Drasil.GamePhysics.GenDefs.html#impulseGD"><span class="hs-identifier hs-var">impulseGD</span></a></span><span>
-</span><span id="line-152"></span><span>
-</span><span id="line-153"></span><span class="hs-comment">{--S &quot;Ik is the moment of inertia of the k-th rigid body (kg m2)&quot;,
+</span><span id="line-153"></span><span>
+</span><span id="line-154"></span><span class="hs-comment">{--S &quot;Ik is the moment of inertia of the k-th rigid body (kg m2)&quot;,
   S &quot;t is a point in time, t0 denotes the initial time&quot; `sC`
   S &quot;and tc denotes the time at collision (s)&quot;,
   S &quot;P is the point of collision (m)&quot;
 --}</span><span>
-</span><span id="line-158"></span><span>
-</span><span id="line-159"></span><span class="hs-comment">{--displaceVectBtw  = cvR (ddcWDS &quot;dispBtwVect&quot; (compoundPhrase'
+</span><span id="line-159"></span><span>
+</span><span id="line-160"></span><span class="hs-comment">{--displaceVectBtw  = cvR (ddcWDS &quot;dispBtwVect&quot; (compoundPhrase'
   (displacement ^. term) (cn &quot;vector between the centre of mass of the k-th
   body and point P&quot;))) (sub (displacement ^. symbol) )
 --}</span><span>
-</span><span id="line-163"></span><span>
-</span><span id="line-164"></span><span class="hs-comment">{- Intro -}</span><span>
-</span><span id="line-165"></span><span>
-</span><span id="line-166"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#instModIntro"><span class="hs-identifier hs-type">instModIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-167"></span><span id="instModIntro"><span class="annot"><span class="annottext">instModIntro :: Sentence
+</span><span id="line-164"></span><span>
+</span><span id="line-165"></span><span class="hs-comment">{- Intro -}</span><span>
+</span><span id="line-166"></span><span>
+</span><span id="line-167"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#instModIntro"><span class="hs-identifier hs-type">instModIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-168"></span><span id="instModIntro"><span class="annot"><span class="annottext">instModIntro :: Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#instModIntro"><span class="hs-identifier hs-var hs-var">instModIntro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -844,7 +845,7 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GamePhysics.Goals.html#linearGS"><span class="hs-identifier hs-var">linearGS</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-168"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-169"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is met by&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
@@ -859,7 +860,7 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.GamePhysics.IMods.html#col2D"><span class="hs-identifier hs-var">col2D</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-169"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span id="line-170"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
 forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; NP
@@ -873,7 +874,7 @@ r -&gt; Sentence
 </span><a href="Drasil.GamePhysics.Goals.html#angularGS"><span class="hs-identifier hs-var">angularGS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is met by&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-170"></span><span>  </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
+</span><span id="line-171"></span><span>  </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
@@ -885,15 +886,15 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.GamePhysics.IMods.html#col2D"><span class="hs-identifier hs-var">col2D</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-171"></span><span>
-</span><span id="line-172"></span><span class="hs-comment">{- Notes -}</span><span>
-</span><span id="line-173"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#noDampConsAssumps"><span class="hs-identifier hs-type">noDampConsAssumps</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-174"></span><span id="noDampConsAssumps"><span class="annot"><span class="annottext">noDampConsAssumps :: Sentence
+</span><span id="line-172"></span><span>
+</span><span id="line-173"></span><span class="hs-comment">{- Notes -}</span><span>
+</span><span id="line-174"></span><span class="annot"><a href="Drasil.GamePhysics.IMods.html#noDampConsAssumps"><span class="hs-identifier hs-type">noDampConsAssumps</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-175"></span><span id="noDampConsAssumps"><span class="annot"><span class="annottext">noDampConsAssumps :: Sentence
 </span><a href="Drasil.GamePhysics.IMods.html#noDampConsAssumps"><span class="hs-identifier hs-var hs-var">noDampConsAssumps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;It is currently assumed that no damping&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-175"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-176"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;occurs during the simulation&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
@@ -902,10 +903,10 @@ forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;that no&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-176"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-177"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;constraints are involved&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GamePhysics.Assumptions.html#assumpCAJI"><span class="hs-identifier hs-var">assumpCAJI</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-177"></span></pre></body></html>
+</span><span id="line-178"></span></pre></body></html>

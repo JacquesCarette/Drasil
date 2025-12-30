@@ -456,62 +456,6 @@ terminologyLabel :: Reference
 sectionReferences :: [Reference]
 
 
--- | General functions that are useful in manipulating some Drasil types
---   into printable <a>Contents</a>.
-module Drasil.Document.Contents
-
--- | Creates a bulleted list.
-enumBullet :: Reference -> [Sentence] -> LabelledContent
-
--- | Same as <a>enumBullet</a> but unlabelled.
-enumBulletU :: [Sentence] -> Contents
-
--- | Currently Unused. Creates a simple bulleted list that labels things
---   with a title and number:
---   
---   <ul>
---   <li>lb - Reference,</li>
---   <li>s - start index for the enumeration,</li>
---   <li>t - title of the list,</li>
---   <li>l - list to be enumerated.</li>
---   </ul>
---   
---   For example, if we want to create a list of data definitions, we could
---   call the function as follows:
---   
---   <pre>
---   enumSimple _ 2 (S "DD") [def1, def2, ...]
---   </pre>
---   
---   And the resulting <a>LabelledContent</a> would be rendered as:
---   
---   <ul>
---   <li>DD2: def1</li>
---   <li>DD3: def2</li>
---   <li>DD4: def3 ...</li>
---   </ul>
-enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent
-
--- | Same as <a>enumSimple</a> but unlabelled.
-enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
-
--- | Convenience function for transforming referable concepts into a
---   bulleted list. Used in drasil-docLang in making the assumptions,
---   goals, and requirements sections. Output is of the kind <tt>Concept
---   Name: definition of concept</tt>.
-mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
-
--- | Displays a given expression and attaches a <a>Reference</a> to it.
-lbldExpr :: ModelExpr -> Reference -> LabelledContent
-
--- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
---   <a>Reference</a>).
-unlbldExpr :: ModelExpr -> Contents
-
--- | Unlabelled code expression
-unlbldCode :: Expr -> Contents
-
-
 -- | Lesson plan notebook chapter types.
 module Drasil.DocumentLanguage.Notebook.Core
 type LsnDesc = [LsnChapter]
@@ -620,6 +564,355 @@ module Drasil.DocumentLanguage.Notebook.DocumentLanguage
 mkNb :: LsnDecl -> (IdeaDict -> CI -> Sentence) -> System -> Document
 
 
+-- | Defines functions used in the Reference Material section.
+module Drasil.Sections.ReferenceMaterial
+
+-- | Default Reference Material section introduction.
+intro :: Contents
+
+-- | Helper for variants of <a>emptySectSent</a>
+emptySectSentPlu :: NamedIdea n => [n] -> Sentence
+
+-- | Helper for variants of <a>emptySectSent</a>
+emptySectSentSing :: NamedIdea n => [n] -> Sentence
+
+
+-- | Defines helper functions used to make the general system description
+--   section.
+module Drasil.Sections.GeneralSystDesc
+
+-- | Default General System Description introduction.
+genSysIntro :: Contents
+
+-- | User Characeristics section constructor. Does not contain any
+--   subsections.
+usrCharsF :: [Contents] -> Section
+
+-- | System Constraints section constructor. Generalized if no constraints,
+--   but if there are, they can be passed through.
+systCon :: [Contents] -> [Section] -> Section
+
+-- | System Context section constructor. Does not contain any subsections.
+sysContxt :: [Contents] -> Section
+
+
+-- | Defines helper functions for making the Table of Auxiliary Constants
+--   section.
+module Drasil.Sections.AuxiliaryConstants
+
+-- | Gets the auxiliary constant values given an introductory <a>Idea</a>
+--   and a <a>QDefinition</a>.
+valsOfAuxConstantsF :: Idea a => a -> [ConstQDef] -> Section
+
+-- | Helper that gets a table of constants from a <a>QDefinition</a>.
+tableOfConstants :: [ConstQDef] -> LabelledContent
+
+-- | Table of constants reference label.
+tableOfConstantsRef :: Reference
+
+
+-- | Defines helper functions for the Stakeholders section.
+module Drasil.Sections.Stakeholders
+
+-- | General stakeholders introduction.
+stakeholderIntro :: Contents
+
+-- | Constructor for making a client. Takes in the system name and details
+--   regarding the client for the specific program.
+tClientF :: Idea a => a -> Sentence -> Section
+
+-- | Constructor for making a customer. Takes in the system name.
+tCustomerF :: Idea a => a -> Section
+
+
+-- | Standard code to make a table of abbreviations and acronyms.
+module Drasil.Sections.TableOfAbbAndAcronyms
+
+-- | The actual table creation function.
+tableAbbAccGen :: Idea s => [s] -> LabelledContent
+
+-- | Table of abbreviations and acronyms reference.
+tableAbbAccRef :: Reference
+
+
+-- | Miscellaneous utility functions for use in various parts of document
+--   creation, but focused mainly on the <a>Sentence</a> level
+module Drasil.Sentence.Combinators
+
+-- | Output is of the form "<tt>reference - sentence</tt>".
+chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
+
+-- | Takes a <a>HasSymbol</a> that is also <a>Referable</a> and outputs as
+--   a <a>Sentence</a>: "<tt>symbol</tt> is defined in <tt>reference</tt>."
+definedIn :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence
+
+-- | Same as <a>definedIn</a>, but allows for additional information to be
+--   appended to the <a>Sentence</a>.
+definedIn' :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence -> Sentence
+
+-- | Takes a <a>Referable</a> and outputs as a <a>Sentence</a> "defined in
+--   <tt>reference</tt>" (no <a>HasSymbol</a>).
+definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
+
+-- | Takes a <tt>Symbol</tt> and its <tt>Reference</tt> (does not append a
+--   period at the end!). Outputs as "<tt>symbol</tt> is defined in
+--   <tt>source</tt>".
+definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
+
+-- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
+--   as a <a>Sentence</a>: "From <tt>source</tt> we can replace
+--   <tt>symbol</tt>:".
+fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
+
+-- | Wraps "from <tt>reference</tt>" in parentheses.
+fromSource :: (Referable r, HasShortName r) => r -> Sentence
+
+-- | Similar to <a>fromSource</a> but takes a list of references instead of
+--   one.
+fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
+
+-- | Takes an amount as a <a>Sentence</a> and appends a unit to it.
+fmtU :: MayHaveUnit a => Sentence -> a -> Sentence
+
+-- | Appends "following <tt>reference</tt>" to the end of a
+--   <a>Sentence</a>.
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+
+-- | Takes a list and a <a>Section</a>, then generates a list of that
+--   section's reference to match the length of the list.
+makeListRef :: [a] -> Section -> [Sentence]
+
+-- | Converts input to a <a>Sentence</a> and appends %.
+addPercent :: Show a => a -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeChanged :: Sentence -> Sentence -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeExpanded :: Sentence -> Sentence -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeWOVerb :: Sentence -> Sentence -> Sentence
+
+-- | Returns the <a>Sentence</a> "<tt>(<a>titleize</a> aNamedIdea)</tt>
+--   Showing the Connections Between <tt>contents</tt>".
+showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
+
+-- | Takes a list of <a>Referable</a>s and <tt>Symbol</tt>s and outputs as
+--   a Sentence "By substituting <tt>symbols</tt>, this can be written
+--   as:".
+substitute :: (Referable r, HasShortName r, DefinesQuantity r) => [r] -> Sentence
+
+-- | Formats typical uncertainty data to be displayed.
+typUncr :: (Double, Maybe Int) -> Sentence
+
+-- | Returns the <a>Sentence</a> "The <tt>chunk</tt> under consideration is
+--   <tt>chunkDefinition</tt>".
+underConsidertn :: ConceptChunk -> Sentence
+
+-- | Get a unit symbol if there is one.
+unwrap :: Maybe UnitDefn -> Sentence
+
+-- | Apply a binary function to the terms of two named ideas, instead of to
+--   the named ideas themselves. Ex. <tt>fterms compoundPhrase t1 t2</tt>
+--   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>.
+fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
+
+-- | Prepends the word <a>Equation</a> to an <a>Int</a>.
+eqN :: Int -> Sentence
+
+-- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
+--   "expression (source)".
+eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
+
+-- | Applies <a>Bullet</a> and <a>Flat</a> to a list.
+bulletFlat :: [Sentence] -> ListType
+
+-- | Applies <a>Bullet</a>s and headers to a <a>Nested</a> <a>ListType</a>.
+--   The first argument is the headers of the <a>Nested</a> lists.
+bulletNested :: [Sentence] -> [ListType] -> ListType
+
+-- | Makes <a>Sentence</a>s from an item and its reference. Takes the title
+--   of reference as a <a>String</a> and a <a>Sentence</a> containing the
+--   full reference. Wraps the full reference in parenthesis.
+itemRefToSent :: String -> Sentence -> Sentence
+
+-- | Makes a traceability matrix from a list of row titles, a list of rows
+--   of "checked" columns, and a list of columns.
+makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
+
+-- | Zip helper function enumerates abbreviations and zips it with list of
+--   <a>ItemType</a>:
+--   
+--   <ul>
+--   <li>s - the number from which the enumeration should start from
+--   (<a>Integer</a>),</li>
+--   <li>t - the title of the list (<a>Sentence</a>),</li>
+--   <li>l - the list to be enumerated ([<a>Sentence</a>]).</li>
+--   </ul>
+mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
+
+-- | Helper for making a table from a columns.
+mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
+
+-- | Converts lists of simple <a>ItemType</a>s into a list which may be
+--   used in <tt>Contents</tt> but is not directly referable.
+noRefs :: [ItemType] -> [(ItemType, Maybe String)]
+
+-- | Create a list in the pattern of "The __ are refined to the __". Note:
+--   Order matters!
+refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term -
+--   termDefinition</tt>".
+tAndDOnly :: Concept s => s -> ItemType
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term (abbreviation) -
+--   termDefinition</tt>".
+tAndDWAcc :: Concept s => s -> ItemType
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term (symbol) -
+--   termDefinition</tt>".
+tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
+
+-- | Distributes a list of Sentences by prepending individual Sentences
+--   once to an existing list of Sentences.
+--   
+--   For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; zipSentList [S "Hi", S "Hey", S "Hi"] [[S "Hello"], [S "World"], [S "Hello", S "World"]]
+--   [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
+--   </pre>
+zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
+
+
+-- | Defines functions used in the Requirements section.
+module Drasil.Sections.Requirements
+
+-- | Wrapper for <a>reqIntro</a>.
+reqF :: [Section] -> Section
+
+-- | Reference for the Required Inputs table.
+reqInputsRef :: Reference
+
+-- | Adds a generalized introduction for a Non-Fucntional Requirements
+--   section. Takes in the contents of that section.
+fReqF :: [Contents] -> Section
+
+-- | Creates an "input-values" functional requirement
+--   (<a>ConceptInstance</a>) and an associated table of input variables
+--   (<a>LabelledContent</a>) from a list of quantities. The 'Maybe
+--   Sentence' provides an optional description for what the inputs define.
+--   
+--   The resulting requirement sentence is of the form: "Inputs the values
+--   from <tt>table_ref</tt>, which define <tt>description</tt>". If the
+--   description is <a>Nothing</a>, the sentence is: "Inputs the values
+--   from <tt>table_ref</tt>".
+inReqWTab :: (Quantity q, MayHaveUnit q) => Maybe Sentence -> [q] -> (ConceptInstance, LabelledContent)
+
+-- | Creates an Input Data Table for use in the Functional Requirments
+--   section. Takes a list of wrapped variables and something that is
+--   <a>Referable</a>.
+mkInputPropsTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
+mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(DefinedQuantityDict, Sentence)]
+mkQRTupleRef :: (Quantity i, MayHaveUnit i, Concept i, HasShortName r, Referable r) => [i] -> [r] -> [(DefinedQuantityDict, Sentence)]
+
+-- | Creates a table for use in the Functional Requirments section. Takes a
+--   list of tuples containing variables and sources, a label, and a
+--   caption.
+mkValsSourceTable :: (Quantity i, MayHaveUnit i, Concept i) => [(i, Sentence)] -> String -> Sentence -> LabelledContent
+
+-- | Adds a generalized introduction for a Non-Fucntional Requirements
+--   section. Takes in the contents of that section.
+nfReqF :: [Contents] -> Section
+
+-- | Common Non-Functional Requirement for Maintainability. Takes in a
+--   Reference Address (<a>Space</a>), a percent value (<a>Space</a>), and
+--   a label (<a>Space</a>).
+mkMaintainableNFR :: String -> Integer -> String -> ConceptInstance
+
+-- | Common Non-Functional Requirement for Portability.
+mkPortableNFR :: String -> [String] -> String -> ConceptInstance
+
+-- | Common Non-Functional Requirement for Correctness.
+mkCorrectNFR :: String -> String -> ConceptInstance
+
+-- | Common Non-Functional Requirement for Verifiability.
+mkVerifiableNFR :: String -> String -> ConceptInstance
+
+-- | Common Non-Functional Requirement for Understandability.
+mkUnderstandableNFR :: String -> String -> ConceptInstance
+
+-- | Common Non-Functional Requirement for Reusability.
+mkReusableNFR :: String -> String -> ConceptInstance
+
+-- | Common Non-Functional Requirement for Security.
+mkSecurityNFR :: String -> String -> ConceptInstance
+
+
+-- | General functions that are useful in manipulating some Drasil types
+--   into printable <a>Contents</a>.
+module Drasil.Document.Contents
+
+-- | Creates a bulleted list.
+enumBullet :: Reference -> [Sentence] -> LabelledContent
+
+-- | Same as <a>enumBullet</a> but unlabelled.
+enumBulletU :: [Sentence] -> Contents
+
+-- | Currently Unused. Creates a simple bulleted list that labels things
+--   with a title and number:
+--   
+--   <ul>
+--   <li>lb - Reference,</li>
+--   <li>s - start index for the enumeration,</li>
+--   <li>t - title of the list,</li>
+--   <li>l - list to be enumerated.</li>
+--   </ul>
+--   
+--   For example, if we want to create a list of data definitions, we could
+--   call the function as follows:
+--   
+--   <pre>
+--   enumSimple _ 2 (S "DD") [def1, def2, ...]
+--   </pre>
+--   
+--   And the resulting <a>LabelledContent</a> would be rendered as:
+--   
+--   <ul>
+--   <li>DD2: def1</li>
+--   <li>DD3: def2</li>
+--   <li>DD4: def3 ...</li>
+--   </ul>
+enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent
+
+-- | Same as <a>enumSimple</a> but unlabelled.
+enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
+
+-- | Convenience function for transforming referable concepts into a
+--   bulleted list. Used in drasil-docLang in making the assumptions,
+--   goals, and requirements sections. Output is of the kind <tt>Concept
+--   Name: definition of concept</tt>.
+mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
+
+-- | Displays a given expression and attaches a <a>Reference</a> to it.
+lbldExpr :: ModelExpr -> Reference -> LabelledContent
+
+-- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
+--   <a>Reference</a>).
+unlbldExpr :: ModelExpr -> Contents
+
+-- | Unlabelled code expression
+unlbldCode :: Expr -> Contents
+
+
 -- | Defines helper functions for creating subsections within the Solution
 --   Characteristics Specification. Namely, for theory models, general
 --   definitions, data definitions, and instance models.
@@ -693,6 +986,159 @@ helperRefs :: HasUID t => t -> System -> Sentence
 --   database.
 helpToRefField :: UID -> ChunkDB -> Sentence
 instance GHC.Show.Show Drasil.DocumentLanguage.Definitions.Field
+
+
+-- | Defines functions used to create the Specific System Description
+--   section.
+module Drasil.Sections.SpecificSystemDescription
+
+-- | Specific System Description section builder.
+specSysDescr :: [Section] -> Section
+
+-- | Describes a problem the system is needed to accomplish.
+probDescF :: Sentence -> [Section] -> Section
+
+-- | Creates the Terms and Definitions section. Can take a (<a>Just</a>
+--   <a>Sentence</a>) if needed or <a>Nothing</a> if not. Also takes
+--   <a>Concept</a>s that contain the definitions.
+termDefnF :: Concept c => Maybe Sentence -> [c] -> Section
+
+-- | Similar to <a>termDefnF</a>, except does not take definitions from the
+--   list of terms.
+termDefnF' :: Maybe Sentence -> [Contents] -> Section
+
+-- | General introduction for the Physical System Description section.
+physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
+
+-- | General constructor for the Goal Statement section. Takes the given
+--   inputs (<a>Sentence</a>s) and the descriptions (<a>Contents</a>).
+goalStmtF :: [Sentence] -> [Contents] -> Int -> Section
+
+-- | General introduction for the Solution Characteristics Specification
+--   section. Takes the program name and a section of instance models.
+solutionCharSpecIntro :: Idea a => a -> Section -> Contents
+
+-- | Creates an Assumptions section by prepending a general introduction to
+--   other related <a>Contents</a>.
+assumpF :: [Contents] -> Section
+
+-- | Wrapper for <tt>thModelIntro</tt>. Takes the program name and other
+--   <a>Contents</a>.
+thModF :: Idea a => a -> [Contents] -> Section
+
+-- | Creates a General Definitions section with a general introduction.
+--   Takes in relevant general definitions (<a>Contents</a>). Use empty
+--   list if none are needed.
+genDefnF :: [Contents] -> Section
+
+-- | Similar to <a>genDefnF</a>, but for Data Definitions. It also uses
+--   <a>EmptyS</a> if the ending <a>Sentence</a> is not needed rather than
+--   an empty list.
+dataDefnF :: Sentence -> [Contents] -> Section
+
+-- | Constructor for Instance Models. Takes the problem description, data
+--   definition, theoretical model, general definition, and any other
+--   relevant contents.
+inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
+
+-- | Constructor for Data Constraints section. Takes a trailing
+--   <a>Sentence</a> (use <a>EmptyS</a> if none) and data constraints.
+datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> Section
+
+-- | Creates the input Data Constraints Table.
+inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => [c] -> LabelledContent
+
+-- | Creates the output Data Constraints Table.
+outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
+
+-- | Creates the Properties of a Correct Solution section.
+propCorSolF :: (Quantity c, Constrained c) => [c] -> [Contents] -> Section
+
+-- | General <a>Sentence</a> that describes some auxiliary specifications
+--   of the system.
+auxSpecSent :: Sentence
+
+-- | Input/Output Data Constraint Table references.
+tInDataCstRef :: Reference
+
+-- | Input/Output Data Constraint Table references.
+tOutDataCstRef :: Reference
+
+-- | Helper for making a <a>ConceptInstance</a> with a reference to the
+--   system information. Used to find where a particular assumption is
+--   referenced.
+helperCI :: ConceptInstance -> System -> ConceptInstance
+
+-- | Section stubs for implicit referencing of different models and
+--   definitions.
+tmStub :: Section
+
+-- | Section stubs for implicit referencing of different models and
+--   definitions.
+ddStub :: Section
+
+-- | Section stubs for implicit referencing of different models and
+--   definitions.
+gdStub :: Section
+
+-- | Section stubs for implicit referencing of different models and
+--   definitions.
+imStub :: Section
+
+-- | Section stubs for implicit referencing of different models and
+--   definitions.
+pdStub :: Section
+
+
+-- | Defines functions used in creating an introduction section.
+module Drasil.Sections.Introduction
+
+-- | Constructor for the Organization of the Document section. Parameters
+--   should be an introduction (<a>Sentence</a>), a resource for a bottom
+--   up approach (<a>NamedIdea</a>), reference to that resource
+--   (<a>Section</a>), and any other relevant information
+--   (<a>Sentence</a>).
+orgSec :: NamedIdea c => c -> Section -> Sentence -> Section
+
+-- | Constructor for the Introduction section. In order, the parameters
+--   are:
+--   
+--   <ul>
+--   <li>problemIntroduction - <a>Sentence</a> introducing the specific
+--   example problem.</li>
+--   <li>programDefinition - <a>Sentence</a> definition of the specific
+--   example.</li>
+--   <li>subSections - List of subsections for this section.</li>
+--   </ul>
+introductionSection :: Sentence -> Sentence -> [Section] -> Section
+
+-- | Constructor for Purpose of Document subsection. Takes a list of
+--   <a>Sentence</a>s that:
+--   
+--   <ul>
+--   <li>Given one element: explains the purpose of the specific
+--   example.</li>
+--   <li>Given two elements: explains the purpose of the specific example
+--   and the development process.</li>
+--   <li>Otherwise: Uses the default
+--   <a>developmentProcessParagraph</a>.</li>
+--   </ul>
+purposeOfDoc :: [Sentence] -> Section
+
+-- | Constructor for the Scope of Requirements subsection. Takes in the
+--   main requirement for the program.
+scopeOfRequirements :: Sentence -> Section
+
+-- | Constructor for characteristics of the intended reader subsection.
+--   Takes the program name (<a>Idea</a>), assumed knowledge
+--   (<a>Sentence</a>s), topic-related subjects (<a>Sentence</a>s),
+--   knowledge assets (<a>Sentence</a>s), and references (<a>Section</a>).
+charIntRdrF :: Idea a => a -> [Sentence] -> [Sentence] -> [Sentence] -> Section -> Section
+
+-- | Combines <a>purpDocPara1</a> and <a>developmentProcessParagraph</a>.
+--   Verbosity controls if the <a>developmentProcessParagraph</a> is added
+--   or not.
+purpDoc :: CI -> Verbosity -> [Sentence]
 
 
 -- | Defines functions to create traceability matrices in SRS documents.
@@ -1067,516 +1513,6 @@ instance Data.Generics.Multiplate.Multiplate Drasil.DocumentLanguage.Core.DLPlat
 instance GHC.Show.Show Drasil.DocumentLanguage.Core.Emphasis
 
 
--- | Document declaration types and functions for generating Software
---   Requirement Specifications.
-module Drasil.DocDecl
-
--- | A Software Requirements Specification Declaration is made up of all
---   necessary sections (<a>DocSection</a>s).
-type SRSDecl = [DocSection]
-
--- | Contains all the different sections needed for a full SRS
---   (<a>SRSDecl</a>).
-data DocSection
-
--- | Table of Contents
-TableOfContents :: DocSection
-
--- | Reference.
-RefSec :: RefSec -> DocSection
-
--- | Introduction.
-IntroSec :: IntroSec -> DocSection
-
--- | Stakeholders.
-StkhldrSec :: StkhldrSec -> DocSection
-
--- | General System Description.
-GSDSec :: GSDSec -> DocSection
-
--- | Specific System Description.
-SSDSec :: SSDSec -> DocSection
-
--- | Requirements.
-ReqrmntSec :: ReqrmntSec -> DocSection
-
--- | Likely Changes.
-LCsSec :: DocSection
-
--- | Unlikely Changes.
-UCsSec :: DocSection
-
--- | Traceability.
-TraceabilitySec :: TraceabilitySec -> DocSection
-
--- | Auxiliary Constants.
-AuxConstntSec :: AuxConstntSec -> DocSection
-
--- | Bibliography.
-Bibliography :: DocSection
-
--- | Appendix.
-AppndxSec :: AppndxSec -> DocSection
-
--- | Off the Shelf Solutions.
-OffShelfSolnsSec :: OffShelfSolnsSec -> DocSection
-
--- | Specific System Description section (wraps <a>SSDSub</a> subsections).
-newtype SSDSec
-SSDProg :: [SSDSub] -> SSDSec
-
--- | Specific System Description subsections.
-data SSDSub
-
--- | Problem description.
-[SSDProblem] :: ProblemDescription -> SSDSub
-
--- | Solution characteristics.
-[SSDSolChSpec] :: SolChSpec -> SSDSub
-
--- | Problem Description section.
-data ProblemDescription
-[PDProg] :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
-
--- | Problem Description subsections.
-data PDSub
-
--- | Terms and Definitions.
-[TermsAndDefs] :: Concept c => Maybe Sentence -> [c] -> PDSub
-
--- | Physical System Description.
-[PhySysDesc] :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
-
--- | Goals.
-[Goals] :: [Sentence] -> PDSub
-
--- | Solution Characteristics Specification section (wraps <a>SCSSub</a>
---   subsections).
-data SolChSpec
-[SCSProg] :: [SCSSub] -> SolChSpec
-
--- | Solution Characteristics Specification subsections.
-data SCSSub
-
--- | Assumptions.
-[Assumptions] :: SCSSub
-
--- | Theory models.
-[TMs] :: [Sentence] -> Fields -> SCSSub
-
--- | General definitions.
-[GDs] :: [Sentence] -> Fields -> DerivationDisplay -> SCSSub
-
--- | Data definitions.
-[DDs] :: [Sentence] -> Fields -> DerivationDisplay -> SCSSub
-
--- | Instance models.
-[IMs] :: [Sentence] -> Fields -> DerivationDisplay -> SCSSub
-
--- | Constraints.
-[Constraints] :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
-
--- | Properties of a correct solution.
-[CorrSolnPpties] :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
-
--- | Requirements section (wraps <a>ReqsSub</a> subsections).
-newtype ReqrmntSec
-ReqsProg :: [ReqsSub] -> ReqrmntSec
-
--- | Requirements subsections.
-data ReqsSub
-
--- | Functional requirements. <a>LabelledContent</a> for tables.
-[FReqsSub] :: [LabelledContent] -> ReqsSub
-
--- | Non-Functional requirements.
-[NonFReqsSub] :: ReqsSub
-
--- | Creates the document description (translates <a>SRSDecl</a> into a
---   more usable form for generating documents).
-mkDocDesc :: System -> SRSDecl -> DocDesc
-
-
--- | Defines functions used in the Reference Material section.
-module Drasil.Sections.ReferenceMaterial
-
--- | Default Reference Material section introduction.
-intro :: Contents
-
--- | Helper for variants of <a>emptySectSent</a>
-emptySectSentPlu :: NamedIdea n => [n] -> Sentence
-
--- | Helper for variants of <a>emptySectSent</a>
-emptySectSentSing :: NamedIdea n => [n] -> Sentence
-
-
--- | Defines functions used in creating an introduction section.
-module Drasil.Sections.Introduction
-
--- | Constructor for the Organization of the Document section. Parameters
---   should be an introduction (<a>Sentence</a>), a resource for a bottom
---   up approach (<a>NamedIdea</a>), reference to that resource
---   (<a>Section</a>), and any other relevant information
---   (<a>Sentence</a>).
-orgSec :: NamedIdea c => c -> Section -> Sentence -> Section
-
--- | Constructor for the Introduction section. In order, the parameters
---   are:
---   
---   <ul>
---   <li>problemIntroduction - <a>Sentence</a> introducing the specific
---   example problem.</li>
---   <li>programDefinition - <a>Sentence</a> definition of the specific
---   example.</li>
---   <li>subSections - List of subsections for this section.</li>
---   </ul>
-introductionSection :: Sentence -> Sentence -> [Section] -> Section
-
--- | Constructor for Purpose of Document subsection. Takes a list of
---   <a>Sentence</a>s that:
---   
---   <ul>
---   <li>Given one element: explains the purpose of the specific
---   example.</li>
---   <li>Given two elements: explains the purpose of the specific example
---   and the development process.</li>
---   <li>Otherwise: Uses the default
---   <a>developmentProcessParagraph</a>.</li>
---   </ul>
-purposeOfDoc :: [Sentence] -> Section
-
--- | Constructor for the Scope of Requirements subsection. Takes in the
---   main requirement for the program.
-scopeOfRequirements :: Sentence -> Section
-
--- | Constructor for characteristics of the intended reader subsection.
---   Takes the program name (<a>Idea</a>), assumed knowledge
---   (<a>Sentence</a>s), topic-related subjects (<a>Sentence</a>s),
---   knowledge assets (<a>Sentence</a>s), and references (<a>Section</a>).
-charIntRdrF :: Idea a => a -> [Sentence] -> [Sentence] -> [Sentence] -> Section -> Section
-
--- | Combines <a>purpDocPara1</a> and <a>developmentProcessParagraph</a>.
---   Verbosity controls if the <a>developmentProcessParagraph</a> is added
---   or not.
-purpDoc :: CI -> Verbosity -> [Sentence]
-
-
--- | Defines helper functions used to make the general system description
---   section.
-module Drasil.Sections.GeneralSystDesc
-
--- | Default General System Description introduction.
-genSysIntro :: Contents
-
--- | User Characeristics section constructor. Does not contain any
---   subsections.
-usrCharsF :: [Contents] -> Section
-
--- | System Constraints section constructor. Generalized if no constraints,
---   but if there are, they can be passed through.
-systCon :: [Contents] -> [Section] -> Section
-
--- | System Context section constructor. Does not contain any subsections.
-sysContxt :: [Contents] -> Section
-
-
--- | Defines helper functions for making the Table of Auxiliary Constants
---   section.
-module Drasil.Sections.AuxiliaryConstants
-
--- | Gets the auxiliary constant values given an introductory <a>Idea</a>
---   and a <a>QDefinition</a>.
-valsOfAuxConstantsF :: Idea a => a -> [ConstQDef] -> Section
-
--- | Helper that gets a table of constants from a <a>QDefinition</a>.
-tableOfConstants :: [ConstQDef] -> LabelledContent
-
--- | Table of constants reference label.
-tableOfConstantsRef :: Reference
-
-
--- | Defines functions used in the Requirements section.
-module Drasil.Sections.Requirements
-
--- | Wrapper for <a>reqIntro</a>.
-reqF :: [Section] -> Section
-
--- | Reference for the Required Inputs table.
-reqInputsRef :: Reference
-
--- | Adds a generalized introduction for a Non-Fucntional Requirements
---   section. Takes in the contents of that section.
-fReqF :: [Contents] -> Section
-
--- | Creates an "input-values" functional requirement
---   (<a>ConceptInstance</a>) and an associated table of input variables
---   (<a>LabelledContent</a>) from a list of quantities. The 'Maybe
---   Sentence' provides an optional description for what the inputs define.
---   
---   The resulting requirement sentence is of the form: "Inputs the values
---   from <tt>table_ref</tt>, which define <tt>description</tt>". If the
---   description is <a>Nothing</a>, the sentence is: "Inputs the values
---   from <tt>table_ref</tt>".
-inReqWTab :: (Quantity q, MayHaveUnit q) => Maybe Sentence -> [q] -> (ConceptInstance, LabelledContent)
-
--- | Creates an Input Data Table for use in the Functional Requirments
---   section. Takes a list of wrapped variables and something that is
---   <a>Referable</a>.
-mkInputPropsTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
-mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(DefinedQuantityDict, Sentence)]
-mkQRTupleRef :: (Quantity i, MayHaveUnit i, Concept i, HasShortName r, Referable r) => [i] -> [r] -> [(DefinedQuantityDict, Sentence)]
-
--- | Creates a table for use in the Functional Requirments section. Takes a
---   list of tuples containing variables and sources, a label, and a
---   caption.
-mkValsSourceTable :: (Quantity i, MayHaveUnit i, Concept i) => [(i, Sentence)] -> String -> Sentence -> LabelledContent
-
--- | Adds a generalized introduction for a Non-Fucntional Requirements
---   section. Takes in the contents of that section.
-nfReqF :: [Contents] -> Section
-
--- | Common Non-Functional Requirement for Maintainability. Takes in a
---   Reference Address (<a>Space</a>), a percent value (<a>Space</a>), and
---   a label (<a>Space</a>).
-mkMaintainableNFR :: String -> Integer -> String -> ConceptInstance
-
--- | Common Non-Functional Requirement for Portability.
-mkPortableNFR :: String -> [String] -> String -> ConceptInstance
-
--- | Common Non-Functional Requirement for Correctness.
-mkCorrectNFR :: String -> String -> ConceptInstance
-
--- | Common Non-Functional Requirement for Verifiability.
-mkVerifiableNFR :: String -> String -> ConceptInstance
-
--- | Common Non-Functional Requirement for Understandability.
-mkUnderstandableNFR :: String -> String -> ConceptInstance
-
--- | Common Non-Functional Requirement for Reusability.
-mkReusableNFR :: String -> String -> ConceptInstance
-
--- | Common Non-Functional Requirement for Security.
-mkSecurityNFR :: String -> String -> ConceptInstance
-
-
--- | Defines functions used to create the Specific System Description
---   section.
-module Drasil.Sections.SpecificSystemDescription
-
--- | Specific System Description section builder.
-specSysDescr :: [Section] -> Section
-
--- | Describes a problem the system is needed to accomplish.
-probDescF :: Sentence -> [Section] -> Section
-
--- | Creates the Terms and Definitions section. Can take a (<a>Just</a>
---   <a>Sentence</a>) if needed or <a>Nothing</a> if not. Also takes
---   <a>Concept</a>s that contain the definitions.
-termDefnF :: Concept c => Maybe Sentence -> [c] -> Section
-
--- | Similar to <a>termDefnF</a>, except does not take definitions from the
---   list of terms.
-termDefnF' :: Maybe Sentence -> [Contents] -> Section
-
--- | General introduction for the Physical System Description section.
-physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
-
--- | General constructor for the Goal Statement section. Takes the given
---   inputs (<a>Sentence</a>s) and the descriptions (<a>Contents</a>).
-goalStmtF :: [Sentence] -> [Contents] -> Int -> Section
-
--- | General introduction for the Solution Characteristics Specification
---   section. Takes the program name and a section of instance models.
-solutionCharSpecIntro :: Idea a => a -> Section -> Contents
-
--- | Creates an Assumptions section by prepending a general introduction to
---   other related <a>Contents</a>.
-assumpF :: [Contents] -> Section
-
--- | Wrapper for <tt>thModelIntro</tt>. Takes the program name and other
---   <a>Contents</a>.
-thModF :: Idea a => a -> [Contents] -> Section
-
--- | Creates a General Definitions section with a general introduction.
---   Takes in relevant general definitions (<a>Contents</a>). Use empty
---   list if none are needed.
-genDefnF :: [Contents] -> Section
-
--- | Similar to <a>genDefnF</a>, but for Data Definitions. It also uses
---   <a>EmptyS</a> if the ending <a>Sentence</a> is not needed rather than
---   an empty list.
-dataDefnF :: Sentence -> [Contents] -> Section
-
--- | Constructor for Instance Models. Takes the problem description, data
---   definition, theoretical model, general definition, and any other
---   relevant contents.
-inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
-
--- | Constructor for Data Constraints section. Takes a trailing
---   <a>Sentence</a> (use <a>EmptyS</a> if none) and data constraints.
-datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> Section
-
--- | Creates the input Data Constraints Table.
-inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => [c] -> LabelledContent
-
--- | Creates the output Data Constraints Table.
-outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
-
--- | Creates the Properties of a Correct Solution section.
-propCorSolF :: (Quantity c, Constrained c) => [c] -> [Contents] -> Section
-
--- | General <a>Sentence</a> that describes some auxiliary specifications
---   of the system.
-auxSpecSent :: Sentence
-
--- | Input/Output Data Constraint Table references.
-tInDataCstRef :: Reference
-
--- | Input/Output Data Constraint Table references.
-tOutDataCstRef :: Reference
-
--- | Helper for making a <a>ConceptInstance</a> with a reference to the
---   system information. Used to find where a particular assumption is
---   referenced.
-helperCI :: ConceptInstance -> System -> ConceptInstance
-
--- | Section stubs for implicit referencing of different models and
---   definitions.
-tmStub :: Section
-
--- | Section stubs for implicit referencing of different models and
---   definitions.
-ddStub :: Section
-
--- | Section stubs for implicit referencing of different models and
---   definitions.
-gdStub :: Section
-
--- | Section stubs for implicit referencing of different models and
---   definitions.
-imStub :: Section
-
--- | Section stubs for implicit referencing of different models and
---   definitions.
-pdStub :: Section
-
-
--- | Defines functions to extract certain kinds of information from a
---   document. Mainly used to pull the <tt>UID</tt>s of chunks out of
---   <a>Sentence</a>s and <a>Expr</a>s.
-module Drasil.ExtractDocDesc
-
--- | Extracts <a>Sentence</a>s from a document description.
-getDocDesc :: DocDesc -> [Sentence]
-
--- | Extracts expressions from the document description (<a>DocDesc</a>)
---   and default <a>DLPlate</a>.
-egetDocDesc :: DocDesc -> [ModelExpr]
-
--- | Creates a <a>Sentence</a> plate.
-sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
-
-
--- | Defines helper functions for the Stakeholders section.
-module Drasil.Sections.Stakeholders
-
--- | General stakeholders introduction.
-stakeholderIntro :: Contents
-
--- | Constructor for making a client. Takes in the system name and details
---   regarding the client for the specific program.
-tClientF :: Idea a => a -> Sentence -> Section
-
--- | Constructor for making a customer. Takes in the system name.
-tCustomerF :: Idea a => a -> Section
-
-
--- | Standard code to make a table of abbreviations and acronyms.
-module Drasil.Sections.TableOfAbbAndAcronyms
-
--- | The actual table creation function.
-tableAbbAccGen :: Idea s => [s] -> LabelledContent
-
--- | Table of abbreviations and acronyms reference.
-tableAbbAccRef :: Reference
-
-
--- | Standard code to make a table of contents.
-module Drasil.Sections.TableOfContents
-
--- | Finds all possible sections and subsections to make a Table of
---   Contents.
-toToC :: DocSection -> ItemType
-
-
--- | Standard code to make a table of symbols.
-module Drasil.Sections.TableOfSymbols
-
--- | Table of Symbols creation function. Takes in a <a>Stage</a>,
---   <a>Symbol</a>s, and something that turns the symbols into a
---   <a>Sentence</a>. Filters non-symbol chunks and checks for duplicate
---   symbol error.
-table :: (Quantity s, MayHaveUnit s) => Stage -> [s] -> (s -> Sentence) -> LabelledContent
-
--- | Makes a reference to the Table of Symbols.
-symbTableRef :: Reference
-
--- | Default is term and given introduction.
---   
---   Table of symbols constructor.
-tsymb :: [TSIntro] -> RefTab
-
--- | Similar to <a>tsymb</a>, but has a default Defn for the LFunc type.
---   Still has a given introduction.
---   
---   Table of symbols constructor.
-tsymb' :: [TSIntro] -> RefTab
-
--- | Table of symbols constructor. Takes a custom function and
---   introduction.
-tsymb'' :: [TSIntro] -> LFunc -> RefTab
-
--- | Table of symbols introduction builder. Used by <tt>mkRefSec</tt>.
-tsIntro :: [TSIntro] -> Contents
-
-
--- | Standard code to make a table of units. First true example of a
---   (small) recipe.
-module Drasil.Sections.TableOfUnits
-
--- | Creates the Table of Units with SI name in the <a>Description</a>
---   column.
-tOfUnitDesc :: IsUnit s => [s] -> LabelledContent
-
--- | Creates the Table of Units with an "SI Name" column.
-tOfUnitSIName :: IsUnit s => [s] -> LabelledContent
-
--- | Makes a reference to the Table of Units.
-unitTableRef :: Reference
-
--- | Table of units with an SI Name.
---   
---   Table of units constructors.
-tunit :: [TUIntro] -> RefTab
-
--- | Table of units with SI name in the description column.
---   
---   Table of units constructors.
-tunit' :: [TUIntro] -> RefTab
-
--- | Table of units with SI name in the description column.
---   
---   Table of units constructors.
-tunitNone :: [TUIntro] -> RefTab
-
--- | Table of units introduction builder. Used by <tt>mkRefSec</tt>.
-tuIntro :: [TUIntro] -> Contents
-
--- | Default table of units intro that contains the system, derivation, and
---   purpose.
-defaultTUI :: [TUIntro]
-
-
 -- | Defines functions used to create the Traceability Matrices and Graphs
 --   section.
 module Drasil.Sections.TraceabilityMandGs
@@ -1738,6 +1674,98 @@ resourcePath :: String
 folderList' :: [ItemType]
 
 
+-- | Standard code to make a table of units. First true example of a
+--   (small) recipe.
+module Drasil.Sections.TableOfUnits
+
+-- | Creates the Table of Units with SI name in the <a>Description</a>
+--   column.
+tOfUnitDesc :: IsUnit s => [s] -> LabelledContent
+
+-- | Creates the Table of Units with an "SI Name" column.
+tOfUnitSIName :: IsUnit s => [s] -> LabelledContent
+
+-- | Makes a reference to the Table of Units.
+unitTableRef :: Reference
+
+-- | Table of units with an SI Name.
+--   
+--   Table of units constructors.
+tunit :: [TUIntro] -> RefTab
+
+-- | Table of units with SI name in the description column.
+--   
+--   Table of units constructors.
+tunit' :: [TUIntro] -> RefTab
+
+-- | Table of units with SI name in the description column.
+--   
+--   Table of units constructors.
+tunitNone :: [TUIntro] -> RefTab
+
+-- | Table of units introduction builder. Used by <tt>mkRefSec</tt>.
+tuIntro :: [TUIntro] -> Contents
+
+-- | Default table of units intro that contains the system, derivation, and
+--   purpose.
+defaultTUI :: [TUIntro]
+
+
+-- | Standard code to make a table of symbols.
+module Drasil.Sections.TableOfSymbols
+
+-- | Table of Symbols creation function. Takes in a <a>Stage</a>,
+--   <a>Symbol</a>s, and something that turns the symbols into a
+--   <a>Sentence</a>. Filters non-symbol chunks and checks for duplicate
+--   symbol error.
+table :: (Quantity s, MayHaveUnit s) => Stage -> [s] -> (s -> Sentence) -> LabelledContent
+
+-- | Makes a reference to the Table of Symbols.
+symbTableRef :: Reference
+
+-- | Default is term and given introduction.
+--   
+--   Table of symbols constructor.
+tsymb :: [TSIntro] -> RefTab
+
+-- | Similar to <a>tsymb</a>, but has a default Defn for the LFunc type.
+--   Still has a given introduction.
+--   
+--   Table of symbols constructor.
+tsymb' :: [TSIntro] -> RefTab
+
+-- | Table of symbols constructor. Takes a custom function and
+--   introduction.
+tsymb'' :: [TSIntro] -> LFunc -> RefTab
+
+-- | Table of symbols introduction builder. Used by <tt>mkRefSec</tt>.
+tsIntro :: [TSIntro] -> Contents
+
+
+-- | Standard code to make a table of contents.
+module Drasil.Sections.TableOfContents
+
+-- | Finds all possible sections and subsections to make a Table of
+--   Contents.
+toToC :: DocSection -> ItemType
+
+
+-- | Defines functions to extract certain kinds of information from a
+--   document. Mainly used to pull the <tt>UID</tt>s of chunks out of
+--   <a>Sentence</a>s and <a>Expr</a>s.
+module Drasil.ExtractDocDesc
+
+-- | Extracts <a>Sentence</a>s from a document description.
+getDocDesc :: DocDesc -> [Sentence]
+
+-- | Extracts expressions from the document description (<a>DocDesc</a>)
+--   and default <a>DLPlate</a>.
+egetDocDesc :: DocDesc -> [ModelExpr]
+
+-- | Creates a <a>Sentence</a> plate.
+sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
+
+
 -- | Collects references common to all SRS documents in one list for easy
 --   use.
 module Drasil.DocLang.References
@@ -1745,6 +1773,136 @@ module Drasil.DocLang.References
 -- | All section references used in creating a Software Requirements
 --   Specification (SRS).
 secRefs :: [Reference]
+
+
+-- | Document declaration types and functions for generating Software
+--   Requirement Specifications.
+module Drasil.DocDecl
+
+-- | A Software Requirements Specification Declaration is made up of all
+--   necessary sections (<a>DocSection</a>s).
+type SRSDecl = [DocSection]
+
+-- | Contains all the different sections needed for a full SRS
+--   (<a>SRSDecl</a>).
+data DocSection
+
+-- | Table of Contents
+TableOfContents :: DocSection
+
+-- | Reference.
+RefSec :: RefSec -> DocSection
+
+-- | Introduction.
+IntroSec :: IntroSec -> DocSection
+
+-- | Stakeholders.
+StkhldrSec :: StkhldrSec -> DocSection
+
+-- | General System Description.
+GSDSec :: GSDSec -> DocSection
+
+-- | Specific System Description.
+SSDSec :: SSDSec -> DocSection
+
+-- | Requirements.
+ReqrmntSec :: ReqrmntSec -> DocSection
+
+-- | Likely Changes.
+LCsSec :: DocSection
+
+-- | Unlikely Changes.
+UCsSec :: DocSection
+
+-- | Traceability.
+TraceabilitySec :: TraceabilitySec -> DocSection
+
+-- | Auxiliary Constants.
+AuxConstntSec :: AuxConstntSec -> DocSection
+
+-- | Bibliography.
+Bibliography :: DocSection
+
+-- | Appendix.
+AppndxSec :: AppndxSec -> DocSection
+
+-- | Off the Shelf Solutions.
+OffShelfSolnsSec :: OffShelfSolnsSec -> DocSection
+
+-- | Specific System Description section (wraps <a>SSDSub</a> subsections).
+newtype SSDSec
+SSDProg :: [SSDSub] -> SSDSec
+
+-- | Specific System Description subsections.
+data SSDSub
+
+-- | Problem description.
+[SSDProblem] :: ProblemDescription -> SSDSub
+
+-- | Solution characteristics.
+[SSDSolChSpec] :: SolChSpec -> SSDSub
+
+-- | Problem Description section.
+data ProblemDescription
+[PDProg] :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
+
+-- | Problem Description subsections.
+data PDSub
+
+-- | Terms and Definitions.
+[TermsAndDefs] :: Concept c => Maybe Sentence -> [c] -> PDSub
+
+-- | Physical System Description.
+[PhySysDesc] :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
+
+-- | Goals.
+[Goals] :: [Sentence] -> PDSub
+
+-- | Solution Characteristics Specification section (wraps <a>SCSSub</a>
+--   subsections).
+data SolChSpec
+[SCSProg] :: [SCSSub] -> SolChSpec
+
+-- | Solution Characteristics Specification subsections.
+data SCSSub
+
+-- | Assumptions.
+[Assumptions] :: SCSSub
+
+-- | Theory models.
+[TMs] :: [Sentence] -> Fields -> SCSSub
+
+-- | General definitions.
+[GDs] :: [Sentence] -> Fields -> DerivationDisplay -> SCSSub
+
+-- | Data definitions.
+[DDs] :: [Sentence] -> Fields -> DerivationDisplay -> SCSSub
+
+-- | Instance models.
+[IMs] :: [Sentence] -> Fields -> DerivationDisplay -> SCSSub
+
+-- | Constraints.
+[Constraints] :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+
+-- | Properties of a correct solution.
+[CorrSolnPpties] :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
+
+-- | Requirements section (wraps <a>ReqsSub</a> subsections).
+newtype ReqrmntSec
+ReqsProg :: [ReqsSub] -> ReqrmntSec
+
+-- | Requirements subsections.
+data ReqsSub
+
+-- | Functional requirements. <a>LabelledContent</a> for tables.
+[FReqsSub] :: [LabelledContent] -> ReqsSub
+
+-- | Non-Functional requirements.
+[NonFReqsSub] :: ReqsSub
+
+-- | Creates the document description (translates <a>SRSDecl</a> into a
+--   more usable form for generating documents).
+mkDocDesc :: System -> SRSDecl -> DocDesc
 
 
 -- | Defines a DLPlate for tracability between pieces of information.

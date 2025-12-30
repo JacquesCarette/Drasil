@@ -3,33 +3,34 @@
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Prelude</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sin</span></span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Development</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span>
-</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">weave</span></span><span class="hs-special">)</span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.NounPhrase.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">NP</span></span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">gravitationalAccel</span></span><span class="hs-special">,</span><span>
-</span><span id="line-14"></span><span>         </span><span class="annot"><span class="hs-identifier">angularAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">momentOfInertia</span></span><span class="hs-special">,</span><span>
-</span><span id="line-15"></span><span>         </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularDisplacement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularFrequency</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">torque</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularDisplacement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">)</span><span>
-</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">constraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">amplitude</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iAngle</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angle</span></span><span class="hs-special">)</span><span>
-</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">pendulum</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">motion</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">shm</span></span><span class="hs-special">)</span><span>
-</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Theories.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">newtonSLR</span></span><span class="hs-special">)</span><span>
-</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.GenDefs.html"><span class="hs-identifier">Drasil.SglPend.GenDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.GenDefs.html#angFrequencyGD"><span class="hs-identifier">angFrequencyGD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">gravitationalAccel</span></span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span>         </span><span class="annot"><span class="hs-identifier">angularAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">momentOfInertia</span></span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>         </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularDisplacement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularFrequency</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">torque</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularDisplacement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">constraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">amplitude</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iAngle</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angle</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">pendulum</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">motion</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">shm</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Theories.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">newtonSLR</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">definedIn''</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Development</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.NounPhrase.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">NP</span></span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">weave</span></span><span class="hs-special">)</span><span>
 </span><span id="line-20"></span><span>
-</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Derivations.html"><span class="hs-identifier">Drasil.SglPend.Derivations</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Derivations.html#angularDisplacementDerivEqns"><span class="hs-identifier">angularDisplacementDerivEqns</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Expressions.html"><span class="hs-identifier">Drasil.SglPend.Expressions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Expressions.html#angularDisplacementExpr"><span class="hs-identifier">angularDisplacementExpr</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html"><span class="hs-identifier">Drasil.SglPend.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Unitals.html#lenRod"><span class="hs-identifier">lenRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html#pendDisplacementAngle"><span class="hs-identifier">pendDisplacementAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html#initialPendAngle"><span class="hs-identifier">initialPendAngle</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#iMods"><span class="hs-identifier hs-type">iMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span class="hs-special">]</span><span>
-</span><span id="line-26"></span><span id="iMods"><span class="annot"><span class="annottext">iMods :: [InstanceModel]
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.GenDefs.html"><span class="hs-identifier">Drasil.SglPend.GenDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.GenDefs.html#angFrequencyGD"><span class="hs-identifier">angFrequencyGD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Derivations.html"><span class="hs-identifier">Drasil.SglPend.Derivations</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Derivations.html#angularDisplacementDerivEqns"><span class="hs-identifier">angularDisplacementDerivEqns</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Expressions.html"><span class="hs-identifier">Drasil.SglPend.Expressions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Expressions.html#angularDisplacementExpr"><span class="hs-identifier">angularDisplacementExpr</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html"><span class="hs-identifier">Drasil.SglPend.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Unitals.html#lenRod"><span class="hs-identifier">lenRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html#pendDisplacementAngle"><span class="hs-identifier">pendDisplacementAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.Unitals.html#initialPendAngle"><span class="hs-identifier">initialPendAngle</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#iMods"><span class="hs-identifier hs-type">iMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span class="hs-special">]</span><span>
+</span><span id="line-27"></span><span id="iMods"><span class="annot"><span class="annottext">iMods :: [InstanceModel]
 </span><a href="Drasil.SglPend.IMods.html#iMods"><span class="hs-identifier hs-var hs-var">iMods</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementIM"><span class="hs-identifier hs-var">angularDisplacementIM</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-27"></span><span>
-</span><span id="line-28"></span><span class="hs-comment">-- Angular Displacement</span><span>
-</span><span id="line-29"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementIM"><span class="hs-identifier hs-type">angularDisplacementIM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
-</span><span id="line-30"></span><span id="angularDisplacementIM"><span class="annot"><span class="annottext">angularDisplacementIM :: InstanceModel
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="hs-comment">-- Angular Displacement</span><span>
+</span><span id="line-30"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementIM"><span class="hs-identifier hs-type">angularDisplacementIM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span>
+</span><span id="line-31"></span><span id="angularDisplacementIM"><span class="annot"><span class="annottext">angularDisplacementIM :: InstanceModel
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementIM"><span class="hs-identifier hs-var hs-var">angularDisplacementIM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 -&gt; Inputs
 -&gt; Output
@@ -40,7 +41,7 @@
 -&gt; InstanceModel
 </span><span class="hs-identifier hs-var">imNoRefs</span></span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementMK"><span class="hs-identifier hs-var">angularDisplacementMK</span></a></span><span>
-</span><span id="line-31"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-32"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -55,7 +56,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-32"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-33"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -70,7 +71,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-33"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-34"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
 (Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
@@ -85,7 +86,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-34"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Output
+</span><span id="line-35"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Output
 forall c. (Quantity c, Concept c, MayHaveUnit c) =&gt; c -&gt; Output
 </span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPend.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -95,38 +96,38 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-35"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+</span><span id="line-36"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDeriv"><span class="hs-identifier hs-var">angularDisplacementDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;calOfAngularDisplacement&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.IMods.html#angularDispConstraintNote"><span class="hs-identifier hs-var">angularDispConstraintNote</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-36"></span><span>
-</span><span id="line-37"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementMK"><span class="hs-identifier hs-type">angularDisplacementMK</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelKind</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-38"></span><span id="angularDisplacementMK"><span class="annot"><span class="annottext">angularDisplacementMK :: ModelKind Expr
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementMK"><span class="hs-identifier hs-type">angularDisplacementMK</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelKind</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-39"></span><span id="angularDisplacementMK"><span class="annot"><span class="annottext">angularDisplacementMK :: ModelKind Expr
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementMK"><span class="hs-identifier hs-var hs-var">angularDisplacementMK</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; QDefinition Expr -&gt; ModelKind Expr
 forall e. String -&gt; NP -&gt; QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModel</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;angularDisplacementIM&quot;</span></span><span>
-</span><span id="line-39"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-40"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;calculation of angular displacement&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">QDefinition Expr
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementFD"><span class="hs-identifier hs-var">angularDisplacementFD</span></a></span><span>
-</span><span id="line-40"></span><span>
-</span><span id="line-41"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementFD"><span class="hs-identifier hs-type">angularDisplacementFD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-42"></span><span id="angularDisplacementFD"><span class="annot"><span class="annottext">angularDisplacementFD :: QDefinition Expr
+</span><span id="line-41"></span><span>
+</span><span id="line-42"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementFD"><span class="hs-identifier hs-type">angularDisplacementFD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-43"></span><span id="angularDisplacementFD"><span class="annot"><span class="annottext">angularDisplacementFD :: QDefinition Expr
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementFD"><span class="hs-identifier hs-var hs-var">angularDisplacementFD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; [UnitalChunk] -&gt; Expr -&gt; QDefinition Expr
 forall c i e.
 (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) =&gt;
 c -&gt; [i] -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkFuncDefByQ</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPend.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span>
-</span><span id="line-43"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span id="line-44"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPend.Expressions.html#angularDisplacementExpr"><span class="hs-identifier hs-var">angularDisplacementExpr</span></a></span><span>
-</span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDeriv"><span class="hs-identifier hs-type">angularDisplacementDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
-</span><span id="line-46"></span><span id="angularDisplacementDeriv"><span class="annot"><span class="annottext">angularDisplacementDeriv :: Derivation
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDeriv"><span class="hs-identifier hs-type">angularDisplacementDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-47"></span><span id="angularDisplacementDeriv"><span class="annot"><span class="annottext">angularDisplacementDeriv :: Derivation
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDeriv"><span class="hs-identifier hs-var hs-var">angularDisplacementDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -139,23 +140,23 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="Drasil.SglPend.Derivations.html#angularDisplacementDerivEqns"><span class="hs-identifier hs-var">angularDisplacementDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-47"></span><span>
-</span><span id="line-48"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSents"><span class="hs-identifier hs-type">angularDisplacementDerivSents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-49"></span><span id="angularDisplacementDerivSents"><span class="annot"><span class="annottext">angularDisplacementDerivSents :: [Sentence]
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSents"><span class="hs-identifier hs-type">angularDisplacementDerivSents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-50"></span><span id="angularDisplacementDerivSents"><span class="annot"><span class="annottext">angularDisplacementDerivSents :: [Sentence]
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSents"><span class="hs-identifier hs-var hs-var">angularDisplacementDerivSents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent1"><span class="hs-identifier hs-var">angularDisplacementDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent2"><span class="hs-identifier hs-var">angularDisplacementDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent3"><span class="hs-identifier hs-var">angularDisplacementDerivSent3</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-50"></span><span>                             </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-51"></span><span>                             </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent4"><span class="hs-identifier hs-var">angularDisplacementDerivSent4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent5"><span class="hs-identifier hs-var">angularDisplacementDerivSent5</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-51"></span><span>
-</span><span id="line-52"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent1"><span class="hs-identifier hs-type">angularDisplacementDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent2"><span class="hs-identifier hs-type">angularDisplacementDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent3"><span class="hs-identifier hs-type">angularDisplacementDerivSent3</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-53"></span><span>  </span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent4"><span class="hs-identifier hs-type">angularDisplacementDerivSent4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent5"><span class="hs-identifier hs-type">angularDisplacementDerivSent5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-54"></span><span id="angularDisplacementDerivSent1"><span class="annot"><span class="annottext">angularDisplacementDerivSent1 :: Sentence
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent1"><span class="hs-identifier hs-type">angularDisplacementDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent2"><span class="hs-identifier hs-type">angularDisplacementDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent3"><span class="hs-identifier hs-type">angularDisplacementDerivSent3</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-54"></span><span>  </span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent4"><span class="hs-identifier hs-type">angularDisplacementDerivSent4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent5"><span class="hs-identifier hs-type">angularDisplacementDerivSent5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-55"></span><span id="angularDisplacementDerivSent1"><span class="annot"><span class="annottext">angularDisplacementDerivSent1 :: Sentence
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent1"><span class="hs-identifier hs-var hs-var">angularDisplacementDerivSent1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span>
-</span><span id="line-55"></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-56"></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;When&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -167,7 +168,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;displaced to an&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span id="line-57"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">iAngle</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -175,7 +176,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;released&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-57"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
 forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
@@ -188,7 +189,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">motion</span></span><span class="hs-special">,</span><span>
-</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;By applying&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence -&gt; Sentence
 forall r.
@@ -200,7 +201,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">newtonSLR</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span id="line-60"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
 forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
@@ -215,7 +216,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;may be obtained&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-60"></span><span id="angularDisplacementDerivSent2"><span class="annot"><span class="annottext">angularDisplacementDerivSent2 :: Sentence
+</span><span id="line-61"></span><span id="angularDisplacementDerivSent2"><span class="annot"><span class="annottext">angularDisplacementDerivSent2 :: Sentence
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent2"><span class="hs-identifier hs-var hs-var">angularDisplacementDerivSent2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -228,7 +229,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">torque</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-61"></span><span>                                    </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-62"></span><span>                                    </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">momentOfInertia</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -241,21 +242,21 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">angularAccel</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.denotes`</span></span><span>
-</span><span id="line-62"></span><span>                                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-63"></span><span>                                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">angularAccel</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;This implies&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-63"></span><span id="angularDisplacementDerivSent3"><span class="annot"><span class="annottext">angularDisplacementDerivSent3 :: Sentence
+</span><span id="line-64"></span><span id="angularDisplacementDerivSent3"><span class="annot"><span class="annottext">angularDisplacementDerivSent3 :: Sentence
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent3"><span class="hs-identifier hs-var hs-var">angularDisplacementDerivSent3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;And rearranged as&quot;</span></span><span> </span><span class="hs-special">]</span><span>
-</span><span id="line-64"></span><span id="angularDisplacementDerivSent4"><span class="annot"><span class="annottext">angularDisplacementDerivSent4 :: Sentence
+</span><span id="line-65"></span><span id="angularDisplacementDerivSent4"><span class="annot"><span class="annottext">angularDisplacementDerivSent4 :: Sentence
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent4"><span class="hs-identifier hs-var hs-var">angularDisplacementDerivSent4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span>
-</span><span id="line-65"></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-66"></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;If&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -269,7 +270,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is small enough&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-66"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-67"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;we can approximate&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
@@ -290,7 +291,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">,</span><span>
-</span><span id="line-67"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-68"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;at very small&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -307,7 +308,7 @@ forall n. NounPhrase n =&gt; n -&gt; NPStruct
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">motion</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-68"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-69"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;reduces to&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="annot"><span class="annottext">(NPStruct -&gt; Sentence) -&gt; NPStruct -&gt; Sentence
@@ -320,7 +321,7 @@ forall n. NounPhrase n =&gt; n -&gt; NPStruct
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">shm</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-69"></span><span id="angularDisplacementDerivSent5"><span class="annot"><span class="annottext">angularDisplacementDerivSent5 :: Sentence
+</span><span id="line-70"></span><span id="angularDisplacementDerivSent5"><span class="annot"><span class="annottext">angularDisplacementDerivSent5 :: Sentence
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementDerivSent5"><span class="hs-identifier hs-var hs-var">angularDisplacementDerivSent5</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -330,9 +331,9 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">shm</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is&quot;</span></span><span> </span><span class="hs-special">]</span><span>
-</span><span id="line-70"></span><span>
-</span><span id="line-71"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDispConstraintNote"><span class="hs-identifier hs-type">angularDispConstraintNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-72"></span><span id="angularDispConstraintNote"><span class="annot"><span class="annottext">angularDispConstraintNote :: Sentence
+</span><span id="line-71"></span><span>
+</span><span id="line-72"></span><span class="annot"><a href="Drasil.SglPend.IMods.html#angularDispConstraintNote"><span class="hs-identifier hs-type">angularDispConstraintNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-73"></span><span id="angularDispConstraintNote"><span class="annot"><span class="annottext">angularDispConstraintNote :: Sentence
 </span><a href="Drasil.SglPend.IMods.html#angularDispConstraintNote"><span class="hs-identifier hs-var hs-var">angularDispConstraintNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="annot"><span class="annottext">(NPStruct -&gt; Sentence) -&gt; NPStruct -&gt; Sentence
@@ -343,7 +344,7 @@ forall n. NounPhrase n =&gt; n -&gt; NPStruct
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-73"></span><span>     </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
+</span><span id="line-74"></span><span>     </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -357,7 +358,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;required&quot;</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-74"></span><span>     </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span id="line-75"></span><span>     </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
 forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP
@@ -368,4 +369,4 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">definedIn''</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
 </span><a href="Drasil.SglPend.GenDefs.html#angFrequencyGD"><span class="hs-identifier hs-var">angFrequencyGD</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-75"></span></pre></body></html>
+</span><span id="line-76"></span></pre></body></html>

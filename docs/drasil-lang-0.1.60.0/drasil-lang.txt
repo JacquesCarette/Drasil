@@ -927,12 +927,6 @@ data DerivType
 Part :: DerivType
 Total :: DerivType
 
--- | For case expressions (either complete or incomplete).
-data Completeness
-Complete :: Completeness
-Incomplete :: Completeness
-expr :: Expr -> ModelExpr
-
 -- | Get dependencies from an equation.
 meDep :: ModelExpr -> [UID]
 
@@ -3471,6 +3465,23 @@ sDash :: Sentence -> Sentence -> Sentence
 
 -- | Helper for wrapping <a>Sentence</a>s in parentheses.
 sParen :: Sentence -> Sentence
+
+-- | Wraps "from <tt>reference</tt>" in parentheses.
+fromSource :: (Referable r, HasShortName r) => r -> Sentence
+
+-- | Apply a binary function to the terms of two named ideas, instead of to
+--   the named ideas themselves. Ex. <tt>fterms compoundPhrase t1 t2</tt>
+--   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>.
+fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
+
+-- | Used when you want to say a term followed by its symbol. ex. "...using
+--   the Force F in...".
+getTandS :: Quantity a => a -> Sentence
+
+-- | Uses an <a>Either</a> type to check if a <a>String</a> is valid -
+--   <a>Left</a> with error message if there is an invalid <a>Char</a> in
+--   <a>String</a>, else <a>Right</a> with <a>String</a>.
+checkValidStr :: String -> String -> Either String String
 class NounPhrase n
 
 -- | Retrieves singular form of term. Ex. "the quick brown fox".
@@ -4045,167 +4056,6 @@ makeEqnRef' :: UID -> Reference
 --   <a>String</a>.
 makeURI' :: UID -> String -> ShortName -> Reference
 
--- | Output is of the form "<tt>reference - sentence</tt>".
-chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
-
--- | Takes a <a>HasSymbol</a> that is also <a>Referable</a> and outputs as
---   a <a>Sentence</a>: "<tt>symbol</tt> is defined in <tt>reference</tt>."
-definedIn :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence
-
--- | Same as <a>definedIn</a>, but allows for additional information to be
---   appended to the <a>Sentence</a>.
-definedIn' :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence -> Sentence
-
--- | Takes a <a>Referable</a> and outputs as a <a>Sentence</a> "defined in
---   <tt>reference</tt>" (no <a>HasSymbol</a>).
-definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
-
--- | Takes a <a>Symbol</a> and its <tt>Reference</tt> (does not append a
---   period at the end!). Outputs as "<tt>symbol</tt> is defined in
---   <tt>source</tt>".
-definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
-
--- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
---   "expression (source)".
-eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
-
--- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
---   as a <a>Sentence</a>: "From <tt>source</tt> we can replace
---   <tt>symbol</tt>:".
-fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
-
--- | Wraps "from <tt>reference</tt>" in parentheses.
-fromSource :: (Referable r, HasShortName r) => r -> Sentence
-
--- | Similar to <a>fromSource</a> but takes a list of references instead of
---   one.
-fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
-
--- | Takes an amount as a <a>Sentence</a> and appends a unit to it.
-fmtU :: MayHaveUnit a => Sentence -> a -> Sentence
-
--- | Appends "following <tt>reference</tt>" to the end of a
---   <a>Sentence</a>.
-follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
-
--- | Takes a list and a <a>Section</a>, then generates a list of that
---   section's reference to match the length of the list.
-makeListRef :: [a] -> Section -> [Sentence]
-
--- | Converts input to a <a>Sentence</a> and appends %.
-addPercent :: Show a => a -> Sentence
-
--- | Prepends the word <a>Equation</a> to an <a>Int</a>.
-eqN :: Int -> Sentence
-
--- | Uses an <a>Either</a> type to check if a <a>String</a> is valid -
---   <a>Left</a> with error message if there is an invalid <a>Char</a> in
---   <a>String</a>, else <a>Right</a> with <a>String</a>.
-checkValidStr :: String -> String -> Either String String
-
--- | Used when you want to say a term followed by its symbol. ex. "...using
---   the Force F in...".
-getTandS :: Quantity a => a -> Sentence
-
--- | Helper functions for making likely change statements. Uses form
---   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
-maybeChanged :: Sentence -> Sentence -> Sentence
-
--- | Helper functions for making likely change statements. Uses form
---   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
-maybeExpanded :: Sentence -> Sentence -> Sentence
-
--- | Helper functions for making likely change statements. Uses form
---   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
-maybeWOVerb :: Sentence -> Sentence -> Sentence
-
--- | Returns the <a>Sentence</a> "<tt>(<a>titleize</a> aNamedIdea)</tt>
---   Showing the Connections Between <tt>contents</tt>".
-showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
-
--- | Takes a list of <a>Referable</a>s and <a>Symbol</a>s and outputs as a
---   Sentence "By substituting <tt>symbols</tt>, this can be written as:".
-substitute :: (Referable r, HasShortName r, DefinesQuantity r) => [r] -> Sentence
-
--- | Formats typical uncertainty data to be displayed.
-typUncr :: (Double, Maybe Int) -> Sentence
-
--- | Returns the <a>Sentence</a> "The <tt>chunk</tt> under consideration is
---   <tt>chunkDefinition</tt>".
-underConsidertn :: ConceptChunk -> Sentence
-
--- | Get a unit symbol if there is one.
-unwrap :: Maybe UnitDefn -> Sentence
-
--- | Apply a binary function to the terms of two named ideas, instead of to
---   the named ideas themselves. Ex. <tt>fterms compoundPhrase t1 t2</tt>
---   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>.
-fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
-
--- | Applies <a>Bullet</a> and <a>Flat</a> to a list.
-bulletFlat :: [Sentence] -> ListType
-
--- | Applies <a>Bullet</a>s and headers to a <a>Nested</a> <a>ListType</a>.
---   The first argument is the headers of the <a>Nested</a> lists.
-bulletNested :: [Sentence] -> [ListType] -> ListType
-
--- | Makes <a>Sentence</a>s from an item and its reference. Takes the title
---   of reference as a <a>String</a> and a <a>Sentence</a> containing the
---   full reference. Wraps the full reference in parenthesis.
-itemRefToSent :: String -> Sentence -> Sentence
-
--- | Makes a traceability matrix from a list of row titles, a list of rows
---   of "checked" columns, and a list of columns.
-makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
-
--- | Zip helper function enumerates abbreviations and zips it with list of
---   <a>ItemType</a>:
---   
---   <ul>
---   <li>s - the number from which the enumeration should start from
---   (<a>Integer</a>),</li>
---   <li>t - the title of the list (<a>Sentence</a>),</li>
---   <li>l - the list to be enumerated ([<a>Sentence</a>]).</li>
---   </ul>
-mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
-
--- | Helper for making a table from a columns.
-mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
-
--- | Converts lists of simple <a>ItemType</a>s into a list which may be
---   used in <tt>Contents</tt> but is not directly referable.
-noRefs :: [ItemType] -> [(ItemType, Maybe String)]
-
--- | Create a list in the pattern of "The __ are refined to the __". Note:
---   Order matters!
-refineChain :: NamedIdea c => [(c, Section)] -> Sentence
-
--- | Helpful combinators for making <a>Sentence</a>s into Terminologies
---   with Definitions. Returns of the form: "<tt>term -
---   termDefinition</tt>".
-tAndDOnly :: Concept s => s -> ItemType
-
--- | Helpful combinators for making <a>Sentence</a>s into Terminologies
---   with Definitions. Returns of the form: "<tt>term (abbreviation) -
---   termDefinition</tt>".
-tAndDWAcc :: Concept s => s -> ItemType
-
--- | Helpful combinators for making <a>Sentence</a>s into Terminologies
---   with Definitions. Returns of the form: "<tt>term (symbol) -
---   termDefinition</tt>".
-tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
-
--- | Distributes a list of Sentences by prepending individual Sentences
---   once to an existing list of Sentences.
---   
---   For example:
---   
---   <pre>
---   &gt;&gt;&gt; zipSentList [S "Hi", S "Hey", S "Hi"] [[S "Hello"], [S "World"], [S "Hello", S "World"]]
---   [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
---   </pre>
-zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
-
 -- | The difference kinds of spaces that may exist. This type holds
 --   numerical spaces (such as the set of integers, rationals, etc.), a
 --   space for booleans, a space for characters, dimensional spaces
@@ -4367,8 +4217,6 @@ type SimpleQDef = QDefinition Expr
 
 -- | Commonly used type for QDefinitions containing ModelExprs.
 type ModelQDef = QDefinition ModelExpr
-
--- | Commonly used type for polymorphic Exprs.
 type PExpr = forall r. (ExprC r, LiteralC r) => r
 
 -- | We can only type check <a>UID</a>s within a type context relating

@@ -6,41 +6,42 @@
 </span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Development</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
-</span><span id="line-9"></span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumption</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">item</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physicalSystem</span></span><span class="hs-special">,</span><span>
-</span><span id="line-11"></span><span>  </span><span class="annot"><span class="hs-identifier">requirement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">section_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sysCont</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">traceyMatrix</span></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html"><span class="hs-identifier">Drasil.GlassBR.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#aR"><span class="hs-identifier">aR</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#stdOffDist"><span class="hs-identifier">stdOffDist</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html"><span class="hs-identifier">Drasil.GlassBR.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#aspectRatio"><span class="hs-identifier">aspectRatio</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#charWeight"><span class="hs-identifier">charWeight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#demand"><span class="hs-identifier">demand</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#demandq"><span class="hs-identifier">demandq</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-15"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#dimlessLoad"><span class="hs-identifier">dimlessLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#lateralLoad"><span class="hs-identifier">lateralLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#sD"><span class="hs-identifier">sD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#stressDistFac"><span class="hs-identifier">stressDistFac</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#resourcePath"><span class="hs-identifier hs-type">resourcePath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-18"></span><span id="resourcePath"><span class="annot"><span class="annottext">resourcePath :: String
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">showingCxnBw</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumption</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">item</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physicalSystem</span></span><span class="hs-special">,</span><span>
+</span><span id="line-12"></span><span>  </span><span class="annot"><span class="hs-identifier">requirement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">section_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sysCont</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">traceyMatrix</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html"><span class="hs-identifier">Drasil.GlassBR.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#aR"><span class="hs-identifier">aR</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#stdOffDist"><span class="hs-identifier">stdOffDist</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html"><span class="hs-identifier">Drasil.GlassBR.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#aspectRatio"><span class="hs-identifier">aspectRatio</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#charWeight"><span class="hs-identifier">charWeight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#demand"><span class="hs-identifier">demand</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#demandq"><span class="hs-identifier">demandq</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-16"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#dimlessLoad"><span class="hs-identifier">dimlessLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#lateralLoad"><span class="hs-identifier">lateralLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#sD"><span class="hs-identifier">sD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#stressDistFac"><span class="hs-identifier">stressDistFac</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#resourcePath"><span class="hs-identifier hs-type">resourcePath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-19"></span><span id="resourcePath"><span class="annot"><span class="annottext">resourcePath :: String
 </span><a href="Drasil.GlassBR.LabelledContent.html#resourcePath"><span class="hs-identifier hs-var hs-var">resourcePath</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;../../../../datafiles/glassbr/&quot;</span></span><span>
-</span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#figures"><span class="hs-identifier hs-type">figures</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span class="hs-special">]</span><span>
-</span><span id="line-21"></span><span id="figures"><span class="annot"><span class="annottext">figures :: [LabelledContent]
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#figures"><span class="hs-identifier hs-type">figures</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span class="hs-special">]</span><span>
+</span><span id="line-22"></span><span id="figures"><span class="annot"><span class="annottext">figures :: [LabelledContent]
 </span><a href="Drasil.GlassBR.LabelledContent.html#figures"><span class="hs-identifier hs-var hs-var">figures</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#sysCtxFig"><span class="hs-identifier hs-var">sysCtxFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#physSystFig"><span class="hs-identifier hs-var">physSystFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#traceItemSecsFig"><span class="hs-identifier hs-var">traceItemSecsFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#traceReqsItemsFig"><span class="hs-identifier hs-var">traceReqsItemsFig</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">LabelledContent
+</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#traceAssumpsOthersFig"><span class="hs-identifier hs-var">traceAssumpsOthersFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#demandVsSDFig"><span class="hs-identifier hs-var">demandVsSDFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#dimlessloadVsARFig"><span class="hs-identifier hs-var">dimlessloadVsARFig</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-23"></span><span>
-</span><span id="line-24"></span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#sysCtxFig"><span class="hs-identifier hs-type">sysCtxFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#physSystFig"><span class="hs-identifier hs-type">physSystFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#traceItemSecsFig"><span class="hs-identifier hs-type">traceItemSecsFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#traceReqsItemsFig"><span class="hs-identifier hs-type">traceReqsItemsFig</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-25"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#traceAssumpsOthersFig"><span class="hs-identifier hs-type">traceAssumpsOthersFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#demandVsSDFig"><span class="hs-identifier hs-type">demandVsSDFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#dimlessloadVsARFig"><span class="hs-identifier hs-type">dimlessloadVsARFig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
-</span><span id="line-26"></span><span>
-</span><span id="line-27"></span><span id="sysCtxFig"><span class="annot"><span class="annottext">sysCtxFig :: LabelledContent
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#sysCtxFig"><span class="hs-identifier hs-type">sysCtxFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#physSystFig"><span class="hs-identifier hs-type">physSystFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#traceItemSecsFig"><span class="hs-identifier hs-type">traceItemSecsFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#traceReqsItemsFig"><span class="hs-identifier hs-type">traceReqsItemsFig</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-26"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#traceAssumpsOthersFig"><span class="hs-identifier hs-type">traceAssumpsOthersFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#demandVsSDFig"><span class="hs-identifier hs-type">demandVsSDFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html#dimlessloadVsARFig"><span class="hs-identifier hs-type">dimlessloadVsARFig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span id="sysCtxFig"><span class="annot"><span class="annottext">sysCtxFig :: LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#sysCtxFig"><span class="hs-identifier hs-var hs-var">sysCtxFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llccFig</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;sysCtxDiag&quot;</span></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; String -&gt; RawContent
+</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; String -&gt; RawContent
 </span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -49,15 +50,15 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;SystemContextFigure.png&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-29"></span><span>
-</span><span id="line-30"></span><span id="physSystFig"><span class="annot"><span class="annottext">physSystFig :: LabelledContent
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span id="physSystFig"><span class="annot"><span class="annottext">physSystFig :: LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#physSystFig"><span class="hs-identifier hs-var hs-var">physSystFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llccFig</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;physSystImage&quot;</span></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; String -&gt; MaxWidthPercent -&gt; RawContent
 </span><span class="hs-identifier hs-var">figWithWidth</span></span><span>
-</span><span id="line-31"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><span id="line-32"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="annot"><span class="annottext">(NPStruct -&gt; Sentence) -&gt; NPStruct -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -73,8 +74,8 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;physicalsystimage.png&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MaxWidthPercent
 </span><span class="hs-number">30</span></span><span>
-</span><span id="line-32"></span><span>
-</span><span id="line-33"></span><span id="traceItemSecsFig"><span class="annot"><span class="annottext">traceItemSecsFig :: LabelledContent
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span id="traceItemSecsFig"><span class="annot"><span class="annottext">traceItemSecsFig :: LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#traceItemSecsFig"><span class="hs-identifier hs-var hs-var">traceItemSecsFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llccFig</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;TraceyItemSecs&quot;</span></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
@@ -86,7 +87,7 @@ forall c. NamedIdea c =&gt; c -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">traceyMatrix</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence) -&gt; Sentence -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-35"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">item</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -97,13 +98,13 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">section_</span></span><span class="hs-special">)</span><span>
-</span><span id="line-35"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span id="line-36"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><a href="Drasil.GlassBR.LabelledContent.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Trace.png&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-36"></span><span>
-</span><span id="line-37"></span><span id="traceReqsItemsFig"><span class="annot"><span class="annottext">traceReqsItemsFig :: LabelledContent
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span id="traceReqsItemsFig"><span class="annot"><span class="annottext">traceReqsItemsFig :: LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#traceReqsItemsFig"><span class="hs-identifier hs-var hs-var">traceReqsItemsFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llccFig</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;TraceyReqsItems&quot;</span></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
@@ -115,7 +116,7 @@ forall c. NamedIdea c =&gt; c -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">traceyMatrix</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence) -&gt; Sentence -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">requirement</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -126,13 +127,13 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">item</span></span><span class="hs-special">)</span><span>
-</span><span id="line-39"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span id="line-40"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><a href="Drasil.GlassBR.LabelledContent.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;RTrace.png&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-40"></span><span>
-</span><span id="line-41"></span><span id="traceAssumpsOthersFig"><span class="annot"><span class="annottext">traceAssumpsOthersFig :: LabelledContent
+</span><span id="line-41"></span><span>
+</span><span id="line-42"></span><span id="traceAssumpsOthersFig"><span class="annot"><span class="annottext">traceAssumpsOthersFig :: LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#traceAssumpsOthersFig"><span class="hs-identifier hs-var hs-var">traceAssumpsOthersFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llccFig</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;TraceyAssumpsOthers&quot;</span></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
@@ -144,7 +145,7 @@ forall c. NamedIdea c =&gt; c -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">traceyMatrix</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence) -&gt; Sentence -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">assumption</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -155,13 +156,13 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">item</span></span><span class="hs-special">)</span><span>
-</span><span id="line-43"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span id="line-44"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><a href="Drasil.GlassBR.LabelledContent.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ATrace.png&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span id="demandVsSDFig"><span class="annot"><span class="annottext">demandVsSDFig :: LabelledContent
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span id="demandVsSDFig"><span class="annot"><span class="annottext">demandVsSDFig :: LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#demandVsSDFig"><span class="hs-identifier hs-var hs-var">demandVsSDFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llccFig</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;demandVSsod&quot;</span></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
@@ -175,7 +176,7 @@ forall c. Definition c =&gt; Lens' c Sentence
 Lens' ConceptChunk Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -189,7 +190,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GlassBR.Concepts.html#stdOffDist"><span class="hs-identifier hs-var">stdOffDist</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.versus`</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -199,13 +200,13 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#charWeight"><span class="hs-identifier hs-var">charWeight</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-48"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span id="line-49"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><a href="Drasil.GlassBR.LabelledContent.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ASTM_F2248-09.png&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span id="dimlessloadVsARFig"><span class="annot"><span class="annottext">dimlessloadVsARFig :: LabelledContent
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span id="dimlessloadVsARFig"><span class="annot"><span class="annottext">dimlessloadVsARFig :: LabelledContent
 </span><a href="Drasil.GlassBR.LabelledContent.html#dimlessloadVsARFig"><span class="hs-identifier hs-var hs-var">dimlessloadVsARFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llccFig</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;dimlessloadVSaspect&quot;</span></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
@@ -215,7 +216,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Non dimensional&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.GlassBR.Unitals.html#lateralLoad"><span class="hs-identifier hs-var">lateralLoad</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -224,7 +225,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#dimlessLoad"><span class="hs-identifier hs-var">dimlessLoad</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-53"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.versus`</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -234,7 +235,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GlassBR.Concepts.html#aR"><span class="hs-identifier hs-var">aR</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-53"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-54"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.versus`</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -244,9 +245,9 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.GlassBR.Unitals.html#stressDistFac"><span class="hs-identifier hs-var">stressDistFac</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-54"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span id="line-55"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><a href="Drasil.GlassBR.LabelledContent.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ASTM_F2248-09_BeasonEtAl.png&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-55"></span></pre></body></html>
+</span><span id="line-56"></span></pre></body></html>

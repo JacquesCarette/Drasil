@@ -40,6 +40,8 @@ digraph alltypes {
 		DumpedChunkDB -> MapChunkTypeUID;
 		}
 	}
+	subgraph maps {
+	}
 	subgraph th {
 	}
 	subgraph uid {

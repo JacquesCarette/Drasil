@@ -111,9 +111,6 @@ toColumn :: [a] -> [[a]]
 --   </pre>
 mkTable :: [a -> b] -> [a] -> [[b]]
 
-module Utils.Drasil.Maps
-invert :: Ord v => Map k [v] -> Map v [k]
-
 module Utils.Drasil.Strings
 
 -- | Replace occurences of special characters
@@ -210,7 +207,6 @@ toColumn :: [a] -> [[a]]
 --   | 3 | 15 |
 --   </pre>
 mkTable :: [a -> b] -> [a] -> [[b]]
-invert :: Ord v => Map k [v] -> Map v [k]
 
 -- | Replace occurences of special characters
 --   (<tt>",~`-=!</tt>#$%^&amp;*+[]\;'/|"&lt;&gt;? "<tt>) with underscores

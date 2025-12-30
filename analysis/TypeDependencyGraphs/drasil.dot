@@ -1052,6 +1052,8 @@ digraph alltypes {
 		DumpedChunkDB -> MapChunkTypeUID;
 		}
 	}
+	subgraph maps {
+	}
 	subgraph th {
 	}
 	subgraph uid {
@@ -1397,6 +1399,8 @@ digraph alltypes {
 	subgraph tableofunits {
 	}
 	subgraph traceabilitymandgs {
+	}
+	subgraph combinators {
 	}
 	subgraph docdecl {
 		subgraph docsection{
@@ -3319,6 +3323,18 @@ digraph alltypes {
 		QDefinitione -> QDefinition;
 		QDefinitione -> Lens_;
 		}
+		subgraph constqdef{
+		ConstQDef	[shape=oval, color=red2, label="ConstQDef"];
+		ConstQDef -> QDefinitionLiteral;
+		}
+		subgraph simpleqdef{
+		SimpleQDef	[shape=oval, color=red2, label="SimpleQDef"];
+		SimpleQDef -> QDefinitionExpr;
+		}
+		subgraph modelqdef{
+		ModelQDef	[shape=oval, color=red2, label="ModelQDef"];
+		ModelQDef -> ModelExpr;
+		}
 	}
 	subgraph namedidea {
 		subgraph ideadict{
@@ -3387,8 +3403,6 @@ digraph alltypes {
 		}
 	}
 	subgraph sentence {
-	}
-	subgraph combinators {
 	}
 	subgraph core {
 		subgraph labelledcontent{
@@ -3474,6 +3488,11 @@ digraph alltypes {
 		}
 	}
 	subgraph class {
+		subgraph pexpr{
+		PExpr	[shape=oval, color=red2, label="PExpr"];
+		PExpr -> ExprCrLiteralCr;
+		PExpr -> r;
+		}
 	}
 	subgraph development {
 	}
@@ -3753,6 +3772,8 @@ digraph alltypes {
 		FoldType -> Sentence;
 		}
 	}
+	subgraph generators {
+	}
 	subgraph helpers {
 	}
 	subgraph clasess {
@@ -3946,25 +3967,6 @@ digraph alltypes {
 		subgraph symbol{
 		Symbol	[shape=oval, color=darkviolet, label="Symbol"];
 		Symbol -> String;
-		}
-	}
-	subgraph synonyms {
-		subgraph constqdef{
-		ConstQDef	[shape=oval, color=red2, label="ConstQDef"];
-		ConstQDef -> QDefinitionLiteral;
-		}
-		subgraph simpleqdef{
-		SimpleQDef	[shape=oval, color=red2, label="SimpleQDef"];
-		SimpleQDef -> QDefinitionExpr;
-		}
-		subgraph modelqdef{
-		ModelQDef	[shape=oval, color=red2, label="ModelQDef"];
-		ModelQDef -> QDefinitionModelExpr;
-		}
-		subgraph pexpr{
-		PExpr	[shape=oval, color=red2, label="PExpr"];
-		PExpr -> ExprCrLiteralCr;
-		PExpr -> r;
 		}
 	}
 	subgraph uncertainty {
@@ -4554,8 +4556,6 @@ digraph alltypes {
 	subgraph englihs {
 	}
 	subgraph litss {
-	}
-	subgraph maps {
 	}
 	subgraph strings {
 	}

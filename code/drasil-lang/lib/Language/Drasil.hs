@@ -279,7 +279,7 @@ import Language.Drasil.WellTyped (RequiresChecking(..), Typed(..), TypingContext
 
 import Language.Drasil.Expr.Class (ExprC(..),
   frac, recip_, square, half, oneHalf, oneThird, apply1, apply2,
-  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet)
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet, PExpr)
 import Language.Drasil.Expr.Lang (Expr, Completeness, Relation)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal)
@@ -318,7 +318,7 @@ import Language.Drasil.Constraint (physRange, sfwrRange, physElem, sfwrElem, isS
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
-  mkFuncDef, mkFuncDef', mkFuncDefByQ)
+  mkFuncDef, mkFuncDef', mkFuncDefByQ, ConstQDef, SimpleQDef, ModelQDef)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.UncertainQuantity
@@ -344,7 +344,6 @@ import Language.Drasil.DecoratedReference(DecRef(refInfo), dRefInfo, dRef, HasDe
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,
   label, variable, sortBySymbol, sortBySymbolTuple)
-import Language.Drasil.Synonyms (ConstQDef, SimpleQDef, ModelQDef, PExpr)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, name, nameStr, rendPersLFM,

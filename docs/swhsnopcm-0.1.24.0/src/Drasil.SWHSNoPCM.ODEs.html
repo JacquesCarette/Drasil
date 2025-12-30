@@ -1,16 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SWHSNoPCM.ODEs</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEOpts"><span class="hs-identifier">noPCMODEOpts</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier">noPCMODEInfo</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-2"></span><span>
-</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ExprC</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">sy</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span class="annot"><span class="hs-identifier">LiteralC</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">exactDbl</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">InitialValueProblem</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">makeAIVP</span></span><span class="hs-special">)</span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ExprC</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">sy</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span class="annot"><span class="hs-identifier">LiteralC</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">exactDbl</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Code</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">odeInfo'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">odeOptions</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">quantvar</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ODEInfo</span></span><span class="hs-special">,</span><span>
 </span><span id="line-5"></span><span>  </span><span class="annot"><span class="hs-identifier">ODEMethod</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">RK45</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ODEOptions</span></span><span class="hs-special">)</span><span>
 </span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SWHS.Unitals</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">tauW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tempC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tempInit</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">timeFinal</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">timeStep</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">absTol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">relTol</span></span><span class="hs-special">)</span><span>
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.IMods.html"><span class="hs-identifier">Drasil.SWHSNoPCM.IMods</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHSNoPCM.IMods.html#eBalanceOnWtrRC"><span class="hs-identifier">eBalanceOnWtrRC</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-8"></span><span>
-</span><span id="line-9"></span><span class="annot"><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEOpts"><span class="hs-identifier hs-type">noPCMODEOpts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ODEOptions</span></span><span>
-</span><span id="line-10"></span><span id="noPCMODEOpts"><span class="annot"><span class="annottext">noPCMODEOpts :: ODEOptions
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">InitialValueProblem</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">makeAIVP</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="annot"><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEOpts"><span class="hs-identifier hs-type">noPCMODEOpts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ODEOptions</span></span><span>
+</span><span id="line-11"></span><span id="noPCMODEOpts"><span class="annot"><span class="annottext">noPCMODEOpts :: ODEOptions
 </span><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEOpts"><span class="hs-identifier hs-var hs-var">noPCMODEOpts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ODEMethod -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; ODEOptions
 </span><span class="hs-identifier hs-var">odeOptions</span></span><span>
-</span><span id="line-11"></span><span>  </span><span class="annot"><span class="annottext">ODEMethod
+</span><span id="line-12"></span><span>  </span><span class="annot"><span class="annottext">ODEMethod
 </span><span class="hs-identifier hs-var">RK45</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; CodeExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -24,9 +25,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; CodeExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">timeStep</span></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="annot"><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMIVP"><span class="hs-identifier hs-type">noPCMIVP</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InitialValueProblem</span></span><span>
-</span><span id="line-14"></span><span id="noPCMIVP"><span class="annot"><span class="annottext">noPCMIVP :: InitialValueProblem
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="annot"><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMIVP"><span class="hs-identifier hs-type">noPCMIVP</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InitialValueProblem</span></span><span>
+</span><span id="line-15"></span><span id="noPCMIVP"><span class="annot"><span class="annottext">noPCMIVP :: InitialValueProblem
 </span><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMIVP"><span class="hs-identifier hs-var hs-var">noPCMIVP</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; [Expr] -&gt; InitialValueProblem
 </span><span class="hs-identifier hs-var">makeAIVP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
@@ -40,16 +41,16 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">tempInit</span></span><span class="hs-special">]</span><span>
-</span><span id="line-15"></span><span>
-</span><span id="line-16"></span><span class="annot"><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier hs-type">noPCMODEInfo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ODEInfo</span></span><span>
-</span><span id="line-17"></span><span id="noPCMODEInfo"><span class="annot"><span class="annottext">noPCMODEInfo :: ODEInfo
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="annot"><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier hs-type">noPCMODEInfo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ODEInfo</span></span><span>
+</span><span id="line-18"></span><span id="noPCMODEInfo"><span class="annot"><span class="annottext">noPCMODEInfo :: ODEInfo
 </span><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier hs-var hs-var">noPCMODEInfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
 -&gt; ODEOptions
 -&gt; DifferentialModel
 -&gt; InitialValueProblem
 -&gt; ODEInfo
 </span><span class="hs-identifier hs-var">odeInfo'</span></span><span>
-</span><span id="line-18"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; CodeVarChunk
+</span><span id="line-19"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; CodeVarChunk
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 c -&gt; CodeVarChunk
@@ -60,10 +61,10 @@ forall c.
 c -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">tempC</span></span><span class="hs-special">]</span><span>
-</span><span id="line-19"></span><span>  </span><span class="annot"><span class="annottext">ODEOptions
+</span><span id="line-20"></span><span>  </span><span class="annot"><span class="annottext">ODEOptions
 </span><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEOpts"><span class="hs-identifier hs-var">noPCMODEOpts</span></a></span><span>
-</span><span id="line-20"></span><span>  </span><span class="annot"><span class="annottext">DifferentialModel
+</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">DifferentialModel
 </span><a href="Drasil.SWHSNoPCM.IMods.html#eBalanceOnWtrRC"><span class="hs-identifier hs-var">eBalanceOnWtrRC</span></a></span><span>
-</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">InitialValueProblem
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">InitialValueProblem
 </span><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMIVP"><span class="hs-identifier hs-var">noPCMIVP</span></a></span><span>
-</span><span id="line-22"></span></pre></body></html>
+</span><span id="line-23"></span></pre></body></html>

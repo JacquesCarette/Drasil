@@ -15,10 +15,9 @@ import qualified Data.Drasil.Quantities.Physics as QP (iSpeed, ixSpeed, iySpeed,
 import Data.Drasil.Concepts.Documentation (coordinate, procedure)
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Drasil.Document.Contents (foldlSP, foldlSP_)
+import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSP_)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (s_2)
-import Drasil.Document.Contents (enumBulletU)
 
 caseProbCont :: [Contents]
 caseProbCont = [projMotionHead, motionContextP1, LlC figCSandA, motionContextP2,

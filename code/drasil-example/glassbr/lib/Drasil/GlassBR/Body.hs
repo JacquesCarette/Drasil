@@ -8,13 +8,12 @@ import qualified Language.Drasil.Development as D
 
 import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
-import Drasil.Document.Contents (enumBulletU)
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Document.Contents (foldlSP, foldlSPCol)
+import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested, tAndDOnly, tAndDWAcc, noRefs,
   tAndDWSym)
 import Drasil.System (SystemKind(Specification), mkSystem)

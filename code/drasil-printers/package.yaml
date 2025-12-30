@@ -21,7 +21,6 @@ dependencies:
 - MissingH
 - filepath
 - directory
-- drasil-data
 - drasil-database
 - drasil-lang
 - drasil-theory

@@ -198,7 +198,7 @@ module Language.Drasil (
   , foldConstraints
 
   -- *** Sentence-related
-  , foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent
+  , foldlEnumList, foldlList, foldlSent
   , foldlSent_,foldlSentCol, foldlsC, foldNums, numList
 
   -- * Basic Document Language

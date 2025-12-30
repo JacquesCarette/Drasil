@@ -10,6 +10,7 @@ import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 import Drasil.Metadata (inModel)
+import Drasil.Document.Contents (foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 import Drasil.System (SystemKind(Specification), mkSystem)
 

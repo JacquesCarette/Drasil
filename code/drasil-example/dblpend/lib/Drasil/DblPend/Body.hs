@@ -28,6 +28,7 @@ import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
+import Drasil.Document.Contents (foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 
 import Drasil.DblPend.Assumptions (assumpDouble)

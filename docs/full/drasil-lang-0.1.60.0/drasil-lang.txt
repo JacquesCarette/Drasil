@@ -540,6 +540,16 @@ label :: String -> Symbol
 -- | Variable smart constructor, requires non-empty variables
 variable :: String -> Symbol
 
+-- | Sorts a list of <tt>HasSymbols</tt> by <a>Symbol</a>.
+sortBySymbol :: HasSymbol a => [a] -> [a]
+
+-- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the
+--   tuple.
+sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
+
+-- | Compare the equational <a>Symbol</a> of two things.
+compareBySymbol :: HasSymbol a => a -> a -> Ordering
+
 
 -- | Number space types and functions.
 module Language.Drasil.Space
@@ -4984,9 +4994,8 @@ showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 --   Sentence "By substituting <tt>symbols</tt>, this can be written as:".
 substitute :: (Referable r, HasShortName r, DefinesQuantity r) => [r] -> Sentence
 
--- | Extracts the typical uncertainty to be displayed from something that
---   has an uncertainty.
-typUncr :: HasUncertainty c => c -> Sentence
+-- | Formats typical uncertainty data to be displayed.
+typUncr :: (Double, Maybe Int) -> Sentence
 
 -- | Returns the <a>Sentence</a> "The <tt>chunk</tt> under consideration is
 --   <tt>chunkDefinition</tt>".
@@ -5037,13 +5046,6 @@ noRefs :: [ItemType] -> [(ItemType, Maybe String)]
 -- | Create a list in the pattern of "The __ are refined to the __". Note:
 --   Order matters!
 refineChain :: NamedIdea c => [(c, Section)] -> Sentence
-
--- | Sorts a list of <tt>HasSymbols</tt> by <a>Symbol</a>.
-sortBySymbol :: HasSymbol a => [a] -> [a]
-
--- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the
---   tuple.
-sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
 
 -- | Helpful combinators for making <a>Sentence</a>s into Terminologies
 --   with Definitions. Returns of the form: "<tt>term -
@@ -8193,9 +8195,8 @@ showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 --   Sentence "By substituting <tt>symbols</tt>, this can be written as:".
 substitute :: (Referable r, HasShortName r, DefinesQuantity r) => [r] -> Sentence
 
--- | Extracts the typical uncertainty to be displayed from something that
---   has an uncertainty.
-typUncr :: HasUncertainty c => c -> Sentence
+-- | Formats typical uncertainty data to be displayed.
+typUncr :: (Double, Maybe Int) -> Sentence
 
 -- | Returns the <a>Sentence</a> "The <tt>chunk</tt> under consideration is
 --   <tt>chunkDefinition</tt>".
@@ -8246,13 +8247,6 @@ noRefs :: [ItemType] -> [(ItemType, Maybe String)]
 -- | Create a list in the pattern of "The __ are refined to the __". Note:
 --   Order matters!
 refineChain :: NamedIdea c => [(c, Section)] -> Sentence
-
--- | Sorts a list of <tt>HasSymbols</tt> by <a>Symbol</a>.
-sortBySymbol :: HasSymbol a => [a] -> [a]
-
--- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the
---   tuple.
-sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
 
 -- | Helpful combinators for making <a>Sentence</a>s into Terminologies
 --   with Definitions. Returns of the form: "<tt>term -
@@ -8384,6 +8378,13 @@ codeSymb :: HasSymbol q => q -> Symbol
 
 -- | Finds if a <a>Stage</a> symbol is real or Empty. True if real.
 hasStageSymbol :: HasSymbol q => q -> Stage -> Bool
+
+-- | Sorts a list of <tt>HasSymbols</tt> by <a>Symbol</a>.
+sortBySymbol :: HasSymbol a => [a] -> [a]
+
+-- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the
+--   tuple.
+sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
 
 -- | Helper for creating a symbol with Unicode in it.
 autoStage :: Symbol -> Stage -> Symbol

@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel',
-  Derivation, mkDerivName)
+  Derivation, mkDerivName, DifferentialModel, makeASystemDE)
 import Utils.Drasil (weave)
 
 -- other parts of SHWS

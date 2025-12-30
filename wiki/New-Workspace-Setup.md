@@ -81,7 +81,15 @@ If you're using a recent version of Mac (> Mavericks/10.9), please open up a ter
 
 ##### GNU `grep`
 
-Assuming you use Homebrew, you can use the [brew formula](https://formulae.brew.sh/formula/grep), installing GNU `grep` via `brew install grep`. Once `grep` is installed, you should be able to run `grep --version` and see a message along the following format:
+Assuming you use Homebrew, you can use the [Homebrew formula](https://formulae.brew.sh/formula/grep), installing GNU `grep` via `brew install grep`. As of Dec. 2025, the Homebrew formula by default does not override the local installation of `grep`. Rather, Homebrew installs GNU `grep` as `ggrep` to avoid unexpected system consequences. To override this, you must prepend its binary directory to your `$PATH`.
+
+Append the following line to your shell configuration (i.e. `~/.zshrc`, or `~/.bashrc` if you're using an old version of macOS) and then run `source ~/.zshrc` (or `source ~./.bashrc`):
+
+```shell
+export PATH="$HOMEBREW_PREFIX/opt/grep/libexec/gnubin:$PATH"
+```
+
+Once `grep` is installed and your `$PATH` is updated, you should be able to run `grep --version` and see a message along the following format:
 
 ```console
 grep (GNU grep) 3.12

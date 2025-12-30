@@ -6,7 +6,7 @@ module Drasil.Website.Body (
 
 import Control.Lens ((^.))
 
-import Drasil.Database
+import Drasil.Database (ChunkDB)
 import Drasil.Generator (cdb)
 import Drasil.System
 import Language.Drasil
@@ -91,7 +91,7 @@ symbMap = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, phsChgMtrl, twoD] 
 
 -- | Helper to get the system name as an 'IdeaDict' from 'System'.
 getSysName :: System -> IdeaDict
-getSysName SI{_sys = nm} = nw nm
+getSysName = nw . (^. sysName)
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
@@ -118,7 +118,7 @@ headerSec =
 
 -- | For the drasil tree image on the website.
 imageContent :: LabelledContent
-imageContent = llcc (makeFigRef "Drasil") $ figNoCapWithWidth EmptyS imagePath 50
+imageContent = llccFig "Drasil" $ figNoCapWithWidth EmptyS imagePath 50
 
 -- | Used for the repository link.
 gitHubRef :: Reference

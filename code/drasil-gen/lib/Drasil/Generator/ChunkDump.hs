@@ -14,7 +14,7 @@ import Text.PrettyPrint
 
 import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
 import Utils.Drasil (invert, atLeast2, createDirIfMissing)
-import Drasil.Database
+import Drasil.Database (HasUID(..), dumpChunkDB)
 import Drasil.System (System, systemdb, traceTable, refbyTable)
 import Drasil.Database.SearchTools (findAllIdeaDicts)
 

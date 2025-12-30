@@ -10,19 +10,21 @@ module Drasil.DocumentLanguage.Definitions (
   -- * Helpers
   helperRefs, helpToRefField) where
 
+import Control.Lens ((^.))
 import Data.List (nub)
 import Data.Maybe (mapMaybe)
-import Control.Lens ((^.))
 
-import Language.Drasil
-import Drasil.Database
-
+-- rest of Drasil
+import Drasil.Database (ChunkDB, UID, HasUID(..), find)
 import Drasil.System (System(_systemdb), systemdb, refbyLookup)
-import Drasil.GetChunks (vars)
-
+import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
-  TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD)
+  TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD,
+  Derivation(Derivation), MayHaveDerivation(derivations))
 
+-- local
+import Drasil.GetChunks (vars)
+import Drasil.Document.Contents (unlbldExpr)
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
 -- | Synonym for a list of 'Field's.
@@ -76,7 +78,7 @@ instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (
 -- or IM definition automatically (called automatically by 'SCSSub' program).
 derivation :: (MayHaveDerivation c, HasShortName c, Referable c) => c -> Maybe Contents
 derivation c = fmap
-  (\(Derivation h d) -> LlC $ llcc (ref c) $ DerivBlock h $ map makeDerivCons d) $
+  (\(Derivation h d) -> LlC $ mkRawLC (DerivBlock h $ map makeDerivCons d) (ref c)) $
   c ^. derivations
 
 -- | Helper function for creating the layout objects

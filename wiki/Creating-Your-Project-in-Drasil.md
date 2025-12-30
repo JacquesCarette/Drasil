@@ -47,43 +47,32 @@
 
 ## Getting Started: 
 
-- Instructions on how to build a virtual machine for [Linux on Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10) (optional)
-- Instructions on how to fork the Drasil repo and enable [continuous integration](https://gitlab.cas.mcmaster.ca/smiths/cas741/-/tree/main/Tools/VM_Instructions). This is required to create your project in Drasil. Also check out this [pull request](https://github.com/JacquesCarette/Drasil/pull/2461) for more information on setting up your own bot for GitHub Actions.
+- Follow the [New Workspace Setup](New-Workspace-Setup) for setting up your machine for working with Drasil.
+- For more information on the contents of a Software Requirements Specification (SRS), see Dr. Smith's [template](https://github.com/smiths/capTemplate/blob/main/docs/SRS/SRS.pdf)
+- To create your project in Drasil, you will generally want to fork the repo and make your changes on your fork. Check out this [pull request](https://github.com/JacquesCarette/Drasil/pull/2461) for more information on setting up your own bot for GitHub Actions.
 - [Setting up your workspace](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup)
 
 ## Sub-packages in Drasil:
+
+See [Folder Layout](Folder-Layout) for a more in-depth discussion. There are three sub-packages that you will primarily be working with:
+
+- `drasil-gen` defines the entry point for artifact generation.
 - `drasil-lang` contains language primitives focused on mathematical
 knowledge capture. This package also includes a language for symbols (`Symbol`) and a language for mathematical expressions embedding symbols (`Expr`). It describes the layout of a document and much more.
-
-- `drasil-data` contains common (reusable) knowledge such as mathematical constants and documentation concepts. You can add new concepts here.
-
-- `drasil-utils` contains common utilities used by non-`drasil-lang` sub-packages.
-
-- `drasil-database` contains System and a chunk database
-structure (`ChunkDB`).
-
-- `drasil-docLang` contains a DSL describing the Software Requirement Specification (SRS) template. It includes a translation routine for converting to a Document DSL from `drasil-lang`.
-
 - `drasil-theory` contains chunk types for describing refinements of mathematical theories and instantiation of definitions.
 
-- `drasil-code` contains a DSL for describing (and generating) object-oriented code. 
+There are several other sub-packages that you will need to work with on a smaller scale:
 
-- `drasil-printers` contains set of routines to translate `drasil-lang` Documents to a common markup language such as HTML or LATEX.
-
-- `drasil-gen` defines the entry point for artefact generation.
-
-- `drasil-example` contains a set of examples maintained in Drasil to demonstrate the capabilities of the language. For consistency, you can create a sub-folder for your project here. You will be working mostly in your new subfolder.
-
-- `drasil-website` generates the homepage for the Drasil website.
+- `drasil-code` and `drasil-docLang`: for generating code and documentation, respectively. You will mainly need them for `Choices` and `SRSDecl`.
+- `drasil-database` and `drasil-system`: for gathering pieces of information and bundling them together.
+- `drasil-example` and `drasil-website`: good reference material if you need it.
+- `drasil-data`: for knowing what things you can reuse (e.g. mathematical concepts and documentation concepts), and adding new things that others can reuse.
 
 # Creating Your Project in Drasil
 
 **Note: The instructions of this tutorial were last updated for a [commit on 29 Oct 2022](https://github.com/JacquesCarette/Drasil/commit/b555167ce688040b766742b03442fbf7af750087).**
 
-After all installation tasks and forking is completed and you are able to run existing example projects in Drasil, you are ready to create your own. You can use [Visual Studio Code](https://code.visualstudio.com/), [Sublime](https://www.sublimetext.com/) or any other editor that you are familiar with.
-- VS Code makes it easier to search folders and sub-folders.
-- Sublime creates links to occurrences of parameters or functions used within your package and other example packages (it only create links to files open files on your machine when you point with your cursor).
-
+After all installation tasks and forking is completed and you are able to run existing example projects in Drasil, you are ready to create your own. You can use [Visual Studio Code](https://code.visualstudio.com/) or any other editor that you are familiar with.
 
 ## Adding a New User and Project Sub-Folder
 
@@ -146,13 +135,6 @@ si = SI {
 1. Update your `Main.hs` file: Your main module will load all the other modules in your project to build and generate your SRS.
 2. Open the `Main.hs` file in the current folder and replace all instances of `template` with your project name, save and close.
 
-
-## Creating Sections in Your SRS Template Within `Body.hs`
-
-1. Start constructing your chunk database i.e `symbMap` function – As you build sections of your SRS, you will be required to fill in this database function. 
-2. Add `nw program` in the second argument of `symbMap`, and import the module where the variable `program` is defined i.e `import Data.Drasil.Concepts.Software (program)`.
-
-   
 ## Update `yaml` and `cabal` Files
 The `package.yaml` file contains some information about your project, including all the modules used in your project. From there, the compiler will generate a `.cabal` file for you. The information in the `.cabal` is then needed to actually build your project and connect all the packages included. As you add more modules to you project folder, you will need to update `package.yaml` (which will automatically update the `.cabal` file). You should almost never have to manually update the `.cabal` file.
 
@@ -180,11 +162,11 @@ executables:
 
 
 ## Build Your Project – Run `make`
-1. Navigate to `code/MakeFile`, add your project to the list of other example projects and modify as applicable.
-2. Navigate to the `code` folder from git bash or your command prompt to build your project.
+1. Navigate to `code/Makefile`, add your project to the list of other example projects and modify as applicable.
+2. Navigate to the `code` folder from your terminal to build your project.
 3. Run `make` to build your project.
 4. Navigate to your project folder in `build` to view your output files.
-5. When you build your project, both a `.tex` and `.html` version of your SRS document will be auto-generated in your SRS folder. They will be separated into PDF and HTML subfolders. By now, your `.html` SRS file should show a blank SRS document.
+5. When you build your project, any artifacts that Drasil was able to generate (e.g. `.tex` and `.html` versions of the SRS, executable code) will be auto-generated in appropriate sub-folders of the build folder.
 6. After the build operation is completed, check the output of your SRS in the `.html` file. A cascading style sheet is also autogenerated in the same folder. 
 
 ## Updating Stable folder in `code/stable/`
@@ -199,10 +181,9 @@ You might have to update stable for all the other examples if you get the follow
 -             MORE DETAILS                -
 -------------------------------------------
 ```
-Subsequently, you need to update stable for your new project whenever you make any changes.
+Subsequently, you need to update stable for your new project whenever you make any changes. This can most easily be done by running `make stabilize`. Alternatively, you can follow these instructions manually:
 1. Make a copy of your project folder from `/Drasil/code/build/yourProjectName`.
 2. Paste in `Drasil/code/stable` to create a folder for your project. Ensure that the version in `stable` matches the version in `build` when pushing your project to your remote repository.
-
 3. Rename your folder with the name you used for `_sys` from the `si` variable in `Body.hs`. This should be the same as what appeared in the `build` folder.
 4. Update `.html` and `.tex` files (copy and replace) only.
 5. When you build your project, and it says `GENERATED OUTPUT MATCHES STABLE VERSION`, then stable is up to date, no need to update. Here is what a stabilized output will look like:
@@ -249,7 +230,7 @@ import qualified Drasil.DocLang.SRS as SRS
 
 7. At this point build your code (by running `make`) and see what you generate. You should see the sections in step 5 displayed in your SRS. Depending on what you have added to mkSRS you may need to update the ChunkDB first, which will be explained below.
 
-8. The remainder of the tutorial will go over adding a subset of potential sections to your project. A complete list of potential sections can be found in the [Haddock documentation](https://jacquescarette.github.io/Drasil/docs/drasil-docLang-0.1.26.0/Drasil-SRSDocument.html#g:3). Not all sections need to be included in your project.
+8. The remainder of the tutorial will go over adding a subset of potential sections to your project. A complete list of potential sections can be found in the [Haddock documentation](https://jacquescarette.github.io/Drasil/docs/drasil-docLang-0.1.26.0/Drasil-SRSDocument.html#g:3). Not all sections need to be included in your project. See Dr. Smith's [template](https://github.com/smiths/capTemplate/blob/main/docs/SRS/SRS.pdf) for more information on each section.
 
 
 ## Adding Introduction Section
@@ -299,7 +280,16 @@ mkSRS = [
 ```
 6. Since we added a `scope` section, you will need to include the constructor name in the chunk database. `scope` is defined in the `doccon` constructor in `../drasil-data/lib/Data/Drasil/Concepts/Documentation`. The process of updating the chunk database may need to be repeated for other constructors that are created in other parts of the SRS.
 
-![image](https://user-images.githubusercontent.com/43192745/94777925-4acd2900-0392-11eb-8dbe-85caf641fd05.png)
+```hs
+doccon :: [NamedChunk]
+doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
+  caseProb, charOfIR, characteristic, class_, client, code, column, company,
+  component, concept, condition, connection, consVals, constant, constraint,
+  -- ...
+  safety, safetyReq, scenario, {-Here!-} scope, scpOfReq,
+  -- ...
+  validation, value, variable, vav, vavPlan, verification, video, year]
+```
 
 7. In the 3rd argument of `symbMap`, add the `doccon` and `doccon'` functions. The third argument should now look like:
 ```Haskell
@@ -310,34 +300,6 @@ You must also `import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon'
 symbMap maps references the the chunk database. Please review the [GlassBR](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/glassbr/lib/Drasil/GlassBR/Body.hs), [NoPCM](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/nopcm/lib/Drasil/NoPCM/Body.hs), and [Projectile](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/projectile/lib/Drasil/Projectile/Body.hs) examples to understand how to populate it.   
 
 8. You may choose to build your program every so often to keep track of errors easily.
-
-
-## Adding Specific System Description (SSD) Section
-
-SSD section constructors can be found in the [SSD Haddock documentation](https://jacquescarette.github.io/Drasil/docs/drasil-docLang-0.1.26.0/Drasil-SRSDocument.html#t:SSDSec). 
-  
-1. Before you add the SSD section, you will need to define the following parameters in `Body.hs`:
-
-    - `prob` (`Sentence` type) defines the problem to be solved by the system.
-    - `terms` (`ConceptChunk` type) holds the terms to be defined in the terminology section.
-    - `physSystParts` (`Sentence` type) describes the physical parts of the system you intend to build.
-
-2. Create a new file `Figures.hs` for your physical system diagram and define a function for your figure. A figure is only needed if adding a `PhySysDesc` subsection. Otherwise, skip this step.
-    
-    - Add a folder for your project in `../Drasil/code/datafiles`
-    - Save your image in your project folder
-    - Add your image to your function defined in `Figures.hs`
-    - Add `Figures.hs` to your import list in `Body.hs`
-
-3. Add SSD section and subsections to `Body.hs` – see excerpt from a sample project below.
-```Haskell
-SSDSec $ 
-    SSDProg -- This adds a Specific system description section and an introductory blob.
-      [ SSDProblem $ PDProg prob [] --  This adds a is used to define the problem your system will solve
-        [ TermsAndDefs Nothing terms  -- This is used to define the terms to be defined in terminology sub section
-      , PhySysDesc pendulumTitle physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
-                                                            -- of the system using physSysParts, figMotion is a function in figures for the image
-```
 
 ## Adding Goal Statements section
 
@@ -375,191 +337,6 @@ motionMass = cic "motionMass"
 6. Add your module to the import list in `Body.hs` to display your Goal statement section and update `symbMap` as required.
 7. Add `goals` to your `symbMap` or to `concIns` (which will be created in step 10 of the next section).
 8. Add all other required parameters to your import list.
-
-## Adding Assumptions Section
-
-Note: Assumptions are added with the Assumptions constructor under the [SSDSolChSpec](https://jacquescarette.github.io/Drasil/docs/drasil-docLang-0.1.26.0/Drasil-SRSDocument.html#v:SSDSolChSpec) constructor in the Specific System Description section.
-
-1. Declare assumptions section – Add `Assumptions` section to `makeSRS` function in `Body.hs`.
-2. Create a new module `Assumptions.hs` and add the necessary imports (`Language.Drasil`, possibly `Utils.Drasil`, and `assumpDom` from `Data.Drasil.Concepts.Documentation`). 
-3. Determine and define your assumption functions in your assumption module. Each individual assumption should be a `ConceptInstance` type. This can be done using the `cic` constructor.
-4. Use the `assumpDom` keyword in the last argument of the definition of your assumptions. `assumpDom` gives a domain (`UID`) to all the assumptions defined.
-5. Then group them together into a list named `assumptions`. E.g.
-```Haskell
-assumptions :: [ConceptInstance]
-assumptions = [pend2DMotion, cartCoord, cartCoordRight, yAxisDir, startOrigin]
-
-pend2DMotion, cartCoord, cartCoordRight, yAxisDir, startOrigin :: ConceptInstance
-pend2DMotion    = cic "pend2DMotion"      pend2DMotionDesc    "pend2DMotion"    assumpDom
-```
-
-6. Remember to import any modules used (from step 2 and from those used for defining your assumptions) into `Assumptions.hs` including:
-```Haskell
-import Data.Drasil.Concepts.Documentation (assumpDom)
-```
-7. Import the `Assumptions.hs` module into `Body.hs`. 
-8. To create a section for assumption in `Body.hs`, we will need to add `assumptions` to `symbMap`. An efficient way to do this is to create a function that will hold the assumptions and other sections of the SRS. So, we create `concIns` as a way of gathering these sections before putting them in our `symbMap`. Add `assumptions` and `goals` to `concIns` and then add `concIns` to `symbMap` in Body.hs. Note: As you continue to build your SRS, you will add more arguments to `concIns`.
-```Haskell
-concIns :: [ConceptInstance]
-concIns = assumptions ++ goals
-```
-
-9. Run `make` to build your program.
-
-Always remember to make references to the different parameters e.g assumptions, data definitions, theoretical models that you use throughout your project. It will help to populate your `refby` field where applicable. It will also be used for your traceability graphs at the end of your document. Make sure you point to the necessary elements. Use `refS` to refer to elements in your project.
-
-## Adding Theoretical Models Section
-
-Note: Theoretical Models are added with the TMs constructor under the [SSDSolChSpec](https://jacquescarette.github.io/Drasil/docs/drasil-docLang-0.1.26.0/Drasil-SRSDocument.html#v:SSDSolChSpec) constructor in the Specific System Description section.
-
-1. Declare the `TM` section in your `SRSDecl` (the `mkSRS` function)
-2. Define the components to be used in construction of `TM` (e.g `Symbol`, `Units`, `DefiningEquation`) by adding an argument to define these variables. They should be of the type `Fields` and look similar to this:
-```Haskell
-        [ Assumptions
-        , TMs [] (Label : stdFields)
-```
-
-3. Define the `stdFields` function in `Body.hs` as shown below. These functions will be used in building your theoretical models and other models used in the project.
-```Haskell
-stdFields :: Fields
-stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-```
-
-4. Create a new `TMods.hs` file in your project folder. 
-5. Where applicable, reuse theories from module `Data.Drasil.Theories`.
-6. You can also define theories specific to your project by following the same format in `code/drasil-data/lib/Data/Drasil/Theories/Physics.hs`
-7. Gather your theoretical models into a `tMods` function:
-```Haskell
-tMods :: [TheoryModel]
-tMods = [theoryModel1, theoryModel2]
-```
-8. Add `tMods` to `symbMap`. Also add `tMods` to the last argument of `symbMap` after mapping them through the `ref` function.
-9. If you have any references for your theoretical models, add a `References.hs` file to your working folder. See example projects for sample reference module.
-10. Import the necessary modules.
-11. Build your project.
-
-## Adding General Definitions Section
-- General Definitions usually include derivations of the equations used in your project. This is held by the general definition's constructor.
-- You will be able to build your derivation equation and sentences and weave then together. 
-- `/drasil-theory/lib/Theory/Drasil` contains the constructors that will be used for constructing your general definitions. `gd` and `gdNoRefs` (for general definitions with no references) are the two constructors used for defining general definitions.
-
-Note: General Definitions are added with the GDs constructor under the [SSDSolChSpec](https://jacquescarette.github.io/Drasil/docs/drasil-docLang-0.1.26.0/Drasil-SRSDocument.html#v:SSDSolChSpec) constructor in the Specific System Description section.
-
-1. Add General definition section to `SRSDecl` constructor in `Body.hs` as shown:
-```Haskell
-        , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-```
-2. Create a `Gendefs.hs` module in your working folder. This module will hold all your general definitions and derivations.
-3. Define the functions to hold your general definitions with type `GenDefn`: 
-```Haskell
-genDefns :: [GenDefn]
-genDefns = [genDef1, genDef2]
-```
-4. Define functions for your derivations sentences and equations.
-5. Add descriptions to your derivation functions and equations.
-6. You can use the `weave` function to connect your derivation sentences and equations to generate your derivation section for each item. Here is an excerpt from Pendulum. Note `angFrequencyDeriv`'s use of `weave`:
-```Haskell
-angFrequencyDeriv :: Derivation
-angFrequencyDeriv = mkDerivName (phraseNP (angularFrequency `the_ofThe` pendulum)) (weave [angFrequencyDerivSents, map eS E.angFrequencyDerivEqns])
-
-angFrequencyDerivSents :: [Sentence]
-angFrequencyDerivSents = [angFrequencyDerivSent1, angFrequencyDerivSent2, angFrequencyDerivSent3,
-                      angFrequencyDerivSent4, angFrequencyDerivSent5, angFrequencyDerivSent6, angFrequencyDerivSent7]
-
-angFrequencyDerivSent1, angFrequencyDerivSent2, angFrequencyDerivSent3,
-     angFrequencyDerivSent4, angFrequencyDerivSent5, angFrequencyDerivSent6, angFrequencyDerivSent7 :: Sentence
-angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque, S "on a", phrase pendulum +:+. definedIn'' newtonSLR,
-                  S "The", phrase force, S "providing the restoring", phrase torque `S.is` phraseNP (the component `NP.of_`
-                  (weight `ofThe` pendulum)), S "bob that acts along the" +:+. phrase arcLen,
-                  (phrase torque `S.isThe` phrase len) `S.the_ofTheC` S "string", ch lenRod, S "multiplied by", phrase component
-                  `S.the_ofThe` S "net", phrase force, S "that is perpendicular to", S "radius" `S.the_ofThe` (S "arc" !.),
-                  S "The minus sign indicates the", phrase torque, S "acts in the opposite", phraseNP (direction `ofThe`angularDisplacement)]
-angFrequencyDerivSent2 = S "So then"
-angFrequencyDerivSent3 = S "Therefore,"
---etc.
-```
-7. Add your new module to `Body.hs` to display the components of this module in the corresponding section.
-8. Add `genDefs` to `symbMap` in `Body.hs`, replacing the existing list `([] :: [GenDefn])` with `genDefs`.
-9. You might need to add another module `Unitals.hs`. You will need to define some concepts, parameters, functions or variables locally in this new `Unitals.hs` module to be used specifically for your projects. These are often used in the `GenDefs` module and other modules. See example projects for a better understanding of unital files.
-10. If you have used parameters from `Unitals.hs` in your `GenDefs` module, remember to add to the import list as required.
-11. Populate the following parameters in the `si` function (in `Body.hs`) with the values defined as functions in your `Unitals` module. It should now look something like this:
-```Haskell
-  _purpose     = [],
-  _quants      = symbols, -- used to define all the symbols for concepts used throughout your project
-  _concepts    = [] :: [DefinedQuantityDict],
-  _instModels  = iMods,
-  _datadefs    = [],
-  _configFiles = [],
-  _inputs      = inputs, -- used to define all the input variable parameters
-  _outputs     = outputs, -- used to define all the output variable parameters
-  _defSequence = [] :: [Block QDefinition],
-```
-
-12. See sample below for an example from Pendulum of defining `symbols`, `inputs`, and `outputs`:
-```Haskell
-symbols :: [QuantityDict]
-symbols = map qw unitalChunks ++ map qw unitless
-
-inputs :: [QuantityDict]
-inputs = map qw [LenRod, QP.force]
-
-outputs :: [QuantityDict]
-outputs = map qw [QP.position
-```
-13. Add `map nw symbols` to `usedDB` and `symbMap` functions in `Body.hs` to display all unit symbols.
-14. Import all the required modules.
-15. Build your project with `make` or the executable name in the cabal file. For example, `make diff_dblpendulum` for the DblPendulum project.
-
-
-
-## Adding Data Definitions and Acronym Section
-
-Note: Data Definitions are added with the DDs constructor under the [SSDSolChSpec](https://jacquescarette.github.io/Drasil/docs/drasil-docLang-0.1.26.0/Drasil-SRSDocument.html#v:SSDSolChSpec) constructor in the Specific System Description section. Acronyms are defined in a new file. Link to two examples, one with them defined in Defs and another in Unitals.
-
-1. Add data definition section to `mkSRS` in `Body.hs`:
-```Haskell
-        , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-```
-2. Add a new new module to your project folder named `DataDefs.hs`.
-3. The constructors for creating data definitions can be found here:
-`/code/drasil-theory/Theory/Drasil/DataDefinition.hs`
-4. Add the constructors to the list of imports.
-5. In your new module, define a list of all your general definition functions using the `DataDefinition` type. E.g
-```Haskell
-dataDefs :: [DataDefinition]
-dataDefs = [positionIX, positionIY]
-```
-6. Add the list function in step 6 above to `si` in `Body.hs` so that the parameter is filled in like so:
-```Haskell
-  _instModels  = iMods,
-  _datadefs    = [],
-  _configFiles = [],
-```
-7. Add all parameters, symbols and units used in `dataDefs` to `symbMap` accordingly. See the `Body.hs` modules from the example projects for more help.
-8. Remember to add all symbols used in this module to symbols function in `Unitals.hs` and add to imports as applicable.
-9. To `symbMap`, replace `([] :: [UnitDefn])` with:
-```Haskell
-(map unitWrapper [{-add the units used here, ex. metre, second, etc.-}])
-```
-
-10. If you have used acronyms (which you must, if you have created any of the above modules), create a function for the list of acronyms used. For example:
-```Haskell
-acronyms :: [CI]
-acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, srs, thModel, typUnc]
-```
-
-11. Add `acronyms` to `symbMap` in `Body.hs` and add appropriate imports.
-12. add `acronyms` and `symbols` to `usedDB` if you have not already done so. It should look like this:
-```Haskell
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
-```
-13. Build your project.
 
 ## Adding Instance Models Section
 
@@ -626,27 +403,6 @@ angularDispConstraintNote = foldlSent [atStartNP (the constraint),
 11. Update `symbols` function in `Unitals.hs` where applicable.
 12. Update the chunk database (`symbMap`) as applicable.
 
-## Adding Constraints and Properties of a Correct Solution Section
-
-Note: Constraints are added with the Constraints constructor and Properties of a Correct Solution are added with the CorrSolnPpties constructor under the [SSDSolChSpec](https://jacquescarette.github.io/Drasil/docs/drasil-docLang-0.1.26.0/Drasil-SRSDocument.html#v:SSDSolChSpec) constructor in the Specific System Description section.
-
-1. Declare the following sections after your definition and model sections in `mkSRS` (which is in `Body.hs`) as shown below:
-```Haskell
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-        , Constraints EmptyS inConstraints
-        , CorrSolnPpties outConstraints []
-       ]
-     ],
-```
-
-2. Set `_constraints = inConstraints` in `si`.
-3. Define the functions `inConstraints` and `outConstraints` in `Unitals.hs`. These functions represent constraints of your input and output parameters.
-    - Declare constraints using the `ConstrConcept` type.
-    - You can use constructors like `constrained'`, `constrainedNRV`, etc. to create your table of constraints. See example projects for reference.
-4. Add all the required imports.
-5. Add all the required parameters to your chunk database in `Body.hs`.
-
-
 ## Adding Requirements Section
 
 1. Declare the requirements section in `mkSRS` (in `Body.hs`):
@@ -678,54 +434,6 @@ concIns = assumptions ++ goals ++ funcReqs
 ```
 7. Add all necessary modules and parameters to the list of imports.
 
-
-## Adding Non-Functional Requirements Section
-
-1. Declare the non-functional requirements section in `mkSRS` function in `Body.hs`. The requirements declaration should now look like:
-```Haskell
-    ReqrmntSec $ ReqsProg
-      [ FReqsSub EmptyS []
-      , NonFReqsSub
-    ],
-```
-
-2. Add non-functional requirements to `Requirements.hs`. 
-3. Define a list function with type `ConceptInstance` to declare all your non- functional requirements. See example in the code excerpt below.
-```Haskell
-nonFuncReqs :: [ConceptInstance]
-nonFuncReqs = [correct, portable]
-
-correct :: ConceptInstance
-correct = cic "correct" correctDesc "Correct" nonFuncReqDom
-
-portable :: ConceptInstance
-portable = cic "portable" portableDesc "Portable" nonFuncReqDom
-
-correctDesc, portableDesc :: Sentence
-```
-
-4. Define each non-functional requirement function (as `ConceptInstance` type) in the list. You will need the domain `nonfuncReqDom` to define every non-functional requirement. See above code excerpt.
-5. Use concept instance constructor `cic` to define your non-functional requirements. See `code/drasil-lang/Language/Drasil/Chunk/Concept.hs` for constructor info.
-
-6. Add `nonfuncReqs` to `concIns` in `Body.hs`.
-7. Add all required parameters to import list.
-8. If you have not already done so, add `srsDomains` to `symbMap (in the 3rd argument) in `Body.hs`.
-
-
-## Adding Likely and Unlikely Changes Section
-
-Please review [PDController's Body.hs](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/pdcontroller/lib/Drasil/PDController/Body.hs) to see an example of this section.
-
-1. Follow above similar steps to add likely and unlikely changes sections where applicable. See sample below.
-2. Add all the required imports.
-3. Update `concIns` function in `Body.hs` to reflect likely and unlikely changes.
-```Haskell
-    NonFReqsSub
-  ],
-  LCsSec,
-  UCsSec,
-```
-
 ## Adding Other Sections
 
 Please review [GamePhysics' Body.hs](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/gamephysics/lib/Drasil/GamePhysics/Body.hs) to see an example of this section.
@@ -736,16 +444,6 @@ Please review [GamePhysics' Body.hs](https://github.com/JacquesCarette/Drasil/bl
   OffShelfSonsSec $ OffShelfSolnsProg offShelfSols,
 ```
 For more information regarding the different possible sections, please visit the [Haddock documentation](https://jacquescarette.github.io/Drasil/docs/full/drasil-docLang-0.1.26.0/Drasil-DocLang.html) for document language.
-
-
-## Adding Traceability Section
-1. Plug in the traceability section in mkSRS function
-```Haskell
-  OffShelfSonsSec $ OffShelfSolnsProg offShelfSols,
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard si
-```
-
-2. Traceability graphs should now automatically generate when you build your code.
 
 ## Notes
 
@@ -844,7 +542,7 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   InputModule(..), AuxFile(..), Visibility(..), defaultChoices)
 ```
 5. Implement the functions created from `Choices.hs` into `Main.hs`. `GlassBR` is a great example to figure out where these functions go.
-6. Update the `MakeFile` in the `code` folder.
+6. Update the `Makefile` in the `code` folder.
 7. You may need to use some of the following functions, so add some or all of these imports to `Body.hs` or `Choices.hs` as applicable:
 ```Haskell
 import Language.Drasil.Code (relToQD, quantvar, listToArray)

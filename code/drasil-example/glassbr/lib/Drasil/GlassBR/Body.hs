@@ -8,6 +8,7 @@ import qualified Language.Drasil.Development as D
 
 import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
+import Drasil.Document.Contents (enumBulletU)
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)

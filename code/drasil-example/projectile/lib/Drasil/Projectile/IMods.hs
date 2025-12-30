@@ -2,19 +2,19 @@ module Drasil.Projectile.IMods (iMods, landPosIM, offsetIM, timeIM) where
 
 import Prelude hiding (cos, sin)
 
-import Language.Drasil
-import qualified Language.Drasil.Development as D
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, equationalModelN)
-import Utils.Drasil (weave)
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
-
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Math (constraint, equation, xAxis)
-
 import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst, iSpeed, ixPos,
   ixVel, iyPos, iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
+
+import Language.Drasil
+import qualified Language.Drasil.Development as D
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, equationalModelN,
+  Derivation, mkDerivName)
+import Utils.Drasil (weave)
 
 import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, gravAccelValue,
   launchOrigin, posXDirection, targetXAxis, timeStartZero, yAxisGravity)

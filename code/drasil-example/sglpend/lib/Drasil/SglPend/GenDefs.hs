@@ -6,18 +6,6 @@ module Drasil.SglPend.GenDefs (genDefns, velocityIXGD, velocityIYGD,
 import Prelude hiding (cos, sin, sqrt)
 import qualified Data.List.NonEmpty as NE
 
-import Language.Drasil
-import qualified Language.Drasil.Development as D
-import Utils.Drasil (weave)
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Language.Drasil.NounPhrase.Combinators as NP
-
-import Theory.Drasil (GenDefn, gdNoRefs,
-    equationalModel', equationalModelU, equationalRealmU,
-    MultiDefn, mkDefiningExpr, mkMultiDefnForQuant)
---
--- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (xComp, yComp, equation, component, direction, angle)
 import Data.Drasil.Quantities.Physics (velocity, acceleration, force,
     momentOfInertia, torque, angularDisplacement, angularFrequency,
@@ -26,7 +14,17 @@ import Data.Drasil.Concepts.Physics (pendulum, weight, shm)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
 import Data.Drasil.Theories.Physics (newtonSLR)
 
--- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
+import Language.Drasil
+import qualified Language.Drasil.Development as D
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Language.Drasil.NounPhrase.Combinators as NP
+import Theory.Drasil (GenDefn, gdNoRefs,
+    Derivation, mkDerivName,
+    equationalModel', equationalModelU, equationalRealmU,
+    MultiDefn, mkDefiningExpr, mkMultiDefnForQuant)
+import Utils.Drasil (weave)
+
 import Drasil.SglPend.DataDefs (frequencyDD, periodSHMDD, angFrequencyDD)
 import qualified Drasil.SglPend.Derivations as D
 import qualified Drasil.SglPend.Expressions as E

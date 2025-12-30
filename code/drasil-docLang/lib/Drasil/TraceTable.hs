@@ -10,7 +10,7 @@ import qualified Data.Map.Strict as M
 import Drasil.Database (UID, HasUID(..))
 import Language.Drasil
 import Language.Drasil.Development (lnames')
-import Theory.Drasil (Theory(..))
+import Theory.Drasil (Theory(..), MayHaveDerivation(derivations), Derivation(..))
 
 import Drasil.DocumentLanguage.Core
 

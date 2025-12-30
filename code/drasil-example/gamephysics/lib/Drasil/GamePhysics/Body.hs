@@ -10,6 +10,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
 
+import Drasil.Document.Contents (enumBulletU)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
   object, physical, physicalSim, physics, problem, product_, project,
@@ -41,7 +42,7 @@ import Drasil.GamePhysics.MetaConcepts (progName)
 import Drasil.GamePhysics.References (citations, uriReferences)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
-import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
+import Drasil.GamePhysics.Unitals (symbols, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints)
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
@@ -128,13 +129,13 @@ conceptChunks =
   [cw surface]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks [] dataDefs iMods generalDefns
+symbMap = cdb symbols ideaDicts conceptChunks [] dataDefs iMods generalDefns
   tMods concIns citations labelledContent
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
   -- QuantityDicts
-  map nw symbolsAll ++
+  map nw symbols ++
   -- CIs
   map nw acronyms
 

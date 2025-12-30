@@ -516,10 +516,12 @@ not?
 
 **S** Ah yes, the hunt for the 'silver bullet', which doesn't exist.
 
-If you look at the developer steps and the activities, a lot of them
+The tradeoff of ITD is that it transfers the effort of development to be earlier in the process. In traditional software development, the upfront cost of creating a functioning piece of software is relatively small, with relatively large costs for maintanence over the lifespan of the software. The ITD requires much higher upfront costs, but allows the generation of fully-documented families of programs at an incrementally timy cost: a long-term payoff for a high initial investment. This long-term payoff is worth it for some applications, but not for others. It is expected that this up-front cost will be *amortized* over many projects; many have already noticed that fundamental theory applies widely and changes slowly.
+
+If you look at the developer steps and the activities of the ITD, a lot of them
 involve 'knowledge capture' in the form of 'theories'. Underlying this is
 the implicit assumption that this knowledge exists and is already
-essential formal. Otherwise the effort to do this kind of work is
+essentially formal. Otherwise the effort to do this kind of work is
 enormous, and might far outweigh the effort of just writing all the
 artifacts in the traditional way.
 

@@ -5,6 +5,9 @@ module Theory.Drasil (
   -- * Constraint Sets
   , ConstraintSet
   , mkConstraintSet
+  -- Theory.Drasil.Components.Derivation
+  , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
+  , MayHaveDerivation(derivations)
   -- * Data Definitions
   , DataDefinition
   , ddE, ddENoRefs
@@ -33,6 +36,8 @@ module Theory.Drasil (
 ) where
 
 import Theory.Drasil.Classes (HasInputs(..), HasOutput(..))
+import Theory.Drasil.Components.Derivation (
+  Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader, MayHaveDerivation(derivations))
 import Theory.Drasil.ConstraintSet (ConstraintSet, mkConstraintSet)
 import Theory.Drasil.DataDefinition (ddMENoRefs, ddME, ddENoRefs, ddE,
   DataDefinition, qdFromDD, qdEFromDD)

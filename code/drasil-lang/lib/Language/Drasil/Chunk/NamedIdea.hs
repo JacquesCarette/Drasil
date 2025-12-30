@@ -1,7 +1,4 @@
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE DerivingVia #-}
-{-# LANGUAGE DeriveGeneric #-}
 -- | The lowest level of chunks in Drasil. It all starts with an identifier and a term.
 module Language.Drasil.Chunk.NamedIdea (
   -- * Type
@@ -9,7 +6,7 @@ module Language.Drasil.Chunk.NamedIdea (
   -- * Classes
   NamedIdea(..), Idea(..),
   -- * Constructors
-  nc, ncUID, nw, mkIdea, mkIdeaUID
+  nc, ncUID, nw, mkIdea,
 ) where
 
 import Control.Lens ((^.), makeLenses, Lens')
@@ -72,14 +69,9 @@ instance Idea      IdeaDict where getA = mabbr
 mkIdea :: String -> NP -> Maybe String -> IdeaDict
 mkIdea s = IdeaDict (mkUid s)
 
--- | Same as 'mkIdea' but takes a 'UID' rather than a 'String'.
-mkIdeaUID :: UID -> NP -> Maybe String -> IdeaDict
-mkIdeaUID = IdeaDict
-
 -- | Historical name: nw comes from 'named wrapped' from when
 -- 'NamedIdea' exported 'getA' (now in 'Idea'). But there are
 -- no more wrappers, instead we have explicit dictionaries. Unwraps
--- an 'Idea' and places its 'UID' and 'NP' into an 'IdeaDict' with
--- 'Nothing' for an abbreviation.
+-- an 'Idea' and places its 'UID' and 'NP' into an 'IdeaDict'
 nw :: Idea c => c -> IdeaDict
 nw c = IdeaDict (c ^. uid) (c ^. term) (getA c)

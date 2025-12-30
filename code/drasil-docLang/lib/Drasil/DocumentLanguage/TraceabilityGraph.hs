@@ -3,7 +3,7 @@
 module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
-import Drasil.Database
+import Drasil.Database (UID, find, isRegistered, (+++.), mkUid)
 import Drasil.Database.SearchTools (termResolve', shortForm)
 import Drasil.System hiding (purpose)
 import Control.Lens ((^.))
@@ -169,7 +169,7 @@ genTraceGraphLabCons ex = zipWith (traceGraphLC ex) traceGFiles traceGUIDs
 
 -- | Generates traceability graphs as figures on an SRS document.
 traceGraphLC :: String -> FilePath -> UID -> LabelledContent
-traceGraphLC ex fp u = llcc (makeFigRef' u) $ fig (S $ show u) (traceyGraphPath ex fp)
+traceGraphLC ex fp u = llccFig' u $ fig (S $ show u) (traceyGraphPath ex fp)
 
 -- | Traceability graph file names.
 traceGFiles :: [String]

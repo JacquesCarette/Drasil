@@ -1,11 +1,13 @@
 -- | Document language for lesson plan notebooks.
 module Drasil.DocumentLanguage.Notebook.DocumentLanguage(mkNb) where
 
+import Control.Lens ((^.))
+
 import Drasil.DocumentLanguage.Notebook.LsnDecl (LsnDecl, mkLsnDesc)
 import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
 
-import Language.Drasil hiding (kind)
+import Language.Drasil
 
 import Drasil.System (System(SI), _authors, whatsTheBigIdea, sysName)
 import Drasil.GetChunks (citeDB)
@@ -14,9 +16,9 @@ import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, exam
   appendix, review, reference, summary)
 
 -- | Creates a notebook from a lesson description and system information.
-mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
+mkNb :: LsnDecl -> (IdeaDict -> CI -> Sentence) -> System -> Document
 mkNb dd comb si@SI { _authors = authors } =
-  Notebook (whatsTheBigIdea si `comb` sysName si) (foldlList Comma List $ map (S . name) authors) $
+  Notebook (whatsTheBigIdea si `comb` (si ^. sysName)) (foldlList Comma List $ map (S . name) authors) $
   mkSections si l where
     l = mkLsnDesc si dd
 

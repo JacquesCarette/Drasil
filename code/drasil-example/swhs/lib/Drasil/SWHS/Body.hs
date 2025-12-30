@@ -13,6 +13,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.Document.Contents (unlbldExpr)
 
 import Drasil.Metadata (inModel)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
@@ -51,7 +52,7 @@ import Drasil.SWHS.Requirements (funcReqs, nfRequirements,
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
-  simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
+  simTime, specParamValList, symbols, tempC, tempPCM,
   tempW, thickness, watE)
 
 si :: System
@@ -89,7 +90,7 @@ conceptChunks =
   map cw [surArea, area]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks [] SWHS.dataDefs insModel
+symbMap = cdb symbols ideaDicts conceptChunks [] SWHS.dataDefs insModel
   genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
 
 abbreviationsList :: [IdeaDict]

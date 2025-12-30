@@ -20,14 +20,14 @@ dependencies:
 - pretty
 - transformers
 - multiplate
-- drasil-lang
 - drasil-data
 - drasil-database
+- drasil-lang
 - drasil-metadata
 - drasil-printers
 - drasil-system
 - drasil-theory
-- drasil-utils 
+- drasil-utils
 
 ghc-options:
 - -Wall
@@ -39,6 +39,7 @@ library:
   - Drasil.DocLang
   - Drasil.DocLang.Notebook
   - Drasil.DocLang.SRS
+  - Drasil.Document.Contents
   - Drasil.DocumentLanguage.Units
   - Drasil.DocumentLanguage.TraceabilityGraph
   - Drasil.SRSDocument

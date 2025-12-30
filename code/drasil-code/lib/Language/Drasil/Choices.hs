@@ -16,7 +16,7 @@ import qualified Data.Map as Map
 
 import Drasil.Database (UID, HasUID (..))
 import Drasil.GOOL (CodeType)
-import Language.Drasil hiding (None, Var)
+import Language.Drasil hiding (None)
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)

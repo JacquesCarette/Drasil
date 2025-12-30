@@ -57,12 +57,15 @@ If you are new to GitHub, a summer student, or want more in-depth instructions, 
     ```
 - Regarding variable names:
   - Use camel case. Ex: `someFunctionFoo`
-  - Make them meaningful. Ex: `htTransCladFuel` as opposed to `hG`
+  - Make them meaningful. Ex: `htTransCladFuel` as opposed to `hG`.
+  - Try not to make them ridiculously long either - e.g. the package/module where something comes from shouldn't be repeated in a name.
+  - If something is **heavily used**, then a shorter name might be warranted.
   - If you find that structure in naming variables (e.g., numbering, systematic
     concatenation, related naming, etc.), there might be missing
     connections/chunks we can make between the related variables. In this case,
     it may be beneficial to file an issue discussing your findings, and asking
     if anything can be done to remedy it. See [Issue 1848](https://github.com/JacquesCarette/Drasil/issues/1848) for an example ticket and relevant discussion.
+  - See this [page](https://kowainik.github.io/posts/naming-conventions) for a broader discussion of variable names for Haskell libraries in general.
 - One blank line between top-level definitions. No blank lines between type signatures and function definitions. Please don't add too many blank lines, 1 to 2 are enough!
 - Surround binary operators with a single space on either side. Ex: `x ^. term`
 - Do not break operations across lines, unless they are sentence combinators (`:+:`, `+:+`, `(sC)`, etc.). Ex: 

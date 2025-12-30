@@ -1,15 +1,16 @@
 module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
   eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
+import Control.Lens((^.))
+
 import Language.Drasil
-import Utils.Drasil (weave)
-import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',
-  equationalModel, ModelKind)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import Control.Lens((^.))
+import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',
+  equationalModel, ModelKind, Derivation, mkDerivName)
+import Utils.Drasil (weave)
 
 import Data.Drasil.Citations
 

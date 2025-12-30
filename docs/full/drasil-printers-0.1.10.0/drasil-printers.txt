@@ -1133,13 +1133,13 @@ notation :: Iso' PrintingConfiguration Notation
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.
 data PrintingInformation
-syst :: Lens' PrintingInformation System
+sysdb :: Lens' PrintingInformation ChunkDB
 stg :: Lens' PrintingInformation Stage
 configuration :: Lens' PrintingInformation PrintingConfiguration
 
 -- | Builds a document's printing information based on the system
 --   information.
-piSys :: System -> Stage -> PrintingConfiguration -> PrintingInformation
+piSys :: ChunkDB -> Map UID Reference -> Stage -> PrintingConfiguration -> PrintingInformation
 refFind :: UID -> PrintingInformation -> Reference
 
 -- | Default configuration is for engineering.
@@ -1444,10 +1444,11 @@ showSymb :: Symbol -> String
 showHasSymbImpl :: HasSymbol x => x -> String
 
 module Language.Drasil.Debug.Print
+type UIDMap = Map UID [UID]
 
 -- | Gathers all printing functions and creates the debugging tables from
 --   them.
-printAllDebugInfo :: PrintingInformation -> [Doc]
+printAllDebugInfo :: PrintingInformation -> UIDMap -> UIDMap -> [Doc]
 
 -- | Debugging table separator.
 cdbSection :: Doc -> Doc
@@ -1509,11 +1510,11 @@ mkTableRef :: PrintingInformation -> Doc
 
 -- | Chunks that depend on other chunks. An empty list means the chunks do
 --   not depend on anything.
-mkTableDepChunks :: PrintingInformation -> Doc
+mkTableDepChunks :: UIDMap -> Doc
 
 -- | Chunks that are referenced and used by other chunks. Those chunks
 --   build on top of the ones listed here.
-mkTableReferencedChunks :: PrintingInformation -> Doc
+mkTableReferencedChunks :: UIDMap -> Doc
 
 -- | Creates a table of all UIDs and their "highest" recorded level of
 --   information. See <tt>mkListShowUsedUIDs</tt> for more details.
@@ -2128,7 +2129,7 @@ makeRequirements :: PrintingInformation -> Doc
 
 -- | Gathers all printing functions and creates the debugging tables from
 --   them.
-printAllDebugInfo :: PrintingInformation -> [Doc]
+printAllDebugInfo :: PrintingInformation -> UIDMap -> UIDMap -> [Doc]
 
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.
@@ -2136,7 +2137,7 @@ data PrintingInformation
 
 -- | Builds a document's printing information based on the system
 --   information.
-piSys :: System -> Stage -> PrintingConfiguration -> PrintingInformation
+piSys :: ChunkDB -> Map UID Reference -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | Able to be printed.
 class HasPrintingOptions c

@@ -81,9 +81,9 @@
 </span><span id="line-70"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildName"><span class="hs-identifier hs-type">BuildName</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-type">BuildConfig</span></a></span><span>
 </span><span id="line-71"></span><span id="buildAll"><span class="annot"><span class="annottext">buildAll :: ([CommandFragment] -&gt; CommandFragment -&gt; [[CommandFragment]])
 -&gt; BuildName -&gt; Maybe BuildConfig
-</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#buildAll"><span class="hs-identifier hs-var hs-var">buildAll</span></a></span></span><span> </span><span id="local-6989586621679347400"><span class="annot"><span class="annottext">[CommandFragment] -&gt; CommandFragment -&gt; [[CommandFragment]]
-</span><a href="#local-6989586621679347400"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679347401"><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679347401"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BuildConfig -&gt; Maybe BuildConfig
+</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#buildAll"><span class="hs-identifier hs-var hs-var">buildAll</span></a></span></span><span> </span><span id="local-6989586621679347410"><span class="annot"><span class="annottext">[CommandFragment] -&gt; CommandFragment -&gt; [[CommandFragment]]
+</span><a href="#local-6989586621679347410"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679347411"><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679347411"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BuildConfig -&gt; Maybe BuildConfig
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(BuildConfig -&gt; Maybe BuildConfig)
 -&gt; BuildConfig -&gt; Maybe BuildConfig
@@ -94,16 +94,16 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 -&gt; Maybe BuildName
 -&gt; BuildDependencies
 -&gt; BuildConfig
-</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-var">BuildConfig</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679347402"><span class="annot"><span class="annottext">[CommandFragment]
-</span><a href="#local-6989586621679347402"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679347403"><span class="annot"><span class="annottext">CommandFragment
-</span><a href="#local-6989586621679347403"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span class="annot"><span class="annottext">CommandFragment
+</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-var">BuildConfig</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679347412"><span class="annot"><span class="annottext">[CommandFragment]
+</span><a href="#local-6989586621679347412"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679347413"><span class="annot"><span class="annottext">CommandFragment
+</span><a href="#local-6989586621679347413"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span class="annot"><span class="annottext">CommandFragment
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[CommandFragment] -&gt; CommandFragment -&gt; [[CommandFragment]]
-</span><a href="#local-6989586621679347400"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[CommandFragment]
-</span><a href="#local-6989586621679347402"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">CommandFragment
-</span><a href="#local-6989586621679347403"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">BuildName -&gt; Maybe BuildName
+</span><a href="#local-6989586621679347410"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[CommandFragment]
+</span><a href="#local-6989586621679347412"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">CommandFragment
+</span><a href="#local-6989586621679347413"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">BuildName -&gt; Maybe BuildName
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679347401"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe BuildName
+</span><a href="#local-6989586621679347411"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe BuildName
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">BuildDependencies
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BcSource"><span class="hs-identifier hs-var">BcSource</span></a></span><span>
@@ -115,11 +115,11 @@ forall a. Maybe a
 </span><span id="line-77"></span><span id="buildAllAdditionalName"><span class="annot"><span class="annottext">buildAllAdditionalName :: ([CommandFragment]
  -&gt; CommandFragment -&gt; CommandFragment -&gt; [[CommandFragment]])
 -&gt; BuildName -&gt; BuildName -&gt; Maybe BuildConfig
-</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#buildAllAdditionalName"><span class="hs-identifier hs-var hs-var">buildAllAdditionalName</span></a></span></span><span> </span><span id="local-6989586621679347405"><span class="annot"><span class="annottext">[CommandFragment]
+</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#buildAllAdditionalName"><span class="hs-identifier hs-var hs-var">buildAllAdditionalName</span></a></span></span><span> </span><span id="local-6989586621679347415"><span class="annot"><span class="annottext">[CommandFragment]
 -&gt; CommandFragment -&gt; CommandFragment -&gt; [[CommandFragment]]
-</span><a href="#local-6989586621679347405"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679347406"><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679347406"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679347407"><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679347407"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BuildConfig -&gt; Maybe BuildConfig
+</span><a href="#local-6989586621679347415"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679347416"><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679347416"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679347417"><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679347417"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BuildConfig -&gt; Maybe BuildConfig
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(BuildConfig -&gt; Maybe BuildConfig)
 -&gt; BuildConfig -&gt; Maybe BuildConfig
@@ -132,13 +132,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 -&gt; BuildConfig
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-var">BuildConfig</span></a></span><span> </span><span class="annot"><span class="annottext">[CommandFragment]
 -&gt; CommandFragment -&gt; CommandFragment -&gt; [[CommandFragment]]
-</span><a href="#local-6989586621679347405"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">BuildName -&gt; Maybe BuildName
+</span><a href="#local-6989586621679347415"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">BuildName -&gt; Maybe BuildName
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679347406"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">BuildName -&gt; Maybe BuildName
+</span><a href="#local-6989586621679347416"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">BuildName -&gt; Maybe BuildName
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679347407"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">BuildDependencies
+</span><a href="#local-6989586621679347417"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">BuildDependencies
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BcSource"><span class="hs-identifier hs-var">BcSource</span></a></span><span>
 </span><span id="line-78"></span><span>
 </span><span id="line-79"></span><span class="hs-comment">-- | Constructor for a build configuration.</span><span>
@@ -147,9 +147,9 @@ forall a. a -&gt; Maybe a
 </span><span id="line-82"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildName"><span class="hs-identifier hs-type">BuildName</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildName"><span class="hs-identifier hs-type">BuildName</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-type">BuildConfig</span></a></span><span>
 </span><span id="line-83"></span><span id="buildSingle"><span class="annot"><span class="annottext">buildSingle :: ([CommandFragment] -&gt; CommandFragment -&gt; [[CommandFragment]])
 -&gt; BuildName -&gt; BuildName -&gt; Maybe BuildConfig
-</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#buildSingle"><span class="hs-identifier hs-var hs-var">buildSingle</span></a></span></span><span> </span><span id="local-6989586621679347409"><span class="annot"><span class="annottext">[CommandFragment] -&gt; CommandFragment -&gt; [[CommandFragment]]
-</span><a href="#local-6989586621679347409"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679347410"><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679347410"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BuildConfig -&gt; Maybe BuildConfig
+</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#buildSingle"><span class="hs-identifier hs-var hs-var">buildSingle</span></a></span></span><span> </span><span id="local-6989586621679347419"><span class="annot"><span class="annottext">[CommandFragment] -&gt; CommandFragment -&gt; [[CommandFragment]]
+</span><a href="#local-6989586621679347419"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679347420"><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679347420"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BuildConfig -&gt; Maybe BuildConfig
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(BuildConfig -&gt; Maybe BuildConfig)
 -&gt; (BuildName -&gt; BuildConfig) -&gt; BuildName -&gt; Maybe BuildConfig
@@ -160,16 +160,16 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 -&gt; Maybe BuildName
 -&gt; BuildDependencies
 -&gt; BuildConfig
-</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-var">BuildConfig</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679347412"><span class="annot"><span class="annottext">[CommandFragment]
-</span><a href="#local-6989586621679347412"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679347413"><span class="annot"><span class="annottext">CommandFragment
-</span><a href="#local-6989586621679347413"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span class="annot"><span class="annottext">CommandFragment
+</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-var">BuildConfig</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679347422"><span class="annot"><span class="annottext">[CommandFragment]
+</span><a href="#local-6989586621679347422"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679347423"><span class="annot"><span class="annottext">CommandFragment
+</span><a href="#local-6989586621679347423"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span class="annot"><span class="annottext">CommandFragment
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[CommandFragment] -&gt; CommandFragment -&gt; [[CommandFragment]]
-</span><a href="#local-6989586621679347409"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[CommandFragment]
-</span><a href="#local-6989586621679347412"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">CommandFragment
-</span><a href="#local-6989586621679347413"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">BuildName -&gt; Maybe BuildName
+</span><a href="#local-6989586621679347419"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[CommandFragment]
+</span><a href="#local-6989586621679347422"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">CommandFragment
+</span><a href="#local-6989586621679347423"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">BuildName -&gt; Maybe BuildName
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679347410"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe BuildName
+</span><a href="#local-6989586621679347420"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe BuildName
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">(BuildDependencies -&gt; BuildConfig)
 -&gt; (BuildName -&gt; BuildDependencies) -&gt; BuildName -&gt; BuildConfig
@@ -230,18 +230,18 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-101"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#interp"><span class="hs-identifier hs-type">interp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildName"><span class="hs-identifier hs-type">BuildName</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#NameOpts"><span class="hs-identifier hs-type">NameOpts</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#InterpreterCommand"><span class="hs-identifier hs-type">InterpreterCommand</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#InterpreterOption"><span class="hs-identifier hs-type">InterpreterOption</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-102"></span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#Runnable"><span class="hs-identifier hs-type">Runnable</span></a></span><span>
 </span><span id="line-103"></span><span id="interp"><span class="annot"><span class="annottext">interp :: BuildName -&gt; NameOpts -&gt; String -&gt; [String] -&gt; Maybe Runnable
-</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#interp"><span class="hs-identifier hs-var hs-var">interp</span></a></span></span><span> </span><span id="local-6989586621679347418"><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679347418"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679347419"><span class="annot"><span class="annottext">NameOpts
-</span><a href="#local-6989586621679347419"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679347420"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679347420"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Runnable -&gt; Maybe Runnable
+</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#interp"><span class="hs-identifier hs-var hs-var">interp</span></a></span></span><span> </span><span id="local-6989586621679347428"><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679347428"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679347429"><span class="annot"><span class="annottext">NameOpts
+</span><a href="#local-6989586621679347429"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679347430"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679347430"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Runnable -&gt; Maybe Runnable
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(Runnable -&gt; Maybe Runnable)
 -&gt; ([String] -&gt; Runnable) -&gt; [String] -&gt; Maybe Runnable
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">BuildName -&gt; NameOpts -&gt; RunType -&gt; Runnable
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#Runnable"><span class="hs-identifier hs-var">Runnable</span></a></span><span> </span><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679347418"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
-</span><a href="#local-6989586621679347419"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">(RunType -&gt; Runnable)
+</span><a href="#local-6989586621679347428"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
+</span><a href="#local-6989586621679347429"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">(RunType -&gt; Runnable)
 -&gt; ([String] -&gt; RunType) -&gt; [String] -&gt; Runnable
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">[CommandFragment] -&gt; RunType
@@ -255,7 +255,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 -&gt; ([String] -&gt; [String]) -&gt; [String] -&gt; [CommandFragment]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679347420"><span class="hs-identifier hs-var">c</span></a></span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; [String]
+</span><a href="#local-6989586621679347430"><span class="hs-identifier hs-var">c</span></a></span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; [String]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="hs-special">)</span><span>
 </span><span id="line-104"></span><span>
@@ -307,10 +307,10 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-121"></span><span class="annot"><span class="hs-comment">-- | Adds an extension to a 'BuildName'.</span></span><span>
 </span><span id="line-122"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#withExt"><span class="hs-identifier hs-type">withExt</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildName"><span class="hs-identifier hs-type">BuildName</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildName"><span class="hs-identifier hs-type">BuildName</span></a></span><span>
 </span><span id="line-123"></span><span id="withExt"><span class="annot"><span class="annottext">withExt :: BuildName -&gt; String -&gt; BuildName
-</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#withExt"><span class="hs-identifier hs-var hs-var">withExt</span></a></span></span><span> </span><span id="local-6989586621679347426"><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679347426"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BuildName -&gt; Ext -&gt; BuildName
+</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#withExt"><span class="hs-identifier hs-var hs-var">withExt</span></a></span></span><span> </span><span id="local-6989586621679347436"><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679347436"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BuildName -&gt; Ext -&gt; BuildName
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BWithExt"><span class="hs-identifier hs-var">BWithExt</span></a></span><span> </span><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679347426"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">(Ext -&gt; BuildName) -&gt; (String -&gt; Ext) -&gt; String -&gt; BuildName
+</span><a href="#local-6989586621679347436"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">(Ext -&gt; BuildName) -&gt; (String -&gt; Ext) -&gt; String -&gt; BuildName
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">CommandFragment -&gt; Ext
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#OtherExt"><span class="hs-identifier hs-var">OtherExt</span></a></span><span> </span><span class="annot"><span class="annottext">(CommandFragment -&gt; Ext)
@@ -336,11 +336,11 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-133"></span><span class="annot"><span class="hs-comment">-- | Helper for configuring doxygen documentation.</span></span><span>
 </span><span id="line-134"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#doxygenDocConfig"><span class="hs-identifier hs-type">doxygenDocConfig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#DocConfig"><span class="hs-identifier hs-type">DocConfig</span></a></span><span>
 </span><span id="line-135"></span><span id="doxygenDocConfig"><span class="annot"><span class="annottext">doxygenDocConfig :: String -&gt; DocConfig
-</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#doxygenDocConfig"><span class="hs-identifier hs-var hs-var">doxygenDocConfig</span></a></span></span><span> </span><span id="local-6989586621679347431"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679347431"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CommandFragment] -&gt; [Command] -&gt; DocConfig
+</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#doxygenDocConfig"><span class="hs-identifier hs-var hs-var">doxygenDocConfig</span></a></span></span><span> </span><span id="local-6989586621679347441"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679347441"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CommandFragment] -&gt; [Command] -&gt; DocConfig
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#DocConfig"><span class="hs-identifier hs-var">DocConfig</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; CommandFragment
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679347431"><span class="hs-identifier hs-var">fp</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679347441"><span class="hs-identifier hs-var">fp</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-136"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CommandFragment -&gt; Command
 </span><span class="hs-identifier hs-var">mkCheckedCommand</span></span><span> </span><span class="annot"><span class="annottext">(CommandFragment -&gt; Command) -&gt; CommandFragment -&gt; Command
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -351,5 +351,5 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-string">&quot;doxygen &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679347431"><span class="hs-identifier hs-var">fp</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679347441"><span class="hs-identifier hs-var">fp</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-137"></span></pre></body></html>

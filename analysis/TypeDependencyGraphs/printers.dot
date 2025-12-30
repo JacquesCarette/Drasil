@@ -33,6 +33,10 @@ digraph alltypes {
 		}
 	}
 	subgraph print {
+		subgraph uidmap{
+		UIDMap	[shape=oval, color=red2, label="UIDMap"];
+		UIDMap -> MapUIDUID;
+		}
 	}
 	subgraph css {
 	}
@@ -263,7 +267,8 @@ digraph alltypes {
 	subgraph printinginformation {
 		subgraph printinginformation{
 		PrintingInformation	[shape=oval, color=cyan3, label="PrintingInformation"];
-		PrintingInformation -> System;
+		PrintingInformation -> ChunkDB;
+		PrintingInformation -> MapUIDReference;
 		PrintingInformation -> Stage;
 		PrintingInformation -> PrintingConfiguration;
 		}

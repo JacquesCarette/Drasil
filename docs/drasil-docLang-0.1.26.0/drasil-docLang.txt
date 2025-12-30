@@ -1324,7 +1324,7 @@ defaultConfiguration :: PrintingConfiguration
 
 -- | Builds a document's printing information based on the system
 --   information.
-piSys :: System -> Stage -> PrintingConfiguration -> PrintingInformation
+piSys :: ChunkDB -> Map UID Reference -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | A Software Requirements Specification Declaration is made up of all
 --   necessary sections (<a>DocSection</a>s).

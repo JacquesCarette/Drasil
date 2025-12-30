@@ -217,7 +217,7 @@ makeRequirements :: PrintingInformation -> Doc
 
 -- | Gathers all printing functions and creates the debugging tables from
 --   them.
-printAllDebugInfo :: PrintingInformation -> [Doc]
+printAllDebugInfo :: PrintingInformation -> UIDMap -> UIDMap -> [Doc]
 
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.
@@ -225,7 +225,7 @@ data PrintingInformation
 
 -- | Builds a document's printing information based on the system
 --   information.
-piSys :: System -> Stage -> PrintingConfiguration -> PrintingInformation
+piSys :: ChunkDB -> Map UID Reference -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | Able to be printed.
 class HasPrintingOptions c

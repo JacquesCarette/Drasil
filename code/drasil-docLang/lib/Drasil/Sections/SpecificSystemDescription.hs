@@ -258,8 +258,8 @@ inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qls
             (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
             (titleize' softwareConstraint, map fmtSfwr $ sortBySymbol qlst),
             (S "Typical Value", map (\q -> fmtU (eS $ express $ getRVal q) q) $ sortBySymbol qlst),
-            (short typUnc, map typUncr $ sortBySymbol qlst)] (inDatumConstraint ^. uid) $
-            titleize' inDatumConstraint
+            (short typUnc, map (\q -> typUncr (uncVal q, uncPrec q)) $ sortBySymbol qlst)]
+            (inDatumConstraint ^. uid) $ titleize' inDatumConstraint
   where
     getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ showUID c) (c ^. reasVal)
 

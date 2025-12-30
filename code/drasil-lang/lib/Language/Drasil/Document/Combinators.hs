@@ -14,15 +14,14 @@ module Language.Drasil.Document.Combinators (
   unwrap, fterms,
   -- * List-related Functions
   bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
-  mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
+  mkTableFromColumns, noRefs, refineChain,
   tAndDOnly, tAndDWAcc, tAndDWSym,
   zipSentList
 ) where
 
 import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
-import Data.Function (on)
-import Data.List (sortBy, transpose)
+import Data.List (transpose)
 
 import Drasil.Database (HasUID)
 
@@ -42,24 +41,10 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Reference (refS, namedRef)
 import Language.Drasil.Sentence (Sentence(S, Percent, (:+:), Sy, EmptyS), eS,
   ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent)
-import Language.Drasil.Symbol.Helpers ( eqSymb )
-import Language.Drasil.Uncertainty
 import Language.Drasil.Symbol
-import Language.Drasil.Sentence.Fold
+import Language.Drasil.Sentence.Fold (foldlList, SepType(Comma), FoldType(List), foldlSent)
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
 import Language.Drasil.Label.Type
-
--- | Sorts a list of 'HasSymbols' by 'Symbol'.
-sortBySymbol :: HasSymbol a => [a] -> [a]
-sortBySymbol = sortBy compareBySymbol
-
--- | Sorts a tuple list of 'HasSymbols' by first Symbol in the tuple.
-sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
-sortBySymbolTuple = sortBy (compareBySymbol `on` fst)
-
--- | Compare the equational 'Symbol' of two things.
-compareBySymbol :: HasSymbol a => a -> a -> Ordering
-compareBySymbol a b = compsy (eqSymb a) (eqSymb b)
 
 -- Ideally this would create a reference to the equation too.
 -- Doesn't use equation concept so utils doesn't depend on data
@@ -108,12 +93,12 @@ mkEnumAbbrevList s t l = zip [t :+: S (show x) | x <- [s..]] $ map Flat l
 fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ unwrap (getUnit u)
 
--- | Extracts the typical uncertainty to be displayed from something that has an uncertainty.
-typUncr :: HasUncertainty c => c -> Sentence
-typUncr x = found (uncVal x) (uncPrec x)
-  where
-    found u Nothing  = addPercent $ u * 100
-    found u (Just p) = addPercent (realFracToDecimal (fromIntegral p) (u * 100) :: DecimalRaw Integer)
+-- | Formats typical uncertainty data to be displayed.
+typUncr :: (Double, Maybe Int) -> Sentence
+typUncr (u, p) =
+  maybe (addPercent $ u * 100)
+        (\q -> addPercent (realFracToDecimal (fromIntegral q) (u * 100) :: DecimalRaw Integer))
+        p
 
 -- | Converts input to a 'Sentence' and appends %.
 addPercent :: Show a => a -> Sentence

@@ -3,12 +3,13 @@
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">velocity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">height</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">acceleration</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gravity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">horizontalMotion</span></span><span class="hs-special">)</span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">height</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gravitationalAccel</span></span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Units.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">velU</span></span><span class="hs-special">)</span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.ShortHands</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cR</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lG</span></span><span class="hs-special">)</span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
-</span><span id="line-9"></span><span>
-</span><span id="line-10"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#exampleContent"><span class="hs-identifier hs-type">exampleContent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span>
-</span><span id="line-11"></span><span id="exampleContent"><span class="annot"><span class="annottext">exampleContent :: [Contents]
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Document.Contents</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">unlbldCode</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.ShortHands</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cR</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lG</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#exampleContent"><span class="hs-identifier hs-type">exampleContent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span>
+</span><span id="line-12"></span><span id="exampleContent"><span class="annot"><span class="annottext">exampleContent :: [Contents]
 </span><a href="Drasil.Projectile.Lesson.Example.html#exampleContent"><span class="hs-identifier hs-var hs-var">exampleContent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.Projectile.Lesson.Example.html#exampleContextP1"><span class="hs-identifier hs-var">exampleContextP1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.Projectile.Lesson.Example.html#codeC1"><span class="hs-identifier hs-var">codeC1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
@@ -16,9 +17,9 @@
 </span><a href="Drasil.Projectile.Lesson.Example.html#codeC2"><span class="hs-identifier hs-var">codeC2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.Projectile.Lesson.Example.html#exampleContextP3"><span class="hs-identifier hs-var">exampleContextP3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.Projectile.Lesson.Example.html#codeC3"><span class="hs-identifier hs-var">codeC3</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#exampleContextP1"><span class="hs-identifier hs-type">exampleContextP1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#exampleContextP2"><span class="hs-identifier hs-type">exampleContextP2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#exampleContextP3"><span class="hs-identifier hs-type">exampleContextP3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-14"></span><span id="exampleContextP1"><span class="annot"><span class="annottext">exampleContextP1 :: Contents
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#exampleContextP1"><span class="hs-identifier hs-type">exampleContextP1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#exampleContextP2"><span class="hs-identifier hs-type">exampleContextP2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#exampleContextP3"><span class="hs-identifier hs-type">exampleContextP3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-15"></span><span id="exampleContextP1"><span class="annot"><span class="annottext">exampleContextP1 :: Contents
 </span><a href="Drasil.Projectile.Lesson.Example.html#exampleContextP1"><span class="hs-identifier hs-var hs-var">exampleContextP1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -26,7 +27,7 @@
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;shown in Figure.&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-15"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-16"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;We can ignore the physics&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -38,7 +39,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;from the ramp&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-16"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-17"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;There is initially no vertical component&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -53,7 +54,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">velocity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is:&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-17"></span><span id="exampleContextP2"><span class="annot"><span class="annottext">exampleContextP2 :: Contents
+</span><span id="line-18"></span><span id="exampleContextP2"><span class="annot"><span class="annottext">exampleContextP2 :: Contents
 </span><a href="Drasil.Projectile.Lesson.Example.html#exampleContextP2"><span class="hs-identifier hs-var hs-var">exampleContextP2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -64,7 +65,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ramp from the floor is&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-18"></span><span id="exampleContextP3"><span class="annot"><span class="annottext">exampleContextP3 :: Contents
+</span><span id="line-19"></span><span id="exampleContextP3"><span class="annot"><span class="annottext">exampleContextP3 :: Contents
 </span><a href="Drasil.Projectile.Lesson.Example.html#exampleContextP3"><span class="hs-identifier hs-var hs-var">exampleContextP3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -74,13 +75,13 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;needed for the sack to strike the floor and the range&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-19"></span><span>    </span><span class="annot"><span class="annottext">Symbol -&gt; Sentence
+</span><span id="line-20"></span><span>    </span><span class="annot"><span class="annottext">Symbol -&gt; Sentence
 </span><span class="hs-identifier hs-var">P</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">cR</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;where sacks begin to pile up&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-20"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-21"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -96,9 +97,9 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is assumed to have the following value&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-21"></span><span>
-</span><span id="line-22"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#codeC1"><span class="hs-identifier hs-type">codeC1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#codeC2"><span class="hs-identifier hs-type">codeC2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#codeC3"><span class="hs-identifier hs-type">codeC3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-23"></span><span id="codeC1"><span class="annot"><span class="annottext">codeC1 :: Contents
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#codeC1"><span class="hs-identifier hs-type">codeC1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#codeC2"><span class="hs-identifier hs-type">codeC2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#codeC3"><span class="hs-identifier hs-type">codeC3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-24"></span><span id="codeC1"><span class="annot"><span class="annottext">codeC1 :: Contents
 </span><a href="Drasil.Projectile.Lesson.Example.html#codeC1"><span class="hs-identifier hs-var hs-var">codeC1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Contents
 </span><span class="hs-identifier hs-var">unlbldCode</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
@@ -110,7 +111,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">17</span></span><span class="hs-special">)</span><span>
-</span><span id="line-24"></span><span id="codeC2"><span class="annot"><span class="annottext">codeC2 :: Contents
+</span><span id="line-25"></span><span id="codeC2"><span class="annot"><span class="annottext">codeC2 :: Contents
 </span><a href="Drasil.Projectile.Lesson.Example.html#codeC2"><span class="hs-identifier hs-var hs-var">codeC2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Contents
 </span><span class="hs-identifier hs-var">unlbldCode</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
@@ -122,7 +123,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">6</span></span><span class="hs-special">)</span><span>
-</span><span id="line-25"></span><span id="codeC3"><span class="annot"><span class="annottext">codeC3 :: Contents
+</span><span id="line-26"></span><span id="codeC3"><span class="annot"><span class="annottext">codeC3 :: Contents
 </span><a href="Drasil.Projectile.Lesson.Example.html#codeC3"><span class="hs-identifier hs-var hs-var">codeC3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Contents
 </span><span class="hs-identifier hs-var">unlbldCode</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
@@ -134,9 +135,9 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">9.81</span></span><span class="hs-special">)</span><span>
-</span><span id="line-26"></span><span>
-</span><span id="line-27"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#horiz_velo"><span class="hs-identifier hs-type">horiz_velo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span>
-</span><span id="line-28"></span><span id="horiz_velo"><span class="annot"><span class="annottext">horiz_velo :: UnitalChunk
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Example.html#horiz_velo"><span class="hs-identifier hs-type">horiz_velo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span>
+</span><span id="line-29"></span><span id="horiz_velo"><span class="annot"><span class="annottext">horiz_velo :: UnitalChunk
 </span><a href="Drasil.Projectile.Lesson.Example.html#horiz_velo"><span class="hs-identifier hs-var hs-var">horiz_velo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall c u.
 (Concept c, IsUnit u) =&gt;
@@ -147,4 +148,4 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;horiz_velo&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">velU</span></span><span>
-</span><span id="line-29"></span></pre></body></html>
+</span><span id="line-30"></span></pre></body></html>

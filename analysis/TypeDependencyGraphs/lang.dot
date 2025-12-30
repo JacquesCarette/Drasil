@@ -283,8 +283,6 @@ digraph alltypes {
 	}
 	subgraph combinators {
 	}
-	subgraph contents {
-	}
 	subgraph core {
 		subgraph labelledcontent{
 		LabelledContent	[shape=oval, color=cyan3, label="LabelledContent"];

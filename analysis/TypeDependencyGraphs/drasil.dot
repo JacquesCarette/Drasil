@@ -1078,6 +1078,8 @@ digraph alltypes {
 	}
 	subgraph srs {
 	}
+	subgraph contents {
+	}
 	subgraph core {
 		subgraph lsnchapter{
 		LsnChapter	[shape=oval, color=darkviolet, label="LsnChapter"];
@@ -3419,8 +3421,6 @@ digraph alltypes {
 	subgraph sentence {
 	}
 	subgraph combinators {
-	}
-	subgraph contents {
 	}
 	subgraph core {
 		subgraph labelledcontent{

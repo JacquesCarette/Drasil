@@ -680,6 +680,15 @@ unlbldExpr :: ModelExpr -> Contents
 -- | Unlabelled code expression
 unlbldCode :: Expr -> Contents
 
+-- | Fold sentences then turns into content using <a>foldlSent</a>.
+foldlSP :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
+foldlSP_ :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
+foldlSPCol :: [Sentence] -> Contents
+
 
 -- | Defines functions to create traceability graphs in SRS documents.
 module Drasil.DocumentLanguage.TraceabilityGraph

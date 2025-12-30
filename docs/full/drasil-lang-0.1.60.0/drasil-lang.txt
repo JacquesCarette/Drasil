@@ -4277,15 +4277,6 @@ foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Se
 --   "and" or "or".
 foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
 
--- | Fold sentences then turns into content using <a>foldlSent</a>.
-foldlSP :: [Sentence] -> Contents
-
--- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
-foldlSP_ :: [Sentence] -> Contents
-
--- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
-foldlSPCol :: [Sentence] -> Contents
-
 -- | Partial function application of <a>foldle</a> for sentences
 --   specifically. Folds with spaces and adds a period (".") at the end.
 foldlSent :: [Sentence] -> Sentence
@@ -7704,15 +7695,6 @@ foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Se
 -- | Creates a list of elements separated by a "separator", ending with
 --   "and" or "or".
 foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
-
--- | Fold sentences then turns into content using <a>foldlSent</a>.
-foldlSP :: [Sentence] -> Contents
-
--- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
-foldlSP_ :: [Sentence] -> Contents
-
--- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
-foldlSPCol :: [Sentence] -> Contents
 
 -- | Partial function application of <a>foldle</a> for sentences
 --   specifically. Folds with spaces and adds a period (".") at the end.

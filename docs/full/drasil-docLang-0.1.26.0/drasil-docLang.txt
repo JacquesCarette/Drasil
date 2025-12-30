@@ -577,54 +577,6 @@ emptySectSentPlu :: NamedIdea n => [n] -> Sentence
 emptySectSentSing :: NamedIdea n => [n] -> Sentence
 
 
--- | Defines helper functions used to make the general system description
---   section.
-module Drasil.Sections.GeneralSystDesc
-
--- | Default General System Description introduction.
-genSysIntro :: Contents
-
--- | User Characeristics section constructor. Does not contain any
---   subsections.
-usrCharsF :: [Contents] -> Section
-
--- | System Constraints section constructor. Generalized if no constraints,
---   but if there are, they can be passed through.
-systCon :: [Contents] -> [Section] -> Section
-
--- | System Context section constructor. Does not contain any subsections.
-sysContxt :: [Contents] -> Section
-
-
--- | Defines helper functions for making the Table of Auxiliary Constants
---   section.
-module Drasil.Sections.AuxiliaryConstants
-
--- | Gets the auxiliary constant values given an introductory <a>Idea</a>
---   and a <a>QDefinition</a>.
-valsOfAuxConstantsF :: Idea a => a -> [ConstQDef] -> Section
-
--- | Helper that gets a table of constants from a <a>QDefinition</a>.
-tableOfConstants :: [ConstQDef] -> LabelledContent
-
--- | Table of constants reference label.
-tableOfConstantsRef :: Reference
-
-
--- | Defines helper functions for the Stakeholders section.
-module Drasil.Sections.Stakeholders
-
--- | General stakeholders introduction.
-stakeholderIntro :: Contents
-
--- | Constructor for making a client. Takes in the system name and details
---   regarding the client for the specific program.
-tClientF :: Idea a => a -> Sentence -> Section
-
--- | Constructor for making a customer. Takes in the system name.
-tCustomerF :: Idea a => a -> Section
-
-
 -- | Standard code to make a table of abbreviations and acronyms.
 module Drasil.Sections.TableOfAbbAndAcronyms
 
@@ -911,6 +863,63 @@ unlbldExpr :: ModelExpr -> Contents
 
 -- | Unlabelled code expression
 unlbldCode :: Expr -> Contents
+
+-- | Fold sentences then turns into content using <a>foldlSent</a>.
+foldlSP :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
+foldlSP_ :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
+foldlSPCol :: [Sentence] -> Contents
+
+
+-- | Defines helper functions for the Stakeholders section.
+module Drasil.Sections.Stakeholders
+
+-- | General stakeholders introduction.
+stakeholderIntro :: Contents
+
+-- | Constructor for making a client. Takes in the system name and details
+--   regarding the client for the specific program.
+tClientF :: Idea a => a -> Sentence -> Section
+
+-- | Constructor for making a customer. Takes in the system name.
+tCustomerF :: Idea a => a -> Section
+
+
+-- | Defines helper functions used to make the general system description
+--   section.
+module Drasil.Sections.GeneralSystDesc
+
+-- | Default General System Description introduction.
+genSysIntro :: Contents
+
+-- | User Characeristics section constructor. Does not contain any
+--   subsections.
+usrCharsF :: [Contents] -> Section
+
+-- | System Constraints section constructor. Generalized if no constraints,
+--   but if there are, they can be passed through.
+systCon :: [Contents] -> [Section] -> Section
+
+-- | System Context section constructor. Does not contain any subsections.
+sysContxt :: [Contents] -> Section
+
+
+-- | Defines helper functions for making the Table of Auxiliary Constants
+--   section.
+module Drasil.Sections.AuxiliaryConstants
+
+-- | Gets the auxiliary constant values given an introductory <a>Idea</a>
+--   and a <a>QDefinition</a>.
+valsOfAuxConstantsF :: Idea a => a -> [ConstQDef] -> Section
+
+-- | Helper that gets a table of constants from a <a>QDefinition</a>.
+tableOfConstants :: [ConstQDef] -> LabelledContent
+
+-- | Table of constants reference label.
+tableOfConstantsRef :: Reference
 
 
 -- | Defines helper functions for creating subsections within the Solution

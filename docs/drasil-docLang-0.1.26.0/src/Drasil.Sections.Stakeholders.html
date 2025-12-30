@@ -7,20 +7,21 @@
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Development</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
 </span><span id="line-8"></span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html"><span class="hs-identifier">Drasil.DocLang.SRS</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">SRS</span></span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">client</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">customer</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">endUser</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">interest</span></span><span class="hs-special">,</span><span>
-</span><span id="line-11"></span><span>  </span><span class="annot"><span class="hs-identifier">product_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">section_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">stakeholder</span></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="annot"><span class="hs-comment">-- | General stakeholders introduction.</span></span><span>
-</span><span id="line-14"></span><span class="annot"><a href="Drasil.Sections.Stakeholders.html#stakeholderIntro"><span class="hs-identifier hs-type">stakeholderIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-15"></span><span id="stakeholderIntro"><span class="annot"><span class="annottext">stakeholderIntro :: Contents
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Document.Contents.html"><span class="hs-identifier">Drasil.Document.Contents</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Document.Contents.html#foldlSP"><span class="hs-identifier">foldlSP</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">client</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">customer</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">endUser</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">interest</span></span><span class="hs-special">,</span><span>
+</span><span id="line-12"></span><span>  </span><span class="annot"><span class="hs-identifier">product_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">section_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">stakeholder</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="annot"><span class="hs-comment">-- | General stakeholders introduction.</span></span><span>
+</span><span id="line-15"></span><span class="annot"><a href="Drasil.Sections.Stakeholders.html#stakeholderIntro"><span class="hs-identifier hs-type">stakeholderIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-16"></span><span id="stakeholderIntro"><span class="annot"><span class="annottext">stakeholderIntro :: Contents
 </span><a href="Drasil.Sections.Stakeholders.html#stakeholderIntro"><span class="hs-identifier hs-var hs-var">stakeholderIntro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
-</span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.Document.Contents.html#foldlSP"><span class="hs-identifier hs-var">foldlSP</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;This&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">section_</span></span><span class="hs-special">,</span><span>
-</span><span id="line-16"></span><span>            </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-17"></span><span>            </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;describes the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -29,7 +30,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">stakeholder</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the people who have an&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-17"></span><span>            </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-18"></span><span>            </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">interest</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -40,26 +41,26 @@ forall n. NounPhrase n =&gt; n -&gt; NPStruct
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">product_</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-18"></span><span>
-</span><span id="line-19"></span><span class="annot"><span class="hs-comment">-- | Constructor for making a client. Takes in the system name and details regarding the client for the specific program.</span></span><span>
-</span><span id="line-20"></span><span id="local-6989586621679097153"><span class="annot"><a href="Drasil.Sections.Stakeholders.html#tClientF"><span class="hs-identifier hs-type">tClientF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679097153"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679097153"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
-</span><span id="line-21"></span><span id="tClientF"><span class="annot"><span class="annottext">tClientF :: forall a. Idea a =&gt; a -&gt; Sentence -&gt; Section
-</span><a href="Drasil.Sections.Stakeholders.html#tClientF"><span class="hs-identifier hs-var hs-var">tClientF</span></a></span></span><span> </span><span id="local-6989586621679097196"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679097196"><span class="hs-identifier hs-var">kWord</span></a></span></span><span> </span><span id="local-6989586621679097197"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679097197"><span class="hs-identifier hs-var">details</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="annot"><span class="hs-comment">-- | Constructor for making a client. Takes in the system name and details regarding the client for the specific program.</span></span><span>
+</span><span id="line-21"></span><span id="local-6989586621679098179"><span class="annot"><a href="Drasil.Sections.Stakeholders.html#tClientF"><span class="hs-identifier hs-type">tClientF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679098179"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679098179"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
+</span><span id="line-22"></span><span id="tClientF"><span class="annot"><span class="annottext">tClientF :: forall a. Idea a =&gt; a -&gt; Sentence -&gt; Section
+</span><a href="Drasil.Sections.Stakeholders.html#tClientF"><span class="hs-identifier hs-var hs-var">tClientF</span></a></span></span><span> </span><span id="local-6989586621679098222"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679098222"><span class="hs-identifier hs-var">kWord</span></a></span></span><span> </span><span id="local-6989586621679098223"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679098223"><span class="hs-identifier hs-var">details</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#theClient"><span class="hs-identifier hs-var">SRS.theClient</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">a -&gt; Sentence -&gt; Contents
 forall a. Idea a =&gt; a -&gt; Sentence -&gt; Contents
 </span><a href="Drasil.Sections.Stakeholders.html#clientIntro"><span class="hs-identifier hs-var">clientIntro</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679097196"><span class="hs-identifier hs-var">kWord</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679097197"><span class="hs-identifier hs-var">details</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-22"></span><span>
-</span><span id="line-23"></span><span class="annot"><span class="hs-comment">-- | General clients introduction. Takes in the system name and details regarding the client for the specific program.</span></span><span>
-</span><span id="line-24"></span><span id="local-6989586621679097157"><span class="annot"><a href="Drasil.Sections.Stakeholders.html#clientIntro"><span class="hs-identifier hs-type">clientIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679097157"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679097157"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
-</span><span id="line-25"></span><span id="clientIntro"><span class="annot"><span class="annottext">clientIntro :: forall a. Idea a =&gt; a -&gt; Sentence -&gt; Contents
-</span><a href="Drasil.Sections.Stakeholders.html#clientIntro"><span class="hs-identifier hs-var hs-var">clientIntro</span></a></span></span><span> </span><span id="local-6989586621679097207"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679097207"><span class="hs-identifier hs-var">kWord</span></a></span></span><span>  </span><span id="local-6989586621679097208"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679097208"><span class="hs-identifier hs-var">details</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
-</span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><a href="#local-6989586621679098222"><span class="hs-identifier hs-var">kWord</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679098223"><span class="hs-identifier hs-var">details</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><span class="hs-comment">-- | General clients introduction. Takes in the system name and details regarding the client for the specific program.</span></span><span>
+</span><span id="line-25"></span><span id="local-6989586621679098183"><span class="annot"><a href="Drasil.Sections.Stakeholders.html#clientIntro"><span class="hs-identifier hs-type">clientIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679098183"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679098183"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
+</span><span id="line-26"></span><span id="clientIntro"><span class="annot"><span class="annottext">clientIntro :: forall a. Idea a =&gt; a -&gt; Sentence -&gt; Contents
+</span><a href="Drasil.Sections.Stakeholders.html#clientIntro"><span class="hs-identifier hs-var hs-var">clientIntro</span></a></span></span><span> </span><span id="local-6989586621679098233"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679098233"><span class="hs-identifier hs-var">kWord</span></a></span></span><span>  </span><span id="local-6989586621679098234"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679098234"><span class="hs-identifier hs-var">details</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><a href="Drasil.Document.Contents.html#foldlSP"><span class="hs-identifier hs-var">foldlSP</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="annot"><span class="annottext">(NPStruct -&gt; Sentence) -&gt; NPStruct -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -70,17 +71,17 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">client</span></span><span class="hs-special">,</span><span>
-</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;for&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679097207"><span class="hs-identifier hs-var">kWord</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679098233"><span class="hs-identifier hs-var">kWord</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679097208"><span class="hs-identifier hs-var">details</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><a href="#local-6989586621679098234"><span class="hs-identifier hs-var">details</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="annot"><span class="annottext">(NPStruct -&gt; Sentence) -&gt; NPStruct -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -93,27 +94,27 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">client</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;has the final say on acceptance of the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">product_</span></span><span class="hs-special">]</span><span>
-</span><span id="line-29"></span><span>
-</span><span id="line-30"></span><span class="annot"><span class="hs-comment">-- | Constructor for making a customer. Takes in the system name.</span></span><span>
-</span><span id="line-31"></span><span id="local-6989586621679097164"><span class="annot"><a href="Drasil.Sections.Stakeholders.html#tCustomerF"><span class="hs-identifier hs-type">tCustomerF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679097164"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679097164"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
-</span><span id="line-32"></span><span id="tCustomerF"><span class="annot"><span class="annottext">tCustomerF :: forall a. Idea a =&gt; a -&gt; Section
-</span><a href="Drasil.Sections.Stakeholders.html#tCustomerF"><span class="hs-identifier hs-var hs-var">tCustomerF</span></a></span></span><span> </span><span id="local-6989586621679097214"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679097214"><span class="hs-identifier hs-var">kWord</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span class="annot"><span class="hs-comment">-- | Constructor for making a customer. Takes in the system name.</span></span><span>
+</span><span id="line-32"></span><span id="local-6989586621679098190"><span class="annot"><a href="Drasil.Sections.Stakeholders.html#tCustomerF"><span class="hs-identifier hs-type">tCustomerF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679098190"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679098190"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
+</span><span id="line-33"></span><span id="tCustomerF"><span class="annot"><span class="annottext">tCustomerF :: forall a. Idea a =&gt; a -&gt; Section
+</span><a href="Drasil.Sections.Stakeholders.html#tCustomerF"><span class="hs-identifier hs-var hs-var">tCustomerF</span></a></span></span><span> </span><span id="local-6989586621679098240"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679098240"><span class="hs-identifier hs-var">kWord</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#theCustomer"><span class="hs-identifier hs-var">SRS.theCustomer</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">a -&gt; Contents
 forall a. Idea a =&gt; a -&gt; Contents
 </span><a href="Drasil.Sections.Stakeholders.html#customerIntro"><span class="hs-identifier hs-var">customerIntro</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679097214"><span class="hs-identifier hs-var">kWord</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-33"></span><span>
-</span><span id="line-34"></span><span class="annot"><span class="hs-comment">-- | General customer introduction. Takes in the system name.</span></span><span>
-</span><span id="line-35"></span><span id="local-6989586621679097166"><span class="annot"><a href="Drasil.Sections.Stakeholders.html#customerIntro"><span class="hs-identifier hs-type">customerIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679097166"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679097166"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
-</span><span id="line-36"></span><span id="customerIntro"><span class="annot"><span class="annottext">customerIntro :: forall a. Idea a =&gt; a -&gt; Contents
-</span><a href="Drasil.Sections.Stakeholders.html#customerIntro"><span class="hs-identifier hs-var hs-var">customerIntro</span></a></span></span><span> </span><span id="local-6989586621679097222"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679097222"><span class="hs-identifier hs-var">kWord</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
-</span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><a href="#local-6989586621679098240"><span class="hs-identifier hs-var">kWord</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="annot"><span class="hs-comment">-- | General customer introduction. Takes in the system name.</span></span><span>
+</span><span id="line-36"></span><span id="local-6989586621679098192"><span class="annot"><a href="Drasil.Sections.Stakeholders.html#customerIntro"><span class="hs-identifier hs-type">customerIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679098192"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679098192"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
+</span><span id="line-37"></span><span id="customerIntro"><span class="annot"><span class="annottext">customerIntro :: forall a. Idea a =&gt; a -&gt; Contents
+</span><a href="Drasil.Sections.Stakeholders.html#customerIntro"><span class="hs-identifier hs-var hs-var">customerIntro</span></a></span></span><span> </span><span id="local-6989586621679098248"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679098248"><span class="hs-identifier hs-var">kWord</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><a href="Drasil.Document.Contents.html#foldlSP"><span class="hs-identifier hs-var">foldlSP</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="annot"><span class="annottext">(NPStruct -&gt; Sentence) -&gt; NPStruct -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NPStruct
@@ -124,7 +125,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">customer</span></span><span class="hs-special">,</span><span>
-</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;are the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -133,5 +134,5 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679097222"><span class="hs-identifier hs-var">kWord</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-38"></span></pre></body></html>
+</span><a href="#local-6989586621679098248"><span class="hs-identifier hs-var">kWord</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-39"></span></pre></body></html>

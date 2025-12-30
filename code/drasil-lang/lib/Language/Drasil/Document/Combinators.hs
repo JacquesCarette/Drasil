@@ -16,7 +16,9 @@ module Language.Drasil.Document.Combinators (
   bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, refineChain,
   tAndDOnly, tAndDWAcc, tAndDWSym,
-  zipSentList
+  zipSentList,
+  -- * Folds that produce Content
+  foldlSP, foldlSP_, foldlSPCol
 ) where
 
 import Control.Lens ((^.))
@@ -34,15 +36,16 @@ import Language.Drasil.Classes (HasUnitSymbol(usymb), Quantity, Concept,
 import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.Development.Sentence (short, atStart, titleize,
   phrase, plural)
-import Language.Drasil.Document (Section)
-import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet))
+import Language.Drasil.Document (mkParagraph, Section)
+import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet), Contents)
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Reference (refS, namedRef)
 import Language.Drasil.Sentence (Sentence(S, Percent, (:+:), Sy, EmptyS), eS,
   ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent)
 import Language.Drasil.Symbol
-import Language.Drasil.Sentence.Fold (foldlList, SepType(Comma), FoldType(List), foldlSent)
+import Language.Drasil.Sentence.Fold (foldlList, SepType(Comma), FoldType(List), foldlSent,
+  foldlSent_, foldlSentCol)
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
 import Language.Drasil.Label.Type
 
@@ -244,3 +247,16 @@ checkValidStr s (x:xs)
 -- @compoundPhrase (t1 ^. term) (t2 ^. term)@.
 fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
 fterms f a b = f (a ^. term) (b ^. term)
+
+-- | Fold sentences then turns into content using 'foldlSent'.
+foldlSP :: [Sentence] -> Contents
+foldlSP = mkParagraph . foldlSent
+
+-- | Same as 'foldlSP' but uses 'foldlSent_'.
+foldlSP_ :: [Sentence] -> Contents
+foldlSP_ = mkParagraph . foldlSent_
+
+-- | Same as 'foldlSP' but uses 'foldlSentCol'.
+foldlSPCol :: [Sentence] -> Contents
+foldlSPCol = mkParagraph . foldlSentCol
+

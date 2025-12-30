@@ -8,15 +8,13 @@ module Language.Drasil.Sentence.Fold (
   -- ** Expression-related
   foldConstraints,
   -- ** Sentence-related
-  foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol,
+  foldlEnumList, foldlList,
   foldlSent, foldlSent_, foldlSentCol, foldlsC, foldNums, numList
 ) where
 
 import Language.Drasil.Classes ( Express(express), Quantity )
 import Language.Drasil.Constraint
     ( Constraint(Range, Elem), ConstraintE )
-import Language.Drasil.Document ( mkParagraph )
-import Language.Drasil.Document.Core ( Contents )
 import Language.Drasil.Expr.Class ( ExprC(($&&), realInterval) )
 import Language.Drasil.Sentence
     ( Sentence(S, E, EmptyS, (:+:)), sParen, (+:+), sC, (+:+.), (+:) )
@@ -45,18 +43,6 @@ foldlSent_ = foldl' (+:+) EmptyS
 -- | 'foldlSent' but ends with colon.
 foldlSentCol :: [Sentence] -> Sentence
 foldlSentCol = foldle (+:+) (+:) EmptyS
-
--- | Fold sentences then turns into content using 'foldlSent'.
-foldlSP :: [Sentence] -> Contents
-foldlSP = mkParagraph . foldlSent
-
--- | Same as 'foldlSP' but uses 'foldlSent_'.
-foldlSP_ :: [Sentence] -> Contents
-foldlSP_ = mkParagraph . foldlSent_
-
--- | Same as 'foldlSP' but uses 'foldlSentCol'.
-foldlSPCol :: [Sentence] -> Contents
-foldlSPCol = mkParagraph . foldlSentCol
 
 -- | Folds a list of elements separated by commas, including the last element.
 foldlsC :: [Sentence] -> Sentence

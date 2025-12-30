@@ -22,7 +22,7 @@ Optionally, some functions will be limited without:
 
 ## Basic Development Tools
 
-We commonly use [`GNU Make`](https://www.gnu.org/software/make/) to simplify many of our common compilation and testing steps for Drasil. Additionally, we use `git` for source code management.
+We commonly use [`GNU Make`](https://www.gnu.org/software/make/) to simplify many of our common compilation and testing steps for Drasil. Additionally, we use `git` for source code management and *GNU* `grep` to scan files using regular expressions.
 
 Git is a version control system for collaboratively building software with others. Using git, you may distribute and contribute software source code, with a full version history of the source project. We use git for collaborating development efforts on Drasil. In addition to the bountiful publicly available [documentation](https://guides.github.com/introduction/git-handbook/) on using `git`, we also have our own primer [Git2Know](https://github.com/JacquesCarette/Drasil/wiki/Git2Know-for-Drasil) document.
  
@@ -40,9 +40,9 @@ If you're on Windows, there are two options.
 - The simplest option to set up is [WSL2](https://learn.microsoft.com/en-us/windows/wsl/setup/environment), the Windows Subsystem for Linux. With this option, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). WSL2 generally provides excellent compatability and a smooth overall experience. The potential downside of WSL2 is that some users have experienced significant slowdown compared to native tools.
 - The other option is to use bash shell emulator such as Git Bash or Cygwin. These tools require more work to set up, but can have better performance. After installing the shell, you will need to install a git client and common development tools (e.g., GNU Make, rm, sort, rev, etc). Instructions for these are below.
 
-[Git Bash](https://git-scm.com/downloads) is a custom terminal for Windows users packaged with `git` and other various generally used *nix system tools. The installation is process is fairly simple; you will need to download their [Git Bash installer](https://git-scm.com/downloads) and run it. The installer will give you a series of steps, please go through them, leaving all options shown default, unless you specifically know what each option does. Once it's been installed, you can open it by pressing the four-flagged Windows key and searching for "Git Bash", clicking on the "Git Bash" application showing up (this will open up a black terminal window which you can use). From there, you should be able to run "git --version" and get output displaying the Git version of your installation.
+[Git Bash](https://git-scm.com/downloads) is a custom terminal for Windows users packaged with `git` and other various generally used *nix system tools (including GNU `grep`). The installation is process is fairly simple; you will need to download their [Git Bash installer](https://git-scm.com/downloads) and run it. The installer will give you a series of steps, please go through them, leaving all options shown default, unless you specifically know what each option does. Once it's been installed, you can open it by pressing the four-flagged Windows key and searching for "Git Bash", clicking on the "Git Bash" application showing up (this will open up a black terminal window which you can use). From there, you should be able to run "git --version" and get output displaying the Git version of your installation.
 
-[Cygwin](https://cygwin.com/) provides a suite of commonly used GNU and Open Source tools in many development workflows. It provides shell tool functionality similar to many Unix-like systems. You should download the [Cygwin Installer](https://cygwin.com/install.html) and run it. It will guide you through your Cygwin installation, where you might need to pick a download mirror. Try to pick a mirror with the same TLD as your country (e.g., '.ca' preferred for Canadians -- this will likely give you a lower latency and generally faster download), but it might still end up taking a bit of time. At the package list window, please make sure to search for "make" and double-click it's "Skip" entry (it should show a specific version and be marked for installation), and then search for "util-linux" and double-click it's "Skip" entry (it should show a specific version and be marked for installation). If you would like to install any other packages you're interested in, please feel free to do so. After having selected the packages, please click "Next" to confirm the list of packages that you're installing, and then "Install" to begin the installation.
+[Cygwin](https://cygwin.com/) provides a suite of commonly used GNU and Open Source tools in many development workflows. It provides shell tool functionality similar to many Unix-like systems (including GNU `grep`). You should download the [Cygwin Installer](https://cygwin.com/install.html) and run it. It will guide you through your Cygwin installation, where you might need to pick a download mirror. Try to pick a mirror with the same TLD as your country (e.g., '.ca' preferred for Canadians -- this will likely give you a lower latency and generally faster download), but it might still end up taking a bit of time. At the package list window, please make sure to search for "make" and double-click it's "Skip" entry (it should show a specific version and be marked for installation), and then search for "util-linux" and double-click it's "Skip" entry (it should show a specific version and be marked for installation). If you would like to install any other packages you're interested in, please feel free to do so. After having selected the packages, please click "Next" to confirm the list of packages that you're installing, and then "Install" to begin the installation.
 
 Once Cygwin and the packages have been installed, you can access the installed tools by pressing the four-flagged Windows key and searching for "Cygwin", clicking on the "Cygwin" application showing up (this will open up a black terminal window which you can use). From there, you should be able to run "git --version" and get output displaying the Git version of your installation. Additionally, you should also be able to access other common tools, such as `rm`, `rev`, `sort`, and [more](https://cygwin.com/packages/package_list.html).
 
@@ -73,9 +73,30 @@ The Drasil directory structure relies on symbolic links. Windows 10/11 has suppo
 
 <summary><h4>Mac</h4></summary>
 
-Mac already comes with a shell + good terminal, so you will only need to install `git`.
+Mac already comes with a shell + good terminal, so you should only need to install `git` and GNU `grep`. You might already have `grep` installed, but the one by default shipped with macOS lacks support for the perl dialect of the extended regular expression language (which we use).
+
+##### `git`
 
 If you're using a recent version of Mac (> Mavericks/10.9), please open up a terminal window (`Apple Logo+SPACE`, then search "Terminal"), and type in `git --version` into it, and press enter. A GUI installer will appear prompting you to install Git. Please follow the on-screen steps, leaving all options default. Once the installation is complete, you should be able to type `git --version` into your Terminal window again and receive a version code back instead of having the GUI pop up again. If you're using an older version of Mac, you may follow through the steps of installing Git using any of the [official repositories](https://git-scm.com/download/mac).
+
+##### GNU `grep`
+
+Assuming you use Homebrew, you can use the [brew formula](https://formulae.brew.sh/formula/grep), installing GNU `grep` via `brew install grep`. Once `grep` is installed, you should be able to run `grep --version` and see a message along the following format:
+
+```console
+grep (GNU grep) 3.12
+Copyright (C) 2025 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Mike Haertel and others; see
+<https://git.savannah.gnu.org/cgit/grep.git/tree/AUTHORS>.
+
+grep -P uses PCRE2 10.46 2025-08-27
+```
+
+The key parts to look for are the first and last lines. The first line indicates that the version of `grep` is from GNU and the last line indicates that it supports the perl dialect of regular expressions.
 
 </details>
 
@@ -86,9 +107,12 @@ If you're using a recent version of Mac (> Mavericks/10.9), please open up a ter
 It's very likely that your operating system came with an installation of `git` and many common development tools, however, if it didn't, you will be able to use your package manager to install it.
 
 *Apt*-based distributions:
-```
+
+```shell
 sudo apt install git build-essential
 ```
+
+This should suffice to install `git`, GNU `grep`, GNU Make and other common development utilities.
 
 *Nix*:
 

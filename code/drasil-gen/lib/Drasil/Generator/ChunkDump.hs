@@ -13,7 +13,7 @@ import System.Environment (lookupEnv)
 import Text.PrettyPrint
 
 import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
-import Utils.Drasil (atLeast2, createDirIfMissing)
+import Utils.Drasil (createDirIfMissing)
 import Drasil.Database (HasUID(..), dumpChunkDB, invert)
 import Drasil.System (System, systemdb, traceTable, refbyTable)
 import Drasil.Database.SearchTools (findAllIdeaDicts)
@@ -51,6 +51,10 @@ dumpEverything0 si pinfo targetPath = do
   dumpTo refByDump $ targetPath ++ "reverse_trace.json"
 
   dumpChunkTables si pinfo $ targetPath ++ "tables.txt"
+
+atLeast2 :: [a] -> Bool
+atLeast2 (_:_:_) = True
+atLeast2 _       = False
 
 -- FIXME: This is more of a general utility than it is drasil-database specific
 dumpTo :: ToJSON a => a -> TargetFile -> IO ()

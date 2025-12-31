@@ -50,7 +50,7 @@ dumpEverything0 si pinfo targetPath = do
   dumpTo traceDump $ targetPath ++ "trace.json"
   dumpTo refByDump $ targetPath ++ "reverse_trace.json"
 
-  dumpChunkTables pinfo $ targetPath ++ "tables.txt"
+  dumpChunkTables si pinfo $ targetPath ++ "tables.txt"
 
 -- FIXME: This is more of a general utility than it is drasil-database specific
 dumpTo :: ToJSON a => a -> TargetFile -> IO ()
@@ -59,8 +59,8 @@ dumpTo d targetFile = do
   LB.hPutStrLn trg $ encodePretty d
   hClose trg
 
-dumpChunkTables :: PrintingInformation -> TargetFile -> IO ()
-dumpChunkTables pinfo targetFile = do
+dumpChunkTables :: System -> PrintingInformation -> TargetFile -> IO ()
+dumpChunkTables si pinfo targetFile = do
   trg <- openFile targetFile WriteMode
-  mapM_ (hPutStrLn trg . render) $ printAllDebugInfo pinfo
+  mapM_ (hPutStrLn trg . render) $ printAllDebugInfo pinfo (si ^. refbyTable) (si ^. traceTable)
   hClose trg

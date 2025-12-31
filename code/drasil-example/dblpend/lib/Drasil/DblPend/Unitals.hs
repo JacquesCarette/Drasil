@@ -1,6 +1,5 @@
 module Drasil.DblPend.Unitals where
 
-
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Display (Symbol(..))

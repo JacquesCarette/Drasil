@@ -16,7 +16,6 @@ specification   = nc "specification"  (cn'    "specification"      )
 softwareReq :: IdeaDict
 softwareReq                  = compoundNCPP software requirement
 
-
 srs, notebook, requirement :: CI
 notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                                      "NB"      [softEng]
 requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]

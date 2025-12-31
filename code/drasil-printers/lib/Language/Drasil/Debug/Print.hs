@@ -17,6 +17,7 @@ import Drasil.System (systemdb, refbyTable, traceTable)
 import Theory.Drasil
 
 import Language.Drasil.Plain.Print
+import Language.Drasil.Printing.Import (spec)
 import Language.Drasil.Printing.PrintingInformation
 
 -- * Main Function
@@ -78,9 +79,9 @@ mkTableFromLenses pin _ ttle hsNEs =
     nestNum = 30
 
 openTerm :: NamedIdea a => PrintingInformation -> (String, a -> Doc)
-openTerm pinfo = ("Term", sentenceDoc pinfo MultiLine . phrase)
+openTerm pinfo = ("Term", sentenceDoc MultiLine . spec pinfo . phrase)
 
-openSymbol :: HasSymbol a =>PrintingInformation -> (String, a -> Doc)
+openSymbol :: HasSymbol a => PrintingInformation -> (String, a -> Doc)
 openSymbol pinfo = ("Symbol", symbolDoc . flip symbol (pinfo ^. stg))
 
 openDefSymbol :: DefinesQuantity s => PrintingInformation -> (String, s -> Doc)
@@ -90,16 +91,16 @@ openAbbreviation :: Idea a => PrintingInformation -> (String, a -> Doc)
 openAbbreviation _ = ("Abbreviation", text . fromMaybe "" . getA)
 
 openDefinition :: Definition a => PrintingInformation -> (String, a -> Doc)
-openDefinition pinfo = ("Definition", sentenceDoc pinfo OneLine . view defn)
+openDefinition pinfo = ("Definition", sentenceDoc OneLine . spec pinfo . view defn)
 
 openUnitSymbol :: HasUnitSymbol a => PrintingInformation -> (String, a -> Doc)
-openUnitSymbol pinfo = ("Unit Symbol", sentenceDoc pinfo OneLine . Sy . usymb)
+openUnitSymbol pinfo = ("Unit Symbol", sentenceDoc OneLine . spec pinfo . Sy . usymb)
 
 openShortName :: HasShortName a => PrintingInformation -> (String, a -> Doc)
-openShortName pinfo = ("Short Name", sentenceDoc pinfo OneLine . getSentSN . shortname)
+openShortName pinfo = ("Short Name", sentenceDoc OneLine . spec pinfo . getSentSN . shortname)
 
 openTitle :: PrintingInformation -> (String, Section -> Doc)
-openTitle pinfo = ("Title", sentenceDoc pinfo MultiLine . tle)
+openTitle pinfo = ("Title", sentenceDoc MultiLine . spec pinfo . tle)
 
 cntntToStr :: RawContent -> String
 cntntToStr Table {} = "Table"

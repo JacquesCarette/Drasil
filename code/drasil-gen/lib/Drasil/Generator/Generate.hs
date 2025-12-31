@@ -28,6 +28,7 @@ import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
   makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)
 import Drasil.SRSDocument (SRSDecl, defaultConfiguration, piSys,
   PrintingInformation, mkDoc)
+import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Drasil.System (System, programName)
 import Utils.Drasil (createDirIfMissing)
 import Drasil.Generator.ChunkDump (dumpEverything)
@@ -180,13 +181,13 @@ prntCSV dt sm = do
 -- | Renders single-page documents.
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc
 writeDoc s _  TeX     _  doc = genTeX doc s
-writeDoc s _  HTML    fn doc = genHTML s fn doc
-writeDoc s dt Jupyter _  doc = genJupyter s dt doc
+writeDoc s _  HTML    fn doc = genHTML fn $ makeDocument s doc
+writeDoc s dt Jupyter _  doc = genJupyter dt $ makeDocument s doc
 writeDoc _ _  _       _  _   = srsFormatError
 
 -- | Renders multi-page documents.
 writeDoc' :: PrintingInformation -> Format -> Document -> [(Filename, Doc)]
-writeDoc' s MDBook doc = genMDBook s doc
+writeDoc' s MDBook doc = genMDBook $ makeProject s doc
 writeDoc' _ _      _   = srsFormatError
 
 -- | Generates traceability graphs as .dot files.

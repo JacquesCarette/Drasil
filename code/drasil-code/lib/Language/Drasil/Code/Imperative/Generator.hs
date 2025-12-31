@@ -34,6 +34,7 @@ import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   LogConfig(..), OptionalFeatures(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE, system')
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
+import Language.Drasil.Printing.Import (spec)
 
 import Drasil.GOOL (OOProg, VisibilityTag(..),
   ProgData(..), initialState)
@@ -56,9 +57,9 @@ import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 -- 'String' parameter is a string representing the date.
 -- \['Expr'\] parameter is the sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
-generator l dt sd chs spec = DrasilState {
+generator l dt sd chs cs = DrasilState {
   -- constants
-  codeSpec = spec,
+  codeSpec = cs,
   printfo = pinfo,
   modular = modularity $ architecture chs,
   inStruct = inputStructure $ dataInfo chs,
@@ -93,19 +94,19 @@ generator l dt sd chs spec = DrasilState {
   _loggedSpaces = [], -- Used to prevent duplicate logs added to design log
   currentScope = Global
 }
-  where pinfo = piSys (spec ^. system') Implementation plainConfiguration
+  where pinfo = piSys (cs ^. system') Implementation plainConfiguration
         (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt
         showDate Hide = ""
         ((pth, elmap, lname), libLog) = runState (chooseODELib l $ getODE $ extLibs chs) []
         els = map snd elmap
         nms = [lname]
-        mem = modExportMap (spec ^. oldCodeSpec) chs modules'
+        mem = modExportMap (cs ^. oldCodeSpec) chs modules'
         lem = fromList (concatMap (^. modExports) els)
-        cdm = clsDefMap (spec ^. oldCodeSpec) chs modules'
-        modules' = (spec ^. modsO) ++ concatMap (^. auxMods) els
+        cdm = clsDefMap (cs ^. oldCodeSpec) chs modules'
+        modules' = (cs ^. modsO) ++ concatMap (^. auxMods) els
         nonPrefChs = choicesSent chs
-        des = vcat . map (sentenceDoc pinfo OneLine) $
+        des = vcat . map (sentenceDoc OneLine . spec pinfo) $
           (nonPrefChs ++ concLog ++ libLog)
 
 -- OO Versions --
@@ -151,10 +152,10 @@ genPackage unRepr = do
       cfp = codeSpec g ^. configFilesO
       db = printfo g
       -- FIXME: The below code does `Doc -> String` conversion.
-      prps = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. purpose)
-      bckgrnd = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. background)
-      mtvtn = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. motivation)
-      scp = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. scope)
+      prps = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. purpose)
+      bckgrnd = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. background)
+      mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
+      scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -181,7 +182,7 @@ genProgram = do
   g <- get
   ms <- chooseModules $ modular g
   let n = codeSpec g ^. pNameO
-  let p = show $ sentenceDoc (printfo g) OneLine $ foldlSent $ codeSpec g ^. purpose
+  let p = show $ sentenceDoc OneLine $ spec (printfo g) $ foldlSent $ codeSpec g ^. purpose
   return $ OO.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
@@ -260,10 +261,10 @@ genPackageProc unRepr = do
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
-      prps = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. purpose)
-      bckgrnd = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. background)
-      mtvtn = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. motivation)
-      scp = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. scope)
+      prps = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. purpose)
+      bckgrnd = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. background)
+      mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
+      scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -290,7 +291,7 @@ genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ modular g
   let n = codeSpec g ^. pNameO
-  let p = show $ sentenceDoc (printfo g) OneLine $ foldlSent $ codeSpec g ^. purpose
+  let p = show $ sentenceDoc OneLine $ spec (printfo g) $ foldlSent $ codeSpec g ^. purpose
   return $ Proc.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice

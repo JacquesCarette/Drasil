@@ -52,6 +52,7 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl, PrintingInformation)
+import qualified Language.Drasil.Printing.Import as PI (codeExpr)
 
 import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
@@ -436,7 +437,7 @@ printConstraint v c = do
 -- If expression is more than just a literal, print it in parentheses.
 printExpr :: (SharedProg r) => CodeExpr -> PrintingInformation -> [MSStatement r]
 printExpr Lit{} _  = []
-printExpr e     db = [printStr $ " (" ++ render (codeExprDoc db OneLine e) ++ ")"]
+printExpr e     db = [printStr $ " (" ++ render (codeExprDoc OneLine $ PI.codeExpr db e) ++ ")"]
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat :: (OOProg r) => VisibilityTag ->

@@ -9,6 +9,7 @@ import Language.Drasil.Code.DataDesc (DataDesc, Data(..), Delim,
 import Language.Drasil.Expr.Development (Expr(Matrix))
 import Language.Drasil.Printers (SingleLine(OneLine), exprDoc, sentenceDoc,
   unitDoc, PrintingInformation)
+import Language.Drasil.Printing.Import (expr, spec)
 
 import Data.List (intersperse, transpose)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, space,
@@ -89,11 +90,11 @@ getMtxLists _ = error "makeInputFile encountered unexpected type, expected matri
 
 -- | Creates a 'OneLine' 'Implementation'-stage 'sentenceDoc'.
 sDoc :: PrintingInformation -> Sentence -> Doc
-sDoc pinfo = sentenceDoc pinfo OneLine
+sDoc pinfo = sentenceDoc OneLine . spec pinfo
 
 -- | Creates a 'OneLine' 'Implementation'-stage 'exprDoc'.
 eDoc :: PrintingInformation -> Expr -> Doc
-eDoc pinfo = exprDoc pinfo OneLine
+eDoc pinfo e = exprDoc OneLine (expr e pinfo)
 
 -- | Creates a 'OneLine' 'unitDoc'.
 uDoc :: USymb -> Doc

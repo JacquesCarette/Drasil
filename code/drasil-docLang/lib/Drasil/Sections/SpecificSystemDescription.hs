@@ -31,12 +31,12 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
   element, general, goalStmt, information, input_, limitation, model, output_,
   physical, physicalConstraint, physicalSystem, physSyst, problem,
-  problemDescription, propOfCorSol, purpose, quantity, requirement, scope,
-  section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
+  problemDescription, propOfCorSol, purpose, quantity, scope,
+  section_, softwareConstraint, solutionCharacteristic, symbol_,
   system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
-import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
+import Drasil.Metadata (inModel, thModel, dataDefn, genDefn, requirement, specification)
 import Drasil.System (System)
 import Language.Drasil hiding (variable)
 import Language.Drasil.Chunk.Concept.NamedCombinators

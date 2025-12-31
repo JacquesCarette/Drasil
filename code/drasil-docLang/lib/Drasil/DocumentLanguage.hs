@@ -67,8 +67,9 @@ import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGr
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
+import Drasil.Metadata as Doc (software)
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
-  software, unlikelyChg)
+  unlikelyChg)
 import qualified Data.Map.Strict as M
 
 -- * Main Function

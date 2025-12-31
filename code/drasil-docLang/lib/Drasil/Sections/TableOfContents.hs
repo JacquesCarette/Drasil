@@ -5,7 +5,7 @@ module Drasil.Sections.TableOfContents (toToC) where
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Core
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, requirement)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -153,7 +153,7 @@ mktSSDSec (SSDProg l) =
 -- | Helper for creating the 'Requirements' section ToC entry
 mktReqrmntSec :: ReqrmntSec -> ItemType
 mktReqrmntSec (ReqsProg l) =
-  mkHeaderItem (namedRef SRS.requirementsLabel $ titleize' Doc.requirement) $ map mktSubs l
+  mkHeaderItem (namedRef SRS.requirementsLabel $ titleize' requirement) $ map mktSubs l
   where
     mktSubs :: ReqsSub -> Sentence
     mktSubs (FReqsSub _ _)  = namedRef SRS.funcReqLabel    $ titleize' Doc.functionalRequirement

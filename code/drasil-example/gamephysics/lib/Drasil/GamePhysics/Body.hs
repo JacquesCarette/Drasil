@@ -1,7 +1,6 @@
 module Drasil.GamePhysics.Body where
 
 import Language.Drasil hiding (organization, section)
-import Drasil.Metadata (dataDefn, inModel)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
@@ -11,11 +10,12 @@ import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
 
+import Drasil.Metadata (dataDefn, inModel, software)
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
   object, physical, physicalSim, physics, problem, product_, project,
-  quantity, realtime, section_, simulation, software, softwareSys,
+  quantity, realtime, section_, simulation, softwareSys,
   system, systemConstraint, sysCont, task, user,
   property, problemDescription)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,

@@ -4,7 +4,7 @@ import Drasil.Metadata
 import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation
-       (assumption, goalStmt, physSyst, requirement, refBy, refName, srs, typUnc)
+       (assumption, goalStmt, physSyst, refBy, refName, typUnc)
 
 acronyms :: [CI]
 acronyms

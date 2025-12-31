@@ -1311,7 +1311,7 @@ expr :: Expr -> PrintingInformation -> Expr
 module Language.Drasil.Printing.Import.CodeExpr
 
 -- | Translate <a>CodeExpr</a>s to printable layout AST <tt>Expr</tt>s.
-codeExpr :: CodeExpr -> PrintingInformation -> Expr
+codeExpr :: PrintingInformation -> CodeExpr -> Expr
 
 
 -- | Defines functions to transform Drasil-based documents into a printable
@@ -1389,7 +1389,7 @@ module Language.Drasil.Printing.Import
 expr :: Expr -> PrintingInformation -> Expr
 
 -- | Translate <a>CodeExpr</a>s to printable layout AST <tt>Expr</tt>s.
-codeExpr :: CodeExpr -> PrintingInformation -> Expr
+codeExpr :: PrintingInformation -> CodeExpr -> Expr
 literal :: Literal -> PrintingInformation -> Expr
 
 -- | Translate Exprs to printable layout AST.
@@ -1423,13 +1423,14 @@ OneLine :: SingleLine
 MultiLine :: SingleLine
 
 -- | Create expressions for a document in <a>Doc</a> format.
-exprDoc :: PrintingInformation -> SingleLine -> Expr -> Doc
+exprDoc :: SingleLine -> Expr -> Doc
 
--- | Create code expressions for a document in <a>Doc</a> format.
-codeExprDoc :: PrintingInformation -> SingleLine -> CodeExpr -> Doc
+-- | Create code expressions for a document in <a>Doc</a> format. assumes
+--   someone has already makde the code expression into an expression
+codeExprDoc :: SingleLine -> Expr -> Doc
 
 -- | Create sentences for a document in <a>Doc</a> format.
-sentenceDoc :: PrintingInformation -> SingleLine -> Sentence -> Doc
+sentenceDoc :: SingleLine -> Spec -> Doc
 
 -- | Create symbols for a document in <a>Doc</a> format.
 symbolDoc :: Symbol -> Doc
@@ -1892,7 +1893,7 @@ cases :: [(Expr, Expr)] -> (Doc -> [D] -> D) -> Doc -> (Expr -> D) -> D
 module Language.Drasil.HTML.Print
 
 -- | Generate an HTML document from a Drasil <a>Document</a>.
-genHTML :: PrintingInformation -> String -> Document -> Doc
+genHTML :: String -> Document -> Doc
 
 -- | For when we add other things to reference like website, newspaper
 renderCite :: BibFormatter -> Citation -> (Doc, Doc)
@@ -1919,7 +1920,7 @@ fence :: OpenClose -> Fence -> String
 module Language.Drasil.Markdown.Print
 
 -- | Generate a mdBook SRS
-genMDBook :: PrintingInformation -> Document -> [(Filename, Doc)]
+genMDBook :: Project -> [(Filename, Doc)]
 
 -- | Helper for rendering Specs into Markdown
 pSpec :: RefMap -> Spec -> Doc
@@ -1951,7 +1952,7 @@ module Language.Drasil.JSON.Print
 -- | Generate a python notebook document (using json). build : build the
 --   SRS document in JSON format build': build the general Jupyter Notbook
 --   document
-genJupyter :: PrintingInformation -> DocType -> Document -> Doc
+genJupyter :: DocType -> Document -> Doc
 
 module Language.Drasil.Printers
 
@@ -2045,7 +2046,7 @@ NF :: [UID] -> [Label] -> Label -> Colour -> NodeFamily
 outputDot :: FilePath -> GraphInfo -> IO ()
 
 -- | Generate an HTML document from a Drasil <a>Document</a>.
-genHTML :: PrintingInformation -> String -> Document -> Doc
+genHTML :: String -> Document -> Doc
 
 -- | Generates the CSS selectors necessary for a document.
 makeCSS :: Document -> Doc
@@ -2089,13 +2090,14 @@ OneLine :: SingleLine
 MultiLine :: SingleLine
 
 -- | Create sentences for a document in <a>Doc</a> format.
-sentenceDoc :: PrintingInformation -> SingleLine -> Sentence -> Doc
+sentenceDoc :: SingleLine -> Spec -> Doc
 
 -- | Create expressions for a document in <a>Doc</a> format.
-exprDoc :: PrintingInformation -> SingleLine -> Expr -> Doc
+exprDoc :: SingleLine -> Expr -> Doc
 
--- | Create code expressions for a document in <a>Doc</a> format.
-codeExprDoc :: PrintingInformation -> SingleLine -> CodeExpr -> Doc
+-- | Create code expressions for a document in <a>Doc</a> format. assumes
+--   someone has already makde the code expression into an expression
+codeExprDoc :: SingleLine -> Expr -> Doc
 
 -- | Create symbols for a document in <a>Doc</a> format.
 symbolDoc :: Symbol -> Doc
@@ -2115,10 +2117,10 @@ genTeX :: Document -> PrintingInformation -> Doc
 -- | Generate a python notebook document (using json). build : build the
 --   SRS document in JSON format build': build the general Jupyter Notbook
 --   document
-genJupyter :: PrintingInformation -> DocType -> Document -> Doc
+genJupyter :: DocType -> Document -> Doc
 
 -- | Generate a mdBook SRS
-genMDBook :: PrintingInformation -> Document -> [(Filename, Doc)]
+genMDBook :: Project -> [(Filename, Doc)]
 
 -- | Prints the .toml config file for mdBook.
 makeBook :: Document -> PrintingInformation -> Doc

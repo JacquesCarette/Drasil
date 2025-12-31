@@ -59,7 +59,6 @@ digraph alltypes {
 	subgraph print {
 		subgraph openclose{
 		OpenClose	[shape=oval, color=darkviolet, label="OpenClose"];
-		OpenClose -> PrintingInformation;
 		OpenClose -> String;
 		OpenClose -> Document;
 		OpenClose -> Doc;
@@ -89,7 +88,6 @@ digraph alltypes {
 	subgraph print {
 		subgraph singleline{
 		SingleLine	[shape=oval, color=darkviolet, label="SingleLine"];
-		SingleLine -> PrintingInformation;
 		SingleLine -> SingleLine;
 		SingleLine -> Expr;
 		SingleLine -> Doc;

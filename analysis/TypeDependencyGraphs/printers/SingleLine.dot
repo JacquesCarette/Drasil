@@ -1,6 +1,5 @@
 digraph singleline{
 SingleLine	[shape=oval, color=darkviolet, label="SingleLine"];
-SingleLine -> PrintingInformation;
 SingleLine -> SingleLine;
 SingleLine -> Expr;
 SingleLine -> Doc;

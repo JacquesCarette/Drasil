@@ -41,6 +41,38 @@ findAllDefinedQuantities :: ChunkDB -> [DefinedQuantityDict]
 findAllCitations :: ChunkDB -> [Citation]
 findAllLabelledContent :: ChunkDB -> [LabelledContent]
 
+
+-- | Re-export top-level functions for easy use across drasil-printers.
+module Language.Drasil.Printing.Import
+
+-- | Translate Exprs to printable layout AST.
+expr :: Expr -> PrintingInformation -> Expr
+
+-- | Translate <a>CodeExpr</a>s to printable layout AST <tt>Expr</tt>s.
+codeExpr :: PrintingInformation -> CodeExpr -> Expr
+literal :: Literal -> PrintingInformation -> Expr
+
+-- | Translate Exprs to printable layout AST.
+modelExpr :: ModelExpr -> PrintingInformation -> Expr
+
+-- | Render a <a>Space</a>.
+space :: PrintingInformation -> Space -> Expr
+
+-- | Translates <a>Sentence</a> to the printable representation of a
+--   <a>Sentence</a> (<tt>Spec</tt>).
+spec :: PrintingInformation -> Sentence -> Spec
+
+-- | Converts a symbol into an expression.
+symbol :: Symbol -> Expr
+
+-- | Translates from <a>Document</a> to a printable representation of
+--   <a>Document</a>.
+makeDocument :: PrintingInformation -> Document -> Document
+
+-- | Translates from <a>Document</a> to a printable representation of
+--   <a>Project</a>.
+makeProject :: PrintingInformation -> Document -> Project
+
 module Language.Drasil.Printers
 
 -- | Document types include Software Requirements Specification and
@@ -133,7 +165,7 @@ NF :: [UID] -> [Label] -> Label -> Colour -> NodeFamily
 outputDot :: FilePath -> GraphInfo -> IO ()
 
 -- | Generate an HTML document from a Drasil <a>Document</a>.
-genHTML :: PrintingInformation -> String -> Document -> Doc
+genHTML :: String -> Document -> Doc
 
 -- | Generates the CSS selectors necessary for a document.
 makeCSS :: Document -> Doc
@@ -177,13 +209,14 @@ OneLine :: SingleLine
 MultiLine :: SingleLine
 
 -- | Create sentences for a document in <a>Doc</a> format.
-sentenceDoc :: PrintingInformation -> SingleLine -> Sentence -> Doc
+sentenceDoc :: SingleLine -> Spec -> Doc
 
 -- | Create expressions for a document in <a>Doc</a> format.
-exprDoc :: PrintingInformation -> SingleLine -> Expr -> Doc
+exprDoc :: SingleLine -> Expr -> Doc
 
--- | Create code expressions for a document in <a>Doc</a> format.
-codeExprDoc :: PrintingInformation -> SingleLine -> CodeExpr -> Doc
+-- | Create code expressions for a document in <a>Doc</a> format. assumes
+--   someone has already makde the code expression into an expression
+codeExprDoc :: SingleLine -> Expr -> Doc
 
 -- | Create symbols for a document in <a>Doc</a> format.
 symbolDoc :: Symbol -> Doc
@@ -203,10 +236,10 @@ genTeX :: Document -> PrintingInformation -> Doc
 -- | Generate a python notebook document (using json). build : build the
 --   SRS document in JSON format build': build the general Jupyter Notbook
 --   document
-genJupyter :: PrintingInformation -> DocType -> Document -> Doc
+genJupyter :: DocType -> Document -> Doc
 
 -- | Generate a mdBook SRS
-genMDBook :: PrintingInformation -> Document -> [(Filename, Doc)]
+genMDBook :: Project -> [(Filename, Doc)]
 
 -- | Prints the .toml config file for mdBook.
 makeBook :: Document -> PrintingInformation -> Doc

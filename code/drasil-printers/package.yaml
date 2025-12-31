@@ -36,6 +36,7 @@ library:
   exposed-modules:
   - Drasil.Database.SearchTools
   - Language.Drasil.Printers
+  - Language.Drasil.Printing.Import
   when:
   - condition: false
     other-modules: Paths_drasil_printers

@@ -1,4 +1,6 @@
 digraph alltypes {
+	subgraph documentation {
+	}
 	subgraph domains {
 	}
 	subgraph drails {

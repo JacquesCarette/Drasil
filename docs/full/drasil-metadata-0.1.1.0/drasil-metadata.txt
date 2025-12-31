@@ -58,6 +58,14 @@ documentc :: IdeaDict
 --   Various domains that are used in Drasil. May have an abbreviation.
 knowledgemng :: IdeaDict
 
+module Drasil.Metadata.Documentation
+srs :: CI
+notebook :: CI
+software :: IdeaDict
+requirement :: CI
+softwareReq :: IdeaDict
+specification :: IdeaDict
+
 module Drasil.Metadata.Drasil
 
 -- | Basic Drasil metadata.

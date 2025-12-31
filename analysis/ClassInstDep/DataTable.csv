@@ -803,6 +803,7 @@ lang,lib/Language/Drasil/,WellTyped.hs,	,	,Typed
 	,	,	,	,	,RequiresChecking
 lang,lib/Language/,Drasil.hs,	,	,	
 	
+metadata,lib/Drasil/Metadata/,Documentation.hs,	,	,	
 metadata,lib/Drasil/Metadata/,Domains.hs,	,	,	
 metadata,lib/Drasil/Metadata/,Drasil.hs,	,DrasilMeta,	,	,	,	,	,	,	,	,	,	,YYYY,	,	,	,YYYY,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
 metadata,lib/Drasil/Metadata/,SupportedSoftware.hs,	,	,	

@@ -3,262 +3,263 @@
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
-</span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Computation.html"><span class="hs-identifier">Data.Drasil.Concepts.Computation</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Computation.html#algorithm"><span class="hs-identifier">algorithm</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Computation.html#dataStruct"><span class="hs-identifier">dataStruct</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Computation.html#inParam"><span class="hs-identifier">inParam</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#input_"><span class="hs-identifier">input_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#physical"><span class="hs-identifier">physical</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#physicalConstraint"><span class="hs-identifier">physicalConstraint</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-9"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#srs"><span class="hs-identifier">srs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#softwareConstraint"><span class="hs-identifier">softwareConstraint</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#quantity"><span class="hs-identifier">quantity</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Math.html"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Math.html#equation"><span class="hs-identifier">equation</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="annot"><span class="hs-comment">-- * Common Software Concepts</span></span><span>
-</span><span id="line-13"></span><span>
-</span><span id="line-14"></span><span class="annot"><span class="hs-comment">-- | Collects all software-related concepts.</span></span><span>
-</span><span id="line-15"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#softwarecon"><span class="hs-identifier hs-type">softwarecon</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-16"></span><span id="softwarecon"><span class="annot"><span class="annottext">softwarecon :: [ConceptChunk]
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Metadata</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">srs</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Computation.html"><span class="hs-identifier">Data.Drasil.Concepts.Computation</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Computation.html#algorithm"><span class="hs-identifier">algorithm</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Computation.html#dataStruct"><span class="hs-identifier">dataStruct</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Computation.html#inParam"><span class="hs-identifier">inParam</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#input_"><span class="hs-identifier">input_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#physical"><span class="hs-identifier">physical</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#physicalConstraint"><span class="hs-identifier">physicalConstraint</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#softwareConstraint"><span class="hs-identifier">softwareConstraint</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#quantity"><span class="hs-identifier">quantity</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Math.html"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Math.html#equation"><span class="hs-identifier">equation</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="annot"><span class="hs-comment">-- * Common Software Concepts</span></span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="annot"><span class="hs-comment">-- | Collects all software-related concepts.</span></span><span>
+</span><span id="line-16"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#softwarecon"><span class="hs-identifier hs-type">softwarecon</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span><span id="softwarecon"><span class="annot"><span class="annottext">softwarecon :: [ConceptChunk]
 </span><a href="Data.Drasil.Concepts.Software.html#softwarecon"><span class="hs-identifier hs-var hs-var">softwarecon</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#correctness"><span class="hs-identifier hs-var">correctness</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#verifiability"><span class="hs-identifier hs-var">verifiability</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#physLib"><span class="hs-identifier hs-var">physLib</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-17"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-18"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#understandability"><span class="hs-identifier hs-var">understandability</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#reusability"><span class="hs-identifier hs-var">reusability</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#maintainability"><span class="hs-identifier hs-var">maintainability</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#portability"><span class="hs-identifier hs-var">portability</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-18"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-19"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#performance"><span class="hs-identifier hs-var">performance</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#accuracy"><span class="hs-identifier hs-var">accuracy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#reliability"><span class="hs-identifier hs-var">reliability</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#c"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#errMsg"><span class="hs-identifier hs-type">errMsg</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#physLib"><span class="hs-identifier hs-type">physLib</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#program"><span class="hs-identifier hs-type">program</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-21"></span><span>
-</span><span id="line-22"></span><span id="c"><span class="annot"><span class="annottext">c :: ConceptChunk
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#c"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#errMsg"><span class="hs-identifier hs-type">errMsg</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#physLib"><span class="hs-identifier hs-type">physLib</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#program"><span class="hs-identifier hs-type">program</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span id="c"><span class="annot"><span class="annottext">c :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#c"><span class="hs-identifier hs-var hs-var">c</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;c&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">pn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;C&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-24"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the C programming language&quot;</span></span><span>
-</span><span id="line-24"></span><span id="physLib"><span class="annot"><span class="annottext">physLib :: ConceptChunk
+</span><span id="line-25"></span><span id="physLib"><span class="annot"><span class="annottext">physLib :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#physLib"><span class="hs-identifier hs-var hs-var">physLib</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;physLib&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cnIES</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;physics library&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a programming library which provides functions for modelling physical phenomenon&quot;</span></span><span>
-</span><span id="line-26"></span><span id="program"><span class="annot"><span class="annottext">program :: ConceptChunk
+</span><span id="line-27"></span><span id="program"><span class="annot"><span class="annottext">program :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#program"><span class="hs-identifier hs-var hs-var">program</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;program&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;program&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a series of coded software instructions to control the operation of a computer or other machine&quot;</span></span><span>
-</span><span id="line-28"></span><span id="errMsg"><span class="annot"><span class="annottext">errMsg :: ConceptChunk
+</span><span id="line-29"></span><span id="errMsg"><span class="annot"><span class="annottext">errMsg :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#errMsg"><span class="hs-identifier hs-var hs-var">errMsg</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;errMsg&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;error message&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a message that indicates an incorrect instruction has been given, or that there is an error resulting from faulty software&quot;</span></span><span>
-</span><span id="line-30"></span><span>
-</span><span id="line-31"></span><span class="annot"><span class="hs-comment">-- * Non-functional Requirements</span></span><span>
-</span><span id="line-32"></span><span>
-</span><span id="line-33"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#accuracy"><span class="hs-identifier hs-type">accuracy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#correctness"><span class="hs-identifier hs-type">correctness</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#maintainability"><span class="hs-identifier hs-type">maintainability</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#performance"><span class="hs-identifier hs-type">performance</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#performanceSpd"><span class="hs-identifier hs-type">performanceSpd</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#portability"><span class="hs-identifier hs-type">portability</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-34"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#reliability"><span class="hs-identifier hs-type">reliability</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#reusability"><span class="hs-identifier hs-type">reusability</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#understandability"><span class="hs-identifier hs-type">understandability</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#verifiability"><span class="hs-identifier hs-type">verifiability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-35"></span><span>
-</span><span id="line-36"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#qualOfBeing"><span class="hs-identifier hs-type">qualOfBeing</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-37"></span><span id="qualOfBeing"><span class="annot"><span class="annottext">qualOfBeing :: String -&gt; String
-</span><a href="Data.Drasil.Concepts.Software.html#qualOfBeing"><span class="hs-identifier hs-var hs-var">qualOfBeing</span></a></span></span><span> </span><span id="local-6989586621679054570"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679054570"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span class="annot"><span class="hs-comment">-- * Non-functional Requirements</span></span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#accuracy"><span class="hs-identifier hs-type">accuracy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#correctness"><span class="hs-identifier hs-type">correctness</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#maintainability"><span class="hs-identifier hs-type">maintainability</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#performance"><span class="hs-identifier hs-type">performance</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#performanceSpd"><span class="hs-identifier hs-type">performanceSpd</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#portability"><span class="hs-identifier hs-type">portability</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-35"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#reliability"><span class="hs-identifier hs-type">reliability</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#reusability"><span class="hs-identifier hs-type">reusability</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#understandability"><span class="hs-identifier hs-type">understandability</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#verifiability"><span class="hs-identifier hs-type">verifiability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-36"></span><span>
+</span><span id="line-37"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#qualOfBeing"><span class="hs-identifier hs-type">qualOfBeing</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-38"></span><span id="qualOfBeing"><span class="annot"><span class="annottext">qualOfBeing :: String -&gt; String
+</span><a href="Data.Drasil.Concepts.Software.html#qualOfBeing"><span class="hs-identifier hs-var hs-var">qualOfBeing</span></a></span></span><span> </span><span id="local-6989586621679054540"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679054540"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the quality or state of being&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679054570"><span class="hs-identifier hs-var">s</span></a></span><span>
-</span><span id="line-38"></span><span>
-</span><span id="line-39"></span><span id="accuracy"><span class="annot"><span class="annottext">accuracy :: ConceptChunk
+</span><a href="#local-6989586621679054540"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span id="accuracy"><span class="annot"><span class="annottext">accuracy :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#accuracy"><span class="hs-identifier hs-var hs-var">accuracy</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;accuracy&quot;</span></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;accuracy&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">(String -&gt; ConceptChunk) -&gt; String -&gt; ConceptChunk
+</span><span id="line-41"></span><span>  </span><span class="annot"><span class="annottext">(String -&gt; ConceptChunk) -&gt; String -&gt; ConceptChunk
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String
 </span><a href="Data.Drasil.Concepts.Software.html#qualOfBeing"><span class="hs-identifier hs-var">qualOfBeing</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;correct or precise&quot;</span></span><span>
-</span><span id="line-41"></span><span>
-</span><span id="line-42"></span><span id="correctness"><span class="annot"><span class="annottext">correctness :: ConceptChunk
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span id="correctness"><span class="annot"><span class="annottext">correctness :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#correctness"><span class="hs-identifier hs-var hs-var">correctness</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;correctness&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;correctness&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">(String -&gt; ConceptChunk) -&gt; String -&gt; ConceptChunk
+</span><span id="line-44"></span><span>  </span><span class="annot"><span class="annottext">(String -&gt; ConceptChunk) -&gt; String -&gt; ConceptChunk
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String
 </span><a href="Data.Drasil.Concepts.Software.html#qualOfBeing"><span class="hs-identifier hs-var">qualOfBeing</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;free from error&quot;</span></span><span>
-</span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span id="maintainability"><span class="annot"><span class="annottext">maintainability :: ConceptChunk
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span id="maintainability"><span class="annot"><span class="annottext">maintainability :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#maintainability"><span class="hs-identifier hs-var hs-var">maintainability</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maintainability&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maintainability&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the probability of performing a successful repair action within a given time&quot;</span></span><span>
-</span><span id="line-47"></span><span>
-</span><span id="line-48"></span><span id="performance"><span class="annot"><span class="annottext">performance :: ConceptChunk
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span id="performance"><span class="annot"><span class="annottext">performance :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#performance"><span class="hs-identifier hs-var hs-var">performance</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;performance&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;performance&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the action or process of carrying out or accomplishing an action, task, or function&quot;</span></span><span>
-</span><span id="line-50"></span><span>
-</span><span id="line-51"></span><span id="performanceSpd"><span class="annot"><span class="annottext">performanceSpd :: ConceptChunk
+</span><span id="line-51"></span><span>
+</span><span id="line-52"></span><span id="performanceSpd"><span class="annot"><span class="annottext">performanceSpd :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#performanceSpd"><span class="hs-identifier hs-var hs-var">performanceSpd</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;performanceSpd&quot;</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;performance speed&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-53"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the action or process of carrying out or accomplishing an action, task, or function quickly&quot;</span></span><span>
-</span><span id="line-53"></span><span>
-</span><span id="line-54"></span><span id="portability"><span class="annot"><span class="annottext">portability :: ConceptChunk
+</span><span id="line-54"></span><span>
+</span><span id="line-55"></span><span id="portability"><span class="annot"><span class="annottext">portability :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#portability"><span class="hs-identifier hs-var hs-var">portability</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;portability&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;portability&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the ability of software to be transferred from one machine or system to another&quot;</span></span><span>
-</span><span id="line-56"></span><span>
-</span><span id="line-57"></span><span id="reliability"><span class="annot"><span class="annottext">reliability :: ConceptChunk
+</span><span id="line-57"></span><span>
+</span><span id="line-58"></span><span id="reliability"><span class="annot"><span class="annottext">reliability :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#reliability"><span class="hs-identifier hs-var hs-var">reliability</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;reliability&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;reliability&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-58"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span id="line-59"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the degree to which the result of a measurement, calculation,&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-60"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;or specification can be depended on to be accurate&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-60"></span><span>
-</span><span id="line-61"></span><span id="reusability"><span class="annot"><span class="annottext">reusability :: ConceptChunk
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span id="reusability"><span class="annot"><span class="annottext">reusability :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#reusability"><span class="hs-identifier hs-var hs-var">reusability</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;reusability&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;reusability&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the use of existing assets in some form within the software product development process&quot;</span></span><span>
-</span><span id="line-63"></span><span>
-</span><span id="line-64"></span><span id="understandability"><span class="annot"><span class="annottext">understandability :: ConceptChunk
+</span><span id="line-64"></span><span>
+</span><span id="line-65"></span><span id="understandability"><span class="annot"><span class="annottext">understandability :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#understandability"><span class="hs-identifier hs-var hs-var">understandability</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;understandability&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;understandability&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-65"></span><span>  </span><span class="annot"><span class="annottext">(String -&gt; ConceptChunk) -&gt; String -&gt; ConceptChunk
+</span><span id="line-66"></span><span>  </span><span class="annot"><span class="annottext">(String -&gt; ConceptChunk) -&gt; String -&gt; ConceptChunk
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String
 </span><a href="Data.Drasil.Concepts.Software.html#qualOfBeing"><span class="hs-identifier hs-var">qualOfBeing</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;understandable&quot;</span></span><span>
-</span><span id="line-66"></span><span>
-</span><span id="line-67"></span><span id="verifiability"><span class="annot"><span class="annottext">verifiability :: ConceptChunk
+</span><span id="line-67"></span><span>
+</span><span id="line-68"></span><span id="verifiability"><span class="annot"><span class="annottext">verifiability :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#verifiability"><span class="hs-identifier hs-var hs-var">verifiability</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;verifiability&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;verifiability&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-68"></span><span>  </span><span class="annot"><span class="annottext">(String -&gt; ConceptChunk) -&gt; String -&gt; ConceptChunk
+</span><span id="line-69"></span><span>  </span><span class="annot"><span class="annottext">(String -&gt; ConceptChunk) -&gt; String -&gt; ConceptChunk
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String
 </span><a href="Data.Drasil.Concepts.Software.html#qualOfBeing"><span class="hs-identifier hs-var">qualOfBeing</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;capable of being verified, confirmed, or substantiated&quot;</span></span><span>
-</span><span id="line-69"></span><span>
-</span><span id="line-70"></span><span class="annot"><span class="hs-comment">-- * Module Concepts</span></span><span>
-</span><span id="line-71"></span><span>
-</span><span id="line-72"></span><span class="hs-comment">-- MODULES Concepts (Maybe move to D.D.C.Software.Modules ?)</span><span>
-</span><span id="line-73"></span><span>
-</span><span id="line-74"></span><span class="hs-comment">--FIXME: &quot;hiding&quot; is not a noun.</span><span>
-</span><span id="line-75"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#hwHiding"><span class="hs-identifier hs-type">hwHiding</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-76"></span><span id="hwHiding"><span class="annot"><span class="annottext">hwHiding :: ConceptChunk
+</span><span id="line-70"></span><span>
+</span><span id="line-71"></span><span class="annot"><span class="hs-comment">-- * Module Concepts</span></span><span>
+</span><span id="line-72"></span><span>
+</span><span id="line-73"></span><span class="hs-comment">-- MODULES Concepts (Maybe move to D.D.C.Software.Modules ?)</span><span>
+</span><span id="line-74"></span><span>
+</span><span id="line-75"></span><span class="hs-comment">--FIXME: &quot;hiding&quot; is not a noun.</span><span>
+</span><span id="line-76"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#hwHiding"><span class="hs-identifier hs-type">hwHiding</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-77"></span><span id="hwHiding"><span class="annot"><span class="annottext">hwHiding :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#hwHiding"><span class="hs-identifier hs-var hs-var">hwHiding</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;hwHiding&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;hardware hiding&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-77"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span id="line-78"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;hides the exact details of the hardware, and provides a uniform interface&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-78"></span><span>   </span><span class="annot"><span class="annottext">String
+</span><span id="line-79"></span><span>   </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; for the rest of the system to use&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-79"></span><span>
-</span><span id="line-80"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modBehavHiding"><span class="hs-identifier hs-type">modBehavHiding</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-81"></span><span id="modBehavHiding"><span class="annot"><span class="annottext">modBehavHiding :: ConceptChunk
+</span><span id="line-80"></span><span>
+</span><span id="line-81"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modBehavHiding"><span class="hs-identifier hs-type">modBehavHiding</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-82"></span><span id="modBehavHiding"><span class="annot"><span class="annottext">modBehavHiding :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modBehavHiding"><span class="hs-identifier hs-var hs-var">modBehavHiding</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modBehavHiding&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;behaviour hiding&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
-</span><span id="line-82"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-83"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;includes programs that provide externally visible behaviour of the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-83"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-84"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;system as specified in the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="Data.Drasil.Concepts.Documentation.html#srs"><span class="hs-identifier hs-var">srs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">srs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence) -&gt; Sentence -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="Data.Drasil.Concepts.Documentation.html#srs"><span class="hs-identifier hs-var">srs</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">srs</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;documents&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-84"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;This module serves as a communication layer between the hardware-hiding module&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-85"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;and the software decision module. The programs in this module will need&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;This module serves as a communication layer between the hardware-hiding module&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-86"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;and the software decision module. The programs in this module will need&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-87"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;to change if there are changes in the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="Data.Drasil.Concepts.Documentation.html#srs"><span class="hs-identifier hs-var">srs</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-87"></span><span>
-</span><span id="line-88"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modControl"><span class="hs-identifier hs-type">modControl</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-89"></span><span id="modControl"><span class="annot"><span class="annottext">modControl :: ConceptChunk
+</span><span class="hs-identifier hs-var">srs</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-88"></span><span>
+</span><span id="line-89"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modControl"><span class="hs-identifier hs-type">modControl</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-90"></span><span id="modControl"><span class="annot"><span class="annottext">modControl :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modControl"><span class="hs-identifier hs-var hs-var">modControl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modControl&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;control module&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;provides the main program&quot;</span></span><span>
-</span><span id="line-90"></span><span>
-</span><span id="line-91"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modSfwrDecision"><span class="hs-identifier hs-type">modSfwrDecision</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-92"></span><span id="modSfwrDecision"><span class="annot"><span class="annottext">modSfwrDecision :: ConceptChunk
+</span><span id="line-91"></span><span>
+</span><span id="line-92"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modSfwrDecision"><span class="hs-identifier hs-type">modSfwrDecision</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-93"></span><span id="modSfwrDecision"><span class="annot"><span class="annottext">modSfwrDecision :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modSfwrDecision"><span class="hs-identifier hs-var hs-var">modSfwrDecision</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modSfwrDecision&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;software decision module&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
-</span><span id="line-93"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-94"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;includes&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -268,69 +269,69 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Computation.html#algorithm"><span class="hs-identifier hs-var">algorithm</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-94"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-95"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;used in the system that do not provide direct interaction with the user&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-95"></span><span>
-</span><span id="line-96"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modInputFormat"><span class="hs-identifier hs-type">modInputFormat</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-97"></span><span id="modInputFormat"><span class="annot"><span class="annottext">modInputFormat :: ConceptChunk
+</span><span id="line-96"></span><span>
+</span><span id="line-97"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modInputFormat"><span class="hs-identifier hs-type">modInputFormat</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-98"></span><span id="modInputFormat"><span class="annot"><span class="annottext">modInputFormat :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modInputFormat"><span class="hs-identifier hs-var hs-var">modInputFormat</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modInputFormat&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;input format module&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-98"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;converts the input data into the data structure used by the input parameters module&quot;</span></span><span>
-</span><span id="line-99"></span><span>
-</span><span id="line-100"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modInputParam"><span class="hs-identifier hs-type">modInputParam</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-101"></span><span id="modInputParam"><span class="annot"><span class="annottext">modInputParam :: ConceptChunk
+</span><span id="line-100"></span><span>
+</span><span id="line-101"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modInputParam"><span class="hs-identifier hs-type">modInputParam</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-102"></span><span id="modInputParam"><span class="annot"><span class="annottext">modInputParam :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modInputParam"><span class="hs-identifier hs-var hs-var">modInputParam</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modInputParam&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;input parameter module&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
-</span><span id="line-102"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-103"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;stores the parameters needed for the program, including&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span>
-</span><span id="line-103"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-104"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;material properties&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;processing conditions&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;numerical parameters&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-104"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-105"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The values can be read as needed. This module knows how many parameters it stores&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-105"></span><span>
-</span><span id="line-106"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modInputConstraint"><span class="hs-identifier hs-type">modInputConstraint</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-107"></span><span id="modInputConstraint"><span class="annot"><span class="annottext">modInputConstraint :: ConceptChunk
+</span><span id="line-106"></span><span>
+</span><span id="line-107"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modInputConstraint"><span class="hs-identifier hs-type">modInputConstraint</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-108"></span><span id="modInputConstraint"><span class="annot"><span class="annottext">modInputConstraint :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modInputConstraint"><span class="hs-identifier hs-var hs-var">modInputConstraint</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modInputConstraint&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;input constraint module&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-108"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span id="line-109"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;defines the constraints on the input data and gives an error if &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-109"></span><span>   </span><span class="annot"><span class="annottext">String
+</span><span id="line-110"></span><span>   </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a constraint is violated&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-110"></span><span>
-</span><span id="line-111"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modInputVerif"><span class="hs-identifier hs-type">modInputVerif</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-112"></span><span id="modInputVerif"><span class="annot"><span class="annottext">modInputVerif :: ConceptChunk
+</span><span id="line-111"></span><span>
+</span><span id="line-112"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modInputVerif"><span class="hs-identifier hs-type">modInputVerif</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-113"></span><span id="modInputVerif"><span class="annot"><span class="annottext">modInputVerif :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modInputVerif"><span class="hs-identifier hs-var hs-var">modInputVerif</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modInputVerif&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;input verification module&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-113"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-114"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;verifies that the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -342,33 +343,33 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#physical"><span class="hs-identifier hs-var">physical</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span>
-</span><span id="line-114"></span><span>   </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-115"></span><span>   </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#softwareConstraint"><span class="hs-identifier hs-var">softwareConstraint</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Throws an error if a parameter violates a&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
-</span><span id="line-115"></span><span>   </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-116"></span><span>   </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#physicalConstraint"><span class="hs-identifier hs-var">physicalConstraint</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Throws a warning if a parameter violates a&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-116"></span><span>   </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span id="line-117"></span><span>   </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#softwareConstraint"><span class="hs-identifier hs-var">softwareConstraint</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-117"></span><span>
-</span><span id="line-118"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modDerivedVal"><span class="hs-identifier hs-type">modDerivedVal</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-119"></span><span id="modDerivedVal"><span class="annot"><span class="annottext">modDerivedVal :: ConceptChunk
+</span><span id="line-118"></span><span>
+</span><span id="line-119"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modDerivedVal"><span class="hs-identifier hs-type">modDerivedVal</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-120"></span><span id="modDerivedVal"><span class="annot"><span class="annottext">modDerivedVal :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modDerivedVal"><span class="hs-identifier hs-var hs-var">modDerivedVal</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modDerivedVal&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;derived value module&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
-</span><span id="line-120"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-121"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;defines the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -379,22 +380,22 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#input_"><span class="hs-identifier hs-var">input_</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-121"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-122"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;into derived&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#quantity"><span class="hs-identifier hs-var">quantity</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-122"></span><span>
-</span><span id="line-123"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modInterpolation"><span class="hs-identifier hs-type">modInterpolation</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-124"></span><span id="modInterpolation"><span class="annot"><span class="annottext">modInterpolation :: ConceptChunk
+</span><span id="line-123"></span><span>
+</span><span id="line-124"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modInterpolation"><span class="hs-identifier hs-type">modInterpolation</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-125"></span><span id="modInterpolation"><span class="annot"><span class="annottext">modInterpolation :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modInterpolation"><span class="hs-identifier hs-var hs-var">modInterpolation</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modInterpolation&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;interpolation module&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
-</span><span id="line-125"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-126"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;provides the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -406,106 +407,106 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Computation.html#inParam"><span class="hs-identifier hs-var">inParam</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span>
-</span><span id="line-126"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-127"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;interpolation data&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;return an interpolated value&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-127"></span><span>
-</span><span id="line-128"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modInterpDatum"><span class="hs-identifier hs-type">modInterpDatum</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-129"></span><span id="modInterpDatum"><span class="annot"><span class="annottext">modInterpDatum :: ConceptChunk
+</span><span id="line-128"></span><span>
+</span><span id="line-129"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modInterpDatum"><span class="hs-identifier hs-type">modInterpDatum</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-130"></span><span id="modInterpDatum"><span class="annot"><span class="annottext">modInterpDatum :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modInterpDatum"><span class="hs-identifier hs-var hs-var">modInterpDatum</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modInterpDatum&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;interpolation datum module&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
-</span><span id="line-130"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-131"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;converts the input interpolation data into the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Computation.html#dataStruct"><span class="hs-identifier hs-var">dataStruct</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-131"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-132"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;used by the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modInterpolation"><span class="hs-identifier hs-var">modInterpolation</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-132"></span><span>
-</span><span id="line-133"></span><span class="hs-comment">{-- Concept Chunks for Modules  --}</span><span>
-</span><span id="line-134"></span><span>
-</span><span id="line-135"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modSeqServ"><span class="hs-identifier hs-type">modSeqServ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-136"></span><span id="modSeqServ"><span class="annot"><span class="annottext">modSeqServ :: ConceptChunk
+</span><span id="line-133"></span><span>
+</span><span id="line-134"></span><span class="hs-comment">{-- Concept Chunks for Modules  --}</span><span>
+</span><span id="line-135"></span><span>
+</span><span id="line-136"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modSeqServ"><span class="hs-identifier hs-type">modSeqServ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-137"></span><span id="modSeqServ"><span class="annot"><span class="annottext">modSeqServ :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modSeqServ"><span class="hs-identifier hs-var hs-var">modSeqServ</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modSeqServ&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;sequence data structure&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-137"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-138"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Provides array manipulation operations, such as&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span>
-</span><span id="line-138"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-139"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;building an array&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;accessing a specific entry&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;slicing an array&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-139"></span><span>
-</span><span id="line-140"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modLinkedServ"><span class="hs-identifier hs-type">modLinkedServ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-141"></span><span id="modLinkedServ"><span class="annot"><span class="annottext">modLinkedServ :: ConceptChunk
+</span><span id="line-140"></span><span>
+</span><span id="line-141"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modLinkedServ"><span class="hs-identifier hs-type">modLinkedServ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-142"></span><span id="modLinkedServ"><span class="annot"><span class="annottext">modLinkedServ :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modLinkedServ"><span class="hs-identifier hs-var hs-var">modLinkedServ</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modLinkedServ&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;linked data structure&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-142"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-143"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Provides tree manipulation operations, such as&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span>
-</span><span id="line-143"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-144"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;building a tree&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;accessing a specific entry&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-144"></span><span>
-</span><span id="line-145"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modAssocServ"><span class="hs-identifier hs-type">modAssocServ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-146"></span><span id="modAssocServ"><span class="annot"><span class="annottext">modAssocServ :: ConceptChunk
+</span><span id="line-145"></span><span>
+</span><span id="line-146"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modAssocServ"><span class="hs-identifier hs-type">modAssocServ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-147"></span><span id="modAssocServ"><span class="annot"><span class="annottext">modAssocServ :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modAssocServ"><span class="hs-identifier hs-var hs-var">modAssocServ</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modAssocServ&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;associative data structure&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-147"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-148"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Provides operations on hash tables, such as&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span>
-</span><span id="line-148"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-149"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;building a hash table&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;accessing a specific entry&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-149"></span><span>
-</span><span id="line-150"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modVectorServ"><span class="hs-identifier hs-type">modVectorServ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-151"></span><span id="modVectorServ"><span class="annot"><span class="annottext">modVectorServ :: ConceptChunk
+</span><span id="line-150"></span><span>
+</span><span id="line-151"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modVectorServ"><span class="hs-identifier hs-type">modVectorServ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-152"></span><span id="modVectorServ"><span class="annot"><span class="annottext">modVectorServ :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modVectorServ"><span class="hs-identifier hs-var hs-var">modVectorServ</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modVectorServ&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;vector&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-152"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-153"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Provides vector operations such as&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
@@ -514,53 +515,53 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;addition&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-153"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-154"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;scalar and vector multiplication&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;dot and cross products&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;rotations&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-154"></span><span>
-</span><span id="line-155"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modPlotDesc"><span class="hs-identifier hs-type">modPlotDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-156"></span><span id="modPlotDesc"><span class="annot"><span class="annottext">modPlotDesc :: ConceptChunk
+</span><span id="line-155"></span><span>
+</span><span id="line-156"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modPlotDesc"><span class="hs-identifier hs-type">modPlotDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-157"></span><span id="modPlotDesc"><span class="annot"><span class="annottext">modPlotDesc :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modPlotDesc"><span class="hs-identifier hs-var hs-var">modPlotDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modPlotDesc&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;plotting&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;provides a plot function&quot;</span></span><span>
-</span><span id="line-157"></span><span>
-</span><span id="line-158"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modOutputfDescFun"><span class="hs-identifier hs-type">modOutputfDescFun</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-159"></span><span id="modOutputfDescFun"><span class="annot"><span class="annottext">modOutputfDescFun :: Sentence -&gt; ConceptChunk
-</span><a href="Data.Drasil.Concepts.Software.html#modOutputfDescFun"><span class="hs-identifier hs-var hs-var">modOutputfDescFun</span></a></span></span><span> </span><span id="local-6989586621679054604"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679054604"><span class="hs-identifier hs-var">desc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
+</span><span id="line-158"></span><span>
+</span><span id="line-159"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modOutputfDescFun"><span class="hs-identifier hs-type">modOutputfDescFun</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-160"></span><span id="modOutputfDescFun"><span class="annot"><span class="annottext">modOutputfDescFun :: Sentence -&gt; ConceptChunk
+</span><a href="Data.Drasil.Concepts.Software.html#modOutputfDescFun"><span class="hs-identifier hs-var hs-var">modOutputfDescFun</span></a></span></span><span> </span><span id="local-6989586621679054574"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679054574"><span class="hs-identifier hs-var">desc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modOutputfDescFun&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;output format&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-160"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-161"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;outputs the results of the calculations, including the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679054604"><span class="hs-identifier hs-var">desc</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-161"></span><span>
-</span><span id="line-162"></span><span class="hs-comment">-- ODE Solver Module</span><span>
-</span><span id="line-163"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modOdeDesc"><span class="hs-identifier hs-type">modOdeDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-164"></span><span id="modOdeDesc"><span class="annot"><span class="annottext">modOdeDesc :: ConceptChunk
+</span><a href="#local-6989586621679054574"><span class="hs-identifier hs-var">desc</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-162"></span><span>
+</span><span id="line-163"></span><span class="hs-comment">-- ODE Solver Module</span><span>
+</span><span id="line-164"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modOdeDesc"><span class="hs-identifier hs-type">modOdeDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-165"></span><span id="modOdeDesc"><span class="annot"><span class="annottext">modOdeDesc :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modOdeDesc"><span class="hs-identifier hs-var hs-var">modOdeDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modOdeDesc&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ODE solver&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-165"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-166"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;provides solvers that take the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span>
-</span><span id="line-166"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-167"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;governing equation&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -568,7 +569,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;numerical parameters&quot;</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span>
-</span><span id="line-167"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-168"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;solve them&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-168"></span></pre></body></html>
+</span><span id="line-169"></span></pre></body></html>

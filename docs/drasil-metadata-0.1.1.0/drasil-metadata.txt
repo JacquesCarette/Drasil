@@ -87,3 +87,9 @@ inModel :: CI
 --   These are internal-to-Drasil common ideas, and need to be defined at
 --   the same time as theories.
 thModel :: CI
+srs :: CI
+notebook :: CI
+software :: IdeaDict
+requirement :: CI
+softwareReq :: IdeaDict
+specification :: IdeaDict

@@ -205,17 +205,13 @@ likelyChg :: CI
 learnObj :: CI
 unlikelyChg :: CI
 physSyst :: CI
-requirement :: CI
 mg :: CI
 mis :: CI
 notApp :: CI
-srs :: CI
 typUnc :: CI
 sec :: CI
-notebook :: CI
 refBy :: CI
 refName :: CI
-softReqSpec :: NP
 abbreviation :: IdeaDict
 acronym :: IdeaDict
 analysis :: IdeaDict
@@ -318,11 +314,9 @@ section_ :: IdeaDict
 scenario :: IdeaDict
 source :: IdeaDict
 simulation :: IdeaDict
-software :: IdeaDict
 solution :: IdeaDict
 summary :: IdeaDict
 specific :: IdeaDict
-specification :: IdeaDict
 stakeholder :: IdeaDict
 standard :: IdeaDict
 statement :: IdeaDict
@@ -391,7 +385,6 @@ nonfunctionalRequirement :: IdeaDict
 safetyReq :: IdeaDict
 softwareConstraint :: IdeaDict
 softwareDoc :: IdeaDict
-softwareReq :: IdeaDict
 softwareSys :: IdeaDict
 softwareVerif :: IdeaDict
 softwareVAV :: IdeaDict

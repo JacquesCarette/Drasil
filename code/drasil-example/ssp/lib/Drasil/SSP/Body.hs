@@ -9,7 +9,6 @@ import Drasil.SRSDocument
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
-import Drasil.Metadata (inModel)
 import Drasil.Document.Contents (foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 import Drasil.System (SystemKind(Specification), mkSystem)
@@ -18,9 +17,10 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
+import Drasil.Metadata (inModel, software)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, effect, endUser, environment, input_, interest, loss, method_,
-  physical, physics, problem, software, softwareSys, symbol_,
+  physical, physics, problem, softwareSys, symbol_,
   sysCont, system, type_, user, value, variable, datumConstraint)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon',

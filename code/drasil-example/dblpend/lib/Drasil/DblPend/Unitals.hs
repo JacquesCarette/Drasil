@@ -1,6 +1,5 @@
 module Drasil.DblPend.Unitals where
 
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 
 import Language.Drasil
 import qualified Language.Drasil.Development as D
@@ -8,9 +7,11 @@ import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, requirement, srs)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
-  requirement, refBy, refName, srs, typUnc)
+  refBy, refName, typUnc)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,

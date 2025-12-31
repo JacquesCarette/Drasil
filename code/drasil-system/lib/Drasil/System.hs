@@ -24,12 +24,11 @@ import Data.Char (isSpace)
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
-import qualified Data.Drasil.Concepts.Documentation as Doc
 import Drasil.Database (UID, HasUID(..), ChunkDB)
 import Language.Drasil (Quantity, MayHaveUnit, Sentence, Concept,
   Reference, People, IdeaDict, CI, Constrained, ConstQDef, nw, abrv)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
-import Drasil.Metadata (runnableSoftware, website)
+import Drasil.Metadata (runnableSoftware, website, srs, notebook)
 import Utils.Drasil (toPlainName)
 
 -- | Project Example purpose.
@@ -51,9 +50,9 @@ whatsTheBigIdea :: System -> IdeaDict
 whatsTheBigIdea si = whatKind' (_kind si)
   where
     whatKind' :: SystemKind -> IdeaDict
-    whatKind' Specification = nw Doc.srs
+    whatKind' Specification = nw srs
     whatKind' RunnableSoftware = runnableSoftware
-    whatKind' Notebook = nw Doc.notebook
+    whatKind' Notebook = nw notebook
     whatKind' Website = website
 
 -- | Data structure for holding all of the requisite information about a system

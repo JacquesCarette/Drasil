@@ -6,8 +6,9 @@ import qualified Language.Drasil.Development as D
 import Drasil.Document.Contents (foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 
+import Drasil.Metadata (software)
 import Data.Drasil.Concepts.Documentation
-       (environment, software, softwareSys, sysCont, system, user)
+       (environment, softwareSys, sysCont, system, user)
 
 import Drasil.PDController.LabelledContent (gsdSysContextFig)
 import Drasil.PDController.Concepts

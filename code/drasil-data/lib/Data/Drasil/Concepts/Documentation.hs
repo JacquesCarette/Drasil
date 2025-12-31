@@ -12,7 +12,8 @@ import Language.Drasil hiding (organization, year, label, variable)
 import Language.Drasil.Development (NPStruct)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Drasil.Metadata (documentc, softEng, dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata (documentc, notebook, softEng, dataDefn, genDefn, inModel, thModel,
+  softwareReq, software, specification, requirement, srs)
 
 import Data.Drasil.Concepts.Math (graph, unit_)
 
@@ -52,13 +53,11 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, learnObj, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook]
+  likelyChg, learnObj, mg, mis, notApp, notebook, physSyst, requirement, srs, thModel, typUnc,
+  unlikelyChg]
 
-assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst, requirement,
-  mg, mis, notApp, srs, typUnc, sec, notebook, refBy, refName :: CI
-
-softReqSpec :: NP
-softReqSpec = fterms compoundPhraseP1 softwareReq specification
+assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst,
+  mg, mis, notApp, typUnc, sec, refBy, refName :: CI
 
 -- * Common Ideas
 
@@ -73,14 +72,11 @@ likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")            
 learnObj    = commonIdeaWithDict "learnObj"    (cn' "learning objective")                            "LO"      [documentc]
 unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
 physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
-requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]
 mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
 mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
 notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                       "N/A"     []
 typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                           "Uncert." [softEng]
 sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
-srs         = commonIdeaWithDict "srs"         softReqSpec                                           "SRS"     [softEng]
-notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                                      "NB"      [softEng]
 refBy       = commonIdeaWithDict "refBy"       (cn  "referenced by")                                 "RefBy"   [documentc]
 refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]
 
@@ -102,7 +98,7 @@ abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_,
   physics, physical, plan, practice, priority, problem, procedure, product_, project,
   property, purpose, quantity, realtime, review, reference, response,
   result, reviewer, safety, scope, scpOfTheProjS, second_, section_, scenario,
-  source, simulation, software, solution, summary, specific, specification, stakeholder,
+  source, simulation, solution, summary, specific, stakeholder,
   standard, statement, symbol_, system, table_, task, template, term_, terminology,
   theory, traceyGraph, traceyMatrix, type_, uncertainty, user, useCase, validation,
   value, variable, video, verification, year :: IdeaDict
@@ -209,10 +205,8 @@ scenario        = nc "scenario"       (cn'    "scenario"           )
 source          = nc "source"         (cn'    "source"             )
 simulation      = nc "simulation"     (cn'    "simulation"         )
 solution        = nc "solution"       (cn'    "solution"           )
-software        = nc "software"       (cn     "software"           )
 summary         = nc "summary"        (cnIES  "summary"            )
 specific        = nc "specific"       (cn'    "specific"           ) --FIXME: Adjective
-specification   = nc "specification"  (cn'    "specification"      )
 stakeholder     = nc "stakeholder"    (cn'    "stakeholder"        )
 standard        = nc "standard"       (cn'    "standard"           )
 statement       = nc "statement"      (cn'    "statement"          )
@@ -275,7 +269,7 @@ designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
   userCharacteristic, coordinateSystem, datumConstraint, inDatumConstraint,
   outDatumConstraint, functionalRequirement, nonfunctionalRequirement, safetyReq,
-  softwareConstraint, softwareDoc, softwareReq, softwareSys, softwareVerif,
+  softwareConstraint, softwareDoc, softwareSys, softwareVerif,
   softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution,
   physicalSim, productUC, useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: IdeaDict
 
@@ -302,7 +296,6 @@ productUC                    = compoundNC product_ useCase
 safetyReq                    = compoundNC safety requirement
 softwareConstraint           = compoundNC software constraint
 softwareDoc                  = compoundNC software documentation
-softwareReq                  = compoundNCPP software requirement
 softwareSys                  = compoundNC software system
 softwareVAV                  = compoundNC software vav
 softwareVerif                = compoundNC software verification

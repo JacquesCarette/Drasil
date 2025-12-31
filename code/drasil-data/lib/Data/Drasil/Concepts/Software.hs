@@ -3,10 +3,11 @@ module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Metadata (srs)
 
 import Data.Drasil.Concepts.Computation (algorithm, dataStruct, inParam)
 import Data.Drasil.Concepts.Documentation (input_, physical, physicalConstraint,
-  srs, softwareConstraint, quantity)
+  softwareConstraint, quantity)
 import Data.Drasil.Concepts.Math (equation)
 
 -- * Common Software Concepts

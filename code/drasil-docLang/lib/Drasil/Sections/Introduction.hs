@@ -14,14 +14,14 @@ import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 import Drasil.Sentence.Combinators (refineChain)
 import Drasil.Document.Contents (foldlSP, foldlSP_)
 
+import Drasil.Metadata (inModel, thModel, requirement, srs)
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   decision, definition, desSpec, design, designDoc, document, documentation,
   environment, goal, goalStmt, implementation, intReader, model,
-  organization, purpose, requirement, scope, section_, softwareDoc,
-  softwareVAV, srs, theory, user, vavPlan, problem, problemIntro,
+  organization, purpose, scope, section_, softwareDoc,
+  softwareVAV, theory, user, vavPlan, problem, problemIntro,
   information, systemConstraint, template)
-import Drasil.Metadata (inModel, thModel)
 import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
   smithKoothoor2016, smithLai2005, koothoor2013)
 import Data.Drasil.Software.Products
@@ -91,7 +91,7 @@ purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase docume
   S "understand" `S.and_` S "verify the", phrase purpose `S.and_` S "scientific",
   S "basis of" +:+. short proName, S "With the exception of",
   namedRef (SRS.sysCon [] []) (plural systemConstraint) `sC` S "this",
-  short Doc.srs, S "will remain abstract, describing what", phrase problem,
+  short srs, S "will remain abstract, describing what", phrase problem,
   S "is being solved, but not how to solve it"]
 
 -- | Combines 'purpDocPara1' and 'developmentProcessParagraph'.
@@ -175,6 +175,6 @@ orgIntro bottom bottomSec trailingSentence = [foldlSP [
 orgOfDocIntro :: Sentence
 orgOfDocIntro = foldlSent
   [D.toSent $ atStartNP (the Doc.organization), S "of this", phrase document,
-  S "follows the", phrase template, S "for an", short Doc.srs, S "for",
+  S "follows the", phrase template, S "for an", short srs, S "for",
   phrase sciCompS, S "proposed by", foldlList Comma List $
     map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]

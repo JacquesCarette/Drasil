@@ -5,10 +5,11 @@ import Control.Lens ((^.))
 import Language.Drasil
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 
+import Drasil.Metadata (materialEng, dataDefn, genDefn, inModel, thModel,
+  requirement, srs)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt,
-  likelyChg, physSyst, requirement, refBy, refName, srs, typUnc, unlikelyChg)
+  likelyChg, physSyst, refBy, refName, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode, parameter, rightSide)
-import Drasil.Metadata (materialEng, dataDefn, genDefn, inModel, thModel)
 
 con :: [ConceptChunk]
 con = [charging, coil, discharging, gaussDiv,

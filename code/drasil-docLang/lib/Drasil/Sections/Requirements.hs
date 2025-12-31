@@ -25,9 +25,10 @@ import qualified Language.Drasil.Development as D
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import Theory.Drasil (HasOutput(output))
 
+import Drasil.Metadata (software)
 import Data.Drasil.Concepts.Documentation (description, funcReqDom, nonFuncReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, output_, section_,
-  software, symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis)
+  symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS

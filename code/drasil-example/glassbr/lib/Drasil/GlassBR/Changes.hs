@@ -6,8 +6,9 @@ import Language.Drasil hiding (variable)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 
+import Drasil.Metadata (software)
 import Data.Drasil.Concepts.Documentation (condition, goal, input_, likeChgDom,
-  software, system, unlikeChgDom, value, variable)
+  system, unlikeChgDom, value, variable)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (flexure)
 import Drasil.Sentence.Combinators (chgsStart)

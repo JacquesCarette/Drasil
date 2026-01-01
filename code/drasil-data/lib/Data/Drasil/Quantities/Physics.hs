@@ -84,7 +84,7 @@ scalarPos              = uc CP.scalarPos              lP                        
 tension                = uc CP.tension                (vec cT)                                    Real        newton
 time                   = uc CP.time                   lT                                          Real        second
 torque                 = uc CP.torque                 (vec lTau)                                  Real        torqueU
-velocity               = uc CP.velocity               (Concat [vec lV, label "(", lT, label ")"]) Real        velU
+velocity               = uc CP.velocity               (Concat [vec lV, label "(", lT, label ")"]) (Vect Real) velU
 weight                 = uc CP.weight                 cW                                          Real        newton
 fOfGravity             = uc CP.fOfGravity             (sub (vec cF) (vec lG))                     Real        newton
 

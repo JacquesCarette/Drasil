@@ -22,8 +22,6 @@ module Utils.Drasil (
   -- ** Strings
   toPlainName, repUnd,
 
-  -- ** CSV
-  makeCSV
 ) where
 
 import Utils.Drasil.Directory
@@ -31,4 +29,3 @@ import Utils.Drasil.Document
 import Utils.Drasil.English
 import Utils.Drasil.Lists
 import Utils.Drasil.Strings
-import Utils.Drasil.CSV

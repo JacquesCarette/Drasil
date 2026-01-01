@@ -372,7 +372,7 @@ instance Typed Expr Space where
   infer cxt (UnaryOpVN Norm e) = do
     et <- infer cxt e
     assertRealVector et (\sp -> "Vector norm only applies to vectors of real numbers. Received `" ++ sp ++ "`.")
-    pure et
+    pure S.Real
 
   infer cxt (UnaryOpVN Dim e) = do
     et <- infer cxt e

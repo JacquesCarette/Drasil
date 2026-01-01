@@ -2520,13 +2520,11 @@ nw :: Idea c => c -> IdeaDict
 --   comes from the domain of computer science.
 data CI
 
--- | The commonIdea smart constructor requires a chunk id (<a>String</a>),
---   a term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
---   ([<a>UID</a>]).
-commonIdea :: String -> NP -> String -> [UID] -> CI
-
--- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
---   (often a domain).
+-- | The commonIdeaWithDict smart constructor requires a chunk id
+--   (<a>String</a>), a term (<a>NP</a>), an abbreviation (<a>String</a>),
+--   and a list of <a>IdeaDict</a> (should be domains). Note: should be
+--   polymorphic in <a>IdeaDict</a>, but currently causes issues with
+--   ambiguous type variables, punting for now.
 commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
 
 -- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.

@@ -2,29 +2,28 @@
 </span><span id="line-2"></span><span>
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Metadata</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">materialEng</span></span><span class="hs-special">)</span><span>
-</span><span id="line-5"></span><span class="hs-comment">-- import Drasil.SWHS.Concepts (phsChgMtrl)</span><span>
-</span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span class="annot"><a href="Drasil.SWHS.MetaConcepts.html#progName"><span class="hs-identifier hs-type">progName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
-</span><span id="line-8"></span><span id="progName"><span class="annot"><span class="annottext">progName :: CI
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="annot"><a href="Drasil.SWHS.MetaConcepts.html#progName"><span class="hs-identifier hs-type">progName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
+</span><span id="line-7"></span><span id="progName"><span class="annot"><span class="annottext">progName :: CI
 </span><a href="Drasil.SWHS.MetaConcepts.html#progName"><span class="hs-identifier hs-var hs-var">progName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
 </span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;swhsName&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;solar water heating system&quot;</span></span><span>
-</span><span id="line-9"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-8"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;solar water heating systems&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;SWHS&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">materialEng</span></span><span class="hs-special">]</span><span>
-</span><span id="line-10"></span><span>
-</span><span id="line-11"></span><span class="hs-comment">-- HACK: should re-decompose this noun phrase back into components!</span><span>
-</span><span id="line-12"></span><span class="annot"><a href="Drasil.SWHS.MetaConcepts.html#progName%27"><span class="hs-identifier hs-type">progName'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
-</span><span id="line-13"></span><span id="progName%27"><span class="annot"><span class="annottext">progName' :: CI
-</span><a href="Drasil.SWHS.MetaConcepts.html#progName%27"><span class="hs-identifier hs-var hs-var">progName'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [UID] -&gt; CI
-</span><span class="hs-identifier hs-var">commonIdea</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="hs-comment">-- HACK: should re-decompose this noun phrase back into components!</span><span>
+</span><span id="line-11"></span><span class="annot"><a href="Drasil.SWHS.MetaConcepts.html#progName%27"><span class="hs-identifier hs-type">progName'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
+</span><span id="line-12"></span><span id="progName%27"><span class="annot"><span class="annottext">progName' :: CI
+</span><a href="Drasil.SWHS.MetaConcepts.html#progName%27"><span class="hs-identifier hs-var hs-var">progName'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
+</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;swhsPCM&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;solar water heating systems incorporating PCM&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-14"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-13"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;SWHS&quot;</span></span><span>
-</span><span id="line-15"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-16"></span></pre></body></html>
+</span><span id="line-14"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-15"></span></pre></body></html>

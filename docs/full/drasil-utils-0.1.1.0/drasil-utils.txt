@@ -9,13 +9,6 @@
 @package drasil-utils
 @version 0.1.1.0
 
-
--- | Functions for constructing CSV files as a <a>Doc</a>.
-module Utils.Drasil.CSV
-
--- | Creates a CSV file as a <a>Doc</a> from a <a>String</a> matrix.
-makeCSV :: [[String]] -> Doc
-
 module Utils.Drasil.Directory
 
 -- | Creates a directory if it does not already exist (optionally with all
@@ -66,9 +59,6 @@ stringList :: [String] -> String
 
 -- | Functions for working with lists.
 module Utils.Drasil.Lists
-
--- | Check if list has at least 2 elements.
-atLeast2 :: [a] -> Bool
 
 -- | Replaces all elements of a target list that belong to a provided "bad"
 --   input list.
@@ -164,9 +154,6 @@ capitalize :: String -> String
 -- | Comma separated list with "and" before final item.
 stringList :: [String] -> String
 
--- | Check if list has at least 2 elements.
-atLeast2 :: [a] -> Bool
-
 -- | Replaces all elements of a target list that belong to a provided "bad"
 --   input list.
 replaceAll :: Eq a => [a] -> a -> [a] -> [a]
@@ -218,6 +205,3 @@ toPlainName :: String -> String
 
 -- | Replace underscores in a string with periods (<tt>.</tt>).
 repUnd :: String -> String
-
--- | Creates a CSV file as a <a>Doc</a> from a <a>String</a> matrix.
-makeCSV :: [[String]] -> Doc

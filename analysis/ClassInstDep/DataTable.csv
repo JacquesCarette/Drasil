@@ -897,7 +897,6 @@ theory,lib/Theory/Drasil/,Theory.hs,SpaceDefn,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,
 	,	,	,	,	,Theory
 theory,lib/Theory/,Drasil.hs,	,	,	
 	
-utils,lib/Utils/Drasil/,CSV.hs,	,	,	
 utils,lib/Utils/Drasil/,Directory.hs,	,	,	
 utils,lib/Utils/Drasil/,Document.hs,	,	,	
 utils,lib/Utils/Drasil/,English.hs,	,	,	

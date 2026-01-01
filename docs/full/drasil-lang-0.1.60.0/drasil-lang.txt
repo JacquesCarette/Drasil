@@ -4916,7 +4916,9 @@ instance GHC.Classes.Eq Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Unital.UnitalChunk
 
 
--- | Contains the common idea type and respective constructors.
+-- | Contains the common idea type and respective constructors. SHOULD BE
+--   DEPRECATED. Some of the uses (for program name) should have its own
+--   chunk type. Others need examined.
 module Language.Drasil.Chunk.CommonIdea
 
 -- | The common idea (with <tt>NounPhrase</tt>) data type. It must have a
@@ -4930,13 +4932,11 @@ module Language.Drasil.Chunk.CommonIdea
 --   comes from the domain of computer science.
 data CI
 
--- | The commonIdea smart constructor requires a chunk id (<a>String</a>),
---   a term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
---   ([<a>UID</a>]).
-commonIdea :: String -> NP -> String -> [UID] -> CI
-
--- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
---   (often a domain).
+-- | The commonIdeaWithDict smart constructor requires a chunk id
+--   (<a>String</a>), a term (<a>NP</a>), an abbreviation (<a>String</a>),
+--   and a list of <a>IdeaDict</a> (should be domains). Note: should be
+--   polymorphic in <a>IdeaDict</a>, but currently causes issues with
+--   ambiguous type variables, punting for now.
 commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
 
 -- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
@@ -6429,13 +6429,11 @@ nw :: Idea c => c -> IdeaDict
 --   comes from the domain of computer science.
 data CI
 
--- | The commonIdea smart constructor requires a chunk id (<a>String</a>),
---   a term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
---   ([<a>UID</a>]).
-commonIdea :: String -> NP -> String -> [UID] -> CI
-
--- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
---   (often a domain).
+-- | The commonIdeaWithDict smart constructor requires a chunk id
+--   (<a>String</a>), a term (<a>NP</a>), an abbreviation (<a>String</a>),
+--   and a list of <a>IdeaDict</a> (should be domains). Note: should be
+--   polymorphic in <a>IdeaDict</a>, but currently causes issues with
+--   ambiguous type variables, punting for now.
 commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
 
 -- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.

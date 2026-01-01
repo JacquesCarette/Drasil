@@ -1939,10 +1939,6 @@ makeRequirements :: PrintingInformation -> Doc
 -- | Render a title <a>Sentence</a>.
 mkTitle :: PrintingInformation -> Sentence -> Doc
 
--- | Map the original filepaths of assets to the location mdBook generator
---   needs.
-assetMat :: PrintingInformation -> [[Filepath]]
-
 
 -- | Defines .json printers to generate jupyter notebooks. For more
 --   information on each of the helper functions, please view the <a>source

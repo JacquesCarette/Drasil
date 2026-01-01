@@ -207,7 +207,6 @@ unlikelyChg :: CI
 physSyst :: CI
 mg :: CI
 mis :: CI
-notApp :: CI
 typUnc :: CI
 sec :: CI
 refBy :: CI
@@ -283,6 +282,7 @@ module_ :: IdeaDict
 model :: IdeaDict
 name_ :: IdeaDict
 nonfunctional :: IdeaDict
+notApp :: IdeaDict
 object :: IdeaDict
 offShelf :: IdeaDict
 open :: IdeaDict

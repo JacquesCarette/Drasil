@@ -4548,8 +4548,6 @@ digraph alltypes {
 	}
 	subgraph drails {
 	}
-	subgraph csv {
-	}
 	subgraph directory {
 	}
 	subgraph document {

@@ -1,6 +1,4 @@
 digraph alltypes {
-	subgraph csv {
-	}
 	subgraph directory {
 	}
 	subgraph document {

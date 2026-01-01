@@ -15,6 +15,7 @@ import Drasil.Database.SearchTools (findAllDefinedQuantities)
 import Language.Drasil
 import Drasil.System (System, HasSystem (instModels, dataDefns, systemdb))
 
+-- Note: this should be externally configurable wrt verbosity!
 typeCheckSI :: System -> IO ()
 typeCheckSI sys = do
     let ims = sys ^. instModels
@@ -23,9 +24,9 @@ typeCheckSI sys = do
     -- build a variable context (a map of UIDs to "Space"s [types])
     let cxt = M.fromList $ map (\x -> (x ^. uid, x ^. typ)) $ findAllDefinedQuantities chks
 
-    -- dump out the list of variables
-    putStr "Symbol Table: "
-    print $ M.toList cxt
+    -- dump out the list of variables (commented out for now)
+    -- putStr "Symbol Table: "
+    -- print $ M.toList cxt
 
     putStrLn "=====[ Start type checking ]====="
     let
@@ -48,11 +49,12 @@ typeCheckSI sys = do
     let chkdd = map (second (map (uncurry (check cxt)))) chkd
 
     -- format 'ok' messages and 'type error' messages, as applicable
-    let formattedChkd :: [Either (String, [Either TypeError Space]) String]
+    let formattedChkd :: [Either (String, [Either TypeError Space]) ()]
         formattedChkd = map
                           (\(t, tcs) -> if any isLeft tcs
                             then Left ("`" ++ show t ++ "` exposes ill-typed expressions!", filter isLeft tcs)
-                            else pure $ "`" ++ show t ++ "` OK!")
+                            else Right () -- pure $ "`" ++ show t ++ "` OK!"
+                          )
                           chkdd
 
     let errConsumer s = do
@@ -64,7 +66,7 @@ typeCheckSI sys = do
               putStrLn tMsg
               mapM_ errConsumer (lefts tcs)
             )
-            putStrLn
+            (\ () -> pure () )
       ) formattedChkd
     putStrLn "=====[ Finished type checking ]====="
 

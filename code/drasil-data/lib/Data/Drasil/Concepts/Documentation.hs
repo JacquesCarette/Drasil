@@ -31,7 +31,7 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
   individual, information, input_, instance_, intReader, interest, interface,
   introduction, issue, item, label, library, limitation, literacy, loss,
   material_, mainIdea, message, method_, methAndAnls, model, module_, name_,
-  nonfunctional, nonfunctionalRequirement, object, offShelf,
+  nonfunctional, nonfunctionalRequirement, notApp, object, offShelf,
   offShelfSolution, open, orgOfDoc, organization, output_, physical,
   physicalConstraint, physicalProperty, physicalSim, physicalSystem, physics,
   plan, practice, priority, problem, problemDescription, problemIntro,
@@ -53,11 +53,11 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, learnObj, mg, mis, notApp, notebook, physSyst, requirement, srs, thModel, typUnc,
+  likelyChg, learnObj, mg, mis, notebook, physSyst, requirement, srs, thModel, typUnc,
   unlikelyChg]
 
 assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst,
-  mg, mis, notApp, typUnc, sec, refBy, refName :: CI
+  mg, mis, typUnc, sec, refBy, refName :: CI
 
 -- * Common Ideas
 
@@ -74,7 +74,6 @@ unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")          
 physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
 mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
 mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
-notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                       "N/A"     []
 typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                           "Uncert." [softEng]
 sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
 refBy       = commonIdeaWithDict "refBy"       (cn  "referenced by")                                 "RefBy"   [documentc]
@@ -94,7 +93,7 @@ abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_,
   functional, game, general, goal, guide, implementation, individual, information,
   interest, interface, input_, instance_, intReader, introduction, issue, item,
   loss, label, library, limitation, literacy, material_, mainIdea, message, method_, module_,
-  model, name_, nonfunctional, object, offShelf, open, organization, output_,
+  model, name_, nonfunctional, notApp, object, offShelf, open, organization, output_,
   physics, physical, plan, practice, priority, problem, procedure, product_, project,
   property, purpose, quantity, realtime, review, reference, response,
   result, reviewer, safety, scope, scpOfTheProjS, second_, section_, scenario,
@@ -231,6 +230,8 @@ verification    = nc "verification"   (cn'    "verification"       )
 video           = nc "video"          (cn'    "video"              )
 year            = nc "year"           (cn'    "year"               )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
+
+notApp          = mkIdea "notApp" (nounPhraseSP "not applicable")   (Just "N/A")
 
 abbAcc, caseProb, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc,
   refMat, reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,

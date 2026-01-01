@@ -76,7 +76,7 @@ module Language.Drasil (
   , nc, ncUID, IdeaDict , mkIdea
   , nw -- bad name (historical)
   -- Language.Drasil.Chunk.CommonIdea
-  , CI, commonIdea, commonIdeaWithDict, prependAbrv
+  , CI, commonIdeaWithDict, prependAbrv
 
   -- *** Concepts
   -- Language.Drasil.Chunk.Concept.Core

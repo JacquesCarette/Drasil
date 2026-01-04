@@ -9,7 +9,7 @@ import qualified Data.Map as Map
 import Drasil.Database (UID, HasUID(..))
 import Drasil.Database.SearchTools (defResolve', findAllConcInsts, DomDefn(domain))
 import Language.Drasil
-import Drasil.System hiding (purpose)
+import Drasil.System (System, systemdb, traceLookup, refbyTable, traceTable)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
   item, reference, traceyMatrix)
@@ -20,7 +20,7 @@ import Drasil.Sentence.Combinators (makeTMatrix, showingCxnBw)
 
 -- * Types
 
--- | Helper type that takes two sets of 'UID's and a 'ChunkDB'.
+-- | Helper type that takes a set of 'UID's and a 'ChunkDB'.
 type TraceViewCat = [UID] -> System -> [UID]
 
 -- * Main Functions

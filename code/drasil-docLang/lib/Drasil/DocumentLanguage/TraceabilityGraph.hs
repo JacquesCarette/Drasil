@@ -1,11 +1,15 @@
 {-# LANGUAGE PostfixOperators, TupleSections #-}
 -- | Defines functions to create traceability graphs in SRS documents.
-module Drasil.DocumentLanguage.TraceabilityGraph where
+module Drasil.DocumentLanguage.TraceabilityGraph
+  (traceMGF, traceyGraphGetRefs, genTraceGraphLabCons, mkGraphInfo, resourcePath) where
+
+import Data.Char (toLower)
+import Data.Maybe (fromMaybe)
 
 import Language.Drasil
-import Drasil.Database (UID, find, isRegistered, (+++.), mkUid)
+import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, ChunkDB)
 import Drasil.Database.SearchTools (termResolve', shortForm)
-import Drasil.System hiding (purpose)
+import Drasil.System (System, systemdb)
 import Control.Lens ((^.))
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat, traceMReferees, traceMReferrers,
   traceMColumns, layoutUIDs, traceMIntro)
@@ -14,13 +18,11 @@ import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvChanges)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Printers (GraphInfo(..), NodeFamily(..))
-import Data.Maybe (fromMaybe)
 import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, reference, purpose, traceyMatrix)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Char (toLower)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
-import Theory.Drasil
+import Theory.Drasil (DataDefinition, InstanceModel, GenDefn, TheoryModel)
 
 -- * Main Functions
 
@@ -69,13 +71,16 @@ mkGraphInfo si = GI {
 -- | Gets the node family of a graph based on the given section
 -- and system information. Also applies a given colour to the node family.
 mkGraphNodes :: TraceViewCat -> System -> String -> NodeFamily
-mkGraphNodes entry si col = NF {nodeUIDs = nodeContents, nodeLabels = map (checkUIDRefAdd si) nodeContents, nfLabel = checkNodeContents nodeContents, nfColour = col}
+mkGraphNodes entry si col = NF {nodeUIDs = nodeContents,
+  nodeLabels = map (checkUIDRefAdd s) nodeContents, nfLabel = checkNodeContents nodeContents,
+  nfColour = col}
     where
         checkNodeContents :: [UID] -> String
         checkNodeContents [] = ""
-        checkNodeContents (x:_) = checkUIDAbbrev si x
+        checkNodeContents (x:_) = checkUIDAbbrev s x
         nodeContents = traceMReferees entryF si
         entryF = layoutUIDs [entry] si
+        s = si ^. systemdb
 
 -- | Creates the graph edges based on the relation of the first list of sections to the second.
 -- Also needs the system information. Return value is of the form (Section, [Dependencies]).
@@ -93,16 +98,15 @@ makeTGraph rowName rows cols = zip rowName [zipFTable' x cols | x <- rows]
     zipFTable' content = filter (`elem` content)
 
 -- | Checker for uids by finding if the 'UID' is in one of the possible data
--- sets contained in the 'System' database.
-checkUID :: UID -> System -> UID
-checkUID t si
+-- sets contained in the 'ChunkDB' database.
+checkUID :: UID -> ChunkDB -> UID
+checkUID t s
   | isRegistered t s = t
   | otherwise = error $ show t ++ "Caught."
-  where s = si ^. systemdb
 
 -- | Similar to 'checkUID' but prepends domain for labelling.
-checkUIDAbbrev :: System -> UID -> String
-checkUIDAbbrev si t
+checkUIDAbbrev :: ChunkDB -> UID -> String
+checkUIDAbbrev s t
   | Just x <- find t s :: Maybe DataDefinition  = abrv x
   | Just x <- find t s :: Maybe InstanceModel   = abrv x
   | Just x <- find t s :: Maybe GenDefn         = abrv x
@@ -111,11 +115,10 @@ checkUIDAbbrev si t
   | Just _ <- find t s :: Maybe LabelledContent = show t
   | Just _ <- find t s :: Maybe Citation        = ""
   | otherwise = error $ show t ++ "Caught."
-  where s = si ^. systemdb
 
 -- | Similar to 'checkUID' but gets reference addresses for display.
-checkUIDRefAdd :: System -> UID -> String
-checkUIDRefAdd si t
+checkUIDRefAdd :: ChunkDB -> UID -> String
+checkUIDRefAdd s t
   | Just x <- find t s :: Maybe DataDefinition  = getAdd $ getRefAdd x
   | Just x <- find t s :: Maybe InstanceModel   = getAdd $ getRefAdd x
   | Just x <- find t s :: Maybe GenDefn         = getAdd $ getRefAdd x
@@ -124,12 +127,11 @@ checkUIDRefAdd si t
   | Just _ <- find t s :: Maybe LabelledContent = show t
   | Just _ <- find t s :: Maybe Citation        = ""
   | otherwise                                   = error $ show t ++ "Caught."
-  where s = si ^. systemdb
 
 -- | Helper that finds the header of a traceability matrix.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.
 traceGHeader :: (System -> [UID]) -> System -> [UID]
-traceGHeader f c = map (`checkUID` c) $ f c
+traceGHeader f c = map (`checkUID` (c ^. systemdb)) $ f c
 
 -- | Helper that finds the headers of the traceability matrix rows.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.

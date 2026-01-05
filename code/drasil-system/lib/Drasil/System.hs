@@ -74,6 +74,7 @@ data System where
   , _scope        :: Scope
   , _motivation   :: Motivation
   , _quants       :: [DefinedQuantityDict]
+  -- ^ The list of quantities to be shown in generated SRS documents.
   , _theoryModels :: [TheoryModel]
   , _genDefns     :: [GenDefn]
   , _dataDefns    :: [DataDefinition]

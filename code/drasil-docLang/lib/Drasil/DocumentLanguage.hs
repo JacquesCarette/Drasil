@@ -35,7 +35,7 @@ import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 
-import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, _quants,
+import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem (..),
   _authors, refTable, refbyTable, traceTable, systemdb, sysName, programName)
 import Drasil.GetChunks (ccss, ccss', citeDB)
 
@@ -220,19 +220,12 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
     mkSubRef SI {_systemdb = db} (TUnits' con f) =
         SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
-    -- FIXME: _quants = v should be removed from this binding and symbols should
-    -- be acquired solely through document traversal, however #1658. If we do
-    -- just the doc traversal here, then we lose some symbols which only appear
-    -- in a table in GlassBR. If we grab symbols from tables (by removing the `isVar`)
-    -- in ExtractDocDesc, then the passes which extract `DefinedQuantityDict`s will
-    -- error out because some of the symbols in tables are only `QuantityDict`s, and thus
-    -- missing a `Concept`.
-    mkSubRef SI {_quants = v, _systemdb = cdb} (TSymb con) =
+    mkSubRef sys@SI {_systemdb = cdb} (TSymb con) =
       SRS.tOfSymb
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational)
-                (nub $ map dqdWr v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
+                (nub $ sys ^. quants ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
                 atStart] []
     mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con

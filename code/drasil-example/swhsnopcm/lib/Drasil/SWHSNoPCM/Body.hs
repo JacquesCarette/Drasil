@@ -150,9 +150,6 @@ si :: System
 si = mkSystem
   progName Specification [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
-  -- FIXME: Everything after (and including) \\ should be removed when
-  -- #1658 is resolved. Basically, _quants is used here, but
-  -- tau does not appear in the document and thus should not be displayed.
   ((map dqdWr unconstrained ++ symbolsWCodeSymbols) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   []

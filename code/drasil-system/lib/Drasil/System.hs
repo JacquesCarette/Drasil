@@ -25,7 +25,7 @@ import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, HasUID(..), ChunkDB)
-import Language.Drasil (Quantity, MayHaveUnit, Sentence, Concept,
+import Language.Drasil (Quantity, MayHaveUnit, Sentence, Concept, DefinedQuantityDict,
   Reference, People, IdeaDict, CI, Constrained, ConstQDef, nw, abrv)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Drasil.Metadata (runnableSoftware, website, srs, notebook)
@@ -62,8 +62,7 @@ data System where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
- SI :: (Quantity e, Eq e, MayHaveUnit e, Concept e,
-  Quantity h, MayHaveUnit h, Concept h,
+ SI :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
   { _sysName      :: CI
@@ -74,7 +73,7 @@ data System where
   , _background   :: Background
   , _scope        :: Scope
   , _motivation   :: Motivation
-  , _quants       :: [e]
+  , _quants       :: [DefinedQuantityDict]
   , _theoryModels :: [TheoryModel]
   , _genDefns     :: [GenDefn]
   , _dataDefns    :: [DataDefinition]
@@ -93,12 +92,12 @@ data System where
 
 makeClassy ''System
 
-mkSystem :: (Quantity e, Eq e, MayHaveUnit e, Concept e,
-  Quantity h, MayHaveUnit h, Concept h,
+mkSystem :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
   CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
-    [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
+    [DefinedQuantityDict] ->
+    [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
     [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
     System
 mkSystem nm sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js cqds db refs

@@ -21,6 +21,15 @@ List of refactorings that should be done to the code base.
 - [ ] change Data.Drasil.ExternalLibraries.ODELibraries to not go via Language.Drasil.Code (PR #4582)
 - [ ] move Language.Drasil.Code.Imperative.GOOL to drasil-GOOL
 
+## drasil-gool
+- [ ] redesign L-values ([#4398](../issues/4398))
+- [ ] remove global `GOOLState` and replace with renderer-local state
+- [ ] investigate RendererSym, and figure out what needs to be changed/removed (see [#4398](../issues/4398) and [#4404](../issues/4404))
+- [ ] resolve issues with some parts of GOOL living in drasil-code
+- [ ] for list, set, etc. APIs, differentiate explicitly between pure and impure functions/methods.
+- [ ] investigate duplicate typeclasses between InterfaceX and RendererClassesX (e.g. NumericExpression and Unary/BinaryOpSym)
+- [ ] anything else in [#4404](../issues/4404)
+
 ## drasil-build
 - [ ] rename package drasil-buildLang
 

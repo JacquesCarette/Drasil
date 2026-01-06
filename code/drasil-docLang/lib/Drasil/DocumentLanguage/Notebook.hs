@@ -21,7 +21,7 @@ import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, exam
 mkNb :: LsnDesc -> (IdeaDict -> CI -> Sentence) -> System -> Document
 mkNb dd comb si@SI { _authors = authors } =
   Notebook (whatsTheBigIdea si `comb` (si ^. sysName)) (foldlList Comma List $ map (S . name) authors) $
-  mkSections si dd where
+  mkSections si dd
 
 -- | Helper for creating the notebook sections.
 mkSections :: System -> LsnDesc -> [Section]

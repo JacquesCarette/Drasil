@@ -18,7 +18,8 @@ import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 
 import Build.Drasil (genMake)
-import Drasil.DocLang (mkGraphInfo, LsnDecl, mkNb)
+import Drasil.DocLang (mkGraphInfo)
+import Drasil.DocumentLanguage.Notebook (LsnDesc, mkNb)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Stage(Equational), Document, Space(..))
@@ -74,7 +75,7 @@ exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcsMods = do
   exportCodeZoo syst chcsMods
 
 -- | Generate a JupyterNotebook-based lesson plan.
-exportLessonPlan :: System -> LsnDecl -> String -> IO ()
+exportLessonPlan :: System -> LsnDesc -> String -> IO ()
 exportLessonPlan syst nbDecl lsnFileName = do
   let nb = mkNb nbDecl S.forT syst
       printSetting = piSys (syst ^. systemdb) (syst ^. refTable) Equational defaultConfiguration

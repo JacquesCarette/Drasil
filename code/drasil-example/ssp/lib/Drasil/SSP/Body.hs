@@ -63,7 +63,7 @@ si = mkSystem
   symbols
   tMods generalDefinitions dataDefs iMods
   []
-  inputs outputs constrained []
+  inputs (map dqdWr outputs) constrained []
   symbMap allRefs
 
 mkSRS :: SRSDecl

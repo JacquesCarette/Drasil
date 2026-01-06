@@ -236,7 +236,7 @@ aspectRatioMax = dqd' (dcc "aspectRatioMax"
 -----------------
 
 constrained :: [ConstrConcept]
-constrained = map cnstrw' inputConstraints ++ map cnstrw' outputs
+constrained = map cnstrw' inputConstraints ++ outputs
 
 -- Input Constraints
 inputs :: [DefinedQuantityDict]

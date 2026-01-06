@@ -156,7 +156,7 @@ si = mkSystem
   ((map dqdWr unconstrained ++ symbolsWCodeSymbols) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   []
-  inputs outputs
+  inputs (map dqdWr outputs)
   (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
   symbMap allRefs
 

@@ -63,7 +63,7 @@ si = mkSystem
   symbols
   tMods genDefs SWHS.dataDefs iMods
   []
-  inputs outputs constrained specParamValList
+  inputs (map dqdWr outputs) constrained specParamValList
   symbMap allRefs
 
 purp :: Sentence

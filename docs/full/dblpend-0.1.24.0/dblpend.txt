@@ -88,7 +88,6 @@ angularAccel_1 :: UnitalChunk
 angularAccel_2 :: UnitalChunk
 tension_1 :: UnitalChunk
 tension_2 :: UnitalChunk
-unitless :: [DefinedQuantityDict]
 lRod :: Symbol
 label1 :: Symbol
 label2 :: Symbol

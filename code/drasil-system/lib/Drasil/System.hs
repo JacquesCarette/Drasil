@@ -62,8 +62,7 @@ data System where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
- SI :: (Quantity e, Eq e, MayHaveUnit e, Concept e,
-  Quantity h, MayHaveUnit h, Concept h,
+ SI :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
   { _sysName      :: CI
@@ -74,7 +73,6 @@ data System where
   , _background   :: Background
   , _scope        :: Scope
   , _motivation   :: Motivation
-  , _quants       :: [e]
   , _theoryModels :: [TheoryModel]
   , _genDefns     :: [GenDefn]
   , _dataDefns    :: [DataDefinition]
@@ -93,16 +91,15 @@ data System where
 
 makeClassy ''System
 
-mkSystem :: (Quantity e, Eq e, MayHaveUnit e, Concept e,
-  Quantity h, MayHaveUnit h, Concept h,
+mkSystem :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
   CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
-    [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
+    [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
     [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
     System
-mkSystem nm sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js cqds db refs
-  = SI nm progName sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js
+mkSystem nm sk ppl prps bkgrd scp motive tms gds dds ims ss hs is js cqds db refs
+  = SI nm progName sk ppl prps bkgrd scp motive tms gds dds ims ss hs is js
       cqds db refsMap mempty mempty
   where
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs

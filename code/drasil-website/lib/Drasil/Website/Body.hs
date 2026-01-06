@@ -66,7 +66,6 @@ si :: FolderLocation -> System
 si fl = mkSystem
   webName Website []
   [] [] [] []
-  ([] :: [DefinedQuantityDict])
   [] [] [] []
   []
   ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []

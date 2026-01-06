@@ -47,7 +47,7 @@ import Drasil.GlassBR.IMods (iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
-import Drasil.GlassBR.Symbols (symbolsForSymbolTable, thisSymbols)
+import Drasil.GlassBR.Symbols (thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
@@ -57,7 +57,6 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
 si :: System
 si = mkSystem progName Specification
   [nikitha, spencerSmith] [purp] [background] [scope] []
-  symbolsForSymbolTable
   tMods [] GB.dataDefs iMods
   configFp
   inputs outputs constrained constants

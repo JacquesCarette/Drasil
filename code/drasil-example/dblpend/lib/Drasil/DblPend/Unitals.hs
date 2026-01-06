@@ -17,14 +17,13 @@ import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity
   angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, time)
 import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.Concepts.Math as CM (angle, xDir, yDir)
-import Data.Drasil.Quantities.Math as QM (unitVect, pi_)
 import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject, horizontalPos,
   verticalPos, horizontalVel, verticalVel, horizontalAccel, verticalAccel)
 import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
 
 symbols:: [DefinedQuantityDict]
-symbols = map dqdWr unitalChunks ++ unitless ++ [dqdWr pendDisAngle] ++ map dqdWr constants
+symbols = map dqdWr unitalChunks ++ [dqdWr pendDisAngle] ++ map dqdWr constants
 
 acronyms :: [CI]
 acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
@@ -149,9 +148,6 @@ pendDisAngle_1 = uc' "theta_1" (angle `ofThe` firstRod)
 pendDisAngle_2 = uc' "theta_2" (angle `ofThe` secondRod)
         (D.toSent $ phraseNP (angle `the_ofThe` secondRod))
         (sub lTheta label2) Real radian
-
-unitless :: [DefinedQuantityDict]
-unitless = [QM.unitVect, QM.pi_]
 
 lRod, label1, label2, labelx, labely, initial, lTheta':: Symbol
 lRod = label "rod"

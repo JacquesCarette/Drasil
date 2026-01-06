@@ -700,94 +700,19 @@ module Drasil.DocumentLanguage.TraceabilityGraph
 --   link and a figure for convenience.
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> String -> [Section] -> Section
 
--- | Generalized traceability graph introduction: appends references to the
---   traceability graphs in <a>Sentence</a> form and wraps in
---   <a>Contents</a>. Usually references the five graphs as defined in
---   <a>GraphInfo</a>.
-traceGIntro :: [UID] -> [Sentence] -> [UnlabelledContent]
-
--- | Extracts traceability graph inforomation from filled-in <a>System</a>.
-mkGraphInfo :: System -> GraphInfo
-
--- | Gets the node family of a graph based on the given section and system
---   information. Also applies a given colour to the node family.
-mkGraphNodes :: TraceViewCat -> System -> String -> NodeFamily
-
--- | Creates the graph edges based on the relation of the first list of
---   sections to the second. Also needs the system information. Return
---   value is of the form (Section, [Dependencies]).
-mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> System -> [(UID, [UID])]
-
--- | Helper for making graph edges. Taken from Utils.Drasil's traceability
---   matrix relation finder. But, instead of marking <a>X</a> on two
---   related ideas, it makes them an edge.
-makeTGraph :: [UID] -> [[UID]] -> [UID] -> [(UID, [UID])]
-
--- | Checker for uids by finding if the <a>UID</a> is in one of the
---   possible data sets contained in the <a>System</a> database.
-checkUID :: UID -> System -> UID
-
--- | Similar to <a>checkUID</a> but prepends domain for labelling.
-checkUIDAbbrev :: System -> UID -> String
-
--- | Similar to <a>checkUID</a> but gets reference addresses for display.
-checkUIDRefAdd :: System -> UID -> String
-
--- | Helper that finds the header of a traceability matrix. However, here
---   we use this to get a list of <a>UID</a>s for a traceability graph
---   instead.
-traceGHeader :: (System -> [UID]) -> System -> [UID]
-
--- | Helper that finds the headers of the traceability matrix rows.
---   However, here we use this to get a list of <a>UID</a>s for a
---   traceability graph instead. This is then used to create the graph
---   edges.
-traceGRowHeader :: ([UID] -> [UID]) -> System -> [UID]
-
--- | Helper that makes references of the form "<tt>reference</tt> shows the
---   dependencies of <tt>something</tt>". Only takes a reference <a>UID</a>
---   instead of a <a>Reference</a>.
-graphShows :: UID -> Sentence -> Sentence
-
--- | Description of the <tt>AllvsAll</tt> traceability graph.
-allvsallDesc :: Sentence
-
--- | Create a list of traceability graph references.
-traceGLst :: Contents
-
--- | The Traceability Graph contents.
-traceGCon :: String -> [Contents]
+-- | Create references to traceability graphs given an example name.
+--   Primarily used for reference database in examples.
+traceyGraphGetRefs :: String -> [Reference]
 
 -- | Generate the <a>LabelledContent</a> chunks, specialized to a specific
 --   example (and its path).
 genTraceGraphLabCons :: String -> [LabelledContent]
 
--- | Generates traceability graphs as figures on an SRS document.
-traceGraphLC :: String -> FilePath -> UID -> LabelledContent
-
--- | Traceability graph file names.
-traceGFiles :: [String]
-
--- | Traceabiliy graph reference <a>UID</a>s.
-traceGUIDs :: [UID]
-
--- | Create reference paths to traceability graphs given an example name.
---   For <tt>.pdf</tt> links
-traceyGraphPaths :: String -> [String]
-
--- | Create references to traceability graphs given an example name.
---   Primarily used for reference database in examples.
-traceyGraphGetRefs :: String -> [Reference]
-
--- | Gets the path of a traceability graph given an example folder name and
---   the graph name. For <tt>.png</tt> files
-traceyGraphPath :: String -> String -> String
+-- | Extracts traceability graph inforomation from filled-in <a>System</a>.
+mkGraphInfo :: System -> GraphInfo
 
 -- | Traceability graphs reference path.
 resourcePath :: String
-
--- | Helper to create a list of traceability graph references.
-folderList' :: [ItemType]
 
 
 -- | Re-export document language types and functions for easy use in other

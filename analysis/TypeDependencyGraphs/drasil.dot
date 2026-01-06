@@ -1354,6 +1354,10 @@ digraph alltypes {
 		Fields	[shape=oval, color=red2, label="Fields"];
 		Fields -> Field;
 		}
+		subgraph traceviewcat{
+		TraceViewCat	[shape=oval, color=red2, label="TraceViewCat"];
+		TraceViewCat -> UIDSystemUID;
+		}
 		subgraph modrow{
 		ModRow	[shape=oval, color=red2, label="ModRow"];
 		ModRow -> StringContents;
@@ -1362,10 +1366,6 @@ digraph alltypes {
 	subgraph traceabilitygraph {
 	}
 	subgraph traceabilitymatrix {
-		subgraph traceviewcat{
-		TraceViewCat	[shape=oval, color=red2, label="TraceViewCat"];
-		TraceViewCat -> UIDSystemUID;
-		}
 	}
 	subgraph units {
 	}

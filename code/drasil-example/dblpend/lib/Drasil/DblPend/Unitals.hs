@@ -174,7 +174,7 @@ inConstraints :: [UncertQ]
 inConstraints = map (`uq` defaultUncrt) [lenRodCon_1, lenRodCon_2, massCon_1, massCon_2]
 
 outConstraints :: [UncertQ]
-outConstraints = map (`uq` defaultUncrt) [pendDisAngleCon_1, pendDisAngleCon_2]
+outConstraints = [pendDisAngle `uq` defaultUncrt]
 
 pendDisAngle :: ConstrConcept
 pendDisAngle = cuc' "pendDisAngle"

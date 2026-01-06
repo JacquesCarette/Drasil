@@ -3,7 +3,7 @@
 -- Namely, for theory models, general definitions, data definitions, and instance models.
 module Drasil.DocumentLanguage.Definitions (
   -- * Types
-  Field(..), Fields, InclUnits(..), Verbosity(..),
+  Field(..), Fields, InclUnits(..), Verbosity(..), TraceViewCat,
   -- * Constructors
   ddefn, derivation, gdefn,
   instanceModel, tmodel,
@@ -52,6 +52,11 @@ data Verbosity = Verbose  -- ^ Full Descriptions.
 -- | Determines whether to include or ignore units.
 data InclUnits = IncludeUnits -- ^ In description field (for other symbols).
                | IgnoreUnits
+
+-- * Types
+
+-- | Helper type that takes a set of 'UID's and a 'ChunkDB'.
+type TraceViewCat = [UID] -> System -> [UID]
 
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a 'RelationConcept' (called automatically by 'SCSSub' program).

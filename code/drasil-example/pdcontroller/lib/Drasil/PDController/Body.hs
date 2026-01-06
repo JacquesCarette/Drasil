@@ -86,7 +86,7 @@ si :: System
 si = mkSystem
   progName Specification [naveen]
   [purp] [background] [scope] [motivation]
-  symbolsWCodeSymbols
+  symbols
   -- FIXME: ^ This should be 'symbols', but changing it removes 2 symbols from
   -- the table of symbols in the SRS!
   theoreticalModels genDefns dataDefinitions instanceModels

@@ -31,7 +31,6 @@ resolver: lts-22.44
 packages:
 - .
 - ../drasil-build
-- ../drasil-codeLang
 - ../drasil-data
 - ../drasil-database
 - ../drasil-gool

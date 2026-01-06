@@ -43,7 +43,7 @@ symbols
      dqdInvLaplaceTransform, dqdPropGain, dqdDerivGain, dqdSetPointTD, dqdSetPointFD,
      dqdProcessVariableTD, dqdProcessVariableFD,
      dqdProcessErrorFD, dqdDerivativeControlFD, dqdPropControlFD,
-     dqdTransferFunctionFD, dqdCtrlVarFD, dqdStepTime, dqdSimTime,
+     dqdCtrlVarFD, dqdStepTime, dqdSimTime,
      dqdDampingCoeff, dqdStiffnessCoeff]
 
 dqdLaplaceTransform, dqdFreqDomain, dqdFxnTDomain,
@@ -51,7 +51,7 @@ dqdLaplaceTransform, dqdFreqDomain, dqdFxnTDomain,
                     dqdSetPointTD, dqdSetPointFD, dqdProcessVariableTD,
                     dqdProcessVariableFD, dqdProcessErrorFD,
                     dqdPropControlFD, dqdDerivativeControlFD,
-                    dqdTransferFunctionFD, dqdCtrlVarFD, dqdStepTime,
+                    dqdCtrlVarFD, dqdStepTime,
                     dqdSimTime, dqdDampingCoeff, dqdStiffnessCoeff, dqdAbsTol, dqdRelTol :: DefinedQuantityDict
 
 inputs :: [DefinedQuantityDict]
@@ -138,9 +138,6 @@ dqdPropControlFD  = dqdNoUnit (dcc "dqdPropControlFD" (propControl `inThe`
 
 dqdDerivativeControlFD = dqdNoUnit (dcc "dqdDerivativeControlFD" (derControl `inThe`
   ccFrequencyDomain) "the derivative control in the frequency domain") symDS Real
-
-dqdTransferFunctionFD = dqdNoUnit (dcc "dqdTransferFunctionFD" (ccTransferFxn `inThe`
-  ccFrequencyDomain) "the transfer function ") symHS Real
 
 dqdCtrlVarFD = dqdNoUnit (dcc "dqdCtrlVarFD" (controlVariable `inThe`
   ccFrequencyDomain) "the control variable in the frequency domain") symCS Real

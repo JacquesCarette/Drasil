@@ -13,7 +13,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({E\_{\text{s}}}\\)   |Process Error in the frequency domain       |--               |
 |\\({F\_{\text{s}}}\\)   |Laplace Transform of a function             |--               |
 |\\({f\_{\text{t}}}\\)   |Function in the time domain                 |--               |
-|\\({H\_{\text{s}}}\\)   |Transfer Function in the frequency domain   |--               |
 |\\({K\_{\text{d}}}\\)   |Derivative Gain                             |--               |
 |\\({K\_{\text{p}}}\\)   |Proportional Gain                           |--               |
 |\\(k\\)                 |Stiffness coefficient                       |\\({\text{s}}\\) |

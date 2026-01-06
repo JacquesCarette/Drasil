@@ -12,7 +12,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({c\_{\text{t}}}\\)   |Control Variable in the time domain         |--               |
 |\\({D\_{\text{s}}}\\)   |Derivative control in the frequency domain  |--               |
 |\\({E\_{\text{s}}}\\)   |Process Error in the frequency domain       |--               |
-|\\({e\_{\text{t}}}\\)   |Process Error in the time domain            |--               |
 |\\({F\_{\text{s}}}\\)   |Laplace Transform of a function             |--               |
 |\\({f\_{\text{t}}}\\)   |Function in the time domain                 |--               |
 |\\({H\_{\text{s}}}\\)   |Transfer Function in the frequency domain   |--               |

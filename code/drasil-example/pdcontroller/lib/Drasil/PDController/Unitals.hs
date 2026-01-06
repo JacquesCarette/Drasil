@@ -41,7 +41,7 @@ symbols :: [DefinedQuantityDict]
 symbols
   = [dqdLaplaceTransform, dqdFreqDomain, dqdFxnTDomain,
      dqdInvLaplaceTransform, dqdPropGain, dqdDerivGain, dqdSetPointTD, dqdSetPointFD,
-     dqdProcessVariableTD, dqdProcessVariableFD, dqdProcessErrorTD,
+     dqdProcessVariableTD, dqdProcessVariableFD,
      dqdProcessErrorFD, dqdDerivativeControlFD, dqdPropControlFD,
      dqdTransferFunctionFD, dqdCtrlVarTD, dqdCtrlVarFD, dqdStepTime, dqdSimTime,
      dqdDampingCoeff, dqdStiffnessCoeff]
@@ -49,7 +49,7 @@ symbols
 dqdLaplaceTransform, dqdFreqDomain, dqdFxnTDomain,
                     dqdInvLaplaceTransform, dqdPropGain, dqdDerivGain,
                     dqdSetPointTD, dqdSetPointFD, dqdProcessVariableTD,
-                    dqdProcessVariableFD, dqdProcessErrorTD, dqdProcessErrorFD,
+                    dqdProcessVariableFD, dqdProcessErrorFD,
                     dqdPropControlFD, dqdDerivativeControlFD,
                     dqdTransferFunctionFD, dqdCtrlVarFD, dqdCtrlVarTD, dqdStepTime,
                     dqdSimTime, dqdDampingCoeff, dqdStiffnessCoeff, dqdAbsTol, dqdRelTol :: DefinedQuantityDict
@@ -129,11 +129,6 @@ dqdSetPointFD
 
 dqdProcessVariableFD = dqdNoUnit (dcc "dqdProcessVariableFD"
   (processVariable `inThe` ccFrequencyDomain) "the process variable in the frequency domain") symYS Real
-
-dqdProcessErrorTD
-  = dqdNoUnit (dcc "dqdProcessErrorTD"
-      (pn "Process Error in the time domain")
-      "the process error in the time domain") symET Real
 
 dqdProcessErrorFD = dqdNoUnit (dcc "dqdProcessErrorFD" (processError `inThe`
   ccFrequencyDomain) "the process error in the time domain") symES Real

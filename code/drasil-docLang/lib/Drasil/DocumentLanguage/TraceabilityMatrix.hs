@@ -13,15 +13,10 @@ import Drasil.System (System, systemdb, traceLookup, refbyTable, traceTable)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
   item, reference, traceyMatrix)
-import Drasil.DocumentLanguage.Definitions (helpToRefField)
+import Drasil.DocumentLanguage.Definitions (helpToRefField, TraceViewCat)
 import Drasil.Sentence.Combinators (makeTMatrix, showingCxnBw)
 
 -- FIXME: Everything in this file needs to be re-written for readability.
-
--- * Types
-
--- | Helper type that takes a set of 'UID's and a 'ChunkDB'.
-type TraceViewCat = [UID] -> System -> [UID]
 
 -- * Main Functions
 

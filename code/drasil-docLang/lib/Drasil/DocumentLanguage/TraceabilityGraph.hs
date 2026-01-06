@@ -11,7 +11,8 @@ import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, ChunkDB)
 import Drasil.Database.SearchTools (termResolve', shortForm)
 import Drasil.System (System, systemdb)
 import Control.Lens ((^.))
-import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat, traceMReferees, traceMReferrers,
+import Drasil.DocumentLanguage.Definitions (TraceViewCat)
+import Drasil.DocumentLanguage.TraceabilityMatrix (traceMReferees, traceMReferrers,
   traceMColumns, layoutUIDs, traceMIntro)
 import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,

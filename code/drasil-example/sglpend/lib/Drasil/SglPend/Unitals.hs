@@ -60,11 +60,11 @@ unitless = [QM.pi_]
 -----------------------
 lenRodCons, pendDisplacementAngleOutCons, angAccelOutCons, initialPendAngleCons :: ConstrConcept
 
-inConstraints :: [UncertQ]
-inConstraints = map (`uq` defaultUncrt) [lenRodCons, initialPendAngleCons]
+inConstraints :: [ConstrConcept]
+inConstraints = [lenRodCons, initialPendAngleCons]
 
-outConstraints :: [UncertQ]
-outConstraints = map (`uq` defaultUncrt) [angAccelOutCons, pendDisplacementAngleOutCons]
+outConstraints :: [ConstrConcept]
+outConstraints = [angAccelOutCons, pendDisplacementAngleOutCons]
 
 lenRodCons                   = constrained' lenRod                [gtZeroConstr] (dbl 44.2)
 initialPendAngleCons         = constrained' initialPendAngle      [gtZeroConstr] (dbl 2.1)

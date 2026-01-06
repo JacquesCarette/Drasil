@@ -316,14 +316,12 @@ lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   angVeloCons, forceCons, torqueCons, veloCons, restCoefCons, veloOutCons,
   angVeloOutCons, orientOutCons, posOutCons :: ConstrConcept
 
-inputConstraints :: [UncertQ]
-inputConstraints = map (`uq` defaultUncrt)
-  [lengthCons, massCons, mmntOfInCons, gravAccelCons, orientCons,
+inputConstraints :: [ConstrConcept]
+inputConstraints = [lengthCons, massCons, mmntOfInCons, gravAccelCons, orientCons,
   veloCons, angVeloCons, forceCons, torqueCons, restCoefCons, posCons]
 
-outputConstraints :: [UncertQ]
-outputConstraints = map (`uq` defaultUncrt)
-  [posOutCons, veloOutCons, orientOutCons, angVeloOutCons]
+outputConstraints :: [ConstrConcept]
+outputConstraints = [posOutCons, veloOutCons, orientOutCons, angVeloOutCons]
 
 lengthCons     = constrained' QPP.len               [gtZeroConstr] (dbl 44.2)
 massCons       = constrained' QPP.mass              [gtZeroConstr] (dbl 56.2)

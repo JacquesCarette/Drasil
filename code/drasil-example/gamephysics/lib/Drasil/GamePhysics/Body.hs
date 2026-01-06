@@ -70,7 +70,7 @@ mkSRS = [TableOfContents,
         , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-        , Constraints EmptyS inputConstraints
+        , Constraints EmptyS (map (`uq` defaultUncrt) inputConstraints)
         , CorrSolnPpties outputConstraints []
         ]
       ],

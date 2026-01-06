@@ -25,8 +25,8 @@ import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, HasUID(..), ChunkDB)
-import Language.Drasil (Quantity, MayHaveUnit, Sentence, Concept, DefinedQuantityDict,
-  Reference, People, IdeaDict, CI, Constrained, ConstQDef, nw, abrv)
+import Language.Drasil (Quantity, MayHaveUnit, Sentence, Concept, ConstrConcept,
+  Reference, People, IdeaDict, CI, ConstQDef, nw, abrv, DefinedQuantityDict)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Drasil.Metadata (runnableSoftware, website, srs, notebook)
 import Utils.Drasil (toPlainName)
@@ -62,8 +62,7 @@ data System where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
- SI :: (Quantity e, Eq e, MayHaveUnit e, Concept e,
-  HasUID j, Constrained j) =>
+ SI :: (Quantity e, Eq e, MayHaveUnit e, Concept e) =>
   { _sysName      :: CI
   , _programName  :: String
   , _kind         :: SystemKind
@@ -80,7 +79,7 @@ data System where
   , _configFiles  :: [String]
   , _inputs       :: [DefinedQuantityDict]
   , _outputs      :: [DefinedQuantityDict]
-  , _constraints  :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
+  , _constraints  :: [ConstrConcept] --TODO: Add SymbolMap OR enough info to gen SymbolMap
   , _constants    :: [ConstQDef]
   , _systemdb     :: ChunkDB
     -- FIXME: Hacks to be removed once 'Reference's are rebuilt.
@@ -88,15 +87,13 @@ data System where
   , _refbyTable   :: M.Map UID [UID]
   , _traceTable   :: M.Map UID [UID]
   } -> System
-
 makeClassy ''System
 
-mkSystem :: (Quantity e, Eq e, MayHaveUnit e, Concept e,
-  HasUID j, Constrained j) =>
+mkSystem :: (Quantity e, Eq e, MayHaveUnit e, Concept e) =>
   CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
     [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
     [String] ->
-    [DefinedQuantityDict] -> [DefinedQuantityDict] -> [j] ->
+    [DefinedQuantityDict] -> [DefinedQuantityDict] -> [ConstrConcept] ->
     [ConstQDef] -> ChunkDB -> [Reference] ->
     System
 mkSystem nm sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js cqds db refs

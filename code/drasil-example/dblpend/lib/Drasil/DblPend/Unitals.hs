@@ -165,16 +165,16 @@ lenRodCon_1, lenRodCon_2, pendDisAngleCon_1, pendDisAngleCon_2, massCon_1, massC
   :: ConstrConcept
 lenRodCon_1       = constrained' lenRod_1 [gtZeroConstr] (dbl 1)
 lenRodCon_2       = constrained' lenRod_2 [gtZeroConstr] (dbl 1)
-pendDisAngleCon_1 = constrained' pendDisAngle_1 [gtZeroConstr] (dbl 30)
+pendDisAngleCon_1 = constrained' pendDisAngle_1 [gtZeroConstr] (dbl 30) -- FIXME: These are "reasonable values," but they're not used in the SRS?
 pendDisAngleCon_2 = constrained' pendDisAngle_2 [gtZeroConstr] (dbl 30)
 massCon_1         = constrained' massObj_1 [gtZeroConstr] (dbl 0.5)
 massCon_2         = constrained' massObj_2 [gtZeroConstr] (dbl 0.5)
 
-inConstraints :: [UncertQ]
-inConstraints = map (`uq` defaultUncrt) [lenRodCon_1, lenRodCon_2, massCon_1, massCon_2]
+inConstraints :: [ConstrConcept]
+inConstraints = [lenRodCon_1, lenRodCon_2, massCon_1, massCon_2]
 
-outConstraints :: [UncertQ]
-outConstraints = map (`uq` defaultUncrt) [pendDisAngleCon_1, pendDisAngleCon_2]
+outConstraints :: [ConstrConcept]
+outConstraints = [pendDisAngleCon_1, pendDisAngleCon_2]
 
 pendDisAngle :: ConstrConcept
 pendDisAngle = cuc' "pendDisAngle"

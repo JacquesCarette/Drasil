@@ -80,7 +80,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
         , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-        , Constraints EmptyS inConstraints
+        , Constraints EmptyS (map (`uq` defaultUncrt) inConstraints)
         , CorrSolnPpties outConstraints []
         ]
       ],

@@ -9,7 +9,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\(\mathit{AbsTol}\\)   |Absolute Tolerance                          |--               |
 |\\({C\_{\text{s}}}\\)   |Control Variable in the frequency domain    |--               |
 |\\(c\\)                 |Damping coefficient of the spring           |--               |
-|\\({c\_{\text{t}}}\\)   |Control Variable in the time domain         |--               |
 |\\({D\_{\text{s}}}\\)   |Derivative control in the frequency domain  |--               |
 |\\({E\_{\text{s}}}\\)   |Process Error in the frequency domain       |--               |
 |\\({F\_{\text{s}}}\\)   |Laplace Transform of a function             |--               |

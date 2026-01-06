@@ -335,4 +335,3 @@ refNameDom    = ccs (mkIdea "refNameDom"    (refName ^. term)                  $
 srsDomains :: [ConceptChunk]
 srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom,
   assumpDom, chgProbDom, likeChgDom, unlikeChgDom, refByDom, refNameDom]
-

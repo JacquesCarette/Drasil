@@ -128,7 +128,7 @@ si = mkSystem progName Specification
   [purp] [background] [scope] [motivation]
   symbols tMods genDefns dataDefs iMods
   []
-  inputs outputs (map cnstrw' constrained) constants
+  inputs outputs constrained constants
   symbMap allRefs
 
 purp :: Sentence

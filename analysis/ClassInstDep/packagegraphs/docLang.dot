@@ -8,7 +8,6 @@ CaseProb	[shape=oval, color=turquoise4, label="CaseProb"];
 Example	[shape=oval, color=turquoise4, label="Example"];
 Smmry	[shape=oval, color=turquoise4, label="Smmry"];
 Apndx	[shape=oval, color=turquoise4, label="Apndx"];
-LsnChapter	[shape=oval, color=turquoise4, label="LsnChapter"];
 DocSection	[shape=oval, color=turquoise4, label="DocSection"];
 RefSec	[shape=oval, color=turquoise4, label="RefSec"];
 RefTab	[shape=oval, color=turquoise4, label="RefTab"];

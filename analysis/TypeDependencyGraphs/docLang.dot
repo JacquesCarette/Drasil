@@ -50,27 +50,6 @@ digraph alltypes {
 		LsnDesc -> LsnChapter;
 		}
 	}
-	subgraph documentlanguage {
-	}
-	subgraph lndecls {
-		subgraph lsnchapter{
-		LsnChapter	[shape=oval, color=darkviolet, label="LsnChapter"];
-		LsnChapter -> Intro;
-		LsnChapter -> LearnObj;
-		LsnChapter -> Review;
-		LsnChapter -> CaseProb;
-		LsnChapter -> Example;
-		LsnChapter -> Smmry;
-		LsnChapter -> Apndx;
-		LsnChapter -> System;
-		LsnChapter -> LsnDecl;
-		LsnChapter -> LsnDesc;
-		}
-		subgraph lsndecl{
-		LsnDecl	[shape=oval, color=red2, label="LsnDecl"];
-		LsnDecl -> LsnChapter;
-		}
-	}
 	subgraph core {
 		subgraph docsection{
 		DocSection	[shape=oval, color=darkviolet, label="DocSection"];
@@ -287,6 +266,8 @@ digraph alltypes {
 		ModRow	[shape=oval, color=red2, label="ModRow"];
 		ModRow -> StringContents;
 		}
+	}
+	subgraph notebook {
 	}
 	subgraph traceabilitygraph {
 	}

@@ -9,93 +9,6 @@
 @package drasil-docLang
 @version 0.1.26.0
 
-module Drasil.DocLang.Notebook
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
---   should be fixed once we have a more concrete idea of the notebook
---   structure TODO: Remove [Section] since the structure of lesson plans
---   should not be nested maybe add a new type Chapter for lesson plans?
-intro :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
---   should be fixed once we have a more concrete idea of the notebook
---   structure TODO: Remove [Section] since the structure of lesson plans
---   should not be nested maybe add a new type Chapter for lesson plans?
-learnObj :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
---   should be fixed once we have a more concrete idea of the notebook
---   structure TODO: Remove [Section] since the structure of lesson plans
---   should not be nested maybe add a new type Chapter for lesson plans?
-review :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
---   should be fixed once we have a more concrete idea of the notebook
---   structure TODO: Remove [Section] since the structure of lesson plans
---   should not be nested maybe add a new type Chapter for lesson plans?
-caseProb :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
---   should be fixed once we have a more concrete idea of the notebook
---   structure TODO: Remove [Section] since the structure of lesson plans
---   should not be nested maybe add a new type Chapter for lesson plans?
-summary :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
---   should be fixed once we have a more concrete idea of the notebook
---   structure TODO: Remove [Section] since the structure of lesson plans
---   should not be nested maybe add a new type Chapter for lesson plans?
-appendix :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
---   should be fixed once we have a more concrete idea of the notebook
---   structure TODO: Remove [Section] since the structure of lesson plans
---   should not be nested maybe add a new type Chapter for lesson plans?
-reference :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
---   should be fixed once we have a more concrete idea of the notebook
---   structure TODO: Remove [Section] since the structure of lesson plans
---   should not be nested maybe add a new type Chapter for lesson plans?
-example :: [Contents] -> [Section] -> Section
-sectionReferences :: [Reference]
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-introLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-learnObjLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-docPurposeLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-referenceLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-reviewLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-caseProbLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-appendixLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-summaryLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-exampleLabel :: Reference
-
 
 -- | Holds all section constructors and labels for creating SRS documents.
 module Drasil.DocLang.SRS
@@ -465,6 +378,31 @@ toSentence :: MayHaveUnit u => u -> Sentence
 
 -- | Similar to <a>toSentence</a>, except default value is "Unitless".
 toSentenceUnitless :: MayHaveUnit u => u -> Sentence
+
+
+-- | Document language for lesson plan notebooks.
+module Drasil.DocumentLanguage.Notebook
+
+-- | Creates a notebook from a lesson description and system information.
+mkNb :: LsnDesc -> (IdeaDict -> CI -> Sentence) -> System -> Document
+type LsnDesc = [LsnChapter]
+data LsnChapter
+Intro :: Intro -> LsnChapter
+LearnObj :: LearnObj -> LsnChapter
+Review :: Review -> LsnChapter
+CaseProb :: CaseProb -> LsnChapter
+Example :: Example -> LsnChapter
+Smmry :: Smmry -> LsnChapter
+BibSec :: LsnChapter
+Apndx :: Apndx -> LsnChapter
+newtype LearnObj
+LrnObjProg :: [Contents] -> LearnObj
+newtype Review
+ReviewProg :: [Contents] -> Review
+newtype CaseProb
+CaseProbProg :: [Contents] -> CaseProb
+newtype Example
+ExampleProg :: [Contents] -> Example
 
 
 -- | Miscellaneous utility functions for use in various parts of document
@@ -1014,39 +952,6 @@ mkDoc :: System -> SRSDecl -> (IdeaDict -> CI -> Sentence) -> (Document, System)
 -- | Recursively find all references in a section (meant for getting at
 --   <a>LabelledContent</a>).
 findAllRefs :: Section -> [Reference]
-
--- | A Lesson Plan notebook declaration is made up of all necessary
---   chapters (<a>LsnChapter</a>s).
-type LsnDecl = [LsnChapter]
-
--- | Contains all the different chapters needed for a notebook lesson plan
---   (<a>LsnDecl</a>).
-data LsnChapter
-Intro :: Intro -> LsnChapter
-LearnObj :: LearnObj -> LsnChapter
-Review :: Review -> LsnChapter
-CaseProb :: CaseProb -> LsnChapter
-Example :: Example -> LsnChapter
-Smmry :: Smmry -> LsnChapter
-BibSec :: LsnChapter
-Apndx :: Apndx -> LsnChapter
-newtype Intro
-IntrodProg :: [Contents] -> Intro
-newtype LearnObj
-LrnObjProg :: [Contents] -> LearnObj
-newtype Review
-ReviewProg :: [Contents] -> Review
-newtype CaseProb
-CaseProbProg :: [Contents] -> CaseProb
-newtype Example
-ExampleProg :: [Contents] -> Example
-newtype Smmry
-SmmryProg :: [Contents] -> Smmry
-newtype Apndx
-ApndxProg :: [Contents] -> Apndx
-
--- | Creates a notebook from a lesson description and system information.
-mkNb :: LsnDecl -> (IdeaDict -> CI -> Sentence) -> System -> Document
 
 -- | Fields that should be displayed in definitions.
 data Field

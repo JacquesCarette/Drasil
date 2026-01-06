@@ -64,7 +64,7 @@ docChoices :: DocType -> [Format] -> DocChoices
 exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO ()
 
 -- | Generate a JupyterNotebook-based lesson plan.
-exportLessonPlan :: System -> LsnDecl -> String -> IO ()
+exportLessonPlan :: System -> LsnDesc -> String -> IO ()
 
 -- | Generate a "website" (HTML file) softifact.
 exportWebsite :: System -> Document -> Filename -> IO ()

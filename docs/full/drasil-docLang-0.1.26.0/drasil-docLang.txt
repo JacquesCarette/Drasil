@@ -495,30 +495,6 @@ DLPlate :: (LsnChapter -> f LsnChapter) -> (Intro -> f Intro) -> (LearnObj -> f 
 instance Data.Generics.Multiplate.Multiplate Drasil.DocumentLanguage.Notebook.Core.DLPlate
 
 
--- | Lesson plan notebook section declaration types and functions.
-module Drasil.DocumentLanguage.Notebook.LsnDecl
-
--- | A Lesson Plan notebook declaration is made up of all necessary
---   chapters (<a>LsnChapter</a>s).
-type LsnDecl = [LsnChapter]
-
--- | Contains all the different chapters needed for a notebook lesson plan
---   (<a>LsnDecl</a>).
-data LsnChapter
-Intro :: Intro -> LsnChapter
-LearnObj :: LearnObj -> LsnChapter
-Review :: Review -> LsnChapter
-CaseProb :: CaseProb -> LsnChapter
-Example :: Example -> LsnChapter
-Smmry :: Smmry -> LsnChapter
-BibSec :: LsnChapter
-Apndx :: Apndx -> LsnChapter
-
--- | Creates the lesson description (translates <a>LsnDecl</a> into a more
---   usable form for generating documents).
-mkLsnDesc :: System -> LsnDecl -> LsnDesc
-
-
 -- | Helpers for dealing with formatting of Units
 module Drasil.DocumentLanguage.Units
 
@@ -558,10 +534,28 @@ citeDB :: System -> BibRef
 
 
 -- | Document language for lesson plan notebooks.
-module Drasil.DocumentLanguage.Notebook.DocumentLanguage
+module Drasil.DocumentLanguage.Notebook
 
 -- | Creates a notebook from a lesson description and system information.
-mkNb :: LsnDecl -> (IdeaDict -> CI -> Sentence) -> System -> Document
+mkNb :: LsnDesc -> (IdeaDict -> CI -> Sentence) -> System -> Document
+type LsnDesc = [LsnChapter]
+data LsnChapter
+Intro :: Intro -> LsnChapter
+LearnObj :: LearnObj -> LsnChapter
+Review :: Review -> LsnChapter
+CaseProb :: CaseProb -> LsnChapter
+Example :: Example -> LsnChapter
+Smmry :: Smmry -> LsnChapter
+BibSec :: LsnChapter
+Apndx :: Apndx -> LsnChapter
+newtype LearnObj
+LrnObjProg :: [Contents] -> LearnObj
+newtype Review
+ReviewProg :: [Contents] -> Review
+newtype CaseProb
+CaseProbProg :: [Contents] -> CaseProb
+newtype Example
+ExampleProg :: [Contents] -> Example
 
 
 -- | Defines functions used in the Reference Material section.
@@ -2163,39 +2157,6 @@ mkDoc :: System -> SRSDecl -> (IdeaDict -> CI -> Sentence) -> (Document, System)
 -- | Recursively find all references in a section (meant for getting at
 --   <a>LabelledContent</a>).
 findAllRefs :: Section -> [Reference]
-
--- | A Lesson Plan notebook declaration is made up of all necessary
---   chapters (<a>LsnChapter</a>s).
-type LsnDecl = [LsnChapter]
-
--- | Contains all the different chapters needed for a notebook lesson plan
---   (<a>LsnDecl</a>).
-data LsnChapter
-Intro :: Intro -> LsnChapter
-LearnObj :: LearnObj -> LsnChapter
-Review :: Review -> LsnChapter
-CaseProb :: CaseProb -> LsnChapter
-Example :: Example -> LsnChapter
-Smmry :: Smmry -> LsnChapter
-BibSec :: LsnChapter
-Apndx :: Apndx -> LsnChapter
-newtype Intro
-IntrodProg :: [Contents] -> Intro
-newtype LearnObj
-LrnObjProg :: [Contents] -> LearnObj
-newtype Review
-ReviewProg :: [Contents] -> Review
-newtype CaseProb
-CaseProbProg :: [Contents] -> CaseProb
-newtype Example
-ExampleProg :: [Contents] -> Example
-newtype Smmry
-SmmryProg :: [Contents] -> Smmry
-newtype Apndx
-ApndxProg :: [Contents] -> Apndx
-
--- | Creates a notebook from a lesson description and system information.
-mkNb :: LsnDecl -> (IdeaDict -> CI -> Sentence) -> System -> Document
 
 -- | Fields that should be displayed in definitions.
 data Field

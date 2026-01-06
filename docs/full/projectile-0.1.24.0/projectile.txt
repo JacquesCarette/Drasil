@@ -190,7 +190,7 @@ foot :: UnitDefn
 accelinftU :: UnitDefn
 
 module Drasil.Projectile.Lesson.Body
-nbDecl :: LsnDecl
+nbDecl :: LsnDesc
 si :: System
 symbMap :: ChunkDB
 ideaDicts :: [IdeaDict]

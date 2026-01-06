@@ -24,7 +24,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({p\_{\text{y}1}}\\)               |Vertical position of the first object       |\\({\text{m}}\\)                     |
 |\\({p\_{\text{y}2}}\\)               |Vertical position of the second object      |\\({\text{m}}\\)                     |
 |\\(\boldsymbol{p}\text{(}t\text{)}\\)|Position                                    |\\({\text{m}}\\)                     |
-|\\(\boldsymbol{T}\\)                 |Tension                                     |\\({\text{N}}\\)                     |
 |\\({\boldsymbol{T}\_{1}}\\)          |Tension of the first object                 |\\({\text{N}}\\)                     |
 |\\({\boldsymbol{T}\_{2}}\\)          |Tension of the second object                |\\({\text{N}}\\)                     |
 |\\(t\\)                              |Time                                        |\\({\text{s}}\\)                     |

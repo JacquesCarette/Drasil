@@ -14,7 +14,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, fo
   angularFrequency, frequency, period)
 import Data.Drasil.Concepts.Physics (pendulum)
 import Data.Drasil.Concepts.Math as CM (angle, iAngle)
-import Data.Drasil.Quantities.Math as QM (unitVect, pi_)
+import Data.Drasil.Quantities.Math as QM (pi_)
 import Drasil.DblPend.Concepts (rod)
 import Drasil.DblPend.Unitals (lRod)
 
@@ -53,7 +53,7 @@ initialPendAngle = uc' "initialPendAngle" (cn "initial pendulum angle")
         (sub lTheta lI) Real radian
 
 unitless :: [DefinedQuantityDict]
-unitless = [QM.unitVect, QM.pi_]
+unitless = [QM.pi_]
 
 -----------------------
 -- CONSTRAINT CHUNKS --

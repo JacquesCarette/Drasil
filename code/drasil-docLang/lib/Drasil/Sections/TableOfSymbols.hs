@@ -21,12 +21,11 @@ import Utils.Drasil (mkTable)
 -- | Table of Symbols creation function. Takes in a 'Stage', 'Symbol's, and something that turns
 -- the symbols into a 'Sentence'. Filters non-symbol chunks and checks for duplicate symbol error.
 table :: (Quantity s, MayHaveUnit s) => Stage -> [s] -> (s -> Sentence) -> LabelledContent
-table _ [] _ = llcc symbTableRef $ Paragraph EmptyS
+table _ [] _ = mkRawLC (Paragraph EmptyS) symbTableRef
 table st ls f
-    |noDuplicate = llcc symbTableRef $
-      Table [atStart symbol_, atStart description, atStart' unit_]
+    |noDuplicate = mkRawLC (Table [atStart symbol_, atStart description, atStart' unit_]
       (mkTable [P . (`symbol` st), f, toSentence] filteredChunks)
-      (titleize' tOfSymb) True
+      (titleize' tOfSymb) True) symbTableRef
     | otherwise = error errorMessage
     where
         filteredChunks = filter (`hasStageSymbol`st) ls

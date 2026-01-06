@@ -1,12 +1,9 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPend.Body where
 
-import Control.Lens ((^.))
-
-import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D
-import Theory.Drasil (TheoryModel, output)
+import Theory.Drasil (TheoryModel)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
@@ -16,12 +13,13 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
+import Drasil.Metadata (inModel, software)
 import Data.Drasil.People (dong)
 import Data.Drasil.Concepts.Computation (inDatum)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
-  physical, sysCont, software, softwareConstraint, softwareSys,
+  physical, sysCont, softwareConstraint, softwareSys,
   system, user, analysis)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
 import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
@@ -30,6 +28,8 @@ import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
+import Drasil.Document.Contents (foldlSP, foldlSPCol)
+import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 
 import Drasil.DblPend.Assumptions (assumpDouble)
 import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject)
@@ -97,7 +97,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
 si :: System
 si = mkSystem progName Specification [dong]
   [purp] [background] [scope] [motivation]
-  symbolsAll
+  symbols
   tMods genDefns dataDefs iMods
   []
   inputs outputs inConstraints
@@ -116,10 +116,18 @@ background = foldlSent_ [D.toSent $ phraseNP (a_ pendulum), S "consists" `S.of_`
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
   S "highly sensitive to initial conditions"]
 
--- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is currently added to symbolsAll automatically as it is used to create new chunks with pendDisAngle's UID suffixed in ODELibraries.hs.
--- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
-symbolsAll :: [DefinedQuantityDict]
-symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
+-- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is currently
+-- added to symbolsWCodeSymbols automatically as it is used to create new chunks
+-- with pendDisAngle's UID suffixed in ODELibraries.hs. The correct way to fix
+-- this is to add the chunks when they are created in the original functions.
+-- See #4298 and #4301.
+--
+-- At another level, this highlights a 'level boundary.' In the `ChunkDB`
+-- necessary to build the SRS, we only need 'symbols', but for code generation,
+-- we need all specification-level symbols along with the code-only symbols.
+-- These symbols should be added another way.
+symbolsWCodeSymbols :: [DefinedQuantityDict]
+symbolsWCodeSymbols = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
   ++ odeInfoChunks dblPenODEInfo
 
 ideaDicts :: [IdeaDict]
@@ -145,7 +153,7 @@ conceptChunks =
   [cw len]
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
+symbMap = cdb symbolsWCodeSymbols ideaDicts conceptChunks []
   dataDefs iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
 
 -- | Holds all references and links used in the document.

@@ -22,30 +22,34 @@ module Drasil.Sections.SpecificSystemDescription (
   tmStub, ddStub, gdStub, imStub, pdStub
 ) where
 
+import Control.Lens ((^.), over)
+import Data.Maybe
+
+-- rest of Drasil
 import Drasil.Database (UID, HasUID(..), showUID)
+import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
+  datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
+  element, general, goalStmt, information, input_, limitation, model, output_,
+  physical, physicalConstraint, physicalSystem, physSyst, problem,
+  problemDescription, propOfCorSol, purpose, quantity, scope,
+  section_, softwareConstraint, solutionCharacteristic, symbol_,
+  system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
+import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
+import Data.Drasil.Concepts.Math (equation, parameter)
+import Drasil.Metadata (inModel, thModel, dataDefn, genDefn, requirement, specification)
+import Drasil.System (System)
 import Language.Drasil hiding (variable)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
-import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 
-import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
-  datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
-  element, general, goalStmt, information, input_, limitation, model, output_,
-  physical, physicalConstraint, physicalSystem, physSyst, problem,
-  problemDescription, propOfCorSol, purpose, quantity, requirement, scope,
-  section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
-  system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
-import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
-import Data.Drasil.Concepts.Math (equation, parameter)
-import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
-import Drasil.System (System)
+-- local
+import Drasil.Document.Contents (enumBulletU, enumSimpleU, foldlSP, foldlSP_)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
-
-import Control.Lens ((^.), over)
-import Data.Maybe
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.Sentence.Combinators (mkTableFromColumns, fmtU, typUncr)
 
 -- Takes the system and subsections.
 -- | Specific System Description section builder.
@@ -245,7 +249,7 @@ auxSpecSent = foldlSent [S "The", namedRef (SRS.valsOfAuxCons [] []) $ S "auxili
 
 -- | Creates a Data Constraints table. Takes in Columns, reference, and a label.
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> UID -> Sentence -> LabelledContent
-mkDataConstraintTable col rf lab = llcc (makeTabRef' rf) $ uncurry Table
+mkDataConstraintTable col rf lab = llccTab' rf $ uncurry Table
   (mkTableFromColumns col) lab True
 
 -- | Creates the input Data Constraints Table.
@@ -255,8 +259,8 @@ inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qls
             (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
             (titleize' softwareConstraint, map fmtSfwr $ sortBySymbol qlst),
             (S "Typical Value", map (\q -> fmtU (eS $ express $ getRVal q) q) $ sortBySymbol qlst),
-            (short typUnc, map typUncr $ sortBySymbol qlst)] (inDatumConstraint ^. uid) $
-            titleize' inDatumConstraint
+            (short typUnc, map (\q -> typUncr (uncVal q, uncPrec q)) $ sortBySymbol qlst)]
+            (inDatumConstraint ^. uid) $ titleize' inDatumConstraint
   where
     getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ showUID c) (c ^. reasVal)
 

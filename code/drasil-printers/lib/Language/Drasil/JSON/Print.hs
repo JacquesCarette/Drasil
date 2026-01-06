@@ -9,7 +9,6 @@ import qualified Language.Drasil as L
 
 import Language.Drasil.Format (DocType(Lesson))
 
-import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
   Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
@@ -17,7 +16,6 @@ import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.Helpers (sqbrac, unders, hat)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
@@ -33,9 +31,9 @@ import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, co
 -- | Generate a python notebook document (using json).
 -- build : build the SRS document in JSON format
 -- build': build the general Jupyter Notbook document
-genJupyter :: PrintingInformation -> DocType -> L.Document -> Doc
-genJupyter sm Lesson doc = build  (makeDocument sm doc)
-genJupyter sm _      doc = build' (makeDocument sm doc)
+genJupyter :: DocType -> Document -> Doc
+genJupyter Lesson doc = build  doc
+genJupyter _      doc = build' doc
 
 -- | Build the JSON Document, called by genJSON
 build :: Document -> Doc

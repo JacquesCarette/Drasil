@@ -10,6 +10,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
+import Drasil.Sentence.Combinators (fromSources)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, value, consVals)
 import Data.Drasil.Concepts.Math (cartesian, xAxis, xDir, yAxis, yDir, direction, positive)

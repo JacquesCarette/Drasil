@@ -9,7 +9,13 @@ import Language.Drasil (DomainDesc(..), RealInterval(..), Inclusive(..),
   RTopology(..), LiteralC(int))
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development (Literal(..))
-import Language.Drasil.ModelExpr.Development
+import Language.Drasil.ModelExpr.Development (
+    ModelExpr(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..)
+  , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..)
+  , SpaceBinOp(..), StatBinOp(..), VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..)
+  , AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..)
+  , DerivType(..)
+  , mePrec, precC, precB, precA)
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)

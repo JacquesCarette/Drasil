@@ -2,28 +2,29 @@
 module Drasil.Projectile.GenDefs (genDefns, posVecGD) where
 
 import Prelude hiding (cos, sin)
-import Language.Drasil
-import qualified Language.Drasil.Development as D
-import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, equationalModel')
-import Utils.Drasil (weave)
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
 
+import Data.Drasil.Citations (hibbeler2004)
 import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (cartesian, equation, vector)
 import Data.Drasil.Concepts.Physics (oneD, rectilinear, twoD, motion)
-
 import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
   iVel, ixVel, iyVel, position, scalarAccel, scalarPos,
   time, velocity, positionVec, speed)
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
+import Drasil.Sentence.Combinators (fromReplace)
+import Language.Drasil
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Language.Drasil.Development as D
+import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, equationalModel', Derivation,
+  mkDerivName)
+import Utils.Drasil (weave)
 
 import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import Drasil.Projectile.Concepts (rectVel)
 import qualified Drasil.Projectile.Derivations as D
 import qualified Drasil.Projectile.Expressions as E
-import Data.Drasil.Citations (hibbeler2004)
 import Drasil.Projectile.Unitals (projSpeed, projPos)
 
 genDefns :: [GenDefn]

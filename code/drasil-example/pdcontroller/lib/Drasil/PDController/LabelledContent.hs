@@ -13,13 +13,13 @@ labelledContent = [gsdSysContextFig, sysFigure]
 
 gsdSysContextFig :: LabelledContent
 gsdSysContextFig
-  = llcc (makeFigRef "systemContextDiag") $
+  = llccFig "systemContextDiag" $
       fig (titleize sysCont)
         "../../../../datafiles/pdcontroller/Fig_SystemContext.png"
 
 sysFigure :: LabelledContent
 sysFigure
-  = llcc (makeFigRef "pidSysDiagram") $
+  = llccFig "pidSysDiagram" $
       figWithWidth (D.toSent $ atStartNP $ the physicalSystem)
         "../../../../datafiles/pdcontroller/Fig_PDController.png"
         70

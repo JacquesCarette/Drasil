@@ -40,11 +40,11 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption
   charOfIR, client, customer, consVals, datumConstraint, functionalRequirement,
   generalSystemDescription, goalStmt, indPRCase, introduction, likelyChg,
   unlikelyChg, nonfunctionalRequirement, offShelfSolution, orgOfDoc, physSyst,
-  prodUCTable, problemDescription, propOfCorSol, prpsOfDoc, reference, requirement,
+  prodUCTable, problemDescription, propOfCorSol, prpsOfDoc, reference,
   scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription,
   stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
   tOfCont, tOfSymb, tOfUnit, userCharacteristic, refMat, abbAcc)
-import qualified Drasil.Metadata as M (dataDefn, genDefn, inModel, thModel)
+import qualified Drasil.Metadata as M (dataDefn, genDefn, inModel, thModel, requirement)
 
 import Control.Lens ((^.), view)
 
@@ -59,7 +59,7 @@ tOfCont, refMat, tOfUnit, tOfSymb, tOfAbbAcc, intro, prpsOfDoc, scpOfReq,
   termogy :: [Contents] -> [Section] -> Section
 
 -- | Table of Contents section.
-tOfCont       cs ss = section (titleize' Doc.tOfCont)                   cs ss tOfContLabel
+tOfCont       cs ss = section (titleize' Doc.tOfCont)                  cs ss tOfContLabel
 
 -- | Reference Material section.
 refMat        cs ss = section (titleize Doc.refMat)                    cs ss refMatLabel
@@ -114,20 +114,20 @@ solCharSpec   cs ss = section (titleize Doc.solutionCharSpec)          cs ss sol
 -- | Assumptions section.
 assumpt       cs ss = section (titleize' Doc.assumption)               cs ss assumptLabel
 -- | Theoretical Models section.
-thModel       cs ss = section (titleize' M.thModel)                  cs ss thModelLabel
+thModel       cs ss = section (titleize' M.thModel)                    cs ss thModelLabel
 -- | General Definitions section.
-genDefn       cs ss = section (titleize' M.genDefn)                  cs ss genDefnLabel
+genDefn       cs ss = section (titleize' M.genDefn)                    cs ss genDefnLabel
 -- | Data Definitions section.
-dataDefn      cs ss = section (titleize' M.dataDefn)                 cs ss dataDefnLabel
+dataDefn      cs ss = section (titleize' M.dataDefn)                   cs ss dataDefnLabel
 -- | Instance Models section.
-inModel       cs ss = section (titleize' M.inModel)                  cs ss inModelLabel
+inModel       cs ss = section (titleize' M.inModel)                    cs ss inModelLabel
 -- | Data Constraints section.
 datCon        cs ss = section (titleize' Doc.datumConstraint)          cs ss datConLabel
 -- | Properties of a Correct Solution section.
 propCorSol    cs ss = section (titleize' Doc.propOfCorSol)             cs ss corSolPropsLabel
 
 -- | Requirements section.
-require       cs ss = section (titleize' Doc.requirement)              cs ss requirementsLabel
+require       cs ss = section (titleize' M.requirement)                cs ss requirementsLabel
 -- | Non-Functional Requirements section.
 nonfuncReq    cs ss = section (titleize' Doc.nonfunctionalRequirement) cs ss nonfuncReqLabel
 -- | Functional Requirements section.
@@ -221,7 +221,7 @@ inModelLabel        = makeSecRef "IMs"              $ titleize' M.inModel
 datConLabel         = makeSecRef "DataConstraints"  $ titleize' Doc.datumConstraint
 corSolPropsLabel    = makeSecRef "CorSolProps"      $ titleize' Doc.propOfCorSol
 
-requirementsLabel   = makeSecRef "Requirements"     $ titleize' Doc.requirement
+requirementsLabel   = makeSecRef "Requirements"     $ titleize' M.requirement
 funcReqLabel        = makeSecRef "FRs"              $ titleize' Doc.functionalRequirement
 nonfuncReqLabel     = makeSecRef "NFRs"             $ titleize' Doc.nonfunctionalRequirement
 

@@ -13,8 +13,6 @@ import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe)
 import qualified Data.Map as Map (keys)
 
-import Utils.Drasil (invert)
-
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import qualified Drasil.DocDecl as DD
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
@@ -26,13 +24,14 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
+import Drasil.Document.Contents(mkEnumSimpleD, foldlSP)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil
 import Language.Drasil.Display (compsy)
 
-import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..))
+import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 
@@ -68,8 +67,9 @@ import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGr
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
+import Drasil.Metadata as Doc (software)
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
-  software, unlikelyChg)
+  unlikelyChg)
 import qualified Data.Map.Strict as M
 
 -- * Main Function

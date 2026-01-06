@@ -1,32 +1,29 @@
 -- | General functions that are useful in manipulating some Drasil types into
 -- printable 'Contents'.
-module Language.Drasil.Document.Contents (
+module Drasil.Document.Contents (
   -- * List Creation Functions
   enumBullet, enumBulletU, enumSimple,
   enumSimpleU, mkEnumSimpleD,
 
   -- * Displaying Expressions
-  lbldExpr, unlbldExpr,
-  unlbldCode
+  lbldExpr, unlbldExpr, unlbldCode,
+
+  -- * Folds
+  foldlSP, foldlSP_, foldlSPCol
 ) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Classes (Definition(..))
-import Language.Drasil.ShortName (HasShortName(..), getSentSN)
-import Language.Drasil.Document (llcc, ulcc)
-import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)
-import Language.Drasil.Document.Core (LabelledContent, RawContent(Enumeration,
-  EqnBlock, CodeBlock), Contents(UlC), ListTuple, ItemType(Flat), ListType(Simple))
-import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.Label.Type ( Referable(refAdd) )
-import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.Reference (Reference)
-import Language.Drasil.Sentence (Sentence (..))
+import Language.Drasil
+  ( Definition(..), HasShortName(..), getSentSN, mkRawLC, ulcc, mkParagraph, foldlSent_
+  , foldlSent, foldlSentCol
+  , LabelledContent, RawContent(Enumeration, EqnBlock, CodeBlock), Contents(UlC), ListTuple
+  , ItemType(Flat), ListType(Simple), Expr, Referable(refAdd), ModelExpr, Reference, Sentence (..))
+import Drasil.Sentence.Combinators (bulletFlat, mkEnumAbbrevList)
 
 -- | Displays a given expression and attaches a 'Reference' to it.
 lbldExpr :: ModelExpr -> Reference -> LabelledContent
-lbldExpr c lbl = llcc lbl $ EqnBlock c
+lbldExpr c = mkRawLC (EqnBlock c)
 
 -- | Same as 'eqUnR' except content is unlabelled (does not attach a 'Reference').
 unlbldExpr :: ModelExpr -> Contents
@@ -38,7 +35,7 @@ unlbldCode c = UlC $ ulcc $ CodeBlock c
 
 -- | Creates a bulleted list.
 enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
-enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
+enumBullet lb s = mkRawLC (Enumeration $ bulletFlat s) lb
 
 -- | Same as 'enumBullet' but unlabelled.
 enumBulletU :: [Sentence] -> Contents --FIXME: should Enumeration be labelled?
@@ -62,7 +59,7 @@ enumBulletU s =  UlC $ ulcc $ Enumeration $ bulletFlat s
 --     * DD3: def2
 --     * DD4: def3 ...
 enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
-enumSimple lb s t l = llcc lb $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
+enumSimple lb s t l = mkRawLC (Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l) lb
 
 -- | Same as 'enumSimple' but unlabelled.
 enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?
@@ -89,3 +86,16 @@ mkEnumSimple f xs = [UlC $ ulcc $ Enumeration $ Simple $ map f xs]
 -- Used in 'mkEnumSimpleD'.
 mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
 mkListTuple f x = (getSentSN $ shortname x, f x, Just $ refAdd x)
+
+-- | Fold sentences then turns into content using 'foldlSent'.
+foldlSP :: [Sentence] -> Contents
+foldlSP = mkParagraph . foldlSent
+
+-- | Same as 'foldlSP' but uses 'foldlSent_'.
+foldlSP_ :: [Sentence] -> Contents
+foldlSP_ = mkParagraph . foldlSent_
+
+-- | Same as 'foldlSP' but uses 'foldlSentCol'.
+foldlSPCol :: [Sentence] -> Contents
+foldlSPCol = mkParagraph . foldlSentCol
+

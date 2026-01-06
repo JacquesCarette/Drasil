@@ -21,13 +21,12 @@ module Drasil.Shared.InterfaceCommon (
   VisibilitySym(..), ParameterSym(..), MethodSym(..), convType
   ) where
 
+import Data.Bifunctor (first)
+import qualified Data.Kind as K (Type)
+
+import Drasil.Shared.AST (ScopeData(..), ScopeTag(..))
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.State (MS, VS)
-
-import qualified Data.Kind as K (Type)
-import Data.Bifunctor (first)
-import CodeLang.Drasil (Comment)
-import Drasil.Shared.AST (ScopeData(..), ScopeTag(..))
 
 type Label = String
 type Library = String
@@ -439,7 +438,7 @@ class (VariableSym r, StatementSym r) => FuncAppStatement r where
   extInOutCall :: Library -> InOutCall r
 
 class (StatementSym r) => CommentStatement r where
-  comment :: Comment -> MSStatement r
+  comment :: String -> MSStatement r
 
 class (BodySym r, VariableSym r) => ControlStatement r where
   break :: MSStatement r

@@ -294,7 +294,7 @@ packagedeps: graphmod check_dot
 	@echo ----------------------------
 	@echo Generating package dependency graph
 	@echo ----------------------------
-	@stack dot --prune dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,projectile,sglpend,ssp,swhs,template,drasil-website | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
+	@stack dot --prune dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,sglpend,ssp,swhs,template | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
 
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then build the generated mdBook projects.

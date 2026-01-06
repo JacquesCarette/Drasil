@@ -7,8 +7,6 @@ import Text.PrettyPrint hiding (Str)
 import Data.List (transpose)
 import Data.List.Utils (replace)
 
-import qualified Language.Drasil as L
-import Language.Drasil.Printing.Import (makeProject)
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
   Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:), Tooltip), Label,
@@ -19,7 +17,6 @@ import Language.Drasil.Printing.LayoutObj (Project(Project),
   LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders,
   hat, hyph, dot, ($^$), vsep)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, fence, OpenClose(..),
   pMatrix, cases)
@@ -38,8 +35,8 @@ import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
 -----------------------------------------------------------------
 
 -- | Generate a mdBook SRS
-genMDBook :: PrintingInformation -> L.Document -> [(Filename, Doc)]
-genMDBook sm doc = build' $ makeProject sm doc
+genMDBook :: Project -> [(Filename, Doc)]
+genMDBook = build'
 
 -- | Build the mdBook Docs, called by genMD'
 build' :: Project -> [(Filename, Doc)]

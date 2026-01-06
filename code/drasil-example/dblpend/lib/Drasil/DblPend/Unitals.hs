@@ -1,30 +1,29 @@
 module Drasil.DblPend.Unitals where
 
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
-
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, requirement, srs)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
-  requirement, refBy, refName, srs, typUnc)
+  refBy, refName, typUnc)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, time)
 import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.Concepts.Math as CM (angle, xDir, yDir)
-import Data.Drasil.Quantities.Math as QM (unitVect, pi_)
 import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject, horizontalPos,
   verticalPos, horizontalVel, verticalVel, horizontalAccel, verticalAccel)
 import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
 
 symbols:: [DefinedQuantityDict]
-symbols = map dqdWr unitalChunks ++ unitless ++ [dqdWr pendDisAngle] ++ map dqdWr constants
+symbols = map dqdWr unitalChunks ++ [dqdWr pendDisAngle] ++ map dqdWr constants
 
 acronyms :: [CI]
 acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
@@ -41,10 +40,11 @@ constants = [gravitationalAccelConst]
 
 unitalChunks :: [UnitalChunk]
 unitalChunks = [
-  lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
+  lenRod_1, lenRod_2, massObj_1, massObj_2,
+  pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2,
   xVel_1, xVel_2, yVel_1, yVel_2, xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1,
   yAccel_1, xAccel_2, yAccel_2, angularAccel_1, angularAccel_2, tension_1,
-  tension_2, QPP.mass, QP.force, QP.gravitationalAccel, QP.tension, QP.acceleration,
+  tension_2, QPP.mass, QP.force, QP.gravitationalAccel, QP.acceleration,
   QP.time, QP.velocity, QP.position]
 
 lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
@@ -148,9 +148,6 @@ pendDisAngle_1 = uc' "theta_1" (angle `ofThe` firstRod)
 pendDisAngle_2 = uc' "theta_2" (angle `ofThe` secondRod)
         (D.toSent $ phraseNP (angle `the_ofThe` secondRod))
         (sub lTheta label2) Real radian
-
-unitless :: [DefinedQuantityDict]
-unitless = [QM.unitVect, QM.pi_]
 
 lRod, label1, label2, labelx, labely, initial, lTheta':: Symbol
 lRod = label "rod"

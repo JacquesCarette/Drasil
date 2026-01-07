@@ -30,8 +30,9 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   ConstantStructure(..), DataInfo(constRepr, inputStructure,
   constStructure), ImplementationType(..), LogConfig(logging), Logging,
   Maps(spaceMatch), Modularity(..), OptionalFeatures(logConfig), SpaceMatch,
-  Structure(..), unCSP, unCPPP, unJP, unJLP, unPP, unSP, Lang(Julia, Java,
+  Structure(..), Lang(Julia, Java,
   Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO), Mod)
+import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
   makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)

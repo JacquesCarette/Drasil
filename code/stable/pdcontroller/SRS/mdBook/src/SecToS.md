@@ -6,7 +6,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 
 |Symbol                  |Description                                 |Units            |
 |:-----------------------|:-------------------------------------------|:----------------|
-|\\(\mathit{AbsTol}\\)   |Absolute Tolerance                          |--               |
 |\\({C\_{\text{s}}}\\)   |Control Variable in the frequency domain    |--               |
 |\\(c\\)                 |Damping coefficient of the spring           |--               |
 |\\({D\_{\text{s}}}\\)   |Derivative control in the frequency domain  |--               |
@@ -21,7 +20,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({P\_{\text{s}}}\\)   |Proportional control in the frequency domain|--               |
 |\\({R\_{\text{s}}}\\)   |Set-Point in the frequency domain           |--               |
 |\\({r\_{\text{t}}}\\)   |Set-Point                                   |--               |
-|\\(\mathit{RelTol}\\)   |Relative Tolerance                          |--               |
 |\\(s\\)                 |Complex frequency-domain parameter          |--               |
 |\\(t\\)                 |Time                                        |\\({\text{s}}\\) |
 |\\({t\_{\text{sim}}}\\) |Simulation Time                             |\\({\text{s}}\\) |

@@ -147,13 +147,10 @@ dqdSetPointTD :: DefinedQuantityDict
 dqdSetPointFD :: DefinedQuantityDict
 dqdProcessVariableTD :: DefinedQuantityDict
 dqdProcessVariableFD :: DefinedQuantityDict
-dqdProcessErrorTD :: DefinedQuantityDict
 dqdProcessErrorFD :: DefinedQuantityDict
 dqdPropControlFD :: DefinedQuantityDict
 dqdDerivativeControlFD :: DefinedQuantityDict
-dqdTransferFunctionFD :: DefinedQuantityDict
 dqdCtrlVarFD :: DefinedQuantityDict
-dqdCtrlVarTD :: DefinedQuantityDict
 dqdStepTime :: DefinedQuantityDict
 dqdSimTime :: DefinedQuantityDict
 dqdDampingCoeff :: DefinedQuantityDict

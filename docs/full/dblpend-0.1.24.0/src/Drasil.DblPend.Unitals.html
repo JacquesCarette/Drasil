@@ -1017,17 +1017,14 @@ c -&gt; Uncertainty -&gt; UncertQ
 </span><span id="line-175"></span><span>
 </span><span id="line-176"></span><span class="annot"><a href="Drasil.DblPend.Unitals.html#outConstraints"><span class="hs-identifier hs-type">outConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
 </span><span id="line-177"></span><span id="outConstraints"><span class="annot"><span class="annottext">outConstraints :: [UncertQ]
-</span><a href="Drasil.DblPend.Unitals.html#outConstraints"><span class="hs-identifier hs-var hs-var">outConstraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; UncertQ) -&gt; [ConstrConcept] -&gt; [UncertQ]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
+</span><a href="Drasil.DblPend.Unitals.html#outConstraints"><span class="hs-identifier hs-var hs-var">outConstraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.DblPend.Unitals.html#pendDisAngle"><span class="hs-identifier hs-var">pendDisAngle</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
 forall c.
 (Quantity c, Constrained c, Concept c, HasReasVal c,
  MayHaveUnit c) =&gt;
 c -&gt; Uncertainty -&gt; UncertQ
 </span><span class="hs-operator hs-var">`uq`</span></span><span> </span><span class="annot"><span class="annottext">Uncertainty
-</span><span class="hs-identifier hs-var">defaultUncrt</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.DblPend.Unitals.html#pendDisAngleCon_1"><span class="hs-identifier hs-var">pendDisAngleCon_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.DblPend.Unitals.html#pendDisAngleCon_2"><span class="hs-identifier hs-var">pendDisAngleCon_2</span></a></span><span class="hs-special">]</span><span>
+</span><span class="hs-identifier hs-var">defaultUncrt</span></span><span class="hs-special">]</span><span>
 </span><span id="line-178"></span><span>
 </span><span id="line-179"></span><span class="annot"><a href="Drasil.DblPend.Unitals.html#pendDisAngle"><span class="hs-identifier hs-type">pendDisAngle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span>
 </span><span id="line-180"></span><span id="pendDisAngle"><span class="annot"><span class="annottext">pendDisAngle :: ConstrConcept

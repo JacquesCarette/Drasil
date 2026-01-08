@@ -445,7 +445,6 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 -&gt; [Sentence]
 -&gt; [Sentence]
 -&gt; [Sentence]
--&gt; [DefinedQuantityDict]
 -&gt; [TheoryModel]
 -&gt; [GenDefn]
 -&gt; [DataDefinition]
@@ -458,10 +457,9 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 -&gt; ChunkDB
 -&gt; [Reference]
 -&gt; System
-forall e h i j.
-(Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h,
- MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i,
- HasUID j, Constrained j) =&gt;
+forall h i j.
+(Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i,
+ Concept i, HasUID j, Constrained j) =&gt;
 CI
 -&gt; SystemKind
 -&gt; People
@@ -469,7 +467,6 @@ CI
 -&gt; [Sentence]
 -&gt; [Sentence]
 -&gt; [Sentence]
--&gt; [e]
 -&gt; [TheoryModel]
 -&gt; [GenDefn]
 -&gt; [DataDefinition]
@@ -494,8 +491,7 @@ CI
 </span><a href="Drasil.Projectile.Body.html#background"><span class="hs-identifier hs-var">background</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.Body.html#scope"><span class="hs-identifier hs-var">scope</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.Body.html#motivation"><span class="hs-identifier hs-var">motivation</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-129"></span><span>  </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
-</span><a href="Drasil.Projectile.Body.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[TheoryModel]
+</span><span id="line-129"></span><span>  </span><span class="annot"><span class="annottext">[TheoryModel]
 </span><a href="Drasil.Projectile.Body.html#tMods"><span class="hs-identifier hs-var">tMods</span></a></span><span> </span><span class="annot"><span class="annottext">[GenDefn]
 </span><a href="Drasil.Projectile.GenDefs.html#genDefns"><span class="hs-identifier hs-var">genDefns</span></a></span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="Drasil.Projectile.DataDefs.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
@@ -982,9 +978,9 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-229"></span><span id="sysCtxResp"><span class="annot"><span class="annottext">sysCtxResp :: [Sentence]
 </span><a href="Drasil.Projectile.Body.html#sysCtxResp"><span class="hs-identifier hs-var hs-var">sysCtxResp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence) -&gt; [Sentence] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679070125"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679070125"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679070125"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679070091"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679070091"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679070091"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Responsibilities&quot;</span></span><span class="hs-special">)</span><span>

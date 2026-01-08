@@ -2173,6 +2173,47 @@ instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.PackageSym Language
 instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
 
 
+-- | Re-export code-related smart constructors for external code writing
+--   and generation.
+module Language.Drasil.GOOL
+
+-- | Members of this class must have all the information necessary for the
+--   <a>AuxiliarySym</a> in addition to information necessary to create a
+--   package.
+class (AuxiliarySym r) => PackageSym r where {
+    type Package r;
+}
+package :: PackageSym r => ProgData -> [r (Auxiliary r)] -> r (Package r)
+
+-- | Members of this class must have a doxygen configuration, ReadMe file,
+--   sample input, omptimize doxygen document, information necessary for a
+--   makefile, auxiliary helper documents, and auxiliary from data
+--   documents.
+class AuxiliarySym r where {
+    type Auxiliary r;
+    type AuxHelper r;
+}
+doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r (Auxiliary r)
+readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)
+sampleInput :: AuxiliarySym r => PrintingInformation -> DataDesc -> [Expr] -> r (Auxiliary r)
+optimizeDox :: AuxiliarySym r => r (AuxHelper r)
+makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r (Auxiliary r)
+auxHelperDoc :: AuxiliarySym r => r (AuxHelper r) -> Doc
+auxFromData :: AuxiliarySym r => FilePath -> Doc -> r (Auxiliary r)
+
+-- | The underlying data type for auxiliary files in all renderers.
+data AuxData
+
+-- | The underlying data type for packages in all renderers.
+data PackData
+unPP :: PythonProject a -> a
+unJP :: JavaProject a -> a
+unCSP :: CSharpProject a -> a
+unCPPP :: CppProject a -> a
+unSP :: SwiftProject a -> a
+unJLP :: JuliaProject a -> a
+
+
 -- | Defines description generators for common SCS functions, classes, and
 --   modules.
 module Language.Drasil.Code.Imperative.Descriptions
@@ -3315,36 +3356,6 @@ Python :: Lang
 Swift :: Lang
 Julia :: Lang
 
--- | Members of this class must have all the information necessary for the
---   <a>AuxiliarySym</a> in addition to information necessary to create a
---   package.
-class (AuxiliarySym r) => PackageSym r where {
-    type Package r;
-}
-package :: PackageSym r => ProgData -> [r (Auxiliary r)] -> r (Package r)
-
--- | Members of this class must have a doxygen configuration, ReadMe file,
---   sample input, omptimize doxygen document, information necessary for a
---   makefile, auxiliary helper documents, and auxiliary from data
---   documents.
-class AuxiliarySym r where {
-    type Auxiliary r;
-    type AuxHelper r;
-}
-doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r (Auxiliary r)
-readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)
-sampleInput :: AuxiliarySym r => PrintingInformation -> DataDesc -> [Expr] -> r (Auxiliary r)
-optimizeDox :: AuxiliarySym r => r (AuxHelper r)
-makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r (Auxiliary r)
-auxHelperDoc :: AuxiliarySym r => r (AuxHelper r) -> Doc
-auxFromData :: AuxiliarySym r => FilePath -> Doc -> r (Auxiliary r)
-
--- | The underlying data type for auxiliary files in all renderers.
-data AuxData
-
--- | The underlying data type for packages in all renderers.
-data PackData
-
 -- | Basic chunk representation in the code generation context. Contains a
 --   DefinedQuantityDict and the kind of code (variable or function).
 data () => CodeChunk
@@ -3461,12 +3472,6 @@ mkODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCal
 --   specification, <a>ExternalLibraryCall</a> specification parameterized
 --   by an <a>ODEInfo</a>, and list of compatible languages.
 mkODELibNoPath :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
-unPP :: PythonProject a -> a
-unJP :: JavaProject a -> a
-unCSP :: CSharpProject a -> a
-unCPPP :: CppProject a -> a
-unSP :: SwiftProject a -> a
-unJLP :: JuliaProject a -> a
 
 -- | Any quantity can be a named argument (wrapper for
 --   <a>DefinedQuantityDict</a>), but with more of a focus on generating

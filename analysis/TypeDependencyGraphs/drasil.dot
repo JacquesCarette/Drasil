@@ -855,6 +855,8 @@ digraph alltypes {
 		ConstantMap -> MapUIDCodeDefinition;
 		}
 	}
+	subgraph gool {
+	}
 	subgraph icosolutionsearch {
 		subgraph def{
 		Def	[shape=oval, color=red2, label="Def"];

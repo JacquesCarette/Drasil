@@ -60,7 +60,6 @@ si :: System
 si = mkSystem
   progName Specification [henryFrankis, brooks]
   [purp] [] [] []
-  symbols
   tMods generalDefinitions dataDefs iMods
   []
   inputs outputs constrained []

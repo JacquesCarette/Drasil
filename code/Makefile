@@ -15,7 +15,7 @@ BUILD_P_SUFFIX = _build
 GRAPH_P_SUFFIX = _graph
 
 BUILD_PACKAGES = $(addsuffix $(BUILD_P_SUFFIX), $(PACKAGES))
-GRAPH_PACKAGES = $(addsuffix $(GRAPH_P_SUFFIX), $(PACKAGES_E)) 
+GRAPH_PACKAGES = $(addsuffix $(GRAPH_P_SUFFIX), $(PACKAGES_E))
 ANALYSIS_PACKAGES = drasil $(PACKAGES_E)
 
 PACKAGE_GEN_TARGET = BUILD DOC GRAPH
@@ -26,7 +26,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
 # Current list of examples
 SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend 
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend
 GOOLTEST = codegenTest
 
 # where they live
@@ -212,6 +212,8 @@ debug: setup_debug_vars test ##@Examples Run test target with better debugging t
 # Debugging individual examples
 $(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): setup_debug_vars %$(TEST_E_SUFFIX)
 
+pr_ready: stackArgs += --force-dirty
+pr_ready: GHCFLAGS += -Werror -fforce-recomp
 pr_ready: all stan hlint check_whitespace ##@General Check if your current work is ready to for a PR via `all` and `hlint` and stan.
 	@echo "Your build/ and stable/ match, and your code currently passes HLint tests."
 	@echo "Feel free to create a PR for your code if you feel it's ready."
@@ -294,7 +296,7 @@ packagedeps: graphmod check_dot
 	@echo ----------------------------
 	@echo Generating package dependency graph
 	@echo ----------------------------
-	@stack dot --prune dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,sglpend,ssp,swhs,template | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
+	@stack dot --prune dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,sglpend,ssp,swhs,template | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png
 
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then build the generated mdBook projects.
@@ -332,7 +334,7 @@ $(GOOLTEST)$(GEN_E_SUFFIX):
 	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
 	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && $(STACK_EXEC) -- "$(GOOLTEST_EXE)"
-	
+
 
 $(GOOLTEST)$(TEST_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX) $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME)
 	@mkdir -p "$(LOG_FOLDER)"
@@ -368,7 +370,7 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PRE
 	$(call DO_DIFF,$(STABLE_FOLDER)$*/,$(BUILD_FOLDER)$(EDIR)/,$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX))
 
 # Website diff tests. First builds the website and then compares the generated
-# contents in the Website folder to those in the stable-website folder. 
+# contents in the Website folder to those in the stable-website folder.
 # Target will have the form Website_diff.
 $(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) website
 	@mkdir -p "$(LOG_FOLDER)"
@@ -379,7 +381,7 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREF
 $(filter %$(BC_E_SUFFIX), $(BC_EXAMPLES)): %$(BC_E_SUFFIX):
 	rm -rf "./$(BUILD_FOLDER)$(EDIR)"
 
-# The website build cleans. 
+# The website build cleans.
 # Target will have the form Website_build_clean
 $(filter %$(BC_E_SUFFIX), $(BC_WEBSITE)): %$(BC_E_SUFFIX):
 	rm -rf "./$(WEBSITE_FOLDER)"
@@ -435,14 +437,14 @@ $(filter %$(JUPYTER_HTML_E_SUFFIX), $(JUPYTER_HTML_EXAMPLES)): %$(JUPYTER_HTML_E
 
 graphs: $(GRAPH_PACKAGES) packagedeps ##@Analysis Generate all module dependency graphs.
 	@echo "Graphs generated in local '$(GRAPH_FOLDER)' folder."
-	
+
 # Generate individual package module dependency graphs.
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
 	@mkdir -p "$(GRAPH_FOLDER)"
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | tee >(dot -Tpdf -o "$(GRAPH_FOLDER)drasil-$*.pdf") >(dot -Tsvg -o "$(GRAPH_FOLDER)drasil-$*.svg") | dot -Tpng -o "$(GRAPH_FOLDER)drasil-$*.png"
 
 # Dot graphs are currently generated for datatypes and class instance structures.
-# They are made using the default dot graph algorithm and viewability. 
+# They are made using the default dot graph algorithm and viewability.
 # We also add example to these variables so that we can still
 # make the graphs for that folder (although it's technically not a package itself).
 analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasil's class, datatype, and instance structures.
@@ -506,7 +508,7 @@ gool: $(CODE_EXAMPLES) ##@GOOL Generate code from examples and test each one.
 
 doxygen: TARGET=doc
 doxygen: $(CODE_EXAMPLES) ##@GOOL Generate doxygen documentation for all examples.
-	
+
 # Find all the code file paths within an example.
 # Targets are of the form exampleName_deploy_code_path.
 %$(DCP_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
@@ -568,7 +570,7 @@ clean_artifacts: $(CLEAN_FOLDERS) ##@Cleaning Remove generated artifacts & folde
 cleanArtifacts: clean_artifacts
 
 clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, & folders.
-	find . -type d -name '.hie' -exec rm -rf {} + 
+	find . -type d -name '.hie' -exec rm -rf {} +
 	stack clean
 
 #--------------------------#

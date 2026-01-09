@@ -22,17 +22,18 @@ type Need  = CodeVarChunk
 -- | Topologically sort a list of 'Def's to form a path from 'Known' values to
 -- values that 'Need' to be calculated.
 solveExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
-solveExecOrder allDefs knowns needs = solve [] allDefs knowns (needs \\ knowns)
+solveExecOrder allDefs knowns needs =
+  topologicalSort [] allDefs knowns (needs \\ knowns)
 
-solve :: [Def] -> [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
-solve foundOrder allDefs knowns needs db
+topologicalSort :: [Def] -> [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
+topologicalSort foundOrder allDefs knowns needs db
   -- Successfully found a path
   | null needs = foundOrder
   -- Path impossible (missing pieces)
   | null nextCalcs = prettyError allDefs knowns needs
   -- Continuously looks for the next possible set of 'Needs' that can be
   -- computed until all are consumed.
-  | otherwise = solve
+  | otherwise = topologicalSort
                   (foundOrder ++ nextCalcs)
                   notReady
                   (knowns ++ newlyCalculated)

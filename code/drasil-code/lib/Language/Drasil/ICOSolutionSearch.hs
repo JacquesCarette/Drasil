@@ -19,12 +19,13 @@ type Known = CodeVarChunk
 -- | Calculated values.
 type Need  = CodeVarChunk
 
--- | Topologically sort a list of 'Def's to form a path from 'Known' values to
--- values that 'Need' to be calculated.
+-- | Find a calculation path from a list of 'Known' values to values that 'Need'
+-- to be calculated, i.e., topologically sort a list of 'Def's.
 solveExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
 solveExecOrder allDefs knowns needs =
   topologicalSort [] allDefs knowns (needs \\ knowns)
 
+-- | Topologically sort a list of 'Def's. First parameter is the found path.
 topologicalSort :: [Def] -> [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
 topologicalSort foundOrder allDefs knowns needs db
   -- Successfully found a path
@@ -43,6 +44,7 @@ topologicalSort foundOrder allDefs knowns needs db
     (nextCalcs, notReady) = partition (computable db knowns) allDefs
     newlyCalculated = map quantvar nextCalcs
 
+-- | Check if a 'Def' is computable given a list of 'Known's.
 computable :: ChunkDB -> [Known] -> Def -> Bool
 computable db knowns def = requiredInputs `subsetOf` knowns
   where

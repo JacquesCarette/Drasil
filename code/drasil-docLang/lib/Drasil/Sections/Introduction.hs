@@ -67,7 +67,6 @@ introSubToSentence (IScope _)   = [S.the_ofThe (phrase scope) (plural requiremen
 introSubToSentence IChar {} = [S.the_ofThe (plural characteristic) (phrase intReader)]
 introSubToSentence IOrgSec {} = [S.the_ofThe (phrase Doc.organization) (phrase document)]
 
-
 -------------------------
 --                    --
 -------------------------
@@ -99,7 +98,6 @@ overviewParagraph programDefinition introSubs =
      S "provides an overview of the", introduceAbb srs, S "for" +:+.
      programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
      S "of this", endingSentence]
-
 
 -- | Constructor for Purpose of Document section that each example controls.
 purpDocPara1 :: CI -> Sentence

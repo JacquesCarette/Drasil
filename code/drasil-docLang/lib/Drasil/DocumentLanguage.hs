@@ -257,7 +257,7 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 -- | Makes the Introduction section into a 'Section'.
 mkIntroSec :: System -> IntroSec -> Section
 mkIntroSec si (IntroProg probIntro progDefn l) =
-  Intro.introductionSection probIntro progDefn $ map mkSubIntro l
+  Intro.introductionSection probIntro progDefn l $ map mkSubIntro l
   where
     mkSubIntro :: IntroSub -> Section
     mkSubIntro (IPurpose intro) = Intro.purposeOfDoc intro

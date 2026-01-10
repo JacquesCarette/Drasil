@@ -8,6 +8,7 @@ import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
 import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import Drasil.DocumentLanguage.Core (IntroSub(..))
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
@@ -51,11 +52,21 @@ developmentProcessParagraph = foldlSent [S "This", phrase document,
   S "process"]
 
 -- | 'Sentence' containing the subsections of the Introduction.
-introductionSubsections :: Sentence
-introductionSubsections = foldlList Comma List (map (uncurry S.the_ofThe)
-  [(phrase scope, plural requirement),
-  (plural characteristic, phrase intReader),
-  (phrase Doc.organization, phrase document)])
+-- Takes a list of IntroSub and generates a sentence listing only the subsections that exist.
+introductionSubsections :: [IntroSub] -> Sentence
+introductionSubsections subs =
+  let subDescriptions = concatMap introSubToSentence subs
+  in case subDescriptions of
+    [] -> EmptyS
+    _  -> S "," +:+ foldlList Comma List subDescriptions
+
+-- | Convert an IntroSub to its description sentence for the roadmap.
+introSubToSentence :: IntroSub -> [Sentence]
+introSubToSentence (IPurpose _) = []  -- Purpose is already mentioned as "purpose of this document"
+introSubToSentence (IScope _)   = [S.the_ofThe (phrase scope) (plural requirement)]
+introSubToSentence (IChar _ _ _) = [S.the_ofThe (plural characteristic) (phrase intReader)]
+introSubToSentence (IOrgSec _ _ _) = [S.the_ofThe (phrase Doc.organization) (phrase document)]
+
 
 -------------------------
 --                    --
@@ -65,21 +76,30 @@ introductionSubsections = foldlList Comma List (map (uncurry S.the_ofThe)
 --
 --     * problemIntroduction - 'Sentence' introducing the specific example problem.
 --     * programDefinition  - 'Sentence' definition of the specific example.
+--     * introSubs          - List of IntroSub describing what subsections exist.
 --     * subSections        - List of subsections for this section.
-introductionSection :: Sentence -> Sentence -> [Section] -> Section
-introductionSection EmptyS              programDefinition = SRS.intro
+introductionSection :: Sentence -> Sentence -> [IntroSub] -> [Section] -> Section
+introductionSection EmptyS              programDefinition introSubs = SRS.intro
   [mkParagraph $ emptySectSentSing [problemIntro],
-  overviewParagraph programDefinition]
-introductionSection problemIntroduction programDefinition = SRS.intro
-  [mkParagraph problemIntroduction, overviewParagraph programDefinition]
+  overviewParagraph programDefinition introSubs]
+introductionSection problemIntroduction programDefinition introSubs = SRS.intro
+  [mkParagraph problemIntroduction, overviewParagraph programDefinition introSubs]
 
 -- | Constructor for the overview paragraph for the Introduction.
--- Takes the definition of the specific example being generated ('Sentence').
-overviewParagraph :: Sentence -> Contents
-overviewParagraph programDefinition = foldlSP [S "The following", phrase section_,
-  S "provides an overview of the", introduceAbb srs, S "for" +:+.
-  programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
-  S "of this", phrase document `sC` introductionSubsections]
+-- Takes the definition of the specific example being generated ('Sentence')
+-- and the list of IntroSub to dynamically generate the roadmap.
+overviewParagraph :: Sentence -> [IntroSub] -> Contents
+overviewParagraph programDefinition introSubs =
+  let subsectionsSentence = introductionSubsections introSubs
+      -- Build the sentence ending based on whether there are subsections
+      endingSentence = case subsectionsSentence of
+        EmptyS -> phrase document  -- No subsections, end with just "document"
+        _      -> phrase document +:+ subsectionsSentence  -- Has subsections, add them
+  in foldlSP [S "The following", phrase section_,
+     S "provides an overview of the", introduceAbb srs, S "for" +:+.
+     programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
+     S "of this", endingSentence]
+
 
 -- | Constructor for Purpose of Document section that each example controls.
 purpDocPara1 :: CI -> Sentence

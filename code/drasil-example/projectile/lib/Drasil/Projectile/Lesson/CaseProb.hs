@@ -15,6 +15,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (iSpeed, ixSpeed, iySpeed,
 import Data.Drasil.Concepts.Documentation (coordinate, procedure)
 import Language.Drasil
 import Language.Drasil.ShortHands
+import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSP_)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (s_2)
 
@@ -149,7 +150,6 @@ verMotionCont = foldlSP [S "In the vertical" `S.or_` P lY, phrase direction, S "
 stepFiveCont = foldlSP [S "Use the equations from Step 4" `sC` S "together with the known values from Step 2 to find the unknown values from Step 3." +:+.
   S "We can do this systematically by going through each equation and determining how many unknowns are in that equation",
   S "Any equations with one unknown can be used to solve for that unknown directly"]
-
 
 equationsSents :: [Sentence]
 equationsSents = [S "From Equation" +: refS lcrectVel,

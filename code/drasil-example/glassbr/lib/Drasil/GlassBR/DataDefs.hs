@@ -3,10 +3,13 @@ module Drasil.GlassBR.DataDefs (dataDefs, aspRat, glaTyFac, glaTyFacQD, gtfRef,
   arRef, hRef, configFp, stdVals) where
 
 import Control.Lens ((^.))
-import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
+
+import Drasil.Database (HasUID)
+import Language.Drasil
 import Theory.Drasil (DataDefinition, ddE)
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Sentence.Combinators (definedIn', definedIn)
 
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)

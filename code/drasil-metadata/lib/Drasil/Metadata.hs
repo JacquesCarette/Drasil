@@ -7,9 +7,12 @@ module Drasil.Metadata (
     -- * Supported Software
     module Drasil.Metadata.SupportedSoftware,
     -- * Theory Concepts
-    module Drasil.Metadata.TheoryConcepts
+    module Drasil.Metadata.TheoryConcepts,
+    -- * Documentation Concepts
+    module Drasil.Metadata.Documentation
 ) where
 
+import Drasil.Metadata.Documentation
 import Drasil.Metadata.Domains
 import Drasil.Metadata.Drasil (DrasilMeta(..), drasilMetaCfg)
 import Drasil.Metadata.SupportedSoftware

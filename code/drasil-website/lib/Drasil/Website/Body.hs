@@ -6,7 +6,7 @@ module Drasil.Website.Body (
 
 import Control.Lens ((^.))
 
-import Database.Drasil
+import Drasil.Database (ChunkDB)
 import Drasil.Generator (cdb)
 import Drasil.System
 import Language.Drasil
@@ -66,11 +66,10 @@ si :: FolderLocation -> System
 si fl = mkSystem
   webName Website []
   [] [] [] []
-  ([] :: [DefinedQuantityDict])
   [] [] [] []
   []
   ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []
-  (symbMap fl)
+  symbMap (allRefs fl)
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
@@ -81,17 +80,17 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
   analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl, footer fl]
 
 -- | Needed for references and terms to work.
-symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, phsChgMtrl, twoD] ++
+symbMap :: ChunkDB
+symbMap = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, phsChgMtrl, twoD] ++
   map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast,
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce,
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [glaSlab, intrslce,
   slope, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] []
-  [] [] [] (allRefs fl)
+  [] [] []
 
 -- | Helper to get the system name as an 'IdeaDict' from 'System'.
 getSysName :: System -> IdeaDict
-getSysName SI{_sys = nm} = nw nm
+getSysName = nw . (^. sysName)
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
@@ -105,7 +104,7 @@ allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, pap
 
 -- | Used for system name and kind inside of 'si'.
 webName :: CI
-webName = commonIdea "websiteName" (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
+webName = commonIdeaWithDict "websiteName" (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
 
 -- * Header Section
 
@@ -118,7 +117,7 @@ headerSec =
 
 -- | For the drasil tree image on the website.
 imageContent :: LabelledContent
-imageContent = llcc (makeFigRef "Drasil") $ figNoCapWithWidth EmptyS imagePath 50
+imageContent = llccFig "Drasil" $ figNoCapWithWidth EmptyS imagePath 50
 
 -- | Used for the repository link.
 gitHubRef :: Reference

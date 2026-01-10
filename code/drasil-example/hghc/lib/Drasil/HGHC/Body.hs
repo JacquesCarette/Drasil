@@ -16,10 +16,9 @@ si :: System
 si = mkSystem
   progName Specification [spencerSmith]
   [purp] [] [] []
-  symbols
   [] [] dataDefs [] []
   htInputs htOutputs ([] :: [ConstrConcept]) []
-  symbMap
+  symbMap []
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -76,4 +75,4 @@ ideaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) dataDefs [] [] [] [] [] [] []
+  ([] :: [UnitDefn]) dataDefs [] [] [] [] [] []

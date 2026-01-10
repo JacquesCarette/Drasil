@@ -41,6 +41,7 @@ library:
   source-dirs: lib
   exposed-modules:
   - Language.Drasil.Code
+  - Language.Drasil.GOOL
   - Data.Drasil.ExternalLibraries.ODELibraries
   when:
   - condition: false

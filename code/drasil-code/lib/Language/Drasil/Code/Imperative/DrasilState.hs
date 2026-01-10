@@ -5,11 +5,20 @@ module Language.Drasil.Code.Imperative.DrasilState (
   addLoggedSpace, genICName
 ) where
 
-import Language.Drasil
+import Control.Lens ((^.), makeLenses, over)
+import Control.Monad.State (State, gets)
+import Data.List (nub)
+import Data.Set (Set)
+import Data.Map (Map, fromList)
+import Text.PrettyPrint.HughesPJ (Doc, ($$))
+
+import Language.Drasil (Space, Expr)
+import Language.Drasil.Printers (PrintingInformation)
 import Drasil.GOOL (VisibilityTag(..), CodeType)
 
 import Data.Containers.ListUtils (nubOrd)
 
+import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
@@ -18,16 +27,9 @@ import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
   CodeSpec(..),  OldCodeSpec(..), getConstraints)
+import Language.Drasil.ICOSolutionSearch (Def)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
-
-import Control.Lens ((^.), makeLenses, over)
-import Control.Monad.State (State, gets)
-import Data.List (nub)
-import Data.Set (Set)
-import Data.Map (Map, fromList)
-import Text.PrettyPrint.HughesPJ (Doc, ($$))
-import Language.Drasil.ICOSolutionSearch (Def)
 
 -- | Type for the mapping between 'Space's and 'CodeType's.
 type MatchedSpaces = Space -> GenState CodeType
@@ -50,6 +52,7 @@ type GenState = State DrasilState
 -- | Private State, used to push these options around the generator.
 data DrasilState = DrasilState {
   codeSpec :: CodeSpec,
+  printfo :: PrintingInformation,
   -- Choices
   modular :: Modularity,
   implType :: ImplementationType,

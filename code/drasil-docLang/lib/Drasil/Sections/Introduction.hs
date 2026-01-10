@@ -11,19 +11,20 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
+import Drasil.Sentence.Combinators (refineChain)
+import Drasil.Document.Contents (foldlSP, foldlSP_)
 
+import Drasil.Metadata (inModel, thModel, requirement, srs)
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   decision, definition, desSpec, design, designDoc, document, documentation,
   environment, goal, goalStmt, implementation, intReader, model,
-  organization, purpose, requirement, scope, section_, softwareDoc,
-  softwareVAV, srs, theory, user, vavPlan, problem, problemIntro,
+  organization, purpose, scope, section_, softwareDoc,
+  softwareVAV, theory, user, vavPlan, problem, problemIntro,
   information, systemConstraint, template)
-import Drasil.Metadata (inModel, thModel)
 import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
   smithKoothoor2016, smithLai2005, koothoor2013)
 import Data.Drasil.Software.Products
-
 
 -----------------------
 --     Constants     --
@@ -72,7 +73,6 @@ introductionSection EmptyS              programDefinition = SRS.intro
 introductionSection problemIntroduction programDefinition = SRS.intro
   [mkParagraph problemIntroduction, overviewParagraph programDefinition]
 
-
 -- | Constructor for the overview paragraph for the Introduction.
 -- Takes the definition of the specific example being generated ('Sentence').
 overviewParagraph :: Sentence -> Contents
@@ -80,7 +80,6 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
   S "provides an overview of the", introduceAbb srs, S "for" +:+.
   programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
   S "of this", phrase document `sC` introductionSubsections]
-
 
 -- | Constructor for Purpose of Document section that each example controls.
 purpDocPara1 :: CI -> Sentence
@@ -92,7 +91,7 @@ purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase docume
   S "understand" `S.and_` S "verify the", phrase purpose `S.and_` S "scientific",
   S "basis of" +:+. short proName, S "With the exception of",
   namedRef (SRS.sysCon [] []) (plural systemConstraint) `sC` S "this",
-  short Doc.srs, S "will remain abstract, describing what", phrase problem,
+  short srs, S "will remain abstract, describing what", phrase problem,
   S "is being solved, but not how to solve it"]
 
 -- | Combines 'purpDocPara1' and 'developmentProcessParagraph'.
@@ -156,7 +155,6 @@ intReaderIntro progName assumed topic asset sectionRef =
 orgSec :: NamedIdea c => c -> Section -> Sentence -> Section
 orgSec b s t = SRS.orgOfDoc (orgIntro b s t) []
 
-
 -- | Helper function that creates the introduction for the Organization of the Document section. Parameters should be
 -- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
 -- and any other relevant information ('Sentence').
@@ -177,6 +175,6 @@ orgIntro bottom bottomSec trailingSentence = [foldlSP [
 orgOfDocIntro :: Sentence
 orgOfDocIntro = foldlSent
   [D.toSent $ atStartNP (the Doc.organization), S "of this", phrase document,
-  S "follows the", phrase template, S "for an", short Doc.srs, S "for",
+  S "follows the", phrase template, S "for an", short srs, S "for",
   phrase sciCompS, S "proposed by", foldlList Comma List $
     map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]

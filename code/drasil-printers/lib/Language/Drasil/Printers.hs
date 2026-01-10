@@ -35,7 +35,7 @@ module Language.Drasil.Printers (
   , PrintingInformation, piSys
   , HasPrintingOptions (..)
   , Notation(..)
-  , defaultConfiguration
+  , defaultConfiguration, plainConfiguration
 ) where
 
 import Language.Drasil.Format (DocType(SRS, Website, Lesson),
@@ -51,6 +51,7 @@ import Language.Drasil.Plain.Print (SingleLine(..), sentenceDoc, exprDoc,
   codeExprDoc, symbolDoc, unitDoc, showSymb, showHasSymbImpl)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
-  HasPrintingOptions(..), Notation(..), defaultConfiguration, piSys)
+  HasPrintingOptions(..), Notation(..), piSys,
+  defaultConfiguration, plainConfiguration)
 import Language.Drasil.DOT.Print (outputDot, GraphInfo(..), NodeFamily(..))
 import Language.Drasil.Debug.Print (printAllDebugInfo)

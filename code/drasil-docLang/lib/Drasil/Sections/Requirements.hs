@@ -17,6 +17,7 @@ import Utils.Drasil (stringList, mkTable)
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
 
+import Drasil.Database (HasUID(..))
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -24,13 +25,15 @@ import qualified Language.Drasil.Development as D
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import Theory.Drasil (HasOutput(output))
 
+import Drasil.Metadata (software)
 import Data.Drasil.Concepts.Documentation (description, funcReqDom, nonFuncReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, output_, section_,
-  software, symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis)
+  symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)
+import Drasil.Sentence.Combinators (addPercent)
 
 -- | Wrapper for 'reqIntro'.
 reqF :: [Section] -> Section
@@ -142,11 +145,10 @@ mkSecurityNFR refAddress lbl = cic refAddress (foldlSent [
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i) =>
                           [i] -> LabelledContent
-mkInputPropsTable []        = llcc reqInputsRef $ Paragraph EmptyS
-mkInputPropsTable reqInputs = llcc reqInputsRef $
-  Table [atStart symbol_, atStart description, atStart' unit_]
+mkInputPropsTable []        = mkRawLC (Paragraph EmptyS) reqInputsRef
+mkInputPropsTable reqInputs = mkRawLC (Table [atStart symbol_, atStart description, atStart' unit_]
   (mkTable [ch, atStart, toSentence] $ sortBySymbol reqInputs)
-  (titleize' reqInput) True
+  (titleize' reqInput) True) reqInputsRef
 
 -- | Reference for the Required Inputs table.
 reqInputsRef :: Reference
@@ -155,7 +157,7 @@ reqInputsRef = makeTabRef' (reqInput ^. uid)
 -- | Creates a table for use in the Functional Requirments section. Takes a list of tuples containing variables and sources, a label, and a caption.
 mkValsSourceTable :: (Quantity i, MayHaveUnit i, Concept i) =>
                           [(i, Sentence)] -> String -> Sentence -> LabelledContent
-mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $
+mkValsSourceTable vals labl cap = llccTab labl $
   Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 

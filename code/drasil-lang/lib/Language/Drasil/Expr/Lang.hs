@@ -5,7 +5,11 @@
 -- | The Drasil Expression language
 module Language.Drasil.Expr.Lang where
 
-import Drasil.Database.UID (UID)
+import Data.Either (fromRight, rights)
+import qualified Data.Foldable as NE
+import Data.List (nub)
+
+import Drasil.Database (UID)
 
 import Language.Drasil.Literal.Class (LiteralC (..))
 import Language.Drasil.Literal.Lang (Literal (..))
@@ -15,10 +19,6 @@ import Language.Drasil.Space (DiscreteDomainDesc, RealInterval, Space,
   assertIndexLike, assertSet, assertReal, assertBoolean)
 import qualified Language.Drasil.Space as S
 import Language.Drasil.WellTyped
-
-import Data.Either (fromRight, rights)
-import qualified Data.Foldable as NE
-import Data.List (nub)
 
 -- * Expression Types
 
@@ -236,7 +236,6 @@ instance LiteralC Expr where
   exactDbl = Lit . exactDbl
   perc l r = Lit $ perc l r
 
-
 -- helper function for typechecking to help reduce duplication
 vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either TypeError Space
 vvvInfer ctx op l r = do
@@ -373,7 +372,7 @@ instance Typed Expr Space where
   infer cxt (UnaryOpVN Norm e) = do
     et <- infer cxt e
     assertRealVector et (\sp -> "Vector norm only applies to vectors of real numbers. Received `" ++ sp ++ "`.")
-    pure et
+    pure S.Real
 
   infer cxt (UnaryOpVN Dim e) = do
     et <- infer cxt e

@@ -34,7 +34,6 @@ computer    = nc   "computer"         (cn' "computer")
 structure   = nc   "structure"        (cn' "structure")
 os          = commonIdeaWithDict "os" (cn' "operating system")    "OS"   [compScience]
 
-
 dataStruct, dataType, inDatum, outDatum, inParam, inVar, inValue, inQty,
   computerLiteracy, computerApp :: IdeaDict
 

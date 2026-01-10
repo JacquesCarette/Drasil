@@ -9,6 +9,7 @@ import Utils.Drasil (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Sentence.Combinators (definedIn'')
 
 import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
 import Drasil.GamePhysics.Concepts (centreMass)
@@ -21,7 +22,6 @@ import Drasil.GamePhysics.Goals (linearGS, angularGS)
 import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
 import Drasil.GamePhysics.Unitals (accj, forcej, massA, massj, normalVect,
   timeC, torquej, velA, velj, angAccj)
-
 
 import Data.Drasil.Concepts.Documentation (condition, goal, output_)
 import Data.Drasil.Concepts.Math (equation, ode)
@@ -139,7 +139,6 @@ col2DNP = nounPhraseSP "Collisions on 2D rigid bodies"
 col2DExpr {-, im3Rel2, im3Rel3, im3Rel4 -} :: Expr -- FIXME: add proper equation
 col2DExpr = apply1 velA time $+
   ((sy impulseS $/ sy massA) $* sy normalVect)
-
 
 col2DOutputs, impulseNote :: Sentence
 col2DOutputs = foldlSent [D.toSent (atStartNP (output_ `the_ofThe` inModel)),

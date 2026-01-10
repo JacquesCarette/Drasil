@@ -3,6 +3,7 @@ module Drasil.Projectile.Lesson.Example where
 import Data.Drasil.Concepts.Physics (velocity, height, time, acceleration, gravity, horizontalMotion)
 import qualified Data.Drasil.Quantities.Physics as QP (height, gravitationalAccel)
 import Data.Drasil.Units.Physics (velU)
+import Drasil.Document.Contents (unlbldCode, foldlSP_)
 import Language.Drasil.ShortHands (cR, lG)
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S

@@ -7,8 +7,9 @@ import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), ProgData(..))
 import Drasil.GProc (ProcProg, unJLC)
 import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), ProgData(..))
 
-import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..),
-  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP, ImplementationType(..))
+import Language.Drasil.Code (ImplementationType(..))
+import Language.Drasil.GOOL (PackageSym(..), AuxiliarySym(..), AuxData(..),
+  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 
 import Utils.Drasil (createDirIfMissing)
 

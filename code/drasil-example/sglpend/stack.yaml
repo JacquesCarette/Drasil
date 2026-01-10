@@ -4,7 +4,6 @@ packages:
 - .
 - ../../drasil-build
 - ../../drasil-code
-- ../../drasil-codeLang
 - ../../drasil-data
 - ../../drasil-database
 - ../../drasil-docLang

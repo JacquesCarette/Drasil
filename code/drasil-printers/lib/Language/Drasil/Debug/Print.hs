@@ -7,25 +7,28 @@ import Prelude hiding ((<>))
 import Control.Lens ((^.), view)
 import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe)
-import Text.PrettyPrint.HughesPJ
 import qualified Data.Map as Map
+import Data.Typeable (Proxy (Proxy))
+import Text.PrettyPrint.HughesPJ
 
+import Drasil.Database (UID, showUID, IsChunk, findAll)
 import Language.Drasil
-import Database.Drasil (IsChunk, findAll, ChunkDB(refbyTable, traceTable))
+import Theory.Drasil
+
 import Language.Drasil.Plain.Print
+import Language.Drasil.Printing.Import (spec)
 import Language.Drasil.Printing.PrintingInformation
 
-import Theory.Drasil
-import Data.Typeable (Proxy (Proxy))
+type UIDMap = Map.Map UID [UID]
 
 -- * Main Function
 -- | Gathers all printing functions and creates the debugging tables from them.
-printAllDebugInfo :: PrintingInformation -> [Doc]
-printAllDebugInfo pinfo = map
-  (cdbSection . ($ pinfo))
-  [ mkTableReferencedChunks
-  , mkTableDepChunks
-  , mkTableSymb
+printAllDebugInfo :: PrintingInformation -> UIDMap -> UIDMap -> [Doc]
+printAllDebugInfo pinfo refbyTable traceTable =
+    cdbSection (mkTableReferencedChunks refbyTable)
+  : cdbSection (mkTableDepChunks traceTable)
+  : map (cdbSection . ($ pinfo))
+  [ mkTableSymb
   , mkTableOfTerms
   , mkTableConcepts
   , mkTableUnitDefn
@@ -72,14 +75,14 @@ mkTableFromLenses pin _ ttle hsNEs =
     hdr   = foldl' (\r l -> r $$ nest (nestNum * snd l) (text $ fst l)) (text "UID")       (zip (map fst namedLenses) ins)
     col a = foldl' (\r l -> r $$ nest (nestNum * snd l) (fst l a)     ) (text $ showUID a) (zip (map snd namedLenses) ins)
 
-    chunks = findAll $ pin ^. ckdb
+    chunks = findAll $ pin ^. sysdb
 
     nestNum = 30
 
 openTerm :: NamedIdea a => PrintingInformation -> (String, a -> Doc)
-openTerm pinfo = ("Term", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) MultiLine . phrase)
+openTerm pinfo = ("Term", sentenceDoc MultiLine . spec pinfo . phrase)
 
-openSymbol :: HasSymbol a =>PrintingInformation -> (String, a -> Doc)
+openSymbol :: HasSymbol a => PrintingInformation -> (String, a -> Doc)
 openSymbol pinfo = ("Symbol", symbolDoc . flip symbol (pinfo ^. stg))
 
 openDefSymbol :: DefinesQuantity s => PrintingInformation -> (String, s -> Doc)
@@ -89,16 +92,16 @@ openAbbreviation :: Idea a => PrintingInformation -> (String, a -> Doc)
 openAbbreviation _ = ("Abbreviation", text . fromMaybe "" . getA)
 
 openDefinition :: Definition a => PrintingInformation -> (String, a -> Doc)
-openDefinition pinfo = ("Definition", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) OneLine . view defn)
+openDefinition pinfo = ("Definition", sentenceDoc OneLine . spec pinfo . view defn)
 
 openUnitSymbol :: HasUnitSymbol a => PrintingInformation -> (String, a -> Doc)
-openUnitSymbol pinfo = ("Unit Symbol", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) OneLine . Sy . usymb)
+openUnitSymbol pinfo = ("Unit Symbol", sentenceDoc OneLine . spec pinfo . Sy . usymb)
 
 openShortName :: HasShortName a => PrintingInformation -> (String, a -> Doc)
-openShortName pinfo = ("Short Name", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) OneLine . getSentSN . shortname)
+openShortName pinfo = ("Short Name", sentenceDoc OneLine . spec pinfo . getSentSN . shortname)
 
 openTitle :: PrintingInformation -> (String, Section -> Doc)
-openTitle pinfo = ("Title", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) MultiLine . tle)
+openTitle pinfo = ("Title", sentenceDoc MultiLine . spec pinfo . tle)
 
 cntntToStr :: RawContent -> String
 cntntToStr Table {} = "Table"
@@ -209,8 +212,8 @@ mkTableRef pinfo = mkTableFromLenses
   [openRef, openShortName]
 
 -- | Chunks that depend on other chunks. An empty list means the chunks do not depend on anything.
-mkTableDepChunks :: PrintingInformation -> Doc
-mkTableDepChunks pinfo = text
+mkTableDepChunks :: UIDMap -> Doc
+mkTableDepChunks traceTable = text
   "Dependent Chunks (the chunks on the left use the chunks on the right in some capacity)"
   <> colon
   $$ header (text "UID" $$ nest nestNum (text "Dependent UIDs"))
@@ -220,14 +223,14 @@ mkTableDepChunks pinfo = text
     testIndepLayout (x, ys) = text (show x) $$ nest nestNum (text $ show ys)
 
     traceMapUIDs :: [(UID, [UID])]
-    traceMapUIDs = Map.assocs $ traceTable $ pinfo ^. ckdb
+    traceMapUIDs = Map.assocs traceTable
 
     nestNum = 30
 
 -- | Chunks that are referenced and used by other chunks.
 -- Those chunks build on top of the ones listed here.
-mkTableReferencedChunks :: PrintingInformation -> Doc
-mkTableReferencedChunks pinfo =
+mkTableReferencedChunks :: UIDMap -> Doc
+mkTableReferencedChunks refbyTable =
   text "Referenced Chunks (other chunks build from these)" <> colon
   $$ header (text "UID" $$ nest nestNum (text "UIDs that use the left UID"))
   $$ vcat (map testIsolateLayout refbyUIDs)
@@ -236,7 +239,7 @@ mkTableReferencedChunks pinfo =
     testIsolateLayout (x, ys) = text (show x) $$ nest nestNum (text $ show ys)
 
     refbyUIDs :: [(UID, [UID])]
-    refbyUIDs = Map.assocs $ refbyTable $ pinfo ^. ckdb
+    refbyUIDs = Map.assocs refbyTable
 
     nestNum = 30
 

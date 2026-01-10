@@ -11,39 +11,27 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
   odeInfoChunks
 ) where
 
-import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
+import Control.Lens ((^.), _1, _2, over)
+
+import Drasil.Database (HasUID(..), (+++))
+import Language.Drasil (HasSymbol(symbol), MayHaveUnit(getUnit),
   HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar, implVar',
   compoundPhrase, nounPhrase, nounPhraseSP, label, sub, Idea(getA), NamedIdea(term), Stage(..),
-  (+++), Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
+  Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
 import Language.Drasil.Display (Symbol(Label, Concat))
 
-import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
-  externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep,
-  callStep, libFunction, libMethod, libFunctionWithResult, libMethodWithResult,
-  libConstructor, libConstructorMultiReqs, constructAndReturn, lockedArg,
-  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, functionArg,
-  customObjArg, recordArg, lockedParam, unnamedParam, customClass,
-  implementation, constructorInfo, methodInfo, methodInfoNoReturn,
-  appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj,
-  initSolListFromArray, initSolListWithVal, solveAndPopulateWhile,
-  returnExprList, fixedReturn',
-  ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill,
-  mandatoryStepFill, mandatoryStepsFill, callStepFill, libCallFill,
-  userDefinedArgFill, basicArgFill, functionArgFill, customObjArgFill,
-  recordArgFill, unnamedParamFill, unnamedParamPBVFill, userDefinedParamFill,
-  customClassFill, implementationFill, constructorInfoFill, methodInfoFill,
-  appendCurrSolFill, populateSolListFill, assignArrayIndexFill,
-  assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill,
-  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill',
-  CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, listToArray,
-  ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
-  mkODELibNoPath, pubStateVar, privStateVar,
-  NamedArgument, narg)
+import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk,
+  quantvar, quantfunc, listToArray)
+import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
+import Language.Drasil.Code.Lang (Lang(..))
+import Language.Drasil.Code.ExternalLibrary
+import Language.Drasil.Code.ExternalLibraryCall
+import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..), ODEMethod(..))
+import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib, mkODELibNoPath)
+import Language.Drasil.Mod (pubStateVar, privStateVar)
 
 import Drasil.Code.CodeExpr
 import Drasil.Code.CodeExpr.Development
-
-import Control.Lens ((^.), _1, _2, over)
 
 -- SciPy Library (Python)
 
@@ -124,7 +112,6 @@ rtolArg = narg $ implVar "rtol_scipy" (nounPhrase
   "the relative tolerance for the ODE solution"
   Real (label "rtol")
 
-
 r, xAxis, ut, transpose :: CodeVarChunk
 r = quantvar $ implVar "r_scipy" (nounPhrase "ODE object" "ODE objects")
   "the ODE object"
@@ -140,7 +127,6 @@ transpose = quantvar $ implVar "transpose_numpy"
   (nounPhrase "Numpy Array Transpose" "Numpy Array Transpose")
   "the Numpy Array Transpose"
   (Array Real) (label "u_t.T") -- (ccObjVar ut transpose) does not seem to work.
-
 
 f, odefunc, setIntegrator, setInitVal, successful,
   integrateStep, arange, odeintFunc :: CodeFuncChunk

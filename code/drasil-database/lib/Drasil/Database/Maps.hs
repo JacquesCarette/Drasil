@@ -1,4 +1,4 @@
-module Utils.Drasil.Maps where
+module Drasil.Database.Maps where
 
 import Data.Map.Strict
 

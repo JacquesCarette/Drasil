@@ -30,7 +30,6 @@ resolver: lts-22.44
 #   - wai
 packages:
 - .
-- ../drasil-codeLang
 
 # Dependency packages to be pulled from upstream that are not in the resolver.
 # These entries can reference officially published versions as well as

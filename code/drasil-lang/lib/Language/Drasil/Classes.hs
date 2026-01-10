@@ -23,10 +23,13 @@ module Language.Drasil.Classes (
   , DefiningExpr(defnExpr)
   ) where
 
+import Control.Lens (Lens')
+
+import Drasil.Database (UID)
+
 -- some classes are so 'core' that they are defined elsewhere
 -- also helps with cycles...
 import Language.Drasil.Symbol (HasSymbol)
-
 import Language.Drasil.Chunk.NamedIdea (Idea(..), NamedIdea(..))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.UnitLang (UDefn, USymb)
@@ -34,9 +37,6 @@ import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.Space (HasSpace)
 import Language.Drasil.Sentence (Sentence)
-import Drasil.Database.UID (UID)
-
-import Control.Lens (Lens')
 
 -- TODO: conceptual typeclass?
 -- TODO: I was thinking of splitting QDefinitions into Definitions with 2 type variables

@@ -1,23 +1,21 @@
 module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
   rocTempSimp, rocTempSimpDeriv, rocTempSimpRC) where
 
-import Language.Drasil
-import qualified Language.Drasil.Development as D
-import Utils.Drasil (weave)
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
-
 import Data.Drasil.Citations (koothoor2013)
-
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)
-
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
 import Data.Drasil.Quantities.Physics as QP (time)
 import Data.Drasil.Quantities.Thermodynamics as QT (heatCapSpec, temp)
-
-import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel')
+import Drasil.Sentence.Combinators (eqN)
+import Language.Drasil
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
+import qualified Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel', Derivation,
+  mkDerivName)
+import Utils.Drasil (weave)
 
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpLCCCW, assumpLCCWP,
   assumpTPCAV, assumpDWPCoV, assumpSHECoV, assumpTHCCoT)

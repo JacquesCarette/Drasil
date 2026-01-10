@@ -12,12 +12,14 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSP_, foldlSPCol)
 
-import Drasil.Metadata (inModel)
+import Drasil.Metadata (inModel, software)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,
-  output_, physical, physics, property, quantity, software, softwareSys,
+  output_, physical, physics, property, quantity, softwareSys,
   solution, sysCont, system, user, value, variable)
 import Data.Drasil.Concepts.Education (calculus, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon')
@@ -51,18 +53,17 @@ import Drasil.SWHS.Requirements (funcReqs, nfRequirements,
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
-  simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
+  simTime, specParamValList, symbols, tempC, tempPCM,
   tempW, thickness, watE)
 
 si :: System
 si = mkSystem
   progName' Specification [thulasi, brooks, spencerSmith]
   [purp] [] [scope] [motivation]
-  symbols
   tMods genDefs SWHS.dataDefs iMods
   []
   inputs outputs constrained specParamValList
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
@@ -89,8 +90,8 @@ conceptChunks =
   map cw [surArea, area]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks [] SWHS.dataDefs insModel
-  genDefs tMods concIns citations (labelledContent ++ funcReqsTables) allRefs
+symbMap = cdb symbols ideaDicts conceptChunks [] SWHS.dataDefs insModel
+  genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

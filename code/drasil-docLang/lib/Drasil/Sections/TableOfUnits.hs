@@ -26,11 +26,11 @@ tOfUnitNone _ = tOfUnitHelper [] [] []
 
 -- | Helper for making a Table of Units.
 tOfUnitHelper :: [Sentence] -> [s -> Sentence] -> [s] -> LabelledContent
-tOfUnitHelper _       _  [] = llcc unitTableRef $ Paragraph EmptyS
-tOfUnitHelper []      _  _  = llcc unitTableRef $ Paragraph EmptyS
-tOfUnitHelper _       [] _  = llcc unitTableRef $ Paragraph EmptyS
-tOfUnitHelper headers fs u  = llcc unitTableRef $ Table headers
-  (mkTable fs u) (S "Table of Units") True
+tOfUnitHelper _       _  [] = mkRawLC (Paragraph EmptyS) unitTableRef
+tOfUnitHelper []      _  _  = mkRawLC (Paragraph EmptyS) unitTableRef
+tOfUnitHelper _       [] _  = mkRawLC (Paragraph EmptyS) unitTableRef
+tOfUnitHelper headers fs u  = mkRawLC (Table headers
+  (mkTable fs u) (S "Table of Units") True) unitTableRef
 
 -- | Makes a reference to the Table of Units.
 unitTableRef :: Reference

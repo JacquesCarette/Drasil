@@ -3,7 +3,6 @@ module Build.Drasil.Make.Print where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), ($$), hsep, vcat)
-
 import qualified Data.Text as T
 import Text.Wrap
 
@@ -13,7 +12,6 @@ import Build.Drasil.Make.AST (Annotation, Command(C),
 import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
 import Build.Drasil.Make.Import (RuleTransformer, toMake)
 import Build.Drasil.Make.MakeString (renderMS)
-import CodeLang.Drasil (Comment)
 
 -- | Generates the makefile by calling 'build' after 'toMake'.
 genMake :: RuleTransformer c => [c] -> Doc
@@ -29,7 +27,7 @@ printRule :: Rule -> Doc
 printRule (R c t d _ cmd) = printComments c $+$ printTarget t d $+$ printCmds cmd
 
 -- | Renders a makefile comment
-printComment :: Comment -> Doc
+printComment :: String -> Doc
 printComment [] = empty
 printComment c  = text $ T.unpack (wrapText wrapSettings 80 $ T.pack c) ++ "\n"
 

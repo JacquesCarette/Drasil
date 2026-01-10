@@ -1,6 +1,5 @@
 module Language.Drasil.Printing.Import.Literal (literal) where
 
-
 import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Literal.Development (Literal(..))
 
@@ -16,9 +15,10 @@ import Language.Drasil.Printing.Import.Helpers
 
 literal :: Literal -> PrintingInformation -> P.Expr
 literal (Dbl d)                  sm = case sm ^. getSetting of
-  Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
-     (fst $ processExpo $ snd $ floatToDigits 10 d) 0
-     (toInteger $ snd $ processExpo $ snd $ floatToDigits 10 d)
+  Engineering ->
+     let (f, s) = processExpo $ snd $ floatToDigits 10 d in
+     P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
+     f 0 (toInteger s)
   Scientific  ->  P.Dbl d
 literal (Int i)                   _ = P.Int i
 literal (ExactDbl d)              _ = P.Int d

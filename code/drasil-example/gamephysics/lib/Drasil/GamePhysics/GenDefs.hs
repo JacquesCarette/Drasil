@@ -1,28 +1,28 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD) where
 
-import Language.Drasil
-import qualified Language.Drasil.Sentence.Combinators as S
-import Theory.Drasil (GenDefn, gd, equationalModel')
-import Utils.Drasil (weave)
+import Data.Drasil.Concepts.Math as CM (line, cartesian)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
  fOfGravity)
+import Language.Drasil
+import qualified Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil (GenDefn, gd, equationalModel', Derivation, mkDerivName)
+import Utils.Drasil (weave)
+
+import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
+  rigidTwoDAssump)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+import Drasil.GamePhysics.References (accelGravitySrc, impulseSrc)
+import Drasil.GamePhysics.TMods (newtonLUG)
 import Drasil.GamePhysics.Unitals (mLarger, dispNorm, dVect, massA, massB,
   momtInertA, momtInertB, normalLen, normalVect, perpLenA, perpLenB, initRelVel,
   mass_1, mass_2, sqrDist, distMass)
-import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
-  rigidTwoDAssump)
-import Data.Drasil.Concepts.Math as CM (line, cartesian)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import Drasil.GamePhysics.TMods (newtonLUG)
-import Drasil.GamePhysics.References (accelGravitySrc, impulseSrc)
 
 ----- General Models -----
 
 generalDefns :: [GenDefn]
 generalDefns = [accelGravityGD, impulseGD]
-
 
 {-conservationOfMomentGDef :: RelationConcept
 conservationOfMomentGDef = makeRC "conservOfMoment" (nounPhraseSP "Conservation of Momentum")
@@ -91,7 +91,6 @@ accelGravityDerivSentence1 :: [Sentence]
 accelGravityDerivSentence1 = [S "From",
         namedRef newtonLUG (S "Newton's law" `S.of_` S "universal gravitation") `sC` S "we have"]
 
-
 accelGravityDerivSentence2 :: [Sentence]
 accelGravityDerivSentence2 = [(S "The above equation governs the gravitational attraction between two bodies" !.),
         S "Suppose that one of the bodies is significantly more massive than the other" `sC`
@@ -137,8 +136,6 @@ accelGravityDerivEqn5 = sy QP.gravitationalAccel $= neg (sy QP.gravitationalCons
 accelGravityDerivEqns :: (ExprC r, LiteralC r) => [r]
 accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGravityDerivEqn3,
                          accelGravityDerivEqn4, accelGravityDerivEqn5]
-
-
 
 ----------------------------Impulse for Collision--------------------------------------------
 

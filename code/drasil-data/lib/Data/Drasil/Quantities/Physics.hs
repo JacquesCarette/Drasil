@@ -55,7 +55,7 @@ constAccel             = uc CP.constAccel             (sup lA lC)               
 displacement           = uc CP.displacement           (vec lU)                                    Real        metre
 distance               = uc CP.distance               lD                                          Real        metre
 energy                 = uc CP.energy                 cE                                          Real        joule
-force                  = uc CP.force                  (vec cF)                                    Real        newton
+force                  = uc CP.force                  (vec cF)                                    (Vect Real) newton
 frequency              = uc CP.frequency              lF                                          Real        hertz
 gravitationalAccel     = uc CP.gravitationalAccel     (vec lG)                                    Real        accelU
 gravitationalConst     = uc CP.gravitationalConst     cG                                          Real        gravConstU
@@ -84,7 +84,7 @@ scalarPos              = uc CP.scalarPos              lP                        
 tension                = uc CP.tension                (vec cT)                                    Real        newton
 time                   = uc CP.time                   lT                                          Real        second
 torque                 = uc CP.torque                 (vec lTau)                                  Real        torqueU
-velocity               = uc CP.velocity               (Concat [vec lV, label "(", lT, label ")"]) Real        velU
+velocity               = uc CP.velocity               (Concat [vec lV, label "(", lT, label ")"]) (Vect Real) velU
 weight                 = uc CP.weight                 cW                                          Real        newton
 fOfGravity             = uc CP.fOfGravity             (sub (vec cF) (vec lG))                     Real        newton
 

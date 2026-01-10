@@ -2,17 +2,15 @@ module Drasil.SSP.Defs where --export all of this file
 
 import Control.Lens ((^.))
 
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
-
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.ShortHands (lX,lY)
 
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, requirement, srs)
 import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,
-  likelyChg, physSyst, property, requirement, refBy, refName, safety, srs, typUnc,
-  unlikelyChg)
+  likelyChg, physSyst, property, refBy, refName, safety, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Education (mechanics)
 import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)

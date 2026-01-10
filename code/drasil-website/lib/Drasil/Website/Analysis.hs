@@ -5,14 +5,12 @@ module Drasil.Website.Analysis where
 
 import Language.Drasil
 
-
 -- * Analysis Section
 --
 -- $analysis
 --
 -- Holds functions that are made for the Analysis section of the Drasil Website,
 -- including the section creator functions, title & introduction, and references.
-
 
 -- | Creates the Analysis of Drasil Section. This section is split into the following sub-sections:
 --
@@ -146,10 +144,10 @@ tableOfGraphsDescClassInst = S "The class instance graphs aim to look at the str
 
 -- | Creates a table that links to all generated type and class instance graphs.
 mkGraphsTable :: FilePath -> FilePath -> [String] -> Contents
-mkGraphsTable typePath clsInstPath pkgs = LlC $ llcc tableGraphRef $ Table
+mkGraphsTable typePath clsInstPath pkgs = LlC $ mkRawLC (Table
   [S "Generated Type Graphs", S "Generated Class Instance Graphs"] -- Header row
   (graphTable "datatype" typePath "classInst" clsInstPath pkgs) -- Create the body of the table
-  (S "Type Graphs") True -- Label the table
+  (S "Type Graphs") True) tableGraphRef -- Label the table
 
 -- | Table of graphs reference.
 tableGraphRef :: Reference
@@ -197,7 +195,7 @@ graphSecBwPkgs = "The graph displayed below shows the dependencies between the p
 
 -- | Function to create displayable versions of the graphs.
 dependencyGraphs :: FilePath -> String -> Contents
-dependencyGraphs path pkg = LlC $ llcc (makeFigRef $ "Figure" ++ pkg) $ fig (S $ "Package - " ++ pkg) (drasilDisplayDepGraphPath path pkg)
+dependencyGraphs path pkg = LlC $ llccFig ("Figure" ++ pkg) $ fig (S $ "Package - " ++ pkg) (drasilDisplayDepGraphPath path pkg)
 
 -- | Function to get the paths of graphs we want to display on the website.
 drasilDisplayDepGraphPath :: FilePath -> FilePath -> String

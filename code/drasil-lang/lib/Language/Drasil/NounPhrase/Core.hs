@@ -3,7 +3,10 @@ module Language.Drasil.NounPhrase.Core (
   -- * Types
   CapitalizationRule(..), NP(..),
   PluralForm, PluralRule(..),
-  NPStruct(S,(:-:),(:+:),P)) where
+  NPStruct(S,(:-:),(:+:),P)
+) where
+
+import Drasil.Database (HasChunkRefs(..))
 
 import Language.Drasil.Symbol (Symbol)
 
@@ -47,3 +50,6 @@ data NP =
   --capitalization, one of the two cannot be capitalized right now.
   --The two capitalization rules are for sentenceCase / titleCase respectively
 
+instance HasChunkRefs NP where
+    chunkRefs _ = mempty
+    {-# INLINABLE chunkRefs #-}

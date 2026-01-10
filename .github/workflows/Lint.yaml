@@ -16,7 +16,7 @@ jobs:
     name: "Linter"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       # Prepare more specific paths filters
       - uses: dorny/paths-filter@v3.0.2
@@ -44,7 +44,7 @@ jobs:
           path: code/
           fail-on: status
 
-      - name: 'Check no lines end with trailing whitespace and no files are missing trailing newlines'
+      - name: 'Check lines have no trailing whitespace, all files have trailing newlines, and no file contains exessive newlines'
         if: ${{ steps.filter.outputs.hs == 'true' }}
         run: scripts/check_whitespace.sh
 

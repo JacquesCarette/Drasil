@@ -13,6 +13,19 @@ This is a place to organize our "Working Notes". See [#4429](../issues/4429) for
   - [DefinedQuantityDict](DefinedQuantityDict)
   - [Concept Chunk (and Related Chunks)](<Concept-Chunk-(and-Related-Chunks)>)
 
+## Brandon
+
+- [File Input Patterns Design Discussion](File-Input-Patterns-Design-Discussion)
+
+## Dr. Carette
+
+- [Questions](Questions)
+- [Nuggets](Nuggets)
+
+## Dr. Smith
+
+- [Getting to Know Potential Users of Drasil](Getting-to-Know-Potential-Users-of-Drasil)
+
 ## Other
 
 #### Design
@@ -27,9 +40,12 @@ This is a place to organize our "Working Notes". See [#4429](../issues/4429) for
 - [Purpose of Document](Recipe-for-Purpose-of-Document-Section)
 - [How to Define Unitals](WIP-How-to-define-Unitals)
 - [File Input Patterns](File-Input-Patterns-Design-Discussion)
+- [Sub-packages](SubPackages)
+- [Promoting Drasil](Promoting-Drasil)
 
 #### WIP Projects
 
 - [Refined Theories Version of Drasil](Refined-Theories-version-of-Drasil)
 - [Idealized Process](Idealized-Process)
 - [Chunk Redesign 2024](Chunk-Redesign-2024)
+- [Refactors](Refactors) to be done to codebase

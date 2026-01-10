@@ -64,8 +64,8 @@ introductionSubsections subs =
 introSubToSentence :: IntroSub -> [Sentence]
 introSubToSentence (IPurpose _) = []  -- Purpose is already mentioned as "purpose of this document"
 introSubToSentence (IScope _)   = [S.the_ofThe (phrase scope) (plural requirement)]
-introSubToSentence (IChar _ _ _) = [S.the_ofThe (plural characteristic) (phrase intReader)]
-introSubToSentence (IOrgSec _ _ _) = [S.the_ofThe (phrase Doc.organization) (phrase document)]
+introSubToSentence IChar {} = [S.the_ofThe (plural characteristic) (phrase intReader)]
+introSubToSentence IOrgSec {} = [S.the_ofThe (phrase Doc.organization) (phrase document)]
 
 
 -------------------------

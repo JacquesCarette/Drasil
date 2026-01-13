@@ -1,9 +1,9 @@
 module Language.Drasil.Code.DataDesc where
 
-import Language.Drasil.Chunk.Code (CodeVarChunk)
-
 import Data.List (nub)
 import Data.List.NonEmpty (NonEmpty(..), fromList)
+
+import Language.Drasil.Chunk.Code (CodeVarChunk)
 
 -- | A 'DataItem' is just a 'CodeVarChunk' (a piece of data).
 type DataItem = CodeVarChunk

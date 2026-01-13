@@ -20,6 +20,8 @@ import Language.Drasil (HasSymbol(symbol), MayHaveUnit(getUnit),
   Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
 import Language.Drasil.Display (Symbol(Label, Concat))
 
+import Drasil.Code.CodeExpr
+import Drasil.Code.CodeExpr.Development
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk,
   quantvar, quantfunc, listToArray)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
@@ -29,9 +31,6 @@ import Language.Drasil.Code.ExternalLibraryCall
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib, mkODELibNoPath)
 import Language.Drasil.Mod (pubStateVar, privStateVar)
-
-import Drasil.Code.CodeExpr
-import Drasil.Code.CodeExpr.Development
 
 -- SciPy Library (Python)
 

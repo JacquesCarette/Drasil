@@ -1,13 +1,16 @@
 {-# LANGUAGE TypeFamilies #-}
-
 -- | The logic to render Python auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
   PythonProject(..)
 ) where
 
+import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import Text.PrettyPrint.HughesPJ (Doc)
+
+import Drasil.GOOL (onCodeList, pyName, pyVersion)
+
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
-
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
@@ -16,11 +19,6 @@ import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
-
-import Drasil.GOOL (onCodeList, pyName, pyVersion)
-
-import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Holds a Python project.
 newtype PythonProject a = PP {unPP :: a}

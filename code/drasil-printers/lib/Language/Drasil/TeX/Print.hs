@@ -41,10 +41,8 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Data.Foldable (foldl')
 
 -- | Generates a LaTeX document.
-genTeX :: L.Document -> PrintingInformation -> TP.Doc
-genTeX doc@(L.Document _ _ toC _) sm =
-  runPrint (buildStd sm toC $ I.makeDocument sm $ L.checkToC doc) Text
-genTeX L.Notebook{} _ = TP.empty
+genTeX :: Document -> L.ShowTableOfContents -> PrintingInformation -> TP.Doc
+genTeX doc toC sm = runPrint (buildStd sm toC doc) Text
 
 -- | Helper to build the document.
 buildStd :: PrintingInformation -> L.ShowTableOfContents -> Document -> D

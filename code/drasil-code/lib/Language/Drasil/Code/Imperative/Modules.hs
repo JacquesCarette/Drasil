@@ -9,10 +9,35 @@ module Language.Drasil.Code.Imperative.Modules (
   genOutputFormat, genOutputFormatProc, genSampleInput
 ) where
 
-import Drasil.Code.CodeExpr.Development
+import Prelude hiding (print)
+import Data.List (intersperse, partition)
+import Data.Map ((!), elems, member)
+import qualified Data.Map as Map (lookup, filter)
+import Data.Maybe (maybeToList, catMaybes)
+import Control.Monad (liftM2, zipWithM)
+import Control.Monad.State (get, gets, modify)
+import Control.Lens ((^.))
+import Text.PrettyPrint.HughesPJ (render)
+import Data.Deriving.Internal (interleave)
 
 import Drasil.Database (HasUID(..))
 import Language.Drasil (Constraint(..), RealInterval(..))
+import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl, PrintingInformation)
+import qualified Language.Drasil.Printing.Import as PI (codeExpr)
+import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
+  SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
+  oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..),
+  ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
+  BooleanExpression(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
+  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
+  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
+    convTypeOO, VisibilityTag(..))
+import qualified Drasil.GOOL as OO (SFile)
+import Drasil.GProc (ProcProg)
+import qualified Drasil.GProc as Proc (SFile)
+
+import Drasil.Code.CodeExpr.Development
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   constModDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc,
@@ -51,33 +76,6 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   Logging(..), Structure(..), hasSampleInput, InternalConcept(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
-import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl, PrintingInformation)
-import qualified Language.Drasil.Printing.Import as PI (codeExpr)
-
-import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
-  SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
-  oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..),
-  ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
-  BooleanExpression(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
-  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
-    convTypeOO, VisibilityTag(..))
-
-import qualified Drasil.GOOL as OO (SFile)
-import Drasil.GProc (ProcProg)
-import qualified Drasil.GProc as Proc (SFile)
-
-import Prelude hiding (print)
-import Data.List (intersperse, partition)
-import Data.Map ((!), elems, member)
-import qualified Data.Map as Map (lookup, filter)
-import Data.Maybe (maybeToList, catMaybes)
-import Control.Monad (liftM2, zipWithM)
-import Control.Monad.State (get, gets, modify)
-import Control.Lens ((^.))
-import Text.PrettyPrint.HughesPJ (render)
-import Data.Deriving.Internal (interleave)
 
 type ConstraintCE = Constraint CodeExpr
 

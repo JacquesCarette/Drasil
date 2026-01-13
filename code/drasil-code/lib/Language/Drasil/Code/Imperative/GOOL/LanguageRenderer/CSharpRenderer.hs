@@ -1,10 +1,15 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE PostfixOperators #-}
-
 -- | The logic to render C# auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
   CSharpProject(..)
 ) where
+
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import qualified Prelude as P ((<>))
+import Text.PrettyPrint.HughesPJ (Doc)
+
+import Drasil.GOOL (onCodeList, csName, csVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
@@ -18,12 +23,6 @@ import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, nativeBinary, osClassDefault, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
-
-import Drasil.GOOL (onCodeList, csName, csVersion)
-
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import qualified Prelude as P ((<>))
-import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Holds a C# project.
 newtype CSharpProject a = CSP {unCSP :: a}

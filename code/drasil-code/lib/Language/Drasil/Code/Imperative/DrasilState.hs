@@ -8,6 +8,7 @@ module Language.Drasil.Code.Imperative.DrasilState (
 import Control.Lens ((^.), makeLenses, over)
 import Control.Monad.State (State, gets)
 import Data.List (nub)
+import Data.Containers.ListUtils (nubOrd)
 import Data.Set (Set)
 import Data.Map (Map, fromList)
 import Text.PrettyPrint.HughesPJ (Doc, ($$))
@@ -16,8 +17,6 @@ import Drasil.Database (UID, findOrErr)
 import Language.Drasil (Space, Expr, DefinedQuantityDict)
 import Language.Drasil.Printers (PrintingInformation)
 import Drasil.GOOL (VisibilityTag(..), CodeType)
-
-import Data.Containers.ListUtils (nubOrd)
 
 import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)

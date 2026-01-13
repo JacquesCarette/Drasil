@@ -8,6 +8,13 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   genModClasses, readData, readDataProc, renderC
 ) where
 
+import Prelude hiding (sin, cos, tan, log, exp)
+import Control.Lens ((^.))
+import qualified Data.Map as Map (lookup)
+import Control.Monad (liftM2,liftM3)
+import Control.Monad.State (get, modify)
+import Data.List ((\\), intersect)
+
 import Drasil.Code.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
 import qualified Drasil.Code.CodeExpr.Development as S (CodeExpr(..))
 import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
@@ -58,13 +65,6 @@ import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile)
-
-import Prelude hiding (sin, cos, tan, log, exp)
-import Data.List ((\\), intersect)
-import qualified Data.Map as Map (lookup)
-import Control.Monad (liftM2,liftM3)
-import Control.Monad.State (get, modify)
-import Control.Lens ((^.))
 
 -- | Gets a chunk's 'CodeType', by checking which 'CodeType' the user has chosen to
 -- match the chunk's 'Space' to.

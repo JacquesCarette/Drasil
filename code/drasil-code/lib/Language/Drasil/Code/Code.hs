@@ -2,14 +2,14 @@
 module Language.Drasil.Code.Code (
     Code(..),
     spaceToCodeType
-    ) where
+) where
+
+import Data.List.NonEmpty (toList)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 import qualified Language.Drasil as S (Space(..))
 
 import Drasil.GOOL (CodeType(..))
-
-import Text.PrettyPrint.HughesPJ (Doc)
-import Data.List.NonEmpty (toList)
 
 -- | Represents the generated code as a list of file names and rendered code pairs.
 newtype Code = Code { unCode :: [(FilePath, Doc)]}

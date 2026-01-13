@@ -3,7 +3,25 @@ module Language.Drasil.Code.Imperative.Generator (
   generator, generateCode, generateCodeProc
 ) where
 
+import Control.Lens ((^.))
+import Control.Monad.State (get, evalState, runState)
+import qualified Data.Set as Set (fromList)
+import Data.Map (fromList, member, keys, elems)
+import Data.Maybe (maybeToList, catMaybes)
+import System.Directory (setCurrentDirectory, getCurrentDirectory)
+import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
+
 import Language.Drasil
+import Drasil.GOOL (OOProg, VisibilityTag(..),
+  ProgData(..), initialState)
+import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
+import Drasil.GProc (ProcProg)
+import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
+import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
+import Language.Drasil.Printing.Import (spec)
+import Drasil.System
+import Utils.Drasil (createDirIfMissing)
+
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
@@ -33,25 +51,6 @@ import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
   LogConfig(..), OptionalFeatures(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
-import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
-import Language.Drasil.Printing.Import (spec)
-
-import Drasil.GOOL (OOProg, VisibilityTag(..),
-  ProgData(..), initialState)
-import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
-import Drasil.GProc (ProcProg)
-import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
-import Drasil.System
-
-import Utils.Drasil (createDirIfMissing)
-
-import System.Directory (setCurrentDirectory, getCurrentDirectory)
-import Control.Lens ((^.))
-import Control.Monad.State (get, evalState, runState)
-import qualified Data.Set as Set (fromList)
-import Data.Map (fromList, member, keys, elems)
-import Data.Maybe (maybeToList, catMaybes)
-import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 
 -- | Initializes the generator's 'DrasilState'.
 -- 'String' parameter is a string representing the date.

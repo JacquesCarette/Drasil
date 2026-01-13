@@ -968,6 +968,37 @@ symbol :: Symbol -> Expr
 pUnit :: USymb -> Expr
 
 
+-- | Defines functions to print on plain files (for .txt, .log, etc.).
+module Language.Drasil.Plain.Print
+
+-- | Data is either linear or not.
+data SingleLine
+OneLine :: SingleLine
+MultiLine :: SingleLine
+
+-- | Create expressions for a document in <a>Doc</a> format.
+exprDoc :: SingleLine -> Expr -> Doc
+
+-- | Create code expressions for a document in <a>Doc</a> format. assumes
+--   someone has already makde the code expression into an expression
+codeExprDoc :: SingleLine -> Expr -> Doc
+
+-- | Create sentences for a document in <a>Doc</a> format.
+sentenceDoc :: SingleLine -> Spec -> Doc
+
+-- | Create symbols for a document in <a>Doc</a> format.
+symbolDoc :: Symbol -> Doc
+
+-- | Helper for printing units in <a>Doc</a> format.
+unitDoc :: SingleLine -> USymb -> Doc
+
+-- | Helper for printing Symbols
+showSymb :: Symbol -> String
+
+-- | Helper for printing a HasSymbol in Implementation Stage
+showHasSymbImpl :: HasSymbol x => x -> String
+
+
 -- | Defines types similar to content types in <a>Language.Drasil</a> but
 --   better suited for printing.
 module Language.Drasil.Printing.LayoutObj
@@ -1413,37 +1444,6 @@ makeDocument :: PrintingInformation -> Document -> Document
 --   <a>Project</a>.
 makeProject :: PrintingInformation -> Document -> Project
 
-
--- | Defines functions to print on plain files (for .txt, .log, etc.).
-module Language.Drasil.Plain.Print
-
--- | Data is either linear or not.
-data SingleLine
-OneLine :: SingleLine
-MultiLine :: SingleLine
-
--- | Create expressions for a document in <a>Doc</a> format.
-exprDoc :: SingleLine -> Expr -> Doc
-
--- | Create code expressions for a document in <a>Doc</a> format. assumes
---   someone has already makde the code expression into an expression
-codeExprDoc :: SingleLine -> Expr -> Doc
-
--- | Create sentences for a document in <a>Doc</a> format.
-sentenceDoc :: SingleLine -> Spec -> Doc
-
--- | Create symbols for a document in <a>Doc</a> format.
-symbolDoc :: Symbol -> Doc
-
--- | Helper for printing units in <a>Doc</a> format.
-unitDoc :: SingleLine -> USymb -> Doc
-
--- | Helper for printing Symbols
-showSymb :: Symbol -> String
-
--- | Helper for printing a HasSymbol in Implementation Stage
-showHasSymbImpl :: HasSymbol x => x -> String
-
 module Language.Drasil.Debug.Print
 type UIDMap = Map UID [UID]
 
@@ -1862,7 +1862,7 @@ instance GHC.Classes.Eq Language.Drasil.TeX.Preamble.Def
 module Language.Drasil.TeX.Print
 
 -- | Generates a LaTeX document.
-genTeX :: Document -> PrintingInformation -> Doc
+genTeX :: Document -> ShowTableOfContents -> PrintingInformation -> Doc
 
 -- | Print an expression to a document.
 pExpr :: Expr -> D
@@ -2108,7 +2108,7 @@ showSymb :: Symbol -> String
 showHasSymbImpl :: HasSymbol x => x -> String
 
 -- | Generates a LaTeX document.
-genTeX :: Document -> PrintingInformation -> Doc
+genTeX :: Document -> ShowTableOfContents -> PrintingInformation -> Doc
 
 -- | Generate a python notebook document (using json). build : build the
 --   SRS document in JSON format build': build the general Jupyter Notbook

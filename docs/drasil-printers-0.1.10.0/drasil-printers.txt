@@ -231,7 +231,7 @@ showSymb :: Symbol -> String
 showHasSymbImpl :: HasSymbol x => x -> String
 
 -- | Generates a LaTeX document.
-genTeX :: Document -> PrintingInformation -> Doc
+genTeX :: Document -> ShowTableOfContents -> PrintingInformation -> Doc
 
 -- | Generate a python notebook document (using json). build : build the
 --   SRS document in JSON format build': build the general Jupyter Notbook

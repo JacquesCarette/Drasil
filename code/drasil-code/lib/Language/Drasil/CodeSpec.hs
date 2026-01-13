@@ -4,7 +4,6 @@
 module Language.Drasil.CodeSpec where
 
 import Prelude hiding (const)
-
 import Control.Lens ((^.), makeLenses, Lens', makeClassyFor)
 import Data.List (nub, (\\))
 import qualified Data.Map as Map

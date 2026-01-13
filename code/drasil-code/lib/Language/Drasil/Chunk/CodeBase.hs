@@ -1,10 +1,11 @@
 module Language.Drasil.Chunk.CodeBase where
 
 import Drasil.Database (ChunkDB, findOrErr, UID)
+import Language.Drasil
+
 import Drasil.Code.CodeExpr.Development
 import Drasil.Code.CodeVar (CodeChunk(..), VarOrFunc(..), CodeFuncChunk(..),
   CodeVarChunk(..))
-import Language.Drasil
 
 -- | Construct a 'CodeVarChunk' from a 'Quantity'.
 quantvar :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeVarChunk

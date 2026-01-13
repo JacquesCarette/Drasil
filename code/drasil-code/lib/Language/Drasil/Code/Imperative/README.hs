@@ -5,7 +5,6 @@ module Language.Drasil.Code.Imperative.README (
 ) where
 
 import Prelude hiding ((<>))
-
 import Data.List.NonEmpty (nonEmpty, toList)
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 

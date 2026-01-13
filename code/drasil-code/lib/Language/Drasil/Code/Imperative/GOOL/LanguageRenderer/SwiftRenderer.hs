@@ -1,13 +1,17 @@
 {-# LANGUAGE TypeFamilies #-}
-
 -- | The logic to render Swift auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (
   SwiftProject(..)
 ) where
 
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import Text.PrettyPrint.HughesPJ (Doc, empty)
+
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+
+import Drasil.GOOL (onCodeList, swiftName, swiftVersion)
 
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
@@ -16,11 +20,6 @@ import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)
-
-import Drasil.GOOL (onCodeList, swiftName, swiftVersion)
-
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 -- | Holds a Swift project.
 newtype SwiftProject a = SP {unSP :: a}

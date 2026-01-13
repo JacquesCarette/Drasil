@@ -2,18 +2,19 @@ module Language.Drasil.Code.Imperative.WriteInput (
   makeInputFile
 ) where
 
+import Data.List (intersperse, transpose)
+import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, space,
+  text, vcat)
+
 import Utils.Drasil (blank)
 import Language.Drasil hiding (space, Matrix)
-import Language.Drasil.Code.DataDesc (DataDesc, Data(..), Delim,
-  LinePattern(..), getDataInputs, isJunk)
 import Language.Drasil.Expr.Development (Expr(Matrix))
 import Language.Drasil.Printers (SingleLine(OneLine), exprDoc, sentenceDoc,
   unitDoc, PrintingInformation)
 import Language.Drasil.Printing.Import (expr, spec)
 
-import Data.List (intersperse, transpose)
-import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, space,
-  text, vcat)
+import Language.Drasil.Code.DataDesc (DataDesc, Data(..), Delim,
+  LinePattern(..), getDataInputs, isJunk)
 
 -- | Generate a sample input file.
 makeInputFile :: PrintingInformation -> DataDesc -> [Expr] -> Doc

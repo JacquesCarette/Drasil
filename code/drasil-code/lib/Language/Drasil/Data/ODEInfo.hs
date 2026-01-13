@@ -3,10 +3,11 @@ module Language.Drasil.Data.ODEInfo (
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..)
 ) where
 
-import Drasil.Code.CodeExpr.Development
-import Language.Drasil.Chunk.Code (CodeVarChunk)
 import Theory.Drasil (makeAODESolverFormat, formEquations,
   DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..))
+
+import Drasil.Code.CodeExpr.Development
+import Language.Drasil.Chunk.Code (CodeVarChunk)
 import Language.Drasil.Chunk.CodeBase (quantvar)
 
 -- This may be temporary, but need a structure to hold ODE info for now.

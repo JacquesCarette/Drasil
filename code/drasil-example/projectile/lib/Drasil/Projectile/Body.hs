@@ -126,7 +126,7 @@ si :: System
 si = mkSystem progName Specification
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
-  symbols tMods genDefns dataDefs iMods
+  tMods genDefns dataDefs iMods
   []
   inputs outputs constrained constants
   symbMap allRefs

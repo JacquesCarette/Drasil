@@ -173,8 +173,8 @@ massCon_2         = constrained' massObj_2 [gtZeroConstr] (dbl 0.5)
 inConstraints :: [ConstrConcept]
 inConstraints = [lenRodCon_1, lenRodCon_2, massCon_1, massCon_2]
 
-outConstraints :: [ConstrConcept]
-outConstraints = [pendDisAngleCon_1, pendDisAngleCon_2]
+outConstraints :: [UncertQ]
+outConstraints = [uq pendDisAngle defaultUncrt]
 
 pendDisAngle :: ConstrConcept
 pendDisAngle = cuc' "pendDisAngle"

@@ -25,8 +25,8 @@ import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, HasUID(..), ChunkDB)
-import Language.Drasil (Quantity, MayHaveUnit, Sentence, Concept, ConstrConcept,
-  Reference, People, IdeaDict, CI, ConstQDef, nw, abrv, DefinedQuantityDict)
+import Language.Drasil (Sentence, ConstrConcept, Reference, People, IdeaDict,
+  CI, ConstQDef, nw, abrv, DefinedQuantityDict)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Drasil.Metadata (runnableSoftware, website, srs, notebook)
 import Utils.Drasil (toPlainName)
@@ -62,7 +62,7 @@ data System where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
- SI :: (Quantity e, Eq e, MayHaveUnit e, Concept e) =>
+ SI ::
   { _sysName      :: CI
   , _programName  :: String
   , _kind         :: SystemKind
@@ -71,7 +71,6 @@ data System where
   , _background   :: Background
   , _scope        :: Scope
   , _motivation   :: Motivation
-  , _quants       :: [e]
   , _theoryModels :: [TheoryModel]
   , _genDefns     :: [GenDefn]
   , _dataDefns    :: [DataDefinition]
@@ -89,15 +88,15 @@ data System where
   } -> System
 makeClassy ''System
 
-mkSystem :: (Quantity e, Eq e, MayHaveUnit e, Concept e) =>
-  CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
-    [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
-    [String] ->
-    [DefinedQuantityDict] -> [DefinedQuantityDict] -> [ConstrConcept] ->
-    [ConstQDef] -> ChunkDB -> [Reference] ->
+mkSystem :: CI -> SystemKind ->
+  People -> Purpose -> Background -> Scope -> Motivation ->
+  [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
+  [String] ->
+  [DefinedQuantityDict] -> [DefinedQuantityDict] -> [ConstrConcept] ->
+  [ConstQDef] -> ChunkDB -> [Reference] ->
     System
-mkSystem nm sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js cqds db refs
-  = SI nm progName sk ppl prps bkgrd scp motive es tms gds dds ims ss hs is js
+mkSystem nm sk ppl prps bkgrd scp motive tms gds dds ims ss hs is js cqds db refs
+  = SI nm progName sk ppl prps bkgrd scp motive tms gds dds ims ss hs is js
       cqds db refsMap mempty mempty
   where
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs

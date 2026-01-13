@@ -23,7 +23,16 @@ import Drasil.DocumentLanguage.Notebook (LsnDesc, mkNb)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Stage(Equational), Document, Space(..))
-import Language.Drasil.Code
+import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
+  generator, readWithDataDesc, sampleInputDD, codeSpec,
+  Architecture(impType, modularity), Choices(Choices, maps, lang,
+  architecture, optFeats, dataInfo), ConstantRepr(..),
+  ConstantStructure(..), DataInfo(constRepr, inputStructure,
+  constStructure), ImplementationType(..), LogConfig(logging), Logging,
+  Maps(spaceMatch), Modularity(..), OptionalFeatures(logConfig), SpaceMatch,
+  Structure(..), Lang(Julia, Java,
+  Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO), Mod)
+import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
   makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)

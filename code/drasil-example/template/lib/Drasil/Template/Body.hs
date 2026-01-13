@@ -73,7 +73,6 @@ si :: System
 si = mkSystem
   progName Specification [authorName]
   [] [] [] []
-  ([] :: [DefinedQuantityDict])
   ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   []
   ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef])

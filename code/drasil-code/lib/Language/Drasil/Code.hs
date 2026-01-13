@@ -34,16 +34,13 @@ module Language.Drasil.Code (
   initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill,
   returnExprListFill, fixedStatementFill, fixedStatementFill', initSolWithValFill,
   Lang(..),
-  PackageSym(..), AuxiliarySym(..),
-  AuxData(..), PackData(..),
   CodeChunk, CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, ccObjVar,
   listToArray,
   field,
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..),
   ODELibPckg(..), mkODELib, mkODELibNoPath,
-  unPP, unJP, unCSP, unCPPP, unSP, unJLP
   -- Language.Drasil.Chunk.NamedArgument
-  , NamedArgument, narg
+  NamedArgument, narg
   -- Language.Drasil.Code.CodeQuantityDicts
   , codeDQDs
 ) where
@@ -101,9 +98,6 @@ import Language.Drasil.CodeSpec (CodeSpec(..), OldCodeSpec(..), HasOldCodeSpec(.
   codeSpec, funcUID, asVC)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..),
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
-  AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), PackData(..))
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeFuncChunk,
   quantvar, quantfunc, ccObjVar, listToArray)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
@@ -111,12 +105,5 @@ import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, odeInfo', ODEOptions(
   odeOptions, ODEMethod(..))
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib,
   mkODELibNoPath)
-
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (unCSP)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (unCPPP)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (unSP)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (unJLP)
 
 import Language.Drasil.Code.CodeQuantityDicts (codeDQDs)

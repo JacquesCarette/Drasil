@@ -60,7 +60,6 @@ si :: System
 si = mkSystem
   progName' Specification [thulasi, brooks, spencerSmith]
   [purp] [] [scope] [motivation]
-  symbols
   tMods genDefs SWHS.dataDefs iMods
   []
   inputs (map dqdWr outputs) constrained specParamValList

@@ -21,7 +21,8 @@ import Build.Drasil (genMake)
 import Drasil.DocLang (mkGraphInfo, LsnDecl, mkNb)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
-import Language.Drasil (Stage(Equational), Document, Space(..))
+import Language.Drasil (Stage(Equational), Document(Document, Notebook), Space(..),
+  ShowTableOfContents, checkToC)
 import Language.Drasil.Code
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
@@ -180,7 +181,12 @@ prntCSV dt sm = do
 
 -- | Renders single-page documents.
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc
-writeDoc s _  TeX     _  doc = genTeX doc s
+writeDoc s _  TeX     _  doc = genTeX (makeDocument s dd) mToC s
+  where
+    getDoc :: Document -> (Document, ShowTableOfContents)
+    getDoc d@(Document _ _ st _) = (d , st)
+    getDoc   (Notebook{})        = error "cannot render notebooks into LaTeX"
+    (dd , mToC) = getDoc $ checkToC doc
 writeDoc s _  HTML    fn doc = genHTML fn $ makeDocument s doc
 writeDoc s dt Jupyter _  doc = genJupyter dt $ makeDocument s doc
 writeDoc _ _  _       _  _   = srsFormatError

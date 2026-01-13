@@ -3,45 +3,46 @@
 </span><span id="line-3"></span><span>  </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier">ODEInfo</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#odeInfo"><span class="hs-identifier">odeInfo</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#odeInfo%27"><span class="hs-identifier">odeInfo'</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEOptions"><span class="hs-identifier">ODEOptions</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#odeOptions"><span class="hs-identifier">odeOptions</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEMethod"><span class="hs-identifier">ODEMethod</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
 </span><span id="line-4"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-5"></span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Code.CodeExpr.Development</span></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html"><span class="hs-identifier">Language.Drasil.Chunk.Code</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">CodeVarChunk</span></span><span class="hs-special">)</span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">makeAODESolverFormat</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">formEquations</span></span><span class="hs-special">,</span><span>
-</span><span id="line-9"></span><span>  </span><span class="annot"><span class="hs-identifier">DifferentialModel</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ODESolverFormat</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">InitialValueProblem</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.CodeBase.html"><span class="hs-identifier">Language.Drasil.Chunk.CodeBase</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Chunk.CodeBase.html#quantvar"><span class="hs-identifier">quantvar</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="hs-comment">-- This may be temporary, but need a structure to hold ODE info for now.</span><span>
-</span><span id="line-13"></span><span class="hs-comment">-- Goal will be for this info to be populated by the instance model for the ODE and the Choices structure.</span><span>
-</span><span id="line-14"></span><span class="hs-comment">-- Probably doesn't belong here, but where?</span><span>
-</span><span id="line-15"></span><span class="annot"><span class="hs-comment">-- | Structure to hold ODE information.</span></span><span>
-</span><span id="line-16"></span><span class="hs-keyword">data</span><span> </span><span id="ODEInfo"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-var">ODEInfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ODEInfo"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-var">ODEInfo</span></a></span></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-17"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Independent variable.</span></span><span>
-</span><span id="line-18"></span><span>  </span><span id="indepVar"><span class="annot"><span class="annottext">ODEInfo -&gt; CodeVarChunk
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">makeAODESolverFormat</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">formEquations</span></span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span>  </span><span class="annot"><span class="hs-identifier">DifferentialModel</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ODESolverFormat</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">InitialValueProblem</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Code.CodeExpr.Development</span></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html"><span class="hs-identifier">Language.Drasil.Chunk.Code</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">CodeVarChunk</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.CodeBase.html"><span class="hs-identifier">Language.Drasil.Chunk.CodeBase</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Chunk.CodeBase.html#quantvar"><span class="hs-identifier">quantvar</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="hs-comment">-- This may be temporary, but need a structure to hold ODE info for now.</span><span>
+</span><span id="line-14"></span><span class="hs-comment">-- Goal will be for this info to be populated by the instance model for the ODE and the Choices structure.</span><span>
+</span><span id="line-15"></span><span class="hs-comment">-- Probably doesn't belong here, but where?</span><span>
+</span><span id="line-16"></span><span class="annot"><span class="hs-comment">-- | Structure to hold ODE information.</span></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">data</span><span> </span><span id="ODEInfo"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-var">ODEInfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ODEInfo"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-var">ODEInfo</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-18"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Independent variable.</span></span><span>
+</span><span id="line-19"></span><span>  </span><span id="indepVar"><span class="annot"><span class="annottext">ODEInfo -&gt; CodeVarChunk
 </span><a href="Language.Drasil.Data.ODEInfo.html#indepVar"><span class="hs-identifier hs-var hs-var">indepVar</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">,</span><span>
-</span><span id="line-19"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Dependent variable.</span></span><span>
-</span><span id="line-20"></span><span>  </span><span id="depVar"><span class="annot"><span class="annottext">ODEInfo -&gt; CodeVarChunk
+</span><span id="line-20"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Dependent variable.</span></span><span>
+</span><span id="line-21"></span><span>  </span><span id="depVar"><span class="annot"><span class="annottext">ODEInfo -&gt; CodeVarChunk
 </span><a href="Language.Drasil.Data.ODEInfo.html#depVar"><span class="hs-identifier hs-var hs-var">depVar</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">,</span><span>
-</span><span id="line-21"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Other variables in the ODE.</span></span><span>
-</span><span id="line-22"></span><span>  </span><span id="otherVars"><span class="annot"><span class="annottext">ODEInfo -&gt; [CodeVarChunk]
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Other variables in the ODE.</span></span><span>
+</span><span id="line-23"></span><span>  </span><span id="otherVars"><span class="annot"><span class="annottext">ODEInfo -&gt; [CodeVarChunk]
 </span><a href="Language.Drasil.Data.ODEInfo.html#otherVars"><span class="hs-identifier hs-var hs-var">otherVars</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-23"></span><span>  </span><span id="tInit"><span class="annot"><span class="annottext">ODEInfo -&gt; CodeExpr
+</span><span id="line-24"></span><span>  </span><span id="tInit"><span class="annot"><span class="annottext">ODEInfo -&gt; CodeExpr
 </span><a href="Language.Drasil.Data.ODEInfo.html#tInit"><span class="hs-identifier hs-var hs-var">tInit</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span class="hs-special">,</span><span>
-</span><span id="line-24"></span><span>  </span><span id="tFinal"><span class="annot"><span class="annottext">ODEInfo -&gt; CodeExpr
+</span><span id="line-25"></span><span>  </span><span id="tFinal"><span class="annot"><span class="annottext">ODEInfo -&gt; CodeExpr
 </span><a href="Language.Drasil.Data.ODEInfo.html#tFinal"><span class="hs-identifier hs-var hs-var">tFinal</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span class="hs-special">,</span><span>
-</span><span id="line-25"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Initial value of an ODE.</span></span><span>
-</span><span id="line-26"></span><span>  </span><span id="initVal"><span class="annot"><span class="annottext">ODEInfo -&gt; [CodeExpr]
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Initial value of an ODE.</span></span><span>
+</span><span id="line-27"></span><span>  </span><span id="initVal"><span class="annot"><span class="annottext">ODEInfo -&gt; [CodeExpr]
 </span><a href="Language.Drasil.Data.ODEInfo.html#initVal"><span class="hs-identifier hs-var hs-var">initVal</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><span class="hs-comment">-- | ODE equations.</span></span><span>
-</span><span id="line-28"></span><span>  </span><span id="odeSyst"><span class="annot"><span class="annottext">ODEInfo -&gt; [CodeExpr]
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="hs-comment">-- | ODE equations.</span></span><span>
+</span><span id="line-29"></span><span>  </span><span id="odeSyst"><span class="annot"><span class="annottext">ODEInfo -&gt; [CodeExpr]
 </span><a href="Language.Drasil.Data.ODEInfo.html#odeSyst"><span class="hs-identifier hs-var hs-var">odeSyst</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-29"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Various options related to the ODE, including solution method, step size, initial value of a second order ODE, etc.</span></span><span>
-</span><span id="line-30"></span><span>  </span><span id="odeOpts"><span class="annot"><span class="annottext">ODEInfo -&gt; ODEOptions
+</span><span id="line-30"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Various options related to the ODE, including solution method, step size, initial value of a second order ODE, etc.</span></span><span>
+</span><span id="line-31"></span><span>  </span><span id="odeOpts"><span class="annot"><span class="annottext">ODEInfo -&gt; ODEOptions
 </span><a href="Language.Drasil.Data.ODEInfo.html#odeOpts"><span class="hs-identifier hs-var hs-var">odeOpts</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEOptions"><span class="hs-identifier hs-type">ODEOptions</span></a></span><span>
-</span><span id="line-31"></span><span class="hs-special">}</span><span>
-</span><span id="line-32"></span><span>
-</span><span id="line-33"></span><span class="annot"><span class="hs-comment">-- | Basic 'ODEInfo' constructor.</span></span><span>
-</span><span id="line-34"></span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#odeInfo"><span class="hs-identifier hs-type">odeInfo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><span id="line-35"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEOptions"><span class="hs-identifier hs-type">ODEOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-type">ODEInfo</span></a></span><span>
-</span><span id="line-36"></span><span id="odeInfo"><span class="annot"><span class="annottext">odeInfo :: CodeVarChunk
+</span><span id="line-32"></span><span class="hs-special">}</span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span class="annot"><span class="hs-comment">-- | Basic 'ODEInfo' constructor.</span></span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#odeInfo"><span class="hs-identifier hs-type">odeInfo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-36"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEOptions"><span class="hs-identifier hs-type">ODEOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-type">ODEInfo</span></a></span><span>
+</span><span id="line-37"></span><span id="odeInfo"><span class="annot"><span class="annottext">odeInfo :: CodeVarChunk
 -&gt; CodeVarChunk
 -&gt; [CodeVarChunk]
 -&gt; CodeExpr
@@ -60,19 +61,19 @@
 -&gt; ODEOptions
 -&gt; ODEInfo
 </span><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-var">ODEInfo</span></a></span><span>
-</span><span id="line-37"></span><span>
-</span><span id="line-38"></span><span class="annot"><span class="hs-comment">-- | Create ODEInfo with Other variables, ODEOptions, DifferentialModel, and InitialValueProblem</span></span><span>
-</span><span id="line-39"></span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#odeInfo%27"><span class="hs-identifier hs-type">odeInfo'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEOptions"><span class="hs-identifier hs-type">ODEOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DifferentialModel</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InitialValueProblem</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-type">ODEInfo</span></a></span><span>
-</span><span id="line-40"></span><span id="odeInfo%27"><span class="annot"><span class="annottext">odeInfo' :: [CodeVarChunk]
+</span><span id="line-38"></span><span>
+</span><span id="line-39"></span><span class="annot"><span class="hs-comment">-- | Create ODEInfo with Other variables, ODEOptions, DifferentialModel, and InitialValueProblem</span></span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#odeInfo%27"><span class="hs-identifier hs-type">odeInfo'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEOptions"><span class="hs-identifier hs-type">ODEOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DifferentialModel</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InitialValueProblem</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-type">ODEInfo</span></a></span><span>
+</span><span id="line-41"></span><span id="odeInfo%27"><span class="annot"><span class="annottext">odeInfo' :: [CodeVarChunk]
 -&gt; ODEOptions
 -&gt; DifferentialModel
 -&gt; InitialValueProblem
 -&gt; ODEInfo
-</span><a href="Language.Drasil.Data.ODEInfo.html#odeInfo%27"><span class="hs-identifier hs-var hs-var">odeInfo'</span></a></span></span><span> </span><span id="local-6989586621679347793"><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679347793"><span class="hs-identifier hs-var">ovs</span></a></span></span><span> </span><span id="local-6989586621679347794"><span class="annot"><span class="annottext">ODEOptions
-</span><a href="#local-6989586621679347794"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span id="local-6989586621679347795"><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679347795"><span class="hs-identifier hs-var">dm</span></a></span></span><span> </span><span id="local-6989586621679347796"><span class="annot"><span class="annottext">InitialValueProblem
-</span><a href="#local-6989586621679347796"><span class="hs-identifier hs-var">ivp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="Language.Drasil.Data.ODEInfo.html#odeInfo%27"><span class="hs-identifier hs-var hs-var">odeInfo'</span></a></span></span><span> </span><span id="local-6989586621679347587"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679347587"><span class="hs-identifier hs-var">ovs</span></a></span></span><span> </span><span id="local-6989586621679347588"><span class="annot"><span class="annottext">ODEOptions
+</span><a href="#local-6989586621679347588"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span id="local-6989586621679347589"><span class="annot"><span class="annottext">DifferentialModel
+</span><a href="#local-6989586621679347589"><span class="hs-identifier hs-var">dm</span></a></span></span><span> </span><span id="local-6989586621679347590"><span class="annot"><span class="annottext">InitialValueProblem
+</span><a href="#local-6989586621679347590"><span class="hs-identifier hs-var">ivp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
 -&gt; CodeVarChunk
 -&gt; [CodeVarChunk]
 -&gt; CodeExpr
@@ -82,7 +83,7 @@
 -&gt; ODEOptions
 -&gt; ODEInfo
 </span><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-var">ODEInfo</span></a></span><span>
-</span><span id="line-41"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; CodeVarChunk
+</span><span id="line-42"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; CodeVarChunk
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 c -&gt; CodeVarChunk
@@ -90,8 +91,8 @@ c -&gt; CodeVarChunk
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DifferentialModel -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">_indepVar</span></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679347795"><span class="hs-identifier hs-var">dm</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-42"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; CodeVarChunk
+</span><a href="#local-6989586621679347589"><span class="hs-identifier hs-var">dm</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-43"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; CodeVarChunk
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 c -&gt; CodeVarChunk
@@ -99,65 +100,65 @@ c -&gt; CodeVarChunk
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DifferentialModel -&gt; ConstrConcept
 </span><span class="hs-identifier hs-var">_depVar</span></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679347795"><span class="hs-identifier hs-var">dm</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679347793"><span class="hs-identifier hs-var">ovs</span></a></span><span>
-</span><span id="line-44"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; CodeExpr
-</span><span class="hs-identifier hs-var">expr</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; CodeExpr) -&gt; Expr -&gt; CodeExpr
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">InitialValueProblem -&gt; Expr
-</span><span class="hs-identifier hs-var">initTime</span></span><span> </span><span class="annot"><span class="annottext">InitialValueProblem
-</span><a href="#local-6989586621679347796"><span class="hs-identifier hs-var">ivp</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679347589"><span class="hs-identifier hs-var">dm</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-44"></span><span>  </span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679347587"><span class="hs-identifier hs-var">ovs</span></a></span><span>
 </span><span id="line-45"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; CodeExpr
 </span><span class="hs-identifier hs-var">expr</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; CodeExpr) -&gt; Expr -&gt; CodeExpr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">InitialValueProblem -&gt; Expr
+</span><span class="hs-identifier hs-var">initTime</span></span><span> </span><span class="annot"><span class="annottext">InitialValueProblem
+</span><a href="#local-6989586621679347590"><span class="hs-identifier hs-var">ivp</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-46"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">expr</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; CodeExpr) -&gt; Expr -&gt; CodeExpr
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">InitialValueProblem -&gt; Expr
 </span><span class="hs-identifier hs-var">finalTime</span></span><span> </span><span class="annot"><span class="annottext">InitialValueProblem
-</span><a href="#local-6989586621679347796"><span class="hs-identifier hs-var">ivp</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-46"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Expr -&gt; CodeExpr) -&gt; [Expr] -&gt; [CodeExpr]
+</span><a href="#local-6989586621679347590"><span class="hs-identifier hs-var">ivp</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-47"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Expr -&gt; CodeExpr) -&gt; [Expr] -&gt; [CodeExpr]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; CodeExpr
 </span><span class="hs-identifier hs-var">expr</span></span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; [CodeExpr]) -&gt; [Expr] -&gt; [CodeExpr]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">InitialValueProblem -&gt; [Expr]
 </span><span class="hs-identifier hs-var">initValues</span></span><span> </span><span class="annot"><span class="annottext">InitialValueProblem
-</span><a href="#local-6989586621679347796"><span class="hs-identifier hs-var">ivp</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-47"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel -&gt; [CodeExpr]
+</span><a href="#local-6989586621679347590"><span class="hs-identifier hs-var">ivp</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-48"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel -&gt; [CodeExpr]
 </span><a href="Language.Drasil.Data.ODEInfo.html#createFinalExpr"><span class="hs-identifier hs-var">createFinalExpr</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679347795"><span class="hs-identifier hs-var">dm</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">ODEOptions
-</span><a href="#local-6989586621679347794"><span class="hs-identifier hs-var">opt</span></a></span><span>
-</span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span class="annot"><span class="hs-comment">-- | Other parameters for solving the ODE numerically</span></span><span>
-</span><span id="line-51"></span><span class="hs-keyword">data</span><span> </span><span id="ODEOptions"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEOptions"><span class="hs-identifier hs-var">ODEOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ODEOpts"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEOpts"><span class="hs-identifier hs-var">ODEOpts</span></a></span></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-52"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Solution method.</span></span><span>
-</span><span id="line-53"></span><span>  </span><span id="solveMethod"><span class="annot"><span class="annottext">ODEOptions -&gt; ODEMethod
+</span><a href="#local-6989586621679347589"><span class="hs-identifier hs-var">dm</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">ODEOptions
+</span><a href="#local-6989586621679347588"><span class="hs-identifier hs-var">opt</span></a></span><span>
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span class="annot"><span class="hs-comment">-- | Other parameters for solving the ODE numerically</span></span><span>
+</span><span id="line-52"></span><span class="hs-keyword">data</span><span> </span><span id="ODEOptions"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEOptions"><span class="hs-identifier hs-var">ODEOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ODEOpts"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEOpts"><span class="hs-identifier hs-var">ODEOpts</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-53"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Solution method.</span></span><span>
+</span><span id="line-54"></span><span>  </span><span id="solveMethod"><span class="annot"><span class="annottext">ODEOptions -&gt; ODEMethod
 </span><a href="Language.Drasil.Data.ODEInfo.html#solveMethod"><span class="hs-identifier hs-var hs-var">solveMethod</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEMethod"><span class="hs-identifier hs-type">ODEMethod</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-54"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Absolute tolerance.</span></span><span>
-</span><span id="line-55"></span><span>  </span><span id="absTol"><span class="annot"><span class="annottext">ODEOptions -&gt; CodeExpr
+</span><span id="line-55"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Absolute tolerance.</span></span><span>
+</span><span id="line-56"></span><span>  </span><span id="absTol"><span class="annot"><span class="annottext">ODEOptions -&gt; CodeExpr
 </span><a href="Language.Drasil.Data.ODEInfo.html#absTol"><span class="hs-identifier hs-var hs-var">absTol</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span class="hs-special">,</span><span>
-</span><span id="line-56"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Relative tolerance.</span></span><span>
-</span><span id="line-57"></span><span>  </span><span id="relTol"><span class="annot"><span class="annottext">ODEOptions -&gt; CodeExpr
+</span><span id="line-57"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Relative tolerance.</span></span><span>
+</span><span id="line-58"></span><span>  </span><span id="relTol"><span class="annot"><span class="annottext">ODEOptions -&gt; CodeExpr
 </span><a href="Language.Drasil.Data.ODEInfo.html#relTol"><span class="hs-identifier hs-var hs-var">relTol</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span class="hs-special">,</span><span>
-</span><span id="line-58"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Step size.</span></span><span>
-</span><span id="line-59"></span><span>  </span><span id="stepSize"><span class="annot"><span class="annottext">ODEOptions -&gt; CodeExpr
+</span><span id="line-59"></span><span>  </span><span class="annot"><span class="hs-comment">-- | Step size.</span></span><span>
+</span><span id="line-60"></span><span>  </span><span id="stepSize"><span class="annot"><span class="annottext">ODEOptions -&gt; CodeExpr
 </span><a href="Language.Drasil.Data.ODEInfo.html#stepSize"><span class="hs-identifier hs-var hs-var">stepSize</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span>
-</span><span id="line-60"></span><span class="hs-special">}</span><span>
-</span><span id="line-61"></span><span>
-</span><span id="line-62"></span><span class="annot"><span class="hs-comment">-- | Basic 'ODEOptions' constructor</span></span><span>
-</span><span id="line-63"></span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#odeOptions"><span class="hs-identifier hs-type">odeOptions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEMethod"><span class="hs-identifier hs-type">ODEMethod</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEOptions"><span class="hs-identifier hs-type">ODEOptions</span></a></span><span>
-</span><span id="line-64"></span><span id="odeOptions"><span class="annot"><span class="annottext">odeOptions :: ODEMethod -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; ODEOptions
+</span><span id="line-61"></span><span class="hs-special">}</span><span>
+</span><span id="line-62"></span><span>
+</span><span id="line-63"></span><span class="annot"><span class="hs-comment">-- | Basic 'ODEOptions' constructor</span></span><span>
+</span><span id="line-64"></span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#odeOptions"><span class="hs-identifier hs-type">odeOptions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEMethod"><span class="hs-identifier hs-type">ODEMethod</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEOptions"><span class="hs-identifier hs-type">ODEOptions</span></a></span><span>
+</span><span id="line-65"></span><span id="odeOptions"><span class="annot"><span class="annottext">odeOptions :: ODEMethod -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; ODEOptions
 </span><a href="Language.Drasil.Data.ODEInfo.html#odeOptions"><span class="hs-identifier hs-var hs-var">odeOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ODEMethod -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; ODEOptions
 </span><a href="Language.Drasil.Data.ODEInfo.html#ODEOpts"><span class="hs-identifier hs-var">ODEOpts</span></a></span><span>
-</span><span id="line-65"></span><span>
-</span><span id="line-66"></span><span class="annot"><span class="hs-comment">-- | Methods for solving ODEs. Includes Runge-Kutta 4-5, Backwards Differentiation Formula, or Adams' method.</span></span><span>
-</span><span id="line-67"></span><span class="hs-keyword">data</span><span> </span><span id="ODEMethod"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEMethod"><span class="hs-identifier hs-var">ODEMethod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="RK45"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#RK45"><span class="hs-identifier hs-var">RK45</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="BDF"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#BDF"><span class="hs-identifier hs-var">BDF</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Adams"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#Adams"><span class="hs-identifier hs-var">Adams</span></a></span></span><span>
-</span><span id="line-68"></span><span>
-</span><span id="line-69"></span><span class="annot"><span class="hs-comment">-- | Create well-formatted ODE equations which the ODE solvers can solve.</span></span><span>
-</span><span id="line-70"></span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#createFinalExpr"><span class="hs-identifier hs-type">createFinalExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DifferentialModel</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span class="hs-special">]</span><span>
-</span><span id="line-71"></span><span id="createFinalExpr"><span class="annot"><span class="annottext">createFinalExpr :: DifferentialModel -&gt; [CodeExpr]
-</span><a href="Language.Drasil.Data.ODEInfo.html#createFinalExpr"><span class="hs-identifier hs-var hs-var">createFinalExpr</span></a></span></span><span> </span><span id="local-6989586621679347812"><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679347812"><span class="hs-identifier hs-var">dm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; CodeExpr) -&gt; [Expr] -&gt; [CodeExpr]
+</span><span id="line-66"></span><span>
+</span><span id="line-67"></span><span class="annot"><span class="hs-comment">-- | Methods for solving ODEs. Includes Runge-Kutta 4-5, Backwards Differentiation Formula, or Adams' method.</span></span><span>
+</span><span id="line-68"></span><span class="hs-keyword">data</span><span> </span><span id="ODEMethod"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEMethod"><span class="hs-identifier hs-var">ODEMethod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="RK45"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#RK45"><span class="hs-identifier hs-var">RK45</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="BDF"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#BDF"><span class="hs-identifier hs-var">BDF</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Adams"><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#Adams"><span class="hs-identifier hs-var">Adams</span></a></span></span><span>
+</span><span id="line-69"></span><span>
+</span><span id="line-70"></span><span class="annot"><span class="hs-comment">-- | Create well-formatted ODE equations which the ODE solvers can solve.</span></span><span>
+</span><span id="line-71"></span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#createFinalExpr"><span class="hs-identifier hs-type">createFinalExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DifferentialModel</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span class="hs-special">]</span><span>
+</span><span id="line-72"></span><span id="createFinalExpr"><span class="annot"><span class="annottext">createFinalExpr :: DifferentialModel -&gt; [CodeExpr]
+</span><a href="Language.Drasil.Data.ODEInfo.html#createFinalExpr"><span class="hs-identifier hs-var hs-var">createFinalExpr</span></a></span></span><span> </span><span id="local-6989586621679347606"><span class="annot"><span class="annottext">DifferentialModel
+</span><a href="#local-6989586621679347606"><span class="hs-identifier hs-var">dm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; CodeExpr) -&gt; [Expr] -&gt; [CodeExpr]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; CodeExpr
 </span><span class="hs-identifier hs-var">expr</span></span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; [CodeExpr]) -&gt; [Expr] -&gt; [CodeExpr]
@@ -165,15 +166,15 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[[Expr]] -&gt; [Unknown] -&gt; [Expr] -&gt; ConstrConcept -&gt; [Expr]
 </span><span class="hs-identifier hs-var">formEquations</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ODESolverFormat -&gt; [[Expr]]
 </span><span class="hs-identifier hs-var">coeffVects</span></span><span> </span><span class="annot"><span class="annottext">ODESolverFormat
-</span><a href="#local-6989586621679347814"><span class="hs-identifier hs-var">ode</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ODESolverFormat -&gt; [Unknown]
+</span><a href="#local-6989586621679347608"><span class="hs-identifier hs-var">ode</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ODESolverFormat -&gt; [Unknown]
 </span><span class="hs-identifier hs-var">unknownVect</span></span><span> </span><span class="annot"><span class="annottext">ODESolverFormat
-</span><a href="#local-6989586621679347814"><span class="hs-identifier hs-var">ode</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ODESolverFormat -&gt; [Expr]
+</span><a href="#local-6989586621679347608"><span class="hs-identifier hs-var">ode</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ODESolverFormat -&gt; [Expr]
 </span><span class="hs-identifier hs-var">constantVect</span></span><span> </span><span class="annot"><span class="annottext">ODESolverFormat
-</span><a href="#local-6989586621679347814"><span class="hs-identifier hs-var">ode</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel -&gt; ConstrConcept
+</span><a href="#local-6989586621679347608"><span class="hs-identifier hs-var">ode</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel -&gt; ConstrConcept
 </span><span class="hs-identifier hs-var">_depVar</span></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679347812"><span class="hs-identifier hs-var">dm</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-72"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679347814"><span class="annot"><span class="annottext">ode :: ODESolverFormat
-</span><a href="#local-6989586621679347814"><span class="hs-identifier hs-var hs-var">ode</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DifferentialModel -&gt; ODESolverFormat
+</span><a href="#local-6989586621679347606"><span class="hs-identifier hs-var">dm</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-73"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679347608"><span class="annot"><span class="annottext">ode :: ODESolverFormat
+</span><a href="#local-6989586621679347608"><span class="hs-identifier hs-var hs-var">ode</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DifferentialModel -&gt; ODESolverFormat
 </span><span class="hs-identifier hs-var">makeAODESolverFormat</span></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679347812"><span class="hs-identifier hs-var">dm</span></a></span><span>
-</span><span id="line-73"></span></pre></body></html>
+</span><a href="#local-6989586621679347606"><span class="hs-identifier hs-var">dm</span></a></span><span>
+</span><span id="line-74"></span></pre></body></html>

@@ -50,10 +50,9 @@ programNameWithShortForm =
   if hasDistinctShortForm progName
      then phrase progName +:+ sParen (short progName)
      else phrase progName
+
 hasDistinctShortForm :: CI -> Bool
-hasDistinctShortForm ci = case getA ci of
-  Nothing -> False
-  Just abbr -> not (null abbr)
+hasDistinctShortForm = maybe False (not . null) . getA
 
 -- Optional provenance information
 provenanceInfo :: Sentence

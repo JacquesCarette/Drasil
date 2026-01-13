@@ -58,7 +58,7 @@ introductionSubsections subs =
   let subDescriptions = concatMap introSubToSentence subs
   in case subDescriptions of
     [] -> EmptyS
-    _  -> S "," +:+ foldlList Comma List subDescriptions
+    _  -> S "," :+: S " " :+: foldlList Comma List subDescriptions
 
 -- | Convert an IntroSub to its description sentence for the roadmap.
 introSubToSentence :: IntroSub -> [Sentence]
@@ -93,7 +93,7 @@ overviewParagraph programDefinition introSubs =
       -- Build the sentence ending based on whether there are subsections
       endingSentence = case subsectionsSentence of
         EmptyS -> phrase document  -- No subsections, end with just "document"
-        _      -> phrase document +:+ subsectionsSentence  -- Has subsections, add them
+        _      -> phrase document :+: subsectionsSentence  -- Has subsections, add them
   in foldlSP [S "The following", phrase section_,
      S "provides an overview of the", introduceAbb srs, S "for" +:+.
      programDefinition, S "This", phrase section_, S "explains the", phrase purpose,

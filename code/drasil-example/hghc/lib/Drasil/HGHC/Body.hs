@@ -42,25 +42,7 @@ introPara = foldlSent [
   S "performance and safety. Engineers therefore rely on dependable calculations",
   S "of the heat transfer coefficients used for simulating the temperature.",
   S "This document describes the requirements of a program called",
-  programNameWithShortForm, provenanceInfo]
-
--- Optional short name
-programNameWithShortForm :: Sentence
-programNameWithShortForm =
-  if hasDistinctShortForm progName
-     then phrase progName +:+ sParen (short progName)
-     else phrase progName
-
-hasDistinctShortForm :: CI -> Bool
-hasDistinctShortForm = maybe False (not . null) . getA
-
--- Optional provenance information
-provenanceInfo :: Sentence
-provenanceInfo =
-  let hasProvenance = False
-  in if hasProvenance
-     then S ", which is based on the original, manually created version of" -- +:+ provenanceRef
-     else EmptyS
+  phrase progName]
 
 purp :: Sentence
 purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to clad"]

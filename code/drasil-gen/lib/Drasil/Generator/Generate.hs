@@ -18,17 +18,28 @@ import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 
 import Build.Drasil (genMake)
-import Drasil.DocLang (mkGraphInfo, LsnDecl, mkNb)
+import Drasil.DocLang (mkGraphInfo)
+import Drasil.DocumentLanguage.Notebook (LsnDesc, mkNb)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Stage(Equational), Document, Space(..))
-import Language.Drasil.Code
+import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
+  generator, readWithDataDesc, sampleInputDD, codeSpec,
+  Architecture(impType, modularity), Choices(Choices, maps, lang,
+  architecture, optFeats, dataInfo), ConstantRepr(..),
+  ConstantStructure(..), DataInfo(constRepr, inputStructure,
+  constStructure), ImplementationType(..), LogConfig(logging), Logging,
+  Maps(spaceMatch), Modularity(..), OptionalFeatures(logConfig), SpaceMatch,
+  Structure(..), Lang(Julia, Java,
+  Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO), Mod)
+import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
   makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)
 import Drasil.SRSDocument (SRSDecl, defaultConfiguration, piSys,
   PrintingInformation, mkDoc)
-import Drasil.System (System, programName)
+import Language.Drasil.Printing.Import (makeDocument, makeProject)
+import Drasil.System (System, programName, refTable, systemdb)
 import Utils.Drasil (createDirIfMissing)
 import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC), docChoices)
@@ -38,7 +49,7 @@ import Drasil.Generator.TypeCheck (typeCheckSI)
 exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO ()
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let (srs, syst') = mkDoc syst srsDecl S.forT
-      printfo = piSys syst' Equational defaultConfiguration
+      printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational defaultConfiguration
   dumpEverything syst' printfo ".drasil/"
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   genDoc (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
@@ -73,16 +84,16 @@ exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcsMods = do
   exportCodeZoo syst chcsMods
 
 -- | Generate a JupyterNotebook-based lesson plan.
-exportLessonPlan :: System -> LsnDecl -> String -> IO ()
+exportLessonPlan :: System -> LsnDesc -> String -> IO ()
 exportLessonPlan syst nbDecl lsnFileName = do
   let nb = mkNb nbDecl S.forT syst
-      printSetting = piSys syst Equational defaultConfiguration
+      printSetting = piSys (syst ^. systemdb) (syst ^. refTable) Equational defaultConfiguration
   genDoc (DocSpec (docChoices Lesson []) lsnFileName) nb printSetting
 
 -- | Generate a "website" (HTML file) softifact.
 exportWebsite :: System -> Document -> Filename -> IO ()
 exportWebsite syst doc fileName = do
-  let printSetting = piSys syst Equational defaultConfiguration
+  let printSetting = piSys (syst ^. systemdb) (syst ^. refTable) Equational defaultConfiguration
   genDoc (DocSpec (docChoices Website [HTML]) fileName) doc printSetting
 
 -- | Generate a document in one or many flavours (HTML, TeX+Makefile,
@@ -180,13 +191,13 @@ prntCSV dt sm = do
 -- | Renders single-page documents.
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc
 writeDoc s _  TeX     _  doc = genTeX doc s
-writeDoc s _  HTML    fn doc = genHTML s fn doc
-writeDoc s dt Jupyter _  doc = genJupyter s dt doc
+writeDoc s _  HTML    fn doc = genHTML fn $ makeDocument s doc
+writeDoc s dt Jupyter _  doc = genJupyter dt $ makeDocument s doc
 writeDoc _ _  _       _  _   = srsFormatError
 
 -- | Renders multi-page documents.
 writeDoc' :: PrintingInformation -> Format -> Document -> [(Filename, Doc)]
-writeDoc' s MDBook doc = genMDBook s doc
+writeDoc' s MDBook doc = genMDBook $ makeProject s doc
 writeDoc' _ _      _   = srsFormatError
 
 -- | Generates traceability graphs as .dot files.

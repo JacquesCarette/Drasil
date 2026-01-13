@@ -7,6 +7,7 @@ import Data.Drasil.Concepts.Math (constraint, equation, xAxis)
 import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst, iSpeed, ixPos,
   ixVel, iyPos, iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
+import Drasil.Sentence.Combinators (eqnWSource)
 
 import Language.Drasil
 import qualified Language.Drasil.Development as D

@@ -1,3 +1,4 @@
+{-# LANGUAGE RankNTypes #-}
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 module Language.Drasil.Expr.Class (
   ExprC(..),
@@ -5,7 +6,8 @@ module Language.Drasil.Expr.Class (
   square, half,
   oneHalf, oneThird,
   apply1, apply2,
-  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet,
+  PExpr
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
@@ -220,6 +222,9 @@ class ExprC r where
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy :: (HasUID c, HasSymbol c) => c -> r
+
+-- Useful synonym
+type PExpr = forall r . (ExprC r, LiteralC r) => r
 
 instance ExprC Expr where
   lit = Lit

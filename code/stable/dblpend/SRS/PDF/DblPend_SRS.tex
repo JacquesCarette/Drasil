@@ -83,8 +83,6 @@ $g$ & Magnitude of gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-$\symbf{\hat{i}}$ & Unit vector & --
-\\
 ${L_{1}}$ & Length of the first rod & ${\text{m}}$
 \\
 ${L_{2}}$ & Length of the second rod & ${\text{m}}$
@@ -104,8 +102,6 @@ ${p_{\text{y}1}}$ & Vertical position of the first object & ${\text{m}}$
 ${p_{\text{y}2}}$ & Vertical position of the second object & ${\text{m}}$
 \\
 $\symbf{p}\text{(}t\text{)}$ & Position & ${\text{m}}$
-\\
-$\symbf{T}$ & Tension & ${\text{N}}$
 \\
 ${\symbf{T}_{1}}$ & Tension of the first object & ${\text{N}}$
 \\
@@ -136,8 +132,6 @@ ${α_{2}}$ & Angular acceleration of the second object & $\frac{\text{rad}}{\tex
 ${θ_{1}}$ & Angle of the first rod & ${\text{rad}}$
 \\
 ${θ_{2}}$ & Angle of the second rod & ${\text{rad}}$
-\\
-$π$ & Ratio of circumference to diameter for any circle & --
 \label{Table:ToS}
 \end{longtblr}
 \subsection{Abbreviations and Acronyms}
@@ -1479,7 +1473,7 @@ By giving equations \hyperref[GD:accelerationX1]{GD:accelerationX1} and \hyperre
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+The \hyperref[Table:InDataConstraints]{Input Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 
 \begin{longtblr}
 [caption={Input Data Constraints}]
@@ -1497,16 +1491,14 @@ ${m_{2}}$ & ${m_{2}}\gt{}0$ & $0.5$ ${\text{kg}}$ & 10$\%$
 \end{longtblr}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
-The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+The \hyperref[Table:OutDataConstraints]{Output Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 
 \begin{longtblr}
 [caption={Output Data Constraints}]
 {colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Var} & \textbf{Physical Constraints}
 \\
-${θ_{1}}$ & ${θ_{1}}\gt{}0$
-\\
-${θ_{2}}$ & ${θ_{2}}\gt{}0$
+$\text{theta}$ & $\text{theta}\geq{}0$
 \label{Table:OutDataConstraints}
 \end{longtblr}
 \section{Requirements}

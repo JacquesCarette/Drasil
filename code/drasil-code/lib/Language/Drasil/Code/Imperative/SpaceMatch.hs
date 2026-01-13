@@ -2,16 +2,16 @@ module Language.Drasil.Code.Imperative.SpaceMatch (
   chooseSpace
 ) where
 
+import Control.Monad.State (modify)
+import Text.PrettyPrint.HughesPJ (Doc, text)
+
+import Drasil.GOOL (CodeType(..))
 import Language.Drasil
+
 import Language.Drasil.Choices (Choices(..), Maps(..))
 import Language.Drasil.Code.Imperative.DrasilState (GenState, MatchedSpaces,
   addToDesignLog, addLoggedSpace)
 import Language.Drasil.Code.Lang (Lang(..))
-
-import Drasil.GOOL (CodeType(..))
-
-import Control.Monad.State (modify)
-import Text.PrettyPrint.HughesPJ (Doc, text)
 
 -- | Concretizes the 'spaceMatch' in 'Choices' to a 'MatchedSpace' based on target language.
 chooseSpace :: Lang -> Choices -> MatchedSpaces

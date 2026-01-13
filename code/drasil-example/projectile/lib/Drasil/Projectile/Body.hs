@@ -1,6 +1,5 @@
 module Drasil.Projectile.Body (si, mkSRS) where
 
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
@@ -9,15 +8,18 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
+import Drasil.Document.Contents (foldlSP, foldlSPCol)
+import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 import Drasil.System (SystemKind(Specification), mkSystem)
 
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, software, requirement, srs)
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics,
-  problem, assumption, goalStmt, physSyst, sysCont, software, user,
-  requirement, refBy, refName, typUnc, example, softwareSys, system, environment,
+  problem, assumption, goalStmt, physSyst, sysCont, user,
+  refBy, refName, typUnc, example, softwareSys, system, environment,
   product_, interface, condition, physical, datum, input_, softwareConstraint,
   output_, endUser)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
+import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon',
@@ -124,7 +126,7 @@ si :: System
 si = mkSystem progName Specification
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
-  symbols tMods genDefns dataDefs iMods
+  tMods genDefns dataDefs iMods
   []
   inputs outputs (map cnstrw' constrained) constants
   symbMap allRefs
@@ -292,4 +294,4 @@ constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 
 acronyms :: [CI]
 acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, Doc.srs, refBy, refName, thModel, typUnc]
+  physSyst, requirement, srs, refBy, refName, thModel, typUnc]

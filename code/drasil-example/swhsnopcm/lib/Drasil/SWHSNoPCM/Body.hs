@@ -1,7 +1,5 @@
 module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 
-import Data.List ((\\))
-
 import Language.Drasil hiding (section)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -63,8 +61,7 @@ import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
 import Drasil.SWHSNoPCM.References (citations)
-import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
-  specParamValList, outputs)
+import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
@@ -150,10 +147,6 @@ si :: System
 si = mkSystem
   progName Specification [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
-  -- FIXME: Everything after (and including) \\ should be removed when
-  -- #1658 is resolved. Basically, _quants is used here, but
-  -- tau does not appear in the document and thus should not be displayed.
-  ((map dqdWr unconstrained ++ symbolsWCodeSymbols) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   []
   inputs outputs

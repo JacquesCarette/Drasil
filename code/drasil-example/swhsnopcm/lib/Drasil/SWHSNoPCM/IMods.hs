@@ -8,13 +8,16 @@ import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Thermodynamics (melting, boilPt)
 import Data.Drasil.Quantities.Physics (energy, time)
+import Drasil.Sentence.Combinators (substitute, unwrap)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel',
-  Derivation, mkDerivName)
+  Derivation, mkDerivName, DifferentialModel, makeASystemDE)
 import Utils.Drasil (weave)
+
+-- other parts of SHWS
 import Drasil.SWHS.Concepts (water)
 import Drasil.SWHS.DataDefs (balanceDecayRate)
 import Drasil.SWHS.GenDefs (htFluxWaterFromCoil)
@@ -22,6 +25,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc3, heat
 import Drasil.SWHS.Unitals (coilHTC, coilSA, htCapW, htFluxC, tauW, tempC,
   tempInit, tempW, timeFinal, wMass)
 
+-- local
 import Drasil.SWHSNoPCM.Assumptions (assumpNIHGBW, assumpWAL)
 import Drasil.SWHSNoPCM.Goals (waterTempGS, waterEnergyGS)
 import Drasil.SWHSNoPCM.Derivations (eBalanceOnWtrDerivEqns)

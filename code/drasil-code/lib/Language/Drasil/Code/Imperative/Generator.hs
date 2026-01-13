@@ -3,7 +3,25 @@ module Language.Drasil.Code.Imperative.Generator (
   generator, generateCode, generateCodeProc
 ) where
 
+import Control.Lens ((^.))
+import Control.Monad.State (get, evalState, runState)
+import qualified Data.Set as Set (fromList)
+import Data.Map (fromList, member, keys, elems)
+import Data.Maybe (maybeToList, catMaybes)
+import System.Directory (setCurrentDirectory, getCurrentDirectory)
+import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
+
 import Language.Drasil
+import Drasil.GOOL (OOProg, VisibilityTag(..),
+  ProgData(..), initialState)
+import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
+import Drasil.GProc (ProcProg)
+import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
+import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
+import Language.Drasil.Printing.Import (spec)
+import Drasil.System
+import Utils.Drasil (createDirIfMissing)
+
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
@@ -32,33 +50,15 @@ import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
   LogConfig(..), OptionalFeatures(..), InternalConcept(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE, system')
-import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
-
-import Drasil.GOOL (OOProg, VisibilityTag(..),
-  ProgData(..), initialState)
-import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
-import Drasil.GProc (ProcProg)
-import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
-import Drasil.System hiding (systemdb)
-
-import Utils.Drasil (createDirIfMissing)
-
-import System.Directory (setCurrentDirectory, getCurrentDirectory)
-import Control.Lens ((^.))
-import Control.Monad.State (get, evalState, runState)
-import qualified Data.Set as Set (fromList)
-import Data.Map (fromList, member, keys, elems)
-import Data.Maybe (maybeToList, catMaybes)
-import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
+import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
 
 -- | Initializes the generator's 'DrasilState'.
 -- 'String' parameter is a string representing the date.
 -- \['Expr'\] parameter is the sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
-generator l dt sd chs spec = DrasilState {
+generator l dt sd chs cs = DrasilState {
   -- constants
-  codeSpec = spec,
+  codeSpec = cs,
   printfo = pinfo,
   modular = modularity $ architecture chs,
   inStruct = inputStructure $ dataInfo chs,
@@ -93,19 +93,19 @@ generator l dt sd chs spec = DrasilState {
   _loggedSpaces = [], -- Used to prevent duplicate logs added to design log
   currentScope = Global
 }
-  where pinfo = piSys (spec ^. system') Implementation plainConfiguration
+  where pinfo = piSys (cs ^. systemdb) (cs ^. refTable) Implementation plainConfiguration
         (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt
         showDate Hide = ""
         ((pth, elmap, lname), libLog) = runState (chooseODELib l $ getODE $ extLibs chs) []
         els = map snd elmap
         nms = [lname]
-        mem = modExportMap (spec ^. oldCodeSpec) chs modules'
+        mem = modExportMap (cs ^. oldCodeSpec) chs modules'
         lem = fromList (concatMap (^. modExports) els)
-        cdm = clsDefMap (spec ^. oldCodeSpec) chs modules'
-        modules' = (spec ^. modsO) ++ concatMap (^. auxMods) els
+        cdm = clsDefMap (cs ^. oldCodeSpec) chs modules'
+        modules' = (cs ^. modsO) ++ concatMap (^. auxMods) els
         nonPrefChs = choicesSent chs
-        des = vcat . map (sentenceDoc pinfo OneLine) $
+        des = vcat . map (sentenceDoc OneLine . spec pinfo) $
           (nonPrefChs ++ concLog ++ libLog)
 
 -- OO Versions --
@@ -151,10 +151,10 @@ genPackage unRepr = do
       cfp = codeSpec g ^. configFilesO
       db = printfo g
       -- FIXME: The below code does `Doc -> String` conversion.
-      prps = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. purpose)
-      bckgrnd = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. background)
-      mtvtn = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. motivation)
-      scp = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. scope)
+      prps = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. purpose)
+      bckgrnd = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. background)
+      mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
+      scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -181,7 +181,7 @@ genProgram = do
   g <- get
   ms <- chooseModules $ modular g
   let n = codeSpec g ^. pNameO
-  let p = show $ sentenceDoc (printfo g) OneLine $ foldlSent $ codeSpec g ^. purpose
+  let p = show $ sentenceDoc OneLine $ spec (printfo g) $ foldlSent $ codeSpec g ^. purpose
   return $ OO.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
@@ -260,10 +260,10 @@ genPackageProc unRepr = do
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
-      prps = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. purpose)
-      bckgrnd = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. background)
-      mtvtn = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. motivation)
-      scp = show $ sentenceDoc db OneLine (foldlSent $ codeSpec g ^. scope)
+      prps = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. purpose)
+      bckgrnd = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. background)
+      mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
+      scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -290,7 +290,7 @@ genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ modular g
   let n = codeSpec g ^. pNameO
-  let p = show $ sentenceDoc (printfo g) OneLine $ foldlSent $ codeSpec g ^. purpose
+  let p = show $ sentenceDoc OneLine $ spec (printfo g) $ foldlSent $ codeSpec g ^. purpose
   return $ Proc.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice

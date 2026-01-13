@@ -13,8 +13,6 @@ import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe)
 import qualified Data.Map as Map (keys)
 
-import Utils.Drasil (invert)
-
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import qualified Drasil.DocDecl as DD
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
@@ -26,18 +24,18 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
-import Drasil.Document.Contents(mkEnumSimpleD)
+import Drasil.Document.Contents(mkEnumSimpleD, foldlSP)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil
 import Language.Drasil.Display (compsy)
 
-import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..))
+import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 
-import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, _quants,
+import Drasil.System (System(SI), whatsTheBigIdea, _systemdb,
   _authors, refTable, refbyTable, traceTable, systemdb, sysName, programName)
 import Drasil.GetChunks (ccss, ccss', citeDB)
 
@@ -69,8 +67,9 @@ import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGr
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
+import Drasil.Metadata as Doc (software)
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
-  software, unlikelyChg)
+  unlikelyChg)
 import qualified Data.Map.Strict as M
 
 -- * Main Function
@@ -221,19 +220,12 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
     mkSubRef SI {_systemdb = db} (TUnits' con f) =
         SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
-    -- FIXME: _quants = v should be removed from this binding and symbols should
-    -- be acquired solely through document traversal, however #1658. If we do
-    -- just the doc traversal here, then we lose some symbols which only appear
-    -- in a table in GlassBR. If we grab symbols from tables (by removing the `isVar`)
-    -- in ExtractDocDesc, then the passes which extract `DefinedQuantityDict`s will
-    -- error out because some of the symbols in tables are only `QuantityDict`s, and thus
-    -- missing a `Concept`.
-    mkSubRef SI {_quants = v, _systemdb = cdb} (TSymb con) =
+    mkSubRef SI {_systemdb = cdb} (TSymb con) =
       SRS.tOfSymb
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational)
-                (nub $ map dqdWr v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
+                (nub $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
                 atStart] []
     mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con

@@ -61,25 +61,17 @@ The symbols used in this document are summarized in the \hyperref[Table:ToS]{Tab
 {colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
-$\mathit{AbsTol}$ & Absolute Tolerance & --
-\\
 ${C_{\text{s}}}$ & Control Variable in the frequency domain & --
 \\
 $c$ & Damping coefficient of the spring & --
-\\
-${c_{\text{t}}}$ & Control Variable in the time domain & --
 \\
 ${D_{\text{s}}}$ & Derivative control in the frequency domain & --
 \\
 ${E_{\text{s}}}$ & Process Error in the frequency domain & --
 \\
-${e_{\text{t}}}$ & Process Error in the time domain & --
-\\
 ${F_{\text{s}}}$ & Laplace Transform of a function & --
 \\
 ${f_{\text{t}}}$ & Function in the time domain & --
-\\
-${H_{\text{s}}}$ & Transfer Function in the frequency domain & --
 \\
 ${K_{\text{d}}}$ & Derivative Gain & --
 \\
@@ -96,8 +88,6 @@ ${P_{\text{s}}}$ & Proportional control in the frequency domain & --
 ${R_{\text{s}}}$ & Set-Point in the frequency domain & --
 \\
 ${r_{\text{t}}}$ & Set-Point & --
-\\
-$\mathit{RelTol}$ & Relative Tolerance & --
 \\
 $s$ & Complex frequency-domain parameter & --
 \\
@@ -675,7 +665,7 @@ The Set-Point ${r_{\text{t}}}$ is a step function and a constant (from \hyperref
 \end{displaymath}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+The \hyperref[Table:InDataConstraints]{Input Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 
 \begin{longtblr}
 [caption={Input Data Constraints}]

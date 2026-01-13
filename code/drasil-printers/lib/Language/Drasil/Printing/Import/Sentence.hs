@@ -8,11 +8,10 @@ import Drasil.Database (unRef)
 import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Development (toSent)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
-import Drasil.System (systemdb)
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation
-  (PrintingInformation, refFind, syst)
+  (PrintingInformation, refFind, sysdb)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.Helpers (lookupT, lookupS, lookupP, lookupC')
 import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)
@@ -65,7 +64,7 @@ spec sm (E e)              = P.E $ modelExpr e sm
 
 -- | Renders the shortname of a reference/domain.
 renderShortName :: PrintingInformation -> IRefProg -> ShortName -> Sentence
-renderShortName pinfo (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $ shortForm $ termResolve' (pinfo ^. syst . systemdb) u
+renderShortName pinfo (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $ shortForm $ termResolve' (pinfo ^. sysdb) u
 renderShortName pinfo (RConcat a b) sn = renderShortName pinfo a sn :+: renderShortName pinfo b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = getSentSN sn

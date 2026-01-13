@@ -31,12 +31,12 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
   element, general, goalStmt, information, input_, limitation, model, output_,
   physical, physicalConstraint, physicalSystem, physSyst, problem,
-  problemDescription, propOfCorSol, purpose, quantity, requirement, scope,
-  section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
+  problemDescription, propOfCorSol, purpose, quantity, scope,
+  section_, softwareConstraint, solutionCharacteristic, symbol_,
   system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
-import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
+import Drasil.Metadata (inModel, thModel, dataDefn, genDefn, requirement, specification)
 import Drasil.System (System)
 import Language.Drasil hiding (variable)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -45,10 +45,11 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 
 -- local
-import Drasil.Document.Contents (enumBulletU, enumSimpleU)
+import Drasil.Document.Contents (enumBulletU, enumSimpleU, foldlSP, foldlSP_)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.Sentence.Combinators (mkTableFromColumns, fmtU, typUncr)
 
 -- Takes the system and subsections.
 -- | Specific System Description section builder.
@@ -212,7 +213,7 @@ dataConstraintParagraph trailingSent = foldlSP_ [inputTableSent, physConsSent,
 
 -- | General 'Sentence' that describes the data constraints on the input variables.
 inputTableSent :: Sentence
-inputTableSent = foldlSent [S "The", namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_, S "shows the",
+inputTableSent = foldlSent [S "The", namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' inDatumConstraint +:+ titleize table_, S "shows the",
   D.toSent $ pluralNP (datumConstraint `onThePS` input_), plural variable]
 
 -- | General 'Sentence' that describes the physical constraints/limitations on the variables.
@@ -244,7 +245,7 @@ typValSent = foldlSent [D.toSent (atStartNP (the column)) `S.of_` S "typical",
 auxSpecSent :: Sentence
 auxSpecSent = foldlSent [S "The", namedRef (SRS.valsOfAuxCons [] []) $ S "auxiliary constants", S "give",
   plural value `S.the_ofThe` phrase specification, plural parameter, S "used in the",
-  namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_]
+  namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' inDatumConstraint +:+ titleize table_]
 
 -- | Creates a Data Constraints table. Takes in Columns, reference, and a label.
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> UID -> Sentence -> LabelledContent
@@ -258,8 +259,8 @@ inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qls
             (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
             (titleize' softwareConstraint, map fmtSfwr $ sortBySymbol qlst),
             (S "Typical Value", map (\q -> fmtU (eS $ express $ getRVal q) q) $ sortBySymbol qlst),
-            (short typUnc, map typUncr $ sortBySymbol qlst)] (inDatumConstraint ^. uid) $
-            titleize' inDatumConstraint
+            (short typUnc, map (\q -> typUncr (uncVal q, uncPrec q)) $ sortBySymbol qlst)]
+            (inDatumConstraint ^. uid) $ titleize' inDatumConstraint
   where
     getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ showUID c) (c ^. reasVal)
 
@@ -296,7 +297,7 @@ propsIntro = foldlSP_ [outputTableSent, physConsSent]
 
 -- | Outputs a data constraint table as a 'Sentence'.
 outputTableSent :: Sentence
-outputTableSent = foldlSent [S "The", namedRef (outDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_, S "shows the",
+outputTableSent = foldlSent [S "The", namedRef (outDataConstTbl ([] :: [UncertQ])) $ titleize' outDatumConstraint +:+ titleize table_, S "shows the",
   D.toSent $ pluralNP (datumConstraint `onThePS` output_), plural variable]
 
 -- | Helper for making a 'ConceptInstance' with a reference to the system information.

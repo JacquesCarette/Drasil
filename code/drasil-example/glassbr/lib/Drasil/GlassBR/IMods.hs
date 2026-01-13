@@ -4,6 +4,7 @@ import Control.Lens ((^.))
 import Prelude hiding (exp)
 
 import Drasil.Database (HasUID)
+import Drasil.Sentence.Combinators (definedIn', definedIn)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators

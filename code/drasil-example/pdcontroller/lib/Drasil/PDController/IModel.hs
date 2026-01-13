@@ -6,7 +6,8 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Theory.Drasil (InstanceModel, im, qwC, newDEModel', Derivation, mkDerivName)
+import Theory.Drasil (InstanceModel, im, qwC, newDEModel', Derivation, mkDerivName, DifferentialModel,
+  makeASingleDE, ($**), ($^^), ($++))
 import Utils.Drasil (weave)
 
 import Drasil.PDController.Assumptions

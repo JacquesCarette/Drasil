@@ -8,8 +8,7 @@ import Drasil.Database (UID)
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
-import Drasil.DocumentLanguage.Definitions (Fields)
-import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat)
+import Drasil.DocumentLanguage.Definitions (Fields, TraceViewCat)
 
 -- | Type synonym for clarity.
 type System = Sentence

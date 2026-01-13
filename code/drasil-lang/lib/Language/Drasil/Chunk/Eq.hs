@@ -9,7 +9,9 @@ module Language.Drasil.Chunk.Eq (
   -- * Constructors
   fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
-  mkFuncDef, mkFuncDef', mkFuncDefByQ
+  mkFuncDef, mkFuncDef', mkFuncDefByQ,
+  -- * Synonyms
+  ConstQDef, SimpleQDef, ModelQDef
 ) where
 
 import Control.Lens ((^.), view, lens, Lens', to)
@@ -26,6 +28,7 @@ import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea)
 import Language.Drasil.Expr.Lang (Expr)
 import qualified Language.Drasil.Expr.Lang as E (Expr(C))
 import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
+import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import qualified Language.Drasil.ModelExpr.Lang as M (ModelExpr(C))
 import Language.Drasil.NounPhrase.Core (NP)
@@ -157,3 +160,12 @@ mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c,
 mkFuncDefByQ f = case getUnit f of
   Just u  -> mkFuncDef  f (f ^. term) EmptyS u
   Nothing -> mkFuncDef' f (f ^. term) EmptyS
+
+-- Useful Synonyms
+-- | Commonly used type for QDefinitions containing Literals.
+type ConstQDef  = QDefinition Literal
+-- | Commonly used type for QDefinitions containing Exprs.
+type SimpleQDef = QDefinition Expr
+-- | Commonly used type for QDefinitions containing ModelExprs.
+type ModelQDef  = QDefinition M.ModelExpr
+

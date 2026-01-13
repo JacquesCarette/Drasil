@@ -13,7 +13,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\(f\\)                              |Frequency                                        |\\({\text{Hz}}\\)                    |
 |\\(\boldsymbol{g}\\)                 |Gravitational acceleration                       |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{I}\\)                 |Moment of inertia                                |\\(\text{kg}\text{m}^{2}\\)          |
-|\\(\boldsymbol{\hat{i}}\\)           |Unit vector                                      |--                                   |
 |\\({L\_{\text{rod}}}\\)              |Length of the rod                                |\\({\text{m}}\\)                     |
 |\\(m\\)                              |Mass                                             |\\({\text{kg}}\\)                    |
 |\\({p\_{\text{x}}}\\)                |\\(x\\)-component of position                    |\\({\text{m}}\\)                     |

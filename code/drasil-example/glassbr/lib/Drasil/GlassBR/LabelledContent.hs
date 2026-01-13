@@ -6,9 +6,11 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Sentence.Combinators (showingCxnBw)
 
+import Drasil.Metadata (requirement)
 import Data.Drasil.Concepts.Documentation (assumption, item, physicalSystem,
-  requirement, section_, sysCont, traceyMatrix)
+  section_, sysCont, traceyMatrix)
 
 import Drasil.GlassBR.Concepts (aR, stdOffDist)
 import Drasil.GlassBR.Unitals (aspectRatio, charWeight, demand, demandq,

@@ -33,6 +33,10 @@ module Theory.Drasil (
   -- * Theory Models
   , Theory(..), TheoryModel
   , tm, tmNoRefs
+  -- * Differential Models
+  , DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..)
+  , ($^^), ($**), ($++)
+  , makeAODESolverFormat, makeAIVP, makeASystemDE, makeASingleDE, formEquations
 ) where
 
 import Theory.Drasil.Classes (HasInputs(..), HasOutput(..))
@@ -41,6 +45,11 @@ import Theory.Drasil.Components.Derivation (
 import Theory.Drasil.ConstraintSet (ConstraintSet, mkConstraintSet)
 import Theory.Drasil.DataDefinition (ddMENoRefs, ddME, ddENoRefs, ddE,
   DataDefinition, qdFromDD, qdEFromDD)
+import Theory.Drasil.DifferentialModel (
+  DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..),
+  ($^^), ($**), ($++),
+  makeAODESolverFormat, makeAIVP, makeASystemDE, makeASingleDE,
+  formEquations)
 import Theory.Drasil.GenDefn (GenDefn, gd, gdNoRefs, getEqModQdsFromGd)
 import Theory.Drasil.ModelKinds (ModelKind,
   newDEModel, newDEModel',

@@ -90,7 +90,6 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
 si :: System
 si = mkSystem progName Specification [olu]
   [purp] [] [] []
-  symbols
   tMods genDefns dataDefs iMods
   []
   inputs outputs inConstraints []

@@ -18,12 +18,22 @@ import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 
 import Build.Drasil (genMake)
-import Drasil.DocLang (mkGraphInfo, LsnDecl, mkNb)
+import Drasil.DocLang (mkGraphInfo)
+import Drasil.DocumentLanguage.Notebook (LsnDesc, mkNb)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Stage(Equational), Document(Document, Notebook), Space(..),
   ShowTableOfContents, checkToC)
-import Language.Drasil.Code
+import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
+  generator, readWithDataDesc, sampleInputDD, codeSpec,
+  Architecture(impType, modularity), Choices(Choices, maps, lang,
+  architecture, optFeats, dataInfo), ConstantRepr(..),
+  ConstantStructure(..), DataInfo(constRepr, inputStructure,
+  constStructure), ImplementationType(..), LogConfig(logging), Logging,
+  Maps(spaceMatch), Modularity(..), OptionalFeatures(logConfig), SpaceMatch,
+  Structure(..), Lang(Julia, Java,
+  Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO), Mod)
+import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
   makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot, makeBook)
@@ -75,7 +85,7 @@ exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcsMods = do
   exportCodeZoo syst chcsMods
 
 -- | Generate a JupyterNotebook-based lesson plan.
-exportLessonPlan :: System -> LsnDecl -> String -> IO ()
+exportLessonPlan :: System -> LsnDesc -> String -> IO ()
 exportLessonPlan syst nbDecl lsnFileName = do
   let nb = mkNb nbDecl S.forT syst
       printSetting = piSys (syst ^. systemdb) (syst ^. refTable) Equational defaultConfiguration

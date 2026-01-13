@@ -19,7 +19,7 @@ import Utils.Drasil (toPlainName)
 
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..),
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
-import Language.Drasil.Printing.Import (symbol)
+import Language.Drasil.Printing.Import.Symbol (symbol)
 
 -- | Data is either linear or not.
 data SingleLine = OneLine | MultiLine

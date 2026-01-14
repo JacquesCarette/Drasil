@@ -9,7 +9,7 @@ import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
 import Drasil.GOOL (onCodeList, swiftName, swiftVersion)
 

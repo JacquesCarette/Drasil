@@ -231,65 +231,6 @@ digraph alltypes {
 	}
 	subgraph languagerenderer {
 	}
-	subgraph import {
-		subgraph readmeinfo{
-		ReadMeInfo	[shape=oval, color=cyan3, label="ReadMeInfo"];
-		ReadMeInfo -> LangAbbrev;
-		ReadMeInfo -> LangVers;
-		ReadMeInfo -> MaybeString;
-		ReadMeInfo -> ImplementationType;
-		ReadMeInfo -> Name;
-		ReadMeInfo -> FilePath;
-		ReadMeInfo -> Contributor;
-		ReadMeInfo -> CaseName;
-		ReadMeInfo -> ExamplePurpose;
-		ReadMeInfo -> ExampleDescr;
-		ReadMeInfo -> ExampleMotivation;
-		ReadMeInfo -> ExampleScope;
-		ReadMeInfo -> Int;
-		ReadMeInfo -> InFile;
-		}
-		subgraph langabbrev{
-		LangAbbrev	[shape=oval, color=red2, label="LangAbbrev"];
-		LangAbbrev -> String;
-		}
-		subgraph langvers{
-		LangVers	[shape=oval, color=red2, label="LangVers"];
-		LangVers -> String;
-		}
-		subgraph casename{
-		CaseName	[shape=oval, color=red2, label="CaseName"];
-		CaseName -> String;
-		}
-		subgraph examplepurpose{
-		ExamplePurpose	[shape=oval, color=red2, label="ExamplePurpose"];
-		ExamplePurpose -> String;
-		}
-		subgraph exampledescr{
-		ExampleDescr	[shape=oval, color=red2, label="ExampleDescr"];
-		ExampleDescr -> String;
-		}
-		subgraph examplemotivation{
-		ExampleMotivation	[shape=oval, color=red2, label="ExampleMotivation"];
-		ExampleMotivation -> String;
-		}
-		subgraph examplescope{
-		ExampleScope	[shape=oval, color=red2, label="ExampleScope"];
-		ExampleScope -> String;
-		}
-		subgraph contributor{
-		Contributor	[shape=oval, color=red2, label="Contributor"];
-		Contributor -> String;
-		}
-		subgraph infile{
-		InFile	[shape=oval, color=red2, label="InFile"];
-		InFile -> String;
-		}
-		subgraph outfile{
-		OutFile	[shape=oval, color=red2, label="OutFile"];
-		OutFile -> String;
-		}
-	}
 	subgraph comments {
 	}
 	subgraph conceptmatch {
@@ -408,13 +349,70 @@ digraph alltypes {
 		ParamType -> Bool;
 		}
 	}
+	subgraph readme {
+		subgraph readmeinfo{
+		ReadMeInfo	[shape=oval, color=cyan3, label="ReadMeInfo"];
+		ReadMeInfo -> LangAbbrev;
+		ReadMeInfo -> LangVers;
+		ReadMeInfo -> MaybeString;
+		ReadMeInfo -> ImplementationType;
+		ReadMeInfo -> Name;
+		ReadMeInfo -> FilePath;
+		ReadMeInfo -> Contributor;
+		ReadMeInfo -> CaseName;
+		ReadMeInfo -> ExamplePurpose;
+		ReadMeInfo -> ExampleDescr;
+		ReadMeInfo -> ExampleMotivation;
+		ReadMeInfo -> ExampleScope;
+		ReadMeInfo -> Int;
+		ReadMeInfo -> InFile;
+		}
+		subgraph langabbrev{
+		LangAbbrev	[shape=oval, color=red2, label="LangAbbrev"];
+		LangAbbrev -> String;
+		}
+		subgraph langvers{
+		LangVers	[shape=oval, color=red2, label="LangVers"];
+		LangVers -> String;
+		}
+		subgraph casename{
+		CaseName	[shape=oval, color=red2, label="CaseName"];
+		CaseName -> String;
+		}
+		subgraph examplepurpose{
+		ExamplePurpose	[shape=oval, color=red2, label="ExamplePurpose"];
+		ExamplePurpose -> String;
+		}
+		subgraph exampledescr{
+		ExampleDescr	[shape=oval, color=red2, label="ExampleDescr"];
+		ExampleDescr -> String;
+		}
+		subgraph examplemotivation{
+		ExampleMotivation	[shape=oval, color=red2, label="ExampleMotivation"];
+		ExampleMotivation -> String;
+		}
+		subgraph examplescope{
+		ExampleScope	[shape=oval, color=red2, label="ExampleScope"];
+		ExampleScope -> String;
+		}
+		subgraph contributor{
+		Contributor	[shape=oval, color=red2, label="Contributor"];
+		Contributor -> String;
+		}
+		subgraph infile{
+		InFile	[shape=oval, color=red2, label="InFile"];
+		InFile -> String;
+		}
+		subgraph outfile{
+		OutFile	[shape=oval, color=red2, label="OutFile"];
+		OutFile -> String;
+		}
+	}
 	subgraph readinput {
 	}
 	subgraph spacematch {
 	}
 	subgraph writeinput {
-	}
-	subgraph writereadme {
 	}
 	subgraph code {
 		subgraph code{

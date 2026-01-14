@@ -1743,7 +1743,7 @@ instance Language.Drasil.CodeSpec.HasOldCodeSpec Language.Drasil.CodeSpec.OldCod
 
 -- | This module defines structures and functions for handling README
 --   files, which are used as auxiliary documentation files for the system.
-module Language.Drasil.Code.Imperative.ReadMe.Import
+module Language.Drasil.Code.Imperative.README
 
 -- | Holds all information needed to create a README file.
 data ReadMeInfo
@@ -1763,8 +1763,6 @@ ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(
 [exampleScope] :: ReadMeInfo -> ExampleScope
 [folderNum] :: ReadMeInfo -> Int
 [inputOutput] :: ReadMeInfo -> (InFile, OutFile)
-
-module Language.Drasil.Code.Imperative.WriteReadMe
 
 -- | Generates a README file.
 makeReadMe :: ReadMeInfo -> Doc
@@ -1890,6 +1888,9 @@ addLoggedSpace :: Space -> CodeType -> DrasilState -> DrasilState
 -- | Get InternalConcept name using DrasilState
 genICName :: InternalConcept -> GenState Name
 
+-- | Gets the <a>DefinedQuantityDict</a> corresponding to a <a>UID</a>.
+lookupC :: DrasilState -> UID -> DefinedQuantityDict
+
 module Language.Drasil.Code.Imperative.SpaceMatch
 
 -- | Concretizes the <a>spaceMatch</a> in <a>Choices</a> to a
@@ -1958,9 +1959,6 @@ module Language.Drasil.Code.Imperative.Helpers
 
 -- | Puts a state-dependent value into a singleton list.
 liftS :: State a b -> State a [b]
-
--- | Gets the <a>DefinedQuantityDict</a> corresponding to a <a>UID</a>.
-lookupC :: DrasilState -> UID -> DefinedQuantityDict
 
 -- | Converts a <a>ScopeType</a> to a <a>Scope</a>
 convScope :: SharedProg r => ScopeType -> r (Scope r)

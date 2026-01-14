@@ -1096,57 +1096,6 @@ imStub :: Section
 pdStub :: Section
 
 
--- | Defines functions used in creating an introduction section.
-module Drasil.Sections.Introduction
-
--- | Constructor for the Organization of the Document section. Parameters
---   should be an introduction (<a>Sentence</a>), a resource for a bottom
---   up approach (<a>NamedIdea</a>), reference to that resource
---   (<a>Section</a>), and any other relevant information
---   (<a>Sentence</a>).
-orgSec :: NamedIdea c => c -> Section -> Sentence -> Section
-
--- | Constructor for the Introduction section. In order, the parameters
---   are:
---   
---   <ul>
---   <li>problemIntroduction - <a>Sentence</a> introducing the specific
---   example problem.</li>
---   <li>programDefinition - <a>Sentence</a> definition of the specific
---   example.</li>
---   <li>subSections - List of subsections for this section.</li>
---   </ul>
-introductionSection :: Sentence -> Sentence -> [Section] -> Section
-
--- | Constructor for Purpose of Document subsection. Takes a list of
---   <a>Sentence</a>s that:
---   
---   <ul>
---   <li>Given one element: explains the purpose of the specific
---   example.</li>
---   <li>Given two elements: explains the purpose of the specific example
---   and the development process.</li>
---   <li>Otherwise: Uses the default
---   <a>developmentProcessParagraph</a>.</li>
---   </ul>
-purposeOfDoc :: [Sentence] -> Section
-
--- | Constructor for the Scope of Requirements subsection. Takes in the
---   main requirement for the program.
-scopeOfRequirements :: Sentence -> Section
-
--- | Constructor for characteristics of the intended reader subsection.
---   Takes the program name (<a>Idea</a>), assumed knowledge
---   (<a>Sentence</a>s), topic-related subjects (<a>Sentence</a>s),
---   knowledge assets (<a>Sentence</a>s), and references (<a>Section</a>).
-charIntRdrF :: Idea a => a -> [Sentence] -> [Sentence] -> [Sentence] -> Section -> Section
-
--- | Combines <a>purpDocPara1</a> and <a>developmentProcessParagraph</a>.
---   Verbosity controls if the <a>developmentProcessParagraph</a> is added
---   or not.
-purpDoc :: CI -> Verbosity -> [Sentence]
-
-
 -- | Defines functions to create traceability matrices in SRS documents.
 module Drasil.DocumentLanguage.TraceabilityMatrix
 
@@ -1676,6 +1625,59 @@ module Drasil.Sections.TableOfContents
 -- | Finds all possible sections and subsections to make a Table of
 --   Contents.
 toToC :: DocSection -> ItemType
+
+
+-- | Defines functions used in creating an introduction section.
+module Drasil.Sections.Introduction
+
+-- | Constructor for the Organization of the Document section. Parameters
+--   should be an introduction (<a>Sentence</a>), a resource for a bottom
+--   up approach (<a>NamedIdea</a>), reference to that resource
+--   (<a>Section</a>), and any other relevant information
+--   (<a>Sentence</a>).
+orgSec :: NamedIdea c => c -> Section -> Sentence -> Section
+
+-- | Constructor for the Introduction section. In order, the parameters
+--   are:
+--   
+--   <ul>
+--   <li>problemIntroduction - <a>Sentence</a> introducing the specific
+--   example problem.</li>
+--   <li>programDefinition - <a>Sentence</a> definition of the specific
+--   example.</li>
+--   <li>introSubs - List of IntroSub describing what subsections
+--   exist.</li>
+--   <li>subSections - List of subsections for this section.</li>
+--   </ul>
+introductionSection :: Sentence -> Sentence -> [IntroSub] -> [Section] -> Section
+
+-- | Constructor for Purpose of Document subsection. Takes a list of
+--   <a>Sentence</a>s that:
+--   
+--   <ul>
+--   <li>Given one element: explains the purpose of the specific
+--   example.</li>
+--   <li>Given two elements: explains the purpose of the specific example
+--   and the development process.</li>
+--   <li>Otherwise: Uses the default
+--   <a>developmentProcessParagraph</a>.</li>
+--   </ul>
+purposeOfDoc :: [Sentence] -> Section
+
+-- | Constructor for the Scope of Requirements subsection. Takes in the
+--   main requirement for the program.
+scopeOfRequirements :: Sentence -> Section
+
+-- | Constructor for characteristics of the intended reader subsection.
+--   Takes the program name (<a>Idea</a>), assumed knowledge
+--   (<a>Sentence</a>s), topic-related subjects (<a>Sentence</a>s),
+--   knowledge assets (<a>Sentence</a>s), and references (<a>Section</a>).
+charIntRdrF :: Idea a => a -> [Sentence] -> [Sentence] -> [Sentence] -> Section -> Section
+
+-- | Combines <a>purpDocPara1</a> and <a>developmentProcessParagraph</a>.
+--   Verbosity controls if the <a>developmentProcessParagraph</a> is added
+--   or not.
+purpDoc :: CI -> Verbosity -> [Sentence]
 
 
 -- | Defines functions to extract certain kinds of information from a

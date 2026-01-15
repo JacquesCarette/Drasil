@@ -26,7 +26,3 @@ codevars' e m = map (varResolve m) $ eDep' e
 -- | Make a 'CodeVarChunk' from a 'UID' in the 'ChunkDB'.
 varResolve :: ChunkDB -> UID -> CodeVarChunk
 varResolve  m x = quantvar (findOrErr x m :: DefinedQuantityDict)
-
--- | Make a 'CodeFuncChunk' from a 'UID' in the 'ChunkDB'.
-funcResolve :: ChunkDB -> UID -> CodeFuncChunk
-funcResolve m x = quantfunc (findOrErr x m :: DefinedQuantityDict)

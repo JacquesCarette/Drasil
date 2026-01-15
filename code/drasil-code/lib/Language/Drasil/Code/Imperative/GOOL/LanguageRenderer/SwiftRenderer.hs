@@ -16,7 +16,7 @@ import Drasil.GOOL (onCodeList, swiftName, swiftVersion)
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (FileAndContents(..),
+import Language.Drasil.Code.Imperative.GOOL.FileData (FileAndContents(..),
   fileAndContents, PackData(..), packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)

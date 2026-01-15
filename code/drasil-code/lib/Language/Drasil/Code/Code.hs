@@ -13,8 +13,8 @@ import Drasil.GOOL ( CodeType(..), FileData(..), ModData(modDoc))
 import qualified Language.Drasil as S (Space(..))
 import Utils.Drasil (createDirIfMissing)
 
-import Language.Drasil.Code.Imperative.GOOL.Data (FileAndContents(fileDoc))
-import qualified Language.Drasil.Code.Imperative.GOOL.Data as D (
+import Language.Drasil.Code.Imperative.GOOL.FileData (FileAndContents(fileDoc))
+import qualified Language.Drasil.Code.Imperative.GOOL.FileData as D (
   filePath)
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))

@@ -178,19 +178,6 @@ instance GHC.Classes.Eq Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Parameter.ParameterChunk
 
 
--- | Defines the <a>Code</a> data type.
-module Language.Drasil.Code.Code
-
--- | Represents the generated code as a list of file names and rendered
---   code pairs.
-newtype Code
-Code :: [(FilePath, Doc)] -> Code
-[unCode] :: Code -> [(FilePath, Doc)]
-
--- | Default mapping between <tt>Space</tt> and <a>CodeType</a>.
-spaceToCodeType :: Space -> [CodeType]
-
-
 -- | Defines QuantityDicts needed in the code generation stage.
 module Language.Drasil.Code.CodeQuantityDicts
 
@@ -464,7 +451,13 @@ packD :: ProgData -> [AuxData] -> PackData
 
 -- | Contains the high-level functionality to create <a>Code</a> and then
 --   produce the actual generated code files.
-module Language.Drasil.Code.CodeGeneration
+module Language.Drasil.Code.Code
+
+-- | Represents the generated code as a list of file names and rendered
+--   code pairs.
+newtype Code
+Code :: [(FilePath, Doc)] -> Code
+[unCode] :: Code -> [(FilePath, Doc)]
 
 -- | Makes code from <a>FileData</a> (<a>FilePath</a>s with module data)
 --   and <a>AuxData</a> (<a>FilePath</a>s with auxiliary document
@@ -473,6 +466,9 @@ makeCode :: [FileData] -> [AuxData] -> Code
 
 -- | Creates the requested <a>Code</a> by producing files.
 createCodeFiles :: Code -> IO ()
+
+-- | Default mapping between <tt>Space</tt> and <a>CodeType</a>.
+spaceToCodeType :: Space -> [CodeType]
 
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer
 
@@ -1672,21 +1668,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aydZ
-oldCodeSpec :: HasOldCodeSpec c_aydZ => Lens' c_aydZ OldCodeSpec
-authorsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ People
-cMapO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [FilePath]
-constMapO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ ConstantMap
-constantsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Const]
-derivedInputsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Derived]
-execOrderO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Def]
-extInputsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Input]
-inputsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Input]
-modsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Mod]
-outputsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Output]
-pNameO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ Name
-systemdbO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ ChunkDB
+class HasOldCodeSpec c_ayz6
+oldCodeSpec :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 OldCodeSpec
+authorsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 People
+cMapO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [FilePath]
+constMapO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 ConstantMap
+constantsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Const]
+derivedInputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Derived]
+execOrderO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Def]
+extInputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Input]
+inputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Input]
+modsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Mod]
+outputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Output]
+pNameO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 Name
+systemdbO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -2910,21 +2906,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_aydZ
-oldCodeSpec :: HasOldCodeSpec c_aydZ => Lens' c_aydZ OldCodeSpec
-authorsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ People
-cMapO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [FilePath]
-constMapO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ ConstantMap
-constantsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Const]
-derivedInputsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Derived]
-execOrderO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Def]
-extInputsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Input]
-inputsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Input]
-modsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Mod]
-outputsO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ [Output]
-pNameO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ Name
-systemdbO :: HasOldCodeSpec c_aydZ => Lens' c_aydZ ChunkDB
+class HasOldCodeSpec c_ayz6
+oldCodeSpec :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 OldCodeSpec
+authorsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 People
+cMapO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [FilePath]
+constMapO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 ConstantMap
+constantsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Const]
+derivedInputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Derived]
+execOrderO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Def]
+extInputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Input]
+inputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Input]
+modsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Mod]
+outputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Output]
+pNameO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 Name
+systemdbO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

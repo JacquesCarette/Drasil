@@ -420,8 +420,6 @@ digraph alltypes {
 		Code -> FilePath;
 		}
 	}
-	subgraph codegeneration {
-	}
 	subgraph codequantitydicts {
 	}
 	subgraph datadecs {

@@ -22,6 +22,7 @@ import Language.Drasil.Printing.Import (spec)
 import Drasil.System
 import Utils.Drasil (createDirIfMissing)
 
+import Language.Drasil.Code.Code (createCodeFiles, makeCode)
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
@@ -44,7 +45,6 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), Auxi
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer(sampleInputName)
-import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),

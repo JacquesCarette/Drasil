@@ -52,7 +52,8 @@ import Language.Drasil.Code.Imperative.Generator (generator, generateCode,
   generateCodeProc)
 import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc,
   sampleInputDD)
-import Language.Drasil.Code.CodeGeneration (makeCode, createCodeFiles)
+
+import Language.Drasil.Code.Code (makeCode, createCodeFiles)
 import Language.Drasil.Code.DataDesc (junkLine, multiLine, repeated, singleLine,
   singleton)
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,

@@ -19,7 +19,7 @@ JavaProject	[shape=oval, color=turquoise4, label="JavaProject"];
 JuliaProject	[shape=oval, color=turquoise4, label="JuliaProject"];
 PythonProject	[shape=oval, color=turquoise4, label="PythonProject"];
 SwiftProject	[shape=oval, color=turquoise4, label="SwiftProject"];
-AuxData	[shape=oval, color=turquoise4, label="AuxData"];
+FileAndContents	[shape=oval, color=turquoise4, label="FileAndContents"];
 PackData	[shape=oval, color=turquoise4, label="PackData"];
 ScopeType	[shape=oval, color=turquoise4, label="ScopeType"];
 DrasilState	[shape=oval, color=turquoise4, label="DrasilState"];

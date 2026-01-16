@@ -1,0 +1,5 @@
+digraph fileandcontents{
+FileAndContents	[shape=oval, color=cyan3, label="FileAndContents"];
+FileAndContents -> FilePath;
+FileAndContents -> Doc;
+}

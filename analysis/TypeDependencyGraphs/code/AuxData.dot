@@ -1,5 +1,0 @@
-digraph auxdata{
-AuxData	[shape=oval, color=cyan3, label="AuxData"];
-AuxData -> FilePath;
-AuxData -> Doc;
-}

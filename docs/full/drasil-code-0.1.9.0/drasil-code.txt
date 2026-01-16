@@ -434,19 +434,19 @@ instance Build.Drasil.Make.Import.RuleTransformer Language.Drasil.Code.Imperativ
 
 
 -- | Defines the underlying data types used in the package extension.
-module Language.Drasil.Code.Imperative.GOOL.Data
+module Language.Drasil.Code.Imperative.GOOL.FileData
 
 -- | The underlying data type for auxiliary files in all renderers.
-data AuxData
+data FileAndContents
 
 -- | Constructor for auxiliary files.
-ad :: FilePath -> Doc -> AuxData
+fileAndContents :: FilePath -> Doc -> FileAndContents
 
 -- | The underlying data type for packages in all renderers.
 data PackData
 
 -- | Constructor for package data.
-packD :: ProgData -> [AuxData] -> PackData
+packD :: ProgData -> [FileAndContents] -> PackData
 
 
 -- | Contains the high-level functionality to create <a>Code</a> and then
@@ -460,9 +460,9 @@ Code :: [(FilePath, Doc)] -> Code
 [unCode] :: Code -> [(FilePath, Doc)]
 
 -- | Makes code from <a>FileData</a> (<a>FilePath</a>s with module data)
---   and <a>AuxData</a> (<a>FilePath</a>s with auxiliary document
+--   and <a>FileAndContents</a> (<a>FilePath</a>s with auxiliary document
 --   information).
-makeCode :: [FileData] -> [AuxData] -> Code
+makeCode :: [FileData] -> [FileAndContents] -> Code
 
 -- | Creates the requested <a>Code</a> by producing files.
 createCodeFiles :: Code -> IO ()
@@ -2200,7 +2200,7 @@ auxHelperDoc :: AuxiliarySym r => r (AuxHelper r) -> Doc
 auxFromData :: AuxiliarySym r => FilePath -> Doc -> r (Auxiliary r)
 
 -- | The underlying data type for auxiliary files in all renderers.
-data AuxData
+data FileAndContents
 
 -- | The underlying data type for packages in all renderers.
 data PackData
@@ -2569,9 +2569,9 @@ generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRep
 module Language.Drasil.Code
 
 -- | Makes code from <a>FileData</a> (<a>FilePath</a>s with module data)
---   and <a>AuxData</a> (<a>FilePath</a>s with auxiliary document
+--   and <a>FileAndContents</a> (<a>FilePath</a>s with auxiliary document
 --   information).
-makeCode :: [FileData] -> [AuxData] -> Code
+makeCode :: [FileData] -> [FileAndContents] -> Code
 
 -- | Creates the requested <a>Code</a> by producing files.
 createCodeFiles :: Code -> IO ()

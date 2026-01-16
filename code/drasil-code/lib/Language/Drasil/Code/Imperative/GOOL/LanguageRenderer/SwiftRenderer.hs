@@ -16,8 +16,8 @@ import Drasil.GOOL (onCodeList, swiftName, swiftVersion)
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
-  packD)
+import Language.Drasil.Code.Imperative.GOOL.FileData (FileAndContents(..),
+  fileAndContents, PackData(..), packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)
 
@@ -39,7 +39,7 @@ instance PackageSym SwiftProject where
   package p = onCodeList (packD p)
 
 instance AuxiliarySym SwiftProject where
-  type Auxiliary SwiftProject = AuxData
+  type Auxiliary SwiftProject = FileAndContents
   type AuxHelper SwiftProject = Doc
   doxConfig _ _ _ = auxFromData "" empty
   readMe rmi = G.readMe rmi {
@@ -52,7 +52,7 @@ instance AuxiliarySym SwiftProject where
   makefile fs it cms = G.makefile (swiftBuildConfig fs it) (G.noRunIfLib it swiftRunnable) (G.docIfEnabled cms (DocConfig [] []))
 
   auxHelperDoc = unSP
-  auxFromData fp d = pure $ ad fp d
+  auxFromData fp d = pure $ fileAndContents fp d
 
 -- | Create a build configuration for Swift files. Takes in 'FilePath's and the type of implementation.
 swiftBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

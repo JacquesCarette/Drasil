@@ -18,8 +18,8 @@ import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad,
-  PackData(..), packD)
+import Language.Drasil.Code.Imperative.GOOL.FileData (FileAndContents(..),
+  fileAndContents, PackData(..), packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, cppCompiler, nativeBinary, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
@@ -42,7 +42,7 @@ instance PackageSym CppProject where
   package p = onCodeList (packD p)
 
 instance AuxiliarySym CppProject where
-  type Auxiliary CppProject = AuxData
+  type Auxiliary CppProject = FileAndContents
   type AuxHelper CppProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
@@ -56,7 +56,7 @@ instance AuxiliarySym CppProject where
   makefile fs it cms = G.makefile (cppBuildConfig fs it) (G.noRunIfLib it cppRunnable) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unCPPP
-  auxFromData fp d = pure $ ad fp d
+  auxFromData fp d = pure $ fileAndContents fp d
 
 -- helpers
 -- | Create a build configuration for C++ files. Takes in 'FilePath's and the type of implementation.

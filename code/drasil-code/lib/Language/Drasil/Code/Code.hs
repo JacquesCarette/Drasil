@@ -13,18 +13,20 @@ import Drasil.GOOL ( CodeType(..), FileData(..), ModData(modDoc))
 import qualified Language.Drasil as S (Space(..))
 import Utils.Drasil (createDirIfMissing)
 
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..))
+import Language.Drasil.Code.Imperative.GOOL.FileData (FileAndContents(fileDoc))
+import qualified Language.Drasil.Code.Imperative.GOOL.FileData as D (
+  filePath)
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 
 -- | Represents the generated code as a list of file names and rendered code pairs.
 newtype Code = Code { unCode :: [(FilePath, Doc)]}
 
--- | Makes code from 'FileData' ('FilePath's with module data) and 'AuxData'
+-- | Makes code from 'FileData' ('FilePath's with module data) and 'FileAndContents'
 -- ('FilePath's with auxiliary document information).
-makeCode :: [FileData] -> [AuxData] -> Code
-makeCode files aux = Code $ zip (map filePath files ++ map auxFilePath aux)
-  (map (modDoc . fileMod) files ++ map auxDoc aux)
+makeCode :: [FileData] -> [FileAndContents] -> Code
+makeCode files aux = Code $ zip (map filePath files ++ map D.filePath aux)
+  (map (modDoc . fileMod) files ++ map fileDoc aux)
 
 -- | Creates the requested 'Code' by producing files.
 createCodeFiles :: Code -> IO ()

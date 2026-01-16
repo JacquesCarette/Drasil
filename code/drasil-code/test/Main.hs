@@ -8,8 +8,10 @@ import Drasil.GProc (ProcProg, unJLC)
 import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), ProgData(..))
 
 import Language.Drasil.Code (ImplementationType(..))
-import Language.Drasil.GOOL (PackageSym(..), AuxiliarySym(..), AuxData(..),
-  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP)
+import Language.Drasil.GOOL (PackageSym(..), AuxiliarySym(..),
+  FileAndContents(fileDoc), PackData(..), unPP, unJP, unCSP, unCPPP, unSP,
+  unJLP)
+import qualified Language.Drasil.GOOL as D (filePath)
 
 import Utils.Drasil (createDirIfMissing)
 
@@ -88,13 +90,14 @@ jlClasses unRepr unRepr' = zipWith
     fileTestsProc, vectorTestProc, nameGenTestProc])
 
 -- | Formats code to be rendered.
-makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]
+makeCode :: [[FileData]] -> [[FileAndContents]] -> [(FilePath, Doc)]
 makeCode files auxs = concat $ zipWith (++)
   (map (map (\fd -> (filePath fd, modDoc $ fileMod fd))) files)
-  (map (map (\ad -> (auxFilePath ad, auxDoc ad))) auxs)
+  (map (map (\fileAndContents ->
+      (D.filePath fileAndContents, fileDoc fileAndContents))) auxs)
 
   -- zip (map filePath files) (map (modDoc . fileMod) files)
-  -- ++ zip (map auxFilePath auxs) (map auxDoc auxs)
+  -- ++ zip (map D.filePath auxs) (map fileDoc auxs)
 
 ------------------
 -- IO Functions --

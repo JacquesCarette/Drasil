@@ -18,7 +18,7 @@ import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.FileData (FileAndContents(..),
+import Language.Drasil.Code.FileData (FileAndContents(..),
   fileAndContents, PackData(..), packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, cppCompiler, nativeBinary, executable, sharedLibrary)

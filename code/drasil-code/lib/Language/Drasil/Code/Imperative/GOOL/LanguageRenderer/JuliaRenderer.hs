@@ -14,7 +14,7 @@ import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.FileData (FileAndContents(..),
+import Language.Drasil.Code.FileData (FileAndContents(..),
   fileAndContents, PackData(..), packD)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, DocConfig(..), interpMM)
 

@@ -7,7 +7,7 @@ module Language.Drasil.GOOL (
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
   AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.GOOL.FileData (FileAndContents(..), PackData(..))
+import Language.Drasil.Code.FileData (FileAndContents(..), PackData(..))
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)

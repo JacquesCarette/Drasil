@@ -2,10 +2,10 @@
 module Main (main) where
 
 import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC,
-  unCPPC, unSC, initialState, FileData(..), ModData(..))
-import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), ProgData(..))
+  unCPPC, unSC, initialState, FileData(..), ProgData(..), ModData(..))
+import qualified Drasil.GOOL as OO (unCI, ProgramSym(..))
 import Drasil.GProc (ProcProg, unJLC)
-import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), ProgData(..))
+import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
 
 import Language.Drasil.Code (ImplementationType(..))
 import Language.Drasil.GOOL (PackageSym(..), AuxiliarySym(..),
@@ -59,17 +59,17 @@ main = do
   setCurrentDirectory workingDir
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
-genCode :: [PackData] -> IO()
-genCode files = createCodeFiles (concatMap (\p -> replicate (length (OO.progMods
-  (packProg p)) + length (packAux p)) (OO.progName $ packProg p)) files) $
-    makeCode (map (OO.progMods . packProg) files) (map packAux files)
+genCode :: [PackData ProgData] -> IO()
+genCode files = createCodeFiles (concatMap (\p -> replicate (length (progMods
+  (packProg p)) + length (packAux p)) (progName $ packProg p)) files) $
+    makeCode (map (progMods . packProg) files) (map packAux files)
 
 -- Cannot assign the list of tests in a where clause and re-use it because the
 -- "r" type variable needs to be instantiated to two different types
 -- (CodeInfo and a renderer) each time this function is called
 -- | Gathers the GOOL file tests and prepares them for rendering
-classes :: (OOProg r, PackageSym r') => (r (OO.Program r) -> OO.ProgData) ->
-  (r' (Package r') -> PackData) -> [PackData]
+classes :: (OOProg r, PackageSym r') => (r (OO.Program r) -> ProgData) ->
+  (r' (Package r') -> PackData ProgData) -> [PackData ProgData]
 classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
@@ -80,7 +80,7 @@ classes unRepr unRepr' = zipWith
 
 -- Classes that Julia is currently able to render
 jlClasses :: (ProcProg r, PackageSym r') => (r (Proc.Program r) ->
-  Proc.ProgData) -> (r' (Package r') -> PackData) -> [PackData]
+  ProgData) -> (r' (Package r') -> PackData ProgData) -> [PackData ProgData]
 jlClasses unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'

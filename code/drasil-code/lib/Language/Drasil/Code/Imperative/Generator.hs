@@ -115,7 +115,7 @@ generator l dt sd chs cs = DrasilState {
 -- be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang ->
   (progRepr (OO.Program progRepr) -> ProgData) -> (packRepr (Package packRepr) ->
-  PackData) -> DrasilState -> IO ()
+  PackData ProgData) -> DrasilState -> IO ()
 generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirIfMissing False (getDir l)
@@ -228,7 +228,7 @@ genModules = do
 -- be generated in.
 generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang ->
   (progRepr (Proc.Program progRepr) -> ProgData) -> (packRepr (Package packRepr) ->
-  PackData) -> DrasilState -> IO ()
+  PackData ProgData) -> DrasilState -> IO ()
 generateCodeProc l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirIfMissing False (getDir l)

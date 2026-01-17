@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (onCodeList, cppName, cppVersion)
+import Drasil.GOOL (ProgData, onCodeList, cppName, cppVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
@@ -38,7 +38,7 @@ instance Monad CppProject where
   CPPP x >>= f = f x
 
 instance PackageSym CppProject where
-  type Package CppProject = PackData
+  type Package CppProject = PackData ProgData
   package p = onCodeList (packD p)
 
 instance AuxiliarySym CppProject where

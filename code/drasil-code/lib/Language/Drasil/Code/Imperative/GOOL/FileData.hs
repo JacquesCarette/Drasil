@@ -5,8 +5,6 @@ module Language.Drasil.Code.Imperative.GOOL.FileData (FileAndContents(filePath,
 
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 
-import Drasil.GOOL (ProgData)
-
 -- | The underlying data type for auxiliary files in all renderers.
 data FileAndContents = FileAndContents {filePath :: FilePath, fileDoc :: Doc}
 
@@ -15,8 +13,8 @@ fileAndContents :: FilePath -> Doc -> FileAndContents
 fileAndContents = FileAndContents
 
 -- | The underlying data type for packages in all renderers.
-data PackData = PackD {packProg :: ProgData, packAux :: [FileAndContents]}
+data PackData a = PackD {packProg :: a, packAux :: [FileAndContents]}
 
 -- | Constructor for package data.
-packD :: ProgData -> [FileAndContents] -> PackData
+packD :: a -> [FileAndContents] -> PackData a
 packD p as = PackD p (filter (not . isEmpty . fileDoc) as)

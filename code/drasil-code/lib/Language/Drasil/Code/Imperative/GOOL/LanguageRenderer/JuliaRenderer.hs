@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 
-import Drasil.GProc (onCodeList, jlName, jlVersion)
+import Drasil.GProc (ProgData, onCodeList, jlName, jlVersion)
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
@@ -32,7 +32,7 @@ instance Monad JuliaProject where
   JLP x >>= f = f x
 
 instance PackageSym JuliaProject where
-  type Package JuliaProject = PackData
+  type Package JuliaProject = PackData ProgData
   package p = onCodeList (packD p)
 
 instance AuxiliarySym JuliaProject where

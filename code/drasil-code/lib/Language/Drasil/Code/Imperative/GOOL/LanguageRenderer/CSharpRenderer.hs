@@ -9,7 +9,7 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (onCodeList, csName, csVersion)
+import Drasil.GOOL (ProgData, onCodeList, csName, csVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
@@ -38,7 +38,7 @@ instance Monad CSharpProject where
   CSP x >>= f = f x
 
 instance PackageSym CSharpProject where
-  type Package CSharpProject = PackData
+  type Package CSharpProject = PackData ProgData
   package p = onCodeList (packD p)
 
 instance AuxiliarySym CSharpProject where

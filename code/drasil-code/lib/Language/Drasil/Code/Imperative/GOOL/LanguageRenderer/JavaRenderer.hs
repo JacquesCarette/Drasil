@@ -9,7 +9,7 @@ import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (onCodeList, jName, jVersion)
+import Drasil.GOOL (ProgData, onCodeList, jName, jVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
@@ -46,7 +46,7 @@ instance Monad JavaProject where
   JP x >>= f = f x
 
 instance PackageSym JavaProject where
-  type Package JavaProject = PackData
+  type Package JavaProject = PackData ProgData
   package p = onCodeList (packD p)
 
 instance AuxiliarySym JavaProject where

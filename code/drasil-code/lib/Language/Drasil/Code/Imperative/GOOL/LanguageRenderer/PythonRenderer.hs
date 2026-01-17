@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (onCodeList, pyName, pyVersion)
+import Drasil.GOOL (ProgData, onCodeList, pyName, pyVersion)
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
@@ -36,7 +36,7 @@ instance Monad PythonProject where
   PP x >>= f = f x
 
 instance PackageSym PythonProject where
-  type Package PythonProject = PackData
+  type Package PythonProject = PackData ProgData
   package p = onCodeList (packD p)
 
 instance AuxiliarySym PythonProject where

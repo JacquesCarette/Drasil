@@ -18,7 +18,7 @@ import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, docIfEnabled)
 import Language.Drasil.Code.FileData (FileAndContents(..),
-  fileAndContents, PackData(..), packD)
+  fileAndContents, PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..),
   Ext(..), Runnable, NameOpts(NameOpts), asFragment, buildSingle,
   buildAllAdditionalName, includeExt, inCodePackage, interp, mainModule,
@@ -46,8 +46,8 @@ instance Monad JavaProject where
   JP x >>= f = f x
 
 instance PackageSym JavaProject where
-  type Package JavaProject = PackData ProgData
-  package p = onCodeList (packD p)
+  type Package JavaProject = PackageData ProgData
+  package p = onCodeList (packageData p)
 
 instance AuxiliarySym JavaProject where
   type Auxiliary JavaProject = FileAndContents

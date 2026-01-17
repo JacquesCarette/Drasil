@@ -17,8 +17,7 @@ import qualified
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
 import Language.Drasil.Code.FileData (FileAndContents(..),
-  fileAndContents, PackData(..),
-  packD)
+  fileAndContents, PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
@@ -36,8 +35,8 @@ instance Monad PythonProject where
   PP x >>= f = f x
 
 instance PackageSym PythonProject where
-  type Package PythonProject = PackData ProgData
-  package p = onCodeList (packD p)
+  type Package PythonProject = PackageData ProgData
+  package p = onCodeList (packageData p)
 
 instance AuxiliarySym PythonProject where
   type Auxiliary PythonProject = FileAndContents

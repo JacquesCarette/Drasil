@@ -19,7 +19,7 @@ import qualified
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
 import Language.Drasil.Code.FileData (FileAndContents(..),
-  fileAndContents, PackData(..), packD)
+  fileAndContents, PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, nativeBinary, osClassDefault, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
@@ -38,8 +38,8 @@ instance Monad CSharpProject where
   CSP x >>= f = f x
 
 instance PackageSym CSharpProject where
-  type Package CSharpProject = PackData ProgData
-  package p = onCodeList (packD p)
+  type Package CSharpProject = PackageData ProgData
+  package p = onCodeList (packageData p)
 
 instance AuxiliarySym CSharpProject where
   type Auxiliary CSharpProject = FileAndContents

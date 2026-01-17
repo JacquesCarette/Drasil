@@ -19,7 +19,7 @@ import qualified
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
 import Language.Drasil.Code.FileData (FileAndContents(..),
-  fileAndContents, PackData(..), packD)
+  fileAndContents, PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, cppCompiler, nativeBinary, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
@@ -38,8 +38,8 @@ instance Monad CppProject where
   CPPP x >>= f = f x
 
 instance PackageSym CppProject where
-  type Package CppProject = PackData ProgData
-  package p = onCodeList (packD p)
+  type Package CppProject = PackageData ProgData
+  package p = onCodeList (packageData p)
 
 instance AuxiliarySym CppProject where
   type Auxiliary CppProject = FileAndContents

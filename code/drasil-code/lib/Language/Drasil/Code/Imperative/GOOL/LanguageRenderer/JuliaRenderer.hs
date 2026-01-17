@@ -15,7 +15,7 @@ import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
 import Language.Drasil.Code.FileData (FileAndContents(..),
-  fileAndContents, PackData(..), packD)
+  fileAndContents, PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, DocConfig(..), interpMM)
 
 -- | Holds a Julia project
@@ -32,8 +32,8 @@ instance Monad JuliaProject where
   JLP x >>= f = f x
 
 instance PackageSym JuliaProject where
-  type Package JuliaProject = PackData ProgData
-  package p = onCodeList (packD p)
+  type Package JuliaProject = PackageData ProgData
+  package p = onCodeList (packageData p)
 
 instance AuxiliarySym JuliaProject where
   type Auxiliary JuliaProject = FileAndContents

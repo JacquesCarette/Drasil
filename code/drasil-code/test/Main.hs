@@ -9,7 +9,7 @@ import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
 
 import Language.Drasil.Code (ImplementationType(..))
 import Language.Drasil.GOOL (PackageSym(..), AuxiliarySym(..),
-  FileAndContents(fileDoc), PackData(..), unPP, unJP, unCSP, unCPPP, unSP,
+  FileAndContents(fileDoc), PackageData(..), unPP, unJP, unCSP, unCPPP, unSP,
   unJLP)
 import qualified Language.Drasil.GOOL as D (filePath)
 
@@ -59,17 +59,17 @@ main = do
   setCurrentDirectory workingDir
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
-genCode :: [PackData ProgData] -> IO()
+genCode :: [PackageData ProgData] -> IO()
 genCode files = createCodeFiles (concatMap (\p -> replicate (length (progMods
-  (packProg p)) + length (packAux p)) (progName $ packProg p)) files) $
-    makeCode (map (progMods . packProg) files) (map packAux files)
+  (packageProg p)) + length (packageAux p)) (progName $ packageProg p)) files) $
+    makeCode (map (progMods . packageProg) files) (map packageAux files)
 
 -- Cannot assign the list of tests in a where clause and re-use it because the
 -- "r" type variable needs to be instantiated to two different types
 -- (CodeInfo and a renderer) each time this function is called
 -- | Gathers the GOOL file tests and prepares them for rendering
 classes :: (OOProg r, PackageSym r') => (r (OO.Program r) -> ProgData) ->
-  (r' (Package r') -> PackData ProgData) -> [PackData ProgData]
+  (r' (Package r') -> PackageData ProgData) -> [PackageData ProgData]
 classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
@@ -80,7 +80,7 @@ classes unRepr unRepr' = zipWith
 
 -- Classes that Julia is currently able to render
 jlClasses :: (ProcProg r, PackageSym r') => (r (Proc.Program r) ->
-  ProgData) -> (r' (Package r') -> PackData ProgData) -> [PackData ProgData]
+  ProgData) -> (r' (Package r') -> PackageData ProgData) -> [PackageData ProgData]
 jlClasses unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'

@@ -396,9 +396,9 @@ instance ExprC M.ModelExpr where
   lit = M.Lit
 
   -- | Smart constructor for equating two expressions.
-  ($=)  = M.EqBinaryOp M.Eq
+  ($=)  = M.EqBinaryOp Eq
   -- | Smart constructor for showing that two expressions are not equal.
-  ($!=) = M.EqBinaryOp M.NEq
+  ($!=) = M.EqBinaryOp NEq
 
   -- | Smart constructor for ordering two equations.
   -- | Less than.
@@ -444,9 +444,9 @@ instance ExprC M.ModelExpr where
   ($^) = M.ArithBinaryOp Pow
 
   -- | Smart constructor to show that one expression implies the other (conditional operator).
-  ($=>)  = M.BoolBinaryOp M.Impl
+  ($=>)  = M.BoolBinaryOp Impl
   -- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).
-  ($<=>) = M.BoolBinaryOp M.Iff
+  ($<=>) = M.BoolBinaryOp Iff
 
   -- | Smart constructor for the boolean /and/ operator.
   a $&& b = M.AssocB M.And [a, b]

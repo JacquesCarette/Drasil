@@ -8,21 +8,12 @@ import Prelude hiding (sqrt)
 import Drasil.Database (UID)
 
 import Language.Drasil.Expr.Lang
-  (Completeness, ArithBinOp(..))
+  (Completeness, ArithBinOp(..), EqBinOp(..), BoolBinOp(..))
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
 import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- Binary functions
-
--- | Equality operators (equal or not equal).
-data EqBinOp = Eq | NEq
-  deriving Eq
-
--- | Conditional and Biconditional operators (Expressions can imply
--- one another, or exist if and only if another expression exists).
-data BoolBinOp = Impl | Iff
-  deriving Eq
 
 -- | Index operator.
 data LABinOp = Index | IndexOf

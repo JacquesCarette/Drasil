@@ -3,19 +3,11 @@ module Language.Drasil.ModelExpr.Precedence where
 
 import Language.Drasil.ModelExpr.Lang
 import Language.Drasil.Expr.Lang (ArithBinOp(..))
-import Language.Drasil.Expr.Precedence (prec2Arith)
+import Language.Drasil.Expr.Precedence (prec2Arith, prec2Bool, prec2Eq)
 
 -- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
-
--- | prec2Bool - precedence for boolean-related binary operations.
-prec2Bool :: BoolBinOp -> Int
-prec2Bool _ = 130
-
--- | prec2Eq - precedence for equality-related binary operations.
-prec2Eq :: EqBinOp -> Int
-prec2Eq _  = 130
 
 -- | prec2LA - precedence for access-related binary operations.
 prec2LA :: LABinOp -> Int

@@ -4,13 +4,12 @@ module Language.Drasil.ModelExpr.Development (
 
   -- ModelExpr.Lang
     ModelExpr(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..)
-  , BoolBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..)
+  , LABinOp(..), OrdBinOp(..)
   , SpaceBinOp(..), StatBinOp(..), VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..)
   , AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..)
   , DerivType(..)
   -- Expr.Lang
-  , ArithBinOp(..)
-
+  , ArithBinOp(..), BoolBinOp(..), EqBinOp(..)
   -- * Functions
 
   -- ModelExpr.Extract
@@ -21,5 +20,6 @@ module Language.Drasil.ModelExpr.Development (
 
 import Language.Drasil.ModelExpr.Extract (meDep)
 import Language.Drasil.ModelExpr.Lang
-import Language.Drasil.Expr.Lang (ArithBinOp(..))
+import Language.Drasil.Expr.Lang (ArithBinOp(..), BoolBinOp(..),
+  EqBinOp(..))
 import Language.Drasil.ModelExpr.Precedence

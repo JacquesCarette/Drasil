@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 import Drasil.Database (UID, HasUID(..))
 
 import Language.Drasil.Expr.Lang
-  (Completeness(..), ArithBinOp(..), EqBinOp(..))
+  (Completeness(..), ArithBinOp(..), EqBinOp(..), BoolBinOp(..))
 import Language.Drasil.Expr.Class (ExprC(..), square)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
@@ -15,11 +15,6 @@ import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc,
   DomainDesc(BoundedDD), RTopology(..))
 
 -- * Operators (mostly binary)
-
--- | Conditional and Biconditional operators (Expressions can imply
--- one another, or exist if and only if another expression exists).
-data BoolBinOp = Impl | Iff
-  deriving Eq
 
 -- | Index operator.
 data LABinOp = Index | IndexOf

@@ -7,15 +7,15 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 
-import Drasil.GProc (onCodeList, jlName, jlVersion)
+import Drasil.GProc (ProgData, onCodeList, jlName, jlVersion)
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.FileData (FileAndContents(..),
-  fileAndContents, PackData(..), packD)
+import Language.Drasil.Code.FileData (FileAndContents(..),
+  fileAndContents, PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, DocConfig(..), interpMM)
 
 -- | Holds a Julia project
@@ -32,8 +32,8 @@ instance Monad JuliaProject where
   JLP x >>= f = f x
 
 instance PackageSym JuliaProject where
-  type Package JuliaProject = PackData
-  package p = onCodeList (packD p)
+  type Package JuliaProject = PackageData ProgData
+  package p = onCodeList (packageData p)
 
 instance AuxiliarySym JuliaProject where
   type Auxiliary JuliaProject = FileAndContents

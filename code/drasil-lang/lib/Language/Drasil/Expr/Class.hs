@@ -515,10 +515,10 @@ instance ExprC M.ModelExpr where
   not_ = M.UnaryOpB M.Not
 
   -- | Smart constructor for indexing.
-  idx = M.LABinaryOp M.Index
+  idx = M.LABinaryOp Index
 
   -- | Smart constructor for indexing.
-  idxOf = M.LABinaryOp M.IndexOf
+  idxOf = M.LABinaryOp IndexOf
 
   -- | Integrate over some expression with bounds (∫).
   defint v low high = M.Operator M.Add (BoundedDD v Continuous low high)

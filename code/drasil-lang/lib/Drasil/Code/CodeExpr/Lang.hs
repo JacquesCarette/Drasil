@@ -7,7 +7,8 @@ import Control.Lens ((^.))
 import Drasil.Database (UID, HasUID(..))
 
 import Language.Drasil.Expr.Lang
-  (Completeness(..), ArithBinOp(..), EqBinOp(..), BoolBinOp(..))
+  (Completeness(..), ArithBinOp(..), EqBinOp(..), BoolBinOp(..),
+   LABinOp(..))
 import Language.Drasil.Expr.Class (ExprC(..), square)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
@@ -15,10 +16,6 @@ import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc,
   DomainDesc(BoundedDD), RTopology(..))
 
 -- * Operators (mostly binary)
-
--- | Index operator.
-data LABinOp = Index | IndexOf
-  deriving Eq
 
 -- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).
 data OrdBinOp = Lt | Gt | LEq | GEq

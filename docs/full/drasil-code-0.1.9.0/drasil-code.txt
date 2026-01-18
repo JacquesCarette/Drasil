@@ -308,6 +308,44 @@ getDataInputs :: Data -> [DataItem]
 -- | Helper that gets the data inputs from single-line or multi-line data.
 getPatternInputs :: LinePattern -> [DataItem]
 
+
+-- | Defines the underlying data types used in the package extension.
+module Language.Drasil.Code.FileData
+
+-- | The underlying data type for auxiliary files in all renderers.
+data FileAndContents
+
+-- | Constructor for auxiliary files.
+fileAndContents :: FilePath -> Doc -> FileAndContents
+
+-- | The underlying data type for packages in all renderers.
+data PackageData a
+
+-- | Constructor for package data.
+packageData :: a -> [FileAndContents] -> PackageData a
+
+
+-- | Contains the high-level functionality to create <a>Code</a> and then
+--   produce the actual generated code files.
+module Language.Drasil.Code.Code
+
+-- | Represents the generated code as a list of file names and rendered
+--   code pairs.
+newtype Code
+Code :: [(FilePath, Doc)] -> Code
+[unCode] :: Code -> [(FilePath, Doc)]
+
+-- | Makes code from <a>FileData</a> (<a>FilePath</a>s with module data)
+--   and <a>FileAndContents</a> (<a>FilePath</a>s with auxiliary document
+--   information).
+makeCode :: [FileData] -> [FileAndContents] -> Code
+
+-- | Creates the requested <a>Code</a> by producing files.
+createCodeFiles :: Code -> IO ()
+
+-- | Default mapping between <tt>Space</tt> and <a>CodeType</a>.
+spaceToCodeType :: Space -> [CodeType]
+
 module Language.Drasil.Code.Imperative.Build.AST
 
 -- | Used to build commands. Type synonym of a <a>MakeString</a> for
@@ -431,44 +469,6 @@ module Language.Drasil.Code.Imperative.Build.Import
 -- | Creates a Makefile.
 makeBuild :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable -> GOOLState -> ProgData -> Doc
 instance Build.Drasil.Make.Import.RuleTransformer Language.Drasil.Code.Imperative.Build.Import.CodeHarness
-
-
--- | Defines the underlying data types used in the package extension.
-module Language.Drasil.Code.Imperative.GOOL.FileData
-
--- | The underlying data type for auxiliary files in all renderers.
-data FileAndContents
-
--- | Constructor for auxiliary files.
-fileAndContents :: FilePath -> Doc -> FileAndContents
-
--- | The underlying data type for packages in all renderers.
-data PackData
-
--- | Constructor for package data.
-packD :: ProgData -> [FileAndContents] -> PackData
-
-
--- | Contains the high-level functionality to create <a>Code</a> and then
---   produce the actual generated code files.
-module Language.Drasil.Code.Code
-
--- | Represents the generated code as a list of file names and rendered
---   code pairs.
-newtype Code
-Code :: [(FilePath, Doc)] -> Code
-[unCode] :: Code -> [(FilePath, Doc)]
-
--- | Makes code from <a>FileData</a> (<a>FilePath</a>s with module data)
---   and <a>FileAndContents</a> (<a>FilePath</a>s with auxiliary document
---   information).
-makeCode :: [FileData] -> [FileAndContents] -> Code
-
--- | Creates the requested <a>Code</a> by producing files.
-createCodeFiles :: Code -> IO ()
-
--- | Default mapping between <tt>Space</tt> and <a>CodeType</a>.
-spaceToCodeType :: Space -> [CodeType]
 
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer
 
@@ -1668,21 +1668,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_ayz6
-oldCodeSpec :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 OldCodeSpec
-authorsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 People
-cMapO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [FilePath]
-constMapO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 ConstantMap
-constantsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Const]
-derivedInputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Derived]
-execOrderO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Def]
-extInputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Input]
-inputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Input]
-modsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Mod]
-outputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Output]
-pNameO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 Name
-systemdbO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 ChunkDB
+class HasOldCodeSpec c_ayz2
+oldCodeSpec :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 OldCodeSpec
+authorsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 People
+cMapO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [FilePath]
+constMapO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 ConstantMap
+constantsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Const]
+derivedInputsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Derived]
+execOrderO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Def]
+extInputsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Input]
+inputsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Input]
+modsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Mod]
+outputsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Output]
+pNameO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 Name
+systemdbO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -2203,7 +2203,7 @@ auxFromData :: AuxiliarySym r => FilePath -> Doc -> r (Auxiliary r)
 data FileAndContents
 
 -- | The underlying data type for packages in all renderers.
-data PackData
+data PackageData a
 unPP :: PythonProject a -> a
 unJP :: JavaProject a -> a
 unCSP :: CSharpProject a -> a
@@ -2556,12 +2556,12 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
+generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackageData ProgData) -> DrasilState -> IO ()
 
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
+generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackageData ProgData) -> DrasilState -> IO ()
 
 
 -- | Re-export code-related smart constructors for external code writing
@@ -2584,12 +2584,12 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
+generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackageData ProgData) -> DrasilState -> IO ()
 
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
+generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackageData ProgData) -> DrasilState -> IO ()
 
 -- | Reads data from a file and converts the values to <a>Expr</a>s. The
 --   file must be formatted according to the <a>DataDesc'</a> passed as a
@@ -2906,21 +2906,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_ayz6
-oldCodeSpec :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 OldCodeSpec
-authorsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 People
-cMapO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [FilePath]
-constMapO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 ConstantMap
-constantsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Const]
-derivedInputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Derived]
-execOrderO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Def]
-extInputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Input]
-inputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Input]
-modsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Mod]
-outputsO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 [Output]
-pNameO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 Name
-systemdbO :: HasOldCodeSpec c_ayz6 => Lens' c_ayz6 ChunkDB
+class HasOldCodeSpec c_ayz2
+oldCodeSpec :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 OldCodeSpec
+authorsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 People
+cMapO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [FilePath]
+constMapO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 ConstantMap
+constantsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Const]
+derivedInputsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Derived]
+execOrderO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Def]
+extInputsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Input]
+inputsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Input]
+modsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Mod]
+outputsO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 [Output]
+pNameO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 Name
+systemdbO :: HasOldCodeSpec c_ayz2 => Lens' c_ayz2 ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

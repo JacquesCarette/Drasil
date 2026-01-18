@@ -1,5 +1,0 @@
-digraph packdata{
-PackData	[shape=oval, color=cyan3, label="PackData"];
-PackData -> ProgData;
-PackData -> FileAndContents;
-}

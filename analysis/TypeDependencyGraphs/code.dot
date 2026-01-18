@@ -112,7 +112,7 @@ digraph alltypes {
 		}
 		subgraph packagecsharpproject{
 		PackageCSharpProject	[shape=oval, color=red2, label="PackageCSharpProject"];
-		PackageCSharpProject -> PackData;
+		PackageCSharpProject -> PackageDataProgData;
 		}
 		subgraph auxiliarycsharpproject{
 		AuxiliaryCSharpProject	[shape=oval, color=red2, label="AuxiliaryCSharpProject"];
@@ -130,7 +130,7 @@ digraph alltypes {
 		}
 		subgraph packagecppproject{
 		PackageCppProject	[shape=oval, color=red2, label="PackageCppProject"];
-		PackageCppProject -> PackData;
+		PackageCppProject -> PackageDataProgData;
 		}
 		subgraph auxiliarycppproject{
 		AuxiliaryCppProject	[shape=oval, color=red2, label="AuxiliaryCppProject"];
@@ -148,7 +148,7 @@ digraph alltypes {
 		}
 		subgraph packagejavaproject{
 		PackageJavaProject	[shape=oval, color=red2, label="PackageJavaProject"];
-		PackageJavaProject -> PackData;
+		PackageJavaProject -> PackageDataProgData;
 		}
 		subgraph auxiliaryjavaproject{
 		AuxiliaryJavaProject	[shape=oval, color=red2, label="AuxiliaryJavaProject"];
@@ -166,7 +166,7 @@ digraph alltypes {
 		}
 		subgraph packagejuliaproject{
 		PackageJuliaProject	[shape=oval, color=red2, label="PackageJuliaProject"];
-		PackageJuliaProject -> PackData;
+		PackageJuliaProject -> PackageDataProgData;
 		}
 		subgraph auxiliaryjuliaproject{
 		AuxiliaryJuliaProject	[shape=oval, color=red2, label="AuxiliaryJuliaProject"];
@@ -186,7 +186,7 @@ digraph alltypes {
 		}
 		subgraph packagepythonproject{
 		PackagePythonProject	[shape=oval, color=red2, label="PackagePythonProject"];
-		PackagePythonProject -> PackData;
+		PackagePythonProject -> PackageDataProgData;
 		}
 		subgraph auxiliarypythonproject{
 		AuxiliaryPythonProject	[shape=oval, color=red2, label="AuxiliaryPythonProject"];
@@ -204,7 +204,7 @@ digraph alltypes {
 		}
 		subgraph packageswiftproject{
 		PackageSwiftProject	[shape=oval, color=red2, label="PackageSwiftProject"];
-		PackageSwiftProject -> PackData;
+		PackageSwiftProject -> PackageDataProgData;
 		}
 		subgraph auxiliaryswiftproject{
 		AuxiliarySwiftProject	[shape=oval, color=red2, label="AuxiliarySwiftProject"];
@@ -216,18 +216,6 @@ digraph alltypes {
 		}
 	}
 	subgraph clasinterfaces {
-	}
-	subgraph filedata {
-		subgraph fileandcontents{
-		FileAndContents	[shape=oval, color=cyan3, label="FileAndContents"];
-		FileAndContents -> FilePath;
-		FileAndContents -> Doc;
-		}
-		subgraph packdata{
-		PackData	[shape=oval, color=cyan3, label="PackData"];
-		PackData -> ProgData;
-		PackData -> FileAndContents;
-		}
 	}
 	subgraph languagerenderer {
 	}
@@ -601,6 +589,18 @@ digraph alltypes {
 		subgraph externallibrarycall{
 		ExternalLibraryCall	[shape=oval, color=red2, label="ExternalLibraryCall"];
 		ExternalLibraryCall -> StepGroupFill;
+		}
+	}
+	subgraph filedata {
+		subgraph fileandcontents{
+		FileAndContents	[shape=oval, color=cyan3, label="FileAndContents"];
+		FileAndContents -> FilePath;
+		FileAndContents -> Doc;
+		}
+		subgraph packagedataa{
+		PackageDataa	[shape=oval, color=cyan3, label="PackageDataa"];
+		PackageDataa -> a;
+		PackageDataa -> FileAndContents;
 		}
 	}
 	subgraph lang {

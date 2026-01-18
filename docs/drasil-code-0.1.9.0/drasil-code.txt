@@ -42,7 +42,7 @@ auxFromData :: AuxiliarySym r => FilePath -> Doc -> r (Auxiliary r)
 data FileAndContents
 
 -- | The underlying data type for packages in all renderers.
-data PackData
+data PackageData a
 unPP :: PythonProject a -> a
 unJP :: JavaProject a -> a
 unCSP :: CSharpProject a -> a
@@ -71,12 +71,12 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
+generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackageData ProgData) -> DrasilState -> IO ()
 
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
+generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackageData ProgData) -> DrasilState -> IO ()
 
 -- | Reads data from a file and converts the values to <a>Expr</a>s. The
 --   file must be formatted according to the <a>DataDesc'</a> passed as a
@@ -393,21 +393,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_ayjg
-oldCodeSpec :: HasOldCodeSpec c_ayjg => Lens' c_ayjg OldCodeSpec
-authorsO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg People
-cMapO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg [FilePath]
-constMapO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg ConstantMap
-constantsO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg [Const]
-derivedInputsO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg [Derived]
-execOrderO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg [Def]
-extInputsO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg [Input]
-inputsO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg [Input]
-modsO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg [Mod]
-outputsO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg [Output]
-pNameO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg Name
-systemdbO :: HasOldCodeSpec c_ayjg => Lens' c_ayjg ChunkDB
+class HasOldCodeSpec c_ayjc
+oldCodeSpec :: HasOldCodeSpec c_ayjc => Lens' c_ayjc OldCodeSpec
+authorsO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc People
+cMapO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc [FilePath]
+constMapO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc ConstantMap
+constantsO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc [Const]
+derivedInputsO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc [Derived]
+execOrderO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc [Def]
+extInputsO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc [Input]
+inputsO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc [Input]
+modsO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc [Mod]
+outputsO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc [Output]
+pNameO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc Name
+systemdbO :: HasOldCodeSpec c_ayjc => Lens' c_ayjc ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

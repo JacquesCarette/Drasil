@@ -2,16 +2,12 @@
 module Language.Drasil.ModelExpr.Precedence where
 
 import Language.Drasil.ModelExpr.Lang
+import Language.Drasil.Expr.Lang (ArithBinOp(..))
+import Language.Drasil.Expr.Precedence (prec2Arith)
 
 -- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
-
--- | prec2Arith - precedence for arithmetic-related binary operations.
-prec2Arith :: ArithBinOp -> Int
-prec2Arith Frac = 190
-prec2Arith Pow  = 200
-prec2Arith Subt = 180
 
 -- | prec2Bool - precedence for boolean-related binary operations.
 prec2Bool :: BoolBinOp -> Int

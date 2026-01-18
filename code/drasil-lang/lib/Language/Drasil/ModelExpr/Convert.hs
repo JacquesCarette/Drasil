@@ -47,11 +47,6 @@ uFuncVN :: E.UFuncVN -> UFuncVN
 uFuncVN E.Norm = Norm
 uFuncVN E.Dim  = Dim
 
-arithBinOp :: E.ArithBinOp -> ArithBinOp
-arithBinOp E.Frac = Frac
-arithBinOp E.Pow  = Pow
-arithBinOp E.Subt = Subt
-
 boolBinOp :: E.BoolBinOp -> BoolBinOp
 boolBinOp E.Impl = Impl
 boolBinOp E.Iff  = Iff
@@ -103,7 +98,7 @@ expr (E.UnaryOp u e)         = UnaryOp (uFunc u) (expr e)
 expr (E.UnaryOpB u e)        = UnaryOpB (uFuncB u) (expr e)
 expr (E.UnaryOpVV u e)       = UnaryOpVV (uFuncVV u) (expr e)
 expr (E.UnaryOpVN u e)       = UnaryOpVN (uFuncVN u) (expr e)
-expr (E.ArithBinaryOp a l r) = ArithBinaryOp (arithBinOp a) (expr l) (expr r)
+expr (E.ArithBinaryOp a l r) = ArithBinaryOp a (expr l) (expr r)
 expr (E.BoolBinaryOp b l r)  = BoolBinaryOp (boolBinOp b) (expr l) (expr r)
 expr (E.EqBinaryOp e l r)    = EqBinaryOp (eqBinOp e) (expr l) (expr r)
 expr (E.LABinaryOp la l r)   = LABinaryOp (laBinOp la) (expr l) (expr r)

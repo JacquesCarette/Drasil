@@ -437,11 +437,11 @@ instance ExprC M.ModelExpr where
   ($*) l (M.AssocA M.Mul r) = M.AssocA M.Mul (l : r)
   ($*) l r = M.AssocA M.Mul [l,r]
   -- | Smart constructor for subtracting two expressions.
-  ($-) = M.ArithBinaryOp M.Subt
+  ($-) = M.ArithBinaryOp Subt
   -- | Smart constructor for dividing two expressions.
-  ($/) = M.ArithBinaryOp M.Frac
+  ($/) = M.ArithBinaryOp Frac
   -- | Smart constructor for rasing the first expression to the power of the second.
-  ($^) = M.ArithBinaryOp M.Pow
+  ($^) = M.ArithBinaryOp Pow
 
   -- | Smart constructor to show that one expression implies the other (conditional operator).
   ($=>)  = M.BoolBinaryOp M.Impl

@@ -2,25 +2,16 @@ module Drasil.Code.CodeExpr.Precedence (precA, precB, eprec) where
 
 import Drasil.Code.CodeExpr.Lang (CodeExpr(..), UFuncVV, UFuncVN, UFuncB(..),
     UFunc(..), AssocBoolOper(..), AssocArithOper(..), VVNBinOp, NVVBinOp,
-    VVVBinOp, OrdBinOp, LABinOp, BoolBinOp, EqBinOp, ArithBinOp(..), AssocConcatOper(..), ESSBinOp, ESBBinOp)
+    VVVBinOp, OrdBinOp, LABinOp, BoolBinOp, AssocConcatOper(..), ESSBinOp, ESBBinOp)
+import Language.Drasil.Expr.Precedence (prec2Arith, prec2Eq)
 
 -- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
 
--- | prec2Arith - precedence for arithmetic-related binary operations.
-prec2Arith :: ArithBinOp -> Int
-prec2Arith Frac = 190
-prec2Arith Pow = 200
-prec2Arith Subt = 180
-
 -- | prec2Bool - precedence for boolean-related binary operations.
 prec2Bool :: BoolBinOp -> Int
 prec2Bool _ = 130
-
--- | prec2Eq - precedence for equality-related binary operations.
-prec2Eq :: EqBinOp -> Int
-prec2Eq _  = 130
 
 -- | prec2LA - precedence for access-related binary operations.
 prec2LA :: LABinOp -> Int

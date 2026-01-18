@@ -7,16 +7,13 @@ import Prelude hiding (sqrt)
 
 import Drasil.Database (UID)
 
-import Language.Drasil.Expr.Lang (Completeness)
+import Language.Drasil.Expr.Lang
+  (Completeness, ArithBinOp(..))
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
 import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- Binary functions
-
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp = Frac | Pow | Subt
-  deriving Eq
 
 -- | Equality operators (equal or not equal).
 data EqBinOp = Eq | NEq

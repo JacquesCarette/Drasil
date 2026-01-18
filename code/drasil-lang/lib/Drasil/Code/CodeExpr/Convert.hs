@@ -39,9 +39,9 @@ expr (LD.UnaryOp uo e)         = UnaryOp (uFunc uo) (expr e)
 expr (LD.UnaryOpB uo e)        = UnaryOpB (uFuncB uo) (expr e)
 expr (LD.UnaryOpVV uo e)       = UnaryOpVV (uFuncVV uo) (expr e)
 expr (LD.UnaryOpVN uo e)       = UnaryOpVN (uFuncVN uo) (expr e)
-expr (LD.ArithBinaryOp bo l r) = ArithBinaryOp (arithBinOp bo) (expr l) (expr r)
+expr (LD.ArithBinaryOp bo l r) = ArithBinaryOp bo (expr l) (expr r)
 expr (LD.BoolBinaryOp bo l r)  = BoolBinaryOp (boolBinOp bo) (expr l) (expr r)
-expr (LD.EqBinaryOp bo l r)    = EqBinaryOp (eqBinOp bo) (expr l) (expr r)
+expr (LD.EqBinaryOp bo l r)    = EqBinaryOp bo (expr l) (expr r)
 expr (LD.LABinaryOp bo l r)    = LABinaryOp (laBinOp bo) (expr l) (expr r)
 expr (LD.OrdBinaryOp bo l r)   = OrdBinaryOp (ordBinOp bo) (expr l) (expr r)
 expr (LD.VVVBinaryOp bo l r)   = VVVBinaryOp (vvvBinOp bo) (expr l) (expr r)
@@ -66,15 +66,6 @@ constraint (Elem r ri) = Elem r (expr ri)
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
 renderDomainDesc :: DiscreteDomainDesc E.Expr E.Expr -> DiscreteDomainDesc CodeExpr CodeExpr
 renderDomainDesc (BoundedDD s t l r) = BoundedDD s t (expr l) (expr r)
-
-arithBinOp :: LD.ArithBinOp -> ArithBinOp
-arithBinOp LD.Frac = Frac
-arithBinOp LD.Pow = Pow
-arithBinOp LD.Subt = Subt
-
-eqBinOp :: LD.EqBinOp -> EqBinOp
-eqBinOp LD.Eq = Eq
-eqBinOp LD.NEq = NEq
 
 boolBinOp :: LD.BoolBinOp -> BoolBinOp
 boolBinOp LD.Impl = Impl

@@ -2,9 +2,11 @@
 module Drasil.Code.CodeExpr.Development (
     -- CodeExpr
     CodeExpr(..),
-    ArithBinOp(..), EqBinOp(..), BoolBinOp(..), LABinOp(..), OrdBinOp(..),
+    BoolBinOp(..), LABinOp(..), OrdBinOp(..),
     VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..),
     UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
+    -- re-export from Expr
+    ArithBinOp(..), EqBinOp(..),
     -- Class
     CodeExprC(..),
     -- Extract
@@ -19,8 +21,9 @@ module Drasil.Code.CodeExpr.Development (
 import Drasil.Code.CodeExpr.Lang (CodeExpr(..),
     UFuncVV(..), UFuncVN(..), UFuncB(..), UFunc(..),
     AssocBoolOper(..), AssocArithOper(..), AssocConcatOper(..),VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..),
-    VVVBinOp(..), OrdBinOp(..), LABinOp(..), BoolBinOp(..), EqBinOp(..),
-    ArithBinOp(..))
+    VVVBinOp(..), OrdBinOp(..), LABinOp(..), BoolBinOp(..))
+import Language.Drasil.Expr.Lang (ArithBinOp(..), EqBinOp(..))
+
 import Drasil.Code.CodeExpr.Class (CodeExprC(..))
 import Drasil.Code.CodeExpr.Extract (eDep, eDep', eNamesRI, eNamesRI')
 import Drasil.Code.CodeExpr.Precedence (eprec, precA, precB)

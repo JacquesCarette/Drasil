@@ -1,32 +1,13 @@
 module Drasil.Code.CodeExpr.Precedence (precA, precB, eprec) where
 
-import Drasil.Code.CodeExpr.Lang (CodeExpr(..), UFuncVV, UFuncVN, UFuncB(..),
-    UFunc(..))
+import Drasil.Code.CodeExpr.Lang (CodeExpr(..))
 import Language.Drasil.Expr.Precedence (prec2Arith, prec2Eq, prec2Bool,
   prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV, prec2ESS, prec2ESB,
-  precA, precB, precC)
+  precA, precB, precC, prec1, prec1B, prec1VV, prec1VN)
 
 -- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
-
--- | prec1 - precedence of unary operators.
-prec1 :: UFunc -> Int
-prec1 Neg = 230
-prec1 Exp = 200
-prec1 _ = 250
-
--- | prec1B - precedence of boolean-related unary operators.
-prec1B :: UFuncB -> Int
-prec1B Not = 230
-
--- | prec1VV - precedence of vector-vector-related unary operators.
-prec1VV :: UFuncVV -> Int
-prec1VV _ = 250
-
--- | prec1VN - precedence of vector-number-related unary operators.
-prec1VN :: UFuncVN -> Int
-prec1VN _ = 230
 
 -- | eprec - "Expression" precedence.
 eprec :: CodeExpr -> Int

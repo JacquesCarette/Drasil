@@ -10,31 +10,13 @@ import Language.Drasil.Expr.Lang
   (Completeness(..), ArithBinOp(..), EqBinOp(..), BoolBinOp(..),
    LABinOp(..), OrdBinOp(..), EqBinOp(..),
    VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..),
-   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..))
+   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..),
+   UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..))
 import Language.Drasil.Expr.Class (ExprC(..), square)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc,
   DomainDesc(BoundedDD), RTopology(..))
-
--- * Operators (mostly binary)
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
-  | Arccos | Arctan | Exp | Sqrt | Neg
-  deriving Eq
-
--- | @Bool -> Bool@ operators.
-data UFuncB = Not
-  deriving Eq
-
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
-  deriving Eq
-
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
-  deriving Eq
 
 -- * CodeExpr
 

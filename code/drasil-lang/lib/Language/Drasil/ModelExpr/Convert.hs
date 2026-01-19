@@ -13,33 +13,6 @@ assocBoolOper :: E.AssocBoolOper -> AssocBoolOper
 assocBoolOper E.And = And
 assocBoolOper E.Or  = Or
 
-uFunc :: E.UFunc -> UFunc
-uFunc E.Abs    = Abs
-uFunc E.Log    = Log
-uFunc E.Ln     = Ln
-uFunc E.Sin    = Sin
-uFunc E.Cos    = Cos
-uFunc E.Tan    = Tan
-uFunc E.Sec    = Sec
-uFunc E.Csc    = Csc
-uFunc E.Cot    = Cot
-uFunc E.Arcsin = Arcsin
-uFunc E.Arccos = Arccos
-uFunc E.Arctan = Arctan
-uFunc E.Exp    = Exp
-uFunc E.Sqrt   = Sqrt
-uFunc E.Neg    = Neg
-
-uFuncB :: E.UFuncB -> UFuncB
-uFuncB E.Not = Not
-
-uFuncVV :: E.UFuncVV -> UFuncVV
-uFuncVV E.NegV = NegV
-
-uFuncVN :: E.UFuncVN -> UFuncVN
-uFuncVN E.Norm = Norm
-uFuncVN E.Dim  = Dim
-
 expr :: E.Expr -> ModelExpr
 expr (E.Lit a)               = Lit a
 expr (E.AssocA ao es)        = AssocA ao $ map expr es
@@ -51,10 +24,10 @@ expr (E.Case c ces)          = Case c (map (bimap expr expr) ces)
 expr (E.Matrix es)           = Matrix $ map (map expr) es
 expr (E.Set s e)             = Set s $ map expr e
 expr (E.Variable s e)        = Variable s $ expr e
-expr (E.UnaryOp u e)         = UnaryOp (uFunc u) (expr e)
-expr (E.UnaryOpB u e)        = UnaryOpB (uFuncB u) (expr e)
-expr (E.UnaryOpVV u e)       = UnaryOpVV (uFuncVV u) (expr e)
-expr (E.UnaryOpVN u e)       = UnaryOpVN (uFuncVN u) (expr e)
+expr (E.UnaryOp u e)         = UnaryOp u (expr e)
+expr (E.UnaryOpB u e)        = UnaryOpB u (expr e)
+expr (E.UnaryOpVV u e)       = UnaryOpVV u (expr e)
+expr (E.UnaryOpVN u e)       = UnaryOpVN u (expr e)
 expr (E.ArithBinaryOp a l r) = ArithBinaryOp a (expr l) (expr r)
 expr (E.BoolBinaryOp b l r)  = BoolBinaryOp b (expr l) (expr r)
 expr (E.EqBinaryOp e l r)    = EqBinaryOp e (expr l) (expr r)

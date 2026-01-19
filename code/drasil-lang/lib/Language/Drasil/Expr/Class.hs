@@ -456,63 +456,63 @@ instance ExprC M.ModelExpr where
   in' = M.ESBBinaryOp SContains
 
   -- | Smart constructor for taking the absolute value of an expression.
-  abs_ = M.UnaryOp M.Abs
+  abs_ = M.UnaryOp Abs
 
   -- | Smart constructor for negating an expression.
-  neg = M.UnaryOp M.Neg
+  neg = M.UnaryOp Neg
 
   -- | Smart constructor to take the log of an expression.
-  log = M.UnaryOp M.Log
+  log = M.UnaryOp Log
 
   -- | Smart constructor to take the ln of an expression.
-  ln = M.UnaryOp M.Ln
+  ln = M.UnaryOp Ln
 
   -- | Smart constructor to take the square root of an expression.
-  sqrt = M.UnaryOp M.Sqrt
+  sqrt = M.UnaryOp Sqrt
 
   -- | Smart constructor to apply sin to an expression.
-  sin = M.UnaryOp M.Sin
+  sin = M.UnaryOp Sin
 
   -- | Smart constructor to apply cos to an expression.
-  cos = M.UnaryOp M.Cos
+  cos = M.UnaryOp Cos
 
   -- | Smart constructor to apply tan to an expression.
-  tan = M.UnaryOp M.Tan
+  tan = M.UnaryOp Tan
 
   -- | Smart constructor to apply sec to an expression.
-  sec = M.UnaryOp M.Sec
+  sec = M.UnaryOp Sec
 
   -- | Smart constructor to apply csc to an expression.
-  csc = M.UnaryOp M.Csc
+  csc = M.UnaryOp Csc
 
   -- | Smart constructor to apply cot to an expression.
-  cot = M.UnaryOp M.Cot
+  cot = M.UnaryOp Cot
 
   -- | Smart constructor to apply arcsin to an expression.
-  arcsin = M.UnaryOp M.Arcsin
+  arcsin = M.UnaryOp Arcsin
 
   -- | Smart constructor to apply arccos to an expression.
-  arccos = M.UnaryOp M.Arccos
+  arccos = M.UnaryOp Arccos
 
   -- | Smart constructor to apply arctan to an expression.
-  arctan = M.UnaryOp M.Arctan
+  arctan = M.UnaryOp Arctan
 
   -- | Smart constructor for the exponential (base e) function.
-  exp = M.UnaryOp M.Exp
+  exp = M.UnaryOp Exp
 
   -- | Smart constructor for calculating the dimension of a vector.
-  dim = M.UnaryOpVN M.Dim
+  dim = M.UnaryOpVN Dim
 
   -- | Smart constructor for calculating the normal form of a vector.
-  norm = M.UnaryOpVN M.Norm
+  norm = M.UnaryOpVN Norm
 
   -- | Smart constructor for negating vectors.
-  negVec = M.UnaryOpVV M.NegV
+  negVec = M.UnaryOpVV NegV
   -- | More general scaling
   vScale = M.NVVBinaryOp Scale
 
   -- | Smart constructor for applying logical negation to an expression.
-  not_ = M.UnaryOpB M.Not
+  not_ = M.UnaryOpB Not
 
   -- | Smart constructor for indexing.
   idx = M.LABinaryOp Index

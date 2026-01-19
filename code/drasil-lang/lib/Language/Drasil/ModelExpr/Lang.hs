@@ -10,7 +10,8 @@ import Drasil.Database (UID)
 import Language.Drasil.Expr.Lang
   (Completeness, ArithBinOp, EqBinOp, BoolBinOp, LABinOp, OrdBinOp,
    VVVBinOp, VVNBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocArithOper,
-   AssocConcatOper)
+   AssocConcatOper,
+   UFunc, UFuncB, UFuncVV, UFuncVN)
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
 import Language.Drasil.Literal.Class (LiteralC(..))
@@ -20,23 +21,6 @@ import Language.Drasil.Literal.Class (LiteralC(..))
 -- | Associative boolean operators (and, or).
 data AssocBoolOper = And | Or | Equivalence
   deriving (Eq, Show)
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
-  | Arccos | Arctan | Exp | Sqrt | Neg
-  deriving Eq
-
--- | @Bool -> Bool@ operators.
-data UFuncB = Not
-  deriving Eq
-
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
-  deriving Eq
-
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
-  deriving Eq
 
 -- | Statements involving 2 arguments.
 data StatBinOp = Defines

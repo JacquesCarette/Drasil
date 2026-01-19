@@ -35,10 +35,10 @@ expr (LD.Case c es)            = Case c $ map (bimap expr expr) es
 expr (LD.Matrix es)            = Matrix $ map (map expr) es
 expr (LD.Set e es)             = Set e $ map expr es
 expr (E.Variable s e)          = Variable s $ expr e
-expr (LD.UnaryOp uo e)         = UnaryOp (uFunc uo) (expr e)
-expr (LD.UnaryOpB uo e)        = UnaryOpB (uFuncB uo) (expr e)
-expr (LD.UnaryOpVV uo e)       = UnaryOpVV (uFuncVV uo) (expr e)
-expr (LD.UnaryOpVN uo e)       = UnaryOpVN (uFuncVN uo) (expr e)
+expr (LD.UnaryOp uo e)         = UnaryOp uo (expr e)
+expr (LD.UnaryOpB uo e)        = UnaryOpB uo (expr e)
+expr (LD.UnaryOpVV uo e)       = UnaryOpVV uo (expr e)
+expr (LD.UnaryOpVN uo e)       = UnaryOpVN uo (expr e)
 expr (LD.ArithBinaryOp bo l r) = ArithBinaryOp bo (expr l) (expr r)
 expr (LD.BoolBinaryOp bo l r)  = BoolBinaryOp bo (expr l) (expr r)
 expr (LD.EqBinaryOp bo l r)    = EqBinaryOp bo (expr l) (expr r)
@@ -66,30 +66,3 @@ constraint (Elem r ri) = Elem r (expr ri)
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
 renderDomainDesc :: DiscreteDomainDesc E.Expr E.Expr -> DiscreteDomainDesc CodeExpr CodeExpr
 renderDomainDesc (BoundedDD s t l r) = BoundedDD s t (expr l) (expr r)
-
-uFunc :: LD.UFunc -> UFunc
-uFunc LD.Abs = Abs -- TODO: These L.'s should be exported through L.D.Development
-uFunc LD.Log = Log
-uFunc LD.Ln = Ln
-uFunc LD.Sin = Sin
-uFunc LD.Cos = Cos
-uFunc LD.Tan = Tan
-uFunc LD.Sec = Sec
-uFunc LD.Csc = Csc
-uFunc LD.Cot = Cot
-uFunc LD.Arcsin = Arcsin
-uFunc LD.Arccos = Arccos
-uFunc LD.Arctan = Arctan
-uFunc LD.Exp = Exp
-uFunc LD.Sqrt = Sqrt
-uFunc LD.Neg = Neg
-
-uFuncB :: LD.UFuncB -> UFuncB
-uFuncB LD.Not = Not
-
-uFuncVV :: LD.UFuncVV -> UFuncVV
-uFuncVV LD.NegV = NegV
-
-uFuncVN :: LD.UFuncVN -> UFuncVN
-uFuncVN LD.Norm = Norm
-uFuncVN LD.Dim = Dim

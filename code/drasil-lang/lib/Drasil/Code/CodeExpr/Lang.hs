@@ -8,7 +8,7 @@ import Drasil.Database (UID, HasUID(..))
 
 import Language.Drasil.Expr.Lang
   (Completeness(..), ArithBinOp(..), EqBinOp(..), BoolBinOp(..),
-   LABinOp(..))
+   LABinOp(..), OrdBinOp(..), EqBinOp(..))
 import Language.Drasil.Expr.Class (ExprC(..), square)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
@@ -16,10 +16,6 @@ import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc,
   DomainDesc(BoundedDD), RTopology(..))
 
 -- * Operators (mostly binary)
-
--- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).
-data OrdBinOp = Lt | Gt | LEq | GEq
-  deriving Eq
 
 -- | @Vector x Vector -> Vector@ binary operations (cross product, vector addition, vector sub).
 data VVVBinOp = Cross | VAdd | VSub

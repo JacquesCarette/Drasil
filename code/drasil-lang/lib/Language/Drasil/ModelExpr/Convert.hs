@@ -47,12 +47,6 @@ uFuncVN :: E.UFuncVN -> UFuncVN
 uFuncVN E.Norm = Norm
 uFuncVN E.Dim  = Dim
 
-ordBinOp :: E.OrdBinOp -> OrdBinOp
-ordBinOp E.Lt  = Lt
-ordBinOp E.Gt  = Gt
-ordBinOp E.LEq = LEq
-ordBinOp E.GEq = GEq
-
 vvvBinOp :: E.VVVBinOp -> VVVBinOp
 vvvBinOp E.Cross = Cross
 vvvBinOp E.VAdd = VAdd
@@ -90,7 +84,7 @@ expr (E.ArithBinaryOp a l r) = ArithBinaryOp a (expr l) (expr r)
 expr (E.BoolBinaryOp b l r)  = BoolBinaryOp b (expr l) (expr r)
 expr (E.EqBinaryOp e l r)    = EqBinaryOp e (expr l) (expr r)
 expr (E.LABinaryOp la l r)   = LABinaryOp la (expr l) (expr r)
-expr (E.OrdBinaryOp o l r)   = OrdBinaryOp (ordBinOp o) (expr l) (expr r)
+expr (E.OrdBinaryOp o l r)   = OrdBinaryOp o (expr l) (expr r)
 expr (E.VVVBinaryOp v l r)   = VVVBinaryOp (vvvBinOp v) (expr l) (expr r)
 expr (E.VVNBinaryOp v l r)   = VVNBinaryOp (vvnBinOp v) (expr l) (expr r)
 expr (E.NVVBinaryOp v l r)   = NVVBinaryOp (nvvBinOp v) (expr l) (expr r)

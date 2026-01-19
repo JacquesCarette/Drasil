@@ -43,7 +43,7 @@ expr (LD.ArithBinaryOp bo l r) = ArithBinaryOp bo (expr l) (expr r)
 expr (LD.BoolBinaryOp bo l r)  = BoolBinaryOp bo (expr l) (expr r)
 expr (LD.EqBinaryOp bo l r)    = EqBinaryOp bo (expr l) (expr r)
 expr (LD.LABinaryOp bo l r)    = LABinaryOp bo (expr l) (expr r)
-expr (LD.OrdBinaryOp bo l r)   = OrdBinaryOp (ordBinOp bo) (expr l) (expr r)
+expr (LD.OrdBinaryOp bo l r)   = OrdBinaryOp bo (expr l) (expr r)
 expr (LD.VVVBinaryOp bo l r)   = VVVBinaryOp (vvvBinOp bo) (expr l) (expr r)
 expr (LD.VVNBinaryOp bo l r)   = VVNBinaryOp (vvnBinOp bo) (expr l) (expr r)
 expr (LD.NVVBinaryOp bo l r)   = NVVBinaryOp (nvvBinOp bo) (expr l) (expr r)
@@ -66,12 +66,6 @@ constraint (Elem r ri) = Elem r (expr ri)
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
 renderDomainDesc :: DiscreteDomainDesc E.Expr E.Expr -> DiscreteDomainDesc CodeExpr CodeExpr
 renderDomainDesc (BoundedDD s t l r) = BoundedDD s t (expr l) (expr r)
-
-ordBinOp :: LD.OrdBinOp -> OrdBinOp
-ordBinOp LD.Lt  = Lt
-ordBinOp LD.Gt  = Gt
-ordBinOp LD.LEq = LEq
-ordBinOp LD.GEq = GEq
 
 vvvBinOp :: LD.VVVBinOp -> VVVBinOp
 vvvBinOp LD.Cross = Cross

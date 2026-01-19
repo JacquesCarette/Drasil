@@ -402,13 +402,13 @@ instance ExprC M.ModelExpr where
 
   -- | Smart constructor for ordering two equations.
   -- | Less than.
-  ($<)  = M.OrdBinaryOp M.Lt
+  ($<)  = M.OrdBinaryOp Lt
   -- | Greater than.
-  ($>)  = M.OrdBinaryOp M.Gt
+  ($>)  = M.OrdBinaryOp Gt
   -- | Less than or equal to.
-  ($<=) = M.OrdBinaryOp M.LEq
+  ($<=) = M.OrdBinaryOp LEq
   -- | Greater than or equal to.
-  ($>=) = M.OrdBinaryOp M.GEq
+  ($>=) = M.OrdBinaryOp GEq
 
   -- | Smart constructor for the dot product of two equations.
   ($.) = M.VVNBinaryOp M.Dot

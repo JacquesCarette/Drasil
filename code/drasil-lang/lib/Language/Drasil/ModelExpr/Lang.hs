@@ -8,17 +8,12 @@ import Prelude hiding (sqrt)
 import Drasil.Database (UID)
 
 import Language.Drasil.Expr.Lang
-  (Completeness, ArithBinOp(..), EqBinOp(..), BoolBinOp(..),
-   LABinOp(..))
+  (Completeness, ArithBinOp, EqBinOp, BoolBinOp, LABinOp, OrdBinOp)
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
 import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- Binary functions
-
--- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).
-data OrdBinOp = Lt | Gt | LEq | GEq
-  deriving Eq
 
 -- | @Vector x Vector -> Vector@ binary operations (cross product, vector addition, subtraction).
 data VVVBinOp = Cross | VAdd | VSub

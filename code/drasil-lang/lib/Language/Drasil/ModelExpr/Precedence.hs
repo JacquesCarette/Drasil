@@ -4,15 +4,11 @@ module Language.Drasil.ModelExpr.Precedence where
 import Language.Drasil.ModelExpr.Lang
 import Language.Drasil.Expr.Lang (ArithBinOp(..))
 import Language.Drasil.Expr.Precedence (prec2Arith, prec2Bool, prec2Eq,
-  prec2LA)
+  prec2LA, prec2Ord)
 
 -- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
-
--- | prec2Ord - precedence for order-related binary operations.
-prec2Ord :: OrdBinOp -> Int
-prec2Ord _  = 130
 
 prec2Spc :: SpaceBinOp -> Int
 prec2Spc _ = 170

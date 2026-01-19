@@ -1,4 +1,4 @@
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
+module Language.Drasil.Code.FileNames (
   -- * Common Syntax
   doxConfigName, makefileName, sampleInputName, readMeName
 ) where
@@ -17,4 +17,3 @@ makefileName = "Makefile"
 sampleInputName = "input.txt"
 -- | "README.md".
 readMeName = "README.md"
-

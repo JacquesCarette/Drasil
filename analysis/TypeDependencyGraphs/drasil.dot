@@ -281,8 +281,6 @@ digraph alltypes {
 	}
 	subgraph clasinterfaces {
 	}
-	subgraph languagerenderer {
-	}
 	subgraph comments {
 	}
 	subgraph conceptmatch {
@@ -666,6 +664,8 @@ digraph alltypes {
 		PackageDataa -> a;
 		PackageDataa -> FileAndContents;
 		}
+	}
+	subgraph filenames {
 	}
 	subgraph lang {
 		subgraph lang{

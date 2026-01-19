@@ -346,6 +346,28 @@ createCodeFiles :: Code -> IO ()
 -- | Default mapping between <tt>Space</tt> and <a>CodeType</a>.
 spaceToCodeType :: Space -> [CodeType]
 
+module Language.Drasil.Code.FileNames
+
+-- | "doxConfig".
+--   
+--   Common syntax for several renderers.
+doxConfigName :: String
+
+-- | "Makefile".
+--   
+--   Common syntax for several renderers.
+makefileName :: String
+
+-- | "input.txt".
+--   
+--   Common syntax for several renderers.
+sampleInputName :: String
+
+-- | "README.md".
+--   
+--   Common syntax for several renderers.
+readMeName :: String
+
 module Language.Drasil.Code.Imperative.Build.AST
 
 -- | Used to build commands. Type synonym of a <a>MakeString</a> for
@@ -469,28 +491,6 @@ module Language.Drasil.Code.Imperative.Build.Import
 -- | Creates a Makefile.
 makeBuild :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable -> GOOLState -> ProgData -> Doc
 instance Build.Drasil.Make.Import.RuleTransformer Language.Drasil.Code.Imperative.Build.Import.CodeHarness
-
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer
-
--- | "doxConfig".
---   
---   Common syntax for several renderers.
-doxConfigName :: String
-
--- | "Makefile".
---   
---   Common syntax for several renderers.
-makefileName :: String
-
--- | "input.txt".
---   
---   Common syntax for several renderers.
-sampleInputName :: String
-
--- | "README.md".
---   
---   Common syntax for several renderers.
-readMeName :: String
 
 
 -- | Defines functions for reading values from a file corresponding to a

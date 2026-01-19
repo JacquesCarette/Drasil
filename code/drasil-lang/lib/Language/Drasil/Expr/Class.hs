@@ -420,10 +420,10 @@ instance ExprC M.ModelExpr where
   ($+) l (M.Lit (Dbl 0)) = l
   ($+) l (M.Lit (ExactDbl 0)) = l
   ($+) (M.Lit (ExactDbl 0)) r = r
-  ($+) (M.AssocA M.Add l) (M.AssocA M.Add r) = M.AssocA M.Add (l ++ r)
-  ($+) (M.AssocA M.Add l) r = M.AssocA M.Add (l ++ [r])
-  ($+) l (M.AssocA M.Add r) = M.AssocA M.Add (l : r)
-  ($+) l r = M.AssocA M.Add [l, r]
+  ($+) (M.AssocA Add l) (M.AssocA Add r) = M.AssocA Add (l ++ r)
+  ($+) (M.AssocA Add l) r = M.AssocA Add (l ++ [r])
+  ($+) l (M.AssocA Add r) = M.AssocA Add (l : r)
+  ($+) l r = M.AssocA Add [l, r]
 
   -- | Multiply two expressions.
   ($*) (M.Lit (Int 1)) r = r
@@ -432,10 +432,10 @@ instance ExprC M.ModelExpr where
   ($*) l (M.Lit (Dbl 1.0)) = l
   ($*) l (M.Lit (ExactDbl 1)) = l
   ($*) (M.Lit (ExactDbl 1)) r = r
-  ($*) (M.AssocA M.Mul l) (M.AssocA M.Mul r) = M.AssocA M.Mul (l ++ r)
-  ($*) (M.AssocA M.Mul l) r = M.AssocA M.Mul (l ++ [r])
-  ($*) l (M.AssocA M.Mul r) = M.AssocA M.Mul (l : r)
-  ($*) l r = M.AssocA M.Mul [l,r]
+  ($*) (M.AssocA Mul l) (M.AssocA Mul r) = M.AssocA Mul (l ++ r)
+  ($*) (M.AssocA Mul l) r = M.AssocA Mul (l ++ [r])
+  ($*) l (M.AssocA Mul r) = M.AssocA Mul (l : r)
+  ($*) l r = M.AssocA Mul [l,r]
   -- | Smart constructor for subtracting two expressions.
   ($-) = M.ArithBinaryOp Subt
   -- | Smart constructor for dividing two expressions.
@@ -521,13 +521,13 @@ instance ExprC M.ModelExpr where
   idxOf = M.LABinaryOp IndexOf
 
   -- | Integrate over some expression with bounds (∫).
-  defint v low high = M.Operator M.Add (BoundedDD v Continuous low high)
+  defint v low high = M.Operator Add (BoundedDD v Continuous low high)
 
   -- | Sum over some expression with bounds (∑).
-  defsum v low high = M.Operator M.Add (BoundedDD v Discrete low high)
+  defsum v low high = M.Operator Add (BoundedDD v Discrete low high)
 
   -- | Product over some expression with bounds (∏).
-  defprod v low high = M.Operator M.Mul (BoundedDD v Discrete low high)
+  defprod v low high = M.Operator Mul (BoundedDD v Discrete low high)
 
   -- | Smart constructor for 'real interval' membership.
   realInterval c = M.RealI (c ^. uid)

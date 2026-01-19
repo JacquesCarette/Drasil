@@ -9,7 +9,8 @@ import Drasil.Database (UID, HasUID(..))
 import Language.Drasil.Expr.Lang
   (Completeness(..), ArithBinOp(..), EqBinOp(..), BoolBinOp(..),
    LABinOp(..), OrdBinOp(..), EqBinOp(..),
-   VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
+   VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..),
+   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..))
 import Language.Drasil.Expr.Class (ExprC(..), square)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
@@ -17,16 +18,6 @@ import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc,
   DomainDesc(BoundedDD), RTopology(..))
 
 -- * Operators (mostly binary)
-
-data AssocConcatOper = SUnion
-  deriving Eq
--- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
-data AssocArithOper = Add | Mul
-  deriving Eq
-
--- | Associative boolean operators (and, or).
-data AssocBoolOper = And | Or
-  deriving Eq
 
 -- | Unary functions (abs, log, ln, sin, etc.).
 data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin

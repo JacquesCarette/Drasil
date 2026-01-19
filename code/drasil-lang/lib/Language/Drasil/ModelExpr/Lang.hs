@@ -9,19 +9,13 @@ import Drasil.Database (UID)
 
 import Language.Drasil.Expr.Lang
   (Completeness, ArithBinOp, EqBinOp, BoolBinOp, LABinOp, OrdBinOp,
-   VVVBinOp, VVNBinOp, NVVBinOp, ESSBinOp, ESBBinOp)
+   VVVBinOp, VVNBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocArithOper,
+   AssocConcatOper)
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
 import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- Binary functions
-
-data AssocConcatOper = SUnion
-  deriving Eq
-
--- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
-data AssocArithOper = Add | Mul
-  deriving Eq
 
 -- | Associative boolean operators (and, or).
 data AssocBoolOper = And | Or | Equivalence

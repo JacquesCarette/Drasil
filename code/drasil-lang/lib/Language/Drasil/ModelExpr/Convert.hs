@@ -9,16 +9,9 @@ import Language.Drasil.Space
 import qualified Language.Drasil.Expr.Lang as E
 import Language.Drasil.ModelExpr.Lang
 
-assocArithOper :: E.AssocArithOper -> AssocArithOper
-assocArithOper E.Add  = Add
-assocArithOper E.Mul  = Mul
-
 assocBoolOper :: E.AssocBoolOper -> AssocBoolOper
 assocBoolOper E.And = And
 assocBoolOper E.Or  = Or
-
-assocConcatOper :: E.AssocConcatOper -> AssocConcatOper
-assocConcatOper E.SUnion  = SUnion
 
 uFunc :: E.UFunc -> UFunc
 uFunc E.Abs    = Abs
@@ -49,9 +42,9 @@ uFuncVN E.Dim  = Dim
 
 expr :: E.Expr -> ModelExpr
 expr (E.Lit a)               = Lit a
-expr (E.AssocA ao es)        = AssocA (assocArithOper ao) $ map expr es
+expr (E.AssocA ao es)        = AssocA ao $ map expr es
 expr (E.AssocB bo es)        = AssocB (assocBoolOper bo) $ map expr es
-expr (E.AssocC ao es)        = AssocC (assocConcatOper ao) $ map expr es
+expr (E.AssocC ao es)        = AssocC ao $ map expr es
 expr (E.C u)                 = C u
 expr (E.FCall u es)          = FCall u (map expr es)
 expr (E.Case c ces)          = Case c (map (bimap expr expr) ces)
@@ -72,7 +65,7 @@ expr (E.VVNBinaryOp v l r)   = VVNBinaryOp v (expr l) (expr r)
 expr (E.NVVBinaryOp v l r)   = NVVBinaryOp v (expr l) (expr r)
 expr (E.ESSBinaryOp o l r)   = ESSBinaryOp o (expr l) (expr r)
 expr (E.ESBBinaryOp o l r)   = ESBBinaryOp o (expr l) (expr r)
-expr (E.Operator ao dd e)    = Operator (assocArithOper ao) (domainDesc dd) (expr e)
+expr (E.Operator ao dd e)    = Operator ao (domainDesc dd) (expr e)
 expr (E.RealI u ri)          = RealI u (realInterval ri)
 
 realInterval :: RealInterval E.Expr E.Expr -> RealInterval ModelExpr ModelExpr

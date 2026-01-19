@@ -1,27 +1,14 @@
 module Drasil.Code.CodeExpr.Precedence (precA, precB, eprec) where
 
 import Drasil.Code.CodeExpr.Lang (CodeExpr(..), UFuncVV, UFuncVN, UFuncB(..),
-    UFunc(..), AssocBoolOper(..), AssocArithOper(..),
-    AssocConcatOper(..))
+    UFunc(..))
 import Language.Drasil.Expr.Precedence (prec2Arith, prec2Eq, prec2Bool,
-  prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV, prec2ESS, prec2ESB)
+  prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV, prec2ESS, prec2ESB,
+  precA, precB, precC)
 
 -- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
-
--- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators.
-precA :: AssocArithOper -> Int
-precA Mul = 190
-precA Add = 180
-
--- | precB - precedence for boolean-related Binary-Associative (Commutative) operators.
-precB :: AssocBoolOper -> Int
-precB And = 120
-precB Or = 110
-
-precC :: AssocConcatOper -> Int
-precC SUnion = 120
 
 -- | prec1 - precedence of unary operators.
 prec1 :: UFunc -> Int

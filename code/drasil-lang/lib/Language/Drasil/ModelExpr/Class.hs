@@ -6,8 +6,9 @@ import Control.Lens ((^.))
 
 import Drasil.Database (HasUID(..))
 
+import Language.Drasil.Expr.Lang (AssocArithOper(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..), DerivType(..),
-  SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..), AssocArithOper(..))
+  SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..))
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), Space)
 import Language.Drasil.Symbol (Symbol, HasSymbol)
 

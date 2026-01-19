@@ -26,9 +26,9 @@ instance CanGenCode LD.Expr where
 -- | Render an algebraic expression into our code expression language.
 expr :: LD.Expr -> CodeExpr
 expr (LD.Lit l)                = Lit l
-expr (LD.AssocA ao es)         = AssocA (assocArithOp ao) $ map expr es
-expr (LD.AssocB bo es)         = AssocB (assocBoolOp bo) $ map expr es
-expr (LD.AssocC bo es)         = AssocC (assocConcatOp bo) $ map expr es
+expr (LD.AssocA ao es)         = AssocA ao $ map expr es
+expr (LD.AssocB bo es)         = AssocB bo $ map expr es
+expr (LD.AssocC bo es)         = AssocC bo $ map expr es
 expr (LD.C u)                  = C u
 expr (LD.FCall u es)           = FCall u (map expr es) []
 expr (LD.Case c es)            = Case c $ map (bimap expr expr) es
@@ -49,7 +49,7 @@ expr (LD.VVNBinaryOp bo l r)   = VVNBinaryOp bo (expr l) (expr r)
 expr (LD.NVVBinaryOp bo l r)   = NVVBinaryOp bo (expr l) (expr r)
 expr (LD.ESSBinaryOp bo l r)   = ESSBinaryOp bo (expr l) (expr r)
 expr (LD.ESBBinaryOp bo l r)   = ESBBinaryOp bo (expr l) (expr r)
-expr (LD.Operator aao dd e)    = Operator (assocArithOp aao) (renderDomainDesc dd) (expr e)
+expr (LD.Operator aao dd e)    = Operator aao (renderDomainDesc dd) (expr e)
 expr (LD.RealI u ri)           = RealI u (realInterval ri)
 
 -- | Convert 'RealInterval' 'Expr' 'Expr's into 'RealInterval' 'CodeExpr' 'CodeExpr's.
@@ -66,17 +66,6 @@ constraint (Elem r ri) = Elem r (expr ri)
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
 renderDomainDesc :: DiscreteDomainDesc E.Expr E.Expr -> DiscreteDomainDesc CodeExpr CodeExpr
 renderDomainDesc (BoundedDD s t l r) = BoundedDD s t (expr l) (expr r)
-
-assocArithOp :: LD.AssocArithOper -> AssocArithOper
-assocArithOp LD.Add = Add -- TODO: These L.'s should be exported through L.D.Development
-assocArithOp LD.Mul = Mul
-
-assocBoolOp :: LD.AssocBoolOper -> AssocBoolOper
-assocBoolOp LD.And = And -- TODO: These L.'s should be exported through L.D.Development
-assocBoolOp LD.Or = Or
-
-assocConcatOp :: LD.AssocConcatOper -> AssocConcatOper
-assocConcatOp LD.SUnion  = SUnion
 
 uFunc :: LD.UFunc -> UFunc
 uFunc LD.Abs = Abs -- TODO: These L.'s should be exported through L.D.Development

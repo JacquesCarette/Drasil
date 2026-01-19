@@ -47,13 +47,6 @@ uFuncVN :: E.UFuncVN -> UFuncVN
 uFuncVN E.Norm = Norm
 uFuncVN E.Dim  = Dim
 
-essBinOp :: E.ESSBinOp -> ESSBinOp
-essBinOp E.SAdd = SAdd
-essBinOp E.SRemove = SRemove
-
-esbBinOp :: E.ESBBinOp -> ESBBinOp
-esbBinOp E.SContains = SContains
-
 expr :: E.Expr -> ModelExpr
 expr (E.Lit a)               = Lit a
 expr (E.AssocA ao es)        = AssocA (assocArithOper ao) $ map expr es
@@ -77,8 +70,8 @@ expr (E.OrdBinaryOp o l r)   = OrdBinaryOp o (expr l) (expr r)
 expr (E.VVVBinaryOp v l r)   = VVVBinaryOp v (expr l) (expr r)
 expr (E.VVNBinaryOp v l r)   = VVNBinaryOp v (expr l) (expr r)
 expr (E.NVVBinaryOp v l r)   = NVVBinaryOp v (expr l) (expr r)
-expr (E.ESSBinaryOp o l r)   = ESSBinaryOp (essBinOp o) (expr l) (expr r)
-expr (E.ESBBinaryOp o l r)   = ESBBinaryOp (esbBinOp o) (expr l) (expr r)
+expr (E.ESSBinaryOp o l r)   = ESSBinaryOp o (expr l) (expr r)
+expr (E.ESBBinaryOp o l r)   = ESBBinaryOp o (expr l) (expr r)
 expr (E.Operator ao dd e)    = Operator (assocArithOper ao) (domainDesc dd) (expr e)
 expr (E.RealI u ri)          = RealI u (realInterval ri)
 

@@ -453,7 +453,7 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = M.AssocB M.Or  [a, b]
 
-  in' = M.ESBBinaryOp M.SContains
+  in' = M.ESBBinaryOp SContains
 
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = M.UnaryOp M.Abs

@@ -9,20 +9,12 @@ import Drasil.Database (UID)
 
 import Language.Drasil.Expr.Lang
   (Completeness, ArithBinOp, EqBinOp, BoolBinOp, LABinOp, OrdBinOp,
-   VVVBinOp, VVNBinOp, NVVBinOp)
+   VVVBinOp, VVNBinOp, NVVBinOp, ESSBinOp, ESBBinOp)
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
 import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- Binary functions
-
--- | Element + Set -> Set
-data ESSBinOp = SAdd | SRemove
-  deriving Eq
-
--- | Element + Set -> Bool
-data ESBBinOp = SContains
-  deriving Eq
 
 data AssocConcatOper = SUnion
   deriving Eq

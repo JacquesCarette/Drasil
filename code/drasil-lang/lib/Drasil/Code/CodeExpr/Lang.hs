@@ -9,7 +9,7 @@ import Drasil.Database (UID, HasUID(..))
 import Language.Drasil.Expr.Lang
   (Completeness(..), ArithBinOp(..), EqBinOp(..), BoolBinOp(..),
    LABinOp(..), OrdBinOp(..), EqBinOp(..),
-   VVVBinOp(..), VVNBinOp(..), NVVBinOp(..))
+   VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
 import Language.Drasil.Expr.Class (ExprC(..), square)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
@@ -17,14 +17,6 @@ import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc,
   DomainDesc(BoundedDD), RTopology(..))
 
 -- * Operators (mostly binary)
-
--- | Element + Set -> Set
-data ESSBinOp = SAdd | SRemove
-  deriving Eq
-
--- | Element + Set -> Bool
-data ESBBinOp = SContains
-  deriving Eq
 
 data AssocConcatOper = SUnion
   deriving Eq

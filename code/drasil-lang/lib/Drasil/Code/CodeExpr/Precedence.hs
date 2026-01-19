@@ -2,21 +2,13 @@ module Drasil.Code.CodeExpr.Precedence (precA, precB, eprec) where
 
 import Drasil.Code.CodeExpr.Lang (CodeExpr(..), UFuncVV, UFuncVN, UFuncB(..),
     UFunc(..), AssocBoolOper(..), AssocArithOper(..),
-    AssocConcatOper(..), ESSBinOp, ESBBinOp)
+    AssocConcatOper(..))
 import Language.Drasil.Expr.Precedence (prec2Arith, prec2Eq, prec2Bool,
-  prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV)
+  prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV, prec2ESS, prec2ESB)
 
 -- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
-
--- | prec2ESS - precedence for Element->Set->Set-related binary operations.
-prec2ESS :: ESSBinOp -> Int
-prec2ESS _ = 190
-
--- | prec2ESS - precedence for Element->Set->Set-related binary operations.
-prec2ESB :: ESBBinOp -> Int
-prec2ESB _ = 190
 
 -- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators.
 precA :: AssocArithOper -> Int

@@ -4,7 +4,7 @@ module Language.Drasil.ModelExpr.Precedence where
 import Language.Drasil.ModelExpr.Lang
 import Language.Drasil.Expr.Lang (ArithBinOp(..))
 import Language.Drasil.Expr.Precedence (prec2Arith, prec2Bool, prec2Eq,
-  prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV)
+  prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV, prec2ESS, prec2ESB)
 
 -- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
@@ -15,12 +15,6 @@ prec2Spc _ = 170
 
 prec2Stat :: StatBinOp -> Int
 prec2Stat _ = 130
-
-prec2ESS :: ESSBinOp -> Int
-prec2ESS _ = 190
-
-prec2ESB :: ESBBinOp -> Int
-prec2ESB _ = 190
 
 -- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators.
 precA :: AssocArithOper -> Int

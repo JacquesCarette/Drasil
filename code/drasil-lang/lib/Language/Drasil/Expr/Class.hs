@@ -411,7 +411,7 @@ instance ExprC M.ModelExpr where
   ($>=) = M.OrdBinaryOp GEq
 
   -- | Smart constructor for the dot product of two equations.
-  ($.) = M.VVNBinaryOp M.Dot
+  ($.) = M.VVNBinaryOp Dot
 
   -- | Add two expressions.
   ($+) (M.Lit (Int 0)) r = r
@@ -509,7 +509,7 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for negating vectors.
   negVec = M.UnaryOpVV M.NegV
   -- | More general scaling
-  vScale = M.NVVBinaryOp M.Scale
+  vScale = M.NVVBinaryOp Scale
 
   -- | Smart constructor for applying logical negation to an expression.
   not_ = M.UnaryOpB M.Not
@@ -536,12 +536,12 @@ instance ExprC M.ModelExpr where
   euclidean = sqrt . foldr1 ($+) . map square
 
   -- | Smart constructor to cross product two expressions.
-  cross = M.VVVBinaryOp M.Cross
+  cross = M.VVVBinaryOp Cross
 
   -- | Adding vectors
-  vAdd  = M.VVVBinaryOp M.VAdd
+  vAdd  = M.VVVBinaryOp VAdd
   -- | Subtracting vectors
-  vSub  = M.VVVBinaryOp M.VSub
+  vSub  = M.VVVBinaryOp VSub
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = M.Case Complete

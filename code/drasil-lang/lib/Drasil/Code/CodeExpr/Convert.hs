@@ -44,9 +44,9 @@ expr (LD.BoolBinaryOp bo l r)  = BoolBinaryOp bo (expr l) (expr r)
 expr (LD.EqBinaryOp bo l r)    = EqBinaryOp bo (expr l) (expr r)
 expr (LD.LABinaryOp bo l r)    = LABinaryOp bo (expr l) (expr r)
 expr (LD.OrdBinaryOp bo l r)   = OrdBinaryOp bo (expr l) (expr r)
-expr (LD.VVVBinaryOp bo l r)   = VVVBinaryOp (vvvBinOp bo) (expr l) (expr r)
-expr (LD.VVNBinaryOp bo l r)   = VVNBinaryOp (vvnBinOp bo) (expr l) (expr r)
-expr (LD.NVVBinaryOp bo l r)   = NVVBinaryOp (nvvBinOp bo) (expr l) (expr r)
+expr (LD.VVVBinaryOp bo l r)   = VVVBinaryOp bo (expr l) (expr r)
+expr (LD.VVNBinaryOp bo l r)   = VVNBinaryOp bo (expr l) (expr r)
+expr (LD.NVVBinaryOp bo l r)   = NVVBinaryOp bo (expr l) (expr r)
 expr (LD.ESSBinaryOp bo l r)   = ESSBinaryOp (essBinOp bo) (expr l) (expr r)
 expr (LD.ESBBinaryOp bo l r)   = ESBBinaryOp (esbBinOp bo) (expr l) (expr r)
 expr (LD.Operator aao dd e)    = Operator (assocArithOp aao) (renderDomainDesc dd) (expr e)
@@ -66,17 +66,6 @@ constraint (Elem r ri) = Elem r (expr ri)
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
 renderDomainDesc :: DiscreteDomainDesc E.Expr E.Expr -> DiscreteDomainDesc CodeExpr CodeExpr
 renderDomainDesc (BoundedDD s t l r) = BoundedDD s t (expr l) (expr r)
-
-vvvBinOp :: LD.VVVBinOp -> VVVBinOp
-vvvBinOp LD.Cross = Cross
-vvvBinOp LD.VAdd = VAdd
-vvvBinOp LD.VSub = VSub
-
-vvnBinOp :: LD.VVNBinOp -> VVNBinOp
-vvnBinOp LD.Dot = Dot
-
-nvvBinOp :: LD.NVVBinOp -> NVVBinOp
-nvvBinOp LD.Scale = Scale
 
 essBinOp :: LD.ESSBinOp -> ESSBinOp
 essBinOp LD.SAdd = SAdd

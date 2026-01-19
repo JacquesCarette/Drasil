@@ -8,7 +8,8 @@ import Drasil.Database (UID, HasUID(..))
 
 import Language.Drasil.Expr.Lang
   (Completeness(..), ArithBinOp(..), EqBinOp(..), BoolBinOp(..),
-   LABinOp(..), OrdBinOp(..), EqBinOp(..))
+   LABinOp(..), OrdBinOp(..), EqBinOp(..),
+   VVVBinOp(..), VVNBinOp(..), NVVBinOp(..))
 import Language.Drasil.Expr.Class (ExprC(..), square)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
@@ -16,18 +17,6 @@ import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc,
   DomainDesc(BoundedDD), RTopology(..))
 
 -- * Operators (mostly binary)
-
--- | @Vector x Vector -> Vector@ binary operations (cross product, vector addition, vector sub).
-data VVVBinOp = Cross | VAdd | VSub
-  deriving Eq
-
--- | @Vector x Vector -> Number@ binary operations (dot product).
-data VVNBinOp = Dot
-  deriving Eq
-
--- | @Number x Vector -> Vector@ binary operations (scaling).
-data NVVBinOp = Scale
-  deriving Eq
 
 -- | Element + Set -> Set
 data ESSBinOp = SAdd | SRemove

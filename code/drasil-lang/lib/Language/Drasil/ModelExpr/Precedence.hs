@@ -4,7 +4,7 @@ module Language.Drasil.ModelExpr.Precedence where
 import Language.Drasil.ModelExpr.Lang
 import Language.Drasil.Expr.Lang (ArithBinOp(..))
 import Language.Drasil.Expr.Precedence (prec2Arith, prec2Bool, prec2Eq,
-  prec2LA, prec2Ord)
+  prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV)
 
 -- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
@@ -15,18 +15,6 @@ prec2Spc _ = 170
 
 prec2Stat :: StatBinOp -> Int
 prec2Stat _ = 130
-
--- | prec2VVV - precedence for Vec->Vec->Vec-related binary operations.
-prec2VVV :: VVVBinOp -> Int
-prec2VVV _ = 190
-
--- | prec2VVN - precedence for Vec->Vec->Num-related binary operations.
-prec2VVN :: VVNBinOp -> Int
-prec2VVN _ = 190
-
--- | prec2NVV - precedence for Num->Vec->Vec-related binary operations.
-prec2NVV :: NVVBinOp -> Int
-prec2NVV _ = 190
 
 prec2ESS :: ESSBinOp -> Int
 prec2ESS _ = 190

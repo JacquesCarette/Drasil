@@ -18,6 +18,7 @@ advantage \textemdash{} consistency, traceability, and reproducibility
 maintenance effort and increase confidence in generated artifacts.
 
 \subsection{Consistency by Construction}
+\label{sec:res_cons}
 Drasil's single-source knowledge representation produced artifacts that are
 consistent by construction. Small, localized edits to domain knowledge or
 recipes propagated deterministically to all generated outputs (documentation
@@ -25,7 +26,10 @@ and code). During reimplementations, this property reduced the number of
 manual synchronization tasks normally required when maintaining separate
 artifacts. In practice, consistency by construction meant that corrections
 made in the knowledge base appeared immediately and uniformly across the SRS,
-reference tables, and generated code after regeneration.
+reference tables, and generated code after regeneration. 
+
+Additionally, all domain knowledge must be explicitly encoded, which prevents
+dangling references or undefined symbols.
 
 \subsection{Traceability and Maintainability}
 Every generated element (formulas, symbols, tables, code identifiers) can be
@@ -46,7 +50,7 @@ environment-consistent builds did not introduce nondeterministic differences,
 supporting reproducibility guarantees that are important for scientific
 software.
 
-\section{Empirical Evidence: Case Studies and Reimplementations}
+\section{Observations: Case Studies and Reimplementations}
 We reimplemented each of our case studies using Drasil and recorded
 measurable outcomes for generated artifacts and the knowledge source that
 produced them.
@@ -58,7 +62,7 @@ contained in a single source file of under 370 lines of Haskell
 (including comments and imports). This line count refers only to the
 GlassBR-specific recipe and does not include the shared base knowledge
 (units, symbols, common chunks, and generic recipes) that are stored
-separately in the global knowledge base and are reused across case studies.
+separately in the global knowledge base and are reused across case studies. 
 
 Comparable results were observed for other reimplemented case studies:
 each system produced a multi-page SRS and a modest-sized recipe or set of
@@ -76,29 +80,44 @@ targets.
 \label{sec:quality}
 Because all artifacts are derived from the same knowledge, a defect in the
 knowledge base manifested consistently across every generated artifact. This
-property made defects more visible ("pervasive bugs"), which in turn aided
+property made defects more visible (``pervasive bugs"), which in turn aided
 discovery and correction. During reimplementations, categories of problems
 that were revealed included inconsistent symbol naming, implicit numeric
 constants, and unstated domain assumptions. Fixing those issues at the
 knowledge level eliminated their occurrences across documentation and code
 simultaneously.
 
-An instructive, concrete example is Issue~\#348 (Slope Stability Problem).
-In the original SSP artifacts several closely related symbols (for shear
+An instructive, concrete example is issue~\#348 from the issue tracker.
+In the original \sp{} artifacts several closely related symbols (for shear
 stress and associated forces) were used inconsistently across sections and
-tables. When the SSP content was encoded as Drasil chunks these inconsistencies
-became immediately visible: the same semantic item was projected with
-conflicting identifiers, and cross-references did not align. Correcting the
-underlying chunk in the knowledge base removed the inconsistencies from all
-generated artifacts (SRS and code) after regeneration.
+tables. When the \sp{} content was encoded as Drasil chunks these 
+inconsistencies became immediately visible: the same semantic item was 
+projected with conflicting identifiers, and cross-references did not align. 
+Correcting the underlying chunk in the knowledge base removed the 
+inconsistencies from all generated artifacts (SRS and code) after regeneration. 
+During the investigation of the same issue, it was also discovered that one of 
+the terms had an implicit unit vector ``into the page'' that was not documented 
+in the original artifacts. Encoding the unit vector explicitly in Drasil made 
+that assumption visible, allowing it to be documented properly in the generated 
+SRS and ensuring that the generated code reflected the correct physical 
+interpretation.
+
+A similar example arose in the GlassBR case study (see Issue \#349), where an 
+implicit division by 1000 for unit conversion was embedded in the original 
+documentation. Drasil's explicit chunk encoding surfaced this hidden 
+assumption, enabling a single-point correction that propagated to all generated 
+artifacts. Other similar issues surfaced during reimplementation, each 
+illustrating how centralized knowledge capture increases error visibility and 
+simplifies maintenance.
 
 \subsection{Design for Change and Software Families}
+\label{sec:design_change}
 The single-source approach enabled rapid generation of software-family
 variants. Where artifacts differed only by parameterization or small domain
-choices (for example, PCM vs NoPCM variants), encoding those choices in the
-knowledge base allowed whole-family updates by editing a small set of chunks.
-This capability materially reduced the effort to produce consistent variants
-of the same artifact family.
+choices (for example, \sw{} with PCM vs \np{} variants), encoding those choices 
+in the knowledge base allowed whole-family updates by editing a small set of 
+chunks. This capability materially reduced the effort to produce consistent 
+variants of the same artifact family.
 
 \section{Usability and Adoption}
 From the reimplementation work it became clear that Drasil's expressiveness
@@ -116,7 +135,7 @@ the Drasil approach are increased consistency, strong provenance for
 generated artifacts, and deterministic reproducibility. These benefits
 manifested in lower ongoing synchronization effort, higher visibility of
 domain assumptions and defects, and faster family-wide changes when those
-domain choices were encoded explicitly. The empirical evidence collected
+domain choices were encoded explicitly. The observations collected
 during the reimplementations supports these claims while also documenting the
 practical cost of initial knowledge capture and onboarding.
 

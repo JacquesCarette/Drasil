@@ -6,82 +6,17 @@ import Control.Lens ((^.))
 
 import Drasil.Database (UID, HasUID(..))
 
-import Language.Drasil.Expr.Lang (Completeness(..))
+import Language.Drasil.Expr.Lang
+  (Completeness(..), ArithBinOp(..), EqBinOp(..), BoolBinOp(..),
+   LABinOp(..), OrdBinOp(..), EqBinOp(..),
+   VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..),
+   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..),
+   UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..))
 import Language.Drasil.Expr.Class (ExprC(..), square)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc,
   DomainDesc(BoundedDD), RTopology(..))
-
--- * Operators (mostly binary)
-
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp = Frac | Pow | Subt
-  deriving Eq
-
--- | Equality operators (equal or not equal).
-data EqBinOp = Eq | NEq
-  deriving Eq
-
--- | Conditional and Biconditional operators (Expressions can imply
--- one another, or exist if and only if another expression exists).
-data BoolBinOp = Impl | Iff
-  deriving Eq
-
--- | Index operator.
-data LABinOp = Index | IndexOf
-  deriving Eq
-
--- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).
-data OrdBinOp = Lt | Gt | LEq | GEq
-  deriving Eq
-
--- | @Vector x Vector -> Vector@ binary operations (cross product, vector addition, vector sub).
-data VVVBinOp = Cross | VAdd | VSub
-  deriving Eq
-
--- | @Vector x Vector -> Number@ binary operations (dot product).
-data VVNBinOp = Dot
-  deriving Eq
-
--- | @Number x Vector -> Vector@ binary operations (scaling).
-data NVVBinOp = Scale
-  deriving Eq
-
--- | Element + Set -> Set
-data ESSBinOp = SAdd | SRemove
-  deriving Eq
-
--- | Element + Set -> Bool
-data ESBBinOp = SContains
-  deriving Eq
-
-data AssocConcatOper = SUnion
-  deriving Eq
--- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
-data AssocArithOper = Add | Mul
-  deriving Eq
-
--- | Associative boolean operators (and, or).
-data AssocBoolOper = And | Or
-  deriving Eq
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
-  | Arccos | Arctan | Exp | Sqrt | Neg
-  deriving Eq
-
--- | @Bool -> Bool@ operators.
-data UFuncB = Not
-  deriving Eq
-
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
-  deriving Eq
-
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
-  deriving Eq
 
 -- * CodeExpr
 

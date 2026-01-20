@@ -38,6 +38,7 @@ import Data.Drasil.Concepts.Education(calculus, undergraduate,
   highSchoolPhysics, highSchoolCalculus)
 
 import Drasil.Projectile.Assumptions (assumptions)
+import Drasil.Projectile.Changes (likelyChgs)
 import Drasil.Projectile.Concepts (launcher, projectile, target, defs, projMotion, rectVel)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.GenDefs (genDefns)
@@ -92,6 +93,7 @@ mkSRS = [TableOfContents,
       [ FReqsSub funcReqsTables
       , NonFReqsSub
       ],
+  LCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
     AuxConsProg progName constants,
@@ -179,7 +181,7 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
+concIns = assumptions ++ funcReqs ++ goals ++ likelyChgs ++ nonfuncReqs
 
 ----------------------------------------
 -- Characteristics of Intended Reader --

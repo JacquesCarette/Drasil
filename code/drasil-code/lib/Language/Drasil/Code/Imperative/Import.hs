@@ -18,7 +18,7 @@ import Data.List ((\\), intersect)
 import Drasil.Code.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
 import qualified Drasil.Code.CodeExpr.Development as S (CodeExpr(..))
 import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
-  AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
+  AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
 import Drasil.Database (UID, HasUID(..))
@@ -345,7 +345,6 @@ convExpr (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to deal w
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm
 convExpr (ArithBinaryOp o a b) = liftM2 (arithBfunc o) (convExpr a) (convExpr b)
-convExpr (BoolBinaryOp o a b)  = liftM2 (boolBfunc o) (convExpr a) (convExpr b)
 convExpr (LABinaryOp o a b)    = liftM2 (laBfunc o) (convExpr a) (convExpr b)
 convExpr (EqBinaryOp o a b)    = liftM2 (eqBfunc o) (convExpr a) (convExpr b)
 convExpr (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExpr a) (convExpr b)
@@ -458,11 +457,6 @@ arithBfunc :: (SharedProg r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)
 arithBfunc Pow  = (#^)
 arithBfunc Subt = (#-)
 arithBfunc Frac = (#/)
-
--- Maps a 'BoolBinOp' to it's corresponding GOOL binary function.
-boolBfunc :: BoolBinOp -> (SValue r -> SValue r -> SValue r)
-boolBfunc Impl = error "convExpr :=>"
-boolBfunc Iff  = error "convExpr :<=>"
 
 -- Maps an 'EqBinOp' to it's corresponding GOOL binary function.
 eqBfunc :: (SharedProg r) => EqBinOp -> (SValue r -> SValue r -> SValue r)
@@ -1045,7 +1039,6 @@ convExprProc (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to de
       getLiteral _ = error "convExprProc: Rational space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm
 convExprProc (ArithBinaryOp o a b) = liftM2 (arithBfunc o) (convExprProc a) (convExprProc b)
-convExprProc (BoolBinaryOp o a b)  = liftM2 (boolBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (LABinaryOp o a b)    = liftM2 (laBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (EqBinaryOp o a b)    = liftM2 (eqBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExprProc a) (convExprProc b)

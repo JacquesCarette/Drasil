@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 import Drasil.Database (UID, HasUID(..))
 
 import Language.Drasil.Expr.Lang
-  (Completeness(..), ArithBinOp(..), EqBinOp(..), BoolBinOp(..),
+  (Completeness(..), ArithBinOp(..), EqBinOp(..),
    LABinOp(..), OrdBinOp(..), EqBinOp(..),
    VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..),
    AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..),
@@ -73,8 +73,6 @@ data CodeExpr where
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-  -- | Binary operator for boolean operators (implies, iff).
-  BoolBinaryOp  :: BoolBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for equality between expressions.
   EqBinaryOp    :: EqBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for indexing two expressions.
@@ -159,11 +157,6 @@ instance ExprC CodeExpr where
   ($/) = ArithBinaryOp Frac
   -- | Smart constructor for rasing the first expression to the power of the second.
   ($^) = ArithBinaryOp Pow
-
-  -- | Smart constructor to show that one expression implies the other (conditional operator).
-  ($=>) = BoolBinaryOp Impl
-  -- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).
-  ($<=>) = BoolBinaryOp Iff
 
   -- | Smart constructor for the boolean /and/ operator.
   a $&& b = AssocB And [a, b]

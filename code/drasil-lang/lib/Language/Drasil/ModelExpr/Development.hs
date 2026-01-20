@@ -8,7 +8,7 @@ module Language.Drasil.ModelExpr.Development (
   , AssocBoolOper(..)
   , DerivType(..)
   -- Expr.Lang
-  , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
+  , ArithBinOp(..), EqBinOp(..), LABinOp(..)
   , OrdBinOp(..), VVVBinOp(..), VVNBinOp(..), NVVBinOp(..)
   , ESSBinOp(..), ESBBinOp(..)
   , AssocArithOper(..), AssocConcatOper(..)
@@ -23,7 +23,7 @@ module Language.Drasil.ModelExpr.Development (
   , precC, precA
 ) where
 
-import Language.Drasil.Expr.Lang (ArithBinOp(..), BoolBinOp(..),
+import Language.Drasil.Expr.Lang (ArithBinOp(..),
   EqBinOp(..), LABinOp(..), OrdBinOp(..), VVVBinOp(..),
   VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..),
   AssocArithOper(..), AssocConcatOper(..),

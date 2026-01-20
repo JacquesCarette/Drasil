@@ -11,7 +11,7 @@ import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development (Literal(..))
 import Language.Drasil.ModelExpr.Development (
     ModelExpr(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..)
-  , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..)
+  , ArithBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..)
   , SpaceBinOp(..), StatBinOp(..), VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..)
   , AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..)
   , DerivType(..)
@@ -163,8 +163,6 @@ modelExpr (UnaryOpVV NegV u)         sm = neg sm u
 modelExpr (ArithBinaryOp Frac a b)   sm = P.Div (modelExpr a sm) (modelExpr b sm)
 modelExpr (ArithBinaryOp Pow a b)    sm = pow sm a b
 modelExpr (ArithBinaryOp Subt a b)   sm = P.Row [modelExpr a sm, P.MO P.Subt, modelExpr b sm]
-modelExpr (BoolBinaryOp Impl a b)    sm = mkBOp sm P.Impl a b
-modelExpr (BoolBinaryOp Iff a b)     sm = mkBOp sm P.Iff a b
 modelExpr (EqBinaryOp Eq a b)        sm = mkBOp sm P.Eq a b
 modelExpr (EqBinaryOp NEq a b)       sm = mkBOp sm P.NEq a b
 modelExpr (LABinaryOp Index a b)     sm = indx sm a b

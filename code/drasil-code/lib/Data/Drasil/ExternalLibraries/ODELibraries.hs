@@ -646,8 +646,6 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
     replaceDepVar (UnaryOpVN u e)         = UnaryOpVN u $ replaceDepVar e
     replaceDepVar (ArithBinaryOp b e1 e2) = ArithBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (BoolBinaryOp b e1 e2)  = BoolBinaryOp b
-      (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (EqBinaryOp b e1 e2)    = EqBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (LABinaryOp b e1 e2)    = LABinaryOp b

@@ -9,7 +9,7 @@ import Drasil.Database (UID)
 import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix, Set)
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
-  AssocBoolOper(..), BoolBinOp(..), EqBinOp(..), Expr(..),
+  AssocBoolOper(..), EqBinOp(..), Expr(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocConcatOper(..), eprec, precA, precB, precC)
 import Language.Drasil.Literal.Development (Literal(..))
@@ -142,8 +142,6 @@ expr (UnaryOpVV NegV u)       sm = neg sm u
 expr (ArithBinaryOp Frac a b) sm = P.Div (expr a sm) (expr b sm)
 expr (ArithBinaryOp Pow a b)  sm = pow sm a b
 expr (ArithBinaryOp Subt a b) sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
-expr (BoolBinaryOp Impl a b)  sm = mkBOp sm P.Impl a b
-expr (BoolBinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
 expr (EqBinaryOp Eq a b)      sm = mkBOp sm P.Eq a b
 expr (EqBinaryOp NEq a b)     sm = mkBOp sm P.NEq a b
 expr (LABinaryOp Index a b)   sm = indx sm a b

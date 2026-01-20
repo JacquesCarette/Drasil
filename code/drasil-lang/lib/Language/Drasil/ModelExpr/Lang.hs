@@ -8,7 +8,7 @@ import Prelude hiding (sqrt)
 import Drasil.Database (UID)
 
 import Language.Drasil.Expr.Lang
-  (Completeness, ArithBinOp, EqBinOp, BoolBinOp, LABinOp, OrdBinOp,
+  (Completeness, ArithBinOp, EqBinOp, LABinOp, OrdBinOp,
    VVVBinOp, VVNBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocArithOper,
    AssocConcatOper,
    UFunc, UFuncB, UFuncVV, UFuncVN)
@@ -78,8 +78,6 @@ data ModelExpr where
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Binary operator for boolean operators (implies, iff).
-  BoolBinaryOp  :: BoolBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for equality between expressions.
   EqBinaryOp    :: EqBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for indexing two expressions.
@@ -150,7 +148,6 @@ instance Eq ModelExpr where
   UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
   UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
   ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
-  BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
   EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
   OrdBinaryOp o a b   == OrdBinaryOp p c d   =   o == p && a == c && b == d
   SpaceBinaryOp o a b == SpaceBinaryOp p c d =   o == p && a == c && b == d

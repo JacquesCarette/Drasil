@@ -113,8 +113,6 @@ class ExprC r where
 
   ($-), ($/), ($^) :: r -> r -> r
 
-  ($=>), ($<=>) :: r -> r -> r
-
   ($&&), ($||) :: r -> r -> r
 
   -- | Smart constructor for set-theoretic membership relation. Added ' to avoid conflict.
@@ -278,11 +276,6 @@ instance ExprC Expr where
   -- | Smart constructor for rasing the first expression to the power of the second.
   ($^) = ArithBinaryOp Pow
 
-  -- | Smart constructor to show that one expression implies the other (conditional operator).
-  ($=>)  = BoolBinaryOp Impl
-  -- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).
-  ($<=>) = BoolBinaryOp Iff
-
   -- | Smart constructor for the boolean /and/ operator.
   a $&& b = AssocB And [a, b]
   -- | Smart constructor for the boolean /or/ operator.
@@ -442,11 +435,6 @@ instance ExprC M.ModelExpr where
   ($/) = M.ArithBinaryOp Frac
   -- | Smart constructor for rasing the first expression to the power of the second.
   ($^) = M.ArithBinaryOp Pow
-
-  -- | Smart constructor to show that one expression implies the other (conditional operator).
-  ($=>)  = M.BoolBinaryOp Impl
-  -- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).
-  ($<=>) = M.BoolBinaryOp Iff
 
   -- | Smart constructor for the boolean /and/ operator.
   a $&& b = M.AssocB M.And [a, b]

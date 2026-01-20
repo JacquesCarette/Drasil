@@ -38,11 +38,6 @@ data ArithBinOp = Frac | Pow | Subt
 data EqBinOp = Eq | NEq
   deriving Eq
 
--- | Conditional and Biconditional operators (Expressions can imply
--- one another, or exist if and only if another expression exists).
-data BoolBinOp = Impl | Iff
-  deriving Eq
-
 -- | Index operator. `Index` represents accessing an element at a specific
 -- index, while `IndexOf` represents finding the index of a specific element.
 data LABinOp = Index | IndexOf
@@ -142,8 +137,6 @@ data Expr where
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> Expr -> Expr -> Expr
-  -- | Binary operator for boolean operators (implies, iff).
-  BoolBinaryOp  :: BoolBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for equality between expressions.
   EqBinaryOp    :: EqBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for indexing two expressions.
@@ -180,7 +173,6 @@ instance Eq Expr where
   UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
   UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
   ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
-  BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
   EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
   OrdBinaryOp o a b   == OrdBinaryOp p c d   =   o == p && a == c && b == d
   LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
@@ -401,14 +393,6 @@ instance Typed Expr Space where
       lt rt
       (\ls rs -> "Subtraction should only be applied to the same numeric typed operands. Received `" ++ ls ++ "` - `" ++ rs ++ "`.")
     pure lt
-
-  infer cxt (BoolBinaryOp _ l r) = do
-    lt <- infer cxt l
-    rt <- infer cxt r
-    let msg = const $ "Boolean expression contains non-boolean operand. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
-    assertBoolean lt msg
-    assertBoolean rt msg
-    pure S.Boolean
 
   infer cxt (EqBinaryOp _ l r) = do
     lt <- infer cxt l

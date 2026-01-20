@@ -1,7 +1,7 @@
 module Drasil.Code.CodeExpr.Precedence (precA, precB, eprec) where
 
 import Drasil.Code.CodeExpr.Lang (CodeExpr(..))
-import Language.Drasil.Expr.Precedence (prec2Arith, prec2Eq, prec2Bool,
+import Language.Drasil.Expr.Precedence (prec2Arith, prec2Eq,
   prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV, prec2ESS, prec2ESB,
   precA, precB, precC, prec1, prec1B, prec1VV, prec1VN)
 
@@ -30,7 +30,6 @@ eprec (UnaryOpVV fn _)       = prec1VV fn
 eprec (UnaryOpVN fn _)       = prec1VN fn
 eprec (Operator o _ _)       = precA o
 eprec (ArithBinaryOp bo _ _) = prec2Arith bo
-eprec (BoolBinaryOp bo _ _)  = prec2Bool bo
 eprec (EqBinaryOp bo _ _)    = prec2Eq bo
 eprec (LABinaryOp bo _ _)    = prec2LA bo
 eprec (OrdBinaryOp bo _ _)   = prec2Ord bo

@@ -3,7 +3,7 @@ module Drasil.Code.CodeExpr.Development (
     -- CodeExpr
     CodeExpr(..),
     -- re-export from Expr
-    ArithBinOp(..), EqBinOp(..), BoolBinOp(..), LABinOp(..),
+    ArithBinOp(..), EqBinOp(..), LABinOp(..),
     OrdBinOp(..), VVVBinOp(..), VVNBinOp(..), NVVBinOp(..),
     ESSBinOp(..), ESBBinOp(..),
     AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..),
@@ -21,7 +21,7 @@ module Drasil.Code.CodeExpr.Development (
 
 import Drasil.Code.CodeExpr.Lang (CodeExpr(..))
 import Language.Drasil.Expr.Lang (ArithBinOp(..), EqBinOp(..),
-    BoolBinOp(..), LABinOp(..), OrdBinOp(..), VVVBinOp(..),
+    LABinOp(..), OrdBinOp(..), VVVBinOp(..),
     VVNBinOp(..), NVVBinOp(..),
     ESSBinOp(..), ESBBinOp(..),
     AssocBoolOper(..), AssocArithOper(..), AssocConcatOper(..),

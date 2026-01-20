@@ -3,7 +3,7 @@ module Language.Drasil.ModelExpr.Precedence where
 
 import Language.Drasil.ModelExpr.Lang
 import Language.Drasil.Expr.Lang (ArithBinOp(..))
-import Language.Drasil.Expr.Precedence (prec2Arith, prec2Bool, prec2Eq,
+import Language.Drasil.Expr.Precedence (prec2Arith, prec2Eq,
   prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV, prec2ESS, prec2ESB,
   precA, precC, prec1, prec1B, prec1VV, prec1VN)
 
@@ -43,7 +43,6 @@ mePrec (UnaryOpVV fn _)       = prec1VV fn
 mePrec (UnaryOpVN fn _)       = prec1VN fn
 mePrec (Operator o _ _)       = precA o
 mePrec (ArithBinaryOp bo _ _) = prec2Arith bo
-mePrec (BoolBinaryOp bo _ _)  = prec2Bool bo
 mePrec (EqBinaryOp bo _ _)    = prec2Eq bo
 mePrec (LABinaryOp bo _ _)    = prec2LA bo
 mePrec (SpaceBinaryOp bo _ _) = prec2Spc bo

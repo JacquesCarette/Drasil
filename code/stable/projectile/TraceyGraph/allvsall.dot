@@ -49,6 +49,7 @@ digraph allvsall {
 	instance:calcValues -> theory:offset;
 	instance:outputValues -> theory:flightduration;
 	instance:outputValues -> theory:offset;
+	instance:considerAirDrag -> instance:neglectDrag;
 
 
 	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -129,6 +130,13 @@ digraph allvsall {
 	subgraph GS {
 	rank="same"
 	{instance:targetHit}
+	}
+
+	instance:considerAirDrag	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:considerAirDrag"];
+
+	subgraph LC {
+	rank="same"
+	{instance:considerAirDrag}
 	}
 
 }

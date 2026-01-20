@@ -2,7 +2,7 @@
 module Language.Drasil.Expr.Precedence where
 
 import Language.Drasil.Expr.Lang (Expr(..),
-  ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
+  ArithBinOp(..), EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
   UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   AssocBoolOper(..), AssocArithOper(..), VVVBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocConcatOper(..))
 
@@ -15,10 +15,6 @@ prec2Arith :: ArithBinOp -> Int
 prec2Arith Frac = 190
 prec2Arith Pow = 200
 prec2Arith Subt = 180
-
--- | prec2Bool - precedence for boolean-related binary operations.
-prec2Bool :: BoolBinOp -> Int
-prec2Bool _ = 130
 
 -- | prec2Eq - precedence for equality-related binary operations.
 prec2Eq :: EqBinOp -> Int
@@ -101,7 +97,6 @@ eprec (UnaryOpVV fn _)       = prec1VV fn
 eprec (UnaryOpVN fn _)       = prec1VN fn
 eprec (Operator o _ _)       = precA o
 eprec (ArithBinaryOp bo _ _) = prec2Arith bo
-eprec (BoolBinaryOp bo _ _)  = prec2Bool bo
 eprec (EqBinaryOp bo _ _)    = prec2Eq bo
 eprec (LABinaryOp bo _ _)    = prec2LA bo
 eprec (OrdBinaryOp bo _ _)   = prec2Ord bo

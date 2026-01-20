@@ -6,82 +6,17 @@ import Control.Lens ((^.))
 
 import Drasil.Database (UID, HasUID(..))
 
-import Language.Drasil.Expr.Lang (Completeness(..))
+import Language.Drasil.Expr.Lang
+  (Completeness(..), ArithBinOp(..), EqBinOp(..),
+   LABinOp(..), OrdBinOp(..), EqBinOp(..),
+   VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..),
+   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..),
+   UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..))
 import Language.Drasil.Expr.Class (ExprC(..), square)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc,
   DomainDesc(BoundedDD), RTopology(..))
-
--- * Operators (mostly binary)
-
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp = Frac | Pow | Subt
-  deriving Eq
-
--- | Equality operators (equal or not equal).
-data EqBinOp = Eq | NEq
-  deriving Eq
-
--- | Conditional and Biconditional operators (Expressions can imply
--- one another, or exist if and only if another expression exists).
-data BoolBinOp = Impl | Iff
-  deriving Eq
-
--- | Index operator.
-data LABinOp = Index | IndexOf
-  deriving Eq
-
--- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).
-data OrdBinOp = Lt | Gt | LEq | GEq
-  deriving Eq
-
--- | @Vector x Vector -> Vector@ binary operations (cross product, vector addition, vector sub).
-data VVVBinOp = Cross | VAdd | VSub
-  deriving Eq
-
--- | @Vector x Vector -> Number@ binary operations (dot product).
-data VVNBinOp = Dot
-  deriving Eq
-
--- | @Number x Vector -> Vector@ binary operations (scaling).
-data NVVBinOp = Scale
-  deriving Eq
-
--- | Element + Set -> Set
-data ESSBinOp = SAdd | SRemove
-  deriving Eq
-
--- | Element + Set -> Bool
-data ESBBinOp = SContains
-  deriving Eq
-
-data AssocConcatOper = SUnion
-  deriving Eq
--- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
-data AssocArithOper = Add | Mul
-  deriving Eq
-
--- | Associative boolean operators (and, or).
-data AssocBoolOper = And | Or
-  deriving Eq
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
-  | Arccos | Arctan | Exp | Sqrt | Neg
-  deriving Eq
-
--- | @Bool -> Bool@ operators.
-data UFuncB = Not
-  deriving Eq
-
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
-  deriving Eq
-
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
-  deriving Eq
 
 -- * CodeExpr
 
@@ -138,8 +73,6 @@ data CodeExpr where
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-  -- | Binary operator for boolean operators (implies, iff).
-  BoolBinaryOp  :: BoolBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for equality between expressions.
   EqBinaryOp    :: EqBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for indexing two expressions.
@@ -224,11 +157,6 @@ instance ExprC CodeExpr where
   ($/) = ArithBinaryOp Frac
   -- | Smart constructor for rasing the first expression to the power of the second.
   ($^) = ArithBinaryOp Pow
-
-  -- | Smart constructor to show that one expression implies the other (conditional operator).
-  ($=>) = BoolBinaryOp Impl
-  -- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).
-  ($<=>) = BoolBinaryOp Iff
 
   -- | Smart constructor for the boolean /and/ operator.
   a $&& b = AssocB And [a, b]

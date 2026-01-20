@@ -49,7 +49,6 @@ import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, colon,
   comma)
-import Drasil.Metadata (watermark)
 
 ----------------------------------------
 -- Syntax common to several renderers --
@@ -412,10 +411,10 @@ type ClassDocRenderer = String -> [String]
 classDox :: ClassDocRenderer
 classDox desc = [doxBrief ++ desc | not (null desc)]
 
-type ModuleDocRenderer = String -> [String] -> String -> String -> [String]
+type ModuleDocRenderer = String -> String -> [String] -> String -> String -> [String]
 
 moduleDox :: ModuleDocRenderer
-moduleDox desc as date m = (doxFile ++ m) :
+moduleDox watermark desc as date m = (doxFile ++ m) :
   [doxAuthor ++ stringList as | not (null as)] ++
   [doxDate ++ date | not (null date)] ++
   [doxBrief ++ desc | not (null desc)] ++

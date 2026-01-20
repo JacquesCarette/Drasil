@@ -561,9 +561,9 @@ fileDoc ext topb botb mdl = do
 --   a is a list of authors
 --   dt is the date
 --   fl is the file
-docMod :: (OORenderSym r) => ModuleDocRenderer -> String -> String ->
+docMod :: (OORenderSym r) => ModuleDocRenderer -> String -> String -> String ->
   [String] -> String -> SFile r -> SFile r
-docMod mdr e d a dt fl = commentedMod fl (docComment $ mdr d a dt . addExt e
+docMod mdr e wm d a dt fl = commentedMod fl (docComment $ mdr wm d a dt . addExt e
   <$> getModuleName)
 
 fileFromData :: (OORenderSym r) => (FilePath -> r (Module r) -> r (File r))

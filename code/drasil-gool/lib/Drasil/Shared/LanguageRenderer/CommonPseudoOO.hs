@@ -86,7 +86,6 @@ import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   brackets, braces, colon, vcat, equals)
-import Drasil.Metadata (watermark)
 
 -- Python, Java, C#, C++, and Swift --
 -- | Convert an integer to an index in a 0-indexed language
@@ -123,7 +122,7 @@ doxFunc = docFunc functionDox
 doxClass :: (OORenderSym r) => String -> SClass r -> SClass r
 doxClass = docClass classDox
 
-doxMod :: (OORenderSym r) => String -> String -> [String] -> String -> SFile r ->
+doxMod :: (OORenderSym r) => String -> String -> String -> [String] -> String -> SFile r ->
   SFile r
 doxMod = docMod moduleDox
 
@@ -501,14 +500,15 @@ implements :: (Monad r) => [Label] -> r ParentSpec
 implements is = toCode $ colon <+> text (intercalate listSep is)
 
 -- TODO: put docMod' back in Swift renderer, as it is no longer common.
-docMod' :: (OORenderSym r) => String -> String -> [String] -> String -> SFile r -> SFile r
+docMod' :: (OORenderSym r) => String -> String -> String -> [String] -> String
+  -> SFile r -> SFile r
 docMod' = docMod modDoc'
 
 -- | Generates Markdown/DocC style module doc comment.  Useful for Swift, which follows
 -- DocC, Julia, which uses Markdown, and any other language that doesn't have
 -- Support for a document generator.
 modDoc' :: ModuleDocRenderer
-modDoc' desc as date m = m : [desc | not (null desc)] ++
+modDoc' watermark desc as date m = m : [desc | not (null desc)] ++
       [docField authorDoc (stringList as) | not (null as)] ++
       [docField dateDoc date | not (null date)] ++
       [docField noteDoc watermark]

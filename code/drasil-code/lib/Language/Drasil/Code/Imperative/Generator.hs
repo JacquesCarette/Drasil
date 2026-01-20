@@ -22,6 +22,7 @@ import Language.Drasil.Printing.Import (spec)
 import Drasil.System
 import Utils.Drasil (createDirIfMissing)
 
+import Language.Drasil.Code.Code (createCodeFiles, makeCode)
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
@@ -41,10 +42,9 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer(sampleInputName)
-import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+import Language.Drasil.Code.FileData (PackageData(..), fileAndContents)
+import Language.Drasil.Code.FileNames(sampleInputName)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
@@ -115,18 +115,18 @@ generator l dt sd chs cs = DrasilState {
 -- be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang ->
   (progRepr (OO.Program progRepr) -> ProgData) -> (packRepr (Package packRepr) ->
-  PackData) -> DrasilState -> IO ()
+  PackageData ProgData) -> DrasilState -> IO ()
 generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackage unReprProg) g
-      baseAux = [ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $
-          ds ^. designLog] ++ packAux (unReprPack pckg)
+      baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
+          not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
       aux
-        | l == Python = ad "__init__.py" mempty : baseAux
+        | l == Python = fileAndContents "__init__.py" mempty : baseAux
         | otherwise   = baseAux
-      code = makeCode (progMods $ packProg $ unReprPack pckg) aux
+      code = makeCode (progMods $ packageProg $ unReprPack pckg) aux
   createCodeFiles code
   setCurrentDirectory workingDir
 
@@ -228,15 +228,15 @@ genModules = do
 -- be generated in.
 generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang ->
   (progRepr (Proc.Program progRepr) -> ProgData) -> (packRepr (Package packRepr) ->
-  PackData) -> DrasilState -> IO ()
+  PackageData ProgData) -> DrasilState -> IO ()
 generateCodeProc l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackageProc unReprProg) g
-      baseAux = [ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $
-          ds ^. designLog] ++ packAux (unReprPack pckg)
-      code = makeCode (progMods $ packProg $ unReprPack pckg) baseAux
+      baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
+          not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
+      code = makeCode (progMods $ packageProg $ unReprPack pckg) baseAux
   createCodeFiles code
   setCurrentDirectory workingDir
 

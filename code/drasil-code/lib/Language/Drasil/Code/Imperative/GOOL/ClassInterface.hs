@@ -15,7 +15,7 @@ import Language.Drasil.Printers (PrintingInformation)
 import Language.Drasil (Expr)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
 -- | Members of this class must have all the information necessary for
 -- the 'AuxiliarySym' in addition to information necessary to create a package.

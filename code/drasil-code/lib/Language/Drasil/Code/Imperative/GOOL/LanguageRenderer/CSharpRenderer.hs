@@ -9,17 +9,17 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (onCodeList, csName, csVersion)
+import Drasil.GOOL (ProgData, onCodeList, csName, csVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
-  packD)
+import Language.Drasil.Code.FileData (FileAndContents(..),
+  fileAndContents, PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, nativeBinary, osClassDefault, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
@@ -38,11 +38,11 @@ instance Monad CSharpProject where
   CSP x >>= f = f x
 
 instance PackageSym CSharpProject where
-  type Package CSharpProject = PackData
-  package p = onCodeList (packD p)
+  type Package CSharpProject = PackageData ProgData
+  package p = onCodeList (packageData p)
 
 instance AuxiliarySym CSharpProject where
-  type Auxiliary CSharpProject = AuxData
+  type Auxiliary CSharpProject = FileAndContents
   type AuxHelper CSharpProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
@@ -58,7 +58,7 @@ instance AuxiliarySym CSharpProject where
     (G.noRunIfLib it csRunnable) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unCSP
-  auxFromData fp d = pure $ ad fp d
+  auxFromData fp d = pure $ fileAndContents fp d
 
 -- | Create a build configuration for C# files. Takes in 'FilePath's and the type of implementation.
 csBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

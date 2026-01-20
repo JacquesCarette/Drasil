@@ -7,16 +7,17 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (onCodeList, pyName, pyVersion)
+import Drasil.GOOL (ProgData, onCodeList, pyName, pyVersion)
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
-  packD)
+import Language.Drasil.Code.FileData (FileAndContents(..),
+  fileAndContents, PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
@@ -34,11 +35,11 @@ instance Monad PythonProject where
   PP x >>= f = f x
 
 instance PackageSym PythonProject where
-  type Package PythonProject = PackData
-  package p = onCodeList (packD p)
+  type Package PythonProject = PackageData ProgData
+  package p = onCodeList (packageData p)
 
 instance AuxiliarySym PythonProject where
-  type Auxiliary PythonProject = AuxData
+  type Auxiliary PythonProject = FileAndContents
   type AuxHelper PythonProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
@@ -53,7 +54,7 @@ instance AuxiliarySym PythonProject where
     (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unPP
-  auxFromData fp d = pure $ ad fp d
+  auxFromData fp d = pure $ fileAndContents fp d
 
 -- | Default runnable information for Python files.
 pyRunnable :: Maybe Runnable

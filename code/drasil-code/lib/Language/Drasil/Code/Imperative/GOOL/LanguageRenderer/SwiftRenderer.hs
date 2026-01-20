@@ -9,15 +9,15 @@ import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
-import Drasil.GOOL (onCodeList, swiftName, swiftVersion)
+import Drasil.GOOL (ProgData, onCodeList, swiftName, swiftVersion)
 
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
-  packD)
+import Language.Drasil.Code.FileData (FileAndContents(..),
+  fileAndContents, PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)
 
@@ -35,11 +35,11 @@ instance Monad SwiftProject where
   SP x >>= f = f x
 
 instance PackageSym SwiftProject where
-  type Package SwiftProject = PackData
-  package p = onCodeList (packD p)
+  type Package SwiftProject = PackageData ProgData
+  package p = onCodeList (packageData p)
 
 instance AuxiliarySym SwiftProject where
-  type Auxiliary SwiftProject = AuxData
+  type Auxiliary SwiftProject = FileAndContents
   type AuxHelper SwiftProject = Doc
   doxConfig _ _ _ = auxFromData "" empty
   readMe rmi = G.readMe rmi {
@@ -52,7 +52,7 @@ instance AuxiliarySym SwiftProject where
   makefile fs it cms = G.makefile (swiftBuildConfig fs it) (G.noRunIfLib it swiftRunnable) (G.docIfEnabled cms (DocConfig [] []))
 
   auxHelperDoc = unSP
-  auxFromData fp d = pure $ ad fp d
+  auxFromData fp d = pure $ fileAndContents fp d
 
 -- | Create a build configuration for Swift files. Takes in 'FilePath's and the type of implementation.
 swiftBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

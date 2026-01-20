@@ -16,7 +16,7 @@ import Language.Drasil
 import Theory.Drasil
 
 import Language.Drasil.Plain.Print
-import Language.Drasil.Printing.Import (spec)
+import Language.Drasil.Printing.Import.Sentence (spec)
 import Language.Drasil.Printing.PrintingInformation
 
 type UIDMap = Map.Map UID [UID]

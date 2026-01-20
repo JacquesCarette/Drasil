@@ -2036,104 +2036,11 @@ instance Language.Drasil.WellTyped.Typed Language.Drasil.Expr.Lang.Expr Language
 -- | The Drasil Modelling Expression language
 module Language.Drasil.ModelExpr.Lang
 
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp
-Frac :: ArithBinOp
-Pow :: ArithBinOp
-Subt :: ArithBinOp
-
--- | Equality operators (equal or not equal).
-data EqBinOp
-Eq :: EqBinOp
-NEq :: EqBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
-
--- | Index operator.
-data LABinOp
-Index :: LABinOp
-IndexOf :: LABinOp
-
--- | Ordered binary operators (less than, greater than, less than or equal
---   to, greater than or equal to).
-data OrdBinOp
-Lt :: OrdBinOp
-Gt :: OrdBinOp
-LEq :: OrdBinOp
-GEq :: OrdBinOp
-
--- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product, vector addition, subtraction).
-data VVVBinOp
-Cross :: VVVBinOp
-VAdd :: VVVBinOp
-VSub :: VVVBinOp
-
--- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
-data VVNBinOp
-Dot :: VVNBinOp
-
--- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
-data NVVBinOp
-Scale :: NVVBinOp
-
--- | Element + Set -&gt; Set
-data ESSBinOp
-SAdd :: ESSBinOp
-SRemove :: ESSBinOp
-
--- | Element + Set -&gt; Bool
-data ESBBinOp
-SContains :: ESBBinOp
-data AssocConcatOper
-SUnion :: AssocConcatOper
-
--- | Associative operators (adding and multiplication). Also specifies
---   whether it is for integers or for real numbers.
-data AssocArithOper
-Add :: AssocArithOper
-Mul :: AssocArithOper
-
 -- | Associative boolean operators (and, or).
 data AssocBoolOper
 And :: AssocBoolOper
 Or :: AssocBoolOper
 Equivalence :: AssocBoolOper
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc
-Abs :: UFunc
-Log :: UFunc
-Ln :: UFunc
-Sin :: UFunc
-Cos :: UFunc
-Tan :: UFunc
-Sec :: UFunc
-Csc :: UFunc
-Cot :: UFunc
-Arcsin :: UFunc
-Arccos :: UFunc
-Arctan :: UFunc
-Exp :: UFunc
-Sqrt :: UFunc
-Neg :: UFunc
-
--- | <tt>Bool -&gt; Bool</tt> operators.
-data UFuncB
-Not :: UFuncB
-
--- | <tt>Vector -&gt; Vector</tt> operators.
-data UFuncVV
-NegV :: UFuncVV
-
--- | <tt>Vector -&gt; Number</tt> operators.
-data UFuncVN
-Norm :: UFuncVN
-Dim :: UFuncVN
 
 -- | Statements involving 2 arguments.
 data StatBinOp
@@ -2246,7 +2153,7 @@ data ModelExpr
 
 -- | Operators are generalized arithmetic operators over a
 --   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
---   Summation is represented via <a>Add</a> over a discrete domain.
+--   Summation is represented via <tt>Add</tt> over a discrete domain.
 [Operator] :: AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> ModelExpr
 
 -- | A different kind of <a>IsIn</a>. A <a>UID</a> is an element of an
@@ -2258,88 +2165,13 @@ data ModelExpr
 
 -- | The variable type is just a renamed <a>String</a>.
 type Variable = String
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.ArithBinOp
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.EqBinOp
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.BoolBinOp
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.LABinOp
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.OrdBinOp
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.VVVBinOp
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.VVNBinOp
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.NVVBinOp
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.ESSBinOp
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.ESBBinOp
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.AssocConcatOper
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.AssocArithOper
 instance GHC.Show.Show Language.Drasil.ModelExpr.Lang.AssocBoolOper
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.AssocBoolOper
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.UFunc
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.UFuncB
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.UFuncVV
-instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.UFuncVN
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.StatBinOp
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.SpaceBinOp
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.DerivType
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.ModelExpr
 instance Language.Drasil.Literal.Class.LiteralC Language.Drasil.ModelExpr.Lang.ModelExpr
-
-
--- | Defines operator precedence.
-module Language.Drasil.ModelExpr.Precedence
-
--- | prec2Arith - precedence for arithmetic-related binary operations.
-prec2Arith :: ArithBinOp -> Int
-
--- | prec2Bool - precedence for boolean-related binary operations.
-prec2Bool :: BoolBinOp -> Int
-
--- | prec2Eq - precedence for equality-related binary operations.
-prec2Eq :: EqBinOp -> Int
-
--- | prec2LA - precedence for access-related binary operations.
-prec2LA :: LABinOp -> Int
-
--- | prec2Ord - precedence for order-related binary operations.
-prec2Ord :: OrdBinOp -> Int
-prec2Spc :: SpaceBinOp -> Int
-prec2Stat :: StatBinOp -> Int
-
--- | prec2VVV - precedence for Vec-&gt;Vec-&gt;Vec-related binary
---   operations.
-prec2VVV :: VVVBinOp -> Int
-
--- | prec2VVN - precedence for Vec-&gt;Vec-&gt;Num-related binary
---   operations.
-prec2VVN :: VVNBinOp -> Int
-
--- | prec2NVV - precedence for Num-&gt;Vec-&gt;Vec-related binary
---   operations.
-prec2NVV :: NVVBinOp -> Int
-prec2ESS :: ESSBinOp -> Int
-prec2ESB :: ESBBinOp -> Int
-
--- | precA - precedence for arithmetic-related Binary-Associative
---   (Commutative) operators.
-precA :: AssocArithOper -> Int
-
--- | precB - precedence for boolean-related Binary-Associative
---   (Commutative) operators.
-precB :: AssocBoolOper -> Int
-precC :: AssocConcatOper -> Int
-
--- | prec1 - precedence of unary operators.
-prec1 :: UFunc -> Int
-
--- | prec1B - precedence of boolean-related unary operators.
-prec1B :: UFuncB -> Int
-
--- | prec1VV - precedence of vector-vector-related unary operators.
-prec1VV :: UFuncVV -> Int
-
--- | prec1Vec - precedence of vector-number-related unary operators.
-prec1VN :: UFuncVN -> Int
-
--- | eprec - <a>ModelExpr</a> precedence.
-mePrec :: ModelExpr -> Int
 
 
 -- | Defines functions to find Chunk UIDs within <a>ModelExpr</a>s.
@@ -2366,243 +2198,13 @@ meNamesRI' :: RealInterval ModelExpr ModelExpr -> [UID]
 meDep :: ModelExpr -> [UID]
 
 
--- | Re-export functions and types related to <a>ModelExpr</a>
-module Language.Drasil.ModelExpr.Development
-
--- | Expression language where all terms are supposed to have a meaning,
---   but that meaning may not be that of a definite value. For example,
---   specification expressions, especially with quantifiers, belong here.
-data ModelExpr
-
--- | Brings a literal into the expression language.
-[Lit] :: Literal -> ModelExpr
-
--- | Introduce Space values into the expression language.
-[Spc] :: Space -> ModelExpr
-
--- | Takes an associative arithmetic operator with a list of expressions.
-[AssocA] :: AssocArithOper -> [ModelExpr] -> ModelExpr
-
--- | Takes an associative boolean operator with a list of expressions.
-[AssocB] :: AssocBoolOper -> [ModelExpr] -> ModelExpr
-[AssocC] :: AssocConcatOper -> [ModelExpr] -> ModelExpr
-
--- | Derivative syntax is: Type (<a>Part</a>ial or <a>Total</a>) -&gt;
---   principal part of change -&gt; with respect to For example: Deriv Part
---   y x1 would be (dy/dx1).
-[Deriv] :: Integer -> DerivType -> ModelExpr -> UID -> ModelExpr
-
--- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
---   Implicitly assumes that the chunk has a symbol.
-[C] :: UID -> ModelExpr
-
--- | Function applications.
-[FCall] :: UID -> [ModelExpr] -> ModelExpr
-
--- | For multi-case expressions, each pair represents one case.
-[Case] :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
-
--- | Represents a matrix of expressions.
-[Matrix] :: [[ModelExpr]] -> ModelExpr
-
--- | Represents a set of expressions
-[Set] :: Space -> [ModelExpr] -> ModelExpr
-
--- | used to refernce the (name + type = variable )
-[Variable] :: String -> ModelExpr -> ModelExpr
-
--- | Unary operation for most functions (eg. sin, cos, log, etc.).
-[UnaryOp] :: UFunc -> ModelExpr -> ModelExpr
-
--- | Unary operation for <tt>Bool -&gt; Bool</tt> operations.
-[UnaryOpB] :: UFuncB -> ModelExpr -> ModelExpr
-
--- | Unary operation for <tt>Vector -&gt; Vector</tt> operations.
-[UnaryOpVV] :: UFuncVV -> ModelExpr -> ModelExpr
-
--- | Unary operation for <tt>Vector -&gt; Number</tt> operations.
-[UnaryOpVN] :: UFuncVN -> ModelExpr -> ModelExpr
-
--- | Binary operator for arithmetic between expressions (fractional, power,
---   and subtraction).
-[ArithBinaryOp] :: ArithBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Binary operator for equality between expressions.
-[EqBinaryOp] :: EqBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Binary operator for indexing two expressions.
-[LABinaryOp] :: LABinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Binary operator for ordering expressions (less than, greater than,
---   etc.).
-[OrdBinaryOp] :: OrdBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Space-related binary operations.
-[SpaceBinaryOp] :: SpaceBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Statement-related binary operations.
-[StatBinaryOp] :: StatBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Binary operator for <tt>Vector x Vector -&gt; Vector</tt> operations
---   (cross product).
-[VVVBinaryOp] :: VVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Binary operator for <tt>Vector x Vector -&gt; Number</tt> operations
---   (dot product).
-[VVNBinaryOp] :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Binary operator for <tt>Number x Vector -&gt; Vector</tt> operations
---   (scaling).
-[NVVBinaryOp] :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Set operator for Element + Set -&gt; Set
-[ESSBinaryOp] :: ESSBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Set operator for Element + Set -&gt; Bool
-[ESBBinaryOp] :: ESBBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Operators are generalized arithmetic operators over a
---   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
---   Summation is represented via <a>Add</a> over a discrete domain.
-[Operator] :: AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> ModelExpr
-
--- | A different kind of <a>IsIn</a>. A <a>UID</a> is an element of an
---   interval.
-[RealI] :: UID -> RealInterval ModelExpr ModelExpr -> ModelExpr
-
--- | Universal quantification
-[ForAll] :: UID -> Space -> ModelExpr -> ModelExpr
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc
-Abs :: UFunc
-Log :: UFunc
-Ln :: UFunc
-Sin :: UFunc
-Cos :: UFunc
-Tan :: UFunc
-Sec :: UFunc
-Csc :: UFunc
-Cot :: UFunc
-Arcsin :: UFunc
-Arccos :: UFunc
-Arctan :: UFunc
-Exp :: UFunc
-Sqrt :: UFunc
-Neg :: UFunc
-
--- | <tt>Bool -&gt; Bool</tt> operators.
-data UFuncB
-Not :: UFuncB
-
--- | <tt>Vector -&gt; Vector</tt> operators.
-data UFuncVV
-NegV :: UFuncVV
-
--- | <tt>Vector -&gt; Number</tt> operators.
-data UFuncVN
-Norm :: UFuncVN
-Dim :: UFuncVN
-
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp
-Frac :: ArithBinOp
-Pow :: ArithBinOp
-Subt :: ArithBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
-
--- | Equality operators (equal or not equal).
-data EqBinOp
-Eq :: EqBinOp
-NEq :: EqBinOp
-
--- | Index operator.
-data LABinOp
-Index :: LABinOp
-IndexOf :: LABinOp
-
--- | Ordered binary operators (less than, greater than, less than or equal
---   to, greater than or equal to).
-data OrdBinOp
-Lt :: OrdBinOp
-Gt :: OrdBinOp
-LEq :: OrdBinOp
-GEq :: OrdBinOp
-
--- | <tt>Value -&gt; Space -&gt; Bool</tt> operators.
-data SpaceBinOp
-IsIn :: SpaceBinOp
-
--- | Statements involving 2 arguments.
-data StatBinOp
-Defines :: StatBinOp
-
--- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product, vector addition, subtraction).
-data VVVBinOp
-Cross :: VVVBinOp
-VAdd :: VVVBinOp
-VSub :: VVVBinOp
-
--- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
-data VVNBinOp
-Dot :: VVNBinOp
-
--- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
-data NVVBinOp
-Scale :: NVVBinOp
-
--- | Element + Set -&gt; Set
-data ESSBinOp
-SAdd :: ESSBinOp
-SRemove :: ESSBinOp
-
--- | Element + Set -&gt; Bool
-data ESBBinOp
-SContains :: ESBBinOp
-
--- | Associative operators (adding and multiplication). Also specifies
---   whether it is for integers or for real numbers.
-data AssocArithOper
-Add :: AssocArithOper
-Mul :: AssocArithOper
-
--- | Associative boolean operators (and, or).
-data AssocBoolOper
-And :: AssocBoolOper
-Or :: AssocBoolOper
-Equivalence :: AssocBoolOper
-data AssocConcatOper
-SUnion :: AssocConcatOper
-
--- | Determines the type of the derivative (either a partial derivative or
---   a total derivative).
-data DerivType
-Part :: DerivType
-Total :: DerivType
-
--- | Get dependencies from an equation.
-meDep :: ModelExpr -> [UID]
-
--- | eprec - <a>ModelExpr</a> precedence.
-mePrec :: ModelExpr -> Int
-precC :: AssocConcatOper -> Int
-
--- | precB - precedence for boolean-related Binary-Associative
---   (Commutative) operators.
-precB :: AssocBoolOper -> Int
-
--- | precA - precedence for arithmetic-related Binary-Associative
---   (Commutative) operators.
-precA :: AssocArithOper -> Int
+-- | Defines functions to convert from the base expression language to
+--   <a>ModelExpr</a>s.
+module Language.Drasil.ModelExpr.Convert
+assocBoolOper :: AssocBoolOper -> AssocBoolOper
+expr :: Expr -> ModelExpr
+realInterval :: RealInterval Expr Expr -> RealInterval ModelExpr ModelExpr
+domainDesc :: DiscreteDomainDesc Expr Expr -> DiscreteDomainDesc ModelExpr ModelExpr
 
 module Language.Drasil.ModelExpr.Class
 
@@ -2655,31 +2257,6 @@ sumAll :: ModelExprC r => Symbol -> r -> r
 --   over all Real numbers.
 prodAll :: ModelExprC r => Symbol -> r -> r
 instance Language.Drasil.ModelExpr.Class.ModelExprC Language.Drasil.ModelExpr.Lang.ModelExpr
-
-
--- | Defines functions to convert from the base expression language to
---   <a>ModelExpr</a>s.
-module Language.Drasil.ModelExpr.Convert
-assocArithOper :: AssocArithOper -> AssocArithOper
-assocBoolOper :: AssocBoolOper -> AssocBoolOper
-assocConcatOper :: AssocConcatOper -> AssocConcatOper
-uFunc :: UFunc -> UFunc
-uFuncB :: UFuncB -> UFuncB
-uFuncVV :: UFuncVV -> UFuncVV
-uFuncVN :: UFuncVN -> UFuncVN
-arithBinOp :: ArithBinOp -> ArithBinOp
-boolBinOp :: BoolBinOp -> BoolBinOp
-eqBinOp :: EqBinOp -> EqBinOp
-laBinOp :: LABinOp -> LABinOp
-ordBinOp :: OrdBinOp -> OrdBinOp
-vvvBinOp :: VVVBinOp -> VVVBinOp
-vvnBinOp :: VVNBinOp -> VVNBinOp
-nvvBinOp :: NVVBinOp -> NVVBinOp
-essBinOp :: ESSBinOp -> ESSBinOp
-esbBinOp :: ESBBinOp -> ESBBinOp
-expr :: Expr -> ModelExpr
-realInterval :: RealInterval Expr Expr -> RealInterval ModelExpr ModelExpr
-domainDesc :: DiscreteDomainDesc Expr Expr -> DiscreteDomainDesc ModelExpr ModelExpr
 
 
 -- | Defines classes for use with Drasil's expression language.
@@ -3154,6 +2731,260 @@ prec1VN :: UFuncVN -> Int
 
 -- | eprec - <a>Expression</a> precedence.
 eprec :: Expr -> Int
+
+
+-- | Defines operator precedence.
+module Language.Drasil.ModelExpr.Precedence
+
+-- | precB - precedence for boolean-related Binary-Associative
+--   (Commutative) operators.
+precB :: AssocBoolOper -> Int
+prec2Spc :: SpaceBinOp -> Int
+prec2Stat :: StatBinOp -> Int
+
+-- | eprec - <a>ModelExpr</a> precedence.
+mePrec :: ModelExpr -> Int
+
+
+-- | Re-export functions and types related to <a>ModelExpr</a>
+module Language.Drasil.ModelExpr.Development
+
+-- | Expression language where all terms are supposed to have a meaning,
+--   but that meaning may not be that of a definite value. For example,
+--   specification expressions, especially with quantifiers, belong here.
+data ModelExpr
+
+-- | Brings a literal into the expression language.
+[Lit] :: Literal -> ModelExpr
+
+-- | Introduce Space values into the expression language.
+[Spc] :: Space -> ModelExpr
+
+-- | Takes an associative arithmetic operator with a list of expressions.
+[AssocA] :: AssocArithOper -> [ModelExpr] -> ModelExpr
+
+-- | Takes an associative boolean operator with a list of expressions.
+[AssocB] :: AssocBoolOper -> [ModelExpr] -> ModelExpr
+[AssocC] :: AssocConcatOper -> [ModelExpr] -> ModelExpr
+
+-- | Derivative syntax is: Type (<a>Part</a>ial or <a>Total</a>) -&gt;
+--   principal part of change -&gt; with respect to For example: Deriv Part
+--   y x1 would be (dy/dx1).
+[Deriv] :: Integer -> DerivType -> ModelExpr -> UID -> ModelExpr
+
+-- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
+--   Implicitly assumes that the chunk has a symbol.
+[C] :: UID -> ModelExpr
+
+-- | Function applications.
+[FCall] :: UID -> [ModelExpr] -> ModelExpr
+
+-- | For multi-case expressions, each pair represents one case.
+[Case] :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
+
+-- | Represents a matrix of expressions.
+[Matrix] :: [[ModelExpr]] -> ModelExpr
+
+-- | Represents a set of expressions
+[Set] :: Space -> [ModelExpr] -> ModelExpr
+
+-- | used to refernce the (name + type = variable )
+[Variable] :: String -> ModelExpr -> ModelExpr
+
+-- | Unary operation for most functions (eg. sin, cos, log, etc.).
+[UnaryOp] :: UFunc -> ModelExpr -> ModelExpr
+
+-- | Unary operation for <tt>Bool -&gt; Bool</tt> operations.
+[UnaryOpB] :: UFuncB -> ModelExpr -> ModelExpr
+
+-- | Unary operation for <tt>Vector -&gt; Vector</tt> operations.
+[UnaryOpVV] :: UFuncVV -> ModelExpr -> ModelExpr
+
+-- | Unary operation for <tt>Vector -&gt; Number</tt> operations.
+[UnaryOpVN] :: UFuncVN -> ModelExpr -> ModelExpr
+
+-- | Binary operator for arithmetic between expressions (fractional, power,
+--   and subtraction).
+[ArithBinaryOp] :: ArithBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for boolean operators (implies, iff).
+[BoolBinaryOp] :: BoolBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for equality between expressions.
+[EqBinaryOp] :: EqBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for indexing two expressions.
+[LABinaryOp] :: LABinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for ordering expressions (less than, greater than,
+--   etc.).
+[OrdBinaryOp] :: OrdBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Space-related binary operations.
+[SpaceBinaryOp] :: SpaceBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Statement-related binary operations.
+[StatBinaryOp] :: StatBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Vector</tt> operations
+--   (cross product).
+[VVVBinaryOp] :: VVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Number</tt> operations
+--   (dot product).
+[VVNBinaryOp] :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for <tt>Number x Vector -&gt; Vector</tt> operations
+--   (scaling).
+[NVVBinaryOp] :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Set operator for Element + Set -&gt; Set
+[ESSBinaryOp] :: ESSBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Set operator for Element + Set -&gt; Bool
+[ESBBinaryOp] :: ESBBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Operators are generalized arithmetic operators over a
+--   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
+--   Summation is represented via <tt>Add</tt> over a discrete domain.
+[Operator] :: AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> ModelExpr
+
+-- | A different kind of <a>IsIn</a>. A <a>UID</a> is an element of an
+--   interval.
+[RealI] :: UID -> RealInterval ModelExpr ModelExpr -> ModelExpr
+
+-- | Universal quantification
+[ForAll] :: UID -> Space -> ModelExpr -> ModelExpr
+
+-- | <tt>Value -&gt; Space -&gt; Bool</tt> operators.
+data SpaceBinOp
+IsIn :: SpaceBinOp
+
+-- | Statements involving 2 arguments.
+data StatBinOp
+Defines :: StatBinOp
+
+-- | Associative boolean operators (and, or).
+data AssocBoolOper
+And :: AssocBoolOper
+Or :: AssocBoolOper
+Equivalence :: AssocBoolOper
+
+-- | Determines the type of the derivative (either a partial derivative or
+--   a total derivative).
+data DerivType
+Part :: DerivType
+Total :: DerivType
+
+-- | Arithmetic operators (fractional, power, and subtraction).
+data ArithBinOp
+Frac :: ArithBinOp
+Pow :: ArithBinOp
+Subt :: ArithBinOp
+
+-- | Conditional and Biconditional operators (Expressions can imply one
+--   another, or exist if and only if another expression exists).
+data BoolBinOp
+Impl :: BoolBinOp
+Iff :: BoolBinOp
+
+-- | Equality operators (equal or not equal).
+data EqBinOp
+Eq :: EqBinOp
+NEq :: EqBinOp
+
+-- | Index operator. <a>Index</a> represents accessing an element at a
+--   specific index, while <a>IndexOf</a> represents finding the index of a
+--   specific element.
+data LABinOp
+Index :: LABinOp
+IndexOf :: LABinOp
+
+-- | Ordered binary operators (less than, greater than, less than or equal
+--   to, greater than or equal to).
+data OrdBinOp
+Lt :: OrdBinOp
+Gt :: OrdBinOp
+LEq :: OrdBinOp
+GEq :: OrdBinOp
+
+-- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
+--   product, addition, subtraction).
+data VVVBinOp
+Cross :: VVVBinOp
+VAdd :: VVVBinOp
+VSub :: VVVBinOp
+
+-- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
+data VVNBinOp
+Dot :: VVNBinOp
+
+-- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
+data NVVBinOp
+Scale :: NVVBinOp
+
+-- | Element + Set -&gt; Set
+data ESSBinOp
+SAdd :: ESSBinOp
+SRemove :: ESSBinOp
+
+-- | Element + Set -&gt; Bool
+data ESBBinOp
+SContains :: ESBBinOp
+
+-- | Associative operators (adding and multiplication). Also specifies
+--   whether it is for integers or for real numbers.
+data AssocArithOper
+Add :: AssocArithOper
+Mul :: AssocArithOper
+data AssocConcatOper
+SUnion :: AssocConcatOper
+
+-- | Unary functions (abs, log, ln, sin, etc.).
+data UFunc
+Abs :: UFunc
+Log :: UFunc
+Ln :: UFunc
+Sin :: UFunc
+Cos :: UFunc
+Tan :: UFunc
+Sec :: UFunc
+Csc :: UFunc
+Cot :: UFunc
+Arcsin :: UFunc
+Arccos :: UFunc
+Arctan :: UFunc
+Exp :: UFunc
+Sqrt :: UFunc
+Neg :: UFunc
+
+-- | <tt>Bool -&gt; Bool</tt> operators.
+data UFuncB
+Not :: UFuncB
+
+-- | <tt>Vector -&gt; Vector</tt> operators.
+data UFuncVV
+NegV :: UFuncVV
+
+-- | <tt>Vector -&gt; Number</tt> operators.
+data UFuncVN
+Norm :: UFuncVN
+Dim :: UFuncVN
+
+-- | Get dependencies from an equation.
+meDep :: ModelExpr -> [UID]
+
+-- | eprec - <a>ModelExpr</a> precedence.
+mePrec :: ModelExpr -> Int
+
+-- | precB - precedence for boolean-related Binary-Associative
+--   (Commutative) operators.
+precB :: AssocBoolOper -> Int
+precC :: AssocConcatOper -> Int
+
+-- | precA - precedence for arithmetic-related Binary-Associative
+--   (Commutative) operators.
+precA :: AssocArithOper -> Int
 
 
 -- | Extract UIDs from an expression so that they can be looked up in the
@@ -5039,104 +4870,6 @@ instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.UncertainQuan
 
 module Drasil.Code.CodeExpr.Lang
 
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp
-Frac :: ArithBinOp
-Pow :: ArithBinOp
-Subt :: ArithBinOp
-
--- | Equality operators (equal or not equal).
-data EqBinOp
-Eq :: EqBinOp
-NEq :: EqBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
-
--- | Index operator.
-data LABinOp
-Index :: LABinOp
-IndexOf :: LABinOp
-
--- | Ordered binary operators (less than, greater than, less than or equal
---   to, greater than or equal to).
-data OrdBinOp
-Lt :: OrdBinOp
-Gt :: OrdBinOp
-LEq :: OrdBinOp
-GEq :: OrdBinOp
-
--- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product, vector addition, vector sub).
-data VVVBinOp
-Cross :: VVVBinOp
-VAdd :: VVVBinOp
-VSub :: VVVBinOp
-
--- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
-data VVNBinOp
-Dot :: VVNBinOp
-
--- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
-data NVVBinOp
-Scale :: NVVBinOp
-
--- | Element + Set -&gt; Set
-data ESSBinOp
-SAdd :: ESSBinOp
-SRemove :: ESSBinOp
-
--- | Element + Set -&gt; Bool
-data ESBBinOp
-SContains :: ESBBinOp
-data AssocConcatOper
-SUnion :: AssocConcatOper
-
--- | Associative operators (adding and multiplication). Also specifies
---   whether it is for integers or for real numbers.
-data AssocArithOper
-Add :: AssocArithOper
-Mul :: AssocArithOper
-
--- | Associative boolean operators (and, or).
-data AssocBoolOper
-And :: AssocBoolOper
-Or :: AssocBoolOper
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc
-Abs :: UFunc
-Log :: UFunc
-Ln :: UFunc
-Sin :: UFunc
-Cos :: UFunc
-Tan :: UFunc
-Sec :: UFunc
-Csc :: UFunc
-Cot :: UFunc
-Arcsin :: UFunc
-Arccos :: UFunc
-Arctan :: UFunc
-Exp :: UFunc
-Sqrt :: UFunc
-Neg :: UFunc
-
--- | <tt>Bool -&gt; Bool</tt> operators.
-data UFuncB
-Not :: UFuncB
-
--- | <tt>Vector -&gt; Vector</tt> operators.
-data UFuncVV
-NegV :: UFuncVV
-
--- | <tt>Vector -&gt; Number</tt> operators.
-data UFuncVN
-Norm :: UFuncVN
-Dim :: UFuncVN
-
 -- | Expression language where all terms also denote a term in GOOL (i.e.
 --   translation is total and meaning preserving).
 data CodeExpr
@@ -5252,23 +4985,6 @@ data CodeExpr
 --   -&gt; Expr | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an
 --   element of an interval.
 [RealI] :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.ArithBinOp
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.EqBinOp
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.BoolBinOp
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.LABinOp
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.OrdBinOp
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.VVVBinOp
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.VVNBinOp
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.NVVBinOp
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.ESSBinOp
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.ESBBinOp
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.AssocConcatOper
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.AssocArithOper
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.AssocBoolOper
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFunc
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFuncB
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFuncVV
-instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFuncVN
 instance Language.Drasil.Literal.Class.LiteralC Drasil.Code.CodeExpr.Lang.CodeExpr
 instance Language.Drasil.Expr.Class.ExprC Drasil.Code.CodeExpr.Lang.CodeExpr
 
@@ -5562,7 +5278,9 @@ data BoolBinOp
 Impl :: BoolBinOp
 Iff :: BoolBinOp
 
--- | Index operator.
+-- | Index operator. <a>Index</a> represents accessing an element at a
+--   specific index, while <a>IndexOf</a> represents finding the index of a
+--   specific element.
 data LABinOp
 Index :: LABinOp
 IndexOf :: LABinOp
@@ -5576,7 +5294,7 @@ LEq :: OrdBinOp
 GEq :: OrdBinOp
 
 -- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product, vector addition, vector sub).
+--   product, addition, subtraction).
 data VVVBinOp
 Cross :: VVVBinOp
 VAdd :: VVVBinOp

@@ -15,41 +15,41 @@
 </span><span id="line-15"></span><span class="annot"><span class="hs-comment">-- | Gets a list of quantities ('DefinedQuantityDict') from an equation in order to print.</span></span><span>
 </span><span id="line-16"></span><span class="annot"><a href="Drasil.GetChunks.html#vars"><span class="hs-identifier hs-type">vars</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-17"></span><span id="vars"><span class="annot"><span class="annottext">vars :: ModelExpr -&gt; ChunkDB -&gt; [DefinedQuantityDict]
-</span><a href="Drasil.GetChunks.html#vars"><span class="hs-identifier hs-var hs-var">vars</span></a></span></span><span> </span><span id="local-6989586621679096523"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679096523"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679096524"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096524"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; DefinedQuantityDict) -&gt; [UID] -&gt; [DefinedQuantityDict]
+</span><a href="Drasil.GetChunks.html#vars"><span class="hs-identifier hs-var hs-var">vars</span></a></span></span><span> </span><span id="local-6989586621679096027"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679096027"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679096028"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096028"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; DefinedQuantityDict) -&gt; [UID] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; ChunkDB -&gt; DefinedQuantityDict
 forall a. Typeable a =&gt; UID -&gt; ChunkDB -&gt; a
 </span><span class="hs-operator hs-var">`findOrErr`</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096524"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [DefinedQuantityDict]) -&gt; [UID] -&gt; [DefinedQuantityDict]
+</span><a href="#local-6989586621679096028"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [DefinedQuantityDict]) -&gt; [UID] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; [UID]
 </span><span class="hs-identifier hs-var">meDep</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679096523"><span class="hs-identifier hs-var">e</span></a></span><span>
+</span><a href="#local-6989586621679096027"><span class="hs-identifier hs-var">e</span></a></span><span>
 </span><span id="line-18"></span><span>
 </span><span id="line-19"></span><span class="annot"><span class="hs-comment">-- | Gets a list of quantities ('DefinedQuantityDict') from a 'Sentence' in order to print.</span></span><span>
 </span><span id="line-20"></span><span class="annot"><a href="Drasil.GetChunks.html#vars%27"><span class="hs-identifier hs-type">vars'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-21"></span><span id="vars%27"><span class="annot"><span class="annottext">vars' :: Sentence -&gt; ChunkDB -&gt; [DefinedQuantityDict]
-</span><a href="Drasil.GetChunks.html#vars%27"><span class="hs-identifier hs-var hs-var">vars'</span></a></span></span><span> </span><span id="local-6989586621679096526"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679096526"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679096527"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096527"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; DefinedQuantityDict) -&gt; [UID] -&gt; [DefinedQuantityDict]
+</span><a href="Drasil.GetChunks.html#vars%27"><span class="hs-identifier hs-var hs-var">vars'</span></a></span></span><span> </span><span id="local-6989586621679096030"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096030"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679096031"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096031"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; DefinedQuantityDict) -&gt; [UID] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; ChunkDB -&gt; DefinedQuantityDict
 forall a. Typeable a =&gt; UID -&gt; ChunkDB -&gt; a
 </span><span class="hs-operator hs-var">`findOrErr`</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096527"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [DefinedQuantityDict]) -&gt; [UID] -&gt; [DefinedQuantityDict]
+</span><a href="#local-6989586621679096031"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [DefinedQuantityDict]) -&gt; [UID] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [UID]
 </span><span class="hs-identifier hs-var">sdep</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679096526"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><a href="#local-6989586621679096030"><span class="hs-identifier hs-var">a</span></a></span><span>
 </span><span id="line-22"></span><span>
 </span><span id="line-23"></span><span class="annot"><span class="hs-comment">-- | Combines the functions of 'vars' and 'concpt' to create a list of 'DefinedQuantityDict's from a 'Sentence'.</span></span><span>
 </span><span id="line-24"></span><span class="annot"><a href="Drasil.GetChunks.html#combine"><span class="hs-identifier hs-type">combine</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-25"></span><span id="combine"><span class="annot"><span class="annottext">combine :: Sentence -&gt; ChunkDB -&gt; [DefinedQuantityDict]
-</span><a href="Drasil.GetChunks.html#combine"><span class="hs-identifier hs-var hs-var">combine</span></a></span></span><span> </span><span id="local-6989586621679096530"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679096530"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679096531"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096531"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; Sentence -&gt; DefinedQuantityDict)
+</span><a href="Drasil.GetChunks.html#combine"><span class="hs-identifier hs-var hs-var">combine</span></a></span></span><span> </span><span id="local-6989586621679096034"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096034"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679096035"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096035"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; Sentence -&gt; DefinedQuantityDict)
 -&gt; [DefinedQuantityDict] -&gt; [Sentence] -&gt; [DefinedQuantityDict]
 forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence -&gt; DefinedQuantityDict
@@ -58,18 +58,18 @@ forall c.
 c -&gt; Sentence -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">dqdQd</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ChunkDB -&gt; [DefinedQuantityDict]
 </span><a href="Drasil.GetChunks.html#vars%27"><span class="hs-identifier hs-var">vars'</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679096530"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096531"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ChunkDB -&gt; [Sentence]
+</span><a href="#local-6989586621679096034"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096035"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ChunkDB -&gt; [Sentence]
 </span><a href="Drasil.GetChunks.html#concpt"><span class="hs-identifier hs-var">concpt</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679096530"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096531"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679096034"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096035"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-26"></span><span>
 </span><span id="line-27"></span><span class="annot"><span class="hs-comment">-- | Combines the functions of 'vars' and 'concpt' to create a list of 'DefinedQuantityDict's from an equation.</span></span><span>
 </span><span id="line-28"></span><span class="annot"><a href="Drasil.GetChunks.html#combine%27"><span class="hs-identifier hs-type">combine'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-29"></span><span id="combine%27"><span class="annot"><span class="annottext">combine' :: ModelExpr -&gt; ChunkDB -&gt; [DefinedQuantityDict]
-</span><a href="Drasil.GetChunks.html#combine%27"><span class="hs-identifier hs-var hs-var">combine'</span></a></span></span><span> </span><span id="local-6989586621679096535"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679096535"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679096536"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096536"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; Sentence -&gt; DefinedQuantityDict)
+</span><a href="Drasil.GetChunks.html#combine%27"><span class="hs-identifier hs-var hs-var">combine'</span></a></span></span><span> </span><span id="local-6989586621679096039"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679096039"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679096040"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096040"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; Sentence -&gt; DefinedQuantityDict)
 -&gt; [DefinedQuantityDict] -&gt; [Sentence] -&gt; [DefinedQuantityDict]
 forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence -&gt; DefinedQuantityDict
@@ -78,19 +78,19 @@ forall c.
 c -&gt; Sentence -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">dqdQd</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr -&gt; ChunkDB -&gt; [DefinedQuantityDict]
 </span><a href="Drasil.GetChunks.html#vars"><span class="hs-identifier hs-var">vars</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679096535"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096536"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr -&gt; ChunkDB -&gt; [Sentence]
+</span><a href="#local-6989586621679096039"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096040"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr -&gt; ChunkDB -&gt; [Sentence]
 </span><a href="Drasil.GetChunks.html#concpt%27"><span class="hs-identifier hs-var">concpt'</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679096535"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096536"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679096039"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096040"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-30"></span><span>
 </span><span id="line-31"></span><span class="annot"><span class="hs-comment">-- | Gets a list of defined quantities ('DefinedQuantityDict's) from 'Sentence's and expressions that are contained in the database ('ChunkDB').</span></span><span>
 </span><span id="line-32"></span><span class="annot"><a href="Drasil.GetChunks.html#ccss"><span class="hs-identifier hs-type">ccss</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-33"></span><span id="ccss"><span class="annot"><span class="annottext">ccss :: [Sentence] -&gt; [ModelExpr] -&gt; ChunkDB -&gt; [DefinedQuantityDict]
-</span><a href="Drasil.GetChunks.html#ccss"><span class="hs-identifier hs-var hs-var">ccss</span></a></span></span><span> </span><span id="local-6989586621679096538"><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679096538"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679096539"><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679096539"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679096540"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096540"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict] -&gt; [DefinedQuantityDict]
+</span><a href="Drasil.GetChunks.html#ccss"><span class="hs-identifier hs-var hs-var">ccss</span></a></span></span><span> </span><span id="local-6989586621679096042"><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679096042"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679096043"><span class="annot"><span class="annottext">[ModelExpr]
+</span><a href="#local-6989586621679096043"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679096044"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096044"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. Eq a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">nub</span></span><span> </span><span class="annot"><span class="annottext">([DefinedQuantityDict] -&gt; [DefinedQuantityDict])
 -&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
@@ -100,8 +100,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ChunkDB -&gt; [DefinedQuantityDict]
 </span><a href="Drasil.GetChunks.html#combine"><span class="hs-operator hs-var">`combine`</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096540"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679096538"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+</span><a href="#local-6989586621679096044"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679096042"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 -&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; [DefinedQuantityDict])
@@ -109,16 +109,16 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr -&gt; ChunkDB -&gt; [DefinedQuantityDict]
 </span><a href="Drasil.GetChunks.html#combine%27"><span class="hs-operator hs-var">`combine'`</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096540"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679096539"><span class="hs-identifier hs-var">e</span></a></span><span>
+</span><a href="#local-6989586621679096044"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
+</span><a href="#local-6989586621679096043"><span class="hs-identifier hs-var">e</span></a></span><span>
 </span><span id="line-34"></span><span>
 </span><span id="line-35"></span><span class="annot"><span class="hs-comment">-- | Gets a list of quantities ('DefinedQuantityDict's) from 'Sentence's and expressions that are contained in the database ('ChunkDB').</span></span><span>
 </span><span id="line-36"></span><span class="annot"><a href="Drasil.GetChunks.html#ccss%27"><span class="hs-identifier hs-type">ccss'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-37"></span><span id="ccss%27"><span class="annot"><span class="annottext">ccss' :: [Sentence] -&gt; [ModelExpr] -&gt; ChunkDB -&gt; [DefinedQuantityDict]
-</span><a href="Drasil.GetChunks.html#ccss%27"><span class="hs-identifier hs-var hs-var">ccss'</span></a></span></span><span> </span><span id="local-6989586621679096542"><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679096542"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679096543"><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679096543"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679096544"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096544"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict] -&gt; [DefinedQuantityDict]
+</span><a href="Drasil.GetChunks.html#ccss%27"><span class="hs-identifier hs-var hs-var">ccss'</span></a></span></span><span> </span><span id="local-6989586621679096046"><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679096046"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679096047"><span class="annot"><span class="annottext">[ModelExpr]
+</span><a href="#local-6989586621679096047"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679096048"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096048"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. Eq a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">nub</span></span><span> </span><span class="annot"><span class="annottext">([DefinedQuantityDict] -&gt; [DefinedQuantityDict])
 -&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
@@ -128,8 +128,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ChunkDB -&gt; [DefinedQuantityDict]
 </span><a href="Drasil.GetChunks.html#vars%27"><span class="hs-operator hs-var">`vars'`</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096544"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679096542"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+</span><a href="#local-6989586621679096048"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679096046"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 -&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; [DefinedQuantityDict])
@@ -137,50 +137,50 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr -&gt; ChunkDB -&gt; [DefinedQuantityDict]
 </span><a href="Drasil.GetChunks.html#vars"><span class="hs-operator hs-var">`vars`</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096544"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679096543"><span class="hs-identifier hs-var">e</span></a></span><span>
+</span><a href="#local-6989586621679096048"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
+</span><a href="#local-6989586621679096047"><span class="hs-identifier hs-var">e</span></a></span><span>
 </span><span id="line-38"></span><span>
 </span><span id="line-39"></span><span class="annot"><span class="hs-comment">-- | Gets a list of concepts ('ConceptChunk') from a 'Sentence' in order to print.</span></span><span>
 </span><span id="line-40"></span><span class="annot"><a href="Drasil.GetChunks.html#concpt"><span class="hs-identifier hs-type">concpt</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-41"></span><span id="concpt"><span class="annot"><span class="annottext">concpt :: Sentence -&gt; ChunkDB -&gt; [Sentence]
-</span><a href="Drasil.GetChunks.html#concpt"><span class="hs-identifier hs-var hs-var">concpt</span></a></span></span><span> </span><span id="local-6989586621679096546"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679096546"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679096547"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096547"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; Sentence) -&gt; [UID] -&gt; [Sentence]
+</span><a href="Drasil.GetChunks.html#concpt"><span class="hs-identifier hs-var hs-var">concpt</span></a></span></span><span> </span><span id="local-6989586621679096050"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096050"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679096051"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096051"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; Sentence) -&gt; [UID] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DomDefn -&gt; Sentence
 </span><span class="hs-identifier hs-var">definition</span></span><span> </span><span class="annot"><span class="annottext">(DomDefn -&gt; Sentence) -&gt; (UID -&gt; DomDefn) -&gt; UID -&gt; Sentence
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; DomDefn
 </span><span class="hs-identifier hs-var">defResolve'</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096547"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [Sentence]) -&gt; [UID] -&gt; [Sentence]
+</span><a href="#local-6989586621679096051"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [Sentence]) -&gt; [UID] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [UID]
 </span><span class="hs-identifier hs-var">sdep</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679096546"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><a href="#local-6989586621679096050"><span class="hs-identifier hs-var">a</span></a></span><span>
 </span><span id="line-42"></span><span>
 </span><span id="line-43"></span><span class="annot"><span class="hs-comment">-- | Gets a list of concepts ('ConceptChunk') from an expression in order to print.</span></span><span>
 </span><span id="line-44"></span><span class="annot"><a href="Drasil.GetChunks.html#concpt%27"><span class="hs-identifier hs-type">concpt'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-45"></span><span id="concpt%27"><span class="annot"><span class="annottext">concpt' :: ModelExpr -&gt; ChunkDB -&gt; [Sentence]
-</span><a href="Drasil.GetChunks.html#concpt%27"><span class="hs-identifier hs-var hs-var">concpt'</span></a></span></span><span> </span><span id="local-6989586621679096549"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679096549"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679096550"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096550"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; Sentence) -&gt; [UID] -&gt; [Sentence]
+</span><a href="Drasil.GetChunks.html#concpt%27"><span class="hs-identifier hs-var hs-var">concpt'</span></a></span></span><span> </span><span id="local-6989586621679096053"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679096053"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679096054"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096054"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; Sentence) -&gt; [UID] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DomDefn -&gt; Sentence
 </span><span class="hs-identifier hs-var">definition</span></span><span> </span><span class="annot"><span class="annottext">(DomDefn -&gt; Sentence) -&gt; (UID -&gt; DomDefn) -&gt; UID -&gt; Sentence
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; DomDefn
 </span><span class="hs-identifier hs-var">defResolve'</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096550"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [Sentence]) -&gt; [UID] -&gt; [Sentence]
+</span><a href="#local-6989586621679096054"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [Sentence]) -&gt; [UID] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; [UID]
 </span><span class="hs-identifier hs-var">meDep</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679096549"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><a href="#local-6989586621679096053"><span class="hs-identifier hs-var">a</span></a></span><span>
 </span><span id="line-46"></span><span>
 </span><span id="line-47"></span><span class="annot"><span class="hs-comment">-- | Extract bibliography entries for a system.</span></span><span>
 </span><span id="line-48"></span><span class="annot"><a href="Drasil.GetChunks.html#citeDB"><span class="hs-identifier hs-type">citeDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span>
 </span><span id="line-49"></span><span id="citeDB"><span class="annot"><span class="annottext">citeDB :: System -&gt; BibRef
-</span><a href="Drasil.GetChunks.html#citeDB"><span class="hs-identifier hs-var hs-var">citeDB</span></a></span></span><span> </span><span id="local-6989586621679096551"><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679096551"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Citation -&gt; Citation -&gt; Ordering) -&gt; BibRef -&gt; BibRef
+</span><a href="Drasil.GetChunks.html#citeDB"><span class="hs-identifier hs-var hs-var">citeDB</span></a></span></span><span> </span><span id="local-6989586621679096055"><span class="annot"><span class="annottext">System
+</span><a href="#local-6989586621679096055"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Citation -&gt; Citation -&gt; Ordering) -&gt; BibRef -&gt; BibRef
 forall a. (a -&gt; a -&gt; Ordering) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">sortBy</span></span><span> </span><span class="annot"><span class="annottext">Citation -&gt; Citation -&gt; Ordering
 forall c. HasFields c =&gt; c -&gt; c -&gt; Ordering
@@ -188,7 +188,7 @@ forall c. HasFields c =&gt; c -&gt; c -&gt; Ordering
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; BibRef
 </span><span class="hs-identifier hs-var">findAllCitations</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679096551"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="annottext">System -&gt; Getting ChunkDB System ChunkDB -&gt; ChunkDB
+</span><a href="#local-6989586621679096055"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="annottext">System -&gt; Getting ChunkDB System ChunkDB -&gt; ChunkDB
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB System ChunkDB
 forall c. HasSystem c =&gt; Lens' c ChunkDB

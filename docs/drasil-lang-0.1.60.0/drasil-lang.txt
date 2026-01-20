@@ -765,9 +765,6 @@ data ModelExpr
 --   and subtraction).
 [ArithBinaryOp] :: ArithBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
 -- | Binary operator for equality between expressions.
 [EqBinaryOp] :: EqBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
@@ -839,12 +836,6 @@ data ArithBinOp
 Frac :: ArithBinOp
 Pow :: ArithBinOp
 Subt :: ArithBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
 
 -- | Equality operators (equal or not equal).
 data EqBinOp
@@ -996,9 +987,6 @@ data Expr
 --   and subtraction).
 [ArithBinaryOp] :: ArithBinOp -> Expr -> Expr -> Expr
 
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> Expr -> Expr -> Expr
-
 -- | Binary operator for equality between expressions.
 [EqBinaryOp] :: EqBinOp -> Expr -> Expr -> Expr
 
@@ -1072,12 +1060,6 @@ data ArithBinOp
 Frac :: ArithBinOp
 Pow :: ArithBinOp
 Subt :: ArithBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
 
 -- | Equality operators (equal or not equal).
 data EqBinOp
@@ -1671,9 +1653,6 @@ data CodeExpr
 --   and subtraction).
 [ArithBinaryOp] :: ArithBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
 -- | Binary operator for equality between expressions.
 [EqBinaryOp] :: EqBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
@@ -1722,12 +1701,6 @@ Subt :: ArithBinOp
 data EqBinOp
 Eq :: EqBinOp
 NEq :: EqBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
 
 -- | Index operator. <a>Index</a> represents accessing an element at a
 --   specific index, while <a>IndexOf</a> represents finding the index of a
@@ -1929,8 +1902,6 @@ lit :: ExprC r => Literal -> r
 ($-) :: ExprC r => r -> r -> r
 ($/) :: ExprC r => r -> r -> r
 ($^) :: ExprC r => r -> r -> r
-($=>) :: ExprC r => r -> r -> r
-($<=>) :: ExprC r => r -> r -> r
 ($&&) :: ExprC r => r -> r -> r
 ($||) :: ExprC r => r -> r -> r
 
@@ -2103,8 +2074,6 @@ lit :: ExprC r => Literal -> r
 ($-) :: ExprC r => r -> r -> r
 ($/) :: ExprC r => r -> r -> r
 ($^) :: ExprC r => r -> r -> r
-($=>) :: ExprC r => r -> r -> r
-($<=>) :: ExprC r => r -> r -> r
 ($&&) :: ExprC r => r -> r -> r
 ($||) :: ExprC r => r -> r -> r
 

@@ -3146,7 +3146,6 @@ digraph alltypes {
 		CodeExpr -> UFuncVV;
 		CodeExpr -> UFuncVN;
 		CodeExpr -> ArithBinOp;
-		CodeExpr -> BoolBinOp;
 		CodeExpr -> EqBinOp;
 		CodeExpr -> LABinOp;
 		CodeExpr -> OrdBinOp;
@@ -3433,9 +3432,6 @@ digraph alltypes {
 		subgraph eqbinop{
 		EqBinOp	[shape=oval, color=darkviolet, label="EqBinOp"];
 		}
-		subgraph boolbinop{
-		BoolBinOp	[shape=oval, color=darkviolet, label="BoolBinOp"];
-		}
 		subgraph labinop{
 		LABinOp	[shape=oval, color=darkviolet, label="LABinOp"];
 		}
@@ -3498,7 +3494,6 @@ digraph alltypes {
 		Expr -> UFuncVV;
 		Expr -> UFuncVN;
 		Expr -> ArithBinOp;
-		Expr -> BoolBinOp;
 		Expr -> EqBinOp;
 		Expr -> LABinOp;
 		Expr -> OrdBinOp;
@@ -3584,7 +3579,6 @@ digraph alltypes {
 		ModelExpr -> UFuncVV;
 		ModelExpr -> UFuncVN;
 		ModelExpr -> ArithBinOp;
-		ModelExpr -> BoolBinOp;
 		ModelExpr -> EqBinOp;
 		ModelExpr -> LABinOp;
 		ModelExpr -> OrdBinOp;

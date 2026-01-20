@@ -1822,12 +1822,6 @@ data EqBinOp
 Eq :: EqBinOp
 NEq :: EqBinOp
 
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
-
 -- | Index operator. <a>Index</a> represents accessing an element at a
 --   specific index, while <a>IndexOf</a> represents finding the index of a
 --   specific element.
@@ -1966,9 +1960,6 @@ data Expr
 --   and subtraction).
 [ArithBinaryOp] :: ArithBinOp -> Expr -> Expr -> Expr
 
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> Expr -> Expr -> Expr
-
 -- | Binary operator for equality between expressions.
 [EqBinaryOp] :: EqBinOp -> Expr -> Expr -> Expr
 
@@ -2010,7 +2001,6 @@ pretty :: Pretty p => p -> String
 vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either TypeError Space
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.ArithBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.EqBinOp
-instance GHC.Classes.Eq Language.Drasil.Expr.Lang.BoolBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.LABinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.OrdBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.VVVBinOp
@@ -2113,9 +2103,6 @@ data ModelExpr
 -- | Binary operator for arithmetic between expressions (fractional, power,
 --   and subtraction).
 [ArithBinaryOp] :: ArithBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
 -- | Binary operator for equality between expressions.
 [EqBinaryOp] :: EqBinOp -> ModelExpr -> ModelExpr -> ModelExpr
@@ -2676,9 +2663,6 @@ module Language.Drasil.Expr.Precedence
 -- | prec2Arith - precedence for arithmetic-related binary operations.
 prec2Arith :: ArithBinOp -> Int
 
--- | prec2Bool - precedence for boolean-related binary operations.
-prec2Bool :: BoolBinOp -> Int
-
 -- | prec2Eq - precedence for equality-related binary operations.
 prec2Eq :: EqBinOp -> Int
 
@@ -2807,9 +2791,6 @@ data ModelExpr
 --   and subtraction).
 [ArithBinaryOp] :: ArithBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
 -- | Binary operator for equality between expressions.
 [EqBinaryOp] :: EqBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
@@ -2881,12 +2862,6 @@ data ArithBinOp
 Frac :: ArithBinOp
 Pow :: ArithBinOp
 Subt :: ArithBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
 
 -- | Equality operators (equal or not equal).
 data EqBinOp
@@ -3063,9 +3038,6 @@ data Expr
 --   and subtraction).
 [ArithBinaryOp] :: ArithBinOp -> Expr -> Expr -> Expr
 
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> Expr -> Expr -> Expr
-
 -- | Binary operator for equality between expressions.
 [EqBinaryOp] :: EqBinOp -> Expr -> Expr -> Expr
 
@@ -3139,12 +3111,6 @@ data ArithBinOp
 Frac :: ArithBinOp
 Pow :: ArithBinOp
 Subt :: ArithBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
 
 -- | Equality operators (equal or not equal).
 data EqBinOp
@@ -3268,8 +3234,6 @@ lit :: ExprC r => Literal -> r
 ($-) :: ExprC r => r -> r -> r
 ($/) :: ExprC r => r -> r -> r
 ($^) :: ExprC r => r -> r -> r
-($=>) :: ExprC r => r -> r -> r
-($<=>) :: ExprC r => r -> r -> r
 ($&&) :: ExprC r => r -> r -> r
 ($||) :: ExprC r => r -> r -> r
 
@@ -4945,9 +4909,6 @@ data CodeExpr
 --   and subtraction).
 [ArithBinaryOp] :: ArithBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
 -- | Binary operator for equality between expressions.
 [EqBinaryOp] :: EqBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
@@ -5220,9 +5181,6 @@ data CodeExpr
 --   and subtraction).
 [ArithBinaryOp] :: ArithBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
 -- | Binary operator for equality between expressions.
 [EqBinaryOp] :: EqBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
@@ -5271,12 +5229,6 @@ Subt :: ArithBinOp
 data EqBinOp
 Eq :: EqBinOp
 NEq :: EqBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
 
 -- | Index operator. <a>Index</a> represents accessing an element at a
 --   specific index, while <a>IndexOf</a> represents finding the index of a
@@ -5478,8 +5430,6 @@ lit :: ExprC r => Literal -> r
 ($-) :: ExprC r => r -> r -> r
 ($/) :: ExprC r => r -> r -> r
 ($^) :: ExprC r => r -> r -> r
-($=>) :: ExprC r => r -> r -> r
-($<=>) :: ExprC r => r -> r -> r
 ($&&) :: ExprC r => r -> r -> r
 ($||) :: ExprC r => r -> r -> r
 
@@ -5726,8 +5676,6 @@ lit :: ExprC r => Literal -> r
 ($-) :: ExprC r => r -> r -> r
 ($/) :: ExprC r => r -> r -> r
 ($^) :: ExprC r => r -> r -> r
-($=>) :: ExprC r => r -> r -> r
-($<=>) :: ExprC r => r -> r -> r
 ($&&) :: ExprC r => r -> r -> r
 ($||) :: ExprC r => r -> r -> r
 

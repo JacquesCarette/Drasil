@@ -31,7 +31,6 @@ LabelledContent	[shape=oval, color=turquoise4, label="LabelledContent"];
 UnlabelledContent	[shape=oval, color=turquoise4, label="UnlabelledContent"];
 ArithBinOp	[shape=oval, color=turquoise4, label="ArithBinOp"];
 EqBinOp	[shape=oval, color=turquoise4, label="EqBinOp"];
-BoolBinOp	[shape=oval, color=turquoise4, label="BoolBinOp"];
 LABinOp	[shape=oval, color=turquoise4, label="LABinOp"];
 OrdBinOp	[shape=oval, color=turquoise4, label="OrdBinOp"];
 VVVBinOp	[shape=oval, color=turquoise4, label="VVVBinOp"];

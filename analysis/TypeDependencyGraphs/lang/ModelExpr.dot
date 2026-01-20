@@ -16,7 +16,6 @@ ModelExpr -> UFuncB;
 ModelExpr -> UFuncVV;
 ModelExpr -> UFuncVN;
 ModelExpr -> ArithBinOp;
-ModelExpr -> BoolBinOp;
 ModelExpr -> EqBinOp;
 ModelExpr -> LABinOp;
 ModelExpr -> OrdBinOp;

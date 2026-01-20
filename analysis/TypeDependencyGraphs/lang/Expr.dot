@@ -15,7 +15,6 @@ Expr -> UFuncB;
 Expr -> UFuncVV;
 Expr -> UFuncVN;
 Expr -> ArithBinOp;
-Expr -> BoolBinOp;
 Expr -> EqBinOp;
 Expr -> LABinOp;
 Expr -> OrdBinOp;

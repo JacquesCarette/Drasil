@@ -1,0 +1,7 @@
+[book]
+language = "en"
+src = "src"
+title = "Software Requirements Specification for Projectile"
+[output.html]
+smart-punctuation = true
+mathjax-support = true

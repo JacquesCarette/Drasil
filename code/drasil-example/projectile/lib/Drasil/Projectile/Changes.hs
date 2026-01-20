@@ -1,6 +1,7 @@
 module Drasil.Projectile.Changes (likelyChgs) where
 
 import Language.Drasil
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (likeChgDom)
 import Drasil.Sentence.Combinators (chgsStart)

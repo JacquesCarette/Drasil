@@ -73,7 +73,6 @@ si :: System
 si = mkSystem
   progName Specification [authorName]
   [] [] [] []
-  ([] :: [DefinedQuantityDict])
   ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   []
   ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef])
@@ -99,7 +98,7 @@ citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,
              smithKoothoor2016]
 
 figTemp :: LabelledContent
-figTemp = llcc (makeFigRef "dblpend") $ figWithWidth EmptyS
+figTemp = llccFig "dblpend" $ figWithWidth EmptyS
   (resourcePath ++ "dblpend.png") 60
 
 -- MOVE TO CONCEPTS

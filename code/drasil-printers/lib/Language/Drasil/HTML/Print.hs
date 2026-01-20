@@ -27,7 +27,6 @@ import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
 import Language.Drasil.HTML.CSS (linkCSS)
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
-import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
   Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:), Tooltip),
@@ -39,7 +38,6 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sufxPrint)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, spec)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
@@ -48,9 +46,9 @@ import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintL
 data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'.
-genHTML :: PrintingInformation -> String -> L.Document -> Doc
-genHTML sm fn doc = build fn (makeDocument sm doc)
---         ^^ -- should really be of type Filename, but that's not in scope
+genHTML ::  String -> Document -> Doc
+genHTML = build
+--      first arg should really be of type Filename, but that's not in scope
 
 -- TODO: Use our JSON printer here to create this code snippet.
 -- | Variable to include MathJax in our HTML files so we can render equations in LaTeX.

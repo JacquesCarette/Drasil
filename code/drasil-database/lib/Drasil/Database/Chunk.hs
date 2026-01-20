@@ -64,10 +64,10 @@ class HasChunkRefs a where
   chunkRefs :: a -> S.Set UID
 
 instance HasChunkRefs UID where
-  -- | UIDs are UIDs, not *UID references*, a TypedUIDRef is a *reference*.
-  -- Therefore, `UID` has no chunk references. They should only be used for the
-  -- UID of a thing being defined, *not as a reference (unless specifically
-  -- within the 'ChunkDB')*.
+  -- | 'UID's are meant to be "owned" (i.e., they are the unique identifier of
+  -- the chunk being defined), not *carried as references to other chunks*.
+  -- 'TypedUIDRef t' exists to be used as a *reference to another chunk of type
+  -- 't'*. Therefore, `UID` has no chunk references.
   chunkRefs _ = S.empty
   {-# INLINABLE chunkRefs #-}
 

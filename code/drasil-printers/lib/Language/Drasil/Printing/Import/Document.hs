@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
 import Data.Map (fromList)
 
-import Language.Drasil hiding (neg, sec, symbol, isIn, codeExpr)
+import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Drasil.Code.CodeExpr.Development (expr)
 
 import Drasil.Database (showUID)
@@ -154,7 +154,7 @@ layLabelled sm x@(LblC _ _ (DerivBlock h d))    = T.HDiv ["subsubsubsection"]
   where refr = P.S $ refAdd x ++ "Deriv"
 layLabelled sm (LblC _ _ (Enumeration cs))      = T.List $ makeL sm cs
 layLabelled  _ (LblC _ _ (Bib bib))             = T.Bib $ map layCite bib
-layLabelled sm (LblC _ _ (CodeBlock c))         = T.CodeBlock (P.E (codeExpr (expr c) sm))
+layLabelled sm (LblC _ _ (CodeBlock c))         = T.CodeBlock (P.E (codeExpr sm (expr c)))
 
 -- | Helper that translates 'RawContent's to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'lay'.
@@ -175,7 +175,7 @@ layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S 
   where layPairs = map (second (map temp))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
-layUnlabelled sm (CodeBlock c)     = T.CodeBlock (P.E (codeExpr (expr c) sm))
+layUnlabelled sm (CodeBlock c)     = T.CodeBlock (P.E (codeExpr sm (expr c)))
 
 -- | For importing a bibliography.
 layCite :: Citation -> P.Citation

@@ -2,16 +2,15 @@ module Language.Drasil.Code.Imperative.Doxygen.Import (
   makeDoxConfig, yes, no
 ) where
 
-import Utils.Drasil (blank)
-
-import Drasil.GOOL (GOOLState, headers, mainMod)
-
-import Language.Drasil.Choices (Verbosity(..))
-
+import Control.Lens ((^.))
 import Data.List (intersperse, nub)
 import Data.Maybe (maybeToList)
-import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
+
+import Drasil.GOOL (GOOLState, headers, mainMod)
+import Utils.Drasil (blank)
+
+import Language.Drasil.Choices (Verbosity(..))
 
 -- | A 'Doc' that holds optimized choices for configuring doxygen files.
 type OptimizeChoice = Doc

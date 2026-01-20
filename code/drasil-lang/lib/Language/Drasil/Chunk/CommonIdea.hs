@@ -1,10 +1,12 @@
 {-# Language TemplateHaskell #-}
 -- | Contains the common idea type and respective constructors.
+-- SHOULD BE DEPRECATED. Some of the uses (for program name) should have
+-- its own chunk type. Others need examined.
 module Language.Drasil.Chunk.CommonIdea (
   -- * Common Idea datatype
   CI,
   -- * Constructors
-  commonIdea, commonIdeaWithDict,
+  commonIdeaWithDict,
   -- * Functions
   prependAbrv
 ) where
@@ -39,14 +41,13 @@ instance CommonIdea    CI where abrv = view ab
 -- | Finds the domain of a 'CI'.
 instance ConceptDomain CI where cdom = cdom'
 
--- | The commonIdea smart constructor requires a chunk id ('String'), a
--- term ('NP'), an abbreviation ('String'), and a domain (['UID']).
-commonIdea :: String -> NP -> String -> [UID] -> CI
-commonIdea s np = CI (nc s np)
-
--- | Similar to 'commonIdea', but takes a list of 'IdeaDict' (often a domain).
+-- | The commonIdeaWithDict smart constructor requires a chunk id ('String'), a
+-- term ('NP'), an abbreviation ('String'), and a
+-- list of 'IdeaDict' (should be domains).
+-- Note: should be polymorphic in 'IdeaDict', but currently causes issues with
+-- ambiguous type variables, punting for now.
 commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
-commonIdeaWithDict x y z = commonIdea x y z . map (^.uid)
+commonIdeaWithDict x y z = CI (nc x y) z . map (^.uid)
 
 -- | Prepends the abbreviation from a 'CommonIdea' to a 'String'.
 prependAbrv :: CommonIdea c => c -> String -> String

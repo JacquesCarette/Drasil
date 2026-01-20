@@ -1,19 +1,21 @@
 module Drasil.GamePhysics.Body where
 
 import Language.Drasil hiding (organization, section)
-import Drasil.Metadata (dataDefn, inModel)
 import Drasil.SRSDocument
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
+import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
 
+import Drasil.Metadata (dataDefn, inModel, software)
+import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
   object, physical, physicalSim, physics, problem, product_, project,
-  quantity, realtime, section_, simulation, software, softwareSys,
+  quantity, realtime, section_, simulation, softwareSys,
   system, systemConstraint, sysCont, task, user,
   property, problemDescription)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
@@ -41,7 +43,7 @@ import Drasil.GamePhysics.MetaConcepts (progName)
 import Drasil.GamePhysics.References (citations, uriReferences)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
-import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
+import Drasil.GamePhysics.Unitals (symbols, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints)
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
@@ -86,11 +88,7 @@ mkSRS = [TableOfContents,
 
 si :: System
 si = mkSystem progName Specification [alex, luthfi, olu]
-  [purp] [] [] [] ([] :: [DefinedQuantityDict])
-  -- FIXME: The _quants field should be filled in with all the symbols, however
-  -- #1658 is why this is empty, otherwise we end up with unused (and probably
-  -- should be removed) symbols. But that's for another time. This is "fine"
-  -- because _quants are only used relative to #1658.
+  [purp] [] [] []
   tMods generalDefns dataDefs iMods
   []
   inputSymbols outputSymbols inputConstraints []
@@ -128,13 +126,13 @@ conceptChunks =
   [cw surface]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks [] dataDefs iMods generalDefns
+symbMap = cdb symbols ideaDicts conceptChunks [] dataDefs iMods generalDefns
   tMods concIns citations labelledContent
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
   -- QuantityDicts
-  map nw symbolsAll ++
+  map nw symbols ++
   -- CIs
   map nw acronyms
 

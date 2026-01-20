@@ -1,7 +1,5 @@
 module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 
-import Data.List ((\\))
-
 import Language.Drasil hiding (section)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -63,21 +61,18 @@ import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
 import Drasil.SWHSNoPCM.References (citations)
-import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
-  specParamValList, outputs)
+import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained
+symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained ++
+  [gradient, pi_, uNormalVect, dqdWr surface] ++ map dqdWr symbolConcepts ++
+  map dqdWr specParamValList ++ map dqdWr [absTol, relTol]
 
-symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
-                               --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
-                               --FOUND LOC OF ERROR: Instance Models
--- FIXME: the dependent variable of noPCMODEInfo (tempW) is currently added to symbolsAll automatically as it is used to create new chunks with tempW's UID suffixed in ODELibraries.hs.
--- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
-symbolsAll = [gradient, pi_, uNormalVect, dqdWr surface] ++ symbols ++
-  map dqdWr symbolConcepts ++ map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++
-  scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
+-- FIXME: 'symbolsWCodeSymbols' shouldn't exist. See DblPend's discussion of its
+-- 'symbolsWCodeSymbols'.
+symbolsWCodeSymbols :: [DefinedQuantityDict]
+symbolsWCodeSymbols = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
   odeInfoChunks noPCMODEInfo
 
 concepts :: [UnitalChunk]
@@ -152,10 +147,6 @@ si :: System
 si = mkSystem
   progName Specification [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
-  -- FIXME: Everything after (and including) \\ should be removed when
-  -- #1658 is resolved. Basically, _quants is used here, but
-  -- tau does not appear in the document and thus should not be displayed.
-  ((map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   []
   inputs outputs
@@ -182,7 +173,7 @@ conceptChunks =
   map cw [surArea, area]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
+symbMap = cdb symbolsWCodeSymbols ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations
   (labelledContent ++ funcReqsTables)
 

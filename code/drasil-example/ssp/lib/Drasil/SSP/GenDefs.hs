@@ -27,6 +27,7 @@ import Data.Drasil.Quantities.PhysicalProperties (specWeight)
 import Data.Drasil.Quantities.Physics (displacement, force, height,
   pressure, torque)
 import Data.Drasil.Theories.Physics (weightGD, hsPressureGD, torqueDD)
+import Drasil.Sentence.Combinators (definedIn''')
 
 import Theory.Drasil
 

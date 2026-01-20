@@ -7,7 +7,7 @@ import Drasil.Generator (cdb)
 import Drasil.System (System, mkSystem, SystemKind(Notebook))
 
 -- TODO: Add export parameters in a module
-import Drasil.DocLang (LsnDecl, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example),
+import Drasil.DocumentLanguage.Notebook (LsnDesc, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example),
   LearnObj(..), Review(..), CaseProb(..), Example(..))
 
 import qualified Data.Drasil.Quantities.Physics as Qs (iSpeed, ixSpeed, iySpeed,
@@ -26,7 +26,7 @@ import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.CaseProb (caseProbCont, figRefs)
 import Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo)
 
-nbDecl :: LsnDecl
+nbDecl :: LsnDesc
 nbDecl = [
     LearnObj $ LrnObjProg [learnObjContext],
     Review $ ReviewProg reviewContent,
@@ -39,7 +39,6 @@ si :: System
 si = mkSystem
   projectileMotionLesson Notebook [spencerSmith]
   [] [] [] []
-  ([] :: [DefinedQuantityDict])
   [] [] [] [] []
   ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []
   symbMap
@@ -62,7 +61,7 @@ symbols = map dqdWr [Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAccel,
   Qs.iPos, Qs.height, horiz_velo]
 
 projectileMotionLesson :: CI
-projectileMotionLesson = commonIdea "projMotLsn" (pn "Projectile Motion Lesson") "Projectile Motion" []
+projectileMotionLesson = commonIdeaWithDict "projMotLsn" (pn "Projectile Motion Lesson") "Projectile Motion" []
 
 allRefs :: [Reference]
 allRefs = nub (figRefs ++ eqnRefs)

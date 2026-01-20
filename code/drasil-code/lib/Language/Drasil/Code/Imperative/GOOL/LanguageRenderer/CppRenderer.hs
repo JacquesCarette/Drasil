@@ -1,29 +1,28 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE PostfixOperators #-}
-
 -- | The logic to render C++ auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
   CppProject(..)
 ) where
 
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
+import Text.PrettyPrint.HughesPJ (Doc)
+
+import Drasil.GOOL (ProgData, onCodeList, cppName, cppVersion)
+
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad,
-  PackData(..), packD)
+import Language.Drasil.Code.FileData (FileAndContents(..),
+  fileAndContents, PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, cppCompiler, nativeBinary, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
-
-import Drasil.GOOL (onCodeList, cppName, cppVersion)
-
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
-import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Holds a C++ project.
 newtype CppProject a = CPPP {unCPPP :: a}
@@ -39,11 +38,11 @@ instance Monad CppProject where
   CPPP x >>= f = f x
 
 instance PackageSym CppProject where
-  type Package CppProject = PackData
-  package p = onCodeList (packD p)
+  type Package CppProject = PackageData ProgData
+  package p = onCodeList (packageData p)
 
 instance AuxiliarySym CppProject where
-  type Auxiliary CppProject = AuxData
+  type Auxiliary CppProject = FileAndContents
   type AuxHelper CppProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
@@ -57,7 +56,7 @@ instance AuxiliarySym CppProject where
   makefile fs it cms = G.makefile (cppBuildConfig fs it) (G.noRunIfLib it cppRunnable) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unCPPP
-  auxFromData fp d = pure $ ad fp d
+  auxFromData fp d = pure $ fileAndContents fp d
 
 -- helpers
 -- | Create a build configuration for C++ files. Takes in 'FilePath's and the type of implementation.

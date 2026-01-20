@@ -34,33 +34,28 @@ module Language.Drasil.Code (
   initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill,
   returnExprListFill, fixedStatementFill, fixedStatementFill', initSolWithValFill,
   Lang(..),
-  PackageSym(..), AuxiliarySym(..),
-  AuxData(..), PackData(..),
   CodeChunk, CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, ccObjVar,
   listToArray,
   field,
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..),
   ODELibPckg(..), mkODELib, mkODELibNoPath,
-  unPP, unJP, unCSP, unCPPP, unSP, unJLP
   -- Language.Drasil.Chunk.NamedArgument
-  , NamedArgument, narg
+  NamedArgument, narg
   -- Language.Drasil.Code.CodeQuantityDicts
   , codeDQDs
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
 
+import Drasil.Code.CodeExpr (field)
 import Language.Drasil.Code.Imperative.Generator (generator, generateCode,
   generateCodeProc)
-
 import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc,
   sampleInputDD)
 
-import Language.Drasil.Code.CodeGeneration (makeCode, createCodeFiles)
-
+import Language.Drasil.Code.Code (makeCode, createCodeFiles)
 import Language.Drasil.Code.DataDesc (junkLine, multiLine, repeated, singleLine,
   singleton)
-
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   FunctionInterface, Argument, externalLib, choiceSteps, choiceStep,
   mandatoryStep, mandatorySteps, callStep, libFunction, libMethod,
@@ -83,9 +78,7 @@ import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill,
   initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill,
   fixedStatementFill, fixedStatementFill', initSolWithValFill)
-
 import Language.Drasil.Code.Lang (Lang(..))
-
 import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   ConstraintBehaviour(..), ImplementationType(..), Logging(..), Modularity(..),
   Structure(..), ConstantStructure(..), ConstantRepr(..), CodeConcept(..),
@@ -94,16 +87,10 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints, makeODE,
   makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
   makeOptFeats, ExtLib(..))
-
-import Drasil.Code.CodeExpr (field)
-
 import Language.Drasil.CodeSpec (CodeSpec(..), OldCodeSpec(..), HasOldCodeSpec(..),
   codeSpec, funcUID, asVC)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..),
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
-  AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), PackData(..))
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeFuncChunk,
   quantvar, quantfunc, ccObjVar, listToArray)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
@@ -111,12 +98,4 @@ import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, odeInfo', ODEOptions(
   odeOptions, ODEMethod(..))
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib,
   mkODELibNoPath)
-
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (unCSP)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (unCPPP)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (unSP)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (unJLP)
-
 import Language.Drasil.Code.CodeQuantityDicts (codeDQDs)

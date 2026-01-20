@@ -4,6 +4,12 @@ module Language.Drasil.Code.Imperative.FunctionCalls (
   genCalcCall, genCalcCallProc, genOutputCall, genOutputCallProc
 ) where
 
+import Data.List ((\\), intersect)
+import qualified Data.Map as Map (lookup)
+import Data.Maybe (catMaybes)
+import Control.Applicative ((<|>))
+import Control.Monad.State (get)
+
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppProc, fAppInOut,
   fAppInOutProc)
 import Language.Drasil.Code.Imperative.Helpers (convScope)
@@ -23,12 +29,6 @@ import Language.Drasil.Choices (InternalConcept(..))
 import Drasil.GOOL (VSType, SValue, MSStatement, SharedProg, OOProg,
   TypeSym(..), VariableValue(..), StatementSym(..), DeclStatement(..),
   convType, convTypeOO)
-
-import Data.List ((\\), intersect)
-import qualified Data.Map as Map (lookup)
-import Data.Maybe (catMaybes)
-import Control.Applicative ((<|>))
-import Control.Monad.State (get)
 
 -- | Generates calls to all of the input-related functions. First is the call to
 -- the function for reading inputs, then the function for calculating derived

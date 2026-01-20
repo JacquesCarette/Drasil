@@ -15,6 +15,10 @@ import Data.Maybe (mapMaybe)
 
 import Drasil.Database (HasUID(..))
 import Language.Drasil
+import Drasil.System hiding (systemdb)
+import Utils.Drasil (stringList)
+
+import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName)
@@ -23,8 +27,7 @@ import Language.Drasil.Choices (ImplementationType(..), Structure(..),
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Description)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
-import Drasil.System hiding (systemdb)
-import Utils.Drasil (stringList)
+import Language.Drasil.Printing.Import (spec)
 
 -- | Returns a module description based on a list of descriptions of what is
 -- contained in the module.
@@ -39,7 +42,7 @@ unmodularDesc = do
   g <- get
   let implTypeStr Program = "program"
       implTypeStr Library = "library"
-  return $ show $ sentenceDoc (printfo g) OneLine $ capSent $
+  return $ show $ sentenceDoc OneLine $ spec (printfo g) $ capSent $
     foldlSent ([S "a", S (implTypeStr (implType g)), S "to"] ++ codeSpec g ^. purpose)
 
 -- | Returns description of what is contained in the Input Parameters module.

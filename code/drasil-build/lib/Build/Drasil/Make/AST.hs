@@ -1,7 +1,7 @@
 -- | Defines a Makefile abstract syntax tree.
 module Build.Drasil.Make.AST where
+
 import Build.Drasil.Make.MakeString (MakeString)
-import CodeLang.Drasil (Comment)
 
 -- * Types
 
@@ -23,8 +23,8 @@ data CommandOpts =
 data Type = Abstract
           | File deriving Eq
 
--- | A Makefile Annotation is made of 0 or more 'Comment's
-type Annotation = [Comment]
+-- | A Makefile Annotation is made of 0 or more 'String's
+type Annotation = [String]
 
 -- | A Makefile target is made from a 'MakeString'.
 type Target = MakeString

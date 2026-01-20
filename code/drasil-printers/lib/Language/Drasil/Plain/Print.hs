@@ -13,34 +13,33 @@ import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
   doubleQuotes, empty, hcat, hsep, integer, parens, punctuate, space, text,
   vcat, render)
 
-import qualified Drasil.Code.CodeExpr.Development as C (CodeExpr)
-import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
-import qualified Language.Drasil as L (Expr, HasSymbol(..))
+import Language.Drasil (Special(..), Stage(..), Symbol, USymb(..))
+import qualified Language.Drasil as L (HasSymbol(..))
 import Utils.Drasil (toPlainName)
 
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..),
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
-import Language.Drasil.Printing.Import (expr, codeExpr, spec, symbol)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Language.Drasil.Printing.Import.Symbol (symbol)
 
 -- | Data is either linear or not.
 data SingleLine = OneLine | MultiLine
 
 -- | Create expressions for a document in 'Doc' format.
-exprDoc :: PrintingInformation -> SingleLine -> L.Expr -> Doc
-exprDoc pinfo sl e = pExprDoc sl (expr e pinfo)
+exprDoc :: SingleLine -> Expr -> Doc
+exprDoc = pExprDoc
 
 -- | Create code expressions for a document in 'Doc' format.
-codeExprDoc :: PrintingInformation -> SingleLine -> C.CodeExpr -> Doc
-codeExprDoc pinfo sl e = pExprDoc sl (codeExpr e pinfo)
+-- assumes someone has already makde the code expression into an expression
+codeExprDoc :: SingleLine -> Expr -> Doc
+codeExprDoc = pExprDoc
 
 -- | Create sentences for a document in 'Doc' format.
-sentenceDoc :: PrintingInformation -> SingleLine -> Sentence -> Doc
-sentenceDoc pinfo sl s = specDoc sl (spec pinfo s)
+sentenceDoc :: SingleLine -> Spec -> Doc
+sentenceDoc = specDoc
 
 -- | Create symbols for a document in 'Doc' format.
 symbolDoc :: Symbol -> Doc
-symbolDoc s = pExprDoc OneLine (symbol s)
+symbolDoc = pExprDoc OneLine . symbol
 
 -- | Helper for printing expressions in 'Doc' format. Display format of an expression may change regarding the 'SingleLine'.
 pExprDoc :: SingleLine -> Expr -> Doc

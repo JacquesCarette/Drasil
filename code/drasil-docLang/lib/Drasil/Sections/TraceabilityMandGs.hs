@@ -13,13 +13,14 @@ import Control.Lens((^.))
 import Data.Foldable (foldl')
 
 import Drasil.DocumentLanguage.Core (TraceConfig(TraceConfig))
+import Drasil.DocumentLanguage.Definitions (TraceViewCat)
 import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
-  traceMReferrers, traceView, traceViewCC, TraceViewCat)
+  traceMReferrers, traceView, traceViewCC)
 import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
-  goalStmt, goalStmtDom, requirement, reqDom, item, section_, likelyChg,
+  goalStmt, goalStmtDom, reqDom, item, section_, likelyChg,
   unlikelyChg)
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
-import Drasil.Database
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, requirement)
+import Drasil.Database (mkUid)
 import Drasil.Database.SearchTools
 import Drasil.System
 import Language.Drasil

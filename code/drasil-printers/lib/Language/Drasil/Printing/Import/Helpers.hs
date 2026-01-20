@@ -10,10 +10,9 @@ import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S)
 import Language.Drasil.Development (toSent)
 import Drasil.Database (UID, ChunkDB, findOrErr)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
-import Drasil.System (systemdb)
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation, stg, syst)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, stg, sysdb)
 
 -- * Expr-related
 
@@ -48,11 +47,8 @@ digitsProcess [] pos coun ex
 --
 -- https://en.wikipedia.org/wiki/Scientific_notation
 processExpo :: Int -> (Int, Int)
-processExpo a
-  | mod (a - 1) 3 == 0 = (1, a - 1)
-  | mod (a - 1) 3 == 1 = (2, a - 2)
-  | mod (a - 1) 3 == 2 = (3, a - 3)
-  | otherwise = error "The cases of processExpo should be exhaustive!"
+processExpo a = (r, a - r)
+  where r = 1 + mod (a -1) 3
 
 -- * Lookup/Term Resolution Functions
 
@@ -63,20 +59,20 @@ lookupC Equational     sm c = eqSymb   (findOrErr c sm :: DefinedQuantityDict)
 lookupC Implementation sm c = codeSymb (findOrErr c sm :: DefinedQuantityDict)
 
 lookupC' :: PrintingInformation -> UID -> Symbol
-lookupC' pinfo = lookupC (pinfo ^. stg) (pinfo ^. syst . systemdb)
+lookupC' pinfo = lookupC (pinfo ^. stg) (pinfo ^. sysdb)
 
 -- | Look up a term given a chunk database and a 'UID' associated with the term. Also specifies capitalization
 lookupT :: PrintingInformation -> UID -> TermCapitalization -> Sentence
-lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' (sm ^. syst . systemdb) c
+lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' (sm ^. sysdb) c
 
 -- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
 lookupS :: PrintingInformation -> UID -> TermCapitalization -> Sentence
 lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= capHelper sCap
-  where l = termResolve' (sm ^. syst . systemdb) c
+  where l = termResolve' (sm ^. sysdb) c
 
 -- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
 lookupP :: PrintingInformation -> UID -> TermCapitalization -> Sentence
-lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' (sm ^. syst . systemdb) c
+lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' (sm ^. sysdb) c
 
 -- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
 resolveCapT :: TermCapitalization -> (NP -> Sentence)

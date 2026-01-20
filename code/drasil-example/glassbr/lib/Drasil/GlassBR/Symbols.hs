@@ -11,6 +11,8 @@ import Drasil.GlassBR.Unitals (specParamVals, modElas,
 
 import Data.List ((\\))
 
+-- FIXME: Clean up these lists.
+
 symbolsForSymbolTable :: [DefinedQuantityDict]
 symbolsForSymbolTable = symbolsForTermTable ++ map dqdWr unitalSymbols ++
   unitless ++ map dqdWr [probBr, stressDistFac, cnstrw' nomThick, cnstrw' glassTypeCon] ++

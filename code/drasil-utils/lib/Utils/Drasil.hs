@@ -15,24 +15,15 @@ module Utils.Drasil (
 
   -- * Lists
   -- | From "Utils.Drasil.Lists". General functions involving lists.
-  atLeast2, replaceAll, subsetOf, nubSort, weave,
-  foldle, foldle1,
-  toColumn, mkTable,
-
-  -- * Maps
-  invert,
+  replaceAll, subsetOf, nubSort, weave, foldle, foldle1, toColumn, mkTable,
 
   -- ** Strings
   toPlainName, repUnd,
 
-  -- ** CSV
-  makeCSV
 ) where
 
 import Utils.Drasil.Directory
 import Utils.Drasil.Document
 import Utils.Drasil.English
 import Utils.Drasil.Lists
-import Utils.Drasil.Maps
 import Utils.Drasil.Strings
-import Utils.Drasil.CSV

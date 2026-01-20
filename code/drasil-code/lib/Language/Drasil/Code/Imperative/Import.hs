@@ -8,6 +8,13 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   genModClasses, readData, readDataProc, renderC
 ) where
 
+import Prelude hiding (sin, cos, tan, log, exp)
+import Control.Lens ((^.))
+import qualified Data.Map as Map (lookup)
+import Control.Monad (liftM2,liftM3)
+import Control.Monad.State (get, modify)
+import Data.List ((\\), intersect)
+
 import Drasil.Code.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
 import qualified Drasil.Code.CodeExpr.Development as S (CodeExpr(..))
 import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
@@ -21,10 +28,10 @@ import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
   ctorCall, genModuleWithImports, genModuleWithImportsProc, primaryClass)
-import Language.Drasil.Code.Imperative.Helpers (lookupC, convScope)
+import Language.Drasil.Code.Imperative.Helpers (convScope)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  ScopeType(..), genICName)
+  ScopeType(..), genICName, lookupC)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
   quantvar, quantfunc, ccObjVar, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
@@ -58,13 +65,6 @@ import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile)
-
-import Prelude hiding (sin, cos, tan, log, exp)
-import Data.List ((\\), intersect)
-import qualified Data.Map as Map (lookup)
-import Control.Monad (liftM2,liftM3)
-import Control.Monad.State (get, modify)
-import Control.Lens ((^.))
 
 -- | Gets a chunk's 'CodeType', by checking which 'CodeType' the user has chosen to
 -- match the chunk's 'Space' to.

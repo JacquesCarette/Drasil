@@ -5,6 +5,9 @@ module Theory.Drasil (
   -- * Constraint Sets
   , ConstraintSet
   , mkConstraintSet
+  -- Theory.Drasil.Components.Derivation
+  , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
+  , MayHaveDerivation(derivations)
   -- * Data Definitions
   , DataDefinition
   , ddE, ddENoRefs
@@ -30,12 +33,23 @@ module Theory.Drasil (
   -- * Theory Models
   , Theory(..), TheoryModel
   , tm, tmNoRefs
+  -- * Differential Models
+  , DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..)
+  , ($^^), ($**), ($++)
+  , makeAODESolverFormat, makeAIVP, makeASystemDE, makeASingleDE, formEquations
 ) where
 
 import Theory.Drasil.Classes (HasInputs(..), HasOutput(..))
+import Theory.Drasil.Components.Derivation (
+  Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader, MayHaveDerivation(derivations))
 import Theory.Drasil.ConstraintSet (ConstraintSet, mkConstraintSet)
 import Theory.Drasil.DataDefinition (ddMENoRefs, ddME, ddENoRefs, ddE,
   DataDefinition, qdFromDD, qdEFromDD)
+import Theory.Drasil.DifferentialModel (
+  DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..),
+  ($^^), ($**), ($++),
+  makeAODESolverFormat, makeAIVP, makeASystemDE, makeASingleDE,
+  formEquations)
 import Theory.Drasil.GenDefn (GenDefn, gd, gdNoRefs, getEqModQdsFromGd)
 import Theory.Drasil.ModelKinds (ModelKind,
   newDEModel, newDEModel',

@@ -9,7 +9,9 @@ module Language.Drasil.Chunk.Eq (
   -- * Constructors
   fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
-  mkFuncDef, mkFuncDef', mkFuncDefByQ
+  mkFuncDef, mkFuncDef', mkFuncDefByQ,
+  -- * Synonyms
+  ConstQDef, SimpleQDef, ModelQDef
 ) where
 
 import Control.Lens ((^.), view, lens, Lens', to)
@@ -22,10 +24,11 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   ConceptDomain(cdom), Express(express), Concept)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs), dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Concept (cc')
-import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
+import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea)
 import Language.Drasil.Expr.Lang (Expr)
 import qualified Language.Drasil.Expr.Lang as E (Expr(C))
 import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
+import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import qualified Language.Drasil.ModelExpr.Lang as M (ModelExpr(C))
 import Language.Drasil.NounPhrase.Core (NP)
@@ -91,12 +94,12 @@ fromEqn' nm desc def symb sp =
 fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> u -> e -> QDefinition e
 fromEqnSt nm desc def symb sp un =
-  QD (dqd' (cc' (nw $ ncUID nm desc) def) symb sp (Just $ unitWrapper un)) []
+  QD (dqd' (cc' (ncUID nm desc) def) symb sp (Just $ unitWrapper un)) []
 
 -- | Same as 'fromEqn', but symbol depends on stage and has no units.
 fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
 fromEqnSt' nm desc def symb sp =
-  QD (dqd' (cc' (nw $ ncUID nm desc) def) symb sp Nothing) []
+  QD (dqd' (cc' (ncUID nm desc) def) symb sp Nothing) []
 
 -- | Same as 'fromEqnSt'', but takes a 'String' instead of a 'UID'.
 fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e ->
@@ -123,14 +126,14 @@ mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining
 -- equation.
 ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
-ec c = QD (dqd' (cc' (nw c) EmptyS) (symbol c) (c ^. typ) (getUnit c)) []
+ec c = QD (dqd' (cc' c EmptyS) (symbol c) (c ^. typ) (getUnit c)) []
 
 -- | Factored version of 'QDefinition' functions.
 mkFuncDef0 :: (HasUID f, HasSymbol f, HasSpace f,
                HasUID i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> e -> QDefinition e
 mkFuncDef0 f n s u is = QD
-  (dqd' (cc' (nw (ncUID (f ^. uid) n)) s) (symbol f)
+  (dqd' (cc' (ncUID (f ^. uid) n) s) (symbol f)
     (f ^. typ) u) (map (^. uid) is)
     -- (mkFunction (map (^. typ) is) (f ^. typ)) u) (map (^. uid) is)
 
@@ -157,3 +160,12 @@ mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c,
 mkFuncDefByQ f = case getUnit f of
   Just u  -> mkFuncDef  f (f ^. term) EmptyS u
   Nothing -> mkFuncDef' f (f ^. term) EmptyS
+
+-- Useful Synonyms
+-- | Commonly used type for QDefinitions containing Literals.
+type ConstQDef  = QDefinition Literal
+-- | Commonly used type for QDefinitions containing Exprs.
+type SimpleQDef = QDefinition Expr
+-- | Commonly used type for QDefinitions containing ModelExprs.
+type ModelQDef  = QDefinition M.ModelExpr
+

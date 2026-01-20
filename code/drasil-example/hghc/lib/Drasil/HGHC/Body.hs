@@ -16,7 +16,6 @@ si :: System
 si = mkSystem
   progName Specification [spencerSmith]
   [purp] [] [] []
-  symbols
   [] [] dataDefs [] []
   htInputs htOutputs ([] :: [ConstrConcept]) []
   symbMap []
@@ -25,6 +24,8 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
     RefSec $
     RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
+    IntroSec $
+    IntroProg introPara (phrase progName) [],
     SSDSec $ SSDProg [
       SSDSolChSpec $ SCSProg [
           TMs [] []
@@ -33,6 +34,15 @@ mkSRS = [TableOfContents,
           Description Verbose IncludeUnits] HideDerivation
         , IMs [] [] HideDerivation
       ]]]
+
+-- Introduction first paragraph
+introPara :: Sentence
+introPara = foldlSent [
+  S "Heat transfer through the cladding of a nuclear fuel element influences",
+  S "performance and safety. Engineers therefore rely on dependable calculations",
+  S "of the heat transfer coefficients used for simulating the temperature.",
+  S "This document describes the requirements of a program called",
+  phrase progName]
 
 purp :: Sentence
 purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to clad"]

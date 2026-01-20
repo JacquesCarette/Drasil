@@ -1,3 +1,4 @@
+{-# LANGUAGE RankNTypes #-}
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 module Language.Drasil.Expr.Class (
   ExprC(..),
@@ -5,7 +6,8 @@ module Language.Drasil.Expr.Class (
   square, half,
   oneHalf, oneThird,
   apply1, apply2,
-  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet,
+  PExpr
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
@@ -221,6 +223,9 @@ class ExprC r where
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy :: (HasUID c, HasSymbol c) => c -> r
 
+-- Useful synonym
+type PExpr = forall r . (ExprC r, LiteralC r) => r
+
 instance ExprC Expr where
   lit = Lit
 
@@ -391,22 +396,22 @@ instance ExprC M.ModelExpr where
   lit = M.Lit
 
   -- | Smart constructor for equating two expressions.
-  ($=)  = M.EqBinaryOp M.Eq
+  ($=)  = M.EqBinaryOp Eq
   -- | Smart constructor for showing that two expressions are not equal.
-  ($!=) = M.EqBinaryOp M.NEq
+  ($!=) = M.EqBinaryOp NEq
 
   -- | Smart constructor for ordering two equations.
   -- | Less than.
-  ($<)  = M.OrdBinaryOp M.Lt
+  ($<)  = M.OrdBinaryOp Lt
   -- | Greater than.
-  ($>)  = M.OrdBinaryOp M.Gt
+  ($>)  = M.OrdBinaryOp Gt
   -- | Less than or equal to.
-  ($<=) = M.OrdBinaryOp M.LEq
+  ($<=) = M.OrdBinaryOp LEq
   -- | Greater than or equal to.
-  ($>=) = M.OrdBinaryOp M.GEq
+  ($>=) = M.OrdBinaryOp GEq
 
   -- | Smart constructor for the dot product of two equations.
-  ($.) = M.VVNBinaryOp M.Dot
+  ($.) = M.VVNBinaryOp Dot
 
   -- | Add two expressions.
   ($+) (M.Lit (Int 0)) r = r
@@ -415,10 +420,10 @@ instance ExprC M.ModelExpr where
   ($+) l (M.Lit (Dbl 0)) = l
   ($+) l (M.Lit (ExactDbl 0)) = l
   ($+) (M.Lit (ExactDbl 0)) r = r
-  ($+) (M.AssocA M.Add l) (M.AssocA M.Add r) = M.AssocA M.Add (l ++ r)
-  ($+) (M.AssocA M.Add l) r = M.AssocA M.Add (l ++ [r])
-  ($+) l (M.AssocA M.Add r) = M.AssocA M.Add (l : r)
-  ($+) l r = M.AssocA M.Add [l, r]
+  ($+) (M.AssocA Add l) (M.AssocA Add r) = M.AssocA Add (l ++ r)
+  ($+) (M.AssocA Add l) r = M.AssocA Add (l ++ [r])
+  ($+) l (M.AssocA Add r) = M.AssocA Add (l : r)
+  ($+) l r = M.AssocA Add [l, r]
 
   -- | Multiply two expressions.
   ($*) (M.Lit (Int 1)) r = r
@@ -427,102 +432,102 @@ instance ExprC M.ModelExpr where
   ($*) l (M.Lit (Dbl 1.0)) = l
   ($*) l (M.Lit (ExactDbl 1)) = l
   ($*) (M.Lit (ExactDbl 1)) r = r
-  ($*) (M.AssocA M.Mul l) (M.AssocA M.Mul r) = M.AssocA M.Mul (l ++ r)
-  ($*) (M.AssocA M.Mul l) r = M.AssocA M.Mul (l ++ [r])
-  ($*) l (M.AssocA M.Mul r) = M.AssocA M.Mul (l : r)
-  ($*) l r = M.AssocA M.Mul [l,r]
+  ($*) (M.AssocA Mul l) (M.AssocA Mul r) = M.AssocA Mul (l ++ r)
+  ($*) (M.AssocA Mul l) r = M.AssocA Mul (l ++ [r])
+  ($*) l (M.AssocA Mul r) = M.AssocA Mul (l : r)
+  ($*) l r = M.AssocA Mul [l,r]
   -- | Smart constructor for subtracting two expressions.
-  ($-) = M.ArithBinaryOp M.Subt
+  ($-) = M.ArithBinaryOp Subt
   -- | Smart constructor for dividing two expressions.
-  ($/) = M.ArithBinaryOp M.Frac
+  ($/) = M.ArithBinaryOp Frac
   -- | Smart constructor for rasing the first expression to the power of the second.
-  ($^) = M.ArithBinaryOp M.Pow
+  ($^) = M.ArithBinaryOp Pow
 
   -- | Smart constructor to show that one expression implies the other (conditional operator).
-  ($=>)  = M.BoolBinaryOp M.Impl
+  ($=>)  = M.BoolBinaryOp Impl
   -- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).
-  ($<=>) = M.BoolBinaryOp M.Iff
+  ($<=>) = M.BoolBinaryOp Iff
 
   -- | Smart constructor for the boolean /and/ operator.
   a $&& b = M.AssocB M.And [a, b]
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = M.AssocB M.Or  [a, b]
 
-  in' = M.ESBBinaryOp M.SContains
+  in' = M.ESBBinaryOp SContains
 
   -- | Smart constructor for taking the absolute value of an expression.
-  abs_ = M.UnaryOp M.Abs
+  abs_ = M.UnaryOp Abs
 
   -- | Smart constructor for negating an expression.
-  neg = M.UnaryOp M.Neg
+  neg = M.UnaryOp Neg
 
   -- | Smart constructor to take the log of an expression.
-  log = M.UnaryOp M.Log
+  log = M.UnaryOp Log
 
   -- | Smart constructor to take the ln of an expression.
-  ln = M.UnaryOp M.Ln
+  ln = M.UnaryOp Ln
 
   -- | Smart constructor to take the square root of an expression.
-  sqrt = M.UnaryOp M.Sqrt
+  sqrt = M.UnaryOp Sqrt
 
   -- | Smart constructor to apply sin to an expression.
-  sin = M.UnaryOp M.Sin
+  sin = M.UnaryOp Sin
 
   -- | Smart constructor to apply cos to an expression.
-  cos = M.UnaryOp M.Cos
+  cos = M.UnaryOp Cos
 
   -- | Smart constructor to apply tan to an expression.
-  tan = M.UnaryOp M.Tan
+  tan = M.UnaryOp Tan
 
   -- | Smart constructor to apply sec to an expression.
-  sec = M.UnaryOp M.Sec
+  sec = M.UnaryOp Sec
 
   -- | Smart constructor to apply csc to an expression.
-  csc = M.UnaryOp M.Csc
+  csc = M.UnaryOp Csc
 
   -- | Smart constructor to apply cot to an expression.
-  cot = M.UnaryOp M.Cot
+  cot = M.UnaryOp Cot
 
   -- | Smart constructor to apply arcsin to an expression.
-  arcsin = M.UnaryOp M.Arcsin
+  arcsin = M.UnaryOp Arcsin
 
   -- | Smart constructor to apply arccos to an expression.
-  arccos = M.UnaryOp M.Arccos
+  arccos = M.UnaryOp Arccos
 
   -- | Smart constructor to apply arctan to an expression.
-  arctan = M.UnaryOp M.Arctan
+  arctan = M.UnaryOp Arctan
 
   -- | Smart constructor for the exponential (base e) function.
-  exp = M.UnaryOp M.Exp
+  exp = M.UnaryOp Exp
 
   -- | Smart constructor for calculating the dimension of a vector.
-  dim = M.UnaryOpVN M.Dim
+  dim = M.UnaryOpVN Dim
 
   -- | Smart constructor for calculating the normal form of a vector.
-  norm = M.UnaryOpVN M.Norm
+  norm = M.UnaryOpVN Norm
 
   -- | Smart constructor for negating vectors.
-  negVec = M.UnaryOpVV M.NegV
+  negVec = M.UnaryOpVV NegV
   -- | More general scaling
-  vScale = M.NVVBinaryOp M.Scale
+  vScale = M.NVVBinaryOp Scale
 
   -- | Smart constructor for applying logical negation to an expression.
-  not_ = M.UnaryOpB M.Not
+  not_ = M.UnaryOpB Not
 
   -- | Smart constructor for indexing.
-  idx = M.LABinaryOp M.Index
+  idx = M.LABinaryOp Index
 
   -- | Smart constructor for indexing.
-  idxOf = M.LABinaryOp M.IndexOf
+  idxOf = M.LABinaryOp IndexOf
 
   -- | Integrate over some expression with bounds (∫).
-  defint v low high = M.Operator M.Add (BoundedDD v Continuous low high)
+  defint v low high = M.Operator Add (BoundedDD v Continuous low high)
 
   -- | Sum over some expression with bounds (∑).
-  defsum v low high = M.Operator M.Add (BoundedDD v Discrete low high)
+  defsum v low high = M.Operator Add (BoundedDD v Discrete low high)
 
   -- | Product over some expression with bounds (∏).
-  defprod v low high = M.Operator M.Mul (BoundedDD v Discrete low high)
+  defprod v low high = M.Operator Mul (BoundedDD v Discrete low high)
 
   -- | Smart constructor for 'real interval' membership.
   realInterval c = M.RealI (c ^. uid)
@@ -531,12 +536,12 @@ instance ExprC M.ModelExpr where
   euclidean = sqrt . foldr1 ($+) . map square
 
   -- | Smart constructor to cross product two expressions.
-  cross = M.VVVBinaryOp M.Cross
+  cross = M.VVVBinaryOp Cross
 
   -- | Adding vectors
-  vAdd  = M.VVVBinaryOp M.VAdd
+  vAdd  = M.VVVBinaryOp VAdd
   -- | Subtracting vectors
-  vSub  = M.VVVBinaryOp M.VSub
+  vSub  = M.VVVBinaryOp VSub
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = M.Case Complete

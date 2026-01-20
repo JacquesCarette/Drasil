@@ -4,27 +4,27 @@
 module Language.Drasil.CodeSpec where
 
 import Prelude hiding (const)
-
 import Control.Lens ((^.), makeLenses, Lens', makeClassyFor)
 import Data.List (nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
 
-import Language.Drasil hiding (None, new)
+import Language.Drasil hiding (None)
 import Language.Drasil.Display (Symbol(Variable))
-import Drasil.Database
+import Drasil.Database (ChunkDB, UID, HasUID(..))
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
-import Drasil.System (HasSystem(..))
+import Drasil.System (HasSystem(..), programName)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Utils.Drasil (subsetOf)
 
+import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))
 import Language.Drasil.Chunk.CodeBase (quantvar, codevars, varResolve)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
-import Language.Drasil.ICOSolutionSearch (Def, getExecOrder)
+import Language.Drasil.ICOSolutionSearch (Def, solveExecOrder)
 
 -- | Program input.
 type Input = CodeVarChunk
@@ -174,16 +174,15 @@ codeSpec si chs ms = CS {
 -- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
 -- from 'System' to populate the 'OldCodeSpec' structure.
 oldcodeSpec :: S.System -> Choices -> [Mod] -> OldCodeSpec
-oldcodeSpec sys@S.SI{ S._sys = sysIdea
-                 , S._authors = as
-                 , S._configFiles = cfp
-                 , S._inputs = ins
-                 , S._outputs = outs
-                 , S._constraints = cs
-                 , S._constants = cnsts
-                 , S._systemdb = db } chs ms =
+oldcodeSpec sys@S.SI{ S._authors = as
+                    , S._configFiles = cfp
+                    , S._inputs = ins
+                    , S._outputs = outs
+                    , S._constraints = cs
+                    , S._constants = cnsts
+                    , S._systemdb = db } chs ms =
   let ddefs = sys ^. dataDefns
-      n = programName sysIdea
+      n = sys ^. programName
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)
@@ -194,7 +193,7 @@ oldcodeSpec sys@S.SI{ S._sys = sysIdea
       --       directly from the instance models (ims) instead of directly from the choices.
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
-      exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
+      exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
   in OldCodeSpec {
         _pName = n,
         _authors = as,

@@ -4,6 +4,7 @@ module Drasil.Sections.GeneralSystDesc where
 import Language.Drasil
 import Language.Drasil.Sentence.Combinators
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Drasil.Document.Contents (foldlSP)
 
 import Data.Drasil.Concepts.Documentation (interface, system, environment,
   userCharacteristic, systemConstraint, information, section_, sysCont)

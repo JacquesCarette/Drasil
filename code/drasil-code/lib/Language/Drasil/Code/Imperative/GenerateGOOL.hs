@@ -4,10 +4,16 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
   fAppInOut, fAppInOutProc
 ) where
 
+import Data.Bifunctor (second)
+import qualified Data.Map as Map (lookup)
+import Data.Maybe (catMaybes)
+import Control.Monad.State (get, modify)
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (List)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), AuxFile(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
@@ -21,12 +27,6 @@ import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))
-
-import Data.Bifunctor (second)
-import qualified Data.Map as Map (lookup)
-import Data.Maybe (catMaybes)
-import Control.Monad.State (get, modify)
-import Control.Lens ((^.))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
 -- Doxygen comments. If the user did not choose 'CommentMod' but did choose

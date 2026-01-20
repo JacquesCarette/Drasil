@@ -9,16 +9,18 @@ import Drasil.SRSDocument
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
-import Drasil.Metadata (inModel)
+import Drasil.Document.Contents (foldlSP, foldlSPCol)
+import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
+import Drasil.Metadata (inModel, software)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, effect, endUser, environment, input_, interest, loss, method_,
-  physical, physics, problem, software, softwareSys, symbol_,
+  physical, physics, problem, softwareSys, symbol_,
   sysCont, system, type_, user, value, variable, datumConstraint)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon',
@@ -58,7 +60,6 @@ si :: System
 si = mkSystem
   progName Specification [henryFrankis, brooks]
   [purp] [] [] []
-  symbols
   tMods generalDefinitions dataDefs iMods
   []
   inputs outputs constrained []
@@ -240,7 +241,7 @@ sysCtxIntro = foldlSP
    S "Arrows are used to show the data flow between the" +:+ D.toSent (phraseNP (system `andIts` environment))]
 
 sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
+sysCtxFig1 = llccFig "sysCtxDiag" $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
@@ -328,7 +329,7 @@ physSystParts = map foldlSent [
   [D.toSent (atStartNP (a_ waterTable)) `sC` S "which may or may not exist"]]
 
 figPhysSyst :: LabelledContent
-figPhysSyst = llcc (makeFigRef "PhysicalSystem") $
+figPhysSyst = llccFig "PhysicalSystem" $
   fig (foldlSent_ [S "An example", D.toSent (phraseNP (slope `for` analysis)),
   S "by", short progName `sC` S "where the dashed line represents the",
   phrase waterTable]) (resourcePath ++ "PhysSyst.png")
@@ -347,7 +348,7 @@ physSysConv = foldlSP [atStart morPrice, phrase analysis, refS morgenstern1965
   eS $ sy index $+ int 1]
 
 figIndexConv :: LabelledContent
-figIndexConv = llcc (makeFigRef "IndexConvention") $
+figIndexConv = llccFig "IndexConvention" $
   fig (foldlSent_ [S "Index convention for", D.toSent (phraseNP (slice `and_`
   intrslce)), plural value]) (resourcePath ++ "IndexConvention.png")
 
@@ -358,7 +359,7 @@ physSysFbd = foldlSP [D.toSent (atStartNP' (NP.a_ (fbd `ofThe` force))), S "acti
   refS (SRS.genDefn [] []) `S.and_` refS (SRS.dataDefn [] [])]
 
 figForceActing :: LabelledContent
-figForceActing = llcc (makeFigRef "ForceDiagram") $
+figForceActing = llccFig "ForceDiagram" $
   fig (D.toSent (atStartNP' (fbd `of_` force)) +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 

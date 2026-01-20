@@ -15,9 +15,9 @@ resourcePath :: String
 resourcePath = "../../../../datafiles/dblpend/"
 
 figMotion :: LabelledContent
-figMotion = llcc (makeFigRef "dblpend") $ figWithWidth (D.toSent $ atStartNP (the physicalSystem))
+figMotion = llccFig "dblpend" $ figWithWidth (D.toSent $ atStartNP (the physicalSystem))
   (resourcePath ++ "dblpend.png") 60
 
 sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont)
+sysCtxFig1 = llccFig "sysCtxDiag" $ fig (titleize sysCont)
   (resourcePath ++ "SystemContextFigure.png")

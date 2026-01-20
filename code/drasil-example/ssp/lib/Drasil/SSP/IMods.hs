@@ -10,6 +10,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.DocLang.SRS (propCorSol)
+import Drasil.Sentence.Combinators (definedIn'', definedIn''', eqN)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint,

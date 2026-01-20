@@ -15,7 +15,7 @@ import Data.List (nub)
 import Data.Maybe (mapMaybe)
 
 -- rest of Drasil
-import Drasil.Database (ChunkDB, UID, HasUID(..), find)
+import Drasil.Database (ChunkDB, UID, HasUID(..), find, uidRef)
 import Drasil.System (System(_systemdb), systemdb, refbyLookup)
 import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
@@ -136,7 +136,7 @@ helpToRefField trg db
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.
 helperSources :: [DecRef] -> [Contents]
 helperSources [] = [mkParagraph $ S "--"]
-helperSources rs  = [mkParagraph $ foldlList Comma List $ map (\r -> Ref (r ^. uid) EmptyS $ refInfo r) rs]
+helperSources rs  = [mkParagraph $ foldlList Comma List $ map (\r -> Ref (uidRef (r ^. uid)) EmptyS $ refInfo r) rs]
 
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
 mkDDField :: DataDefinition -> System -> Field -> ModRow -> ModRow

@@ -7,7 +7,7 @@ import Data.Char (toLower)
 import Data.Maybe (fromMaybe)
 
 import Language.Drasil
-import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, ChunkDB)
+import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, uidRef, ChunkDB)
 import Drasil.Database.SearchTools (termResolve', shortForm)
 import Drasil.System (System, systemdb)
 import Control.Lens ((^.))
@@ -198,4 +198,4 @@ resourcePath = "../../../../traceygraphs/"
 
 -- | Helper to create a list of traceability graph references.
 folderList' :: [ItemType]
-folderList' = map (Flat . (\x -> Ref (x +++. "Link") EmptyS None)) traceGUIDs
+folderList' = map (Flat . (\x -> Ref (uidRef (x +++. "Link")) EmptyS None)) traceGUIDs

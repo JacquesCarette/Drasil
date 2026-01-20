@@ -11,7 +11,7 @@ module Language.Drasil.Reference (
 
 import Control.Lens ((^.), makeLenses, Lens')
 
-import Drasil.Database (UID, HasUID(..), HasChunkRefs(..))
+import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), uidRef)
 
 import Language.Drasil.Label.Type (LblType, HasRefAddress(..))
 import Language.Drasil.ShortName (HasShortName(..), ShortName)
@@ -64,9 +64,9 @@ namedRef r s = namedComplexRef r s None
 
 -- | Takes a 'Reference' with additional display info. Uses the internal shortname for its display name.
 complexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sentence
-complexRef r = Ref (ref r ^. uid) EmptyS
+complexRef r = Ref (uidRef (ref r ^. uid)) EmptyS
 
 -- | Takes a 'Reference' with a name to be displayed and any additional information and wraps it into a 'Sentence'.
 -- Does not overwrite the shortname contained in the reference, but will only display as the given 'Sentence' along with the given 'RefInfo'.
 namedComplexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
-namedComplexRef r = Ref (ref r ^. uid)
+namedComplexRef r = Ref (uidRef (ref r ^. uid))

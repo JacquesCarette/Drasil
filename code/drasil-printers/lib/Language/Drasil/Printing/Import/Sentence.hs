@@ -4,6 +4,7 @@ module Language.Drasil.Printing.Import.Sentence where
 import Control.Lens ((^.))
 import Data.Maybe (fromMaybe)
 
+import Drasil.Database (unRef)
 import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Development (toSent)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
@@ -29,16 +30,16 @@ spec _  (Sy s)                  = P.E $ pUnit s
 spec sm (NP np)                 = spec sm (toSent $ phraseNP np)
 spec _  Percent                 = P.E $ P.MO P.Perc
 spec _  (P s)                   = P.E $ symbol s
-spec sm (SyCh s)                = P.E $ symbol $ lookupC' sm s
+spec sm (SyCh s)                = P.E $ symbol $ lookupC' sm (unRef s)
 
 -- First term is the tooltip, second term is the rendered short form
 spec sm (Ch ShortStyle caps s)  = P.Tooltip (spec sm $ lookupT
-  sm s caps) (spec sm $ lookupS sm s caps)
+  sm (unRef s) caps) (spec sm $ lookupS sm (unRef s) caps)
 
-spec sm (Ch TermStyle caps s)   = spec sm $ lookupT sm s caps
-spec sm (Ch PluralTerm caps s) = spec sm $ lookupP sm s caps
+spec sm (Ch TermStyle caps s)   = spec sm $ lookupT sm (unRef s) caps
+spec sm (Ch PluralTerm caps s) = spec sm $ lookupP sm (unRef s) caps
 spec sm (Ref u EmptyS notes)    =
-  let reff = refFind u sm in
+  let reff = refFind (unRef u) sm in
   case reff of
     (Reference _ (RP rp ra) sn) ->
       P.Ref P.Internal ra (spec sm $ renderShortName sm rp sn)
@@ -47,7 +48,7 @@ spec sm (Ref u EmptyS notes)    =
     (Reference _ (URI ra) sn) ->
       P.Ref P.External    ra (spec sm $ renderURI sm sn)
 spec sm (Ref u dName notes) =
-  let reff = refFind u sm in
+  let reff = refFind (unRef u) sm in
   case reff of
     (Reference _ (RP _ ra) _) ->
       P.Ref P.Internal ra (spec sm dName)

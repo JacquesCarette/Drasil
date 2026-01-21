@@ -21,6 +21,7 @@
     * [GOOL/GProc Overview](GOOL-GProc%20Overview)
 * Design
   * [Design Choices](Design-Choices)
+  * [Drasil's Terminology](Terminology)
   * [Guidelines for Adding New Types and Typeclasses](Guidelines-for-Adding-New-Types-and-Typeclasses-in-Drasil)
 * [Readings](Readings)
 * Misc.

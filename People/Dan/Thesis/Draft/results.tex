@@ -29,7 +29,10 @@ made in the knowledge base appeared immediately and uniformly across the SRS,
 reference tables, and generated code after regeneration. 
 
 Additionally, all domain knowledge must be explicitly encoded, which prevents
-dangling references or undefined symbols.
+dangling references or undefined symbols as observed in a number of 
+early passes over the original case study documentation (for example, issue 
+\#348 in the issue tracker which will be discussed in more detail in 
+Section~\ref{sec:quality} and Section~\ref{sec:dis_reproducibility}).
 
 \subsection{Traceability and Maintainability}
 Every generated element (formulas, symbols, tables, code identifiers) can be
@@ -41,13 +44,25 @@ required to locate the origin of a definition or relation during maintenance
 tasks and refactoring: it was trivial to identify the source to edit rather than
 hunting through multiple artifacts.
 
+For example, in the GlassBR case study (see issue~\#349), a unit conversion
+was embedded implicitly in the original documentation. With Drasil, it was
+straightforward to trace the generated formula back to its originating chunk,
+facilitating a single-point correction to change the implicit conversion into 
+an explicit one that propagated to all artifacts after regeneration, 
+demonstrating the practical benefits of strong traceability and reducing the 
+burden of maintenance.
+
 \subsection{Reproducibility and Determinism}
 Artifact generation in Drasil was fully deterministic: repeated generation runs
 from the same knowledge base and recipe set produced byte-for-byte equivalent
-outputs for the textual artifacts we exercised. Repeatability checks executed
-during the case studies confirmed that regenerating artifacts after
-environment-consistent builds did not introduce nondeterministic differences,
-supporting reproducibility guarantees that are important for scientific
+outputs for generated softifacts as compared to the then-current stable 
+versions. These outputs were confirmed using a diff tool that ran as part of an 
+automated regression test suite.
+
+Furthermore, repeatability checks executed during the case study 
+reimplementations confirmed that regenerating artifacts after 
+environment-consistent builds did not introduce nondeterministic differences, 
+supporting reproducibility guarantees that are important for scientific 
 software.
 
 \section{Observations: Case Studies and Reimplementations}
@@ -64,13 +79,41 @@ GlassBR-specific recipe and does not include the shared base knowledge
 (units, symbols, common chunks, and generic recipes) that are stored
 separately in the global knowledge base and are reused across case studies. 
 
+\begin{table}[h]
+\centering
+\caption{Summary statistics for Drasil case study SRS reimplementations}
+\label{tab:case_study_stats}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{\rule{0pt}{3ex}Case Study} & \textbf{SRS Pages} & 
+\textbf{Recipe LOC$^1$} \\
+\hline
+\rule{0pt}{3ex}GlassBR & 44 & 370 \\
+SWHS    & 50 & 560$^2$ \\
+NoPCM   & 32 & 316 \\
+SSP     & 84 & 380 \\
+Projectile & 31 & 209 \\
+GamePhysics & 46 & 424 \\
+\hline
+\end{tabular}
+\begin{flushleft}
+% I couldn't get regular footnotes working in a tabular env, so this is a 
+% workaround
+\footnotesize
+$^1$ Including comments and import statements
+
+$^2$ This is an outlier due to excessive use of comments. Without comments it 
+would be 386 lines.
+\end{flushleft}
+\end{table}
+
 Comparable results were observed for other reimplemented case studies:
 each system produced a multi-page SRS and a modest-sized recipe or set of
 recipes (tens to a few hundred lines) that captured the system-specific
-knowledge. Generated code for each system followed the same pattern:
-language-agnostic knowledge encoded as chunks and recipes was emitted to
-multiple target languages with consistent identifiers and traceability
-annotations.
+knowledge. See Table~\ref{tab:case_study_stats} for a summary. Generated
+code for each system followed the same pattern: language-agnostic knowledge
+encoded as chunks and recipes was emitted to multiple target languages with
+consistent identifiers and traceability annotations.
 
 Generated code and documentation remained consistent after edits to the
 knowledge base, with regeneration producing updated artifacts across all
@@ -102,7 +145,7 @@ that assumption visible, allowing it to be documented properly in the generated
 SRS and ensuring that the generated code reflected the correct physical 
 interpretation.
 
-A similar example arose in the GlassBR case study (see Issue \#349), where an 
+A similar example arose in the GlassBR case study (see issue \#349), where an 
 implicit division by 1000 for unit conversion was embedded in the original 
 documentation. Drasil's explicit chunk encoding surfaced this hidden 
 assumption, enabling a single-point correction that propagated to all generated 
@@ -119,15 +162,53 @@ in the knowledge base allowed whole-family updates by editing a small set of
 chunks. This capability materially reduced the effort to produce consistent 
 variants of the same artifact family.
 
+\begin{table}[h]
+\centering
+\caption{Key differences between SWHS and NoPCM Drasil implementations}
+\label{tab:swhs_nopcm}
+\begin{tabular}{|p{3.5cm}|c|c|p{6cm}|}
+\hline
+\textbf{\rule{0pt}{3ex}Chunk/Concept} & \textbf{SWHS} & \textbf{NoPCM} & 
+\textbf{Notes} \\
+\hline
+\rule{0pt}{3ex}PCM properties         & Yes           & No             & Only 
+in SWHS \\
+Latent heat            & Yes           & No             & Only in SWHS \\
+Sensible heat          & Yes           & Yes            & Present in both \\
+Energy balance         & Yes           & Yes            & PCM terms omitted in 
+NoPCM \\
+PCM input parameters   & Yes           & No             & Only in SWHS \\
+PCM assumptions        & Yes           & No             & Only in SWHS \\
+Tank/water properties  & Yes           & Yes            & Shared \\
+\rule{0pt}{3ex}Recipes                 & Modified       & Modified           & 
+NoPCM 
+recipe omits PCM-related content \\
+\hline
+\end{tabular}
+\end{table}
+
+For example, producing the NoPCM variant from SWHS required removing all 
+reference to PCM by excluding the PCM-related chunks. The majority of the 
+knowledge base and recipes were reused without change, demonstrating the 
+efficiency of the single-source approach for software families. Table~\ref{tab:swhs_nopcm} summarizes the key differences between the SWHS and NoPCM Drasil
+implementations, highlighting which chunks and concepts were unique to each
+variant and which were shared.
+
 \section{Usability and Adoption}
 From the reimplementation work it became clear that Drasil's expressiveness
 comes with an onboarding cost. Contributors familiar with the codebase could
 encode and modify domain knowledge effectively; new users required a
-nontrivial ramp-up period to understand the chunk and recipe patterns.
-Nevertheless, undergraduate contributors and short-term students were able to
-make meaningful contributions after initial mentoring. These observations report
-what we observed during reimplementation and are not intended as 
-recommendations or required practices.
+nontrivial ramp-up period of up to two weeks of mentoring to understand the 
+chunk combinators and recipe patterns. Common challenges
+included understanding the how to build new chunks, particularly while 
+referencing other chunks, and how to find existing chunks of the 
+appropriate type in the knowledge base. 
+
+Feedback collected during onboarding, along with the observations listed above, 
+indicated that improved search tools and documentation would significantly 
+reduce ramp-up time. Nevertheless, undergraduate contributors and short-term 
+students were able to make meaningful contributions after initial mentoring.
+
 
 \section{Summary and Takeaways}
 The combined results from the case studies show that the primary benefits of

@@ -5,20 +5,20 @@ This chapter interprets the results reported in Chapter~\ref{c:results}.
 We synthesise the practical benefits observed \textemdash{} automation, 
 traceability, and rapid adaptation \textemdash{} evaluate costs such as 
 onboarding and modelling effort, and outline limitations and directions for 
-formal validation. We refer back to evidence in Chapter~\ref{c:results} and 
+formal validation. We refer back to observations in Chapter~\ref{c:results} and 
 cite illustrative issue examples.
 
 \section{Interpreting the Results}
 
 This section organises the principal outcomes from
 Chapter~\ref{c:results} into interpretation themes that mirror the
-empirical observations: consistency, traceability, reproducibility, and the
+observations: consistency, traceability, reproducibility, and the
 tradeoffs that follow from centralizing knowledge.
 
 \subsection{Consistency by construction}
 
 Drasil projects a single knowledge base into diverse artifacts. The case
-studies show that local edits to domain knowledge yield system-wide
+studies demonstrate that local changes to domain knowledge yield system-wide
 corrections. Practically, this reduces the maintenance surface area: a
 single canonical edit replaces repeated, artifact-level fixes. The primary
 tradeoff is increased upfront modelling effort and the need for disciplined
@@ -96,7 +96,7 @@ maintenance of software families, and supports rapid, reliable adaptation to
 evolving requirements.
 
 \subsection{Reproducibility and error visibility}
-
+\label{sec:dis_reproducibility}
 Artifact generation was deterministic in our case studies: regenerating from
 the same knowledge base produced consistent textual outputs. At the same
 time, defects in the knowledge base appear across all generated artifacts,
@@ -135,10 +135,6 @@ discovery and search tools for the knowledge base, and higher-level authoring
 interfaces that present domain concepts in more familiar terms. In short: 
 Drasil desperately needs better tooling for authoring.
 
-Onboarding metrics (time to first meaningful edit, number of support
-interactions) should be measured in future studies to quantify this overhead
-and to guide UX and tooling improvements.
-
 \section{Limitations and Directions for Validation}
 
 The current evidence is largely qualitative and anecdotal. Formal,
@@ -146,6 +142,10 @@ controlled experiments are required to measure productivity gains,
 maintenance cost reduction, and error rates across larger teams. Until such
 studies are performed, claims about absolute gains should be framed as
 preliminary.
+
+Future validation should include controlled studies measuring onboarding 
+metrics (time to first meaningful edit, amount of mentoring required),
+maintenance effort, and error rates across teams of varying experience. Experimental designs could compare Drasil-based workflows to traditional manual approaches, quantifying differences in initial productivity, long-term maintenance, and defect reduction. These metrics will be essential for substantiating the qualitative benefits observed in this thesis. Feedback from such studies will also guide the development of improved authoring tools and onboarding resources, helping to lower the initial ramp-up cost and make Drasil accessible to a broader range of users.
 
 Scalability concerns also merit attention: as the knowledge base grows,
 improved tools for discovery, efficient projection, and modularization will

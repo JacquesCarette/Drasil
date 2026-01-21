@@ -1,6 +1,35 @@
 \chapter{Conclusion}
 \label{c:conclusion}
 
-\ds{Should Future work be collapsed into here?}
+This thesis set out to address the persistent challenges of consistency,
+traceability, and maintainability in scientific software and documentation.
+The introduction established the need for a principled, automated approach to
+knowledge capture and artifact generation, motivating the development and
+evaluation of Drasil.
 
-Every thesis also needs a concluding chapter
+The results chapter provided concrete evidence that Drasil's single-source
+architecture enforces consistency by construction, improves traceability
+through explicit provenance, and enhances reproducibility via deterministic
+artifact generation. Case studies demonstrated that local changes to domain
+knowledge propagate automatically across all generated outputs, reducing
+manual effort and the risk of inconsistencies. The results also highlighted
+practical benefits such as the automatic maintenance of supporting materials
+and the ease of creating new software family members by reusing and extending
+the knowledge base.
+
+The discussion chapter interpreted these findings, emphasizing that Drasil's
+approach shifts the burden of correctness to the knowledge base, clarifies
+implicit assumptions, and enables rapid, reliable adaptation to new
+requirements. It also acknowledged tradeoffs, such as the increased upfront
+modeling and onboarding effort, and identified the need for improved tooling
+and formal validation.
+
+The primary contribution of this thesis is the demonstration that a
+centralized, recipe-driven knowledge base can systematically address many of
+the recurring problems in scientific software engineering. By explicitly
+capturing domain knowledge and automating artifact generation, Drasil
+provides a scalable, extensible foundation for reliable, maintainable, and
+reproducible scientific software. The lessons learned and directions for
+future work outlined here position Drasil as both a practical tool and a
+platform for further research in automated knowledge capture and software
+generation.

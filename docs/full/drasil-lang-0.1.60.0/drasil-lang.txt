@@ -1108,9 +1108,8 @@ lPosInf :: Symbol
 lNegInf :: Symbol
 
 
--- | Noun phrases are used to hold terms with knowledge of proper
---   capitalization and pluralization.
-module Language.Drasil.NounPhrase.Core
+-- | Basic data types for noun phrases.
+module Language.Drasil.NounPhrase.Types
 
 -- | Capitalization rules.
 data CapitalizationRule
@@ -1172,7 +1171,12 @@ S :: String -> NPStruct
 (:-:) :: NPStruct -> NPStruct -> NPStruct
 (:+:) :: NPStruct -> NPStruct -> NPStruct
 P :: Symbol -> NPStruct
-instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.NounPhrase.Core.NP
+
+
+-- | Noun phrases are used to hold terms with knowledge of proper
+--   capitalization and pluralization.
+module Language.Drasil.NounPhrase.Core
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.NounPhrase.Types.NP
 
 module Language.Drasil.NounPhrase
 class NounPhrase n
@@ -1381,7 +1385,7 @@ S :: String -> NPStruct
 (:-:) :: NPStruct -> NPStruct -> NPStruct
 (:+:) :: NPStruct -> NPStruct -> NPStruct
 P :: Symbol -> NPStruct
-instance Language.Drasil.NounPhrase.NounPhrase Language.Drasil.NounPhrase.Core.NP
+instance Language.Drasil.NounPhrase.NounPhrase Language.Drasil.NounPhrase.Types.NP
 
 
 -- | Defines various NounPhrase-level combinators. These hold more
@@ -2397,8 +2401,22 @@ sentenceSymb :: UID -> Sentence
 --   
 --   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
 sentenceTerm :: UID -> Sentence
+
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <a>Symbol</a>.
+sdep :: Sentence -> [UID]
+shortdep :: Sentence -> [UID]
+
+-- | Generic traverse of all positions that could lead to <i>reference</i>
+--   <a>UID</a>s from <a>Sentence</a>s.
+lnames :: Sentence -> [UID]
+
+-- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
+lnames' :: [Sentence] -> [UID]
+sentenceRefs :: Sentence -> Set UID
 instance GHC.Base.Semigroup Language.Drasil.Sentence.Sentence
 instance GHC.Base.Monoid Language.Drasil.Sentence.Sentence
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Sentence.Sentence
 
 
 -- | Short names are used for displaying references.
@@ -2426,11 +2444,12 @@ shortname' :: Sentence -> ShortName
 
 -- | Extract various kinds of UIDs from a Sentence. Used in conjunction
 --   with the chunk database in order to render terms, symbols, and
---   references properly.
+--   references properly. The actual traversals now live in
+--   <a>Sentence</a>, but this module keeps the old import path working.
 module Language.Drasil.Sentence.Extract
 
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <tt>Symbol</tt>.
+--   a <a>Symbol</a>.
 sdep :: Sentence -> [UID]
 shortdep :: Sentence -> [UID]
 
@@ -4118,7 +4137,7 @@ S :: String -> NPStruct
 P :: Symbol -> NPStruct
 
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <tt>Symbol</tt>.
+--   a <a>Symbol</a>.
 sdep :: Sentence -> [UID]
 shortdep :: Sentence -> [UID]
 

@@ -695,6 +695,7 @@ digraph alltypes {
 		ODELibPckg	[shape=oval, color=cyan3, label="ODELibPckg"];
 		ODELibPckg -> Name;
 		ODELibPckg -> Version;
+		ODELibPckg -> DefinedQuantityDict;
 		ODELibPckg -> ExternalLibrary;
 		ODELibPckg -> ODEInfoExternalLibraryCall;
 		ODELibPckg -> MaybeFilePath;
@@ -1565,8 +1566,6 @@ digraph alltypes {
 	subgraph references {
 	}
 	subgraph requirements {
-	}
-	subgraph symbols {
 	}
 	subgraph tmods {
 	}
@@ -3036,7 +3035,7 @@ digraph alltypes {
 		}
 		subgraph moduledocrenderer{
 		ModuleDocRenderer	[shape=oval, color=red2, label="ModuleDocRenderer"];
-		ModuleDocRenderer -> StringStringStringStringString;
+		ModuleDocRenderer -> StringStringStringStringStringString;
 		}
 	}
 	subgraph rendererclasescommons {
@@ -3603,6 +3602,8 @@ digraph alltypes {
 	subgraph combinators {
 	}
 	subgraph core {
+	}
+	subgraph types {
 		subgraph npstruct{
 		NPStruct	[shape=oval, color=darkviolet, label="NPStruct"];
 		NPStruct -> String;

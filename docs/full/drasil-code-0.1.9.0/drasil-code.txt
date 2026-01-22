@@ -1190,13 +1190,16 @@ module Language.Drasil.Data.ODELibPckg
 
 -- | Holds an ODE library package.
 data ODELibPckg
-ODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
+ODELib :: Name -> Version -> [DefinedQuantityDict] -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
 
 -- | Library name.
 [libName] :: ODELibPckg -> Name
 
 -- | Version.
 [libVers] :: ODELibPckg -> Version
+
+-- | Dummy quantities necessary for use in ODE solving.
+[libDummyQuants] :: ODELibPckg -> [DefinedQuantityDict]
 
 -- | Library specifications.
 [libSpec] :: ODELibPckg -> ExternalLibrary
@@ -1211,15 +1214,17 @@ ODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall)
 [compatibleLangs] :: ODELibPckg -> [Lang]
 
 -- | Makes an <a>ODELibPckg</a> with the given name, <a>ExternalLibrary</a>
---   specification, <a>ExternalLibraryCall</a> specification parameterized
---   by an <a>ODEInfo</a>, local file path to the library, and list of
---   compatible languages.
-mkODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
+--   specification, a list of necessary dummy quantities usage relies on,
+--   <a>ExternalLibraryCall</a> specification parameterized by an
+--   <a>ODEInfo</a>, local file path to the library, and list of compatible
+--   languages.
+mkODELib :: Name -> Version -> [DefinedQuantityDict] -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
 
 -- | Makes an <a>ODELibPckg</a> with the given name, <a>ExternalLibrary</a>
---   specification, <a>ExternalLibraryCall</a> specification parameterized
---   by an <a>ODEInfo</a>, and list of compatible languages.
-mkODELibNoPath :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
+--   specification, a list of necessary dummy quantities usage relies on,
+--   <a>ExternalLibraryCall</a> specification parameterized by an
+--   <a>ODEInfo</a>, and list of compatible languages.
+mkODELibNoPath :: Name -> Version -> [DefinedQuantityDict] -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
 
 
 -- | Defines functions for simultaneous interpretation of ExternalLibrary
@@ -1372,6 +1377,7 @@ ODE :: [ODEInfo] -> [ODELibPckg] -> ODE
 
 -- | Constructor to create an ODE
 makeODE :: [ODEInfo] -> [ODELibPckg] -> ODE
+odeLibReqs :: ExtLib -> [DefinedQuantityDict]
 
 -- | Configuration for Doxygen documentation
 data DocConfig
@@ -1659,21 +1665,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_ayiw
-oldCodeSpec :: HasOldCodeSpec c_ayiw => Lens' c_ayiw OldCodeSpec
-authorsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw People
-cMapO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [FilePath]
-constMapO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw ConstantMap
-constantsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Const]
-derivedInputsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Derived]
-execOrderO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Def]
-extInputsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Input]
-inputsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Input]
-modsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Mod]
-outputsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Output]
-pNameO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw Name
-systemdbO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw ChunkDB
+class HasOldCodeSpec c_aArX
+oldCodeSpec :: HasOldCodeSpec c_aArX => Lens' c_aArX OldCodeSpec
+authorsO :: HasOldCodeSpec c_aArX => Lens' c_aArX People
+cMapO :: HasOldCodeSpec c_aArX => Lens' c_aArX ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aArX => Lens' c_aArX [FilePath]
+constMapO :: HasOldCodeSpec c_aArX => Lens' c_aArX ConstantMap
+constantsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Const]
+derivedInputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Derived]
+execOrderO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Def]
+extInputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Input]
+inputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Input]
+modsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Mod]
+outputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Output]
+pNameO :: HasOldCodeSpec c_aArX => Lens' c_aArX Name
+systemdbO :: HasOldCodeSpec c_aArX => Lens' c_aArX ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -2897,21 +2903,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_ayiw
-oldCodeSpec :: HasOldCodeSpec c_ayiw => Lens' c_ayiw OldCodeSpec
-authorsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw People
-cMapO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [FilePath]
-constMapO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw ConstantMap
-constantsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Const]
-derivedInputsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Derived]
-execOrderO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Def]
-extInputsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Input]
-inputsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Input]
-modsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Mod]
-outputsO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw [Output]
-pNameO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw Name
-systemdbO :: HasOldCodeSpec c_ayiw => Lens' c_ayiw ChunkDB
+class HasOldCodeSpec c_aArX
+oldCodeSpec :: HasOldCodeSpec c_aArX => Lens' c_aArX OldCodeSpec
+authorsO :: HasOldCodeSpec c_aArX => Lens' c_aArX People
+cMapO :: HasOldCodeSpec c_aArX => Lens' c_aArX ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aArX => Lens' c_aArX [FilePath]
+constMapO :: HasOldCodeSpec c_aArX => Lens' c_aArX ConstantMap
+constantsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Const]
+derivedInputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Derived]
+execOrderO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Def]
+extInputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Input]
+inputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Input]
+modsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Mod]
+outputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Output]
+pNameO :: HasOldCodeSpec c_aArX => Lens' c_aArX Name
+systemdbO :: HasOldCodeSpec c_aArX => Lens' c_aArX ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -3431,13 +3437,16 @@ Adams :: ODEMethod
 
 -- | Holds an ODE library package.
 data ODELibPckg
-ODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
+ODELib :: Name -> Version -> [DefinedQuantityDict] -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
 
 -- | Library name.
 [libName] :: ODELibPckg -> Name
 
 -- | Version.
 [libVers] :: ODELibPckg -> Version
+
+-- | Dummy quantities necessary for use in ODE solving.
+[libDummyQuants] :: ODELibPckg -> [DefinedQuantityDict]
 
 -- | Library specifications.
 [libSpec] :: ODELibPckg -> ExternalLibrary
@@ -3452,15 +3461,17 @@ ODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall)
 [compatibleLangs] :: ODELibPckg -> [Lang]
 
 -- | Makes an <a>ODELibPckg</a> with the given name, <a>ExternalLibrary</a>
---   specification, <a>ExternalLibraryCall</a> specification parameterized
---   by an <a>ODEInfo</a>, local file path to the library, and list of
---   compatible languages.
-mkODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
+--   specification, a list of necessary dummy quantities usage relies on,
+--   <a>ExternalLibraryCall</a> specification parameterized by an
+--   <a>ODEInfo</a>, local file path to the library, and list of compatible
+--   languages.
+mkODELib :: Name -> Version -> [DefinedQuantityDict] -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
 
 -- | Makes an <a>ODELibPckg</a> with the given name, <a>ExternalLibrary</a>
---   specification, <a>ExternalLibraryCall</a> specification parameterized
---   by an <a>ODEInfo</a>, and list of compatible languages.
-mkODELibNoPath :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
+--   specification, a list of necessary dummy quantities usage relies on,
+--   <a>ExternalLibraryCall</a> specification parameterized by an
+--   <a>ODEInfo</a>, and list of compatible languages.
+mkODELibNoPath :: Name -> Version -> [DefinedQuantityDict] -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
 
 -- | Any quantity can be a named argument (wrapper for
 --   <a>DefinedQuantityDict</a>), but with more of a focus on generating
@@ -3479,16 +3490,8 @@ module Data.Drasil.ExternalLibraries.ODELibraries
 -- | <a>SciPy</a> ODE library package.
 scipyODEPckg :: ODELibPckg
 
--- | Collects variables needed for SciPy's ODEs as
---   <a>DefinedQuantityDict</a>s.
-scipyODESymbols :: [DefinedQuantityDict]
-
 -- | <a>Oslo</a> ODE library package.
 osloPckg :: ODELibPckg
-
--- | Collects variables needed for Oslo's ODEs as
---   <a>DefinedQuantityDict</a>s.
-osloSymbols :: [DefinedQuantityDict]
 
 -- | Oslo's Vector type behaves like an array, so needs to be represented
 --   as one or else will hit type errors in GOOL.
@@ -3497,16 +3500,8 @@ arrayVecDepVar :: ODEInfo -> CodeVarChunk
 -- | <a>Apache Commons</a> ODE library package.
 apacheODEPckg :: ODELibPckg
 
--- | Collects variables needed for Apache's ODEs as
---   <a>DefinedQuantityDict</a>s.
-apacheODESymbols :: [DefinedQuantityDict]
-
 -- | <a>odeint</a> ODE library package.
 odeintPckg :: ODELibPckg
-
--- | Collects variables needed for odeint's ODEs as
---   <a>DefinedQuantityDict</a>s.
-odeintSymbols :: [DefinedQuantityDict]
 
 -- | Change in <tt>X</tt> chunk constructor (where <tt>X</tt> is a given
 --   argument).

@@ -769,7 +769,7 @@ class (ModuleSym r) => FileSym r where {
     type File r;
 }
 fileDoc :: FileSym r => FSModule r -> SFile r
-docMod :: FileSym r => String -> [String] -> String -> SFile r -> SFile r
+docMod :: FileSym r => String -> String -> [String] -> String -> SFile r -> SFile r
 class (MethodSym r) => ModuleSym r where {
     type Module r;
 }
@@ -860,7 +860,7 @@ class (ModuleSym r) => FileSym r where {
     type File r;
 }
 fileDoc :: FileSym r => FSModule r -> SFile r
-docMod :: FileSym r => String -> [String] -> String -> SFile r -> SFile r
+docMod :: FileSym r => String -> String -> [String] -> String -> SFile r -> SFile r
 class (ClassSym r) => ModuleSym r where {
     type Module r;
 }
@@ -1159,7 +1159,7 @@ type FuncDocRenderer = String -> [(String, String)] -> [String] -> [String]
 functionDox :: FuncDocRenderer
 type ClassDocRenderer = String -> [String]
 classDox :: ClassDocRenderer
-type ModuleDocRenderer = String -> [String] -> String -> String -> [String]
+type ModuleDocRenderer = String -> String -> [String] -> String -> String -> [String]
 moduleDox :: ModuleDocRenderer
 commentedMod :: FileData -> Doc -> FileData
 valueList :: CommonRenderSym r => [r (Value r)] -> Doc
@@ -1358,7 +1358,7 @@ fileDoc :: OORenderSym r => String -> (r (Module r) -> r (Block r)) -> r (Block 
 --   description, author, and module name and returns a doc comment e is
 --   the file extension d is the description (I think) a is a list of
 --   authors dt is the date fl is the file
-docMod :: OORenderSym r => ModuleDocRenderer -> String -> String -> [String] -> String -> SFile r -> SFile r
+docMod :: OORenderSym r => ModuleDocRenderer -> String -> String -> String -> [String] -> String -> SFile r -> SFile r
 newtype OptionalSpace
 OSpace :: Doc -> OptionalSpace
 [oSpace] :: OptionalSpace -> Doc
@@ -1374,8 +1374,8 @@ int :: CommonRenderSym r => VSType r
 constructor :: OORenderSym r => Label -> [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
 doxFunc :: CommonRenderSym r => String -> [String] -> Maybe String -> SMethod r -> SMethod r
 doxClass :: OORenderSym r => String -> SClass r -> SClass r
-doxMod :: OORenderSym r => String -> String -> [String] -> String -> SFile r -> SFile r
-docMod' :: OORenderSym r => String -> String -> [String] -> String -> SFile r -> SFile r
+doxMod :: OORenderSym r => String -> String -> String -> [String] -> String -> SFile r -> SFile r
+docMod' :: OORenderSym r => String -> String -> String -> [String] -> String -> SFile r -> SFile r
 
 -- | Generates Markdown/DocC style module doc comment. Useful for Swift,
 --   which follows DocC, Julia, which uses Markdown, and any other language
@@ -1552,7 +1552,7 @@ module Drasil.GProc.LanguageRenderer.AbstractProc
 fileDoc :: ProcRenderSym r => String -> FSModule r -> SFile r
 fileFromData :: ProcRenderSym r => (FilePath -> r (Module r) -> r (File r)) -> FilePath -> FSModule r -> SFile r
 buildModule :: ProcRenderSym r => Label -> FS Doc -> FS Doc -> [SMethod r] -> FSModule r
-docMod :: ProcRenderSym r => String -> String -> [String] -> String -> SFile r -> SFile r
+docMod :: ProcRenderSym r => String -> String -> String -> [String] -> String -> SFile r -> SFile r
 modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
 listInnerType :: ProcRenderSym r => VSType r -> VSType r
 arrayElem :: ProcRenderSym r => SValue r -> SVariable r -> SVariable r
@@ -1680,7 +1680,7 @@ class (ModuleSym r) => FileSym r where {
     type File r;
 }
 fileDoc :: FileSym r => FSModule r -> SFile r
-docMod :: FileSym r => String -> [String] -> String -> SFile r -> SFile r
+docMod :: FileSym r => String -> String -> [String] -> String -> SFile r -> SFile r
 class (BlockSym r) => BodySym r where {
     type Body r;
 }
@@ -2934,7 +2934,7 @@ class (ModuleSym r) => FileSym r where {
     type File r;
 }
 fileDoc :: FileSym r => FSModule r -> SFile r
-docMod :: FileSym r => String -> [String] -> String -> SFile r -> SFile r
+docMod :: FileSym r => String -> String -> [String] -> String -> SFile r -> SFile r
 class PermanenceSym r where {
     type Permanence r;
 }

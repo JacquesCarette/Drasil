@@ -1,4 +1,4 @@
 digraph moduledocrenderer{
 ModuleDocRenderer	[shape=oval, color=red2, label="ModuleDocRenderer"];
-ModuleDocRenderer -> StringStringStringStringString;
+ModuleDocRenderer -> StringStringStringStringStringString;
 }

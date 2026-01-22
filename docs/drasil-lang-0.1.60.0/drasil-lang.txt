@@ -1280,7 +1280,7 @@ S :: String -> NPStruct
 P :: Symbol -> NPStruct
 
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <tt>Symbol</tt>.
+--   a <a>Symbol</a>.
 sdep :: Sentence -> [UID]
 shortdep :: Sentence -> [UID]
 

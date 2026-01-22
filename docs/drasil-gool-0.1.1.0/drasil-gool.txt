@@ -36,7 +36,7 @@ class (ModuleSym r) => FileSym r where {
     type File r;
 }
 fileDoc :: FileSym r => FSModule r -> SFile r
-docMod :: FileSym r => String -> [String] -> String -> SFile r -> SFile r
+docMod :: FileSym r => String -> String -> [String] -> String -> SFile r -> SFile r
 class (BlockSym r) => BodySym r where {
     type Body r;
 }
@@ -423,7 +423,7 @@ class (ModuleSym r) => FileSym r where {
     type File r;
 }
 fileDoc :: FileSym r => FSModule r -> SFile r
-docMod :: FileSym r => String -> [String] -> String -> SFile r -> SFile r
+docMod :: FileSym r => String -> String -> [String] -> String -> SFile r -> SFile r
 class PermanenceSym r where {
     type Permanence r;
 }

@@ -103,8 +103,6 @@ digraph alltypes {
 	}
 	subgraph requirements {
 	}
-	subgraph symbols {
-	}
 	subgraph tmods {
 	}
 	subgraph unitals {

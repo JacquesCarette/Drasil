@@ -54,6 +54,7 @@ module Drasil.GlassBR.Units
 sFlawPU :: UnitDefn
 
 module Drasil.GlassBR.Unitals
+symbols :: [DefinedQuantityDict]
 constrained :: [ConstrConcept]
 plateLen :: UncertQ
 plateWidth :: UncertQ
@@ -191,20 +192,10 @@ implVars :: [DefinedQuantityDict]
 interpY :: Func
 interpZ :: Func
 
-module Drasil.GlassBR.Symbols
-symbolsForSymbolTable :: [DefinedQuantityDict]
-symbolsForTermTable :: [DefinedQuantityDict]
-thisSymbols :: [DefinedQuantityDict]
-thisTerms :: [DefinedQuantityDict]
-
 module Drasil.GlassBR.LabelledContent
-resourcePath :: String
 figures :: [LabelledContent]
 sysCtxFig :: LabelledContent
 physSystFig :: LabelledContent
-traceItemSecsFig :: LabelledContent
-traceReqsItemsFig :: LabelledContent
-traceAssumpsOthersFig :: LabelledContent
 demandVsSDFig :: LabelledContent
 dimlessloadVsARFig :: LabelledContent
 
@@ -268,6 +259,7 @@ ideaDicts :: [IdeaDict]
 conceptChunks :: [ConceptChunk]
 abbreviationsList :: [IdeaDict]
 symbMap :: ChunkDB
+symbolsWCodeSymbols :: [DefinedQuantityDict]
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

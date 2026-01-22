@@ -631,6 +631,7 @@ digraph alltypes {
 		ODELibPckg	[shape=oval, color=cyan3, label="ODELibPckg"];
 		ODELibPckg -> Name;
 		ODELibPckg -> Version;
+		ODELibPckg -> DefinedQuantityDict;
 		ODELibPckg -> ExternalLibrary;
 		ODELibPckg -> ODEInfoExternalLibraryCall;
 		ODELibPckg -> MaybeFilePath;

@@ -393,21 +393,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_ay2G
-oldCodeSpec :: HasOldCodeSpec c_ay2G => Lens' c_ay2G OldCodeSpec
-authorsO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G People
-cMapO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G [FilePath]
-constMapO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G ConstantMap
-constantsO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G [Const]
-derivedInputsO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G [Derived]
-execOrderO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G [Def]
-extInputsO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G [Input]
-inputsO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G [Input]
-modsO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G [Mod]
-outputsO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G [Output]
-pNameO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G Name
-systemdbO :: HasOldCodeSpec c_ay2G => Lens' c_ay2G ChunkDB
+class HasOldCodeSpec c_aApf
+oldCodeSpec :: HasOldCodeSpec c_aApf => Lens' c_aApf OldCodeSpec
+authorsO :: HasOldCodeSpec c_aApf => Lens' c_aApf People
+cMapO :: HasOldCodeSpec c_aApf => Lens' c_aApf ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aApf => Lens' c_aApf [FilePath]
+constMapO :: HasOldCodeSpec c_aApf => Lens' c_aApf ConstantMap
+constantsO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Const]
+derivedInputsO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Derived]
+execOrderO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Def]
+extInputsO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Input]
+inputsO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Input]
+modsO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Mod]
+outputsO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Output]
+pNameO :: HasOldCodeSpec c_aApf => Lens' c_aApf Name
+systemdbO :: HasOldCodeSpec c_aApf => Lens' c_aApf ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -927,13 +927,16 @@ Adams :: ODEMethod
 
 -- | Holds an ODE library package.
 data ODELibPckg
-ODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
+ODELib :: Name -> Version -> [DefinedQuantityDict] -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
 
 -- | Library name.
 [libName] :: ODELibPckg -> Name
 
 -- | Version.
 [libVers] :: ODELibPckg -> Version
+
+-- | Dummy quantities necessary for use in ODE solving.
+[libDummyQuants] :: ODELibPckg -> [DefinedQuantityDict]
 
 -- | Library specifications.
 [libSpec] :: ODELibPckg -> ExternalLibrary
@@ -948,15 +951,17 @@ ODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall)
 [compatibleLangs] :: ODELibPckg -> [Lang]
 
 -- | Makes an <a>ODELibPckg</a> with the given name, <a>ExternalLibrary</a>
---   specification, <a>ExternalLibraryCall</a> specification parameterized
---   by an <a>ODEInfo</a>, local file path to the library, and list of
---   compatible languages.
-mkODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
+--   specification, a list of necessary dummy quantities usage relies on,
+--   <a>ExternalLibraryCall</a> specification parameterized by an
+--   <a>ODEInfo</a>, local file path to the library, and list of compatible
+--   languages.
+mkODELib :: Name -> Version -> [DefinedQuantityDict] -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
 
 -- | Makes an <a>ODELibPckg</a> with the given name, <a>ExternalLibrary</a>
---   specification, <a>ExternalLibraryCall</a> specification parameterized
---   by an <a>ODEInfo</a>, and list of compatible languages.
-mkODELibNoPath :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
+--   specification, a list of necessary dummy quantities usage relies on,
+--   <a>ExternalLibraryCall</a> specification parameterized by an
+--   <a>ODEInfo</a>, and list of compatible languages.
+mkODELibNoPath :: Name -> Version -> [DefinedQuantityDict] -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
 
 -- | Any quantity can be a named argument (wrapper for
 --   <a>DefinedQuantityDict</a>), but with more of a focus on generating
@@ -975,16 +980,8 @@ module Data.Drasil.ExternalLibraries.ODELibraries
 -- | <a>SciPy</a> ODE library package.
 scipyODEPckg :: ODELibPckg
 
--- | Collects variables needed for SciPy's ODEs as
---   <a>DefinedQuantityDict</a>s.
-scipyODESymbols :: [DefinedQuantityDict]
-
 -- | <a>Oslo</a> ODE library package.
 osloPckg :: ODELibPckg
-
--- | Collects variables needed for Oslo's ODEs as
---   <a>DefinedQuantityDict</a>s.
-osloSymbols :: [DefinedQuantityDict]
 
 -- | Oslo's Vector type behaves like an array, so needs to be represented
 --   as one or else will hit type errors in GOOL.
@@ -993,16 +990,8 @@ arrayVecDepVar :: ODEInfo -> CodeVarChunk
 -- | <a>Apache Commons</a> ODE library package.
 apacheODEPckg :: ODELibPckg
 
--- | Collects variables needed for Apache's ODEs as
---   <a>DefinedQuantityDict</a>s.
-apacheODESymbols :: [DefinedQuantityDict]
-
 -- | <a>odeint</a> ODE library package.
 odeintPckg :: ODELibPckg
-
--- | Collects variables needed for odeint's ODEs as
---   <a>DefinedQuantityDict</a>s.
-odeintSymbols :: [DefinedQuantityDict]
 
 -- | Change in <tt>X</tt> chunk constructor (where <tt>X</tt> is a given
 --   argument).

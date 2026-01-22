@@ -21,7 +21,12 @@ import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 import Drasil.GlassBR.Units (sFlawPU)
 --FIXME: Many of the current terms can be separated into terms and defns?
 
-{--}
+symbols :: [DefinedQuantityDict]
+symbols = map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
+  map dqdWr sdVector ++ tmSymbols ++ map dqdWr specParamVals ++
+  [dqdWr modElas] ++ interps ++ map dqdWr unitalSymbols ++
+  unitless ++ map dqdWr [probBr, stressDistFac, cnstrw' nomThick, cnstrw' glassTypeCon] ++
+  map dqdWr derivedInputDataConstraints
 
 constrained :: [ConstrConcept]
 constrained = map cnstrw' dataConstraints ++ map cnstrw' [nomThick, glassTypeCon]

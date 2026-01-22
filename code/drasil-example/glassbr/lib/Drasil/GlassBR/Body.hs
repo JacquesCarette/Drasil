@@ -12,6 +12,7 @@ import Drasil.DocLang (auxSpecSent, termDefnF')
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested, tAndDOnly, tAndDWAcc, noRefs,
@@ -45,14 +46,14 @@ import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
+import Drasil.GlassBR.ModuleDefs (allMods, implVars)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
-import Drasil.GlassBR.Symbols (thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
+  sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
 
 si :: System
 si = mkSystem progName Specification
@@ -137,8 +138,12 @@ abbreviationsList =
   map nw acronyms
 
 symbMap :: ChunkDB
-symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
+symbMap = cdb symbolsWCodeSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
   GB.dataDefs iMods [] tMods concIns citations labCon
+
+symbolsWCodeSymbols :: [DefinedQuantityDict]
+symbolsWCodeSymbols = map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
+  ++ implVars ++ symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

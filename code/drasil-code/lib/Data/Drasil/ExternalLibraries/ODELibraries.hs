@@ -662,6 +662,11 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
     replaceDepVar e = e
 
 -- | Collect all chunks related to a specific ODE
+--
+-- FIXME: HACK: Rather than being tied to 'ODEInfo', this should be tied to the
+-- 'ODELibPckg', which contains the know-how of code generation for ODEs and
+-- really knows which "ODEInfo-required-chunks" are necessary to add to the
+-- `ChunkDB`. This currently throws more than necessary.
 odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]
 odeInfoChunks info =
   let dv = depVar info

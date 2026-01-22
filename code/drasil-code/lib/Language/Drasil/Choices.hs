@@ -2,7 +2,7 @@
 module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..),
   makeMaps, spaceToCodeType, Constraints(..), makeConstraints,
-  ODE(..), makeODE, odeLibReqs,
+  ODE(..), makeODE, odeInfoReqs, odeLibReqs,
   DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..),
   makeOptFeats, ExtLib(..), Modularity(..), Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
@@ -18,6 +18,8 @@ import qualified Data.Map as Map
 import Drasil.Database (UID, HasUID (..))
 import Drasil.GOOL (CodeType)
 import Language.Drasil hiding (None)
+
+import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
 
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -319,6 +321,9 @@ data ODE = ODE{
 -- | Constructor to create an ODE
 makeODE :: [ODEInfo] -> [ODELibPckg] -> ODE
 makeODE = ODE
+
+odeInfoReqs :: ExtLib -> [DefinedQuantityDict]
+odeInfoReqs (Math ode) = concatMap odeInfoChunks $ odeInfo ode
 
 odeLibReqs :: ExtLib -> [DefinedQuantityDict]
 odeLibReqs (Math ode) = concatMap libDummyQuants $ odeLib ode

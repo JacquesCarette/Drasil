@@ -665,8 +665,7 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
 odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]
 odeInfoChunks info =
   let dv = depVar info
-  in map dqdWr [ dv
-               , listToArray dv
+  in map dqdWr [ listToArray dv
                , arrayVecDepVar info
                , diffCodeChunk dv
                , listToArray $ diffCodeChunk dv

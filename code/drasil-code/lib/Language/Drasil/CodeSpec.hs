@@ -21,7 +21,8 @@ import Utils.Drasil (subsetOf)
 import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
-import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..), odeLibReqs)
+import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..),
+  odeLibReqs, odeInfoReqs)
 import Language.Drasil.Chunk.CodeBase (quantvar, codevars, varResolve)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 import Language.Drasil.ICOSolutionSearch (Def, solveExecOrder)
@@ -170,8 +171,10 @@ codeSpec si chs ms = CS {
   _oldCode = oldcodeSpec si' chs ms
 }
   where
-    libReqs = concatMap odeLibReqs $ extLibs chs
-    db' = insertAll libReqs $ si ^. systemdb
+    els = extLibs chs
+    libReqs = concatMap odeLibReqs els
+    infoReqs = concatMap odeInfoReqs els
+    db' = insertAll (libReqs ++ infoReqs) $ si ^. systemdb
     si' = set systemdb db' si
 
 -- | Generates an 'OldCodeSpec' from 'System', 'Choices', and a list of 'Mod's.

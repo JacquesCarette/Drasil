@@ -1,11 +1,9 @@
 \chapter{Introduction}
-\ds{Introduce the term softifact somewhere in here}
+% The following is a working draft. All changes will be summarized at the top.
 
-\ds{Give examples of what audience writing for - know classical software 
-engineering}
+% --- Begin copied content from introduction.tex ---
 
-\ds{Pain points and problems come first, then solution is docs, then problems 
-with writing docs, then the rest of this.}
+
 Documentation is good\cite{Hyman1990, Kotula2000, Thimbleby1986, Parnas2010, 
 ParnasAndClements1986,
 ParnasEtAl1994, Roache1998, CarverEtAl2007, Kelly2007, Kelly2015, 
@@ -17,28 +15,67 @@ ShumAndCook1993, PieterseKourieAndBoake2004, Simonis2003, SchulteEtAl2012,
 Leisch2002, LenthEtAl2007, Lenth2009, FlattEtAl2009, SmithEtAl2015SQJ,
 SmithEtAl2015-SS-TR, SmithEtAl2013, SmithKoothoorAndNedialkov2014, 
 SmithAndKoothoor2016, SmithAndYu2009}, yet it is not often prioritized on 
-software
-projects. Code and other software artifacts say the same thing, but to 
-different audiences - if they didn't, they would be describing different 
-systems.
+software projects. 
 
-Take, for example, a software requirements document. It is a human-readable
-abstraction of \textit{what} the software is supposed to do. Whereas a design 
-document is a human-readable version of \textit{how} the software is supposed 
-to fulfill its requirements. The source code itself is a computer-readable list 
-of instructions combining \textit{what} must be done and, in many languages, 
-\textit{how} that is to be accomplished.
 
-[Put in figures of an example from \gb{}/Projectile here, showing SRS, DD, and
-code versions of the same knowledge]
+In this thesis, we use the command \sf{} to refer to any artifact produced
+during software development that conveys knowledge: source code, requirements, 
+design documents, test cases, or user manuals.
 
-[Figure] shows an example of the same information represented in several
-different views (requirements, detailed design, and source code). We aim to
-take advantage of the inherent redundancy across these views to distill a single
-source of information, thus removing the need to manually duplicate information
-across software artifacts.
+Code and other software artifacts (\sfs{}) say the same thing, but to
+different audiences (ie. developers, maintainers, regulators, or end users); 
+if they did not, they would be describing different systems.
+Using this thesis as an example, it is written for an audience familiar with 
+classical software engineering, including those who have experience with 
+requirements documents, design documents, and the challenges of maintaining 
+large, long-lived software systems. The examples and case studies are drawn 
+from scientific computing, but the pain points and solutions discussed are 
+broadly relevant.
 
-Manually writing and maintaining a full range of software artifacts (i.e.
+Speaking broadly about \sfs{}, let us consider a few different documents. A 
+software requirements document is a human-readable abstraction of \textit{what} 
+the software is supposed to do. Whereas a design document is a human-readable 
+version of \textit{how} the software is supposed to fulfill its requirements. 
+The source code itself is a computer-readable list of instructions combining 
+\textit{what} must be done and, in many languages, \textit{how} that is to be 
+accomplished. Importantly, this multiplicity of views is not limited to 
+separate \sfs{}; even within a single artifact the same information may appear 
+in multiple forms. For example, a requirements document may include natural 
+language descriptions, mathematical equations, and other relationships 
+expressed in a multitude of ways (tables, graphs, diagrams, etc.).
+
+\begin{table}[h]
+\centering
+\caption{The same information as natural language, equation, and code}
+\label{tab:proj-views}
+\begin{tabular}{|p{0.3\linewidth}|p{0.22\linewidth}|p{0.48\linewidth}|}
+\hline
+\textbf{\rule{0pt}{4.5ex}Description} & 
+\textbf{Equation} & 
+\textbf{Code (Python)} \\
+\hline
+\vspace{1.5ex} $P_b$ is the Probability of Breakage &
+\vspace{1.5ex} $P_b = 1 - e^-B$ &
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[language=Python,basicstyle=\ttfamily\footnotesize]
+def func_P_b(B):
+    return 1.0 - math.exp(-B)
+\end{lstlisting}
+\end{minipage} \\
+\hline
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:proj-views} shows how the same information (the definition of 
+$P_b$) can be represented in several different views: as a natural language 
+description, equation, and code definition. We aim to take advantage of the 
+inherent redundancy across these views to distill a single source of 
+information, thus removing the need to manually duplicate information across 
+\sfs{}. This example illustrates a broader challenge: when the same knowledge 
+must be expressed in multiple forms for different audiences or purposes, the 
+effort to keep these representations consistent becomes significant.
+
+Manually writing and maintaining a full range of software artifacts (ie.
 multiple documents for different audiences plus the source code) is
 redundant and tedious. Factor in deadlines, changing requirements, and other
 common issues faced during development and you have a perfect storm for
@@ -58,35 +95,20 @@ forced to manually write descriptions of systems in both code and comments.
 They also do not generate all software artifacts - commonly they are used to
 generate only API documentation targeted towards developers or user manuals.
 
-\ds{If we can truly understand the differences and commonalities between 
+If we can truly understand the differences and commonalities between 
 software artifacts, we can develop tools to capitalize on them and streamline 
 the process of creating and maintaining software artifacts. For that we first 
 need to break down common artifacts to develop an understanding of their 
 contents, intended audience, and how they differ whether on intra- or 
-inter-project scales}.
+inter-project scales.
 
 We propose a new framework, Drasil, alongside a knowledge-centric view of
-software, to help take advantage of inherent redundancy, while avoiding 
-\ds{/reducing} manual duplication and synchronization problems. Our approach 
-looks at what underlies the problems we solve using software and capturing that 
-``common" or ``core" knowledge. We then use that knowledge to generate our 
-software artifacts, thus gaining the benefits inherent to the generation 
-process: lack of manual duplication, one source to maintain, and 'free' 
-traceability of information.
-
-\section{Value in the mundane}
-??
-\ds{What we're doing is not big and flashy, instead it is focused on the tedium 
-we deal with in our day-to-day lives as Software Engineers. We are focused on 
-improving the development experience holistically. The small annoyances can be 
-more frustrating than solving larger problems. Ex. The feeling of hours spent 
-banging heads against walls for an off-by-one or a typo that didn't get caught, 
-versus the sublime joy of finding a novel, interesting, scalable, and 
-maintainable solution to a problem.}
-
-\ds {More about the little pain points should go here - i.e. having to go 
-manually update artifacts after modifying code, particularly in regulated 
-industries}
+software, to help take advantage of inherent redundancy while reducing manual 
+duplication and synchronization problems. Our approach looks at what underlies 
+the problems we solve using software and capturing that ``common" or ``core" 
+knowledge. We then use that knowledge to generate our software artifacts, thus 
+gaining the benefits inherent to the generation process: lack of manual 
+duplication, one source to maintain, and 'free' traceability of information.
 
 \section{Problem Statement and Motivation}
 Despite the recognized value of documentation and software artifacts (\sfs{}), 
@@ -98,6 +120,67 @@ documentation. This thesis addresses the challenge: \emph{How can we
 systematically reduce unnecessary redundancy and improve consistency across 
 software artifacts, especially in domains where correctness and traceability 
 are critical?}
+
+The root of the problem lies in the fact that the same knowledge must be
+expressed in multiple forms for different audiences and purposes. Each artifact
+is typically maintained separately, requiring manual updates whenever changes
+occur. This manual process is error-prone and time-consuming, and the effort
+required to keep all artifacts synchronized grows rapidly as projects become
+more complex or requirements change more frequently.
+
+Existing approaches, such as documentation generators and code-centric tools,
+alleviate some of the burden but do not eliminate the underlying redundancy.
+They often focus on generating a limited subset of artifacts (such as API
+documentation) and still require developers to duplicate information in code
+and comments. As a result, inconsistencies persist, and the benefits of
+automation are only partially realized.
+
+The consequences of these challenges are particularly acute in scientific
+computing and other domains where correctness, traceability, and regulatory
+compliance are essential. In such contexts, even minor inconsistencies can
+undermine confidence in the software and its documentation, potentially
+leading to costly errors or rework.
+
+Motivated by these issues, this thesis seeks to develop a knowledge-centric
+approach that captures the core information underlying a system and uses it to
+generate all relevant \sfs{}. By reducing manual duplication and
+synchronization effort, we aim to improve consistency, maintainability, and
+traceability across the software lifecycle.
+
+\section{The mundane and why it matters}
+
+What we are doing is not big and flashy; instead, it is focused on the tedium
+we deal with in our day-to-day lives as software engineers. We are focused on
+improving the development experience holistically. The small annoyances can be
+more frustrating than solving larger problems. For example, the feeling of
+hours spent banging heads against walls for an off-by-one error or a typo that 
+somehow snuck past review, versus the sublime joy of finding a novel, 
+interesting, scalable, and maintainable solution to a problem.
+
+These little pain points, including having to manually update artifacts after
+modifying code, especially in regulated industries, accumulate over time and
+can have a significant impact on productivity and morale. While each instance
+may seem minor, together they represent a substantial barrier to efficient and
+reliable software development, particularly in domains where correctness and
+traceability are essential.
+
+Drasil is our approach to address these everyday frustrations by systematically
+reducing manual duplication and synchronization effort. By capturing core
+knowledge explicitly and generating artifacts from a single source, Drasil
+helps ensure that changes propagate consistently and automatically across all
+relevant documents and code. This approach not only reduces the risk of
+inconsistencies, but also supports practices such as continuous integration and
+refactoring, keeping artifacts in a steady-state of consistency.
+
+The value of this approach is most apparent in the small details: the hours
+saved by not having to update documentation by hand, the confidence that comes
+from knowing all artifacts are synchronized, and the ability to trace the
+origin of any piece of information. These improvements may not be as
+immediately dramatic as solving a major technical challenge, but they
+accumulate to create a more reliable, maintainable, and satisfying development
+experience. In this way, Drasil demonstrates that addressing the mundane is not
+only worthwhile, but essential for advancing the practice of software
+engineering.
 
 \section{Scope}
 \label{sec:scope}
@@ -136,51 +219,86 @@ EasterbrookAndJohns2009}, or amethododical~\citep{Kelly2013} processes instead.
 The remainder of this thesis is organized as follows:
 \begin{itemize}
     \item \textbf{Chapter~\ref{c:background}: Background} reviews the 
-    literature on software artifacts, reuse, literate programming, and 
-    generative programming.
+    literature on software artifacts, redundancy, reuse, literate programming, 
+    and generative programming.
     \item \textbf{Chapter~\ref{c:process}: Our Process} details the methods 
-    used to analyze artifacts and identify redundancy.
+    used to analyze \sfs{}, identify redundancy, and motivate the 
+    knowledge-centric approach.
     \item \textbf{Chapter~\ref{c:drasil}: The Drasil Framework} presents the 
-    design and implementation of Drasil.
-    \item \textbf{Chapter~\ref{c:results}: Results} discusses the outcomes of 
-    applying Drasil to case studies.
-    \item \textbf{Chapter~\ref{c:future}: Future Work} outlines potential 
-    extensions and open questions.
+    design, architecture, and implementation of Drasil, including its 
+    knowledge representation and artifact generation capabilities.
+    \item \textbf{Chapter~\ref{c:results}: Results} presents observations
+    and analysis from reimplementing existing case studies using Drasil,
+    highlighting practical benefits.
+    \item \textbf{Chapter~\ref{c:discussion}: Discussion} interprets the 
+    results, explores the implications of the knowledge-centric approach, and
+    discusses limitations and challenges encountered.
     \item \textbf{Chapter~\ref{c:conclusion}: Conclusion} summarizes the 
-    findings and their implications.
+    findings, contributions, and implications of this work and outlines 
+    potential extensions, open questions, and directions for further research.
 \end{itemize}
 
 \section{Contributions}
 
 The main contributions of this thesis are:
+
 \begin{itemize}
-    \item A systematic analysis of redundancy and inconsistency in software 
-    artifacts, with a focus on scientific computing.
-    \item The design and implementation of the Drasil framework, which enables 
-    knowledge-centric generation of multiple software artifacts from a single 
-    source of truth.
-    \item A demonstration of Drasil's effectiveness through reimplementation of 
-    several case studies, highlighting improvements in consistency, 
-    maintainability, and traceability.
-    \item A discussion of the limitations, challenges, and future directions 
-    for knowledge-centric software artifact generation.
+    \item \textbf{Systematic analysis of redundancy and inconsistency in 
+    software artifacts.} Through detailed breakdowns of \sfs{} across multiple 
+    scientific computing case studies, this work exposes patterns and sources 
+    of unnecessary duplication and inconsistency that plague traditional 
+    artifact-centric workflows.
+
+    \item \textbf{Operationalization of knowledge-centric artifact generation.}
+    The thesis develops and formalizes a process for capturing, organizing,
+    and projecting domain knowledge, operationalizing software engineering
+    principles to enable automated generation of diverse artifacts from a
+    single source of truth.
+
+    \item \textbf{Design and implementation of the Drasil framework.}
+    Drasil is presented as a novel, extensible framework for knowledge-centric
+    software artifact generation. Its architecture includes robust mechanisms
+    for knowledge capture (chunks), projection (recipes), and rendering 
+    (multi-format output), supporting traceability and maintainability by 
+    construction.
+
+    \item \textbf{Demonstration of Drasil's effectiveness via reimplementation 
+    of case studies.} The thesis documents the reimplementation of several 
+    scientific computing systems using Drasil, showing that local changes to 
+    domain knowledge propagate automatically and consistently across all 
+    generated artifacts. This approach reduces manual effort, increases error 
+    visibility, and supports rapid adaptation and software family evolution.
+
+    \item \textbf{Empirical observations on consistency, traceability, and 
+    reproducibility.} Through case study analysis and artifact comparison, the 
+    thesis provides evidence that Drasil enforces consistency by construction, 
+    improves traceability through explicit provenance, and supports 
+    reproducibility via deterministic artifact generation.
+
+    \item \textbf{Identification and clarification of tacit knowledge and 
+    implicit assumptions.} By forcing explicit encoding of all domain 
+    knowledge, Drasil surfaces hidden assumptions and semantic inconsistencies, 
+    enabling their correction and documentation across all artifacts.
+
+    \item \textbf{Framework for rapid generation and maintenance of software 
+    families.} The single-source approach and recipe DSL enable efficient 
+    creation of software family variants, minimizing duplication and ensuring 
+    consistency across related products.
+
+    \item \textbf{Lessons learned and guidance for future research.}
+    The thesis distills practical lessons from iterative development,
+    onboarding, and refinement, highlighting the importance of centralized
+    knowledge, improved authoring tools, and formal validation. It outlines
+    open questions and directions for extending Drasil to new domains and
+    improving usability. \ds{Is this too much?}
+
+    \item \textbf{Advancing the value of addressing everyday software 
+    engineering pain points.} By focusing on the ``mundane'' sources of tedium 
+    and error in artifact maintenance, the thesis demonstrates that holistic 
+    improvements to development workflows can yield substantial benefits for 
+    reliability, maintainability, and developer experience.
 \end{itemize}
 
-\ds{After so much time working here, I think I've finally realized one of the 
-true contributions of this thesis/Drasil. Not only the framework itself 
-(which is still awesome), but also the process of breaking everything down and 
-truly understanding softifacts at a deep level to operationalize our 
-understanding of SE / system design in a way that makes all of this generation 
-possible. With that in mind Drasil is just one means to that end.}
+Drasil allows developers to focus on the system being built as a whole rather than the individual artifacts. We can still produce a ``rational design"~\cite{ParnasAndClements1986} without the explicit tedium of manually keeping everything in sync.
 
-\ds{Minor point that came up in conversation: Parnas' paper on how/why to fake 
-rational design. Our tool lets people fake it. It's all about change, there's 
-no perfect understanding at the beginning and we need to change things on as we 
-go. Drasil allows us to change everything to fake the rational design process 
-at every step along the way.}
-
-\ds{Continuous integration / refactoring are nothing new, but the way we used 
-them ensured we were always at a steady-state where everything worked.}
-
-\ds{Note that some of the code may not have been written by me directly, but 
-was developed by the Drasil team}
+\textit{Note:} While the core techniques and framework were developed by the author, Drasil's ongoing development and case study evolution are collaborative efforts by the Drasil team. This thesis focuses on the author's initial, original contributions and foundational work.

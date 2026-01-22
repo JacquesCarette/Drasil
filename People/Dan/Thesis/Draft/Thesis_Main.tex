@@ -100,6 +100,19 @@
   \end{center}
 }
 
+%\newcommand{\cardifact}[2]{%
+%  \begin{minipage}[t]{\linewidth}
+%    \setlength{\fboxsep}{6pt}%
+%    \setlength{\fboxrule}{0.5pt}%
+%    \fbox{%
+%      \begin{minipage}[t]{0.95\linewidth}
+%        \textbf{Name}: \textbf{#1}\\[0.5ex]
+%        \textbf{Description}: #2
+%      \end{minipage}
+%    }
+%  \end{minipage}
+%}
+
 \newcommand{\codeBlock}[3]{
 	\lstinputlisting[language=Haskell, linerange=#2-#3, 
 	firstnumber=#2]{code/#1.hs}

@@ -31,6 +31,45 @@ within a team.
 {The Waterfall Model of Software Development}
 {fig:Waterfall}
 
+
+\begin{table}[h!]
+\caption{Mapping of Rational Design Process to Waterfall Model and Common
+Software Artifacts}
+\label{tab:RatWatComp}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|
+  >{\raggedright\arraybackslash}p{0.28\linewidth}|
+  >{\raggedright\arraybackslash}p{0.28\linewidth}|
+  >{\raggedright\arraybackslash}p{0.36\linewidth}|
+}
+\hline
+\textbf{Rational Design Phase} & \textbf{Waterfall Phase(s)} & \textbf{Common
+Artifacts} \\
+\hline
+Establish/Document Requirements & Requirements Analysis &
+System Requirements Specification; Verification and Validation Plan \\
+\hline
+Design and Document Module Structure & System Design &
+Design Document \\
+\hline
+Design and Document Module Interfaces & Program Design &
+Module Interface Specification \\
+\hline
+Design and Document Module Internal Structures & Program Design &
+Module Guide \\
+\hline
+Write Programs & Coding &
+Source Code; Build Instructions \\
+\hline
+Maintain & 
+Testing (Unit, Integration, System, Acceptance) \newline\newline Operation \& 
+Maintenance &
+Test Cases; Verification and Validation Report \\
+\hline
+\end{tabular}
+\end{table}
+
 Software design can follow a number of different design processes, each with 
 their own collection of \sfs{}. A common, traditional approach is the Waterfall 
 model (Figure~\ref{fig:Waterfall}) of software 
@@ -44,38 +83,38 @@ information that is not yet available or not fully clear during the time of
 writing. Those stubs are then filled in over the development process, and 
 existing documentation is updated so it appears to have been created in a 
 linear fashion for ease of review later in the software lifecycle. The rational 
-design process involves the following:
-
-\begin{enumerate}
-\item Establish/Document Requirements
-\item Design and Document the Module Structure
-\item Design and Document the Module Interfaces
-\item Design and Document the Module Internal Structures
-\item Write Programs
-\item Maintain
-\end{enumerate}
+design process involves the steps listed in the first column of 
+Table~\ref{tab:RatWatComp}.
 
 Parnas provided a list of the most important documents~\cite{Parnas2010} 
 required for the rational design process, which 
 Smith~\cite{SmithAndKoothoor2016} expanded upon by including complimentary 
 artifacts such as source code, verification and validation plans, test cases, 
 and build instructions. While there have been many proposed artifacts, the 
-following curated list covers those most relevant to this thesis:
+following collection covers those most relevant to this thesis:
 
-\begin{enumerate}
-\item System Requirements
-\item System Design Document
-\item Module Guide
-\item Module Interface Specification
-\item Program Source Code
-\item Verification and Validation Plan
-\item Test cases
-\item Verification and Validation Report
-\item User Manual
-\end{enumerate}
+\cardifact{Software Requirements Specification}{Contains the functional and 
+nonfunctional requirements detailing what the desired software system should 
+do.} 
+\cardifact{System Design Document}{Explains how the system should be broken 
+down and documents implementation-level decisions that have been made for the 
+design of the system.} 
+\cardifact{Module Guide}{In-depth explanation of the modules outlined in the 
+System Design Document.}
+\cardifact{Module Interface Specification}{Interface specification for each of 
+the modules outlined in the System Design Document/Module Guide.} 
+\cardifact{Program Source Code}{The source code of the implemented software 
+system.} 
+\cardifact{Verification and Validation Plan}{Uses the system requirements to 
+document acceptance criteria for each requirement that can be validated.}
+\cardifact{Test cases}{Implementation of the Verification and Validation Plan 
+in source code (where applicable) or as a step-by-step guide for testers.} 
+\cardifact{Verification and Validation Report}{Report outlining the results 
+after undertaking all of the testing initiatives outlined in the Verification 
+and Validation plan and test cases.}
 
-This list is not exhaustive of all the types of \sfs{}, as there are many other
-design processes which use different types of \sfs{}. Looking at an agile 
+This collection is not exhaustive of all the types of \sfs{}, as there are many 
+other design processes which use different types of \sfs{}. Looking at an agile 
 approach using Scrum/Kanban, the \sfs{} tend to be distributed in different 
 ways~\cite{KasauliEtAl2017}. Requirements are documented in tickets under 
 so-called ``epics", ``stories", and ``tasks" as opposed to a singular 
@@ -87,67 +126,9 @@ information to that of the rational design process. Using the waterfall model
 as an example, we can see (Table~\ref{tab:RatWatComp}) the rational design 
 process and its artifacts map onto the model in a very straightforward manner.
 
-\begin{table}[htbp]
-\caption{Comparison of Rational Design Process and Waterfall Model}
-\label{tab:RatWatComp}
-\begin{tabular}{|p{.25\linewidth}|p{.35\linewidth}|p{.4\linewidth}|}
-\hline &&\\
-Rational Design phase & Corresponding Waterfall phase(s) & Common \SFS{}
-\\&&\\ \hline &&\\
-	Establish/ Document Requirements & Requirements Analysis & System 
-	Requirements Specification \newline \newline
-	Verification and Validation plan
-\\&&\\ \hline &&\\
-	Design and Document the Module Structure & 
-	System Design  & 
-	Design Document
-\\&&\\ \hline &&\\
-	Design and Document the Module Interfaces & 
-	Program Design & 
-	Module Interface Specification
-\\&&\\ \hline &&\\
-	Design and Document the Module Internal Structures &
-	Program Design &
-	Module Guide
-\\&&\\ \hline &&\\
-	Write Programs & 
-	Coding &
-	Source code  \newline \newline
-	Build instructions
-\\&&\\ \hline &&\\
-	Maintain & 
-	Unit \& Integration Testing \newline \newline System Testing \newline 
-	\newline Acceptance 
-	Testing \newline \newline Operation \& Maintenance &
-	Test cases \newline \newline
-	Verification and Validation Report
-\\ \hline
-\end{tabular}
-\end{table}
-
 As mentioned earlier, \sfs{} are important to development in a number of ways, 
 such as easing the burden of maintenance and training. We outline the artifacts 
 we are most interested below with a brief description of their purpose.
-
-\cardifact{Software Requirements Specification}{Contains the functional and 
-nonfunctional requirements detailing what the desired software system should 
-do.}
-\cardifact{System Design Document}{Explains how the system should be broken 
-down and documents implementation-level decisions that have been made for the 
-design of the system.}
-\cardifact{Module Guide}{In-depth explanation of the modules outlined in the 
-System Design Document.}
-\cardifact{Module Interface Specification}{Interface specification for each of 
-the modules outlined in the System Design Document/Module Guide.}
-\cardifact{Program Source Code}{The source code of the implemented software 
-system.}
-\cardifact{Verification and Validation Plan}{Uses the system requirements to 
-document acceptance criteria for each requirement that can be validated.}
-\cardifact{Test cases}{Implementation of the Verification and Validation Plan 
-in source code (where applicable) or as a step-by-step guide for testers.}
-\cardifact{Verification and Validation Report}{Report outlining the results 
-after undertaking all of the testing initiatives outlined in the Verification 
-and Validation plan and test cases.}
 
 Parnas~\citep{Parnas2010} does an excellent job of defining the target audience 
 for each of the most common \sfs{} and we extend that alongside our work. A 
@@ -157,51 +138,59 @@ summary can be found in Table~\ref{tab:sfsummary}.
 \caption{A summary of the Audience for each of the most common \sfs{} and what 
 problem that \sf{} is solving}
 \label{tab:sfsummary}
-\begin{tabular}{| P{.3\linewidth} | p{.3\linewidth}  | p{.3\linewidth} |}
+\begingroup
+\setlength{\tabcolsep}{12pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|
+  >{\raggedright\arraybackslash}p{.2\linewidth} |
+  >{\raggedright\arraybackslash}p{.2\linewidth} |
+  >{\raggedright\arraybackslash}p{.45\linewidth} |
+}
 \hline
- \SF{} & Who (Audience) & What (Problem)
+ \textbf{\SF{}} & \textbf{Who (Audience)} & \textbf{What (Problem/Solution)}
 \\ \hline
-	SRS & 
+    SRS & 
 
-	Software Architects \newline \newline
-	QA analysts & 
+    Software Architects \newline \newline
+    QA analysts & 
 
-	Define exactly what specification the software system must adhere to. 
+    Defines exactly what specification the software system must adhere to. 
 \\ \hline
-	Module Guide & 
+    Module Guide & 
 
-	All developers \newline \newline
-	QA analysts  & 
+    All developers \newline \newline
+    QA analysts  & 
 
-	Outline implementation decisions around the separation of functionality 
-	into modules and give an overview of each module.
+    Outlines implementation decisions around the separation of functionality 
+    into modules and give an overview of each module.
 \\ \hline
-	Module Interface Specifications & 
+    Module Interface Specifications & 
 
-	Developers who implement the module \newline \newline
-	Developers who use the module \newline \newline
-	QA analysts & 
+    Developers who implement the module \newline \newline
+    Developers who use the module \newline \newline
+    QA analysts & 
 
-	Detail the exact interfaces of the modules from the Module Guide.
+    Details the exact interfaces of the modules from the Module Guide.
 \\ \hline
-	Source Code / Executable &
-	
-	All developers \newline \newline
-	QA analysts \newline \newline 
-	End users &
+    Source Code / Executable &
 
-	Implements the machine instructions designed to address the overall problem 
-	for which the software system has been specified
+    All developers \newline \newline
+    QA analysts \newline \newline 
+    End users &
+
+    Implements the machine instructions designed to address the overall problem 
+    for which the software system has been specified
 \\ \hline
-	Verification and Validation Plan &
-	
-	Developers who implement the module \newline \newline
-	QA analysts &
+    Verification and Validation Plan &
 
-	Describe how the software should be verified using tests that can be 
-	validated. Includes module-specific and system-wide plans.
+    Developers who implement the module \newline \newline
+    QA analysts &
+
+    Describes how the software should be verified using tests that can be 
+    validated. Includes module-specific and system-wide plans.
 \\ \hline
 \end{tabular}
+\endgroup
 \end{table}
 
 \section{Software Reuse and Software Families}
@@ -490,5 +479,21 @@ often not worth the effort to use generative programming for one-off projects.
 There are a large number of generative programming tools available today. Some, 
 like template metaprogramming (TMP) tools, are built into a number of 
 programming languages (C++, Rust, Scala, Java, Go, Python, etc.) and offer 
-varying levels of support for generative programming. 
-\ds{Give some examples of code generators and their applications here}
+varying levels of support for generative programming. Others are widely used 
+across a multitude of disparate domains. For example, \textbf{ANTLR} (Another 
+Tool for Language Recognition) automatically generates parsers and lexers from 
+grammar specifications, enabling rapid development of compilers and 
+interpreters~\cite{Parr1995}. \textbf{YACC} (Yet Another Compiler Compiler) and 
+its derivatives serve a similar purpose for C-based 
+toolchains~\cite{Johnson1975}. In web development, frameworks like 
+\textbf{Yeoman} scaffold entire web applications by generating boilerplate 
+code, configuration files, and project structure~\cite{Baumgartner2016}. 
+\textbf{Swagger Codegen} and the \textbf{OpenAPI Generator} produce client 
+libraries, server stubs, and API documentation from OpenAPI specifications, 
+streamlining the development of RESTful services~\cite{openapi2025, 
+swagger2025}. In embedded systems, tools such as \textbf{Simulink Coder} 
+generate C/C++ code from graphical models, facilitating deployment on hardware 
+targets~\cite{Chaturvedi2017}. These examples illustrate the breadth of 
+generative programming, from language processing to web and embedded systems, 
+and demonstrate how code generators can accelerate development and improve 
+consistency across software projects.

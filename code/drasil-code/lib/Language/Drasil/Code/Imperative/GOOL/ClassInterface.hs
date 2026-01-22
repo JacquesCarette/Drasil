@@ -28,17 +28,16 @@ class (AuxiliarySym r) => PackageSym r where
 -- sample input, omptimize doxygen document, information necessary for a makefile,
 -- auxiliary helper documents, and auxiliary from data documents.
 class AuxiliarySym r where
-  type AuxHelper r
   doxConfig :: String -> GOOLState -> Verbosity -> r FileAndContents
   readMe ::  ReadMeInfo -> r FileAndContents
   sampleInput :: PrintingInformation -> DataDesc -> [Expr] -> r FileAndContents
 
-  optimizeDox :: r (AuxHelper r)
+  optimizeDox :: r Doc
 
   makefile :: [FilePath] -> ImplementationType -> [Comments] -> GOOLState ->
     ProgData -> r FileAndContents
 
-  auxHelperDoc :: r (AuxHelper r) -> Doc
+  auxHelperDoc :: r Doc -> Doc
 
 
 auxFromData :: Applicative r => FilePath -> Doc -> r FileAndContents

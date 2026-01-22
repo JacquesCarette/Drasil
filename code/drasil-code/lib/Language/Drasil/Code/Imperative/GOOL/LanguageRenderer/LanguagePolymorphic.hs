@@ -4,6 +4,8 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
   docIfEnabled
 ) where
 
+import Text.PrettyPrint.HughesPJ (Doc)
+
 import Language.Drasil (Expr)
 import Drasil.GOOL (ProgData, GOOLState)
 import Language.Drasil.Printers (PrintingInformation)
@@ -18,13 +20,13 @@ import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 import Language.Drasil.Code.FileNames (doxConfigName, makefileName,
   sampleInputName, readMeName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
-    AuxiliarySym(AuxHelper, auxHelperDoc), auxFromData
+    AuxiliarySym(auxHelperDoc), auxFromData
   )
 import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..), makeReadMe)
 
 -- | Defines a Doxygen configuration file.
-doxConfig :: (AuxiliarySym r, Applicative r) => r (AuxHelper r) -> String ->
+doxConfig :: (AuxiliarySym r, Applicative r) => r Doc -> String ->
   GOOLState -> Verbosity -> r FileAndContents
 doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s
   (auxHelperDoc opt) v)

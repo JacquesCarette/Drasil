@@ -7,7 +7,6 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.List (intercalate)
-import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.GOOL (ProgData, onCodeList, jName, jVersion)
 
@@ -49,7 +48,6 @@ instance PackageSym JavaProject where
   package p = onCodeList (packageData p)
 
 instance AuxiliarySym JavaProject where
-  type AuxHelper JavaProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
     G.readMe rmi {

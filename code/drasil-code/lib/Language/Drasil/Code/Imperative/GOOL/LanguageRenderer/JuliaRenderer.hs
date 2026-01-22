@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (
 ) where
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Text.PrettyPrint.HughesPJ (Doc, empty)
+import Text.PrettyPrint.HughesPJ (empty)
 
 import Drasil.GProc (ProgData, onCodeList, jlName, jlVersion)
 
@@ -35,7 +35,6 @@ instance PackageSym JuliaProject where
   package p = onCodeList (packageData p)
 
 instance AuxiliarySym JuliaProject where
-  type AuxHelper JuliaProject = Doc
   doxConfig _ _ _ = auxFromData "" empty -- Doxygen does not support Julia
   readMe rmi = G.readMe rmi {
         langName = jlName,

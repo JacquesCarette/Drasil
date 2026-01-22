@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (
 ) where
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Text.PrettyPrint.HughesPJ (Doc, empty)
+import Text.PrettyPrint.HughesPJ (empty)
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
@@ -39,7 +39,6 @@ instance PackageSym SwiftProject where
   package p = onCodeList (packageData p)
 
 instance AuxiliarySym SwiftProject where
-  type AuxHelper SwiftProject = Doc
   doxConfig _ _ _ = auxFromData "" empty
   readMe rmi = G.readMe rmi {
         langName = swiftName,

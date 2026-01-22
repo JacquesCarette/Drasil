@@ -5,7 +5,6 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
 ) where
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.GOOL (ProgData, onCodeList, pyName, pyVersion)
 
@@ -38,7 +37,6 @@ instance PackageSym PythonProject where
   package p = onCodeList (packageData p)
 
 instance AuxiliarySym PythonProject where
-  type AuxHelper PythonProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
     G.readMe rmi {

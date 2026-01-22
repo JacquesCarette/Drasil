@@ -7,7 +7,6 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
 ) where
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
-import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.GOOL (ProgData, onCodeList, cppName, cppVersion)
 
@@ -41,7 +40,6 @@ instance PackageSym CppProject where
   package p = onCodeList (packageData p)
 
 instance AuxiliarySym CppProject where
-  type AuxHelper CppProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
     G.readMe rmi {

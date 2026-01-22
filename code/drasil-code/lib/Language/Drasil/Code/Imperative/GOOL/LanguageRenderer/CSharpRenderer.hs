@@ -7,7 +7,6 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
-import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.GOOL (ProgData, onCodeList, csName, csVersion)
 
@@ -41,7 +40,6 @@ instance PackageSym CSharpProject where
   package p = onCodeList (packageData p)
 
 instance AuxiliarySym CSharpProject where
-  type AuxHelper CSharpProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
     G.readMe rmi {

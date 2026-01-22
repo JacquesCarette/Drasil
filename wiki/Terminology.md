@@ -2,7 +2,7 @@
 
 The purpose of this page is to explain some of the words we use to mean specific
 Drasil-related words. These all have a general meaning that hints at how we use
-them in Drsail, but we often have a more specific meaning in mind
+them in Drasil, but we often have a more specific meaning in mind
 whenever we use them in the context of Drasil.
 
 ## Artifacts

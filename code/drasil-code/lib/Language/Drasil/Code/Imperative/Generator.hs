@@ -115,7 +115,7 @@ generator l dt sd chs cs = DrasilState {
 -- un-representation functions determine which target language the package will
 -- be generated in.
 generateCode :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
-  Lang -> (progRepr (OO.Program progRepr) -> ProgData) -> 
+  Lang -> (progRepr (OO.Program progRepr) -> ProgData) ->
   (packRepr (PackageData ProgData) -> PackageData ProgData) ->
   DrasilState -> IO ()
 generateCode l unReprProg unReprPack g = do

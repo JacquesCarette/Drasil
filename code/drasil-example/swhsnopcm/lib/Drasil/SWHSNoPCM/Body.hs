@@ -20,8 +20,7 @@ import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
 
-import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
-  apacheODESymbols, odeintSymbols, odeInfoChunks)
+import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
@@ -72,8 +71,7 @@ symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained ++
 -- FIXME: 'symbolsWCodeSymbols' shouldn't exist. See DblPend's discussion of its
 -- 'symbolsWCodeSymbols'.
 symbolsWCodeSymbols :: [DefinedQuantityDict]
-symbolsWCodeSymbols = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
-  odeInfoChunks noPCMODEInfo
+symbolsWCodeSymbols = symbols ++ odeInfoChunks noPCMODEInfo
 
 concepts :: [UnitalChunk]
 concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,

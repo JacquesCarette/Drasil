@@ -9,9 +9,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.Concepts.Math (mathcon', ode)
-import Data.Drasil.ExternalLibraries.ODELibraries
-       (apacheODESymbols, odeintSymbols, osloSymbols,
-        scipyODESymbols, odeInfoChunks)
+import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
@@ -109,7 +107,6 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
 -- 'symbolsWCodeSymbols'.
 symbolsWCodeSymbols :: [DefinedQuantityDict]
 symbolsWCodeSymbols = symbols ++ map dqdWr pidConstants
-  ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
   ++ odeInfoChunks pidODEInfo
 
 ideaDicts :: [IdeaDict]

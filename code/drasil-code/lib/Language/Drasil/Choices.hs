@@ -1,7 +1,8 @@
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..),
-  makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE,
+  makeMaps, spaceToCodeType, Constraints(..), makeConstraints,
+  ODE(..), makeODE, odeLibReqs,
   DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..),
   makeOptFeats, ExtLib(..), Modularity(..), Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
@@ -21,7 +22,7 @@ import Language.Drasil hiding (None)
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
-import Language.Drasil.Data.ODELibPckg (ODELibPckg)
+import Language.Drasil.Data.ODELibPckg (ODELibPckg (libDummyQuants))
 import Language.Drasil.Mod (Name)
 
 -- | The instruction indicates how the generated program should be written down.
@@ -314,9 +315,13 @@ data ODE = ODE{
   -- | Preferentially-ordered list ODE libraries to try.
   odeLib :: [ODELibPckg]
 }
+
 -- | Constructor to create an ODE
 makeODE :: [ODEInfo] -> [ODELibPckg] -> ODE
 makeODE = ODE
+
+odeLibReqs :: ExtLib -> [DefinedQuantityDict]
+odeLibReqs (Math ode) = concatMap libDummyQuants $ odeLib ode
 
 -- | Default choices to be used as the base from which design specifications
 -- can be built.

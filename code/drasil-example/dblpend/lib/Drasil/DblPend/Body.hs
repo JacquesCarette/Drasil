@@ -43,8 +43,6 @@ import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs, funcReqsTables)
 import Drasil.DblPend.References (citations)
-import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
-import Drasil.DblPend.ODEs (dblPenODEInfo)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
@@ -114,19 +112,6 @@ background = foldlSent_ [D.toSent $ phraseNP (a_ pendulum), S "consists" `S.of_`
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
   S "highly sensitive to initial conditions"]
 
--- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is currently
--- added to symbolsWCodeSymbols automatically as it is used to create new chunks
--- with pendDisAngle's UID suffixed in ODELibraries.hs. The correct way to fix
--- this is to add the chunks when they are created in the original functions.
--- See #4298 and #4301.
---
--- At another level, this highlights a 'level boundary.' In the `ChunkDB`
--- necessary to build the SRS, we only need 'symbols', but for code generation,
--- we need all specification-level symbols along with the code-only symbols.
--- These symbols should be added another way.
-symbolsWCodeSymbols :: [DefinedQuantityDict]
-symbolsWCodeSymbols = symbols ++ odeInfoChunks dblPenODEInfo
-
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
@@ -150,7 +135,7 @@ conceptChunks =
   [cw len]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsWCodeSymbols ideaDicts conceptChunks []
+symbMap = cdb symbols ideaDicts conceptChunks []
   dataDefs iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
 
 -- | Holds all references and links used in the document.

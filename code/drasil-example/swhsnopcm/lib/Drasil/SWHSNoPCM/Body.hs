@@ -20,8 +20,6 @@ import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
 
-import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
-
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
 import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
@@ -66,12 +64,7 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
 symbols :: [DefinedQuantityDict]
 symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained ++
   [gradient, pi_, uNormalVect, dqdWr surface] ++ map dqdWr symbolConcepts ++
-  map dqdWr specParamValList ++ map dqdWr [absTol, relTol]
-
--- FIXME: 'symbolsWCodeSymbols' shouldn't exist. See DblPend's discussion of its
--- 'symbolsWCodeSymbols'.
-symbolsWCodeSymbols :: [DefinedQuantityDict]
-symbolsWCodeSymbols = symbols ++ odeInfoChunks noPCMODEInfo
+  map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr outputs
 
 concepts :: [UnitalChunk]
 concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
@@ -171,7 +164,7 @@ conceptChunks =
   map cw [surArea, area]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsWCodeSymbols ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
+symbMap = cdb symbols ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations
   (labelledContent ++ funcReqsTables)
 

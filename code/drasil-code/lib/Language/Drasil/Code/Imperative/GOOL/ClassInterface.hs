@@ -27,8 +27,8 @@ class (AuxiliarySym r) => PackageSym r where
   package :: ProgData -> [r FileAndContents] -> r (PackageData ProgData)
 
 -- | Members of this class must have a doxygen configuration, ReadMe file,
--- sample input, omptimize doxygen document, information necessary for a makefile,
--- auxiliary helper documents, and auxiliary from data documents.
+-- omptimize doxygen document, information necessary for a makefile,
+-- auxiliary helper documents
 class AuxiliarySym r where
   doxConfig :: String -> GOOLState -> Verbosity -> r FileAndContents
   readMe ::  ReadMeInfo -> r FileAndContents

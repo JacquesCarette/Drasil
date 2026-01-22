@@ -69,9 +69,9 @@ buildModule n imps bot fs = RCP.modFromData n (do
   let fnDocs = vibcat (map RCC.method fns ++ [bt])
   return $ emptyIfEmpty fnDocs (vibcat (filter (not . isEmpty) [is, fnDocs])))
 
-docMod :: (ProcRenderSym r) => String -> String -> [String] -> String ->
+docMod :: (ProcRenderSym r) => String -> String -> String -> [String] -> String ->
   SFile r -> SFile r
-docMod e d a dt fl = RCP.commentedMod fl (RCC.docComment $ CP.modDoc' d a dt .
+docMod e d wm a dt fl = RCP.commentedMod fl (RCC.docComment $ CP.modDoc' d wm a dt .
   addExt e <$> getModuleName)
 
 modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r

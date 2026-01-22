@@ -47,8 +47,8 @@ class (ModuleSym r) => FileSym r where
   type File r
   fileDoc :: FSModule r -> SFile r
 
-  -- Module description, list of author names, date as a String, file to comment
-  docMod :: String -> [String] -> String -> SFile r -> SFile r
+  -- Module description, watermark, list of author names, date as a String, file to comment
+  docMod :: String -> String -> [String] -> String -> SFile r -> SFile r
 
 type FSModule a = FS (a (Module a))
 

@@ -61,7 +61,7 @@ instance FileSym CodeInfoProc where
   type File CodeInfoProc = ()
   fileDoc = execute1
 
-  docMod _ _ _ = execute1
+  docMod _ _ _ _ = execute1
 
 instance BodySym CodeInfoProc where
   type Body CodeInfoProc = ()

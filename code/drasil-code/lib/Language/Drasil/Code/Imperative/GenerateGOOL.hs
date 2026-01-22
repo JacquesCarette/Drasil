@@ -25,6 +25,7 @@ import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
   GOOLState)
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
+import Drasil.Metadata (watermark)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))
 
@@ -42,10 +43,8 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   let as = map name (codeSpec g ^. authorsO )
   cs <- sequence maybeCs
   ms <- sequence maybeMs
-  let commMod | CommentMod `elem` commented g                   = OO.docMod desc
-                  as (date g)
-              | CommentFunc `elem` commented g && not (null ms) = OO.docMod "" []
-                  ""
+  let commMod | CommentMod `elem` commented g                   = OO.docMod desc watermark as (date g)
+              | CommentFunc `elem` commented g && not (null ms) = OO.docMod "" watermark [] ""
               | otherwise                                       = id
   return $ commMod $ OO.fileDoc $ OO.buildModule n is (catMaybes ms) (catMaybes cs)
 
@@ -180,10 +179,8 @@ genModuleWithImportsProc n desc is maybeMs = do
   modify (\s -> s { currentModule = n })
   let as = map name (codeSpec g ^. authorsO )
   ms <- sequence maybeMs
-  let commMod | CommentMod `elem` commented g                   = Proc.docMod desc
-                  as (date g)
-              | CommentFunc `elem` commented g && not (null ms) = Proc.docMod "" []
-                  ""
+  let commMod | CommentMod `elem` commented g                   = Proc.docMod desc watermark as (date g)
+              | CommentFunc `elem` commented g && not (null ms) = Proc.docMod "" watermark [] ""
               | otherwise                                       = id
   return $ commMod $ Proc.fileDoc $ Proc.buildModule n is (catMaybes ms)
 

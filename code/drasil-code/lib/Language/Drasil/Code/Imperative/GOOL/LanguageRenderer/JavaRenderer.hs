@@ -8,15 +8,14 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.List (intercalate)
 
-import Drasil.GOOL (onCodeList, jName, jVersion)
+import Drasil.GOOL (jName, jVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, makefile, noRunIfLib, doxDocConfig, docIfEnabled)
-import Language.Drasil.Code.FileData (packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..),
   Ext(..), Runnable, NameOpts(NameOpts), asFragment, buildSingle,
   buildAllAdditionalName, includeExt, inCodePackage, interp, mainModule,
@@ -42,9 +41,6 @@ instance Applicative JavaProject where
 
 instance Monad JavaProject where
   JP x >>= f = f x
-
-instance PackageSym JavaProject where
-  package p = onCodeList (packageData p)
 
 instance AuxiliarySym JavaProject where
   doxConfig = G.doxConfig optimizeDox

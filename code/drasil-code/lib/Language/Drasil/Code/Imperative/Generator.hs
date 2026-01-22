@@ -41,7 +41,8 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..),
+  package)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Code.FileData (PackageData(..), fileAndContents)
 import Language.Drasil.Code.FileNames(sampleInputName)
@@ -113,8 +114,8 @@ generator l dt sd chs cs = DrasilState {
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
 -- be generated in.
-generateCode :: (OOProg progRepr, PackageSym packRepr, Applicative packRepr) => Lang ->
-  (progRepr (OO.Program progRepr) -> ProgData) -> 
+generateCode :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
+  Lang -> (progRepr (OO.Program progRepr) -> ProgData) -> 
   (packRepr (PackageData ProgData) -> PackageData ProgData) ->
   DrasilState -> IO ()
 generateCode l unReprProg unReprPack g = do
@@ -137,7 +138,7 @@ generateCode l unReprProg unReprPack g = do
 -- package will be generated in.
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
-genPackage :: (OOProg progRepr, PackageSym packRepr, Applicative packRepr) =>
+genPackage :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
   (progRepr (OO.Program progRepr) -> ProgData) ->
   GenState (packRepr (PackageData ProgData))
 genPackage unRepr = do
@@ -227,7 +228,7 @@ genModules = do
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
 -- be generated in.
-generateCodeProc :: (ProcProg progRepr, PackageSym packRepr, Applicative packRepr) =>
+generateCodeProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
   Lang -> (progRepr (Proc.Program progRepr) -> ProgData) ->
   (packRepr (PackageData ProgData) -> PackageData ProgData) ->
   DrasilState -> IO ()
@@ -248,7 +249,7 @@ generateCodeProc l unReprProg unReprPack g = do
 -- package will be generated in.
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
-genPackageProc :: (ProcProg progRepr, PackageSym packRepr, Applicative packRepr) =>
+genPackageProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
   (progRepr (Proc.Program progRepr) -> ProgData) ->
   GenState (packRepr (PackageData ProgData))
 genPackageProc unRepr = do

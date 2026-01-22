@@ -8,16 +8,15 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Text.PrettyPrint.HughesPJ (empty)
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
-  AuxiliarySym(..), auxFromData)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface ( AuxiliarySym(..),
+  auxFromData)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
-import Drasil.GOOL (onCodeList, swiftName, swiftVersion)
+import Drasil.GOOL (swiftName, swiftVersion)
 
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.FileData (packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)
 
@@ -33,9 +32,6 @@ instance Applicative SwiftProject where
 
 instance Monad SwiftProject where
   SP x >>= f = f x
-
-instance PackageSym SwiftProject where
-  package p = onCodeList (packageData p)
 
 instance AuxiliarySym SwiftProject where
   doxConfig _ _ _ = auxFromData "" empty

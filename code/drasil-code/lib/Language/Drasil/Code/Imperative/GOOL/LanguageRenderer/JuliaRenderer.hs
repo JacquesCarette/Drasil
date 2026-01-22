@@ -7,14 +7,13 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Text.PrettyPrint.HughesPJ (empty)
 
-import Drasil.GProc (onCodeList, jlName, jlVersion)
+import Drasil.GProc (jlName, jlVersion)
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..), auxFromData)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..), auxFromData)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.FileData (packageData)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, DocConfig(..), interpMM)
 
 -- | Holds a Julia project
@@ -29,9 +28,6 @@ instance Applicative JuliaProject where
 
 instance Monad JuliaProject where
   JLP x >>= f = f x
-
-instance PackageSym JuliaProject where
-  package p = onCodeList (packageData p)
 
 instance AuxiliarySym JuliaProject where
   doxConfig _ _ _ = auxFromData "" empty -- Doxygen does not support Julia

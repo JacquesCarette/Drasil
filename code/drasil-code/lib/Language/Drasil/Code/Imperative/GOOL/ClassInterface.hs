@@ -4,27 +4,22 @@
 -- program with auxiliary, non-source-code files.
 module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   -- Typeclasses
-  PackageSym(..), AuxiliarySym(..), sampleInput, auxFromData
+  AuxiliarySym(..), package, sampleInput, auxFromData
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (ProgData, GOOLState)
+import Drasil.GOOL (ProgData, GOOLState, onCodeList)
 import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Code.FileData (FileAndContents(..), PackageData,
-  fileAndContents)
+  fileAndContents, packageData)
 import Language.Drasil.Code.FileNames (sampleInputName)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
-
--- | Members of this class must have all the information necessary for
--- the 'AuxiliarySym' in addition to information necessary to create a package.
-class (AuxiliarySym r) => PackageSym r where
-  package :: ProgData -> [r FileAndContents] -> r (PackageData ProgData)
 
 -- | Members of this class must have a doxygen configuration, ReadMe file,
 -- omptimize doxygen document, information necessary for a makefile,
@@ -39,6 +34,9 @@ class AuxiliarySym r where
     ProgData -> r FileAndContents
 
   auxHelperDoc :: r Doc -> Doc
+
+package :: (Monad r) => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
+package p = onCodeList (packageData p)
 
 sampleInput :: (Applicative r) => PrintingInformation -> DataDesc -> [Expr] ->
   r FileAndContents

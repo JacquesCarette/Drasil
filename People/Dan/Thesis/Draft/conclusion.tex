@@ -33,3 +33,242 @@ reproducible scientific software. The lessons learned and directions for
 future work outlined here position Drasil as both a practical tool and a
 platform for further research in automated knowledge capture and software
 generation.
+
+\section{Summary of Main Contributions}
+
+This thesis presents the design and implementation of Drasil, a centralized,
+recipe-driven knowledge base created as part of this research to
+systematically address persistent challenges in scientific software
+engineering. Through a systematic analysis of the commonalities and
+differences among software artifacts, this work operationalizes our
+understanding of software engineering principles, enabling their direct
+application in automated artifact generation. By explicitly capturing domain
+knowledge and automating the generation of software and documentation
+artifacts, Drasil enforces consistency by construction, improves traceability
+through explicit provenance, and enhances reproducibility via deterministic
+outputs. Case studies presented in Chapter~\ref{c:results} show that local
+changes to domain knowledge propagate automatically across all generated
+outputs, reducing manual effort and minimizing the risk of inconsistencies.
+The architecture described in Chapter~\ref{c:drasil}, refined through
+iterative development and feedback, enables the reuse and
+extension of the knowledge base, facilitating the creation of new software
+family members and supporting the automatic maintenance of supporting
+materials. Collectively, these contributions provide a scalable and
+extensible foundation for reliable, maintainable, and reproducible
+scientific software.
+
+
+\section{Limitations and Open Questions}
+
+While Drasil demonstrates significant progress toward automating knowledge
+capture and artifact generation, several limitations remain. The approach
+requires substantial upfront modeling effort and domain expertise, which may
+pose a barrier to adoption for new users or projects. Tooling and usability
+challenges persist, including the need for improved front-end interfaces and
+developer experience plugins to streamline onboarding and knowledge capture.
+
+Formal validation and empirical evaluation of Drasil's effectiveness are
+ongoing, and further experiments are needed to establish its generalizability
+across diverse scientific computing domains. At present, Drasil is primarily
+limited to scientific computing software that adheres to an input-process-
+output paradigm, where requirements and models are well-understood and
+structured. As the knowledge base grows, scalability and efficient knowledge
+management will become increasingly important challenges, particularly for
+discovery, projection, and modularization of domain knowledge.
+
+Extending Drasil to more dynamic or less formalized fields
+remains an open question. These limitations and open questions, discussed 
+in Chapter~\ref{c:discussion}, highlight important directions for future 
+work, which are outlined in the following section.
+
+\section{Future Work}
+
+Building on the foundation established in this thesis, several avenues for
+future work are apparent. As Drasil continues to evolve, its ongoing
+development will be shaped by both practical experience and feedback from
+real-world adoption. The directions outlined below reflect the need to
+broaden Drasil's applicability, improve its usability, and deepen its
+integration into scientific software engineering workflows. The following 
+subsections highlight key areas where further research and development can
+have the greatest impact.
+
+\subsection{Expanding the Knowledge Base and Knowledge Capture Mechanisms}
+
+As Drasil is adopted for new projects, the encoded chunk database will
+naturally expand. This gradual growth is essential for increasing the
+breadth and depth of reusable domain knowledge, which in turn enhances
+the quality and variety of generated artifacts. Each new project
+contributes additional chunks, models, and recipes, making it easier to
+support related domains and reducing the effort required for future
+knowledge capture. Over time, a richer knowledge base will enable Drasil
+to generate more comprehensive documentation and software, facilitate
+cross-project reuse, and improve consistency across scientific computing
+applications.
+
+Similarly, designing more flexible and extensible knowledge capture 
+mechanisms is essential for broadening Drasil's applicability. Currently, 
+the types of information encoded as chunks are fairly primitive, often 
+limited to basic definitions, equations, and simple relationships. 
+Future work should focus on advancing the sophistication of chunks to 
+enable Drasil to generate higher-quality artifacts and address more nuanced 
+requirements. Additionally, developing new methods and interfaces for knowledge
+capture (such as guided authoring tools, semi-automated chunk inference, and 
+support for alternative modeling paradigms) will allow domain experts to 
+contribute knowledge more efficiently and facilitate extensibility into new 
+scientific fields.
+
+\subsection{Inference Improvements}
+A key direction for future work is improving Drasil's ability to infer
+knowledge chunks and their relationships directly from recipes and other
+high-level specifications. Currently, much of the chunk structure and
+dependency information must be defined explicitly, which can be tedious and
+error-prone as projects scale. Automating chunk inference would reduce the
+need for manual list definitions and make knowledge capture more efficient
+and less repetitive. Achieving this will require advances in both recipe
+design and the underlying inference passes. Progress in this area will
+streamline the authoring process, lower the barrier to entry for new users,
+and further enhance Drasil's scalability and maintainability.
+
+\subsection{Typed Expression Language}
+Developing a robust typed expression language within Drasil is a promising
+direction for future work. Currently, expressions are represented in a way
+that limits the ability to perform deep sanity checks or enforce domain-
+specific constraints at the knowledge level. Introducing a typed expression
+language would enable more rigorous validation of mathematical models,
+formulae, and relationships before code or documentation is generated.
+This would help catch errors early, ensure consistency across artifacts,
+and support advanced features such as type-driven code generation and
+automated reasoning about units and dimensions. Ultimately, a typed
+expression language would increase the reliability and expressiveness of
+Drasil's knowledge base, making it easier to support complex scientific
+domains and reduce the risk of subtle errors in generated artifacts.
+
+\subsection{Usability Enhancements}
+Improving usability is critical for lowering barriers to adoption and
+ensuring that domain experts can efficiently contribute and manage knowledge.
+Future work should focus on developing intuitive tooling, such as visual
+front-ends, drag-and-drop interfaces, and plugins for popular development
+environments. Enhanced authoring tools will streamline the process of
+defining and refining chunks, while improved onboarding resources and guided
+workflows will help new users become productive more quickly. Tooling for
+cross-referencing existing chunks will prevent duplication and facilitate
+knowledge discovery, supporting both the expansion and sophistication of the
+knowledge base. Collectively, these usability enhancements will make Drasil
+more accessible and effective for a wider range of users and projects.
+
+\subsection{Output Formats and Artifact Types}
+Expanding the range of output formats and artifact types is essential for
+making Drasil applicable to a wider array of audiences and use cases.
+Future work should focus on supporting additional programming languages
+(by expanding the existing GOOL backend) and document formats, 
+such as docx or other widely used file types. 
+
+Introducing new artifact types, (ex. Jupyter notebooks, journal papers), 
+will further extend Drasil's utility beyond traditional software documentation.
+These enhancements will enable Drasil to serve the diverse needs of scientific 
+computing practitioners, educators, and researchers, and will help bridge the 
+gap between code, documentation, and knowledge dissemination.
+
+\subsection{Natural Language Variants}
+Supporting multiple natural language variants and context-sensitive artifact
+generation will significantly enhance Drasil's adaptability and accessibility.
+This capability is especially important for international and interdisciplinary
+teams, where documentation and software artifacts may need to be produced in
+different languages tailored to specific audiences. Future work should
+focus on developing mechanisms for encoding and selecting language variants
+within the knowledge base, as well as strategies for generating artifacts
+that reflect cultural and contextual differences. These improvements will
+broaden Drasil's reach and facilitate collaboration across diverse scientific
+communities.
+
+\subsection{Test Case Generation}
+
+Developing more robust automated test case generation is essential for
+ensuring the reliability and correctness of artifacts produced by Drasil.
+Future work should focus on enhancing the mechanisms for generating
+comprehensive and meaningful test cases that reflect both domain knowledge
+and software requirements. Improvements in this area will help verify
+artifact integrity and support the adoption of Drasil in safety-critical
+and high-assurance scientific computing projects.
+
+\subsection{Experiments and Validation}
+
+Formal experiments and empirical validation are needed to rigorously assess
+Drasil's effectiveness and generalizability across different domains and
+project types. Future work should include controlled studies measuring
+onboarding metrics (such as time to first meaningful edit and mentoring
+required), maintenance effort, and error rates across teams of varying
+experience. Comparative experimental designs could evaluate Drasil-based
+workflows against traditional manual approaches, quantifying differences in
+initial productivity, long-term maintenance, and defect reduction. Gathering
+quantitative evidence through these studies will help demonstrate the
+practical benefits of Drasil's approach, identify limitations, and guide
+further improvements. Feedback from such experiments will also inform the
+development of improved authoring tools and onboarding resources, helping to
+lower the initial ramp-up cost and make Drasil accessible to a broader range
+of users. Demonstrating Drasil's impact through systematic experimentation
+will be crucial for broader acceptance within the scientific computing 
+and software engineering community.
+
+\subsection{Extending Beyond Input-Process-Output}
+
+Extending Drasil beyond the input-process-output paradigm represents a
+significant challenge and opportunity for future work. Many scientific
+and engineering applications involve interactive, event-driven, or
+stateful behaviors that do not fit neatly into the current modeling
+framework. Addressing these domains will require advances in flexible
+modeling, chunk representation, and recipe design, enabling the capture
+and projection of more complex knowledge structures. Progress in this
+direction will broaden Drasil's applicability to a wider range of
+software systems, including those with dynamic requirements and less
+formalized processes, and will help realize the vision of fully
+automated, knowledge-centric artifact generation across scientific
+computing.
+
+As Drasil continues to develop, ongoing research and collaboration will be
+essential to realizing its full potential and advancing the practice of
+automated, knowledge-centric scientific software engineering.
+
+\section{Broader Impact and Personal Reflection}
+
+The development of Drasil represents a step toward more principled and
+automated scientific software engineering. By centralizing domain knowledge
+and enabling systematic artifact generation, Drasil has the potential to
+improve reliability, reproducibility, and maintainability across a wide
+range of scientific computing projects. Its approach may influence future
+tools and methodologies, encouraging the adoption of knowledge-centric
+practices in both research and industry.
+
+Drasil's evolution has been shaped by its iterative development process,
+where feedback from case studies and practical use continually informed
+refinement of both the knowledge base and framework itself. This
+iterative approach has enabled Drasil to adapt to new requirements,
+address unforeseen challenges, and incrementally improve its capabilities
+while maintaining validated, working case study software projects.
+
+On a personal level, this work has highlighted the importance of
+interdisciplinary thinking and the value of bridging gaps between software
+engineering theory and practical implementation. The challenges encountered
+throughout the design and development of Drasil have reinforced my 
+understanding of the need for flexibility, collaboration, and ongoing 
+refinement. The experience has been both intellectually rewarding and 
+formative, shaping my perspective on the future of scientific software. 
+
+\section{Closing Remarks}
+
+This thesis has demonstrated the feasibility and benefits of a knowledge-
+centric approach to scientific software engineering. By operationalizing
+software engineering principles and automating the generation of software
+and documentation artifacts, Drasil offers a scalable solution to persistent
+challenges of consistency, traceability, and maintainability. The work
+presented here lays the groundwork for further advances in knowledge capture
+and automated artifact generation, and invites continued research and
+collaboration to realize the full potential of this approach.
+
+As the scientific computing community evolves, tools like Drasil may play an
+increasingly important role in supporting reliable, reproducible, and
+adaptable software systems. The lessons learned from this work highlight the
+value of centralized knowledge, systematic artifact generation, and the
+importance of ongoing refinement. Continued investment in these principles
+will help shape the future of scientific software engineering, ensuring that
+software remains trustworthy, maintainable, and responsive to new challenges.

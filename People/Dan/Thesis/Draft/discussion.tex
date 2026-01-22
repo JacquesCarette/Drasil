@@ -53,7 +53,7 @@ knowledge capture, further reinforcing consistency and reducing manual effort.
 
 \subsection{Traceability and refactoring}
 
-Centralized knowledge makes provenance explicit: formulas, symbols, and
+Centralized knowledge makes provenance explicit: formulae, symbols, and
 identifiers trace back to named chunks or recipes. That provenance eases
 refactoring because changes localized to chunks produce immediate updates
 across downstream artifacts. The recipe DSL allows reorganizing output
@@ -145,11 +145,33 @@ preliminary.
 
 Future validation should include controlled studies measuring onboarding 
 metrics (time to first meaningful edit, amount of mentoring required),
-maintenance effort, and error rates across teams of varying experience. Experimental designs could compare Drasil-based workflows to traditional manual approaches, quantifying differences in initial productivity, long-term maintenance, and defect reduction. These metrics will be essential for substantiating the qualitative benefits observed in this thesis. Feedback from such studies will also guide the development of improved authoring tools and onboarding resources, helping to lower the initial ramp-up cost and make Drasil accessible to a broader range of users.
+maintenance effort, and error rates across teams of varying experience. 
+Experimental designs could compare Drasil-based workflows to traditional manual 
+approaches, quantifying differences in initial productivity, long-term 
+maintenance, and defect reduction. These metrics will be essential for 
+substantiating the qualitative benefits observed in this thesis. Feedback from 
+such studies will also guide the development of improved authoring tools and 
+onboarding resources, helping to lower the initial ramp-up cost and make Drasil 
+accessible to a broader range of users.
 
 Scalability concerns also merit attention: as the knowledge base grows,
 improved tools for discovery, efficient projection, and modularization will
 be essential to maintain developer productivity.
+
+Drasil's current implementation is also limited primarily to scientific 
+computing software that follows an input-process-output (IPO) paradigm. This 
+constraint arises because such domains typically feature well-defined 
+requirements, structured models, and predictable outputs, making it feasible to 
+encode domain knowledge explicitly and project it into multiple artifacts. 
+
+In contrast, domains with less structured or more dynamic 
+requirements\textemdash{}such as interactive systems, event-driven 
+applications, or software with complex stateful behaviors\textemdash{}present 
+significant challenges for knowledge capture and automated artifact generation. 
+The underlying information in these domains may not be as readily formalized or 
+reused, limiting the effectiveness of Drasil's current approach. Extending 
+Drasil to support these broader classes of software will require advances in 
+flexible modeling, knowledge representation, and recipe design.
 
 \section{Lessons Learned}
 
@@ -164,8 +186,8 @@ be essential to maintain developer productivity.
 \item Rapid case-study reimplementation and ease of propagation suggest the
   approach can scale across domains given improved onboarding and
   validation, provided the domain knowledge can be effectively captured.
-\item The recipe DSL enables flexible artifact structuring and adaptation without
-  modifying the underlying knowledge, supporting maintainability and
+\item The recipe DSL enables flexible artifact structuring and adaptation 
+  without modifying the underlying knowledge, supporting maintainability and  
   evolution.
 \item Centralized knowledge capture increases error visibility by making defects
   pervasive across all generated artifacts, simplifying root-cause analysis
@@ -180,18 +202,20 @@ be essential to maintain developer productivity.
 \item Formal, controlled studies are needed to quantify productivity gains,
   maintenance cost reductions, and error rates to validate the qualitative
   observations reported here.
-\item Deterministic, automated artifact generation supports scientific reproducibility by 
-  ensuring that repeated builds from the same knowledge base yield identical outputs, reducing 
-  the risk of accidental divergence and increasing confidence in results.
-\item Centralized, structured knowledge enables the automatic generation and consistent 
-  maintenance of supporting materials—such as traceability matrices and reference tables—that 
-  are often neglected or inconsistently updated in traditional workflows.
-\item The development and reporting of quantitative metrics—such as onboarding time, 
-  regeneration timings, and maintenance effort—are essential for guiding future improvements 
-  and validating the practical impact of the approach.
-\item Drasil's extensible architecture allows it to adapt to new requirements and scientific 
-  advances by incorporating richer or more abstract domain knowledge, future-proofing the 
-  system as knowledge capture mechanisms evolve.
+\item Deterministic, automated artifact generation supports scientific 
+  reproducibility by ensuring that repeated builds from the same knowledge base 
+  yield identical outputs, reducing the risk of accidental divergence and 
+  increasing confidence in results.
+\item Centralized, structured knowledge enables the automatic generation and 
+  consistent maintenance of supporting materials—such as traceability matrices 
+  and reference tables—that are often neglected or inconsistently updated in 
+  traditional workflows. 
+\item The development and reporting of quantitative metrics—such as onboarding 
+  time, regeneration timings, and maintenance effort—are essential for guiding 
+  future improvements and validating the practical impact of the approach.
+\item Drasil's extensible architecture allows it to adapt to new requirements 
+  and scientific advances by incorporating richer or more abstract domain 
+  knowledge, future-proofing the system as knowledge capture mechanisms evolve.
 \end{enumerate}
 
 \section{Summary and Takeaways}
@@ -199,19 +223,20 @@ be essential to maintain developer productivity.
 Drasil's single-source approach delivers several practical benefits. Consistency
 is enforced by projecting a single knowledge base into all artifacts, ensuring
 that local edits yield system-wide corrections and eliminating inconsistencies
-common in manual workflows. Traceability is improved, as provenance for formulas,
-symbols, and requirements is explicit and changes are automatically propagated
-across documentation and code. Reproducibility is enhanced by automating artifact
-generation, reducing the risk of human error and ensuring that supporting
-materials such as traceability matrices and reference tables are always
-up-to-date.
+common in manual workflows. Traceability is improved, as provenance for 
+formulae, symbols, and requirements is explicit and changes are automatically 
+propagated across documentation and code. Reproducibility is enhanced by 
+automating artifact generation, reducing the risk of human error and ensuring 
+that supporting materials such as traceability matrices and reference tables 
+are always up-to-date.
 
-Automation further reduces manual effort, especially when generating new projects
-or adapting existing ones. Boilerplate text and artifact structure are handled by
-recipes, allowing contributors to focus on encoding domain knowledge. This
-approach also supports the systematic evolution of software families: new
-variants can be created by extending the knowledge base or modifying recipes,
-minimizing duplication and maintaining consistency across related products.
+Automation further reduces manual effort, especially when generating new 
+projects or adapting existing ones. Boilerplate text and artifact structure are 
+handled by recipes, allowing contributors to focus on encoding domain 
+knowledge. This approach also supports the systematic evolution of software 
+families: new variants can be created by extending the knowledge base or 
+modifying recipes, minimizing duplication and maintaining consistency across 
+related products.
 
 The primary tradeoff is increased upfront modeling and onboarding effort. The
 benefits of Drasil's approach are most pronounced when a substantial portion of

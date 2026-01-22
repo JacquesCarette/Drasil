@@ -10,11 +10,12 @@ whenever we use them in the context of Drasil.
 - "Artifact": any and all files associated with a software project. These can
 include the code, SRS, makefile, README, Doxygen config files, sample inputs,
 dot files, etc. Implicitly, they are anything that Drasil can (or should be able
-to) generate.
+to) generate. Note that the 'file' part is not actually important, it merely
+corresponds to the most common representation of artifacts in current use.
 - "Software Dossier": artifacts directly related to the code, that are not
 themselves code. Examples include Doxygen config files, READMEs, sample inputs,
 and makefiles.
-- "Code": What it sounds like - executable code. Currently we support C++, C#,
+- "Code": What it sounds like - source code. Currently we support C++, C#,
 Java, Swift, Python, and Julia.
   - Note that `drasil-code` does not currently follow this convention: it
   contains both code- and Software Dossier-related functionality. We are working

@@ -71,7 +71,7 @@ buildModule n imps bot fs = RCP.modFromData n (do
 
 docMod :: (ProcRenderSym r) => String -> String -> String -> [String] -> String ->
   SFile r -> SFile r
-docMod e wm d a dt fl = RCP.commentedMod fl (RCC.docComment $ CP.modDoc' wm d a dt .
+docMod e d wm a dt fl = RCP.commentedMod fl (RCC.docComment $ CP.modDoc' d wm a dt .
   addExt e <$> getModuleName)
 
 modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r

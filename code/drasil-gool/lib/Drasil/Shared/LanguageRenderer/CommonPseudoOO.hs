@@ -508,7 +508,7 @@ docMod' = docMod modDoc'
 -- DocC, Julia, which uses Markdown, and any other language that doesn't have
 -- Support for a document generator.
 modDoc' :: ModuleDocRenderer
-modDoc' watermark desc as date m = m : [desc | not (null desc)] ++
+modDoc' desc watermark as date m = m : [desc | not (null desc)] ++
       [docField authorDoc (stringList as) | not (null as)] ++
       [docField dateDoc date | not (null date)] ++
       [docField noteDoc watermark]

@@ -414,7 +414,7 @@ classDox desc = [doxBrief ++ desc | not (null desc)]
 type ModuleDocRenderer = String -> String -> [String] -> String -> String -> [String]
 
 moduleDox :: ModuleDocRenderer
-moduleDox watermark desc as date m = (doxFile ++ m) :
+moduleDox desc watermark as date m = (doxFile ++ m) :
   [doxAuthor ++ stringList as | not (null as)] ++
   [doxDate ++ date | not (null date)] ++
   [doxBrief ++ desc | not (null desc)] ++

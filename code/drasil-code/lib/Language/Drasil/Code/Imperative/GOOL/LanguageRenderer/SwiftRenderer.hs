@@ -16,7 +16,7 @@ import Drasil.GOOL (onCodeList, swiftName, swiftVersion)
 
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
-  G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
+  G (readMe, makefile, noRunIfLib, docIfEnabled)
 import Language.Drasil.Code.FileData (packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)
@@ -42,7 +42,6 @@ instance AuxiliarySym SwiftProject where
   readMe rmi = G.readMe rmi {
         langName = swiftName,
         langVersion = swiftVersion}
-  sampleInput = G.sampleInput
 
   optimizeDox = error doxError
 

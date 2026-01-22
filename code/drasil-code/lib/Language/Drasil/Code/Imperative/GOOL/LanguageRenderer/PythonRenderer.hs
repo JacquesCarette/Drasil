@@ -13,7 +13,7 @@ import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
+  G (doxConfig, readMe, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
 import Language.Drasil.Code.FileData (packageData)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
@@ -41,7 +41,6 @@ instance AuxiliarySym PythonProject where
     G.readMe rmi {
         langName = pyName,
         langVersion = pyVersion}
-  sampleInput = G.sampleInput
 
   optimizeDox = pure yes
 

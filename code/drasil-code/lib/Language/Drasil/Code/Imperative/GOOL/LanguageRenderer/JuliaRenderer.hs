@@ -13,7 +13,7 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), Auxi
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
-  G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
+  G (readMe, makefile, noRunIfLib, docIfEnabled)
 import Language.Drasil.Code.FileData (packageData)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, DocConfig(..), interpMM)
 
@@ -38,7 +38,6 @@ instance AuxiliarySym JuliaProject where
   readMe rmi = G.readMe rmi {
         langName = jlName,
         langVersion = jlVersion}
-  sampleInput = G.sampleInput
 
   optimizeDox = error doxError
 

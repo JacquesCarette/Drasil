@@ -113,7 +113,7 @@ generator l dt sd chs cs = DrasilState {
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
 -- be generated in.
-generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang ->
+generateCode :: (OOProg progRepr, PackageSym packRepr, Applicative packRepr) => Lang ->
   (progRepr (OO.Program progRepr) -> ProgData) -> 
   (packRepr (PackageData ProgData) -> PackageData ProgData) ->
   DrasilState -> IO ()
@@ -137,7 +137,7 @@ generateCode l unReprProg unReprPack g = do
 -- package will be generated in.
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
-genPackage :: (OOProg progRepr, PackageSym packRepr) =>
+genPackage :: (OOProg progRepr, PackageSym packRepr, Applicative packRepr) =>
   (progRepr (OO.Program progRepr) -> ProgData) ->
   GenState (packRepr (PackageData ProgData))
 genPackage unRepr = do
@@ -227,8 +227,8 @@ genModules = do
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
 -- be generated in.
-generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang ->
-  (progRepr (Proc.Program progRepr) -> ProgData) ->
+generateCodeProc :: (ProcProg progRepr, PackageSym packRepr, Applicative packRepr) =>
+  Lang -> (progRepr (Proc.Program progRepr) -> ProgData) ->
   (packRepr (PackageData ProgData) -> PackageData ProgData) ->
   DrasilState -> IO ()
 generateCodeProc l unReprProg unReprPack g = do
@@ -248,7 +248,7 @@ generateCodeProc l unReprProg unReprPack g = do
 -- package will be generated in.
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
-genPackageProc :: (ProcProg progRepr, PackageSym packRepr) =>
+genPackageProc :: (ProcProg progRepr, PackageSym packRepr, Applicative packRepr) =>
   (progRepr (Proc.Program progRepr) -> ProgData) ->
   GenState (packRepr (PackageData ProgData))
 genPackageProc unRepr = do

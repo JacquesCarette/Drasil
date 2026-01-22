@@ -1,9 +1,6 @@
 Original,Copy
 ../../../../datafiles/glassbr/SystemContextFigure.png,src/assets/SystemContextFigure.png
 ../../../../datafiles/glassbr/physicalsystimage.png,src/assets/physicalsystimage.png
-../../../../datafiles/glassbr/Trace.png,src/assets/Trace.png
-../../../../datafiles/glassbr/RTrace.png,src/assets/RTrace.png
-../../../../datafiles/glassbr/ATrace.png,src/assets/ATrace.png
 ../../../../datafiles/glassbr/ASTM_F2248-09.png,src/assets/ASTM_F2248-09.png
 ../../../../datafiles/glassbr/ASTM_F2248-09_BeasonEtAl.png,src/assets/ASTM_F2248-09_BeasonEtAl.png
 ../../../../traceygraphs/glassbr/avsa.svg,src/assets/avsa.svg

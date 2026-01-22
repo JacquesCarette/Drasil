@@ -1,13 +1,13 @@
 -- | Define and collect information about ODEs and ODE solvers from various libraries.
 module Data.Drasil.ExternalLibraries.ODELibraries (
   -- * SciPy Library (Python)
-  scipyODEPckg, scipyODESymbols,
+  scipyODEPckg,
   -- * Oslo Library (C#)
-  osloPckg, osloSymbols, arrayVecDepVar,
+  osloPckg, arrayVecDepVar,
   -- * Apache Commons (Java)
-  apacheODEPckg, apacheODESymbols,
+  apacheODEPckg,
   -- * Odeint (C++)
-  odeintPckg, odeintSymbols, diffCodeChunk,
+  odeintPckg, diffCodeChunk,
   odeInfoChunks
 ) where
 
@@ -36,7 +36,8 @@ import Language.Drasil.Mod (pubStateVar, privStateVar)
 
 -- | [SciPy](https://www.scipy.org/) ODE library package.
 scipyODEPckg :: ODELibPckg
-scipyODEPckg = mkODELibNoPath "SciPy" "1.4.1" scipyODE scipyCall [Python]
+scipyODEPckg = mkODELibNoPath "SciPy" "1.4.1" scipyODESymbols scipyODE
+  scipyCall [Python]
 
 scipyODE :: ExternalLibrary
 scipyODE = externalLib [
@@ -169,7 +170,8 @@ odeintFunc = quantfunc $ implVar "odeint_scipy" (nounPhrase
 
 -- | [Oslo](https://www.microsoft.com/en-us/research/project/open-solving-library-for-odes/) ODE library package.
 osloPckg :: ODELibPckg
-osloPckg = mkODELib "OSLO" "1.2" oslo osloCall "Microsoft.Research.Oslo.dll" [CSharp]
+osloPckg = mkODELib "OSLO" "1.2" osloSymbols oslo osloCall
+  "Microsoft.Research.Oslo.dll" [CSharp]
 
 oslo :: ExternalLibrary
 oslo = externalLib [
@@ -295,7 +297,7 @@ arrayVecDepVar info = quantvar $ implVar' (show $ dv +++ "vec")
 
 -- | [Apache Commons](https://commons.apache.org/) ODE library package.
 apacheODEPckg :: ODELibPckg
-apacheODEPckg = mkODELib "Apache" "3.6.1" apacheODE apacheODECall
+apacheODEPckg = mkODELib "Apache" "3.6.1" apacheODESymbols apacheODE apacheODECall
   "lib/commons-math3-3.6.1.jar" [Java]
 
 apacheODE :: ExternalLibrary
@@ -458,7 +460,7 @@ computeDerivatives = quantfunc $ implVar "computeDerivatives_apache" (nounPhrase
 
 -- | [odeint](https://headmyshoulder.github.io/odeint-v2/) ODE library package.
 odeintPckg :: ODELibPckg
-odeintPckg = mkODELib "odeint" "v2" odeint odeintCall "." [Cpp]
+odeintPckg = mkODELib "odeint" "v2" odeintSymbols odeint odeintCall "." [Cpp]
 
 odeint :: ExternalLibrary
 odeint = externalLib [

@@ -4,14 +4,14 @@
 module Language.Drasil.CodeSpec where
 
 import Prelude hiding (const)
-import Control.Lens ((^.), makeLenses, Lens', makeClassyFor)
+import Control.Lens ((^.), makeLenses, Lens', makeClassyFor, set)
 import Data.List (nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
 
 import Language.Drasil hiding (None)
 import Language.Drasil.Display (Symbol(Variable))
-import Drasil.Database (ChunkDB, UID, HasUID(..))
+import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll)
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
 import Drasil.System (HasSystem(..), programName)
@@ -21,7 +21,7 @@ import Utils.Drasil (subsetOf)
 import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
-import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))
+import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..), odeLibReqs)
 import Language.Drasil.Chunk.CodeBase (quantvar, codevars, varResolve)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 import Language.Drasil.ICOSolutionSearch (Def, solveExecOrder)
@@ -166,9 +166,13 @@ mapODE (Just ode) = map odeDef $ odeInfo ode
 -- The 'CodeSpec' consists of the system information and a corresponding 'OldCodeSpec'.
 codeSpec :: S.System -> Choices -> [Mod] -> CodeSpec
 codeSpec si chs ms = CS {
-  _system' = si,
-  _oldCode = oldcodeSpec si chs ms
+  _system' = si',
+  _oldCode = oldcodeSpec si' chs ms
 }
+  where
+    libReqs = concatMap odeLibReqs $ extLibs chs
+    db' = insertAll libReqs $ si ^. systemdb
+    si' = set systemdb db' si
 
 -- | Generates an 'OldCodeSpec' from 'System', 'Choices', and a list of 'Mod's.
 -- This function extracts various components (e.g., inputs, outputs, constraints, etc.)

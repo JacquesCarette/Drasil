@@ -43,8 +43,7 @@ import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs, funcReqsTables)
 import Drasil.DblPend.References (citations)
-import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
-  osloSymbols, apacheODESymbols, odeintSymbols, odeInfoChunks)
+import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
 mkSRS :: SRSDecl
@@ -126,8 +125,7 @@ background = foldlSent_ [D.toSent $ phraseNP (a_ pendulum), S "consists" `S.of_`
 -- we need all specification-level symbols along with the code-only symbols.
 -- These symbols should be added another way.
 symbolsWCodeSymbols :: [DefinedQuantityDict]
-symbolsWCodeSymbols = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
-  ++ odeInfoChunks dblPenODEInfo
+symbolsWCodeSymbols = symbols ++ odeInfoChunks dblPenODEInfo
 
 ideaDicts :: [IdeaDict]
 ideaDicts =

@@ -17,27 +17,30 @@ import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 import Language.Drasil.Code.FileNames (doxConfigName, makefileName,
   sampleInputName, readMeName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
+    AuxiliarySym(AuxHelper, auxHelperDoc), auxFromData
+  )
+import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..), makeReadMe)
 
 -- | Defines a Doxygen configuration file.
-doxConfig :: (AuxiliarySym r) => r (AuxHelper r) -> String ->
-  GOOLState -> Verbosity -> r (Auxiliary r)
+doxConfig :: (AuxiliarySym r, Applicative r) => r (AuxHelper r) -> String ->
+  GOOLState -> Verbosity -> r FileAndContents
 doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s
   (auxHelperDoc opt) v)
 
 -- | Defines a markdown file.
-readMe :: (AuxiliarySym r) => ReadMeInfo -> r (Auxiliary r)
+readMe :: (Applicative r) => ReadMeInfo -> r FileAndContents
 readMe rmi= auxFromData readMeName (makeReadMe rmi)
 
 -- | Defines a sample input file.
-sampleInput :: (AuxiliarySym r) => PrintingInformation -> DataDesc -> [Expr] ->
-  r (Auxiliary r)
+sampleInput :: (Applicative r) => PrintingInformation -> DataDesc -> [Expr] ->
+  r FileAndContents
 sampleInput db d sd = auxFromData sampleInputName (makeInputFile db d sd)
 
 -- | Defines a Makefile.
-makefile :: (AuxiliarySym r) => Maybe BuildConfig -> Maybe Runnable ->
-  Maybe DocConfig -> GOOLState -> ProgData -> r (Auxiliary r)
+makefile :: (Applicative r) => Maybe BuildConfig -> Maybe Runnable ->
+  Maybe DocConfig -> GOOLState -> ProgData -> r FileAndContents
 makefile bc r d s p = auxFromData makefileName (makeBuild d bc r s p)
 
 -- | Changes a 'Runnable' to 'Nothing' if the user chose 'Library' for the 'ImplementationType'.

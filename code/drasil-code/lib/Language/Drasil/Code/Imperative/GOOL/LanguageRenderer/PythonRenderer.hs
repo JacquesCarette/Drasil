@@ -16,8 +16,8 @@ import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.FileData (FileAndContents(..),
-  fileAndContents, PackageData(..), packageData)
+import Language.Drasil.Code.FileData (FileAndContents(..), PackageData(..),
+  packageData)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
@@ -54,7 +54,6 @@ instance AuxiliarySym PythonProject where
     (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unPP
-  auxFromData fp d = pure $ fileAndContents fp d
 
 -- | Default runnable information for Python files.
 pyRunnable :: Maybe Runnable

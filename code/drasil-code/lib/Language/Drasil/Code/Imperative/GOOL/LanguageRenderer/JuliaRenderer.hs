@@ -9,13 +9,13 @@ import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 import Drasil.GProc (ProgData, onCodeList, jlName, jlVersion)
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..), auxFromData)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.FileData (FileAndContents(..),
-  fileAndContents, PackageData(..), packageData)
+import Language.Drasil.Code.FileData (FileAndContents(..), PackageData(..),
+  packageData)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, DocConfig(..), interpMM)
 
 -- | Holds a Julia project
@@ -50,7 +50,6 @@ instance AuxiliarySym JuliaProject where
                             (G.docIfEnabled cms (DocConfig [] []))
 
   auxHelperDoc = unJLP
-  auxFromData fp d = pure $ fileAndContents fp d
 
 -- | Default runnable information for Julia files
 jlRunnable :: Maybe Runnable

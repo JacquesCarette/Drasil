@@ -4,7 +4,7 @@
 -- program with auxiliary, non-source-code files.
 module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   -- Typeclasses
-  PackageSym(..), AuxiliarySym(..)
+  PackageSym(..), AuxiliarySym(..), auxFromData
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -14,6 +14,7 @@ import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
 import Language.Drasil.Code.DataDesc (DataDesc)
+import Language.Drasil.Code.FileData (FileAndContents(..), fileAndContents)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
@@ -39,4 +40,7 @@ class AuxiliarySym r where
     ProgData -> r (Auxiliary r)
 
   auxHelperDoc :: r (AuxHelper r) -> Doc
-  auxFromData :: FilePath -> Doc -> r (Auxiliary r)
+
+
+auxFromData :: Applicative r => FilePath -> Doc -> r FileAndContents
+auxFromData fp d = pure $ fileAndContents fp d

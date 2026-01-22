@@ -17,8 +17,8 @@ import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, docIfEnabled)
-import Language.Drasil.Code.FileData (FileAndContents(..),
-  fileAndContents, PackageData(..), packageData)
+import Language.Drasil.Code.FileData (FileAndContents(..), PackageData(..),
+  packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..),
   Ext(..), Runnable, NameOpts(NameOpts), asFragment, buildSingle,
   buildAllAdditionalName, includeExt, inCodePackage, interp, mainModule,
@@ -65,7 +65,6 @@ instance AuxiliarySym JavaProject where
     (G.noRunIfLib it (jRunnable fs)) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unJP
-  auxFromData fp d = pure $ fileAndContents fp d
 
 -- | Create a build configuration for Java files. Takes in 'FilePath's and the type of implementation.
 jBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

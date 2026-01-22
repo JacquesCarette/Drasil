@@ -18,8 +18,8 @@ import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.FileData (FileAndContents(..),
-  fileAndContents, PackageData(..), packageData)
+import Language.Drasil.Code.FileData (FileAndContents(..), PackageData(..),
+  packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, nativeBinary, osClassDefault, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
@@ -58,7 +58,6 @@ instance AuxiliarySym CSharpProject where
     (G.noRunIfLib it csRunnable) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unCSP
-  auxFromData fp d = pure $ fileAndContents fp d
 
 -- | Create a build configuration for C# files. Takes in 'FilePath's and the type of implementation.
 csBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

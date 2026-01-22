@@ -8,7 +8,8 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
+  AuxiliarySym(..), auxFromData)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
 import Drasil.GOOL (ProgData, onCodeList, swiftName, swiftVersion)
@@ -16,8 +17,8 @@ import Drasil.GOOL (ProgData, onCodeList, swiftName, swiftVersion)
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.FileData (FileAndContents(..),
-  fileAndContents, PackageData(..), packageData)
+import Language.Drasil.Code.FileData (FileAndContents(..), PackageData(..),
+  packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)
 
@@ -52,7 +53,6 @@ instance AuxiliarySym SwiftProject where
   makefile fs it cms = G.makefile (swiftBuildConfig fs it) (G.noRunIfLib it swiftRunnable) (G.docIfEnabled cms (DocConfig [] []))
 
   auxHelperDoc = unSP
-  auxFromData fp d = pure $ fileAndContents fp d
 
 -- | Create a build configuration for Swift files. Takes in 'FilePath's and the type of implementation.
 swiftBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

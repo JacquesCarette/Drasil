@@ -18,8 +18,7 @@ import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.FileData (FileAndContents(..), PackageData(..),
-  packageData)
+import Language.Drasil.Code.FileData (PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, nativeBinary, osClassDefault, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
@@ -42,7 +41,6 @@ instance PackageSym CSharpProject where
   package p = onCodeList (packageData p)
 
 instance AuxiliarySym CSharpProject where
-  type Auxiliary CSharpProject = FileAndContents
   type AuxHelper CSharpProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =

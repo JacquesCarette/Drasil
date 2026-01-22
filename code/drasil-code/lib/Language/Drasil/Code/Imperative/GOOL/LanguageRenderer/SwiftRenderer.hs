@@ -17,8 +17,7 @@ import Drasil.GOOL (ProgData, onCodeList, swiftName, swiftVersion)
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.FileData (FileAndContents(..), PackageData(..),
-  packageData)
+import Language.Drasil.Code.FileData (PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)
 
@@ -40,7 +39,6 @@ instance PackageSym SwiftProject where
   package p = onCodeList (packageData p)
 
 instance AuxiliarySym SwiftProject where
-  type Auxiliary SwiftProject = FileAndContents
   type AuxHelper SwiftProject = Doc
   doxConfig _ _ _ = auxFromData "" empty
   readMe rmi = G.readMe rmi {

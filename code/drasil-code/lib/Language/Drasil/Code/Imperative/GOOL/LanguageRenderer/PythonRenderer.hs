@@ -16,8 +16,7 @@ import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.FileData (FileAndContents(..), PackageData(..),
-  packageData)
+import Language.Drasil.Code.FileData (PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
@@ -39,7 +38,6 @@ instance PackageSym PythonProject where
   package p = onCodeList (packageData p)
 
 instance AuxiliarySym PythonProject where
-  type Auxiliary PythonProject = FileAndContents
   type AuxHelper PythonProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =

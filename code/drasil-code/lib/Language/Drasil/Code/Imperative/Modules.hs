@@ -62,6 +62,7 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar,
   DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
@@ -470,7 +471,7 @@ genDataDesc = do
 
 -- | Generates a sample input file compatible with the generated program,
 -- if the user chose to.
-genSampleInput :: (AuxiliarySym r) => GenState (Maybe (r (Auxiliary r)))
+genSampleInput :: (AuxiliarySym r) => GenState (Maybe (r FileAndContents))
 genSampleInput = do
   g <- get
   dd <- genDataDesc

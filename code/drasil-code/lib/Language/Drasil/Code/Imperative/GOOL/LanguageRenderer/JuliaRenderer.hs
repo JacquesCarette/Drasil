@@ -14,8 +14,7 @@ import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.FileData (FileAndContents(..), PackageData(..),
-  packageData)
+import Language.Drasil.Code.FileData (PackageData(..), packageData)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, DocConfig(..), interpMM)
 
 -- | Holds a Julia project
@@ -36,7 +35,6 @@ instance PackageSym JuliaProject where
   package p = onCodeList (packageData p)
 
 instance AuxiliarySym JuliaProject where
-  type Auxiliary JuliaProject = FileAndContents
   type AuxHelper JuliaProject = Doc
   doxConfig _ _ _ = auxFromData "" empty -- Doxygen does not support Julia
   readMe rmi = G.readMe rmi {

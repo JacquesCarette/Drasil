@@ -744,7 +744,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;will be the functions&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679068227"><span class="hs-identifier hs-var">vals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679068228"><span class="hs-identifier hs-var">vals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;over time that satisfy the&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-146"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -770,7 +770,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;for&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679068227"><span class="hs-identifier hs-var">vals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
+</span><a href="#local-6989586621679068228"><span class="hs-identifier hs-var">vals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NPStruct -&gt; Sentence
 </span><span class="hs-identifier hs-var">D.toSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NPStruct
 forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
@@ -783,7 +783,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;so the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679068227"><span class="hs-identifier hs-var">vals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679068228"><span class="hs-identifier hs-var">vals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;functions are for the&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-149"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
@@ -793,8 +793,8 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassDD"><span class="hs-identifier hs-var">ctrOfMassDD</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-150"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679068227"><span class="annot"><span class="annottext">vals :: Sentence
-</span><a href="#local-6989586621679068227"><span class="hs-identifier hs-var hs-var">vals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><span id="line-150"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679068228"><span class="annot"><span class="annottext">vals :: Sentence
+</span><a href="#local-6989586621679068228"><span class="hs-identifier hs-var hs-var">vals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(UnitalChunk -&gt; Sentence) -&gt; [UnitalChunk] -&gt; [Sentence]

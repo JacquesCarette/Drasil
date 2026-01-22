@@ -1267,6 +1267,40 @@ steps :: Lens' ExtLibState [FuncStmt]
 genExternalLibraryCall :: ExternalLibrary -> ExternalLibraryCall -> ExtLibState
 
 
+-- | Define and collect information about ODEs and ODE solvers from various
+--   libraries.
+module Data.Drasil.ExternalLibraries.ODELibraries
+
+-- | <a>SciPy</a> ODE library package.
+scipyODEPckg :: ODELibPckg
+
+-- | <a>Oslo</a> ODE library package.
+osloPckg :: ODELibPckg
+
+-- | Oslo's Vector type behaves like an array, so needs to be represented
+--   as one or else will hit type errors in GOOL.
+arrayVecDepVar :: ODEInfo -> CodeVarChunk
+
+-- | <a>Apache Commons</a> ODE library package.
+apacheODEPckg :: ODELibPckg
+
+-- | <a>odeint</a> ODE library package.
+odeintPckg :: ODELibPckg
+
+-- | Change in <tt>X</tt> chunk constructor (where <tt>X</tt> is a given
+--   argument).
+diffCodeChunk :: CodeVarChunk -> CodeVarChunk
+
+-- | Collect all chunks related to a specific ODE
+--   
+--   FIXME: HACK: Rather than being tied to <a>ODEInfo</a>, this should be
+--   tied to the <a>ODELibPckg</a>, which contains the know-how of code
+--   generation for ODEs and really knows which "ODEInfo-required-chunks"
+--   are necessary to add to the <tt>ChunkDB</tt>. This currently throws
+--   more than necessary.
+odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]
+
+
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices
 
@@ -1377,6 +1411,7 @@ ODE :: [ODEInfo] -> [ODELibPckg] -> ODE
 
 -- | Constructor to create an ODE
 makeODE :: [ODEInfo] -> [ODELibPckg] -> ODE
+odeInfoReqs :: ExtLib -> [DefinedQuantityDict]
 odeLibReqs :: ExtLib -> [DefinedQuantityDict]
 
 -- | Configuration for Doxygen documentation
@@ -1665,21 +1700,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aArX
-oldCodeSpec :: HasOldCodeSpec c_aArX => Lens' c_aArX OldCodeSpec
-authorsO :: HasOldCodeSpec c_aArX => Lens' c_aArX People
-cMapO :: HasOldCodeSpec c_aArX => Lens' c_aArX ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aArX => Lens' c_aArX [FilePath]
-constMapO :: HasOldCodeSpec c_aArX => Lens' c_aArX ConstantMap
-constantsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Const]
-derivedInputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Derived]
-execOrderO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Def]
-extInputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Input]
-inputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Input]
-modsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Mod]
-outputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Output]
-pNameO :: HasOldCodeSpec c_aArX => Lens' c_aArX Name
-systemdbO :: HasOldCodeSpec c_aArX => Lens' c_aArX ChunkDB
+class HasOldCodeSpec c_aLiQ
+oldCodeSpec :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ People
+cMapO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [FilePath]
+constMapO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ ConstantMap
+constantsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Const]
+derivedInputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Derived]
+execOrderO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Def]
+extInputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Input]
+inputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Input]
+modsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Mod]
+outputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Output]
+pNameO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ Name
+systemdbO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -2903,21 +2938,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_aArX
-oldCodeSpec :: HasOldCodeSpec c_aArX => Lens' c_aArX OldCodeSpec
-authorsO :: HasOldCodeSpec c_aArX => Lens' c_aArX People
-cMapO :: HasOldCodeSpec c_aArX => Lens' c_aArX ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aArX => Lens' c_aArX [FilePath]
-constMapO :: HasOldCodeSpec c_aArX => Lens' c_aArX ConstantMap
-constantsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Const]
-derivedInputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Derived]
-execOrderO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Def]
-extInputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Input]
-inputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Input]
-modsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Mod]
-outputsO :: HasOldCodeSpec c_aArX => Lens' c_aArX [Output]
-pNameO :: HasOldCodeSpec c_aArX => Lens' c_aArX Name
-systemdbO :: HasOldCodeSpec c_aArX => Lens' c_aArX ChunkDB
+class HasOldCodeSpec c_aLiQ
+oldCodeSpec :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ People
+cMapO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [FilePath]
+constMapO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ ConstantMap
+constantsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Const]
+derivedInputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Derived]
+execOrderO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Def]
+extInputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Input]
+inputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Input]
+modsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Mod]
+outputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Output]
+pNameO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ Name
+systemdbO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -3481,31 +3516,3 @@ data NamedArgument
 -- | Smart constructor for <a>NamedArgument</a> .
 narg :: (Quantity q, MayHaveUnit q, Concept q) => q -> NamedArgument
 codeDQDs :: [DefinedQuantityDict]
-
-
--- | Define and collect information about ODEs and ODE solvers from various
---   libraries.
-module Data.Drasil.ExternalLibraries.ODELibraries
-
--- | <a>SciPy</a> ODE library package.
-scipyODEPckg :: ODELibPckg
-
--- | <a>Oslo</a> ODE library package.
-osloPckg :: ODELibPckg
-
--- | Oslo's Vector type behaves like an array, so needs to be represented
---   as one or else will hit type errors in GOOL.
-arrayVecDepVar :: ODEInfo -> CodeVarChunk
-
--- | <a>Apache Commons</a> ODE library package.
-apacheODEPckg :: ODELibPckg
-
--- | <a>odeint</a> ODE library package.
-odeintPckg :: ODELibPckg
-
--- | Change in <tt>X</tt> chunk constructor (where <tt>X</tt> is a given
---   argument).
-diffCodeChunk :: CodeVarChunk -> CodeVarChunk
-
--- | Collect all chunks related to a specific ODE
-odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]

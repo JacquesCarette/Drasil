@@ -10,6 +10,40 @@
 @version 0.1.9.0
 
 
+-- | Define and collect information about ODEs and ODE solvers from various
+--   libraries.
+module Data.Drasil.ExternalLibraries.ODELibraries
+
+-- | <a>SciPy</a> ODE library package.
+scipyODEPckg :: ODELibPckg
+
+-- | <a>Oslo</a> ODE library package.
+osloPckg :: ODELibPckg
+
+-- | Oslo's Vector type behaves like an array, so needs to be represented
+--   as one or else will hit type errors in GOOL.
+arrayVecDepVar :: ODEInfo -> CodeVarChunk
+
+-- | <a>Apache Commons</a> ODE library package.
+apacheODEPckg :: ODELibPckg
+
+-- | <a>odeint</a> ODE library package.
+odeintPckg :: ODELibPckg
+
+-- | Change in <tt>X</tt> chunk constructor (where <tt>X</tt> is a given
+--   argument).
+diffCodeChunk :: CodeVarChunk -> CodeVarChunk
+
+-- | Collect all chunks related to a specific ODE
+--   
+--   FIXME: HACK: Rather than being tied to <a>ODEInfo</a>, this should be
+--   tied to the <a>ODELibPckg</a>, which contains the know-how of code
+--   generation for ODEs and really knows which "ODEInfo-required-chunks"
+--   are necessary to add to the <tt>ChunkDB</tt>. This currently throws
+--   more than necessary.
+odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]
+
+
 -- | Re-export code-related smart constructors for external code writing
 --   and generation.
 module Language.Drasil.GOOL
@@ -393,21 +427,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_aApf
-oldCodeSpec :: HasOldCodeSpec c_aApf => Lens' c_aApf OldCodeSpec
-authorsO :: HasOldCodeSpec c_aApf => Lens' c_aApf People
-cMapO :: HasOldCodeSpec c_aApf => Lens' c_aApf ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aApf => Lens' c_aApf [FilePath]
-constMapO :: HasOldCodeSpec c_aApf => Lens' c_aApf ConstantMap
-constantsO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Const]
-derivedInputsO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Derived]
-execOrderO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Def]
-extInputsO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Input]
-inputsO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Input]
-modsO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Mod]
-outputsO :: HasOldCodeSpec c_aApf => Lens' c_aApf [Output]
-pNameO :: HasOldCodeSpec c_aApf => Lens' c_aApf Name
-systemdbO :: HasOldCodeSpec c_aApf => Lens' c_aApf ChunkDB
+class HasOldCodeSpec c_aLga
+oldCodeSpec :: HasOldCodeSpec c_aLga => Lens' c_aLga OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLga => Lens' c_aLga People
+cMapO :: HasOldCodeSpec c_aLga => Lens' c_aLga ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLga => Lens' c_aLga [FilePath]
+constMapO :: HasOldCodeSpec c_aLga => Lens' c_aLga ConstantMap
+constantsO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Const]
+derivedInputsO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Derived]
+execOrderO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Def]
+extInputsO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Input]
+inputsO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Input]
+modsO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Mod]
+outputsO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Output]
+pNameO :: HasOldCodeSpec c_aLga => Lens' c_aLga Name
+systemdbO :: HasOldCodeSpec c_aLga => Lens' c_aLga ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -971,31 +1005,3 @@ data NamedArgument
 -- | Smart constructor for <a>NamedArgument</a> .
 narg :: (Quantity q, MayHaveUnit q, Concept q) => q -> NamedArgument
 codeDQDs :: [DefinedQuantityDict]
-
-
--- | Define and collect information about ODEs and ODE solvers from various
---   libraries.
-module Data.Drasil.ExternalLibraries.ODELibraries
-
--- | <a>SciPy</a> ODE library package.
-scipyODEPckg :: ODELibPckg
-
--- | <a>Oslo</a> ODE library package.
-osloPckg :: ODELibPckg
-
--- | Oslo's Vector type behaves like an array, so needs to be represented
---   as one or else will hit type errors in GOOL.
-arrayVecDepVar :: ODEInfo -> CodeVarChunk
-
--- | <a>Apache Commons</a> ODE library package.
-apacheODEPckg :: ODELibPckg
-
--- | <a>odeint</a> ODE library package.
-odeintPckg :: ODELibPckg
-
--- | Change in <tt>X</tt> chunk constructor (where <tt>X</tt> is a given
---   argument).
-diffCodeChunk :: CodeVarChunk -> CodeVarChunk
-
--- | Collect all chunks related to a specific ODE
-odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]

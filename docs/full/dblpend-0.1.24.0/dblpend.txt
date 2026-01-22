@@ -235,7 +235,6 @@ si :: System
 purp :: Sentence
 motivation :: Sentence
 background :: Sentence
-symbolsWCodeSymbols :: [DefinedQuantityDict]
 ideaDicts :: [IdeaDict]
 abbreviationsList :: [IdeaDict]
 conceptChunks :: [ConceptChunk]

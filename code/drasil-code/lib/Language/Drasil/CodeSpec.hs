@@ -174,7 +174,11 @@ codeSpec si chs ms = CS {
     els = extLibs chs
     libReqs = concatMap odeLibReqs els
     infoReqs = concatMap odeInfoReqs els
-    db' = insertAll (libReqs ++ infoReqs) $ si ^. systemdb
+    msReqs = map asVC $ concatMap (\(Mod _ _ _ _ l) -> l) ms
+    db' = insertAll libReqs
+        $ insertAll infoReqs
+        $ insertAll msReqs
+        $ si ^. systemdb
     si' = set systemdb db' si
 
 -- | Generates an 'OldCodeSpec' from 'System', 'Choices', and a list of 'Mod's.

@@ -12,7 +12,6 @@ import Drasil.DocLang (auxSpecSent, termDefnF')
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested, tAndDOnly, tAndDWAcc, noRefs,
@@ -46,7 +45,7 @@ import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
-import Drasil.GlassBR.ModuleDefs (allMods, implVars)
+import Drasil.GlassBR.ModuleDefs (implVars)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.TMods (tMods)
@@ -142,8 +141,7 @@ symbMap = cdb symbolsWCodeSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
   GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]
-symbolsWCodeSymbols = map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
-  ++ implVars ++ symbols
+symbolsWCodeSymbols = implVars ++ symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

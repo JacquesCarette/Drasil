@@ -1,4 +1,3 @@
-{-# LANGUAGE TypeFamilies #-}
 -- | The logic to render Python auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
   PythonProject(..)

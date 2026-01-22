@@ -1,4 +1,3 @@
-{-# LANGUAGE TypeFamilies #-}
 -- | The logic to render Julia auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (
   JuliaProject(..)

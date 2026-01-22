@@ -14,15 +14,15 @@ import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
 import Language.Drasil.Code.DataDesc (DataDesc)
-import Language.Drasil.Code.FileData (FileAndContents(..), fileAndContents)
+import Language.Drasil.Code.FileData (FileAndContents(..), PackageData,
+  fileAndContents)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
 -- | Members of this class must have all the information necessary for
 -- the 'AuxiliarySym' in addition to information necessary to create a package.
 class (AuxiliarySym r) => PackageSym r where
-  type Package r
-  package :: ProgData -> [r FileAndContents] -> r (Package r)
+  package :: ProgData -> [r FileAndContents] -> r (PackageData ProgData)
 
 -- | Members of this class must have a doxygen configuration, ReadMe file,
 -- sample input, omptimize doxygen document, information necessary for a makefile,

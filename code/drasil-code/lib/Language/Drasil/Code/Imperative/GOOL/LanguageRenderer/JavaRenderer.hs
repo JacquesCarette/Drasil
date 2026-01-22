@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.List (intercalate)
 
-import Drasil.GOOL (ProgData, onCodeList, jName, jVersion)
+import Drasil.GOOL (onCodeList, jName, jVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
@@ -16,7 +16,7 @@ import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, docIfEnabled)
-import Language.Drasil.Code.FileData (PackageData(..), packageData)
+import Language.Drasil.Code.FileData (packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..),
   Ext(..), Runnable, NameOpts(NameOpts), asFragment, buildSingle,
   buildAllAdditionalName, includeExt, inCodePackage, interp, mainModule,
@@ -44,7 +44,6 @@ instance Monad JavaProject where
   JP x >>= f = f x
 
 instance PackageSym JavaProject where
-  type Package JavaProject = PackageData ProgData
   package p = onCodeList (packageData p)
 
 instance AuxiliarySym JavaProject where

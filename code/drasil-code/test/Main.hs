@@ -69,7 +69,7 @@ genCode files = createCodeFiles (concatMap (\p -> replicate (length (progMods
 -- (CodeInfo and a renderer) each time this function is called
 -- | Gathers the GOOL file tests and prepares them for rendering
 classes :: (OOProg r, PackageSym r') => (r (OO.Program r) -> ProgData) ->
-  (r' (Package r') -> PackageData ProgData) -> [PackageData ProgData]
+  (r' (PackageData ProgData) -> PackageData ProgData) -> [PackageData ProgData]
 classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
@@ -79,8 +79,8 @@ classes unRepr unRepr' = zipWith
     fileTestsOO, vectorTestOO, nameGenTestOO])
 
 -- Classes that Julia is currently able to render
-jlClasses :: (ProcProg r, PackageSym r') => (r (Proc.Program r) ->
-  ProgData) -> (r' (Package r') -> PackageData ProgData) -> [PackageData ProgData]
+jlClasses :: (ProcProg r, PackageSym r') => (r (Proc.Program r) -> ProgData) ->
+  (r' (PackageData ProgData) -> PackageData ProgData) -> [PackageData ProgData]
 jlClasses unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'

@@ -114,8 +114,9 @@ generator l dt sd chs cs = DrasilState {
 -- un-representation functions determine which target language the package will
 -- be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang ->
-  (progRepr (OO.Program progRepr) -> ProgData) -> (packRepr (Package packRepr) ->
-  PackageData ProgData) -> DrasilState -> IO ()
+  (progRepr (OO.Program progRepr) -> ProgData) -> 
+  (packRepr (PackageData ProgData) -> PackageData ProgData) ->
+  DrasilState -> IO ()
 generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirIfMissing False (getDir l)
@@ -138,7 +139,7 @@ generateCode l unReprProg unReprPack g = do
 -- used by the language renderer.
 genPackage :: (OOProg progRepr, PackageSym packRepr) =>
   (progRepr (OO.Program progRepr) -> ProgData) ->
-  GenState (packRepr (Package packRepr))
+  GenState (packRepr (PackageData ProgData))
 genPackage unRepr = do
   g <- get
   ci <- genProgram
@@ -227,8 +228,9 @@ genModules = do
 -- un-representation functions determine which target language the package will
 -- be generated in.
 generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang ->
-  (progRepr (Proc.Program progRepr) -> ProgData) -> (packRepr (Package packRepr) ->
-  PackageData ProgData) -> DrasilState -> IO ()
+  (progRepr (Proc.Program progRepr) -> ProgData) ->
+  (packRepr (PackageData ProgData) -> PackageData ProgData) ->
+  DrasilState -> IO ()
 generateCodeProc l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirIfMissing False (getDir l)
@@ -248,7 +250,7 @@ generateCodeProc l unReprProg unReprPack g = do
 -- used by the language renderer.
 genPackageProc :: (ProcProg progRepr, PackageSym packRepr) =>
   (progRepr (Proc.Program progRepr) -> ProgData) ->
-  GenState (packRepr (Package packRepr))
+  GenState (packRepr (PackageData ProgData))
 genPackageProc unRepr = do
   g <- get
   ci <- genProgramProc

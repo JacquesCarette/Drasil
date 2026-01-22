@@ -12,12 +12,12 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
   AuxiliarySym(..), auxFromData)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
-import Drasil.GOOL (ProgData, onCodeList, swiftName, swiftVersion)
+import Drasil.GOOL (onCodeList, swiftName, swiftVersion)
 
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.FileData (PackageData(..), packageData)
+import Language.Drasil.Code.FileData (packageData)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)
 
@@ -35,7 +35,6 @@ instance Monad SwiftProject where
   SP x >>= f = f x
 
 instance PackageSym SwiftProject where
-  type Package SwiftProject = PackageData ProgData
   package p = onCodeList (packageData p)
 
 instance AuxiliarySym SwiftProject where

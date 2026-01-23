@@ -8,7 +8,8 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.ShortHands (lX,lY)
 
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, requirement, srs)
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata.Documentation (requirement, srs)
 import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,
   likelyChg, physSyst, property, refBy, refName, safety, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Education (mechanics)

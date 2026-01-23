@@ -5,7 +5,7 @@ import Language.Drasil hiding (number, norm, matrix, Sentence(P, S, (:+:)))
 import qualified Language.Drasil as D
 import Language.Drasil.Development (NPStruct(P, S, (:-:)))
 import Language.Drasil.ShortHands (lX, lY, lZ)
-import Drasil.Metadata (mathematics)
+import Drasil.Metadata.Domains (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators

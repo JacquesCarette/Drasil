@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
-import Drasil.Metadata (inModel)
+import Drasil.Metadata.TheoryConcepts (inModel)
 import Language.Drasil
 import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil

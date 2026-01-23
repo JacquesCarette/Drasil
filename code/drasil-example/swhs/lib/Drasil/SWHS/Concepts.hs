@@ -5,8 +5,9 @@ import Control.Lens ((^.))
 import Language.Drasil
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 
-import Drasil.Metadata (materialEng, dataDefn, genDefn, inModel, thModel,
-  requirement, srs)
+import Drasil.Metadata.Domains (materialEng)
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata.Documentation (requirement, srs)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt,
   likelyChg, physSyst, refBy, refName, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode, parameter, rightSide)

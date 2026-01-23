@@ -1,24 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Drasil.Metadata (
     -- * Drasil Metadata
-    drasilMeta, watermark,
-    -- * Domains
-    module Drasil.Metadata.Domains,
-    -- * Supported Software
-    module Drasil.Metadata.SupportedSoftware,
-    -- * Theory Concepts
-    module Drasil.Metadata.TheoryConcepts,
-    -- * Documentation Concepts
-    module Drasil.Metadata.Documentation
+    watermark
 ) where
 
-import Drasil.Metadata.Documentation
-import Drasil.Metadata.Domains
 import Drasil.Metadata.Drasil (DrasilMeta(..), drasilMetaCfg)
-import Drasil.Metadata.SupportedSoftware
-import Drasil.Metadata.TheoryConcepts
 
--- | Drasil metadata.
+-- | Drasil metadata. Don't export.
 drasilMeta :: DrasilMeta
 drasilMeta = $drasilMetaCfg
 

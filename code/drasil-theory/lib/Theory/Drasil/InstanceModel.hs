@@ -13,7 +13,7 @@ module Theory.Drasil.InstanceModel(
 import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
-import Drasil.Metadata (inModel)
+import Drasil.Metadata.TheoryConcepts (inModel)
 
 import Control.Lens ((^.), makeLenses, _1, _2)
 import Theory.Drasil.Components.Derivation (Derivation,MayHaveDerivation(derivations))

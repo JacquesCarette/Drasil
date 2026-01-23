@@ -36,7 +36,8 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
-import Drasil.Metadata (inModel, thModel, dataDefn, genDefn, requirement, specification)
+import Drasil.Metadata.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
+import Drasil.Metadata.Documentation (requirement, specification)
 import Drasil.System (System)
 import Language.Drasil hiding (variable)
 import Language.Drasil.Chunk.Concept.NamedCombinators

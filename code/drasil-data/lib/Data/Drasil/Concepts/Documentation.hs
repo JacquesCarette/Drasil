@@ -12,8 +12,10 @@ import Language.Drasil hiding (organization, year, label, variable)
 import Language.Drasil.Development (NPStruct)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Drasil.Metadata (documentc, notebook, softEng, dataDefn, genDefn, inModel, thModel,
-  softwareReq, software, specification, requirement, srs)
+import Drasil.Metadata.Domains (softEng, documentc)
+import Drasil.Metadata.Documentation
+  (softwareReq, software, specification, requirement, srs, notebook)
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Data.Drasil.Concepts.Math (graph, unit_)
 

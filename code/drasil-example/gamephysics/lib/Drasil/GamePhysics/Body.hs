@@ -10,7 +10,8 @@ import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
 
-import Drasil.Metadata (dataDefn, inModel, software)
+import Drasil.Metadata.TheoryConcepts (dataDefn, inModel)
+import Drasil.Metadata.Documentation (software)
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,

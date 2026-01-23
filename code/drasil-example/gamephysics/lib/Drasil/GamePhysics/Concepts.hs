@@ -2,8 +2,10 @@ module Drasil.GamePhysics.Concepts (centreMass, threeD, twoD, acronyms) where
 
 import Language.Drasil
 
-import Drasil.Metadata (physics, dataDefn, genDefn, inModel, thModel, srs,
-  requirement)
+import Drasil.Metadata.Domains (physics)
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata.Documentation (srs, requirement)
+
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
   refBy, refName, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode)

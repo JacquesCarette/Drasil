@@ -12,7 +12,8 @@ import Drasil.Document.Contents (foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 import Drasil.System (SystemKind(Specification), mkSystem)
 
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, software, requirement, srs)
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata.Documentation (software, requirement, srs)
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics,
   problem, assumption, goalStmt, physSyst, sysCont, user,

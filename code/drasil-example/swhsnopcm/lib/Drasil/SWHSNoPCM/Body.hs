@@ -6,7 +6,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
 
-import Drasil.Metadata (inModel)
+import Drasil.Metadata.TheoryConcepts (inModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Drasil.Generator (cdb)

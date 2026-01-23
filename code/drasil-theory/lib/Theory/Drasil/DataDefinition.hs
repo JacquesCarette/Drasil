@@ -10,7 +10,7 @@ import Control.Lens
 
 import Drasil.Database (UID, HasUID(..), showUID, HasChunkRefs(..), nsUid)
 import Language.Drasil
-import Drasil.Metadata (dataDefn)
+import Drasil.Metadata.TheoryConcepts (dataDefn)
 import Theory.Drasil.Classes (HasOutput(..))
 import Theory.Drasil.Components.Derivation (Derivation,MayHaveDerivation(derivations))
 

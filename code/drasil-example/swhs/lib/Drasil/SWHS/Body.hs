@@ -16,7 +16,8 @@ import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Drasil.System (SystemKind(Specification), mkSystem)
 import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSP_, foldlSPCol)
 
-import Drasil.Metadata (inModel, software)
+import Drasil.Metadata.TheoryConcepts (inModel)
+import Drasil.Metadata.Documentation (software)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,
   output_, physical, physics, property, quantity, softwareSys,

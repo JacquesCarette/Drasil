@@ -6,7 +6,7 @@
 module Drasil.Template.Body (mkSRS, si) where
 
 import Drasil.System (SystemKind(Specification), mkSystem)
-import Drasil.Metadata
+import Drasil.Metadata.TheoryConcepts (inModel)
 import Language.Drasil
 import Drasil.SRSDocument
 import Drasil.DocLang (tunitNone)

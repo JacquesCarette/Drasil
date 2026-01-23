@@ -1,6 +1,7 @@
 module Drasil.PDController.Concepts where
 
-import Drasil.Metadata
+import Drasil.Metadata.TheoryConcepts
+import Drasil.Metadata.Documentation
 import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation

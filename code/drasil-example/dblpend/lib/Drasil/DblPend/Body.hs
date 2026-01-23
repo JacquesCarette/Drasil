@@ -13,7 +13,8 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.Metadata (inModel, software)
+import Drasil.Metadata.TheoryConcepts (inModel)
+import Drasil.Metadata.Documentation (software)
 import Data.Drasil.People (dong)
 import Data.Drasil.Concepts.Computation (inDatum)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)

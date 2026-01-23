@@ -6,7 +6,8 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
 import qualified Language.Drasil.Development as D
 
-import Drasil.Metadata as M (dataDefn, inModel, thModel, software)
+import Drasil.Metadata.TheoryConcepts as M (dataDefn, inModel, thModel)
+import Drasil.Metadata.Documentation as M (software)
 import Drasil.SRSDocument
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import Drasil.Generator (cdb)

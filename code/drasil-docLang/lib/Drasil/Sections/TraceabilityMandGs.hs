@@ -19,7 +19,8 @@ import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
 import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   goalStmt, goalStmtDom, reqDom, item, section_, likelyChg,
   unlikelyChg)
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, requirement)
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata.Documentation (requirement)
 import Drasil.Database (mkUid)
 import Drasil.Database.SearchTools
 import Drasil.System

@@ -1,7 +1,7 @@
 module Drasil.SWHS.MetaConcepts where
 
 import Language.Drasil
-import Drasil.Metadata (materialEng)
+import Drasil.Metadata.Domains (materialEng)
 
 progName :: CI
 progName = commonIdeaWithDict "swhsName"   (nounPhrase "solar water heating system"

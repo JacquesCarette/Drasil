@@ -3,7 +3,7 @@ module Drasil.SglPend.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
-import Drasil.Metadata (inModel)
+import Drasil.Metadata.TheoryConcepts (inModel)
 import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)

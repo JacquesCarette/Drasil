@@ -13,7 +13,6 @@ import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
 import Data.Drasil.Concepts.Math (unit_)
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                              -- Vector - Name conflict (defined in file)
-import Language.Drasil.Printers (symbolDoc)
 import Drasil.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), LFunc(..), RefTab(..))
 import Utils.Drasil (mkTable)
 
@@ -28,7 +27,7 @@ table st ls f
       (titleize' tOfSymb) True) symbTableRef
     | otherwise = error errorMessage
     where
-        filteredChunks = filter (`hasStageSymbol`st) ls
+        filteredChunks = filter (`hasStageSymbol` st) ls
         symbolsCol     = map (`symbol` st) filteredChunks
         uidCol         = map (view uid)    filteredChunks
         symUidPair     = zip symbolsCol uidCol
@@ -39,7 +38,7 @@ table st ls f
         extractUid  = map snd
         extractUidFromPairs = text . show . extractUid . extractPairs
         errSymUidDuplicates = vcat $ map (\symb ->
-          extractUidFromPairs symb<+>text "all have symbol"<+>symbolDoc symb) symDuplicates
+          extractUidFromPairs symb <+> text "all have the same symbol") symDuplicates
         errorMessage = "Same symbols for different quantities found: " ++ render errSymUidDuplicates
 
 -- | Makes a reference to the Table of Symbols.

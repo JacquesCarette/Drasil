@@ -1,4 +1,3 @@
-{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE PostfixOperators #-}
 -- | The logic to render Java auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
@@ -7,18 +6,15 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.List (intercalate)
-import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (ProgData, onCodeList, jName, jVersion)
+import Drasil.GOOL (jName, jVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, docIfEnabled)
-import Language.Drasil.Code.FileData (FileAndContents(..),
-  fileAndContents, PackageData(..), packageData)
+  G (doxConfig, readMe, makefile, noRunIfLib, doxDocConfig, docIfEnabled)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..),
   Ext(..), Runnable, NameOpts(NameOpts), asFragment, buildSingle,
   buildAllAdditionalName, includeExt, inCodePackage, interp, mainModule,
@@ -45,19 +41,12 @@ instance Applicative JavaProject where
 instance Monad JavaProject where
   JP x >>= f = f x
 
-instance PackageSym JavaProject where
-  type Package JavaProject = PackageData ProgData
-  package p = onCodeList (packageData p)
-
 instance AuxiliarySym JavaProject where
-  type Auxiliary JavaProject = FileAndContents
-  type AuxHelper JavaProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
     G.readMe rmi {
         langName = jName,
         langVersion = jVersion}
-  sampleInput = G.sampleInput
 
   optimizeDox = pure yes
 
@@ -65,7 +54,6 @@ instance AuxiliarySym JavaProject where
     (G.noRunIfLib it (jRunnable fs)) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unJP
-  auxFromData fp d = pure $ fileAndContents fp d
 
 -- | Create a build configuration for Java files. Takes in 'FilePath's and the type of implementation.
 jBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

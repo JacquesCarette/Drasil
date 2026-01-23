@@ -10,4 +10,4 @@ import Drasil.SWHSNoPCM.Choices (choices)
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  exportSmithEtAlSrsWCode si mkSRS "SWHSNoPCM_SRS" choices []
+  exportSmithEtAlSrsWCode si mkSRS "SWHSNoPCM_SRS" choices

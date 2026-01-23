@@ -84,7 +84,6 @@ si = mkSystem
   progName Specification [naveen]
   [purp] [background] [scope] [motivation]
   theoreticalModels genDefns dataDefinitions instanceModels
-  []
   inputs outputs (map cnstrw' inpConstrained)
   pidConstants symbMap allRefs
 

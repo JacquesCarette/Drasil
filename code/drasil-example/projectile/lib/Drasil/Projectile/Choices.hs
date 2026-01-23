@@ -2,7 +2,7 @@
 module Drasil.Projectile.Choices where
 
 import Language.Drasil (Space(..))
-import Language.Drasil.Code (Choices(..), Comments(..), Mod,
+import Language.Drasil.Code (Choices(..), Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
   ConstantRepr(..), CodeConcept(..), matchConcepts, SpaceMatch,
@@ -12,8 +12,8 @@ import Language.Drasil.Code (Choices(..), Comments(..), Mod,
 import Drasil.GOOL (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
 
-choiceCombos :: [(Choices, [Mod])]
-choiceCombos = map (,[]) [
+choiceCombos :: [Choices]
+choiceCombos = [
   baseChoices {
     lang = [Python, Cpp, CSharp, Java, Swift, Julia]
   },

@@ -3,8 +3,6 @@ module Language.Drasil.Printers (
   DocType(SRS, Website, Lesson),
   Format(..)
   -- * DOT
-  -- ** Types
-  , GraphInfo(..), NodeFamily(..)
   -- ** Functions
   , outputDot
   -- * HTML
@@ -53,5 +51,5 @@ import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
   HasPrintingOptions(..), Notation(..), piSys,
   defaultConfiguration, plainConfiguration)
-import Language.Drasil.DOT.Print (outputDot, GraphInfo(..), NodeFamily(..))
+import Language.Drasil.DOT.Print (outputDot)
 import Language.Drasil.Debug.Print (printAllDebugInfo)

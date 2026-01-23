@@ -1,36 +1,40 @@
 \chapter{Introduction}
-% The following is a working draft. All changes will be summarized at the top.
 
-% --- Begin copied content from introduction.tex ---
+Documentation is good\cite{AckroydEtAl2008, AlMatiiAndBoujarwah2002, 
+CarverEtAl2007, EasterbrookAndJohns2009, FlattEtAl2009, 
+FritzsonGunnarssonAndJirstrand2002, HattonAndRoberts1994, Hyman1990, 
+JohnsonAndJohnson1997, Kelly2007, Kelly2013, Kelly2015, Knuth1984, Kotula2000, 
+Leisch2002, Lenth2009, LenthEtAl2007, MatthewsEtAl2008, Parnas2010, 
+ParnasAndClements1986, ParnasEtAl1994, PieterseKourieAndBoake2004, Ramsey1994, 
+Roache1998, SandersAndKelly2008, SchulteEtAl2012, ShumAndCook1993, Simonis2003, 
+SmithAndKoothoor2016, SmithAndYu2009, SmithEtAl2013, SmithEtAl2015-SS-TR, 
+SmithEtAl2015SQJ, SmithKoothoorAndNedialkov2014, Thimbleby1986}, yet it is not 
+often prioritized on software projects. Many projects focus heavily on source 
+code, treating it as the primary artifact, while documentation is often 
+neglected despite its necessary role. Documentation serves as a critical 
+bridge between stakeholders, enabling effective communication, knowledge 
+transfer, and long-term maintainability. It helps clarify requirements, 
+supports onboarding of new team members, facilitates regulatory compliance, and 
+provides a reference for future maintenance and evolution. Well-maintained 
+documentation reduces the risk of misunderstandings, errors, and knowledge 
+loss, ultimately contributing to higher quality and more reliable software 
+systems. 
 
-
-Documentation is good\cite{Hyman1990, Kotula2000, Thimbleby1986, Parnas2010, 
-ParnasAndClements1986,
-ParnasEtAl1994, Roache1998, CarverEtAl2007, Kelly2007, Kelly2015, 
-AckroydEtAl2008, EasterbrookAndJohns2009, Kelly2013, SandersAndKelly2008, 
-MatthewsEtAl2008, HattonAndRoberts1994, Knuth1984, Ramsey1994, 
-AlMatiiAndBoujarwah2002, JohnsonAndJohnson1997, 
-FritzsonGunnarssonAndJirstrand2002,
-ShumAndCook1993, PieterseKourieAndBoake2004, Simonis2003, SchulteEtAl2012,
-Leisch2002, LenthEtAl2007, Lenth2009, FlattEtAl2009, SmithEtAl2015SQJ,
-SmithEtAl2015-SS-TR, SmithEtAl2013, SmithKoothoorAndNedialkov2014, 
-SmithAndKoothoor2016, SmithAndYu2009}, yet it is not often prioritized on 
-software projects. 
-
-
-In this thesis, we use the command \sf{} to refer to any artifact produced
-during software development that conveys knowledge: source code, requirements, 
-design documents, test cases, or user manuals.
-
-Code and other software artifacts (\sfs{}) say the same thing, but to
-different audiences (ie. developers, maintainers, regulators, or end users); 
-if they did not, they would be describing different systems.
-Using this thesis as an example, it is written for an audience familiar with 
-classical software engineering, including those who have experience with 
-requirements documents, design documents, and the challenges of maintaining 
-large, long-lived software systems. The examples and case studies are drawn 
-from scientific computing, but the pain points and solutions discussed are 
-broadly relevant.
+To simplify our discussion of both source code and documentation, this thesis 
+introduces the term \sf{} to refer to any artifact produced during software 
+development that conveys knowledge, including source code, 
+requirements, design documents, test cases, user manuals, and any other 
+relevant materials. Code and other software artifacts (\sfs{}) by their nature 
+must say the same thing, albeit to different audiences (ie. developers, 
+maintainers, regulators, or end users); if they did not, they would be 
+describing different systems. This principle applies regardless of the context 
+of the \sf{}. Take this thesis for example: it is written 
+for an audience familiar with classical software engineering, including those 
+who have experience with requirements documents, design documents, and the 
+challenges of maintaining large, long-lived software systems. The examples and 
+case studies are drawn from scientific computing, but the pain points and 
+solutions discussed are relevant to wider software engineering contexts as a 
+whole.
 
 Speaking broadly about \sfs{}, let us consider a few different documents. A 
 software requirements document is a human-readable abstraction of \textit{what} 
@@ -102,30 +106,36 @@ need to break down common artifacts to develop an understanding of their
 contents, intended audience, and how they differ whether on intra- or 
 inter-project scales.
 
-We propose a new framework, Drasil, alongside a knowledge-centric view of
-software, to help take advantage of inherent redundancy while reducing manual 
-duplication and synchronization problems. Our approach looks at what underlies 
-the problems we solve using software and capturing that ``common" or ``core" 
-knowledge. We then use that knowledge to generate our software artifacts, thus 
+We propose a new framework, Drasil\footnote{The name Drasil comes from a 
+shortening of the name Yggdrasil from Norse mythology, as we believe Drasil can 
+span the many worlds (domains) of software engineering.}, alongside a 
+knowledge-centric view of software, to help take advantage of inherent 
+redundancy while reducing manual duplication and synchronization problems. Our 
+approach looks at what underlies the problems we solve using software and 
+capturing that ``common" or ``core" knowledge. We then use that knowledge to 
+generate our software artifacts\footnote{For the purpose of this thesis we 
+focus on source code, requirements, and build instructions, but Drasil is 
+extensible and can be adapted to generate additional artifact types.}, thus 
 gaining the benefits inherent to the generation process: lack of manual 
 duplication, one source to maintain, and 'free' traceability of information.
 
 \section{Problem Statement and Motivation}
 Despite the recognized value of documentation and software artifacts (\sfs{}), 
 the process of creating and maintaining them is fraught with redundancy, 
-tedium, and potential risks of inconsistency. As software evolves, artifacts 
-(requirements documents, design documents, source code, etc.) often fall out of 
-sync, leading to errors, increased maintenance costs, and reduced trust in 
-documentation. This thesis addresses the challenge: \emph{How can we 
-systematically reduce unnecessary redundancy and improve consistency across 
-software artifacts, especially in domains where correctness and traceability 
-are critical?}
+tedium, and potential risks of inconsistency. Change is inevitable in software 
+projects: requirements evolve, bugs are fixed, and features are added. As 
+software evolves, artifacts (requirements documents, design documents, source 
+code, etc.) often fall out of sync, leading to errors, increased maintenance 
+costs, and reduced trust in documentation. This thesis addresses the challenge: 
+\emph{How can we systematically reduce unnecessary redundancy and improve 
+consistency across software artifacts, especially in domains where correctness 
+and traceability are critical?}
 
-The root of the problem lies in the fact that the same knowledge must be
-expressed in multiple forms for different audiences and purposes. Each artifact
-is typically maintained separately, requiring manual updates whenever changes
-occur. This manual process is error-prone and time-consuming, and the effort
-required to keep all artifacts synchronized grows rapidly as projects become
+The root of the problem is rooted in the same knowledge needing to be expressed 
+in multiple forms for different audiences and purposes. Each artifact is 
+typically maintained separately, requiring manual updates whenever changes 
+occur. This manual process is error-prone and time-consuming, and the effort 
+required to keep all artifacts synchronized grows rapidly as projects become 
 more complex or requirements change more frequently.
 
 Existing approaches, such as documentation generators and code-centric tools,
@@ -190,13 +200,15 @@ systems. Frankly, it would be highly impractical to attempt to solve such a
 broad spectrum of problems. Each software domain poses its own challenges,
 alongside specific benefits and drawbacks. 
 
-Our work on Drasil is most relevant to software that is well-understood and 
-undergoes frequent change (maintenance). Good candidates for development using
-Drasil are long-lived (10+ years) software projects with artifacts of interest
-to multiple stakeholders. With that in mind, we have decided to focus on
-scientific computing (SC) software. Specifically, we are looking at software 
-that follows the pattern \emph{input $\rightarrow$ process $\rightarrow$ 
-output}.
+Our work on Drasil is most relevant to software that is 
+well-understood~\cite{CaretteEtAl2023} and undergoes frequent change 
+(maintenance). Good candidates for development using Drasil are long-lived (10+ 
+years) software projects with artifacts of interest to multiple stakeholders. 
+With that in mind, we have decided to focus on Scientific Computing (SC) 
+software. Specifically, we are looking at software that follows the pattern 
+\mbox{\emph{input~$\rightarrow$~process~$\rightarrow$~output}}. This focus 
+allows us to make the initial implementation of Drasil feasible and tractable, 
+while still capturing a broad class of scientific computing problems.
 
 SC software has a strong fundamental underpinning of well-understood concepts.
 It also has the benefit of seldomly changing, and when it does, existing models
@@ -204,7 +216,7 @@ are not necessarily invalidated. For example, rigid-body problems in physics are
 well-understood and the underlying modeling equations are unlikely to change.
 However, should they change, the current models will likely remain as good
 approximations under a specific set of assumptions. For instance, who hasn't
-heard `assume each body is a sphere' during a physics lecture?
+heard ``assume each body is a sphere" during a physics lecture?
 
 SC software could also benefit from buy-in to good software development 
 practices as many SC software developers put the emphasis on science and not 
@@ -214,19 +226,27 @@ software choose to use knowledge acquisition driven~\citep{Kelly2015},
 agile~\citep{Segal2005, CarverEtAl2007, AckroydEtAl2008, 
 EasterbrookAndJohns2009}, or amethododical~\citep{Kelly2013} processes instead.
 
+Finally, while recent advances in Machine Learning (ML), Large Language Models 
+(LLMs), and other Artificial Intelligence (AI) based tooling have shown promise 
+in automating aspects of software engineering, Drasil intentionally does not 
+employ these approaches. This is because our focus is on achieving determinism 
+and reproducibility: properties that are essential in scientific computing. The 
+artifacts generated by Drasil must be consistent and repeatable, which is not 
+guaranteed by current AI-based methods.
+
 \section{Roadmap}
 
 The remainder of this thesis is organized as follows:
 \begin{itemize}
-    \item \textbf{Chapter~\ref{c:background}: Background} reviews the 
-    literature on software artifacts, redundancy, reuse, literate programming, 
+    \item \textbf{Chapter~\ref{c:background}: Background} reviews relevant 
+	literature on software artifacts, redundancy, reuse, literate programming, 
     and generative programming.
     \item \textbf{Chapter~\ref{c:process}: Our Process} details the methods 
-    used to analyze \sfs{}, identify redundancy, and motivate the 
+    used to analyze \sfs{}, identify redundancy, and motivate our 
     knowledge-centric approach.
     \item \textbf{Chapter~\ref{c:drasil}: The Drasil Framework} presents the 
     design, architecture, and implementation of Drasil, including its 
-    knowledge representation and artifact generation capabilities.
+    knowledge capture and artifact generation capabilities.
     \item \textbf{Chapter~\ref{c:results}: Results} presents observations
     and analysis from reimplementing existing case studies using Drasil,
     highlighting practical benefits.

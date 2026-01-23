@@ -1,5 +1,10 @@
 -- | Defines printer types and functions for generating traceability graphs (as .dot files).
-module Language.Drasil.DOT.Print where
+module Language.Drasil.DOT.Print (
+    GraphInfo(..),
+    NodeFamily(..),
+
+    outputDot
+) where
 
 import Data.List (intercalate)
 import System.IO (Handle, IOMode(WriteMode), openFile, hPutStrLn, hClose)
@@ -72,41 +77,11 @@ outputDot :: FilePath -> GraphInfo -> IO ()
 outputDot outputFilePath gi = do
     createDirIfMissing False outputFilePath
     setCurrentDirectory outputFilePath
-    mkOutputAvsA gi
-    mkOutputAvsAll gi
-    mkOutputRefvsRef gi
-    mkOutputAllvsR gi
-    mkOutputAllvsAll gi
-
--- | Output function for assumptions dependent on assumptions.
-mkOutputAvsA :: GraphInfo -> IO ()
-mkOutputAvsA gi = do
-    let labels = [assumpNF]
-    mkOutput gi "avsa" edgesAvsA labels
-
--- | Output function for definitions, models, requirements, and changes dependent on assumptions.
-mkOutputAvsAll :: GraphInfo -> IO ()
-mkOutputAvsAll gi = do
-    let labels = [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, chgNF]
-    mkOutput gi "avsall" edgesAvsAll labels
-
--- | Output function for definitions and models that are dependent on other definitions and models.
-mkOutputRefvsRef :: GraphInfo -> IO ()
-mkOutputRefvsRef gi = do
-    let labels = [ddNF, tmNF, gdNF, imNF]
-    mkOutput gi "refvsref" edgesRefvsRef labels
-
--- | Output function for goals and requirements dependent on definitions, models, and other requirements.
-mkOutputAllvsR :: GraphInfo -> IO ()
-mkOutputAllvsR gi = do
-    let labels = [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, gsNF]
-    mkOutput gi "allvsr" edgesAllvsR labels
-
--- | Output function for definitions, models, requirements, goals, and changes that are dependent on one another.
-mkOutputAllvsAll :: GraphInfo -> IO ()
-mkOutputAllvsAll gi = do
-    let labels = [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, gsNF, chgNF]
-    mkOutput gi "allvsall" edgesAllvsAll labels
+    mkOutput gi "avsa" edgesAvsA [assumpNF]
+    mkOutput gi "avsall" edgesAvsAll [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, chgNF]
+    mkOutput gi "refvsref" edgesRefvsRef [ddNF, tmNF, gdNF, imNF]
+    mkOutput gi "allvsr" edgesAllvsR [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, gsNF]
+    mkOutput gi "allvsall" edgesAllvsAll [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, gsNF, chgNF]
 
 -- ** Helpers
 

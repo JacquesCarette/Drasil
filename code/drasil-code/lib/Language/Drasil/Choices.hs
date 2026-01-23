@@ -48,7 +48,10 @@ data Choices = Choices {
   -- | Function to get modifiable function names
   icNames :: InternalConcept -> Name,
   -- | Number of folders to go up in order to obtain the image
-  folderVal :: Int
+  folderVal :: Int,
+  -- | A list of "program configuration files" to be copied over to the exported
+  -- project, required for execution, and configurable by the user.
+  defaultConfigFiles :: [String]
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -345,7 +348,8 @@ defaultChoices = Choices {
   srsConstraints = makeConstraints Exception Warning,
   extLibs = [],
   icNames = defaultICName,
-  folderVal = 4
+  folderVal = 4,
+  defaultConfigFiles = []
 }
 
 -- | Renders 'Choices' as 'Sentence's.

@@ -61,7 +61,6 @@ si = mkSystem
   progName' Specification [thulasi, brooks, spencerSmith]
   [purp] [] [scope] [motivation]
   tMods genDefs SWHS.dataDefs iMods
-  []
   inputs outputs constrained specParamValList
   symbMap allRefs
 

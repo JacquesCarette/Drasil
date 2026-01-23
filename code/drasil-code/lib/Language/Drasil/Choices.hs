@@ -49,6 +49,9 @@ data Choices = Choices {
   icNames :: InternalConcept -> Name,
   -- | Number of folders to go up in order to obtain the image
   folderVal :: Int,
+  -- | A list of "program configuration files" to be copied over to the exported
+  -- project, required for execution, and configurable by the user.
+  defaultConfigFiles :: [String],
   -- | List of extra modules for generation.
   extraMods :: [Mod]
 }
@@ -348,6 +351,7 @@ defaultChoices = Choices {
   extLibs = [],
   icNames = defaultICName,
   folderVal = 4,
+  defaultConfigFiles = [],
   extraMods = []
 }
 

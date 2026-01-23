@@ -4,9 +4,9 @@ import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
   ConstantRepr(..), AuxFile(..), Visibility(..), makeArchit,
-  makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats)
+  makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats,
+  RelativeFile, relativeFile)
 
-import Drasil.GlassBR.DataDefs (configFp)
 import Drasil.GlassBR.ModuleDefs (allMods)
 
 choices :: Choices
@@ -22,3 +22,6 @@ choices = defaultChoices {
   defaultConfigFiles = configFp,
   extraMods = allMods
 }
+
+configFp :: [RelativeFile]
+configFp = map relativeFile ["SDF.txt", "TSD.txt"]

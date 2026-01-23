@@ -25,7 +25,7 @@ import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg (libDummyQuants))
-import Language.Drasil.Mod (Name)
+import Language.Drasil.Mod (Name, Mod)
 
 -- | The instruction indicates how the generated program should be written down.
 -- Full details of Choices documentation https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
@@ -51,7 +51,9 @@ data Choices = Choices {
   folderVal :: Int,
   -- | A list of "program configuration files" to be copied over to the exported
   -- project, required for execution, and configurable by the user.
-  defaultConfigFiles :: [String]
+  defaultConfigFiles :: [String],
+  -- | List of extra modules for generation.
+  extraMods :: [Mod]
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -349,7 +351,8 @@ defaultChoices = Choices {
   extLibs = [],
   icNames = defaultICName,
   folderVal = 4,
-  defaultConfigFiles = []
+  defaultConfigFiles = [],
+  extraMods = []
 }
 
 -- | Renders 'Choices' as 'Sentence's.

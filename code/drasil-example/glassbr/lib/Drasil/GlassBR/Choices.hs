@@ -7,6 +7,7 @@ import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
   makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats)
 
 import Drasil.GlassBR.DataDefs (configFp)
+import Drasil.GlassBR.ModuleDefs (allMods)
 
 choices :: Choices
 choices = defaultChoices {
@@ -18,5 +19,6 @@ choices = defaultChoices {
     (makeLogConfig [LogVar, LogFunc] "log.txt")
     [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Exception Exception,
-  defaultConfigFiles = configFp
+  defaultConfigFiles = configFp,
+  extraMods = allMods
 }

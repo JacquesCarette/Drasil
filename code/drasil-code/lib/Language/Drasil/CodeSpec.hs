@@ -182,7 +182,6 @@ codeSpec si chs ms = CS {
 -- from 'System' to populate the 'OldCodeSpec' structure.
 oldcodeSpec :: S.System -> Choices -> [Mod] -> OldCodeSpec
 oldcodeSpec sys@S.SI{ S._authors = as
-                    , S._configFiles = cfp
                     , S._inputs = ins
                     , S._outputs = outs
                     , S._constraints = cs
@@ -208,7 +207,7 @@ oldcodeSpec sys@S.SI{ S._authors = as
         _extInputs = inputs',
         _derivedInputs = derived,
         _outputs = outs',
-        _configFiles = cfp,
+        _configFiles = defaultConfigFiles chs,
         _execOrder = exOrder,
         _cMap = constraintMap cs,
         _constants = const',

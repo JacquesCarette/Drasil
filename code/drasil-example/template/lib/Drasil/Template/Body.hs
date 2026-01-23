@@ -74,7 +74,6 @@ si = mkSystem
   progName Specification [authorName]
   [] [] [] []
   ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  []
   ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef])
   symbMap
   []

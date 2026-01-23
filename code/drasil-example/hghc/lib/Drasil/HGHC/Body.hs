@@ -16,7 +16,7 @@ si :: System
 si = mkSystem
   progName Specification [spencerSmith]
   [purp] [] [] []
-  [] [] dataDefs [] []
+  [] [] dataDefs []
   htInputs htOutputs ([] :: [ConstrConcept]) []
   symbMap []
 

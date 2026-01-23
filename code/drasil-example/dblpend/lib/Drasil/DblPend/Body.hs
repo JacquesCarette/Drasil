@@ -95,7 +95,6 @@ si :: System
 si = mkSystem progName Specification [dong]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
-  []
   inputs outputs inConstraints
   constants
   symbMap allRefs

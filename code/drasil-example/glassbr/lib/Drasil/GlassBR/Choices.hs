@@ -7,6 +7,8 @@ import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
   ConstantRepr(..), AuxFile(..), Visibility(..), makeArchit,
   makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats)
 
+import Drasil.GlassBR.DataDefs (configFp)
+import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.Unitals (aspectRatio, standOffDist, stressDistFac,
   demand, eqTNTWeight, dimlessLoad, interpY, interpZ)
 
@@ -20,6 +22,8 @@ choices = defaultChoices {
     (makeLogConfig [LogVar, LogFunc] "log.txt")
     [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Exception Exception,
+  defaultConfigFiles = configFp,
+  extraMods = allMods,
   handWiredDefs = [strDisFacQD, calofDemandQD]
 }
 

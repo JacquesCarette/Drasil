@@ -39,7 +39,7 @@ si :: System
 si = mkSystem
   projectileMotionLesson Notebook [spencerSmith]
   [] [] [] []
-  [] [] [] [] []
+  [] [] [] []
   ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []
   symbMap
   allRefs

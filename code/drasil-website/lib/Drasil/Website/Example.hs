@@ -71,7 +71,7 @@ allExampleSI = [
 -- | Records example choices. The order of the list must match up with
 -- that in `allExampleSI`, or the Case Studies Table will be incorrect.
 allExampleChoices :: [[Choices]]
-allExampleChoices = [[DblPend.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.choices], map fst Projectile.choiceCombos, [], [], []]
+allExampleChoices = [[DblPend.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.choices], Projectile.choiceCombos, [], [], []]
 
 -- | Combine system info, description, choices, and file paths into one nice package.
 allExamples :: [System] -> [[Choices]] -> FilePath -> FilePath -> [Example]

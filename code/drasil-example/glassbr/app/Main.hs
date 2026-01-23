@@ -6,9 +6,8 @@ import Drasil.Generator (exportSmithEtAlSrsWCode)
 
 import Drasil.GlassBR.Body (mkSRS, si)
 import Drasil.GlassBR.Choices (choices)
-import Drasil.GlassBR.ModuleDefs (allMods)
 
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  exportSmithEtAlSrsWCode si mkSRS "GlassBR_SRS" choices allMods
+  exportSmithEtAlSrsWCode si mkSRS "GlassBR_SRS" choices

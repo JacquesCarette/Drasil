@@ -1,42 +1,44 @@
-{-# LANGUAGE TypeFamilies #-}
-
 -- | Defines a package extension for GOOL, with functions for pairing a GOOL
 -- program with auxiliary, non-source-code files.
 module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   -- Typeclasses
-  PackageSym(..), AuxiliarySym(..)
+  AuxiliarySym(..), package, sampleInput, auxFromData
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (ProgData, GOOLState)
+import Drasil.GOOL (ProgData, GOOLState, onCodeList)
 import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
 import Language.Drasil.Code.DataDesc (DataDesc)
+import Language.Drasil.Code.FileData (FileAndContents(..), PackageData,
+  fileAndContents, packageData)
+import Language.Drasil.Code.FileNames (sampleInputName)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
+import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
--- | Members of this class must have all the information necessary for
--- the 'AuxiliarySym' in addition to information necessary to create a package.
-class (AuxiliarySym r) => PackageSym r where
-  type Package r
-  package :: ProgData -> [r (Auxiliary r)] -> r (Package r)
-
 -- | Members of this class must have a doxygen configuration, ReadMe file,
--- sample input, omptimize doxygen document, information necessary for a makefile,
--- auxiliary helper documents, and auxiliary from data documents.
+-- omptimize doxygen document, information necessary for a makefile,
+-- auxiliary helper documents
 class AuxiliarySym r where
-  type Auxiliary r
-  type AuxHelper r
-  doxConfig :: String -> GOOLState -> Verbosity -> r (Auxiliary r)
-  readMe ::  ReadMeInfo -> r (Auxiliary r)
-  sampleInput :: PrintingInformation -> DataDesc -> [Expr] -> r (Auxiliary r)
+  doxConfig :: String -> GOOLState -> Verbosity -> r FileAndContents
+  readMe ::  ReadMeInfo -> r FileAndContents
 
-  optimizeDox :: r (AuxHelper r)
+  optimizeDox :: r Doc
 
   makefile :: [FilePath] -> ImplementationType -> [Comments] -> GOOLState ->
-    ProgData -> r (Auxiliary r)
+    ProgData -> r FileAndContents
 
-  auxHelperDoc :: r (AuxHelper r) -> Doc
-  auxFromData :: FilePath -> Doc -> r (Auxiliary r)
+  auxHelperDoc :: r Doc -> Doc
+
+package :: (Monad r) => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
+package p = onCodeList (packageData p)
+
+sampleInput :: (Applicative r) => PrintingInformation -> DataDesc -> [Expr] ->
+  r FileAndContents
+sampleInput db d sd = auxFromData sampleInputName (makeInputFile db d sd)
+
+auxFromData :: Applicative r => FilePath -> Doc -> r FileAndContents
+auxFromData fp d = pure $ fileAndContents fp d

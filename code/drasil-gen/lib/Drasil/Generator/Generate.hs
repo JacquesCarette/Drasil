@@ -32,7 +32,7 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   constStructure), ImplementationType(..), LogConfig(logging), Logging,
   Maps(spaceMatch), Modularity(..), OptionalFeatures(logConfig), SpaceMatch,
   Structure(..), Lang(Julia, Java,
-  Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO), Mod)
+  Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
@@ -57,32 +57,32 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
   genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
 
 -- | Internal: Generate an ICO-style executable softifact.
-exportCode :: System -> Choices -> [Mod] -> IO ()
-exportCode syst chcs extraModules = do
-  let code = codeSpec syst chcs extraModules
+exportCode :: System -> Choices -> IO ()
+exportCode syst chcs = do
+  let code = codeSpec syst chcs
   genCode chcs code
 
 -- | Internal: Generate a zoo of ICO-style executable softifact.
-exportCodeZoo :: System -> [(Choices, [Mod])] -> IO ()
-exportCodeZoo syst = mapM_ $ \(chcs, mods) -> do
+exportCodeZoo :: System -> [Choices] -> IO ()
+exportCodeZoo syst = mapM_ $ \chcs -> do
   let dir = map toLower $ codedDirName (syst ^. programName) chcs
   workingDir <- getCurrentDirectory
   createDirIfMissing False dir
   setCurrentDirectory dir
-  exportCode syst chcs mods
+  exportCode syst chcs
   setCurrentDirectory workingDir
 
 -- | Generate an SRS softifact with a specific solution softifact.
-exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> [Mod] -> IO ()
-exportSmithEtAlSrsWCode syst srsDecl srsFileName chcs extraModules = do
+exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> IO ()
+exportSmithEtAlSrsWCode syst srsDecl srsFileName chcs = do
   exportSmithEtAlSrs syst srsDecl srsFileName
-  exportCode syst chcs extraModules
+  exportCode syst chcs
 
 -- | Generate an SRS softifact with a zoo of solution softifacts.
-exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [(Choices, [Mod])] -> IO ()
-exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcsMods = do
+exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [Choices] -> IO ()
+exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcs = do
   exportSmithEtAlSrs syst srsDecl srsFileName
-  exportCodeZoo syst chcsMods
+  exportCodeZoo syst chcs
 
 -- | Generate a JupyterNotebook-based lesson plan.
 exportLessonPlan :: System -> LsnDesc -> String -> IO ()

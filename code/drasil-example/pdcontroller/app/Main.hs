@@ -10,4 +10,4 @@ import Drasil.PDController.Choices (choices)
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  exportSmithEtAlSrsWCode si mkSRS "PDController_SRS" choices []
+  exportSmithEtAlSrsWCode si mkSRS "PDController_SRS" choices

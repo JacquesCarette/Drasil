@@ -77,7 +77,6 @@ data System where
   , _genDefns     :: [GenDefn]
   , _dataDefns    :: [DataDefinition]
   , _instModels   :: [InstanceModel]
-  , _configFiles  :: [String]
   , _inputs       :: [h]
   , _outputs      :: [i]
   , _constraints  :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
@@ -96,10 +95,10 @@ mkSystem :: (Quantity h, MayHaveUnit h, Concept h,
   HasUID j, Constrained j) =>
   CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
     [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
-    [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
+    [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
     System
-mkSystem nm sk ppl prps bkgrd scp motive tms gds dds ims ss hs is js cqds db refs
-  = SI nm progName sk ppl prps bkgrd scp motive tms gds dds ims ss hs is js
+mkSystem nm sk ppl prps bkgrd scp motive tms gds dds ims hs is js cqds db refs
+  = SI nm progName sk ppl prps bkgrd scp motive tms gds dds ims hs is js
       cqds db refsMap mempty mempty
   where
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs

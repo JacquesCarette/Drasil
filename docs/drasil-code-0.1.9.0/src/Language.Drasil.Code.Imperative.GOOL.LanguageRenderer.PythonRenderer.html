@@ -18,46 +18,46 @@
 </span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Doxygen.Import.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.Doxygen.Import</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Doxygen.Import.html#yes"><span class="hs-identifier">yes</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-19"></span><span>
 </span><span id="line-20"></span><span class="annot"><span class="hs-comment">-- | Holds a Python project.</span></span><span>
-</span><span id="line-21"></span><span class="hs-keyword">newtype</span><span> </span><span id="PythonProject"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PythonProject"><span class="hs-identifier hs-var">PythonProject</span></a></span></span><span> </span><span id="local-6989586621679402895"><span class="annot"><a href="#local-6989586621679402895"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="PP"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-var">PP</span></a></span></span><span> </span><span class="hs-special">{</span><span id="unPP"><span class="annot"><span class="annottext">forall a. PythonProject a -&gt; a
-</span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#unPP"><span class="hs-identifier hs-var hs-var">unPP</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679402895"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">}</span><span>
+</span><span id="line-21"></span><span class="hs-keyword">newtype</span><span> </span><span id="PythonProject"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PythonProject"><span class="hs-identifier hs-var">PythonProject</span></a></span></span><span> </span><span id="local-6989586621679402890"><span class="annot"><a href="#local-6989586621679402890"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="PP"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-var">PP</span></a></span></span><span> </span><span class="hs-special">{</span><span id="unPP"><span class="annot"><span class="annottext">forall a. PythonProject a -&gt; a
+</span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#unPP"><span class="hs-identifier hs-var hs-var">unPP</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679402890"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">}</span><span>
 </span><span id="line-22"></span><span>
-</span><span id="line-23"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679402963"><span class="annot"><span class="hs-identifier hs-type">Functor</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PythonProject"><span class="hs-identifier hs-type">PythonProject</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-24"></span><span>  </span><span id="local-6989586621679402967"><span class="annot"><span class="annottext">fmap :: forall a b. (a -&gt; b) -&gt; PythonProject a -&gt; PythonProject b
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">fmap</span></span></span><span> </span><span id="local-6989586621679402968"><span class="annot"><span class="annottext">a -&gt; b
-</span><a href="#local-6989586621679402968"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-type">PP</span></a></span><span> </span><span id="local-6989586621679402969"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679402969"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b -&gt; PythonProject b
+</span><span id="line-23"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679402958"><span class="annot"><span class="hs-identifier hs-type">Functor</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PythonProject"><span class="hs-identifier hs-type">PythonProject</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-24"></span><span>  </span><span id="local-6989586621679402962"><span class="annot"><span class="annottext">fmap :: forall a b. (a -&gt; b) -&gt; PythonProject a -&gt; PythonProject b
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">fmap</span></span></span><span> </span><span id="local-6989586621679402963"><span class="annot"><span class="annottext">a -&gt; b
+</span><a href="#local-6989586621679402963"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-type">PP</span></a></span><span> </span><span id="local-6989586621679402964"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679402964"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b -&gt; PythonProject b
 forall a. a -&gt; PythonProject a
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-var">PP</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; b
-</span><a href="#local-6989586621679402968"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679402969"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679402963"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679402964"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-25"></span><span>
-</span><span id="line-26"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679402975"><span id="local-6989586621679402979"><span id="local-6989586621679402982"><span class="annot"><span class="hs-identifier hs-type">Applicative</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PythonProject"><span class="hs-identifier hs-type">PythonProject</span></a></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-27"></span><span>  </span><span id="local-6989586621679402985"><span class="annot"><span class="annottext">pure :: forall a. a -&gt; PythonProject a
+</span><span id="line-26"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679402970"><span id="local-6989586621679402974"><span id="local-6989586621679402977"><span class="annot"><span class="hs-identifier hs-type">Applicative</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PythonProject"><span class="hs-identifier hs-type">PythonProject</span></a></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-27"></span><span>  </span><span id="local-6989586621679402980"><span class="annot"><span class="annottext">pure :: forall a. a -&gt; PythonProject a
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">pure</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; PythonProject a
 forall a. a -&gt; PythonProject a
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-var">PP</span></a></span><span>
-</span><span id="line-28"></span><span>  </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-type">PP</span></a></span><span> </span><span id="local-6989586621679402986"><span class="annot"><span class="annottext">a -&gt; b
-</span><a href="#local-6989586621679402986"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679402987"><span class="annot"><span class="annottext">&lt;*&gt; :: forall a b.
+</span><span id="line-28"></span><span>  </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-type">PP</span></a></span><span> </span><span id="local-6989586621679402981"><span class="annot"><span class="annottext">a -&gt; b
+</span><a href="#local-6989586621679402981"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679402982"><span class="annot"><span class="annottext">&lt;*&gt; :: forall a b.
 PythonProject (a -&gt; b) -&gt; PythonProject a -&gt; PythonProject b
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;*&gt;</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-type">PP</span></a></span><span> </span><span id="local-6989586621679402988"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679402988"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b -&gt; PythonProject b
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;*&gt;</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-type">PP</span></a></span><span> </span><span id="local-6989586621679402983"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679402983"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b -&gt; PythonProject b
 forall a. a -&gt; PythonProject a
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-var">PP</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; b
-</span><a href="#local-6989586621679402986"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679402988"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679402981"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679402983"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-29"></span><span>
-</span><span id="line-30"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679402993"><span id="local-6989586621679402997"><span class="annot"><span class="hs-identifier hs-type">Monad</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PythonProject"><span class="hs-identifier hs-type">PythonProject</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-31"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-type">PP</span></a></span><span> </span><span id="local-6989586621679403000"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679403000"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679403001"><span class="annot"><span class="annottext">&gt;&gt;= :: forall a b.
+</span><span id="line-30"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679402988"><span id="local-6989586621679402992"><span class="annot"><span class="hs-identifier hs-type">Monad</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PythonProject"><span class="hs-identifier hs-type">PythonProject</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-31"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PP"><span class="hs-identifier hs-type">PP</span></a></span><span> </span><span id="local-6989586621679402995"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679402995"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679402996"><span class="annot"><span class="annottext">&gt;&gt;= :: forall a b.
 PythonProject a -&gt; (a -&gt; PythonProject b) -&gt; PythonProject b
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">&gt;&gt;=</span></span></span><span> </span><span id="local-6989586621679403002"><span class="annot"><span class="annottext">a -&gt; PythonProject b
-</span><a href="#local-6989586621679403002"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; PythonProject b
-</span><a href="#local-6989586621679403002"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679403000"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">&gt;&gt;=</span></span></span><span> </span><span id="local-6989586621679402997"><span class="annot"><span class="annottext">a -&gt; PythonProject b
+</span><a href="#local-6989586621679402997"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; PythonProject b
+</span><a href="#local-6989586621679402997"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679402995"><span class="hs-identifier hs-var">x</span></a></span><span>
 </span><span id="line-32"></span><span>
 </span><span id="line-33"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#AuxiliarySym"><span class="hs-identifier hs-type">AuxiliarySym</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#PythonProject"><span class="hs-identifier hs-type">PythonProject</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-34"></span><span>  </span><span id="local-6989586621679403013"><span class="annot"><span class="annottext">doxConfig :: String -&gt; GOOLState -&gt; Verbosity -&gt; PythonProject FileAndContents
-</span><a href="#local-6989586621679403013"><span class="hs-identifier hs-var hs-var hs-var hs-var">doxConfig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PythonProject Doc
+</span><span id="line-34"></span><span>  </span><span id="local-6989586621679403008"><span class="annot"><span class="annottext">doxConfig :: String -&gt; GOOLState -&gt; Verbosity -&gt; PythonProject FileAndContents
+</span><a href="#local-6989586621679403008"><span class="hs-identifier hs-var hs-var hs-var hs-var">doxConfig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PythonProject Doc
 -&gt; String
 -&gt; GOOLState
 -&gt; Verbosity
@@ -68,35 +68,35 @@ r Doc -&gt; String -&gt; GOOLState -&gt; Verbosity -&gt; r FileAndContents
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#doxConfig"><span class="hs-identifier hs-var">G.doxConfig</span></a></span><span> </span><span class="annot"><span class="annottext">PythonProject Doc
 forall (r :: * -&gt; *). AuxiliarySym r =&gt; r Doc
 </span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#optimizeDox"><span class="hs-identifier hs-var">optimizeDox</span></a></span><span>
-</span><span id="line-35"></span><span>  </span><span id="local-6989586621679403017"><span class="annot"><span class="annottext">readMe :: ReadMeInfo -&gt; PythonProject FileAndContents
-</span><a href="#local-6989586621679403017"><span class="hs-identifier hs-var hs-var hs-var hs-var">readMe</span></a></span></span><span> </span><span id="local-6989586621679403019"><span class="annot"><span class="annottext">ReadMeInfo
-</span><a href="#local-6989586621679403019"><span class="hs-identifier hs-var">rmi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-35"></span><span>  </span><span id="local-6989586621679403012"><span class="annot"><span class="annottext">readMe :: ReadMeInfo -&gt; PythonProject FileAndContents
+</span><a href="#local-6989586621679403012"><span class="hs-identifier hs-var hs-var hs-var hs-var">readMe</span></a></span></span><span> </span><span id="local-6989586621679403014"><span class="annot"><span class="annottext">ReadMeInfo
+</span><a href="#local-6989586621679403014"><span class="hs-identifier hs-var">rmi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-36"></span><span>    </span><span class="annot"><span class="annottext">ReadMeInfo -&gt; PythonProject FileAndContents
 forall (r :: * -&gt; *).
 Applicative r =&gt;
 ReadMeInfo -&gt; r FileAndContents
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#readMe"><span class="hs-identifier hs-var">G.readMe</span></a></span><span> </span><span class="annot"><span class="annottext">ReadMeInfo
-</span><a href="#local-6989586621679403019"><span class="hs-identifier hs-var">rmi</span></a></span><span> </span><span class="hs-special">{</span><span>
+</span><a href="#local-6989586621679403014"><span class="hs-identifier hs-var">rmi</span></a></span><span> </span><span class="hs-special">{</span><span>
 </span><span id="line-37"></span><span>        </span><span class="annot"><a href="Language.Drasil.Code.Imperative.README.html#langName"><span class="hs-identifier hs-var">langName</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">pyName</span></span><span class="hs-special">,</span><span>
 </span><span id="line-38"></span><span>        </span><span class="annot"><a href="Language.Drasil.Code.Imperative.README.html#langVersion"><span class="hs-identifier hs-var">langVersion</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">pyVersion</span></span><span class="hs-special">}</span><span>
 </span><span id="line-39"></span><span>
-</span><span id="line-40"></span><span>  </span><span id="local-6989586621679403023"><span class="annot"><span class="annottext">optimizeDox :: PythonProject Doc
+</span><span id="line-40"></span><span>  </span><span id="local-6989586621679403018"><span class="annot"><span class="annottext">optimizeDox :: PythonProject Doc
 </span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#optimizeDox"><span class="hs-identifier hs-var hs-var hs-var hs-var">optimizeDox</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; PythonProject Doc
 forall a. a -&gt; PythonProject a
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Language.Drasil.Code.Imperative.Doxygen.Import.html#yes"><span class="hs-identifier hs-var">yes</span></a></span><span>
 </span><span id="line-41"></span><span>
-</span><span id="line-42"></span><span>  </span><span id="local-6989586621679403025"><span class="annot"><span class="annottext">makefile :: [String]
+</span><span id="line-42"></span><span>  </span><span id="local-6989586621679403020"><span class="annot"><span class="annottext">makefile :: [String]
 -&gt; ImplementationType
 -&gt; [Comments]
 -&gt; GOOLState
 -&gt; ProgData
 -&gt; PythonProject FileAndContents
-</span><a href="#local-6989586621679403025"><span class="hs-identifier hs-var hs-var hs-var hs-var">makefile</span></a></span></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679403027"><span class="annot"><span class="annottext">ImplementationType
-</span><a href="#local-6989586621679403027"><span class="hs-identifier hs-var">it</span></a></span></span><span> </span><span id="local-6989586621679403028"><span class="annot"><span class="annottext">[Comments]
-</span><a href="#local-6989586621679403028"><span class="hs-identifier hs-var">cms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe BuildConfig
+</span><a href="#local-6989586621679403020"><span class="hs-identifier hs-var hs-var hs-var hs-var">makefile</span></a></span></span><span> </span><span class="annot"><span class="annottext">[String]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679403022"><span class="annot"><span class="annottext">ImplementationType
+</span><a href="#local-6989586621679403022"><span class="hs-identifier hs-var">it</span></a></span></span><span> </span><span id="local-6989586621679403023"><span class="annot"><span class="annottext">[Comments]
+</span><a href="#local-6989586621679403023"><span class="hs-identifier hs-var">cms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe BuildConfig
 -&gt; Maybe Runnable
 -&gt; Maybe DocConfig
 -&gt; GOOLState
@@ -114,15 +114,15 @@ Maybe BuildConfig
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ImplementationType -&gt; Maybe Runnable -&gt; Maybe Runnable
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#noRunIfLib"><span class="hs-identifier hs-var">G.noRunIfLib</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
-</span><a href="#local-6989586621679403027"><span class="hs-identifier hs-var">it</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Runnable
+</span><a href="#local-6989586621679403022"><span class="hs-identifier hs-var">it</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Runnable
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#pyRunnable"><span class="hs-identifier hs-var">pyRunnable</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-43"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Comments] -&gt; DocConfig -&gt; Maybe DocConfig
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#docIfEnabled"><span class="hs-identifier hs-var">G.docIfEnabled</span></a></span><span> </span><span class="annot"><span class="annottext">[Comments]
-</span><a href="#local-6989586621679403028"><span class="hs-identifier hs-var">cms</span></a></span><span> </span><span class="annot"><span class="annottext">DocConfig
+</span><a href="#local-6989586621679403023"><span class="hs-identifier hs-var">cms</span></a></span><span> </span><span class="annot"><span class="annottext">DocConfig
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#doxDocConfig"><span class="hs-identifier hs-var">G.doxDocConfig</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span>  </span><span id="local-6989586621679403030"><span class="annot"><span class="annottext">auxHelperDoc :: PythonProject Doc -&gt; Doc
-</span><a href="#local-6989586621679403030"><span class="hs-identifier hs-var hs-var hs-var hs-var">auxHelperDoc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PythonProject Doc -&gt; Doc
+</span><span id="line-45"></span><span>  </span><span id="local-6989586621679403025"><span class="annot"><span class="annottext">auxHelperDoc :: PythonProject Doc -&gt; Doc
+</span><a href="#local-6989586621679403025"><span class="hs-identifier hs-var hs-var hs-var hs-var">auxHelperDoc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PythonProject Doc -&gt; Doc
 forall a. PythonProject a -&gt; a
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.html#unPP"><span class="hs-identifier hs-var">unPP</span></a></span><span>
 </span><span id="line-46"></span><span>

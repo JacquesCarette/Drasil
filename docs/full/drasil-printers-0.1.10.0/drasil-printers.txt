@@ -92,31 +92,6 @@ numberedTMEquations :: Bool
 --   (as .dot files).
 module Language.Drasil.DOT.Print
 
--- | Type synonym for clarity.
-type Colour = String
-
--- | Type synonym for clarity.
-type Label = String
-
--- | A node family contains a list of <a>UID</a>s, their display labels,
---   general subgraph label, and colour.
-data NodeFamily
-NF :: [UID] -> [Label] -> Label -> Colour -> NodeFamily
-
--- | Node <a>UID</a>s.
-[nodeUIDs] :: NodeFamily -> [UID]
-
--- | Display labels for nodes. We use the reference addresses from the
---   <a>UID</a>s.
-[nodeLabels] :: NodeFamily -> [Label]
-
--- | Individual subgraph labels. These labels do not show on the final
---   generated pdf or png files.
-[nfLabel] :: NodeFamily -> Label
-
--- | Gives the ability to change colours of bubbles within the graph.
-[nfColour] :: NodeFamily -> Colour
-
 -- | Holds all important and relevant information for generating a
 --   traceability graph. Includes nodes, graph edges, and node family
 --   information.
@@ -166,53 +141,28 @@ GI :: NodeFamily -> NodeFamily -> NodeFamily -> NodeFamily -> NodeFamily -> Node
 --   dependent on one another.
 [edgesAllvsAll] :: GraphInfo -> [(UID, [UID])]
 
+-- | A node family contains a list of <a>UID</a>s, their display labels,
+--   general subgraph label, and colour.
+data NodeFamily
+NF :: [UID] -> [Label] -> Label -> Colour -> NodeFamily
+
+-- | Node <a>UID</a>s.
+[nodeUIDs] :: NodeFamily -> [UID]
+
+-- | Display labels for nodes. We use the reference addresses from the
+--   <a>UID</a>s.
+[nodeLabels] :: NodeFamily -> [Label]
+
+-- | Individual subgraph labels. These labels do not show on the final
+--   generated pdf or png files.
+[nfLabel] :: NodeFamily -> Label
+
+-- | Gives the ability to change colours of bubbles within the graph.
+[nfColour] :: NodeFamily -> Colour
+
 -- | Creates the directory for output, gathers all individual graph output
 --   functions and calls them.
 outputDot :: FilePath -> GraphInfo -> IO ()
-
--- | Output function for assumptions dependent on assumptions.
-mkOutputAvsA :: GraphInfo -> IO ()
-
--- | Output function for definitions, models, requirements, and changes
---   dependent on assumptions.
-mkOutputAvsAll :: GraphInfo -> IO ()
-
--- | Output function for definitions and models that are dependent on other
---   definitions and models.
-mkOutputRefvsRef :: GraphInfo -> IO ()
-
--- | Output function for goals and requirements dependent on definitions,
---   models, and other requirements.
-mkOutputAllvsR :: GraphInfo -> IO ()
-
--- | Output function for definitions, models, requirements, goals, and
---   changes that are dependent on one another.
-mkOutputAllvsAll :: GraphInfo -> IO ()
-
--- | General output function for making a traceability graph. Takes in the
---   graph information, title, edge generator functions, and node family
---   functions.
-mkOutput :: GraphInfo -> String -> (GraphInfo -> [(UID, [UID])]) -> [GraphInfo -> NodeFamily] -> IO ()
-
--- | Graph output helper. Takes in the file handle, edges, and node
---   families.
-outputSub :: Handle -> [(UID, [UID])] -> [NodeFamily] -> IO ()
-
--- | Prints graph edges (directions) onto a given file handle.
-mkDirections :: Handle -> (UID, [UID]) -> IO ()
-
--- | Prints graph nodes (labels) onto a given file handle.
-mkNodes :: Handle -> NodeFamily -> IO ()
-
--- | Helper that only makes a subgraph if there are elements in the
---   subgraph. Otherwise, it returns nothing.
-mkSubgraph :: Handle -> Label -> [UID] -> IO ()
-
--- | Gets graph labels.
-filterAndGI :: GraphInfo -> [GraphInfo -> NodeFamily] -> [NodeFamily]
-
--- | Helper to remove invalid characters.
-filterInvalidChars :: String -> String
 
 
 -- | Possible formats for printer output.

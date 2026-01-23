@@ -10,4 +10,5 @@ Choices -> ExtLib;
 Choices -> InternalConceptName;
 Choices -> Int;
 Choices -> String;
+Choices -> Mod;
 }

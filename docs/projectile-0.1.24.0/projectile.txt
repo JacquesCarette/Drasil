@@ -10,7 +10,7 @@
 @version 0.1.24.0
 
 module Drasil.Projectile.Choices
-choiceCombos :: [(Choices, [Mod])]
+choiceCombos :: [Choices]
 matchToFloats :: SpaceMatch
 baseChoices :: Choices
 

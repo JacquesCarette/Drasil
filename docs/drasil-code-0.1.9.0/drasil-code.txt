@@ -112,7 +112,7 @@ sampleInputDD :: [CodeVarChunk] -> DataDesc'
 --   down. Full details of Choices documentation
 --   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
-Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [String] -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [String] -> [Mod] -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
@@ -148,6 +148,9 @@ Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Con
 --   exported project, required for execution, and configurable by the
 --   user.
 [defaultConfigFiles] :: Choices -> [String]
+
+-- | List of extra modules for generation.
+[extraMods] :: Choices -> [Mod]
 
 -- | Comment implementation options.
 data Comments
@@ -418,22 +421,22 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 -- | Creates a <a>CodeSpec</a> using the provided <tt>System</tt>,
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
-codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_aLj5
-oldCodeSpec :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 People
-cMapO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [FilePath]
-constMapO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 ConstantMap
-constantsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Const]
-derivedInputsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Derived]
-execOrderO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Def]
-extInputsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Input]
-inputsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Input]
-modsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Mod]
-outputsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Output]
-pNameO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 Name
-systemdbO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 ChunkDB
+codeSpec :: System -> Choices -> CodeSpec
+class HasOldCodeSpec c_aLme
+oldCodeSpec :: HasOldCodeSpec c_aLme => Lens' c_aLme OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLme => Lens' c_aLme People
+cMapO :: HasOldCodeSpec c_aLme => Lens' c_aLme ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLme => Lens' c_aLme [FilePath]
+constMapO :: HasOldCodeSpec c_aLme => Lens' c_aLme ConstantMap
+constantsO :: HasOldCodeSpec c_aLme => Lens' c_aLme [Const]
+derivedInputsO :: HasOldCodeSpec c_aLme => Lens' c_aLme [Derived]
+execOrderO :: HasOldCodeSpec c_aLme => Lens' c_aLme [Def]
+extInputsO :: HasOldCodeSpec c_aLme => Lens' c_aLme [Input]
+inputsO :: HasOldCodeSpec c_aLme => Lens' c_aLme [Input]
+modsO :: HasOldCodeSpec c_aLme => Lens' c_aLme [Mod]
+outputsO :: HasOldCodeSpec c_aLme => Lens' c_aLme [Output]
+pNameO :: HasOldCodeSpec c_aLme => Lens' c_aLme Name
+systemdbO :: HasOldCodeSpec c_aLme => Lens' c_aLme ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

@@ -84,10 +84,10 @@ exportLessonPlan :: System -> LsnDesc -> String -> IO ()
 exportWebsite :: System -> Document -> Filename -> IO ()
 
 -- | Generate an SRS softifact with a specific solution softifact.
-exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> [Mod] -> IO ()
+exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> IO ()
 
 -- | Generate an SRS softifact with a zoo of solution softifacts.
-exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [(Choices, [Mod])] -> IO ()
+exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [Choices] -> IO ()
 
 -- | Find name of folders created for a "zoo" of executable softifacts.
 --   

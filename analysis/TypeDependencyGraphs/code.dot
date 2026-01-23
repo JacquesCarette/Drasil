@@ -579,6 +579,7 @@ digraph alltypes {
 		Choices -> InternalConceptName;
 		Choices -> Int;
 		Choices -> String;
+		Choices -> Mod;
 		}
 		subgraph architecture{
 		Architecture	[shape=oval, color=cyan3, label="Architecture"];

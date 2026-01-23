@@ -1,15 +1,48 @@
 \chapter{Background}
 \label{c:background}
+
+This chapter surveys foundational concepts and approaches that underpin the 
+thesis. Each section is selected to clarify the context, motivations, and 
+limitations of the work. We structure the review as follows:
+
+\begin{itemize}
+  \item First we introduce literature around software artifacts, emphasizing 
+  	their role in communication, maintenance, and verification within 
+  	software engineering.
+  \item Next we examine software reuse, software families, and reproducible 
+	research, highlighting strategies for leveraging prior work and domain 
+	knowledge.
+  \item Then we discuss literate approaches to software development to motivate
+    the integration of documentation and code.
+  \item Finally, we review Generative programming as a means of automating 
+  	artifact creation from high-level specifications.
+\end{itemize}
+
+We have selected specific topic areas following a criterion for inclusion 
+regarding the direct relevance to our central problem: improving the 
+production and maintenance of software artifacts through automation and 
+knowledge reuse. Topics are selected if they inform the design, implementation, 
+or evaluation of the proposed approach. Areas such as Model-Driven Engineering 
+(MDE), or Knowledge-Based Software Engineering (KBSE)\footnote{While KBSE 
+shares some conceptual overlap, its primary concerns (such as expert systems, 
+rule-based reasoning, and formal methods) do not directly inform the design, 
+implementation, or evaluation of Drasil.} while significant in the broader 
+literature, are excluded unless they directly intersect with the thesis's 
+scope. This ensures the chapter remains focused and purposeful, rather 
+than exhaustive.
+
 \section{Software Artifacts}
 \label{sec:sfs}
 
 Software artifacts (or \sfs{}) come in a wide variety of forms and have existed 
 since the first programs were created. In the broadest sense, we can think of 
-\sfs{} as anything produced during the creation of a piece of software that 
-serves some purpose. Any document detailing what the software should do, how it 
-was designed, how it was implemented, how to test it, and so on would be 
-considered a \sf{}, as would the source code whether as a text file, stack of 
-punched cards, magnetic tapes, or other media.
+\sfs{} as anything and everything produced during the creation of a piece of 
+software that serves some purpose. Any document detailing what the software 
+should do, how it was designed, how it was implemented, how to test it, and so 
+on would be considered a \sf{}, as would the source code whether as a text 
+file, stack of punched cards, magnetic tapes, or other media. \SFS{} also 
+include items such as build instructions, Continuous Integration/Continuous 
+Delivery (CI/CD) pipeline definitions, automated test cases, READMEs, etc.
 
 \SFS{} beyond just the source code are important to us for a number of reasons. 
 They serve as a means of communication between different stakeholders 
@@ -17,7 +50,7 @@ involved in the software development process, or even different generations of
 developers involved in the production of a piece of software. They provide a 
 common understanding of what the software is supposed to do, how it will be 
 built, and how it will be tested. \SFS{} also provide a record of the decisions 
-that were made during the development process which is important for future 
+that were made during the development process, which is important for future 
 maintenance/modification of the software or for compliance reasons. Combined 
 with the former, this gives us a means to verify and validate the software 
 against its original requirements and design. The production, maintenance, and 
@@ -73,10 +106,11 @@ Test Cases; Verification and Validation Report \\
 Software design can follow a number of different design processes, each with 
 their own collection of \sfs{}. A common, traditional approach is the Waterfall 
 model (Figure~\ref{fig:Waterfall}) of software 
-development~\cite{PfleegerAndAtlee2010Ch2}. 
+development~\cite{PfleegerAndAtlee2010Ch2}, which often does not work in 
+practice~\cite{}. \ds{Need this source.}
 However, Parnas and Clements~\cite{ParnasAndClements1986} detailed what they 
 dubbed a ``rational" design process; an idealized version of software 
-development which includes what needs to be documented in corresponding \sfs{}.
+development that includes what needs to be documented in corresponding \sfs{}.
 The rational design process is not meant to be a linear process like the 
 Waterfall model, but instead an iterative process using section stubs for 
 information that is not yet available or not fully clear during the time of 
@@ -88,7 +122,7 @@ Table~\ref{tab:RatWatComp}.
 
 Parnas provided a list of the most important documents~\cite{Parnas2010} 
 required for the rational design process, which 
-Smith~\cite{SmithAndKoothoor2016} expanded upon by including complimentary 
+Smith~\cite{Smith2016} expanded upon by including complimentary 
 artifacts such as source code, verification and validation plans, test cases, 
 and build instructions. While there have been many proposed artifacts, the 
 following collection covers those most relevant to this thesis:
@@ -114,21 +148,21 @@ after undertaking all of the testing initiatives outlined in the Verification
 and Validation plan and test cases.}
 
 This collection is not exhaustive of all the types of \sfs{}, as there are many 
-other design processes which use different types of \sfs{}. Looking at an agile 
-approach using Scrum/Kanban, the \sfs{} tend to be distributed in different 
-ways~\cite{KasauliEtAl2017}. Requirements are documented in tickets under 
-so-called ``epics", ``stories", and ``tasks" as opposed to a singular 
+other design processes that use different types of \sfs{}. For example, looking 
+at an agile approach using Scrum/Kanban, the \sfs{} tend to be distributed in 
+different ways~\cite{KasauliEtAl2017}. Requirements are documented in tickets 
+under so-called ``epics", ``stories", and ``tasks" as opposed to a singular 
 requirements artifact, and the acceptance criteria listed on those tickets make 
 up the validation and verification plan. 
 
-Regardless of the process used, most attempt to document very similar 
-information to that of the rational design process. Using the waterfall model 
-as an example, we can see (Table~\ref{tab:RatWatComp}) the rational design 
-process and its artifacts map onto the model in a very straightforward manner.
+Regardless of the process, most attempt to document very similar information to 
+that of the rational design process. Using the waterfall model as an example, 
+we can see (Table~\ref{tab:RatWatComp}) the rational design process and its 
+artifacts map onto the model in a very straightforward manner.
 
 As mentioned earlier, \sfs{} are important to development in a number of ways, 
 such as easing the burden of maintenance and training. We outline the artifacts 
-we are most interested below with a brief description of their purpose.
+we are most interested in below with a brief description of their purpose.
 
 Parnas~\citep{Parnas2010} does an excellent job of defining the target audience 
 for each of the most common \sfs{} and we extend that alongside our work. A 
@@ -198,13 +232,38 @@ problem that \sf{} is solving}
 In this section we look at ways in which others have attempted to avoid 
 ``reinventing the wheel" by providing means to reuse software, in part or 
 whole, and reuse the analysis and design efforts of those that came before.
+We focus on software families (software product lines), component-based 
+software engineering (CBSE), frameworks for reuse such as Draco, and the 
+concept of reproducible research. These techniques were selected because they 
+represent significant strategies for leveraging prior work, domain expertise, 
+and automation in software development. Software families and CBSE illustrate 
+structural and compositional reuse, Draco demonstrates early domain-specific 
+reuse and code generation, while reproducible research highlights the 
+importance of transparency and repeatability in computational work. Together, 
+these approaches inform our emphasis on automating artifact generation 
+and promoting knowledge reuse across the software lifecycle.
 
 \subsection{Software/Program Families}
 
-Software/program families refer to a group of related systems sharing a common 
-set of features, functionality, and design~\cite{Pohl2005}. These systems are 
-typically designed to serve a specific domain or market, and are often 
-developed using a common set of core technologies and design principles.
+Software/program families, or software product lines, refer to a group of 
+related systems sharing a common set of features, functionality, and 
+design~\cite{Pohl2005}. These systems are typically designed to serve a 
+specific domain or market, and are often developed using a common set of core 
+technologies and design principles.
+
+A central concept in software/program families is the distinction between 
+\emph{commonalities} and \emph{variabilities}~\cite{Bosch2000,Pohl2005}. 
+\emph{Commonalities} refer to the features, components, or design decisions 
+shared by all members of the family, forming the stable core that defines the 
+family's identity. In contrast, \emph{variabilities} capture the aspects that 
+can differ among family members, enabling customization or adaptation to 
+specific requirements or contexts. These variabilities are typically managed 
+through explicit \emph{parameters of variation}, which may include 
+configuration options, feature selections, or architectural choices. 
+Identifying and systematically managing these parameters is essential for 
+effective reuse and automation in software product lines, as it allows 
+developers to generate tailored systems while maintaining consistency and 
+reducing duplication.
 
 One well-known example of a software family is the Microsoft Office suite. Each 
 program in the suite is used for a specific application (word 
@@ -225,7 +284,7 @@ RaspbianOS, RedSleeve, etc.). There are even specialized distributions that are
 meant to be run without persistent storage for specific applications like 
 penetration/network testing (Kali Linux, Backbox, Parrot Security OS, 
 BlackArch, etc.). However, if you are familiar with one particular flavour of 
-linux, you'll likely be comfortable moving between several of the distributions
+Linux, you'll likely be comfortable moving between several of the distributions
 built upon the same cores. You may even be familiar moving to other *NIX based 
 systems like MacOS/Unix.
 
@@ -254,11 +313,11 @@ components as the building blocks of larger systems. These reusable components
 can be developed independently and tested in isolation before being integrated 
 into the larger system software.
 
-One key benefit of CBSE, as mentioned above, is that it can help to reduce the 
-cost and time required for software development, since developers do not need 
-to implement everything from scratch. Additionally, CBSE can improve the 
-quality and reliability of software systems, since components have typically 
-been thoroughly tested and previously used in other contexts.
+A key benefit of CBSE is it can help to reduce the cost and time required for 
+software development, since developers do not need to implement everything from 
+scratch. Additionally, CBSE can improve the quality and reliability of software 
+systems, since components have typically been thoroughly tested and previously 
+used in other contexts.
 
 One CBSE framework is the Common Object Request Broker Architecture (CORBA), 
 which provides a standardized mechanism for components to 
@@ -275,26 +334,24 @@ form larger applications~\cite{OracleJavaBeans}.
 The largest challenge of CBSE is ensuring components are compatible with others 
 and can be integrated into a larger system without conflicts or errors. In an 
 effort to address this challenge, numerous approaches to component 
-compatibility testing have been proposed~\cite{Wu2001}.
+compatibility testing have been proposed~\cite{Wu2001}. This limitation motivates our approach to explore reuse beyond mere composition, focusing instead on capturing and reusing domain knowledge to generate consistent, compatible artifacts.
 
+Others have attempted to provide frameworks for reuse as well. For example,
 Neighbors~\cite{Neighbors1980,Neighbors1984,Neighbors1989} proposed a method
 for engineering reusable software systems known as ``Draco''. Draco was among
 the earliest frameworks for software reuse, particularly in the context of
 domain-specific software generation, though its direct influence was more
-limited compared to later, widely adopted approaches. The core idea behind
-Draco is to construct software systems by composing reusable, domain-specific
-components called ``domain knowledge modules''. In Draco, a software engineer
-first defines a domain model, capturing the essential abstractions and
-operations relevant to a particular problem area. The system then provides a
-set of reusable transformations and code generation templates tailored to that
-domain. By selecting and configuring these modules, developers can
-automatically generate significant portions of a software system, reducing
-manual coding effort. While Draco itself is no longer widely used, its
-approach anticipated later developments in software product lines and
+limited compared to later approaches. The core idea behind Draco is to construct software systems by composing reusable, domain-specific components called ``domain knowledge modules''. Unlike CBSE, which focuses on assembling systems from independently developed, interchangeable components, Draco emphasizes the reuse of domain-specific knowledge and automated code generation through configurable transformations.
+
+In Draco, a software engineer first defines a domain model, capturing the 
+essential abstractions and operations relevant to a particular problem area. 
+The system then provides a set of reusable transformations and code generation 
+templates tailored to that domain. By selecting and configuring these modules, 
+developers can automatically generate significant portions of a software 
+system, reducing manual coding effort. While Draco itself is not widely 
+used, its approach anticipated later developments in software product lines and
 generative programming by emphasizing the explicit capture and reuse of domain
-knowledge~\cite{Neighbors1984,Czarnecki2000}. Draco's concepts have informed
-subsequent research in generative programming and domain-specific language
-design, even if its practical adoption remained limited.
+knowledge~\cite{Neighbors1984,Czarnecki2000}. We draw inspiration from Draco's focus on domain knowledge reuse and automated artifact generation in our own approach.
 
 \subsection{Reproducible Research}
 
@@ -306,10 +363,11 @@ and in some cases reveal errors in the original author's
 work~\cite{IonescuAndJansson2013}.
 
 Reproducible research has been used to mean embedding executable code in
-research papers to allow readers to reproduce the results
-described~\cite{SchulteEtAl2012}.
+research papers (example: using Jupyter Notebooks~\cite{Jupyter}) to allow 
+readers to reproduce the results described~\cite{SchulteEtAl2012}. We have designed Drasil to go beyond this narrow definition of reproducible research by
+emphasizing the generation of multiple, consistent artifacts from a single knowledge base. This approach not only facilitates the reproduction of computational results but also ensures that all related documentation, code, and tests remain synchronized and up-to-date, thereby enhancing the overall reproducibility and reliability of scientific software.
 
-Combining research reports with relevant code, data, etc.\ is not necessarily
+Combining research reports with relevant code, data, etc. is not necessarily
 easy, especially when dealing with the publication versions of an author's work.
 As such, the idea of \emph{compendia} were
 introduced~\cite{GentlemanAndLang2012} to provide a means of encapsulating the
@@ -324,10 +382,11 @@ SASweave~\cite{LenthEtAl2007}, Statweave~\cite{Lenth2009},
 Scribble~\cite{FlattEtAl2009}, and Org-mode~\cite{SchulteEtAl2012}. The most
 popular of those being Sweave~\cite{SchulteEtAl2012}. The aforementioned tools
 maintain a focus on code and certain computational details. Sweave,
-specifically, allows for embedding code into a document which is run as the
+specifically, allows for embedding code into a document that is run as the
 document is being typeset so that up to date results are always included.
 However, Sweave (along with many other tools), still maintains a focus on
-producing a single, linear document. 
+producing a single, linear document. Drasil, on the other hand, focuses on
+producing multiple, interrelated artifacts from a single knowledge base, providing a breadth of output options and ensuring consistency and reproducibility across all generated outputs.
 %\ds{this doesn't belong here}
 %It is my hope that Drasil will outperform
 %these existing tools due to its flexibility and its ability to create multiple
@@ -365,10 +424,13 @@ using LP ends up with more consistent documentation and
 code~\cite{ShumAndCook1993}. There are many downsides to having inconsistent 
 documentation while developing or maintaining 
 code~\cite{Kotula2000,Thimbleby1986}, while the benefits of consistent 
-documentation are numerous~\cite{Hyman1990, Kotula2000}. Keeping the advantages 
-and disadvantages of good documentation in mind we can see that more effective, 
-maintainable code can be produced if properly using 
-LP~\cite{PieterseKourieAndBoake2004}.
+documentation are numerous~\cite{Hyman1990, Kotula2000} including improved 
+maintainability and ease of future modifications, reduced risk of introducing 
+errors during updates, enhanced onboarding and training for new team members, 
+better communication among stakeholders, and increased confidence in overall 
+software quality. With the advantages and disadvantages of good documentation 
+in mind we see that more effective, maintainable code can be produced if 
+properly using LP~\cite{PieterseKourieAndBoake2004}.
 
 Regardless of the benefits of LP, it has not been very popular with 
 developers~\cite{ShumAndCook1993}. However, there are
@@ -387,10 +449,12 @@ documentation simultaneously, that documentation is comprised of a single
 artifact which may not cover the same material as standard artifacts software 
 engineers expect (see Section~\ref{sec:sfs} for more details). LP also does not 
 simplify the development process: documentation and code are written as usual, 
-and there is the additional effort of re-ordering the chunks. The LP 
-development process has some benefits such as allowing developers to follow a 
-more natural flow in development by writing chunks in whichever order they 
-wish, keep the documentation and code updated simultaneously (in theory) 
+and there is the additional effort of re-ordering the chunks. It is also 
+challenging to use LP when requirements and design choices change, as those 
+changes may affect many different chunks. That is not to say LP does not have 
+benefits, the LP development process allows developers to follow a more natural 
+flow in development by writing chunks in whichever order they wish, keep the 
+documentation and code updated simultaneously (in theory) 
 because of their co-location, and automatically incorporate code chunks into 
 the documentation to reduce some information duplication.
 
@@ -416,12 +480,31 @@ Sweave~\cite{Leisch2002}, however it is designed to dynamically create
 up-to-date reports or manuals by running embedded code as opposed to being used
 as part of the software development process. 
 
+Drasil draws inspiration from LP in its emphasis on integrating documentation 
+and code, and in its goal of improving the understandability and 
+maintainability of scientific software. Drasil differs from LP in several 
+important ways. First, while LP focuses on producing a single, human-readable 
+artifact that interleaves code and documentation, Drasil is designed to 
+generate multiple, distinct artifacts from a single, unified knowledge base. 
+This approach addresses the needs of software engineering processes that 
+require a variety of artifacts for
+different stakeholders and purposes, going beyond the single-document focus of
+traditional LP.
+
+Second, Drasil explicitly models domain knowledge, enabling automated 
+consistency across all generated artifacts. In contrast, LP relies on manual 
+synchronization between code and documentation. Drasil's knowledge-centric 
+approach facilitates reuse, traceability, and automated updates, making it 
+better suited for environments where change is frequent and artifact 
+consistency is critical. Drasil can be seen as a generalization and extension 
+of LP, retaining its core strengths while addressing its limitations.
+
 \subsection{Literate Software}
 
 A combination of LP and Box Structure~\cite{Mills1986} was proposed as a new
 method called ``Literate Software Development''
 (LSD)~\cite{AlMatiiAndBoujarwah2002}. Box structure can be summarized as the
-idea of different views which are abstractions that communicate the same
+idea of different views that are abstractions that communicate the same
 information in different levels of detail, for different purposes. Box
 structures consist of black box, state machine, and clear box structures. The
 black box gives an external (user) view of the system and consists of stimuli
@@ -442,7 +525,13 @@ variety of ways. It included new chunk types, the ability to refine chunks, the
 ability to specify interfaces and communication between boxes, and the ability
 to decompose boxes at any level. However, literate software (and LSD) remains
 primarily code-focused with very little support for creating other software
-artifacts, in much the same way as LP.
+artifacts, in much the same way as LP. Drasil aims to extend the principles of 
+LSD by generating a comprehensive suite of software artifacts from a single 
+knowledge base. This broader scope addresses the needs of modern software 
+engineering practices, which require diverse artifacts for various 
+stakeholders, thereby enhancing the utility and applicability of the literate 
+approach and making it better suited for environments where artifact diversity 
+and traceability are essential.
 
 \section{Generative Programming}
 
@@ -466,7 +555,7 @@ error, and the generated code is typically more consistent and predictable.
 
 There are also some potential drawbacks to generative programming. For 
 instance, the generated code may not always be optimal or 
-efficient~\cite{Czarnecki2000,Taha2006}.As the code is generated 
+efficient~\cite{Czarnecki2000,Taha2006}. As the code is generated 
 automatically, it may not take into account all of the nuance or complexity
 of the underlying system potentially leading to suboptimal performance or other 
 issues.
@@ -497,3 +586,10 @@ targets~\cite{Chaturvedi2017}. These examples illustrate the breadth of
 generative programming, from language processing to web and embedded systems, 
 and demonstrate how code generators can accelerate development and improve 
 consistency across software projects.
+
+However, current generators still tend to focus primarily on the code, but the 
+same techniques can be used to generate other software artifacts as well. 
+Drasil aims to utilize code generation to produce a comprehensive suite of 
+software artifacts, from a single knowledge base. This holistic approach 
+ensures consistency across all artifacts and addresses the diverse needs of 
+modern software engineering practices.

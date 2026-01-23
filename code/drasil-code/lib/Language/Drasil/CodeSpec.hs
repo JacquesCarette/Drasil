@@ -22,7 +22,7 @@ import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..),
-  odeLibReqs, odeInfoReqs)
+  odeLibReqs, odeInfoReqs, RelativeFile)
 import Language.Drasil.Chunk.CodeBase (quantvar, codevars, varResolve)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 import Language.Drasil.ICOSolutionSearch (Def, solveExecOrder)
@@ -53,7 +53,7 @@ data OldCodeSpec = OldCodeSpec {
   -- | All outputs.
   _outputs :: [Output],
   -- | List of files that must be in same directory for running the executable.
-  _configFiles :: [FilePath],
+  _configFiles :: [RelativeFile],
   -- | Mathematical definitions, ordered so that they form a path from inputs to
   -- outputs.
   _execOrder :: [Def],
@@ -127,7 +127,7 @@ instance HasOldCodeSpec CodeSpec where
   outputsO :: Lens' CodeSpec [Output]
   outputsO = oldCode . outputsO
 
-  configFilesO :: Lens' CodeSpec [FilePath]
+  configFilesO :: Lens' CodeSpec [RelativeFile]
   configFilesO = oldCode . configFilesO
 
   execOrderO :: Lens' CodeSpec [Def]

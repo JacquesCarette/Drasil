@@ -11,7 +11,7 @@ import Text.PrettyPrint.HughesPJ (Doc, empty)
 import Language.Drasil.Printers (makeMd, introInfo, verInfo, unsupOS,
     extLibSec, instDoc, endNote, whatInfo)
 
-import Language.Drasil.Choices (ImplementationType(..))
+import Language.Drasil.Choices (ImplementationType(..), RelativeFile, relFileToStr)
 import Language.Drasil.Mod (Name, Version)
 
 -- | Language name.
@@ -44,7 +44,7 @@ data ReadMeInfo = ReadMeInfo {
   extLibNV :: [(Name, Version)],
   extLibFP :: [FilePath],
   contributors :: [Contributor],
-  configFP :: [FilePath],
+  configFP :: [RelativeFile],
   caseName :: CaseName,
   examplePurpose :: ExamplePurpose,
   exampleDescr :: ExampleDescr,
@@ -75,7 +75,7 @@ makeReadMe ReadMeInfo {
     makeMd [introInfo name auths (fieldEmptySTR motiv)
       (fieldEmptySTR purp),
     whatInfo (fieldEmptySTR descr) (fieldEmptySTR sc),
-    makeInstr imptype configFPs name inoutf,
+    makeInstr imptype (map relFileToStr configFPs) name inoutf,
     verInfo progLang progLangVers,
     unsupOS unsupportedOSs,
     extLibSec extLibns extLibfp,

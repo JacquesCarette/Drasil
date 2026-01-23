@@ -9,6 +9,7 @@ module Language.Drasil.Code (
   OptionalFeatures(..), makeOptFeats, ExtLib(..), ImplementationType(..), Logging(..),
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..),
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..),
+  RelativeFile, relativeFile, relFileToStr,
   getSampleData, Visibility(..), defaultChoices, CodeSpec(..), OldCodeSpec(..), codeSpec,
   HasOldCodeSpec(..), funcUID, asVC, ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar,
   privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod,
@@ -86,7 +87,7 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   Visibility(..), defaultChoices, makeArchit, Architecture(..), DataInfo(..),
   makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints, makeODE,
   makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
-  makeOptFeats, ExtLib(..))
+  makeOptFeats, ExtLib(..), RelativeFile, relativeFile, relFileToStr)
 import Language.Drasil.CodeSpec (CodeSpec(..), OldCodeSpec(..), HasOldCodeSpec(..),
   codeSpec, funcUID, asVC)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..),

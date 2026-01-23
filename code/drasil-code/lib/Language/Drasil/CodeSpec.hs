@@ -165,10 +165,10 @@ mapODE (Just ode) = map odeDef $ odeInfo ode
 
 -- | Creates a 'CodeSpec' using the provided 'System', 'Choices', and 'Mod's.
 -- The 'CodeSpec' consists of the system information and a corresponding 'OldCodeSpec'.
-codeSpec :: S.System -> Choices -> [Mod] -> CodeSpec
-codeSpec si chs ms = CS {
+codeSpec :: S.System -> Choices -> CodeSpec
+codeSpec si chs = CS {
   _system' = si',
-  _oldCode = oldcodeSpec si' chs ms
+  _oldCode = oldcodeSpec si' chs
 }
   where
     els = extLibs chs
@@ -180,14 +180,14 @@ codeSpec si chs ms = CS {
 -- | Generates an 'OldCodeSpec' from 'System', 'Choices', and a list of 'Mod's.
 -- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
 -- from 'System' to populate the 'OldCodeSpec' structure.
-oldcodeSpec :: S.System -> Choices -> [Mod] -> OldCodeSpec
+oldcodeSpec :: S.System -> Choices -> OldCodeSpec
 oldcodeSpec sys@S.SI{ S._authors = as
                     , S._configFiles = cfp
                     , S._inputs = ins
                     , S._outputs = outs
                     , S._constraints = cs
                     , S._constants = cnsts
-                    , S._systemdb = db } chs ms =
+                    , S._systemdb = db } chs =
   let ddefs = sys ^. dataDefns
       n = sys ^. programName
       inputs' = map quantvar ins
@@ -213,7 +213,7 @@ oldcodeSpec sys@S.SI{ S._authors = as
         _cMap = constraintMap cs,
         _constants = const',
         _constMap = assocToMap const',
-        _mods = ms,
+        _mods = extraMods chs,
         _systemdb = db
       }
 

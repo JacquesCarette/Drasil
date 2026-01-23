@@ -25,7 +25,7 @@ import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg (libDummyQuants))
-import Language.Drasil.Mod (Name)
+import Language.Drasil.Mod (Name, Mod)
 
 -- | The instruction indicates how the generated program should be written down.
 -- Full details of Choices documentation https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
@@ -48,7 +48,9 @@ data Choices = Choices {
   -- | Function to get modifiable function names
   icNames :: InternalConcept -> Name,
   -- | Number of folders to go up in order to obtain the image
-  folderVal :: Int
+  folderVal :: Int,
+  -- | List of extra modules for generation.
+  extraMods :: [Mod]
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -345,7 +347,8 @@ defaultChoices = Choices {
   srsConstraints = makeConstraints Exception Warning,
   extLibs = [],
   icNames = defaultICName,
-  folderVal = 4
+  folderVal = 4,
+  extraMods = []
 }
 
 -- | Renders 'Choices' as 'Sentence's.

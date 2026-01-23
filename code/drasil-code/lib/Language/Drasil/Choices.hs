@@ -48,7 +48,10 @@ data Choices = Choices {
   -- | Function to get modifiable function names
   icNames :: InternalConcept -> Name,
   -- | Number of folders to go up in order to obtain the image
-  folderVal :: Int
+  folderVal :: Int,
+  -- | A list of supplementary hand-wired quantity definitions usable in code
+  -- generation, unique to a particular code solution.
+  handWiredDefs :: [SimpleQDef]
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -345,7 +348,8 @@ defaultChoices = Choices {
   srsConstraints = makeConstraints Exception Warning,
   extLibs = [],
   icNames = defaultICName,
-  folderVal = 4
+  folderVal = 4,
+  handWiredDefs = []
 }
 
 -- | Renders 'Choices' as 'Sentence's.

@@ -70,7 +70,6 @@ Output-Values: Output the values from the table for [Required Outputs](./SecFRs.
 |\\(h\\)                      |Minimum thickness                                     |[DD:minThick](./SecDDs.md#DD:minThick)          |\\({\text{m}}\\) |
 |\\(\mathit{isSafeLR}\\)      |3 second load equivalent resistance safety requirement|[IM:isSafeLR](./SecIMs.md#IM:isSafeLR)          |--               |
 |\\(\mathit{isSafePb}\\)      |Probability of glass breakage safety requirement      |[IM:isSafePb](./SecIMs.md#IM:isSafePb)          |--               |
-|\\(J\\)                      |Stress distribution factor (Function)                 |[IM:stressDistFac](./SecIMs.md#IM:stressDistFac)|--               |
 |\\({J\_{\text{tol}}}\\)      |Tolerable stress distribution factor                  |[IM:sdfTol](./SecIMs.md#IM:sdfTol)              |--               |
 |\\(\mathit{LR}\\)            |Load resistance                                       |[IM:calofCapacity](./SecIMs.md#IM:calofCapacity)|\\({\text{Pa}}\\)|
 |\\(\mathit{NFL}\\)           |Non-factored load                                     |[IM:nFL](./SecIMs.md#IM:nFL)                    |\\({\text{Pa}}\\)|

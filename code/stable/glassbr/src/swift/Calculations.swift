@@ -216,67 +216,6 @@ func func_q_hat_tol(_ inParams: inout InputParameters, _ J_tol: Double) throws -
     return try interpY("SDF.txt", inParams.AR, J_tol)
 }
 
-/** Calculates stress distribution factor (Function)
-    - Parameter inParams: structure holding the input values
-    - Parameter q_hat: dimensionless load
-    - Returns: stress distribution factor (Function)
-*/
-func func_J(_ inParams: inout InputParameters, _ q_hat: Double) throws -> Double {
-    var outfile: FileHandle
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("function func_J called with inputs: {".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  inParams = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(", ".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  q_hat = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(String(q_hat).utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  }".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    
-    return try interpZ("SDF.txt", inParams.AR, q_hat)
-}
-
 /** Calculates non-factored load (Pa)
     - Parameter inParams: structure holding the input values
     - Parameter q_hat_tol: tolerable load
@@ -336,6 +275,67 @@ func func_NFL(_ inParams: inout InputParameters, _ q_hat_tol: Double) throws -> 
     }
     
     return q_hat_tol * 7.17e10 * pow(inParams.h, 4.0) / pow(inParams.a * inParams.b, 2.0)
+}
+
+/** Calculates stress distribution factor (Function)
+    - Parameter inParams: structure holding the input values
+    - Parameter q_hat: dimensionless load
+    - Returns: stress distribution factor (Function)
+*/
+func func_J(_ inParams: inout InputParameters, _ q_hat: Double) throws -> Double {
+    var outfile: FileHandle
+    do {
+        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
+        try outfile.seekToEnd()
+    } catch {
+        throw "Error opening file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("function func_J called with inputs: {".utf8))
+        try outfile.write(contentsOf: Data("\n".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("  inParams = ".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data(", ".utf8))
+        try outfile.write(contentsOf: Data("\n".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("  q_hat = ".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data(String(q_hat).utf8))
+        try outfile.write(contentsOf: Data("\n".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("  }".utf8))
+        try outfile.write(contentsOf: Data("\n".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.close()
+    } catch {
+        throw "Error closing file."
+    }
+    
+    return try interpZ("SDF.txt", inParams.AR, q_hat)
 }
 
 /** Calculates risk of failure

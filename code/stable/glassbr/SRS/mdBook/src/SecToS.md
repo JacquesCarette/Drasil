@@ -19,7 +19,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\(\mathit{GTF}\\)               |Glass type factor                                         |--                                      |
 |\\(h\\)                          |Minimum thickness                                         |\\({\text{m}}\\)                        |
 |\\(\mathit{interpY}\\)           |InterpY                                                   |--                                      |
-|\\(\mathit{interpZ}\\)           |InterpZ                                                   |--                                      |
 |\\(\mathit{isSafeLoad}\\)        |Load resistance safety requirement                        |--                                      |
 |\\(\mathit{isSafeLR}\\)          |3 second load equivalent resistance safety requirement    |--                                      |
 |\\(\mathit{isSafePb}\\)          |Probability of glass breakage safety requirement          |--                                      |

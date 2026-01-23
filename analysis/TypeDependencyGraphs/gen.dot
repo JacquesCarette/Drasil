@@ -45,6 +45,8 @@ digraph alltypes {
 	}
 	subgraph generate {
 	}
+	subgraph traceabilitygraphs {
+	}
 	subgraph typececkh {
 	}
 	subgraph generator {

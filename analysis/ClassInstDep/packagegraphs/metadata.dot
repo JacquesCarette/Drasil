@@ -1,5 +1,7 @@
 digraph metadata{
 DrasilMeta	[shape=oval, color=turquoise4, label="DrasilMeta"];
+NodeFamily	[shape=oval, color=turquoise4, label="NodeFamily"];
+GraphInfo	[shape=oval, color=turquoise4, label="GraphInfo"];
 ToJSON	[shape=oval, color=pink, label="ToJSON"];
 FromJSON	[shape=oval, color=pink, label="FromJSON"];
 DrasilMeta -> ToJSON;

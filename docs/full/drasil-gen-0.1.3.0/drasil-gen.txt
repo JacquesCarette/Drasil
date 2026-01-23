@@ -67,6 +67,12 @@ type Filename = String
 docChoices :: DocType -> [Format] -> DocChoices
 instance Build.Drasil.Make.Import.RuleTransformer Drasil.Generator.Formats.DocSpec
 
+module Drasil.Generator.TraceabilityGraphs
+
+-- | Creates the directory for output, gathers all individual graph output
+--   functions and calls them.
+outputDot :: FilePath -> GraphInfo -> IO ()
+
 module Drasil.Generator.TypeCheck
 typeCheckSI :: System -> IO ()
 

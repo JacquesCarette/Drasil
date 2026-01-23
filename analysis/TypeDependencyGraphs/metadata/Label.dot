@@ -1,0 +1,4 @@
+digraph label{
+Label	[shape=oval, color=red2, label="Label"];
+Label -> String;
+}

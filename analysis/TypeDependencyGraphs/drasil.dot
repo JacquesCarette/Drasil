@@ -1787,6 +1787,8 @@ digraph alltypes {
 	}
 	subgraph generate {
 	}
+	subgraph traceabilitygraphs {
+	}
 	subgraph typececkh {
 	}
 	subgraph generator {
@@ -3829,21 +3831,7 @@ digraph alltypes {
 	}
 	subgraph teoryconcepths {
 	}
-	subgraph metadata {
-	}
-	subgraph searctoolhs {
-		subgraph termabbr{
-		TermAbbr	[shape=oval, color=cyan3, label="TermAbbr"];
-		TermAbbr -> NP;
-		TermAbbr -> MaybeString;
-		}
-		subgraph domdefn{
-		DomDefn	[shape=oval, color=cyan3, label="DomDefn"];
-		DomDefn -> UID;
-		DomDefn -> Sentence;
-		}
-	}
-	subgraph print {
+	subgraph traceabilitygraphs {
 		subgraph nodefamily{
 		NodeFamily	[shape=oval, color=cyan3, label="NodeFamily"];
 		NodeFamily -> UID;
@@ -3862,6 +3850,20 @@ digraph alltypes {
 		subgraph label{
 		Label	[shape=oval, color=red2, label="Label"];
 		Label -> String;
+		}
+	}
+	subgraph metadata {
+	}
+	subgraph searctoolhs {
+		subgraph termabbr{
+		TermAbbr	[shape=oval, color=cyan3, label="TermAbbr"];
+		TermAbbr -> NP;
+		TermAbbr -> MaybeString;
+		}
+		subgraph domdefn{
+		DomDefn	[shape=oval, color=cyan3, label="DomDefn"];
+		DomDefn -> UID;
+		DomDefn -> Sentence;
 		}
 	}
 	subgraph print {

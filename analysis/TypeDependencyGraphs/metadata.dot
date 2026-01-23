@@ -13,6 +13,27 @@ digraph alltypes {
 	}
 	subgraph teoryconcepths {
 	}
+	subgraph traceabilitygraphs {
+		subgraph nodefamily{
+		NodeFamily	[shape=oval, color=cyan3, label="NodeFamily"];
+		NodeFamily -> UID;
+		NodeFamily -> Label;
+		NodeFamily -> Colour;
+		}
+		subgraph graphinfo{
+		GraphInfo	[shape=oval, color=cyan3, label="GraphInfo"];
+		GraphInfo -> NodeFamily;
+		GraphInfo -> UID;
+		}
+		subgraph colour{
+		Colour	[shape=oval, color=red2, label="Colour"];
+		Colour -> String;
+		}
+		subgraph label{
+		Label	[shape=oval, color=red2, label="Label"];
+		Label -> String;
+		}
+	}
 	subgraph metadata {
 	}
 }

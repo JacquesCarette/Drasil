@@ -1,5 +1,4 @@
--- | Defines printer types and functions for generating traceability graphs (as .dot files).
-module Language.Drasil.DOT.Print (outputDot) where
+module Drasil.Generator.TraceabilityGraphs (outputDot) where
 
 import Data.List (intercalate)
 import System.IO (Handle, IOMode(WriteMode), openFile, hPutStrLn, hClose)
@@ -9,8 +8,6 @@ import Drasil.Database (UID)
 import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..),
   Label, Colour)
 import Utils.Drasil (createDirIfMissing)
-
--- * Main Output
 
 -- | Creates the directory for output, gathers all individual graph output functions and calls them.
 outputDot :: FilePath -> GraphInfo -> IO ()

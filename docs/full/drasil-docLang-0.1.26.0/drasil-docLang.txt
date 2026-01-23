@@ -2350,7 +2350,7 @@ data () => ChunkDB
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data () => System
-[SI] :: forall h i j. (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> String -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
+[SI] :: forall h i j. (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> String -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
 
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.

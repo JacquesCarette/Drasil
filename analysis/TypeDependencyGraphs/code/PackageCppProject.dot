@@ -1,4 +1,0 @@
-digraph packagecppproject{
-PackageCppProject	[shape=oval, color=red2, label="PackageCppProject"];
-PackageCppProject -> PackageDataProgData;
-}

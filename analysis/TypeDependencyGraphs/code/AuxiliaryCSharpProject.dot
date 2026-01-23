@@ -1,4 +1,0 @@
-digraph auxiliarycsharpproject{
-AuxiliaryCSharpProject	[shape=oval, color=red2, label="AuxiliaryCSharpProject"];
-AuxiliaryCSharpProject -> FileAndContents;
-}

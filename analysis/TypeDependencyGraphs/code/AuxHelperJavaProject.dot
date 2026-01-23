@@ -1,4 +1,0 @@
-digraph auxhelperjavaproject{
-AuxHelperJavaProject	[shape=oval, color=red2, label="AuxHelperJavaProject"];
-AuxHelperJavaProject -> Doc;
-}

@@ -1,4 +1,0 @@
-digraph packagejavaproject{
-PackageJavaProject	[shape=oval, color=red2, label="PackageJavaProject"];
-PackageJavaProject -> PackageDataProgData;
-}

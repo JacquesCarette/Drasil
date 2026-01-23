@@ -8,8 +8,8 @@
 </span><span id="line-8"></span><span class="annot"><span class="hs-comment">-- | Creates the Haddock documentation for all of Drasil.</span></span><span>
 </span><span id="line-9"></span><span class="annot"><a href="Drasil.Website.Documentation.html#docsSec"><span class="hs-identifier hs-type">docsSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
 </span><span id="line-10"></span><span id="docsSec"><span class="annot"><span class="annottext">docsSec :: FilePath -&gt; Section
-</span><a href="Drasil.Website.Documentation.html#docsSec"><span class="hs-identifier hs-var hs-var">docsSec</span></a></span></span><span> </span><span id="local-6989586621679086460"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679086460"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="Drasil.Website.Documentation.html#docsSec"><span class="hs-identifier hs-var hs-var">docsSec</span></a></span></span><span> </span><span id="local-6989586621679086454"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679086454"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-11"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
 </span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Website.Documentation.html#haddockDocsTitle"><span class="hs-identifier hs-var">haddockDocsTitle</span></a></span><span> </span><span class="hs-comment">-- Title</span><span>
@@ -18,7 +18,7 @@
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
 </span><a href="Drasil.Website.Documentation.html#haddockDocsDesc"><span class="hs-identifier hs-var">haddockDocsDesc</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679086460"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- Contents</span><span>
+</span><a href="#local-6989586621679086454"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- Contents</span><span>
 </span><span id="line-13"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">(Reference -&gt; Section) -&gt; Reference -&gt; Section
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence -&gt; Reference
@@ -39,8 +39,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-19"></span><span class="annot"><span class="hs-comment">-- | Body paragraph that directs users to the Haddock documentation and a variant with fully exposed modules.</span></span><span>
 </span><span id="line-20"></span><span class="annot"><a href="Drasil.Website.Documentation.html#haddockDocsDesc"><span class="hs-identifier hs-type">haddockDocsDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-21"></span><span id="haddockDocsDesc"><span class="annot"><span class="annottext">haddockDocsDesc :: FilePath -&gt; Sentence
-</span><a href="Drasil.Website.Documentation.html#haddockDocsDesc"><span class="hs-identifier hs-var hs-var">haddockDocsDesc</span></a></span></span><span> </span><span id="local-6989586621679086467"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679086467"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><a href="Drasil.Website.Documentation.html#haddockDocsDesc"><span class="hs-identifier hs-var hs-var">haddockDocsDesc</span></a></span></span><span> </span><span id="local-6989586621679086461"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679086461"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;Drasil's framework is primarily written in Haskell, \
   \so we use Haddock to document our code. The following link will take you \
@@ -51,7 +51,7 @@ forall r.
 r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Reference
 </span><a href="Drasil.Website.Documentation.html#docsRef"><span class="hs-identifier hs-var">docsRef</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679086467"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><a href="#local-6989586621679086461"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;Haddock documentation&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-24"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -65,7 +65,7 @@ forall r.
 r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Reference
 </span><a href="Drasil.Website.Documentation.html#fullDocsRef"><span class="hs-identifier hs-var">fullDocsRef</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679086467"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><a href="#local-6989586621679086461"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;fully exposed modules&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
@@ -75,11 +75,11 @@ r -&gt; Sentence -&gt; Sentence
 </span><span id="line-27"></span><span class="annot"><span class="hs-comment">-- | Creates references to the haddock documentation (both normal and full variations).</span></span><span>
 </span><span id="line-28"></span><span class="annot"><a href="Drasil.Website.Documentation.html#docsRef"><span class="hs-identifier hs-type">docsRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Website.Documentation.html#fullDocsRef"><span class="hs-identifier hs-type">fullDocsRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
 </span><span id="line-29"></span><span id="docsRef"><span class="annot"><span class="annottext">docsRef :: FilePath -&gt; Reference
-</span><a href="Drasil.Website.Documentation.html#docsRef"><span class="hs-identifier hs-var hs-var">docsRef</span></a></span></span><span> </span><span id="local-6989586621679086472"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679086472"><span class="hs-identifier hs-var">path</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; ShortName -&gt; Reference
+</span><a href="Drasil.Website.Documentation.html#docsRef"><span class="hs-identifier hs-var hs-var">docsRef</span></a></span></span><span> </span><span id="local-6989586621679086466"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679086466"><span class="hs-identifier hs-var">path</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; ShortName -&gt; Reference
 </span><span class="hs-identifier hs-var">makeURI</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;haddockDocs&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679086472"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679086466"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;index.html&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ShortName -&gt; Reference) -&gt; ShortName -&gt; Reference
@@ -91,11 +91,11 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;HaddockDocs&quot;</span></span><span>
 </span><span id="line-30"></span><span id="fullDocsRef"><span class="annot"><span class="annottext">fullDocsRef :: FilePath -&gt; Reference
-</span><a href="Drasil.Website.Documentation.html#fullDocsRef"><span class="hs-identifier hs-var hs-var">fullDocsRef</span></a></span></span><span> </span><span id="local-6989586621679086475"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679086475"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; ShortName -&gt; Reference
+</span><a href="Drasil.Website.Documentation.html#fullDocsRef"><span class="hs-identifier hs-var hs-var">fullDocsRef</span></a></span></span><span> </span><span id="local-6989586621679086469"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679086469"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; ShortName -&gt; Reference
 </span><span class="hs-identifier hs-var">makeURI</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;fullHaddockDocs&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679086475"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679086469"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;full/index.html&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ShortName -&gt; Reference) -&gt; ShortName -&gt; Reference
@@ -110,10 +110,10 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-32"></span><span class="annot"><span class="hs-comment">-- | Gathers all references used in this file.</span></span><span>
 </span><span id="line-33"></span><span class="annot"><a href="Drasil.Website.Documentation.html#docRefs"><span class="hs-identifier hs-type">docRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
 </span><span id="line-34"></span><span id="docRefs"><span class="annot"><span class="annottext">docRefs :: FilePath -&gt; [Reference]
-</span><a href="Drasil.Website.Documentation.html#docRefs"><span class="hs-identifier hs-var hs-var">docRefs</span></a></span></span><span> </span><span id="local-6989586621679086477"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679086477"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; Reference
+</span><a href="Drasil.Website.Documentation.html#docRefs"><span class="hs-identifier hs-var hs-var">docRefs</span></a></span></span><span> </span><span id="local-6989586621679086471"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679086471"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; Reference
 </span><a href="Drasil.Website.Documentation.html#docsRef"><span class="hs-identifier hs-var">docsRef</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679086477"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Reference
+</span><a href="#local-6989586621679086471"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Reference
 </span><a href="Drasil.Website.Documentation.html#fullDocsRef"><span class="hs-identifier hs-var">fullDocsRef</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679086477"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679086471"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-35"></span></pre></body></html>

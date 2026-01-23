@@ -9,9 +9,6 @@
 @package glassbr
 @version 0.1.24.0
 
-module Drasil.GlassBR.Choices
-choices :: Choices
-
 module Drasil.GlassBR.Concepts
 idglass :: IdeaDict
 con :: [CI]
@@ -245,6 +242,9 @@ funcReqs :: [ConceptInstance]
 funcReqsTables :: [LabelledContent]
 inReqDesc :: Sentence
 nonfuncReqs :: [ConceptInstance]
+
+module Drasil.GlassBR.Choices
+choices :: Choices
 
 module Drasil.GlassBR.Changes
 likelyChgs :: [ConceptInstance]

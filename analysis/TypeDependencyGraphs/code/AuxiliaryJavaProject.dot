@@ -1,4 +1,0 @@
-digraph auxiliaryjavaproject{
-AuxiliaryJavaProject	[shape=oval, color=red2, label="AuxiliaryJavaProject"];
-AuxiliaryJavaProject -> FileAndContents;
-}

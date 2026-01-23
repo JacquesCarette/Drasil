@@ -1,4 +1,0 @@
-digraph packagecsharpproject{
-PackageCSharpProject	[shape=oval, color=red2, label="PackageCSharpProject"];
-PackageCSharpProject -> PackageDataProgData;
-}

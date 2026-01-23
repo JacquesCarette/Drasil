@@ -1,4 +1,0 @@
-digraph auxhelpercsharpproject{
-AuxHelperCSharpProject	[shape=oval, color=red2, label="AuxHelperCSharpProject"];
-AuxHelperCSharpProject -> Doc;
-}

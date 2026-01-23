@@ -110,35 +110,11 @@ digraph alltypes {
 		CSharpProjecta	[shape=oval, color=darkgreen, label="CSharpProjecta"];
 		CSharpProjecta -> a;
 		}
-		subgraph packagecsharpproject{
-		PackageCSharpProject	[shape=oval, color=red2, label="PackageCSharpProject"];
-		PackageCSharpProject -> PackageDataProgData;
-		}
-		subgraph auxiliarycsharpproject{
-		AuxiliaryCSharpProject	[shape=oval, color=red2, label="AuxiliaryCSharpProject"];
-		AuxiliaryCSharpProject -> FileAndContents;
-		}
-		subgraph auxhelpercsharpproject{
-		AuxHelperCSharpProject	[shape=oval, color=red2, label="AuxHelperCSharpProject"];
-		AuxHelperCSharpProject -> Doc;
-		}
 	}
 	subgraph cpprenderer {
 		subgraph cppprojecta{
 		CppProjecta	[shape=oval, color=darkgreen, label="CppProjecta"];
 		CppProjecta -> a;
-		}
-		subgraph packagecppproject{
-		PackageCppProject	[shape=oval, color=red2, label="PackageCppProject"];
-		PackageCppProject -> PackageDataProgData;
-		}
-		subgraph auxiliarycppproject{
-		AuxiliaryCppProject	[shape=oval, color=red2, label="AuxiliaryCppProject"];
-		AuxiliaryCppProject -> FileAndContents;
-		}
-		subgraph auxhelpercppproject{
-		AuxHelperCppProject	[shape=oval, color=red2, label="AuxHelperCppProject"];
-		AuxHelperCppProject -> Doc;
 		}
 	}
 	subgraph javarenderer {
@@ -146,35 +122,11 @@ digraph alltypes {
 		JavaProjecta	[shape=oval, color=darkgreen, label="JavaProjecta"];
 		JavaProjecta -> a;
 		}
-		subgraph packagejavaproject{
-		PackageJavaProject	[shape=oval, color=red2, label="PackageJavaProject"];
-		PackageJavaProject -> PackageDataProgData;
-		}
-		subgraph auxiliaryjavaproject{
-		AuxiliaryJavaProject	[shape=oval, color=red2, label="AuxiliaryJavaProject"];
-		AuxiliaryJavaProject -> FileAndContents;
-		}
-		subgraph auxhelperjavaproject{
-		AuxHelperJavaProject	[shape=oval, color=red2, label="AuxHelperJavaProject"];
-		AuxHelperJavaProject -> Doc;
-		}
 	}
 	subgraph juliarenderer {
 		subgraph juliaprojecta{
 		JuliaProjecta	[shape=oval, color=darkgreen, label="JuliaProjecta"];
 		JuliaProjecta -> a;
-		}
-		subgraph packagejuliaproject{
-		PackageJuliaProject	[shape=oval, color=red2, label="PackageJuliaProject"];
-		PackageJuliaProject -> PackageDataProgData;
-		}
-		subgraph auxiliaryjuliaproject{
-		AuxiliaryJuliaProject	[shape=oval, color=red2, label="AuxiliaryJuliaProject"];
-		AuxiliaryJuliaProject -> FileAndContents;
-		}
-		subgraph auxhelperjuliaproject{
-		AuxHelperJuliaProject	[shape=oval, color=red2, label="AuxHelperJuliaProject"];
-		AuxHelperJuliaProject -> Doc;
 		}
 	}
 	subgraph languagepolymorpich {
@@ -184,35 +136,11 @@ digraph alltypes {
 		PythonProjecta	[shape=oval, color=darkgreen, label="PythonProjecta"];
 		PythonProjecta -> a;
 		}
-		subgraph packagepythonproject{
-		PackagePythonProject	[shape=oval, color=red2, label="PackagePythonProject"];
-		PackagePythonProject -> PackageDataProgData;
-		}
-		subgraph auxiliarypythonproject{
-		AuxiliaryPythonProject	[shape=oval, color=red2, label="AuxiliaryPythonProject"];
-		AuxiliaryPythonProject -> FileAndContents;
-		}
-		subgraph auxhelperpythonproject{
-		AuxHelperPythonProject	[shape=oval, color=red2, label="AuxHelperPythonProject"];
-		AuxHelperPythonProject -> Doc;
-		}
 	}
 	subgraph swiftrenderer {
 		subgraph swiftprojecta{
 		SwiftProjecta	[shape=oval, color=darkgreen, label="SwiftProjecta"];
 		SwiftProjecta -> a;
-		}
-		subgraph packageswiftproject{
-		PackageSwiftProject	[shape=oval, color=red2, label="PackageSwiftProject"];
-		PackageSwiftProject -> PackageDataProgData;
-		}
-		subgraph auxiliaryswiftproject{
-		AuxiliarySwiftProject	[shape=oval, color=red2, label="AuxiliarySwiftProject"];
-		AuxiliarySwiftProject -> FileAndContents;
-		}
-		subgraph auxhelperswiftproject{
-		AuxHelperSwiftProject	[shape=oval, color=red2, label="AuxHelperSwiftProject"];
-		AuxHelperSwiftProject -> Doc;
 		}
 	}
 	subgraph clasinterfaces {
@@ -650,6 +578,7 @@ digraph alltypes {
 		Choices -> ExtLib;
 		Choices -> InternalConceptName;
 		Choices -> Int;
+		Choices -> String;
 		}
 		subgraph architecture{
 		Architecture	[shape=oval, color=cyan3, label="Architecture"];

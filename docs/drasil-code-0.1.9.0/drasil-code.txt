@@ -48,29 +48,16 @@ odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]
 --   and generation.
 module Language.Drasil.GOOL
 
--- | Members of this class must have all the information necessary for the
---   <a>AuxiliarySym</a> in addition to information necessary to create a
---   package.
-class (AuxiliarySym r) => PackageSym r where {
-    type Package r;
-}
-package :: PackageSym r => ProgData -> [r (Auxiliary r)] -> r (Package r)
-
 -- | Members of this class must have a doxygen configuration, ReadMe file,
---   sample input, omptimize doxygen document, information necessary for a
---   makefile, auxiliary helper documents, and auxiliary from data
---   documents.
-class AuxiliarySym r where {
-    type Auxiliary r;
-    type AuxHelper r;
-}
-doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r (Auxiliary r)
-readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)
-sampleInput :: AuxiliarySym r => PrintingInformation -> DataDesc -> [Expr] -> r (Auxiliary r)
-optimizeDox :: AuxiliarySym r => r (AuxHelper r)
-makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r (Auxiliary r)
-auxHelperDoc :: AuxiliarySym r => r (AuxHelper r) -> Doc
-auxFromData :: AuxiliarySym r => FilePath -> Doc -> r (Auxiliary r)
+--   omptimize doxygen document, information necessary for a makefile,
+--   auxiliary helper documents
+class AuxiliarySym r
+doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r FileAndContents
+readMe :: AuxiliarySym r => ReadMeInfo -> r FileAndContents
+optimizeDox :: AuxiliarySym r => r Doc
+makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r FileAndContents
+auxHelperDoc :: AuxiliarySym r => r Doc -> Doc
+package :: Monad r => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
 
 -- | The underlying data type for auxiliary files in all renderers.
 data FileAndContents
@@ -105,12 +92,12 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackageData ProgData) -> DrasilState -> IO ()
+generateCode :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (PackageData ProgData) -> PackageData ProgData) -> DrasilState -> IO ()
 
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackageData ProgData) -> DrasilState -> IO ()
+generateCodeProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (PackageData ProgData) -> PackageData ProgData) -> DrasilState -> IO ()
 
 -- | Reads data from a file and converts the values to <a>Expr</a>s. The
 --   file must be formatted according to the <a>DataDesc'</a> passed as a
@@ -125,7 +112,7 @@ sampleInputDD :: [CodeVarChunk] -> DataDesc'
 --   down. Full details of Choices documentation
 --   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
-Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [String] -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
@@ -156,6 +143,11 @@ Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Con
 
 -- | Number of folders to go up in order to obtain the image
 [folderVal] :: Choices -> Int
+
+-- | A list of "program configuration files" to be copied over to the
+--   exported project, required for execution, and configurable by the
+--   user.
+[defaultConfigFiles] :: Choices -> [String]
 
 -- | Comment implementation options.
 data Comments
@@ -427,21 +419,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_aLga
-oldCodeSpec :: HasOldCodeSpec c_aLga => Lens' c_aLga OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLga => Lens' c_aLga People
-cMapO :: HasOldCodeSpec c_aLga => Lens' c_aLga ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLga => Lens' c_aLga [FilePath]
-constMapO :: HasOldCodeSpec c_aLga => Lens' c_aLga ConstantMap
-constantsO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Const]
-derivedInputsO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Derived]
-execOrderO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Def]
-extInputsO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Input]
-inputsO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Input]
-modsO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Mod]
-outputsO :: HasOldCodeSpec c_aLga => Lens' c_aLga [Output]
-pNameO :: HasOldCodeSpec c_aLga => Lens' c_aLga Name
-systemdbO :: HasOldCodeSpec c_aLga => Lens' c_aLga ChunkDB
+class HasOldCodeSpec c_aLj5
+oldCodeSpec :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 People
+cMapO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [FilePath]
+constMapO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 ConstantMap
+constantsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Const]
+derivedInputsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Derived]
+execOrderO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Def]
+extInputsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Input]
+inputsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Input]
+modsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Mod]
+outputsO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 [Output]
+pNameO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 Name
+systemdbO :: HasOldCodeSpec c_aLj5 => Lens' c_aLj5 ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

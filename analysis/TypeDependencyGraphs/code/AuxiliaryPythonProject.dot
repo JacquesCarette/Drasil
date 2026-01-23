@@ -1,4 +1,0 @@
-digraph auxiliarypythonproject{
-AuxiliaryPythonProject	[shape=oval, color=red2, label="AuxiliaryPythonProject"];
-AuxiliaryPythonProject -> FileAndContents;
-}

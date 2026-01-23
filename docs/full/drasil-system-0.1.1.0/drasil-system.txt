@@ -17,34 +17,33 @@ module Drasil.System
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data System
-[SI] :: (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> String -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
+[SI] :: (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> String -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
 data SystemKind
 Specification :: SystemKind
 RunnableSoftware :: SystemKind
 Notebook :: SystemKind
 Website :: SystemKind
-class HasSystem c_a8aU
-system :: HasSystem c_a8aU => Lens' c_a8aU System
-authors :: HasSystem c_a8aU => Lens' c_a8aU People
-background :: HasSystem c_a8aU => Lens' c_a8aU Background
-configFiles :: HasSystem c_a8aU => Lens' c_a8aU [String]
-constants :: HasSystem c_a8aU => Lens' c_a8aU [ConstQDef]
-dataDefns :: HasSystem c_a8aU => Lens' c_a8aU [DataDefinition]
-genDefns :: HasSystem c_a8aU => Lens' c_a8aU [GenDefn]
-instModels :: HasSystem c_a8aU => Lens' c_a8aU [InstanceModel]
-kind :: HasSystem c_a8aU => Lens' c_a8aU SystemKind
-motivation :: HasSystem c_a8aU => Lens' c_a8aU Motivation
-programName :: HasSystem c_a8aU => Lens' c_a8aU String
-purpose :: HasSystem c_a8aU => Lens' c_a8aU Purpose
-refTable :: HasSystem c_a8aU => Lens' c_a8aU (Map UID Reference)
-refbyTable :: HasSystem c_a8aU => Lens' c_a8aU (Map UID [UID])
-scope :: HasSystem c_a8aU => Lens' c_a8aU Scope
-sysName :: HasSystem c_a8aU => Lens' c_a8aU CI
-systemdb :: HasSystem c_a8aU => Lens' c_a8aU ChunkDB
-theoryModels :: HasSystem c_a8aU => Lens' c_a8aU [TheoryModel]
-traceTable :: HasSystem c_a8aU => Lens' c_a8aU (Map UID [UID])
+class HasSystem c_a8ah
+system :: HasSystem c_a8ah => Lens' c_a8ah System
+authors :: HasSystem c_a8ah => Lens' c_a8ah People
+background :: HasSystem c_a8ah => Lens' c_a8ah Background
+constants :: HasSystem c_a8ah => Lens' c_a8ah [ConstQDef]
+dataDefns :: HasSystem c_a8ah => Lens' c_a8ah [DataDefinition]
+genDefns :: HasSystem c_a8ah => Lens' c_a8ah [GenDefn]
+instModels :: HasSystem c_a8ah => Lens' c_a8ah [InstanceModel]
+kind :: HasSystem c_a8ah => Lens' c_a8ah SystemKind
+motivation :: HasSystem c_a8ah => Lens' c_a8ah Motivation
+programName :: HasSystem c_a8ah => Lens' c_a8ah String
+purpose :: HasSystem c_a8ah => Lens' c_a8ah Purpose
+refTable :: HasSystem c_a8ah => Lens' c_a8ah (Map UID Reference)
+refbyTable :: HasSystem c_a8ah => Lens' c_a8ah (Map UID [UID])
+scope :: HasSystem c_a8ah => Lens' c_a8ah Scope
+sysName :: HasSystem c_a8ah => Lens' c_a8ah CI
+systemdb :: HasSystem c_a8ah => Lens' c_a8ah ChunkDB
+theoryModels :: HasSystem c_a8ah => Lens' c_a8ah [TheoryModel]
+traceTable :: HasSystem c_a8ah => Lens' c_a8ah (Map UID [UID])
 whatsTheBigIdea :: System -> IdeaDict
-mkSystem :: (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] -> System
+mkSystem :: (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] -> System
 
 -- | Project Example purpose.
 type Purpose = [Sentence]

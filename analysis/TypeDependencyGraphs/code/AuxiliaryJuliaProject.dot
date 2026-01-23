@@ -1,4 +1,0 @@
-digraph auxiliaryjuliaproject{
-AuxiliaryJuliaProject	[shape=oval, color=red2, label="AuxiliaryJuliaProject"];
-AuxiliaryJuliaProject -> FileAndContents;
-}

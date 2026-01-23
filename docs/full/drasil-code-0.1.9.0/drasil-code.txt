@@ -1308,7 +1308,7 @@ module Language.Drasil.Choices
 --   down. Full details of Choices documentation
 --   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
-Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [String] -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
@@ -1339,6 +1339,11 @@ Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Con
 
 -- | Number of folders to go up in order to obtain the image
 [folderVal] :: Choices -> Int
+
+-- | A list of "program configuration files" to be copied over to the
+--   exported project, required for execution, and configurable by the
+--   user.
+[defaultConfigFiles] :: Choices -> [String]
 
 -- | Architecture of a program
 data Architecture
@@ -1700,21 +1705,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aLiQ
-oldCodeSpec :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ People
-cMapO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [FilePath]
-constMapO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ ConstantMap
-constantsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Const]
-derivedInputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Derived]
-execOrderO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Def]
-extInputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Input]
-inputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Input]
-modsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Mod]
-outputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Output]
-pNameO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ Name
-systemdbO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ ChunkDB
+class HasOldCodeSpec c_aLlL
+oldCodeSpec :: HasOldCodeSpec c_aLlL => Lens' c_aLlL OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL People
+cMapO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [FilePath]
+constMapO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL ConstantMap
+constantsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Const]
+derivedInputsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Derived]
+execOrderO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Def]
+extInputsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Input]
+inputsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Input]
+modsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Mod]
+outputsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Output]
+pNameO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL Name
+systemdbO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -1812,29 +1817,18 @@ chooseODELib :: Lang -> Maybe ODE -> State [Sentence] ODEGenInfo
 --   GOOL program with auxiliary, non-source-code files.
 module Language.Drasil.Code.Imperative.GOOL.ClassInterface
 
--- | Members of this class must have all the information necessary for the
---   <a>AuxiliarySym</a> in addition to information necessary to create a
---   package.
-class (AuxiliarySym r) => PackageSym r where {
-    type Package r;
-}
-package :: PackageSym r => ProgData -> [r (Auxiliary r)] -> r (Package r)
-
 -- | Members of this class must have a doxygen configuration, ReadMe file,
---   sample input, omptimize doxygen document, information necessary for a
---   makefile, auxiliary helper documents, and auxiliary from data
---   documents.
-class AuxiliarySym r where {
-    type Auxiliary r;
-    type AuxHelper r;
-}
-doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r (Auxiliary r)
-readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)
-sampleInput :: AuxiliarySym r => PrintingInformation -> DataDesc -> [Expr] -> r (Auxiliary r)
-optimizeDox :: AuxiliarySym r => r (AuxHelper r)
-makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r (Auxiliary r)
-auxHelperDoc :: AuxiliarySym r => r (AuxHelper r) -> Doc
-auxFromData :: AuxiliarySym r => FilePath -> Doc -> r (Auxiliary r)
+--   omptimize doxygen document, information necessary for a makefile,
+--   auxiliary helper documents
+class AuxiliarySym r
+doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r FileAndContents
+readMe :: AuxiliarySym r => ReadMeInfo -> r FileAndContents
+optimizeDox :: AuxiliarySym r => r Doc
+makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r FileAndContents
+auxHelperDoc :: AuxiliarySym r => r Doc -> Doc
+package :: Monad r => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
+sampleInput :: Applicative r => PrintingInformation -> DataDesc -> [Expr] -> r FileAndContents
+auxFromData :: Applicative r => FilePath -> Doc -> r FileAndContents
 
 module Language.Drasil.Code.Imperative.DrasilState
 
@@ -2022,10 +2016,10 @@ genModuleProc :: ProcProg r => Name -> Description -> [GenState (Maybe (SMethod 
 
 -- | Generates a Doxygen configuration file if the user has comments
 --   enabled.
-genDoxConfig :: AuxiliarySym r => GOOLState -> GenState (Maybe (r (Auxiliary r)))
+genDoxConfig :: AuxiliarySym r => GOOLState -> GenState (Maybe (r FileAndContents))
 
 -- | Generates a README file.
-genReadMe :: AuxiliarySym r => ReadMeInfo -> GenState (Maybe (r (Auxiliary r)))
+genReadMe :: AuxiliarySym r => ReadMeInfo -> GenState (Maybe (r FileAndContents))
 
 -- | Generates a primary class.
 primaryClass :: OOProg r => Name -> Maybe Name -> Description -> [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)
@@ -2097,16 +2091,13 @@ no :: Doc
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
 
 -- | Defines a Doxygen configuration file.
-doxConfig :: AuxiliarySym r => r (AuxHelper r) -> String -> GOOLState -> Verbosity -> r (Auxiliary r)
+doxConfig :: (AuxiliarySym r, Applicative r) => r Doc -> String -> GOOLState -> Verbosity -> r FileAndContents
 
 -- | Defines a markdown file.
-readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)
-
--- | Defines a sample input file.
-sampleInput :: AuxiliarySym r => PrintingInformation -> DataDesc -> [Expr] -> r (Auxiliary r)
+readMe :: Applicative r => ReadMeInfo -> r FileAndContents
 
 -- | Defines a Makefile.
-makefile :: AuxiliarySym r => Maybe BuildConfig -> Maybe Runnable -> Maybe DocConfig -> GOOLState -> ProgData -> r (Auxiliary r)
+makefile :: Applicative r => Maybe BuildConfig -> Maybe Runnable -> Maybe DocConfig -> GOOLState -> ProgData -> r FileAndContents
 
 -- | Changes a <a>Runnable</a> to <a>Nothing</a> if the user chose
 --   <a>Library</a> for the <a>ImplementationType</a>.
@@ -2129,7 +2120,6 @@ SP :: a -> SwiftProject a
 instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
 instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
 instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
-instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.PackageSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
 instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
 
 
@@ -2143,7 +2133,6 @@ PP :: a -> PythonProject a
 instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
 instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
 instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
-instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.PackageSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
 instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
 
 
@@ -2157,7 +2146,6 @@ JLP :: a -> JuliaProject a
 instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
 instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
 instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
-instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.PackageSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
 instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
 
 
@@ -2171,7 +2159,6 @@ JP :: a -> JavaProject a
 instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
 instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
 instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
-instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.PackageSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
 instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
 
 
@@ -2185,7 +2172,6 @@ CPPP :: a -> CppProject a
 instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
 instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
 instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
-instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.PackageSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
 instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
 
 
@@ -2199,7 +2185,6 @@ CSP :: a -> CSharpProject a
 instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
 instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
 instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
-instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.PackageSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
 instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
 
 
@@ -2207,29 +2192,16 @@ instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Langua
 --   and generation.
 module Language.Drasil.GOOL
 
--- | Members of this class must have all the information necessary for the
---   <a>AuxiliarySym</a> in addition to information necessary to create a
---   package.
-class (AuxiliarySym r) => PackageSym r where {
-    type Package r;
-}
-package :: PackageSym r => ProgData -> [r (Auxiliary r)] -> r (Package r)
-
 -- | Members of this class must have a doxygen configuration, ReadMe file,
---   sample input, omptimize doxygen document, information necessary for a
---   makefile, auxiliary helper documents, and auxiliary from data
---   documents.
-class AuxiliarySym r where {
-    type Auxiliary r;
-    type AuxHelper r;
-}
-doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r (Auxiliary r)
-readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)
-sampleInput :: AuxiliarySym r => PrintingInformation -> DataDesc -> [Expr] -> r (Auxiliary r)
-optimizeDox :: AuxiliarySym r => r (AuxHelper r)
-makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r (Auxiliary r)
-auxHelperDoc :: AuxiliarySym r => r (AuxHelper r) -> Doc
-auxFromData :: AuxiliarySym r => FilePath -> Doc -> r (Auxiliary r)
+--   omptimize doxygen document, information necessary for a makefile,
+--   auxiliary helper documents
+class AuxiliarySym r
+doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r FileAndContents
+readMe :: AuxiliarySym r => ReadMeInfo -> r FileAndContents
+optimizeDox :: AuxiliarySym r => r Doc
+makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r FileAndContents
+auxHelperDoc :: AuxiliarySym r => r Doc -> Doc
+package :: Monad r => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
 
 -- | The underlying data type for auxiliary files in all renderers.
 data FileAndContents
@@ -2573,7 +2545,7 @@ genOutputFormatProc :: SharedProg r => GenState (Maybe (SMethod r))
 
 -- | Generates a sample input file compatible with the generated program,
 --   if the user chose to.
-genSampleInput :: AuxiliarySym r => GenState (Maybe (r (Auxiliary r)))
+genSampleInput :: Applicative r => GenState (Maybe (r FileAndContents))
 instance GHC.Classes.Eq Language.Drasil.Code.Imperative.Modules.CalcType
 
 
@@ -2588,12 +2560,12 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackageData ProgData) -> DrasilState -> IO ()
+generateCode :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (PackageData ProgData) -> PackageData ProgData) -> DrasilState -> IO ()
 
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackageData ProgData) -> DrasilState -> IO ()
+generateCodeProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (PackageData ProgData) -> PackageData ProgData) -> DrasilState -> IO ()
 
 
 -- | Re-export code-related smart constructors for external code writing
@@ -2616,12 +2588,12 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackageData ProgData) -> DrasilState -> IO ()
+generateCode :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (PackageData ProgData) -> PackageData ProgData) -> DrasilState -> IO ()
 
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackageData ProgData) -> DrasilState -> IO ()
+generateCodeProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (PackageData ProgData) -> PackageData ProgData) -> DrasilState -> IO ()
 
 -- | Reads data from a file and converts the values to <a>Expr</a>s. The
 --   file must be formatted according to the <a>DataDesc'</a> passed as a
@@ -2636,7 +2608,7 @@ sampleInputDD :: [CodeVarChunk] -> DataDesc'
 --   down. Full details of Choices documentation
 --   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
-Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [String] -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
@@ -2667,6 +2639,11 @@ Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Con
 
 -- | Number of folders to go up in order to obtain the image
 [folderVal] :: Choices -> Int
+
+-- | A list of "program configuration files" to be copied over to the
+--   exported project, required for execution, and configurable by the
+--   user.
+[defaultConfigFiles] :: Choices -> [String]
 
 -- | Comment implementation options.
 data Comments
@@ -2938,21 +2915,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_aLiQ
-oldCodeSpec :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ People
-cMapO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [FilePath]
-constMapO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ ConstantMap
-constantsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Const]
-derivedInputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Derived]
-execOrderO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Def]
-extInputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Input]
-inputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Input]
-modsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Mod]
-outputsO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ [Output]
-pNameO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ Name
-systemdbO :: HasOldCodeSpec c_aLiQ => Lens' c_aLiQ ChunkDB
+class HasOldCodeSpec c_aLlL
+oldCodeSpec :: HasOldCodeSpec c_aLlL => Lens' c_aLlL OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL People
+cMapO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [FilePath]
+constMapO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL ConstantMap
+constantsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Const]
+derivedInputsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Derived]
+execOrderO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Def]
+extInputsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Input]
+inputsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Input]
+modsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Mod]
+outputsO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL [Output]
+pNameO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL Name
+systemdbO :: HasOldCodeSpec c_aLlL => Lens' c_aLlL ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

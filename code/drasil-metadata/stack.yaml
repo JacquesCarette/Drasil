@@ -28,6 +28,7 @@ resolver: lts-22.44
 #   - wai
 packages:
 - .
+- ../drasil-database/
 - ../drasil-lang/
 - ../drasil-utils/
 

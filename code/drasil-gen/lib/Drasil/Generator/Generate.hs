@@ -36,14 +36,16 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
-  makeRequirements, genHTML, genTeX, genJupyter, genMDBook, outputDot,
-  makeBook, defaultConfiguration, piSys, PrintingInformation)
+  makeRequirements, genHTML, genTeX, genJupyter, genMDBook, makeBook,
+  defaultConfiguration, piSys, PrintingInformation)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Drasil.System (System, programName, refTable, systemdb)
 import Utils.Drasil (createDirIfMissing)
+
 import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC), docChoices)
+import Drasil.Generator.TraceabilityGraphs (outputDot)
 import Drasil.Generator.TypeCheck (typeCheckSI)
 
 -- | Generate an SRS softifact.

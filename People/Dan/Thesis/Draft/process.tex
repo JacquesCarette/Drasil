@@ -1,76 +1,145 @@
-\chapter{A look under the hood: \\ Our process}
+\chapter{A look under the hood: \mbox{Our process}}
 \label{c:process}
 
-\ds{Make sure we talk about continuous integration / git processes / etc.
-Actually might belong in the next chapter - iteration and refinement}
+%\ds{Make sure we talk about continuous integration / git processes / etc.
+%Actually might belong in the next chapter - iteration and refinement}
 
-\ds{Add something about how this is about deving the framework itself, not dev 
-in general. This is about our developing of the framework itself}
+The focus of this chapter is the process by which we developed the Drasil 
+framework itself. Rather than describing the general software development 
+process that Drasil is intended to support or automate, we turn our attention 
+inward to examine the steps, decisions, and rationale that guided the creation 
+of the framework. Our goal is to provide transparency into the reasoning that 
+shaped Drasil, highlighting the challenges encountered and the strategies 
+employed to address them. By doing so, we aim to give the reader a clear 
+understanding of how the framework's design emerged from a careful analysis of 
+redundancy and knowledge organization across software artifacts.
 
-The first step in removing unnecessary redundancy is identifying exactly what
-that redundancy is and where it exists. To that end we need to understand what
-each of our software artifacts is attempting to communicate, who their audience
-is, and what information can be considered boilerplate versus system-specific.
-Luckily, we have an excellent starting point thanks to the work of many smart
-people - artifact templates.
+As one of the central motivations for developing Drasil was the observation 
+that \sfs{} contain significant, unnecessary redundancy, our first step in 
+removing that redundancy is identifying exactly what it is and where it exists. 
+To that end we need to understand what each of our software artifacts is 
+attempting to communicate, who their audience is, and what information can be 
+considered boilerplate versus system-specific. Luckily, we have an excellent 
+starting point thanks to the work of many smart people: artifact templates.
 
-\ds{Add an example, something like hghc or F=ma, to set the scene}.
+% Lots of work \ds{cite some people who did this} has been done to specify 
+% exactly what should be documented in a given artifact in an effort for 
+% standardization. Ironically, this has led to many different `standardized' 
+% templates. Through the examination of a number of different artifact templates, 
+% we have concluded they convey roughly the same overall information for a given 
+% artifact. Most differences are stylistic or related to content 
+% organization and naming conventions.
 
-\ds{Make sure to tell the audience why information is being presented here and 
-how it's relevant to the chapter ahead. Give an outline of the entire chapter, 
-not just the first bit. Get into some detail.}
+% Once we understand our artifacts, we take a practical, example-driven approach
+% to identifying redundancy through the use of existing software system case
+% studies. For each of these case studies, we start by examining the source code
+% and existing software artifacts to understand exactly what problem they are
+% trying to solve. From there, we attempt to distill the system-specific knowledge
+% and generalize the boilerplate.
 
-Lots of work \ds{cite some people who did this} has been done to specify 
-exactly what should be documented in a given artifact in an effort for 
-standardization. Ironically, this has led to many different `standardized' 
-templates. Through the examination of a number of different artifact templates, 
-we have concluded they convey roughly the same overall information for a given 
-artifact. Most differences are stylistic or related to content 
-organization and naming conventions.
+\section{A minimal motivating example: HGHC}
+\label{sec:hghc-mini}
 
-Once we understand our artifacts, we take a practical, example-driven approach
-to identifying redundancy through the use of existing software system case
-studies. For each of these case studies, we start by examining the source code
-and existing software artifacts to understand exactly what problem they are
-trying to solve. From there, we attempt to distill the system-specific knowledge
-and generalize the boilerplate.
+Before delving into the full complexity of our case studies and artifact 
+templates, it is helpful to illustrate the core problem of knowledge redundancy 
+with an incredibly minimal, toy example. For this, we use the ``HGHC'' system, 
+a simple heat transfer case study included in the repository.
+
+The HGHC example's SRS specifies what problem the software is trying to solve/ 
+In this case, it should model heat transfer coefficients in nuclear fuel rods, 
+specifically $h_g$ (gap conductance) and $h_c$ (effective heat transfer 
+coefficient between clad and coolant). Even in this minimal system, the same 
+core knowledge appears in multiple places within the SRS.
+
+To illustrate, consider the following: The SRS defines variables such as $h_g$, 
+$h_c$, $\tau_c$ (clad thickness), $h_p$ (initial gap film conductance), $h_b$ 
+(initial coolant film conductance), and $k_c$ (clad conductivity). The defining 
+equations for $h_g$ and $h_c$ are also given as:
+    \[
+      h_g = \frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}
+    \]
+    \[
+      h_c = \frac{2k_{c}h_{b}}{2k_{c}+\tau_c h_{b}}
+    \]
+
+We can already see repeated knowledge ($k_c$ and $\tau_c$) in these two 
+equations. But the redundancy goes even deeper in the full SRS (which can be 
+found in Appendix~\ref{appendix:hghc}). There we can see repeated descriptions 
+and units for $h_g$ and $h_c$ in the table of symbols and the data definitions. 
+We also observe something more troubling: missing symbols. None of $k_c$, 
+$h_p$, $h_b$, or $\tau_c$ have units associated with them nor are they defined 
+in the table of symbols despite their presence in the equations and data 
+definitions for $h_g$ and $h_c$.
+
+As this is a toy example, it may seem contrived to have missing information. 
+However we ran into exactly these sorts of issues with our real-world case 
+studies. In this example, while we can easily identify and rectify omissions,
+it highlights a key issue: even in a simple system, knowledge is repeated 
+across different sections of a single \sf{}, and critical definitions can be 
+overlooked. Once we add more complexity, with multiple \sfs{} and larger 
+systems, these issues compound.
+
+Imagine now that we wish to validate the units of both $h_g$ and $h_c$. The 
+knowledge required for this validation is currently missing. Suppose we add the 
+appropriate symbol definitions and units to the SRS; if we then discover an 
+inconsistency in the units due to an error in the defining equations, we would 
+need to update multiple sections of the SRS to correct it, increasing the risk 
+of further mistakes. If additional \sfs{}, particularly code, have already been 
+created based on these definitions, the challenge of maintaining consistency 
+becomes even greater. Corrections would now be required across multiple input 
+languages (for example, \LaTeX{} and Python), significantly increasing the 
+verification burden. Ultimately, these \sfs{} are communicating much of the 
+same knowledge, merely formatted for different audiences. In the case of the 
+SRS and the source code, the audiences are human stakeholders and computers, 
+respectively, but both require a precise definition of $h_g$ and $h_c$.
+
+This small example foreshadows the larger patterns of redundancy that we 
+observe in more complex systems. The rest of this chapter 
+generalizes from such examples, showing how we systematically identified, 
+categorized, and addressed these issues in the development of Drasil.
 
 \section{A (very) brief introduction to our case study systems}
-\ds{**NOTE: ensure each artifact has a 'who' (audience), 'what' (problem 
-being solved), and 'how' (specific-knowledge vs boilerplate) - this last one 
-may not be necessary}
+
+To ground our analysis in practical reality and move beyond abstract 
+principles, this thesis draws on a set of detailed case studies. These case 
+studies serve not only to illustrate the prevalence and impact of redundant 
+knowledge in \sfs{}, but also to provide a concrete basis for systematically 
+identifying, comparing, and generalizing patterns of redundancy and knowledge 
+organization. By examining systems developed using common artifact templates, 
+we are able to empirically motivate the need for the Drasil framework and 
+inform its design. 
 
 To simplify the process of identifying redundancies and patterns, we have chosen
 several case studies developed using common artifact templates, specifically 
 those used by \smithea{} \ds{source?} Also, as mentioned in 
 Section~\ref{sec:scope}, we have chosen software systems that follow the 
-$`input' \rightarrow `process' \rightarrow `output'$ pattern. These systems 
-cover a variety of use cases, to help avoid over-specializing into one 
+\mbox{$`input'~\rightarrow~`process'~\rightarrow~`output'$} pattern. These 
+systems cover a variety of use cases, to help avoid over-specializing into one 
 particular system type. 
 
 The majority of the aforementioned case studies were developed to solve real
 problems. The following cards are meant to be used as a high-level reference to 
 each case study, providing the general details at a glance. For the specifics 
-of each system, all relevant case study artifacts can be found at \ds{Add a 
-link here or put in appendices?}.
+of each system, all relevant case study artifacts can be found in the GitHub 
+repository.
 
 \card{\gb}
 {We need to efficiently and correctly predict whether a glass 
 slab can withstand a blast under given conditions.}
-{\ds{TODO - Fill in once all examples in the thesis are done}}
+{SRS, source code.}
 
 \card{\sw}
 {Solar water heating systems incorporating phase change 
  material (PCM) use a renewable energy source and provide a novel way of 
  storing energy. A system is needed to investigate the effect of employing PCM
  within a solar water heating tank.}
-{\ds{TODO}}
+{SRS, source code.}
 
 \card{\np}
 {Solar water heating systems provide a novel way of 
 heating water and storing renewable energy. A system is needed to investigate
 the heating of water within a solar water heating tank.}
-{\ds{TODO}}
+{SRS, source code.}
 
 The NoPCM case study was created as a software family member for the SWHS case
 study. It was manually written, removing all references to PCM and thus 
@@ -84,21 +153,20 @@ remodeling the system.
  a slope's slip surface and identify the critical slip surface of the slope, 
  as well as the interslice normal force and shear force along the critical 
  slip surface.}
-{\ds{TODO}}
+{SRS, source code.}
 
 \card{\pr}
 {A system is needed to efficiently and correctly predict
  the landing position of a projectile.}
-{\ds{TODO}}
+{SRS, source code.}
 
 The Projectile case study, was the first example of a system 
 created solely in Drasil, i.e. we did not have a manually created version to 
 compare and contrast with through development. As such, it will not be 
-referenced often until \ds{DRASILSECTION} since it did not inform Drasil's 
-design or development until much further in our process. The Projectile case 
-study was created post-facto to provide a simple, understandable example for a 
-general audience as it requires, at most, a high-school level understanding of 
-physics. 
+referenced often since it did not inform Drasil's design or development until 
+much further in our process. The Projectile case study was created post-facto 
+to provide a simple, understandable example for a general audience as it 
+requires, at most, a high-school level understanding of physics. 
 
 \card{\gp}
 {Many video games need physics libraries that simulate 
@@ -107,7 +175,7 @@ physics.
  Developing a physics library from scratch takes a long period of time and is 
  very costly, presenting barriers of entry which make it difficult for game 
  developers to include physics in their products.}
-{\ds{TODO}}
+{SRS, source code.}
 
 After carefully selecting our case studies, we went about a practical approach
 to find and remove redundancies. The first step was to break down each artifact
@@ -116,6 +184,15 @@ type and understand exactly what they are trying to convey.
 
 \section{Breaking down \sfs}
 \label{sec:breakdown}
+
+To meaningfully address redundancy in software artifacts, it is not enough to 
+simply observe that repetition exists; we must also understand the purpose, 
+content, and intended audience of each artifact. Building on the foundation 
+provided by our case studies, this section systematically examines the 
+structure and role of each major \sf{} in our process. By breaking down these 
+artifacts, we aim to reveal both their commonalities and their differences, 
+setting the stage for identifying patterns of knowledge organization and 
+redundancy that inform the design of Drasil.
 
 As noted earlier, for our approach to work we must understand exactly what each
 of our artifacts are trying to say and to whom.\footnote{Refer to 
@@ -204,7 +281,8 @@ With the structure of the document in mind, let us look at several of our case
 studies' SRS documents to get a deeper understanding of what each section truly
 represents. Figure~\ref{fig:csRefSecs} shows the reference section of the SRS 
 for \gb. Each of the case studies' SRS contains a similar section so for 
-brevity we will omit the others here, but they can be found at \ds{TODO}. 
+brevity we will omit the others here, but they can be found in the GitHub 
+repository. 
 % Provide a link / ref to relevant appendix
 We will look into the case studies in more detail later \ds{will we actually? 
 depends on length of chapter}, for now we will try to 

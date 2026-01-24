@@ -33,7 +33,7 @@ class AuxiliarySym r where
 
   auxHelperDoc :: r Doc -> Doc
 
-package :: (Monad r) => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
+package :: (Monad r) => progRepr -> [r FileAndContents] -> r (PackageData progRepr)
 package p = onCodeList (packageData p)
 
 sampleInput :: (Applicative r) => PrintingInformation -> DataDesc -> [Expr] ->

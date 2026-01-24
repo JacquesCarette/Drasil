@@ -6,8 +6,6 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (GOOLState)
-
 import Language.Drasil.Choices (Comments, ImplementationType(..), Verbosity)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
@@ -22,7 +20,7 @@ import Language.Drasil.Code.Imperative.README (ReadMeInfo(..), makeReadMe)
 
 -- | Defines a Doxygen configuration file.
 doxConfig :: (AuxiliarySym r, Applicative r) => r Doc -> String ->
-  GOOLState -> Verbosity -> r FileAndContents
+  stateRepr -> Verbosity -> r FileAndContents
 doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s
   (auxHelperDoc opt) v)
 
@@ -32,7 +30,7 @@ readMe rmi= auxFromData readMeName (makeReadMe rmi)
 
 -- | Defines a Makefile.
 makefile :: (Applicative r) => Maybe BuildConfig -> Maybe Runnable ->
-  Maybe DocConfig -> GOOLState -> progRepr -> r FileAndContents
+  Maybe DocConfig -> stateRepr -> progRepr -> r FileAndContents
 makefile bc r d s p = auxFromData makefileName (makeBuild d bc r s p)
 
 -- | Changes a 'Runnable' to 'Nothing' if the user chose 'Library' for the 'ImplementationType'.

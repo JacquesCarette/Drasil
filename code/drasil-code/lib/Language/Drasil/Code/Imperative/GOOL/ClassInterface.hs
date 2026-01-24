@@ -7,7 +7,6 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (GOOLState)
 import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
@@ -23,12 +22,12 @@ import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 -- omptimize doxygen document, information necessary for a makefile,
 -- auxiliary helper documents
 class AuxiliarySym r where
-  doxConfig :: String -> GOOLState -> Verbosity -> r FileAndContents
+  doxConfig :: String -> stateRepr -> Verbosity -> r FileAndContents
   readMe ::  ReadMeInfo -> r FileAndContents
 
   optimizeDox :: r Doc
 
-  makefile :: [FilePath] -> ImplementationType -> [Comments] -> GOOLState ->
+  makefile :: [FilePath] -> ImplementationType -> [Comments] -> stateRepr ->
     progRepr -> r FileAndContents
 
   auxHelperDoc :: r Doc -> Doc

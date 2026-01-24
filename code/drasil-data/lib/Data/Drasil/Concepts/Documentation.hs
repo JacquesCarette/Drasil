@@ -13,6 +13,8 @@ import Language.Drasil.Development (NPStruct)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.Metadata.Domains (softEng, documentc)
+import qualified Drasil.Metadata.Documentation as Doc
+  (introduction, learnObj)
 import Drasil.Metadata.Documentation
   (softwareReq, software, specification, requirement, srs, notebook)
 import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
@@ -70,8 +72,8 @@ assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")               
 desSpec     = commonIdeaWithDict "desSpec"     (combineNINI design specification)                    "DS"      [softEng]
 goalStmt    = commonIdeaWithDict "goalStmt"    (combineNINI goal statement)                          "GS"      [softEng]
 dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
+learnObj    = Doc.learnObj
 likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
-learnObj    = commonIdeaWithDict "learnObj"    (cn' "learning objective")                            "LO"      [documentc]
 unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
 physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
 mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
@@ -159,7 +161,7 @@ interface       = nc "interface"      (cn'    "interface"          )
 input_          = nc "input"          (cn'    "input"              )
 instance_       = nc "instance"       (cn'    "instance"           )
 intReader       = nc "intReader"      (cn'    "intended reader"    )
-introduction    = nc "introduction"   (cn'    "introduction"       )
+introduction    = Doc.introduction
 issue           = nc "issue"          (cn'    "issue"              )
 item            = nc "item"           (cn'    "item"               )
 label           = nc "label"          (cn'    "label"              )

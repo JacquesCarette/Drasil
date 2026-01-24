@@ -9,18 +9,17 @@ module Language.Drasil.Choices (
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs, InternalConcept(..),
-  RelativeFile, relativeFile, relFileToStr
+  choicesSent, showChs, InternalConcept(..)
 ) where
 
 import Control.Lens ((^.))
 import Data.Map (Map)
 import qualified Data.Map as Map
-import System.FilePath (isAbsolute, isValid, hasExtension)
 
 import Drasil.Database (UID, HasUID (..))
 import Drasil.GOOL (CodeType)
 import Language.Drasil hiding (None)
+import Utils.Drasil (RelativeFile)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
 
@@ -409,15 +408,3 @@ defaultICName InputFormat         = "InputFormat"
 defaultICName OutputFormat        = "OutputFormat"
 defaultICName Calculations        = "Calculations"
 defaultICName Constants           = "Constants"
-
--- | A valid, relative file path with an extension.
-newtype RelativeFile = RF { relFileToStr :: String }
-  deriving Eq
-
--- | Create a 'RelativeFile' given a raw 'String'.
-relativeFile :: String -> RelativeFile
-relativeFile fp
-  | not $ isValid fp = error $ "`" ++ fp ++ "` is not a valid file path."
-  | not $ hasExtension fp = error $ "`" ++ fp ++ "` does not contain a file extension."
-  | isAbsolute fp = error $ "`" ++ fp ++ "` is an absolute file path, but a relative file path was expected."
-  | otherwise = RF fp

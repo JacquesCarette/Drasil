@@ -4,8 +4,8 @@ import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
   ConstantRepr(..), AuxFile(..), Visibility(..), makeArchit,
-  makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats,
-  RelativeFile, relativeFile)
+  makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats)
+import Utils.Drasil (RelativeFile, relativeFile)
 
 import Drasil.GlassBR.ModuleDefs (allMods)
 

@@ -16,13 +16,13 @@ import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
 import Drasil.System (HasSystem(..), programName)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
-import Utils.Drasil (subsetOf)
+import Utils.Drasil (subsetOf, RelativeFile)
 
 import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..),
-  odeLibReqs, odeInfoReqs, RelativeFile)
+  odeLibReqs, odeInfoReqs)
 import Language.Drasil.Chunk.CodeBase (quantvar, codevars, varResolve)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 import Language.Drasil.ICOSolutionSearch (Def, solveExecOrder)

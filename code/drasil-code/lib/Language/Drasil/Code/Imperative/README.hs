@@ -10,8 +10,9 @@ import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 import Language.Drasil.Printers (makeMd, introInfo, verInfo, unsupOS,
     extLibSec, instDoc, endNote, whatInfo)
+import Utils.Drasil (RelativeFile, relFileToStr)
 
-import Language.Drasil.Choices (ImplementationType(..), RelativeFile, relFileToStr)
+import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Mod (Name, Version)
 
 -- | Language name.

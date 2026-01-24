@@ -419,5 +419,5 @@ relativeFile :: String -> RelativeFile
 relativeFile fp
   | not $ isValid fp = error $ "`" ++ fp ++ "` is not a valid file path."
   | not $ hasExtension fp = error $ "`" ++ fp ++ "` does not contain a file extension."
-  | isAbsolute fp = error $ "`" ++ fp ++ "` is not a relative file path."
+  | isAbsolute fp = error $ "`" ++ fp ++ "` is an absolute file path, but a relative file path was expected."
   | otherwise = RF fp

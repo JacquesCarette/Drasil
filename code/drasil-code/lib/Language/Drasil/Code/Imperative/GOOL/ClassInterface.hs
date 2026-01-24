@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (ProgData, GOOLState, onCodeList)
+import Drasil.GOOL (ProgData, GOOLState)
 import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
@@ -34,7 +34,7 @@ class AuxiliarySym r where
   auxHelperDoc :: r Doc -> Doc
 
 package :: (Monad r) => progRepr -> [r FileAndContents] -> r (PackageData progRepr)
-package p = onCodeList (packageData p)
+package p as = packageData p <$> sequence as
 
 sampleInput :: (Applicative r) => PrintingInformation -> DataDesc -> [Expr] ->
   r FileAndContents

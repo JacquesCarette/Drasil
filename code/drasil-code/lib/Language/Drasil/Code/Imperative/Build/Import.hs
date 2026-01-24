@@ -20,15 +20,15 @@ import Drasil.GOOL (FileData(..), ProgData(..), GOOLState(..), headers, sources,
 import Drasil.Metadata (watermark)
 
 -- | Holds all the needed information to run a program.
-data CodeHarness = Ch {
+data CodeHarness progRepr = Ch {
   buildConfig :: Maybe BuildConfig,
   runnable :: Maybe Runnable,
   goolState :: GOOLState,
-  progData :: ProgData,
+  progData :: progRepr,
   docConfig :: Maybe DocConfig}
 
 -- | Transforms information in 'CodeHarness' into a list of Makefile rules.
-instance RuleTransformer CodeHarness where
+instance RuleTransformer (CodeHarness progRepr) where
   makeRule (Ch b r s m d) = maybe [mkRule (openingComments m) buildTarget [] []]
     (\(BuildConfig comp onm anm bt) ->
     let outnm = maybe (asFragment "") (renderBuildName s m nameOpts) onm
@@ -91,7 +91,7 @@ buildRunTarget fn (Interpreter i) = foldr (+:+) mempty $ i ++ [fn]
 
 -- | Creates a Makefile.
 makeBuild :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable ->
-  GOOLState -> ProgData -> Doc
+  GOOLState -> progRepr -> Doc
 makeBuild d b r s p = genMake [Ch {
   buildConfig = b,
   runnable = r,

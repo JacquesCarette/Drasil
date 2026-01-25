@@ -53,7 +53,16 @@ data Choices = Choices {
   -- project, required for execution, and configurable by the user.
   defaultConfigFiles :: [String],
   -- | List of extra modules for generation.
-  extraMods :: [Mod]
+  extraMods :: [Mod],
+  -- | A list of supplementary hand-wired quantity definitions usable in code
+  -- generation, unique to a particular code solution.
+  --
+  -- FIXME: These formulas are inadequately argued. They should be constructed
+  -- through theory refinement in an SDS describing a software solution for a
+  -- specific SRS. See the following for further discussion:
+  -- * <https://github.com/JacquesCarette/Drasil/pull/4663#issuecomment-3791189095>
+  -- * <https://github.com/JacquesCarette/Drasil/pull/4664#issuecomment-3791983458>
+  handWiredDefs :: [SimpleQDef]
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -352,7 +361,8 @@ defaultChoices = Choices {
   icNames = defaultICName,
   folderVal = 4,
   defaultConfigFiles = [],
-  extraMods = []
+  extraMods = [],
+  handWiredDefs = []
 }
 
 -- | Renders 'Choices' as 'Sentence's.

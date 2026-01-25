@@ -9,7 +9,7 @@ Choices -> Constraints;
 Choices -> ExtLib;
 Choices -> InternalConceptName;
 Choices -> Int;
-Choices -> String;
+Choices -> RelativeFile;
 Choices -> Mod;
 Choices -> SimpleQDef;
 }

@@ -7,6 +7,7 @@ ReadMeInfo -> ImplementationType;
 ReadMeInfo -> Name;
 ReadMeInfo -> FilePath;
 ReadMeInfo -> Contributor;
+ReadMeInfo -> RelativeFile;
 ReadMeInfo -> CaseName;
 ReadMeInfo -> ExamplePurpose;
 ReadMeInfo -> ExampleDescr;

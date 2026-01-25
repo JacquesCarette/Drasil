@@ -189,6 +189,10 @@ implVars :: [DefinedQuantityDict]
 interpY :: Func
 interpZ :: Func
 
+module Drasil.GlassBR.Choices
+choices :: Choices
+configFp :: [RelativeFile]
+
 module Drasil.GlassBR.LabelledContent
 figures :: [LabelledContent]
 sysCtxFig :: LabelledContent
@@ -227,7 +231,6 @@ calofDemand :: DataDefinition
 aGrtrThanB :: Sentence
 arRef :: Sentence
 hRef :: Sentence
-configFp :: [String]
 stdVals :: (HasSymbol s, HasUID s) => [s] -> Sentence
 
 module Drasil.GlassBR.IMods
@@ -242,9 +245,6 @@ funcReqs :: [ConceptInstance]
 funcReqsTables :: [LabelledContent]
 inReqDesc :: Sentence
 nonfuncReqs :: [ConceptInstance]
-
-module Drasil.GlassBR.Choices
-choices :: Choices
 
 module Drasil.GlassBR.Changes
 likelyChgs :: [ConceptInstance]

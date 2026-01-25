@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Utils.Drasil.FilePath</span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-2"></span><span>  </span><span class="annot"><a href="Utils.Drasil.FilePath.html#RelativeFile"><span class="hs-identifier">RelativeFile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.FilePath.html#relativeFile"><span class="hs-identifier">relativeFile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.FilePath.html#relFileToStr"><span class="hs-identifier">relFileToStr</span></a></span><span>
+</span><span id="line-3"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.FilePath</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">isAbsolute</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">isValid</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">hasExtension</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="annot"><span class="hs-comment">-- | A valid, relative file path with an extension.</span></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">newtype</span><span> </span><span id="RelativeFile"><span class="annot"><a href="Utils.Drasil.FilePath.html#RelativeFile"><span class="hs-identifier hs-var">RelativeFile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="RF"><span class="annot"><a href="Utils.Drasil.FilePath.html#RF"><span class="hs-identifier hs-var">RF</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span id="relFileToStr"><span class="annot"><span class="annottext">RelativeFile -&gt; String
+</span><a href="Utils.Drasil.FilePath.html#relFileToStr"><span class="hs-identifier hs-var hs-var">relFileToStr</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-special">}</span><span>
+</span><span id="line-9"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679047333"><span id="local-6989586621679047339"><span class="annot"><span class="annottext">RelativeFile -&gt; RelativeFile -&gt; Bool
+(RelativeFile -&gt; RelativeFile -&gt; Bool)
+-&gt; (RelativeFile -&gt; RelativeFile -&gt; Bool) -&gt; Eq RelativeFile
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+$c== :: RelativeFile -&gt; RelativeFile -&gt; Bool
+== :: RelativeFile -&gt; RelativeFile -&gt; Bool
+$c/= :: RelativeFile -&gt; RelativeFile -&gt; Bool
+/= :: RelativeFile -&gt; RelativeFile -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="annot"><span class="hs-comment">-- | Create a 'RelativeFile' given a raw 'String'.</span></span><span>
+</span><span id="line-12"></span><span class="annot"><a href="Utils.Drasil.FilePath.html#relativeFile"><span class="hs-identifier hs-type">relativeFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Utils.Drasil.FilePath.html#RelativeFile"><span class="hs-identifier hs-type">RelativeFile</span></a></span><span>
+</span><span id="line-13"></span><span id="relativeFile"><span class="annot"><span class="annottext">relativeFile :: String -&gt; RelativeFile
+</span><a href="Utils.Drasil.FilePath.html#relativeFile"><span class="hs-identifier hs-var hs-var">relativeFile</span></a></span></span><span> </span><span id="local-6989586621679047346"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679047346"><span class="hs-identifier hs-var">fp</span></a></span></span><span>
+</span><span id="line-14"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Bool
+</span><span class="hs-identifier hs-var">isValid</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679047346"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; RelativeFile
+forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; RelativeFile) -&gt; String -&gt; RelativeFile
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;`&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679047346"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;` is not a valid file path.&quot;</span></span><span>
+</span><span id="line-15"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Bool
+</span><span class="hs-identifier hs-var">hasExtension</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679047346"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; RelativeFile
+forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; RelativeFile) -&gt; String -&gt; RelativeFile
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;`&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679047346"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;` does not contain a file extension.&quot;</span></span><span>
+</span><span id="line-16"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">String -&gt; Bool
+</span><span class="hs-identifier hs-var">isAbsolute</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679047346"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; RelativeFile
+forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; RelativeFile) -&gt; String -&gt; RelativeFile
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;`&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679047346"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;` is an absolute file path, but a relative file path was expected.&quot;</span></span><span>
+</span><span id="line-17"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; RelativeFile
+</span><a href="Utils.Drasil.FilePath.html#RF"><span class="hs-identifier hs-var">RF</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679047346"><span class="hs-identifier hs-var">fp</span></a></span><span>
+</span><span id="line-18"></span></pre></body></html>

@@ -112,7 +112,7 @@ sampleInputDD :: [CodeVarChunk] -> DataDesc'
 --   down. Full details of Choices documentation
 --   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
-Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [String] -> [Mod] -> [SimpleQDef] -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [RelativeFile] -> [Mod] -> [SimpleQDef] -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
@@ -147,7 +147,7 @@ Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Con
 -- | A list of "program configuration files" to be copied over to the
 --   exported project, required for execution, and configurable by the
 --   user.
-[defaultConfigFiles] :: Choices -> [String]
+[defaultConfigFiles] :: Choices -> [RelativeFile]
 
 -- | List of extra modules for generation.
 [extraMods] :: Choices -> [Mod]
@@ -384,7 +384,7 @@ CS :: System -> OldCodeSpec -> CodeSpec
 
 -- | Old Code specifications. Holds information needed to generate code.
 data OldCodeSpec
-OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> [FilePath] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> OldCodeSpec
+OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> [RelativeFile] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> OldCodeSpec
 
 -- | Program name.
 [_pName] :: OldCodeSpec -> Name
@@ -407,7 +407,7 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | List of files that must be in same directory for running the
 --   executable.
-[_configFiles] :: OldCodeSpec -> [FilePath]
+[_configFiles] :: OldCodeSpec -> [RelativeFile]
 
 -- | Mathematical definitions, ordered so that they form a path from inputs
 --   to outputs.
@@ -434,21 +434,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aLpo
-oldCodeSpec :: HasOldCodeSpec c_aLpo => Lens' c_aLpo OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo People
-cMapO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo [FilePath]
-constMapO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo ConstantMap
-constantsO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo [Const]
-derivedInputsO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo [Derived]
-execOrderO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo [Def]
-extInputsO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo [Input]
-inputsO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo [Input]
-modsO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo [Mod]
-outputsO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo [Output]
-pNameO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo Name
-systemdbO :: HasOldCodeSpec c_aLpo => Lens' c_aLpo ChunkDB
+class HasOldCodeSpec c_aLpR
+oldCodeSpec :: HasOldCodeSpec c_aLpR => Lens' c_aLpR OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR People
+cMapO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR [RelativeFile]
+constMapO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR ConstantMap
+constantsO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR [Const]
+derivedInputsO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR [Derived]
+execOrderO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR [Def]
+extInputsO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR [Input]
+inputsO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR [Input]
+modsO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR [Mod]
+outputsO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR [Output]
+pNameO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR Name
+systemdbO :: HasOldCodeSpec c_aLpR => Lens' c_aLpR ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

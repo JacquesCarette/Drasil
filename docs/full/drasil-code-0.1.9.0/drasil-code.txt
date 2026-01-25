@@ -1308,7 +1308,7 @@ module Language.Drasil.Choices
 --   down. Full details of Choices documentation
 --   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
-Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [String] -> [Mod] -> [SimpleQDef] -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [RelativeFile] -> [Mod] -> [SimpleQDef] -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
@@ -1343,7 +1343,7 @@ Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Con
 -- | A list of "program configuration files" to be copied over to the
 --   exported project, required for execution, and configurable by the
 --   user.
-[defaultConfigFiles] :: Choices -> [String]
+[defaultConfigFiles] :: Choices -> [RelativeFile]
 
 -- | List of extra modules for generation.
 [extraMods] :: Choices -> [Mod]
@@ -1675,7 +1675,7 @@ type ConstantMap = Map UID CodeDefinition
 
 -- | Old Code specifications. Holds information needed to generate code.
 data OldCodeSpec
-OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> [FilePath] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> OldCodeSpec
+OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> [RelativeFile] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> OldCodeSpec
 
 -- | Program name.
 [_pName] :: OldCodeSpec -> Name
@@ -1698,7 +1698,7 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | List of files that must be in same directory for running the
 --   executable.
-[_configFiles] :: OldCodeSpec -> [FilePath]
+[_configFiles] :: OldCodeSpec -> [RelativeFile]
 
 -- | Mathematical definitions, ordered so that they form a path from inputs
 --   to outputs.
@@ -1720,21 +1720,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aLs4
-oldCodeSpec :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 People
-cMapO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [FilePath]
-constMapO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 ConstantMap
-constantsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Const]
-derivedInputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Derived]
-execOrderO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Def]
-extInputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Input]
-inputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Input]
-modsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Mod]
-outputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Output]
-pNameO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 Name
-systemdbO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 ChunkDB
+class HasOldCodeSpec c_aLsx
+oldCodeSpec :: HasOldCodeSpec c_aLsx => Lens' c_aLsx OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx People
+cMapO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [RelativeFile]
+constMapO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx ConstantMap
+constantsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Const]
+derivedInputsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Derived]
+execOrderO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Def]
+extInputsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Input]
+inputsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Input]
+modsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Mod]
+outputsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Output]
+pNameO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx Name
+systemdbO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -1795,7 +1795,7 @@ module Language.Drasil.Code.Imperative.README
 
 -- | Holds all information needed to create a README file.
 data ReadMeInfo
-ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(Name, Version)] -> [FilePath] -> [Contributor] -> [FilePath] -> CaseName -> ExamplePurpose -> ExampleDescr -> ExampleMotivation -> ExampleScope -> Int -> (InFile, OutFile) -> ReadMeInfo
+ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(Name, Version)] -> [FilePath] -> [Contributor] -> [RelativeFile] -> CaseName -> ExamplePurpose -> ExampleDescr -> ExampleMotivation -> ExampleScope -> Int -> (InFile, OutFile) -> ReadMeInfo
 [langName] :: ReadMeInfo -> LangAbbrev
 [langVersion] :: ReadMeInfo -> LangVers
 [invalidOS] :: ReadMeInfo -> Maybe String
@@ -1803,7 +1803,7 @@ ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(
 [extLibNV] :: ReadMeInfo -> [(Name, Version)]
 [extLibFP] :: ReadMeInfo -> [FilePath]
 [contributors] :: ReadMeInfo -> [Contributor]
-[configFP] :: ReadMeInfo -> [FilePath]
+[configFP] :: ReadMeInfo -> [RelativeFile]
 [caseName] :: ReadMeInfo -> CaseName
 [examplePurpose] :: ReadMeInfo -> ExamplePurpose
 [exampleDescr] :: ReadMeInfo -> ExampleDescr
@@ -2623,7 +2623,7 @@ sampleInputDD :: [CodeVarChunk] -> DataDesc'
 --   down. Full details of Choices documentation
 --   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
-Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [String] -> [Mod] -> [SimpleQDef] -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [RelativeFile] -> [Mod] -> [SimpleQDef] -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
@@ -2658,7 +2658,7 @@ Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Con
 -- | A list of "program configuration files" to be copied over to the
 --   exported project, required for execution, and configurable by the
 --   user.
-[defaultConfigFiles] :: Choices -> [String]
+[defaultConfigFiles] :: Choices -> [RelativeFile]
 
 -- | List of extra modules for generation.
 [extraMods] :: Choices -> [Mod]
@@ -2895,7 +2895,7 @@ CS :: System -> OldCodeSpec -> CodeSpec
 
 -- | Old Code specifications. Holds information needed to generate code.
 data OldCodeSpec
-OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> [FilePath] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> OldCodeSpec
+OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> [RelativeFile] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> OldCodeSpec
 
 -- | Program name.
 [_pName] :: OldCodeSpec -> Name
@@ -2918,7 +2918,7 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | List of files that must be in same directory for running the
 --   executable.
-[_configFiles] :: OldCodeSpec -> [FilePath]
+[_configFiles] :: OldCodeSpec -> [RelativeFile]
 
 -- | Mathematical definitions, ordered so that they form a path from inputs
 --   to outputs.
@@ -2945,21 +2945,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aLs4
-oldCodeSpec :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 People
-cMapO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [FilePath]
-constMapO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 ConstantMap
-constantsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Const]
-derivedInputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Derived]
-execOrderO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Def]
-extInputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Input]
-inputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Input]
-modsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Mod]
-outputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Output]
-pNameO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 Name
-systemdbO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 ChunkDB
+class HasOldCodeSpec c_aLsx
+oldCodeSpec :: HasOldCodeSpec c_aLsx => Lens' c_aLsx OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx People
+cMapO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [RelativeFile]
+constMapO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx ConstantMap
+constantsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Const]
+derivedInputsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Derived]
+execOrderO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Def]
+extInputsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Input]
+inputsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Input]
+modsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Mod]
+outputsO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx [Output]
+pNameO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx Name
+systemdbO :: HasOldCodeSpec c_aLsx => Lens' c_aLsx ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

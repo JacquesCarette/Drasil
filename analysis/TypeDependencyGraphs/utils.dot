@@ -9,6 +9,12 @@ digraph alltypes {
 	}
 	subgraph englihs {
 	}
+	subgraph filepath {
+		subgraph relativefile{
+		RelativeFile	[shape=oval, color=darkgreen, label="RelativeFile"];
+		RelativeFile -> String;
+		}
+	}
 	subgraph litss {
 	}
 	subgraph strings {

@@ -337,6 +337,7 @@ digraph alltypes {
 		ReadMeInfo -> Name;
 		ReadMeInfo -> FilePath;
 		ReadMeInfo -> Contributor;
+		ReadMeInfo -> RelativeFile;
 		ReadMeInfo -> CaseName;
 		ReadMeInfo -> ExamplePurpose;
 		ReadMeInfo -> ExampleDescr;
@@ -642,7 +643,7 @@ digraph alltypes {
 		Choices -> ExtLib;
 		Choices -> InternalConceptName;
 		Choices -> Int;
-		Choices -> String;
+		Choices -> RelativeFile;
 		Choices -> Mod;
 		Choices -> SimpleQDef;
 		}
@@ -749,7 +750,7 @@ digraph alltypes {
 		OldCodeSpec -> Input;
 		OldCodeSpec -> Derived;
 		OldCodeSpec -> Output;
-		OldCodeSpec -> FilePath;
+		OldCodeSpec -> RelativeFile;
 		OldCodeSpec -> Def;
 		OldCodeSpec -> ConstraintCEMap;
 		OldCodeSpec -> Const;
@@ -4364,6 +4365,12 @@ digraph alltypes {
 		}
 	}
 	subgraph englihs {
+	}
+	subgraph filepath {
+		subgraph relativefile{
+		RelativeFile	[shape=oval, color=darkgreen, label="RelativeFile"];
+		RelativeFile -> String;
+		}
 	}
 	subgraph litss {
 	}

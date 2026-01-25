@@ -5,7 +5,7 @@ OldCodeSpec -> People;
 OldCodeSpec -> Input;
 OldCodeSpec -> Derived;
 OldCodeSpec -> Output;
-OldCodeSpec -> FilePath;
+OldCodeSpec -> RelativeFile;
 OldCodeSpec -> Def;
 OldCodeSpec -> ConstraintCEMap;
 OldCodeSpec -> Const;

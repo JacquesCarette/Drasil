@@ -49,6 +49,13 @@ capitalize :: String -> String
 -- | Comma separated list with "and" before final item.
 stringList :: [String] -> String
 
+-- | A valid, relative file path with an extension.
+data RelativeFile
+
+-- | Create a <a>RelativeFile</a> given a raw <a>String</a>.
+relativeFile :: String -> RelativeFile
+relFileToStr :: RelativeFile -> String
+
 -- | Replaces all elements of a target list that belong to a provided "bad"
 --   input list.
 replaceAll :: Eq a => [a] -> a -> [a] -> [a]

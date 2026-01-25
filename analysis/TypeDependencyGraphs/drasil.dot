@@ -644,6 +644,7 @@ digraph alltypes {
 		Choices -> Int;
 		Choices -> String;
 		Choices -> Mod;
+		Choices -> SimpleQDef;
 		}
 		subgraph architecture{
 		Architecture	[shape=oval, color=cyan3, label="Architecture"];

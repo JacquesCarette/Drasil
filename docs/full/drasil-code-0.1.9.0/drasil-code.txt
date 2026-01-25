@@ -1308,7 +1308,7 @@ module Language.Drasil.Choices
 --   down. Full details of Choices documentation
 --   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
-Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [String] -> [Mod] -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [String] -> [Mod] -> [SimpleQDef] -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
@@ -1347,6 +1347,18 @@ Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Con
 
 -- | List of extra modules for generation.
 [extraMods] :: Choices -> [Mod]
+
+-- | A list of supplementary hand-wired quantity definitions usable in code
+--   generation, unique to a particular code solution.
+--   
+--   FIXME: These formulas are inadequately argued. They should be
+--   constructed through theory refinement in an SDS describing a software
+--   solution for a specific SRS. See the following for further discussion:
+--   *
+--   <a>https://github.com/JacquesCarette/Drasil/pull/4663#issuecomment-3791189095</a>
+--   *
+--   <a>https://github.com/JacquesCarette/Drasil/pull/4664#issuecomment-3791983458</a>
+[handWiredDefs] :: Choices -> [SimpleQDef]
 
 -- | Architecture of a program
 data Architecture
@@ -1708,21 +1720,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aLoH
-oldCodeSpec :: HasOldCodeSpec c_aLoH => Lens' c_aLoH OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH People
-cMapO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [FilePath]
-constMapO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH ConstantMap
-constantsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Const]
-derivedInputsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Derived]
-execOrderO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Def]
-extInputsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Input]
-inputsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Input]
-modsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Mod]
-outputsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Output]
-pNameO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH Name
-systemdbO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH ChunkDB
+class HasOldCodeSpec c_aLs4
+oldCodeSpec :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 People
+cMapO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [FilePath]
+constMapO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 ConstantMap
+constantsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Const]
+derivedInputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Derived]
+execOrderO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Def]
+extInputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Input]
+inputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Input]
+modsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Mod]
+outputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Output]
+pNameO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 Name
+systemdbO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -2611,7 +2623,7 @@ sampleInputDD :: [CodeVarChunk] -> DataDesc'
 --   down. Full details of Choices documentation
 --   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
-Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [String] -> [Mod] -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> [String] -> [Mod] -> [SimpleQDef] -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
@@ -2650,6 +2662,18 @@ Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Con
 
 -- | List of extra modules for generation.
 [extraMods] :: Choices -> [Mod]
+
+-- | A list of supplementary hand-wired quantity definitions usable in code
+--   generation, unique to a particular code solution.
+--   
+--   FIXME: These formulas are inadequately argued. They should be
+--   constructed through theory refinement in an SDS describing a software
+--   solution for a specific SRS. See the following for further discussion:
+--   *
+--   <a>https://github.com/JacquesCarette/Drasil/pull/4663#issuecomment-3791189095</a>
+--   *
+--   <a>https://github.com/JacquesCarette/Drasil/pull/4664#issuecomment-3791983458</a>
+[handWiredDefs] :: Choices -> [SimpleQDef]
 
 -- | Comment implementation options.
 data Comments
@@ -2921,21 +2945,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aLoH
-oldCodeSpec :: HasOldCodeSpec c_aLoH => Lens' c_aLoH OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH People
-cMapO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [FilePath]
-constMapO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH ConstantMap
-constantsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Const]
-derivedInputsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Derived]
-execOrderO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Def]
-extInputsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Input]
-inputsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Input]
-modsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Mod]
-outputsO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH [Output]
-pNameO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH Name
-systemdbO :: HasOldCodeSpec c_aLoH => Lens' c_aLoH ChunkDB
+class HasOldCodeSpec c_aLs4
+oldCodeSpec :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 People
+cMapO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [FilePath]
+constMapO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 ConstantMap
+constantsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Const]
+derivedInputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Derived]
+execOrderO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Def]
+extInputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Input]
+inputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Input]
+modsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Mod]
+outputsO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 [Output]
+pNameO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 Name
+systemdbO :: HasOldCodeSpec c_aLs4 => Lens' c_aLs4 ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

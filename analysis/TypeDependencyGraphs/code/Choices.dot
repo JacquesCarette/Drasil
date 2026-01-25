@@ -11,4 +11,5 @@ Choices -> InternalConceptName;
 Choices -> Int;
 Choices -> String;
 Choices -> Mod;
+Choices -> SimpleQDef;
 }

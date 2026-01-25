@@ -4,38 +4,26 @@
 %\ds{Make sure we talk about continuous integration / git processes / etc.
 %Actually might belong in the next chapter - iteration and refinement}
 
-The focus of this chapter is the process by which we developed the Drasil 
+This chapter examines the process by which we developed the Drasil 
 framework itself. Rather than describing the general software development 
 process that Drasil is intended to support or automate, we turn our attention 
-inward to examine the steps, decisions, and rationale that guided the creation 
-of the framework. Our goal is to provide transparency into the reasoning that 
-shaped Drasil, highlighting the challenges encountered and the strategies 
-employed to address them. By doing so, we aim to give the reader a clear 
-understanding of how the framework's design emerged from a careful analysis of 
-redundancy and knowledge organization across software artifacts.
+inward to examine the steps, decisions, and rationale that guided its creation. 
+Our goal is to provide transparency into the reasoning that shaped Drasil, 
+highlighting the challenges encountered and the strategies employed to address 
+them. By doing so, we aim to give the reader a clear understanding of how the 
+framework's design emerged from a careful analysis of redundancy and knowledge 
+organization across software artifacts.
 
 As one of the central motivations for developing Drasil was the observation 
-that \sfs{} contain significant, unnecessary redundancy, our first step in 
-removing that redundancy is identifying exactly what it is and where it exists. 
-To that end we need to understand what each of our software artifacts is 
-attempting to communicate, who their audience is, and what information can be 
-considered boilerplate versus system-specific. Luckily, we have an excellent 
-starting point thanks to the work of many smart people: artifact templates.
-
-% Lots of work \ds{cite some people who did this} has been done to specify 
-% exactly what should be documented in a given artifact in an effort for 
-% standardization. Ironically, this has led to many different `standardized' 
-% templates. Through the examination of a number of different artifact templates, 
-% we have concluded they convey roughly the same overall information for a given 
-% artifact. Most differences are stylistic or related to content 
-% organization and naming conventions.
-
-% Once we understand our artifacts, we take a practical, example-driven approach
-% to identifying redundancy through the use of existing software system case
-% studies. For each of these case studies, we start by examining the source code
-% and existing software artifacts to understand exactly what problem they are
-% trying to solve. From there, we attempt to distill the system-specific knowledge
-% and generalize the boilerplate.
+that \sfs{} contain significant, unnecessary redundancy, we begin by motivating 
+our approach through concrete examples of redundancy in \sfs{}. We then 
+describe how we selected and analyzed a set of representative case studies, 
+breaking down their artifacts to identify recurring patterns and organizational 
+structures. This analysis leads to a general methodology for knowledge capture 
+and projection, which ultimately shaped the core principles of Drasil. 
+Throughout, we emphasize the interplay between practical experience and 
+theoretical insight, illustrating how each informed our process and contributed 
+to the framework's evolution.
 
 \section{A minimal motivating example: HGHC}
 \label{sec:hghc-mini}
@@ -63,7 +51,7 @@ equations for $h_g$ and $h_c$ are also given as:
     \]
 
 We can already see repeated knowledge ($k_c$ and $\tau_c$) in these two 
-equations. But the redundancy goes even deeper in the full SRS (which can be 
+equations. The redundancy goes even deeper in the full SRS (which can be 
 found in Appendix~\ref{appendix:hghc}). There we can see repeated descriptions 
 and units for $h_g$ and $h_c$ in the table of symbols and the data definitions. 
 We also observe something more troubling: missing symbols. None of $k_c$, 
@@ -89,30 +77,29 @@ created based on these definitions, the challenge of maintaining consistency
 becomes even greater. Corrections would now be required across multiple input 
 languages (for example, \LaTeX{} and Python), significantly increasing the 
 verification burden. Ultimately, these \sfs{} are communicating much of the 
-same knowledge, merely formatted for different audiences. In the case of the 
-SRS and the source code, the audiences are human stakeholders and computers, 
-respectively, but both require a precise definition of $h_g$ and $h_c$.
+same knowledge (i.e. the definitions of $h_g$ and $h_c$), merely formatted for 
+different audiences. In the case of the SRS and the source code, the audiences 
+are human stakeholders and computers, respectively.
 
 This small example foreshadows the larger patterns of redundancy that we 
-observe in more complex systems. The rest of this chapter 
-generalizes from such examples, showing how we systematically identified, 
-categorized, and addressed these issues in the development of Drasil.
+observe in more complex systems. The rest of this chapter generalizes from such 
+examples, showing how we systematically identified, categorized, and addressed 
+these issues in the development of Drasil.
 
 \section{A (very) brief introduction to our case study systems}
 
-To ground our analysis in practical reality and move beyond abstract 
-principles, this thesis draws on a set of detailed case studies. These case 
-studies serve not only to illustrate the prevalence and impact of redundant 
-knowledge in \sfs{}, but also to provide a concrete basis for systematically 
-identifying, comparing, and generalizing patterns of redundancy and knowledge 
-organization. By examining systems developed using common artifact templates, 
-we are able to empirically motivate the need for the Drasil framework and 
-inform its design. 
+To ground our analysis in reality and move beyond abstract principles, this 
+thesis draws on a set of detailed case studies. These case studies serve not 
+only to illustrate the prevalence and impact of redundant knowledge in \sfs{}, 
+but also to provide a concrete basis for systematically identifying, comparing, 
+and generalizing patterns of redundancy and knowledge organization. By 
+examining systems developed using common artifact templates, we are able to 
+motivate the need for the Drasil framework and inform its design. 
 
 To simplify the process of identifying redundancies and patterns, we have chosen
 several case studies developed using common artifact templates, specifically 
-those used by \smithea{} \ds{source?} Also, as mentioned in 
-Section~\ref{sec:scope}, we have chosen software systems that follow the 
+those used by \smithea{} \ds{source?} Also, as previously mentioned in 
+Section~\ref{sec:scope}, our case study software systems follow the 
 \mbox{$`input'~\rightarrow~`process'~\rightarrow~`output'$} pattern. These 
 systems cover a variety of use cases, to help avoid over-specializing into one 
 particular system type. 
@@ -122,6 +109,10 @@ problems. The following cards are meant to be used as a high-level reference to
 each case study, providing the general details at a glance. For the specifics 
 of each system, all relevant case study artifacts can be found in the GitHub 
 repository.
+
+\ds{The cards were initially going to say more, but I might convert them into a 
+table at this point. Though I like a bit of visual difference.}
+%if removing cards, update above sentence
 
 \card{\gb}
 {We need to efficiently and correctly predict whether a glass 
@@ -185,25 +176,21 @@ type and understand exactly what they are trying to convey.
 \section{Breaking down \sfs}
 \label{sec:breakdown}
 
-To meaningfully address redundancy in software artifacts, it is not enough to 
-simply observe that repetition exists; we must also understand the purpose, 
-content, and intended audience of each artifact. Building on the foundation 
-provided by our case studies, this section systematically examines the 
-structure and role of each major \sf{} in our process. By breaking down these 
-artifacts, we aim to reveal both their commonalities and their differences, 
-setting the stage for identifying patterns of knowledge organization and 
-redundancy that inform the design of Drasil.
+To meaningfully address redundancy in software artifacts, we must understand 
+the purpose, content, and audience of each artifact\textemdash{}not just 
+observe repetition. Building on the foundation provided by our case studies, 
+this section examines the structure and role of each major \sf{} in our 
+process. By breaking down these artifacts, we aim to reveal both their 
+commonalities and their differences, setting the stage for identifying patterns 
+of knowledge organization and redundancy that inform the design of Drasil.
 
 As noted earlier, for our approach to work we must understand exactly what each
-of our artifacts are trying to say and to whom.\footnote{Refer to 
+of our \sfs{} are trying to say and to whom.\footnote{Refer to 
 Section~\ref{sec:sfs} for a general summary of \sfs{}.} By selecting our case 
 studies from those developed using common artifact templates, we have given 
-ourselves a head start on that process, however, there is still much work to be 
-done.
-
-The following subsections present a brief sampling of our process of breaking 
-down \sfs{}, acknowledging that a comprehensive overview would be excessively 
-lengthy.
+ourselves a head start on that process. The following subsections present a 
+brief sampling of our process of breaking down \sfs{}, acknowledging that a 
+comprehensive overview would be excessively lengthy.
 
 \subsection{SRS}
 \label{sec:breakdown:srs}
@@ -274,27 +261,24 @@ contents for an SRS using the \smithea{} template.
 \item Appendix
 \end{enumerate}
   \end{center}
-}{The Table of Contents from the (\ds{expanded?}) \smithea{} 
-template}{fig:SRSToC}
+}{The Table of Contents from the expanded \smithea{} template}{fig:SRSToC}
 
 With the structure of the document in mind, let us look at several of our case
 studies' SRS documents to get a deeper understanding of what each section truly
 represents. Figure~\ref{fig:csRefSecs} shows the reference section of the SRS 
 for \gb. Each of the case studies' SRS contains a similar section so for 
 brevity we will omit the others here, but they can be found in the GitHub 
-repository. 
-% Provide a link / ref to relevant appendix
-We will look into the case studies in more detail later \ds{will we actually? 
-depends on length of chapter}, for now we will try to 
-ignore any superficial differences (spelling, grammar, phrasing, etc.) in each 
-of them while we look for commonality. We are also trying to determine how the 
-non-superficial differences relate to the document template, general problem 
-domain, and specific system information.
+repository. We will try to ignore any superficial differences (spelling, 
+grammar, phrasing, etc.) in each of the case studies while we look for 
+commonality. We are also trying to determine how the non-superficial 
+differences relate to the document template, general problem domain, and 
+specific system information.
+
+\ds{The figure with subfigures might be a hassle to keep co-located, might 
+split it up into 3 separate figures and just refer to them collectively}
 
 \fig{
 \centering
-%\emph{Figure showing the Ref Section of one case 
-%			study, split into multiple subfigures - case study TBD}
 \begin{subfigure}{\textwidth}
 \centering
 \fbox{\includegraphics[width=\textwidth]{figures/gb_SRS_ToU.png}}
@@ -357,7 +341,10 @@ see distinct differences in the types of information contained in each section.
 Again we find some is boilerplate text meant to give a generic 
 (non-system-specific) overview, some is specific to the proposed system, and 
 some is in-between: it is specific to the problem domain for the proposed 
-system, but not necessarily specific to the system itself.
+system, but not necessarily specific to the system itself. For example, many 
+theoretical models would fall into that in-between category\textemdash{}they 
+represent theories from their problem domain (ex. Physics) that are used to 
+derive the system-specific knowledge.
 
 Observing the contents of an SRS template adhere to said template may seem 
 mundane, but it is a necessary step before we can move on to other \sfs{}. 
@@ -401,12 +388,13 @@ that the system may undergo during its lifecycle.
 {fig:gbrmgtoc}
 
 Figure~\ref{fig:gbrmgtoc} shows the table of contents for the \gb{} case 
-study's MG. For the sake of brevity we will omit the other case studies 
-here (they can be found at \ds{TODO}). Just as with the SRS we are looking for 
-commonality and understanding of what the document is trying to portray to the 
-reader. As such we will ignore superficial differences between the MG sections. 
-As the MG is a fairly short document we will look at each of the most relevant 
-sections as part of this exercise.
+study's MG. Again, for the sake of brevity we will omit the other case studies 
+here, even though we engaged in the same breakdown process for each of them. 
+Just as with the SRS we are looking for commonality and understanding of 
+what the document is trying to portray to the reader. As such we will ignore 
+superficial differences between the MG sections. As the MG is a fairly short 
+document we will look at each of the most relevant sections as part of this 
+exercise.
 
 Breaking down the MG by section, we can see that the introduction is itself 
 completely generic boilerplate explaining the purpose of the MG, the audience, 
@@ -557,6 +545,12 @@ very obvious transformation from one form to the other; the symbol used by the
 DD is the (partial) name of the function in the source code and the equation 
 from the DD is calculated within the source code. This is one of many patterns 
 we see across our \sfs{} within each case study.
+
+By systematically dissecting each artifact type, we not only reveal the sources 
+and forms of redundancy, but also clarify the requirements for any framework 
+(Drasil) that aims to automate or improve the generation of these artifacts. 
+This analysis directly informs the patterns and organizational strategies we 
+discuss in the following sections.
 
 \section{Identifying Repetitive Redundancy}
 \label{sec:patterns}
@@ -744,25 +738,11 @@ repetition, and is where we need to focus if we intend to reduce unnecessary
 redundancy.
 
 \section{Organizing knowledge - a fluid approach}
-%  **Subsec roadmap:
-%    - We see the patterns above, we can generalize a lot of that
-%    - Direct repetition (copy-paste) vs indirect repetition (view-changes)
-%    require us to pull together knowledge from all artifacts into one place
-%    - Some can be derived automatically, the rest must be explicitly stated
-%    - We need to create a categorization system (hint at chunks) that is both
-%    robust and extensible to cover a wide variety of use cases.
-%    - Finally the templates give us structure
-%
-%  **NOTE: Under the hood section should explain the process of how we 
-%determined
-%  what we needed to do. What we ended up doing should come in the following
-%  section(s) - no 'real' implementation details, only conceptual stuff here.
-%
-%- Some ``boilerplate" information is actually in the domain of \sf{} writing 
-%and 
-%thus is so broad, yet relevant to everything we do, that we consider it 
-%completely general. Things like stakeholders, characteristics of the intended 
-%audience, etc.
+
+Recognizing the patterns of redundancy, this section discusses our conceptual 
+approach to organizing and managing knowledge. Here, we generalize from 
+specific examples to propose a flexible framework for knowledge capture and 
+projection, laying the groundwork for Drasil's design.
 
 Given the knowledge categories and patterns of use across \sfs{} we have seen 
 in the previous section, we can generalize knowledge projections by their 
@@ -854,14 +834,11 @@ knowledge", "project knowledge", and have the framework to support that across
 multiple \sf{} domains and multiple code langs}
   
 \section{Summary - The seeds of Drasil}
-%  **Subsec roadmap:
-%    -- Summarize the above subsections and lead into next section
-%    -- Add relevant information that doesn't quite fit above 
-%      and isn't implementation related
-%    -- 'Relevant buckshot section'
 
-\ds{Point out what the reader should have learned from this chapter before 
-anything else}
+This final section synthesizes the chapter's findings, highlighting the key 
+insights that inform the design of Drasil. By summarizing our process and 
+rationale, we prepare the reader for the transition from analysis to 
+implementation in the following chapter.
 
 Through this chapter, as part of our effort to reduce unnecessary redundancy 
 across the software development process, we have taken an approach to breaking 

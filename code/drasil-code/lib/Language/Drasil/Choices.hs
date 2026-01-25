@@ -9,7 +9,8 @@ module Language.Drasil.Choices (
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs, InternalConcept(..)) where
+  choicesSent, showChs, InternalConcept(..)
+) where
 
 import Control.Lens ((^.))
 import Data.Map (Map)
@@ -18,6 +19,7 @@ import qualified Data.Map as Map
 import Drasil.Database (UID, HasUID (..))
 import Drasil.GOOL (CodeType)
 import Language.Drasil hiding (None)
+import Utils.Drasil (RelativeFile)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
 
@@ -51,7 +53,7 @@ data Choices = Choices {
   folderVal :: Int,
   -- | A list of "program configuration files" to be copied over to the exported
   -- project, required for execution, and configurable by the user.
-  defaultConfigFiles :: [String],
+  defaultConfigFiles :: [RelativeFile],
   -- | List of extra modules for generation.
   extraMods :: [Mod],
   -- | A list of supplementary hand-wired quantity definitions usable in code

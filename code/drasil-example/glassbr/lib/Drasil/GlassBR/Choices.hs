@@ -24,15 +24,15 @@ choices = defaultChoices {
   srsConstraints = makeConstraints Exception Exception,
   defaultConfigFiles = configFp,
   extraMods = allMods,
-  handWiredDefs = [strDisFacQD, calofDemandQD, tolPreQD]
+  handWiredDefs = [strDisFacQD, demandQD, tolPreQD]
 }
 
 strDisFacQD :: SimpleQDef
 strDisFacQD = mkQuantDef stressDistFac
   $ apply interpZ [str "SDF.txt", sy aspectRatio, sy dimlessLoad]
 
-calofDemandQD :: SimpleQDef
-calofDemandQD = mkQuantDef demand
+demandQD :: SimpleQDef
+demandQD = mkQuantDef demand
   $ apply interpY [str "TSD.txt", sy standOffDist, sy eqTNTWeight]
 
 tolPreQD :: SimpleQDef

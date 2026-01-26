@@ -36,7 +36,7 @@ module Language.Drasil.Code (
   Lang(..),
   CodeChunk, CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, ccObjVar,
   listToArray,
-  field, FileInfoState(..), headers, sources, mainMod,
+  field, FileInfoState(..),
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..),
   ODELibPckg(..), mkODELib, mkODELibNoPath,
   -- Language.Drasil.Chunk.NamedArgument
@@ -48,8 +48,7 @@ module Language.Drasil.Code (
 import Prelude hiding (break, print, return, log, exp)
 
 import Drasil.Code.CodeExpr (field)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (FileInfoState(..),
-  headers, mainMod, sources)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (FileInfoState(..))
 import Language.Drasil.Code.Imperative.Generator (generator, generateCode,
   generateCodeProc)
 import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc,

@@ -21,13 +21,13 @@ exportWebsite syst doc fileName = do
   let printSetting = piSys (syst ^. systemdb) (syst ^. refTable) Equational defaultConfiguration
       dir = "Website/HTML"
       pd = makeDocument printSetting doc
-  
+
   createDirIfMissing True dir
-  
+
   outh <- openFile (dir ++ "/" ++ fileName ++ ".html") WriteMode
   hPutStrLn outh $ render $ genHTML fileName pd
   hClose outh
-  
+
   outh2 <- openFile (dir ++ "/" ++ fileName ++ ".css") WriteMode
   hPutStrLn outh2 $ render $ makeCSS doc
   hClose outh2

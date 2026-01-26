@@ -1,10 +1,7 @@
 module Language.Drasil.Printers (
-  -- * Formats
-  DocType(SRS, Website, Lesson),
-  Format(..)
   -- * HTML
   -- ** Printer
-  , genHTML
+    genHTML
   -- ** Helpers
   , makeCSS
   -- * Markdown
@@ -33,8 +30,6 @@ module Language.Drasil.Printers (
   , defaultConfiguration, plainConfiguration
 ) where
 
-import Language.Drasil.Format (DocType(SRS, Website, Lesson),
-  Format(..))
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJupyterLessonPlan, genJupyterSRS)

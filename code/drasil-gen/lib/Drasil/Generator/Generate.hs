@@ -34,15 +34,16 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
-  makeRequirements, genHTML, genTeX, genMDBook, makeBook, defaultConfiguration,
-  piSys, PrintingInformation, genJupyterSRS)
+import Language.Drasil.Printers (makeCSS, makeRequirements, genHTML, genTeX,
+  genMDBook, makeBook, defaultConfiguration, piSys, PrintingInformation,
+  genJupyterSRS)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Drasil.System (System, programName, refTable, systemdb)
 import Utils.Drasil (createDirIfMissing)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
+import Drasil.Generator.Format
 import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC), docChoices)
 import Drasil.Generator.TraceabilityGraphs (outputDot)
 import Drasil.Generator.TypeCheck (typeCheckSI)

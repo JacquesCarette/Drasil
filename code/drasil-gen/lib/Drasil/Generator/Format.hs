@@ -1,5 +1,5 @@
 -- | Possible formats for printer output.
-module Language.Drasil.Format where
+module Drasil.Generator.Format where
 
 -- | Document types include Software Requirements Specification and Website.
 -- Choosing SRS will generate both TeX and HTML files, while Website generates only as HTML.

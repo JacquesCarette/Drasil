@@ -8,10 +8,12 @@ module Drasil.Generator.Formats (
 ) where
 
 import Data.Char (toLower)
+
 import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeVar,
   mkFile, mkRule, RuleTransformer(makeRule))
-import Language.Drasil.Printers (DocType(..), Format(TeX, MDBook))
 import Drasil.Metadata (watermark)
+
+import Drasil.Generator.Format
 
 -- | When choosing your document, you must specify the filename for
 -- the generated output (specified /without/ a file extension).

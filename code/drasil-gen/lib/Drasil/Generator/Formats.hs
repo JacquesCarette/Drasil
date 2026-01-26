@@ -3,19 +3,41 @@ module Drasil.Generator.Formats (
   -- * Types (Printing Options)
   DocType(..), DocSpec(DocSpec), DocChoices(..),
   DocClass(..), UsePackages(..), ExDoc(..), Filename,
+  Format(..),
   -- * Constructors
   docChoices
 ) where
 
 import Data.Char (toLower)
+
 import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeVar,
   mkFile, mkRule, RuleTransformer(makeRule))
-import Language.Drasil.Printers (DocType(..), Format(TeX, MDBook))
 import Drasil.Metadata (watermark)
 
 -- | When choosing your document, you must specify the filename for
 -- the generated output (specified /without/ a file extension).
 type Filename = String
+
+-- | Document types include Software Requirements Specification and Website.
+-- Choosing SRS will generate both TeX and HTML files, while Website generates
+-- only as HTML. This also determines what folders the generated files will be
+-- placed into.
+data DocType = SRS | Website
+
+-- | Possible formats for printer output.
+data Format = TeX | Plain | HTML | Jupyter | MDBook
+
+instance Show Format where
+  show TeX     = "PDF"
+  show Plain   = "Plain"
+  show HTML    = "HTML"
+  show Jupyter = "Jupyter"
+  show MDBook  = "mdBook"
+
+-- | Shows the different types of documents.
+instance Show DocType where
+  show SRS     = "SRS"
+  show Website = "Website"
 
 -- | Document choices include the type of document as well as the file formats we want to generate as.
 data DocChoices = DC {

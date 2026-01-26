@@ -1,6 +1,6 @@
 module Language.Drasil.Printers (
   -- * Formats
-  DocType(SRS, Website, Lesson),
+  DocType(SRS, Website),
   Format(..)
   -- * HTML
   -- ** Printer
@@ -33,7 +33,7 @@ module Language.Drasil.Printers (
   , defaultConfiguration, plainConfiguration
 ) where
 
-import Language.Drasil.Format (DocType(SRS, Website, Lesson),
+import Language.Drasil.Format (DocType(SRS, Website),
   Format(..))
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)

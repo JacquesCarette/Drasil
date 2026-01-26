@@ -21,7 +21,7 @@ module Language.Drasil.Printers (
   -- * TeX
   , genTeX
   -- * Jupyter
-  , genJupyter
+  , genJupyterLessonPlan, genJupyterSRS
   -- * Markdown
   , genMDBook, makeBook, makeRequirements
   -- * Log
@@ -37,7 +37,7 @@ import Language.Drasil.Format (DocType(SRS, Website, Lesson),
   Format(..))
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
-import Language.Drasil.JSON.Print (genJupyter)
+import Language.Drasil.JSON.Print (genJupyterLessonPlan, genJupyterSRS)
 import Language.Drasil.Markdown.Print (genMDBook)
 import Language.Drasil.Markdown.Config (makeBook, makeRequirements)
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,

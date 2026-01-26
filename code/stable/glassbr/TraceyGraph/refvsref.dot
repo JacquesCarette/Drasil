@@ -2,11 +2,8 @@ digraph refvsref {
 	theory:riskFun -> dataDefn:minThick;
 	theory:riskFun -> dataDefn:loadDurFactor;
 	theory:nFL -> dataDefn:minThick;
-	theory:nFL -> theory:tolLoad;
 	theory:dimlessLoad -> dataDefn:minThick;
 	theory:dimlessLoad -> dataDefn:glassTypeFac;
-	theory:tolLoad -> dataDefn:aR;
-	theory:tolLoad -> theory:sdfTol;
 	theory:sdfTol -> dataDefn:minThick;
 	theory:sdfTol -> dataDefn:loadDurFactor;
 	theory:probBr -> theory:riskFun;
@@ -41,7 +38,6 @@ digraph refvsref {
 	theory:riskFun	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
 	theory:nFL	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nFL"];
 	theory:dimlessLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:dimlessLoad"];
-	theory:tolLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:tolLoad"];
 	theory:sdfTol	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:sdfTol"];
 	theory:probBr	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:probOfBreak"];
 	theory:lResistance	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calofCapacity"];
@@ -50,7 +46,7 @@ digraph refvsref {
 
 	subgraph IM {
 	rank="same"
-	{theory:riskFun, theory:nFL, theory:dimlessLoad, theory:tolLoad, theory:sdfTol, theory:probBr, theory:lResistance, theory:isSafePb, theory:isSafeLR}
+	{theory:riskFun, theory:nFL, theory:dimlessLoad, theory:sdfTol, theory:probBr, theory:lResistance, theory:isSafePb, theory:isSafeLR}
 	}
 
 }

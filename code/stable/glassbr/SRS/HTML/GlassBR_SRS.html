@@ -237,11 +237,6 @@
                   <td><em>m</em></td>
                 </tr>
                 <tr>
-                  <td><em>interpY</em></td>
-                  <td>InterpY</td>
-                  <td>--</td>
-                </tr>
-                <tr>
                   <td><em>isSafeLoad</em></td>
                   <td>Load resistance safety requirement</td>
                   <td>--</td>
@@ -1286,9 +1281,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#IM:tolLoad>IM:tolLoad</a></p>
-                      </td>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -1508,9 +1501,6 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>q&#770;<sub>tol</sub></em> is defined in <a href=#IM:tolLoad>IM:tolLoad</a>.
-                        </p>
-                        <p class="paragraph">
                           <em>E</em> comes from <a href=#assumpSV>A:standardValues</a>.
                         </p>
                         <p class="paragraph">
@@ -1625,79 +1615,6 @@
                     </tr>
                   </table>
                 </div>
-                <div id="IM:tolLoad">
-                  <table class="idefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>IM:tolLoad</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Tolerable load</p></td>
-                    </tr>
-                    <tr>
-                      <th>Input</th>
-                      <td>
-                        <p class="paragraph"><em>AR</em>, <em>J<sub>tol</sub></em></p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Output</th>
-                      <td><p class="paragraph"><em>q&#770;<sub>tol</sub></em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Input Constraints</th>
-                      <td>\[\mathit{AR}\geq{}1\]</td>
-                    </tr>
-                    <tr>
-                      <th>Output Constraints</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[{\hat{q}_{\text{tol}}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},{J_{\text{tol}}}\right)\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
-                          </li>
-                          <li><em>interpY</em> is the interpY (Unitless)</li>
-                          <li><em>AR</em> is the aspect ratio (Unitless)</li>
-                          <li>
-                            <em>J<sub>tol</sub></em> is the tolerable stress distribution factor (Unitless)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>q&#770;<sub>tol</sub></em> is obtained by interpolating from data shown in <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>AR</em> is defined in <a href=#DD:aspectRatio>DD:aspectRatio</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>J<sub>tol</sub></em> is defined in <a href=#IM:sdfTol>IM:sdfTol</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td><p class="paragraph"><a href=#IM:nFL>IM:nFL</a></p></td>
-                    </tr>
-                  </table>
-                </div>
                 <div id="IM:sdfTol">
                   <table class="idefn">
                     <tr>
@@ -1796,9 +1713,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#IM:tolLoad>IM:tolLoad</a></p>
-                      </td>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -2452,12 +2367,6 @@
                   <td><a href=#IM:dimlessLoad>IM:dimlessLoad</a></td>
                   <td>--</td>
                 </tr>
-                <tr>
-                  <td><em>q&#770;<sub>tol</sub></em></td>
-                  <td>Tolerable load</td>
-                  <td><a href=#IM:tolLoad>IM:tolLoad</a></td>
-                  <td>--</td>
-                </tr>
               </table>
               <p class="caption">Required Outputs</p>
             </div>
@@ -2805,17 +2714,6 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#IM:tolLoad>IM:tolLoad</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#IM:sdfTol>IM:sdfTol</a></td>
               <td></td>
               <td></td>
@@ -3115,7 +3013,6 @@
               <th><a href=#IM:riskFun>IM:riskFun</a></th>
               <th><a href=#IM:nFL>IM:nFL</a></th>
               <th><a href=#IM:dimlessLoad>IM:dimlessLoad</a></th>
-              <th><a href=#IM:tolLoad>IM:tolLoad</a></th>
               <th><a href=#IM:sdfTol>IM:sdfTol</a></th>
               <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
               <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
@@ -3124,7 +3021,6 @@
             </tr>
             <tr>
               <td><a href=#DD:minThick>DD:minThick</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3160,11 +3056,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:gTF>DD:gTF</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3200,11 +3094,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:aspectRatio>DD:aspectRatio</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3240,11 +3132,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:isSafeProb>TM:isSafeProb</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3280,13 +3170,11 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:riskFun>IM:riskFun</a></td>
               <td>X</td>
               <td>X</td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3315,7 +3203,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3340,33 +3227,11 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#IM:tolLoad>IM:tolLoad</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:sdfTol>IM:sdfTol</a></td>
               <td>X</td>
               <td>X</td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3400,7 +3265,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:calofCapacity>IM:calofCapacity</a></td>
@@ -3414,7 +3278,6 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3436,7 +3299,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3444,7 +3306,6 @@
             </tr>
             <tr>
               <td><a href=#IM:isSafeLR>IM:isSafeLR</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3482,7 +3343,6 @@
               <th><a href=#IM:riskFun>IM:riskFun</a></th>
               <th><a href=#IM:nFL>IM:nFL</a></th>
               <th><a href=#IM:dimlessLoad>IM:dimlessLoad</a></th>
-              <th><a href=#IM:tolLoad>IM:tolLoad</a></th>
               <th><a href=#IM:sdfTol>IM:sdfTol</a></th>
               <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
               <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
@@ -3511,7 +3371,6 @@
               <td>
                 <a href=#willBreakGS>GS:Predict-Glass-Withstands-Explosion</a>
               </td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3571,13 +3430,11 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#sysSetValsFollowingAssumps>FR:System-Set-Values-Following-Assumptions</a>
               </td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3639,13 +3496,11 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#outputValsAndKnownValues>FR:Output-Values-and-Known-Values</a>
               </td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3677,7 +3532,6 @@
             </tr>
             <tr>
               <td><a href=#checkGlassSafety>FR:Check-Glass-Safety</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3737,11 +3591,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#correct>NFR:Correctness</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3801,11 +3653,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#understandable>NFR:Understandability</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3865,7 +3715,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR:Maintainability</a></td>
@@ -3897,11 +3746,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#portable>NFR:Portablity</a></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>

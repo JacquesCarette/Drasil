@@ -3,28 +3,26 @@ module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) wher
 import Control.Lens ((^.))
 import Prelude hiding (exp)
 
-import Drasil.Database (HasUID)
 import Drasil.Sentence.Combinators (definedIn', definedIn)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
-import Language.Drasil.Chunk.Concept.NamedCombinators
+import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN, output)
 
 import Data.Drasil.Citations (campidelli)
-import Data.Drasil.Concepts.Documentation (goal, user, datum)
-import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.Documentation (goal, user)
+import Data.Drasil.SI_Units (kilogram, metre)
 
-import Drasil.GlassBR.DataDefs (aGrtrThanB, arRef, glaTyFac,
+import Drasil.GlassBR.DataDefs (aGrtrThanB, glaTyFac,
   gtfRef, hRef, loadDFDD, stdVals)
-import Drasil.GlassBR.LabelledContent (dimlessloadVsARFig)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals
 
 iMods :: [InstanceModel]
-iMods = [risk, nonFL, dimLL, tolPre, tolStrDisFac, probOfBreak,
-  calofCapacity, pbIsSafe, lrIsSafe]
+iMods = [risk, nonFL, dimLL, tolStrDisFac, probOfBreak, calofCapacity,
+  pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
 symb = [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram,
@@ -33,9 +31,6 @@ symb = [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram,
 abInputConstraints :: [(DefinedQuantityDict, Maybe (RealInterval Expr Expr))]
 abInputConstraints = [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
                       qwC plateWidth $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen)]
-
-aspectRatioConstraint :: RealInterval Expr Expr
-aspectRatioConstraint = UpFrom (Inc, exactDbl 1)
 
 probConstraint :: RealInterval Expr Expr
 probConstraint = Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)
@@ -61,7 +56,7 @@ nonFL :: InstanceModel
 nonFL = imNoDeriv (equationalModelN (nonFactorL ^. term) nonFLQD)
   (qwUC tolLoad : qwUC modElas : qwUC minThick : abInputConstraints)
   (dqdWr nonFactorL) [] [dRef astm2009] "nFL"
-  [qHtTlTolRef, stdVals [modElas], hRef, aGrtrThanB]
+  [stdVals [modElas], hRef, aGrtrThanB]
 
 nonFLEq :: Expr
 nonFLEq = (sy tolLoad $* sy modElas) $* (sy minThick $^ exactDbl 4) $/
@@ -84,21 +79,6 @@ dimLLEq = sy demand $* square (sy plateLen $* sy plateWidth)
 
 dimLLQD :: SimpleQDef
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
-
-{--}
-
-tolPre :: InstanceModel
-tolPre = imNoDeriv (equationalModelN (tolLoad ^. term) tolPreQD)
-  [qwC aspectRatio aspectRatioConstraint, qwUC $ tolStrDisFac ^. output] tolLoad []
-  [dRef astm2009] "tolLoad" [interpolating tolLoad dimlessloadVsARFig, arRef,
-    jtolRef]
-
-tolPreEq :: Expr
---tolPreEq = apply (sy tolLoad) [sy sdfTol, (sy plateLen) / (sy plateWidth)]
-tolPreEq = apply interpY [str "SDF.txt", sy aspectRatio, sy sdfTol]
-
-tolPreQD :: SimpleQDef
-tolPreQD = mkQuantDef tolLoad tolPreEq
 
 {--}
 
@@ -182,16 +162,9 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafeLR +:+ fromSource lrIsSafe)
 
-capRef, jtolRef, ldfRef, nonFLRef, probBRRef, qHtTlTolRef, riskRef :: Sentence
+capRef, ldfRef, nonFLRef, probBRRef, riskRef :: Sentence
 capRef      = definedIn' calofCapacity (S "and is also called capacity")
-jtolRef     = definedIn  tolStrDisFac
 ldfRef      = definedIn  loadDFDD
 nonFLRef    = definedIn  nonFL
 probBRRef   = definedIn  probOfBreak
-qHtTlTolRef = definedIn  tolPre
 riskRef     = definedIn  risk
-
--- Helper --
-interpolating :: (HasUID s, HasSymbol s, Referable f, HasShortName f) => s -> f -> Sentence
-interpolating s f = foldlSent [ch s `S.is` S "obtained by interpolating from",
-  plural datum, S "shown" `S.in_` refS f]

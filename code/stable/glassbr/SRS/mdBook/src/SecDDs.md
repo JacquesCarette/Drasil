@@ -84,7 +84,7 @@ This section collects and defines all the data needed to build the instance mode
 |Description|<ul><li>\\(\mathit{AR}\\) is the aspect ratio (Unitless)</li><li>\\(a\\) is the plate length (long dimension) (\\({\text{m}}\\))</li><li>\\(b\\) is the plate width (short dimension) (\\({\text{m}}\\))</li></ul>|
 |Notes      |<ul><li>\\(a\\) and \\(b\\) are the dimensions of the plate, where (\\(a\geq{}b\\)).</li></ul>                                                                                                                    |
 |Source     |[astm2009](./SecReferences.md#astm2009)                                                                                                                                                                           |
-|RefBy      |[IM:tolLoad](./SecIMs.md#IM:tolLoad)                                                                                                                                                                              |
+|RefBy      |                                                                                                                                                                                                                  |
 
 <div align="center">
 

@@ -10,7 +10,7 @@ import Utils.Drasil (RelativeFile, relativeFile)
 
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.Unitals (aspectRatio, standOffDist, stressDistFac,
-  demand, eqTNTWeight, dimlessLoad, interpY, interpZ)
+  demand, eqTNTWeight, dimlessLoad, sdfTol, tolLoad, interpY, interpZ)
 
 choices :: Choices
 choices = defaultChoices {
@@ -24,7 +24,7 @@ choices = defaultChoices {
   srsConstraints = makeConstraints Exception Exception,
   defaultConfigFiles = configFp,
   extraMods = allMods,
-  handWiredDefs = [strDisFacQD, calofDemandQD]
+  handWiredDefs = [strDisFacQD, calofDemandQD, tolPreQD]
 }
 
 strDisFacQD :: SimpleQDef
@@ -34,6 +34,10 @@ strDisFacQD = mkQuantDef stressDistFac
 calofDemandQD :: SimpleQDef
 calofDemandQD = mkQuantDef demand
   $ apply interpY [str "TSD.txt", sy standOffDist, sy eqTNTWeight]
+
+tolPreQD :: SimpleQDef
+tolPreQD = mkQuantDef tolLoad
+  $ apply interpY [str "SDF.txt", sy aspectRatio, sy sdfTol]
 
 configFp :: [RelativeFile]
 configFp = map relativeFile ["SDF.txt", "TSD.txt"]

@@ -12,7 +12,7 @@ import Utils.Drasil (capitalize)
 import Language.Drasil.Code.Imperative.Build.AST (asFragment, DocConfig(..),
   BuildConfig(BuildConfig), BuildDependencies(..), Ext(..), includeExt,
   NameOpts, nameOpts, packSep, Runnable(Runnable), BuildName(..), RunType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (FileInfoState,
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (SoftwareDossierState,
   headers, sources, mainMod)
 
 import Build.Drasil (Annotation, (+:+), genMake, makeS, MakeString, mkFile, mkRule,
@@ -24,7 +24,7 @@ import Drasil.Metadata (watermark)
 data CodeHarness = Ch {
   buildConfig :: Maybe BuildConfig,
   runnable :: Maybe Runnable,
-  fileInfoState :: FileInfoState,
+  fileInfoState :: SoftwareDossierState,
   progData :: ProgData,
   docConfig :: Maybe DocConfig}
 
@@ -59,7 +59,7 @@ progPurpAdd m = if progPurp m /= [] then "Project Purpose: " ++
                 else []
 
 -- | Helper that renders information into a MakeString. Dependent on the 'BuildName' criteria.
-renderBuildName :: FileInfoState -> ProgData -> NameOpts -> BuildName -> MakeString
+renderBuildName :: SoftwareDossierState -> ProgData -> NameOpts -> BuildName -> MakeString
 renderBuildName s _ _ BMain = makeS $ maybe (error "Main module missing")
   takeBaseName (s ^. mainMod)
 renderBuildName _ p _ BPackName = makeS (progName p)
@@ -76,12 +76,12 @@ renderExt CodeExt f = makeS $ takeExtension f
 renderExt (OtherExt e) _ = e
 
 -- | Helper that records the compiler input information.
-getCompilerInput :: BuildDependencies -> FileInfoState -> ProgData -> [MakeString]
+getCompilerInput :: BuildDependencies -> SoftwareDossierState -> ProgData -> [MakeString]
 getCompilerInput BcSource s _ = map makeS $ s ^. sources
 getCompilerInput (BcSingle n) s p = [renderBuildName s p nameOpts n]
 
 -- | Helper that retrieves commented files.
-getCommentedFiles :: FileInfoState -> [MakeString]
+getCommentedFiles :: SoftwareDossierState -> [MakeString]
 getCommentedFiles s = map makeS (nubOrd (s ^. headers ++
   maybeToList (s ^. mainMod)))
 
@@ -92,7 +92,7 @@ buildRunTarget fn (Interpreter i) = foldr (+:+) mempty $ i ++ [fn]
 
 -- | Creates a Makefile.
 makeBuild :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable ->
-  FileInfoState -> ProgData -> Doc
+  SoftwareDossierState -> ProgData -> Doc
 makeBuild d b r s p = genMake [Ch {
   buildConfig = b,
   runnable = r,

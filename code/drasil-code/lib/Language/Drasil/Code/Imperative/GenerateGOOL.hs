@@ -14,7 +14,7 @@ import Language.Drasil hiding (List)
 import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..),
-  FileInfoState)
+  SoftwareDossierState)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), AuxFile(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
@@ -56,7 +56,7 @@ genModule :: (OOProg r) => Name -> Description ->
 genModule n desc = genModuleWithImports n desc []
 
 -- | Generates a Doxygen configuration file if the user has comments enabled.
-genDoxConfig :: (AuxiliarySym r) => FileInfoState -> GenState (Maybe (r FileAndContents))
+genDoxConfig :: (AuxiliarySym r) => SoftwareDossierState -> GenState (Maybe (r FileAndContents))
 genDoxConfig s = do
   g <- get
   let n = codeSpec g ^. pNameO

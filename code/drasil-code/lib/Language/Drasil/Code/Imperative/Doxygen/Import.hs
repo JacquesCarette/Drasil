@@ -10,7 +10,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
 import Utils.Drasil (blank)
 
 import Language.Drasil.Choices (Verbosity(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (FileInfoState,
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (SoftwareDossierState,
   headers, mainMod)
 
 -- | A 'Doc' that holds optimized choices for configuring doxygen files.
@@ -42,10 +42,10 @@ defYes = defaultValSentence <> yes <> text "."
 -- | Renders a Doxygen configuration file.
 --
 --     * Sets the PROJECT_NAME field according to the given name.
---     * Sets the INPUT field to the header files contained in the given FileInfoState.
+--     * Sets the INPUT field to the header files contained in the given SoftwareDossierState.
 --     * Sets the OPTIMIZE_OUTPUT_JAVA field according to the OptimizeChoice parameter.
 --     * Sets the QUIET field according to the given Verbosity.
-makeDoxConfig :: ProjName -> FileInfoState -> OptimizeChoice -> Verbosity -> Doc
+makeDoxConfig :: ProjName -> SoftwareDossierState -> OptimizeChoice -> Verbosity -> Doc
 makeDoxConfig prog s opt v =
   let fs = nub (s ^. headers ++ maybeToList (s ^. mainMod))
   in vcat [

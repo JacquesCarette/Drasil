@@ -8,7 +8,7 @@ import qualified Drasil.GOOL as OO (unCI, ProgramSym(..))
 import Drasil.GProc (ProcProg, unJLC)
 import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
 
-import Language.Drasil.Code (ImplementationType(..), FileInfoState(..))
+import Language.Drasil.Code (ImplementationType(..), SoftwareDossierState(..))
 import Language.Drasil.GOOL (AuxiliarySym(..), package,
   FileAndContents(fileDoc), PackageData(..), unPP, unJP, unCSP, unCPPP, unSP,
   unJLP)
@@ -75,7 +75,7 @@ classes :: (OOProg r, AuxiliarySym r', Monad r') => (r (OO.Program r) -> ProgDat
 classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
-                fileInfoState = FIS {
+                fileInfoState = Sds {
                   _headers = gs' ^. headers,
                   _sources = gs' ^. sources,
                   _mainMod = gs' ^. mainMod
@@ -91,7 +91,7 @@ jlClasses :: (ProcProg r, AuxiliarySym r', Monad r') => (r (Proc.Program r) -> P
 jlClasses unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
-                fileInfoState = FIS {
+                fileInfoState = Sds {
                   _headers = gs' ^. headers,
                   _sources = gs' ^. sources,
                   _mainMod = gs' ^. mainMod

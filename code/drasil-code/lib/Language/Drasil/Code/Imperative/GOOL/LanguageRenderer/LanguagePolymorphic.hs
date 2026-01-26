@@ -15,13 +15,13 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.FileNames (doxConfigName, makefileName, readMeName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
-    AuxiliarySym(auxHelperDoc), auxFromData, FileInfoState)
+    AuxiliarySym(auxHelperDoc), auxFromData, SoftwareDossierState)
 import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..), makeReadMe)
 
 -- | Defines a Doxygen configuration file.
 doxConfig :: (AuxiliarySym r, Applicative r) => r Doc -> String ->
-  FileInfoState -> Verbosity -> r FileAndContents
+  SoftwareDossierState -> Verbosity -> r FileAndContents
 doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s
   (auxHelperDoc opt) v)
 
@@ -31,7 +31,7 @@ readMe rmi= auxFromData readMeName (makeReadMe rmi)
 
 -- | Defines a Makefile.
 makefile :: (Applicative r) => Maybe BuildConfig -> Maybe Runnable ->
-  Maybe DocConfig -> FileInfoState -> ProgData -> r FileAndContents
+  Maybe DocConfig -> SoftwareDossierState -> ProgData -> r FileAndContents
 makefile bc r d s p = auxFromData makefileName (makeBuild d bc r s p)
 
 -- | Changes a 'Runnable' to 'Nothing' if the user chose 'Library' for the 'ImplementationType'.

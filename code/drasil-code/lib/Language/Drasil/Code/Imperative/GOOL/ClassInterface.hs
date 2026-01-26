@@ -4,7 +4,7 @@
 -- program with auxiliary, non-source-code files.
 module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   -- DataTypes
-  FileInfoState(..), headers, sources, mainMod,
+  SoftwareDossierState(..), headers, sources, mainMod,
   -- Typeclasses
   AuxiliarySym(..),
   -- Functions
@@ -27,24 +27,24 @@ import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
 import Control.Lens (makeLenses)
 
-data FileInfoState = FIS {
+data SoftwareDossierState = Sds {
   _headers :: [FilePath], -- Used by Drasil for doxygen config gen
   _sources :: [FilePath], -- Used by Drasil for doxygen config and Makefile gen
   _mainMod :: Maybe FilePath -- Used by Drasil generator to access main
                              -- mod file path (needed in Makefile generation)
 }
-makeLenses ''FileInfoState
+makeLenses ''SoftwareDossierState
 
 -- | Members of this class must have a doxygen configuration, ReadMe file,
 -- omptimize doxygen document, information necessary for a makefile, and
 -- auxiliary helper documents
 class AuxiliarySym r where
-  doxConfig :: String -> FileInfoState -> Verbosity -> r FileAndContents
+  doxConfig :: String -> SoftwareDossierState -> Verbosity -> r FileAndContents
   readMe ::  ReadMeInfo -> r FileAndContents
 
   optimizeDox :: r Doc
 
-  makefile :: [FilePath] -> ImplementationType -> [Comments] -> FileInfoState ->
+  makefile :: [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState ->
     ProgData -> r FileAndContents
 
   auxHelperDoc :: r Doc -> Doc

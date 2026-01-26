@@ -4,7 +4,7 @@
 -- program with auxiliary, non-source-code files.
 module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   -- DataTypes
-  SoftwareDossierState(..), headers, sources, mainMod,
+  SoftwareDossierState, makeSds, headers, sources, mainMod,
   -- Typeclasses
   AuxiliarySym(..),
   -- Functions
@@ -34,6 +34,13 @@ data SoftwareDossierState = Sds {
                              -- mod file path (needed in Makefile generation)
 }
 makeLenses ''SoftwareDossierState
+
+makeSds :: [FilePath] -> [FilePath] -> Maybe FilePath -> SoftwareDossierState
+makeSds headerFiles sourceFiles mainModule = Sds {
+    _headers = headerFiles,
+    _sources = sourceFiles,
+    _mainMod = mainModule
+  }
 
 -- | Members of this class must have a doxygen configuration, ReadMe file,
 -- omptimize doxygen document, information necessary for a makefile, and

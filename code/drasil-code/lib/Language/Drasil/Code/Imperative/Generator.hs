@@ -42,7 +42,7 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
-  SoftwareDossierState(..), AuxiliarySym(..), package)
+  makeSds, AuxiliarySym(..), package)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Code.FileData (PackageData(..), fileAndContents)
 import Language.Drasil.Code.FileNames(sampleInputName)
@@ -147,11 +147,7 @@ genPackage unRepr = do
   p <- genProgram
   let info = OO.unCI $ evalState ci initialState
       (reprPD, s) = runState p info
-      fileInfoState = Sds {
-        _headers = s ^. headers,
-        _sources = s ^. sources,
-        _mainMod = s ^. mainMod
-      }
+      fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (implType g) (commented g) fileInfoState pd
       as = map name (codeSpec g ^. authorsO)
@@ -263,11 +259,7 @@ genPackageProc unRepr = do
   p <- genProgramProc
   let info = Proc.unCI $ evalState ci initialState
       (reprPD, s) = runState p info
-      fileInfoState = Sds {
-        _headers = s ^. headers,
-        _sources = s ^. sources,
-        _mainMod = s ^. mainMod
-      }
+      fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (implType g) (commented g) fileInfoState pd
       as = map name (codeSpec g ^. authorsO)

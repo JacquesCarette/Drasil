@@ -1,10 +1,17 @@
+{- This code really doesn't belong here, but it didn't belong in drasil-printers either!
+   It will need to find a proper home, later. Right now, it needs to be 'here' because it
+   depends on things defined in this package
+-}
 module Drasil.Database.SearchTools where
 
 import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB, UID, find, findAll)
 import Language.Drasil
-import Theory.Drasil
+import Theory.Drasil.DataDefinition (DataDefinition)
+import Theory.Drasil.InstanceModel (InstanceModel)
+import Theory.Drasil.GenDefn (GenDefn)
+import Theory.Drasil.Theory (TheoryModel)
 
 -- This is only needed for as long as `TypedUIDRef` is underused.
 data TermAbbr = TermAbbr { longForm :: NP, shortForm :: Maybe String }

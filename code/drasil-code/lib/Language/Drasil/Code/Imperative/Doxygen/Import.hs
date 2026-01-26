@@ -42,7 +42,7 @@ defYes = defaultValSentence <> yes <> text "."
 -- | Renders a Doxygen configuration file.
 --
 --     * Sets the PROJECT_NAME field according to the given name.
---     * Sets the INPUT field to the header files contained in the given GOOLState.
+--     * Sets the INPUT field to the header files contained in the given FileInfoState.
 --     * Sets the OPTIMIZE_OUTPUT_JAVA field according to the OptimizeChoice parameter.
 --     * Sets the QUIET field according to the given Verbosity.
 makeDoxConfig :: ProjName -> FileInfoState -> OptimizeChoice -> Verbosity -> Doc

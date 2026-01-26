@@ -1,7 +1,7 @@
 -- | Defines Drasil generator functions.
 module Drasil.Generator.Generate (
   -- * Generators
-  exportSmithEtAlSrs, exportLessonPlan, exportWebsite,
+  exportSmithEtAlSrs, exportWebsite,
   exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo,
   -- * Internal Functions
   codedDirName
@@ -19,7 +19,6 @@ import Text.PrettyPrint.HughesPJ (Doc, render)
 
 import Build.Drasil (genMake)
 import Drasil.DocLang (mkGraphInfo)
-import Drasil.DocumentLanguage.Notebook (LsnDesc, mkNb)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Stage(Equational), Document(Document, Notebook), Space(..),
@@ -37,7 +36,7 @@ import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
   makeRequirements, genHTML, genTeX, genMDBook, makeBook, defaultConfiguration,
-  piSys, PrintingInformation, genJupyterLessonPlan, genJupyterSRS)
+  piSys, PrintingInformation, genJupyterSRS)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Drasil.System (System, programName, refTable, systemdb)
@@ -85,20 +84,6 @@ exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [Choices] -> IO ()
 exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcs = do
   exportSmithEtAlSrs syst srsDecl srsFileName
   exportCodeZoo syst chcs
-
--- | Generate an /interactive/ JupyterNotebook-based lesson plan.
-exportLessonPlan :: System -> LsnDesc -> String -> IO ()
-exportLessonPlan syst nbDecl lsnFileName = do
-  let nb = mkNb nbDecl S.forT syst
-      printSetting = piSys (syst ^. systemdb) (syst ^. refTable) Equational defaultConfiguration
-      dir = "Lesson/"
-      fn  = lsnFileName ++ ".ipynb"
-      pd  = makeDocument printSetting nb 
-  
-  createDirIfMissing True dir
-  outh <- openFile (dir ++ "/" ++ fn) WriteMode
-  hPutStrLn outh $ render $ genJupyterLessonPlan pd
-  hClose outh
 
 -- | Generate a "website" (HTML file) softifact.
 exportWebsite :: System -> Document -> Filename -> IO ()

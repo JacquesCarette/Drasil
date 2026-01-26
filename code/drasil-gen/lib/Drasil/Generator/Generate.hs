@@ -43,8 +43,8 @@ import Drasil.System (System, programName, refTable, systemdb)
 import Utils.Drasil (createDirIfMissing)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
-import Drasil.Generator.Format
-import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC), docChoices)
+import Drasil.Generator.Formats (DocSpec(..), DocChoices(DC), Filename,
+  docChoices, Format(..), DocType(Website, SRS))
 import Drasil.Generator.TraceabilityGraphs (outputDot)
 import Drasil.Generator.TypeCheck (typeCheckSI)
 

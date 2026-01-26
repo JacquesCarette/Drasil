@@ -13,7 +13,7 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (ProgData, GOOLState, onCodeList)
+import Drasil.GOOL (ProgData, onCodeList)
 import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
@@ -44,7 +44,7 @@ class AuxiliarySym r where
 
   optimizeDox :: r Doc
 
-  makefile :: [FilePath] -> ImplementationType -> [Comments] -> GOOLState ->
+  makefile :: [FilePath] -> ImplementationType -> [Comments] -> FileInfoState ->
     ProgData -> r FileAndContents
 
   auxHelperDoc :: r Doc -> Doc

@@ -2,12 +2,13 @@
 module Main (main) where
 
 import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC,
-  unCPPC, unSC, initialState, FileData(..), ProgData(..), ModData(..))
+  unCPPC, unSC, initialState, FileData(..), ProgData(..), ModData(..),
+  headers, sources, mainMod)
 import qualified Drasil.GOOL as OO (unCI, ProgramSym(..))
 import Drasil.GProc (ProcProg, unJLC)
 import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
 
-import Language.Drasil.Code (ImplementationType(..))
+import Language.Drasil.Code (ImplementationType(..), FileInfoState(..))
 import Language.Drasil.GOOL (AuxiliarySym(..), package,
   FileAndContents(fileDoc), PackageData(..), unPP, unJP, unCSP, unCPPP, unSP,
   unJLP)
@@ -17,6 +18,7 @@ import Utils.Drasil (createDirIfMissing)
 
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import Control.Monad.State (evalState, runState)
+import Control.Lens ((^.))
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
@@ -73,7 +75,12 @@ classes :: (OOProg r, AuxiliarySym r', Monad r') => (r (OO.Program r) -> ProgDat
 classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
-  in unRepr' $ package pd [makefile [] Program [] gs' pd])
+                fileInfoState = FIS {
+                  _headers = gs' ^. headers,
+                  _sources = gs' ^. sources,
+                  _mainMod = gs' ^. mainMod
+                }
+  in unRepr' $ package pd [makefile [] Program [] fileInfoState pd])
   [helloWorldOO, patternTest, fileTestsOO, vectorTestOO, nameGenTestOO]
   (map (OO.unCI . (`evalState` initialState)) [helloWorldOO, patternTest,
     fileTestsOO, vectorTestOO, nameGenTestOO])
@@ -84,7 +91,12 @@ jlClasses :: (ProcProg r, AuxiliarySym r', Monad r') => (r (Proc.Program r) -> P
 jlClasses unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
-  in unRepr' $ package pd [makefile [] Program [] gs' pd])
+                fileInfoState = FIS {
+                  _headers = gs' ^. headers,
+                  _sources = gs' ^. sources,
+                  _mainMod = gs' ^. mainMod
+                }
+  in unRepr' $ package pd [makefile [] Program [] fileInfoState pd])
   [helloWorldProc, fileTestsProc, vectorTestProc, nameGenTestProc]
   (map (Proc.unCI . (`evalState` initialState)) [helloWorldProc,
     fileTestsProc, vectorTestProc, nameGenTestProc])

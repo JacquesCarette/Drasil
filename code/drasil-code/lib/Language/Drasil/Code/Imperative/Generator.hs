@@ -147,8 +147,13 @@ genPackage unRepr = do
   p <- genProgram
   let info = OO.unCI $ evalState ci initialState
       (reprPD, s) = runState p info
+      fileInfoState = FIS {
+        _headers = s ^. headers,
+        _sources = s ^. sources,
+        _mainMod = s ^. mainMod
+      }
       pd = unRepr reprPD
-      m = makefile (libPaths g) (implType g) (commented g) s pd
+      m = makefile (libPaths g) (implType g) (commented g) fileInfoState pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
@@ -157,11 +162,6 @@ genPackage unRepr = do
       bckgrnd = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. background)
       mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
       scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
-      fileInfoState = FIS {
-        _headers = s ^. headers,
-        _sources = s ^. sources,
-        _mainMod = s ^. mainMod
-      }
   i <- genSampleInput
   d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
@@ -263,8 +263,13 @@ genPackageProc unRepr = do
   p <- genProgramProc
   let info = Proc.unCI $ evalState ci initialState
       (reprPD, s) = runState p info
+      fileInfoState = FIS {
+        _headers = s ^. headers,
+        _sources = s ^. sources,
+        _mainMod = s ^. mainMod
+      }
       pd = unRepr reprPD
-      m = makefile (libPaths g) (implType g) (commented g) s pd
+      m = makefile (libPaths g) (implType g) (commented g) fileInfoState pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
@@ -272,11 +277,6 @@ genPackageProc unRepr = do
       bckgrnd = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. background)
       mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
       scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
-      fileInfoState = FIS {
-        _headers = s ^. headers,
-        _sources = s ^. sources,
-        _mainMod = s ^. mainMod
-      }
   i <- genSampleInput
   d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {

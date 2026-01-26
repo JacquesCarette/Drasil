@@ -12,18 +12,19 @@ import Utils.Drasil (capitalize)
 import Language.Drasil.Code.Imperative.Build.AST (asFragment, DocConfig(..),
   BuildConfig(BuildConfig), BuildDependencies(..), Ext(..), includeExt,
   NameOpts, nameOpts, packSep, Runnable(Runnable), BuildName(..), RunType(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (FileInfoState,
+  headers, sources, mainMod)
 
 import Build.Drasil (Annotation, (+:+), genMake, makeS, MakeString, mkFile, mkRule,
   mkCheckedCommand, mkFreeVar, RuleTransformer(makeRule))
-import Drasil.GOOL (FileData(..), ProgData(..), GOOLState(..), headers, sources,
-  mainMod)
+import Drasil.GOOL (FileData(..), ProgData(..))
 import Drasil.Metadata (watermark)
 
 -- | Holds all the needed information to run a program.
 data CodeHarness = Ch {
   buildConfig :: Maybe BuildConfig,
   runnable :: Maybe Runnable,
-  goolState :: GOOLState,
+  fileInfoState :: FileInfoState,
   progData :: ProgData,
   docConfig :: Maybe DocConfig}
 
@@ -58,7 +59,7 @@ progPurpAdd m = if progPurp m /= [] then "Project Purpose: " ++
                 else []
 
 -- | Helper that renders information into a MakeString. Dependent on the 'BuildName' criteria.
-renderBuildName :: GOOLState -> ProgData -> NameOpts -> BuildName -> MakeString
+renderBuildName :: FileInfoState -> ProgData -> NameOpts -> BuildName -> MakeString
 renderBuildName s _ _ BMain = makeS $ maybe (error "Main module missing")
   takeBaseName (s ^. mainMod)
 renderBuildName _ p _ BPackName = makeS (progName p)
@@ -75,12 +76,12 @@ renderExt CodeExt f = makeS $ takeExtension f
 renderExt (OtherExt e) _ = e
 
 -- | Helper that records the compiler input information.
-getCompilerInput :: BuildDependencies -> GOOLState -> ProgData -> [MakeString]
+getCompilerInput :: BuildDependencies -> FileInfoState -> ProgData -> [MakeString]
 getCompilerInput BcSource s _ = map makeS $ s ^. sources
 getCompilerInput (BcSingle n) s p = [renderBuildName s p nameOpts n]
 
 -- | Helper that retrieves commented files.
-getCommentedFiles :: GOOLState -> [MakeString]
+getCommentedFiles :: FileInfoState -> [MakeString]
 getCommentedFiles s = map makeS (nubOrd (s ^. headers ++
   maybeToList (s ^. mainMod)))
 
@@ -91,10 +92,10 @@ buildRunTarget fn (Interpreter i) = foldr (+:+) mempty $ i ++ [fn]
 
 -- | Creates a Makefile.
 makeBuild :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable ->
-  GOOLState -> ProgData -> Doc
+  FileInfoState -> ProgData -> Doc
 makeBuild d b r s p = genMake [Ch {
   buildConfig = b,
   runnable = r,
-  goolState = s,
+  fileInfoState = s,
   progData = p,
   docConfig = d}]

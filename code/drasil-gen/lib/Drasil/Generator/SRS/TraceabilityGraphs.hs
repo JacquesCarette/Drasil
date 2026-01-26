@@ -1,4 +1,4 @@
-module Drasil.Generator.TraceabilityGraphs (outputDot) where
+module Drasil.Generator.SRS.TraceabilityGraphs (outputDot) where
 
 import Data.List (intercalate)
 import System.IO (Handle, IOMode(WriteMode), openFile, hPutStrLn, hClose)

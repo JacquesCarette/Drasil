@@ -12,7 +12,7 @@ import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 
 import Language.Drasil
-import Drasil.GOOL (OOProg, VisibilityTag(..),
+import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
   ProgData(..), initialState)
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
@@ -41,8 +41,8 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..),
-  package)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (FileInfoState(..),
+  AuxiliarySym(..), package)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Code.FileData (PackageData(..), fileAndContents)
 import Language.Drasil.Code.FileNames(sampleInputName)
@@ -157,8 +157,13 @@ genPackage unRepr = do
       bckgrnd = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. background)
       mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
       scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
+      fileInfoState = FIS {
+        _headers = s ^. headers,
+        _sources = s ^. sources,
+        _mainMod = s ^. mainMod
+      }
   i <- genSampleInput
-  d <- genDoxConfig s
+  d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
         langName = "",
         langVersion = "",
@@ -267,8 +272,13 @@ genPackageProc unRepr = do
       bckgrnd = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. background)
       mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
       scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
+      fileInfoState = FIS {
+        _headers = s ^. headers,
+        _sources = s ^. sources,
+        _mainMod = s ^. mainMod
+      }
   i <- genSampleInput
-  d <- genDoxConfig s
+  d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
         langName = "",
         langVersion = "",

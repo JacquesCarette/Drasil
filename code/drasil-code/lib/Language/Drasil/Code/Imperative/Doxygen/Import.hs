@@ -7,10 +7,11 @@ import Data.List (intersperse, nub)
 import Data.Maybe (maybeToList)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
 
-import Drasil.GOOL (GOOLState, headers, mainMod)
 import Utils.Drasil (blank)
 
 import Language.Drasil.Choices (Verbosity(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (FileInfoState,
+  headers, mainMod)
 
 -- | A 'Doc' that holds optimized choices for configuring doxygen files.
 type OptimizeChoice = Doc
@@ -44,7 +45,7 @@ defYes = defaultValSentence <> yes <> text "."
 --     * Sets the INPUT field to the header files contained in the given GOOLState.
 --     * Sets the OPTIMIZE_OUTPUT_JAVA field according to the OptimizeChoice parameter.
 --     * Sets the QUIET field according to the given Verbosity.
-makeDoxConfig :: ProjName -> GOOLState -> OptimizeChoice -> Verbosity -> Doc
+makeDoxConfig :: ProjName -> FileInfoState -> OptimizeChoice -> Verbosity -> Doc
 makeDoxConfig prog s opt v =
   let fs = nub (s ^. headers ++ maybeToList (s ^. mainMod))
   in vcat [

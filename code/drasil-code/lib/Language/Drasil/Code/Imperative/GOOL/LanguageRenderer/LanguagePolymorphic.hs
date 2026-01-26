@@ -15,14 +15,13 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.FileNames (doxConfigName, makefileName, readMeName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
-    AuxiliarySym(auxHelperDoc), auxFromData
-  )
+    AuxiliarySym(auxHelperDoc), auxFromData, FileInfoState)
 import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..), makeReadMe)
 
 -- | Defines a Doxygen configuration file.
 doxConfig :: (AuxiliarySym r, Applicative r) => r Doc -> String ->
-  GOOLState -> Verbosity -> r FileAndContents
+  FileInfoState -> Verbosity -> r FileAndContents
 doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s
   (auxHelperDoc opt) v)
 

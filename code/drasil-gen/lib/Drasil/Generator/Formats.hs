@@ -22,7 +22,7 @@ type Filename = String
 -- Choosing SRS will generate both TeX and HTML files, while Website generates
 -- only as HTML. This also determines what folders the generated files will be
 -- placed into.
-data DocType = SRS | Website | Lesson
+data DocType = SRS | Website
 
 -- | Possible formats for printer output.
 data Format = TeX | Plain | HTML | Jupyter | MDBook
@@ -36,7 +36,6 @@ instance Show Format where
 
 -- | Shows the different types of documents.
 instance Show DocType where
-  show Lesson  = "Lesson"
   show SRS     = "SRS"
   show Website = "Website"
 

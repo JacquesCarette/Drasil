@@ -1,13 +1,13 @@
 -- | Defines .json printers to generate jupyter notebooks. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.JSON.Print.html).
-module Language.Drasil.JSON.Print(genJupyter) where
+module Language.Drasil.JSON.Print(
+  genJupyterLessonPlan, genJupyterSRS
+) where
 
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
 import qualified Language.Drasil as L
-
-import Language.Drasil.Format (DocType(Lesson))
 
 import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
@@ -28,16 +28,9 @@ import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, co
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv,
  markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
 
--- | Generate a python notebook document (using json).
--- build : build the SRS document in JSON format
--- build': build the general Jupyter Notbook document
-genJupyter :: DocType -> Document -> Doc
-genJupyter Lesson doc = build  doc
-genJupyter _      doc = build' doc
-
--- | Build the JSON Document, called by genJSON
-build :: Document -> Doc
-build (Document t a c) =
+-- | Build the general Jupyter Notebook document.
+genJupyterLessonPlan :: Document -> Doc
+genJupyterLessonPlan (Document t a c) =
   markdownB $$
   nbformat (text "# " <> pSpec t) $$
   nbformat (text "## " <> pSpec a) $$
@@ -48,8 +41,9 @@ build (Document t a c) =
   makeMetadata $$
   text "}"
 
-build' :: Document -> Doc
-build' (Document t a c) =
+-- | Build an SRS document in JSON format.
+genJupyterSRS :: Document -> Doc
+genJupyterSRS (Document t a c) =
   markdownB $$
   nbformat (text "# " <> pSpec t) $$
   nbformat (text "## " <> pSpec a) $$

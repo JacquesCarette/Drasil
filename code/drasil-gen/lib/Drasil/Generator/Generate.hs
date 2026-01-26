@@ -1,7 +1,7 @@
 -- | Defines Drasil generator functions.
 module Drasil.Generator.Generate (
   -- * Generators
-  exportSmithEtAlSrs, exportLessonPlan, exportWebsite,
+  exportSmithEtAlSrs, exportWebsite,
   exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo,
   -- * Internal Functions
   codedDirName
@@ -19,7 +19,6 @@ import Text.PrettyPrint.HughesPJ (Doc, render)
 
 import Build.Drasil (genMake)
 import Drasil.DocLang (mkGraphInfo)
-import Drasil.DocumentLanguage.Notebook (LsnDesc, mkNb)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Stage(Equational), Document(Document, Notebook), Space(..),
@@ -36,8 +35,8 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (DocType(..), makeCSS, Format(..),
-  makeRequirements, genHTML, genTeX, genJupyter, genMDBook, makeBook,
-  defaultConfiguration, piSys, PrintingInformation)
+  makeRequirements, genHTML, genTeX, genMDBook, makeBook, defaultConfiguration,
+  piSys, PrintingInformation, genJupyterSRS)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Drasil.System (System, programName, refTable, systemdb)
@@ -86,13 +85,6 @@ exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcs = do
   exportSmithEtAlSrs syst srsDecl srsFileName
   exportCodeZoo syst chcs
 
--- | Generate a JupyterNotebook-based lesson plan.
-exportLessonPlan :: System -> LsnDesc -> String -> IO ()
-exportLessonPlan syst nbDecl lsnFileName = do
-  let nb = mkNb nbDecl S.forT syst
-      printSetting = piSys (syst ^. systemdb) (syst ^. refTable) Equational defaultConfiguration
-  genDoc (DocSpec (docChoices Lesson []) lsnFileName) nb printSetting
-
 -- | Generate a "website" (HTML file) softifact.
 exportWebsite :: System -> Document -> Filename -> IO ()
 exportWebsite syst doc fileName = do
@@ -102,22 +94,18 @@ exportWebsite syst doc fileName = do
 -- | Generate a document in one or many flavours (HTML, TeX+Makefile,
 -- mdBook+Makefile, or Jupyter Notebook, up to document type).
 genDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
-genDoc (DocSpec (DC Lesson _) fn) body sm = prntDoc body sm fn Lesson Jupyter
 genDoc (DocSpec (DC dt fmts) fn)  body sm = mapM_ (prntDoc body sm fn dt) fmts
 
 -- | Helper for writing the documents (TeX / HTML / Jupyter) to file.
 prntDoc :: Document -> PrintingInformation -> String -> DocType -> Format -> IO ()
-prntDoc d pinfo fn Lesson Jupyter = prntDoc' Lesson "Lesson" fn Jupyter d pinfo
-prntDoc _ _     _  Lesson _       =
-  error "Lesson-plan rendering only supports Jupyter Notebook output type."
 prntDoc d pinfo fn dtype fmt =
   case fmt of
-    HTML    -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
+    HTML    -> do prntDoc' (show dtype ++ "/HTML") fn HTML d pinfo
                   prntCSS dtype fn d
-    TeX     -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
+    TeX     -> do prntDoc' (show dtype ++ "/PDF") fn TeX d pinfo
                   prntMake $ DocSpec (DC dtype [TeX]) fn
-    Jupyter -> do prntDoc' dtype (show dtype ++ "/Jupyter") fn Jupyter d pinfo
-    MDBook  -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
+    Jupyter -> do prntDoc' (show dtype ++ "/Jupyter") fn Jupyter d pinfo
+    MDBook  -> do prntDoc' (show dtype ++ "/mdBook") fn MDBook d pinfo
                   prntMake $ DocSpec (DC dtype [MDBook]) fn
                   prntBook dtype d pinfo
                   prntCSV  dtype pinfo
@@ -129,8 +117,8 @@ srsFormatError = error "We can only write TeX/HTML/JSON/MDBook (for now)."
 
 -- | Helper that takes the document type, directory name, document name, format of documents,
 -- document information and printing information. Then generates the document file.
-prntDoc' :: DocType -> String -> String -> Format -> Document -> PrintingInformation -> IO ()
-prntDoc' _ dt' _ MDBook body' sm = do
+prntDoc' :: String -> String -> Format -> Document -> PrintingInformation -> IO ()
+prntDoc' dt' _ MDBook body' sm = do
   createDirIfMissing True dir
   mapM_ writeDocToFile con
   where
@@ -140,10 +128,10 @@ prntDoc' _ dt' _ MDBook body' sm = do
       outh <- openFile (dir ++ "/" ++ fp ++ ".md") WriteMode
       hPutStrLn outh $ render d
       hClose outh
-prntDoc' dt dt' fn format body' sm = do
+prntDoc' dt' fn format body' sm = do
   createDirIfMissing True dt'
   outh <- openFile (dt' ++ "/" ++ fn ++ getExt format) WriteMode
-  hPutStrLn outh $ render $ writeDoc sm dt format fn body'
+  hPutStrLn outh $ render $ writeDoc sm format fn body'
   hClose outh
   where
     -- | Gets extension for a particular format.
@@ -192,16 +180,16 @@ prntCSV dt sm = do
     fp = show dt ++ "/mdBook/.drasil-requirements.csv"
 
 -- | Renders single-page documents.
-writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc
-writeDoc s _  TeX     _  doc = genTeX (makeDocument s dd) mToC s
+writeDoc :: PrintingInformation -> Format -> Filename -> Document -> Doc
+writeDoc s  TeX     _  doc = genTeX (makeDocument s dd) mToC s
   where
     getDoc :: Document -> (Document, ShowTableOfContents)
     getDoc d@(Document _ _ st _) = (d , st)
     getDoc   (Notebook{})        = error "cannot render notebooks into LaTeX"
     (dd , mToC) = getDoc $ checkToC doc
-writeDoc s _  HTML    fn doc = genHTML fn $ makeDocument s doc
-writeDoc s dt Jupyter _  doc = genJupyter dt $ makeDocument s doc
-writeDoc _ _  _       _  _   = srsFormatError
+writeDoc s  HTML    fn doc = genHTML fn $ makeDocument s doc
+writeDoc s Jupyter _  doc = genJupyterSRS $ makeDocument s doc
+writeDoc _  _       _  _   = srsFormatError
 
 -- | Renders multi-page documents.
 writeDoc' :: PrintingInformation -> Format -> Document -> [(Filename, Doc)]

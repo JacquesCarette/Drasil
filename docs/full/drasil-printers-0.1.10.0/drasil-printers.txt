@@ -88,29 +88,6 @@ numberedDDEquations :: Bool
 numberedTMEquations :: Bool
 
 
--- | Possible formats for printer output.
-module Language.Drasil.Format
-
--- | Document types include Software Requirements Specification and
---   Website. Choosing SRS will generate both TeX and HTML files, while
---   Website generates only as HTML. This also determines what folders the
---   generated files will be placed into.
-data DocType
-SRS :: DocType
-Website :: DocType
-Lesson :: DocType
-
--- | Possible formats for printer output.
-data Format
-TeX :: Format
-Plain :: Format
-HTML :: Format
-Jupyter :: Format
-MDBook :: Format
-instance GHC.Show.Show Language.Drasil.Format.Format
-instance GHC.Show.Show Language.Drasil.Format.DocType
-
-
 -- | Defines functions to create accompanying .css files for HTML
 --   generators.
 module Language.Drasil.HTML.CSS
@@ -1818,29 +1795,13 @@ mkTitle :: PrintingInformation -> Sentence -> Doc
 --   files</a>.
 module Language.Drasil.JSON.Print
 
--- | Generate a python notebook document (using json). build : build the
---   SRS document in JSON format build': build the general Jupyter Notbook
---   document
-genJupyter :: DocType -> Document -> Doc
+-- | Build the general Jupyter Notebook document.
+genJupyterLessonPlan :: Document -> Doc
+
+-- | Build an SRS document in JSON format.
+genJupyterSRS :: Document -> Doc
 
 module Language.Drasil.Printers
-
--- | Document types include Software Requirements Specification and
---   Website. Choosing SRS will generate both TeX and HTML files, while
---   Website generates only as HTML. This also determines what folders the
---   generated files will be placed into.
-data DocType
-SRS :: DocType
-Website :: DocType
-Lesson :: DocType
-
--- | Possible formats for printer output.
-data Format
-TeX :: Format
-Plain :: Format
-HTML :: Format
-Jupyter :: Format
-MDBook :: Format
 
 -- | Generate an HTML document from a Drasil <a>Document</a>.
 genHTML :: String -> Document -> Doc
@@ -1911,10 +1872,11 @@ showHasSymbImpl :: HasSymbol x => x -> String
 -- | Generates a LaTeX document.
 genTeX :: Document -> ShowTableOfContents -> PrintingInformation -> Doc
 
--- | Generate a python notebook document (using json). build : build the
---   SRS document in JSON format build': build the general Jupyter Notbook
---   document
-genJupyter :: DocType -> Document -> Doc
+-- | Build the general Jupyter Notebook document.
+genJupyterLessonPlan :: Document -> Doc
+
+-- | Build an SRS document in JSON format.
+genJupyterSRS :: Document -> Doc
 
 -- | Generate a mdBook SRS
 genMDBook :: Project -> [(Filename, Doc)]

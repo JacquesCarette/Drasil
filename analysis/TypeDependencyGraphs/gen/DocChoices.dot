@@ -1,5 +1,4 @@
 digraph docchoices{
 DocChoices	[shape=oval, color=cyan3, label="DocChoices"];
-DocChoices -> DocType;
 DocChoices -> Format;
 }

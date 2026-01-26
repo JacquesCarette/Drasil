@@ -19,15 +19,15 @@
 </span><span id="line-19"></span><span class="annot"><span class="hs-comment">-- | Generate a sample input file.</span></span><span>
 </span><span id="line-20"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#makeInputFile"><span class="hs-identifier hs-type">makeInputFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#DataDesc"><span class="hs-identifier hs-type">DataDesc</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-21"></span><span id="makeInputFile"><span class="annot"><span class="annottext">makeInputFile :: PrintingInformation -&gt; DataDesc -&gt; [Expr] -&gt; Doc
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#makeInputFile"><span class="hs-identifier hs-var hs-var">makeInputFile</span></a></span></span><span> </span><span id="local-6989586621679395331"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395331"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span id="local-6989586621679395332"><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395332"><span class="hs-identifier hs-var">dd</span></a></span></span><span> </span><span id="local-6989586621679395333"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395333"><span class="hs-identifier hs-var">sampData</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#makeInputFile"><span class="hs-identifier hs-var hs-var">makeInputFile</span></a></span></span><span> </span><span id="local-6989586621679395320"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395320"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span id="local-6989586621679395321"><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395321"><span class="hs-identifier hs-var">dd</span></a></span></span><span> </span><span id="local-6989586621679395322"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395322"><span class="hs-identifier hs-var">sampData</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; [Expr] -&gt; [Doc]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395331"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395332"><span class="hs-identifier hs-var">dd</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395333"><span class="hs-identifier hs-var">sampData</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679395320"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395321"><span class="hs-identifier hs-var">dd</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395322"><span class="hs-identifier hs-var">sampData</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-22"></span><span>
 </span><span id="line-23"></span><span class="hs-comment">-- | Writes a data file formatted according to the given 'DataDesc', where the data</span><span>
 </span><span id="line-24"></span><span class="hs-comment">-- values come from the passed \['Expr'\].</span><span>
@@ -47,84 +47,111 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-27"></span><span>          </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot; than expected, should be impossible&quot;</span></span><span>
 </span><span id="line-28"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679395336"><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395336"><span class="hs-identifier hs-var">ds</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">(Data -&gt; Bool) -&gt; DataDesc -&gt; Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679395325"><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395325"><span class="hs-identifier hs-var">ds</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">(Data -&gt; Bool) -&gt; DataDesc -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">all</span></span><span> </span><span class="annot"><span class="annottext">Data -&gt; Bool
 </span><a href="Language.Drasil.Code.DataDesc.html#isJunk"><span class="hs-identifier hs-var">isJunk</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395336"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Doc -&gt; [Doc]
+</span><a href="#local-6989586621679395325"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Doc -&gt; [Doc]
 forall a. Int -&gt; a -&gt; [a]
 </span><span class="hs-identifier hs-var">replicate</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDesc -&gt; Int
 forall a. [a] -&gt; Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395336"><span class="hs-identifier hs-var">ds</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679395325"><span class="hs-identifier hs-var">ds</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">blank</span></span><span>
 </span><span id="line-29"></span><span>  </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Doc]
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;makeInputFile received fewer inputs than expected, should be impossible&quot;</span></span><span>
-</span><span id="line-30"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395340"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395340"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Data
-</span><a href="Language.Drasil.Code.DataDesc.html#JunkData"><span class="hs-identifier hs-var">JunkData</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395342"><span class="annot"><span class="annottext">ds :: DataDesc
-</span><a href="#local-6989586621679395342"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Singleton"><span class="hs-identifier hs-type">Singleton</span></a></span><span> </span><span class="annot"><span class="annottext">DataItem
+</span><span id="line-30"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395329"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395329"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Data
+</span><a href="Language.Drasil.Code.DataDesc.html#JunkData"><span class="hs-identifier hs-var">JunkData</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395331"><span class="annot"><span class="annottext">ds :: DataDesc
+</span><a href="#local-6989586621679395331"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Singleton"><span class="hs-identifier hs-type">Singleton</span></a></span><span> </span><span class="annot"><span class="annottext">DataItem
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395333"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395333"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; Char -&gt; [Expr] -&gt; [Doc]
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#docLine"><span class="hs-identifier hs-var">docLine</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395329"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395331"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">' '</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395333"><span class="hs-identifier hs-var">es</span></a></span><span>
+</span><span id="line-31"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395335"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395335"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Data
+</span><a href="Language.Drasil.Code.DataDesc.html#JunkData"><span class="hs-identifier hs-var">JunkData</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395336"><span class="annot"><span class="annottext">ds :: DataDesc
+</span><a href="#local-6989586621679395336"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Line"><span class="hs-identifier hs-type">Line</span></a></span><span> </span><span class="annot"><span class="annottext">LinePattern
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679395338"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395338"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395339"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395339"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; Char -&gt; [Expr] -&gt; [Doc]
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#docLine"><span class="hs-identifier hs-var">docLine</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395335"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395336"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395338"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395339"><span class="hs-identifier hs-var">es</span></a></span><span>
+</span><span id="line-32"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395340"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395340"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Data
+</span><a href="Language.Drasil.Code.DataDesc.html#JunkData"><span class="hs-identifier hs-var">JunkData</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395341"><span class="annot"><span class="annottext">ds :: DataDesc
+</span><a href="#local-6989586621679395341"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Lines"><span class="hs-identifier hs-type">Lines</span></a></span><span> </span><span class="annot"><span class="annottext">LinePattern
+</span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Maybe Integer
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679395343"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395343"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">DataDesc
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395344"><span class="annot"><span class="annottext">[Expr]
 </span><a href="#local-6989586621679395344"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; Char -&gt; [Expr] -&gt; [Doc]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#docLine"><span class="hs-identifier hs-var">docLine</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679395340"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395342"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">' '</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395341"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395343"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="#local-6989586621679395344"><span class="hs-identifier hs-var">es</span></a></span><span>
-</span><span id="line-31"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395346"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395346"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Data
-</span><a href="Language.Drasil.Code.DataDesc.html#JunkData"><span class="hs-identifier hs-var">JunkData</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395347"><span class="annot"><span class="annottext">ds :: DataDesc
-</span><a href="#local-6989586621679395347"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Line"><span class="hs-identifier hs-type">Line</span></a></span><span> </span><span class="annot"><span class="annottext">LinePattern
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679395349"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395349"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395350"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395350"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; Char -&gt; [Expr] -&gt; [Doc]
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#docLine"><span class="hs-identifier hs-var">docLine</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395346"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395347"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395349"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395350"><span class="hs-identifier hs-var">es</span></a></span><span>
-</span><span id="line-32"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395351"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395351"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Data
-</span><a href="Language.Drasil.Code.DataDesc.html#JunkData"><span class="hs-identifier hs-var">JunkData</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395352"><span class="annot"><span class="annottext">ds :: DataDesc
-</span><a href="#local-6989586621679395352"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Lines"><span class="hs-identifier hs-type">Lines</span></a></span><span> </span><span class="annot"><span class="annottext">LinePattern
-</span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Maybe Integer
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679395354"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395354"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395355"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395355"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; Char -&gt; [Expr] -&gt; [Doc]
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#docLine"><span class="hs-identifier hs-var">docLine</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395351"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395352"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395354"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395355"><span class="hs-identifier hs-var">es</span></a></span><span>
-</span><span id="line-33"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395356"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395356"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Singleton"><span class="hs-identifier hs-type">Singleton</span></a></span><span> </span><span class="annot"><span class="annottext">DataItem
-</span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395357"><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395357"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679395358"><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679395358"><span class="hs-identifier hs-var">e</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679395359"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395359"><span class="hs-identifier hs-var">es</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Expr -&gt; Doc
+</span><span id="line-33"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395345"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395345"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Singleton"><span class="hs-identifier hs-type">Singleton</span></a></span><span> </span><span class="annot"><span class="annottext">DataItem
+</span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395346"><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395346"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679395347"><span class="annot"><span class="annottext">Expr
+</span><a href="#local-6989586621679395347"><span class="hs-identifier hs-var">e</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679395348"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395348"><span class="hs-identifier hs-var">es</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Expr -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#eDoc"><span class="hs-identifier hs-var">eDoc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395356"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679395358"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
+</span><a href="#local-6989586621679395345"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="#local-6989586621679395347"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; [Expr] -&gt; [Doc]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395356"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395357"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395359"><span class="hs-identifier hs-var">es</span></a></span><span>
-</span><span id="line-34"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395361"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395361"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Line"><span class="hs-identifier hs-type">Line</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Straight"><span class="hs-identifier hs-type">Straight</span></a></span><span> </span><span id="local-6989586621679395363"><span class="annot"><span class="annottext">[DataItem]
+</span><a href="#local-6989586621679395345"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395346"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395348"><span class="hs-identifier hs-var">es</span></a></span><span>
+</span><span id="line-34"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395350"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395350"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Line"><span class="hs-identifier hs-type">Line</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Straight"><span class="hs-identifier hs-type">Straight</span></a></span><span> </span><span id="local-6989586621679395352"><span class="annot"><span class="annottext">[DataItem]
+</span><a href="#local-6989586621679395352"><span class="hs-identifier hs-var">dis</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395353"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395353"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395354"><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395354"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395355"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395355"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span>
+</span><span id="line-35"></span><span>  </span><span class="hs-special">(</span><span id="local-6989586621679395357"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395357"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">,</span><span id="local-6989586621679395358"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395358"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Expr] -&gt; ([Expr], [Expr])
+forall a. Int -&gt; [a] -&gt; ([a], [a])
+</span><span class="hs-identifier hs-var">splitAt</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[DataItem] -&gt; Int
+forall a. [a] -&gt; Int
+forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
+</span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[DataItem]
+</span><a href="#local-6989586621679395352"><span class="hs-identifier hs-var">dis</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395355"><span class="hs-identifier hs-var">es</span></a></span><span>
+</span><span id="line-36"></span><span>  </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Char -&gt; [Expr] -&gt; Doc
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#dataLine"><span class="hs-identifier hs-var">dataLine</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395350"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395353"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395357"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; [Expr] -&gt; [Doc]
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395350"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395354"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395358"><span class="hs-identifier hs-var">ls</span></a></span><span>
+</span><span id="line-37"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395361"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395361"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Line"><span class="hs-identifier hs-type">Line</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Repeat"><span class="hs-identifier hs-type">Repeat</span></a></span><span> </span><span id="local-6989586621679395363"><span class="annot"><span class="annottext">[DataItem]
 </span><a href="#local-6989586621679395363"><span class="hs-identifier hs-var">dis</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395364"><span class="annot"><span class="annottext">Char
 </span><a href="#local-6989586621679395364"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395365"><span class="annot"><span class="annottext">DataDesc
 </span><a href="#local-6989586621679395365"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395366"><span class="annot"><span class="annottext">[Expr]
 </span><a href="#local-6989586621679395366"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span>
-</span><span id="line-35"></span><span>  </span><span class="hs-special">(</span><span id="local-6989586621679395368"><span class="annot"><span class="annottext">[Expr]
+</span><span id="line-38"></span><span>  </span><span class="hs-special">(</span><span id="local-6989586621679395368"><span class="annot"><span class="annottext">[Expr]
 </span><a href="#local-6989586621679395368"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">,</span><span id="local-6989586621679395369"><span class="annot"><span class="annottext">[Expr]
 </span><a href="#local-6989586621679395369"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Expr] -&gt; ([Expr], [Expr])
 forall a. Int -&gt; [a] -&gt; ([a], [a])
@@ -134,126 +161,99 @@ forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[DataItem]
 </span><a href="#local-6989586621679395363"><span class="hs-identifier hs-var">dis</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="#local-6989586621679395366"><span class="hs-identifier hs-var">es</span></a></span><span>
-</span><span id="line-36"></span><span>  </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Char -&gt; [Expr] -&gt; Doc
+</span><span id="line-39"></span><span>  </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Char -&gt; [Expr] -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#dataLine"><span class="hs-identifier hs-var">dataLine</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679395361"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395364"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395368"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
+</span><a href="#local-6989586621679395364"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Expr]] -&gt; [Expr]
+forall (t :: * -&gt; *) a. Foldable t =&gt; t [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">concat</span></span><span> </span><span class="annot"><span class="annottext">([[Expr]] -&gt; [Expr]) -&gt; [[Expr]] -&gt; [Expr]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [[Expr]]
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#orderVecs"><span class="hs-identifier hs-var">orderVecs</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395368"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; [Expr] -&gt; [Doc]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679395361"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
 </span><a href="#local-6989586621679395365"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="#local-6989586621679395369"><span class="hs-identifier hs-var">ls</span></a></span><span>
-</span><span id="line-37"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395372"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395372"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Line"><span class="hs-identifier hs-type">Line</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Repeat"><span class="hs-identifier hs-type">Repeat</span></a></span><span> </span><span id="local-6989586621679395374"><span class="annot"><span class="annottext">[DataItem]
-</span><a href="#local-6989586621679395374"><span class="hs-identifier hs-var">dis</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395375"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395375"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395376"><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395376"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395377"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395377"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span>
-</span><span id="line-38"></span><span>  </span><span class="hs-special">(</span><span id="local-6989586621679395379"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395379"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">,</span><span id="local-6989586621679395380"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395380"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Expr] -&gt; ([Expr], [Expr])
-forall a. Int -&gt; [a] -&gt; ([a], [a])
-</span><span class="hs-identifier hs-var">splitAt</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[DataItem] -&gt; Int
-forall a. [a] -&gt; Int
-forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
-</span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[DataItem]
-</span><a href="#local-6989586621679395374"><span class="hs-identifier hs-var">dis</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395377"><span class="hs-identifier hs-var">es</span></a></span><span>
-</span><span id="line-39"></span><span>  </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Char -&gt; [Expr] -&gt; Doc
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#dataLine"><span class="hs-identifier hs-var">dataLine</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395372"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395375"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Expr]] -&gt; [Expr]
-forall (t :: * -&gt; *) a. Foldable t =&gt; t [a] -&gt; [a]
-</span><span class="hs-identifier hs-var">concat</span></span><span> </span><span class="annot"><span class="annottext">([[Expr]] -&gt; [Expr]) -&gt; [[Expr]] -&gt; [Expr]
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [[Expr]]
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#orderVecs"><span class="hs-identifier hs-var">orderVecs</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395379"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
-forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; [Expr] -&gt; [Doc]
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395372"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395376"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395380"><span class="hs-identifier hs-var">ls</span></a></span><span>
-</span><span id="line-41"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395383"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395383"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Lines"><span class="hs-identifier hs-type">Lines</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Straight"><span class="hs-identifier hs-type">Straight</span></a></span><span> </span><span class="annot"><span class="annottext">[DataItem]
+</span><span id="line-41"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395372"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395372"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Lines"><span class="hs-identifier hs-type">Lines</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Straight"><span class="hs-identifier hs-type">Straight</span></a></span><span> </span><span class="annot"><span class="annottext">[DataItem]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Integer
-</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span id="local-6989586621679395384"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395384"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395385"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395385"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; Doc) -&gt; [[Expr]] -&gt; [Doc]
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span id="local-6989586621679395373"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395373"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395374"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395374"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; Doc) -&gt; [[Expr]] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Char -&gt; [Expr] -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#dataLine"><span class="hs-identifier hs-var">dataLine</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395383"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395384"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679395372"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395373"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-42"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Expr] -&gt; [[Expr]]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#orderVecs"><span class="hs-identifier hs-var">orderVecs</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395385"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-43"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395386"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395386"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Lines"><span class="hs-identifier hs-type">Lines</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Straight"><span class="hs-identifier hs-type">Straight</span></a></span><span> </span><span id="local-6989586621679395387"><span class="annot"><span class="annottext">[DataItem]
-</span><a href="#local-6989586621679395387"><span class="hs-identifier hs-var">dis</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679395388"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679395388"><span class="hs-identifier hs-var">n</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395389"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395389"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395390"><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395390"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395391"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395391"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span>
-</span><span id="line-44"></span><span>  </span><span class="hs-special">(</span><span id="local-6989586621679395393"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395393"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">,</span><span id="local-6989586621679395394"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395394"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Expr] -&gt; ([Expr], [Expr])
+</span><a href="#local-6989586621679395374"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-43"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395375"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395375"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Lines"><span class="hs-identifier hs-type">Lines</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Straight"><span class="hs-identifier hs-type">Straight</span></a></span><span> </span><span id="local-6989586621679395376"><span class="annot"><span class="annottext">[DataItem]
+</span><a href="#local-6989586621679395376"><span class="hs-identifier hs-var">dis</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679395377"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679395377"><span class="hs-identifier hs-var">n</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395378"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395378"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395379"><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395379"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395380"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395380"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span>
+</span><span id="line-44"></span><span>  </span><span class="hs-special">(</span><span id="local-6989586621679395382"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395382"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">,</span><span id="local-6989586621679395383"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395383"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Expr] -&gt; ([Expr], [Expr])
 forall a. Int -&gt; [a] -&gt; ([a], [a])
 </span><span class="hs-identifier hs-var">splitAt</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[DataItem] -&gt; Int
 forall a. [a] -&gt; Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[DataItem]
-</span><a href="#local-6989586621679395387"><span class="hs-identifier hs-var">dis</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395391"><span class="hs-identifier hs-var">es</span></a></span><span>
-</span><span id="line-45"></span><span>  </span><span id="local-6989586621679395395"><span class="annot"><span class="annottext">vs :: [[Expr]]
-</span><a href="#local-6989586621679395395"><span class="hs-identifier hs-var hs-var">vs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [[Expr]]
+</span><a href="#local-6989586621679395376"><span class="hs-identifier hs-var">dis</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395380"><span class="hs-identifier hs-var">es</span></a></span><span>
+</span><span id="line-45"></span><span>  </span><span id="local-6989586621679395384"><span class="annot"><span class="annottext">vs :: [[Expr]]
+</span><a href="#local-6989586621679395384"><span class="hs-identifier hs-var hs-var">vs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [[Expr]]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#orderVecs"><span class="hs-identifier hs-var">orderVecs</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395393"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><a href="#local-6989586621679395382"><span class="hs-identifier hs-var">l</span></a></span><span>
 </span><span id="line-46"></span><span>  </span><span class="hs-keyword">in</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Integer
 forall a. Integral a =&gt; a -&gt; Integer
 </span><span class="hs-identifier hs-var">toInteger</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Expr]] -&gt; Int
 forall a. [a] -&gt; Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[[Expr]]
-</span><a href="#local-6989586621679395395"><span class="hs-identifier hs-var">vs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
+</span><a href="#local-6989586621679395384"><span class="hs-identifier hs-var">vs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679395388"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; Doc) -&gt; [[Expr]] -&gt; [Doc]
+</span><a href="#local-6989586621679395377"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; Doc) -&gt; [[Expr]] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Char -&gt; [Expr] -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#dataLine"><span class="hs-identifier hs-var">dataLine</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395386"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395389"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[[Expr]]
-</span><a href="#local-6989586621679395395"><span class="hs-identifier hs-var">vs</span></a></span><span>
+</span><a href="#local-6989586621679395375"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395378"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[[Expr]]
+</span><a href="#local-6989586621679395384"><span class="hs-identifier hs-var">vs</span></a></span><span>
 </span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; [Doc] -&gt; [Doc]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; [Expr] -&gt; [Doc]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395386"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395390"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395394"><span class="hs-identifier hs-var">ls</span></a></span><span>
+</span><a href="#local-6989586621679395375"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395379"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395383"><span class="hs-identifier hs-var">ls</span></a></span><span>
 </span><span id="line-48"></span><span>  </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Doc]
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;makeInputFile encountered wrong-sized vectors&quot;</span></span><span>
-</span><span id="line-49"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395396"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395396"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Lines"><span class="hs-identifier hs-type">Lines</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Repeat"><span class="hs-identifier hs-type">Repeat</span></a></span><span> </span><span class="annot"><span class="annottext">[DataItem]
+</span><span id="line-49"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395385"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395385"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Lines"><span class="hs-identifier hs-type">Lines</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Repeat"><span class="hs-identifier hs-type">Repeat</span></a></span><span> </span><span class="annot"><span class="annottext">[DataItem]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Integer
-</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span id="local-6989586621679395397"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395397"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395398"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395398"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([[Expr]] -&gt; Doc) -&gt; [[[Expr]]] -&gt; [Doc]
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span id="local-6989586621679395386"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395386"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395387"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395387"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([[Expr]] -&gt; Doc) -&gt; [[[Expr]]] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span>
 </span><span id="line-50"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Char -&gt; [Expr] -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#dataLine"><span class="hs-identifier hs-var">dataLine</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395396"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395397"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; Doc) -&gt; ([[Expr]] -&gt; [Expr]) -&gt; [[Expr]] -&gt; Doc
+</span><a href="#local-6989586621679395385"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395386"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; Doc) -&gt; ([[Expr]] -&gt; [Expr]) -&gt; [[Expr]] -&gt; Doc
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">[[Expr]] -&gt; [Expr]
 forall (t :: * -&gt; *) a. Foldable t =&gt; t [a] -&gt; [a]
@@ -264,44 +264,44 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall a. [[a]] -&gt; [[a]]
 </span><span class="hs-identifier hs-var">transpose</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Expr] -&gt; [[[Expr]]]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#orderMtxs"><span class="hs-identifier hs-var">orderMtxs</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395398"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-51"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395401"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395401"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Lines"><span class="hs-identifier hs-type">Lines</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Repeat"><span class="hs-identifier hs-type">Repeat</span></a></span><span> </span><span id="local-6989586621679395402"><span class="annot"><span class="annottext">[DataItem]
-</span><a href="#local-6989586621679395402"><span class="hs-identifier hs-var">dis</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679395403"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679395403"><span class="hs-identifier hs-var">n</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395404"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395404"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395405"><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395405"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395406"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395406"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span>
-</span><span id="line-52"></span><span>  </span><span class="hs-special">(</span><span id="local-6989586621679395408"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395408"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">,</span><span id="local-6989586621679395409"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395409"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Expr] -&gt; ([Expr], [Expr])
+</span><a href="#local-6989586621679395387"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-51"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395390"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395390"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Lines"><span class="hs-identifier hs-type">Lines</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Repeat"><span class="hs-identifier hs-type">Repeat</span></a></span><span> </span><span id="local-6989586621679395391"><span class="annot"><span class="annottext">[DataItem]
+</span><a href="#local-6989586621679395391"><span class="hs-identifier hs-var">dis</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679395392"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679395392"><span class="hs-identifier hs-var">n</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395393"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395393"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395394"><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395394"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395395"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395395"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span>
+</span><span id="line-52"></span><span>  </span><span class="hs-special">(</span><span id="local-6989586621679395397"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395397"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">,</span><span id="local-6989586621679395398"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395398"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Expr] -&gt; ([Expr], [Expr])
 forall a. Int -&gt; [a] -&gt; ([a], [a])
 </span><span class="hs-identifier hs-var">splitAt</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[DataItem] -&gt; Int
 forall a. [a] -&gt; Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[DataItem]
-</span><a href="#local-6989586621679395402"><span class="hs-identifier hs-var">dis</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395406"><span class="hs-identifier hs-var">es</span></a></span><span>
-</span><span id="line-53"></span><span>  </span><span id="local-6989586621679395410"><span class="annot"><span class="annottext">ms :: [[[Expr]]]
-</span><a href="#local-6989586621679395410"><span class="hs-identifier hs-var hs-var">ms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [[[Expr]]]
+</span><a href="#local-6989586621679395391"><span class="hs-identifier hs-var">dis</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395395"><span class="hs-identifier hs-var">es</span></a></span><span>
+</span><span id="line-53"></span><span>  </span><span id="local-6989586621679395399"><span class="annot"><span class="annottext">ms :: [[[Expr]]]
+</span><a href="#local-6989586621679395399"><span class="hs-identifier hs-var hs-var">ms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [[[Expr]]]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#orderMtxs"><span class="hs-identifier hs-var">orderMtxs</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395408"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><a href="#local-6989586621679395397"><span class="hs-identifier hs-var">l</span></a></span><span>
 </span><span id="line-54"></span><span>  </span><span class="hs-keyword">in</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Integer
 forall a. Integral a =&gt; a -&gt; Integer
 </span><span class="hs-identifier hs-var">toInteger</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[[Expr]]] -&gt; Int
 forall a. [a] -&gt; Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[[[Expr]]]
-</span><a href="#local-6989586621679395410"><span class="hs-identifier hs-var">ms</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
+</span><a href="#local-6989586621679395399"><span class="hs-identifier hs-var">ms</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679395403"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">([[Expr]] -&gt; Doc) -&gt; [[[Expr]]] -&gt; [Doc]
+</span><a href="#local-6989586621679395392"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">([[Expr]] -&gt; Doc) -&gt; [[[Expr]]] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span>
 </span><span id="line-55"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Char -&gt; [Expr] -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#dataLine"><span class="hs-identifier hs-var">dataLine</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395401"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395404"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; Doc) -&gt; ([[Expr]] -&gt; [Expr]) -&gt; [[Expr]] -&gt; Doc
+</span><a href="#local-6989586621679395390"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395393"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; Doc) -&gt; ([[Expr]] -&gt; [Expr]) -&gt; [[Expr]] -&gt; Doc
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">[[Expr]] -&gt; [Expr]
 forall (t :: * -&gt; *) a. Foldable t =&gt; t [a] -&gt; [a]
@@ -311,66 +311,66 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">[[Expr]] -&gt; [[Expr]]
 forall a. [[a]] -&gt; [[a]]
 </span><span class="hs-identifier hs-var">transpose</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[[[Expr]]]
-</span><a href="#local-6989586621679395410"><span class="hs-identifier hs-var">ms</span></a></span><span>
+</span><a href="#local-6989586621679395399"><span class="hs-identifier hs-var">ms</span></a></span><span>
 </span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; [Doc] -&gt; [Doc]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; [Expr] -&gt; [Doc]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395401"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395405"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395409"><span class="hs-identifier hs-var">ls</span></a></span><span>
+</span><a href="#local-6989586621679395390"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395394"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395398"><span class="hs-identifier hs-var">ls</span></a></span><span>
 </span><span id="line-57"></span><span>  </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Doc]
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;makeInputFile encountered wrong-sized matrices&quot;</span></span><span>
-</span><span id="line-58"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395411"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395411"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Data
-</span><a href="Language.Drasil.Code.DataDesc.html#JunkData"><span class="hs-identifier hs-var">JunkData</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395412"><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395412"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395413"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395413"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
+</span><span id="line-58"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span id="local-6989586621679395400"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395400"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Data
+</span><a href="Language.Drasil.Code.DataDesc.html#JunkData"><span class="hs-identifier hs-var">JunkData</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679395401"><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395401"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679395402"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395402"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">blank</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; [Expr] -&gt; [Doc]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395411"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395412"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395413"><span class="hs-identifier hs-var">es</span></a></span><span>
+</span><a href="#local-6989586621679395400"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395401"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395402"><span class="hs-identifier hs-var">es</span></a></span><span>
 </span><span id="line-59"></span><span>
 </span><span id="line-60"></span><span class="hs-comment">-- helpers</span><span>
 </span><span id="line-61"></span><span>
 </span><span id="line-62"></span><span class="annot"><span class="hs-comment">-- | Helper to create a data line with the given delimeter.</span></span><span>
 </span><span id="line-63"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#dataLine"><span class="hs-identifier hs-type">dataLine</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Delim"><span class="hs-identifier hs-type">Delim</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-64"></span><span id="dataLine"><span class="annot"><span class="annottext">dataLine :: PrintingInformation -&gt; Char -&gt; [Expr] -&gt; Doc
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#dataLine"><span class="hs-identifier hs-var hs-var">dataLine</span></a></span></span><span> </span><span id="local-6989586621679395414"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395414"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span id="local-6989586621679395415"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395415"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#dataLine"><span class="hs-identifier hs-var hs-var">dataLine</span></a></span></span><span> </span><span id="local-6989586621679395403"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395403"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span id="local-6989586621679395404"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395404"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><span class="hs-identifier hs-var">hcat</span></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; ([Expr] -&gt; [Doc]) -&gt; [Expr] -&gt; Doc
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">intersperse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Doc
 </span><span class="hs-identifier hs-var">char</span></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395415"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; [Doc]) -&gt; ([Expr] -&gt; [Doc]) -&gt; [Expr] -&gt; [Doc]
+</span><a href="#local-6989586621679395404"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; [Doc]) -&gt; ([Expr] -&gt; [Doc]) -&gt; [Expr] -&gt; [Doc]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Doc) -&gt; [Expr] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Expr -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#eDoc"><span class="hs-identifier hs-var">eDoc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395414"><span class="hs-identifier hs-var">db</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679395403"><span class="hs-identifier hs-var">db</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-65"></span><span>
 </span><span id="line-66"></span><span class="annot"><span class="hs-comment">-- | Helper to create document lines with a data description, delimiter, and expressions.</span></span><span>
 </span><span id="line-67"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#docLine"><span class="hs-identifier hs-type">docLine</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#DataDesc"><span class="hs-identifier hs-type">DataDesc</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.DataDesc.html#Delim"><span class="hs-identifier hs-type">Delim</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">]</span><span>
 </span><span id="line-68"></span><span id="docLine"><span class="annot"><span class="annottext">docLine :: PrintingInformation -&gt; DataDesc -&gt; Char -&gt; [Expr] -&gt; [Doc]
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#docLine"><span class="hs-identifier hs-var hs-var">docLine</span></a></span></span><span> </span><span id="local-6989586621679395416"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395416"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span id="local-6989586621679395417"><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395417"><span class="hs-identifier hs-var">ds</span></a></span></span><span> </span><span id="local-6989586621679395418"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395418"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span id="local-6989586621679395419"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395419"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679395422"><span class="annot"><span class="annottext">dis :: [DataItem]
-</span><a href="#local-6989586621679395422"><span class="hs-identifier hs-var hs-var">dis</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Data -&gt; [DataItem]
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#docLine"><span class="hs-identifier hs-var hs-var">docLine</span></a></span></span><span> </span><span id="local-6989586621679395405"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395405"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span id="local-6989586621679395406"><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395406"><span class="hs-identifier hs-var">ds</span></a></span></span><span> </span><span id="local-6989586621679395407"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679395407"><span class="hs-identifier hs-var">dl</span></a></span></span><span> </span><span id="local-6989586621679395408"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395408"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679395411"><span class="annot"><span class="annottext">dis :: [DataItem]
+</span><a href="#local-6989586621679395411"><span class="hs-identifier hs-var hs-var">dis</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Data -&gt; [DataItem]
 </span><a href="Language.Drasil.Code.DataDesc.html#getDataInputs"><span class="hs-identifier hs-var">getDataInputs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDesc -&gt; Data
 forall a. HasCallStack =&gt; [a] -&gt; a
 </span><span class="hs-identifier hs-var">head</span></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395417"><span class="hs-identifier hs-var">ds</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679395406"><span class="hs-identifier hs-var">ds</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-69"></span><span>  </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;#&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
@@ -379,21 +379,21 @@ forall a. HasCallStack =&gt; [a] -&gt; a
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">intersperse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Doc
 </span><span class="hs-identifier hs-var">char</span></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679395418"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679395407"><span class="hs-identifier hs-var">dl</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">space</span></span><span class="hs-special">)</span><span>
 </span><span id="line-70"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(DataItem -&gt; Doc) -&gt; [DataItem] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679395424"><span class="annot"><span class="annottext">DataItem
-</span><a href="#local-6989586621679395424"><span class="hs-identifier hs-var">di</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Doc
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679395413"><span class="annot"><span class="annottext">DataItem
+</span><a href="#local-6989586621679395413"><span class="hs-identifier hs-var">di</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#sDoc"><span class="hs-identifier hs-var">sDoc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395416"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Doc) -&gt; (DataItem -&gt; Sentence) -&gt; DataItem -&gt; Doc
+</span><a href="#local-6989586621679395405"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Doc) -&gt; (DataItem -&gt; Sentence) -&gt; DataItem -&gt; Doc
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">DataItem -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">DataItem
-</span><a href="#local-6989586621679395424"><span class="hs-identifier hs-var">di</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679395413"><span class="hs-identifier hs-var">di</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span>
 </span><span id="line-71"></span><span>  </span><span class="annot"><span class="annottext">Doc -&gt; (UnitDefn -&gt; Doc) -&gt; Maybe UnitDefn -&gt; Doc
 forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
@@ -409,21 +409,21 @@ forall u. HasUnitSymbol u =&gt; u -&gt; USymb
 </span><span class="hs-identifier hs-var">usymb</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataItem -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">DataItem
-</span><a href="#local-6989586621679395424"><span class="hs-identifier hs-var">di</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[DataItem]
-</span><a href="#local-6989586621679395422"><span class="hs-identifier hs-var">dis</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679395413"><span class="hs-identifier hs-var">di</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[DataItem]
+</span><a href="#local-6989586621679395411"><span class="hs-identifier hs-var">dis</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-72"></span><span>  </span><span class="annot"><span class="annottext">Doc -&gt; [Doc] -&gt; [Doc]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DataDesc -&gt; [Expr] -&gt; [Doc]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#convDataDesc"><span class="hs-identifier hs-var">convDataDesc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395416"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
-</span><a href="#local-6989586621679395417"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395419"><span class="hs-identifier hs-var">es</span></a></span><span>
+</span><a href="#local-6989586621679395405"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">DataDesc
+</span><a href="#local-6989586621679395406"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395408"><span class="hs-identifier hs-var">es</span></a></span><span>
 </span><span id="line-73"></span><span>
 </span><span id="line-74"></span><span class="annot"><span class="hs-comment">-- | Order vectors.</span></span><span>
 </span><span id="line-75"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#orderVecs"><span class="hs-identifier hs-type">orderVecs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
 </span><span id="line-76"></span><span id="orderVecs"><span class="annot"><span class="annottext">orderVecs :: [Expr] -&gt; [[Expr]]
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#orderVecs"><span class="hs-identifier hs-var hs-var">orderVecs</span></a></span></span><span> </span><span id="local-6989586621679395431"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395431"><span class="hs-identifier hs-var">vs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[Expr]] -&gt; [[Expr]]
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#orderVecs"><span class="hs-identifier hs-var hs-var">orderVecs</span></a></span></span><span> </span><span id="local-6989586621679395420"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395420"><span class="hs-identifier hs-var">vs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[Expr]] -&gt; [[Expr]]
 forall a. [[a]] -&gt; [[a]]
 </span><span class="hs-identifier hs-var">transpose</span></span><span> </span><span class="annot"><span class="annottext">([[Expr]] -&gt; [[Expr]]) -&gt; [[Expr]] -&gt; [[Expr]]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -431,14 +431,14 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; [Expr]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#getVecList"><span class="hs-identifier hs-var">getVecList</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395431"><span class="hs-identifier hs-var">vs</span></a></span><span>
+</span><a href="#local-6989586621679395420"><span class="hs-identifier hs-var">vs</span></a></span><span>
 </span><span id="line-77"></span><span>
 </span><span id="line-78"></span><span class="annot"><span class="hs-comment">-- | Helper to get a vector (singular 'Matrix') in list form.</span></span><span>
 </span><span id="line-79"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#getVecList"><span class="hs-identifier hs-type">getVecList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">]</span><span>
 </span><span id="line-80"></span><span id="getVecList"><span class="annot"><span class="annottext">getVecList :: Expr -&gt; [Expr]
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#getVecList"><span class="hs-identifier hs-var hs-var">getVecList</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Matrix</span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679395433"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395433"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395433"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#getVecList"><span class="hs-identifier hs-var hs-var">getVecList</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Matrix</span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679395422"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395422"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395422"><span class="hs-identifier hs-var">l</span></a></span><span>
 </span><span id="line-81"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#getVecList"><span class="hs-identifier hs-var">getVecList</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Expr]
 forall a. HasCallStack =&gt; [Char] -&gt; a
@@ -448,8 +448,8 @@ forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span id="line-83"></span><span class="annot"><span class="hs-comment">-- | Order matricies.</span></span><span>
 </span><span id="line-84"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#orderMtxs"><span class="hs-identifier hs-type">orderMtxs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span class="hs-special">]</span><span>
 </span><span id="line-85"></span><span id="orderMtxs"><span class="annot"><span class="annottext">orderMtxs :: [Expr] -&gt; [[[Expr]]]
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#orderMtxs"><span class="hs-identifier hs-var hs-var">orderMtxs</span></a></span></span><span> </span><span id="local-6989586621679395434"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395434"><span class="hs-identifier hs-var">ms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[[Expr]]] -&gt; [[[Expr]]]
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#orderMtxs"><span class="hs-identifier hs-var hs-var">orderMtxs</span></a></span></span><span> </span><span id="local-6989586621679395423"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679395423"><span class="hs-identifier hs-var">ms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[[Expr]]] -&gt; [[[Expr]]]
 forall a. [[a]] -&gt; [[a]]
 </span><span class="hs-identifier hs-var">transpose</span></span><span> </span><span class="annot"><span class="annottext">([[[Expr]]] -&gt; [[[Expr]]]) -&gt; [[[Expr]]] -&gt; [[[Expr]]]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -457,14 +457,14 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; [[Expr]]
 </span><a href="Language.Drasil.Code.Imperative.WriteInput.html#getMtxLists"><span class="hs-identifier hs-var">getMtxLists</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679395434"><span class="hs-identifier hs-var">ms</span></a></span><span>
+</span><a href="#local-6989586621679395423"><span class="hs-identifier hs-var">ms</span></a></span><span>
 </span><span id="line-86"></span><span>
 </span><span id="line-87"></span><span class="annot"><span class="hs-comment">-- | Helper to get a 'Matrix' in a 2D list form.</span></span><span>
 </span><span id="line-88"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#getMtxLists"><span class="hs-identifier hs-type">getMtxLists</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
 </span><span id="line-89"></span><span id="getMtxLists"><span class="annot"><span class="annottext">getMtxLists :: Expr -&gt; [[Expr]]
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#getMtxLists"><span class="hs-identifier hs-var hs-var">getMtxLists</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Matrix</span></span><span> </span><span id="local-6989586621679395436"><span class="annot"><span class="annottext">[[Expr]]
-</span><a href="#local-6989586621679395436"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[Expr]]
-</span><a href="#local-6989586621679395436"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#getMtxLists"><span class="hs-identifier hs-var hs-var">getMtxLists</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Matrix</span></span><span> </span><span id="local-6989586621679395425"><span class="annot"><span class="annottext">[[Expr]]
+</span><a href="#local-6989586621679395425"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[Expr]]
+</span><a href="#local-6989586621679395425"><span class="hs-identifier hs-var">l</span></a></span><span>
 </span><span id="line-90"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#getMtxLists"><span class="hs-identifier hs-var">getMtxLists</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Expr]]
 forall a. HasCallStack =&gt; [Char] -&gt; a
@@ -474,26 +474,26 @@ forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span id="line-92"></span><span class="annot"><span class="hs-comment">-- | Creates a 'OneLine' 'Implementation'-stage 'sentenceDoc'.</span></span><span>
 </span><span id="line-93"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#sDoc"><span class="hs-identifier hs-type">sDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-94"></span><span id="sDoc"><span class="annot"><span class="annottext">sDoc :: PrintingInformation -&gt; Sentence -&gt; Doc
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#sDoc"><span class="hs-identifier hs-var hs-var">sDoc</span></a></span></span><span> </span><span id="local-6989586621679395438"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395438"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SingleLine -&gt; Spec -&gt; Doc
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#sDoc"><span class="hs-identifier hs-var hs-var">sDoc</span></a></span></span><span> </span><span id="local-6989586621679395427"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395427"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SingleLine -&gt; Spec -&gt; Doc
 </span><span class="hs-identifier hs-var">sentenceDoc</span></span><span> </span><span class="annot"><span class="annottext">SingleLine
 </span><span class="hs-identifier hs-var">OneLine</span></span><span> </span><span class="annot"><span class="annottext">(Spec -&gt; Doc) -&gt; (Sentence -&gt; Spec) -&gt; Sentence -&gt; Doc
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><span class="hs-identifier hs-var">spec</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395438"><span class="hs-identifier hs-var">pinfo</span></a></span><span>
+</span><a href="#local-6989586621679395427"><span class="hs-identifier hs-var">pinfo</span></a></span><span>
 </span><span id="line-95"></span><span>
 </span><span id="line-96"></span><span class="annot"><span class="hs-comment">-- | Creates a 'OneLine' 'Implementation'-stage 'exprDoc'.</span></span><span>
 </span><span id="line-97"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#eDoc"><span class="hs-identifier hs-type">eDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-98"></span><span id="eDoc"><span class="annot"><span class="annottext">eDoc :: PrintingInformation -&gt; Expr -&gt; Doc
-</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#eDoc"><span class="hs-identifier hs-var hs-var">eDoc</span></a></span></span><span> </span><span id="local-6989586621679395439"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395439"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span id="local-6989586621679395440"><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679395440"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SingleLine -&gt; Expr -&gt; Doc
+</span><a href="Language.Drasil.Code.Imperative.WriteInput.html#eDoc"><span class="hs-identifier hs-var hs-var">eDoc</span></a></span></span><span> </span><span id="local-6989586621679395428"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395428"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span id="local-6989586621679395429"><span class="annot"><span class="annottext">Expr
+</span><a href="#local-6989586621679395429"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SingleLine -&gt; Expr -&gt; Doc
 </span><span class="hs-identifier hs-var">exprDoc</span></span><span> </span><span class="annot"><span class="annottext">SingleLine
 </span><span class="hs-identifier hs-var">OneLine</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; PrintingInformation -&gt; Expr
 </span><span class="hs-identifier hs-var">expr</span></span><span> </span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679395440"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679395439"><span class="hs-identifier hs-var">pinfo</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679395429"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679395428"><span class="hs-identifier hs-var">pinfo</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-99"></span><span>
 </span><span id="line-100"></span><span class="annot"><span class="hs-comment">-- | Creates a 'OneLine' 'unitDoc'.</span></span><span>
 </span><span id="line-101"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteInput.html#uDoc"><span class="hs-identifier hs-type">uDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">USymb</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>

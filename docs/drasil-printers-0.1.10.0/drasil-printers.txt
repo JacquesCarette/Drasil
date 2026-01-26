@@ -75,23 +75,6 @@ makeProject :: PrintingInformation -> Document -> Project
 
 module Language.Drasil.Printers
 
--- | Document types include Software Requirements Specification and
---   Website. Choosing SRS will generate both TeX and HTML files, while
---   Website generates only as HTML. This also determines what folders the
---   generated files will be placed into.
-data DocType
-SRS :: DocType
-Website :: DocType
-Lesson :: DocType
-
--- | Possible formats for printer output.
-data Format
-TeX :: Format
-Plain :: Format
-HTML :: Format
-Jupyter :: Format
-MDBook :: Format
-
 -- | Generate an HTML document from a Drasil <a>Document</a>.
 genHTML :: String -> Document -> Doc
 
@@ -161,10 +144,11 @@ showHasSymbImpl :: HasSymbol x => x -> String
 -- | Generates a LaTeX document.
 genTeX :: Document -> ShowTableOfContents -> PrintingInformation -> Doc
 
--- | Generate a python notebook document (using json). build : build the
---   SRS document in JSON format build': build the general Jupyter Notbook
---   document
-genJupyter :: DocType -> Document -> Doc
+-- | Build the general Jupyter Notebook document.
+genJupyterLessonPlan :: Document -> Doc
+
+-- | Build an SRS document in JSON format.
+genJupyterSRS :: Document -> Doc
 
 -- | Generate a mdBook SRS
 genMDBook :: Project -> [(Filename, Doc)]

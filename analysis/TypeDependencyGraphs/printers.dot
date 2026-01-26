@@ -300,14 +300,6 @@ digraph alltypes {
 		StyleGuide -> String;
 		}
 	}
-	subgraph format {
-		subgraph doctype{
-		DocType	[shape=oval, color=darkviolet, label="DocType"];
-		}
-		subgraph format{
-		Format	[shape=oval, color=darkviolet, label="Format"];
-		}
-	}
 	subgraph printers {
 	}
 }

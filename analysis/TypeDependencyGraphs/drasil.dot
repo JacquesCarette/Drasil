@@ -1743,6 +1743,10 @@ digraph alltypes {
 	}
 	subgraph body {
 	}
+	subgraph traceabilitygraphs {
+	}
+	subgraph typececkh {
+	}
 	subgraph baecunkdbhs {
 	}
 	subgraph cunkdumph {
@@ -1758,14 +1762,15 @@ digraph alltypes {
 	subgraph formats {
 		subgraph docchoices{
 		DocChoices	[shape=oval, color=cyan3, label="DocChoices"];
-		DocChoices -> DocType;
 		DocChoices -> Format;
+		}
+		subgraph format{
+		Format	[shape=oval, color=darkviolet, label="Format"];
 		}
 		subgraph docspec{
 		DocSpec	[shape=oval, color=darkviolet, label="DocSpec"];
 		DocSpec -> DocChoices;
 		DocSpec -> Filename;
-		DocSpec -> DocType;
 		DocSpec -> Format;
 		}
 		subgraph docclass{
@@ -1789,9 +1794,11 @@ digraph alltypes {
 	}
 	subgraph generate {
 	}
-	subgraph traceabilitygraphs {
+	subgraph lesonplans {
 	}
-	subgraph typececkh {
+	subgraph srs {
+	}
+	subgraph webites {
 	}
 	subgraph generator {
 	}
@@ -4155,14 +4162,6 @@ digraph alltypes {
 		StyleGuide	[shape=oval, color=darkviolet, label="StyleGuide"];
 		StyleGuide -> StyleGuide;
 		StyleGuide -> String;
-		}
-	}
-	subgraph format {
-		subgraph doctype{
-		DocType	[shape=oval, color=darkviolet, label="DocType"];
-		}
-		subgraph format{
-		Format	[shape=oval, color=darkviolet, label="Format"];
 		}
 	}
 	subgraph printers {

@@ -1,9 +1,6 @@
 \chapter{A look under the hood: \mbox{Our process}}
 \label{c:process}
 
-%\ds{Make sure we talk about continuous integration / git processes / etc.
-%Actually might belong in the next chapter - iteration and refinement}
-
 This chapter examines the process by which we developed the Drasil 
 framework itself. Rather than describing the general software development 
 process that Drasil is intended to support or automate, we turn our attention 
@@ -81,10 +78,10 @@ same knowledge (i.e. the definitions of $h_g$ and $h_c$), merely formatted for
 different audiences. In the case of the SRS and the source code, the audiences 
 are human stakeholders and computers, respectively.
 
-This small example foreshadows the larger patterns of redundancy that we 
-observe in more complex systems. The rest of this chapter generalizes from such 
-examples, showing how we systematically identified, categorized, and addressed 
-these issues in the development of Drasil.
+This small example foreshadows the larger patterns of redundancy and risks of 
+inconsistency that we observe in more complex systems. The rest of this chapter 
+generalizes from such examples, showing how we systematically identified, 
+categorized, and addressed these issues in the development of Drasil.
 
 \section{A (very) brief introduction to our case study systems}
 
@@ -179,8 +176,11 @@ type and understand exactly what they are trying to convey.
 To meaningfully address redundancy in software artifacts, we must understand 
 the purpose, content, and audience of each artifact\textemdash{}not just 
 observe repetition. Building on the foundation provided by our case studies, 
-this section examines the structure and role of each major \sf{} in our 
-process. By breaking down these artifacts, we aim to reveal both their 
+this section examines the structure and role of each major \sf{}\footnote{For 
+brevity, we focus our analysis on the SRS, Module Guide, and Source Code, as 
+these artifacts are both representative and sufficiently distinct to illustrate 
+the patterns of redundancy and knowledge organization central to our argument.} 
+in our process. By breaking down these artifacts, we aim to reveal both their 
 commonalities and their differences, setting the stage for identifying patterns 
 of knowledge organization and redundancy that inform the design of Drasil.
 
@@ -189,8 +189,9 @@ of our \sfs{} are trying to say and to whom.\footnote{Refer to
 Section~\ref{sec:sfs} for a general summary of \sfs{}.} By selecting our case 
 studies from those developed using common artifact templates, we have given 
 ourselves a head start on that process. The following subsections present a 
-brief sampling of our process of breaking down \sfs{}, acknowledging that a 
-comprehensive overview would be excessively lengthy.
+brief sampling of our process of breaking down \sfs{}, using the \gb{} case 
+study as a running, motivating example to ground the analysis, acknowledging 
+that a comprehensive overview would be excessively lengthy.
 
 \subsection{SRS}
 \label{sec:breakdown:srs}
@@ -349,21 +350,8 @@ derive the system-specific knowledge.
 Observing the contents of an SRS template adhere to said template may seem 
 mundane, but it is a necessary step before we can move on to other \sfs{}. 
 Without understanding what the SRS template intends to convey it is hard to 
-assess weather or not the case study SRS conveys that information. With that in 
+assess whether or not the case study SRS conveys that information. With that in 
 mind, we can move on to the MG and source code.
-
-\ds{Current plan for following subsections: Brief description of the \sf{}, 
-show an example of similarities within (ex. MG/MIS have a section per module, 
-each section is organized the same way, some are filled in, some aren't), then 
-follow a requirement through the MG to something in the MIS and finally to 
-code. We'll dissect differences between case studies when looking at the 
-patterns in Section~\ref{sec:patterns}. This also plants the seeds of "see, 
-there's the same info moving from SRS $\rightarrow$ MG $\rightarrow$ MIS** 
-$\rightarrow$ Code without stating it 
-explicitly, which we can then do in the pattern section.}
-
-\ds{Example to use should be a DD/IM from \gb{}, goes to calculations module 
-in the MG, and finally a method in the source code}
 
 \subsection{Module Guide}
 \label{sec:breakdown:mg}
@@ -448,7 +436,7 @@ designers, as opposed to the knowledge of the system domain, problem being
 solved, and requirements of an acceptable solution provided in the SRS. The MG 
 provides platform and implementation-specific decisions, which will eventually 
 be translated into implementation details in the source code. With that in 
-mind, let us move on to the source code.
+mind, let us move on to dissecting the source code.
 
 \subsection{Source Code}
 \label{sec:breakdown:code}
@@ -517,10 +505,10 @@ identically in structure to the module decomposition. The only difference being
 the existence of an exceptions module defining the different types of
 exceptions that may be thrown by the other modules. While this can be 
 considered a fairly trivial difference, likely made for ease of maintenance, 
-readability, and extensibility, it highlights that the two \sfs{} are out of 
-sync. We speculate this difference was caused by a change made during the 
-implementation phase, wherein the MG was not updated to reflect the addition of 
-an exceptions module.
+readability, and extensibility, it highlights that \textbf{the two \sfs{} are 
+out of sync}. We speculate this difference was caused by a change made during 
+the implementation phase, wherein the MG was not updated to reflect the 
+addition of an exceptions module.
 
 \fig{
 \lstinputlisting[language=Python, firstline=5, 
@@ -546,6 +534,21 @@ DD is the (partial) name of the function in the source code and the equation
 from the DD is calculated within the source code. This is one of many patterns 
 we see across our \sfs{} within each case study.
 
+\subsection{Wrapping up}
+
+A close examination of each major software artifact reveals that, while their 
+purposes and audiences differ, they are all fundamentally built upon the same 
+core knowledge. Redundancy is introduced both within and across these 
+artifacts, often as a result of tailoring the same information for different 
+contexts or audiences. Structural similarities emerge across artifacts, 
+highlighting opportunities for systematic knowledge capture and reuse. At the 
+same time, inconsistencies and omissions can easily arise when artifacts are 
+maintained separately, underscoring the risks inherent in manual, disconnected 
+processes. Understanding the intent, content, and audience of each artifact is 
+therefore essential for identifying patterns of redundancy and for informing 
+the design of tools that aim to improve consistency and reduce unnecessary 
+repetition.
+
 By systematically dissecting each artifact type, we not only reveal the sources 
 and forms of redundancy, but also clarify the requirements for any framework 
 (Drasil) that aims to automate or improve the generation of these artifacts. 
@@ -555,15 +558,15 @@ discuss in the following sections.
 \section{Identifying Repetitive Redundancy}
 \label{sec:patterns}
 
-From the examples in Section~\ref{sec:breakdown}, we can see a number of simple 
-patterns emerging with respect to organization and information repetition 
-within a case study. Upon applying our process to all of the case studies and 
-adopting a broader perspective, numerous instances emerge where patterns 
-transcend individual case studies and remain universally applicable. Several of 
-these patterns should be unsurprising, as they relate to the template of a 
-particular \sf{}. It is interesting, however, that patterns of information 
-organization crop up within a given \sf{} in multiple places, containing 
-distinct information.
+From the examples in Sections~\ref{sec:hghc-mini}~and~\ref{sec:breakdown}, we 
+can see a number of simple patterns emerging with respect to organization and 
+information repetition within a case study. Upon applying our process to all of 
+the case studies and adopting a broader perspective, numerous instances emerge 
+where patterns transcend individual case studies and remain universally 
+applicable. Several of these patterns should be unsurprising, as they relate to 
+the template of a particular \sf{}. It is interesting, however, that patterns 
+of information organization crop up within a given \sf{} in multiple places, 
+containing distinct information.
 
 Returning to our example from Section~\ref{sec:breakdown:srs}, looking only at 
 the reference section of our SRS template, we have already found three 
@@ -676,14 +679,15 @@ basic form. However, communication of this sort is still imperfect, due to gaps
 in shared knowledge between participants or misunderstanding of overloaded 
 terms. Interpersonal communications can involve nuance and context-dependent 
 interpretations, yet they still boil down to knowledge projection on the part of
-the communicator and knowledge transformation on the part of the communicatee.
-The latter can infer context, or be provided with explicit context, which 
-affirms their use of the appropriate knowledge transformations.
+the communicator and knowledge transformation on the part of the 
+communicatee.\footnote{All this to say, words are a shorthand for their 
+definitions.} The latter can infer context, or be provided with explicit 
+context, which affirms their use of the appropriate knowledge transformations.
 
 Returning to the context of software systems, if we broaden our view from a 
 single system, to a software family, we can also find patterns of commonality 
 and repeated knowledge across the various \sfs{} of the family members (For 
-example the SWHS and NoPCM case studies) as they have been developed to solve 
+example our SWHS and NoPCM case studies) as they have been developed to solve 
 similar, or in our case nearly identical, problems. Software family members are 
 good examples to help determine what types of information or knowledge provided 
 in the \sfs{} belong to the system-domain, problem-domain, or are simply 
@@ -724,7 +728,7 @@ energy balance on water in the tank as shown in Figure~\ref{fig:swhsnopcmim1}.
 {Instance Model difference between SWHS and NoPCM }
 {fig:swhsnopcmim1}
 
-While the above examples are fairly small and specific, they are indicative of 
+While these examples are fairly small and specific, they are indicative of 
 a larger, more generalizable, set of patterns of knowledge organization and 
 repetition. These patterns are at their core: the use of common knowledge that 
 has been projected through some means, and patterns of organization of those 
@@ -735,104 +739,140 @@ may include the identity projection (ie. the full, unabridged definition) as
 they are dependent on the relevance to the audience of the given \sf{}. 
 Regardless, the captured knowledge fundamentally underlies these patterns of 
 repetition, and is where we need to focus if we intend to reduce unnecessary 
-redundancy.
+redundancy and improve maintainability.
+
+These patterns directly inform the requirements and architecture of Drasil. By 
+understanding them, we reveal challenges and opportunities for automation and 
+consistency in software artifact generation. Recognizing that redundancy arises 
+from projecting the same core knowledge into different forms for different 
+audiences, we see the need for a framework that can capture, organize, and 
+project knowledge in a principled, reusable way. This insight is the conceptual 
+bridge to Drasil: a framework explicitly designed to operationalize these 
+patterns, reduce unnecessary duplication, and ensure consistency across 
+artifacts. The following sections build on this foundation.
 
 \section{Organizing knowledge - a fluid approach}
 
-Recognizing the patterns of redundancy, this section discusses our conceptual 
-approach to organizing and managing knowledge. Here, we generalize from 
-specific examples to propose a flexible framework for knowledge capture and 
-projection, laying the groundwork for Drasil's design.
+Recognizing patterns of redundancy and knowledge projection, we are left with a 
+crucial question: how should knowledge itself be captured and organized to 
+support consistent, flexible reuse across artifacts? While our analysis has 
+revealed the importance of knowledge projections and the risks of redundancy, 
+it remains unclear what form the underlying knowledge base should take, or how 
+it should be structured to enable effective projection. In the following 
+section, we turn to this open problem, exploring conceptual approaches to 
+knowledge capture and organization that can lay the groundwork for Drasil's 
+design.
 
-Given the knowledge categories and patterns of use across \sfs{} we have seen 
-in the previous section, we can generalize knowledge projections by their 
-projection functions. \ds{What follows is very rough and may need some 
-definitions/tweaking to be more clear, but it makes sense in my head} Identity 
-projection functions directly repeat knowledge 
-verbatim i.e. $p(K) \equiv K$ for some piece of knowledge $k$ \ds{I think I'll 
-remove all of the set notation here, it comes out of nowhere and probably won't 
-come up anywhere else or be defined anywhere so it's a bit jarring. I'm leaving 
-it in for now because it makes sense to me}. For example a 
-copy-and-paste approach would be an identity projection.  It should be noted in 
-our case that as long as the projection used contains the full definition and 
-context of a piece of knowledge, that projection is considered an identity 
-projection regardless of changes to notation (ex. ``$x = y$" vs ``$y = x$") or 
+To this point we have been referring to an intuitive, albeit nebulous concept 
+of \emph{knowledge} without explicitly defining it. Before we can discuss how 
+to organize knowledge, let us first clarify what it is: knowledge is 
+information that has been structured and contextualized to be meaningful and 
+useful. It encompasses facts, concepts, definitions, theories, and 
+relationships that are relevant to a particular domain or problem. Knowledge 
+can be represented in various forms, such as mathematical equations, natural 
+language descriptions, code snippets, diagrams, and more. The core of what a 
+piece of knowledge is remains consistent, regardless of its representation. 
+This should become more clear in Chapter~\ref{c:drasil}, specifically 
+Section~\ref{sec:kcChunk}.
+
+\emph{For clarity in the following examples, we will use set notation to 
+describe relationships between knowledge and projections. This is not intended 
+as a formalization, but rather as a familiar mathematical juxtaposition to help 
+illustrate the concepts.} Here, we use $K$ to denote a set, or in our 
+terminology a \emph{chunk}, of one or more related pieces of information. Each 
+$K$ may represent a single fact, a definition, or a tightly connected set of 
+information relevant to a particular concept or artifact.
+
+Given the patterns across \sfs{} we observed in the previous section, we can 
+generalize knowledge projections to their projection functions. Identity 
+projection functions directly repeat knowledge verbatim i.e. $p(K) \equiv K$ 
+for some set of knowledge $K$. It should be noted in our case that as long as 
+the projection used contains the full definition and context of a piece of 
+knowledge, that projection is considered an identity projection 
+\textbf{regardless of changes to notation} (ex. ``$x = y$" vs ``$y = x$") or 
 language (ex. ``$x = y$" vs ``$x$ is equal to $y$" vs ``x est \'egal \`a y"). 
-\ds{Please correct my French if I'm wrong here}
+An identity projection is providing the knowledge chunk in full. 
 Non-identity projections require using representations that elide some details 
 of the knowledge at hand to make it more palatable for the audience of the 
 given \sf{} i.e. $p(K) \subset K$. Similarly, we can have multivariant 
 projection functions (whether identity or not) which project knowledge from 
 several places into one form, i.e. $p(K,L,M) \subseteq K\cup L\cup M$.
 
-In both cases, we have a knowledge core that is fully defined and then we apply 
+In all cases, we have some fully defined knowledge and then we apply 
 a projection function to retrieve the necessary information for our \sf{}. We 
-can postulate that organizing our knowledge cores into some type of structure, 
-with some assortment of projection functions (ex. Looking up the full 
-definition would be done through an identity projection function) will allow 
-us to reduce the need for manual duplication and remove unnecessary 
-redundancies, as anything we need to include in our \sfs{} can be retrieved 
-from a given source with a given projection function.
+can postulate that organizing and grouping knowledge into some type of 
+structure, with an assortment of projection functions (ex. To look up the full 
+definition in different representations, pull out relevant portions for a given 
+audience, or provide useful abstractions) will allow us to reduce the need for 
+manual duplication and remove unnecessary redundancies, as anything we need to 
+include in our \sfs{} can be retrieved from a given source with a given 
+projection function.
 
 Keeping in mind that our core knowledge is used across all \sfs{} via 
-projections, we may naively choose to consolidate all knowledge cores into one 
+projections, we may naively choose to consolidate all knowledge into a single
 database. This naive approach works well enough for a limited set of examples, 
 but it quickly becomes apparent (refer to the PM example from 
 Section~\ref{sec:patterns}) that context is highly important and the sheer 
 scope of knowledge to be organized may become unwieldy. After breaking down 
-multiple case studies, we believe collecting knowledge cores into categories 
+multiple case studies, we believe collecting knowledge chunks into categories 
 based on their domain(s) is a more easily navigable and maintainable approach. 
 This also allows us to keep some context information at a meta-level (ex. 
 Physics knowledge would be categorized into a Physics knowledge-base). Then for 
 any given system, we would likely only need to reference across a handful of 
 contexts (knowledge-bases) relevant to the domain.
 
-There is knowledge fundamental to all \sfs{} as it is contextual to the domain 
-of \sf{} writing itself. This kind of meta-knowledge would be useful to have 
-readily available in its own knowledge-base. The same could be said for things 
-like SI Unit definitions, while they only apply to measuring physical 
-properties, we see some domains built off of physics that operate at a higher 
-level of assumed understanding (ex. Chemistry abstracts some of the physics 
-details, while being directly reliant on them).
+There is also knowledge fundamental to all \sfs{}\textemdash{}it is contextual 
+to the domain of \sf{} writing itself. This kind of meta-knowledge would be 
+useful to have readily available in its own knowledge-base. The same could be 
+said for things like SI Unit definitions, while they only apply to measuring 
+physical properties, we see some domains built off of physics that operate at a 
+higher level of assumed understanding (ex. Chemistry abstracts some of the 
+physics details, while being directly reliant on them).
 
 Some of the knowledge used in our \sfs{} is derived from other, more 
-fundamental, knowledge cores. For example, when using SI units, we may choose 
-to use a derived unit (newton, joule, radian, etc.) which 
-is a better fit for the application domain of the system being documented. 
-While we want to avoid unnecessary redundancy, we can argue that derived units 
-are good candidates for acceptable redundancy. For example, if anywhere we use 
-\emph{Joules} we replace that with the definition ($J = 
-\frac{kg\cdot{}m^2}{s^2}$) we then run into a problem of context and 
-complexity. Generally, the audience for a given \sf{} will have an internal 
-representation of context-specific knowledge, so even something as 
-straightforward as changing the units from $J$ to $\frac{kg\cdot{}m^2}{s^2}$ 
-will put unnecessary load on said audience and force them to engage in more 
-intensive knowledge transformations, while also potentially making the \sfs{} 
-harder to parse for experts in the domain. In these cases, we want to use the 
-derived knowledge in place of the core knowledge.
+fundamental, knowledge chunks. For example, when using SI units, we may choose 
+to use a derived unit (newton, joule, radian, etc.) that is a better fit for 
+the application domain of the system being documented. While we want to avoid 
+unnecessary redundancy, we can argue that derived units are good candidates for 
+acceptable redundancy. For example, if anywhere we use \emph{Joules} we replace 
+that with the definition ($J = \frac{kg\cdot{}m^2}{s^2}$) we then run into a 
+problem of context and complexity. Generally, the audience for a given \sf{} 
+will have an internal representation of context-specific knowledge, so even 
+something as straightforward as changing the units from $J$ to 
+$\frac{kg\cdot{}m^2}{s^2}$ will put unnecessary load on said audience and force 
+them to engage in more intensive knowledge transformations, while also 
+potentially making the \sfs{} harder to parse for experts in the domain. In 
+these cases, we want to use the derived knowledge in place of the core 
+knowledge.
 
 Being able to specify our level of abstraction through the progressive 
 application of projection functions eludes to another necessary piece of 
 knowledge organization: the projection functions themselves. As we project out 
 core knowledge that we know of as otherwise commonly derived concepts (like the 
-Joule example above), we should also like to store them. For example, derived 
-units may end up in the same context as the SI Units, defined by specific 
-projection functions applied to SI Units. Continuing the Joule example, we 
-would be applying a projection function across core knowledge related to energy 
-and specific SI Units, then calling that projection \emph{Joule} and giving it 
-a symbolic representation $J$ that we can refer to later.
+Joule example above), we should also like to store them in some form. For 
+example, derived units may end up in the same context as the SI Units, defined 
+by specific projection functions applied to SI Units. Continuing the Joule 
+example, we would be applying a projection function across core knowledge 
+related to energy and specific SI Units, then calling that projection 
+\emph{Joule} and giving it a symbolic representation $J$ that we can refer to 
+later.
 
 We want to take a fluid and practical approach to organizing knowledge, such 
-that we can keep domain-related knowledge cores together with useful 
+that we can keep domain-related knowledge chunks together with useful 
 derivations. We want to separate knowledge in unrelated domains, such that it 
 is straightforward to look up whatever we need with relative ease. The 
 specific implementation for organization will be detailed later (See 
 Chapter~\ref{sec:kc}).
 
-\ds{Next section needs to summarize "we need to capture knowledge", "store 
-knowledge", "project knowledge", and have the framework to support that across 
-multiple \sf{} domains and multiple code langs}
-  
+In summary, this approach to organizing knowledge (grouping related information 
+into domain-specific knowledge-bases and supporting flexible projection) lays 
+the conceptual foundation for Drasil's framework. By making explicit how 
+knowledge is structured and accessed, we address the root causes of redundancy 
+and inconsistency identified earlier in this chapter. This organizational 
+strategy not only clarifies the requirements for knowledge capture and reuse, 
+but also directly informs the design principles and implementation choices 
+discussed later in the thesis.
+
 \section{Summary - The seeds of Drasil}
 
 This final section synthesizes the chapter's findings, highlighting the key 
@@ -844,15 +884,15 @@ Through this chapter, as part of our effort to reduce unnecessary redundancy
 across the software development process, we have taken an approach to breaking 
 down \sfs{} to the core knowledge they present and looked for commonalities in 
 that knowledge between them. We use several case study systems that fit our 
-scope (input $\rightarrow$ process $\rightarrow$ output) as examples to give a 
-concrete, applied base to the work.
+scope (\mbox{input~$\rightarrow$~process~$\rightarrow$~output}) as examples to 
+give a concrete, applied base to the work.
 
 Generally, we see \sfs{} for a given system have a lot in common, namely they 
 require the same core knowledge tailored to a specific audience for each \sf{}. 
 This knowledge is organized in a meaningful way, and portions relevant to the 
 context of the \sf{} are presented to the audience.
 
-We delved into the idea of knowledge cores and projection functions for 
+We delved into the idea of knowledge chunks and projection functions for 
 producing context-relevant pieces of knowledge that are consumable by a given 
 audience. We have also explored strategies for organizing that knowledge in a 
 practical manner. 
@@ -869,17 +909,5 @@ of \sfs{} is relatively straightforward to deal with, we can use templates,
 blueprints, or deterministic generation which rely on relatively common 
 technologies. The knowledge-capture and projection is much more interesting as 
 it relies on some yet-to-be-determined knowledge-capture mechanism that can 
-provide us with chunks (borrowing the term from LP) of knowledge that can then 
-be fed to projection functions in some context-aware manner.
-
-\ds{Want to work in something about ``our framework needs to be developed with 
-consistency in mind, so we take a practical, example-driven (case studies) 
-approach to minimize introducing new errors and inconsistencies." Could also 
-fit in Drasil section, but I feel like introducing it here would be better.}
-
-%- Everything boils down to knowledge we are trying to convey, audience 
-%(context), and organizational structure. The latter can be 
-%handled through a number of means (deterministic generation / templates / 
-%blueprints). The former is more interesting as it essentially boils down to a 
-%particular grouping of information (knowledge-base) and some way to transform 
-%or project out what is relevant given a set of characteristics or expectations.
+provide us with chunks of knowledge that can then be fed to projection 
+functions in some context-aware manner.

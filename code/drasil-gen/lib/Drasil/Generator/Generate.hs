@@ -1,7 +1,7 @@
 -- | Defines Drasil generator functions.
 module Drasil.Generator.Generate (
   -- * Generators
-  exportSmithEtAlSrs, exportWebsite,
+  exportSmithEtAlSrs,
   exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo,
   -- * Internal Functions
   codedDirName
@@ -44,7 +44,7 @@ import Utils.Drasil (createDirIfMissing)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (DocSpec(..), DocChoices(DC), Filename,
-  docChoices, Format(..), DocType(Website, SRS))
+  docChoices, Format(..), DocType(SRS))
 import Drasil.Generator.TraceabilityGraphs (outputDot)
 import Drasil.Generator.TypeCheck (typeCheckSI)
 
@@ -85,12 +85,6 @@ exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [Choices] -> IO ()
 exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcs = do
   exportSmithEtAlSrs syst srsDecl srsFileName
   exportCodeZoo syst chcs
-
--- | Generate a "website" (HTML file) softifact.
-exportWebsite :: System -> Document -> Filename -> IO ()
-exportWebsite syst doc fileName = do
-  let printSetting = piSys (syst ^. systemdb) (syst ^. refTable) Equational defaultConfiguration
-  genDoc (DocSpec (docChoices Website [HTML]) fileName) doc printSetting
 
 -- | Generate a document in one or many flavours (HTML, TeX+Makefile,
 -- mdBook+Makefile, or Jupyter Notebook, up to document type).

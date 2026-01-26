@@ -24,7 +24,7 @@ import Utils.Drasil (createDirIfMissing)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (DocSpec(..), DocChoices(DC), Filename,
-  docChoices, Format(..), DocType(SRS))
+  docChoices, Format(..))
 import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 
@@ -35,27 +35,27 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
       printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational defaultConfiguration
   dumpEverything syst' printfo ".drasil/"
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
-  genDoc (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
+  genDoc (DocSpec (docChoices [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
   genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
 
 -- | Generate a document in one or many flavours (HTML, TeX+Makefile,
 -- mdBook+Makefile, or Jupyter Notebook, up to document type).
 genDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
-genDoc (DocSpec (DC dt fmts) fn)  body sm = mapM_ (prntDoc body sm fn dt) fmts
+genDoc (DocSpec (DC fmts) fn)  body sm = mapM_ (prntDoc body sm fn) fmts
 
 -- | Helper for writing the documents (TeX / HTML / Jupyter) to file.
-prntDoc :: Document -> PrintingInformation -> String -> DocType -> Format -> IO ()
-prntDoc d pinfo fn dtype fmt =
+prntDoc :: Document -> PrintingInformation -> String -> Format -> IO ()
+prntDoc d pinfo fn fmt =
   case fmt of
-    HTML    -> do prntDoc' (show dtype ++ "/HTML") fn HTML d pinfo
-                  prntCSS dtype fn d
-    TeX     -> do prntDoc' (show dtype ++ "/PDF") fn TeX d pinfo
-                  prntMake $ DocSpec (DC dtype [TeX]) fn
-    Jupyter -> do prntDoc' (show dtype ++ "/Jupyter") fn Jupyter d pinfo
-    MDBook  -> do prntDoc' (show dtype ++ "/mdBook") fn MDBook d pinfo
-                  prntMake $ DocSpec (DC dtype [MDBook]) fn
-                  prntBook dtype d pinfo
-                  prntCSV  dtype pinfo
+    HTML    -> do prntDoc' "SRS/HTML" fn HTML d pinfo
+                  prntCSS fn d
+    TeX     -> do prntDoc' "SRS/PDF" fn TeX d pinfo
+                  prntMake $ DocSpec (DC [TeX]) fn
+    Jupyter ->    prntDoc' "SRS/Jupyter" fn Jupyter d pinfo
+    MDBook  -> do prntDoc' "SRS/mdBook" fn MDBook d pinfo
+                  prntMake $ DocSpec (DC [MDBook]) fn
+                  prntBook d pinfo
+                  prntCSV  pinfo
     Plain   -> putStrLn "Plain-rendering is not supported."
 
 -- | Common error for when an unsupported SRS format is attempted.
@@ -90,8 +90,8 @@ prntDoc' dt' fn format body' sm = do
 
 -- | Helper for writing the Makefile(s).
 prntMake :: DocSpec -> IO ()
-prntMake ds@(DocSpec (DC dt f) _) =
-  do outh <- openFile (show dt ++ dir f ++ "/Makefile") WriteMode
+prntMake ds@(DocSpec (DC f) _) =
+  do outh <- openFile ("SRS" ++ dir f ++ "/Makefile") WriteMode
      hPutStrLn outh $ render $ genMake [ds]
      hClose outh
   where
@@ -101,30 +101,26 @@ prntMake ds@(DocSpec (DC dt f) _) =
 
 -- | Helper that creates a CSS file to accompany an HTML file.
 -- Takes in the folder name, generated file name, and the document.
-prntCSS :: DocType -> String -> Document -> IO ()
-prntCSS docType fn body = do
-  outh2 <- openFile (getFD docType ++ fn ++ ".css") WriteMode
+prntCSS :: String -> Document -> IO ()
+prntCSS fn body = do
+  outh2 <- openFile ("SRS/HTML/" ++ fn ++ ".css") WriteMode
   hPutStrLn outh2 $ render (makeCSS body)
   hClose outh2
-  where
-    getFD dtype = show dtype ++ "/HTML/"
 
 -- | Helper for generating the .toml config file for mdBook.
-prntBook :: DocType -> Document -> PrintingInformation -> IO()
-prntBook dt doc sm = do
+prntBook :: Document -> PrintingInformation -> IO()
+prntBook doc sm = do
   outh <- openFile fp WriteMode
   hPutStrLn outh $ render (makeBook doc sm)
   hClose outh
   where
-    fp = show dt ++ "/mdBook/book.toml"
+    fp = "SRS/mdBook/book.toml"
 
-prntCSV :: DocType -> PrintingInformation -> IO()
-prntCSV dt sm = do
-  outh <- openFile fp WriteMode
+prntCSV :: PrintingInformation -> IO()
+prntCSV sm = do
+  outh <- openFile "SRS/mdBook/.drasil-requirements.csv" WriteMode
   hPutStrLn outh $ render (makeRequirements sm)
   hClose outh
-  where
-    fp = show dt ++ "/mdBook/.drasil-requirements.csv"
 
 -- | Renders single-page documents.
 writeDoc :: PrintingInformation -> Format -> Filename -> Document -> Doc

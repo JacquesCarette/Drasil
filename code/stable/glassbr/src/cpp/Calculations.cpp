@@ -65,21 +65,6 @@ double func_q_hat_tol(InputParameters &inParams, double J_tol) {
     return interpY("SDF.txt", inParams.AR, J_tol);
 }
 
-double func_J(InputParameters &inParams, double q_hat) {
-    ofstream outfile;
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "function func_J called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object";
-    outfile << ", " << std::endl;
-    outfile << "  q_hat = ";
-    outfile << q_hat << std::endl;
-    outfile << "  }" << std::endl;
-    outfile.close();
-    
-    return interpZ("SDF.txt", inParams.AR, q_hat);
-}
-
 double func_NFL(InputParameters &inParams, double q_hat_tol) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
@@ -93,6 +78,21 @@ double func_NFL(InputParameters &inParams, double q_hat_tol) {
     outfile.close();
     
     return q_hat_tol * 7.17e10 * pow(inParams.h, 4.0) / pow(inParams.a * inParams.b, 2.0);
+}
+
+double func_J(InputParameters &inParams, double q_hat) {
+    ofstream outfile;
+    outfile.open("log.txt", std::fstream::app);
+    outfile << "function func_J called with inputs: {" << std::endl;
+    outfile << "  inParams = ";
+    outfile << "Instance of InputParameters object";
+    outfile << ", " << std::endl;
+    outfile << "  q_hat = ";
+    outfile << q_hat << std::endl;
+    outfile << "  }" << std::endl;
+    outfile.close();
+    
+    return interpZ("SDF.txt", inParams.AR, q_hat);
 }
 
 double func_B(InputParameters &inParams, double J) {

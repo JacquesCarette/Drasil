@@ -67,23 +67,6 @@ def func_q_hat_tol(inParams, J_tol):
     
     return Interpolation.interpY("SDF.txt", inParams.AR, J_tol)
 
-## \brief Calculates stress distribution factor (Function)
-# \param inParams structure holding the input values
-# \param q_hat dimensionless load
-# \return stress distribution factor (Function)
-def func_J(inParams, q_hat):
-    outfile = open("log.txt", "a")
-    print("function func_J called with inputs: {", file=outfile)
-    print("  inParams = ", end="", file=outfile)
-    print("Instance of InputParameters object", end="", file=outfile)
-    print(", ", file=outfile)
-    print("  q_hat = ", end="", file=outfile)
-    print(q_hat, file=outfile)
-    print("  }", file=outfile)
-    outfile.close()
-    
-    return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat)
-
 ## \brief Calculates non-factored load (Pa)
 # \param inParams structure holding the input values
 # \param q_hat_tol tolerable load
@@ -100,6 +83,23 @@ def func_NFL(inParams, q_hat_tol):
     outfile.close()
     
     return q_hat_tol * 7.17e10 * inParams.h ** 4.0 / (inParams.a * inParams.b) ** 2.0
+
+## \brief Calculates stress distribution factor (Function)
+# \param inParams structure holding the input values
+# \param q_hat dimensionless load
+# \return stress distribution factor (Function)
+def func_J(inParams, q_hat):
+    outfile = open("log.txt", "a")
+    print("function func_J called with inputs: {", file=outfile)
+    print("  inParams = ", end="", file=outfile)
+    print("Instance of InputParameters object", end="", file=outfile)
+    print(", ", file=outfile)
+    print("  q_hat = ", end="", file=outfile)
+    print(q_hat, file=outfile)
+    print("  }", file=outfile)
+    outfile.close()
+    
+    return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat)
 
 ## \brief Calculates risk of failure
 # \param inParams structure holding the input values

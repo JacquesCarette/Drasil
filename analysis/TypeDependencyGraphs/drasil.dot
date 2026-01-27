@@ -1759,6 +1759,8 @@ digraph alltypes {
 		TargetFile -> String;
 		}
 	}
+	subgraph code {
+	}
 	subgraph formats {
 		subgraph docchoices{
 		DocChoices	[shape=oval, color=cyan3, label="DocChoices"];

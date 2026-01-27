@@ -22,6 +22,20 @@ module Drasil.Generator.ChunkDump
 --   system to the host system.
 dumpEverything :: System -> PrintingInformation -> Path -> IO ()
 
+module Drasil.Generator.Code
+
+-- | Internal: Generate an ICO-style executable softifact.
+exportCode :: System -> Choices -> IO ()
+
+-- | Internal: Generate a zoo of ICO-style executable softifact.
+exportCodeZoo :: System -> [Choices] -> IO ()
+
+-- | Find name of folders created for a "zoo" of executable softifacts.
+--   
+--   FIXME: This is a hack. The generation phase should emit what artifacts
+--   it created.
+codedDirName :: String -> Choices -> String
+
 
 -- | Defines output formats for the different documents we can generate.
 module Drasil.Generator.Formats
@@ -94,12 +108,6 @@ exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> IO ()
 
 -- | Generate an SRS softifact with a zoo of solution softifacts.
 exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [Choices] -> IO ()
-
--- | Find name of folders created for a "zoo" of executable softifacts.
---   
---   FIXME: This is a hack. The generation phase should emit what artifacts
---   it created.
-codedDirName :: String -> Choices -> String
 
 module Drasil.Generator.Website
 

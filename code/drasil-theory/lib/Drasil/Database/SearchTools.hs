@@ -74,9 +74,6 @@ findAllTheoryMods = findAll
 findAllConcInsts :: ChunkDB -> [ConceptInstance]
 findAllConcInsts = findAll
 
-findAllIdeaDicts :: ChunkDB -> [IdeaDict]
-findAllIdeaDicts = findAll
-
 findAllDefinedQuantities :: ChunkDB -> [DefinedQuantityDict]
 findAllDefinedQuantities = findAll
 

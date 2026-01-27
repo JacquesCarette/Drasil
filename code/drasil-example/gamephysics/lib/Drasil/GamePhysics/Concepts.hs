@@ -4,10 +4,9 @@ import Language.Drasil
 
 import Drasil.Metadata.Domains (physics)
 import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Drasil.Metadata.Documentation (srs, requirement)
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
-  refBy, refName, typUnc, unlikelyChg)
+  refBy, refName, requirement, srs, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Physics (threeD, twoD)

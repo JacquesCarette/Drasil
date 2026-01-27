@@ -14,9 +14,9 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.Metadata.Domains (softEng, documentc)
 import qualified Drasil.Metadata.Documentation as Doc
-  (introduction, learnObj)
+  (introduction, learnObj, requirement, srs)
 import Drasil.Metadata.Documentation
-  (softwareReq, software, specification, requirement, srs, notebook)
+  (softwareReq, software, specification, notebook)
 import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Data.Drasil.Concepts.Math (graph, unit_)
@@ -61,7 +61,9 @@ doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
   unlikelyChg]
 
 assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst,
-  mg, mis, typUnc, sec, refBy, refName :: CI
+  mg, mis, typUnc, sec, refBy, refName,
+  -- re-exports
+  requirement, srs :: CI
 
 -- * Common Ideas
 
@@ -82,6 +84,8 @@ typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")      
 sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
 refBy       = commonIdeaWithDict "refBy"       (cn  "referenced by")                                 "RefBy"   [documentc]
 refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]
+requirement = Doc.requirement
+srs         = Doc.srs
 
 ---------------------------------------------------------------------
 

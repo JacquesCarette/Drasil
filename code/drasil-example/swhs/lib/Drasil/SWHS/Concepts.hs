@@ -7,9 +7,9 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 
 import Drasil.Metadata.Domains (materialEng)
 import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Drasil.Metadata.Documentation (requirement, srs)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt,
-  likelyChg, physSyst, refBy, refName, typUnc, unlikelyChg)
+  likelyChg, physSyst, refBy, refName, typUnc, unlikelyChg,
+  requirement, srs)
 import Data.Drasil.Concepts.Math (ode, parameter, rightSide)
 
 con :: [ConceptChunk]

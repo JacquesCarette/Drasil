@@ -13,13 +13,13 @@ import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Drasil.Metadata.Documentation (software, requirement, srs)
+import Drasil.Metadata.Documentation (software)
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics,
   problem, assumption, goalStmt, physSyst, sysCont, user,
   refBy, refName, typUnc, example, softwareSys, system, environment,
   product_, interface, condition, physical, datum, input_, softwareConstraint,
-  output_, endUser)
+  output_, endUser, requirement, srs)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)

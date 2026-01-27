@@ -40,7 +40,7 @@ accelYGravity: The acceleration in the \\(y\\)-direction is the acceleration due
 
 <div id="neglectDrag"></div>
 
-neglectDrag: Air drag is neglected. (RefBy: [A:constAccel](./SecAssumps.md#constAccel).)
+neglectDrag: Air drag is neglected. (RefBy: [A:constAccel](./SecAssumps.md#constAccel) and [LC:Consider-Air-Drag](./SecLCs.md#considerAirDrag).)
 
 <div id="pointMass"></div>
 

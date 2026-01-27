@@ -296,7 +296,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[constAccel:\phantomsection\label{constAccel}]{The acceleration is constant (from \hyperref[accelXZero]{A:accelXZero}, \hyperref[accelYGravity]{A:accelYGravity}, \hyperref[neglectDrag]{A:neglectDrag}, and \hyperref[freeFlight]{A:freeFlight}). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
 \item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[constAccel]{A:constAccel}.)}
 \item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A:yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} and \hyperref[constAccel]{A:constAccel}.)}
-\item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected. (RefBy: \hyperref[constAccel]{A:constAccel}.)}
+\item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected. (RefBy: \hyperref[constAccel]{A:constAccel} and \hyperref[considerAirDrag]{LC:Consider-Air-Drag}.)}
 \item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD:rectVel} and \hyperref[GD:rectPos]{GD:rectPos}.)}
 \item[freeFlight:\phantomsection\label{freeFlight}]{The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A:constAccel}.)}
 \item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: \hyperref[targetXAxis]{A:targetXAxis} and \hyperref[cartSyst]{A:cartSyst}.)}
@@ -1012,6 +1012,13 @@ This section provides the non-functional requirements, the qualities that the so
 \item[Maintainability:\phantomsection\label{maintainable}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
 \item[Portability:\phantomsection\label{portable}]{The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.}
 \end{description}
+\section{Likely Changes}
+\label{Sec:LCs}
+This section lists the likely changes to be made to the software.
+
+\begin{description}[font=\normalfont]
+\item[Consider-Air-Drag:\phantomsection\label{considerAirDrag}]{\hyperref[neglectDrag]{A:neglectDrag} - The software may be changed to consider the effect of air drag on the projectile during its flight.}
+\end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
@@ -1100,6 +1107,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[considerAirDrag]{LC:Consider-Air-Drag} &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
 \label{Table:TraceMatAvsAll}
 \end{longtblr}
 \begin{longtblr}

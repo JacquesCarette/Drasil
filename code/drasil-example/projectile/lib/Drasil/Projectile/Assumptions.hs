@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
-  assumptions, constAccel, gravAccelValue, launchOrigin, pointMass,
+  assumptions, constAccel, gravAccelValue, launchOrigin, neglectDrag, pointMass,
   posXDirection, targetXAxis, timeStartZero, twoDMotion, yAxisGravity) where
 
 import Language.Drasil

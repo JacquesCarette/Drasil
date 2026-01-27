@@ -5,9 +5,6 @@ module Drasil.SRSDocument (
   -- * Chunk database types and functions
   -- | Imported from "Database.Drasil"
   ChunkDB, System(..),
-  -- * Printing Information needed to generate all documents
-  -- | Imported from "Language.Drasil.Printers"
-  PrintingInformation, defaultConfiguration, piSys,
   -- * Document section types needed for a SRS
   -- | Imported from "Drasil.DocDecl"
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
@@ -35,7 +32,6 @@ module Drasil.SRSDocument (
   purpDoc           -- Drasil.Sections.Introduction
   ) where
 
-import Language.Drasil.Printers (PrintingInformation, defaultConfiguration, piSys)
 import Drasil.Database (ChunkDB)
 import Drasil.System
 import Drasil.DocLang (

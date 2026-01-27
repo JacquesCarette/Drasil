@@ -1,25 +1,34 @@
+{- HLINT ignore "Use newtype instead of data" -}
 -- | Defines output formats for the different documents we can generate.
 module Drasil.Generator.Formats (
   -- * Types (Printing Options)
-  DocType(..), DocSpec(DocSpec), DocChoices(..),
+  DocSpec(DocSpec), DocChoices(..),
   DocClass(..), UsePackages(..), ExDoc(..), Filename,
+  Format(..),
   -- * Constructors
   docChoices
 ) where
 
-import Data.Char (toLower)
 import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeVar,
   mkFile, mkRule, RuleTransformer(makeRule))
-import Language.Drasil.Printers (DocType(..), Format(TeX, MDBook))
 import Drasil.Metadata (watermark)
 
 -- | When choosing your document, you must specify the filename for
 -- the generated output (specified /without/ a file extension).
 type Filename = String
 
+-- | Possible formats for printer output.
+data Format = TeX | Plain | HTML | Jupyter | MDBook
+
+instance Show Format where
+  show TeX     = "PDF"
+  show Plain   = "Plain"
+  show HTML    = "HTML"
+  show Jupyter = "Jupyter"
+  show MDBook  = "mdBook"
+
 -- | Document choices include the type of document as well as the file formats we want to generate as.
 data DocChoices = DC {
-  doctype :: DocType,
   format :: [Format]
 }
 
@@ -27,20 +36,20 @@ data DocChoices = DC {
 data DocSpec = DocSpec DocChoices Filename
 
 -- | Constructor for users to choose their document options
-docChoices :: DocType -> [Format] -> DocChoices
+docChoices :: [Format] -> DocChoices
 docChoices = DC
 
 -- | Allows the creation of Makefiles for documents that use LaTeX.
 instance RuleTransformer DocSpec where
-  makeRule (DocSpec (DC dt [TeX]) fn) = [
-    mkRule [watermark] (makeS $ map toLower $ show dt) [pdfName] [],
+  makeRule (DocSpec (DC [TeX]) fn) = [
+    mkRule [watermark] (makeS "srs") [pdfName] [],
     mkFile [] pdfName [makeS $ fn ++ ".tex"] $
       map ($ fn) [lualatex, bibtex, lualatex, lualatex]] where
         lualatex, bibtex :: String -> Command
         lualatex = mkCheckedCommand . (+:+) (makeS "lualatex" +:+ mkFreeVar "TEXFLAGS") . makeS
         bibtex = mkCommand . (+:+) (makeS "bibtex" +:+ mkFreeVar "BIBTEXFLAGS") . makeS
         pdfName = makeS $ fn ++ ".pdf"
-  makeRule (DocSpec (DC _ [MDBook]) _) = [
+  makeRule (DocSpec (DC [MDBook]) _) = [
     mkRule [watermark] (makeS "build")  [] [build],
     mkRule [] (makeS "server") [] [server]]
     where

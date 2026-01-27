@@ -24,6 +24,7 @@ digraph avsall {
 	theory:landingposition -> instance:accelXZero;
 	theory:landingposition -> instance:gravAccelValue;
 	theory:offset -> instance:posXDirection;
+	instance:considerAirDrag -> instance:neglectDrag;
 
 
 	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -97,6 +98,13 @@ digraph avsall {
 	subgraph FR {
 	rank="same"
 	{instance:inputValues, instance:verifyInVals, instance:calcValues, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:portable}
+	}
+
+	instance:considerAirDrag	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:considerAirDrag"];
+
+	subgraph LC {
+	rank="same"
+	{instance:considerAirDrag}
 	}
 
 }

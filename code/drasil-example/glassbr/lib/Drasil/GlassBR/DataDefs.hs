@@ -1,6 +1,6 @@
 module Drasil.GlassBR.DataDefs (dataDefs, aspRat, glaTyFac, glaTyFacQD, gtfRef,
   hFromt, hFromtQD, loadDFDD, standOffDis, eqTNTWDD, calofDemand, aGrtrThanB,
-  arRef, hRef, configFp, stdVals) where
+  arRef, hRef, stdVals) where
 
 import Control.Lens ((^.))
 import Prelude hiding (log, exp, sqrt)
@@ -148,10 +148,6 @@ arRef, gtfRef, hRef :: Sentence
 arRef  = definedIn  aspRat
 gtfRef = definedIn  glaTyFac
 hRef   = definedIn' hFromt (S "and is based on the nominal thicknesses")
-
--- List of Configuration Files necessary for DataDefs.hs
-configFp :: [String]
-configFp = ["SDF.txt", "TSD.txt"]
 
 --- Helper
 stdVals :: (HasSymbol s, HasUID s) => [s] -> Sentence

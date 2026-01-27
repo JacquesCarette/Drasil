@@ -5,6 +5,9 @@ import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
   ConstantRepr(..), AuxFile(..), Visibility(..), makeArchit,
   makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats)
+import Utils.Drasil (RelativeFile, relativeFile)
+
+import Drasil.GlassBR.ModuleDefs (allMods)
 
 choices :: Choices
 choices = defaultChoices {
@@ -15,5 +18,10 @@ choices = defaultChoices {
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [LogVar, LogFunc] "log.txt")
     [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME],
-  srsConstraints = makeConstraints Exception Exception
+  srsConstraints = makeConstraints Exception Exception,
+  defaultConfigFiles = configFp,
+  extraMods = allMods
 }
+
+configFp :: [RelativeFile]
+configFp = map relativeFile ["SDF.txt", "TSD.txt"]

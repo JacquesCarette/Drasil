@@ -9,8 +9,7 @@ import Language.Drasil hiding (E)
 import Drasil.System (System(..), programName, sysName)
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower)
-import Language.Drasil.Printers (Format(..))
-import Drasil.Generator (codedDirName)
+import Drasil.Generator (codedDirName, Format(..))
 
 import qualified Drasil.DblPend.Body as DblPend (si)
 import qualified Drasil.GamePhysics.Body as GamePhysics (si)
@@ -71,7 +70,7 @@ allExampleSI = [
 -- | Records example choices. The order of the list must match up with
 -- that in `allExampleSI`, or the Case Studies Table will be incorrect.
 allExampleChoices :: [[Choices]]
-allExampleChoices = [[DblPend.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.choices], map fst Projectile.choiceCombos, [], [], []]
+allExampleChoices = [[DblPend.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.choices], Projectile.choiceCombos, [], [], []]
 
 -- | Combine system info, description, choices, and file paths into one nice package.
 allExamples :: [System] -> [[Choices]] -> FilePath -> FilePath -> [Example]

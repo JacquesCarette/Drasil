@@ -17,6 +17,7 @@ dependencies:
 - base >= 4.7 && < 5
 - aeson
 - template-haskell
+- drasil-database
 - drasil-lang
 
 ghc-options:
@@ -32,6 +33,7 @@ library:
   - Drasil.Metadata.Drasil
   - Drasil.Metadata.SupportedSoftware
   - Drasil.Metadata.TheoryConcepts
+  - Drasil.Metadata.TraceabilityGraphs
   when:
   - condition: false
     other-modules: Paths_drasil_metadata

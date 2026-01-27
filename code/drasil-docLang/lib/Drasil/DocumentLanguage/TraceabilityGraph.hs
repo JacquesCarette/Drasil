@@ -18,9 +18,9 @@ import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
   tvChanges)
 import qualified Drasil.DocLang.SRS as SRS
-import Language.Drasil.Printers (GraphInfo(..), NodeFamily(..))
 import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, reference, purpose, traceyMatrix)
+import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..))
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 import Theory.Drasil (DataDefinition, InstanceModel, GenDefn, TheoryModel)

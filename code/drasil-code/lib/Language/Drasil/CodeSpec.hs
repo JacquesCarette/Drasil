@@ -16,7 +16,7 @@ import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
 import Drasil.System (HasSystem(..), programName)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
-import Utils.Drasil (subsetOf)
+import Utils.Drasil (subsetOf, RelativeFile)
 
 import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
@@ -53,7 +53,7 @@ data OldCodeSpec = OldCodeSpec {
   -- | All outputs.
   _outputs :: [Output],
   -- | List of files that must be in same directory for running the executable.
-  _configFiles :: [FilePath],
+  _configFiles :: [RelativeFile],
   -- | Mathematical definitions, ordered so that they form a path from inputs to
   -- outputs.
   _execOrder :: [Def],
@@ -127,7 +127,7 @@ instance HasOldCodeSpec CodeSpec where
   outputsO :: Lens' CodeSpec [Output]
   outputsO = oldCode . outputsO
 
-  configFilesO :: Lens' CodeSpec [FilePath]
+  configFilesO :: Lens' CodeSpec [RelativeFile]
   configFilesO = oldCode . configFilesO
 
   execOrderO :: Lens' CodeSpec [Def]
@@ -165,10 +165,10 @@ mapODE (Just ode) = map odeDef $ odeInfo ode
 
 -- | Creates a 'CodeSpec' using the provided 'System', 'Choices', and 'Mod's.
 -- The 'CodeSpec' consists of the system information and a corresponding 'OldCodeSpec'.
-codeSpec :: S.System -> Choices -> [Mod] -> CodeSpec
-codeSpec si chs ms = CS {
+codeSpec :: S.System -> Choices -> CodeSpec
+codeSpec si chs = CS {
   _system' = si',
-  _oldCode = oldcodeSpec si' chs ms
+  _oldCode = oldcodeSpec si' chs
 }
   where
     els = extLibs chs
@@ -180,14 +180,13 @@ codeSpec si chs ms = CS {
 -- | Generates an 'OldCodeSpec' from 'System', 'Choices', and a list of 'Mod's.
 -- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
 -- from 'System' to populate the 'OldCodeSpec' structure.
-oldcodeSpec :: S.System -> Choices -> [Mod] -> OldCodeSpec
+oldcodeSpec :: S.System -> Choices -> OldCodeSpec
 oldcodeSpec sys@S.SI{ S._authors = as
-                    , S._configFiles = cfp
                     , S._inputs = ins
                     , S._outputs = outs
                     , S._constraints = cs
                     , S._constants = cnsts
-                    , S._systemdb = db } chs ms =
+                    , S._systemdb = db } chs =
   let ddefs = sys ^. dataDefns
       n = sys ^. programName
       inputs' = map quantvar ins
@@ -196,6 +195,7 @@ oldcodeSpec sys@S.SI{ S._authors = as
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
       rels = (map qtoc (getEqModQdsFromIm (sys ^. instModels) ++ mapMaybe qdEFromDD ddefs) \\ derived)
         ++ mapODE (getODE $ extLibs chs)
+        ++ map qtoc (handWiredDefs chs)
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.
       outs' = map quantvar outs
@@ -208,12 +208,12 @@ oldcodeSpec sys@S.SI{ S._authors = as
         _extInputs = inputs',
         _derivedInputs = derived,
         _outputs = outs',
-        _configFiles = cfp,
+        _configFiles = defaultConfigFiles chs,
         _execOrder = exOrder,
         _cMap = constraintMap cs,
         _constants = const',
         _constMap = assocToMap const',
-        _mods = ms,
+        _mods = extraMods chs,
         _systemdb = db
       }
 

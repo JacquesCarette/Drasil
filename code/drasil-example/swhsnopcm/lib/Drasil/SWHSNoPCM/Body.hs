@@ -139,7 +139,6 @@ si = mkSystem
   progName Specification [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
-  []
   inputs outputs
   (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
   symbMap allRefs

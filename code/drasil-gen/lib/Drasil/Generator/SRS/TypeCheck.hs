@@ -1,5 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
-module Drasil.Generator.TypeCheck (
+module Drasil.Generator.SRS.TypeCheck (
   -- * Type check a Drasil 'System'
   typeCheckSI
 ) where
@@ -12,7 +12,8 @@ import qualified Data.Map.Strict as M
 
 import Drasil.Database (UID, HasUID(..))
 import Drasil.Database.SearchTools (findAllDefinedQuantities)
-import Language.Drasil
+import Language.Drasil (Expr, Space, temporaryIndent, HasSpace(typ),
+  RequiresChecking(..), TypeError, Typed(check))
 import Drasil.System (System, HasSystem (instModels, dataDefns, systemdb))
 
 -- Note: this should be externally configurable wrt verbosity!

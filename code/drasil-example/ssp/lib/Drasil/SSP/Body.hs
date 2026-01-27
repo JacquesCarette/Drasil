@@ -62,7 +62,6 @@ si = mkSystem
   progName Specification [henryFrankis, brooks]
   [purp] [] [] []
   tMods generalDefinitions dataDefs iMods
-  []
   inputs outputs constrained []
   symbMap allRefs
 

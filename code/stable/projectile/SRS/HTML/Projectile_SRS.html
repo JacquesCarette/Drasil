@@ -97,6 +97,7 @@
               <li><a href=#Sec:NFRs>Non-Functional Requirements</a></li>
             </ul>
           </li>
+          <li><a href=#Sec:LCs>Likely Changes</a></li>
           <li>
             <a href=#Sec:TraceMatrices>Traceability Matrices and Graphs</a>
           </li>
@@ -663,7 +664,7 @@
                   </p>
                   <p>
                     <div id="neglectDrag">
-                      neglectDrag: Air drag is neglected. (RefBy: <a href=#constAccel>A:constAccel</a>.)
+                      neglectDrag: Air drag is neglected. (RefBy: <a href=#constAccel>A:constAccel</a> and <a href=#considerAirDrag>LC:Consider-Air-Drag</a>.)
                     </div>
                   </p>
                   <p>
@@ -1806,6 +1807,21 @@
         </div>
       </div>
     </div>
+    <div id="Sec:LCs">
+      <div class="section">
+        <h1>Likely Changes</h1>
+        <p class="paragraph">
+          This section lists the likely changes to be made to the software.
+        </p>
+        <div class="list">
+          <p>
+            <div id="considerAirDrag">
+              Consider-Air-Drag: <a href=#neglectDrag>A:neglectDrag</a> - The software may be changed to consider the effect of air drag on the projectile during its flight.
+            </div>
+          </p>
+        </div>
+      </div>
+    </div>
     <div id="Sec:TraceMatrices">
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
@@ -2517,6 +2533,24 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#considerAirDrag>LC:Consider-Air-Drag</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

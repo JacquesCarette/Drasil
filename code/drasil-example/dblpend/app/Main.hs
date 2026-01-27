@@ -10,4 +10,4 @@ import Drasil.DblPend.Choices (choices)
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  exportSmithEtAlSrsWCode si mkSRS "DblPend_SRS" choices []
+  exportSmithEtAlSrsWCode si mkSRS "DblPend_SRS" choices

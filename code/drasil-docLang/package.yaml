@@ -25,7 +25,6 @@ dependencies:
 - drasil-database
 - drasil-lang
 - drasil-metadata
-- drasil-printers
 - drasil-system
 - drasil-theory
 - drasil-utils

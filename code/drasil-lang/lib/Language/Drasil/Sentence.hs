@@ -195,8 +195,8 @@ getUIDshort EmptyS              = []
 -----------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
 -- | This is to collect /symbolic/ 'UID's that are printed out as a 'Symbol'.
-sdep :: Sentence -> [UID]
-sdep = nubOrd . getUIDs
+sdep :: Sentence -> Set.Set UID
+sdep = Set.fromList . getUIDs
 {-# INLINE sdep #-}
 
 -- This is to collect symbolic 'UID's that are printed out as an /abbreviation/.
@@ -226,7 +226,7 @@ lnames' = concatMap lnames
 {-# INLINE lnames' #-}
 
 sentenceRefs :: Sentence -> Set.Set UID
-sentenceRefs sent = Set.fromList (lnames sent ++ sdep sent ++ shortdep sent)
+sentenceRefs sent = Set.unions [Set.fromList (lnames sent), sdep sent, Set.fromList (shortdep sent)]
 {-# INLINE sentenceRefs #-}
 
 instance HasChunkRefs Sentence where

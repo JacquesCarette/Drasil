@@ -7,7 +7,6 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (ProgData, GOOLState, onCodeList)
 import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
@@ -23,18 +22,18 @@ import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 -- omptimize doxygen document, information necessary for a makefile,
 -- auxiliary helper documents
 class AuxiliarySym r where
-  doxConfig :: String -> GOOLState -> Verbosity -> r FileAndContents
+  doxConfig :: String -> stateRepr -> Verbosity -> r FileAndContents
   readMe ::  ReadMeInfo -> r FileAndContents
 
   optimizeDox :: r Doc
 
-  makefile :: [FilePath] -> ImplementationType -> [Comments] -> GOOLState ->
-    ProgData -> r FileAndContents
+  makefile :: [FilePath] -> ImplementationType -> [Comments] -> stateRepr ->
+    progRepr -> r FileAndContents
 
   auxHelperDoc :: r Doc -> Doc
 
-package :: (Monad r) => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
-package p = onCodeList (packageData p)
+package :: (Monad r) => progRepr -> [r FileAndContents] -> r (PackageData progRepr)
+package p as = packageData p <$> sequence as
 
 sampleInput :: (Applicative r) => PrintingInformation -> DataDesc -> [Expr] ->
   r FileAndContents

@@ -26,7 +26,6 @@ import Language.Drasil.NounPhrase.Types (NP)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Symbol (HasSymbol, Symbol)
 
-import Data.Containers.ListUtils (nubOrd)
 import qualified Data.Set as Set
 
 -- | Used in 'Ch' constructor to determine the state of a term
@@ -200,8 +199,8 @@ sdep = Set.fromList . getUIDs
 {-# INLINE sdep #-}
 
 -- This is to collect symbolic 'UID's that are printed out as an /abbreviation/.
-shortdep :: Sentence -> [UID]
-shortdep = nubOrd . getUIDshort
+shortdep :: Sentence -> Set.Set UID
+shortdep = Set.fromList . getUIDshort
 {-# INLINE shortdep #-}
 
 -- | Generic traverse of all positions that could lead to /reference/ 'UID's from 'Sentence's.
@@ -226,7 +225,7 @@ lnames' = concatMap (Set.toList . lnames)
 {-# INLINE lnames' #-}
 
 sentenceRefs :: Sentence -> Set.Set UID
-sentenceRefs sent = Set.unions [lnames sent, sdep sent, Set.fromList (shortdep sent)]
+sentenceRefs sent = Set.unions [lnames sent, sdep sent, shortdep sent]
 {-# INLINE sentenceRefs #-}
 
 instance HasChunkRefs Sentence where

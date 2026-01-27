@@ -38,10 +38,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-d95c8593.js";
+            window.path_to_searchindex_js = "searchindex-5983bb4f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-390bb047.js"></script>
+        <script src="toc-902fd9af.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -234,6 +234,7 @@
 <li><a href="#Sec:NFRs">Non-Functional Requirements</a></li>
 </ul>
 </li>
+<li><a href="#Sec:LCs">Likely Changes</a></li>
 <li><a href="#Sec:TraceMatrices">Traceability Matrices and Graphs</a></li>
 <li><a href="#Sec:AuxConstants">Values of Auxiliary Constants</a></li>
 <li><a href="#Sec:References">References</a></li>
@@ -464,7 +465,7 @@
 <p>accelYGravity: The acceleration in the \(y\)-direction is the acceleration due to gravity (from <a href="#yAxisGravity">A:yAxisGravity</a>). (RefBy: <a href="#IM:calOfLandingTime">IM:calOfLandingTime</a> and <a href="#constAccel">A:constAccel</a>.)</p>
 <div id="neglectDrag"></div>
 
-<p>neglectDrag: Air drag is neglected. (RefBy: <a href="#constAccel">A:constAccel</a>.)</p>
+<p>neglectDrag: Air drag is neglected. (RefBy: <a href="#constAccel">A:constAccel</a> and <a href="#considerAirDrag">LC:Consider-Air-Drag</a>.)</p>
 <div id="pointMass"></div>
 
 <p>pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href="#GD:rectVel">GD:rectVel</a> and <a href="#GD:rectPos">GD:rectPos</a>.)</p>
@@ -990,6 +991,12 @@
 
 <p>Portability: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.</p>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="Sec:LCs"><a class="header" href="#Sec:LCs">Likely Changes</a></h1>
+<p>This section lists the likely changes to be made to the software.</p>
+<div id="considerAirDrag"></div>
+
+<p>Consider-Air-Drag: <a href="#neglectDrag">A:neglectDrag</a> - The software may be changed to consider the effect of air drag on the projectile during its flight.</p>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="Sec:TraceMatrices"><a class="header" href="#Sec:TraceMatrices">Traceability Matrices and Graphs</a></h1>
 <p>The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an “X” should be modified as well. <a href="#Table:TraceMatAvsA">Tab:TraceMatAvsA</a> shows the dependencies of the assumptions on each other. <a href="#Table:TraceMatAvsAll">Tab:TraceMatAvsAll</a> shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href="#Table:TraceMatRefvsRef">Tab:TraceMatRefvsRef</a> shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. <a href="#Table:TraceMatAllvsR">Tab:TraceMatAllvsR</a> shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.</p>
 <div id="Table:TraceMatAvsA"></div>
@@ -1051,6 +1058,7 @@
 <tr><td style="text-align: left"><a href="#reusable">NFR:Reusability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
 <tr><td style="text-align: left"><a href="#maintainable">NFR:Maintainability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
 <tr><td style="text-align: left"><a href="#portable">NFR:Portability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="#considerAirDrag">LC:Consider-Air-Drag</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
 </tbody>
 </table>
 </div>

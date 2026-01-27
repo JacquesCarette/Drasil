@@ -47,12 +47,16 @@ assumptions :: [ConceptInstance]
 constAccel :: ConceptInstance
 gravAccelValue :: ConceptInstance
 launchOrigin :: ConceptInstance
+neglectDrag :: ConceptInstance
 pointMass :: ConceptInstance
 posXDirection :: ConceptInstance
 targetXAxis :: ConceptInstance
 timeStartZero :: ConceptInstance
 twoDMotion :: ConceptInstance
 yAxisGravity :: ConceptInstance
+
+module Drasil.Projectile.Changes
+likelyChgs :: [ConceptInstance]
 
 module Drasil.Projectile.Goals
 goals :: [ConceptInstance]

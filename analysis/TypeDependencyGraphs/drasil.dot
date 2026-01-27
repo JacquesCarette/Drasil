@@ -1579,6 +1579,8 @@ digraph alltypes {
 	}
 	subgraph body {
 	}
+	subgraph cangehs {
+	}
 	subgraph coicehs {
 	}
 	subgraph concepts {

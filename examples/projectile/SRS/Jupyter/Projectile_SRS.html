@@ -7560,6 +7560,7 @@ a.anchor-link {
 <li><a href="#Sec:Requirements">Requirements</a></li>
 <li><a href="#Sec:FRs">Functional Requirements</a></li>
 <li><a href="#Sec:NFRs">Non-Functional Requirements</a></li>
+<li><a href="#Sec:LCs">Likely Changes</a></li>
 <li><a href="#Sec:TraceMatrices">Traceability Matrices and Graphs</a></li>
 <li><a href="#Sec:AuxConstants">Values of Auxiliary Constants</a></li>
 <li><a href="#Sec:References">References</a></li>
@@ -7958,7 +7959,7 @@ accelYGravity: The acceleration in the $y$-direction is the acceleration due to 
 
 </div>
 <div id='\"neglectDrag\"'>
-neglectDrag: Air drag is neglected. (RefBy: [A:constAccel](#constAccel).)
+neglectDrag: Air drag is neglected. (RefBy: [A:constAccel](#constAccel) and [LC:Consider-Air-Drag](#considerAirDrag).)
 
 </div>
 <div id='\"pointMass\"'>
@@ -8854,6 +8855,12 @@ Maintainability: If a likely change is made to the finished software, it will ta
 Portability: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.
 
 </div>
+<h1 id="Likely-Changes">Likely Changes<a class="anchor-link" href="#Likely-Changes">¶</a></h1><p><a id="Sec:LCs"></a></p>
+<p>This section lists the likely changes to be made to the software.</p>
+<div id='\"considerAirDrag\"'>
+Consider-Air-Drag: [A:neglectDrag](#neglectDrag) - The software may be changed to consider the effect of air drag on the projectile during its flight.
+
+</div>
 <h1 id="Traceability-Matrices-and-Graphs">Traceability Matrices and Graphs<a class="anchor-link" href="#Traceability-Matrices-and-Graphs">¶</a></h1><p><a id="Sec:TraceMatrices"></a></p>
 <p>The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href="#Table:TraceMatAvsA">Tab:TraceMatAvsA</a> shows the dependencies of the assumptions on each other. <a href="#Table:TraceMatAvsAll">Tab:TraceMatAvsAll</a> shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href="#Table:TraceMatRefvsRef">Tab:TraceMatRefvsRef</a> shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. <a href="#Table:TraceMatAllvsR">Tab:TraceMatAllvsR</a> shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.</p>
 <p><a id="Table:TraceMatAvsA"></a></p>
@@ -9564,6 +9571,24 @@ Portability: The code shall be portable to multiple environments, particularly W
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="#considerAirDrag">LC:Consider-Air-Drag</a></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">X</td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>
 <td style="text-align:left"></td>

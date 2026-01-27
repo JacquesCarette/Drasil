@@ -205,28 +205,28 @@ shortdep = nubOrd . getUIDshort
 {-# INLINE shortdep #-}
 
 -- | Generic traverse of all positions that could lead to /reference/ 'UID's from 'Sentence's.
-lnames :: Sentence -> [UID]
-lnames Ch {}       = []
-lnames SyCh {}     = []
-lnames Sy {}       = []
-lnames NP {}       = []
-lnames S {}        = []
-lnames Percent     = []
-lnames P {}        = []
-lnames (Ref a _ _) = [a]
-lnames ((:+:) a b) = lnames a ++ lnames b
-lnames Quote {}    = []
-lnames E {}        = []
-lnames EmptyS      = []
+lnames :: Sentence -> Set.Set UID
+lnames Ch {}       = Set.empty
+lnames SyCh {}     = Set.empty
+lnames Sy {}       = Set.empty
+lnames NP {}       = Set.empty
+lnames S {}        = Set.empty
+lnames Percent     = Set.empty
+lnames P {}        = Set.empty
+lnames (Ref a _ _) = Set.singleton a
+lnames ((:+:) a b) = lnames a `Set.union` lnames b
+lnames Quote {}    = Set.empty
+lnames E {}        = Set.empty
+lnames EmptyS      = Set.empty
 {-# INLINE lnames #-}
 
 -- | Get /reference/ 'UID's from 'Sentence's.
 lnames' :: [Sentence] -> [UID]
-lnames' = concatMap lnames
+lnames' = concatMap (Set.toList . lnames)
 {-# INLINE lnames' #-}
 
 sentenceRefs :: Sentence -> Set.Set UID
-sentenceRefs sent = Set.unions [Set.fromList (lnames sent), sdep sent, Set.fromList (shortdep sent)]
+sentenceRefs sent = Set.unions [lnames sent, sdep sent, Set.fromList (shortdep sent)]
 {-# INLINE sentenceRefs #-}
 
 instance HasChunkRefs Sentence where

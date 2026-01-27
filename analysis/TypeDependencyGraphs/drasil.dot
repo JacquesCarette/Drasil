@@ -3867,18 +3867,6 @@ digraph alltypes {
 	}
 	subgraph metadata {
 	}
-	subgraph searctoolhs {
-		subgraph termabbr{
-		TermAbbr	[shape=oval, color=cyan3, label="TermAbbr"];
-		TermAbbr -> NP;
-		TermAbbr -> MaybeString;
-		}
-		subgraph domdefn{
-		DomDefn	[shape=oval, color=cyan3, label="DomDefn"];
-		DomDefn -> UID;
-		DomDefn -> Sentence;
-		}
-	}
 	subgraph print {
 		subgraph uidmap{
 		UIDMap	[shape=oval, color=red2, label="UIDMap"];
@@ -4198,6 +4186,18 @@ digraph alltypes {
 		subgraph motivation{
 		Motivation	[shape=oval, color=red2, label="Motivation"];
 		Motivation -> Sentence;
+		}
+	}
+	subgraph searctoolhs {
+		subgraph termabbr{
+		TermAbbr	[shape=oval, color=cyan3, label="TermAbbr"];
+		TermAbbr -> NP;
+		TermAbbr -> MaybeString;
+		}
+		subgraph domdefn{
+		DomDefn	[shape=oval, color=cyan3, label="DomDefn"];
+		DomDefn -> UID;
+		DomDefn -> Sentence;
 		}
 	}
 	subgraph derivation {

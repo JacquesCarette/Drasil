@@ -1,6 +1,4 @@
 digraph printers{
-TermAbbr	[shape=oval, color=turquoise4, label="TermAbbr"];
-DomDefn	[shape=oval, color=turquoise4, label="DomDefn"];
 BibFormatter	[shape=oval, color=turquoise4, label="BibFormatter"];
 Variation	[shape=oval, color=turquoise4, label="Variation"];
 PrintHTML	[shape=oval, color=turquoise4, label="PrintHTML"];

@@ -1,8 +1,6 @@
 ## Purpose
 It has become clear that there are issues with our current patterns for reading input parameters from the file.  This page seeks to analyze the patterns we currently have, and to propose improvements.
 
-Note that I have implemented case studies for the designs listed below.  They can be found [here](https://github.com/smiths/caseStudies/tree/FileInputTests/CaseStudies/FileInputTests).
-
 ## What We Have
 Currently, the `Choices` construct has two options for `inputStructure`, which defines how input is stored: `Bundled` and `Unbundled`.
 

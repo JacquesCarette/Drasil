@@ -1,24 +1,16 @@
 module Language.Drasil.Code.Imperative.Helpers (
-  liftS, lookupC, convScope
+  liftS, convScope
 ) where
 
-import Database.Drasil (findOrErr)
-import Language.Drasil (UID, DefinedQuantityDict)
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..),
-  ScopeType(..))
-import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
+import Control.Monad.State (State)
+
 import Drasil.GOOL (SharedProg, ScopeSym(..))
 
-import Control.Monad.State (State)
-import Control.Lens ((^.))
+import Language.Drasil.Code.Imperative.DrasilState (ScopeType(..))
 
 -- | Puts a state-dependent value into a singleton list.
 liftS :: State a b -> State a [b]
 liftS = fmap (: [])
-
--- | Gets the 'DefinedQuantityDict' corresponding to a 'UID'.
-lookupC :: DrasilState -> UID -> DefinedQuantityDict
-lookupC g u = findOrErr u (codeSpec g ^. systemdbO)
 
 -- | Converts a 'ScopeType' to a 'Scope'
 convScope :: (SharedProg r) => ScopeType -> r (Scope r)

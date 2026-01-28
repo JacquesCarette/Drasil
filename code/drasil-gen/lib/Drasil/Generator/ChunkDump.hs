@@ -7,18 +7,14 @@ import Control.Lens ((^.))
 import Data.Aeson (ToJSON)
 import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LB
-import qualified Data.Map.Strict as SM
-import System.IO
+import System.IO (IOMode(WriteMode), openFile, hClose, hPutStrLn)
 import System.Environment (lookupEnv)
-import Text.PrettyPrint
+import Text.PrettyPrint (render)
 
 import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
-import Utils.Drasil (invert, atLeast2, createDirIfMissing)
-import Database.Drasil
-import qualified Database.Drasil as DB
-import Drasil.System (System, systemdb)
-import Drasil.Database.SearchTools (findAllIdeaDicts)
-
+import Utils.Drasil (createDirIfMissing)
+import Drasil.Database (dumpChunkDB)
+import Drasil.System (System, systemdb, traceTable, refbyTable)
 
 type Path = String
 type TargetFile = String
@@ -38,21 +34,15 @@ dumpEverything0 :: System -> PrintingInformation -> Path -> IO ()
 dumpEverything0 si pinfo targetPath = do
   createDirIfMissing True targetPath
   let chunkDb = si ^. systemdb
-      chunkDump = DB.dumpChunkDB chunkDb
-      invertedChunkDump = invert chunkDump
-      (sharedUIDs, _) = SM.partition atLeast2 invertedChunkDump
-      traceDump = traceTable chunkDb
-      refByDump = refbyTable chunkDb
-      justTerms = map (^. uid) (findAllIdeaDicts chunkDb)
+      chunkDump = dumpChunkDB chunkDb
+      traceDump = si ^. traceTable
+      refByDump = si ^. refbyTable
 
   dumpTo chunkDump $ targetPath ++ "seeds.json"
-  dumpTo invertedChunkDump $ targetPath ++ "inverted_seeds.json"
-  dumpTo justTerms $ targetPath ++ "uids_are_just_terms.json"
-  dumpTo sharedUIDs $ targetPath ++ "problematic_seeds.json"
   dumpTo traceDump $ targetPath ++ "trace.json"
   dumpTo refByDump $ targetPath ++ "reverse_trace.json"
 
-  dumpChunkTables pinfo $ targetPath ++ "tables.txt"
+  dumpChunkTables si pinfo $ targetPath ++ "tables.txt"
 
 -- FIXME: This is more of a general utility than it is drasil-database specific
 dumpTo :: ToJSON a => a -> TargetFile -> IO ()
@@ -61,8 +51,8 @@ dumpTo d targetFile = do
   LB.hPutStrLn trg $ encodePretty d
   hClose trg
 
-dumpChunkTables :: PrintingInformation -> TargetFile -> IO ()
-dumpChunkTables pinfo targetFile = do
+dumpChunkTables :: System -> PrintingInformation -> TargetFile -> IO ()
+dumpChunkTables si pinfo targetFile = do
   trg <- openFile targetFile WriteMode
-  mapM_ (hPutStrLn trg . render) $ printAllDebugInfo pinfo
+  mapM_ (hPutStrLn trg . render) $ printAllDebugInfo pinfo (si ^. refbyTable) (si ^. traceTable)
   hClose trg

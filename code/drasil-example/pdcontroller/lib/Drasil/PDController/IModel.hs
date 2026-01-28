@@ -1,16 +1,14 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.PDController.IModel where
 
+import Data.Drasil.Quantities.Physics (time)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-
+import Theory.Drasil (InstanceModel, im, qwC, newDEModel', Derivation, mkDerivName, DifferentialModel,
+  makeASingleDE, ($**), ($^^), ($++))
 import Utils.Drasil (weave)
-
-import Data.Drasil.Quantities.Physics (time)
-
-import Theory.Drasil (InstanceModel, im, qwC, newDEModel')
 
 import Drasil.PDController.Assumptions
 import Drasil.PDController.Concepts

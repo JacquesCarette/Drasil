@@ -21,7 +21,12 @@ import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 import Drasil.GlassBR.Units (sFlawPU)
 --FIXME: Many of the current terms can be separated into terms and defns?
 
-{--}
+symbols :: [DefinedQuantityDict]
+symbols = map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
+  map dqdWr sdVector ++ tmSymbols ++ map dqdWr specParamVals ++
+  [dqdWr modElas] ++ interps ++ map dqdWr unitalSymbols ++
+  unitless ++ map dqdWr [probBr, stressDistFac, cnstrw' nomThick, cnstrw' glassTypeCon] ++
+  map dqdWr derivedInputDataConstraints
 
 constrained :: [ConstrConcept]
 constrained = map cnstrw' dataConstraints ++ map cnstrw' [nomThick, glassTypeCon]
@@ -68,7 +73,6 @@ derivedInputDataConstraints = derivedInsWUnitsUncrtn
 dataConstraints :: [UncertQ]
 dataConstraints = inputDataConstraints ++ derivedInputDataConstraints
 
-
 plateLen = uqc "plateLen" (nounPhraseSP "plate length (long dimension)")
   "the length (long dimension) of the glass plate" lA metre Real
   [ gtZeroConstr,
@@ -112,7 +116,6 @@ nomThick = cuc' "nomThick" (nounPhraseSP "nominal thickness")
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
   [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
 
-
 outputs :: [DefinedQuantityDict]
 outputs = map dqdWr [isSafePb, isSafeLR] ++ map dqdWr [probBr, stressDistFac]
 
@@ -139,7 +142,6 @@ pbTolfail = cucNoUnit' "pbTolfail" (nounPhraseSP "tolerable probability of failu
   "the tolerable probability of failure of the glass plate"
   (sub cP (Concat [lFail, lTol])) Real
   [probConstr] (dbl 0.008)
-
 
   --FIXME: no typical value!
 
@@ -279,7 +281,6 @@ interpY = dqdNoUnit (dcc "interpY" (nounPhraseSP "interpY")
 interpZ = dqdNoUnit (dcc "interpZ" (nounPhraseSP "interpZ")
   "interpolated z") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
-
 loadDF        = dqdNoUnit loadDurFac (variable "LDF") Real
 loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
@@ -291,8 +292,6 @@ sdfTol = dqdNoUnit (dcc "sdfTol" (nounPhraseSP "tolerable stress distribution fa
 
 tolLoad = dqdNoUnit (dcc "tolLoad" (nounPhraseSP "tolerable load")
   "the tolerable load") (sub (eqSymb dimlessLoad) lTol) Real
-
-
 
 lBreak, lDur, lFail, lTol :: Symbol
 lBreak = label "b"
@@ -314,8 +313,8 @@ aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
 annealedGl    = cc' annealed
   (S "a flat, monolithic, glass lite which has uniform thickness where" +:+
   S "the residual surface stresses are almost zero, as defined in"+:+ refS astm2016)
-aspectRatioCon   = cc aR
-  ("the ratio of the long dimension of the glass to the short dimension of " ++
+aspectRatioCon   = cc' aR
+  (S $ "the ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
     "always equal to or greater than 1.0. For glass supported on three " ++
     "sides, the ratio of the length of one of the supported edges " ++

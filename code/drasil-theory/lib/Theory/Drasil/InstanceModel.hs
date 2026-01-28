@@ -10,13 +10,13 @@ module Theory.Drasil.InstanceModel(
   , qwUC, qwC
   ) where
 
-import Drasil.Database.Chunk (HasChunkRefs(..))
-
+import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
 import Drasil.Metadata (inModel)
 
 import Control.Lens ((^.), makeLenses, _1, _2)
+import Theory.Drasil.Components.Derivation (Derivation,MayHaveDerivation(derivations))
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
 
 type Input = (DefinedQuantityDict, Maybe (RealInterval Expr Expr))

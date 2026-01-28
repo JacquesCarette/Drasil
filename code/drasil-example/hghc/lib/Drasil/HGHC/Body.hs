@@ -1,13 +1,9 @@
-module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
-
-import Control.Lens ((^.))
+module Drasil.HGHC.Body (si, mkSRS) where
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
-import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (mkSystem, SystemKind(Specification), systemdb)
+import Drasil.System (mkSystem, SystemKind(Specification))
 
 import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
@@ -16,33 +12,20 @@ import Drasil.HGHC.MetaConcepts (progName)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
 
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS S.forT sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
-
 si :: System
 si = mkSystem
   progName Specification [spencerSmith]
   [purp] [] [] []
-  symbols
-  [] [] dataDefs [] []
+  [] [] dataDefs []
   htInputs htOutputs ([] :: [ConstrConcept]) []
-  symbMap
-
+  symbMap []
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
     RefSec $
     RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
+    IntroSec $
+    IntroProg introPara (phrase progName) [],
     SSDSec $ SSDProg [
       SSDSolChSpec $ SCSProg [
           TMs [] []
@@ -51,6 +34,15 @@ mkSRS = [TableOfContents,
           Description Verbose IncludeUnits] HideDerivation
         , IMs [] [] HideDerivation
       ]]]
+
+-- Introduction first paragraph
+introPara :: Sentence
+introPara = foldlSent [
+  S "Heat transfer through the cladding of a nuclear fuel element influences",
+  S "performance and safety. Engineers therefore rely on dependable calculations",
+  S "of the heat transfer coefficients used for simulating the temperature.",
+  S "This document describes the requirements of a program called",
+  phrase progName]
 
 purp :: Sentence
 purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to clad"]
@@ -64,4 +56,4 @@ ideaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) dataDefs [] [] [] [] [] [] []
+  ([] :: [UnitDefn]) dataDefs [] [] [] [] [] []

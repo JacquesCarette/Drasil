@@ -21,9 +21,9 @@ dependencies:
 - MissingH
 - filepath
 - directory
-- drasil-data
 - drasil-database
 - drasil-lang
+- drasil-metadata
 - drasil-theory
 - drasil-utils
 - split
@@ -35,8 +35,8 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Drasil.Database.SearchTools
   - Language.Drasil.Printers
+  - Language.Drasil.Printing.Import
   when:
   - condition: false
     other-modules: Paths_drasil_printers

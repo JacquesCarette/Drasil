@@ -1,55 +1,43 @@
 -- | Define and collect information about ODEs and ODE solvers from various libraries.
 module Data.Drasil.ExternalLibraries.ODELibraries (
   -- * SciPy Library (Python)
-  scipyODEPckg, scipyODESymbols,
+  scipyODEPckg,
   -- * Oslo Library (C#)
-  osloPckg, osloSymbols, arrayVecDepVar,
+  osloPckg, arrayVecDepVar,
   -- * Apache Commons (Java)
-  apacheODEPckg, apacheODESymbols,
+  apacheODEPckg,
   -- * Odeint (C++)
-  odeintPckg, odeintSymbols, diffCodeChunk,
+  odeintPckg, diffCodeChunk,
   odeInfoChunks
 ) where
 
-import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
+import Control.Lens ((^.), _1, _2, over)
+
+import Drasil.Database (HasUID(..), (+++))
+import Language.Drasil (HasSymbol(symbol), MayHaveUnit(getUnit),
   HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar, implVar',
   compoundPhrase, nounPhrase, nounPhraseSP, label, sub, Idea(getA), NamedIdea(term), Stage(..),
-  (+++), Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
+  Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
 import Language.Drasil.Display (Symbol(Label, Concat))
-
-import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
-  externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep,
-  callStep, libFunction, libMethod, libFunctionWithResult, libMethodWithResult,
-  libConstructor, libConstructorMultiReqs, constructAndReturn, lockedArg,
-  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, functionArg,
-  customObjArg, recordArg, lockedParam, unnamedParam, customClass,
-  implementation, constructorInfo, methodInfo, methodInfoNoReturn,
-  appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj,
-  initSolListFromArray, initSolListWithVal, solveAndPopulateWhile,
-  returnExprList, fixedReturn',
-  ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill,
-  mandatoryStepFill, mandatoryStepsFill, callStepFill, libCallFill,
-  userDefinedArgFill, basicArgFill, functionArgFill, customObjArgFill,
-  recordArgFill, unnamedParamFill, unnamedParamPBVFill, userDefinedParamFill,
-  customClassFill, implementationFill, constructorInfoFill, methodInfoFill,
-  appendCurrSolFill, populateSolListFill, assignArrayIndexFill,
-  assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill,
-  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill',
-  CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, listToArray,
-  ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
-  mkODELibNoPath, pubStateVar, privStateVar,
-  NamedArgument, narg)
 
 import Drasil.Code.CodeExpr
 import Drasil.Code.CodeExpr.Development
-
-import Control.Lens ((^.), _1, _2, over)
+import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk,
+  quantvar, quantfunc, listToArray)
+import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
+import Language.Drasil.Code.Lang (Lang(..))
+import Language.Drasil.Code.ExternalLibrary
+import Language.Drasil.Code.ExternalLibraryCall
+import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..), ODEMethod(..))
+import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib, mkODELibNoPath)
+import Language.Drasil.Mod (pubStateVar, privStateVar)
 
 -- SciPy Library (Python)
 
 -- | [SciPy](https://www.scipy.org/) ODE library package.
 scipyODEPckg :: ODELibPckg
-scipyODEPckg = mkODELibNoPath "SciPy" "1.4.1" scipyODE scipyCall [Python]
+scipyODEPckg = mkODELibNoPath "SciPy" "1.4.1" scipyODESymbols scipyODE
+  scipyCall [Python]
 
 scipyODE :: ExternalLibrary
 scipyODE = externalLib [
@@ -124,7 +112,6 @@ rtolArg = narg $ implVar "rtol_scipy" (nounPhrase
   "the relative tolerance for the ODE solution"
   Real (label "rtol")
 
-
 r, xAxis, ut, transpose :: CodeVarChunk
 r = quantvar $ implVar "r_scipy" (nounPhrase "ODE object" "ODE objects")
   "the ODE object"
@@ -140,7 +127,6 @@ transpose = quantvar $ implVar "transpose_numpy"
   (nounPhrase "Numpy Array Transpose" "Numpy Array Transpose")
   "the Numpy Array Transpose"
   (Array Real) (label "u_t.T") -- (ccObjVar ut transpose) does not seem to work.
-
 
 f, odefunc, setIntegrator, setInitVal, successful,
   integrateStep, arange, odeintFunc :: CodeFuncChunk
@@ -184,7 +170,8 @@ odeintFunc = quantfunc $ implVar "odeint_scipy" (nounPhrase
 
 -- | [Oslo](https://www.microsoft.com/en-us/research/project/open-solving-library-for-odes/) ODE library package.
 osloPckg :: ODELibPckg
-osloPckg = mkODELib "OSLO" "1.2" oslo osloCall "Microsoft.Research.Oslo.dll" [CSharp]
+osloPckg = mkODELib "OSLO" "1.2" osloSymbols oslo osloCall
+  "Microsoft.Research.Oslo.dll" [CSharp]
 
 oslo :: ExternalLibrary
 oslo = externalLib [
@@ -310,7 +297,7 @@ arrayVecDepVar info = quantvar $ implVar' (show $ dv +++ "vec")
 
 -- | [Apache Commons](https://commons.apache.org/) ODE library package.
 apacheODEPckg :: ODELibPckg
-apacheODEPckg = mkODELib "Apache" "3.6.1" apacheODE apacheODECall
+apacheODEPckg = mkODELib "Apache" "3.6.1" apacheODESymbols apacheODE apacheODECall
   "lib/commons-math3-3.6.1.jar" [Java]
 
 apacheODE :: ExternalLibrary
@@ -473,7 +460,7 @@ computeDerivatives = quantfunc $ implVar "computeDerivatives_apache" (nounPhrase
 
 -- | [odeint](https://headmyshoulder.github.io/odeint-v2/) ODE library package.
 odeintPckg :: ODELibPckg
-odeintPckg = mkODELib "odeint" "v2" odeint odeintCall "." [Cpp]
+odeintPckg = mkODELib "odeint" "v2" odeintSymbols odeint odeintCall "." [Cpp]
 
 odeint :: ExternalLibrary
 odeint = externalLib [
@@ -661,8 +648,6 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
     replaceDepVar (UnaryOpVN u e)         = UnaryOpVN u $ replaceDepVar e
     replaceDepVar (ArithBinaryOp b e1 e2) = ArithBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (BoolBinaryOp b e1 e2)  = BoolBinaryOp b
-      (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (EqBinaryOp b e1 e2)    = EqBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (LABinaryOp b e1 e2)    = LABinaryOp b
@@ -677,11 +662,15 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
     replaceDepVar e = e
 
 -- | Collect all chunks related to a specific ODE
+--
+-- FIXME: HACK: Rather than being tied to 'ODEInfo', this should be tied to the
+-- 'ODELibPckg', which contains the know-how of code generation for ODEs and
+-- really knows which "ODEInfo-required-chunks" are necessary to add to the
+-- `ChunkDB`. This currently throws more than necessary.
 odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]
 odeInfoChunks info =
   let dv = depVar info
-  in map dqdWr [ dv
-               , listToArray dv
+  in map dqdWr [ listToArray dv
                , arrayVecDepVar info
                , diffCodeChunk dv
                , listToArray $ diffCodeChunk dv

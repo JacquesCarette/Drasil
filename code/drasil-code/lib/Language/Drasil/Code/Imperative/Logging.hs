@@ -2,6 +2,9 @@ module Language.Drasil.Code.Imperative.Logging (
   maybeLog, logBody, loggedMethod, varLogFile
 ) where
 
+import Control.Lens.Zoom (zoom)
+import Control.Monad.State (get)
+
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Choices (Logging(..))
 
@@ -9,9 +12,6 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
   SharedProg, BodySym(..), BlockSym(..), TypeSym(..), var, VariableElim(..),
   Literal(..), VariableValue(..), StatementSym(..), DeclStatement(..),
   IOStatement(..), lensMStoVS, ScopeSym(..))
-
-import Control.Lens.Zoom (zoom)
-import Control.Monad.State (get)
 
 -- | Generates a statement that logs the given variable's value, if the user
 -- chose to turn on logging of variable assignments.

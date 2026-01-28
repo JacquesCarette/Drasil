@@ -3,10 +3,12 @@ module Language.Drasil.Chunk.Parameter (
   PassBy(..), ParameterChunk(..), pcAuto, pcVal
 ) where
 
-import Language.Drasil hiding (Ref, CodeIdea(..), CodeChunk)
-import Language.Drasil.Chunk.Code (CodeIdea(..), CodeChunk)
-
 import Control.Lens ((^.), makeLenses, view)
+
+import Drasil.Database (HasUID(..))
+import Language.Drasil hiding (Ref)
+
+import Language.Drasil.Chunk.Code (CodeIdea(..), CodeChunk)
 
 -- | Determines whether a parameter is passed by value or by reference.
 data PassBy = Val | Ref

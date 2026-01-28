@@ -1,6 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHSNoPCM.Changes (likelyChgs, unlikelyChgs) where
 
+import Drasil.Sentence.Combinators (chgsStart)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -27,7 +28,6 @@ likeChgDT = cic "likeChgDT" (
   S "A more complete", phrase model,
   S "would also account" `S.for` S "discharging" `S.of_` D.toSent (phraseNP (the tank))])
   "Discharging-Tank" likeChgDom
-
 
 unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [unlikeChgWFS, unlikeChgNIHG]

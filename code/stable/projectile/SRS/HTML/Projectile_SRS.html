@@ -97,6 +97,7 @@
               <li><a href=#Sec:NFRs>Non-Functional Requirements</a></li>
             </ul>
           </li>
+          <li><a href=#Sec:LCs>Likely Changes</a></li>
           <li>
             <a href=#Sec:TraceMatrices>Traceability Matrices and Graphs</a>
           </li>
@@ -377,6 +378,10 @@
                 <tr>
                   <td>IM</td>
                   <td>Instance Model</td>
+                </tr>
+                <tr>
+                  <td>LC</td>
+                  <td>Likely Change</td>
                 </tr>
                 <tr>
                   <td>PS</td>
@@ -670,7 +675,7 @@
                   </p>
                   <p>
                     <div id="neglectDrag">
-                      neglectDrag: Air drag is neglected. (<span title="referenced by">RefBy</span>: <a href=#constAccel>A:constAccel</a>.)
+                      neglectDrag: Air drag is neglected. (<span title="referenced by">RefBy</span>: <a href=#constAccel>A:constAccel</a> and <a href=#considerAirDrag>LC:Consider-Air-Drag</a>.)
                     </div>
                   </p>
                   <p>
@@ -1642,7 +1647,7 @@
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+                  The <a href=#Table:InDataConstraints>Input Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -1681,7 +1686,7 @@
               <div class="subsubsection">
                 <h3>Properties of a Correct Solution</h3>
                 <p class="paragraph">
-                  The <a href=#Table:OutDataConstraints>Data Constraints Table</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+                  The <a href=#Table:OutDataConstraints>Output Data Constraints Table</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
                 </p>
                 <div id="Table:OutDataConstraints">
                   <table class="table">
@@ -1810,6 +1815,21 @@
               </p>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:LCs">
+      <div class="section">
+        <h1>Likely Changes</h1>
+        <p class="paragraph">
+          This section lists the Likely Changes (<span title="likely change">LC</span>) to be made to the software.
+        </p>
+        <div class="list">
+          <p>
+            <div id="considerAirDrag">
+              Consider-Air-Drag: <a href=#neglectDrag>A:neglectDrag</a> - The software may be changed to consider the effect of air drag on the projectile during its flight.
+            </div>
+          </p>
         </div>
       </div>
     </div>
@@ -2351,6 +2371,78 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#inputValues>FR:Input-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifyInVals>FR:Verify-Input-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#calcValues>FR:Calculate-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#correct>NFR:Correctness</a></td>
               <td></td>
               <td></td>
@@ -2459,7 +2551,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#inputValues>FR:Input-Values</a></td>
+              <td><a href=#considerAirDrag>LC:Consider-Air-Drag</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2469,61 +2561,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#verifyInVals>FR:Verify-Input-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#calcValues>FR:Calculate-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#outputValues>FR:Output-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2753,16 +2791,16 @@
               <th><a href=#IM:calOfLandingTime>IM:calOfLandingTime</a></th>
               <th><a href=#IM:calOfLandingDist>IM:calOfLandingDist</a></th>
               <th><a href=#IM:offsetIM>IM:offsetIM</a></th>
+              <th><a href=#inputValues>FR:Input-Values</a></th>
+              <th><a href=#verifyInVals>FR:Verify-Input-Values</a></th>
+              <th><a href=#calcValues>FR:Calculate-Values</a></th>
+              <th><a href=#outputValues>FR:Output-Values</a></th>
               <th><a href=#correct>NFR:Correctness</a></th>
               <th><a href=#verifiable>NFR:Verifiability</a></th>
               <th><a href=#understandable>NFR:Understandability</a></th>
               <th><a href=#reusable>NFR:Reusability</a></th>
               <th><a href=#maintainable>NFR:Maintainability</a></th>
               <th><a href=#portable>NFR:Portability</a></th>
-              <th><a href=#inputValues>FR:Input-Values</a></th>
-              <th><a href=#verifyInVals>FR:Verify-Input-Values</a></th>
-              <th><a href=#calcValues>FR:Calculate-Values</a></th>
-              <th><a href=#outputValues>FR:Output-Values</a></th>
             </tr>
             <tr>
               <td><a href=#targetHit>GS:targetHit</a></td>
@@ -2778,6 +2816,106 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#inputValues>FR:Input-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifyInVals>FR:Verify-Input-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#calcValues>FR:Calculate-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2928,106 +3066,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#inputValues>FR:Input-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#verifyInVals>FR:Verify-Input-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#calcValues>FR:Calculate-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#outputValues>FR:Output-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

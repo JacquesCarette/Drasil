@@ -41,17 +41,17 @@ symbols :: [DefinedQuantityDict]
 symbols
   = [dqdLaplaceTransform, dqdFreqDomain, dqdFxnTDomain,
      dqdInvLaplaceTransform, dqdPropGain, dqdDerivGain, dqdSetPointTD, dqdSetPointFD,
-     dqdProcessVariableTD, dqdProcessVariableFD, dqdProcessErrorTD,
+     dqdProcessVariableTD, dqdProcessVariableFD,
      dqdProcessErrorFD, dqdDerivativeControlFD, dqdPropControlFD,
-     dqdTransferFunctionFD, dqdCtrlVarTD, dqdCtrlVarFD, dqdStepTime, dqdSimTime,
+     dqdCtrlVarFD, dqdStepTime, dqdSimTime,
      dqdDampingCoeff, dqdStiffnessCoeff]
 
 dqdLaplaceTransform, dqdFreqDomain, dqdFxnTDomain,
                     dqdInvLaplaceTransform, dqdPropGain, dqdDerivGain,
                     dqdSetPointTD, dqdSetPointFD, dqdProcessVariableTD,
-                    dqdProcessVariableFD, dqdProcessErrorTD, dqdProcessErrorFD,
+                    dqdProcessVariableFD, dqdProcessErrorFD,
                     dqdPropControlFD, dqdDerivativeControlFD,
-                    dqdTransferFunctionFD, dqdCtrlVarFD, dqdCtrlVarTD, dqdStepTime,
+                    dqdCtrlVarFD, dqdStepTime,
                     dqdSimTime, dqdDampingCoeff, dqdStiffnessCoeff, dqdAbsTol, dqdRelTol :: DefinedQuantityDict
 
 inputs :: [DefinedQuantityDict]
@@ -130,11 +130,6 @@ dqdSetPointFD
 dqdProcessVariableFD = dqdNoUnit (dcc "dqdProcessVariableFD"
   (processVariable `inThe` ccFrequencyDomain) "the process variable in the frequency domain") symYS Real
 
-dqdProcessErrorTD
-  = dqdNoUnit (dcc "dqdProcessErrorTD"
-      (pn "Process Error in the time domain")
-      "the process error in the time domain") symET Real
-
 dqdProcessErrorFD = dqdNoUnit (dcc "dqdProcessErrorFD" (processError `inThe`
   ccFrequencyDomain) "the process error in the time domain") symES Real
 
@@ -143,15 +138,6 @@ dqdPropControlFD  = dqdNoUnit (dcc "dqdPropControlFD" (propControl `inThe`
 
 dqdDerivativeControlFD = dqdNoUnit (dcc "dqdDerivativeControlFD" (derControl `inThe`
   ccFrequencyDomain) "the derivative control in the frequency domain") symDS Real
-
-dqdTransferFunctionFD = dqdNoUnit (dcc "dqdTransferFunctionFD" (ccTransferFxn `inThe`
-  ccFrequencyDomain) "the transfer function ") symHS Real
-
-dqdCtrlVarTD
-  = dqdNoUnit (dcc "dqdCtrlVarTD" (pn "Control Variable in the time domain")
-      "the control variable in the time domain")
-      symCT
-      Real
 
 dqdCtrlVarFD = dqdNoUnit (dcc "dqdCtrlVarFD" (controlVariable `inThe`
   ccFrequencyDomain) "the control variable in the frequency domain") symCS Real

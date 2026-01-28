@@ -9,11 +9,35 @@ module Language.Drasil.Code.Imperative.Modules (
   genOutputFormat, genOutputFormatProc, genSampleInput
 ) where
 
-import Database.Drasil (ChunkDB)
-import Drasil.Code.CodeExpr.Development
+import Prelude hiding (print)
+import Data.List (intersperse, partition)
+import Data.Map ((!), elems, member)
+import qualified Data.Map as Map (lookup, filter)
+import Data.Maybe (maybeToList, catMaybes)
+import Control.Monad (liftM2, zipWithM)
+import Control.Monad.State (get, gets, modify)
+import Control.Lens ((^.))
+import Text.PrettyPrint.HughesPJ (render)
+import Data.Deriving.Internal (interleave)
 
-import Language.Drasil (Constraint(..), RealInterval(..),
-  HasUID(uid), Stage(..))
+import Drasil.Database (HasUID(..))
+import Language.Drasil (Constraint(..), RealInterval(..))
+import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl, PrintingInformation)
+import qualified Language.Drasil.Printing.Import as PI (codeExpr)
+import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
+  SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
+  oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..),
+  ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
+  BooleanExpression(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
+  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
+  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
+    convTypeOO, VisibilityTag(..))
+import qualified Drasil.GOOL as OO (SFile)
+import Drasil.GProc (ProcProg)
+import qualified Drasil.GProc as Proc (SFile)
+
+import Drasil.Code.CodeExpr.Development
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   constModDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc,
@@ -37,7 +61,8 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getInputFormatOuts, getCalcParams, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), genICName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (sampleInput)
+import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar,
   DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
@@ -52,32 +77,6 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   Logging(..), Structure(..), hasSampleInput, InternalConcept(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
-import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl)
-
-import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
-  SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
-  oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..),
-  ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
-  BooleanExpression(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
-  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
-    convTypeOO, VisibilityTag(..))
-
-import qualified Drasil.GOOL as OO (SFile)
-import Drasil.GProc (ProcProg)
-import qualified Drasil.GProc as Proc (SFile)
-
-import Prelude hiding (print)
-import Data.List (intersperse, partition)
-import Data.Map ((!), elems, member)
-import qualified Data.Map as Map (lookup, filter)
-import Data.Maybe (maybeToList, catMaybes)
-import Control.Monad (liftM2, zipWithM)
-import Control.Monad.State (get, gets, modify)
-import Control.Lens ((^.))
-import Text.PrettyPrint.HughesPJ (render)
-import Data.Deriving.Internal (interleave)
 
 type ConstraintCE = Constraint CodeExpr
 
@@ -362,7 +361,6 @@ chooseConstr cb cs = do
   where chooseCB Warning = constrWarn
         chooseCB Exception = constrExc
 
-
 -- | Generates body defining constraint violation behaviour if Warning chosen from 'chooseConstr'.
 -- Prints a \"Warning\" message followed by a message that says
 -- what value was \"suggested\".
@@ -373,7 +371,6 @@ constrWarn c = do
       cs = snd c
   msgs <- mapM (constraintViolatedMsg q "suggested") cs
   return $ map (bodyStatements . (printStr "Warning: " :)) msgs
-
 
 -- | Generates body defining constraint violation behaviour if Exception chosen from 'chooseConstr'.
 -- Prints a message that says what value was \"expected\",
@@ -414,7 +411,7 @@ printConstraint :: (OOProg r) => String -> ConstraintCE ->
   GenState [MSStatement r]
 printConstraint v c = do
   g <- get
-  let db = codeSpec g ^. systemdbO
+  let db = printfo g
       printConstraint' :: (OOProg r) => String -> ConstraintCE -> GenState
         [MSStatement r]
       printConstraint' _ (Range _ (Bounded (_, e1) (_, e2))) = do
@@ -434,13 +431,12 @@ printConstraint v c = do
         return $ [printStr "an element of the set ", print lb] ++ [printStrLn "."]
   printConstraint' v c
 
-
 -- | Don't print expressions that are just literals, because that would be
 -- redundant (the values are already printed by printConstraint).
 -- If expression is more than just a literal, print it in parentheses.
-printExpr :: (SharedProg r) => CodeExpr -> ChunkDB -> [MSStatement r]
+printExpr :: (SharedProg r) => CodeExpr -> PrintingInformation -> [MSStatement r]
 printExpr Lit{} _  = []
-printExpr e     db = [printStr $ " (" ++ render (codeExprDoc db Implementation OneLine e) ++ ")"]
+printExpr e     db = [printStr $ " (" ++ render (codeExprDoc OneLine $ PI.codeExpr db e) ++ ")"]
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat :: (OOProg r) => VisibilityTag ->
@@ -475,12 +471,12 @@ genDataDesc = do
 
 -- | Generates a sample input file compatible with the generated program,
 -- if the user chose to.
-genSampleInput :: (AuxiliarySym r) => GenState (Maybe (r (Auxiliary r)))
+genSampleInput :: (Applicative r) => GenState (Maybe (r FileAndContents))
 genSampleInput = do
   g <- get
   dd <- genDataDesc
   if hasSampleInput (auxiliaries g) then return . Just $ sampleInput
-    (codeSpec g ^. systemdbO) dd (sampleData g) else return Nothing
+    (printfo g) dd (sampleData g) else return Nothing
 
 ----- CONSTANTS -----
 
@@ -979,7 +975,7 @@ printConstraintProc :: (SharedProg r) => ConstraintCE ->
   GenState [MSStatement r]
 printConstraintProc c = do
   g <- get
-  let db = codeSpec g ^. systemdbO
+  let db = printfo g
       printConstraint' :: (SharedProg r) => ConstraintCE -> GenState
         [MSStatement r]
       printConstraint' (Range _ (Bounded (_, e1) (_, e2))) = do

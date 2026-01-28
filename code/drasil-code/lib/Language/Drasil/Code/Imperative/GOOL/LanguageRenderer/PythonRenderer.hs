@@ -1,26 +1,21 @@
-{-# LANGUAGE TypeFamilies #-}
-
 -- | The logic to render Python auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
   PythonProject(..)
 ) where
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+
+import Drasil.GOOL (pyName, pyVersion)
+
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
+  G (doxConfig, readMe, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
-  packD)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
-
-import Drasil.GOOL (onCodeList, pyName, pyVersion)
-
-import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Holds a Python project.
 newtype PythonProject a = PP {unPP :: a}
@@ -35,19 +30,12 @@ instance Applicative PythonProject where
 instance Monad PythonProject where
   PP x >>= f = f x
 
-instance PackageSym PythonProject where
-  type Package PythonProject = PackData
-  package p = onCodeList (packD p)
-
 instance AuxiliarySym PythonProject where
-  type Auxiliary PythonProject = AuxData
-  type AuxHelper PythonProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
     G.readMe rmi {
         langName = pyName,
         langVersion = pyVersion}
-  sampleInput = G.sampleInput
 
   optimizeDox = pure yes
 
@@ -55,7 +43,6 @@ instance AuxiliarySym PythonProject where
     (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unPP
-  auxFromData fp d = pure $ ad fp d
 
 -- | Default runnable information for Python files.
 pyRunnable :: Maybe Runnable

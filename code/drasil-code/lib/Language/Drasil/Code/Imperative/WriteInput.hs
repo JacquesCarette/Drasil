@@ -2,26 +2,27 @@ module Language.Drasil.Code.Imperative.WriteInput (
   makeInputFile
 ) where
 
-import Utils.Drasil (blank)
-import Database.Drasil (ChunkDB)
-import Language.Drasil hiding (space, Matrix)
-import Language.Drasil.Code.DataDesc (DataDesc, Data(..), Delim,
-  LinePattern(..), getDataInputs, isJunk)
-import Language.Drasil.Expr.Development (Expr(Matrix))
-import Language.Drasil.Printers (SingleLine(OneLine), exprDoc, sentenceDoc,
-  unitDoc)
-
 import Data.List (intersperse, transpose)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, space,
   text, vcat)
 
+import Utils.Drasil (blank)
+import Language.Drasil hiding (space, Matrix)
+import Language.Drasil.Expr.Development (Expr(Matrix))
+import Language.Drasil.Printers (SingleLine(OneLine), exprDoc, sentenceDoc,
+  unitDoc, PrintingInformation)
+import Language.Drasil.Printing.Import (expr, spec)
+
+import Language.Drasil.Code.DataDesc (DataDesc, Data(..), Delim,
+  LinePattern(..), getDataInputs, isJunk)
+
 -- | Generate a sample input file.
-makeInputFile :: ChunkDB -> DataDesc -> [Expr] -> Doc
+makeInputFile :: PrintingInformation -> DataDesc -> [Expr] -> Doc
 makeInputFile db dd sampData = vcat (convDataDesc db dd sampData)
 
 -- | Writes a data file formatted according to the given 'DataDesc', where the data
 -- values come from the passed \['Expr'\].
-convDataDesc :: ChunkDB -> DataDesc -> [Expr] -> [Doc]
+convDataDesc :: PrintingInformation -> DataDesc -> [Expr] -> [Doc]
 convDataDesc _ [] (_:_) = error $ "makeInputFile received more inputs" ++
           " than expected, should be impossible"
 convDataDesc _ ds [] = if all isJunk ds then replicate (length ds) blank
@@ -59,11 +60,11 @@ convDataDesc db (JunkData : ds) es = blank : convDataDesc db ds es
 -- helpers
 
 -- | Helper to create a data line with the given delimeter.
-dataLine :: ChunkDB -> Delim -> [Expr] -> Doc
+dataLine :: PrintingInformation -> Delim -> [Expr] -> Doc
 dataLine db dl = hcat . intersperse (char dl) . map (eDoc db)
 
 -- | Helper to create document lines with a data description, delimiter, and expressions.
-docLine :: ChunkDB -> DataDesc -> Delim -> [Expr] -> [Doc]
+docLine :: PrintingInformation -> DataDesc -> Delim -> [Expr] -> [Doc]
 docLine db ds dl es = let dis = getDataInputs (head ds)
   in text "#" <+> hcat (intersperse (char dl <> space)
   (map (\di -> (sDoc db . phrase) di <+>
@@ -89,12 +90,12 @@ getMtxLists (Matrix l) = l
 getMtxLists _ = error "makeInputFile encountered unexpected type, expected matrix"
 
 -- | Creates a 'OneLine' 'Implementation'-stage 'sentenceDoc'.
-sDoc :: ChunkDB -> Sentence -> Doc
-sDoc db = sentenceDoc db Implementation OneLine
+sDoc :: PrintingInformation -> Sentence -> Doc
+sDoc pinfo = sentenceDoc OneLine . spec pinfo
 
 -- | Creates a 'OneLine' 'Implementation'-stage 'exprDoc'.
-eDoc :: ChunkDB -> Expr -> Doc
-eDoc db = exprDoc db Implementation OneLine
+eDoc :: PrintingInformation -> Expr -> Doc
+eDoc pinfo e = exprDoc OneLine (expr e pinfo)
 
 -- | Creates a 'OneLine' 'unitDoc'.
 uDoc :: USymb -> Doc

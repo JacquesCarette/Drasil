@@ -4,7 +4,7 @@
 - [Issues related to Drasil](#issues-related-to-drasil)
     - [Problem Analysis](#problem-analysis)
         - [`grep` Summary](#grep-summary)
-        - [`make test`](#using-make-test)
+        - [Makefile Options](#makefile-options)
         - [Generated Chunk Logs](#using-generated-chunk-logs)
     - [Example Problem](#example)
         - [`ChunkDB` Information](#now-what-is-the-chunkdb)
@@ -13,15 +13,11 @@
     - [Errors of the form `Reference: not found in ReferenceMap`](#notes-for-reference-not-found-in-referencemap-errors)
 - Also see the [Workflow](Workflow) page
 
-# Issues related to `git`
-Below are some of the commonly encountered issues or errors when working on Drasil:
-Here are also some errors that have happened in the past but should be fixed (due to updates from stack, GHC, git, etc.):
-- I made changes to a file on my local branch and built, the build was successful but when I checked to see my changes in the .html file, the changes I made were not visible. What can I do?
-    - Make sure that your code change is valid and correct.
-    - run `make stackArgs=-force-dirty`, this command will your machine to recompile, using the packages on your local branch.
-- I made changes to the code and stable folder files on my local branch. The build build was successful. I staged and committed all changed files (in one pull request), but the GitHub Actions tests failed. What can I do?
-    - See the [`make test` section](#using-make-test)
-    - Also see this [comment](https://github.com/JacquesCarette/Drasil/pull/2151#issuecomment-635750650) on different types of Continuous Integration (CI) errors.
+## GitHub Actions
+If you open a PR and the Continuous Integration (CI) build fails, there are a few helpful places that can help you understand why.
+- The easiest place is to check the build logs. Beside the failed test case, there should be a button to view details, which will show you the command run and the output from it. The error messages are usually helpful and should help you get a sense of what went wrong.
+- For more tips, see the [Makefile Options section](#makefile-options)
+- Also see this [comment](https://github.com/JacquesCarette/Drasil/pull/2151#issuecomment-635750650) on different types of  CI errors.
 
 
 # Issues related to Drasil
@@ -43,9 +39,16 @@ drasil-docLang/Drasil/DocumentLanguage.hs:import qualified Drasil.DocumentLangua
 drasil-docLang/Drasil/DocumentLanguage.hs:mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
 ```
 
-- `--color` will highlight the word searched in a different colour. This is useful for larger `grep` searches, where each occurrence is not instantly apparent. 
+- `--color` will highlight the word searched in a different colour. This is useful for larger `grep` searches, where each occurrence is not instantly apparent.
 
-### Using `make test`
+Note that many of us use [ripgrep](https://github.com/BurntSushi/ripgrep), a `grep` alternative.
+
+### Makefile Options
+
+The makefile has various options that can help you find the sources of a few types of bugs.
+
+##### `make test`
+
 Running the following set of commands may help you debug any elusive errors:
 ```
 make clean
@@ -53,8 +56,17 @@ make test >& make.log
 ```
 Check for any warnings or errors in the logs; these are treated as errors in GitHub Actions. Just remember to delete the log file once you are finished with it!
 
-### Using Generated Chunk Logs
-If a [chunk](Chunks) is not behaving as expected, try checking out the chunk logs (under `code/debug`) for the specific example. Specifically, keep an eye out for duplicate `UID`s attached to different terms or any other pieces of information. It may be a signal for a deeper problem. The first three tables contain traceability information from one chunk to the next, while the rest are listed from the fields of the `ChunkDB` type. `ChunkDB`s are usually stored in the `_sysinfodb` field of `System`.
+##### `make stabilize`
+
+This re-generates the examples and updates stable. Forgetting to update stable is one of the main sources of CI build failure, so this is a good one to know!
+
+##### `make pr_ready`
+
+This command (more-or-less) runs the CI actions on your local machine, which should allow you to reproduce the errors from CI. It's usually worth running before opening a PR or pushing changes to a PR.
+
+### Debugging the `ChunkDB`
+
+If you think weird stuff is going on with the `ChunkDB` or want to know about what is or isn't contained, you can run `make debug` and then check `build/myExample/.drasil`.
 
 # Example
 
@@ -62,7 +74,7 @@ Let's say you are working on adding a new section to an example (specifically, w
 ```
 Reference: parnasClements1986 not found in ReferenceMap
 ```
-It will be quite difficult to manually search through all the files to find this exact error message, so let's try using `grep` on a small part of the error message. Using `grep "not found in" -r * --include "*.hs"` (meaning that I want to traverse all files, looking only through the `.hs` files for lines containing the characters "not found in") shows us that the errors starts in `code/drasil-database/Database/Drasil/ChunkDB.hs`:
+It will be quite difficult to manually search through all the files to find this exact error message, so let's try using `grep` on a small part of the error message. Specifically, "not found in" is a good candidate: it's a generic enough piece of text that we should be able to find its source regardless of the specific chunk that's causing problems. Using `grep "not found in" -r * --include "*.hs"` (meaning that I want to traverse all files, looking only through the `.hs` files for lines containing the characters "not found in") shows us that the errors starts in `code/drasil-database/Database/Drasil/ChunkDB.hs`:
 ```Haskell
  -- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown. 
  uMapLookup :: String -> String -> UID -> UMap a -> a 
@@ -106,7 +118,7 @@ Using a similar `grep` to the above (searching with `ChunkDB`), we find the type
 
 ### So, what does this ultimately mean?
 
-This means that some example (likely the named one throwing the error in the first place) is missing some chunk information in it's `ChunkDB`!
+This means that some example (likely the named one throwing the error in the first place) is missing some chunk information in its `ChunkDB`!
 
 ## Solution
 

@@ -1,24 +1,23 @@
-module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
+module Drasil.Projectile.Body (si, mkSRS) where
 
-import Control.Lens ((^.))
-
-import Drasil.Metadata (inModel)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.Document.Contents (foldlSP, foldlSPCol)
+import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
+import Drasil.Metadata (inModel, software)
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (analysis, assumption, condition,
-  datum, endUser, environment, example, input_, interface, output_, physical,
-  physics, problem, product_, software, softwareConstraint, softwareSys,
-  sysCont, system, user)
+import Data.Drasil.Concepts.Documentation (analysis, physics, problem,
+  assumption, sysCont, user, example, softwareSys, system, environment,
+  product_, interface, condition, physical, datum, input_, softwareConstraint,
+  output_, endUser)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -38,6 +37,7 @@ import Data.Drasil.Concepts.Education(calculus, undergraduate,
   highSchoolPhysics, highSchoolCalculus)
 
 import Drasil.Projectile.Assumptions (assumptions)
+import Drasil.Projectile.Changes (likelyChgs)
 import Drasil.Projectile.Concepts (launcher, projectile, target, defs, projMotion, rectVel)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.GenDefs (genDefns)
@@ -46,23 +46,10 @@ import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.LabelledContent (figLaunch, sysCtxFig1, labelledContent)
 import Drasil.Projectile.MetaConcepts (progName)
 import Drasil.Projectile.References (citations)
-import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
+import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -102,9 +89,10 @@ mkSRS = [TableOfContents,
       ],
   ReqrmntSec $
     ReqsProg
-      [ FReqsSub EmptyS []
+      [ FReqsSub funcReqsTables
       , NonFReqsSub
       ],
+  LCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
     AuxConsProg progName constants,
@@ -139,10 +127,9 @@ si :: System
 si = mkSystem progName Specification
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
-  symbols tMods genDefns dataDefs iMods
-  []
+  tMods genDefns dataDefs iMods
   inputs outputs (map cnstrw' constrained) constants
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]
@@ -174,7 +161,8 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
-  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
+  dataDefs iMods genDefns tMods concIns citations
+  (labelledContent ++ funcReqsTables)
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -184,7 +172,7 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
+concIns = assumptions ++ funcReqs ++ goals ++ likelyChgs ++ nonfuncReqs
 
 ----------------------------------------
 -- Characteristics of Intended Reader --
@@ -284,12 +272,6 @@ symbols = unitalQuants ++ map dqdWr [gravitationalAccelConst, tol] ++
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst, tol]
-
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr [launSpeed, launAngle, targPos]
-
-outputs :: [DefinedQuantityDict]
-outputs = [dqdWr offset, dqdWr flightDur]
 
 unitalQuants :: [DefinedQuantityDict]
 unitalQuants = map dqdWr constrained

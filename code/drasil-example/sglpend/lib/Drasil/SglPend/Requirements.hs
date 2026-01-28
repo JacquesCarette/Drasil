@@ -1,16 +1,26 @@
-module Drasil.SglPend.Requirements (funcReqs) where
+module Drasil.SglPend.Requirements (
+  funcReqs, funcReqsTables
+) where
 
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.DocLang (inReqWTab)
 import Data.Drasil.Concepts.Documentation (funcReqDom, output_, value)
 import Drasil.SglPend.IMods (angularDisplacementIM)
-import Drasil.SglPend.Unitals (lenRod, pendDisplacementAngle)
+import Drasil.SglPend.Unitals (lenRod, pendDisplacementAngle, inputs)
 import Data.Drasil.Quantities.Physics (angularDisplacement)
 import Drasil.DblPend.Requirements(verifyInptVals)
 
 --Functional Requirements--
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInptVals, calcAngPos, outputValues]
+funcReqs = [inputValues, verifyInptVals, calcAngPos, outputValues]
+
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab Nothing inputs
 
 calcAngPos, outputValues :: ConceptInstance
 

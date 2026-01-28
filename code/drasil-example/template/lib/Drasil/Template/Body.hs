@@ -3,35 +3,19 @@
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 -- This comment can be removed after copying this template to build your own example.
 
-module Drasil.Template.Body where
+module Drasil.Template.Body (mkSRS, si) where
 
-import Control.Lens ((^.))
-
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc, tunitNone)
+import Drasil.DocLang (tunitNone)
 import Drasil.Generator (cdb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
-import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -75,7 +59,7 @@ mkSRS = [TableOfContents,
       ],
   ReqrmntSec $ ReqsProg
     [
-       FReqsSub EmptyS []
+       FReqsSub []
      , NonFReqsSub
     ],
   LCsSec,
@@ -89,11 +73,10 @@ si :: System
 si = mkSystem
   progName Specification [authorName]
   [] [] [] []
-  ([] :: [DefinedQuantityDict])
   ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  []
   ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef])
   symbMap
+  []
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
@@ -107,22 +90,15 @@ symbMap :: ChunkDB
 symbMap = cdb ([] :: [DefinedQuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [LabelledContent]) ([] :: [Reference]) citations
+  citations ([] :: [LabelledContent])
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,
              smithKoothoor2016]
 
-inConstraints :: [UncertQ]
-inConstraints = []
-
-outConstraints :: [UncertQ]
-outConstraints = []
-
 figTemp :: LabelledContent
-figTemp = llcc (makeFigRef "dblpend") $ figWithWidth EmptyS
+figTemp = llccFig "dblpend" $ figWithWidth EmptyS
   (resourcePath ++ "dblpend.png") 60
-
 
 -- MOVE TO CONCEPTS
 progName :: CI

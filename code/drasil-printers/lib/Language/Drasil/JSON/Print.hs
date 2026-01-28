@@ -1,5 +1,7 @@
 -- | Defines .json printers to generate jupyter notebooks. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.JSON.Print.html).
-module Language.Drasil.JSON.Print(genJupyter) where
+module Language.Drasil.JSON.Print(
+  genJupyterLessonPlan, genJupyterSRS
+) where
 
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
@@ -7,9 +9,6 @@ import Numeric (showEFloat)
 
 import qualified Language.Drasil as L
 
-import Language.Drasil.Format (DocType(Lesson))
-
-import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
   Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
@@ -17,7 +16,6 @@ import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.Helpers (sqbrac, unders, hat)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
@@ -30,16 +28,9 @@ import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, co
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv,
  markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
 
--- | Generate a python notebook document (using json).
--- build : build the SRS document in JSON format
--- build': build the general Jupyter Notbook document
-genJupyter :: PrintingInformation -> DocType -> L.Document -> Doc
-genJupyter sm Lesson doc = build  (makeDocument sm doc)
-genJupyter sm _      doc = build' (makeDocument sm doc)
-
--- | Build the JSON Document, called by genJSON
-build :: Document -> Doc
-build (Document t a c) =
+-- | Build the general Jupyter Notebook document.
+genJupyterLessonPlan :: Document -> Doc
+genJupyterLessonPlan (Document t a c) =
   markdownB $$
   nbformat (text "# " <> pSpec t) $$
   nbformat (text "## " <> pSpec a) $$
@@ -50,8 +41,9 @@ build (Document t a c) =
   makeMetadata $$
   text "}"
 
-build' :: Document -> Doc
-build' (Document t a c) =
+-- | Build an SRS document in JSON format.
+genJupyterSRS :: Document -> Doc
+genJupyterSRS (Document t a c) =
   markdownB $$
   nbformat (text "# " <> pSpec t) $$
   nbformat (text "## " <> pSpec a) $$
@@ -106,7 +98,6 @@ printLO' (Bib bib)                       = markdownCell $ makeBib bib
 printLO' Graph{}                         = empty
 printLO' (CodeBlock contents)            = codeCell $ codeformat $ cSpec contents
 
-
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
 print :: [LayoutObj] -> Doc
@@ -138,7 +129,6 @@ cSpec :: Spec -> Doc
 cSpec (E e)  = pExpr e
 cSpec _      = empty
 
-
 -- | Renders expressions in JSON (called by multiple functions)
 pExpr :: Expr -> Doc
 pExpr (Dbl d)        = text $ showEFloat Nothing d ""
@@ -161,8 +151,6 @@ pExpr (Font Bold e)  = pExpr e
 --pExpr (Spc Thin)     = text "&#8239;" -- HTML used
 -- Uses TeX for Mathjax for all other exprs
 pExpr e              = printMath $ toMath $ TeX.pExpr e
-
-
 
 -- TODO: edit all operations in markdown format
 pOps :: Ops -> String
@@ -261,7 +249,6 @@ makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
 makeDRows [(f,d)]    = tr (nbformat (th (text f)) $$ td (vcat $ map printLO d))
 makeDRows ((f,d):ps) = tr (nbformat (th (text f)) $$ td (vcat $ map printLO d)) $$ makeDRows ps
-
 
 -- | Renders lists
 makeList :: ListType -> Bool -> Doc -- FIXME: ref id's should be folded into the li

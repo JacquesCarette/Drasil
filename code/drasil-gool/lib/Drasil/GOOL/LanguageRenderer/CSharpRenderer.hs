@@ -80,8 +80,6 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   listDecDef, mainFunction, notNull, objVarSelf, openFileA, openFileR, openFileW,
   pi, printSt, setMethodCall, stateVar, stateVarDef, string)
 
-
-
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1,
@@ -113,8 +111,6 @@ import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (
   extFuncAppMixedArgs, extVar, listAccessFunc, listSetFunc )
-
-
 
 csExt :: String
 csExt = "cs"

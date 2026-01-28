@@ -1,7 +1,7 @@
 -- | Functions for working with lists.
 module Utils.Drasil.Lists where
 
-import Data.List
+import Data.List (sort, transpose)
 
 import Data.Containers.ListUtils (nubOrd)
 
@@ -30,11 +30,6 @@ mergeAll :: [[a]] -> [a] -> [a]
 mergeAll [] rs = rs
 mergeAll (l:ls) (r:rs) = l ++ r : mergeAll ls rs
 mergeAll ls _ = concat ls
-
--- | Check if list has at least 2 elements.
-atLeast2 :: [a] -> Bool
-atLeast2 (_:_:_) = True
-atLeast2 _       = False
 
 -- | Replaces all elements of a target list that belong to a provided "bad"
 --   input list.

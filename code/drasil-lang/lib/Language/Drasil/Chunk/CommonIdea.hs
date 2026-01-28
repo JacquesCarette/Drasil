@@ -1,22 +1,25 @@
 {-# Language TemplateHaskell #-}
 -- | Contains the common idea type and respective constructors.
+-- SHOULD BE DEPRECATED. Some of the uses (for program name) should have
+-- its own chunk type. Others need examined.
 module Language.Drasil.Chunk.CommonIdea (
   -- * Common Idea datatype
   CI,
   -- * Constructors
-  commonIdea, commonIdeaWithDict,
+  commonIdeaWithDict,
   -- * Functions
-  prependAbrv) where
+  prependAbrv
+) where
+
+import Control.Lens (makeLenses, (^.), view)
+
+import Drasil.Database (UID, HasUID(uid))
+import Utils.Drasil (repUnd)
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nc)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
 import Language.Drasil.NounPhrase.Core (NP)
-import Drasil.Database.UID (UID, HasUID(uid))
-
-import Utils.Drasil (repUnd)
-
-import Control.Lens (makeLenses, (^.), view)
 
 -- | The common idea (with 'NounPhrase') data type. It must have a 'UID',
 -- 'NounPhrase' for its term, an abbreviation ('String'), and a domain (['UID']).
@@ -38,15 +41,13 @@ instance CommonIdea    CI where abrv = view ab
 -- | Finds the domain of a 'CI'.
 instance ConceptDomain CI where cdom = cdom'
 
--- | The commonIdea smart constructor requires a chunk id ('String'), a
--- term ('NP'), an abbreviation ('String'), and a domain (['UID']).
-commonIdea :: String -> NP -> String -> [UID] -> CI
-commonIdea s np = CI (nc s np)
-
--- | Similar to 'commonIdea', but takes a list of 'IdeaDict' (often a domain).
+-- | The commonIdeaWithDict smart constructor requires a chunk id ('String'), a
+-- term ('NP'), an abbreviation ('String'), and a
+-- list of 'IdeaDict' (should be domains).
+-- Note: should be polymorphic in 'IdeaDict', but currently causes issues with
+-- ambiguous type variables, punting for now.
 commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
-commonIdeaWithDict x y z = commonIdea x y z . map (^.uid)
-
+commonIdeaWithDict x y z = CI (nc x y) z . map (^.uid)
 
 -- | Prepends the abbreviation from a 'CommonIdea' to a 'String'.
 prependAbrv :: CommonIdea c => c -> String -> String

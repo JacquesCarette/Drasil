@@ -14,6 +14,7 @@ import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SVariable,
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
+import Drasil.Metadata (watermark)
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
@@ -22,13 +23,14 @@ import Helper (helperOO, helperProc)
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldOO :: (OOProg r) => OO.GSProgram r
-helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description
+helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
   ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
   [helloWorldMainOO] []), helperOO]
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldProc :: (ProcProg r) => GProc.GSProgram r
 helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod description
+  watermark
   ["Brooks MacLachlan"] "" $ GProc.fileDoc (GProc.buildModule "HelloWorld" []
   [helloWorldMainProc]), helperProc]
 
@@ -293,7 +295,6 @@ helloIfBody = addComments "If body" (body [
     printLn (valueOf $ var "a" int),
     printLn (inlineIf litTrue (litInt 5) (litInt 0)),
     printLn (cot (litDouble 1.0))]])
-
 
 -- | Print the 5th given argument.
 helloElseBody :: (SharedProg r) => MSBody r

@@ -5,6 +5,7 @@ import Data.Drasil.Concepts.Math (equation)
 import qualified Drasil.Projectile.Expressions as E (lcrectVel, lcrectPos, lcrectNoTime)
 import qualified Data.Drasil.Quantities.Physics as QP (speed, time, scalarPos, iPos, iSpeed, constAccel)
 import Language.Drasil
+import Drasil.Document.Contents (foldlSP, foldlSP_)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 reviewContent :: [Contents]
@@ -28,5 +29,4 @@ reviewContextP2
   = foldlSP
       [S "Only two of these", plural equation, S "are independent" `sC` S "since the third" +:+
        phrase equation, S "can always be derived from the other two"]
-
 

@@ -1,13 +1,13 @@
 module Drasil.PDController.ODEs where
 
-import Language.Drasil (LiteralC(exactDbl), ExprC(sy), InitialValueProblem, makeAIVP)
+import Language.Drasil (LiteralC(exactDbl), ExprC(sy))
 import Language.Drasil.Code (odeInfo', odeOptions, quantvar, ODEInfo,
     ODEMethod(RK45), ODEOptions)
+import Theory.Drasil (InitialValueProblem, makeAIVP)
 
 import Drasil.PDController.Unitals (dqdSetPointTD, dqdPropGain, dqdDerivGain,
     dqdSimTime, dqdStepTime, odeRelTolConst, odeAbsTolConst)
 import Drasil.PDController.IModel(imPDRC)
-
 
 pidODEOptions :: ODEOptions
 pidODEOptions = odeOptions

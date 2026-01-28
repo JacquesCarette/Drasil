@@ -119,7 +119,7 @@ To merge a branch, follow these steps:
     >>>>>>>
     ```
 
-5. At this point, you can now look through and edit the code by hand to combine the current changes and the changes you made to resolve the conflict. After editing, you can chose to accept either “incoming changes”, “current changes”, or just manually delete the `<`,`>`, and `=` symbols. 
+5. At this point, you can now look through and edit the code by hand to combine the current changes and the changes you made to resolve the conflict. After editing, you can chose to accept either “incoming changes”, “current changes”, or just manually delete the `<`,`>`, and `=` symbols. If you prefer, VS Code provides a visual merge editor that can give a more intuitive way to resolve conflicts.
 6. Continue as if you were making a new commit: `git add .`, `git add *`, or `git add -u`.
 7. `git commit -m “merge main to branchName”`.
 8. `git push` to send your changes to the remote repo.
@@ -155,9 +155,11 @@ git init
 ```
 
 
-## Windows/git bash terminal need2know 
+## Windows/git bash terminal need2know
 
-Most of the commands using git bash are similar to that of Unix style operating systems (Mac OS and Linux). Git bash is a different terminal than the default PowerShell command line from Windows and will need to be downloaded from [the web](https://git-scm.com/downloads). However, not all Unix commands work in the Windows git bash shell. It is only meant as a light wrapper to interact using git. For example, `open` and `rev` do not work. If a certain command does not work, it may not be available for Windows OS, and you may need to use the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+If you are using [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install), git should work the same as for Mac OS and Linux.
+
+If you are using git bash, most of the commands using will be similar to that of Unix style operating systems (Mac OS and Linux). However, not all Unix commands work in the Windows git bash shell. It is only meant as a light wrapper to interact using git. For example, `open` and `rev` do not work. If a certain command does not work, it may not be available for Windows OS, and you may need to use the [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install).
 
 
 ## Additional `git` information
@@ -195,12 +197,6 @@ Follow these steps:
 
 
 ### [Helpful VS Code Shortcuts](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup#general-helpful-vscode-shortcuts) 
-
-
-## Things to avoid 
-
-- Don’t write lines more than 80 characters long. 
-- Don’t add too many blank lines (no more than 1 or 2).
 
 ## Avoidable Issues 
 I’ve made changes to the code, but the program says there’s nothing to commit? 

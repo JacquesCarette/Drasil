@@ -7,18 +7,18 @@ module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..),
   funcDefParams, packmod, packmodRequires
 ) where
 
-import Language.Drasil (Space, MayHaveUnit, Quantity, CodeExpr, LiteralC(..), Concept)
-import Database.Drasil (ChunkDB)
-import Drasil.GOOL (VisibilityTag(..))
+import Data.List ((\\), nub)
 
+import Language.Drasil (Space, MayHaveUnit, Quantity, LiteralC(int), Concept)
+import Drasil.Database (ChunkDB)
+import Drasil.GOOL (VisibilityTag(..))
+import Utils.Drasil (toPlainName)
+
+import Drasil.Code.CodeExpr (CodeExpr)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
   codevars', quantvar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
-
-import Utils.Drasil (toPlainName)
-
-import Data.List ((\\), nub)
 
 -- | Type synonym for clarity.
 type Name = String

@@ -7,7 +7,12 @@ module Language.Drasil.Chunk.DefinedQuantity (
   DefinesQuantity(defLhs),
   -- * Constructors
   dqd, dqdNoUnit, dqdNoUnit', dqd', dqdQd, dqdWr,
-  implVar, implVar', implVarAU, implVarAU') where
+  implVar, implVar', implVarAU, implVarAU'
+) where
+
+import Control.Lens ((^.), makeLenses, view, Getter)
+
+import Drasil.Database (HasChunkRefs(..), HasUID(..))
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
@@ -18,10 +23,6 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage (Implementation, Equational))
-import Drasil.Database.Chunk (HasChunkRefs(..))
-import Drasil.Database.UID (HasUID(uid))
-
-import Control.Lens ((^.), makeLenses, view, Getter)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
 

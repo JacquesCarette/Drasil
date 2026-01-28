@@ -10,6 +10,9 @@ description: Please see the README on GitHub at <https://github.com/JacquesCaret
 language: Haskell2010
 default-extensions:
 - StrictData
+- StandaloneDeriving
+- DerivingVia
+- DeriveGeneric
 
 extra-source-files: []
 
@@ -21,6 +24,7 @@ dependencies:
 - text
 - Decimal
 - unicode-names >= 3.2.0.0
+- drasil-database
 - drasil-utils
 - containers
 
@@ -31,11 +35,10 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Drasil.Database.Chunk
-  - Drasil.Database.TypedUIDRef
-  - Drasil.Database.UID
+  - Drasil.Code.Classes
   - Drasil.Code.CodeExpr
   - Drasil.Code.CodeExpr.Development
+  - Drasil.Code.CodeVar
   - Language.Drasil
   - Language.Drasil.Chunk.Concept.NamedCombinators
   - Language.Drasil.Development

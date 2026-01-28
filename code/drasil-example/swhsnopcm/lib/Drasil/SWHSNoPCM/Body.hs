@@ -1,18 +1,14 @@
-module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
-
-import Control.Lens ((^.))
-import Data.List ((\\))
+module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 
 import Language.Drasil hiding (section)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import Data.Drasil.People (thulasi)
 
@@ -23,9 +19,6 @@ import qualified Data.Drasil.Concepts.Physics as CP (physicCon', energy, mechEne
 import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
-
-import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
-  apacheODESymbols, odeintSymbols, odeInfoChunks)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
@@ -63,38 +56,15 @@ import Drasil.SWHSNoPCM.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHSNoPCM.MetaConcepts (progName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
-import Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc)
+import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
 import Drasil.SWHSNoPCM.References (citations)
-import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
-  specParamValList)
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS S.forT sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
+import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = map dqdWr concepts ++ map dqdWr constrained
- ++ map dqdWr [tempW, watE]
-
-symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
-                               --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
-                               --FOUND LOC OF ERROR: Instance Models
--- FIXME: the dependent variable of noPCMODEInfo (tempW) is currently added to symbolsAll automatically as it is used to create new chunks with tempW's UID suffixed in ODELibraries.hs.
--- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
-symbolsAll = [gradient, pi_, uNormalVect, dqdWr surface] ++ symbols ++
-  map dqdWr symbolConcepts ++ map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++
-  scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
-  odeInfoChunks noPCMODEInfo
+symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained ++
+  [gradient, pi_, uNormalVect, dqdWr surface] ++ map dqdWr symbolConcepts ++
+  map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr outputs
 
 concepts :: [UnitalChunk]
 concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
@@ -148,7 +118,7 @@ mkSRS = [TableOfContents,
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub inReqDesc [],
+    FReqsSub funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,
@@ -168,15 +138,10 @@ si :: System
 si = mkSystem
   progName Specification [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
-  -- FIXME: Everything after (and including) \\ should be removed when
-  -- #1658 is resolved. Basically, _quants is used here, but
-  -- tau does not appear in the document and thus should not be displayed.
-  ((map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
-  []
-  (inputs ++ [dqdWr watE]) [tempW, watE]
+  inputs outputs
   (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]
@@ -198,8 +163,9 @@ conceptChunks =
   map cw [surArea, area]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns labelledContent allRefs citations
+symbMap = cdb symbols ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
+  NoPCM.iMods genDefs tMods concIns citations
+  (labelledContent ++ funcReqsTables)
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

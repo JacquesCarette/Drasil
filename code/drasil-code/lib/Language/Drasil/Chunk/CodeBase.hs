@@ -1,8 +1,11 @@
 module Language.Drasil.Chunk.CodeBase where
 
-import Database.Drasil (ChunkDB, findOrErr)
-import Drasil.Code.CodeExpr.Development
+import Drasil.Database (ChunkDB, findOrErr, UID)
 import Language.Drasil
+
+import Drasil.Code.CodeExpr.Development
+import Drasil.Code.CodeVar (CodeChunk(..), VarOrFunc(..), CodeFuncChunk(..),
+  CodeVarChunk(..))
 
 -- | Construct a 'CodeVarChunk' from a 'Quantity'.
 quantvar :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeVarChunk
@@ -23,7 +26,3 @@ codevars' e m = map (varResolve m) $ eDep' e
 -- | Make a 'CodeVarChunk' from a 'UID' in the 'ChunkDB'.
 varResolve :: ChunkDB -> UID -> CodeVarChunk
 varResolve  m x = quantvar (findOrErr x m :: DefinedQuantityDict)
-
--- | Make a 'CodeFuncChunk' from a 'UID' in the 'ChunkDB'.
-funcResolve :: ChunkDB -> UID -> CodeFuncChunk
-funcResolve m x = quantfunc (findOrErr x m :: DefinedQuantityDict)

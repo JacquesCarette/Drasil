@@ -1,23 +1,19 @@
-{-# LANGUAGE TypeFamilies #-}
-
 -- | The logic to render Julia auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (
   JuliaProject(..)
 ) where
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import Text.PrettyPrint.HughesPJ (empty)
+
+import Drasil.GProc (jlName, jlVersion)
+
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..), auxFromData)
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
-  G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
-  packD)
+  G (readMe, makefile, noRunIfLib, docIfEnabled)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, DocConfig(..), interpMM)
-
-import Drasil.GProc (onCodeList, jlName, jlVersion)
-
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 -- | Holds a Julia project
 newtype JuliaProject a = JLP {unJLP :: a}
@@ -32,18 +28,11 @@ instance Applicative JuliaProject where
 instance Monad JuliaProject where
   JLP x >>= f = f x
 
-instance PackageSym JuliaProject where
-  type Package JuliaProject = PackData
-  package p = onCodeList (packD p)
-
 instance AuxiliarySym JuliaProject where
-  type Auxiliary JuliaProject = AuxData
-  type AuxHelper JuliaProject = Doc
   doxConfig _ _ _ = auxFromData "" empty -- Doxygen does not support Julia
   readMe rmi = G.readMe rmi {
         langName = jlName,
         langVersion = jlVersion}
-  sampleInput = G.sampleInput
 
   optimizeDox = error doxError
 
@@ -51,7 +40,6 @@ instance AuxiliarySym JuliaProject where
                             (G.docIfEnabled cms (DocConfig [] []))
 
   auxHelperDoc = unJLP
-  auxFromData fp d = pure $ ad fp d
 
 -- | Default runnable information for Julia files
 jlRunnable :: Maybe Runnable

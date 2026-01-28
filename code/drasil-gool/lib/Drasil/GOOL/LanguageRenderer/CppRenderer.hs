@@ -53,7 +53,6 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 
-
 import Drasil.Shared.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart,
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
@@ -125,7 +124,6 @@ import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, brackets,
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
-
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
 cppSrcExt = "cpp"
@@ -162,7 +160,7 @@ instance (Pair p) => FileSym (p CppSrcCode CppHdrCode) where
   type File (p CppSrcCode CppHdrCode) = FileData
   fileDoc = pair1 fileDoc fileDoc
 
-  docMod d a dt = pair1 (docMod d a dt) (docMod d a dt)
+  docMod d wm a dt = pair1 (docMod d wm a dt) (docMod d wm a dt)
 
 instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
@@ -678,7 +676,6 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
   tryCatch = pair2 tryCatch tryCatch
 
   assert cond errMsg = pair2 assert assert (zoom lensMStoVS cond) (zoom lensMStoVS errMsg)
-
 
 instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) where
   notifyObservers f t = pair2 notifyObservers notifyObservers

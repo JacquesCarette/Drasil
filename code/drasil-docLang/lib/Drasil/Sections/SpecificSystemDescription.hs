@@ -20,31 +20,35 @@ module Drasil.Sections.SpecificSystemDescription (
   helperCI,
   -- * Subsection Stubs
   tmStub, ddStub, gdStub, imStub, pdStub
-  ) where
+) where
 
+import Control.Lens ((^.), over)
+import Data.Maybe
+
+-- rest of Drasil
+import Drasil.Database (UID, HasUID(..), showUID)
+import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
+  datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
+  element, general, goalStmt, information, input_, limitation, model, output_,
+  physical, physicalConstraint, physicalSystem, physSyst, problem,
+  problemDescription, propOfCorSol, purpose, quantity, refBy, scope,
+  section_, softwareConstraint, solutionCharacteristic, symbol_,
+  system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
+import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
+import Data.Drasil.Concepts.Math (equation, parameter)
+import Drasil.Document.Contents (enumBulletU, enumSimpleU, foldlSP, foldlSP_)
+import Drasil.Metadata (inModel, thModel, dataDefn, genDefn, requirement, specification)
+import Drasil.System (System)
 import Language.Drasil hiding (variable)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
-import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 
-import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
-  datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
-  element, general, goalStmt, information, input_, limitation, model, output_,
-  physical, physicalConstraint, physicalSystem, physSyst, problem,
-  problemDescription, propOfCorSol, purpose, quantity, requirement, scope,
-  section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
-  system, table_, term_, theory, typUnc, uncertainty, user, value, variable, refBy)
-import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
-import Data.Drasil.Concepts.Math (equation, parameter)
-import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
-import Drasil.System (System)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
-
-import Control.Lens ((^.), over)
-import Data.Maybe
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.Sentence.Combinators (mkTableFromColumns, fmtU, typUncr)
 
 -- Takes the system and subsections.
 -- | Specific System Description section builder.
@@ -119,7 +123,6 @@ solutionCharSpecIntro progName instModelSection = foldlSP [D.toSent $ atStartNP'
   S "and their derivation is also presented, so that the", plural inModel,
   S "can be verified"]
 
-
 -- Wrappers for assumpIntro. Use assumpF' if genDefs is not needed
 -- | Creates an Assumptions section by prepending a general introduction to other related 'Contents'.
 assumpF :: [Contents] -> Section
@@ -160,7 +163,6 @@ generalDefinitionIntro _  = foldlSP [S "This", phrase section_,
   S "collects the laws and", plural equation,
   S "that will be used to build the", plural inModel]
 
-
 -- | Similar to 'genDefnF', but for Data Definitions. It also uses 'EmptyS' if the ending 'Sentence' is not needed rather than an empty list.
 dataDefnF :: Sentence -> [Contents] -> Section
 dataDefnF _          []            = SRS.dataDefn [dataDefnIntroNoContent] []
@@ -187,7 +189,6 @@ inModelF probDes datDef theMod genDef otherContents = SRS.inModel (inModelIntro
                                                         genDef : otherContents)
                                                         []
 
-
 -- | Creates a general Instance Model introduction. Requires four references to function. Nothing can be input into the last reference if only three tables are present.
 inModelIntro :: Section -> Section -> Section -> Section -> Contents
 inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
@@ -211,7 +212,7 @@ dataConstraintParagraph trailingSent = foldlSP_ [inputTableSent, physConsSent,
 
 -- | General 'Sentence' that describes the data constraints on the input variables.
 inputTableSent :: Sentence
-inputTableSent = foldlSent [S "The", namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_, S "shows the",
+inputTableSent = foldlSent [S "The", namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' inDatumConstraint +:+ titleize table_, S "shows the",
   D.toSent $ pluralNP (datumConstraint `onThePS` input_), plural variable]
 
 -- | General 'Sentence' that describes the physical constraints/limitations on the variables.
@@ -243,12 +244,12 @@ typValSent = foldlSent [D.toSent (atStartNP (the column)) `S.of_` S "typical",
 auxSpecSent :: Sentence
 auxSpecSent = foldlSent [S "The", namedRef (SRS.valsOfAuxCons [] []) $ S "auxiliary constants", S "give",
   plural value `S.the_ofThe` phrase specification, plural parameter, S "used in the",
-  namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_]
+  namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' inDatumConstraint +:+ titleize table_]
   -- FIXME: inDataConstTbl is abused to get a table reference label.
 
 -- | Creates a Data Constraints table. Takes in Columns, reference, and a label.
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> UID -> Sentence -> LabelledContent
-mkDataConstraintTable col rf lab = llcc (makeTabRef' rf) $ uncurry Table
+mkDataConstraintTable col rf lab = llccTab' rf $ uncurry Table
   (mkTableFromColumns col) lab True
 
 -- | Creates the input Data Constraints Table.
@@ -258,8 +259,8 @@ inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qls
             (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
             (titleize' softwareConstraint, map fmtSfwr $ sortBySymbol qlst),
             (S "Typical Value", map (\q -> fmtU (eS $ express $ getRVal q) q) $ sortBySymbol qlst),
-            (short typUnc, map typUncr $ sortBySymbol qlst)] (inDatumConstraint ^. uid) $
-            titleize' inDatumConstraint
+            (short typUnc, map (\q -> typUncr (uncVal q, uncPrec q)) $ sortBySymbol qlst)]
+            (inDatumConstraint ^. uid) $ titleize' inDatumConstraint
   where
     getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ showUID c) (c ^. reasVal)
 
@@ -296,7 +297,7 @@ propsIntro = foldlSP_ [outputTableSent, physConsSent]
 
 -- | Outputs a data constraint table as a 'Sentence'.
 outputTableSent :: Sentence
-outputTableSent = foldlSent [S "The", namedRef (outDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_, S "shows the",
+outputTableSent = foldlSent [S "The", namedRef (outDataConstTbl ([] :: [UncertQ])) $ titleize' outDatumConstraint +:+ titleize table_, S "shows the",
   D.toSent $ pluralNP (datumConstraint `onThePS` output_), plural variable]
 
 -- | Helper for making a 'ConceptInstance' with a reference to the system information.

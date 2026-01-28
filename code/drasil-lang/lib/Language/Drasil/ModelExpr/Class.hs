@@ -2,18 +2,18 @@
 module Language.Drasil.ModelExpr.Class where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
-
 import Control.Lens ((^.))
 
-import Drasil.Database.UID (HasUID(..))
+import Drasil.Database (HasUID(..))
+
+import Language.Drasil.Expr.Lang (AssocArithOper(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..), DerivType(..),
-  SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..), AssocArithOper(..))
+  SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..))
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), Space)
 import Language.Drasil.Symbol (Symbol, HasSymbol)
 
-
 -- | Helper for creating new smart constructors for Associative Binary
---   operations that require at least 1 expression.
+-- operations that require at least 1 expression.
 assocCreate :: AssocBoolOper -> [ModelExpr] -> ModelExpr
 assocCreate abo [] = error $ "Need at least 1 expression to create " ++ show abo
 assocCreate _ [x]  = x

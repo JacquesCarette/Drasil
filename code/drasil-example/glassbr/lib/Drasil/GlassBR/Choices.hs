@@ -1,17 +1,13 @@
 module Drasil.GlassBR.Choices where
 
-import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
+import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
   ConstantRepr(..), AuxFile(..), Visibility(..), makeArchit,
-  makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats,
-  defaultChoices)
+  makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats)
+import Utils.Drasil (RelativeFile, relativeFile)
 
 import Drasil.GlassBR.ModuleDefs (allMods)
-import Drasil.GlassBR.Body (fullSI)
-
-code :: CodeSpec
-code = codeSpec fullSI choices allMods
 
 choices :: Choices
 choices = defaultChoices {
@@ -22,5 +18,10 @@ choices = defaultChoices {
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [LogVar, LogFunc] "log.txt")
     [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME],
-  srsConstraints = makeConstraints Exception Exception
+  srsConstraints = makeConstraints Exception Exception,
+  defaultConfigFiles = configFp,
+  extraMods = allMods
 }
+
+configFp :: [RelativeFile]
+configFp = map relativeFile ["SDF.txt", "TSD.txt"]

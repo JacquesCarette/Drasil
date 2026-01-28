@@ -1,28 +1,25 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPend.Body where
 
-import Control.Lens ((^.))
-
-import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D
-import Theory.Drasil (TheoryModel, output)
+import Theory.Drasil (TheoryModel)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
+import Drasil.Metadata (inModel, software)
 import Data.Drasil.People (dong)
 import Data.Drasil.Concepts.Computation (inDatum)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
-  physical, sysCont, software, softwareConstraint, softwareSys,
+  physical, sysCont, softwareConstraint, softwareSys,
   system, user, analysis)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
 import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
@@ -31,6 +28,8 @@ import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
+import Drasil.Document.Contents (foldlSP, foldlSPCol)
+import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 
 import Drasil.DblPend.Assumptions (assumpDouble)
 import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject)
@@ -42,24 +41,8 @@ import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, constants)
-import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
+import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs, funcReqsTables)
 import Drasil.DblPend.References (citations)
-import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
-  osloSymbols, apacheODESymbols, odeintSymbols, odeInfoChunks)
-import Drasil.DblPend.ODEs (dblPenODEInfo)
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
@@ -99,7 +82,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
         ]
       ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub EmptyS []
+    [ FReqsSub funcReqsTables
     , NonFReqsSub
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -111,12 +94,10 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
 si :: System
 si = mkSystem progName Specification [dong]
   [purp] [background] [scope] [motivation]
-  symbolsAll
   tMods genDefns dataDefs iMods
-  []
   inputs outputs inConstraints
   constants
-  symbMap
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
@@ -129,12 +110,6 @@ background :: Sentence
 background = foldlSent_ [D.toSent $ phraseNP (a_ pendulum), S "consists" `S.of_` phrase mass,
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
   S "highly sensitive to initial conditions"]
-
--- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is currently added to symbolsAll automatically as it is used to create new chunks with pendDisAngle's UID suffixed in ODELibraries.hs.
--- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
-symbolsAll :: [DefinedQuantityDict]
-symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
-  ++ odeInfoChunks dblPenODEInfo
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
@@ -152,8 +127,8 @@ conceptChunks =
   [cw len]
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
+symbMap = cdb symbols ideaDicts conceptChunks []
+  dataDefs iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -275,7 +250,6 @@ userCharacteristicsIntro prog = foldlSP
 -- 3.3 : System Constraints  --
 -------------------------------
 -- System Constraints automatically generated in SystCons
-
 
 --------------------------------------------
 -- Section 4: Specific System Description --

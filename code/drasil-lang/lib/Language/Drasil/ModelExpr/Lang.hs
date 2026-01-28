@@ -5,82 +5,22 @@ module Language.Drasil.ModelExpr.Lang where
 
 import Prelude hiding (sqrt)
 
-import Language.Drasil.Expr.Lang (Completeness)
+import Drasil.Database (UID)
+
+import Language.Drasil.Expr.Lang
+  (Completeness, ArithBinOp, EqBinOp, LABinOp, OrdBinOp,
+   VVVBinOp, VVNBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocArithOper,
+   AssocConcatOper,
+   UFunc, UFuncB, UFuncVV, UFuncVN)
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
-import Drasil.Database.UID (UID)
 import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- Binary functions
 
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp = Frac | Pow | Subt
-  deriving Eq
-
--- | Equality operators (equal or not equal).
-data EqBinOp = Eq | NEq
-  deriving Eq
-
--- | Conditional and Biconditional operators (Expressions can imply
--- one another, or exist if and only if another expression exists).
-data BoolBinOp = Impl | Iff
-  deriving Eq
-
--- | Index operator.
-data LABinOp = Index | IndexOf
-  deriving Eq
-
--- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).
-data OrdBinOp = Lt | Gt | LEq | GEq
-  deriving Eq
-
--- | @Vector x Vector -> Vector@ binary operations (cross product, vector addition, subtraction).
-data VVVBinOp = Cross | VAdd | VSub
-  deriving Eq
-
--- | @Vector x Vector -> Number@ binary operations (dot product).
-data VVNBinOp = Dot
-  deriving Eq
-
--- | @Number x Vector -> Vector@ binary operations (scaling).
-data NVVBinOp = Scale
-  deriving Eq
-
--- | Element + Set -> Set
-data ESSBinOp = SAdd | SRemove
-  deriving Eq
-
--- | Element + Set -> Bool
-data ESBBinOp = SContains
-  deriving Eq
-
-data AssocConcatOper = SUnion
-  deriving Eq
-
--- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
-data AssocArithOper = Add | Mul
-  deriving Eq
-
 -- | Associative boolean operators (and, or).
 data AssocBoolOper = And | Or | Equivalence
   deriving (Eq, Show)
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
-  | Arccos | Arctan | Exp | Sqrt | Neg
-  deriving Eq
-
--- | @Bool -> Bool@ operators.
-data UFuncB = Not
-  deriving Eq
-
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
-  deriving Eq
-
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
-  deriving Eq
 
 -- | Statements involving 2 arguments.
 data StatBinOp = Defines
@@ -138,8 +78,6 @@ data ModelExpr where
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Binary operator for boolean operators (implies, iff).
-  BoolBinaryOp  :: BoolBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for equality between expressions.
   EqBinaryOp    :: EqBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for indexing two expressions.
@@ -210,7 +148,6 @@ instance Eq ModelExpr where
   UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
   UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
   ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
-  BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
   EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
   OrdBinaryOp o a b   == OrdBinaryOp p c d   =   o == p && a == c && b == d
   SpaceBinaryOp o a b == SpaceBinaryOp p c d =   o == p && a == c && b == d

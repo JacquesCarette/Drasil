@@ -1,27 +1,33 @@
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..),
-  makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE,
+  makeMaps, spaceToCodeType, Constraints(..), makeConstraints,
+  ODE(..), makeODE, odeInfoReqs, odeLibReqs,
   DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..),
   makeOptFeats, ExtLib(..), Modularity(..), Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs, InternalConcept(..)) where
+  choicesSent, showChs, InternalConcept(..)
+) where
 
-import Language.Drasil hiding (None, Var)
-import Language.Drasil.Code.Code (spaceToCodeType)
-import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.Data.ODEInfo (ODEInfo)
-import Language.Drasil.Data.ODELibPckg (ODELibPckg)
-import Language.Drasil.Mod (Name)
+import Control.Lens ((^.))
 import Data.Map (Map)
 import qualified Data.Map as Map
 
+import Drasil.Database (UID, HasUID (..))
 import Drasil.GOOL (CodeType)
+import Language.Drasil hiding (None)
+import Utils.Drasil (RelativeFile)
 
-import Control.Lens ((^.))
+import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
+
+import Language.Drasil.Code.Code (spaceToCodeType)
+import Language.Drasil.Code.Lang (Lang(..))
+import Language.Drasil.Data.ODEInfo (ODEInfo)
+import Language.Drasil.Data.ODELibPckg (ODELibPckg (libDummyQuants))
+import Language.Drasil.Mod (Name, Mod)
 
 -- | The instruction indicates how the generated program should be written down.
 -- Full details of Choices documentation https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
@@ -44,7 +50,21 @@ data Choices = Choices {
   -- | Function to get modifiable function names
   icNames :: InternalConcept -> Name,
   -- | Number of folders to go up in order to obtain the image
-  folderVal :: Int
+  folderVal :: Int,
+  -- | A list of "program configuration files" to be copied over to the exported
+  -- project, required for execution, and configurable by the user.
+  defaultConfigFiles :: [RelativeFile],
+  -- | List of extra modules for generation.
+  extraMods :: [Mod],
+  -- | A list of supplementary hand-wired quantity definitions usable in code
+  -- generation, unique to a particular code solution.
+  --
+  -- FIXME: These formulas are inadequately argued. They should be constructed
+  -- through theory refinement in an SDS describing a software solution for a
+  -- specific SRS. See the following for further discussion:
+  -- * <https://github.com/JacquesCarette/Drasil/pull/4663#issuecomment-3791189095>
+  -- * <https://github.com/JacquesCarette/Drasil/pull/4664#issuecomment-3791983458>
+  handWiredDefs :: [SimpleQDef]
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -313,9 +333,16 @@ data ODE = ODE{
   -- | Preferentially-ordered list ODE libraries to try.
   odeLib :: [ODELibPckg]
 }
+
 -- | Constructor to create an ODE
 makeODE :: [ODEInfo] -> [ODELibPckg] -> ODE
 makeODE = ODE
+
+odeInfoReqs :: ExtLib -> [DefinedQuantityDict]
+odeInfoReqs (Math ode) = concatMap odeInfoChunks $ odeInfo ode
+
+odeLibReqs :: ExtLib -> [DefinedQuantityDict]
+odeLibReqs (Math ode) = concatMap libDummyQuants $ odeLib ode
 
 -- | Default choices to be used as the base from which design specifications
 -- can be built.
@@ -334,7 +361,10 @@ defaultChoices = Choices {
   srsConstraints = makeConstraints Exception Warning,
   extLibs = [],
   icNames = defaultICName,
-  folderVal = 4
+  folderVal = 4,
+  defaultConfigFiles = [],
+  extraMods = [],
+  handWiredDefs = []
 }
 
 -- | Renders 'Choices' as 'Sentence's.

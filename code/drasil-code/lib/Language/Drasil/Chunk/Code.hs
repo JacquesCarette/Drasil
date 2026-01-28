@@ -1,20 +1,22 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
-
 -- | Defines chunk types for use in code generation.
 module Language.Drasil.Chunk.Code (
   CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..),
   VarOrFunc(..), obv, quantvar, quantfunc, ccObjVar, codevars, codevars',
-  funcResolve, varResolve, listToArray, programName, funcPrefix,
+  listToArray, funcPrefix,
   DefiningCodeExpr(..)
 ) where
 
 import Control.Lens ((^.), view)
+import Text.PrettyPrint.HughesPJ (render)
 
 import Language.Drasil
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Printers (symbolDoc)
 
-import Text.PrettyPrint.HughesPJ (render)
+import Drasil.Code.CodeVar (CodeChunk(..), CodeIdea(..), VarOrFunc(..),
+  DefiningCodeExpr(..), CodeFuncChunk(..), CodeVarChunk(..), funcPrefix, obv,
+  listToArray, qc, ccv, ccf)
 
 -- | Finds the code name of a 'CodeChunk'.
 instance CodeIdea    CodeChunk where

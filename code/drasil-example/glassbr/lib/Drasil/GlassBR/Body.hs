@@ -6,20 +6,24 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
 import qualified Language.Drasil.Development as D
 
-import Drasil.Metadata as M (dataDefn, inModel, thModel)
+import Drasil.Metadata as M (dataDefn, inModel, thModel, software)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc, auxSpecSent, termDefnF')
+import Drasil.DocLang (auxSpecSent, termDefnF')
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
+import Drasil.Sentence.Combinators (bulletFlat, bulletNested, tAndDOnly, tAndDWAcc, noRefs,
+  tAndDWSym)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   characteristic, company, condition, dataConst, datum,
   environment, input_, interface, model, physical, problem, product_,
-  software, softwareConstraint, softwareSys, standard, sysCont,
+  softwareConstraint, softwareSys, standard, sysCont,
   system, term_, user, value, variable, reference, definition)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, mathcon')
@@ -36,48 +40,33 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab,
   ptOfExplsn, con', glass, iGlass, lGlass)
-import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
+import Drasil.GlassBR.ModuleDefs (allMods, implVars)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
-import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
-import Drasil.GlassBR.Symbols (symbolsForSymbolTable, thisSymbols)
+import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
+  sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
 
 si :: System
 si = mkSystem progName Specification
   [nikitha, spencerSmith] [purp] [background] [scope] []
-  symbolsForSymbolTable
   tMods [] GB.dataDefs iMods
-  configFp
   inputs outputs constrained constants
   symbMap
+  allRefs
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA ],
   IntroSec $
-    IntroProg (startIntro software blstRskInvWGlassSlab progName)
+    IntroProg (startIntro M.software blstRskInvWGlassSlab progName)
       (short progName)
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
@@ -106,7 +95,7 @@ mkSRS = [TableOfContents,
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub inReqDesc funcReqsTables,
+    FReqsSub funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,
@@ -142,12 +131,18 @@ conceptChunks =
   map cw mathquants
 
 symbMap :: ChunkDB
-symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
-  GB.dataDefs iMods [] tMods concIns labCon allRefs citations
+symbMap = cdb symbolsWCodeSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
+  GB.dataDefs iMods [] tMods concIns citations labCon
+
+symbolsWCodeSymbols :: [DefinedQuantityDict]
+symbolsWCodeSymbols = map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
+  ++ implVars ++ symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+-- FIXME: GlassBR needs `map ref citations` pre-created or else the code
+-- generator fails due to a missing reference to `astm2009`.
+allRefs = externalLinkRef : map ref citations
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -229,7 +224,6 @@ scope = foldlSent_ [S "determining the safety" `S.ofA` phrase glaSlab,
 {--Purpose of Document--}
 -- Purpose of Document automatically generated in IPurpose
 
-
 {--Scope of Requirements--}
 
 {--Organization of Document--}
@@ -250,7 +244,7 @@ orgOfDocIntroEnd = foldlSent [D.toSent (atStartNP' (the dataDefn)) `S.are`
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
-   S "A circle represents an external entity outside the" +:+ phrase software
+   S "A circle represents an external entity outside the" +:+ phrase M.software
    `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", (sParen (short progName) !.),
    S "Arrows are used to show the data flow between the" +:+ D.toSent (phraseNP (system
@@ -268,9 +262,9 @@ sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
   D.toSent (phraseNP (glaSlab `and_` blastTy)) `sC` S "ensuring no errors" `S.inThe` plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+. D.toSent (pluralNP (combineNINI input_ variable)),
   S "Ensure required" +:+
-  namedRef (SRS.assumpt [] []) (D.toSent $ pluralNP (combineNINI software assumption))
+  namedRef (SRS.assumpt [] []) (D.toSent $ pluralNP (combineNINI M.software assumption))
     +:+ S "are appropriate for any particular" +:+
-    phrase problem +:+ S "input to the" +:+. phrase software]
+    phrase problem +:+ S "input to the" +:+. phrase M.software]
 
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+

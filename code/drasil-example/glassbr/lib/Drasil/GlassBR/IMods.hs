@@ -2,16 +2,18 @@ module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) wher
 
 import Control.Lens ((^.))
 import Prelude hiding (exp)
+
+import Drasil.Database (HasUID)
+import Drasil.Sentence.Combinators (definedIn', definedIn)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN, output)
 
 import Data.Drasil.Citations (campidelli)
 import Data.Drasil.Concepts.Documentation (goal, user, datum)
 import Data.Drasil.SI_Units
-
-import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN, output)
 
 import Drasil.GlassBR.DataDefs (aGrtrThanB, arRef, calofDemand, glaTyFac,
   gtfRef, hRef, loadDFDD, stdVals)
@@ -27,8 +29,6 @@ iMods = [risk, strDisFac, nonFL, dimLL, tolPre, tolStrDisFac, probOfBreak,
 symb :: [UnitalChunk]
 symb = [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram,
   ucuc standOffDist metre] -- this is temporary
--- ++
- -- [dqdQd (qw calofDemand) demandq]
 
 abInputConstraints :: [(DefinedQuantityDict, Maybe (RealInterval Expr Expr))]
 abInputConstraints = [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),

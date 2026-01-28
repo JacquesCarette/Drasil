@@ -10,8 +10,7 @@ module Theory.Drasil.Theory (
 
 import Control.Lens (Lens', view, makeLenses)
 
-import Drasil.Database.Chunk (HasChunkRefs(..))
-
+import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
 import Drasil.Metadata (thModel)
 
@@ -110,7 +109,6 @@ instance Referable TheoryModel where
 
 -- TODO: Theory Models should generally be using their own UID, instead of
 --       having their UIDs derived by the model kind.
-
 
 -- This "smart" constructor is really quite awful, it takes way too many arguments.
 -- This should likely be re-arranged somehow. Especially since since of the arguments

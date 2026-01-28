@@ -25,12 +25,10 @@ import Control.Lens ((^.))
 
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
- ++ map dqdWr unitalChuncks
+ ++ map dqdWr unitalChuncks ++ map dqdWr specParamValList ++
+   map dqdWr [htFusionMin, htFusionMax, coilSAMax] ++
+   map dqdWr [absTol, relTol]
 
-symbolsAll :: [DefinedQuantityDict]
-symbolsAll = symbols ++ map dqdWr specParamValList ++
-  map dqdWr [htFusionMin, htFusionMax, coilSAMax] ++
-  map dqdWr [absTol, relTol]
 -- Symbols with Units --
 
 units :: [UnitalChunk]

@@ -24,6 +24,7 @@ digraph avsall {
 	theory:landingposition -> instance:accelXZero;
 	theory:landingposition -> instance:gravAccelValue;
 	theory:offset -> instance:posXDirection;
+	instance:considerAirDrag -> instance:neglectDrag;
 
 
 	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -83,20 +84,27 @@ digraph avsall {
 	{theory:flightduration, theory:landingposition, theory:offset}
 	}
 
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:verifyInVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInVals"];
+	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
 	instance:verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
 	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
 	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
 	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
 	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
-	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
-	instance:verifyInVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInVals"];
-	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
-	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 
-	subgraph NFR {
+	subgraph FR {
 	rank="same"
-	{instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:portable, instance:inputValues, instance:verifyInVals, instance:calcValues, instance:outputValues}
+	{instance:inputValues, instance:verifyInVals, instance:calcValues, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:portable}
+	}
+
+	instance:considerAirDrag	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:considerAirDrag"];
+
+	subgraph LC {
+	rank="same"
+	{instance:considerAirDrag}
 	}
 
 }

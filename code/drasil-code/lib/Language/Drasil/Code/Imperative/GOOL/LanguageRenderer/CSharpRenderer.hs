@@ -1,29 +1,24 @@
-{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE PostfixOperators #-}
-
 -- | The logic to render C# auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
   CSharpProject(..)
 ) where
 
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import qualified Prelude as P ((<>))
+
+import Drasil.GOOL (csName, csVersion)
+
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
+  G (doxConfig, readMe, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
-  packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, nativeBinary, osClassDefault, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
-
-import Drasil.GOOL (onCodeList, csName, csVersion)
-
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import qualified Prelude as P ((<>))
-import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Holds a C# project.
 newtype CSharpProject a = CSP {unCSP :: a}
@@ -38,20 +33,13 @@ instance Applicative CSharpProject where
 instance Monad CSharpProject where
   CSP x >>= f = f x
 
-instance PackageSym CSharpProject where
-  type Package CSharpProject = PackData
-  package p = onCodeList (packD p)
-
 instance AuxiliarySym CSharpProject where
-  type Auxiliary CSharpProject = AuxData
-  type AuxHelper CSharpProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
     G.readMe rmi {
         langName = csName,
         langVersion = csVersion,
         invalidOS = Just "All OS's except Windows"}
-  sampleInput = G.sampleInput
 
   optimizeDox = pure no
 
@@ -59,7 +47,6 @@ instance AuxiliarySym CSharpProject where
     (G.noRunIfLib it csRunnable) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unCSP
-  auxFromData fp d = pure $ ad fp d
 
 -- | Create a build configuration for C# files. Takes in 'FilePath's and the type of implementation.
 csBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

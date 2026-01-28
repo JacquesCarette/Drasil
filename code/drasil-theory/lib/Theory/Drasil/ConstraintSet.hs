@@ -10,14 +10,15 @@
 module Theory.Drasil.ConstraintSet (
   -- * Type
    ConstraintSet,
-
    -- * Constructors
    mkConstraintSet,
 ) where
 
-import           Control.Lens (makeLenses, (^.))
+import Control.Lens (makeLenses, (^.))
 import qualified Data.List.NonEmpty as NE
-import           Language.Drasil
+
+import Language.Drasil
+import Drasil.Database (HasUID(..))
 
 -- | 'ConstraintSet's are sets of invariants that always hold for underlying domains.
 data ConstraintSet e = CL {

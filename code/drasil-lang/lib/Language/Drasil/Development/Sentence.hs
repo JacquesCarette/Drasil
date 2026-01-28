@@ -11,10 +11,12 @@ module Language.Drasil.Development.Sentence (
   -- * from NPStruct to Sentence
   toSent,
   -- * Short Form (lowercase)
-  short
+  short, introduceAbb
 ) where
 
 import Control.Lens ((^.))
+
+import Drasil.Database (HasUID(..))
 
 import Language.Drasil.Classes (NamedIdea(term), Idea)
 import Language.Drasil.Sentence ((+:+), sParen, sentenceTerm,
@@ -22,7 +24,6 @@ import Language.Drasil.Sentence ((+:+), sParen, sentenceTerm,
 import qualified Language.Drasil.Sentence as S
 import qualified Language.Drasil.NounPhrase as NP
 import Language.Drasil.NounPhrase.Core (NPStruct(..))
-import Drasil.Database.UID (HasUID(..))
 
 -- | Translate from NPStruct to Sentence
 toSent :: NPStruct -> S.Sentence

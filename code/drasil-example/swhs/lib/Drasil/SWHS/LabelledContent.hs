@@ -17,12 +17,12 @@ labelledContent :: [LabelledContent]
 labelledContent = [sysCntxtFig, figTank]
 
 sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon")
+sysCntxtFig = llccFig "SysCon"
   $ fig (titleize sysCont)
   $ resourcePath ++ "SystemContextFigure.png"
 
 figTank :: LabelledContent
-figTank = llcc (makeFigRef "Tank") $ fig (
+figTank = llccFig "Tank" $ fig (
   foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC `S.of_`
   ch htFluxC `S.and_` phrase htFluxP `S.of_` ch htFluxP])
   $ resourcePath ++ "Tank.png"

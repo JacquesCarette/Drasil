@@ -18,11 +18,14 @@ module Theory.Drasil.ModelKinds (
 import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')
 import Data.Maybe (mapMaybe)
 
-import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..), Expr,
+import Drasil.Database (UID, HasUID(..), mkUid, nsUid)
+import Language.Drasil (NamedIdea(..), NP, QDefinition, Expr,
   RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..),
-  UID, DifferentialModel, mkUid, nsUid, RequiresChecking(..), Space,
+  RequiresChecking(..), Space,
   HasSpace(typ), DefiningExpr(..))
+
 import Theory.Drasil.ConstraintSet (ConstraintSet)
+import Theory.Drasil.DifferentialModel (DifferentialModel)
 import Theory.Drasil.MultiDefn (MultiDefn)
 
 -- | Models can be of different kinds:

@@ -3,26 +3,28 @@
 -- Namely, for theory models, general definitions, data definitions, and instance models.
 module Drasil.DocumentLanguage.Definitions (
   -- * Types
-  Field(..), Fields, InclUnits(..), Verbosity(..),
+  Field(..), Fields, InclUnits(..), Verbosity(..), TraceViewCat,
   -- * Constructors
   ddefn, derivation, gdefn,
   instanceModel, tmodel,
   -- * Helpers
   helperRefs, helpToRefField) where
 
+import Control.Lens ((^.))
 import Data.List (nub)
 import Data.Maybe (mapMaybe)
-import Control.Lens ((^.))
 
+-- rest of Drasil
+import Drasil.Database (ChunkDB, UID, HasUID(..), find)
+import Drasil.System (System(_systemdb), systemdb, refbyLookup)
 import Language.Drasil
-import Database.Drasil
-
-import Drasil.System
-import Drasil.GetChunks (vars)
-
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
-  TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD)
+  TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD,
+  Derivation(Derivation), MayHaveDerivation(derivations))
 
+-- local
+import Drasil.GetChunks (vars)
+import Drasil.Document.Contents (unlbldExpr)
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
 -- | Synonym for a list of 'Field's.
@@ -51,6 +53,11 @@ data Verbosity = Verbose  -- ^ Full Descriptions.
 data InclUnits = IncludeUnits -- ^ In description field (for other symbols).
                | IgnoreUnits
 
+-- * Types
+
+-- | Helper type that takes a set of 'UID's and a 'ChunkDB'.
+type TraceViewCat = [UID] -> System -> [UID]
+
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a 'RelationConcept' (called automatically by 'SCSSub' program).
 tmodel :: Fields -> System -> TheoryModel -> LabelledContent
@@ -76,7 +83,7 @@ instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (
 -- or IM definition automatically (called automatically by 'SCSSub' program).
 derivation :: (MayHaveDerivation c, HasShortName c, Referable c) => c -> Maybe Contents
 derivation c = fmap
-  (\(Derivation h d) -> LlC $ llcc (ref c) $ DerivBlock h $ map makeDerivCons d) $
+  (\(Derivation h d) -> LlC $ mkRawLC (DerivBlock h $ map makeDerivCons d) (ref c)) $
   c ^. derivations
 
 -- | Helper function for creating the layout objects
@@ -112,7 +119,7 @@ mkTMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
 helperRefs :: HasUID t => t -> System -> Sentence
 helperRefs t s = foldlList Comma List $ map (`helpToRefField` (s ^. systemdb)) $ nub $
-  refbyLookup (t ^. uid) (refbyTable $ s ^. systemdb)
+  refbyLookup (t ^. uid) s
 
 -- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of
 -- the possible data sets contained in the 'System' database.

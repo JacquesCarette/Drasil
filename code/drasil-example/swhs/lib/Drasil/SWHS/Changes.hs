@@ -8,6 +8,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model, likeChgDom, unlikeChgDom)
+import Drasil.Sentence.Combinators (chgsStart)
 
 import Drasil.SWHS.Concepts (tank, phsChgMtrl, water)
 import Drasil.SWHS.Unitals (tempInit, tempC, tempPCM)
@@ -72,7 +73,6 @@ unlikeChgWPFS = cic "unlikeChgWPFS" (
   foldlSent [refS assumpWAL `sC` chgsStart assumpNGSP (S "It is unlikely" `S.for` S "the change of"),
   phrase water, S "from liquid to a solid or the state change" `S.ofThe` phrase phsChgMtrl,
   S "from a liquid to a gas to be considered"] ) "Water-PCM-Fixed-States" unlikeChgDom
-
 
 unlikeChgNIHG = cic "unlikeChgNIHG" (
   foldlSent [chgsStart assumpNIHGBWP (S "Is used" `S.for` S "the derivations of"),

@@ -1,20 +1,14 @@
-module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
-
-import Control.Lens ((^.))
+module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
 import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
-import Drasil.DocLang (DocDesc)
 import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem, systemdb)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Data.Drasil.Concepts.Math (mathcon', ode)
-import Data.Drasil.ExternalLibraries.ODELibraries
-       (apacheODESymbols, odeintSymbols, osloSymbols,
-        scipyODESymbols, odeInfoChunks)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
@@ -34,7 +28,7 @@ import Drasil.PDController.IModel (instanceModels, imPD)
 import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc, externalLinkRef,
        introUserChar1, introUserChar2, introscopeOfReq, scope)
 import Drasil.PDController.References (citations)
-import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
+import Drasil.PDController.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
@@ -43,19 +37,6 @@ import Drasil.PDController.ODEs (pidODEInfo)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
-
-sd  :: (System , DocDesc)
-sd = fillcdbSRS mkSRS si
-
--- sigh, this is used by others
-fullSI :: System
-fullSI = fst sd
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) sd
-
-printSetting :: PrintingInformation
-printSetting = piSys (fullSI ^. systemdb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS
@@ -90,18 +71,16 @@ mkSRS
                  ShowDerivation,
                Constraints EmptyS inputsUC]],
 
-     ReqrmntSec $ ReqsProg [FReqsSub EmptyS [], NonFReqsSub], LCsSec,
+     ReqrmntSec $ ReqsProg [FReqsSub funcReqsTables, NonFReqsSub], LCsSec,
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
 si :: System
 si = mkSystem
   progName Specification [naveen]
   [purp] [background] [scope] [motivation]
-  symbolsAll
   theoreticalModels genDefns dataDefinitions instanceModels
-  []
   inputs outputs (map cnstrw' inpConstrained)
-  pidConstants symbMap
+  pidConstants symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,
@@ -125,13 +104,6 @@ orgSecEnd = foldlSent [
     titleize ode, sParen (short ode), S "that models the", phrase pidC
   ]
 
--- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is currently added to symbolsAll automatically as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
--- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
-symbolsAll :: [DefinedQuantityDict]
-symbolsAll = symbols ++ map dqdWr pidConstants
-  ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
-  ++ odeInfoChunks pidODEInfo
-
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
@@ -145,7 +117,10 @@ conceptChunks =
   physicalcon ++ [linear, angular]
 
 symbMap :: ChunkDB
-symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, dqdWr negInf])
+symbMap = cdb
+  (map dqdWr physicscon ++ symbols ++
+    [dqdWr mass, dqdWr posInf, dqdWr negInf] ++
+    map dqdWr pidConstants)
   ideaDicts
   conceptChunks
   ([] :: [UnitDefn])
@@ -154,9 +129,8 @@ symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, 
   genDefns
   theoreticalModels
   conceptInstances
-  labelledContent
-  allRefs
   citations
+  (labelledContent ++ funcReqsTables)
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

@@ -3,9 +3,10 @@ module Language.Drasil.ModelExpr.Extract where
 
 import Data.Containers.ListUtils (nubOrd)
 
+import Drasil.Database (UID)
+
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..))
 import Language.Drasil.Space (RealInterval(..))
-import Drasil.Database.UID (UID)
 
 -- | Generic traverse of all expressions that could lead to names.
 meNames :: ModelExpr -> [UID]
@@ -24,7 +25,6 @@ meNames (UnaryOpB _ u)        = meNames u
 meNames (UnaryOpVV _ u)       = meNames u
 meNames (UnaryOpVN _ u)       = meNames u
 meNames (ArithBinaryOp _ a b) = meNames a ++ meNames b
-meNames (BoolBinaryOp _ a b)  = meNames a ++ meNames b
 meNames (EqBinaryOp _ a b)    = meNames a ++ meNames b
 meNames (LABinaryOp _ a b)    = meNames a ++ meNames b
 meNames (SpaceBinaryOp _ a b) = meNames a ++ meNames b
@@ -67,7 +67,6 @@ meNames' (UnaryOpB _ u)        = meNames' u
 meNames' (UnaryOpVV _ u)       = meNames' u
 meNames' (UnaryOpVN _ u)       = meNames' u
 meNames' (ArithBinaryOp _ a b) = meNames' a ++ meNames' b
-meNames' (BoolBinaryOp _ a b)  = meNames' a ++ meNames' b
 meNames' (EqBinaryOp _ a b)    = meNames' a ++ meNames' b
 meNames' (LABinaryOp _ a b)    = meNames' a ++ meNames' b
 meNames' (OrdBinaryOp _ a b)   = meNames' a ++ meNames' b

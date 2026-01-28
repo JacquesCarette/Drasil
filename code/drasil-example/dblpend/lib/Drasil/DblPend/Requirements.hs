@@ -2,7 +2,7 @@ module Drasil.DblPend.Requirements where
 
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon)
-import Drasil.DocLang (mkPortableNFR, mkCorrectNFR)
+import Drasil.DocLang (mkPortableNFR, mkCorrectNFR, inReqWTab)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (inValue)
@@ -14,11 +14,18 @@ import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Drasil.DblPend.IMods (angleIM_1, angleIM_2)
-import Drasil.DblPend.Unitals (pendDisAngle_1, pendDisAngle_2)
+import Drasil.DblPend.Unitals (inputs, pendDisAngle_1, pendDisAngle_2)
 
 --Functional Requirements--
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInptVals, calcAng, outputValues]
+funcReqs = [inputValues, verifyInptVals, calcAng, outputValues]
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab Nothing inputs
+
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
 
 verifyInptVals, calcAng, outputValues :: ConceptInstance
 

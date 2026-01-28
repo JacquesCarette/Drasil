@@ -5,7 +5,11 @@
 -- | The Drasil Expression language
 module Language.Drasil.Expr.Lang where
 
-import Drasil.Database.UID (UID)
+import Data.Either (fromRight, rights)
+import qualified Data.Foldable as NE
+import Data.List (nub)
+
+import Drasil.Database (UID)
 
 import Language.Drasil.Literal.Class (LiteralC (..))
 import Language.Drasil.Literal.Lang (Literal (..))
@@ -15,10 +19,6 @@ import Language.Drasil.Space (DiscreteDomainDesc, RealInterval, Space,
   assertIndexLike, assertSet, assertReal, assertBoolean)
 import qualified Language.Drasil.Space as S
 import Language.Drasil.WellTyped
-
-import Data.Either (fromRight, rights)
-import qualified Data.Foldable as NE
-import Data.List (nub)
 
 -- * Expression Types
 
@@ -36,11 +36,6 @@ data ArithBinOp = Frac | Pow | Subt
 
 -- | Equality operators (equal or not equal).
 data EqBinOp = Eq | NEq
-  deriving Eq
-
--- | Conditional and Biconditional operators (Expressions can imply
--- one another, or exist if and only if another expression exists).
-data BoolBinOp = Impl | Iff
   deriving Eq
 
 -- | Index operator. `Index` represents accessing an element at a specific
@@ -142,8 +137,6 @@ data Expr where
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> Expr -> Expr -> Expr
-  -- | Binary operator for boolean operators (implies, iff).
-  BoolBinaryOp  :: BoolBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for equality between expressions.
   EqBinaryOp    :: EqBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for indexing two expressions.
@@ -180,7 +173,6 @@ instance Eq Expr where
   UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
   UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
   ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
-  BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
   EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
   OrdBinaryOp o a b   == OrdBinaryOp p c d   =   o == p && a == c && b == d
   LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
@@ -235,7 +227,6 @@ instance LiteralC Expr where
   dbl = Lit . dbl
   exactDbl = Lit . exactDbl
   perc l r = Lit $ perc l r
-
 
 -- helper function for typechecking to help reduce duplication
 vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either TypeError Space
@@ -373,7 +364,7 @@ instance Typed Expr Space where
   infer cxt (UnaryOpVN Norm e) = do
     et <- infer cxt e
     assertRealVector et (\sp -> "Vector norm only applies to vectors of real numbers. Received `" ++ sp ++ "`.")
-    pure et
+    pure S.Real
 
   infer cxt (UnaryOpVN Dim e) = do
     et <- infer cxt e
@@ -402,14 +393,6 @@ instance Typed Expr Space where
       lt rt
       (\ls rs -> "Subtraction should only be applied to the same numeric typed operands. Received `" ++ ls ++ "` - `" ++ rs ++ "`.")
     pure lt
-
-  infer cxt (BoolBinaryOp _ l r) = do
-    lt <- infer cxt l
-    rt <- infer cxt r
-    let msg = const $ "Boolean expression contains non-boolean operand. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
-    assertBoolean lt msg
-    assertBoolean rt msg
-    pure S.Boolean
 
   infer cxt (EqBinaryOp _ l r) = do
     lt <- infer cxt l

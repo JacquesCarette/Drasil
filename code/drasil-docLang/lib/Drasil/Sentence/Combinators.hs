@@ -1,0 +1,213 @@
+{-# Language PostfixOperators, TupleSections #-}
+-- | Miscellaneous utility functions for use in various parts of document creation,
+-- but focused mainly on the 'Sentence' level
+module Drasil.Sentence.Combinators (
+  -- * Reference-related Functions
+  -- | Attach a 'Reference' and a 'Sentence' in different ways.
+  chgsStart, definedIn, definedIn', definedIn'', definedIn''',
+  fromReplace, fromSource, fromSources, fmtU, follows,
+  makeListRef,
+  -- * Sentence-related Functions
+  -- | See Reference-related Functions as well.
+  addPercent, maybeChanged, maybeExpanded,
+  maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
+  unwrap, fterms, eqN, eqnWSource,
+  -- * List-related Functions
+  bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
+  mkTableFromColumns, noRefs, refineChain,
+  tAndDOnly, tAndDWAcc, tAndDWSym,
+  zipSentList
+) where
+
+import Control.Lens ((^.))
+import Data.Decimal (DecimalRaw, realFracToDecimal)
+import Data.List (transpose)
+
+import Drasil.Database (HasUID)
+
+import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs) , UnitDefn, MayHaveUnit(..)
+  , UnitalChunk , HasUnitSymbol(usymb), Quantity, Concept, Definition(defn), NamedIdea(..)
+  , HasSymbol
+  , HasShortName(..) , short, atStart, titleize, phrase, plural , Section , ItemType(..), ListType(Bullet)
+  , ModelExpr , refS, namedRef
+  , Sentence(S, Percent, (:+:), Sy, EmptyS), eS
+  , ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent, fromSource, fterms
+  , foldlList, SepType(Comma), FoldType(List), foldlSent , Referable)
+import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
+
+-- Ideally this would create a reference to the equation too.
+-- Doesn't use equation concept so utils doesn't depend on data
+-- | Prepends the word "Equation" to an 'Int'.
+eqN :: Int -> Sentence
+eqN n = S "Equation" +:+ sParen (S $ show n)
+
+-- | Takes an expression and a 'Referable' and outputs as a Sentence "expression (source)".
+eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
+eqnWSource a b = eS a +:+ sParen (refS b)
+
+-- | Takes a 'Referable' source and a 'UnitalChunk' and outputs as a 'Sentence': "From @source@ we can replace @symbol@:".
+fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
+fromReplace src c = S "From" +:+ refS src `sC` S "we can replace" +: ch c
+
+-- | Takes a list of 'Referable's and 'Symbol's and outputs as a Sentence "By substituting @symbols@, this can be written as:".
+substitute :: (Referable r, HasShortName r, DefinesQuantity r) => [r] -> Sentence
+substitute s = S "By substituting" +: (foldlList Comma List l `sC` S "this can be written as")
+  where l = map (\x -> ch (x ^. defLhs) +:+ fromSource x) s
+
+-- | Takes a 'HasSymbol' that is also 'Referable' and outputs as a 'Sentence': "@symbol@ is defined in @reference@."
+definedIn :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence
+definedIn q = ch (q ^. defLhs) `S.is` S "defined in" +:+. refS q
+
+-- | Same as 'definedIn', but allows for additional information to be appended to the 'Sentence'.
+definedIn' :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence -> Sentence
+definedIn' q info = ch (q ^. defLhs) `S.is` S "defined" `S.in_` refS q +:+. info
+
+-- | Takes a 'Referable' and outputs as a 'Sentence' "defined in @reference@" (no 'HasSymbol').
+definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
+definedIn'' q =  S "defined" `S.in_` refS q
+
+-- | Takes a 'Symbol' and its 'Reference' (does not append a period at the end!). Outputs as "@symbol@ is defined in @source@".
+definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
+definedIn''' q src = ch q `S.is` S "defined in" +:+ refS src
+
+-- | Zip helper function enumerates abbreviations and zips it with list of 'ItemType':
+--
+--     * s - the number from which the enumeration should start from ('Integer'),
+--     * t - the title of the list ('Sentence'),
+--     * l - the list to be enumerated (['Sentence']).
+mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
+mkEnumAbbrevList s t l = zip [t :+: S (show x) | x <- [s..]] $ map Flat l
+
+-- | Takes an amount as a 'Sentence' and appends a unit to it.
+fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
+fmtU n u  = n +:+ unwrap (getUnit u)
+
+-- | Formats typical uncertainty data to be displayed.
+typUncr :: (Double, Maybe Int) -> Sentence
+typUncr (u, p) =
+  maybe (addPercent $ u * 100)
+        (\q -> addPercent (realFracToDecimal (fromIntegral q) (u * 100) :: DecimalRaw Integer))
+        p
+
+-- | Converts input to a 'Sentence' and appends %.
+addPercent :: Show a => a -> Sentence
+addPercent num = S (show num) :+: Percent
+
+-- | Distributes a list of Sentences by prepending individual Sentences once to an existing list of Sentences.
+--
+-- For example:
+--
+-- >>> zipSentList [S "Hi", S "Hey", S "Hi"] [[S "Hello"], [S "World"], [S "Hello", S "World"]]
+-- [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
+zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
+zipSentList acc _ []           = acc
+zipSentList acc [] r           = acc ++ map (EmptyS:) r
+zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
+
+-- | Makes a traceability matrix from a list of row titles, a list of rows
+--   of "checked" columns, and a list of columns.
+makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
+makeTMatrix rowName rows cols = zipSentList [] rowName [zipFTable' x cols | x <- rows]
+  where
+    zipFTable' content = concatMap (\x -> if x `elem` content then [S "X"] else [EmptyS])
+
+-- | Helper for making a table from a columns.
+mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
+mkTableFromColumns l =
+  let l' = filter (not . all isEmpty . snd) l in
+  (map fst l', transpose $ map (map replaceEmptyS . snd) l')
+  where
+    isEmpty       EmptyS = True
+    isEmpty       _      = False
+    replaceEmptyS EmptyS = S "--"
+    replaceEmptyS s      = s
+
+-- | Makes 'Sentence's from an item and its reference.
+-- Takes the title of reference as a 'String' and a
+-- 'Sentence' containing the full reference. Wraps the full reference in parenthesis.
+itemRefToSent :: String -> Sentence -> Sentence
+itemRefToSent a b = S a +:+ sParen b
+
+-- | Takes a list and a 'Section', then generates a list of that section's reference to
+-- match the length of the list.
+makeListRef :: [a] -> Section -> [Sentence]
+makeListRef l = replicate (length l) . refS
+
+-- | Applies 'Bullet' and 'Flat' to a list.
+bulletFlat :: [Sentence] -> ListType
+bulletFlat = Bullet . noRefs . map Flat
+
+-- | Applies 'Bullet's and headers to a 'Nested' 'ListType'.
+-- The first argument is the headers of the 'Nested' lists.
+bulletNested :: [Sentence] -> [ListType] -> ListType
+bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
+
+-- | Get a unit symbol if there is one.
+unwrap :: Maybe UnitDefn -> Sentence
+unwrap (Just a) = Sy $ usymb a
+unwrap Nothing  = EmptyS
+
+-- | Converts lists of simple 'ItemType's into a list which may be used
+-- in 'Contents' but is not directly referable.
+noRefs :: [ItemType] -> [(ItemType, Maybe String)]
+noRefs = map (, Nothing)
+
+--Doesn't use connection phrase so utils doesn't depend on data
+-- | Returns the 'Sentence' "@('titleize' aNamedIdea)@ Showing the Connections Between @contents@".
+showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
+showingCxnBw traceyVar contents = titleize traceyVar +:+
+  S "Showing the Connections Between" +:+ contents
+
+-- | Returns the 'Sentence' "The @chunk@ under consideration is @chunkDefinition@".
+underConsidertn :: ConceptChunk -> Sentence
+underConsidertn chunk = S "The" +:+ phrase chunk +:+
+  S "under consideration is" +:+. (chunk ^. defn)
+
+-- | Create a list in the pattern of "The \_\_ are refined to the \_\_".
+-- Note: Order matters!
+refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+refineChain [x,y] = S "The" +:+ namedRef (snd x) (plural $ fst x) `S.are` S "refined" `S.toThe` plural (fst y)
+refineChain (x:y:xs) = (foldlList Comma List (refineChain [x,y] : rc (y : xs)) !.)
+  where
+    rc [a, b]   = [rcSent a b]
+    rc (a:b:as) =  rcSent a b : rc (b : as)
+    rc _        = error "refineChain helper encountered an unexpected empty list"
+    rcSent a b  = S "the" +:+ namedRef (snd a) (plural $ fst a) `S.toThe` namedRef (snd b) (plural (fst b))
+refineChain _ = error "refineChain encountered an unexpected empty list"
+
+-- | Helper functions for making likely change statements. Outputs "The @firstSentence@ may be @someVerb@ @thirdSentence@".
+likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence
+likelyFrame a verb x = foldlSent [S "The", a, S "may be", verb, x]
+
+-- | Helper functions for making likely change statements. Uses form @'likelyFrame' parameter1 _ parameter2@.
+maybeWOVerb, maybeChanged, maybeExpanded :: Sentence -> Sentence -> Sentence
+maybeWOVerb a   = likelyFrame a EmptyS
+maybeChanged a  = likelyFrame a (S "changed")
+maybeExpanded a = likelyFrame a (S "expanded")
+
+-- | Helpful combinators for making 'Sentence's into Terminologies with Definitions.
+-- Returns of the form: "@term (abbreviation) - termDefinition@".
+tAndDWAcc :: Concept s => s -> ItemType
+tAndDWAcc temp = Flat $ atStart temp +:+. (sParen (short temp) `sDash` capSent (temp ^. defn))
+
+-- | Helpful combinators for making 'Sentence's into Terminologies with Definitions.
+-- Returns of the form: "@term (symbol) - termDefinition@".
+tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
+tAndDWSym tD sym = Flat $ atStart tD +:+. (sParen (ch sym) `sDash` capSent (tD ^. defn))
+
+-- | Helpful combinators for making 'Sentence's into Terminologies with Definitions.
+-- Returns of the form: "@term - termDefinition@".
+tAndDOnly :: Concept s => s -> ItemType
+tAndDOnly chunk  = Flat $ atStart chunk `sDash` EmptyS +:+. capSent (chunk ^. defn)
+
+-- | Appends "following @reference@" to the end of a 'Sentence'.
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+preceding `follows` r = preceding +:+ S "following" +:+ refS r
+
+-- | Similar to `fromSource` but takes a list of references instead of one.
+fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
+fromSources rs = sParen (S "from" +:+ foldlList Comma List (map refS rs))
+
+-- | Output is of the form "@reference - sentence@".
+chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
+chgsStart = sDash . refS

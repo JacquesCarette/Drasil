@@ -148,11 +148,6 @@
                   <th>Units</th>
                 </tr>
                 <tr>
-                  <td><em>AbsTol</em></td>
-                  <td>Absolute Tolerance</td>
-                  <td>--</td>
-                </tr>
-                <tr>
                   <td><em>C<sub>s</sub></em></td>
                   <td>Control Variable in the frequency domain</td>
                   <td>--</td>
@@ -160,11 +155,6 @@
                 <tr>
                   <td><em>c</em></td>
                   <td>Damping coefficient of the spring</td>
-                  <td>--</td>
-                </tr>
-                <tr>
-                  <td><em>c<sub>t</sub></em></td>
-                  <td>Control Variable in the time domain</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -178,11 +168,6 @@
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>e<sub>t</sub></em></td>
-                  <td>Process Error in the time domain</td>
-                  <td>--</td>
-                </tr>
-                <tr>
                   <td><em>F<sub>s</sub></em></td>
                   <td>Laplace Transform of a function</td>
                   <td>--</td>
@@ -190,11 +175,6 @@
                 <tr>
                   <td><em>f<sub>t</sub></em></td>
                   <td>Function in the time domain</td>
-                  <td>--</td>
-                </tr>
-                <tr>
-                  <td><em>H<sub>s</sub></em></td>
-                  <td>Transfer Function in the frequency domain</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -235,11 +215,6 @@
                 <tr>
                   <td><em>r<sub>t</sub></em></td>
                   <td>Set-Point</td>
-                  <td>--</td>
-                </tr>
-                <tr>
-                  <td><em>RelTol</em></td>
-                  <td>Relative Tolerance</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -1265,7 +1240,7 @@
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+                  The <a href=#Table:InDataConstraints>Input Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -1772,62 +1747,6 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#portable>NFR:Portability</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#security>NFR:Security</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#maintainability>NFR:Maintainability</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#verifiability>NFR:Verifiability</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#inputValues>FR:Input-Values</a></td>
               <td></td>
               <td></td>
@@ -1871,6 +1790,62 @@
             </tr>
             <tr>
               <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR:Portability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#security>NFR:Security</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainability>NFR:Maintainability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiability>NFR:Verifiability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2042,97 +2017,17 @@
               <th><a href=#TM:tmSOSystem>TM:tmSOSystem</a></th>
               <th><a href=#GD:gdPowerPlant>GD:gdPowerPlant</a></th>
               <th><a href=#IM:pdEquationIM>IM:pdEquationIM</a></th>
-              <th><a href=#portable>NFR:Portability</a></th>
-              <th><a href=#security>NFR:Security</a></th>
-              <th><a href=#maintainability>NFR:Maintainability</a></th>
-              <th><a href=#verifiability>NFR:Verifiability</a></th>
               <th><a href=#inputValues>FR:Input-Values</a></th>
               <th><a href=#verifyInputs>FR:Verify-Input-Values</a></th>
               <th><a href=#calculateValues>FR:Calculate-Values</a></th>
               <th><a href=#outputValues>FR:Output-Values</a></th>
+              <th><a href=#portable>NFR:Portability</a></th>
+              <th><a href=#security>NFR:Security</a></th>
+              <th><a href=#maintainability>NFR:Maintainability</a></th>
+              <th><a href=#verifiability>NFR:Verifiability</a></th>
             </tr>
             <tr>
               <td><a href=#calculateProcessVariable>GS:Process-Variable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#portable>NFR:Portability</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#security>NFR:Security</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#maintainability>NFR:Maintainability</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#verifiability>NFR:Verifiability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2222,6 +2117,86 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR:Portability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#security>NFR:Security</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainability>NFR:Maintainability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiability>NFR:Verifiability</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

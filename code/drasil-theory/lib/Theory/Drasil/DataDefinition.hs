@@ -6,12 +6,13 @@ module Theory.Drasil.DataDefinition (
   qdFromDD, qdEFromDD
 ) where
 
-import Database.Drasil (HasChunkRefs(chunkRefs))
-
 import Control.Lens
+
+import Drasil.Database (UID, HasUID(..), showUID, HasChunkRefs(..), nsUid)
 import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Theory.Drasil.Classes (HasOutput(..))
+import Theory.Drasil.Components.Derivation (Derivation,MayHaveDerivation(derivations))
 
 -- * Types
 

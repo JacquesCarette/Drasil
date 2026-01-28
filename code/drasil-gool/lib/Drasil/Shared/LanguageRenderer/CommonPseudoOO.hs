@@ -30,7 +30,6 @@ import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
   pointerParam), MethodSym(mainFunction), ScopeSym(..))
 
-
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), PermanenceSym(..), Initializers, objMethodCallNoParams, objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
@@ -87,7 +86,6 @@ import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   brackets, braces, colon, vcat, equals)
-import Drasil.Metadata (watermark)
 
 -- Python, Java, C#, C++, and Swift --
 -- | Convert an integer to an index in a 0-indexed language
@@ -124,7 +122,7 @@ doxFunc = docFunc functionDox
 doxClass :: (OORenderSym r) => String -> SClass r -> SClass r
 doxClass = docClass classDox
 
-doxMod :: (OORenderSym r) => String -> String -> [String] -> String -> SFile r ->
+doxMod :: (OORenderSym r) => String -> String -> String -> [String] -> String -> SFile r ->
   SFile r
 doxMod = docMod moduleDox
 
@@ -170,7 +168,6 @@ intClass f n s i svrs cstrs mths = do
   svs <- onStateList (R.stateVarList . map RC.stateVar) svrs
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) (cstrs ++ mths))
   return $ onCodeValue (\p -> f n p (RC.visibility s) svs ms) i
-
 
 -- Python and C++ --
 
@@ -380,7 +377,6 @@ extraClass :: (OORenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] ->
   [SMethod r] -> [SMethod r] -> SClass r
 extraClass n = S.intClass n public . S.inherit
 
-
 -- Java, C#, and Swift --
 
 doubleRender :: String
@@ -503,16 +499,16 @@ inherit n = toCode $ maybe empty ((colon <+>) . text) n
 implements :: (Monad r) => [Label] -> r ParentSpec
 implements is = toCode $ colon <+> text (intercalate listSep is)
 
-
 -- TODO: put docMod' back in Swift renderer, as it is no longer common.
-docMod' :: (OORenderSym r) => String -> String -> [String] -> String -> SFile r -> SFile r
+docMod' :: (OORenderSym r) => String -> String -> String -> [String] -> String
+  -> SFile r -> SFile r
 docMod' = docMod modDoc'
 
 -- | Generates Markdown/DocC style module doc comment.  Useful for Swift, which follows
 -- DocC, Julia, which uses Markdown, and any other language that doesn't have
 -- Support for a document generator.
 modDoc' :: ModuleDocRenderer
-modDoc' desc as date m = m : [desc | not (null desc)] ++
+modDoc' desc watermark as date m = m : [desc | not (null desc)] ++
       [docField authorDoc (stringList as) | not (null as)] ++
       [docField dateDoc date | not (null date)] ++
       [docField noteDoc watermark]
@@ -540,12 +536,10 @@ noteDoc = "Note"
 paramDoc = "Parameter"
 returnDoc = "Returns"
 
-
 -- | For declaring and optionally defining a variable in a language where
 --   declaring a variable before defining it is not required.
 --   v is the variable to declare, and e is Nothing if we are not defining it,
 --   and (Just d) if d is the value we are defining it as.
-
 
 fileOpen, fileR, fileW, fileA :: Label
 fileOpen = "open"
@@ -561,7 +555,6 @@ openFileA' n = funcApp fileOpen infile [n, IC.litString fileA]
 argExists :: (CommonRenderSym r) => Integer -> SValue r
 argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 
-
 -- Julia and MATLAB --
 
 -- | Call to insert a value into a list in a language where this is not a method.
@@ -569,7 +562,6 @@ listAdd :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 listAdd l i v = do
   f <- S.listAddFunc l (IC.intToIndex i) v
   mkVal (RC.functionType f) (RC.function f)
-
 
 -- | Call to append a value to a list in a language where this is not a method.
 listAppend :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r

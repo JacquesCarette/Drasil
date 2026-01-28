@@ -4,10 +4,17 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
   fAppInOut, fAppInOutProc
 ) where
 
+import Data.Bifunctor (second)
+import qualified Data.Map as Map (lookup)
+import Data.Maybe (catMaybes)
+import Control.Monad.State (get, modify)
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (List)
+import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), AuxFile(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
@@ -19,14 +26,9 @@ import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
   GOOLState)
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
+import Drasil.Metadata (watermark)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))
-
-import Data.Bifunctor (second)
-import qualified Data.Map as Map (lookup)
-import Data.Maybe (catMaybes)
-import Control.Monad.State (get, modify)
-import Control.Lens ((^.))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
 -- Doxygen comments. If the user did not choose 'CommentMod' but did choose
@@ -42,10 +44,8 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   let as = map name (codeSpec g ^. authorsO )
   cs <- sequence maybeCs
   ms <- sequence maybeMs
-  let commMod | CommentMod `elem` commented g                   = OO.docMod desc
-                  as (date g)
-              | CommentFunc `elem` commented g && not (null ms) = OO.docMod "" []
-                  ""
+  let commMod | CommentMod `elem` commented g                   = OO.docMod desc watermark as (date g)
+              | CommentFunc `elem` commented g && not (null ms) = OO.docMod "" watermark [] ""
               | otherwise                                       = id
   return $ commMod $ OO.fileDoc $ OO.buildModule n is (catMaybes ms) (catMaybes cs)
 
@@ -56,7 +56,7 @@ genModule :: (OOProg r) => Name -> Description ->
 genModule n desc = genModuleWithImports n desc []
 
 -- | Generates a Doxygen configuration file if the user has comments enabled.
-genDoxConfig :: (AuxiliarySym r) => GOOLState -> GenState (Maybe (r (Auxiliary r)))
+genDoxConfig :: (AuxiliarySym r) => GOOLState -> GenState (Maybe (r FileAndContents))
 genDoxConfig s = do
   g <- get
   let n = codeSpec g ^. pNameO
@@ -65,14 +65,14 @@ genDoxConfig s = do
   return $ if not (null cms) then Just (doxConfig n s v) else Nothing
 
 -- | Generates a README file.
-genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState (Maybe (r (Auxiliary r)))
+genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState (Maybe (r FileAndContents))
 genReadMe rmi = do
   g <- get
   let n = codeSpec g ^. pNameO
   return $ getReadMe (auxiliaries g) rmi {caseName = n}
 
 -- | Helper for generating a README file.
-getReadMe :: (AuxiliarySym r) => [AuxFile] -> ReadMeInfo -> Maybe (r (Auxiliary r))
+getReadMe :: (AuxiliarySym r) => [AuxFile] -> ReadMeInfo -> Maybe (r FileAndContents)
 getReadMe auxl rmi = if ReadME `elem` auxl then Just (readMe rmi) else Nothing
 
 data ClassType = Primary | Auxiliary
@@ -119,7 +119,6 @@ mkArg v = do
       mkArg' (Object _) = pointerArg
       mkArg' _ = id
   mkArg' (getType $ valueType vl) (return vl)
-
 
 -- | Gets the current module and calls mkArg on the arguments.
 -- Called by more specific function call generators ('fApp' and 'ctorCall').
@@ -181,10 +180,8 @@ genModuleWithImportsProc n desc is maybeMs = do
   modify (\s -> s { currentModule = n })
   let as = map name (codeSpec g ^. authorsO )
   ms <- sequence maybeMs
-  let commMod | CommentMod `elem` commented g                   = Proc.docMod desc
-                  as (date g)
-              | CommentFunc `elem` commented g && not (null ms) = Proc.docMod "" []
-                  ""
+  let commMod | CommentMod `elem` commented g                   = Proc.docMod desc watermark as (date g)
+              | CommentFunc `elem` commented g && not (null ms) = Proc.docMod "" watermark [] ""
               | otherwise                                       = id
   return $ commMod $ Proc.fileDoc $ Proc.buildModule n is (catMaybes ms)
 

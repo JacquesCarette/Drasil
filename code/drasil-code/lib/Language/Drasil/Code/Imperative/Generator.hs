@@ -3,7 +3,26 @@ module Language.Drasil.Code.Imperative.Generator (
   generator, generateCode, generateCodeProc
 ) where
 
+import Control.Lens ((^.))
+import Control.Monad.State (get, evalState, runState)
+import qualified Data.Set as Set (fromList)
+import Data.Map (fromList, member, keys, elems)
+import Data.Maybe (maybeToList, catMaybes)
+import System.Directory (setCurrentDirectory, getCurrentDirectory)
+import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
+
 import Language.Drasil
+import Drasil.GOOL (OOProg, VisibilityTag(..),
+  ProgData(..), initialState)
+import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
+import Drasil.GProc (ProcProg)
+import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
+import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
+import Language.Drasil.Printing.Import (spec)
+import Drasil.System
+import Utils.Drasil (createDirIfMissing)
+
+import Language.Drasil.Code.Code (createCodeFiles, makeCode)
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
@@ -22,43 +41,26 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer(sampleInputName)
-import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..),
+  package)
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+import Language.Drasil.Code.FileData (PackageData(..), fileAndContents)
+import Language.Drasil.Code.FileNames(sampleInputName)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
   LogConfig(..), OptionalFeatures(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
-import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
-
-import Drasil.GOOL (OOProg, VisibilityTag(..),
-  ProgData(..), initialState)
-import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
-import Drasil.GProc (ProcProg)
-import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
-import Drasil.System hiding (systemdb)
-
-import Utils.Drasil (createDirIfMissing)
-
-import System.Directory (setCurrentDirectory, getCurrentDirectory)
-import Control.Lens ((^.))
-import Control.Monad.State (get, evalState, runState)
-import qualified Data.Set as Set (fromList)
-import Data.Map (fromList, member, keys, elems)
-import Data.Maybe (maybeToList, catMaybes)
-import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 
 -- | Initializes the generator's 'DrasilState'.
 -- 'String' parameter is a string representing the date.
 -- \['Expr'\] parameter is the sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
-generator l dt sd chs spec = DrasilState {
+generator l dt sd chs cs = DrasilState {
   -- constants
-  codeSpec = spec,
+  codeSpec = cs,
+  printfo = pinfo,
   modular = modularity $ architecture chs,
   inStruct = inputStructure $ dataInfo chs,
   conStruct = constStructure $ dataInfo chs,
@@ -92,18 +94,19 @@ generator l dt sd chs spec = DrasilState {
   _loggedSpaces = [], -- Used to prevent duplicate logs added to design log
   currentScope = Global
 }
-  where (mcm, concLog) = runState (chooseConcept chs) []
+  where pinfo = piSys (cs ^. systemdb) (cs ^. refTable) Implementation plainConfiguration
+        (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt
         showDate Hide = ""
         ((pth, elmap, lname), libLog) = runState (chooseODELib l $ getODE $ extLibs chs) []
         els = map snd elmap
         nms = [lname]
-        mem = modExportMap (spec ^. oldCodeSpec) chs modules'
+        mem = modExportMap (cs ^. oldCodeSpec) chs modules'
         lem = fromList (concatMap (^. modExports) els)
-        cdm = clsDefMap (spec ^. oldCodeSpec) chs modules'
-        modules' = (spec ^. modsO) ++ concatMap (^. auxMods) els
+        cdm = clsDefMap (cs ^. oldCodeSpec) chs modules'
+        modules' = (cs ^. modsO) ++ concatMap (^. auxMods) els
         nonPrefChs = choicesSent chs
-        des = vcat . map (sentenceDoc (spec ^. systemdbO) Implementation OneLine) $
+        des = vcat . map (sentenceDoc OneLine . spec pinfo) $
           (nonPrefChs ++ concLog ++ libLog)
 
 -- OO Versions --
@@ -111,20 +114,21 @@ generator l dt sd chs spec = DrasilState {
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
 -- be generated in.
-generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang ->
-  (progRepr (OO.Program progRepr) -> ProgData) -> (packRepr (Package packRepr) ->
-  PackData) -> DrasilState -> IO ()
+generateCode :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
+  Lang -> (progRepr (OO.Program progRepr) -> ProgData) ->
+  (packRepr (PackageData ProgData) -> PackageData ProgData) ->
+  DrasilState -> IO ()
 generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackage unReprProg) g
-      baseAux = [ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $
-          ds ^. designLog] ++ packAux (unReprPack pckg)
+      baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
+          not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
       aux
-        | l == Python = ad "__init__.py" mempty : baseAux
+        | l == Python = fileAndContents "__init__.py" mempty : baseAux
         | otherwise   = baseAux
-      code = makeCode (progMods $ packProg $ unReprPack pckg) aux
+      code = makeCode (progMods $ packageProg $ unReprPack pckg) aux
   createCodeFiles code
   setCurrentDirectory workingDir
 
@@ -134,9 +138,9 @@ generateCode l unReprProg unReprPack g = do
 -- package will be generated in.
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
-genPackage :: (OOProg progRepr, PackageSym packRepr) =>
+genPackage :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
   (progRepr (OO.Program progRepr) -> ProgData) ->
-  GenState (packRepr (Package packRepr))
+  GenState (packRepr (PackageData ProgData))
 genPackage unRepr = do
   g <- get
   ci <- genProgram
@@ -147,17 +151,12 @@ genPackage unRepr = do
       m = makefile (libPaths g) (implType g) (commented g) s pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
-      db = codeSpec g ^. systemdbO
-      -- prps = show $ sentenceDoc db Implementation OneLine
-      --   (foldlSent $ purpose $ codeSpec g)
-      prps = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ codeSpec g ^. purpose)
-      bckgrnd = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ codeSpec g ^. background)
-      mtvtn = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ codeSpec g ^. motivation)
-      scp = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ codeSpec g ^. scope)
+      db = printfo g
+      -- FIXME: The below code does `Doc -> String` conversion.
+      prps = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. purpose)
+      bckgrnd = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. background)
+      mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
+      scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -184,7 +183,7 @@ genProgram = do
   g <- get
   ms <- chooseModules $ modular g
   let n = codeSpec g ^. pNameO
-  let p = show $ sentenceDoc (codeSpec g ^. systemdbO) Implementation OneLine $ foldlSent $ codeSpec g ^. purpose
+  let p = show $ sentenceDoc OneLine $ spec (printfo g) $ foldlSent $ codeSpec g ^. purpose
   return $ OO.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
@@ -229,17 +228,18 @@ genModules = do
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
 -- be generated in.
-generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang ->
-  (progRepr (Proc.Program progRepr) -> ProgData) -> (packRepr (Package packRepr) ->
-  PackData) -> DrasilState -> IO ()
+generateCodeProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
+  Lang -> (progRepr (Proc.Program progRepr) -> ProgData) ->
+  (packRepr (PackageData ProgData) -> PackageData ProgData) ->
+  DrasilState -> IO ()
 generateCodeProc l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackageProc unReprProg) g
-      baseAux = [ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $
-          ds ^. designLog] ++ packAux (unReprPack pckg)
-      code = makeCode (progMods $ packProg $ unReprPack pckg) baseAux
+      baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
+          not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
+      code = makeCode (progMods $ packageProg $ unReprPack pckg) baseAux
   createCodeFiles code
   setCurrentDirectory workingDir
 
@@ -249,9 +249,9 @@ generateCodeProc l unReprProg unReprPack g = do
 -- package will be generated in.
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
-genPackageProc :: (ProcProg progRepr, PackageSym packRepr) =>
+genPackageProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
   (progRepr (Proc.Program progRepr) -> ProgData) ->
-  GenState (packRepr (Package packRepr))
+  GenState (packRepr (PackageData ProgData))
 genPackageProc unRepr = do
   g <- get
   ci <- genProgramProc
@@ -262,15 +262,11 @@ genPackageProc unRepr = do
       m = makefile (libPaths g) (implType g) (commented g) s pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
-      db = codeSpec g ^. systemdbO
-      prps = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ codeSpec g ^. purpose)
-      bckgrnd = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ codeSpec g ^. background)
-      mtvtn = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ codeSpec g ^. motivation)
-      scp = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ codeSpec g ^. scope)
+      db = printfo g
+      prps = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. purpose)
+      bckgrnd = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. background)
+      mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
+      scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -297,7 +293,7 @@ genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ modular g
   let n = codeSpec g ^. pNameO
-  let p = show $ sentenceDoc (codeSpec g ^. systemdbO) Implementation OneLine $ foldlSent $ codeSpec g ^. purpose
+  let p = show $ sentenceDoc OneLine $ spec (printfo g) $ foldlSent $ codeSpec g ^. purpose
   return $ Proc.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice

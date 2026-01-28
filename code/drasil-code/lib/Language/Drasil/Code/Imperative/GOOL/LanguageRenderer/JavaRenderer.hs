@@ -1,30 +1,25 @@
-{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE PostfixOperators #-}
-
 -- | The logic to render Java auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
   JavaProject(..)
 ) where
 
+import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import Data.List (intercalate)
+
+import Drasil.GOOL (jName, jVersion)
+
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
-  packD)
+  G (doxConfig, readMe, makefile, noRunIfLib, doxDocConfig, docIfEnabled)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..),
   Ext(..), Runnable, NameOpts(NameOpts), asFragment, buildSingle,
   buildAllAdditionalName, includeExt, inCodePackage, interp, mainModule,
   mainModuleFile, packSep, withExt)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
-
-import Drasil.GOOL (onCodeList, jName, jVersion)
-
-import Data.List (intercalate)
-import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Name options for Java files.
 jNameOpts :: NameOpts
@@ -46,19 +41,12 @@ instance Applicative JavaProject where
 instance Monad JavaProject where
   JP x >>= f = f x
 
-instance PackageSym JavaProject where
-  type Package JavaProject = PackData
-  package p = onCodeList (packD p)
-
 instance AuxiliarySym JavaProject where
-  type Auxiliary JavaProject = AuxData
-  type AuxHelper JavaProject = Doc
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
     G.readMe rmi {
         langName = jName,
         langVersion = jVersion}
-  sampleInput = G.sampleInput
 
   optimizeDox = pure yes
 
@@ -66,7 +54,6 @@ instance AuxiliarySym JavaProject where
     (G.noRunIfLib it (jRunnable fs)) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unJP
-  auxFromData fp d = pure $ ad fp d
 
 -- | Create a build configuration for Java files. Takes in 'FilePath's and the type of implementation.
 jBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

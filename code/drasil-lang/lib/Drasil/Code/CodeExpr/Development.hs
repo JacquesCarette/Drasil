@@ -2,8 +2,11 @@
 module Drasil.Code.CodeExpr.Development (
     -- CodeExpr
     CodeExpr(..),
-    ArithBinOp(..), EqBinOp(..), BoolBinOp(..), LABinOp(..), OrdBinOp(..),
-    VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..),
+    -- re-export from Expr
+    ArithBinOp(..), EqBinOp(..), LABinOp(..),
+    OrdBinOp(..), VVVBinOp(..), VVNBinOp(..), NVVBinOp(..),
+    ESSBinOp(..), ESBBinOp(..),
+    AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..),
     UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
     -- Class
     CodeExprC(..),
@@ -16,11 +19,14 @@ module Drasil.Code.CodeExpr.Development (
     expr, realInterval, constraint, CanGenCode(..)
 ) where
 
-import Drasil.Code.CodeExpr.Lang (CodeExpr(..),
-    UFuncVV(..), UFuncVN(..), UFuncB(..), UFunc(..),
-    AssocBoolOper(..), AssocArithOper(..), AssocConcatOper(..),VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..),
-    VVVBinOp(..), OrdBinOp(..), LABinOp(..), BoolBinOp(..), EqBinOp(..),
-    ArithBinOp(..))
+import Drasil.Code.CodeExpr.Lang (CodeExpr(..))
+import Language.Drasil.Expr.Lang (ArithBinOp(..), EqBinOp(..),
+    LABinOp(..), OrdBinOp(..), VVVBinOp(..),
+    VVNBinOp(..), NVVBinOp(..),
+    ESSBinOp(..), ESBBinOp(..),
+    AssocBoolOper(..), AssocArithOper(..), AssocConcatOper(..),
+    UFuncVV(..), UFuncVN(..), UFuncB(..), UFunc(..))
+
 import Drasil.Code.CodeExpr.Class (CodeExprC(..))
 import Drasil.Code.CodeExpr.Extract (eDep, eDep', eNamesRI, eNamesRI')
 import Drasil.Code.CodeExpr.Precedence (eprec, precA, precB)

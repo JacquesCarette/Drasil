@@ -2,7 +2,11 @@ module Language.Drasil.Code.Imperative.GenODE (
   chooseODELib
 ) where
 
+import Control.Monad.State (State, modify)
+
 import Language.Drasil (Sentence(..), (+:+.))
+
+import Language.Drasil.Choices (ODE(..))
 import Language.Drasil.Code.ExtLibImport (ExtLibState(..),
   genExternalLibraryCall)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -10,9 +14,6 @@ import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Chunk.CodeDefinition (odeDef)
 import Language.Drasil.Mod (Name, Version)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
-
-import Control.Monad.State (State, modify)
-import Language.Drasil.Choices (ODE(..))
 
 -- | Holds the generation information for an ordinary differential equation.
 type ODEGenInfo = (Maybe FilePath, [(Name, ExtLibState)], (Name,Version))

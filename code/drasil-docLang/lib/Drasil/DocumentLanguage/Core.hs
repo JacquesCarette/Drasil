@@ -2,13 +2,13 @@
 -- | Defines core types for use with the Drasil document language ("Drasil.DocumentLanguage").
 module Drasil.DocumentLanguage.Core where
 
-import Drasil.DocumentLanguage.Definitions (Fields)
-import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat)
+import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
+
+import Drasil.Database (UID)
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
-
-import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
+import Drasil.DocumentLanguage.Definitions (Fields, TraceViewCat)
 
 -- | Type synonym for clarity.
 type System = Sentence
@@ -202,8 +202,6 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 -- | Requirements subsections.
 data ReqsSub where
   -- | Functional requirements. LabelledContent needed for tables.
-  FReqsSub'   :: [ConceptInstance] -> [LabelledContent] -> ReqsSub
-  -- | Functional requirements. LabelledContent needed for tables.
   FReqsSub    :: [ConceptInstance] -> [LabelledContent] -> ReqsSub
   -- | Non-functional requirements.
   NonFReqsSub :: [ConceptInstance] -> ReqsSub
@@ -320,7 +318,6 @@ instance Multiplate DLPlate where
     sc (CorrSolnPpties c cs) = pure $ CorrSolnPpties c cs
     rs (ReqsProg reqs) = ReqsProg <$> traverse (reqSub p) reqs
     rs' (FReqsSub ci con) = pure $ FReqsSub ci con
-    rs' (FReqsSub' ci con) = pure $ FReqsSub' ci con
     rs' (NonFReqsSub c) = pure $ NonFReqsSub c
     lcp (LCsProg c) = pure $ LCsProg c
     ucp (UCsProg c) = pure $ UCsProg c

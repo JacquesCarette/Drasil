@@ -6,15 +6,13 @@ module Language.Drasil.Chunk.NamedIdea (
   -- * Classes
   NamedIdea(..), Idea(..),
   -- * Constructors
-  nc, ncUID, nw, mkIdea, mkIdeaUID
+  nc, ncUID, nw, mkIdea,
 ) where
 
-import Drasil.Database.Chunk (HasChunkRefs(..))
-import Drasil.Database.UID (mkUid, UID, HasUID(..))
-import Control.Lens ((^.), makeLenses)
+import Control.Lens ((^.), makeLenses, Lens')
 
-import Language.Drasil.NounPhrase.Core ( NP )
-import Control.Lens.Lens (Lens')
+import Drasil.Database (mkUid, UID, HasUID(..), declareHasChunkRefs, Generically(..))
+import Language.Drasil.NounPhrase.Core (NP)
 
 -- TODO: Why does a NamedIdea need a UID? It might need a UID to be registered in the chunk map.
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as
@@ -54,10 +52,8 @@ data IdeaDict = IdeaDict {
   _np :: NP,
   mabbr :: Maybe String
 }
+declareHasChunkRefs ''IdeaDict
 makeLenses ''IdeaDict
-
-instance HasChunkRefs IdeaDict where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Equal if 'UID's are equal.
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid
@@ -73,14 +69,9 @@ instance Idea      IdeaDict where getA = mabbr
 mkIdea :: String -> NP -> Maybe String -> IdeaDict
 mkIdea s = IdeaDict (mkUid s)
 
--- | Same as 'mkIdea' but takes a 'UID' rather than a 'String'.
-mkIdeaUID :: UID -> NP -> Maybe String -> IdeaDict
-mkIdeaUID = IdeaDict
-
 -- | Historical name: nw comes from 'named wrapped' from when
 -- 'NamedIdea' exported 'getA' (now in 'Idea'). But there are
 -- no more wrappers, instead we have explicit dictionaries. Unwraps
--- an 'Idea' and places its 'UID' and 'NP' into an 'IdeaDict' with
--- 'Nothing' for an abbreviation.
+-- an 'Idea' and places its 'UID' and 'NP' into an 'IdeaDict'
 nw :: Idea c => c -> IdeaDict
 nw c = IdeaDict (c ^. uid) (c ^. term) (getA c)

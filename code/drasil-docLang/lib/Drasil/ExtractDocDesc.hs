@@ -1,7 +1,7 @@
 {-# LANGUAGE LambdaCase, Rank2Types #-}
 -- | Defines functions to extract certain kinds of information from a document.
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
-module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, sentencePlate) where
+module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, sentencePlate, getCitations) where
 
 import Control.Lens((^.))
 import Drasil.DocumentLanguage.Core
@@ -220,6 +220,11 @@ getLP (t, it, _) = t : getIL it
 getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
+
+-- | Extracts citation reference 'UID's from a document description.
+-- This gets all 'UID's that appear in 'Ref' constructors within sentences.
+getCitations :: DocDesc -> [UID]
+getCitations = concatMap lnames . getDocDesc
 
 -- ciPlate is not currently used.
 -- | A common idea plate.

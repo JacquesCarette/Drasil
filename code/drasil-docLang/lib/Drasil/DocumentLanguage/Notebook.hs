@@ -12,7 +12,7 @@ import Language.Drasil (IdeaDict, Sentence(S), Section, CI, Document(Notebook), 
   foldlList, SepType(Comma), FoldType(List), name, Contents(UlC), ulcc, RawContent(Bib))
 
 import Drasil.System (System(SI), _authors, whatsTheBigIdea, sysName)
-import Drasil.GetChunks (citeDB)
+import Drasil.GetChunks (citeDBLsn)
 
 import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, example,
   appendix, review, reference, summary)
@@ -25,7 +25,7 @@ mkNb dd comb si@SI { _authors = authors } =
 
 -- | Helper for creating the notebook sections.
 mkSections :: System -> LsnDesc -> [Section]
-mkSections si = map doit
+mkSections si dd = map doit dd
   where
     doit :: LsnChapter -> Section
     doit (Intro i)     = mkIntro i
@@ -34,7 +34,7 @@ mkSections si = map doit
     doit (CaseProb cp) = mkCaseProb cp
     doit (Example e)   = mkExample e
     doit (Smmry s)     = mkSmmry s
-    doit BibSec        = mkBib (citeDB si)
+    doit BibSec        = mkBib (citeDBLsn si dd)
     doit (Apndx a)     = mkAppndx a
 
 -- | Helper for making the 'Introduction' section.

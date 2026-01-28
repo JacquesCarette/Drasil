@@ -84,7 +84,7 @@ mkDoc si srsDecl headingComb =
       -- 'LabelledContent' for potential traceability graphs). The below line
       -- injects "traceability" maps into the 'ChunkDB' and adds missing
       -- 'LabelledContent' (the generated traceability-related tables).
-      si' = buildTraceMaps dd $ fillReferences sections si
+      si' = buildTraceMaps dd $ fillReferences dd sections si
       -- Now, the 'real generation' of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's).
@@ -129,12 +129,12 @@ buildTraceMaps sd si
     containsTraceSec []                    = False
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: [Section] -> System -> System
-fillReferences allSections si = si2
+fillReferences :: DocDesc -> [Section] -> System -> System
+fillReferences dd allSections si = si2
   where
     -- get old chunk database + ref database
     chkdb = si ^. systemdb
-    cites = citeDB si
+    cites = citeDB si dd
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
@@ -186,7 +186,7 @@ mkSections si dd = map doit dd
     doit (StkhldrSec sts)     = mkStkhldrSec sts
     doit (SSDSec ss)          = mkSSDSec si ss
     doit (AuxConstntSec acs)  = mkAuxConsSec acs
-    doit Bibliography         = mkBib (citeDB si)
+    doit Bibliography         = mkBib (citeDB si dd)
     doit (GSDSec gs')         = mkGSDSec gs'
     doit (ReqrmntSec r)       = mkReqrmntSec r
     doit (LCsSec lc)          = mkLCsSec lc

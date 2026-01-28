@@ -1,16 +1,21 @@
 -- | Utilities to get grab certain chunks (from 'Expr', 'Sentence', etc) by
 -- 'UID' and dereference the chunk it refers to.
-module Drasil.GetChunks (ccss, ccss', combine, vars, citeDB) where
+module Drasil.GetChunks (ccss, ccss', combine, vars, citeDB, citeDBLsn) where
 
 import Control.Lens ((^.))
 import Data.List (nub, sortBy)
+import Data.Maybe (mapMaybe)
 
 import Language.Drasil
 import Language.Drasil.Development
 import Language.Drasil.ModelExpr.Development (meDep)
-import Drasil.Database (ChunkDB, findOrErr)
-import Drasil.Database.SearchTools (defResolve', DomDefn(definition), findAllCitations)
+import Drasil.Database (ChunkDB, findOrErr, find)
+import Drasil.Database.SearchTools (defResolve', DomDefn(definition))
 import Drasil.System (System, systemdb)
+import Drasil.DocumentLanguage.Core (DocDesc)
+import Drasil.DocumentLanguage.Notebook.Core (LsnDesc)
+import qualified Drasil.ExtractDocDesc as EDD
+import qualified Drasil.ExtractNotebook as EDN
 
 -- | Gets a list of quantities ('DefinedQuantityDict') from an equation in order to print.
 vars :: ModelExpr -> ChunkDB -> [DefinedQuantityDict]
@@ -44,6 +49,16 @@ concpt a m = map (definition . defResolve' m) $ sdep a
 concpt' :: ModelExpr -> ChunkDB -> [Sentence]
 concpt' a m = map (definition . defResolve' m) $ meDep a
 
--- | Extract bibliography entries for a system.
-citeDB :: System -> BibRef
-citeDB si = sortBy compareAuthYearTitle $ findAllCitations (si ^. systemdb)
+-- | Extract bibliography entries for a system based on the document description.
+-- Scans the document for citation references and looks them up in the database.
+citeDB :: System -> DocDesc -> BibRef
+citeDB si dd = sortBy compareAuthYearTitle $ lookupCitations (si ^. systemdb) (EDD.getCitations dd)
+
+-- | Extract bibliography entries for a notebook based on the lesson description.
+-- Scans the notebook for citation references and looks them up in the database.
+citeDBLsn :: System -> LsnDesc -> BibRef
+citeDBLsn si ld = sortBy compareAuthYearTitle $ lookupCitations (si ^. systemdb) (EDN.getCitations ld)
+
+-- | Look up citation chunks from the database using their UIDs.
+lookupCitations :: ChunkDB -> [UID] -> [Citation]
+lookupCitations db uids = mapMaybe (`find` db) (nub uids)

@@ -68,9 +68,8 @@ import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGr
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
-import Drasil.Metadata as Doc (software)
-import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
-  unlikelyChg)
+import Drasil.Metadata (software, dataDefn, genDefn, inModel, thModel, requirement)
+import Data.Drasil.Concepts.Documentation (likelyChg, section_, unlikelyChg, assumption, goalStmt, refName, refBy)
 import qualified Data.Map.Strict as M
 
 import Language.Drasil.Development (shortdep)
@@ -249,14 +248,18 @@ mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map (mkSubRef si) l)
         [LlC $ tableAbbAccGen $ collectDocumentAbbreviations renderedSecs cdb]
         []
 
--- | Extracts abbreviations/acronyms found in the document
-getAllChunksFromDoc :: [Section] -> ChunkDB -> [TermAbbr]
-getAllChunksFromDoc renderedSecs cdb =
-  map (termResolve' cdb) $ nub $ concatMap shortdep $ concatMap getSec renderedSecs
-
 collectDocumentAbbreviations :: [Section] -> ChunkDB -> [TermAbbr]
 collectDocumentAbbreviations renderedSecs cdb =
-  filter (isJust . shortForm) $ getAllChunksFromDoc renderedSecs cdb
+  filter (isJust . shortForm) allTerms
+  where
+    -- Terms found in the document using the list of `Sentence`s extracted from
+    -- the sections.
+    foundInDoc = concatMap shortdep $ concatMap getSec renderedSecs
+    -- Terms that could not be found in `Sentence`s, but are important to
+    -- include in the table of abbreviations and acronyms.
+    missingFromDocHACK = map (^. uid) [assumption, dataDefn, genDefn, goalStmt,
+      inModel, requirement, thModel, refName, refBy]
+    allTerms = map (termResolve' cdb) $ nub (foundInDoc ++ missingFromDocHACK)
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
@@ -373,19 +376,19 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg (introChgs Doc.likelyChg c: mkEnumSimpleD c) []
+mkLCsSec (LCsProg c) = SRS.likeChg (introChgs likelyChg c: mkEnumSimpleD c) []
 
 -- ** Unlikely Changes
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs Doc.unlikelyChg  c : mkEnumSimpleD c) []
+mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs unlikelyChg  c : mkEnumSimpleD c) []
 
 -- | Intro paragraph for likely and unlikely changes
 introChgs :: Idea n => n -> [ConceptInstance] -> Contents
 introChgs xs [] = mkParagraph $ emptySectSentPlu [xs]
-introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
-  introduceAbbPlrl xs, S "to be made to the", phrase Doc.software]
+introChgs xs _ = foldlSP [S "This", phrase section_, S "lists the",
+  introduceAbbPlrl xs, S "to be made to the", phrase software]
 
 -- ** Traceability
 

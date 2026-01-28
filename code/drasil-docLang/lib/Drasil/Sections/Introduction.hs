@@ -9,7 +9,7 @@ import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
 import Drasil.DocumentLanguage.Definitions(Verbosity(..))
-import Language.Drasil.Chunk.Concept.NamedCombinators
+import Language.Drasil.Chunk.Concept.NamedCombinators (andThe, the)
 import Drasil.DocumentLanguage.Core (IntroSub(..))
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -17,13 +17,13 @@ import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 import Drasil.Sentence.Combinators (refineChain)
 import Drasil.Document.Contents (foldlSP, foldlSP_)
 
-import Drasil.Metadata (requirement, srs, dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata (requirement, srs, inModel, thModel)
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation (assumption, characteristic, decision,
   definition, desSpec, design, designDoc, document, documentation, environment,
   goal, goalStmt, implementation, information, intReader, model, organization,
-  physSyst, problem, problemIntro, purpose, scope, section_, softwareDoc,
-  softwareVAV, system, systemConstraint, template, theory, typUnc, user, vavPlan)
+  problem, problemIntro, purpose, scope, section_, softwareDoc, softwareVAV,
+  systemConstraint, template, theory, user, vavPlan)
 import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
   smithKoothoor2016, smithLai2005, koothoor2013)
 import Data.Drasil.Software.Products (sciCompS)
@@ -174,18 +174,26 @@ intReaderIntro progName assumed topic asset sectionRef =
 orgSec :: NamedIdea c => c -> Section -> Maybe Sentence -> Section
 orgSec b s t = SRS.orgOfDoc (orgIntro b s t) []
 
--- | Helper function that creates the introduction for the Organization of the Document section. Parameters should be
--- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
--- and any other relevant information ('Sentence').
+-- | Helper function that creates the introduction for the Organization of the
+-- Document section. Parameters should be an introduction ('Sentence'), a
+-- resource for a bottom up approach ('NamedIdea'), reference to that resource
+-- ('Section'), and any other relevant information ('Sentence').
 orgIntro :: NamedIdea c => c -> Section -> Maybe Sentence -> [Contents]
 orgIntro bottom bottomSec trailingSentence =
-  foldlSP [
-    orgOfDocIntro, S "The presentation follows the standard pattern of presenting" +:+.
-    foldlList Comma List (map plural [nw goal, nw theory, nw definition, nw assumption]),
-    S "For readers that would like a more bottom up approach" `sC`
-    S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
-    S "trace back to find any additional information they require"
-  ] : flowDiscussion trailingSentence
+  [ foldlSP [
+      orgOfDocIntro, S "The presentation follows the standard pattern of presenting" +:+.
+      foldlList Comma List (map plural [nw goal, nw theory, nw definition, nw assumption]),
+      S "For readers that would like a more bottom up approach" `sC`
+      S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
+      S "trace back to find any additional information they require"
+    ]
+  , foldlSP_ (introS : maybeToList trailingSentence)
+  ]
+  where
+    -- FIXME: The below abuses `SRS.goalStmt`, `SRS.thModel`, etc.
+    introS = refineChain (zip
+      [goalStmt, thModel, inModel]
+      [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []])
 
 orgOfDocIntro :: Sentence
 orgOfDocIntro = foldlSent
@@ -193,27 +201,3 @@ orgOfDocIntro = foldlSent
   S "follows the", phrase template, S "for an", short srs, S "for",
   phrase sciCompS, S "proposed by", foldlList Comma List $
     map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
-
-flowDiscussion :: Maybe Sentence -> [Contents]
-flowDiscussion mbXtraSent = [
-    foldlSP_ (introS : maybeToList mbXtraSent)
-  , foldlSP_ [S "The" +:+ introduceAbbPlrl goalStmt +:+ S "are systematically refined into the" +:+
-      introduceAbbPlrl thModel `sC` S "which in turn are refined into the" +:+.
-      introduceAbbPlrl inModel,
-      S "This refinement process is guided by the" +:+ introduceAbbPlrl assumption +:+
-      S "that constrain the" +:+ phrase system `sC` S "as well as the supporting" +:+
-      introduceAbbPlrl genDefn +:+ S "and" +:+ introduceAbbPlrl dataDefn +:+
-      S "that provide the necessary mathematical and physical context.",
-      S "The" +:+ introduceAbbPlrl requirement +:+ S "are traced back through the" +:+
-      short goalStmt `sC` short thModel `sC` S "and" +:+ short inModel +:+. S "to ensure consistency and completeness",
-      S "Furthermore" `sC` S "the" +:+ introduceAbbPlrl physSyst +:+ S "establishes the overall" +:+
-      S "context in which the" +:+ short goalStmt +:+ S "are formulated and the" +:+ short assumption +:+ S "are validated.",
-      S "Finally" `sC` S "the" +:+ introduceAbbPlrl typUnc +:+ S "are documented and linked to" +:+
-      S "the relevant" +:+ short inModel +:+ S "and" +:+ short dataDefn `sC` S "ensuring transparency in the modeling process."
-    ]
-  ]
-  where
-    -- FIXME: The below abuses `SRS.goalStmt`, `SRS.thModel`, etc.
-    introS = refineChain (zip
-      [goalStmt, thModel, inModel]
-      [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []])

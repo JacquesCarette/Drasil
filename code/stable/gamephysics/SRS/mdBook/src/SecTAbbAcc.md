@@ -14,7 +14,6 @@
 |IM          |Instance Model                     |
 |LC          |Likely Change                      |
 |ODE         |Ordinary Differential Equation     |
-|PS          |Physical System Description        |
 |R           |Requirement                        |
 |RefBy       |Referenced by                      |
 |Refname     |Reference Name                     |

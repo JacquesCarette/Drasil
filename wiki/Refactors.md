@@ -24,8 +24,10 @@ List of refactorings that should be done to the code base.
 ## drasil-gool
 - [ ] redesign L-values ([#4398](../issues/4398))
 - [ ] remove global `GOOLState` and replace with renderer-local state
+  - [#4678](../issues/4678) contributes to this
 - [ ] investigate RendererSym, and figure out what needs to be changed/removed (see [#4398](../issues/4398) and [#4404](../issues/4404))
 - [ ] resolve issues with some parts of GOOL living in drasil-code
+  - [#4678](../issues/4678) contributes to this
 - [ ] for list, set, etc. APIs, differentiate explicitly between pure and impure functions/methods.
 - [ ] investigate duplicate typeclasses between InterfaceX and RendererClassesX (e.g. NumericExpression and Unary/BinaryOpSym)
 - [ ] anything else in [#4404](../issues/4404)

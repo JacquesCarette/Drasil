@@ -4,18 +4,24 @@
 module Drasil.ExtractDocDesc (
   getDocDesc, egetDocDesc,
   sentencePlate,
-  getSec
+  getSec,
+  getCitations, citeDB
 ) where
 
 import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
-
-import Drasil.DocumentLanguage.Core
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Language.Drasil hiding (Manual, Verb)
-import Theory.Drasil
+import Data.List (sortBy)
 import Data.Maybe (maybeToList)
+
+import Drasil.Database (UID, uid)
+import Drasil.DocumentLanguage.Core
+import Drasil.GetChunks (lookupCitations)
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
+import Drasil.System (System, HasSystem(systemdb))
+import Language.Drasil hiding (getCitations, Manual, Verb)
+import Language.Drasil.Development (lnames)
+import Theory.Drasil
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -247,15 +253,33 @@ getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
 
--- ciPlate is not currently used.
--- | A common idea plate.
--- ciPlate :: DLPlate (Constant [CI])
--- ciPlate = preorderFold $ purePlate {
---   introSub = Constant <$> \case
---     (IOrgSec _ ci _ _) -> [ci]
---     _ -> [],
---   stkSub = Constant <$> \case
---    (Client ci _) -> [ci]
---    (Cstmr ci) -> [ci],
---    auxConsSec = Constant <$> \(AuxConsProg ci _) -> [ci]
--- }
+-- | Extracts citation reference 'UID's from a document description.
+-- This gets all 'UID's that appear in 'Ref' constructors within sentences
+-- and from DecRefs in models (DataDefinition, GenDefn, InstanceModel, TheoryModel).
+getCitations :: DocDesc -> [UID]
+getCitations dd = concatMap lnames (getDocDesc dd) ++ getModelRefs dd
+
+-- | Extracts 'UID's from DecRefs stored in models.
+getModelRefs :: DocDesc -> [UID]
+getModelRefs = fmGetDocDesc modelRefPlate
+
+-- | Creates a plate for extracting DecRef UIDs from models.
+modelRefPlate :: DLPlate (Constant [UID])
+modelRefPlate = preorderFold $ purePlate {
+  scsSub = Constant <$> \case
+    (TMs _ _ t) -> concatMap getDecRefUIDs t
+    (DDs _ _ d _) -> concatMap getDecRefUIDs d
+    (GDs _ _ g _) -> concatMap getDecRefUIDs g
+    (IMs _ _ i _) -> concatMap getDecRefUIDs i
+    _ -> []
+}
+
+-- | Extract UIDs from DecRefs of a chunk that has them.
+getDecRefUIDs :: HasDecRef a => a -> [UID]
+getDecRefUIDs x = map (^. uid) (x ^. getDecRefs)
+
+-- | Extract bibliography entries for a system based on the document
+-- description. Scans the document for citation references and looks them up in
+-- the database.
+citeDB :: System -> DocDesc -> BibRef
+citeDB si dd = sortBy compareAuthYearTitle $ lookupCitations (si ^. systemdb) (getCitations dd)

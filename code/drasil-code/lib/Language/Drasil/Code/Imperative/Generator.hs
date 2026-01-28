@@ -22,7 +22,7 @@ import Language.Drasil.Printing.Import (spec)
 import Drasil.System
 import Utils.Drasil (createDirIfMissing)
 
-import Language.Drasil.Code.Code (createPackageFiles, consolidatePackageFiles)
+import Language.Drasil.Code.PackageFiles (createPackageFiles, consolidatePackageFiles)
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)

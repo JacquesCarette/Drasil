@@ -23,7 +23,7 @@ import Utils.Drasil (RelativeFile)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
 
-import Language.Drasil.Code.Code (spaceToCodeType)
+import Language.Drasil.Code.PackageFiles (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg (libDummyQuants))

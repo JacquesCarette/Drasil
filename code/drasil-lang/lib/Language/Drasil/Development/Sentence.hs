@@ -7,11 +7,13 @@ module Language.Drasil.Development.Sentence (
   -- * Capitalize First Word
   atStart, atStart',
   -- * Capitalize All Words
-  titleize, titleize', introduceAbb, introduceAbbPlrl,
+  titleize, titleize',
   -- * from NPStruct to Sentence
   toSent,
   -- * Short Form (lowercase)
-  short, introduceAbb
+  short,
+  -- * Introduce with Abbreviation
+  introduceAbb, introduceAbbPlrl
 ) where
 
 import Control.Lens ((^.))

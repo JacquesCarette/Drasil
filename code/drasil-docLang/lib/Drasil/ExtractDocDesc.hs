@@ -15,7 +15,7 @@ import Drasil.DocumentLanguage.Core
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 import Language.Drasil hiding (Manual, Verb)
 import Theory.Drasil
-import Data.Drasil.Concepts.Documentation (refName)
+import Data.Drasil.Concepts.Documentation (refName, refBy)
 import Data.Maybe (maybeToList)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
@@ -201,13 +201,14 @@ getCon (Figure l _ _ _)    = [l]
 getCon (Bib bref)          = getBib bref
 getCon (Graph sss _ _ l)   = let (ls, rs) = unzip sss
                              in l : ls ++ rs
-getCon (Defini _ ics)      = rnHACK : concatMap (concatMap getCon' . snd) ics
+getCon (Defini _ ics)      = rnbyHACK ++ concatMap (concatMap getCon' . snd) ics
   where
-    -- FIXME: rnHACK exists because `Refname` does not explicitly go into any
-    -- `Sentence`, but is used in the generation of the "Definition" tables
-    -- (i.e., for DDs, IMs, GDs, and TMs). To fix this 'properly', `Defini`
-    -- needs to be removed in favour of using `Table` for the same feature.
-    rnHACK = short refName
+    -- FIXME: rnHACK exists because `Refname` and `RefBy do not explicitly go
+    -- into any `Sentence`, but are used in the generation of the "Definition"
+    -- tables (i.e., for DDs, IMs, GDs, and TMs). To fix this 'properly',
+    -- `Defini` needs to be removed in favour of using `Table` for the same
+    -- feature.
+    rnbyHACK = map short [refName, refBy]
 
 -- | Get the bibliography from something that has a field.
 getBib :: (HasFields c) => [c] -> [Sentence]

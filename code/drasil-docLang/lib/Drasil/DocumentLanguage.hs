@@ -10,7 +10,7 @@ module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy)
-import Data.Maybe (maybeToList, mapMaybe)
+import Data.Maybe (maybeToList, mapMaybe, fromMaybe)
 import qualified Data.Map as Map (keys)
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)

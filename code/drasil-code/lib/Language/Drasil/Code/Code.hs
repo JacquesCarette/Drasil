@@ -1,7 +1,7 @@
 -- | Contains the high-level functionality to create 'PackageFiles' and then produce the
 -- actual generated code files.
 module Language.Drasil.Code.Code (
-    makeCode,
+    consolidatePackageFiles,
     createCodeFiles,
     spaceToCodeType
 ) where
@@ -23,10 +23,11 @@ import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 --   list of pairs of file names and rendered contents.
 newtype PackageFiles = PackageFiles [(FilePath, Doc)]
 
--- | Makes code from 'FileData' ('FilePath's with module data) and 'FileAndContents'
--- ('FilePath's with auxiliary document information).
-makeCode :: [FileData] -> [FileAndContents] -> PackageFiles
-makeCode files aux = PackageFiles $ zip (map filePath files ++ map D.filePath aux)
+-- | Converts 'FileData' ('FilePath's with module data) and 'FileAndContents'
+-- ('FilePath's with auxiliary document information) into 'PackageData'
+-- (a unified format for all file types)
+consolidatePackageFiles :: [FileData] -> [FileAndContents] -> PackageFiles
+consolidatePackageFiles files aux = PackageFiles $ zip (map filePath files ++ map D.filePath aux)
   (map (modDoc . fileMod) files ++ map fileDoc aux)
 
 -- | Creates the requested 'PackageFiles' by producing files.

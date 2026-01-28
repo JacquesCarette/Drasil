@@ -2,7 +2,7 @@
 -- actual generated code files.
 module Language.Drasil.Code.Code (
     consolidatePackageFiles,
-    createCodeFiles,
+    createPackageFiles,
     spaceToCodeType
 ) where
 
@@ -30,9 +30,9 @@ consolidatePackageFiles :: [FileData] -> [FileAndContents] -> PackageFiles
 consolidatePackageFiles files aux = PackageFiles $ zip (map filePath files ++ map D.filePath aux)
   (map (modDoc . fileMod) files ++ map fileDoc aux)
 
--- | Creates the requested 'PackageFiles' by producing files.
-createCodeFiles :: PackageFiles -> IO ()
-createCodeFiles (PackageFiles cs) = mapM_ createCodeFile cs
+-- | Outputs the requested 'Package Files' into system files.
+createPackageFiles :: PackageFiles -> IO ()
+createPackageFiles (PackageFiles cs) = mapM_ createCodeFile cs
 
 -- | Helper that uses pairs of 'PackageFiles' to create a file written with the given
 -- document at the given 'FilePath'.

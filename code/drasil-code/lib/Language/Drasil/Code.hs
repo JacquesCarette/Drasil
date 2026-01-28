@@ -1,6 +1,6 @@
 -- | Re-export code-related smart constructors for external code writing and generation.
 module Language.Drasil.Code (
-  consolidatePackageFiles, createCodeFiles,
+  consolidatePackageFiles, createPackageFiles,
   generator, generateCode, generateCodeProc,
   readWithDataDesc, sampleInputDD,
   Choices(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), makeArchit,
@@ -53,7 +53,7 @@ import Language.Drasil.Code.Imperative.Generator (generator, generateCode,
 import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc,
   sampleInputDD)
 
-import Language.Drasil.Code.Code (consolidatePackageFiles, createCodeFiles)
+import Language.Drasil.Code.Code (consolidatePackageFiles, createPackageFiles)
 import Language.Drasil.Code.DataDesc (junkLine, multiLine, repeated, singleLine,
   singleton)
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,

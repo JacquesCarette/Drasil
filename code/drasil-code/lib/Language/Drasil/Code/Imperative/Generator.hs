@@ -22,7 +22,7 @@ import Language.Drasil.Printing.Import (spec)
 import Drasil.System
 import Utils.Drasil (createDirIfMissing)
 
-import Language.Drasil.Code.Code (createCodeFiles, consolidatePackageFiles)
+import Language.Drasil.Code.Code (createPackageFiles, consolidatePackageFiles)
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
@@ -129,7 +129,7 @@ generateCode l unReprProg unReprPack g = do
         | l == Python = fileAndContents "__init__.py" mempty : baseAux
         | otherwise   = baseAux
       packageFiles = consolidatePackageFiles (progMods $ packageProg $ unReprPack pckg) aux
-  createCodeFiles packageFiles
+  createPackageFiles packageFiles
   setCurrentDirectory workingDir
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
@@ -240,7 +240,7 @@ generateCodeProc l unReprProg unReprPack g = do
       baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
           not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
       packageFiles = consolidatePackageFiles (progMods $ packageProg $ unReprPack pckg) baseAux
-  createCodeFiles packageFiles
+  createPackageFiles packageFiles
   setCurrentDirectory workingDir
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen

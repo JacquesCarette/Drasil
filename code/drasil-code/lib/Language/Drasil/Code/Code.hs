@@ -9,7 +9,7 @@ module Language.Drasil.Code.Code (
 import Text.PrettyPrint.HughesPJ ( Doc, Doc, render )
 import Data.List.NonEmpty (toList)
 
-import Drasil.GOOL ( CodeType(..), FileData(..), ModData(modDoc))
+import Drasil.GOOL (CodeType(..), FileData(..), ModData(modDoc))
 import qualified Language.Drasil as S (Space(..))
 import Utils.Drasil (createDirIfMissing)
 
@@ -32,15 +32,15 @@ consolidatePackageFiles files aux = PackageFiles $ zip (map filePath files ++ ma
 
 -- | Outputs the requested 'Package Files' into system files.
 createPackageFiles :: PackageFiles -> IO ()
-createPackageFiles (PackageFiles cs) = mapM_ createCodeFile cs
+createPackageFiles (PackageFiles cs) = mapM_ createPackageFile cs
 
 -- | Helper that uses pairs of 'PackageFiles' to create a file written with the given
 -- document at the given 'FilePath'.
-createCodeFile :: (FilePath, Doc) -> IO ()
-createCodeFile (path, code) = do
+createPackageFile :: (FilePath, Doc) -> IO ()
+createPackageFile (path, contents) = do
   createDirIfMissing True (takeDirectory path)
   h <- openFile path WriteMode
-  hPutStrLn h (render code)
+  hPutStrLn h (render contents)
   hClose h
 
 -- | Default mapping between 'Space' and 'CodeType'.

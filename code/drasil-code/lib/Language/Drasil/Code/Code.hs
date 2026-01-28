@@ -1,7 +1,7 @@
--- | Contains the high-level functionality to create 'Code' and then produce the
+-- | Contains the high-level functionality to create 'PackageFiles' and then produce the
 -- actual generated code files.
 module Language.Drasil.Code.Code (
-    Code(..), makeCode,
+    makeCode,
     createCodeFiles,
     spaceToCodeType
 ) where
@@ -19,20 +19,21 @@ import qualified Language.Drasil.Code.FileData as D (
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 
--- | Represents the generated code as a list of file names and rendered code pairs.
-newtype Code = Code { unCode :: [(FilePath, Doc)]}
+-- | Represents the generated files of a package as a unified
+--   list of pairs of file names and rendered contents.
+newtype PackageFiles = PackageFiles [(FilePath, Doc)]
 
 -- | Makes code from 'FileData' ('FilePath's with module data) and 'FileAndContents'
 -- ('FilePath's with auxiliary document information).
-makeCode :: [FileData] -> [FileAndContents] -> Code
-makeCode files aux = Code $ zip (map filePath files ++ map D.filePath aux)
+makeCode :: [FileData] -> [FileAndContents] -> PackageFiles
+makeCode files aux = PackageFiles $ zip (map filePath files ++ map D.filePath aux)
   (map (modDoc . fileMod) files ++ map fileDoc aux)
 
--- | Creates the requested 'Code' by producing files.
-createCodeFiles :: Code -> IO ()
-createCodeFiles (Code cs) = mapM_ createCodeFile cs
+-- | Creates the requested 'PackageFiles' by producing files.
+createCodeFiles :: PackageFiles -> IO ()
+createCodeFiles (PackageFiles cs) = mapM_ createCodeFile cs
 
--- | Helper that uses pairs of 'Code' to create a file written with the given
+-- | Helper that uses pairs of 'PackageFiles' to create a file written with the given
 -- document at the given 'FilePath'.
 createCodeFile :: (FilePath, Doc) -> IO ()
 createCodeFile (path, code) = do

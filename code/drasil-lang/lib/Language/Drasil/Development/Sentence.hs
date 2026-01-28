@@ -46,10 +46,9 @@ short c = sentenceShort (c ^. uid)
 introduceAbb :: Idea n => n -> S.Sentence
 introduceAbb n = phrase n +:+ sParen (short n)
 
--- | Introduce plural title-case version of a noun phrase followed by its
--- (parenthesized) abbreviation.
+-- | Introduce a plural noun phrase and its (parenthesized) abbreviation.
 introduceAbbPlrl :: Idea n => n -> S.Sentence
-introduceAbbPlrl n = toSent (NP.titleizeNP' (n ^. term)) +:+ sParen (short n)
+introduceAbbPlrl n = plural n +:+ sParen (short n)
 
 -- | Helper function for getting the sentence case of a noun phrase from a
 -- 'NamedIdea'.

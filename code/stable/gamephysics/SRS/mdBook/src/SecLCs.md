@@ -1,6 +1,6 @@
 # Likely Changes {#Sec:LCs}
 
-This section lists the Likely Changes (LC) to be made to the software.
+This section lists the likely changes (LC) to be made to the software.
 
 <div id="lcVODES"></div>
 

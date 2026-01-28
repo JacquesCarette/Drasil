@@ -8,6 +8,7 @@
 module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 
 import Control.Lens ((^.), set)
+import Data.Containers.ListUtils (nubOrdOn)
 import Data.Function (on)
 import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe, fromMaybe)
@@ -86,7 +87,7 @@ mkDoc si srsDecl headingComb =
       -- 'LabelledContent' (the generated traceability-related tables).
       si' = buildTraceMaps dd $ fillReferences dd sections si
       -- Extract all citations now that references are populated
-      allCites = nub $ citeDB si' dd ++ citeDBFromSections si' sections
+      allCites = nubOrdOn (^. uid) $ citeDB si' dd ++ citeDBFromSections si' sections
       -- Now, the 'real generation' of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's).
@@ -139,7 +140,7 @@ fillReferences dd allSections si = si2
     -- Extract citations from both DocDesc (for model DecRefs) and Sections (for all sentences including generated ones)
     citesFromDoc = citeDB si dd
     citesFromSecs = citeDBFromSections si allSections
-    cites = nub $ citesFromDoc ++ citesFromSecs
+    cites = nubOrdOn (^. uid) $ citesFromDoc ++ citesFromSecs
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database

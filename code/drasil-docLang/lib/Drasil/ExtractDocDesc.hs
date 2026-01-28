@@ -13,10 +13,9 @@ import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 import Data.List (sortBy)
-import Data.Maybe (maybeToList)
 
 import Drasil.Database (UID, uid)
-import Drasil.DocumentLanguage.Core
+import Drasil.DocumentLanguage.Core hiding (System)
 import Drasil.GetChunks (lookupCitations)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 import Drasil.System (System, HasSystem(systemdb))
@@ -115,7 +114,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (IPurpose s) -> s
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec _ s1 s2) -> maybeToList s2 ++ getSec s1,
+      (IOrgSec _ s1 s2) -> s2 : getSec s1,
     stkSub = Constant . f <$> \case
       (Client _ s) -> [s]
       (Cstmr _) -> [],
@@ -151,7 +150,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
     getIntroSub (IPurpose ss) = ss
     getIntroSub (IScope s) = [s]
     getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
-    getIntroSub (IOrgSec _ s1 s2) = maybeToList s2 ++ getSec s1
+    getIntroSub (IOrgSec _ s1 s2) = s2 : getSec s1
 
     der :: MayHaveDerivation a => [a] -> [Sentence]
     der = concatMap (getDerivSent . (^. derivations))

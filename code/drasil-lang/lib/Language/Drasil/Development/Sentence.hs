@@ -25,7 +25,7 @@ import Language.Drasil.Sentence ((+:+), sParen, sentenceTerm,
   sentencePlural, sentenceShort)
 import qualified Language.Drasil.Sentence as S
 import qualified Language.Drasil.NounPhrase as NP
-import Language.Drasil.NounPhrase.Core (NPStruct(..))
+import Language.Drasil.NounPhrase.Types (NPStruct(..))
 
 -- | Translate from NPStruct to Sentence
 toSent :: NPStruct -> S.Sentence
@@ -42,10 +42,9 @@ toSent (P p) = S.P p
 short :: Idea c => c -> S.Sentence
 short c = sentenceShort (c ^. uid)
 
--- | Introduce title-case version of a noun phrase followed by its
--- (parenthesized) abbreviation.
+-- | Introduce a noun phrase and its (parenthesized) abbreviation.
 introduceAbb :: Idea n => n -> S.Sentence
-introduceAbb n = toSent (NP.titleizeNP (n ^. term)) +:+ sParen (short n)
+introduceAbb n = phrase n +:+ sParen (short n)
 
 -- | Introduce plural title-case version of a noun phrase followed by its
 -- (parenthesized) abbreviation.

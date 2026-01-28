@@ -53,8 +53,8 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, learnObj, mg, mis, notebook, physSyst, requirement, srs, thModel, typUnc,
-  unlikelyChg]
+  likelyChg, learnObj, mg, mis, physSyst, requirement, srs, thModel, typUnc,
+  unlikelyChg, notebook, refBy, refName]
 
 assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst,
   mg, mis, typUnc, sec, refBy, refName :: CI
@@ -74,7 +74,7 @@ unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")          
 physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
 mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
 mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
-typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                           "Uncert." [softEng]
+typUnc      = commonIdeaWithDict "typUnc"      (cnIES "typical uncertainty")                         "Uncert." [softEng]
 sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
 refBy       = commonIdeaWithDict "refBy"       (cn  "referenced by")                                 "RefBy"   [documentc]
 refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]

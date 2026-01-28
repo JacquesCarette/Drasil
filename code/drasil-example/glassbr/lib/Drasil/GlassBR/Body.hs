@@ -38,7 +38,7 @@ import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab,
+import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab,
   ptOfExplsn, con', glass, iGlass, lGlass)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.LabelledContent
@@ -64,14 +64,14 @@ si = mkSystem progName Specification
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
+  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA ],
   IntroSec $
     IntroProg (startIntro M.software blstRskInvWGlassSlab progName)
       (short progName)
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec M.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
+     IOrgSec M.dataDefn (SRS.inModel [] []) (Just orgOfDocIntroEnd)],
   StkhldrSec $
     StkhldrProg
       [Client progName $ D.toSent (phraseNP (a_ company))
@@ -129,11 +129,6 @@ conceptChunks =
   map cw mathunitals ++ map cw physicalquants ++
   -- DefinedQuantityDicts
   map cw mathquants
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  map nw acronyms
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsWCodeSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
@@ -234,7 +229,7 @@ scope = foldlSent_ [S "determining the safety" `S.ofA` phrase glaSlab,
 {--Organization of Document--}
 
 orgOfDocIntroEnd :: Sentence
-orgOfDocIntroEnd = foldlSent_ [D.toSent (atStartNP' (the dataDefn)) `S.are`
+orgOfDocIntroEnd = foldlSent [D.toSent (atStartNP' (the dataDefn)) `S.are`
   S "used to support", plural definition `S.the_ofThe` S "different", plural model]
 
 {--STAKEHOLDERS--}

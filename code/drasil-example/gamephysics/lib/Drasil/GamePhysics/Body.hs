@@ -34,7 +34,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GamePhysics.Concepts (acronyms, threeD, twoD, centreMass)
+import Drasil.GamePhysics.Concepts (threeD, twoD, centreMass)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.LabelledContent (labelledContent, sysCtxFig1)
@@ -49,12 +49,12 @@ import Drasil.GamePhysics.GenDefs (generalDefns)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA abbreviationsList],
+  RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA ],
   IntroSec $ IntroProg para1_introduction_intro (short progName)
   [IPurpose $ purpDoc progName Verbose,
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
-   IOrgSec inModel (SRS.inModel [] []) EmptyS],
+   IOrgSec inModel (SRS.inModel [] []) Nothing],
    GSDSec $ GSDProg [
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
@@ -127,13 +127,6 @@ conceptChunks =
 symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts conceptChunks [] dataDefs iMods generalDefns
   tMods concIns citations labelledContent
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- QuantityDicts
-  map nw symbols ++
-  -- CIs
-  map nw acronyms
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

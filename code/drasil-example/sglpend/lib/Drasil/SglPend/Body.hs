@@ -27,7 +27,6 @@ import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
 import qualified Drasil.DblPend.Body as DPD (tMods)
 import Drasil.DblPend.Concepts (concepts, rod)
 import Drasil.DblPend.Requirements (nonFuncReqs)
-import Drasil.DblPend.Unitals (acronyms)
 import Drasil.DblPend.References (citations)
 
 import Drasil.SglPend.Assumptions (assumpSingle)
@@ -47,14 +46,14 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
-      , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
+      , TAandA          -- Add table of abbreviation and acronym section
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) EmptyS],
+       IOrgSec inModel (SRS.inModel [] []) Nothing],
   GSDSec $
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
@@ -111,13 +110,6 @@ conceptChunks =
   gravitationalConst, gravity, rigidBody, weight, shm] ++
   -- Unital Chunks
   [cw len]
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  nw progName : map nw acronyms ++
-  -- QuantityDicts
-  map nw symbols
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []

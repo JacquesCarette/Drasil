@@ -32,4 +32,4 @@ responseType: The response type considered in GlassBR is flexural. (RefBy: [LC:C
 
 <div id="assumpLDFC"></div>
 
-ldfConstant: With reference to [A:standardValues](./SecAssumps.md#assumpSV), the value of load duration factor (\\(\mathit{LDF}\\)) is a constant in GlassBR. (RefBy: [LC:Variable-Values-of-m,k,E](./SecLCs.md#varValsOfmkE) and [DD:loadDurFactor](./SecDDs.md#DD:loadDurFactor).)
+ldfConstant: With reference to [A:standardValues](./SecAssumps.md#assumpSV), the value of load duration factor (LDF) is a constant in GlassBR. (RefBy: [LC:Variable-Values-of-m,k,E](./SecLCs.md#varValsOfmkE) and [DD:loadDurFactor](./SecDDs.md#DD:loadDurFactor).)

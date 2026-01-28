@@ -6,28 +6,25 @@ import Control.Lens ((^.))
 import Data.Function (on)
 import Data.List (sortBy)
 
-import Data.Drasil.Concepts.Documentation (abbreviation, fullForm, abbAcc)
-import Drasil.Database (HasUID(..))
 import Language.Drasil
+import Language.Drasil.Development (toSent)
+import Drasil.Database (HasUID(..))
+import Drasil.Database.SearchTools (TermAbbr (shortForm), longForm)
+import Data.Drasil.Concepts.Documentation (abbreviation, fullForm, abbAcc)
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 import Utils.Drasil (mkTable)
 
-import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
-
--- | Helper function that gets the acronym out of an 'Idea'.
-select :: (Idea s) => [s] -> [(String, s)]
-select [] = []
-select (x:xs) = case getA x of
-  Nothing -> select xs
-  Just y  -> (y, x) : select xs
-
--- | The actual table creation function.
-tableAbbAccGen :: (Idea s) => [s] -> LabelledContent
+-- | Create a table of abbreviations from the given 'TermAbbr's. If the list is
+-- empty, it will return a paragraph saying there are no abbreviations or
+-- acronyms. It is assumed that the provided 'TermAbbr's are unique and all have
+-- a short form.
+tableAbbAccGen :: [TermAbbr] -> LabelledContent
 tableAbbAccGen [] = mkRawLC (Paragraph $ emptySectSentPlu [abbAcc]) tableAbbAccRef
-tableAbbAccGen ls = let chunks = sortBy (compare `on` fst) $ select ls in
+tableAbbAccGen ls = let chunks = sortBy (compare `on` shortForm) ls in
   mkRawLC (Table
   (map titleize [abbreviation, fullForm]) (mkTable
-  [\(a,_) -> S a,
-   \(_,b) -> titleize b]
+    [maybe EmptyS S . shortForm,
+     toSent . titleizeNP . longForm]
   chunks)
   (titleize' abbAcc) True) tableAbbAccRef
 

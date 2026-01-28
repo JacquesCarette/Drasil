@@ -31,11 +31,12 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
   element, general, goalStmt, information, input_, limitation, model, output_,
   physical, physicalConstraint, physicalSystem, physSyst, problem,
-  problemDescription, propOfCorSol, purpose, quantity, scope,
+  problemDescription, propOfCorSol, purpose, quantity, refBy, scope,
   section_, softwareConstraint, solutionCharacteristic, symbol_,
   system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
+import Drasil.Document.Contents (enumBulletU, enumSimpleU, foldlSP, foldlSP_)
 import Drasil.Metadata (inModel, thModel, dataDefn, genDefn, requirement, specification)
 import Drasil.System (System)
 import Language.Drasil hiding (variable)
@@ -44,8 +45,6 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 
--- local
-import Drasil.Document.Contents (enumBulletU, enumSimpleU, foldlSP, foldlSP_)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
@@ -246,6 +245,7 @@ auxSpecSent :: Sentence
 auxSpecSent = foldlSent [S "The", namedRef (SRS.valsOfAuxCons [] []) $ S "auxiliary constants", S "give",
   plural value `S.the_ofThe` phrase specification, plural parameter, S "used in the",
   namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' inDatumConstraint +:+ titleize table_]
+  -- FIXME: inDataConstTbl is abused to get a table reference label.
 
 -- | Creates a Data Constraints table. Takes in Columns, reference, and a label.
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> UID -> Sentence -> LabelledContent
@@ -306,7 +306,7 @@ helperCI :: ConceptInstance -> System -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
   where
     refby EmptyS = EmptyS
-    refby sent   = sParen $ S "RefBy:" +:+. sent
+    refby sent   = sParen $ short refBy :+: S ":" +:+. sent
 
 -- | Section stubs for implicit referencing of different models and definitions.
 tmStub, ddStub, gdStub, imStub, pdStub :: Section

@@ -33,7 +33,7 @@ import qualified Data.Set as Set
 -- (can record whether something is in plural form, a singular term, or in short form).
 data SentenceStyle = PluralTerm
                    | TermStyle
-                   | ShortStyle
+                   | ShortStyle -- TODO: Short plural?
 
 -- | Used in 'Ch' constructor to determine the capitalization of a term.
 -- CapF is for capitalizing the first word from the 'UID' of the given term.

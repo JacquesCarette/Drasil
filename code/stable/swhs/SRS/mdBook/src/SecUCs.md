@@ -1,6 +1,6 @@
 # Unlikely Changes {#Sec:UCs}
 
-This section lists the unlikely changes to be made to the software.
+This section lists the unlikely changes (UC) to be made to the software.
 
 <div id="unlikeChgWPFS"></div>
 

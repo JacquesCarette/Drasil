@@ -293,6 +293,8 @@ SRS & Software Requirements Specification
 \\
 SWHS & Solar Water Heating System
 \\
+SWHS & Solar Water Heating Systems Incorporating PCM
+\\
 TM & Theoretical Model
 \\
 UC & Unlikely Change
@@ -304,7 +306,7 @@ Uncert. & Typical Uncertainty
 \label{Sec:Intro}
 Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use a renewable energy source and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems incorporating PCM. The developed program will be referred to as Solar Water Heating System (SWHS) based on the original, manually created version of \hyperref{https://github.com/smiths/swhs/tree/master}{}{}{SWHS}. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the software requirements specification (SRS) for solar water heating systems incorporating PCM. The developed program will be referred to as Solar Water Heating System (SWHS) based on the original, manually created version of \hyperref{https://github.com/smiths/swhs/tree/master}{}{}{SWHS}. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -1600,7 +1602,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
-This section lists the likely changes to be made to the software.
+This section lists the likely changes (LC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[Uniform-Temperature-PCM:\phantomsection\label{likeChgUTP}]{\hyperref[assumpTPCAV]{A:Temp-PCM-Constant-Across-Volume} - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.}
@@ -1612,7 +1614,7 @@ This section lists the likely changes to be made to the software.
 \end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
-This section lists the unlikely changes to be made to the software.
+This section lists the unlikely changes (UC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[Water-PCM-Fixed-States:\phantomsection\label{unlikeChgWPFS}]{\hyperref[assumpWAL]{A:Water-Always-Liquid}, \hyperref[assumpNGSP]{A:No-Gaseous-State-PCM} - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.}

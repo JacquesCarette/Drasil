@@ -282,12 +282,24 @@
                   <td>Instance Model</td>
                 </tr>
                 <tr>
+                  <td>LC</td>
+                  <td>Likely Change</td>
+                </tr>
+                <tr>
+                  <td>ODE</td>
+                  <td>Ordinary Differential Equation</td>
+                </tr>
+                <tr>
                   <td>P</td>
                   <td>proportional</td>
                 </tr>
                 <tr>
                   <td>PD</td>
                   <td>proportional derivative</td>
+                </tr>
+                <tr>
+                  <td>PD Controller</td>
+                  <td>PD Controller</td>
                 </tr>
                 <tr>
                   <td>PID</td>
@@ -332,10 +344,10 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore, a simulation of the PD Controller with a Second Order System is created in this project based on the original, manually created version of <a href="https://github.com/muralidn/CAS741-Fall20/tree/master">PD Controller</a> that can be used to tune the gain constants.
+          Automatic process control with a controller (<span title="proportional">P</span>/PI/<span title="proportional derivative">PD</span>/<span title="proportional integral derivative">PID</span>) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore, a simulation of the PD Controller with a Second Order System is created in this project based on the original, manually created version of <a href="https://github.com/muralidn/CAS741-Fall20/tree/master">PD Controller</a> that can be used to tune the gain constants.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for PD Controller. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for PD Controller. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
@@ -566,57 +578,57 @@
                 <div class="list">
                   <p>
                     <div id="pwrPlant">
-                      Power plant: The Power Plant and the Sensor are coupled as a single unit. (RefBy: <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>, <a href=#pwrPlantTxFnx>A:Transfer Function</a>, <a href=#massSpring>A:Spring Mass</a>, and <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>.)
+                      Power plant: The Power Plant and the Sensor are coupled as a single unit. (<span title="referenced by">RefBy</span>: <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>, <a href=#pwrPlantTxFnx>A:Transfer Function</a>, <a href=#massSpring>A:Spring Mass</a>, and <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="decoupled">
-                      Decoupled equation: The decoupled form of the PD Controller equation used in this simulation. (RefBy: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
+                      Decoupled equation: The decoupled form of the PD Controller equation used in this simulation. (<span title="referenced by">RefBy</span>: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="setPointConstant">
-                      Set-Point: The Set-Point is constant throughout the simulation. (RefBy: <a href=#IM:pdEquationIM>IM:pdEquationIM</a> and <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
+                      Set-Point: The Set-Point is constant throughout the simulation. (<span title="referenced by">RefBy</span>: <a href=#IM:pdEquationIM>IM:pdEquationIM</a> and <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="externalDisturb">
-                      External disturbance: There are no external disturbances to the Power Plant during the simulation. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
+                      External disturbance: There are no external disturbances to the Power Plant during the simulation. (<span title="referenced by">RefBy</span>: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="initialValue">
-                      Initial Value: The initial value of the Process Variable is assumed to be zero. (RefBy: <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
+                      Initial Value: The initial value of the Process Variable is assumed to be zero. (<span title="referenced by">RefBy</span>: <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="parallelEq">
-                      Parallel Equation: The Parallel form of the equation is used for the PD Controller. (RefBy: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
+                      Parallel Equation: The Parallel form of the equation is used for the PD Controller. (<span title="referenced by">RefBy</span>: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="unfilteredDerivative">
-                      Unfiltered Derivative: A pure derivative function is used for this simulation; there are no filters applied. (RefBy: <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>.)
+                      Unfiltered Derivative: A pure derivative function is used for this simulation; there are no filters applied. (<span title="referenced by">RefBy</span>: <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="pwrPlantTxFnx">
-                      Transfer Function: The combined Power Plant and Sensor (<a href=#pwrPlant>A:Power plant</a>) are characterized by a Second Order mass-spring-damper System. (RefBy: <a href=#TM:tmSOSystem>TM:tmSOSystem</a>.)
+                      Transfer Function: The combined Power Plant and Sensor (<a href=#pwrPlant>A:Power plant</a>) are characterized by a Second Order mass-spring-damper System. (<span title="referenced by">RefBy</span>: <a href=#TM:tmSOSystem>TM:tmSOSystem</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="massSpring">
-                      Spring Mass: The mass of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1 kilogram. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
+                      Spring Mass: The mass of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1 kilogram. (<span title="referenced by">RefBy</span>: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="dampingCoeffSpring">
-                      Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
+                      Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1. (<span title="referenced by">RefBy</span>: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="stiffnessCoeffSpring">
-                      Spring Stiffness Coefficient: The Stiffness coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
+                      Spring Stiffness Coefficient: The Stiffness coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (<span title="referenced by">RefBy</span>: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
                     </div>
                   </p>
                 </div>
@@ -1385,7 +1397,7 @@
       <div class="section">
         <h1>Likely Changes</h1>
         <p class="paragraph">
-          This section lists the likely changes to be made to the software.
+          This section lists the likely changes (<span title="likely change">LC</span>) to be made to the software.
         </p>
         <div class="list">
           <p>

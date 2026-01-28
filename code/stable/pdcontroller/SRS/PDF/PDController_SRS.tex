@@ -119,9 +119,15 @@ GS & Goal Statement
 \\
 IM & Instance Model
 \\
+LC & Likely Change
+\\
+ODE & Ordinary Differential Equation
+\\
 P & proportional
 \\
 PD & proportional derivative
+\\
+PD Controller & PD Controller
 \\
 PID & proportional integral derivative
 \\
@@ -144,7 +150,7 @@ Uncert. & Typical Uncertainty
 \label{Sec:Intro}
 Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore, a simulation of the PD Controller with a Second Order System is created in this project based on the original, manually created version of \hyperref{https://github.com/muralidn/CAS741-Fall20/tree/master}{}{}{PD Controller} that can be used to tune the gain constants.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for PD Controller. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the software requirements specification (SRS) for PD Controller. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -725,7 +731,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
-This section lists the likely changes to be made to the software.
+This section lists the likely changes (LC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[DC Gain and Time Constant:\phantomsection\label{likeChgPP}]{The mass, Damping Coefficient and the Stiffness coefficient may be changed to be supplied by the user (from \hyperref[massSpring]{A:Spring Mass}, \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}, and \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}).}

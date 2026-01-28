@@ -380,8 +380,16 @@
                   <td>Instance Model</td>
                 </tr>
                 <tr>
+                  <td>LC</td>
+                  <td>Likely Change</td>
+                </tr>
+                <tr>
                   <td>PS</td>
                   <td>Physical System Description</td>
+                </tr>
+                <tr>
+                  <td>Projectile</td>
+                  <td>Projectile</td>
                 </tr>
                 <tr>
                   <td>R</td>
@@ -421,7 +429,7 @@
           Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. Common examples of projectile motion include ballistics problems (missiles, bullets, etc.) and the flight of balls in various sports (baseball, golf, football, etc.). The document describes the program called Projectile , which is based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile">Projectile</a>.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for Projectile. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for Projectile. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
@@ -619,77 +627,77 @@
                 <div class="list">
                   <p>
                     <div id="twoDMotion">
-                      twoDMotion: The projectile motion is two-dimensional (<span title="two-dimensional">2D</span>). (RefBy: <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:posVec>GD:posVec</a>.)
+                      twoDMotion: The projectile motion is two-dimensional (<span title="two-dimensional">2D</span>). (<span title="referenced by">RefBy</span>: <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:posVec>GD:posVec</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="cartSyst">
-                      cartSyst: A Cartesian coordinate system is used (from <a href=#neglectCurv>A:neglectCurv</a>). (RefBy: <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:posVec>GD:posVec</a>.)
+                      cartSyst: A Cartesian coordinate system is used (from <a href=#neglectCurv>A:neglectCurv</a>). (<span title="referenced by">RefBy</span>: <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:posVec>GD:posVec</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="yAxisGravity">
-                      yAxisGravity: The direction of the <em>y</em>-axis is directed opposite to gravity. (RefBy: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>, and <a href=#accelYGravity>A:accelYGravity</a>.)
+                      yAxisGravity: The direction of the <em>y</em>-axis is directed opposite to gravity. (<span title="referenced by">RefBy</span>: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>, and <a href=#accelYGravity>A:accelYGravity</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="launchOrigin">
-                      launchOrigin: The launcher is coincident with the origin. (RefBy: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                      launchOrigin: The launcher is coincident with the origin. (<span title="referenced by">RefBy</span>: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="targetXAxis">
-                      targetXAxis: The target lies on the <em>x</em>-axis (from <a href=#neglectCurv>A:neglectCurv</a>). (RefBy: <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                      targetXAxis: The target lies on the <em>x</em>-axis (from <a href=#neglectCurv>A:neglectCurv</a>). (<span title="referenced by">RefBy</span>: <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="posXDirection">
-                      posXDirection: The positive <em>x</em>-direction is from the launcher to the target. (RefBy: <a href=#IM:offsetIM>IM:offsetIM</a>, <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                      posXDirection: The positive <em>x</em>-direction is from the launcher to the target. (<span title="referenced by">RefBy</span>: <a href=#IM:offsetIM>IM:offsetIM</a>, <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="constAccel">
-                      constAccel: The acceleration is constant (from <a href=#accelXZero>A:accelXZero</a>, <a href=#accelYGravity>A:accelYGravity</a>, <a href=#neglectDrag>A:neglectDrag</a>, and <a href=#freeFlight>A:freeFlight</a>). (RefBy: <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:posVec>GD:posVec</a>.)
+                      constAccel: The acceleration is constant (from <a href=#accelXZero>A:accelXZero</a>, <a href=#accelYGravity>A:accelYGravity</a>, <a href=#neglectDrag>A:neglectDrag</a>, and <a href=#freeFlight>A:freeFlight</a>). (<span title="referenced by">RefBy</span>: <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:posVec>GD:posVec</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="accelXZero">
-                      accelXZero: The acceleration in the <em>x</em>-direction is zero. (RefBy: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#constAccel>A:constAccel</a>.)
+                      accelXZero: The acceleration in the <em>x</em>-direction is zero. (<span title="referenced by">RefBy</span>: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#constAccel>A:constAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="accelYGravity">
-                      accelYGravity: The acceleration in the <em>y</em>-direction is the acceleration due to gravity (from <a href=#yAxisGravity>A:yAxisGravity</a>). (RefBy: <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a> and <a href=#constAccel>A:constAccel</a>.)
+                      accelYGravity: The acceleration in the <em>y</em>-direction is the acceleration due to gravity (from <a href=#yAxisGravity>A:yAxisGravity</a>). (<span title="referenced by">RefBy</span>: <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a> and <a href=#constAccel>A:constAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="neglectDrag">
-                      neglectDrag: Air drag is neglected. (RefBy: <a href=#constAccel>A:constAccel</a> and <a href=#considerAirDrag>LC:Consider-Air-Drag</a>.)
+                      neglectDrag: Air drag is neglected. (<span title="referenced by">RefBy</span>: <a href=#constAccel>A:constAccel</a> and <a href=#considerAirDrag>LC:Consider-Air-Drag</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="pointMass">
-                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectVel>GD:rectVel</a> and <a href=#GD:rectPos>GD:rectPos</a>.)
+                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (<span title="referenced by">RefBy</span>: <a href=#GD:rectVel>GD:rectVel</a> and <a href=#GD:rectPos>GD:rectPos</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="freeFlight">
-                      freeFlight: The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: <a href=#constAccel>A:constAccel</a>.)
+                      freeFlight: The flight is free; there are no collisions during the trajectory of the projectile. (<span title="referenced by">RefBy</span>: <a href=#constAccel>A:constAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="neglectCurv">
-                      neglectCurv: The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: <a href=#targetXAxis>A:targetXAxis</a> and <a href=#cartSyst>A:cartSyst</a>.)
+                      neglectCurv: The distance is small enough that the curvature of the celestial body can be neglected. (<span title="referenced by">RefBy</span>: <a href=#targetXAxis>A:targetXAxis</a> and <a href=#cartSyst>A:cartSyst</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="timeStartZero">
-                      timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD:velVec</a>, <a href=#GD:rectVel>GD:rectVel</a>, <a href=#GD:rectPos>GD:rectPos</a>, <a href=#GD:posVec>GD:posVec</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                      timeStartZero: Time starts at zero. (<span title="referenced by">RefBy</span>: <a href=#GD:velVec>GD:velVec</a>, <a href=#GD:rectVel>GD:rectVel</a>, <a href=#GD:rectPos>GD:rectPos</a>, <a href=#GD:posVec>GD:posVec</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="gravAccelValue">
-                      gravAccelValue: The acceleration due to gravity is assumed to have the value provided in the section for <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a>. (RefBy: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                      gravAccelValue: The acceleration due to gravity is assumed to have the value provided in the section for <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a>. (<span title="referenced by">RefBy</span>: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
                     </div>
                   </p>
                 </div>
@@ -1811,7 +1819,7 @@
       <div class="section">
         <h1>Likely Changes</h1>
         <p class="paragraph">
-          This section lists the likely changes to be made to the software.
+          This section lists the likely changes (<span title="likely change">LC</span>) to be made to the software.
         </p>
         <div class="list">
           <p>

@@ -40,7 +40,7 @@ import Data.Drasil.SI_Units (degree)
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SSP.DataDefs (dataDefs)
-import Drasil.SSP.Defs (acronyms, crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
+import Drasil.SSP.Defs (crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil,
   soilLyr, soilMechanics, soilPrpty, ssa, stabAnalysis, waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
@@ -67,7 +67,7 @@ si = mkSystem
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
-  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA abbreviationsList],
+  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA ],
   IntroSec $ IntroProg startIntro kSent
     [ IPurpose $ purpDoc progName Verbose
     , IScope scope
@@ -75,7 +75,7 @@ mkSRS = [TableOfContents,
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
         phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
         [phrase soilMechanics]
-    , IOrgSec inModel (SRS.inModel [] []) orgSecEnd
+    , IOrgSec inModel (SRS.inModel [] []) (Just orgSecEnd)
     ],
     --FIXME: issue #235
   GSDSec $ GSDProg
@@ -143,15 +143,6 @@ conceptChunks =
 symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts conceptChunks
   [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  map nw acronyms ++
-  -- ConceptChunks
-  nw progName :
-  -- DefinedQuantityDicts
-  map nw symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -226,7 +217,7 @@ scope = foldlSent_ [D.toSent (phraseNP (stabAnalysis `ofA` twoD)), sParen (short
 -- SECTION 2.4 --
 -- Organization automatically generated in IOrgSec
 orgSecEnd :: Sentence
-orgSecEnd = foldlSent_ [D.toSent (atStartNP' (the inModel)), S "provide the set of",
+orgSecEnd = foldlSent [D.toSent (atStartNP' (the inModel)), S "provide the set of",
   S "algebraic", plural equation, S "that must be solved"]
 
 -- SECTION 3 --

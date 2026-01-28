@@ -19,7 +19,10 @@ module Utils.Drasil (
 
   -- * Lists
   -- | From "Utils.Drasil.Lists". General functions involving lists.
-  replaceAll, subsetOf, nubSort, weave, foldle, foldle1, toColumn, mkTable,
+  splitAtAll, mergeAll,
+  replaceAll, subsetOf, nubSort, weave,
+  foldle, foldle1,
+  toColumn, mkTable,
 
   -- ** Strings
   toPlainName, repUnd,

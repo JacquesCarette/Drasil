@@ -1,6 +1,6 @@
 # Likely Changes {#Sec:LCs}
 
-This section lists the likely changes to be made to the software.
+This section lists the likely changes (LC) to be made to the software.
 
 <div id="likeChgPP"></div>
 

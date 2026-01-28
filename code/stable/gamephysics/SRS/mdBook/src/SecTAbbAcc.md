@@ -7,10 +7,10 @@
 |2D          |Two-Dimensional                    |
 |3D          |Three-Dimensional                  |
 |A           |Assumption                         |
-|CM          |Centre of Mass                     |
 |DD          |Data Definition                    |
 |GD          |General Definition                 |
 |GS          |Goal Statement                     |
+|GamePhysics |GamePhysics                        |
 |IM          |Instance Model                     |
 |LC          |Likely Change                      |
 |ODE         |Ordinary Differential Equation     |

@@ -1,4 +1,4 @@
-{-# Language TupleSections #-}
+{-# Language TupleSections, LambdaCase #-}
 ---------------------------------------------------------------------------
 -- | Start the process of moving away from Document as the main internal
 -- representation of information, to something more informative.
@@ -10,7 +10,7 @@ module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy)
-import Data.Maybe (maybeToList, mapMaybe)
+import Data.Maybe (maybeToList, mapMaybe, isJust)
 import qualified Data.Map as Map (keys)
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
@@ -25,15 +25,17 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
 import Drasil.Document.Contents(mkEnumSimpleD, foldlSP)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, getSec)
 import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil
 import Language.Drasil.Display (compsy)
+import Utils.Drasil (splitAtAll, mergeAll)
 
 import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
-  findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
+  findAllInstMods, findAllTheoryMods, findAllConcInsts, TermAbbr, shortForm,
+  termResolve', findAllLabelledContent)
 
 import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem(..))
 import Drasil.GetChunks (ccss, ccss', citeDB)
@@ -66,10 +68,11 @@ import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGr
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
-import Drasil.Metadata as Doc (software)
-import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
-  unlikelyChg)
+import Drasil.Metadata (software, dataDefn, genDefn, inModel, thModel, requirement)
+import Data.Drasil.Concepts.Documentation (likelyChg, section_, unlikelyChg, assumption, goalStmt, refName, refBy)
 import qualified Data.Map.Strict as M
+
+import Language.Drasil.Development (shortdep)
 
 -- * Main Function
 
@@ -177,11 +180,27 @@ getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 
 -- | Helper for creating the different document sections.
 mkSections :: System -> DocDesc -> [Section]
-mkSections si dd = map doit dd
+mkSections si dd =
+  let
+    splitByTAandA :: [[DocSection]]
+    refSecPlans :: [DocSection]
+    (splitByTAandA, refSecPlans) = splitAtAll (\case {RefSec _ -> True; _ -> False}) dd
+
+    splitSecs :: [[Section]]
+    splitSecs = map (map doit) splitByTAandA
+
+    refSecs :: [Section]
+    refSecs = map
+      (\case {
+          RefSec rs -> mkRefSec si dd rs $ concat splitSecs;
+          _         -> error "A non-RefSec got captured in the RefSecs list!"})
+      refSecPlans
+  in
+    mergeAll splitSecs refSecs
   where
     doit :: DocSection -> Section
     doit TableOfContents      = mkToC dd
-    doit (RefSec rs)          = mkRefSec si dd rs
+    doit (RefSec _)           = error "RefSecs should have been filtered out!"
     doit (IntroSec is)        = mkIntroSec si is
     doit (StkhldrSec sts)     = mkStkhldrSec sts
     doit (SSDSec ss)          = mkSSDSec si ss
@@ -207,8 +226,8 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
 
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
-mkRefSec :: System -> DocDesc -> RefSec -> Section
-mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
+mkRefSec :: System -> DocDesc -> RefSec -> [Section] -> Section
+mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map (mkSubRef si) l)
   where
     mkSubRef :: System -> RefTab -> Section
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
@@ -224,10 +243,23 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
 
-    mkSubRef _ (TAandA ideas) =
+    mkSubRef SI {_systemdb = cdb} TAandA =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ nub ideas]
+        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations renderedSecs cdb]
         []
+
+collectDocumentAbbreviations :: [Section] -> ChunkDB -> [TermAbbr]
+collectDocumentAbbreviations renderedSecs cdb =
+  filter (isJust . shortForm) allTerms
+  where
+    -- Terms found in the document using the list of `Sentence`s extracted from
+    -- the sections.
+    foundInDoc = concatMap shortdep $ concatMap getSec renderedSecs
+    -- Terms that could not be found in `Sentence`s, but are important to
+    -- include in the table of abbreviations and acronyms.
+    missingFromDocHACK = map (^. uid) [assumption, dataDefn, genDefn, goalStmt,
+      inModel, requirement, thModel, refName, refBy]
+    allTerms = map (termResolve' cdb) $ nub (foundInDoc ++ missingFromDocHACK)
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
@@ -344,19 +376,19 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg (introChgs Doc.likelyChg c: mkEnumSimpleD c) []
+mkLCsSec (LCsProg c) = SRS.likeChg (introChgs likelyChg c: mkEnumSimpleD c) []
 
 -- ** Unlikely Changes
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs Doc.unlikelyChg  c : mkEnumSimpleD c) []
+mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs unlikelyChg  c : mkEnumSimpleD c) []
 
 -- | Intro paragraph for likely and unlikely changes
-introChgs :: NamedIdea n => n -> [ConceptInstance] -> Contents
+introChgs :: Idea n => n -> [ConceptInstance] -> Contents
 introChgs xs [] = mkParagraph $ emptySectSentPlu [xs]
-introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
-  plural xs, S "to be made to the", phrase Doc.software]
+introChgs xs _ = foldlSP [S "This", phrase section_, S "lists the",
+  introduceAbbPlrl xs, S "to be made to the", phrase software]
 
 -- ** Traceability
 

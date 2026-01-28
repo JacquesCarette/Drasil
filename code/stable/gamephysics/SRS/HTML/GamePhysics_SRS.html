@@ -546,10 +546,6 @@
                   <td>Assumption</td>
                 </tr>
                 <tr>
-                  <td>CM</td>
-                  <td>Centre of Mass</td>
-                </tr>
-                <tr>
                   <td>DD</td>
                   <td>Data Definition</td>
                 </tr>
@@ -560,6 +556,10 @@
                 <tr>
                   <td>GS</td>
                   <td>Goal Statement</td>
+                </tr>
+                <tr>
+                  <td>GamePhysics</td>
+                  <td>GamePhysics</td>
                 </tr>
                 <tr>
                   <td>IM</td>
@@ -615,7 +615,7 @@
           Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products. The document describes the program  based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/blob/master/CaseStudies/gamephys">GamePhysics</a>.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for <span title="GamePhysics">GamePhysics</span>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for <span title="GamePhysics">GamePhysics</span>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
@@ -809,12 +809,12 @@
                 <div class="list">
                   <p>
                     <div id="assumpOT">
-                      objectTy: All objects are rigid bodies. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
+                      objectTy: All objects are rigid bodies. (<span title="referenced by">RefBy</span>: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpOD">
-                      objectDimension: All objects are <span title="two-dimensional">2D</span>. (RefBy: <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
+                      objectDimension: All objects are <span title="two-dimensional">2D</span>. (<span title="referenced by">RefBy</span>: <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
                     </div>
                   </p>
                   <p>
@@ -824,22 +824,22 @@
                   </p>
                   <p>
                     <div id="assumpAD">
-                      axesDefined: The axes are defined using right-handed coordinate system. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#IM:rotMot>IM:rotMot</a>.)
+                      axesDefined: The axes are defined using right-handed coordinate system. (<span title="referenced by">RefBy</span>: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#IM:rotMot>IM:rotMot</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCT">
-                      collisionType: All rigid bodies collisions are vertex-to-edge collisions. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#lcEC>LC:Expanded-Collisions</a>.)
+                      collisionType: All rigid bodies collisions are vertex-to-edge collisions. (<span title="referenced by">RefBy</span>: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#lcEC>LC:Expanded-Collisions</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpDI">
-                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#lcID>LC:Include-Dampening</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, and <a href=#DD:kEnergy>DD:kEnergy</a>.)
+                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (<span title="referenced by">RefBy</span>: <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#lcID>LC:Include-Dampening</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, and <a href=#DD:kEnergy>DD:kEnergy</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCAJI">
-                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:transMot>IM:transMot</a>, and <a href=#lcIJC>LC:Include-Joints-Constraints</a>.)
+                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (<span title="referenced by">RefBy</span>: <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:transMot>IM:transMot</a>, and <a href=#lcIJC>LC:Include-Joints-Constraints</a>.)
                     </div>
                   </p>
                 </div>
@@ -2668,7 +2668,7 @@
       <div class="section">
         <h1>Likely Changes</h1>
         <p class="paragraph">
-          This section lists the likely changes to be made to the software.
+          This section lists the likely changes (<span title="likely change">LC</span>) to be made to the software.
         </p>
         <div class="list">
           <p>
@@ -2698,7 +2698,7 @@
       <div class="section">
         <h1>Unlikely Changes</h1>
         <p class="paragraph">
-          This section lists the unlikely changes to be made to the software.
+          This section lists the unlikely changes (<span title="unlikely change">UC</span>) to be made to the software.
         </p>
         <div class="list">
           <p>

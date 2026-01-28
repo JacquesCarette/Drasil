@@ -456,12 +456,20 @@
                   <td>Fully Tempered</td>
                 </tr>
                 <tr>
+                  <td>GD</td>
+                  <td>General Definition</td>
+                </tr>
+                <tr>
                   <td>GS</td>
                   <td>Goal Statement</td>
                 </tr>
                 <tr>
                   <td>GTF</td>
                   <td>Glass Type Factor</td>
+                </tr>
+                <tr>
+                  <td>GlassBR</td>
+                  <td>GlassBR</td>
                 </tr>
                 <tr>
                   <td>HS</td>
@@ -549,7 +557,7 @@
           Explosions in downtown areas are dangerous from the blast itself and also potentially from the secondary effect of falling glass. Therefore, software is needed to predict whether a glass slab can withstand a blast under given conditions. For example, we might wish to know whether a pane of glass fails from a gas main explosion or from a small fertilizer truck bomb. The document describes the program called <span title="GlassBR">GlassBR</span> , which is based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass">GlassBR</a>.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for <span title="GlassBR">GlassBR</span>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for <span title="GlassBR">GlassBR</span>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
@@ -835,37 +843,37 @@
                   </p>
                   <p>
                     <div id="assumpGC">
-                      glassCondition: Following <a href=#astm2009>astm2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: <a href=#accAlteredGlass>UC:Accommodate-Altered-Glass</a>.)
+                      glassCondition: Following <a href=#astm2009>astm2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (<span title="referenced by">RefBy</span>: <a href=#accAlteredGlass>UC:Accommodate-Altered-Glass</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpES">
-                      explainScenario: This system only considers the external explosion scenario for its calculations. (RefBy: <a href=#calcInternalBlastRisk>LC:Calculate-Internal-Blast-Risk</a>.)
+                      explainScenario: This system only considers the external explosion scenario for its calculations. (<span title="referenced by">RefBy</span>: <a href=#calcInternalBlastRisk>LC:Calculate-Internal-Blast-Risk</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSV">
-                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#assumpLDFC>A:ldfConstant</a>, and <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.)
+                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (<span title="referenced by">RefBy</span>: <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#assumpLDFC>A:ldfConstant</a>, and <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpGL">
-                      glassLite: Glass under consideration is assumed to be a single lite; hence, the value of <span title="load share factor">LSF</span> is equal to 1 for all calculations in <span title="GlassBR">GlassBR</span>. (RefBy: <a href=#accMoreThanSingleLite>LC:Accomodate-More-than-Single-Lite</a>.)
+                      glassLite: Glass under consideration is assumed to be a single lite; hence, the value of <span title="load share factor">LSF</span> is equal to 1 for all calculations in <span title="GlassBR">GlassBR</span>. (<span title="referenced by">RefBy</span>: <a href=#accMoreThanSingleLite>LC:Accomodate-More-than-Single-Lite</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpBC">
-                      boundaryConditions: Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: <a href=#accMoreBoundaryConditions>LC:Accomodate-More-Boundary-Conditions</a>.)
+                      boundaryConditions: Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (<span title="referenced by">RefBy</span>: <a href=#accMoreBoundaryConditions>LC:Accomodate-More-Boundary-Conditions</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpRT">
-                      responseType: The response type considered in <span title="GlassBR">GlassBR</span> is flexural. (RefBy: <a href=#considerMoreThanFlexGlass>LC:Consider-More-than-Flexure-Glass</a>.)
+                      responseType: The response type considered in <span title="GlassBR">GlassBR</span> is flexural. (<span title="referenced by">RefBy</span>: <a href=#considerMoreThanFlexGlass>LC:Consider-More-than-Flexure-Glass</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpLDFC">
-                      ldfConstant: With reference to <a href=#assumpSV>A:standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in <span title="GlassBR">GlassBR</span>. (RefBy: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a> and <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.)
+                      ldfConstant: With reference to <a href=#assumpSV>A:standardValues</a>, the value of load duration factor (<span title="load duration factor">LDF</span>) is a constant in <span title="GlassBR">GlassBR</span>. (<span title="referenced by">RefBy</span>: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a> and <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.)
                     </div>
                   </p>
                 </div>
@@ -2669,7 +2677,7 @@
       <div class="section">
         <h1>Likely Changes</h1>
         <p class="paragraph">
-          This section lists the likely changes to be made to the software.
+          This section lists the likely changes (<span title="likely change">LC</span>) to be made to the software.
         </p>
         <div class="list">
           <p>
@@ -2704,7 +2712,7 @@
       <div class="section">
         <h1>Unlikely Changes</h1>
         <p class="paragraph">
-          This section lists the unlikely changes to be made to the software.
+          This section lists the unlikely changes (<span title="unlikely change">UC</span>) to be made to the software.
         </p>
         <div class="list">
           <p>

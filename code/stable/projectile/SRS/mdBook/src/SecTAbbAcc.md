@@ -11,7 +11,9 @@
 |GD          |General Definition                 |
 |GS          |Goal Statement                     |
 |IM          |Instance Model                     |
+|LC          |Likely Change                      |
 |PS          |Physical System Description        |
+|Projectile  |Projectile                         |
 |R           |Requirement                        |
 |RefBy       |Referenced by                      |
 |Refname     |Reference Name                     |

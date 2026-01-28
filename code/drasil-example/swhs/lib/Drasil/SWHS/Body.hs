@@ -38,7 +38,7 @@ import Data.Drasil.People (brooks, spencerSmith, thulasi)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
+import Drasil.SWHS.Concepts (coil, con, phaseChangeMaterial,
   phsChgMtrl, sWHT, tank, tankPCM, transient, water)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
 import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
@@ -92,13 +92,6 @@ symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts conceptChunks [] SWHS.dataDefs insModel
   genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
 
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  nw progName : map nw acronymsFull ++
-  -- DefinedQuantityDicts
-  map nw symbols
-
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = externalLinkRef : uriReferences
@@ -108,13 +101,13 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro [
     TUnits,
     tsymb'' tSymbIntro $ TermExcept [uNormalVect],
-    TAandA abbreviationsList],
+    TAandA ],
   IntroSec $
     IntroProg (introStart +:+ introStartSWHS) (introEnd (plural progName') progName)
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] charsOfReader [],
-     IOrgSec inModel (SRS.inModel [] []) orgDocEnd
+     IOrgSec inModel (SRS.inModel [] []) (Just orgDocEnd)
     ],
   GSDSec $ GSDProg
     [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets progName]
@@ -241,7 +234,7 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 -- 2.4 : Organization of Document --
 ------------------------------------
 orgDocEnd :: Sentence
-orgDocEnd = foldlSent_ [D.toSent (atStartNP' (the inModel)),
+orgDocEnd = foldlSent [D.toSent (atStartNP' (the inModel)),
   S "to be solved" `S.are` S "referred to as" +:+.
   foldlList Comma List (map refS iMods), S "The", plural inModel,
   S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_`

@@ -899,7 +899,7 @@
           A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in significant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety..
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (<span title="Slope Stability analysis Program">SSP</span>) based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp">SSP</a>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (<span title="Slope Stability analysis Program">SSP</span>) based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp">SSP</a>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
@@ -1166,82 +1166,82 @@
                 <div class="list">
                   <p>
                     <div id="assumpSSC">
-                      Slip-Surface-Concave: The slip surface is concave with respect to the slope surface. The (<em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>) coordinates of a slip surface follow a concave up function. (RefBy: <a href=#IM:crtSlpId>IM:crtSlpId</a>.)
+                      Slip-Surface-Concave: The slip surface is concave with respect to the slope surface. The (<em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>) coordinates of a slip surface follow a concave up function. (<span title="referenced by">RefBy</span>: <a href=#IM:crtSlpId>IM:crtSlpId</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpFOS">
-                      Factor-of-Safety: The factor of safety is assumed to be constant across the entire slip surface. (RefBy: <a href=#GD:mobShr>GD:mobShr</a>.)
+                      Factor-of-Safety: The factor of safety is assumed to be constant across the entire slip surface. (<span title="referenced by">RefBy</span>: <a href=#GD:mobShr>GD:mobShr</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSLH">
-                      Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil properties throughout. (RefBy: <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#GD:resShr>GD:resShr</a>, and <a href=#LC_inhomogeneous>LC:Calculate-Inhomogeneous-Soil-Layers</a>.)
+                      Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil properties throughout. (<span title="referenced by">RefBy</span>: <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#GD:resShr>GD:resShr</a>, and <a href=#LC_inhomogeneous>LC:Calculate-Inhomogeneous-Soil-Layers</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSP">
-                      Soil-Properties: The soil properties are independent of dry or saturated conditions, with the exception of unit weight. (RefBy: <a href=#GD:resShr>GD:resShr</a>.)
+                      Soil-Properties: The soil properties are independent of dry or saturated conditions, with the exception of unit weight. (<span title="referenced by">RefBy</span>: <a href=#GD:resShr>GD:resShr</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSLI">
-                      Soil-Layers-Isotropic: The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. (RefBy: <a href=#GD:resShr>GD:resShr</a>.)
+                      Soil-Layers-Isotropic: The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. (<span title="referenced by">RefBy</span>: <a href=#GD:resShr>GD:resShr</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpINSFL">
-                      Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. (RefBy: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#GD:normShrR>GD:normShrR</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, and <a href=#UC_normshearlinear>UC:Normal-And-Shear-Linear-Only</a>.)
+                      Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. (<span title="referenced by">RefBy</span>: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#GD:normShrR>GD:normShrR</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, and <a href=#UC_normshearlinear>UC:Normal-And-Shear-Linear-Only</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpPSC">
-                      Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making <span title="two-dimensional">2D</span> analysis appropriate. (RefBy: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#GD:resShr>GD:resShr</a>, <a href=#GD:effNormF>GD:effNormF</a>, and <a href=#GD:baseWtrF>GD:baseWtrF</a>.)
+                      Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making <span title="two-dimensional">2D</span> analysis appropriate. (<span title="referenced by">RefBy</span>: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#GD:resShr>GD:resShr</a>, <a href=#GD:effNormF>GD:effNormF</a>, and <a href=#GD:baseWtrF>GD:baseWtrF</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpENSL">
-                      Effective-Norm-Stress-Large: The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. (RefBy: <a href=#TM:equilibrium>TM:equilibrium</a> and <a href=#UC_2donly>UC:2D-Analysis-Only</a>.)
+                      Effective-Norm-Stress-Large: The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. (<span title="referenced by">RefBy</span>: <a href=#TM:equilibrium>TM:equilibrium</a> and <a href=#UC_2donly>UC:2D-Analysis-Only</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSBSBISL">
-                      Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. (RefBy: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#TM:mcShrStrgth>TM:mcShrStrgth</a>, <a href=#GD:baseWtrF>GD:baseWtrF</a>, <a href=#DD:slcHeight>DD:slcHeight</a>, <a href=#DD:angleB>DD:angleB</a>, and <a href=#DD:angleA>DD:angleA</a>.)
+                      Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. (<span title="referenced by">RefBy</span>: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#TM:mcShrStrgth>TM:mcShrStrgth</a>, <a href=#GD:baseWtrF>GD:baseWtrF</a>, <a href=#DD:slcHeight>DD:slcHeight</a>, <a href=#DD:angleB>DD:angleB</a>, and <a href=#DD:angleA>DD:angleA</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpES">
-                      Edge-Slices: The interslice forces at the 0th and <em>n</em>th interslice interfaces are zero. (RefBy: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:intsliceFs>IM:intsliceFs</a>, and <a href=#IM:fctSfty>IM:fctSfty</a>.)
+                      Edge-Slices: The interslice forces at the 0th and <em>n</em>th interslice interfaces are zero. (<span title="referenced by">RefBy</span>: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:intsliceFs>IM:intsliceFs</a>, and <a href=#IM:fctSfty>IM:fctSfty</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSF">
-                      Seismic-Force: There is no seismic force acting on the slope. (RefBy: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, and <a href=#LC_seismic>LC:Calculate-Seismic-Force</a>.)
+                      Seismic-Force: There is no seismic force acting on the slope. (<span title="referenced by">RefBy</span>: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, and <a href=#LC_seismic>LC:Calculate-Seismic-Force</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSL">
-                      Surface-Load: There is no imposed surface load, and therefore no external forces, acting on the slope. (RefBy: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, and <a href=#LC_external>LC:Calculate-External-Force</a>.)
+                      Surface-Load: There is no imposed surface load, and therefore no external forces, acting on the slope. (<span title="referenced by">RefBy</span>: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, and <a href=#LC_external>LC:Calculate-External-Force</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpWIBE">
-                      Water-Intersects-Base-Edge: The water table only intersects the base of a slice at an edge of the slice. (RefBy: <a href=#GD:sliceWght>GD:sliceWght</a> and <a href=#GD:baseWtrF>GD:baseWtrF</a>.)
+                      Water-Intersects-Base-Edge: The water table only intersects the base of a slice at an edge of the slice. (<span title="referenced by">RefBy</span>: <a href=#GD:sliceWght>GD:sliceWght</a> and <a href=#GD:baseWtrF>GD:baseWtrF</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpWISE">
-                      Water-Intersects-Surface-Edge: The water table only intersects the slope surface at the edge of a slice. (RefBy: <a href=#GD:srfWtrF>GD:srfWtrF</a> and <a href=#GD:sliceWght>GD:sliceWght</a>.)
+                      Water-Intersects-Surface-Edge: The water table only intersects the slope surface at the edge of a slice. (<span title="referenced by">RefBy</span>: <a href=#GD:srfWtrF>GD:srfWtrF</a> and <a href=#GD:sliceWght>GD:sliceWght</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpNESSS">
-                      Negligible-Effect-Surface-Slope-Seismic: The effect of the slope of the surface of the soil on the seismic force is assumed to be negligible. (RefBy: <a href=#GD:momentEql>GD:momentEql</a>.)
+                      Negligible-Effect-Surface-Slope-Seismic: The effect of the slope of the surface of the soil on the seismic force is assumed to be negligible. (<span title="referenced by">RefBy</span>: <a href=#GD:momentEql>GD:momentEql</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpHFSM">
-                      Hydrostatic-Force-Slice-Midpoint: The resultant surface hydrostatic forces act into the midpoint of each slice surface and the resultant base hydrostatic forces act into the midpoint of each slice base. (RefBy: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:momentEql>GD:momentEql</a>, and <a href=#GD:baseWtrF>GD:baseWtrF</a>.)
+                      Hydrostatic-Force-Slice-Midpoint: The resultant surface hydrostatic forces act into the midpoint of each slice surface and the resultant base hydrostatic forces act into the midpoint of each slice base. (<span title="referenced by">RefBy</span>: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:momentEql>GD:momentEql</a>, and <a href=#GD:baseWtrF>GD:baseWtrF</a>.)
                     </div>
                   </p>
                 </div>
@@ -4728,7 +4728,7 @@
       <div class="section">
         <h1>Likely Changes</h1>
         <p class="paragraph">
-          This section lists the likely changes to be made to the software.
+          This section lists the likely changes (<span title="likely change">LC</span>) to be made to the software.
         </p>
         <div class="list">
           <p>
@@ -4753,7 +4753,7 @@
       <div class="section">
         <h1>Unlikely Changes</h1>
         <p class="paragraph">
-          This section lists the unlikely changes to be made to the software.
+          This section lists the unlikely changes (<span title="unlikely change">UC</span>) to be made to the software.
         </p>
         <div class="list">
           <p>

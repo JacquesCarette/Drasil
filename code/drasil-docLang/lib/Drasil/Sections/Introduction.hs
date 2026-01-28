@@ -52,14 +52,8 @@ developmentProcessParagraph = foldlSent [S "This", phrase document,
   S "is still to", Quote (S "fake"), S "a rational", phrase design,
   S "process"]
 
--- | 'Sentence' containing the subsections of the Introduction.
--- introductionSubsections :: Sentence
--- introductionSubsections = foldlList Comma List (map (uncurry S.the_ofThe)
---   [(phrase scope, plural requirement),
---   (plural characteristic, phrase intReader),
---   (phrase organization, phrase document)])
-
--- Takes a list of IntroSub and generates a sentence listing only the subsections that exist.
+-- | 'Sentence' containing the subsections of the Introduction. Takes a list of
+-- IntroSub and generates a sentence listing only the subsections that exist.
 introductionSubsections :: [IntroSub] -> Sentence
 introductionSubsections subs =
   let subDescriptions = concatMap introSubToSentence subs

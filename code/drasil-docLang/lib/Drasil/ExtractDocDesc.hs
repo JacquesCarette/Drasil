@@ -5,7 +5,8 @@ module Drasil.ExtractDocDesc (
   getDocDesc, egetDocDesc,
   sentencePlate,
   getSec,
-  getCitations, citeDB
+  getCitations, citeDB,
+  getCitationsFromSections, citeDBFromSections
 ) where
 
 import Control.Lens((^.))
@@ -259,6 +260,12 @@ getIL (Nested h lt) = h : getLT lt
 getCitations :: DocDesc -> [UID]
 getCitations dd = concatMap lnames (getDocDesc dd) ++ getModelRefs dd
 
+-- | Extracts citation reference 'UID's from generated sections.
+-- This is needed because some sentences (like orgOfDocIntro) are only created
+-- when DocDesc is converted to Sections during mkSections.
+getCitationsFromSections :: [Section] -> [UID]
+getCitationsFromSections = concatMap lnames . concatMap getSec
+
 -- | Extracts 'UID's from DecRefs stored in models.
 getModelRefs :: DocDesc -> [UID]
 getModelRefs = fmGetDocDesc modelRefPlate
@@ -283,3 +290,9 @@ getDecRefUIDs x = map (^. uid) (x ^. getDecRefs)
 -- the database.
 citeDB :: System -> DocDesc -> BibRef
 citeDB si dd = sortBy compareAuthYearTitle $ lookupCitations (si ^. systemdb) (getCitations dd)
+
+-- | Extract bibliography entries from generated sections.
+-- This version extracts from fully expanded Sections, capturing citations that
+-- are only created during document generation (like those in orgOfDocIntro).
+citeDBFromSections :: System -> [Section] -> BibRef
+citeDBFromSections si secs = sortBy compareAuthYearTitle $ lookupCitations (si ^. systemdb) (getCitationsFromSections secs)

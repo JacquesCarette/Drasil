@@ -12,13 +12,13 @@ List of refactorings that should be done to the code base.
 
 ## drasil-lang
 - [ ] move Drasil.Code to drasil-code
-- [ ] move Language.Drasil.Derivation to drasil-theory (PR #4583)
+- [ ] move Language.Drasil.Derivation to drasil-theory (PR [#4583](../issues/4583))
 - [ ] move Language.Drasil.Document and .* to drasil-docLang
 - [ ] move Language.Drasil.NounPhrase to Language.Drasil.NaturalLanguage.English.NounPhrase
 - [ ] move Language.Drasil.Chunk.DifferentialModel to (drasil-theory) Theory.Drasil.DifferentialModel
 
 ## dasil-code
-- [ ] change Data.Drasil.ExternalLibraries.ODELibraries to not go via Language.Drasil.Code (PR #4582)
+- [ ] change Data.Drasil.ExternalLibraries.ODELibraries to not go via Language.Drasil.Code (PR [#4582](../issues/4582))
 - [ ] move Language.Drasil.Code.Imperative.GOOL to drasil-GOOL
 
 ## drasil-gool

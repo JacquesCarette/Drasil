@@ -7,7 +7,7 @@ import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 
-import Drasil.Database (UID)
+import Drasil.Database (UID, uid)
 import Language.Drasil hiding (getCitations, Manual, Verb)
 import Theory.Drasil
 

@@ -1,15 +1,16 @@
 -- | Utilities to get grab certain chunks (from 'Expr', 'Sentence', etc) by
 -- 'UID' and dereference the chunk it refers to.
-module Drasil.GetChunks (ccss, ccss', combine, vars, lookupCitations) where
+module Drasil.GetChunks (ccss, ccss', combine, vars, citeDB) where
 
-import Data.List (nub)
-import Data.Maybe (mapMaybe)
+import Control.Lens ((^.))
+import Data.List (nub, sortBy)
 
 import Language.Drasil
-import Language.Drasil.Development (sdep)
+import Language.Drasil.Development
 import Language.Drasil.ModelExpr.Development (meDep)
-import Drasil.Database (ChunkDB, findOrErr, find, UID)
-import Drasil.Database.SearchTools (defResolve', DomDefn(definition))
+import Drasil.Database (ChunkDB, findOrErr)
+import Drasil.Database.SearchTools (defResolve', DomDefn(definition), findAllCitations)
+import Drasil.System (System, systemdb)
 
 -- | Gets a list of quantities ('DefinedQuantityDict') from an equation in order to print.
 vars :: ModelExpr -> ChunkDB -> [DefinedQuantityDict]
@@ -43,6 +44,6 @@ concpt a m = map (definition . defResolve' m) $ sdep a
 concpt' :: ModelExpr -> ChunkDB -> [Sentence]
 concpt' a m = map (definition . defResolve' m) $ meDep a
 
--- | Look up citation chunks from the database using their UIDs.
-lookupCitations :: ChunkDB -> [UID] -> [Citation]
-lookupCitations db uids = mapMaybe (`find` db) (nub uids)
+-- | Extract bibliography entries for a system.
+citeDB :: System -> BibRef
+citeDB si = sortBy compareAuthYearTitle $ findAllCitations (si ^. systemdb)

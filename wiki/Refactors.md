@@ -12,20 +12,22 @@ List of refactorings that should be done to the code base.
 
 ## drasil-lang
 - [ ] move Drasil.Code to drasil-code
-- [ ] move Language.Drasil.Derivation to drasil-theory (PR #4583)
+- [ ] move Language.Drasil.Derivation to drasil-theory (PR [#4583](../issues/4583))
 - [ ] move Language.Drasil.Document and .* to drasil-docLang
 - [ ] move Language.Drasil.NounPhrase to Language.Drasil.NaturalLanguage.English.NounPhrase
 - [ ] move Language.Drasil.Chunk.DifferentialModel to (drasil-theory) Theory.Drasil.DifferentialModel
 
 ## dasil-code
-- [ ] change Data.Drasil.ExternalLibraries.ODELibraries to not go via Language.Drasil.Code (PR #4582)
+- [ ] change Data.Drasil.ExternalLibraries.ODELibraries to not go via Language.Drasil.Code (PR [#4582](../issues/4582))
 - [ ] move Language.Drasil.Code.Imperative.GOOL to drasil-GOOL
 
 ## drasil-gool
 - [ ] redesign L-values ([#4398](../issues/4398))
 - [ ] remove global `GOOLState` and replace with renderer-local state
+  - [#4678](../issues/4678) contributes to this
 - [ ] investigate RendererSym, and figure out what needs to be changed/removed (see [#4398](../issues/4398) and [#4404](../issues/4404))
 - [ ] resolve issues with some parts of GOOL living in drasil-code
+  - [#4678](../issues/4678) contributes to this
 - [ ] for list, set, etc. APIs, differentiate explicitly between pure and impure functions/methods.
 - [ ] investigate duplicate typeclasses between InterfaceX and RendererClassesX (e.g. NumericExpression and Unary/BinaryOpSym)
 - [ ] anything else in [#4404](../issues/4404)

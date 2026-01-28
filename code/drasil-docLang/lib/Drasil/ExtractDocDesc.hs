@@ -1,16 +1,22 @@
 {-# LANGUAGE LambdaCase, Rank2Types #-}
 -- | Defines functions to extract certain kinds of information from a document.
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
-module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, sentencePlate, getCitations) where
+module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, sentencePlate, getCitations, citeDB) where
 
 import Control.Lens((^.))
-import Drasil.DocumentLanguage.Core
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Language.Drasil hiding (Manual, Verb)
-import Theory.Drasil
-
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
+
+import Drasil.Database (UID)
+import Language.Drasil hiding (getCitations, Manual, Verb)
+import Theory.Drasil
+
+import Drasil.DocumentLanguage.Core hiding (System)
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
+import Language.Drasil.Development (lnames)
+import Data.List (sortBy)
+import Drasil.GetChunks (lookupCitations)
+import Drasil.System (System, HasSystem(systemdb))
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -226,15 +232,8 @@ getIL (Nested h lt) = h : getLT lt
 getCitations :: DocDesc -> [UID]
 getCitations = concatMap lnames . getDocDesc
 
--- ciPlate is not currently used.
--- | A common idea plate.
--- ciPlate :: DLPlate (Constant [CI])
--- ciPlate = preorderFold $ purePlate {
---   introSub = Constant <$> \case
---     (IOrgSec _ ci _ _) -> [ci]
---     _ -> [],
---   stkSub = Constant <$> \case
---    (Client ci _) -> [ci]
---    (Cstmr ci) -> [ci],
---    auxConsSec = Constant <$> \(AuxConsProg ci _) -> [ci]
--- }
+-- | Extract bibliography entries for a system based on the document
+-- description. Scans the document for citation references and looks them up in
+-- the database.
+citeDB :: System -> DocDesc -> BibRef
+citeDB si dd = sortBy compareAuthYearTitle $ lookupCitations (si ^. systemdb) (getCitations dd)

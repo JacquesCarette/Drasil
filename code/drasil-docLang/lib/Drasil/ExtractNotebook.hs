@@ -1,9 +1,16 @@
-{-# LANGUAGE LambdaCase #-}
 -- | Defines functions to extract citation references from Notebook documents.
-module Drasil.ExtractNotebook (getCitations) where
+module Drasil.ExtractNotebook (getCitations, citeDBLsn) where
+
+import Control.Lens ((^.))
+
+import Drasil.Database (UID)
+import Language.Drasil hiding (getCitations, Manual, Verb)
+import Language.Drasil.Development (lnames)
 
 import Drasil.DocumentLanguage.Notebook.Core
-import Language.Drasil hiding (Manual, Verb)
+import Drasil.System (System, HasSystem (systemdb))
+import Data.List (sortBy)
+import Drasil.GetChunks (lookupCitations)
 
 -- | Extracts citation reference 'UID's from a lesson description.
 -- This gets all 'UID's that appear in 'Ref' constructors within sentences.
@@ -23,7 +30,7 @@ getCitationsChap (Apndx (ApndxProg cs)) = concatMap getCitationsCon cs
 
 -- | Extracts citation reference 'UID's from contents.
 getCitationsCon :: Contents -> [UID]
-getCitationsCon (UlC (UnlblCons rc)) = concatMap lnames (getSentencesRaw rc)
+getCitationsCon (UlC (UnlblC rc)) = concatMap lnames (getSentencesRaw rc)
 getCitationsCon (LlC lc) = concatMap lnames (getSentencesRaw (lc ^. accessContents))
 
 -- | Extracts 'Sentence's from raw content.
@@ -57,7 +64,13 @@ getLT (Definitions lp) = concatMap getLP lp
 getLP :: ListTuple -> [Sentence]
 getLP (t, it, _) = t : getIL it
 
--- | Flattens out an ItemType into 'Sentence's. Headers for 'Nested' items are prepended to its contents.
+-- | Flattens out an ItemType into 'Sentence's. Headers for 'Nested' items are
+-- prepended to its contents.
 getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
+
+-- | Extract bibliography entries for a notebook based on the lesson description.
+-- Scans the notebook for citation references and looks them up in the database.
+citeDBLsn :: System -> LsnDesc -> BibRef
+citeDBLsn si ld = sortBy compareAuthYearTitle $ lookupCitations (si ^. systemdb) (getCitations ld)

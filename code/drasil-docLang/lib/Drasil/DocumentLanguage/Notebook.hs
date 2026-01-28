@@ -5,17 +5,15 @@ module Drasil.DocumentLanguage.Notebook
 
 import Control.Lens ((^.))
 
-import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
-  Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
-
 import Language.Drasil (IdeaDict, Sentence(S), Section, CI, Document(Notebook), BibRef,
   foldlList, SepType(Comma), FoldType(List), name, Contents(UlC), ulcc, RawContent(Bib))
-
 import Drasil.System (System(SI), _authors, whatsTheBigIdea, sysName)
-import Drasil.GetChunks (citeDBLsn)
 
+import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
+  Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
 import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, example,
   appendix, review, reference, summary)
+import Drasil.ExtractNotebook (citeDBLsn)
 
 -- | Creates a notebook from a lesson description and system information.
 mkNb :: LsnDesc -> (IdeaDict -> CI -> Sentence) -> System -> Document

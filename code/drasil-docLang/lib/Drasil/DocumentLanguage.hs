@@ -25,7 +25,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
 import Drasil.Document.Contents(mkEnumSimpleD, foldlSP)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, citeDB)
 import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil
@@ -36,7 +36,7 @@ import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 
 import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem(..))
-import Drasil.GetChunks (ccss, ccss', citeDB)
+import Drasil.GetChunks (ccss, ccss')
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC)

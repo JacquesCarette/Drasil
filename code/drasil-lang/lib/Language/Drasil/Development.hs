@@ -14,6 +14,6 @@ module Language.Drasil.Development (
 
 import Language.Drasil.Development.Sentence (toSent)
 import Language.Drasil.NounPhrase (NounPhrase(..))
-import Language.Drasil.NounPhrase.Core (NPStruct(..))
+import Language.Drasil.NounPhrase.Types (NPStruct(..))
 import Language.Drasil.Sentence.Extract (sdep, shortdep, lnames, lnames')
 import Drasil.Database (showUID)

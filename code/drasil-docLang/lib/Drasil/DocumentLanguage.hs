@@ -26,7 +26,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
 import Drasil.Document.Contents(mkEnumSimpleD, foldlSP)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, citeDB, citeDBFromSections)
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, citeDBFromSections)
 import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil
@@ -87,7 +87,7 @@ mkDoc si srsDecl headingComb =
       -- 'LabelledContent' (the generated traceability-related tables).
       si' = buildTraceMaps dd $ fillReferences dd sections si
       -- Extract all citations now that references are populated
-      allCites = nubOrdOn (^. uid) $ citeDB si' dd ++ citeDBFromSections si' sections
+      allCites = nubOrdOn (^. uid) $ citeDBFromSections si' sections
       -- Now, the 'real generation' of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's).
@@ -138,9 +138,8 @@ fillReferences dd allSections si = si2
     -- get old chunk database + ref database
     chkdb = si ^. systemdb
     -- Extract citations from both DocDesc (for model DecRefs) and Sections (for all sentences including generated ones)
-    citesFromDoc = citeDB si dd
     citesFromSecs = citeDBFromSections si allSections
-    cites = nubOrdOn (^. uid) $ citesFromDoc ++ citesFromSecs
+    cites = nubOrdOn (^. uid) citesFromSecs
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
@@ -192,7 +191,7 @@ mkSections si dd mbib = map doit dd
     doit (StkhldrSec sts)     = mkStkhldrSec sts
     doit (SSDSec ss)          = mkSSDSec si ss
     doit (AuxConstntSec acs)  = mkAuxConsSec acs
-    doit Bibliography         = mkBib $ fromMaybe (citeDB si dd) mbib
+    doit Bibliography         = mkBib $ fromMaybe [] mbib
     doit (GSDSec gs')         = mkGSDSec gs'
     doit (ReqrmntSec r)       = mkReqrmntSec r
     doit (LCsSec lc)          = mkLCsSec lc

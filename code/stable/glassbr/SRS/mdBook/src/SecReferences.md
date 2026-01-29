@@ -20,13 +20,13 @@
 
 [5]: Campidelli, Manuel. "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading."
 
-<div id="parnasClements1986"></div>
-
-[6]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." *IEEE Transactions on Software Engineering*, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
-
 <div id="koothoor2013"></div>
 
-[7]: Koothoor, Nirmitha. *A Document Driven Approach to Certifying Scientific Computing Software*. McMaster University, Hamilton, ON, Canada: 2013. Print.
+[6]: Koothoor, Nirmitha. *A Document Driven Approach to Certifying Scientific Computing Software*. McMaster University, Hamilton, ON, Canada: 2013. Print.
+
+<div id="parnasClements1986"></div>
+
+[7]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." *IEEE Transactions on Software Engineering*, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
 
 <div id="smithKoothoor2016"></div>
 

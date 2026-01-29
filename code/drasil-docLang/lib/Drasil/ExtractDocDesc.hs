@@ -5,7 +5,6 @@ module Drasil.ExtractDocDesc (
   getDocDesc, egetDocDesc,
   sentencePlate,
   getSec,
-  getCitations, citeDB,
   getCitationsFromSections, citeDBFromSections
 ) where
 
@@ -253,12 +252,6 @@ getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
 
--- | Extracts citation reference 'UID's from a document description.
--- This gets all 'UID's that appear in 'Ref' constructors within sentences
--- and from DecRefs in models (DataDefinition, GenDefn, InstanceModel, TheoryModel).
-getCitations :: DocDesc -> [UID]
-getCitations dd = concatMap lnames (getDocDesc dd) ++ getModelRefs dd
-
 -- | Extracts citation reference 'UID's from generated sections.
 -- This is needed because some sentences (like orgOfDocIntro) are only created
 -- when DocDesc is converted to Sections during mkSections.
@@ -283,12 +276,6 @@ modelRefPlate = preorderFold $ purePlate {
 -- | Extract UIDs from DecRefs of a chunk that has them.
 getDecRefUIDs :: HasDecRef a => a -> [UID]
 getDecRefUIDs x = map (^. uid) (x ^. getDecRefs)
-
--- | Extract bibliography entries for a system based on the document
--- description. Scans the document for citation references and looks them up in
--- the database.
-citeDB :: System -> DocDesc -> BibRef
-citeDB si dd = sortBy compareAuthYearTitle $ lookupCitations (si ^. systemdb) (getCitations dd)
 
 -- | Extract bibliography entries from generated sections.
 -- This version extracts from fully expanded Sections, capturing citations that

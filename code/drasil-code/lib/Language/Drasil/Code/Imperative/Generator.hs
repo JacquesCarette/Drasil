@@ -12,7 +12,7 @@ import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 
 import Language.Drasil
-import Drasil.GOOL (OOProg, VisibilityTag(..),
+import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
   ProgData(..), initialState)
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
@@ -22,7 +22,7 @@ import Language.Drasil.Printing.Import (spec)
 import Drasil.System
 import Utils.Drasil (createDirIfMissing)
 
-import Language.Drasil.Code.Code (createCodeFiles, makeCode)
+import Language.Drasil.Code.PackageFiles (createPackageFiles, consolidatePackageFiles)
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
@@ -41,8 +41,8 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..),
-  package)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
+  makeSds, AuxiliarySym(..), package)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Code.FileData (PackageData(..), fileAndContents)
 import Language.Drasil.Code.FileNames(sampleInputName)
@@ -128,8 +128,8 @@ generateCode l unReprProg unReprPack g = do
       aux
         | l == Python = fileAndContents "__init__.py" mempty : baseAux
         | otherwise   = baseAux
-      code = makeCode (progMods $ packageProg $ unReprPack pckg) aux
-  createCodeFiles code
+      packageFiles = consolidatePackageFiles (progMods $ packageProg $ unReprPack pckg) aux
+  createPackageFiles packageFiles
   setCurrentDirectory workingDir
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
@@ -147,8 +147,9 @@ genPackage unRepr = do
   p <- genProgram
   let info = OO.unCI $ evalState ci initialState
       (reprPD, s) = runState p info
+      fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
-      m = makefile (libPaths g) (implType g) (commented g) s pd
+      m = makefile (libPaths g) (implType g) (commented g) fileInfoState pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
@@ -158,7 +159,7 @@ genPackage unRepr = do
       mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
       scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
-  d <- genDoxConfig s
+  d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
         langName = "",
         langVersion = "",
@@ -239,8 +240,8 @@ generateCodeProc l unReprProg unReprPack g = do
   let (pckg, ds) = runState (genPackageProc unReprProg) g
       baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
           not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
-      code = makeCode (progMods $ packageProg $ unReprPack pckg) baseAux
-  createCodeFiles code
+      packageFiles = consolidatePackageFiles (progMods $ packageProg $ unReprPack pckg) baseAux
+  createPackageFiles packageFiles
   setCurrentDirectory workingDir
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
@@ -258,8 +259,9 @@ genPackageProc unRepr = do
   p <- genProgramProc
   let info = Proc.unCI $ evalState ci initialState
       (reprPD, s) = runState p info
+      fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
-      m = makefile (libPaths g) (implType g) (commented g) s pd
+      m = makefile (libPaths g) (implType g) (commented g) fileInfoState pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
@@ -268,7 +270,7 @@ genPackageProc unRepr = do
       mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
       scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
-  d <- genDoxConfig s
+  d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
         langName = "",
         langVersion = "",

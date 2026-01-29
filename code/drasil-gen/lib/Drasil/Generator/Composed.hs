@@ -1,5 +1,5 @@
 -- | Defines Drasil generator functions.
-module Drasil.Generator.Generate (
+module Drasil.Generator.Composed (
   -- * Generators
   exportSmithEtAlSrsWCode, exportSmithEtAlSrsWCodeZoo,
 ) where

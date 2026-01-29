@@ -1,13 +1,19 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 -- | Defines a package extension for GOOL, with functions for pairing a GOOL
 -- program with auxiliary, non-source-code files.
 module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
+  -- DataTypes
+  SoftwareDossierState, makeSds, headers, sources, mainMod,
   -- Typeclasses
-  AuxiliarySym(..), package, sampleInput, auxFromData
+  AuxiliarySym(..),
+  -- Functions
+  package, sampleInput, auxFromData
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (ProgData, GOOLState, onCodeList)
+import Drasil.GOOL (ProgData, onCodeList)
 import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
@@ -19,16 +25,33 @@ import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
+import Control.Lens (makeLenses)
+
+data SoftwareDossierState = Sds {
+  _headers :: [FilePath], -- Used by Drasil for doxygen config gen
+  _sources :: [FilePath], -- Used by Drasil for doxygen config and Makefile gen
+  _mainMod :: Maybe FilePath -- Used by Drasil generator to access main
+                             -- mod file path (needed in Makefile generation)
+}
+makeLenses ''SoftwareDossierState
+
+makeSds :: [FilePath] -> [FilePath] -> Maybe FilePath -> SoftwareDossierState
+makeSds headerFiles sourceFiles mainModule = Sds {
+    _headers = headerFiles,
+    _sources = sourceFiles,
+    _mainMod = mainModule
+  }
+
 -- | Members of this class must have a doxygen configuration, ReadMe file,
--- omptimize doxygen document, information necessary for a makefile,
+-- omptimize doxygen document, information necessary for a makefile, and
 -- auxiliary helper documents
 class AuxiliarySym r where
-  doxConfig :: String -> GOOLState -> Verbosity -> r FileAndContents
+  doxConfig :: String -> SoftwareDossierState -> Verbosity -> r FileAndContents
   readMe ::  ReadMeInfo -> r FileAndContents
 
   optimizeDox :: r Doc
 
-  makefile :: [FilePath] -> ImplementationType -> [Comments] -> GOOLState ->
+  makefile :: [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState ->
     ProgData -> r FileAndContents
 
   auxHelperDoc :: r Doc -> Doc

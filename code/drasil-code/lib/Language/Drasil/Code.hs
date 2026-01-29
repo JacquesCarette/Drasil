@@ -1,6 +1,5 @@
 -- | Re-export code-related smart constructors for external code writing and generation.
 module Language.Drasil.Code (
-  makeCode, createCodeFiles,
   generator, generateCode, generateCodeProc,
   readWithDataDesc, sampleInputDD,
   Choices(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), makeArchit,
@@ -35,8 +34,7 @@ module Language.Drasil.Code (
   returnExprListFill, fixedStatementFill, fixedStatementFill', initSolWithValFill,
   Lang(..),
   CodeChunk, CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, ccObjVar,
-  listToArray,
-  field,
+  listToArray, field, SoftwareDossierState, makeSds,
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..),
   ODELibPckg(..), mkODELib, mkODELibNoPath,
   -- Language.Drasil.Chunk.NamedArgument
@@ -48,12 +46,13 @@ module Language.Drasil.Code (
 import Prelude hiding (break, print, return, log, exp)
 
 import Drasil.Code.CodeExpr (field)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
+  SoftwareDossierState, makeSds)
 import Language.Drasil.Code.Imperative.Generator (generator, generateCode,
   generateCodeProc)
 import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc,
   sampleInputDD)
 
-import Language.Drasil.Code.Code (makeCode, createCodeFiles)
 import Language.Drasil.Code.DataDesc (junkLine, multiLine, repeated, singleLine,
   singleton)
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,

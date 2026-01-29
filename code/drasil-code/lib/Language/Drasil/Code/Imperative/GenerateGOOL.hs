@@ -13,7 +13,8 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (List)
 import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..),
+  SoftwareDossierState)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), AuxFile(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
@@ -22,8 +23,7 @@ import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
   CSStateVar, SClass, NamedArgs, SharedProg, OOProg, TypeElim(..),
   ValueSym(..), Argument(..), ValueExpression(..), OOValueExpression(..),
-  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..),
-  GOOLState)
+  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..))
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
 import Drasil.Metadata (watermark)
@@ -56,7 +56,7 @@ genModule :: (OOProg r) => Name -> Description ->
 genModule n desc = genModuleWithImports n desc []
 
 -- | Generates a Doxygen configuration file if the user has comments enabled.
-genDoxConfig :: (AuxiliarySym r) => GOOLState -> GenState (Maybe (r FileAndContents))
+genDoxConfig :: (AuxiliarySym r) => SoftwareDossierState -> GenState (Maybe (r FileAndContents))
 genDoxConfig s = do
   g <- get
   let n = codeSpec g ^. pNameO

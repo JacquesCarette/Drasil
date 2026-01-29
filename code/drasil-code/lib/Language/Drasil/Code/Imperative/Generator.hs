@@ -12,7 +12,7 @@ import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 
 import Language.Drasil
-import Drasil.GOOL (OOProg, VisibilityTag(..),
+import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
   ProgData(..), initialState)
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
@@ -41,8 +41,8 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..),
-  package)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
+  makeSds, AuxiliarySym(..), package)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Code.FileData (PackageData(..), fileAndContents)
 import Language.Drasil.Code.FileNames(sampleInputName)
@@ -147,8 +147,9 @@ genPackage unRepr = do
   p <- genProgram
   let info = OO.unCI $ evalState ci initialState
       (reprPD, s) = runState p info
+      fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
-      m = makefile (libPaths g) (implType g) (commented g) s pd
+      m = makefile (libPaths g) (implType g) (commented g) fileInfoState pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
@@ -158,7 +159,7 @@ genPackage unRepr = do
       mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
       scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
-  d <- genDoxConfig s
+  d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
         langName = "",
         langVersion = "",
@@ -258,8 +259,9 @@ genPackageProc unRepr = do
   p <- genProgramProc
   let info = Proc.unCI $ evalState ci initialState
       (reprPD, s) = runState p info
+      fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
-      m = makefile (libPaths g) (implType g) (commented g) s pd
+      m = makefile (libPaths g) (implType g) (commented g) fileInfoState pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
@@ -268,7 +270,7 @@ genPackageProc unRepr = do
       mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
       scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
-  d <- genDoxConfig s
+  d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
         langName = "",
         langVersion = "",

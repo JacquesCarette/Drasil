@@ -865,10 +865,6 @@ DomDefn :: [UID] -> Sentence -> DomDefn
 --   <a>ChunkDB</a>. If nothing is found, an error is thrown.
 defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
 defResolve' :: ChunkDB -> UID -> DomDefn
-findAllDataDefns :: ChunkDB -> [DataDefinition]
-findAllGenDefns :: ChunkDB -> [GenDefn]
-findAllInstMods :: ChunkDB -> [InstanceModel]
-findAllTheoryMods :: ChunkDB -> [TheoryModel]
 findAllConcInsts :: ChunkDB -> [ConceptInstance]
 findAllDefinedQuantities :: ChunkDB -> [DefinedQuantityDict]
 findAllCitations :: ChunkDB -> [Citation]

@@ -507,8 +507,6 @@ digraph alltypes {
 	}
 	subgraph combinators {
 	}
-	subgraph extract {
-	}
 	subgraph fold {
 		subgraph enumtype{
 		EnumType	[shape=oval, color=darkviolet, label="EnumType"];

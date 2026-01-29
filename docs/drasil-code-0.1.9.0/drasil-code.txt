@@ -49,13 +49,13 @@ odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]
 module Language.Drasil.GOOL
 
 -- | Members of this class must have a doxygen configuration, ReadMe file,
---   omptimize doxygen document, information necessary for a makefile,
+--   omptimize doxygen document, information necessary for a makefile, and
 --   auxiliary helper documents
 class AuxiliarySym r
-doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r FileAndContents
+doxConfig :: AuxiliarySym r => String -> SoftwareDossierState -> Verbosity -> r FileAndContents
 readMe :: AuxiliarySym r => ReadMeInfo -> r FileAndContents
 optimizeDox :: AuxiliarySym r => r Doc
-makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r FileAndContents
+makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState -> ProgData -> r FileAndContents
 auxHelperDoc :: AuxiliarySym r => r Doc -> Doc
 package :: Monad r => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
 
@@ -75,14 +75,6 @@ unJLP :: JuliaProject a -> a
 -- | Re-export code-related smart constructors for external code writing
 --   and generation.
 module Language.Drasil.Code
-
--- | Makes code from <a>FileData</a> (<a>FilePath</a>s with module data)
---   and <a>FileAndContents</a> (<a>FilePath</a>s with auxiliary document
---   information).
-makeCode :: [FileData] -> [FileAndContents] -> Code
-
--- | Creates the requested <a>Code</a> by producing files.
-createCodeFiles :: Code -> IO ()
 
 -- | Initializes the generator's <a>DrasilState</a>. <a>Space</a> parameter
 --   is a string representing the date. &lt;math&gt; parameter is the
@@ -434,21 +426,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aLpF
-oldCodeSpec :: HasOldCodeSpec c_aLpF => Lens' c_aLpF OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF People
-cMapO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF [RelativeFile]
-constMapO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF ConstantMap
-constantsO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF [Const]
-derivedInputsO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF [Derived]
-execOrderO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF [Def]
-extInputsO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF [Input]
-inputsO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF [Input]
-modsO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF [Mod]
-outputsO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF [Output]
-pNameO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF Name
-systemdbO :: HasOldCodeSpec c_aLpF => Lens' c_aLpF ChunkDB
+class HasOldCodeSpec c_aMjz
+oldCodeSpec :: HasOldCodeSpec c_aMjz => Lens' c_aMjz OldCodeSpec
+authorsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz People
+cMapO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [RelativeFile]
+constMapO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz ConstantMap
+constantsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Const]
+derivedInputsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Derived]
+execOrderO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Def]
+extInputsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Input]
+inputsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Input]
+modsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Mod]
+outputsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Output]
+pNameO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz Name
+systemdbO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -907,6 +899,8 @@ listToArray :: CodeVarChunk -> CodeVarChunk
 
 -- | Constructs a CodeExpr representing the field of an actor
 field :: CodeExprC r => CodeVarChunk -> CodeVarChunk -> r
+data SoftwareDossierState
+makeSds :: [FilePath] -> [FilePath] -> Maybe FilePath -> SoftwareDossierState
 
 -- | Structure to hold ODE information.
 data ODEInfo

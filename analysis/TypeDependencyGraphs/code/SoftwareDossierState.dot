@@ -1,0 +1,5 @@
+digraph softwaredossierstate{
+SoftwareDossierState	[shape=oval, color=cyan3, label="SoftwareDossierState"];
+SoftwareDossierState -> FilePath;
+SoftwareDossierState -> MaybeFilePath;
+}

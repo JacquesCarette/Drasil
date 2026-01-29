@@ -2404,12 +2404,12 @@ sentenceTerm :: UID -> Sentence
 
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
 --   a <a>Symbol</a>.
-sdep :: Sentence -> [UID]
-shortdep :: Sentence -> [UID]
+sdep :: Sentence -> Set UID
+shortdep :: Sentence -> Set UID
 
 -- | Generic traverse of all positions that could lead to <i>reference</i>
 --   <a>UID</a>s from <a>Sentence</a>s.
-lnames :: Sentence -> [UID]
+lnames :: Sentence -> Set UID
 
 -- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
 lnames' :: [Sentence] -> [UID]
@@ -2440,25 +2440,6 @@ getSentSN :: ShortName -> Sentence
 -- | Smart constructor for making a <a>Sentence</a> into a
 --   <a>ShortName</a>.
 shortname' :: Sentence -> ShortName
-
-
--- | Extract various kinds of UIDs from a Sentence. Used in conjunction
---   with the chunk database in order to render terms, symbols, and
---   references properly. The actual traversals now live in
---   <a>Sentence</a>, but this module keeps the old import path working.
-module Language.Drasil.Sentence.Extract
-
--- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <a>Symbol</a>.
-sdep :: Sentence -> [UID]
-shortdep :: Sentence -> [UID]
-
--- | Generic traverse of all positions that could lead to <i>reference</i>
---   <a>UID</a>s from <a>Sentence</a>s.
-lnames :: Sentence -> [UID]
-
--- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
-lnames' :: [Sentence] -> [UID]
 
 
 -- | Defines a type used to hold referencing information.
@@ -2503,6 +2484,104 @@ instance GHC.Classes.Eq Language.Drasil.Reference.Reference
 instance Drasil.Database.UID.HasUID Language.Drasil.Reference.Reference
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Reference.Reference
 instance Language.Drasil.ShortName.HasShortName Language.Drasil.Reference.Reference
+
+
+-- | Various helpers for building Sentences from other bits. Really ought
+--   to be moved out to (likely) docLang, but is here for now.
+module Language.Drasil.Development.Sentence
+
+-- | Helper for getting the phrase from a <a>NamedIdea</a> using it's UID.
+phrase :: NamedIdea n => n -> Sentence
+
+-- | Helper for getting the plural of a phrase from a <a>NamedIdea</a>.
+plural :: NamedIdea n => n -> Sentence
+
+-- | Singular possesive function
+--   
+--   Helper for getting the possesive cases from the term of a
+--   <a>NamedIdea</a>.
+phrasePoss :: NamedIdea n => n -> Sentence
+
+-- | Plural possesive function
+--   
+--   Helper for getting the possesive cases from the term of a
+--   <a>NamedIdea</a>.
+pluralPoss :: NamedIdea n => n -> Sentence
+
+-- | Singular sentence case.
+--   
+--   Helper function for getting the sentence case of a noun phrase from a
+--   <a>NamedIdea</a>.
+atStart :: NamedIdea n => n -> Sentence
+
+-- | Plural sentence case.
+--   
+--   Helper function for getting the sentence case of a noun phrase from a
+--   <a>NamedIdea</a>.
+atStart' :: NamedIdea n => n -> Sentence
+
+-- | Singular title case.
+--   
+--   Helper function for getting the title case of a noun phrase from a
+--   <a>NamedIdea</a>.
+titleize :: NamedIdea n => n -> Sentence
+
+-- | Plural title case.
+--   
+--   Helper function for getting the title case of a noun phrase from a
+--   <a>NamedIdea</a>.
+titleize' :: NamedIdea n => n -> Sentence
+
+-- | Translate from NPStruct to Sentence
+toSent :: NPStruct -> Sentence
+
+-- | Get short form (if it exists), else get term of an <a>Idea</a>. Uses
+--   the UID of the <a>Idea</a> in a <tt>Ch</tt> Sentence constructor to
+--   get the short form using getA. getA may return Nothing, in which case
+--   lookupS uses the term, where lookupS is the main helper for looking up
+--   the short form of a <tt>Ch</tt> Sentence.
+short :: Idea c => c -> Sentence
+
+-- | Introduce a noun phrase and its (parenthesized) abbreviation.
+introduceAbb :: Idea n => n -> Sentence
+
+
+-- | Developing the expression language in Drasil. Re-export many things to
+--   simplify external use.
+module Language.Drasil.Development
+
+-- | Translate from NPStruct to Sentence
+toSent :: NPStruct -> Sentence
+class NounPhrase n
+
+-- | Retrieves singular form of term. Ex. "the quick brown fox".
+phraseNP :: NounPhrase n => n -> NPStruct
+
+-- | Retrieves plural form of term. Ex. "the quick brown foxes".
+pluralNP :: NounPhrase n => n -> PluralForm
+
+-- | Essentially a subset of <tt>Sentence</tt> that contains only the parts
+--   that make sense for a NounPhrase
+data NPStruct
+S :: String -> NPStruct
+(:-:) :: NPStruct -> NPStruct -> NPStruct
+(:+:) :: NPStruct -> NPStruct -> NPStruct
+P :: Symbol -> NPStruct
+
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <a>Symbol</a>.
+sdep :: Sentence -> Set UID
+shortdep :: Sentence -> Set UID
+
+-- | Generic traverse of all positions that could lead to <i>reference</i>
+--   <a>UID</a>s from <a>Sentence</a>s.
+lnames :: Sentence -> Set UID
+
+-- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
+lnames' :: [Sentence] -> [UID]
+
+-- | Get something's <a>UID</a> as a <a>Value</a>.
+showUID :: HasUID a => a -> String
 
 
 -- | References that have extra information.
@@ -3868,68 +3947,6 @@ class DefiningExpr c
 defnExpr :: DefiningExpr c => Lens' (c e) e
 
 
--- | Various helpers for building Sentences from other bits. Really ought
---   to be moved out to (likely) docLang, but is here for now.
-module Language.Drasil.Development.Sentence
-
--- | Helper for getting the phrase from a <a>NamedIdea</a> using it's UID.
-phrase :: NamedIdea n => n -> Sentence
-
--- | Helper for getting the plural of a phrase from a <a>NamedIdea</a>.
-plural :: NamedIdea n => n -> Sentence
-
--- | Singular possesive function
---   
---   Helper for getting the possesive cases from the term of a
---   <a>NamedIdea</a>.
-phrasePoss :: NamedIdea n => n -> Sentence
-
--- | Plural possesive function
---   
---   Helper for getting the possesive cases from the term of a
---   <a>NamedIdea</a>.
-pluralPoss :: NamedIdea n => n -> Sentence
-
--- | Singular sentence case.
---   
---   Helper function for getting the sentence case of a noun phrase from a
---   <a>NamedIdea</a>.
-atStart :: NamedIdea n => n -> Sentence
-
--- | Plural sentence case.
---   
---   Helper function for getting the sentence case of a noun phrase from a
---   <a>NamedIdea</a>.
-atStart' :: NamedIdea n => n -> Sentence
-
--- | Singular title case.
---   
---   Helper function for getting the title case of a noun phrase from a
---   <a>NamedIdea</a>.
-titleize :: NamedIdea n => n -> Sentence
-
--- | Plural title case.
---   
---   Helper function for getting the title case of a noun phrase from a
---   <a>NamedIdea</a>.
-titleize' :: NamedIdea n => n -> Sentence
-
--- | Translate from NPStruct to Sentence
-toSent :: NPStruct -> Sentence
-
--- | Get short form (if it exists), else get term of an <a>Idea</a>. Uses
---   the UID of the <a>Idea</a> in a <tt>Ch</tt> Sentence constructor to
---   get the short form using getA. getA may return Nothing, in which case
---   lookupS uses the term, where lookupS is the main helper for looking up
---   the short form of a <tt>Ch</tt> Sentence.
-short :: Idea c => c -> Sentence
-
--- | Helper for common pattern of introducing the title-case version of a
---   noun phrase (from an Idea) followed by its abbreviation in
---   parentheses.
-introduceAbb :: Idea n => n -> Sentence
-
-
 -- | Functions that create sentences from other data
 module Language.Drasil.Sentence.Generators
 
@@ -4112,44 +4129,6 @@ foldNums :: String -> [Int] -> Sentence
 -- | Parses a list of integers into a list of strings (ie. ["1", "4-7",
 --   "13"]).
 numList :: String -> [Int] -> [String]
-
-
--- | Developing the expression language in Drasil. Re-export many things to
---   simplify external use.
-module Language.Drasil.Development
-
--- | Translate from NPStruct to Sentence
-toSent :: NPStruct -> Sentence
-class NounPhrase n
-
--- | Retrieves singular form of term. Ex. "the quick brown fox".
-phraseNP :: NounPhrase n => n -> NPStruct
-
--- | Retrieves plural form of term. Ex. "the quick brown foxes".
-pluralNP :: NounPhrase n => n -> PluralForm
-
--- | Essentially a subset of <tt>Sentence</tt> that contains only the parts
---   that make sense for a NounPhrase
-data NPStruct
-S :: String -> NPStruct
-(:-:) :: NPStruct -> NPStruct -> NPStruct
-(:+:) :: NPStruct -> NPStruct -> NPStruct
-P :: Symbol -> NPStruct
-
--- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <a>Symbol</a>.
-sdep :: Sentence -> [UID]
-shortdep :: Sentence -> [UID]
-
--- | Generic traverse of all positions that could lead to <i>reference</i>
---   <a>UID</a>s from <a>Sentence</a>s.
-lnames :: Sentence -> [UID]
-
--- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
-lnames' :: [Sentence] -> [UID]
-
--- | Get something's <a>UID</a> as a <a>Value</a>.
-showUID :: HasUID a => a -> String
 
 
 -- | Defines various chunk combinators. The full naming scheme can be found
@@ -7272,9 +7251,7 @@ nounPhraseSP :: String -> NP
 --   case is just <a>AddS</a>.
 nounPhraseSent :: NPStruct -> NP
 
--- | Helper for common pattern of introducing the title-case version of a
---   noun phrase (from an Idea) followed by its abbreviation in
---   parentheses.
+-- | Introduce a noun phrase and its (parenthesized) abbreviation.
 introduceAbb :: Idea n => n -> Sentence
 
 -- | Helper for getting the phrase from a <a>NamedIdea</a> using it's UID.

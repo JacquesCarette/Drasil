@@ -704,6 +704,44 @@ data Literal
 [Perc] :: Integer -> Integer -> Literal
 
 
+-- | Developing the expression language in Drasil. Re-export many things to
+--   simplify external use.
+module Language.Drasil.Development
+
+-- | Translate from NPStruct to Sentence
+toSent :: NPStruct -> Sentence
+class NounPhrase n
+
+-- | Retrieves singular form of term. Ex. "the quick brown fox".
+phraseNP :: NounPhrase n => n -> NPStruct
+
+-- | Retrieves plural form of term. Ex. "the quick brown foxes".
+pluralNP :: NounPhrase n => n -> PluralForm
+
+-- | Essentially a subset of <tt>Sentence</tt> that contains only the parts
+--   that make sense for a NounPhrase
+data NPStruct
+S :: String -> NPStruct
+(:-:) :: NPStruct -> NPStruct -> NPStruct
+(:+:) :: NPStruct -> NPStruct -> NPStruct
+P :: Symbol -> NPStruct
+
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <a>Symbol</a>.
+sdep :: Sentence -> Set UID
+shortdep :: Sentence -> Set UID
+
+-- | Generic traverse of all positions that could lead to <i>reference</i>
+--   <a>UID</a>s from <a>Sentence</a>s.
+lnames :: Sentence -> Set UID
+
+-- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
+lnames' :: [Sentence] -> [UID]
+
+-- | Get something's <a>UID</a> as a <a>Value</a>.
+showUID :: HasUID a => a -> String
+
+
 -- | Re-export functions and types related to <a>ModelExpr</a>
 module Language.Drasil.ModelExpr.Development
 
@@ -1255,44 +1293,6 @@ versus :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the words "with respect to" between two Sentences.
 wrt :: Sentence -> Sentence -> Sentence
-
-
--- | Developing the expression language in Drasil. Re-export many things to
---   simplify external use.
-module Language.Drasil.Development
-
--- | Translate from NPStruct to Sentence
-toSent :: NPStruct -> Sentence
-class NounPhrase n
-
--- | Retrieves singular form of term. Ex. "the quick brown fox".
-phraseNP :: NounPhrase n => n -> NPStruct
-
--- | Retrieves plural form of term. Ex. "the quick brown foxes".
-pluralNP :: NounPhrase n => n -> PluralForm
-
--- | Essentially a subset of <tt>Sentence</tt> that contains only the parts
---   that make sense for a NounPhrase
-data NPStruct
-S :: String -> NPStruct
-(:-:) :: NPStruct -> NPStruct -> NPStruct
-(:+:) :: NPStruct -> NPStruct -> NPStruct
-P :: Symbol -> NPStruct
-
--- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <a>Symbol</a>.
-sdep :: Sentence -> [UID]
-shortdep :: Sentence -> [UID]
-
--- | Generic traverse of all positions that could lead to <i>reference</i>
---   <a>UID</a>s from <a>Sentence</a>s.
-lnames :: Sentence -> [UID]
-
--- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
-lnames' :: [Sentence] -> [UID]
-
--- | Get something's <a>UID</a> as a <a>Value</a>.
-showUID :: HasUID a => a -> String
 
 
 -- | Defines various chunk combinators. The full naming scheme can be found
@@ -3651,9 +3651,7 @@ nounPhraseSP :: String -> NP
 --   case is just <a>AddS</a>.
 nounPhraseSent :: NPStruct -> NP
 
--- | Helper for common pattern of introducing the title-case version of a
---   noun phrase (from an Idea) followed by its abbreviation in
---   parentheses.
+-- | Introduce a noun phrase and its (parenthesized) abbreviation.
 introduceAbb :: Idea n => n -> Sentence
 
 -- | Helper for getting the phrase from a <a>NamedIdea</a> using it's UID.

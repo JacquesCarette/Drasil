@@ -49,10 +49,12 @@ capitalize :: String -> String
 -- | Comma separated list with "and" before final item.
 stringList :: [String] -> String
 
--- | A valid, relative file path with an extension.
+-- | A valid, relative file path with an extension in canonical form.
 data RelativeFile
 
--- | Create a <a>RelativeFile</a> given a raw <a>String</a>.
+-- | Create a <a>RelativeFile</a> given a <a>String</a> that must be in
+--   canonical form, be a valid file path, contain a file extension, and be
+--   relative (not absolute); otherwise, an error is raised.
 relativeFile :: String -> RelativeFile
 relFileToStr :: RelativeFile -> String
 

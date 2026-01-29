@@ -90,7 +90,7 @@ digraph alltypes {
 		CodeHarness	[shape=oval, color=cyan3, label="CodeHarness"];
 		CodeHarness -> MaybeBuildConfig;
 		CodeHarness -> MaybeRunnable;
-		CodeHarness -> GOOLState;
+		CodeHarness -> SoftwareDossierState;
 		CodeHarness -> ProgData;
 		CodeHarness -> MaybeDocConfig;
 		}
@@ -144,6 +144,11 @@ digraph alltypes {
 		}
 	}
 	subgraph clasinterfaces {
+		subgraph softwaredossierstate{
+		SoftwareDossierState	[shape=oval, color=cyan3, label="SoftwareDossierState"];
+		SoftwareDossierState -> FilePath;
+		SoftwareDossierState -> MaybeFilePath;
+		}
 	}
 	subgraph comments {
 	}
@@ -328,12 +333,6 @@ digraph alltypes {
 	subgraph spacematch {
 	}
 	subgraph writeinput {
-	}
-	subgraph code {
-		subgraph code{
-		Code	[shape=oval, color=darkgreen, label="Code"];
-		Code -> FilePath;
-		}
 	}
 	subgraph codequantitydicts {
 	}
@@ -535,6 +534,13 @@ digraph alltypes {
 	subgraph lang {
 		subgraph lang{
 		Lang	[shape=oval, color=darkviolet, label="Lang"];
+		}
+	}
+	subgraph packagefiles {
+		subgraph packagefiles{
+		PackageFiles	[shape=oval, color=darkgreen, label="PackageFiles"];
+		PackageFiles -> FilePath;
+		PackageFiles -> Doc;
 		}
 	}
 	subgraph odeinfo {

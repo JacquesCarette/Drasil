@@ -101,7 +101,7 @@ exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO ()
 
 
 -- | Defines Drasil generator functions.
-module Drasil.Generator.Generate
+module Drasil.Generator.Composed
 
 -- | Generate an SRS softifact with a specific solution softifact.
 exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> IO ()

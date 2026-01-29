@@ -17,6 +17,8 @@ digraph alltypes {
 	}
 	subgraph code {
 	}
+	subgraph compoeds {
+	}
 	subgraph formats {
 		subgraph docchoices{
 		DocChoices	[shape=oval, color=cyan3, label="DocChoices"];
@@ -49,8 +51,6 @@ digraph alltypes {
 		Filename	[shape=oval, color=red2, label="Filename"];
 		Filename -> String;
 		}
-	}
-	subgraph generate {
 	}
 	subgraph lesonplans {
 	}

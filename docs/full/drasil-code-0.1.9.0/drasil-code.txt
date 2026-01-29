@@ -315,28 +315,6 @@ data PackageData a
 -- | Constructor for package data.
 packageData :: a -> [FileAndContents] -> PackageData a
 
-
--- | Contains the high-level functionality to create <a>Code</a> and then
---   produce the actual generated code files.
-module Language.Drasil.Code.Code
-
--- | Represents the generated code as a list of file names and rendered
---   code pairs.
-newtype Code
-Code :: [(FilePath, Doc)] -> Code
-[unCode] :: Code -> [(FilePath, Doc)]
-
--- | Makes code from <a>FileData</a> (<a>FilePath</a>s with module data)
---   and <a>FileAndContents</a> (<a>FilePath</a>s with auxiliary document
---   information).
-makeCode :: [FileData] -> [FileAndContents] -> Code
-
--- | Creates the requested <a>Code</a> by producing files.
-createCodeFiles :: Code -> IO ()
-
--- | Default mapping between <tt>Space</tt> and <a>CodeType</a>.
-spaceToCodeType :: Space -> [CodeType]
-
 module Language.Drasil.Code.FileNames
 
 -- | "doxConfig".
@@ -477,12 +455,6 @@ cppCompiler :: CommandFragment
 -- | Helper for configuring doxygen documentation.
 doxygenDocConfig :: FilePath -> DocConfig
 
-module Language.Drasil.Code.Imperative.Build.Import
-
--- | Creates a Makefile.
-makeBuild :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable -> GOOLState -> ProgData -> Doc
-instance Build.Drasil.Make.Import.RuleTransformer Language.Drasil.Code.Imperative.Build.Import.CodeHarness
-
 
 -- | Defines functions for reading values from a file corresponding to a
 --   DataDesc
@@ -516,6 +488,23 @@ Swift :: Lang
 Julia :: Lang
 instance GHC.Show.Show Language.Drasil.Code.Lang.Lang
 instance GHC.Classes.Eq Language.Drasil.Code.Lang.Lang
+
+
+-- | Contains the high-level functionality to create <a>PackageFiles</a>
+--   and then produce the actual generated package files.
+module Language.Drasil.Code.PackageFiles
+
+-- | Converts <a>FileData</a> (<a>FilePath</a>s with module data) and
+--   <a>FileAndContents</a> (<a>FilePath</a>s with auxiliary document
+--   information) into <a>PackageFiles</a> (a unified format for all file
+--   types)
+consolidatePackageFiles :: [FileData] -> [FileAndContents] -> PackageFiles
+
+-- | Outputs the requested 'Package Files' into system files.
+createPackageFiles :: PackageFiles -> IO ()
+
+-- | Default mapping between <tt>Space</tt> and <a>CodeType</a>.
+spaceToCodeType :: Space -> [CodeType]
 
 
 -- | Defines a structure to contain scientifically-relevant information
@@ -1720,21 +1709,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aLsk
-oldCodeSpec :: HasOldCodeSpec c_aLsk => Lens' c_aLsk OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk People
-cMapO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [RelativeFile]
-constMapO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk ConstantMap
-constantsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Const]
-derivedInputsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Derived]
-execOrderO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Def]
-extInputsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Input]
-inputsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Input]
-modsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Mod]
-outputsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Output]
-pNameO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk Name
-systemdbO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk ChunkDB
+class HasOldCodeSpec c_aMmf
+oldCodeSpec :: HasOldCodeSpec c_aMmf => Lens' c_aMmf OldCodeSpec
+authorsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf People
+cMapO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [RelativeFile]
+constMapO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf ConstantMap
+constantsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Const]
+derivedInputsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Derived]
+execOrderO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Def]
+extInputsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Input]
+inputsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Input]
+modsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Mod]
+outputsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Output]
+pNameO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf Name
+systemdbO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -1831,19 +1820,30 @@ chooseODELib :: Lang -> Maybe ODE -> State [Sentence] ODEGenInfo
 -- | Defines a package extension for GOOL, with functions for pairing a
 --   GOOL program with auxiliary, non-source-code files.
 module Language.Drasil.Code.Imperative.GOOL.ClassInterface
+data SoftwareDossierState
+makeSds :: [FilePath] -> [FilePath] -> Maybe FilePath -> SoftwareDossierState
+headers :: Lens' SoftwareDossierState [FilePath]
+sources :: Lens' SoftwareDossierState [FilePath]
+mainMod :: Lens' SoftwareDossierState (Maybe FilePath)
 
 -- | Members of this class must have a doxygen configuration, ReadMe file,
---   omptimize doxygen document, information necessary for a makefile,
+--   omptimize doxygen document, information necessary for a makefile, and
 --   auxiliary helper documents
 class AuxiliarySym r
-doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r FileAndContents
+doxConfig :: AuxiliarySym r => String -> SoftwareDossierState -> Verbosity -> r FileAndContents
 readMe :: AuxiliarySym r => ReadMeInfo -> r FileAndContents
 optimizeDox :: AuxiliarySym r => r Doc
-makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r FileAndContents
+makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState -> ProgData -> r FileAndContents
 auxHelperDoc :: AuxiliarySym r => r Doc -> Doc
 package :: Monad r => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
 sampleInput :: Applicative r => PrintingInformation -> DataDesc -> [Expr] -> r FileAndContents
 auxFromData :: Applicative r => FilePath -> Doc -> r FileAndContents
+
+module Language.Drasil.Code.Imperative.Build.Import
+
+-- | Creates a Makefile.
+makeBuild :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable -> SoftwareDossierState -> ProgData -> Doc
+instance Build.Drasil.Make.Import.RuleTransformer Language.Drasil.Code.Imperative.Build.Import.CodeHarness
 
 module Language.Drasil.Code.Imperative.DrasilState
 
@@ -2031,7 +2031,7 @@ genModuleProc :: ProcProg r => Name -> Description -> [GenState (Maybe (SMethod 
 
 -- | Generates a Doxygen configuration file if the user has comments
 --   enabled.
-genDoxConfig :: AuxiliarySym r => GOOLState -> GenState (Maybe (r FileAndContents))
+genDoxConfig :: AuxiliarySym r => SoftwareDossierState -> GenState (Maybe (r FileAndContents))
 
 -- | Generates a README file.
 genReadMe :: AuxiliarySym r => ReadMeInfo -> GenState (Maybe (r FileAndContents))
@@ -2090,12 +2090,12 @@ module Language.Drasil.Code.Imperative.Doxygen.Import
 --   <ul>
 --   <li>Sets the PROJECT_NAME field according to the given name.</li>
 --   <li>Sets the INPUT field to the header files contained in the given
---   GOOLState.</li>
+--   SoftwareDossierState.</li>
 --   <li>Sets the OPTIMIZE_OUTPUT_JAVA field according to the
 --   OptimizeChoice parameter.</li>
 --   <li>Sets the QUIET field according to the given Verbosity.</li>
 --   </ul>
-makeDoxConfig :: ProjName -> GOOLState -> OptimizeChoice -> Verbosity -> Doc
+makeDoxConfig :: ProjName -> SoftwareDossierState -> OptimizeChoice -> Verbosity -> Doc
 
 -- | Renderings of values commonly used in the configuration file.
 yes :: Doc
@@ -2106,13 +2106,13 @@ no :: Doc
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
 
 -- | Defines a Doxygen configuration file.
-doxConfig :: (AuxiliarySym r, Applicative r) => r Doc -> String -> GOOLState -> Verbosity -> r FileAndContents
+doxConfig :: (AuxiliarySym r, Applicative r) => r Doc -> String -> SoftwareDossierState -> Verbosity -> r FileAndContents
 
 -- | Defines a markdown file.
 readMe :: Applicative r => ReadMeInfo -> r FileAndContents
 
 -- | Defines a Makefile.
-makefile :: Applicative r => Maybe BuildConfig -> Maybe Runnable -> Maybe DocConfig -> GOOLState -> ProgData -> r FileAndContents
+makefile :: Applicative r => Maybe BuildConfig -> Maybe Runnable -> Maybe DocConfig -> SoftwareDossierState -> ProgData -> r FileAndContents
 
 -- | Changes a <a>Runnable</a> to <a>Nothing</a> if the user chose
 --   <a>Library</a> for the <a>ImplementationType</a>.
@@ -2208,13 +2208,13 @@ instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Langua
 module Language.Drasil.GOOL
 
 -- | Members of this class must have a doxygen configuration, ReadMe file,
---   omptimize doxygen document, information necessary for a makefile,
+--   omptimize doxygen document, information necessary for a makefile, and
 --   auxiliary helper documents
 class AuxiliarySym r
-doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r FileAndContents
+doxConfig :: AuxiliarySym r => String -> SoftwareDossierState -> Verbosity -> r FileAndContents
 readMe :: AuxiliarySym r => ReadMeInfo -> r FileAndContents
 optimizeDox :: AuxiliarySym r => r Doc
-makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r FileAndContents
+makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState -> ProgData -> r FileAndContents
 auxHelperDoc :: AuxiliarySym r => r Doc -> Doc
 package :: Monad r => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
 
@@ -2587,14 +2587,6 @@ generateCodeProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) =
 --   and generation.
 module Language.Drasil.Code
 
--- | Makes code from <a>FileData</a> (<a>FilePath</a>s with module data)
---   and <a>FileAndContents</a> (<a>FilePath</a>s with auxiliary document
---   information).
-makeCode :: [FileData] -> [FileAndContents] -> Code
-
--- | Creates the requested <a>Code</a> by producing files.
-createCodeFiles :: Code -> IO ()
-
 -- | Initializes the generator's <a>DrasilState</a>. <a>Space</a> parameter
 --   is a string representing the date. &lt;math&gt; parameter is the
 --   sample input values provided by the user.
@@ -2945,21 +2937,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aLsk
-oldCodeSpec :: HasOldCodeSpec c_aLsk => Lens' c_aLsk OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk People
-cMapO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [RelativeFile]
-constMapO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk ConstantMap
-constantsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Const]
-derivedInputsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Derived]
-execOrderO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Def]
-extInputsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Input]
-inputsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Input]
-modsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Mod]
-outputsO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk [Output]
-pNameO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk Name
-systemdbO :: HasOldCodeSpec c_aLsk => Lens' c_aLsk ChunkDB
+class HasOldCodeSpec c_aMmf
+oldCodeSpec :: HasOldCodeSpec c_aMmf => Lens' c_aMmf OldCodeSpec
+authorsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf People
+cMapO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [RelativeFile]
+constMapO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf ConstantMap
+constantsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Const]
+derivedInputsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Derived]
+execOrderO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Def]
+extInputsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Input]
+inputsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Input]
+modsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Mod]
+outputsO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf [Output]
+pNameO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf Name
+systemdbO :: HasOldCodeSpec c_aMmf => Lens' c_aMmf ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -3418,6 +3410,8 @@ listToArray :: CodeVarChunk -> CodeVarChunk
 
 -- | Constructs a CodeExpr representing the field of an actor
 field :: CodeExprC r => CodeVarChunk -> CodeVarChunk -> r
+data SoftwareDossierState
+makeSds :: [FilePath] -> [FilePath] -> Maybe FilePath -> SoftwareDossierState
 
 -- | Structure to hold ODE information.
 data ODEInfo

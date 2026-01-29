@@ -32,6 +32,12 @@ exportCodeZoo :: System -> [Choices] -> IO ()
 --   it created.
 codedDirName :: String -> Choices -> String
 
+-- | Generate an SRS softifact with a specific solution softifact.
+exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> IO ()
+
+-- | Generate an SRS softifact with a zoo of solution softifacts.
+exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [Choices] -> IO ()
+
 -- | Document specifications. Holds the type of document (<tt>DocType</tt>)
 --   and its name (<a>Filename</a>).
 data DocSpec
@@ -69,12 +75,6 @@ MDBook :: Format
 
 -- | Constructor for users to choose their document options
 docChoices :: [Format] -> DocChoices
-
--- | Generate an SRS softifact with a specific solution softifact.
-exportSmithEtAlSrsWCode :: System -> SRSDecl -> String -> Choices -> IO ()
-
--- | Generate an SRS softifact with a zoo of solution softifacts.
-exportSmithEtAlSrsWCodeZoo :: System -> SRSDecl -> String -> [Choices] -> IO ()
 
 -- | Generate an <i>interactive</i> JupyterNotebook-based lesson plan.
 exportLessonPlan :: System -> LsnDesc -> String -> IO ()

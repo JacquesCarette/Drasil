@@ -18,12 +18,12 @@ import Control.Lens ((^.))
 
 import Drasil.Database (HasUID(..))
 
-import Language.Drasil.Classes (NamedIdea(term), Idea)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(term), Idea)
 import Language.Drasil.Sentence ((+:+), sParen, sentenceTerm,
   sentencePlural, sentenceShort)
 import qualified Language.Drasil.Sentence as S
 import qualified Language.Drasil.NounPhrase as NP
-import Language.Drasil.NounPhrase.Core (NPStruct(..))
+import Language.Drasil.NounPhrase.Types (NPStruct(..))
 
 -- | Translate from NPStruct to Sentence
 toSent :: NPStruct -> S.Sentence

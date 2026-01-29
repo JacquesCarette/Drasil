@@ -3,14 +3,11 @@
 module Language.Drasil.Code.PackageFiles (
     consolidatePackageFiles,
     createPackageFiles,
-    spaceToCodeType
 ) where
 
 import Text.PrettyPrint.HughesPJ ( Doc, Doc, render )
-import Data.List.NonEmpty (toList)
 
-import Drasil.GOOL (CodeType(..), FileData(..), ModData(modDoc))
-import qualified Language.Drasil as S (Space(..))
+import Drasil.GOOL (FileData(..), ModData(modDoc))
 import Utils.Drasil (createDirIfMissing)
 
 import Language.Drasil.Code.FileData (FileAndContents(fileDoc))
@@ -42,22 +39,3 @@ createPackageFile (path, contents) = do
   h <- openFile path WriteMode
   hPutStrLn h (render contents)
   hClose h
-
--- | Default mapping between 'Space' and 'CodeType'.
-spaceToCodeType :: S.Space -> [CodeType]
-spaceToCodeType S.Integer        = [Integer]
-spaceToCodeType S.Natural        = [Integer]
-spaceToCodeType S.Real           = [Double, Float]
-spaceToCodeType S.Rational       = [Double, Float]
-spaceToCodeType S.Boolean        = [Boolean]
-spaceToCodeType S.Char           = [Char]
-spaceToCodeType S.String         = [String]
-spaceToCodeType (S.Vect s)       = map List (spaceToCodeType s)
-spaceToCodeType (S.Matrix _ _ s) = map (List . List) (spaceToCodeType s)
-spaceToCodeType (S.Set s)        = map List (spaceToCodeType s)
-spaceToCodeType (S.Array s)      = map Array (spaceToCodeType s)
-spaceToCodeType (S.Actor s)      = [Object s]
-spaceToCodeType S.Void           = [Void]
-spaceToCodeType (S.Function i t) = [Func is ts | is <- ins, ts <- trgs]
-    where trgs = spaceToCodeType t
-          ins  = map spaceToCodeType (toList i)

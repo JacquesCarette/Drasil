@@ -11,7 +11,9 @@ module Language.Drasil.Development.Sentence (
   -- * from NPStruct to Sentence
   toSent,
   -- * Short Form (lowercase)
-  short, introduceAbb
+  short,
+  -- * Introduce with Abbreviation
+  introduceAbb
 ) where
 
 import Control.Lens ((^.))
@@ -40,11 +42,9 @@ toSent (P p) = S.P p
 short :: Idea c => c -> S.Sentence
 short c = sentenceShort (c ^. uid)
 
--- | Helper for common pattern of introducing the title-case version of a
--- noun phrase (from an Idea)
--- followed by its abbreviation in parentheses.
+-- | Introduce a noun phrase and its (parenthesized) abbreviation.
 introduceAbb :: Idea n => n -> S.Sentence
-introduceAbb n = toSent (NP.titleizeNP (n ^. term)) +:+ sParen (short n)
+introduceAbb n = phrase n +:+ sParen (short n)
 
 -- | Helper function for getting the sentence case of a noun phrase from a
 -- 'NamedIdea'.

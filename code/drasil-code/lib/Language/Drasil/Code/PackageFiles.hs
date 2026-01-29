@@ -1,15 +1,15 @@
--- | Contains the high-level functionality to create 'Code' and then produce the
--- actual generated code files.
-module Language.Drasil.Code.Code (
-    Code(..), makeCode,
-    createCodeFiles,
+-- | Contains the high-level functionality to create 'PackageFiles' and then produce the
+-- actual generated package files.
+module Language.Drasil.Code.PackageFiles (
+    consolidatePackageFiles,
+    createPackageFiles,
     spaceToCodeType
 ) where
 
 import Text.PrettyPrint.HughesPJ ( Doc, Doc, render )
 import Data.List.NonEmpty (toList)
 
-import Drasil.GOOL ( CodeType(..), FileData(..), ModData(modDoc))
+import Drasil.GOOL (CodeType(..), FileData(..), ModData(modDoc))
 import qualified Language.Drasil as S (Space(..))
 import Utils.Drasil (createDirIfMissing)
 
@@ -19,26 +19,28 @@ import qualified Language.Drasil.Code.FileData as D (
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 
--- | Represents the generated code as a list of file names and rendered code pairs.
-newtype Code = Code { unCode :: [(FilePath, Doc)]}
+-- | Represents the generated files of a package as a unified
+--   list of pairs of file names and rendered contents.
+newtype PackageFiles = PackageFiles [(FilePath, Doc)]
 
--- | Makes code from 'FileData' ('FilePath's with module data) and 'FileAndContents'
--- ('FilePath's with auxiliary document information).
-makeCode :: [FileData] -> [FileAndContents] -> Code
-makeCode files aux = Code $ zip (map filePath files ++ map D.filePath aux)
+-- | Converts 'FileData' ('FilePath's with module data) and 'FileAndContents'
+-- ('FilePath's with auxiliary document information) into 'PackageFiles'
+-- (a unified format for all file types)
+consolidatePackageFiles :: [FileData] -> [FileAndContents] -> PackageFiles
+consolidatePackageFiles files aux = PackageFiles $ zip (map filePath files ++ map D.filePath aux)
   (map (modDoc . fileMod) files ++ map fileDoc aux)
 
--- | Creates the requested 'Code' by producing files.
-createCodeFiles :: Code -> IO ()
-createCodeFiles (Code cs) = mapM_ createCodeFile cs
+-- | Outputs the requested 'Package Files' into system files.
+createPackageFiles :: PackageFiles -> IO ()
+createPackageFiles (PackageFiles cs) = mapM_ createPackageFile cs
 
--- | Helper that uses pairs of 'Code' to create a file written with the given
+-- | Helper that uses pairs of 'PackageFiles' to create a file written with the given
 -- document at the given 'FilePath'.
-createCodeFile :: (FilePath, Doc) -> IO ()
-createCodeFile (path, code) = do
+createPackageFile :: (FilePath, Doc) -> IO ()
+createPackageFile (path, contents) = do
   createDirIfMissing True (takeDirectory path)
   h <- openFile path WriteMode
-  hPutStrLn h (render code)
+  hPutStrLn h (render contents)
   hClose h
 
 -- | Default mapping between 'Space' and 'CodeType'.

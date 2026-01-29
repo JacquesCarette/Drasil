@@ -8,9 +8,10 @@
 module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 
 import Control.Lens ((^.), set)
+import Data.Containers.ListUtils (nubOrdOn)
 import Data.Function (on)
 import Data.List (nub, sortBy)
-import Data.Maybe (maybeToList, mapMaybe)
+import Data.Maybe (maybeToList, mapMaybe, fromMaybe)
 import qualified Data.Map as Map (keys)
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
@@ -25,7 +26,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
 import Drasil.Document.Contents(mkEnumSimpleD, foldlSP)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, citeDB, citeDBFromSections)
 import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil
@@ -36,7 +37,7 @@ import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
 
 import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem(..))
-import Drasil.GetChunks (ccss, ccss', citeDB)
+import Drasil.GetChunks (ccss, ccss')
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC)
@@ -78,13 +79,15 @@ import qualified Data.Map.Strict as M
 mkDoc :: System -> SRSDecl -> (IdeaDict -> CI -> Sentence) -> (Document, System)
 mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
-      sections = mkSections si dd
+      sections = mkSections si dd Nothing
       -- Above this line, the content to be generated in the SRS artifact is
       -- pre-generated (missing content involving 'Reference's and
       -- 'LabelledContent' for potential traceability graphs). The below line
       -- injects "traceability" maps into the 'ChunkDB' and adds missing
       -- 'LabelledContent' (the generated traceability-related tables).
-      si' = buildTraceMaps dd $ fillReferences sections si
+      si' = buildTraceMaps dd $ fillReferences dd sections si
+      -- Extract all citations now that references are populated
+      allCites = nubOrdOn (^. uid) $ citeDB si' dd ++ citeDBFromSections si' sections
       -- Now, the 'real generation' of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's).
@@ -92,7 +95,7 @@ mkDoc si srsDecl headingComb =
       authorsList = foldlList Comma List $ map (S . name) $ si ^. authors
       toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl
-      sections' = mkSections si' dd'
+      sections' = mkSections si' dd' (Just allCites)
   in (Document heading authorsList toc sections', si')
 
 -- * Functions to Fill 'ChunkDB'
@@ -129,12 +132,15 @@ buildTraceMaps sd si
     containsTraceSec []                    = False
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: [Section] -> System -> System
-fillReferences allSections si = si2
+fillReferences :: DocDesc -> [Section] -> System -> System
+fillReferences dd allSections si = si2
   where
     -- get old chunk database + ref database
     chkdb = si ^. systemdb
-    cites = citeDB si
+    -- Extract citations from both DocDesc (for model DecRefs) and Sections (for all sentences including generated ones)
+    citesFromDoc = citeDB si dd
+    citesFromSecs = citeDBFromSections si allSections
+    cites = nubOrdOn (^. uid) $ citesFromDoc ++ citesFromSecs
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
@@ -176,8 +182,8 @@ getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 -- * Section Creator Functions
 
 -- | Helper for creating the different document sections.
-mkSections :: System -> DocDesc -> [Section]
-mkSections si dd = map doit dd
+mkSections :: System -> DocDesc -> Maybe BibRef -> [Section]
+mkSections si dd mbib = map doit dd
   where
     doit :: DocSection -> Section
     doit TableOfContents      = mkToC dd
@@ -186,7 +192,7 @@ mkSections si dd = map doit dd
     doit (StkhldrSec sts)     = mkStkhldrSec sts
     doit (SSDSec ss)          = mkSSDSec si ss
     doit (AuxConstntSec acs)  = mkAuxConsSec acs
-    doit Bibliography         = mkBib (citeDB si)
+    doit Bibliography         = mkBib $ fromMaybe (citeDB si dd) mbib
     doit (GSDSec gs')         = mkGSDSec gs'
     doit (ReqrmntSec r)       = mkReqrmntSec r
     doit (LCsSec lc)          = mkLCsSec lc

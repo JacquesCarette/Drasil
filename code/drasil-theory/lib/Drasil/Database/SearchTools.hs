@@ -77,8 +77,5 @@ findAllConcInsts = findAll
 findAllDefinedQuantities :: ChunkDB -> [DefinedQuantityDict]
 findAllDefinedQuantities = findAll
 
-findAllCitations :: ChunkDB -> [Citation]
-findAllCitations = findAll
-
 findAllLabelledContent :: ChunkDB -> [LabelledContent]
 findAllLabelledContent = findAll

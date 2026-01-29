@@ -24,14 +24,14 @@
 </span><span id="line-24"></span><span>
 </span><span id="line-25"></span><span class="hs-comment">-- TODO: This looks like it should be moved to wherever uses it, it's too specific.</span><span>
 </span><span id="line-26"></span><span class="annot"><span class="hs-comment">-- | Helper for formatting a list of constraints.</span></span><span>
-</span><span id="line-27"></span><span id="local-6989586621679387027"><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#foldConstraints"><span class="hs-identifier hs-type">foldConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#Quantity"><span class="hs-identifier hs-type">Quantity</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679387027"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679387027"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Constraint.html#ConstraintE"><span class="hs-identifier hs-type">ConstraintE</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Sentence.html#Sentence"><span class="hs-identifier hs-type">Sentence</span></a></span></span><span>
+</span><span id="line-27"></span><span id="local-6989586621679387099"><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#foldConstraints"><span class="hs-identifier hs-type">foldConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#Quantity"><span class="hs-identifier hs-type">Quantity</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679387099"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679387099"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Constraint.html#ConstraintE"><span class="hs-identifier hs-type">ConstraintE</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Sentence.html#Sentence"><span class="hs-identifier hs-type">Sentence</span></a></span></span><span>
 </span><span id="line-28"></span><span id="foldConstraints"><span class="annot"><span class="annottext">foldConstraints :: forall c. Quantity c =&gt; c -&gt; [ConstraintE] -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.Fold.html#foldConstraints"><span class="hs-identifier hs-var hs-var">foldConstraints</span></a></span></span><span> </span><span class="annot"><span class="annottext">c
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Language.Drasil.Sentence.html#EmptyS"><span class="hs-identifier hs-var">EmptyS</span></a></span><span>
-</span><span id="line-29"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#foldConstraints"><span class="hs-identifier hs-var">foldConstraints</span></a></span><span> </span><span id="local-6989586621679387139"><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679387139"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679387140"><span class="annot"><span class="annottext">[ConstraintE]
-</span><a href="#local-6989586621679387140"><span class="hs-identifier hs-var">e</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
+</span><span id="line-29"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#foldConstraints"><span class="hs-identifier hs-var">foldConstraints</span></a></span><span> </span><span id="local-6989586621679387211"><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679387211"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679387212"><span class="annot"><span class="annottext">[ConstraintE]
+</span><a href="#local-6989586621679387212"><span class="hs-identifier hs-var">e</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.html#E"><span class="hs-identifier hs-var">E</span></a></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; ModelExpr -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; ModelExpr -&gt; ModelExpr) -&gt; [ModelExpr] -&gt; ModelExpr
@@ -45,13 +45,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstraintE -&gt; ModelExpr
 forall {c}. (Express c, ExprC c) =&gt; Constraint c -&gt; ModelExpr
-</span><a href="#local-6989586621679387142"><span class="hs-identifier hs-var">constraintToExpr</span></a></span><span> </span><span class="annot"><span class="annottext">[ConstraintE]
-</span><a href="#local-6989586621679387140"><span class="hs-identifier hs-var">e</span></a></span><span>
+</span><a href="#local-6989586621679387214"><span class="hs-identifier hs-var">constraintToExpr</span></a></span><span> </span><span class="annot"><span class="annottext">[ConstraintE]
+</span><a href="#local-6989586621679387212"><span class="hs-identifier hs-var">e</span></a></span><span>
 </span><span id="line-30"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-31"></span><span>    </span><span id="local-6989586621679387142"><span class="annot"><span class="annottext">constraintToExpr :: Constraint c -&gt; ModelExpr
-</span><a href="#local-6989586621679387142"><span class="hs-identifier hs-var hs-var">constraintToExpr</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Constraint.html#Range"><span class="hs-identifier hs-type">Range</span></a></span><span> </span><span class="annot"><span class="annottext">ConstraintReason
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679387149"><span class="annot"><span class="annottext">RealInterval c c
-</span><a href="#local-6989586621679387149"><span class="hs-identifier hs-var">ri</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; ModelExpr
+</span><span id="line-31"></span><span>    </span><span id="local-6989586621679387214"><span class="annot"><span class="annottext">constraintToExpr :: Constraint c -&gt; ModelExpr
+</span><a href="#local-6989586621679387214"><span class="hs-identifier hs-var hs-var">constraintToExpr</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Constraint.html#Range"><span class="hs-identifier hs-type">Range</span></a></span><span> </span><span class="annot"><span class="annottext">ConstraintReason
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679387221"><span class="annot"><span class="annottext">RealInterval c c
+</span><a href="#local-6989586621679387221"><span class="hs-identifier hs-var">ri</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; ModelExpr
 forall c. Express c =&gt; c -&gt; ModelExpr
 </span><a href="Language.Drasil.ExprClasses.html#express"><span class="hs-identifier hs-var">express</span></a></span><span> </span><span class="annot"><span class="annottext">(c -&gt; ModelExpr) -&gt; c -&gt; ModelExpr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -59,14 +59,14 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall c. HasUID c =&gt; c -&gt; RealInterval c c -&gt; c
 forall r c. (ExprC r, HasUID c) =&gt; c -&gt; RealInterval r r -&gt; r
 </span><a href="Language.Drasil.Expr.Class.html#realInterval"><span class="hs-identifier hs-var">realInterval</span></a></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679387139"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">RealInterval c c
-</span><a href="#local-6989586621679387149"><span class="hs-identifier hs-var">ri</span></a></span><span>
-</span><span id="line-32"></span><span>    </span><span class="annot"><a href="#local-6989586621679387142"><span class="hs-identifier hs-var">constraintToExpr</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Constraint.html#Elem"><span class="hs-identifier hs-type">Elem</span></a></span><span> </span><span class="annot"><span class="annottext">ConstraintReason
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679387150"><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679387150"><span class="hs-identifier hs-var">set</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; ModelExpr
+</span><a href="#local-6989586621679387211"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">RealInterval c c
+</span><a href="#local-6989586621679387221"><span class="hs-identifier hs-var">ri</span></a></span><span>
+</span><span id="line-32"></span><span>    </span><span class="annot"><a href="#local-6989586621679387214"><span class="hs-identifier hs-var">constraintToExpr</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Constraint.html#Elem"><span class="hs-identifier hs-type">Elem</span></a></span><span> </span><span class="annot"><span class="annottext">ConstraintReason
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679387222"><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679387222"><span class="hs-identifier hs-var">set</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; ModelExpr
 forall c. Express c =&gt; c -&gt; ModelExpr
 </span><a href="Language.Drasil.ExprClasses.html#express"><span class="hs-identifier hs-var">express</span></a></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679387150"><span class="hs-identifier hs-var">set</span></a></span><span>
+</span><a href="#local-6989586621679387222"><span class="hs-identifier hs-var">set</span></a></span><span>
 </span><span id="line-33"></span><span>
 </span><span id="line-34"></span><span class="hs-comment">-- | Partial function application of 'foldle' for sentences specifically.</span><span>
 </span><span id="line-35"></span><span class="hs-comment">-- Folds with spaces and adds a period (&quot;.&quot;) at the end.</span><span>
@@ -115,13 +115,13 @@ forall a. (a -&gt; a -&gt; a) -&gt; (a -&gt; a -&gt; a) -&gt; a -&gt; [a] -&gt; 
 </span><span id="line-49"></span><span id="foldlsC"><span class="annot"><span class="annottext">foldlsC :: [Sentence] -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.Fold.html#foldlsC"><span class="hs-identifier hs-var hs-var">foldlsC</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Language.Drasil.Sentence.html#EmptyS"><span class="hs-identifier hs-var">EmptyS</span></a></span><span>
-</span><span id="line-50"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#foldlsC"><span class="hs-identifier hs-var">foldlsC</span></a></span><span> </span><span id="local-6989586621679387152"><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679387152"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence -&gt; Sentence) -&gt; [Sentence] -&gt; Sentence
+</span><span id="line-50"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#foldlsC"><span class="hs-identifier hs-var">foldlsC</span></a></span><span> </span><span id="local-6989586621679387224"><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679387224"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence -&gt; Sentence) -&gt; [Sentence] -&gt; Sentence
 forall a. (a -&gt; a -&gt; a) -&gt; [a] -&gt; a
 forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; a -&gt; a) -&gt; t a -&gt; a
 </span><span class="hs-identifier hs-var">foldl1</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.html#sC"><span class="hs-identifier hs-var">sC</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679387152"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><a href="#local-6989586621679387224"><span class="hs-identifier hs-var">xs</span></a></span><span>
 </span><span id="line-51"></span><span>
 </span><span id="line-52"></span><span class="annot"><span class="hs-comment">-- | Type that helps determine enumeration method. Can use either numbers, uppercase letters, or lowercase letters.</span></span><span>
 </span><span id="line-53"></span><span class="hs-keyword">data</span><span> </span><span id="EnumType"><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#EnumType"><span class="hs-identifier hs-var">EnumType</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Numb"><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#Numb"><span class="hs-identifier hs-var">Numb</span></a></span></span><span>   </span><span class="hs-glyph">|</span><span> </span><span id="Upper"><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#Upper"><span class="hs-identifier hs-var">Upper</span></a></span></span><span>   </span><span class="hs-glyph">|</span><span> </span><span id="Lower"><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#Lower"><span class="hs-identifier hs-var">Lower</span></a></span></span><span>
@@ -143,91 +143,91 @@ forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; a -&gt; a) -&gt; t a -&gt; 
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Language.Drasil.Sentence.html#EmptyS"><span class="hs-identifier hs-var">EmptyS</span></a></span><span>
 </span><span id="line-67"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#foldlList"><span class="hs-identifier hs-var">foldlList</span></a></span><span> </span><span class="annot"><span class="annottext">SepType
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679387163"><span class="annot"><span class="annottext">FoldType
-</span><a href="#local-6989586621679387163"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679387164"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387164"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679387165"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387165"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FoldType -&gt; Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679387235"><span class="annot"><span class="annottext">FoldType
+</span><a href="#local-6989586621679387235"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679387236"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387236"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679387237"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387237"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FoldType -&gt; Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.Fold.html#end"><span class="hs-identifier hs-var">end</span></a></span><span> </span><span class="annot"><span class="annottext">FoldType
-</span><a href="#local-6989586621679387163"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387164"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387165"><span class="hs-identifier hs-var">b</span></a></span><span>
-</span><span id="line-68"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#foldlList"><span class="hs-identifier hs-var">foldlList</span></a></span><span> </span><span id="local-6989586621679387167"><span class="annot"><span class="annottext">SepType
-</span><a href="#local-6989586621679387167"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679387168"><span class="annot"><span class="annottext">FoldType
-</span><a href="#local-6989586621679387168"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679387169"><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679387169"><span class="hs-identifier hs-var">lst</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence -&gt; Sentence)
+</span><a href="#local-6989586621679387235"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387236"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387237"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><span id="line-68"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#foldlList"><span class="hs-identifier hs-var">foldlList</span></a></span><span> </span><span id="local-6989586621679387239"><span class="annot"><span class="annottext">SepType
+</span><a href="#local-6989586621679387239"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679387240"><span class="annot"><span class="annottext">FoldType
+</span><a href="#local-6989586621679387240"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679387241"><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679387241"><span class="hs-identifier hs-var">lst</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence -&gt; Sentence)
 -&gt; (Sentence -&gt; Sentence -&gt; Sentence) -&gt; [Sentence] -&gt; Sentence
 forall a. (a -&gt; a -&gt; a) -&gt; (a -&gt; a -&gt; a) -&gt; [a] -&gt; a
 </span><span class="hs-identifier hs-var">foldle1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SepType -&gt; Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.Fold.html#sep"><span class="hs-identifier hs-var">sep</span></a></span><span> </span><span class="annot"><span class="annottext">SepType
-</span><a href="#local-6989586621679387167"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679387172"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387172"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679387173"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387173"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">FoldType -&gt; Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679387239"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679387244"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387244"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679387245"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387245"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">FoldType -&gt; Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.Fold.html#end"><span class="hs-identifier hs-var">end</span></a></span><span> </span><span class="annot"><span class="annottext">FoldType
-</span><a href="#local-6989586621679387168"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SepType -&gt; Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679387240"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SepType -&gt; Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.Fold.html#sep"><span class="hs-identifier hs-var">sep</span></a></span><span> </span><span class="annot"><span class="annottext">SepType
-</span><a href="#local-6989586621679387167"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387172"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387239"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387244"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Language.Drasil.Sentence.html#EmptyS"><span class="hs-identifier hs-var">EmptyS</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387173"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679387169"><span class="hs-identifier hs-var">lst</span></a></span><span>
+</span><a href="#local-6989586621679387245"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679387241"><span class="hs-identifier hs-var">lst</span></a></span><span>
 </span><span id="line-69"></span><span>
 </span><span id="line-70"></span><span class="annot"><span class="hs-comment">-- | Creates a list of elements with &quot;enumerators&quot; in &quot;wrappers&quot; using foldlList.</span></span><span>
 </span><span id="line-71"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#foldlEnumList"><span class="hs-identifier hs-type">foldlEnumList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#EnumType"><span class="hs-identifier hs-type">EnumType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#WrapType"><span class="hs-identifier hs-type">WrapType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#SepType"><span class="hs-identifier hs-type">SepType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#FoldType"><span class="hs-identifier hs-type">FoldType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Sentence.html#Sentence"><span class="hs-identifier hs-type">Sentence</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Sentence.html#Sentence"><span class="hs-identifier hs-type">Sentence</span></a></span><span>
 </span><span id="line-72"></span><span id="foldlEnumList"><span class="annot"><span class="annottext">foldlEnumList :: EnumType
 -&gt; WrapType -&gt; SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
-</span><a href="Language.Drasil.Sentence.Fold.html#foldlEnumList"><span class="hs-identifier hs-var hs-var">foldlEnumList</span></a></span></span><span> </span><span id="local-6989586621679387174"><span class="annot"><span class="annottext">EnumType
-</span><a href="#local-6989586621679387174"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679387175"><span class="annot"><span class="annottext">WrapType
-</span><a href="#local-6989586621679387175"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span id="local-6989586621679387176"><span class="annot"><span class="annottext">SepType
-</span><a href="#local-6989586621679387176"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679387177"><span class="annot"><span class="annottext">FoldType
-</span><a href="#local-6989586621679387177"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679387178"><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679387178"><span class="hs-identifier hs-var">lst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><a href="Language.Drasil.Sentence.Fold.html#foldlEnumList"><span class="hs-identifier hs-var hs-var">foldlEnumList</span></a></span></span><span> </span><span id="local-6989586621679387246"><span class="annot"><span class="annottext">EnumType
+</span><a href="#local-6989586621679387246"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679387247"><span class="annot"><span class="annottext">WrapType
+</span><a href="#local-6989586621679387247"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span id="local-6989586621679387248"><span class="annot"><span class="annottext">SepType
+</span><a href="#local-6989586621679387248"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679387249"><span class="annot"><span class="annottext">FoldType
+</span><a href="#local-6989586621679387249"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679387250"><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679387250"><span class="hs-identifier hs-var">lst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.Fold.html#foldlList"><span class="hs-identifier hs-var">foldlList</span></a></span><span> </span><span class="annot"><span class="annottext">SepType
-</span><a href="#local-6989586621679387176"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">FoldType
-</span><a href="#local-6989586621679387177"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [Sentence] -&gt; Sentence
+</span><a href="#local-6989586621679387248"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">FoldType
+</span><a href="#local-6989586621679387249"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [Sentence] -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence -&gt; Sentence)
 -&gt; [Sentence] -&gt; [Sentence] -&gt; [Sentence]
 forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.html#%2B%3A%2B"><span class="hs-operator hs-var">(+:+)</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">EnumType -&gt; WrapType -&gt; Int -&gt; [Sentence]
-</span><a href="#local-6989586621679387180"><span class="hs-identifier hs-var">enumList</span></a></span><span> </span><span class="annot"><span class="annottext">EnumType
-</span><a href="#local-6989586621679387174"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">WrapType
-</span><a href="#local-6989586621679387175"><span class="hs-identifier hs-var">w</span></a></span><span> </span><span class="annot"><span class="annottext">(Int -&gt; [Sentence]) -&gt; Int -&gt; [Sentence]
+</span><a href="#local-6989586621679387252"><span class="hs-identifier hs-var">enumList</span></a></span><span> </span><span class="annot"><span class="annottext">EnumType
+</span><a href="#local-6989586621679387246"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">WrapType
+</span><a href="#local-6989586621679387247"><span class="hs-identifier hs-var">w</span></a></span><span> </span><span class="annot"><span class="annottext">(Int -&gt; [Sentence]) -&gt; Int -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Int
 forall a. [a] -&gt; Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679387178"><span class="hs-identifier hs-var">lst</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679387178"><span class="hs-identifier hs-var">lst</span></a></span><span>
+</span><a href="#local-6989586621679387250"><span class="hs-identifier hs-var">lst</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679387250"><span class="hs-identifier hs-var">lst</span></a></span><span>
 </span><span id="line-73"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-74"></span><span>    </span><span id="local-6989586621679387180"><span class="annot"><span class="annottext">enumList :: EnumType -&gt; WrapType -&gt; Int -&gt; [Sentence]
-</span><a href="#local-6989586621679387180"><span class="hs-identifier hs-var hs-var">enumList</span></a></span></span><span> </span><span id="local-6989586621679387182"><span class="annot"><span class="annottext">EnumType
-</span><a href="#local-6989586621679387182"><span class="hs-identifier hs-var">enum</span></a></span></span><span> </span><span id="local-6989586621679387183"><span class="annot"><span class="annottext">WrapType
-</span><a href="#local-6989586621679387183"><span class="hs-identifier hs-var">wt</span></a></span></span><span> </span><span id="local-6989586621679387184"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387184"><span class="hs-identifier hs-var">len</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; Sentence) -&gt; [String] -&gt; [Sentence]
+</span><span id="line-74"></span><span>    </span><span id="local-6989586621679387252"><span class="annot"><span class="annottext">enumList :: EnumType -&gt; WrapType -&gt; Int -&gt; [Sentence]
+</span><a href="#local-6989586621679387252"><span class="hs-identifier hs-var hs-var">enumList</span></a></span></span><span> </span><span id="local-6989586621679387254"><span class="annot"><span class="annottext">EnumType
+</span><a href="#local-6989586621679387254"><span class="hs-identifier hs-var">enum</span></a></span></span><span> </span><span id="local-6989586621679387255"><span class="annot"><span class="annottext">WrapType
+</span><a href="#local-6989586621679387255"><span class="hs-identifier hs-var">wt</span></a></span></span><span> </span><span id="local-6989586621679387256"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387256"><span class="hs-identifier hs-var">len</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; Sentence) -&gt; [String] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">WrapType -&gt; Sentence -&gt; Sentence
-</span><a href="#local-6989586621679387185"><span class="hs-identifier hs-var">wrap</span></a></span><span> </span><span class="annot"><span class="annottext">WrapType
-</span><a href="#local-6989586621679387183"><span class="hs-identifier hs-var">wt</span></a></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence)
+</span><a href="#local-6989586621679387257"><span class="hs-identifier hs-var">wrap</span></a></span><span> </span><span class="annot"><span class="annottext">WrapType
+</span><a href="#local-6989586621679387255"><span class="hs-identifier hs-var">wt</span></a></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence)
 -&gt; (String -&gt; Sentence) -&gt; String -&gt; Sentence
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.html#S"><span class="hs-identifier hs-var">S</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; [String] -&gt; [String]
 forall a. Int -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">take</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387184"><span class="hs-identifier hs-var">len</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">EnumType -&gt; [String]
-</span><a href="#local-6989586621679387188"><span class="hs-identifier hs-var">chList</span></a></span><span> </span><span class="annot"><span class="annottext">EnumType
-</span><a href="#local-6989586621679387182"><span class="hs-identifier hs-var">enum</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-75"></span><span>    </span><span id="local-6989586621679387188"><span class="annot"><span class="annottext">chList :: EnumType -&gt; [String]
-</span><a href="#local-6989586621679387188"><span class="hs-identifier hs-var hs-var">chList</span></a></span></span><span> </span><span class="annot"><span class="annottext">EnumType
+</span><a href="#local-6989586621679387256"><span class="hs-identifier hs-var">len</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">EnumType -&gt; [String]
+</span><a href="#local-6989586621679387260"><span class="hs-identifier hs-var">chList</span></a></span><span> </span><span class="annot"><span class="annottext">EnumType
+</span><a href="#local-6989586621679387254"><span class="hs-identifier hs-var">enum</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-75"></span><span>    </span><span id="local-6989586621679387260"><span class="annot"><span class="annottext">chList :: EnumType -&gt; [String]
+</span><a href="#local-6989586621679387260"><span class="hs-identifier hs-var hs-var">chList</span></a></span></span><span> </span><span class="annot"><span class="annottext">EnumType
 </span><a href="Language.Drasil.Sentence.Fold.html#Numb"><span class="hs-identifier hs-var">Numb</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Integer -&gt; String) -&gt; [Integer] -&gt; [String]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span class="hs-glyph">..</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-76"></span><span>    </span><span class="annot"><a href="#local-6989586621679387188"><span class="hs-identifier hs-var">chList</span></a></span><span> </span><span class="annot"><span class="annottext">EnumType
+</span><span id="line-76"></span><span>    </span><span class="annot"><a href="#local-6989586621679387260"><span class="hs-identifier hs-var">chList</span></a></span><span> </span><span class="annot"><span class="annottext">EnumType
 </span><a href="Language.Drasil.Sentence.Fold.html#Upper"><span class="hs-identifier hs-var">Upper</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Char -&gt; String) -&gt; String -&gt; [String]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; String
@@ -235,7 +235,7 @@ forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'A'</span></span><span class="hs-glyph">..</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'Z'</span></span><span class="hs-special">]</span><span>
-</span><span id="line-77"></span><span>    </span><span class="annot"><a href="#local-6989586621679387188"><span class="hs-identifier hs-var">chList</span></a></span><span> </span><span class="annot"><span class="annottext">EnumType
+</span><span id="line-77"></span><span>    </span><span class="annot"><a href="#local-6989586621679387260"><span class="hs-identifier hs-var">chList</span></a></span><span> </span><span class="annot"><span class="annottext">EnumType
 </span><a href="Language.Drasil.Sentence.Fold.html#Lower"><span class="hs-identifier hs-var">Lower</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Char -&gt; String) -&gt; String -&gt; [String]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; String
@@ -243,16 +243,16 @@ forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'a'</span></span><span class="hs-glyph">..</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'z'</span></span><span class="hs-special">]</span><span>
-</span><span id="line-78"></span><span>    </span><span id="local-6989586621679387185"><span class="annot"><span class="annottext">wrap :: WrapType -&gt; Sentence -&gt; Sentence
-</span><a href="#local-6989586621679387185"><span class="hs-identifier hs-var hs-var">wrap</span></a></span></span><span> </span><span class="annot"><span class="annottext">WrapType
-</span><a href="Language.Drasil.Sentence.Fold.html#Parens"><span class="hs-identifier hs-var">Parens</span></a></span><span> </span><span id="local-6989586621679387200"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387200"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-78"></span><span>    </span><span id="local-6989586621679387257"><span class="annot"><span class="annottext">wrap :: WrapType -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679387257"><span class="hs-identifier hs-var hs-var">wrap</span></a></span></span><span> </span><span class="annot"><span class="annottext">WrapType
+</span><a href="Language.Drasil.Sentence.Fold.html#Parens"><span class="hs-identifier hs-var">Parens</span></a></span><span> </span><span id="local-6989586621679387272"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387272"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.html#sParen"><span class="hs-identifier hs-var">sParen</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387200"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-79"></span><span>    </span><span class="annot"><a href="#local-6989586621679387185"><span class="hs-identifier hs-var">wrap</span></a></span><span> </span><span class="annot"><span class="annottext">WrapType
-</span><a href="Language.Drasil.Sentence.Fold.html#Period"><span class="hs-identifier hs-var">Period</span></a></span><span> </span><span id="local-6989586621679387201"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387201"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387201"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679387272"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-79"></span><span>    </span><span class="annot"><a href="#local-6989586621679387257"><span class="hs-identifier hs-var">wrap</span></a></span><span> </span><span class="annot"><span class="annottext">WrapType
+</span><a href="Language.Drasil.Sentence.Fold.html#Period"><span class="hs-identifier hs-var">Period</span></a></span><span> </span><span id="local-6989586621679387273"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387273"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387273"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.html#%3A%2B%3A"><span class="hs-operator hs-var">:+:</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.html#S"><span class="hs-identifier hs-var">S</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;.&quot;</span></span><span>
@@ -274,22 +274,22 @@ forall a. Show a =&gt; a -&gt; String
 </span><a href="Language.Drasil.Sentence.Fold.html#Comma"><span class="hs-identifier hs-var">Comma</span></a></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.html#sC"><span class="hs-identifier hs-var">sC</span></a></span><span>
 </span><span id="line-89"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#sep"><span class="hs-identifier hs-var">sep</span></a></span><span> </span><span class="annot"><span class="annottext">SepType
-</span><a href="Language.Drasil.Sentence.Fold.html#SemiCol"><span class="hs-identifier hs-var">SemiCol</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679387202"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387202"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679387203"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387203"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387202"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="Language.Drasil.Sentence.Fold.html#SemiCol"><span class="hs-identifier hs-var">SemiCol</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679387274"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387274"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679387275"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387275"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679387274"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.html#%3A%2B%3A"><span class="hs-operator hs-var">:+:</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.html#S"><span class="hs-identifier hs-var">S</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;;&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.html#%2B%3A%2B"><span class="hs-operator hs-var">+:+</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679387203"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679387275"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-90"></span><span>
 </span><span id="line-91"></span><span class="annot"><span class="hs-comment">-- | Parses a list of integers into a nice sentence (ie. S &quot;1, 4-7, and 13&quot;).</span></span><span>
 </span><span id="line-92"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#foldNums"><span class="hs-identifier hs-type">foldNums</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Sentence.html#Sentence"><span class="hs-identifier hs-type">Sentence</span></a></span><span>
 </span><span id="line-93"></span><span id="foldNums"><span class="annot"><span class="annottext">foldNums :: String -&gt; [Int] -&gt; Sentence
-</span><a href="Language.Drasil.Sentence.Fold.html#foldNums"><span class="hs-identifier hs-var hs-var">foldNums</span></a></span></span><span> </span><span id="local-6989586621679387204"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387204"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679387205"><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679387205"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><a href="Language.Drasil.Sentence.Fold.html#foldNums"><span class="hs-identifier hs-var hs-var">foldNums</span></a></span></span><span> </span><span id="local-6989586621679387276"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387276"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679387277"><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679387277"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.Fold.html#foldlList"><span class="hs-identifier hs-var">foldlList</span></a></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><a href="Language.Drasil.Sentence.Fold.html#Comma"><span class="hs-identifier hs-var">Comma</span></a></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><a href="Language.Drasil.Sentence.Fold.html#List"><span class="hs-identifier hs-var">List</span></a></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [Sentence] -&gt; Sentence
@@ -299,8 +299,8 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><a href="Language.Drasil.Sentence.html#S"><span class="hs-identifier hs-var">S</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; [Int] -&gt; [String]
 </span><a href="Language.Drasil.Sentence.Fold.html#numList"><span class="hs-identifier hs-var">numList</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387204"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679387205"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679387276"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679387277"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-94"></span><span>
 </span><span id="line-95"></span><span class="annot"><span class="hs-comment">-- | Parses a list of integers into a list of strings (ie. [&quot;1&quot;, &quot;4-7&quot;, &quot;13&quot;]).</span></span><span>
 </span><span id="line-96"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#numList"><span class="hs-identifier hs-type">numList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
@@ -311,145 +311,145 @@ forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Empty list used with foldNums&quot;</span></span><span>
 </span><span id="line-98"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#numList"><span class="hs-identifier hs-var">numList</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679387207"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387207"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; String
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679387279"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387279"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387207"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-99"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#numList"><span class="hs-identifier hs-var">numList</span></a></span><span> </span><span id="local-6989586621679387208"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387208"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679387209"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387209"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679387210"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387210"><span class="hs-identifier hs-var">z</span></a></span></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679387279"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-99"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#numList"><span class="hs-identifier hs-var">numList</span></a></span><span> </span><span id="local-6989586621679387280"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387280"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679387281"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387281"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679387282"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387282"><span class="hs-identifier hs-var">z</span></a></span></span><span class="hs-special">]</span><span>
 </span><span id="line-100"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387210"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679387282"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387209"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679387281"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; String -&gt; String
 </span><a href="Language.Drasil.Sentence.Fold.html#rangeSep"><span class="hs-identifier hs-var">rangeSep</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387209"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387210"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387208"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679387281"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387282"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387280"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-101"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Int -&gt; String) -&gt; [Int] -&gt; [String]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387209"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387210"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-102"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#numList"><span class="hs-identifier hs-var">numList</span></a></span><span> </span><span id="local-6989586621679387213"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387213"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679387214"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387214"><span class="hs-identifier hs-var">y</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679387215"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387215"><span class="hs-identifier hs-var">z</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679387216"><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679387216"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679387281"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387282"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-102"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#numList"><span class="hs-identifier hs-var">numList</span></a></span><span> </span><span id="local-6989586621679387285"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387285"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679387286"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387286"><span class="hs-identifier hs-var">y</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679387287"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387287"><span class="hs-identifier hs-var">z</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679387288"><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679387288"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span>
 </span><span id="line-103"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387215"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679387287"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387214"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679387286"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; [Int] -&gt; [String]
-</span><a href="#local-6989586621679387217"><span class="hs-identifier hs-var">range</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387214"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387215"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679387216"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><a href="#local-6989586621679387289"><span class="hs-identifier hs-var">range</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387286"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387287"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679387288"><span class="hs-identifier hs-var">xs</span></a></span><span>
 </span><span id="line-104"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387214"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; [String]
+</span><a href="#local-6989586621679387286"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; [String]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; [Int] -&gt; [String]
 </span><a href="Language.Drasil.Sentence.Fold.html#numList"><span class="hs-identifier hs-var">numList</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387213"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387215"><span class="hs-identifier hs-var">z</span></a></span><span class="annot"><span class="annottext">Int -&gt; [Int] -&gt; [Int]
+</span><a href="#local-6989586621679387285"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387287"><span class="hs-identifier hs-var">z</span></a></span><span class="annot"><span class="annottext">Int -&gt; [Int] -&gt; [Int]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679387216"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679387288"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-105"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-106"></span><span>    </span><span id="local-6989586621679387217"><span class="annot"><span class="annottext">range :: Int -&gt; Int -&gt; [Int] -&gt; [String]
-</span><a href="#local-6989586621679387217"><span class="hs-identifier hs-var hs-var">range</span></a></span></span><span> </span><span id="local-6989586621679387225"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387225"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679387226"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387226"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; String -&gt; String
+</span><span id="line-106"></span><span>    </span><span id="local-6989586621679387289"><span class="annot"><span class="annottext">range :: Int -&gt; Int -&gt; [Int] -&gt; [String]
+</span><a href="#local-6989586621679387289"><span class="hs-identifier hs-var hs-var">range</span></a></span></span><span> </span><span id="local-6989586621679387297"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387297"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679387298"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387298"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; String -&gt; String
 </span><a href="Language.Drasil.Sentence.Fold.html#rangeSep"><span class="hs-identifier hs-var">rangeSep</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387225"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387226"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387213"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-107"></span><span>    </span><span class="annot"><a href="#local-6989586621679387217"><span class="hs-identifier hs-var">range</span></a></span><span> </span><span id="local-6989586621679387227"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387227"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679387228"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387228"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679387229"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387229"><span class="hs-identifier hs-var">n</span></a></span></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679387297"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387298"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387285"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-107"></span><span>    </span><span class="annot"><a href="#local-6989586621679387289"><span class="hs-identifier hs-var">range</span></a></span><span> </span><span id="local-6989586621679387299"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387299"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679387300"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387300"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679387301"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387301"><span class="hs-identifier hs-var">n</span></a></span></span><span class="hs-special">]</span><span>
 </span><span id="line-108"></span><span>      </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387229"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679387301"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387228"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679387300"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; String -&gt; String
 </span><a href="Language.Drasil.Sentence.Fold.html#rangeSep"><span class="hs-identifier hs-var">rangeSep</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387227"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387229"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387213"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679387299"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387301"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387285"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-109"></span><span>      </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; String -&gt; String
 </span><a href="Language.Drasil.Sentence.Fold.html#rangeSep"><span class="hs-identifier hs-var">rangeSep</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387227"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387228"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387213"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; String
+</span><a href="#local-6989586621679387299"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387300"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387285"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387229"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-110"></span><span>    </span><span class="annot"><a href="#local-6989586621679387217"><span class="hs-identifier hs-var">range</span></a></span><span> </span><span id="local-6989586621679387230"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387230"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679387231"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387231"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679387232"><span class="annot"><span class="annottext">l :: [Int]
-</span><a href="#local-6989586621679387232"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span id="local-6989586621679387233"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387233"><span class="hs-identifier hs-var">n</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679387234"><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679387234"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679387301"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-110"></span><span>    </span><span class="annot"><a href="#local-6989586621679387289"><span class="hs-identifier hs-var">range</span></a></span><span> </span><span id="local-6989586621679387302"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387302"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679387303"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387303"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679387304"><span class="annot"><span class="annottext">l :: [Int]
+</span><a href="#local-6989586621679387304"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span id="local-6989586621679387305"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387305"><span class="hs-identifier hs-var">n</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679387306"><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679387306"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>
 </span><span id="line-111"></span><span>      </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387233"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679387305"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387231"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679387303"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; [Int] -&gt; [String]
-</span><a href="#local-6989586621679387217"><span class="hs-identifier hs-var">range</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387230"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387233"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679387234"><span class="hs-identifier hs-var">ns</span></a></span><span>
+</span><a href="#local-6989586621679387289"><span class="hs-identifier hs-var">range</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387302"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387305"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679387306"><span class="hs-identifier hs-var">ns</span></a></span><span>
 </span><span id="line-112"></span><span>      </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; String -&gt; String
 </span><a href="Language.Drasil.Sentence.Fold.html#rangeSep"><span class="hs-identifier hs-var">rangeSep</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387230"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387231"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387213"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; [String]
+</span><a href="#local-6989586621679387302"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387303"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387285"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; [String]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; [Int] -&gt; [String]
 </span><a href="Language.Drasil.Sentence.Fold.html#numList"><span class="hs-identifier hs-var">numList</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387213"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679387232"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><a href="#local-6989586621679387285"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679387304"><span class="hs-identifier hs-var">l</span></a></span><span>
 </span><span id="line-113"></span><span>
 </span><span id="line-114"></span><span class="annot"><span class="hs-comment">-- | Helper for numList that concatenates integers to strings.</span></span><span>
 </span><span id="line-115"></span><span class="annot"><a href="Language.Drasil.Sentence.Fold.html#rangeSep"><span class="hs-identifier hs-type">rangeSep</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-116"></span><span id="rangeSep"><span class="annot"><span class="annottext">rangeSep :: Int -&gt; Int -&gt; String -&gt; String
-</span><a href="Language.Drasil.Sentence.Fold.html#rangeSep"><span class="hs-identifier hs-var hs-var">rangeSep</span></a></span></span><span> </span><span id="local-6989586621679387235"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387235"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679387236"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387236"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span id="local-6989586621679387237"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387237"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; String
+</span><a href="Language.Drasil.Sentence.Fold.html#rangeSep"><span class="hs-identifier hs-var hs-var">rangeSep</span></a></span></span><span> </span><span id="local-6989586621679387307"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387307"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679387308"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679387308"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span id="local-6989586621679387309"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387309"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387235"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679387307"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387237"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679387309"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679387236"><span class="hs-identifier hs-var">q</span></a></span><span>
+</span><a href="#local-6989586621679387308"><span class="hs-identifier hs-var">q</span></a></span><span>
 </span><span id="line-117"></span></pre></body></html>

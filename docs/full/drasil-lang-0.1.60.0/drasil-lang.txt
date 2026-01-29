@@ -2440,6 +2440,7 @@ getSentSN :: ShortName -> Sentence
 -- | Smart constructor for making a <a>Sentence</a> into a
 --   <a>ShortName</a>.
 shortname' :: Sentence -> ShortName
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.ShortName.ShortName
 
 
 -- | Defines a type used to hold referencing information.

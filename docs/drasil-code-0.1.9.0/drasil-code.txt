@@ -229,7 +229,7 @@ Maps :: ConceptMatchMap -> SpaceMatch -> Maps
 -- | Constructor to create a Maps
 makeMaps :: ConceptMatchMap -> SpaceMatch -> Maps
 
--- | Default mapping between <tt>Space</tt> and <a>CodeType</a>.
+-- | Default mapping between <a>Space</a> and <a>CodeType</a>.
 spaceToCodeType :: Space -> [CodeType]
 
 -- | Constructor to create a Constraints
@@ -426,21 +426,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aMjz
-oldCodeSpec :: HasOldCodeSpec c_aMjz => Lens' c_aMjz OldCodeSpec
-authorsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz People
-cMapO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [RelativeFile]
-constMapO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz ConstantMap
-constantsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Const]
-derivedInputsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Derived]
-execOrderO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Def]
-extInputsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Input]
-inputsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Input]
-modsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Mod]
-outputsO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz [Output]
-pNameO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz Name
-systemdbO :: HasOldCodeSpec c_aMjz => Lens' c_aMjz ChunkDB
+class HasOldCodeSpec c_aM9j
+oldCodeSpec :: HasOldCodeSpec c_aM9j => Lens' c_aM9j OldCodeSpec
+authorsO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j People
+cMapO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j [RelativeFile]
+constMapO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j ConstantMap
+constantsO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j [Const]
+derivedInputsO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j [Derived]
+execOrderO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j [Def]
+extInputsO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j [Input]
+inputsO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j [Input]
+modsO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j [Mod]
+outputsO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j [Output]
+pNameO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j Name
+systemdbO :: HasOldCodeSpec c_aM9j => Lens' c_aM9j ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

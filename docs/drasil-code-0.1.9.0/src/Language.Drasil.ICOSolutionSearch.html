@@ -23,48 +23,48 @@
 </span><span id="line-23"></span><span class="hs-comment">-- to be calculated, i.e., topologically sort a list of 'Def's.</span><span>
 </span><span id="line-24"></span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#solveExecOrder"><span class="hs-identifier hs-type">solveExecOrder</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Def"><span class="hs-identifier hs-type">Def</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Known"><span class="hs-identifier hs-type">Known</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Need"><span class="hs-identifier hs-type">Need</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Def"><span class="hs-identifier hs-type">Def</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-25"></span><span id="solveExecOrder"><span class="annot"><span class="annottext">solveExecOrder :: [Def] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk] -&gt; ChunkDB -&gt; [Def]
-</span><a href="Language.Drasil.ICOSolutionSearch.html#solveExecOrder"><span class="hs-identifier hs-var hs-var">solveExecOrder</span></a></span></span><span> </span><span id="local-6989586621679402579"><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402579"><span class="hs-identifier hs-var">allDefs</span></a></span></span><span> </span><span id="local-6989586621679402580"><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402580"><span class="hs-identifier hs-var">knowns</span></a></span></span><span> </span><span id="local-6989586621679402581"><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402581"><span class="hs-identifier hs-var">needs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="Language.Drasil.ICOSolutionSearch.html#solveExecOrder"><span class="hs-identifier hs-var hs-var">solveExecOrder</span></a></span></span><span> </span><span id="local-6989586621679401904"><span class="annot"><span class="annottext">[Def]
+</span><a href="#local-6989586621679401904"><span class="hs-identifier hs-var">allDefs</span></a></span></span><span> </span><span id="local-6989586621679401905"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401905"><span class="hs-identifier hs-var">knowns</span></a></span></span><span> </span><span id="local-6989586621679401906"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401906"><span class="hs-identifier hs-var">needs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">[Def]
 -&gt; [Def] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk] -&gt; ChunkDB -&gt; [Def]
 </span><a href="Language.Drasil.ICOSolutionSearch.html#topologicalSort"><span class="hs-identifier hs-var">topologicalSort</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402579"><span class="hs-identifier hs-var">allDefs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402580"><span class="hs-identifier hs-var">knowns</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402581"><span class="hs-identifier hs-var">needs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
+</span><a href="#local-6989586621679401904"><span class="hs-identifier hs-var">allDefs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401905"><span class="hs-identifier hs-var">knowns</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401906"><span class="hs-identifier hs-var">needs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
 forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">\\</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402580"><span class="hs-identifier hs-var">knowns</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679401905"><span class="hs-identifier hs-var">knowns</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-27"></span><span>
 </span><span id="line-28"></span><span class="annot"><span class="hs-comment">-- | Topologically sort a list of 'Def's. First parameter is the found path.</span></span><span>
 </span><span id="line-29"></span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#topologicalSort"><span class="hs-identifier hs-type">topologicalSort</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Def"><span class="hs-identifier hs-type">Def</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Def"><span class="hs-identifier hs-type">Def</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Known"><span class="hs-identifier hs-type">Known</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Need"><span class="hs-identifier hs-type">Need</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Def"><span class="hs-identifier hs-type">Def</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-30"></span><span id="topologicalSort"><span class="annot"><span class="annottext">topologicalSort :: [Def]
 -&gt; [Def] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk] -&gt; ChunkDB -&gt; [Def]
-</span><a href="Language.Drasil.ICOSolutionSearch.html#topologicalSort"><span class="hs-identifier hs-var hs-var">topologicalSort</span></a></span></span><span> </span><span id="local-6989586621679402583"><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402583"><span class="hs-identifier hs-var">foundOrder</span></a></span></span><span> </span><span id="local-6989586621679402584"><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402584"><span class="hs-identifier hs-var">allDefs</span></a></span></span><span> </span><span id="local-6989586621679402585"><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402585"><span class="hs-identifier hs-var">knowns</span></a></span></span><span> </span><span id="local-6989586621679402586"><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402586"><span class="hs-identifier hs-var">needs</span></a></span></span><span> </span><span id="local-6989586621679402587"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679402587"><span class="hs-identifier hs-var">db</span></a></span></span><span>
+</span><a href="Language.Drasil.ICOSolutionSearch.html#topologicalSort"><span class="hs-identifier hs-var hs-var">topologicalSort</span></a></span></span><span> </span><span id="local-6989586621679401908"><span class="annot"><span class="annottext">[Def]
+</span><a href="#local-6989586621679401908"><span class="hs-identifier hs-var">foundOrder</span></a></span></span><span> </span><span id="local-6989586621679401909"><span class="annot"><span class="annottext">[Def]
+</span><a href="#local-6989586621679401909"><span class="hs-identifier hs-var">allDefs</span></a></span></span><span> </span><span id="local-6989586621679401910"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401910"><span class="hs-identifier hs-var">knowns</span></a></span></span><span> </span><span id="local-6989586621679401911"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401911"><span class="hs-identifier hs-var">needs</span></a></span></span><span> </span><span id="local-6989586621679401912"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679401912"><span class="hs-identifier hs-var">db</span></a></span></span><span>
 </span><span id="line-31"></span><span>  </span><span class="hs-comment">-- Successfully found a path</span><span>
 </span><span id="line-32"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; Bool
 forall a. [a] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402586"><span class="hs-identifier hs-var">needs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402583"><span class="hs-identifier hs-var">foundOrder</span></a></span><span>
+</span><a href="#local-6989586621679401911"><span class="hs-identifier hs-var">needs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Def]
+</span><a href="#local-6989586621679401908"><span class="hs-identifier hs-var">foundOrder</span></a></span><span>
 </span><span id="line-33"></span><span>  </span><span class="hs-comment">-- Path impossible (missing pieces)</span><span>
 </span><span id="line-34"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">[Def] -&gt; Bool
 forall a. [a] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402589"><span class="hs-identifier hs-var">nextCalcs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Def] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk] -&gt; [Def]
+</span><a href="#local-6989586621679401914"><span class="hs-identifier hs-var">nextCalcs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Def] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk] -&gt; [Def]
 forall a. [Def] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk] -&gt; a
 </span><a href="Language.Drasil.ICOSolutionSearch.html#prettyError"><span class="hs-identifier hs-var">prettyError</span></a></span><span> </span><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402584"><span class="hs-identifier hs-var">allDefs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402585"><span class="hs-identifier hs-var">knowns</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402586"><span class="hs-identifier hs-var">needs</span></a></span><span>
+</span><a href="#local-6989586621679401909"><span class="hs-identifier hs-var">allDefs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401910"><span class="hs-identifier hs-var">knowns</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401911"><span class="hs-identifier hs-var">needs</span></a></span><span>
 </span><span id="line-35"></span><span>  </span><span class="hs-comment">-- Continuously looks for the next possible set of 'Needs' that can be</span><span>
 </span><span id="line-36"></span><span>  </span><span class="hs-comment">-- computed until all are consumed.</span><span>
 </span><span id="line-37"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
@@ -72,63 +72,63 @@ forall a. [Def] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk] -&gt; a
 -&gt; [Def] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk] -&gt; ChunkDB -&gt; [Def]
 </span><a href="Language.Drasil.ICOSolutionSearch.html#topologicalSort"><span class="hs-identifier hs-var">topologicalSort</span></a></span><span>
 </span><span id="line-38"></span><span>                  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402583"><span class="hs-identifier hs-var">foundOrder</span></a></span><span> </span><span class="annot"><span class="annottext">[Def] -&gt; [Def] -&gt; [Def]
+</span><a href="#local-6989586621679401908"><span class="hs-identifier hs-var">foundOrder</span></a></span><span> </span><span class="annot"><span class="annottext">[Def] -&gt; [Def] -&gt; [Def]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402589"><span class="hs-identifier hs-var">nextCalcs</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679401914"><span class="hs-identifier hs-var">nextCalcs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-39"></span><span>                  </span><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402591"><span class="hs-identifier hs-var">notReady</span></a></span><span>
+</span><a href="#local-6989586621679401916"><span class="hs-identifier hs-var">notReady</span></a></span><span>
 </span><span id="line-40"></span><span>                  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402585"><span class="hs-identifier hs-var">knowns</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
+</span><a href="#local-6989586621679401910"><span class="hs-identifier hs-var">knowns</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402592"><span class="hs-identifier hs-var">newlyCalculated</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679401917"><span class="hs-identifier hs-var">newlyCalculated</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-41"></span><span>                  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402586"><span class="hs-identifier hs-var">needs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
+</span><a href="#local-6989586621679401911"><span class="hs-identifier hs-var">needs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
 forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">\\</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402592"><span class="hs-identifier hs-var">newlyCalculated</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679401917"><span class="hs-identifier hs-var">newlyCalculated</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-42"></span><span>                  </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679402587"><span class="hs-identifier hs-var">db</span></a></span><span>
+</span><a href="#local-6989586621679401912"><span class="hs-identifier hs-var">db</span></a></span><span>
 </span><span id="line-43"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-44"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679402589"><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402589"><span class="hs-identifier hs-var">nextCalcs</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679402591"><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402591"><span class="hs-identifier hs-var">notReady</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Def -&gt; Bool) -&gt; [Def] -&gt; ([Def], [Def])
+</span><span id="line-44"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679401914"><span class="annot"><span class="annottext">[Def]
+</span><a href="#local-6989586621679401914"><span class="hs-identifier hs-var">nextCalcs</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679401916"><span class="annot"><span class="annottext">[Def]
+</span><a href="#local-6989586621679401916"><span class="hs-identifier hs-var">notReady</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Def -&gt; Bool) -&gt; [Def] -&gt; ([Def], [Def])
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; ([a], [a])
 </span><span class="hs-identifier hs-var">partition</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB -&gt; [CodeVarChunk] -&gt; Def -&gt; Bool
 </span><a href="Language.Drasil.ICOSolutionSearch.html#computable"><span class="hs-identifier hs-var">computable</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679402587"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402585"><span class="hs-identifier hs-var">knowns</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402584"><span class="hs-identifier hs-var">allDefs</span></a></span><span>
-</span><span id="line-45"></span><span>    </span><span id="local-6989586621679402592"><span class="annot"><span class="annottext">newlyCalculated :: [CodeVarChunk]
-</span><a href="#local-6989586621679402592"><span class="hs-identifier hs-var hs-var">newlyCalculated</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Def -&gt; CodeVarChunk) -&gt; [Def] -&gt; [CodeVarChunk]
+</span><a href="#local-6989586621679401912"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401910"><span class="hs-identifier hs-var">knowns</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Def]
+</span><a href="#local-6989586621679401909"><span class="hs-identifier hs-var">allDefs</span></a></span><span>
+</span><span id="line-45"></span><span>    </span><span id="local-6989586621679401917"><span class="annot"><span class="annottext">newlyCalculated :: [CodeVarChunk]
+</span><a href="#local-6989586621679401917"><span class="hs-identifier hs-var hs-var">newlyCalculated</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Def -&gt; CodeVarChunk) -&gt; [Def] -&gt; [CodeVarChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Def -&gt; CodeVarChunk
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 c -&gt; CodeVarChunk
 </span><a href="Language.Drasil.Chunk.CodeBase.html#quantvar"><span class="hs-identifier hs-var">quantvar</span></a></span><span> </span><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402589"><span class="hs-identifier hs-var">nextCalcs</span></a></span><span>
+</span><a href="#local-6989586621679401914"><span class="hs-identifier hs-var">nextCalcs</span></a></span><span>
 </span><span id="line-46"></span><span>
 </span><span id="line-47"></span><span class="annot"><span class="hs-comment">-- | Check if a 'Def' is computable given a list of 'Known's.</span></span><span>
 </span><span id="line-48"></span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#computable"><span class="hs-identifier hs-type">computable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Known"><span class="hs-identifier hs-type">Known</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Def"><span class="hs-identifier hs-type">Def</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
 </span><span id="line-49"></span><span id="computable"><span class="annot"><span class="annottext">computable :: ChunkDB -&gt; [CodeVarChunk] -&gt; Def -&gt; Bool
-</span><a href="Language.Drasil.ICOSolutionSearch.html#computable"><span class="hs-identifier hs-var hs-var">computable</span></a></span></span><span> </span><span id="local-6989586621679402605"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679402605"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span id="local-6989586621679402606"><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402606"><span class="hs-identifier hs-var">knowns</span></a></span></span><span> </span><span id="local-6989586621679402607"><span class="annot"><span class="annottext">Def
-</span><a href="#local-6989586621679402607"><span class="hs-identifier hs-var">def</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402608"><span class="hs-identifier hs-var">requiredInputs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk] -&gt; Bool
+</span><a href="Language.Drasil.ICOSolutionSearch.html#computable"><span class="hs-identifier hs-var hs-var">computable</span></a></span></span><span> </span><span id="local-6989586621679401930"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679401930"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span id="local-6989586621679401931"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401931"><span class="hs-identifier hs-var">knowns</span></a></span></span><span> </span><span id="local-6989586621679401932"><span class="annot"><span class="annottext">Def
+</span><a href="#local-6989586621679401932"><span class="hs-identifier hs-var">def</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401933"><span class="hs-identifier hs-var">requiredInputs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk] -&gt; Bool
 forall a. Eq a =&gt; [a] -&gt; [a] -&gt; Bool
 </span><span class="hs-operator hs-var">`subsetOf`</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402606"><span class="hs-identifier hs-var">knowns</span></a></span><span>
+</span><a href="#local-6989586621679401931"><span class="hs-identifier hs-var">knowns</span></a></span><span>
 </span><span id="line-50"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-51"></span><span>    </span><span id="local-6989586621679402615"><span class="annot"><span class="annottext">inputs :: [CodeVarChunk]
-</span><a href="#local-6989586621679402615"><span class="hs-identifier hs-var hs-var">inputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [CodeVarChunk]) -&gt; [CodeExpr] -&gt; [CodeVarChunk]
+</span><span id="line-51"></span><span>    </span><span id="local-6989586621679401940"><span class="annot"><span class="annottext">inputs :: [CodeVarChunk]
+</span><a href="#local-6989586621679401940"><span class="hs-identifier hs-var hs-var">inputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [CodeVarChunk]) -&gt; [CodeExpr] -&gt; [CodeVarChunk]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeExpr -&gt; ChunkDB -&gt; [CodeVarChunk]
 </span><a href="Language.Drasil.Chunk.CodeBase.html#codevars%27"><span class="hs-operator hs-var">`codevars'`</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679402605"><span class="hs-identifier hs-var">db</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Def
-</span><a href="#local-6989586621679402607"><span class="hs-identifier hs-var">def</span></a></span><span> </span><span class="annot"><span class="annottext">Def -&gt; Getting CodeExpr Def CodeExpr -&gt; CodeExpr
+</span><a href="#local-6989586621679401930"><span class="hs-identifier hs-var">db</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Def
+</span><a href="#local-6989586621679401932"><span class="hs-identifier hs-var">def</span></a></span><span> </span><span class="annot"><span class="annottext">Def -&gt; Getting CodeExpr Def CodeExpr -&gt; CodeExpr
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeExpr Def CodeExpr
 forall c. DefiningCodeExpr c =&gt; Lens' c CodeExpr
@@ -136,30 +136,30 @@ Lens' Def CodeExpr
 </span><span class="hs-identifier hs-var">codeExpr</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [CodeExpr] -&gt; [CodeExpr]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Def
-</span><a href="#local-6989586621679402607"><span class="hs-identifier hs-var">def</span></a></span><span> </span><span class="annot"><span class="annottext">Def -&gt; Getting [CodeExpr] Def [CodeExpr] -&gt; [CodeExpr]
+</span><a href="#local-6989586621679401932"><span class="hs-identifier hs-var">def</span></a></span><span> </span><span class="annot"><span class="annottext">Def -&gt; Getting [CodeExpr] Def [CodeExpr] -&gt; [CodeExpr]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [CodeExpr] Def [CodeExpr]
 Lens' Def [CodeExpr]
 </span><a href="Language.Drasil.Chunk.CodeDefinition.html#auxExprs"><span class="hs-identifier hs-var">auxExprs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-52"></span><span>    </span><span class="hs-comment">-- FIXME: This allows variables to be defined in terms of themselves, but is</span><span>
 </span><span id="line-53"></span><span>    </span><span class="hs-comment">-- this the right spot for this sanity check?</span><span>
-</span><span id="line-54"></span><span>    </span><span id="local-6989586621679402608"><span class="annot"><span class="annottext">requiredInputs :: [CodeVarChunk]
-</span><a href="#local-6989586621679402608"><span class="hs-identifier hs-var hs-var">requiredInputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402615"><span class="hs-identifier hs-var">inputs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
+</span><span id="line-54"></span><span>    </span><span id="local-6989586621679401933"><span class="annot"><span class="annottext">requiredInputs :: [CodeVarChunk]
+</span><a href="#local-6989586621679401933"><span class="hs-identifier hs-var hs-var">requiredInputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401940"><span class="hs-identifier hs-var">inputs</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk]
 forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">\\</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Def -&gt; CodeVarChunk
 forall c.
 (Quantity c, MayHaveUnit c, Concept c) =&gt;
 c -&gt; CodeVarChunk
 </span><a href="Language.Drasil.Chunk.CodeBase.html#quantvar"><span class="hs-identifier hs-var">quantvar</span></a></span><span> </span><span class="annot"><span class="annottext">Def
-</span><a href="#local-6989586621679402607"><span class="hs-identifier hs-var">def</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679401932"><span class="hs-identifier hs-var">def</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-55"></span><span>
-</span><span id="line-56"></span><span id="local-6989586621679402517"><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#prettyError"><span class="hs-identifier hs-type">prettyError</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Def"><span class="hs-identifier hs-type">Def</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Known"><span class="hs-identifier hs-type">Known</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Need"><span class="hs-identifier hs-type">Need</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679402517"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-56"></span><span id="local-6989586621679401842"><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#prettyError"><span class="hs-identifier hs-type">prettyError</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Def"><span class="hs-identifier hs-type">Def</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Known"><span class="hs-identifier hs-type">Known</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.ICOSolutionSearch.html#Need"><span class="hs-identifier hs-type">Need</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679401842"><span class="hs-identifier hs-type">a</span></a></span></span><span>
 </span><span id="line-57"></span><span id="prettyError"><span class="annot"><span class="annottext">prettyError :: forall a. [Def] -&gt; [CodeVarChunk] -&gt; [CodeVarChunk] -&gt; a
-</span><a href="Language.Drasil.ICOSolutionSearch.html#prettyError"><span class="hs-identifier hs-var hs-var">prettyError</span></a></span></span><span> </span><span id="local-6989586621679402632"><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402632"><span class="hs-identifier hs-var">defs</span></a></span></span><span> </span><span id="local-6989586621679402633"><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402633"><span class="hs-identifier hs-var">knowns</span></a></span></span><span> </span><span id="local-6989586621679402634"><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402634"><span class="hs-identifier hs-var">needs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; a
+</span><a href="Language.Drasil.ICOSolutionSearch.html#prettyError"><span class="hs-identifier hs-var hs-var">prettyError</span></a></span></span><span> </span><span id="local-6989586621679401957"><span class="annot"><span class="annottext">[Def]
+</span><a href="#local-6989586621679401957"><span class="hs-identifier hs-var">defs</span></a></span></span><span> </span><span id="local-6989586621679401958"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401958"><span class="hs-identifier hs-var">knowns</span></a></span></span><span> </span><span id="local-6989586621679401959"><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401959"><span class="hs-identifier hs-var">needs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; a
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">([Char] -&gt; a) -&gt; [Char] -&gt; a
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -169,8 +169,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [Char]
 forall c. HasUID c =&gt; [c] -&gt; [Char]
-</span><a href="#local-6989586621679402636"><span class="hs-identifier hs-var">lm</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402634"><span class="hs-identifier hs-var">needs</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; [Char]
+</span><a href="#local-6989586621679401961"><span class="hs-identifier hs-var">lm</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401959"><span class="hs-identifier hs-var">needs</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; [Char]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;\n&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; [Char]
@@ -181,8 +181,8 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Def] -&gt; [Char]
 forall c. HasUID c =&gt; [c] -&gt; [Char]
-</span><a href="#local-6989586621679402636"><span class="hs-identifier hs-var">lm</span></a></span><span> </span><span class="annot"><span class="annottext">[Def]
-</span><a href="#local-6989586621679402632"><span class="hs-identifier hs-var">defs</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; [Char]
+</span><a href="#local-6989586621679401961"><span class="hs-identifier hs-var">lm</span></a></span><span> </span><span class="annot"><span class="annottext">[Def]
+</span><a href="#local-6989586621679401957"><span class="hs-identifier hs-var">defs</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; [Char]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;\n&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; [Char]
@@ -193,12 +193,12 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; [Char]
 forall c. HasUID c =&gt; [c] -&gt; [Char]
-</span><a href="#local-6989586621679402636"><span class="hs-identifier hs-var">lm</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679402633"><span class="hs-identifier hs-var">knowns</span></a></span><span>
+</span><a href="#local-6989586621679401961"><span class="hs-identifier hs-var">lm</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679401958"><span class="hs-identifier hs-var">knowns</span></a></span><span>
 </span><span id="line-61"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-62"></span><span>    </span><span id="local-6989586621679402552"><span class="annot"><a href="#local-6989586621679402636"><span class="hs-identifier hs-type">lm</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679402552"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679402552"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span></span><span>
-</span><span id="line-63"></span><span>    </span><span id="local-6989586621679402636"><span class="annot"><span class="annottext">lm :: forall c. HasUID c =&gt; [c] -&gt; [Char]
-</span><a href="#local-6989586621679402636"><span class="hs-identifier hs-var hs-var">lm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; [Char]
+</span><span id="line-62"></span><span>    </span><span id="local-6989586621679401877"><span class="annot"><a href="#local-6989586621679401961"><span class="hs-identifier hs-type">lm</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679401877"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679401877"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span></span><span>
+</span><span id="line-63"></span><span>    </span><span id="local-6989586621679401961"><span class="annot"><span class="annottext">lm :: forall c. HasUID c =&gt; [c] -&gt; [Char]
+</span><a href="#local-6989586621679401961"><span class="hs-identifier hs-var hs-var">lm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; [Char]
 forall a. [a] -&gt; [[a]] -&gt; [a]
 </span><span class="hs-identifier hs-var">intercalate</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;, &quot;</span></span><span> </span><span class="annot"><span class="annottext">([[Char]] -&gt; [Char]) -&gt; ([c] -&gt; [[Char]]) -&gt; [c] -&gt; [Char]

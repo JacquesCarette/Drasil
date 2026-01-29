@@ -273,10 +273,10 @@ getModelRefs = fmGetDocDesc modelRefPlate
 modelRefPlate :: DLPlate (Constant [UID])
 modelRefPlate = preorderFold $ purePlate {
   scsSub = Constant <$> \case
-    (TMs _ _ t) -> concatMap getDecRefUIDs t
-    (DDs _ _ d _) -> concatMap getDecRefUIDs d
-    (GDs _ _ g _) -> concatMap getDecRefUIDs g
-    (IMs _ _ i _) -> concatMap getDecRefUIDs i
+    (TMs ss _ ts)   -> concatMap lnames ss ++ concatMap getDecRefUIDs ts
+    (DDs ss _ ds _) -> concatMap lnames ss ++ concatMap getDecRefUIDs ds
+    (GDs ss _ gs _) -> concatMap lnames ss ++ concatMap getDecRefUIDs gs
+    (IMs ss _ is _) -> concatMap lnames ss ++ concatMap getDecRefUIDs is
     _ -> []
 }
 

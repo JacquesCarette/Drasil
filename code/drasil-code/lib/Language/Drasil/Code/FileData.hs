@@ -1,8 +1,10 @@
+{-# LANGUAGE  PatternSynonyms #-}
+
 -- | Defines the underlying data types used in the package extension.
 module Language.Drasil.Code.FileData (FileAndContents(filePath, fileDoc),
-  fileAndContents, fileDataToFileAndContents, PackageData(packageProg,
-  packageAux), packageData
-) where
+  fileAndContents, fileDataToFileAndContents,
+  PackageData(packageProg, packageAux), pattern PackageData
+  ) where
 
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 import qualified Drasil.GOOL as G (FileData(..), ModData(..))
@@ -20,6 +22,8 @@ fileDataToFileAndContents file = fileAndContents (G.filePath file) ((G.modDoc . 
 -- | The underlying data type for packages in all renderers.
 data PackageData a = PackD {packageProg :: a, packageAux :: [FileAndContents]}
 
--- | Constructor for package data.
-packageData :: a -> [FileAndContents] -> PackageData a
-packageData p as = PackD p (filter (not . isEmpty . fileDoc) as)
+pattern PackageData :: a -> [FileAndContents] -> PackageData a
+pattern PackageData prog aux <- PackD prog aux
+  where
+    PackageData prog aux = PackD prog (filter (not . isEmpty . fileDoc) aux)
+{-# COMPLETE PackageData #-}

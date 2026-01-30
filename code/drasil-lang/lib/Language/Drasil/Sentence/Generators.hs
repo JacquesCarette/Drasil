@@ -7,6 +7,8 @@ module Language.Drasil.Sentence.Generators (
 
 import Control.Lens ((^.))
 
+import Drasil.Database (IsChunk)
+
 import Language.Drasil.Classes (NamedIdea(..), Quantity)
 import Language.Drasil.Development.Sentence (phrase)
 import Language.Drasil.Label.Type (Referable)
@@ -26,7 +28,7 @@ fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
 fterms f a b = f (a ^. term) (b ^. term)
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in...".
-getTandS :: (Quantity a) => a -> Sentence
+getTandS :: (IsChunk t, Quantity t) => t -> Sentence
 getTandS a = phrase a +:+ ch a
 
 -- | Uses an 'Either' type to check if a 'String' is valid -

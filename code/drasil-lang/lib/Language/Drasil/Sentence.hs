@@ -10,23 +10,23 @@ module Language.Drasil.Sentence (
   -- * Functions
   (+:+), (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
-  sentenceSymb, sentenceTerm,
+  sentenceTerm,
   sdep, shortdep, lnames, lnames', sentenceRefs
 ) where
 
-import Control.Lens ((^.))
 import Data.Char (toUpper)
+import qualified Data.Set as Set
 
-import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
+import Drasil.Database (IsChunk, HasChunkRefs(..), UID, UIDRef, hide, raw)
 
+import Language.Drasil.Chunk.NamedIdea (Idea)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ModelExpr.Extract (meNames)
 import Language.Drasil.NounPhrase.Types (NP)
 import Language.Drasil.UnitLang (USymb)
+import Language.Drasil.Space (HasSpace)
 import Language.Drasil.Symbol (HasSymbol, Symbol)
-
-import qualified Data.Set as Set
 
 -- | Used in 'Ch' constructor to determine the state of a term
 -- (can record whether something is in plural form, a singular term, or in short form).
@@ -60,7 +60,7 @@ data Sentence where
   -- This allows Sentences to hold plural forms of 'NamedIdea's.
   Ch    :: SentenceStyle -> TermCapitalization -> UID -> Sentence
   -- | A branch of Ch dedicated to SymbolStyle only.
-  SyCh  :: UID -> Sentence
+  SyCh  :: (IsChunk t, Idea t, HasSpace t, HasSymbol t) => UIDRef t -> Sentence
   -- | Converts a unit symbol into a usable Sentence form.
   Sy    :: USymb -> Sentence
   -- | Directly embeds a 'NP'
@@ -90,8 +90,8 @@ eS' = E . express
 
 -- The HasSymbol is redundant, but on purpose
 -- | Gets a symbol and places it in a 'Sentence'.
-ch :: (HasUID c, HasSymbol c) => c -> Sentence
-ch x = SyCh (x ^. uid)
+ch :: (IsChunk t, Idea t, HasSpace t, HasSymbol t) => t -> Sentence
+ch s = SyCh $ hide s
 
 -- | Sentences can be concatenated.
 instance Semigroup Sentence where
@@ -102,13 +102,11 @@ instance Monoid Sentence where
   mempty = EmptyS
 
 -- | Smart constructors for turning a 'UID' into a 'Sentence'.
-sentencePlural, sentenceShort, sentenceSymb, sentenceTerm :: UID -> Sentence
+sentencePlural, sentenceShort, sentenceTerm :: UID -> Sentence
 -- | Gets plural term of 'UID'.
 sentencePlural = Ch PluralTerm NoCap
 -- | Gets short form of 'UID'.
 sentenceShort  = Ch ShortStyle NoCap
--- | Gets symbol form of 'UID'.
-sentenceSymb   = SyCh
 -- | Gets singular form of 'UID'.
 sentenceTerm   = Ch TermStyle NoCap
 
@@ -161,7 +159,7 @@ getUIDs :: Sentence -> [UID]
 getUIDs (Ch ShortStyle _ _) = []
 getUIDs (Ch TermStyle _ _)  = []
 getUIDs (Ch PluralTerm _ _) = []
-getUIDs (SyCh a)            = [a]
+getUIDs (SyCh a)            = [raw a]
 getUIDs Sy {}               = []
 getUIDs NP {}               = []
 getUIDs S {}                = []

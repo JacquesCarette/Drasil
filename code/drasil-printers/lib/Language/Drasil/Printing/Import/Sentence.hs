@@ -12,7 +12,7 @@ import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation
   (PrintingInformation, refFind, sysdb)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
-import Language.Drasil.Printing.Import.Helpers (lookupT, lookupS, lookupP, lookupC')
+import Language.Drasil.Printing.Import.Helpers (lookupT, lookupS, lookupP, lookupSymb)
 import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)
 
 -- * Main Function
@@ -29,7 +29,7 @@ spec _  (Sy s)                  = P.E $ pUnit s
 spec sm (NP np)                 = spec sm (toSent $ phraseNP np)
 spec _  Percent                 = P.E $ P.MO P.Perc
 spec _  (P s)                   = P.E $ symbol s
-spec sm (SyCh s)                = P.E $ symbol $ lookupC' sm s
+spec sm (SyCh s)                = P.E $ symbol $ lookupSymb sm s
 
 -- First term is the tooltip, second term is the rendered short form
 spec sm (Ch ShortStyle caps s)  = P.Tooltip (spec sm $ lookupT

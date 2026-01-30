@@ -78,23 +78,23 @@ import qualified Data.Map.Strict as M
 mkDoc :: System -> SRSDecl -> (IdeaDict -> CI -> Sentence) -> (Document, System)
 mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
+      -- /Pre-generate/ the SRS artifact. It is missing content involving
+      -- 'Reference's and 'LabelledContent' for potential traceability graphs as
+      -- well as 'Citation's. 
       sections = mkSections si dd Nothing
-      -- Above this line, the content to be generated in the SRS artifact is
-      -- pre-generated (missing content involving 'Reference's and
-      -- 'LabelledContent' for potential traceability graphs). The below line
-      -- injects "traceability" maps into the 'ChunkDB' and adds missing
+      -- Extract all referenced 'Citations' from the pre-generated artifact.
+      refdCites = nubOrdOn (^. uid) $ citeDBFromSections si sections
+      -- Injects "traceability" maps into the 'ChunkDB' and adds missing
       -- 'LabelledContent' (the generated traceability-related tables).
-      si' = buildTraceMaps dd $ fillReferences sections si
-      -- Extract all citations now that references are populated
-      allCites = nubOrdOn (^. uid) $ citeDBFromSections si' sections
-      -- Now, the 'real generation' of the SRS artifact can begin, with the
+      si' = buildTraceMaps dd $ fillReferences sections refdCites si
+      -- Now, the /real generation/ of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
-      -- 'Reference's).
+      -- 'Reference's) and the true list of bibliography entries known.
       heading = whatsTheBigIdea si `headingComb` (si' ^. sysName)
       authorsList = foldlList Comma List $ map (S . name) $ si ^. authors
       toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl
-      sections' = mkSections si' dd' (Just allCites)
+      sections' = mkSections si' dd' (Just refdCites)
   in (Document heading authorsList toc sections', si')
 
 -- * Functions to Fill 'ChunkDB'
@@ -131,14 +131,11 @@ buildTraceMaps sd si
     containsTraceSec []                    = False
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: [Section] -> System -> System
-fillReferences allSections si = si2
+fillReferences :: [Section] -> [Citation] -> System -> System
+fillReferences allSections cites si = si2
   where
     -- get old chunk database + ref database
     chkdb = si ^. systemdb
-    -- Extract citations from both DocDesc (for model DecRefs) and Sections (for all sentences including generated ones)
-    citesFromSecs = citeDBFromSections si allSections
-    cites = nubOrdOn (^. uid) citesFromSecs
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database

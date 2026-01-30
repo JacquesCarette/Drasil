@@ -32,7 +32,7 @@ lsnChapCites (Apndx (ApndxProg cs)) = concatMap contRefs cs
 
 -- | Extracts reference 'UID's from 'Content's.
 contRefs :: Contents -> [UID]
-contRefs = concatMap (S.toList . lnames) . getCont
+contRefs = S.toList . S.unions . map lnames . getCont
 
 -- | Extract bibliography entries for a notebook based on the lesson
 -- description. Scans the notebook for citation references and looks them up in

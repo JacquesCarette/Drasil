@@ -23,7 +23,7 @@ import Theory.Drasil
 import Drasil.DocumentLanguage.Core hiding (System)
 import Drasil.GetChunks (lookupCitations)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Drasil.ExtractCommon (sentToExp, getCon, getCon')
+import Drasil.ExtractCommon (sentToExp, getCon, getCon', getContList, getLC)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -118,7 +118,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs
       (TermsAndDefs (Just s) cs) -> s : def cs
-      (PhySysDesc _ s lc cs) -> s ++ getLC lc ++ getC cs
+      (PhySysDesc _ s lc cs) -> s ++ getLC lc ++ getContList cs
       (Goals s c) -> s ++ def c,
     scsSub = Constant . f <$> \case
       (Assumptions c) -> def c
@@ -129,7 +129,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (GDs s _ d _) -> s ++ def d ++ der d ++ notes d
       (IMs s _ d _) -> s ++ der d ++ notes d
       (Constraints s _) -> [s]
-      (CorrSolnPpties _ cs) -> getC cs,
+      (CorrSolnPpties _ cs) -> getContList cs,
     reqSub = Constant . f <$> \case
       (FReqsSub c lcs) -> def c ++ concatMap getLC lcs
       (NonFReqsSub c) -> def c,
@@ -160,14 +160,8 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
 
     getPDSub :: PDSub -> [Sentence]
     getPDSub (TermsAndDefs ms c) = def c ++ maybe [] pure ms
-    getPDSub (PhySysDesc _ s lc cs) = s ++ getLC lc ++ getC cs
+    getPDSub (PhySysDesc _ s lc cs) = s ++ getLC lc ++ getContList cs
     getPDSub (Goals s c) = s ++ def c
-
-    getC :: [Contents] -> [Sentence]
-    getC = concatMap getCon'
-
-    getLC :: LabelledContent -> [Sentence]
-    getLC = getCon . (^. accessContents)
 
 -- | Extracts 'Sentence's from a document description.
 getDocDesc :: DocDesc -> [Sentence]

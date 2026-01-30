@@ -1,5 +1,5 @@
 module Drasil.ExtractCommon (
-  sentToExp, getCon', getCon, getCont
+  sentToExp, getCon', getCon, getCont, getContList, getLC
 ) where
 
 import Control.Lens((^.))
@@ -81,3 +81,11 @@ getIL (Nested h lt) = h : getLT lt
 getCont :: Contents -> [Sentence]
 getCont (UlC (UnlblC rc)) = getCon rc
 getCont (LlC lc) = getCon (lc ^. accessContents)
+
+-- | Extracts 'Sentence's from a list of 'Contents'.
+getContList :: [Contents] -> [Sentence]
+getContList = concatMap getCon'
+
+-- | Extracts 'Sentence's from 'LabelledContent'.
+getLC :: LabelledContent -> [Sentence]
+getLC = getCon . (^. accessContents)

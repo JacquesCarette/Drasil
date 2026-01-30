@@ -3,6 +3,12 @@
 Last updated: August 12, 2021
 --------------------------------------------------
 
+**Note on `.Core` Modules:**
+Several subdirectories contain a `Core.hs` file (e.g., `Chunk/Concept/Core.hs`, `Document/Core.hs`, `NounPhrase/Core.hs`).
+These modules follow a naming convention where `.Core` indicates the module contains foundational
+type definitions and data structures for that subsystem, typically with minimal dependencies.
+They serve as the basis upon which other modules in the same subsystem build additional functionality.
+
 **Chunk**
   - Contains different chunk data types and constructors.
 

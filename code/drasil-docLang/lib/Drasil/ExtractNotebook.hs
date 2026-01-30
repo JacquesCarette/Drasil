@@ -1,16 +1,17 @@
 -- | Defines functions to extract citation references from Notebook documents.
-module Drasil.ExtractNotebook (getCitations, citeDBLsn) where
+module Drasil.ExtractNotebook (citeDBLsn) where
 
 import Control.Lens ((^.))
+import Data.List (sortBy)
+import qualified Data.Set as S
 
 import Drasil.Database (UID)
 import Language.Drasil hiding (getCitations, Manual, Verb)
 import Language.Drasil.Development (lnames)
-
-import Drasil.DocumentLanguage.Notebook.Core
 import Drasil.System (System, HasSystem (systemdb))
-import Data.List (sortBy)
+
 import Drasil.GetChunks (lookupCitations)
+import Drasil.DocumentLanguage.Notebook.Core
 
 -- | Extracts citation reference 'UID's from a lesson description.
 -- This gets all 'UID's that appear in 'Ref' constructors within sentences.
@@ -30,8 +31,8 @@ getCitationsChap (Apndx (ApndxProg cs)) = concatMap getCitationsCon cs
 
 -- | Extracts citation reference 'UID's from contents.
 getCitationsCon :: Contents -> [UID]
-getCitationsCon (UlC (UnlblC rc)) = concatMap lnames (getSentencesRaw rc)
-getCitationsCon (LlC lc) = concatMap lnames (getSentencesRaw (lc ^. accessContents))
+getCitationsCon (UlC (UnlblC rc)) = concatMap (S.toList . lnames) (getSentencesRaw rc)
+getCitationsCon (LlC lc) = concatMap (S.toList . lnames) (getSentencesRaw (lc ^. accessContents))
 
 -- | Extracts 'Sentence's from raw content.
 getSentencesRaw :: RawContent -> [Sentence]
@@ -73,4 +74,5 @@ getIL (Nested h lt) = h : getLT lt
 -- | Extract bibliography entries for a notebook based on the lesson description.
 -- Scans the notebook for citation references and looks them up in the database.
 citeDBLsn :: System -> LsnDesc -> BibRef
-citeDBLsn si ld = sortBy compareAuthYearTitle $ lookupCitations (si ^. systemdb) (getCitations ld)
+citeDBLsn si ld = sortBy compareAuthYearTitle refs
+  where refs = lookupCitations (si ^. systemdb) (getCitations ld)

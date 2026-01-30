@@ -12,6 +12,7 @@ import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 import Data.List (sortBy)
+import qualified Data.Set as S
 
 import Drasil.Database (UID, uid)
 import Drasil.DocumentLanguage.Core hiding (System)
@@ -256,7 +257,7 @@ getIL (Nested h lt) = h : getLT lt
 -- This is needed because some sentences (like orgOfDocIntro) are only created
 -- when DocDesc is converted to Sections during mkSections.
 getCitationsFromSections :: [Section] -> [UID]
-getCitationsFromSections = concatMap lnames . concatMap getSec
+getCitationsFromSections = concatMap (S.toList . lnames) . concatMap getSec
 
 -- | Extracts 'UID's from DecRefs stored in models.
 getModelRefs :: DocDesc -> [UID]
@@ -266,10 +267,10 @@ getModelRefs = fmGetDocDesc modelRefPlate
 modelRefPlate :: DLPlate (Constant [UID])
 modelRefPlate = preorderFold $ purePlate {
   scsSub = Constant <$> \case
-    (TMs ss _ ts)   -> concatMap lnames ss ++ concatMap getDecRefUIDs ts
-    (DDs ss _ ds _) -> concatMap lnames ss ++ concatMap getDecRefUIDs ds
-    (GDs ss _ gs _) -> concatMap lnames ss ++ concatMap getDecRefUIDs gs
-    (IMs ss _ is _) -> concatMap lnames ss ++ concatMap getDecRefUIDs is
+    (TMs ss _ ts)   -> concatMap (S.toList . lnames) ss ++ concatMap getDecRefUIDs ts
+    (DDs ss _ ds _) -> concatMap (S.toList . lnames) ss ++ concatMap getDecRefUIDs ds
+    (GDs ss _ gs _) -> concatMap (S.toList . lnames) ss ++ concatMap getDecRefUIDs gs
+    (IMs ss _ is _) -> concatMap (S.toList . lnames) ss ++ concatMap getDecRefUIDs is
     _ -> []
 }
 

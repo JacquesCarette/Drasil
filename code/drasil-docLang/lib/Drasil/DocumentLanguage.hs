@@ -33,8 +33,7 @@ import Language.Drasil
 import Language.Drasil.Display (compsy)
 
 import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
-import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
-  findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
+import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent)
 
 import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem(..))
 import Drasil.GetChunks (ccss, ccss')
@@ -143,10 +142,10 @@ fillReferences dd allSections si = si2
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    ddefs   = findAllDataDefns chkdb
-    gdefs   = findAllGenDefns chkdb
-    imods   = findAllInstMods chkdb
-    tmods   = findAllTheoryMods chkdb
+    ddefs   = si ^. dataDefns
+    gdefs   = si ^. genDefns
+    imods   = si ^. instModels
+    tmods   = si ^. theoryModels
     concIns = findAllConcInsts chkdb
     lblCon  = findAllLabelledContent chkdb
     newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $ refsFromSRS

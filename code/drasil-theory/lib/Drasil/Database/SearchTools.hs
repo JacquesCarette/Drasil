@@ -1,6 +1,6 @@
-{- This code really doesn't belong here, but it didn't belong in drasil-printers either!
-   It will need to find a proper home, later. Right now, it needs to be 'here' because it
-   depends on things defined in this package
+{- This code really doesn't belong here, but it didn't belong in drasil-printers
+   either! It will need to find a proper home, later. Right now, it needs to be
+   'here' because it depends on things defined in this package
 -}
 module Drasil.Database.SearchTools where
 
@@ -58,18 +58,6 @@ defResolve f db trg
 
 defResolve' :: ChunkDB -> UID -> DomDefn
 defResolve' = defResolve DomDefn
-
-findAllDataDefns :: ChunkDB -> [DataDefinition]
-findAllDataDefns = findAll
-
-findAllGenDefns :: ChunkDB -> [GenDefn]
-findAllGenDefns = findAll
-
-findAllInstMods :: ChunkDB -> [InstanceModel]
-findAllInstMods = findAll
-
-findAllTheoryMods :: ChunkDB -> [TheoryModel]
-findAllTheoryMods = findAll
 
 findAllConcInsts :: ChunkDB -> [ConceptInstance]
 findAllConcInsts = findAll

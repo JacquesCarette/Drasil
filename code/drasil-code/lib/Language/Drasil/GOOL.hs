@@ -1,13 +1,14 @@
 -- | Re-export code-related smart constructors for external code writing and generation.
 module Language.Drasil.GOOL (
   AuxiliarySym(..), package,
-  FileAndContents(..), PackageData(..),
+  FileAndContents(..), fileDataToFileAndContents, PackageData(..),
   unPP, unJP, unCSP, unCPPP, unSP, unJLP
 ) where
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..),
   package)
-import Language.Drasil.Code.FileData (FileAndContents(..), PackageData(..))
+import Language.Drasil.Code.FileData (FileAndContents(..),
+  fileDataToFileAndContents, PackageData(..))
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)

@@ -2,21 +2,21 @@
 module Main (main) where
 
 import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC,
-  unCPPC, unSC, initialState, FileData(..), ProgData(..), ModData(..),
-  headers, sources, mainMod)
+  unCPPC, unSC, initialState, FileData(..), ProgData(..), headers, sources,
+  mainMod)
 import qualified Drasil.GOOL as OO (unCI, ProgramSym(..))
 import Drasil.GProc (ProcProg, unJLC)
 import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
 
 import Language.Drasil.Code (ImplementationType(..), makeSds)
 import Language.Drasil.GOOL (AuxiliarySym(..), package,
-  FileAndContents(fileDoc), PackageData(..), unPP, unJP, unCSP, unCPPP, unSP,
+  fileDataToFileAndContents, PackageData(..), unPP, unJP, unCSP, unCPPP, unSP,
   unJLP)
-import qualified Language.Drasil.GOOL as D (filePath)
+import qualified Language.Drasil.GOOL as D (filePath, FileAndContents(..))
 
 import Utils.Drasil (createDirIfMissing)
 
-import Text.PrettyPrint.HughesPJ (Doc, render)
+import Text.PrettyPrint.HughesPJ (render)
 import Control.Monad.State (evalState, runState)
 import Control.Lens ((^.))
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
@@ -96,30 +96,28 @@ jlClasses unRepr unRepr' = zipWith
     fileTestsProc, vectorTestProc, nameGenTestProc])
 
 -- | Formats code to be rendered.
-makeCode :: [[FileData]] -> [[FileAndContents]] -> [(FilePath, Doc)]
+makeCode :: [[FileData]] -> [[D.FileAndContents]] -> [D.FileAndContents]
 makeCode files auxs = concat $ zipWith (++)
-  (map (map (\fd -> (filePath fd, modDoc $ fileMod fd))) files)
-  (map (map (\fileAndContents ->
-      (D.filePath fileAndContents, fileDoc fileAndContents))) auxs)
-
-  -- zip (map filePath files) (map (modDoc . fileMod) files)
-  -- ++ zip (map D.filePath auxs) (map fileDoc auxs)
+  (map (map fileDataToFileAndContents) files)
+  auxs
 
 ------------------
 -- IO Functions --
 ------------------
 
 -- | Creates the requested 'Code' by producing files.
-createCodeFiles :: [Label] -> [(FilePath, Doc)] -> IO () -- [(FilePath, Doc)] -> IO ()
+createCodeFiles :: [Label] -> [D.FileAndContents] -> IO ()
 createCodeFiles ns cs = mapM_ createCodeFile (zip ns cs)
 
 -- | Helper that creates the file and renders code.
-createCodeFile :: (Label, (FilePath, Doc)) -> IO ()
-createCodeFile (n, (path, code)) = do
-    createDirIfMissing False n
-    setCurrentDirectory n
-    createDirIfMissing True (takeDirectory path)
-    h <- openFile path WriteMode
-    hPutStrLn h (render code)
-    hClose h
-    setCurrentDirectory ".."
+createCodeFile :: (Label, D.FileAndContents) -> IO ()
+createCodeFile (n, file) = do
+  let path = D.filePath file
+      code = D.fileDoc file
+  createDirIfMissing False n
+  setCurrentDirectory n
+  createDirIfMissing True (takeDirectory path)
+  h <- openFile path WriteMode
+  hPutStrLn h (render code)
+  hClose h
+  setCurrentDirectory ".."

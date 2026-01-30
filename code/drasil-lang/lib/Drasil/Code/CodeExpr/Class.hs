@@ -2,7 +2,7 @@ module Drasil.Code.CodeExpr.Class where
 
 import Control.Lens ((^.))
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(uid), IsChunk)
 
 import Drasil.Code.Classes (IsArgumentName, Callable)
 import Drasil.Code.CodeExpr.Lang (CodeExpr(FCall, New, Message, Field))
@@ -13,26 +13,26 @@ import Language.Drasil.Expr.Class (ExprC(..))
 
 class CodeExprC r where
   -- | Constructs a CodeExpr for actor creation (constructor call)
-  new :: (Callable f, HasUID f, CodeIdea f) => f -> [r] -> r
+  new :: (Callable f, IsChunk f, CodeIdea f) => f -> [r] -> r
 
   -- | Constructs a CodeExpr for actor creation (constructor call) that uses named arguments
-  newWithNamedArgs :: (Callable f, HasUID f, CodeIdea f, HasUID a,
+  newWithNamedArgs :: (Callable f, IsChunk f, CodeIdea f, IsChunk a,
     IsArgumentName a) => f -> [r] -> [(a, r)] -> r
 
   -- | Constructs a CodeExpr for actor messaging (method call)
-  msg :: (Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, CodeIdea c)
+  msg :: (Callable f, IsChunk f, CodeIdea f, IsChunk c, HasSpace c, CodeIdea c)
     => c -> f -> [r] -> r
 
   -- | Constructs a CodeExpr for actor messaging (method call) that uses named arguments
-  msgWithNamedArgs :: (Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c,
-    CodeIdea c, HasUID a, IsArgumentName a) => c -> f -> [r] -> [(a, r)] ->
+  msgWithNamedArgs :: (Callable f, IsChunk f, CodeIdea f, IsChunk c, HasSpace c,
+    CodeIdea c, IsChunk a, IsArgumentName a) => c -> f -> [r] -> [(a, r)] ->
     r
 
   -- | Constructs a CodeExpr representing the field of an actor
   field :: CodeVarChunk -> CodeVarChunk -> r
 
   -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f
+  applyWithNamedArgs :: (IsChunk f, HasSymbol f, IsChunk a, IsArgumentName a) => f
     -> [r] -> [(a, r)] -> r
 
 instance CodeExprC CodeExpr where

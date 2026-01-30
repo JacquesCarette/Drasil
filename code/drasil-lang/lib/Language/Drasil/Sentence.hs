@@ -17,7 +17,7 @@ module Language.Drasil.Sentence (
 import Control.Lens ((^.))
 import Data.Char (toUpper)
 
-import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
+import Drasil.Database (HasChunkRefs(..), HasUID(uid), IsChunk, UID)
 
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
@@ -90,7 +90,7 @@ eS' = E . express
 
 -- The HasSymbol is redundant, but on purpose
 -- | Gets a symbol and places it in a 'Sentence'.
-ch :: (HasUID c, HasSymbol c) => c -> Sentence
+ch :: (IsChunk c, HasSymbol c) => c -> Sentence
 ch x = SyCh (x ^. uid)
 
 -- | Sentences can be concatenated.

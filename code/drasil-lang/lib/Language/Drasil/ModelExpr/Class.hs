@@ -4,7 +4,7 @@ module Language.Drasil.ModelExpr.Class where
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 import Control.Lens ((^.))
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(uid), IsChunk)
 
 import Language.Drasil.Expr.Lang (AssocArithOper(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..), DerivType(..),
@@ -30,10 +30,10 @@ assocSanitize b (de:des) = de : assocSanitize b des
 class ModelExprC r where
   -- This also wants a symbol constraint.
   -- | Gets the derivative of an 'ModelExpr' with respect to a 'Symbol'.
-  deriv, pderiv :: (HasUID c, HasSymbol c) => r -> c -> r
+  deriv, pderiv :: (IsChunk c, HasSymbol c) => r -> c -> r
 
   -- | Gets the nthderivative of an 'ModelExpr' with respect to a 'Symbol'.
-  nthderiv, nthpderiv :: (HasUID c, HasSymbol c) => Integer -> r -> c -> r
+  nthderiv, nthpderiv :: (IsChunk c, HasSymbol c) => Integer -> r -> c -> r
 
   -- | One expression is "defined" by another.
   defines :: r -> r -> r

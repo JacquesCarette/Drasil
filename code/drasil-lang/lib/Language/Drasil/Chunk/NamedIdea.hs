@@ -11,13 +11,13 @@ module Language.Drasil.Chunk.NamedIdea (
 
 import Control.Lens ((^.), makeLenses, Lens')
 
-import Drasil.Database (mkUid, UID, HasUID(..), declareHasChunkRefs, Generically(..))
+import Drasil.Database (mkUid, UID, HasUID(..), IsChunk, declareHasChunkRefs, Generically(..))
 import Language.Drasil.NounPhrase.Types (NP)
 
 -- TODO: Why does a NamedIdea need a UID? It might need a UID to be registered in the chunk map.
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as
 -- being worthy of naming.
-class HasUID c => NamedIdea c where
+class IsChunk c => NamedIdea c where
   -- | Lens to the term (a noun phrase).
   term :: Lens' c NP
 

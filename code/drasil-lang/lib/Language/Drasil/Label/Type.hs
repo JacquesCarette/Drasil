@@ -11,7 +11,7 @@ module Language.Drasil.Label.Type(
   , name, (+::+), raw, defer, prepend
 ) where
 
-import Drasil.Database (UID, HasUID)
+import Drasil.Database (UID, HasUID, IsChunk)
 
 -- | Applying different pieces of information for a reference.
 -- An RP is a decorated internal reference.
@@ -35,7 +35,7 @@ class HasRefAddress b where
   getRefAdd :: b -> LblType
 
 -- | Members of this class have the ability to be referenced.
-class (HasUID s, HasRefAddress s) => Referable s where
+class (IsChunk s, HasRefAddress s) => Referable s where
   -- | The referencing address (what we're linking to).
   -- Only visible in the source (tex/html).
   refAdd    :: s -> String

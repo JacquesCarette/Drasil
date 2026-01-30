@@ -13,7 +13,7 @@ module Language.Drasil.Expr.Class (
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 import Control.Lens ((^.))
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(uid), IsChunk)
 import Utils.Drasil (toColumn)
 
 import Language.Drasil.Symbol
@@ -48,11 +48,11 @@ oneThird :: (ExprC r, LiteralC r) => r
 oneThird = frac 1 3
 
 -- | Similar to 'apply', but converts second argument into 'Symbol's.
-apply1 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
+apply1 :: (ExprC r, IsChunk f, HasSymbol f, IsChunk a, HasSymbol a) => f -> a -> r
 apply1 f a = apply f [sy a]
 
 -- | Similar to 'apply', but the applied function takes two parameters (which are both 'Symbol's).
-apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b)
+apply2 :: (ExprC r, IsChunk f, HasSymbol f, IsChunk a, HasSymbol a, IsChunk b, HasSymbol b)
     => f -> a -> b -> r
 apply2 f a b = apply f [sy a, sy b]
 
@@ -185,7 +185,7 @@ class ExprC r where
   defint, defsum, defprod :: Symbol -> r -> r -> r -> r
 
   -- | Smart constructor for 'real interval' membership.
-  realInterval :: HasUID c => c -> RealInterval r r -> r
+  realInterval :: IsChunk c => c -> RealInterval r r -> r
 
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
   euclidean :: [r] -> r
@@ -215,11 +215,11 @@ class ExprC r where
   set' :: Space -> [r] -> r
 
   -- | Applies a given function with a list of parameters.
-  apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
+  apply :: (IsChunk f, HasSymbol f) => f -> [r] -> r
 
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
-  sy :: (HasUID c, HasSymbol c) => c -> r
+  sy :: (IsChunk c, HasSymbol c) => c -> r
 
 -- Useful synonym
 type PExpr = forall r . (ExprC r, LiteralC r) => r

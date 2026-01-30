@@ -25,7 +25,7 @@ import Language.Drasil.Sentence ((+:+), sParen, sentenceTerm,
   sentencePlural, sentenceShort)
 import qualified Language.Drasil.Sentence as S
 import qualified Language.Drasil.NounPhrase as NP
-import Language.Drasil.NounPhrase.Types (NPStruct(..))
+import Language.Drasil.NounPhrase.Core (NPStruct(..))
 
 -- | Translate from NPStruct to Sentence
 toSent :: NPStruct -> S.Sentence

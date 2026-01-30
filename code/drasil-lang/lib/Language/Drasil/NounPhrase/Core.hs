@@ -1,5 +1,5 @@
 -- | Basic data types for noun phrases.
-module Language.Drasil.NounPhrase.Types (
+module Language.Drasil.NounPhrase.Core (
   -- * Types
   CapitalizationRule(..), NP(..),
   PluralForm, PluralRule(..),

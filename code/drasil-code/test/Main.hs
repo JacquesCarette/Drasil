@@ -65,7 +65,7 @@ main = do
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
 genCode :: [PackageData ProgData] -> IO()
-genCode files = 
+genCode files =
   createCodeFiles $ files >>= \(PackageData prog aux) ->
     let label = progName prog
         modCode = progMods prog <&> \modFileData -> (label, fileDataToFileAndContents modFileData)

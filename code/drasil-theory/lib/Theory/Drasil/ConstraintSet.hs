@@ -16,6 +16,7 @@ module Theory.Drasil.ConstraintSet (
 
 import Control.Lens (makeLenses, (^.))
 import qualified Data.List.NonEmpty as NE
+import Data.Typeable (Typeable)
 
 import Language.Drasil
 import Drasil.Database (HasUID(..))
@@ -31,7 +32,7 @@ makeLenses ''ConstraintSet
 -- | Finds the 'UID' of the 'ConstraintSet'.
 instance HasUID        (ConstraintSet e) where uid  = con . uid
 -- | Finds the term ('NP') of the 'ConstraintSet'.
-instance NamedIdea     (ConstraintSet e) where term = con . term
+instance Typeable e => NamedIdea (ConstraintSet e) where term = con . term
 -- | Finds the idea of the 'ConstraintSet'.
 instance Idea          (ConstraintSet e) where getA = getA . (^. con)
 -- | Finds the definition of the 'ConstraintSet'.

@@ -15,7 +15,8 @@ module Language.Drasil.Chunk.Eq (
 ) where
 
 import Control.Lens ((^.), view, lens, Lens', to)
-import Drasil.Database (UID, HasUID(..), HasChunkRefs(..))
+import Data.Typeable (Typeable)
+import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk)
 
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
@@ -52,17 +53,17 @@ qdExpr = lens (\(QD _ _ e) -> e) (\(QD qua ins _) e' -> QD qua ins e')
 instance HasUID          (QDefinition e) where uid = qdQua . uid
 instance HasChunkRefs    (QDefinition e) where
   chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
-instance NamedIdea       (QDefinition e) where term = qdQua . term
-instance Idea            (QDefinition e) where getA = getA . (^. qdQua)
+instance Typeable e => NamedIdea (QDefinition e) where term = qdQua . term
+instance Typeable e => Idea      (QDefinition e) where getA = getA . (^. qdQua)
 instance DefinesQuantity (QDefinition e) where defLhs = qdQua . to dqdWr
 instance HasSpace        (QDefinition e) where typ = qdQua . typ
 instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qdQua)
 instance Definition      (QDefinition e) where defn = qdQua . defn
-instance Quantity        (QDefinition e) where
+instance Typeable e => Quantity  (QDefinition e) where
 instance Eq              (QDefinition e) where a == b = a ^. uid == b ^. uid
 instance MayHaveUnit     (QDefinition e) where getUnit = getUnit . view qdQua
 instance DefiningExpr     QDefinition    where defnExpr = qdExpr
-instance Express e => Express (QDefinition e) where
+instance (Express e, Typeable e) => Express (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where
       f = case q ^. qdInputs of

@@ -1,5 +1,5 @@
 module Drasil.ExtractCommon (
-  sentToExp, getCon', getCon
+  sentToExp, getCon', getCon, getCont
 ) where
 
 import Control.Lens((^.))
@@ -76,3 +76,8 @@ getLP (t, it, _) = t : getIL it
 getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
+
+-- | Extracts reference 'UID's from 'Content's.
+getCont :: Contents -> [Sentence]
+getCont (UlC (UnlblC rc)) = getCon rc
+getCont (LlC lc) = getCon (lc ^. accessContents)

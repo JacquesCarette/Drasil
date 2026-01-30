@@ -8,7 +8,7 @@ module Language.Drasil.Chunk.Constrained (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..))
 
 import Language.Drasil.Chunk.Concept (cw, dcc, dccWDS)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr, dqdNoUnit)
@@ -40,6 +40,8 @@ makeLenses ''ConstrConcept
 
 -- | Finds 'UID' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance HasUID        ConstrConcept where uid = defq . uid
+instance HasChunkRefs  ConstrConcept where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 -- | Finds term ('NP') of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance NamedIdea     ConstrConcept where term = defq . term
 -- | Finds the idea contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.

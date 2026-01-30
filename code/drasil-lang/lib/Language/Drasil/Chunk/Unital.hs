@@ -8,7 +8,7 @@ module Language.Drasil.Chunk.Unital (
 
 import Control.Lens (makeLenses, view, (^.))
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..))
 
 import Language.Drasil.Chunk.Concept (dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
@@ -35,6 +35,8 @@ makeLenses ''UnitalChunk
 
 -- | Finds 'UID' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance HasUID        UnitalChunk where uid = defq' . uid
+instance HasChunkRefs  UnitalChunk where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 -- | Finds term ('NP') of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance NamedIdea     UnitalChunk where term = defq' . term
 -- | Finds the idea contained in the 'DefinedQuantityDict' used to make the 'UnitalChunk'.

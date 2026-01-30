@@ -4,7 +4,7 @@ module Language.Drasil.Document where
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (UID, HasUID(..), (+++.), mkUid, nsUid)
+import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), (+++.), mkUid, nsUid)
 import Utils.Drasil (repUnd)
 
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
@@ -48,6 +48,8 @@ data Content   = Content   Contents
 -}
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
+instance HasChunkRefs  Section where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 -- | 'Section's are equal if 'UID's are equal.
 instance Eq Section where a == b = a ^. uid == b ^. uid
 -- | Finds the short name of a 'Section'.

@@ -15,7 +15,7 @@ module Language.Drasil.Chunk.Eq (
 ) where
 
 import Control.Lens ((^.), view, lens, Lens', to)
-import Drasil.Database (UID, HasUID(..))
+import Drasil.Database (UID, HasUID(..), HasChunkRefs(..))
 
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
@@ -50,6 +50,8 @@ qdExpr :: Lens' (QDefinition e) e
 qdExpr = lens (\(QD _ _ e) -> e) (\(QD qua ins _) e' -> QD qua ins e')
 
 instance HasUID          (QDefinition e) where uid = qdQua . uid
+instance HasChunkRefs    (QDefinition e) where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 instance NamedIdea       (QDefinition e) where term = qdQua . term
 instance Idea            (QDefinition e) where getA = getA . (^. qdQua)
 instance DefinesQuantity (QDefinition e) where defLhs = qdQua . to dqdWr

@@ -13,7 +13,7 @@ module Language.Drasil.Chunk.CommonIdea (
 
 import Control.Lens (makeLenses, (^.), view)
 
-import Drasil.Database (UID, HasUID(uid))
+import Drasil.Database (UID, HasUID(uid), HasChunkRefs(..))
 import Utils.Drasil (repUnd)
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nc)
@@ -32,6 +32,8 @@ makeLenses ''CI
 
 -- | Finds 'UID' of the 'IdeaDict' used to make the 'CI'.
 instance HasUID        CI where uid  = nc' . uid
+instance HasChunkRefs  CI where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 -- | Finds term ('NP') of the 'IdeaDict' used to make the 'CI'.
 instance NamedIdea     CI where term = nc' . term
 -- | Finds the idea of a 'CI' (abbreviation).

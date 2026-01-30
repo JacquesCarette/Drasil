@@ -9,7 +9,7 @@ module Language.Drasil.Chunk.UncertainQuantity (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..))
 
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), cuc')
@@ -36,6 +36,8 @@ makeLenses ''UncertQ
 instance Eq             UncertQ where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds 'UID' of the 'ConstrConcept' used to make the 'UncertQ'.
 instance HasUID         UncertQ where uid = coco . uid
+instance HasChunkRefs   UncertQ where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 -- | Finds term ('NP') of the 'ConstrConcept' used to make the 'UncertQ'.
 instance NamedIdea      UncertQ where term = coco . term
 -- | Finds the idea contained in the 'ConstrConcept' used to make the 'UncertQ'.

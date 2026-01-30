@@ -80,7 +80,7 @@ mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
       -- /Pre-generate/ the SRS artifact. It is missing content involving
       -- 'Reference's and 'LabelledContent' for potential traceability graphs as
-      -- well as 'Citation's. 
+      -- well as 'Citation's.
       sections = mkSections si dd Nothing
       -- Extract all referenced 'Citations' from the pre-generated artifact.
       refdCites = nubOrdOn (^. uid) $ citeDBFromSections si sections

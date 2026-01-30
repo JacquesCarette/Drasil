@@ -6,6 +6,8 @@ module Language.Drasil.NounPhrase.Types (
   NPStruct(S,(:-:),(:+:),P)
 ) where
 
+import Drasil.Database (HasChunkRefs(..))
+
 import Language.Drasil.Symbol (Symbol)
 
 -- | Essentially a subset of 'Sentence' that contains only the parts
@@ -47,3 +49,9 @@ data NP =
   --them directly. FIXME: If the singular/plural phrase has special (replace)
   --capitalization, one of the two cannot be capitalized right now.
   --The two capitalization rules are for sentenceCase / titleCase respectively
+
+-- | Gather the chunk references mentioned within an 'NP'.
+instance HasChunkRefs NP where
+    -- NPStruct only contains Strings and Symbols, so it cannot embed UID refs.
+    chunkRefs _ = mempty
+    {-# INLINABLE chunkRefs #-}

@@ -23,7 +23,7 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage (Implementation, Equational))
-import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.NounPhrase.Types (NP)
 import Language.Drasil.Sentence (Sentence)
 
 -- | DefinedQuantityDict is the combination of a 'Concept' and a 'Quantity'.
@@ -36,7 +36,6 @@ data DefinedQuantityDict = DQD { _con :: ConceptChunk
                                , _spa :: Space
                                , _unit' :: Maybe UnitDefn
                                }
-
 makeLenses ''DefinedQuantityDict
 
 class DefinesQuantity d where

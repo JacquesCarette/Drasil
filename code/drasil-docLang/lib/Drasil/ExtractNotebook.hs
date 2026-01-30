@@ -12,9 +12,10 @@ import Drasil.System (System, HasSystem (systemdb))
 
 import Drasil.GetChunks (lookupCitations)
 import Drasil.DocumentLanguage.Notebook.Core
+import Drasil.ExtractCommon (getCon)
 
--- | Extracts citation reference 'UID's from a lesson description.
--- This gets all 'UID's that appear in 'Ref' constructors within sentences.
+-- | Extracts citation reference 'UID's from a lesson description. This gets all
+-- 'UID's that appear in 'Ref' constructors within sentences.
 getCitations :: LsnDesc -> [UID]
 getCitations = concatMap getCitationsChap
 
@@ -31,48 +32,12 @@ getCitationsChap (Apndx (ApndxProg cs)) = concatMap getCitationsCon cs
 
 -- | Extracts citation reference 'UID's from contents.
 getCitationsCon :: Contents -> [UID]
-getCitationsCon (UlC (UnlblC rc)) = concatMap (S.toList . lnames) (getSentencesRaw rc)
-getCitationsCon (LlC lc) = concatMap (S.toList . lnames) (getSentencesRaw (lc ^. accessContents))
+getCitationsCon (UlC (UnlblC rc)) = concatMap (S.toList . lnames) (getCon rc)
+getCitationsCon (LlC lc) = concatMap (S.toList . lnames) (getCon (lc ^. accessContents))
 
--- | Extracts 'Sentence's from raw content.
-getSentencesRaw :: RawContent -> [Sentence]
-getSentencesRaw (Table s1 s2 t _)   = t : s1 ++ concat s2
-getSentencesRaw (Paragraph s)       = [s]
-getSentencesRaw EqnBlock{}          = []
-getSentencesRaw CodeBlock{}         = []
-getSentencesRaw (DerivBlock h d)    = h : concatMap getSentencesRaw d
-getSentencesRaw (Enumeration lst)   = getLT lst
-getSentencesRaw (Figure l _ _ _)    = [l]
-getSentencesRaw (Bib _)             = []  -- Don't extract from bibliography itself
-getSentencesRaw (Graph [(s1, s2)] _ _ l) = [s1, s2, l]
-getSentencesRaw Graph{}             = []
-getSentencesRaw (Defini _ [])       = []
-getSentencesRaw (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getSentencesRaw (Defini dt fs)
-
--- | Extracts 'Sentence's from something that has contents.
-getCon' :: HasContents a => a -> [Sentence]
-getCon' = getSentencesRaw . (^. accessContents)
-
--- | Translates different types of lists into a 'Sentence' form.
-getLT :: ListType -> [Sentence]
-getLT (Bullet it) = concatMap (getIL . fst) it
-getLT (Numeric it) = concatMap (getIL . fst) it
-getLT (Simple lp) = concatMap getLP lp
-getLT (Desc lp) = concatMap getLP lp
-getLT (Definitions lp) = concatMap getLP lp
-
--- | Translates a 'ListTuple' into 'Sentence's.
-getLP :: ListTuple -> [Sentence]
-getLP (t, it, _) = t : getIL it
-
--- | Flattens out an ItemType into 'Sentence's. Headers for 'Nested' items are
--- prepended to its contents.
-getIL :: ItemType -> [Sentence]
-getIL (Flat s) = [s]
-getIL (Nested h lt) = h : getLT lt
-
--- | Extract bibliography entries for a notebook based on the lesson description.
--- Scans the notebook for citation references and looks them up in the database.
+-- | Extract bibliography entries for a notebook based on the lesson
+-- description. Scans the notebook for citation references and looks them up in
+-- the database.
 citeDBLsn :: System -> LsnDesc -> BibRef
 citeDBLsn si ld = sortBy compareAuthYearTitle refs
   where refs = lookupCitations (si ^. systemdb) (getCitations ld)

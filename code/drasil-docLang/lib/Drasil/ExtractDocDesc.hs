@@ -14,14 +14,16 @@ import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 import Data.List (sortBy)
 import qualified Data.Set as S
 
-import Drasil.Database (UID, uid)
+import Drasil.Database (UID)
+import Language.Drasil hiding (getCitations, Manual, Verb)
+import Language.Drasil.Development (lnames)
+import Drasil.System (System, HasSystem(systemdb))
+import Theory.Drasil
+
 import Drasil.DocumentLanguage.Core hiding (System)
 import Drasil.GetChunks (lookupCitations)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Drasil.System (System, HasSystem(systemdb))
-import Language.Drasil hiding (getCitations, Manual, Verb)
-import Language.Drasil.Development (lnames)
-import Theory.Drasil
+import Drasil.ExtractCommon (sentToExp, getCon, getCon')
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -70,12 +72,6 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
                            ++ x ^. invariants
                            ++ go (map (^. defnExpr) (x ^. defined_quant ++ x ^. defined_fun))
                            ++ goTM (x ^. valid_context))
-
--- | Converts a 'Sentence' into a list of expressions. If the 'Sentence' cant be translated, returns an empty list.
-sentToExp :: Sentence -> [ModelExpr]
-sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2
-sentToExp (E e) = [e]
-sentToExp _ = []
 
 -- | Helper that extracts a list of some type from the 'DLPlate' and 'DocDesc'.
 fmGetDocDesc :: DLPlate (Constant [a]) -> DocDesc -> [a]
@@ -190,96 +186,14 @@ getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
 getSecCon (Con c) = getCon' c
 
--- | Extracts 'Sentence's from something that has contents.
-getCon' :: HasContents a => a -> [Sentence]
-getCon' = getCon . (^. accessContents)
-
--- | Extracts 'Sentence's from raw content.
-getCon :: RawContent -> [Sentence]
-getCon (Table s1 s2 t _)   = t : s1 ++ concat s2
-getCon (Paragraph s)       = [s]
-getCon EqnBlock{}          = []
-getCon CodeBlock{}         = []
-getCon (DerivBlock h d)    = h : concatMap getCon d
-getCon (Enumeration lst)   = getLT lst
-getCon (Figure l _ _ _)    = [l]
-getCon (Bib bref)          = getBib bref
-getCon (Graph sss _ _ l)   = let (ls, rs) = unzip sss
-                             in l : ls ++ rs
-getCon (Defini _ ics)      = concatMap (concatMap getCon' . snd) ics
-
--- | Get the bibliography from something that has a field.
-getBib :: (HasFields c) => [c] -> [Sentence]
-getBib a = map getField $ concatMap (^. getFields) a
-
--- | Unwraps a 'CiteField' into a 'Sentence'.
-getField :: CiteField -> Sentence
-getField (Address s) = S s
-getField Author{} = EmptyS
-getField (BookTitle s) = S s
-getField Chapter{} = EmptyS
-getField Edition{} = EmptyS
-getField Editor{} = EmptyS
-getField HowPublished{} = EmptyS
-getField (Institution s) = S s
-getField (Journal s) = S s
-getField Month{} = EmptyS
-getField (Note s) = S s
-getField Number{} = EmptyS
-getField (Organization s) = S s
-getField Pages{} = EmptyS
-getField (Publisher s) = S s
-getField (School s) = S s
-getField (Series s) = S s
-getField (Title s) = S s
-getField (Type s) = S s
-getField Volume{} = EmptyS
-getField Year{} = EmptyS
-
--- | Translates different types of lists into a 'Sentence' form.
-getLT :: ListType -> [Sentence]
-getLT (Bullet it)      = concatMap (getIL . fst) it
-getLT (Numeric it)     = concatMap (getIL . fst) it
-getLT (Simple lp)      = concatMap getLP lp
-getLT (Desc lp)        = concatMap getLP lp
-getLT (Definitions lp) = concatMap getLP lp
-
--- | Translates a 'ListTuple' into 'Sentence's.
-getLP :: ListTuple -> [Sentence]
-getLP (t, it, _) = t : getIL it
-
--- | Flattens out an ItemType into 'Sentence's. Headers for 'Nested' items are prepended to its contents.
-getIL :: ItemType -> [Sentence]
-getIL (Flat s) = [s]
-getIL (Nested h lt) = h : getLT lt
-
--- | Extracts citation reference 'UID's from generated sections.
--- This is needed because some sentences (like orgOfDocIntro) are only created
--- when DocDesc is converted to Sections during mkSections.
+-- | Extracts citation reference 'UID's from generated sections. This is needed
+-- because some sentences (like orgOfDocIntro) are only created when DocDesc is
+-- converted to Sections during mkSections.
 getCitationsFromSections :: [Section] -> [UID]
 getCitationsFromSections = concatMap (S.toList . lnames) . concatMap getSec
 
--- | Extracts 'UID's from DecRefs stored in models.
-getModelRefs :: DocDesc -> [UID]
-getModelRefs = fmGetDocDesc modelRefPlate
-
--- | Creates a plate for extracting DecRef UIDs from models.
-modelRefPlate :: DLPlate (Constant [UID])
-modelRefPlate = preorderFold $ purePlate {
-  scsSub = Constant <$> \case
-    (TMs ss _ ts)   -> concatMap (S.toList . lnames) ss ++ concatMap getDecRefUIDs ts
-    (DDs ss _ ds _) -> concatMap (S.toList . lnames) ss ++ concatMap getDecRefUIDs ds
-    (GDs ss _ gs _) -> concatMap (S.toList . lnames) ss ++ concatMap getDecRefUIDs gs
-    (IMs ss _ is _) -> concatMap (S.toList . lnames) ss ++ concatMap getDecRefUIDs is
-    _ -> []
-}
-
--- | Extract UIDs from DecRefs of a chunk that has them.
-getDecRefUIDs :: HasDecRef a => a -> [UID]
-getDecRefUIDs x = map (^. uid) (x ^. getDecRefs)
-
--- | Extract bibliography entries from generated sections.
--- This version extracts from fully expanded Sections, capturing citations that
--- are only created during document generation (like those in orgOfDocIntro).
+-- | Extract bibliography entries from generated sections. This version extracts
+-- from fully expanded Sections, capturing citations that are only created
+-- during document generation (like those in orgOfDocIntro).
 citeDBFromSections :: System -> [Section] -> BibRef
 citeDBFromSections si secs = sortBy compareAuthYearTitle $ lookupCitations (si ^. systemdb) (getCitationsFromSections secs)

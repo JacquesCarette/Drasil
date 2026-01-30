@@ -84,7 +84,7 @@ mkDoc si srsDecl headingComb =
       -- 'LabelledContent' for potential traceability graphs). The below line
       -- injects "traceability" maps into the 'ChunkDB' and adds missing
       -- 'LabelledContent' (the generated traceability-related tables).
-      si' = buildTraceMaps dd $ fillReferences dd sections si
+      si' = buildTraceMaps dd $ fillReferences sections si
       -- Extract all citations now that references are populated
       allCites = nubOrdOn (^. uid) $ citeDBFromSections si' sections
       -- Now, the 'real generation' of the SRS artifact can begin, with the
@@ -131,8 +131,8 @@ buildTraceMaps sd si
     containsTraceSec []                    = False
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: DocDesc -> [Section] -> System -> System
-fillReferences dd allSections si = si2
+fillReferences :: [Section] -> System -> System
+fillReferences allSections si = si2
   where
     -- get old chunk database + ref database
     chkdb = si ^. systemdb

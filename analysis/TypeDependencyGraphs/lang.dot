@@ -480,8 +480,6 @@ digraph alltypes {
 	}
 	subgraph combinators {
 	}
-	subgraph core {
-	}
 	subgraph types {
 		subgraph npstruct{
 		NPStruct	[shape=oval, color=darkviolet, label="NPStruct"];

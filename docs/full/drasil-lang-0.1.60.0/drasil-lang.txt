@@ -1171,11 +1171,6 @@ S :: String -> NPStruct
 (:-:) :: NPStruct -> NPStruct -> NPStruct
 (:+:) :: NPStruct -> NPStruct -> NPStruct
 P :: Symbol -> NPStruct
-
-
--- | Noun phrases are used to hold terms with knowledge of proper
---   capitalization and pluralization.
-module Language.Drasil.NounPhrase.Core
 instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.NounPhrase.Types.NP
 
 module Language.Drasil.NounPhrase

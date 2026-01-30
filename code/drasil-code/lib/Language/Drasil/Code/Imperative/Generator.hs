@@ -8,6 +8,7 @@ import Control.Monad.State (get, evalState, runState)
 import qualified Data.Set as Set (fromList)
 import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList, catMaybes)
+import Data.Foldable (traverse_)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 
@@ -22,7 +23,7 @@ import Language.Drasil.Printing.Import (spec)
 import Drasil.System
 import Utils.Drasil (createDirIfMissing)
 
-import Language.Drasil.Code.PackageFiles (createPackageFiles, consolidatePackageFiles)
+import Language.Drasil.Code.PackageFiles (createPackageFile)
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
@@ -44,7 +45,8 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   makeSds, AuxiliarySym(..), package)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
-import Language.Drasil.Code.FileData (PackageData(..), fileAndContents)
+import Language.Drasil.Code.FileData (PackageData(..), fileAndContents,
+  fileDataToFileAndContents)
 import Language.Drasil.Code.FileNames(sampleInputName)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -128,8 +130,8 @@ generateCode l unReprProg unReprPack g = do
       aux
         | l == Python = fileAndContents "__init__.py" mempty : baseAux
         | otherwise   = baseAux
-      packageFiles = consolidatePackageFiles (progMods $ packageProg $ unReprPack pckg) aux
-  createPackageFiles packageFiles
+      packageFiles = map fileDataToFileAndContents (progMods $ packageProg $ unReprPack pckg) ++ aux
+  traverse_ createPackageFile packageFiles
   setCurrentDirectory workingDir
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
@@ -240,8 +242,8 @@ generateCodeProc l unReprProg unReprPack g = do
   let (pckg, ds) = runState (genPackageProc unReprProg) g
       baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
           not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
-      packageFiles = consolidatePackageFiles (progMods $ packageProg $ unReprPack pckg) baseAux
-  createPackageFiles packageFiles
+      packageFiles = map fileDataToFileAndContents (progMods (packageProg $ unReprPack pckg)) ++ baseAux
+  traverse_ createPackageFile packageFiles
   setCurrentDirectory workingDir
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen

@@ -4,6 +4,10 @@ module Utils.Drasil (
   -- | From "Utils.Drasil.Directory".
   createDirIfMissing,
 
+  -- * File IO
+  -- | From "Utils.Drasil.FileIO".
+  createFile,
+
   -- * Documents
   -- | From "Utils.Drasil.Document".
   blank, indent, indentList, filterEmpty, listToDoc,
@@ -26,6 +30,7 @@ module Utils.Drasil (
 ) where
 
 import Utils.Drasil.Directory
+import Utils.Drasil.FileIO
 import Utils.Drasil.Document
 import Utils.Drasil.English
 import Utils.Drasil.FilePath

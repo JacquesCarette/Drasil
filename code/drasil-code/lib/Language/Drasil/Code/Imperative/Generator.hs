@@ -10,9 +10,7 @@ import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList, catMaybes)
 import Data.Foldable (traverse_)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
-import System.FilePath.Posix (takeDirectory)
-import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
-import Text.PrettyPrint.HughesPJ (isEmpty, vcat, render)
+import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 
 import Language.Drasil
 import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
@@ -23,7 +21,7 @@ import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
 import Language.Drasil.Printing.Import (spec)
 import Drasil.System
-import Utils.Drasil (createDirIfMissing)
+import Utils.Drasil (createDirIfMissing, createFile)
 
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
@@ -132,7 +130,7 @@ generateCode l unReprProg unReprPack g = do
         | l == Python = fileAndContents "__init__.py" mempty : baseAux
         | otherwise   = baseAux
       packageFiles = map fileDataToFileAndContents (progMods $ packageProg $ unReprPack pckg) ++ aux
-  traverse_ createFile packageFiles
+  traverse_ (\file -> createFile (filePath file) (fileDoc file)) packageFiles
   setCurrentDirectory workingDir
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
@@ -244,7 +242,7 @@ generateCodeProc l unReprProg unReprPack g = do
       baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
           not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
       packageFiles = map fileDataToFileAndContents (progMods (packageProg $ unReprPack pckg)) ++ baseAux
-  traverse_ createFile packageFiles
+  traverse_ (\file -> createFile (filePath file) (fileDoc file)) packageFiles
   setCurrentDirectory workingDir
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
@@ -337,17 +335,6 @@ genModulesProc = do
   moddef <- traverse genModDefProc (modules g) -- hack ?
   if con then error "genModulesProc: Procedural renderers do not support classes"
   else return $ mn : inp ++ cal : out ++ moddef
-
--- | Helper to convert a FileAndContents into a real file with the given document
--- at the given FilePath
-createFile :: FileAndContents -> IO ()
-createFile file = do
-  let path     = filePath file
-      contents = fileDoc file
-  createDirIfMissing True (takeDirectory path)
-  h <- openFile path WriteMode
-  hPutStrLn h (render contents)
-  hClose h
 
 -- | Private utilities used in 'generateCode'.
 getDir :: Lang -> String

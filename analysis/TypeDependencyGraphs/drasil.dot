@@ -3269,9 +3269,6 @@ digraph alltypes {
 		}
 		subgraph citationkind{
 		CitationKind	[shape=oval, color=darkviolet, label="CitationKind"];
-		CitationKind -> editor;
-		CitationKind -> People;
-		CitationKind -> CiteField;
 		}
 	}
 	subgraph date {

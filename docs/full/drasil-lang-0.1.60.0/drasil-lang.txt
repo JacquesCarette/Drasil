@@ -309,6 +309,8 @@ month :: Month -> CiteField
 -- | Orders two authors. If given two of the exact same authors, year, and
 --   title, returns an error.
 compareAuthYearTitle :: HasFields c => c -> c -> Ordering
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Data.Citation.CitationKind
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Data.Citation.CiteField
 
 
 -- | Stages of the development process.
@@ -2387,11 +2389,6 @@ sentencePlural :: UID -> Sentence
 --   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
 sentenceShort :: UID -> Sentence
 
--- | Gets symbol form of <a>UID</a>.
---   
---   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
-sentenceSymb :: UID -> Sentence
-
 -- | Gets singular form of <a>UID</a>.
 --   
 --   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
@@ -2743,12 +2740,13 @@ cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Cit
 -- | Unpublished citation requires author, title, and note. Optional fields
 --   can be month and year. Implicitly uses the EntryID as the chunk id.
 cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
-instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.Citation.Citation
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.ShortName.HasShortName Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Data.Citation.HasFields Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Label.Type.Referable Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Chunk.Citation.Citation
+instance GHC.Generics.Generic Language.Drasil.Chunk.Citation.Citation
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.Citation.Citation
 
 
 -- | Defines operator precedence.

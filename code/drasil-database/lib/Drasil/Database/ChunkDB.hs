@@ -29,7 +29,7 @@ import qualified Data.Map.Strict as M
 
 import qualified Data.Set as S
 
-import Drasil.Database.Chunk (Chunk, HasChunkRefs(chunkRefs), IsChunk,
+import Drasil.Database.Chunk (Chunk, HasChunkRefs(chunkRefs), TypeableChunk,
   mkChunk, unChunk, chunkType)
 import Drasil.Database.Maps (invert)
 import Drasil.Database.UID (HasUID(..), UID)
@@ -55,7 +55,7 @@ empty = ChunkDB M.empty M.empty
 
 -- | Create a 'ChunkDB' from a list of chunks. This will insert all chunks into
 -- the database from the list, from left to right.
-fromList :: IsChunk a => [a] -> ChunkDB
+fromList :: TypeableChunk a => [a] -> ChunkDB
 fromList = flip insertAll empty
 
 -- | Query the 'ChunkDB' for all registered chunks (by their 'UID's).
@@ -92,7 +92,7 @@ findOrErr :: forall a. Typeable a => UID -> ChunkDB -> a
 findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u ++ " (expected type: " ++ show (typeRep $ Proxy @a) ++ ")") . find u
 
 -- | Find all chunks of a specific type in the 'ChunkDB'.
-findAll :: forall a. IsChunk a => ChunkDB -> [a]
+findAll :: forall a. TypeableChunk a => ChunkDB -> [a]
 findAll cdb = maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
   where
     tr = typeRep (Proxy :: Proxy a)
@@ -129,7 +129,7 @@ insertRefsExpectingExistence newDpdnts depdncy cbu =
 -- | Internal function to insert a chunk into the 'ChunkDB'. This function
 -- assumes that the chunk is not already registered in the database, and quietly
 -- break table synchronicity if it is.
-insert0 :: IsChunk a => ChunkDB -> a -> ChunkDB
+insert0 :: TypeableChunk a => ChunkDB -> a -> ChunkDB
 insert0 cdb c = cdb'
   where
     -- Box our chunk.
@@ -151,7 +151,7 @@ insert0 cdb c = cdb'
 -- | Insert a chunk into the 'ChunkDB' if it is sensible to do so (i.e., does
 -- not depend on itself, is not a 'ChunkDB', and does not overwrite another
 -- chunk).
-insert :: IsChunk a => a -> ChunkDB -> ChunkDB
+insert :: TypeableChunk a => a -> ChunkDB -> ChunkDB
 insert c cdb
   | c ^. uid `elem` chunkRefs c =
       error $ "Chunk `" ++ show (c ^. uid) ++ "` cannot reference itself as a dependancy."
@@ -172,7 +172,7 @@ insert c cdb
   | otherwise = insert0 cdb c
 
 -- | Insert a list of chunks into a 'ChunkDB'.
-insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
+insertAll :: TypeableChunk a => [a] -> ChunkDB -> ChunkDB
 insertAll as cdb = foldl' (flip insert) cdb as
 
 --------------------------------------------------------------------------------
@@ -183,9 +183,9 @@ insertAll as cdb = foldl' (flip insert) cdb as
 -- input 'ChunkDB' does not already contain any of the chunks from the chunk
 -- lists.
 insertAllOutOfOrder11 ::
-  (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e,
-   IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j,
-   IsChunk k) =>
+  (TypeableChunk a, TypeableChunk b, TypeableChunk c, TypeableChunk d,
+   TypeableChunk e, TypeableChunk f, TypeableChunk g, TypeableChunk h,
+   TypeableChunk i, TypeableChunk j, TypeableChunk k) =>
    ChunkDB ->
    [a] -> [b] -> [c] -> [d] -> [e] ->
    [f] -> [g] -> [h] -> [i] -> [j] ->

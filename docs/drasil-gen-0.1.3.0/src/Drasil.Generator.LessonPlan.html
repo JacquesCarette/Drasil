@@ -19,31 +19,31 @@
 </span><span id="line-19"></span><span class="annot"><span class="hs-comment">-- | Generate an /interactive/ JupyterNotebook-based lesson plan.</span></span><span>
 </span><span id="line-20"></span><span class="annot"><a href="Drasil.Generator.LessonPlan.html#exportLessonPlan"><span class="hs-identifier hs-type">exportLessonPlan</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LsnDesc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-21"></span><span id="exportLessonPlan"><span class="annot"><span class="annottext">exportLessonPlan :: System -&gt; LsnDesc -&gt; String -&gt; IO ()
-</span><a href="Drasil.Generator.LessonPlan.html#exportLessonPlan"><span class="hs-identifier hs-var hs-var">exportLessonPlan</span></a></span></span><span> </span><span id="local-6989586621679100952"><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679100952"><span class="hs-identifier hs-var">syst</span></a></span></span><span> </span><span id="local-6989586621679100953"><span class="annot"><span class="annottext">LsnDesc
-</span><a href="#local-6989586621679100953"><span class="hs-identifier hs-var">nbDecl</span></a></span></span><span> </span><span id="local-6989586621679100954"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679100954"><span class="hs-identifier hs-var">lsnFileName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-22"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679100959"><span class="annot"><span class="annottext">nb :: Document
-</span><a href="#local-6989586621679100959"><span class="hs-identifier hs-var hs-var">nb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">LsnDesc -&gt; (IdeaDict -&gt; CI -&gt; Sentence) -&gt; System -&gt; Document
+</span><a href="Drasil.Generator.LessonPlan.html#exportLessonPlan"><span class="hs-identifier hs-var hs-var">exportLessonPlan</span></a></span></span><span> </span><span id="local-6989586621679100974"><span class="annot"><span class="annottext">System
+</span><a href="#local-6989586621679100974"><span class="hs-identifier hs-var">syst</span></a></span></span><span> </span><span id="local-6989586621679100975"><span class="annot"><span class="annottext">LsnDesc
+</span><a href="#local-6989586621679100975"><span class="hs-identifier hs-var">nbDecl</span></a></span></span><span> </span><span id="local-6989586621679100976"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679100976"><span class="hs-identifier hs-var">lsnFileName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-22"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679100981"><span class="annot"><span class="annottext">nb :: Document
+</span><a href="#local-6989586621679100981"><span class="hs-identifier hs-var hs-var">nb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">LsnDesc -&gt; (IdeaDict -&gt; CI -&gt; Sentence) -&gt; System -&gt; Document
 </span><span class="hs-identifier hs-var">mkNb</span></span><span> </span><span class="annot"><span class="annottext">LsnDesc
-</span><a href="#local-6989586621679100953"><span class="hs-identifier hs-var">nbDecl</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; CI -&gt; Sentence
+</span><a href="#local-6989586621679100975"><span class="hs-identifier hs-var">nbDecl</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; CI -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; Sentence
 </span><span class="hs-identifier hs-var">S.forT</span></span><span> </span><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679100952"><span class="hs-identifier hs-var">syst</span></a></span><span>
-</span><span id="line-23"></span><span>      </span><span id="local-6989586621679100967"><span class="annot"><span class="annottext">printSetting :: PrintingInformation
-</span><a href="#local-6989586621679100967"><span class="hs-identifier hs-var hs-var">printSetting</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679100974"><span class="hs-identifier hs-var">syst</span></a></span><span>
+</span><span id="line-23"></span><span>      </span><span id="local-6989586621679100989"><span class="annot"><span class="annottext">printSetting :: PrintingInformation
+</span><a href="#local-6989586621679100989"><span class="hs-identifier hs-var hs-var">printSetting</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Map UID Reference
 -&gt; Stage
 -&gt; PrintingConfiguration
 -&gt; PrintingInformation
 </span><span class="hs-identifier hs-var">piSys</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679100952"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">System -&gt; Getting ChunkDB System ChunkDB -&gt; ChunkDB
+</span><a href="#local-6989586621679100974"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">System -&gt; Getting ChunkDB System ChunkDB -&gt; ChunkDB
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB System ChunkDB
 forall c. HasSystem c =&gt; Lens' c ChunkDB
 Lens' System ChunkDB
 </span><span class="hs-identifier hs-var">systemdb</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679100952"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">System
+</span><a href="#local-6989586621679100974"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">System
 -&gt; Getting (Map UID Reference) System (Map UID Reference)
 -&gt; Map UID Reference
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -53,47 +53,47 @@ Lens' System (Map UID Reference)
 </span><span class="hs-identifier hs-var">refTable</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Stage
 </span><span class="hs-identifier hs-var">Equational</span></span><span> </span><span class="annot"><span class="annottext">PrintingConfiguration
 </span><span class="hs-identifier hs-var">defaultConfiguration</span></span><span>
-</span><span id="line-24"></span><span>      </span><span id="local-6989586621679100968"><span class="annot"><span class="annottext">dir :: String
-</span><a href="#local-6989586621679100968"><span class="hs-identifier hs-var hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-24"></span><span>      </span><span id="local-6989586621679100990"><span class="annot"><span class="annottext">dir :: String
+</span><a href="#local-6989586621679100990"><span class="hs-identifier hs-var hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Lesson/&quot;</span></span><span>
-</span><span id="line-25"></span><span>      </span><span id="local-6989586621679100969"><span class="annot"><span class="annottext">fn :: String
-</span><a href="#local-6989586621679100969"><span class="hs-identifier hs-var hs-var">fn</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679100954"><span class="hs-identifier hs-var">lsnFileName</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><span id="line-25"></span><span>      </span><span id="local-6989586621679100991"><span class="annot"><span class="annottext">fn :: String
+</span><a href="#local-6989586621679100991"><span class="hs-identifier hs-var hs-var">fn</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679100976"><span class="hs-identifier hs-var">lsnFileName</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;.ipynb&quot;</span></span><span>
-</span><span id="line-26"></span><span>      </span><span id="local-6989586621679100970"><span class="annot"><span class="annottext">pd :: Document
-</span><a href="#local-6989586621679100970"><span class="hs-identifier hs-var hs-var">pd</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Document -&gt; Document
+</span><span id="line-26"></span><span>      </span><span id="local-6989586621679100992"><span class="annot"><span class="annottext">pd :: Document
+</span><a href="#local-6989586621679100992"><span class="hs-identifier hs-var hs-var">pd</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Document -&gt; Document
 </span><span class="hs-identifier hs-var">makeDocument</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679100967"><span class="hs-identifier hs-var">printSetting</span></a></span><span> </span><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679100959"><span class="hs-identifier hs-var">nb</span></a></span><span>
+</span><a href="#local-6989586621679100989"><span class="hs-identifier hs-var">printSetting</span></a></span><span> </span><span class="annot"><span class="annottext">Document
+</span><a href="#local-6989586621679100981"><span class="hs-identifier hs-var">nb</span></a></span><span>
 </span><span id="line-27"></span><span>
 </span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; String -&gt; IO ()
 </span><span class="hs-identifier hs-var">createDirIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679100968"><span class="hs-identifier hs-var">dir</span></a></span><span>
-</span><span id="line-29"></span><span>  </span><span id="local-6989586621679100971"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679100971"><span class="hs-identifier hs-var">outh</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; IOMode -&gt; IO Handle
+</span><a href="#local-6989586621679100990"><span class="hs-identifier hs-var">dir</span></a></span><span>
+</span><span id="line-29"></span><span>  </span><span id="local-6989586621679100993"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679100993"><span class="hs-identifier hs-var">outh</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; IOMode -&gt; IO Handle
 </span><span class="hs-identifier hs-var">openFile</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679100968"><span class="hs-identifier hs-var">dir</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679100990"><span class="hs-identifier hs-var">dir</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;/&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679100969"><span class="hs-identifier hs-var">fn</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IOMode
+</span><a href="#local-6989586621679100991"><span class="hs-identifier hs-var">fn</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IOMode
 </span><span class="hs-identifier hs-var">WriteMode</span></span><span>
 </span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; String -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679100971"><span class="hs-identifier hs-var">outh</span></a></span><span> </span><span class="annot"><span class="annottext">(String -&gt; IO ()) -&gt; String -&gt; IO ()
+</span><a href="#local-6989586621679100993"><span class="hs-identifier hs-var">outh</span></a></span><span> </span><span class="annot"><span class="annottext">(String -&gt; IO ()) -&gt; String -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; String
 </span><span class="hs-identifier hs-var">render</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; String) -&gt; Doc -&gt; String
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Document -&gt; Doc
 </span><span class="hs-identifier hs-var">genJupyterLessonPlan</span></span><span> </span><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679100970"><span class="hs-identifier hs-var">pd</span></a></span><span>
+</span><a href="#local-6989586621679100992"><span class="hs-identifier hs-var">pd</span></a></span><span>
 </span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; IO ()
 </span><span class="hs-identifier hs-var">hClose</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679100971"><span class="hs-identifier hs-var">outh</span></a></span><span>
+</span><a href="#local-6989586621679100993"><span class="hs-identifier hs-var">outh</span></a></span><span>
 </span><span id="line-32"></span></pre></body></html>

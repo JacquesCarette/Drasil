@@ -2389,6 +2389,11 @@ sentencePlural :: UID -> Sentence
 --   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
 sentenceShort :: UID -> Sentence
 
+-- | Gets symbol form of <a>UID</a>.
+--   
+--   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
+sentenceSymb :: UID -> Sentence
+
 -- | Gets singular form of <a>UID</a>.
 --   
 --   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.

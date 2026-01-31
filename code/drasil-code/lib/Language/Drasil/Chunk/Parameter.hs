@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.Parameter (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..))
 import Language.Drasil hiding (Ref)
 
 import Language.Drasil.Chunk.Code (CodeIdea(..), CodeChunk)
@@ -17,6 +17,9 @@ data PassBy = Val | Ref
 data ParameterChunk = PC {_pcc :: CodeChunk
                          , passBy :: PassBy}
 makeLenses ''ParameterChunk
+
+instance HasChunkRefs ParameterChunk where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'ParameterChunk'.
 instance HasUID      ParameterChunk where uid = pcc . uid

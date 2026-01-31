@@ -26,7 +26,7 @@ import Control.Lens ((^.), over)
 import Data.Maybe
 
 -- rest of Drasil
-import Drasil.Database (UID, HasUID(..), showUID)
+import Drasil.Database (UID, HasUID(..), showUID, IsChunk)
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
   element, general, goalStmt, information, input_, limitation, model, output_,
@@ -200,7 +200,7 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   namedRef r4 (plural genDefn)]
 
 -- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.
-datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =>
+datConF :: (IsChunk c, HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =>
   Sentence -> [c] -> Section
 datConF _ [] = SRS.datCon [mkParagraph $ emptySectSentPlu [datumConstraint]] []
 datConF t c  = SRS.datCon [dataConstraintParagraph t, LlC $ inDataConstTbl c] []
@@ -253,7 +253,7 @@ mkDataConstraintTable col rf lab = llccTab' rf $ uncurry Table
   (mkTableFromColumns col) lab True
 
 -- | Creates the input Data Constraints Table.
-inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =>
+inDataConstTbl :: (IsChunk c, HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =>
   [c] -> LabelledContent
 inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qlst),
             (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
@@ -265,7 +265,7 @@ inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qls
     getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ showUID c) (c ^. reasVal)
 
 -- | Creates the output Data Constraints Table.
-outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
+outDataConstTbl :: (IsChunk c, Quantity c, Constrained c) => [c] -> LabelledContent
 outDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),
             (titleize' softwareConstraint, map fmtSfwr qlst)] (outDatumConstraint ^. uid) $
@@ -286,7 +286,7 @@ fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
 fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 
 -- | Creates the Properties of a Correct Solution section.
-propCorSolF :: (Quantity c, Constrained c) => [c] -> [Contents] -> Section
+propCorSolF :: (IsChunk c, Quantity c, Constrained c) => [c] -> [Contents] -> Section
 propCorSolF []  [] = SRS.propCorSol [mkParagraph $ emptySectSentPlu [propOfCorSol]] []
 propCorSolF [] con = SRS.propCorSol con []
 propCorSolF c  con = SRS.propCorSol ([propsIntro, LlC $ outDataConstTbl c] ++ con) []

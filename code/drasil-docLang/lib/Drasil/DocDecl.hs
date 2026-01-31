@@ -15,7 +15,7 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), AuxConstntSec(..),
   AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
 
-import Drasil.Database (HasUID(..), findAll)
+import Drasil.Database (HasUID(..), findAll, IsChunk)
 import Drasil.System
 import Language.Drasil hiding (sec)
 
@@ -85,9 +85,9 @@ data SCSSub where
   -- | Instance models.
   IMs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
   -- | Constraints.
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+  Constraints    :: (IsChunk c, HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
   -- | Properties of a correct solution.
-  CorrSolnPpties :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
+  CorrSolnPpties :: (IsChunk c, Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
 
 -- | Requirements section (wraps 'ReqsSub' subsections).
 newtype ReqrmntSec = ReqsProg [ReqsSub]

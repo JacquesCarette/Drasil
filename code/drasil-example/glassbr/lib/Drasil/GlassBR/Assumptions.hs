@@ -2,6 +2,7 @@ module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
   assumpGL, assumpBC, assumpRT, assumpLDFC, assumptionConstants,
   assumptions) where
 
+import Drasil.Database (IsChunk)
 import Language.Drasil hiding (organization)
 import qualified Language.Drasil.Development as D
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
@@ -84,7 +85,7 @@ responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [D.toSent $ atStartNP (the responseTy), S "considered in",
   short progName, S "is flexural"]
 
-ldfConstantDesc :: (HasSymbol c, NamedIdea c) => c -> Sentence
+ldfConstantDesc :: (IsChunk c, Quantity c) => c -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
   refS assumpSV `sC` D.toSent (phraseNP (NP.the (value `of_`
   mainConcept))), sParen (ch mainConcept) `S.is` D.toSent (phraseNP (a_ constant))

@@ -23,11 +23,10 @@ import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.List (transpose)
 
-import Drasil.Database (HasUID)
+import Drasil.Database (IsChunk)
 
 import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs) , UnitDefn, MayHaveUnit(..)
   , UnitalChunk , HasUnitSymbol(usymb), Quantity, Concept, Definition(defn), NamedIdea(..)
-  , HasSymbol
   , HasShortName(..) , short, atStart, titleize, phrase, plural , Section , ItemType(..), ListType(Bullet)
   , ModelExpr , refS, namedRef
   , Sentence(S, Percent, (:+:), Sy, EmptyS), eS
@@ -67,7 +66,7 @@ definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
 definedIn'' q =  S "defined" `S.in_` refS q
 
 -- | Takes a 'Symbol' and its 'Reference' (does not append a period at the end!). Outputs as "@symbol@ is defined in @source@".
-definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
+definedIn''' :: (IsChunk q, Quantity q, Referable r, HasShortName r) => q -> r -> Sentence
 definedIn''' q src = ch q `S.is` S "defined in" +:+ refS src
 
 -- | Zip helper function enumerates abbreviations and zips it with list of 'ItemType':
@@ -192,7 +191,7 @@ tAndDWAcc temp = Flat $ atStart temp +:+. (sParen (short temp) `sDash` capSent (
 
 -- | Helpful combinators for making 'Sentence's into Terminologies with Definitions.
 -- Returns of the form: "@term (symbol) - termDefinition@".
-tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
+tAndDWSym :: (IsChunk a, Concept s, Quantity a) => s -> a -> ItemType
 tAndDWSym tD sym = Flat $ atStart tD +:+. (sParen (ch sym) `sDash` capSent (tD ^. defn))
 
 -- | Helpful combinators for making 'Sentence's into Terminologies with Definitions.

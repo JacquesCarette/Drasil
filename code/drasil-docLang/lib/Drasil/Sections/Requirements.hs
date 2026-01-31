@@ -17,7 +17,7 @@ import Utils.Drasil (stringList, mkTable)
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), IsChunk)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -47,7 +47,7 @@ reqF = SRS.require [reqIntro]
 -- The resulting requirement sentence is of the form: "Inputs the values from
 -- @table_ref@, which define @description@". If the description is 'Nothing',
 -- the sentence is: "Inputs the values from @table_ref@".
-inReqWTab :: (Quantity q, MayHaveUnit q) => Maybe Sentence -> [q] -> (ConceptInstance, LabelledContent)
+inReqWTab :: (IsChunk q, Quantity q, MayHaveUnit q) => Maybe Sentence -> [q] -> (ConceptInstance, LabelledContent)
 inReqWTab mdesc qs = (ci, tbl)
   where
     tbl = mkInputPropsTable qs
@@ -143,7 +143,7 @@ mkSecurityNFR refAddress lbl = cic refAddress (foldlSent [
   ]) lbl nonFuncReqDom
 
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
-mkInputPropsTable :: (Quantity i, MayHaveUnit i) =>
+mkInputPropsTable :: (IsChunk i, Quantity i, MayHaveUnit i) =>
                           [i] -> LabelledContent
 mkInputPropsTable []        = mkRawLC (Paragraph EmptyS) reqInputsRef
 mkInputPropsTable reqInputs = mkRawLC (Table [atStart symbol_, atStart description, atStart' unit_]
@@ -155,14 +155,14 @@ reqInputsRef :: Reference
 reqInputsRef = makeTabRef' (reqInput ^. uid)
 
 -- | Creates a table for use in the Functional Requirments section. Takes a list of tuples containing variables and sources, a label, and a caption.
-mkValsSourceTable :: (Quantity i, MayHaveUnit i, Concept i) =>
+mkValsSourceTable :: (IsChunk i, Quantity i, MayHaveUnit i, Concept i) =>
                           [(i, Sentence)] -> String -> Sentence -> LabelledContent
 mkValsSourceTable vals labl cap = llccTab labl $
   Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 
-mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(DefinedQuantityDict, Sentence)]
+mkQRTuple :: (IsChunk i, HasOutput i, HasShortName i, Referable i) => [i] -> [(DefinedQuantityDict, Sentence)]
 mkQRTuple = map (\c -> (c ^. output, refS c))
 
-mkQRTupleRef :: (Quantity i, MayHaveUnit i, Concept i, HasShortName r, Referable r) => [i] -> [r] -> [(DefinedQuantityDict, Sentence)]
+mkQRTupleRef :: (Quantity i, MayHaveUnit i, Concept i, HasShortName r, Referable r) =>[i] -> [r] -> [(DefinedQuantityDict, Sentence)]
 mkQRTupleRef = zipWith (curry (bimap dqdWr refS))

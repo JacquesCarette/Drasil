@@ -4,7 +4,7 @@ module Drasil.DocumentLanguage.Core where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
-import Drasil.Database (UID)
+import Drasil.Database (UID, IsChunk)
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
@@ -184,11 +184,11 @@ data SCSSub where
   -- | Instance Models.
   IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   -- | Constraints.
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+  Constraints    :: (IsChunk c, HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
   --                  Sentence -> [LabelledContent] Fields  -> [UncertainWrapper] -> [ConstrainedChunk] -> SCSSub --FIXME: temporary definition?
   --FIXME: Work in Progress ^
   -- | Properties of a correct solution.
-  CorrSolnPpties :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
+  CorrSolnPpties :: (IsChunk c, Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
 
 -- | Choose whether to show or hide the derivation of an expression.
 data DerivationDisplay = ShowDerivation

@@ -5,7 +5,6 @@ module Drasil.GlassBR.DataDefs (dataDefs, aspRat, glaTyFac, glaTyFacQD, gtfRef,
 import Control.Lens ((^.))
 import Prelude hiding (log, exp, sqrt)
 
-import Drasil.Database (HasUID)
 import Language.Drasil
 import Theory.Drasil (DataDefinition, ddE)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -150,7 +149,7 @@ gtfRef = definedIn  glaTyFac
 hRef   = definedIn' hFromt (S "and is based on the nominal thicknesses")
 
 --- Helper
-stdVals :: (HasSymbol s, HasUID s) => [s] -> Sentence
+stdVals :: Quantity s => [s] -> Sentence
 stdVals s = foldlList Comma List (map ch s) +:+ sent +:+. refS assumpSV
   where sent = case s of [ ]   -> error "stdVals needs quantities"
                          [_]   -> S "comes from"

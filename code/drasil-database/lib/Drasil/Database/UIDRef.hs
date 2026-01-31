@@ -7,7 +7,7 @@ module Drasil.Database.UIDRef (
 import Control.Lens ((^.))
 import Data.Maybe (fromMaybe)
 
-import Drasil.Database.Chunk (IsChunk, HasChunkRefs (..))
+import Drasil.Database.Chunk (TypeableChunk, HasChunkRefs (..))
 import Drasil.Database.ChunkDB (ChunkDB, find)
 import Drasil.Database.UID (HasUID(..), UID)
 import qualified Data.Set as S (singleton)
@@ -23,15 +23,15 @@ instance HasChunkRefs (UIDRef t) where
   {-# INLINABLE chunkRefs #-}
 
 -- | Create a 'UIDRef' to a chunk.
-hide :: IsChunk t => t -> UIDRef t
+hide :: TypeableChunk t => t -> UIDRef t
 hide = UIDRef . (^. uid)
 
 -- | Find a chunk by a 'UIDRef'.
-unhide :: IsChunk t => UIDRef t -> ChunkDB -> Maybe t
+unhide :: TypeableChunk t => UIDRef t -> ChunkDB -> Maybe t
 unhide (UIDRef u) = find u
 
 -- | Find a chunk by a 'UIDRef', erroring if not found.
-unhideOrErr :: IsChunk t => UIDRef t -> ChunkDB -> t
+unhideOrErr :: TypeableChunk t => UIDRef t -> ChunkDB -> t
 unhideOrErr tu cdb = fromMaybe (error "Typed UID dereference failed.") (unhide tu cdb)
 
 -- | A variant of 'UIDRef' without type information about the chunk being
@@ -44,13 +44,13 @@ instance HasChunkRefs UnitypedUIDRef where
   {-# INLINABLE chunkRefs #-}
 
 -- | Create a 'UnitypedUIDRef' to a chunk.
-hideUni :: IsChunk t => t -> UnitypedUIDRef
+hideUni :: TypeableChunk t => t -> UnitypedUIDRef
 hideUni = UnitypedUIDRef . (^. uid)
 
 -- | Find a chunk by its 'UnitypedUIDRef'.
-unhideUni :: IsChunk t => UnitypedUIDRef -> ChunkDB -> Maybe t
+unhideUni :: TypeableChunk t => UnitypedUIDRef -> ChunkDB -> Maybe t
 unhideUni (UnitypedUIDRef u) = find u
 
 -- | Find a chunk by its 'UnitypedUIDRef', erroring if not found.
-unhideUniOrErr :: IsChunk t => UnitypedUIDRef -> ChunkDB -> t
+unhideUniOrErr :: TypeableChunk t => UnitypedUIDRef -> ChunkDB -> t
 unhideUniOrErr tu cdb = fromMaybe (error "Untyped UID dereference failed.") (unhideUni tu cdb)

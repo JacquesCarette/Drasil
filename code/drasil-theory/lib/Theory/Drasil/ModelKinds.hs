@@ -18,7 +18,7 @@ module Theory.Drasil.ModelKinds (
 import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')
 import Data.Maybe (mapMaybe)
 
-import Drasil.Database (UID, HasUID(..), mkUid, nsUid)
+import Drasil.Database (UID, HasUID(..), mkUid, nsUid, HasChunkRefs(..))
 import Language.Drasil (NamedIdea(..), NP, QDefinition, Expr,
   RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..),
   RequiresChecking(..), Space,
@@ -128,6 +128,9 @@ othModel u n rc = MK (OthModel rc) (mkUid' u) n
 othModel' :: RelationConcept -> ModelKind e
 othModel' rc = MK (OthModel rc) (modelNs $ rc ^. uid) (rc ^. term)
 
+instance HasChunkRefs (ModelKinds e) where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+
 -- | Finds the 'UID' of the 'ModelKinds'.
 instance HasUID        (ModelKinds e) where uid     = getterMk uid uid uid uid uid
 -- | Finds the term ('NP') of the 'ModelKinds'.
@@ -151,7 +154,11 @@ instance RequiresChecking (ModelKinds Expr) Expr Space where
   requiredChecks (EquationalRealm md)       = requiredChecks md
   requiredChecks (OthModel _)               = mempty
 
--- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
+-- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed
+-- OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
+
+instance HasChunkRefs (ModelKind e) where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of the 'ModelKind'.
 instance HasUID        (ModelKind e) where uid     = mkUID

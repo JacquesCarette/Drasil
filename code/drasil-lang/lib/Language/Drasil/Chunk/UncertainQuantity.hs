@@ -9,7 +9,7 @@ module Language.Drasil.Chunk.UncertainQuantity (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..))
 
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), cuc')
@@ -31,6 +31,9 @@ import Language.Drasil.Uncertainty
 -- Ex. Measuring the length of a pendulum arm may be recorded with an uncertainty value.
 data UncertQ = UQ { _coco :: ConstrConcept , _unc'' :: Uncertainty }
 makeLenses ''UncertQ
+
+instance HasChunkRefs UncertQ where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Equal if 'UID's are equal.
 instance Eq             UncertQ where a == b = (a ^. uid) == (b ^. uid)

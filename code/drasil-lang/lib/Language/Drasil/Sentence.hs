@@ -10,7 +10,7 @@ module Language.Drasil.Sentence (
   -- * Functions
   (+:+), (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
-  sentenceSymb, sentenceTerm,
+  sentenceTerm,
   sdep, shortdep, lnames, lnames', sentenceRefs
 ) where
 
@@ -22,7 +22,7 @@ import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ModelExpr.Extract (meNames)
-import Language.Drasil.NounPhrase.Types (NP)
+import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Symbol (HasSymbol, Symbol)
 
@@ -102,13 +102,11 @@ instance Monoid Sentence where
   mempty = EmptyS
 
 -- | Smart constructors for turning a 'UID' into a 'Sentence'.
-sentencePlural, sentenceShort, sentenceSymb, sentenceTerm :: UID -> Sentence
+sentencePlural, sentenceShort, sentenceTerm :: UID -> Sentence
 -- | Gets plural term of 'UID'.
 sentencePlural = Ch PluralTerm NoCap
 -- | Gets short form of 'UID'.
 sentenceShort  = Ch ShortStyle NoCap
--- | Gets symbol form of 'UID'.
-sentenceSymb   = SyCh
 -- | Gets singular form of 'UID'.
 sentenceTerm   = Ch TermStyle NoCap
 

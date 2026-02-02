@@ -14,7 +14,7 @@ module Theory.Drasil.DifferentialModel (
 import Control.Lens (makeLenses, (^.), view)
 import Data.List (find)
 
-import Drasil.Database (HasUID(uid))
+import Drasil.Database (HasUID(uid), HasChunkRefs(..))
 
 import Language.Drasil
   (ConceptChunk, dccWDS, Express(..), ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..)
@@ -101,6 +101,9 @@ data ODESolverFormat = X'{
   -- | represent B, the constant column vector with identity matrix
   constantVect :: [Expr]
 }
+
+instance HasChunkRefs DifferentialModel where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DifferentialModel'.
 instance HasUID        DifferentialModel where uid = dmconc . uid

@@ -23,7 +23,7 @@ import Theory.Drasil
 import Drasil.DocumentLanguage.Core hiding (System)
 import Drasil.GetChunks (lookupCitations)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Drasil.ExtractCommon (sentToExp, getCon, getCon', getContList, getLC)
+import Drasil.ExtractCommon (sentToExp, getCon', getContList, getLC)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->

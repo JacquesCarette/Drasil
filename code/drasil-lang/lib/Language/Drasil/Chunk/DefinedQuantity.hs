@@ -36,7 +36,6 @@ data DefinedQuantityDict = DQD { _con :: ConceptChunk
                                , _spa :: Space
                                , _unit' :: Maybe UnitDefn
                                }
-
 makeLenses ''DefinedQuantityDict
 
 class DefinesQuantity d where

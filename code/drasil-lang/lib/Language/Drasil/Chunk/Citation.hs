@@ -16,7 +16,8 @@ module Language.Drasil.Chunk.Citation (
 
 import Control.Lens (makeLenses, Lens')
 
-import Drasil.Database (HasChunkRefs(..), UID, HasUID(..), showUID, mkUid)
+import Drasil.Database (HasUID(..), UID, showUID, mkUid, declareHasChunkRefs,
+  Generically(..))
 
 import Language.Drasil.People (People)
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
@@ -43,15 +44,13 @@ data Citation = Cite
   , _citeID   :: UID
   ,  sn       :: ShortName
   }
+declareHasChunkRefs ''Citation
 makeLenses ''Citation
 
 -- | Some documents, as well as some pieces of knowledge, have citations.
 class HasCitation c where
   -- | Provides a 'Lens' to the citations.
   getCitations :: Lens' c [Citation]
-
-instance HasChunkRefs Citation where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds 'UID' of the 'Citation'.
 instance HasUID       Citation where uid       = citeID

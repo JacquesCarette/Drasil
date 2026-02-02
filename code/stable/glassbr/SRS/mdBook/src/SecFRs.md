@@ -62,20 +62,18 @@ Output-Values: Output the values from the table for [Required Outputs](./SecFRs.
 
 <div id="Table:ReqOutputs"></div>
 
-|Symbol                       |Description                                           |Source                                          |Units            |
-|:----------------------------|:-----------------------------------------------------|:-----------------------------------------------|:----------------|
-|\\(\mathit{AR}\\)            |Aspect ratio                                          |[DD:aspectRatio](./SecDDs.md#DD:aspectRatio)    |--               |
-|\\(B\\)                      |Risk of failure                                       |[IM:riskFun](./SecIMs.md#IM:riskFun)            |--               |
-|\\(\mathit{GTF}\\)           |Glass type factor                                     |[DD:gTF](./SecDDs.md#DD:gTF)                    |--               |
-|\\(h\\)                      |Minimum thickness                                     |[DD:minThick](./SecDDs.md#DD:minThick)          |\\({\text{m}}\\) |
-|\\(\mathit{isSafeLR}\\)      |3 second load equivalent resistance safety requirement|[IM:isSafeLR](./SecIMs.md#IM:isSafeLR)          |--               |
-|\\(\mathit{isSafePb}\\)      |Probability of glass breakage safety requirement      |[IM:isSafePb](./SecIMs.md#IM:isSafePb)          |--               |
-|\\(J\\)                      |Stress distribution factor (Function)                 |[IM:stressDistFac](./SecIMs.md#IM:stressDistFac)|--               |
-|\\({J\_{\text{tol}}}\\)      |Tolerable stress distribution factor                  |[IM:sdfTol](./SecIMs.md#IM:sdfTol)              |--               |
-|\\(\mathit{LR}\\)            |Load resistance                                       |[IM:calofCapacity](./SecIMs.md#IM:calofCapacity)|\\({\text{Pa}}\\)|
-|\\(\mathit{NFL}\\)           |Non-factored load                                     |[IM:nFL](./SecIMs.md#IM:nFL)                    |\\({\text{Pa}}\\)|
-|\\({P\_{\text{b}}}\\)        |Probability of breakage                               |[IM:probOfBreak](./SecIMs.md#IM:probOfBreak)    |--               |
-|\\(\hat{q}\\)                |Dimensionless load                                    |[IM:dimlessLoad](./SecIMs.md#IM:dimlessLoad)    |--               |
-|\\({\hat{q}\_{\text{tol}}}\\)|Tolerable load                                        |[IM:tolLoad](./SecIMs.md#IM:tolLoad)            |--               |
+|Symbol                 |Description                                           |Source                                          |Units            |
+|:----------------------|:-----------------------------------------------------|:-----------------------------------------------|:----------------|
+|\\(\mathit{AR}\\)      |Aspect ratio                                          |[DD:aspectRatio](./SecDDs.md#DD:aspectRatio)    |--               |
+|\\(B\\)                |Risk of failure                                       |[IM:riskFun](./SecIMs.md#IM:riskFun)            |--               |
+|\\(\mathit{GTF}\\)     |Glass type factor                                     |[DD:gTF](./SecDDs.md#DD:gTF)                    |--               |
+|\\(h\\)                |Minimum thickness                                     |[DD:minThick](./SecDDs.md#DD:minThick)          |\\({\text{m}}\\) |
+|\\(\mathit{isSafeLR}\\)|3 second load equivalent resistance safety requirement|[IM:isSafeLR](./SecIMs.md#IM:isSafeLR)          |--               |
+|\\(\mathit{isSafePb}\\)|Probability of glass breakage safety requirement      |[IM:isSafePb](./SecIMs.md#IM:isSafePb)          |--               |
+|\\({J\_{\text{tol}}}\\)|Tolerable stress distribution factor                  |[IM:sdfTol](./SecIMs.md#IM:sdfTol)              |--               |
+|\\(\mathit{LR}\\)      |Load resistance                                       |[IM:calofCapacity](./SecIMs.md#IM:calofCapacity)|\\({\text{Pa}}\\)|
+|\\(\mathit{NFL}\\)     |Non-factored load                                     |[IM:nFL](./SecIMs.md#IM:nFL)                    |\\({\text{Pa}}\\)|
+|\\({P\_{\text{b}}}\\)  |Probability of breakage                               |[IM:probOfBreak](./SecIMs.md#IM:probOfBreak)    |--               |
+|\\(\hat{q}\\)          |Dimensionless load                                    |[IM:dimlessLoad](./SecIMs.md#IM:dimlessLoad)    |--               |
 
 **<p align="center">Required Outputs</p>**

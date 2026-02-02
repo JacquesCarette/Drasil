@@ -81,26 +81,6 @@ public class Calculations {
         return Interpolation.interpY("SDF.txt", inParams.AR, J_tol);
     }
     
-    /** \brief Calculates stress distribution factor (Function)
-        \param inParams structure holding the input values
-        \param q_hat dimensionless load
-        \return stress distribution factor (Function)
-    */
-    public static double func_J(InputParameters inParams, double q_hat) {
-        StreamWriter outfile;
-        outfile = new StreamWriter("log.txt", true);
-        outfile.WriteLine("function func_J called with inputs: {");
-        outfile.Write("  inParams = ");
-        outfile.Write("Instance of InputParameters object");
-        outfile.WriteLine(", ");
-        outfile.Write("  q_hat = ");
-        outfile.WriteLine(q_hat);
-        outfile.WriteLine("  }");
-        outfile.Close();
-        
-        return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat);
-    }
-    
     /** \brief Calculates non-factored load (Pa)
         \param inParams structure holding the input values
         \param q_hat_tol tolerable load
@@ -119,6 +99,26 @@ public class Calculations {
         outfile.Close();
         
         return q_hat_tol * 7.17e10 * Math.Pow(inParams.h, 4.0) / Math.Pow(inParams.a * inParams.b, 2.0);
+    }
+    
+    /** \brief Calculates stress distribution factor (Function)
+        \param inParams structure holding the input values
+        \param q_hat dimensionless load
+        \return stress distribution factor (Function)
+    */
+    public static double func_J(InputParameters inParams, double q_hat) {
+        StreamWriter outfile;
+        outfile = new StreamWriter("log.txt", true);
+        outfile.WriteLine("function func_J called with inputs: {");
+        outfile.Write("  inParams = ");
+        outfile.Write("Instance of InputParameters object");
+        outfile.WriteLine(", ");
+        outfile.Write("  q_hat = ");
+        outfile.WriteLine(q_hat);
+        outfile.WriteLine("  }");
+        outfile.Close();
+        
+        return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat);
     }
     
     /** \brief Calculates risk of failure

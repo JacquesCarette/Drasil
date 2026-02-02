@@ -86,26 +86,6 @@ public class Calculations {
         return Interpolation.interpY("SDF.txt", inParams.AR, J_tol);
     }
     
-    /** \brief Calculates stress distribution factor (Function)
-        \param inParams structure holding the input values
-        \param q_hat dimensionless load
-        \return stress distribution factor (Function)
-    */
-    public static double func_J(InputParameters inParams, double q_hat) throws Exception, FileNotFoundException, IOException {
-        PrintWriter outfile;
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_J called with inputs: {");
-        outfile.print("  inParams = ");
-        outfile.print("Instance of InputParameters object");
-        outfile.println(", ");
-        outfile.print("  q_hat = ");
-        outfile.println(q_hat);
-        outfile.println("  }");
-        outfile.close();
-        
-        return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat);
-    }
-    
     /** \brief Calculates non-factored load (Pa)
         \param inParams structure holding the input values
         \param q_hat_tol tolerable load
@@ -124,6 +104,26 @@ public class Calculations {
         outfile.close();
         
         return q_hat_tol * 7.17e10 * Math.pow(inParams.h, 4.0) / Math.pow(inParams.a * inParams.b, 2.0);
+    }
+    
+    /** \brief Calculates stress distribution factor (Function)
+        \param inParams structure holding the input values
+        \param q_hat dimensionless load
+        \return stress distribution factor (Function)
+    */
+    public static double func_J(InputParameters inParams, double q_hat) throws Exception, FileNotFoundException, IOException {
+        PrintWriter outfile;
+        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
+        outfile.println("function func_J called with inputs: {");
+        outfile.print("  inParams = ");
+        outfile.print("Instance of InputParameters object");
+        outfile.println(", ");
+        outfile.print("  q_hat = ");
+        outfile.println(q_hat);
+        outfile.println("  }");
+        outfile.close();
+        
+        return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat);
     }
     
     /** \brief Calculates risk of failure

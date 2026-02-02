@@ -1,8 +1,7 @@
 module Drasil.GlassBR.DataDefs (dataDefs, aspRat, glaTyFac, glaTyFacQD, gtfRef,
-  hFromt, hFromtQD, loadDFDD, standOffDis, eqTNTWDD, calofDemand, aGrtrThanB,
+  hFromt, hFromtQD, loadDFDD, standOffDis, eqTNTWDD, aGrtrThanB,
   arRef, hRef, stdVals) where
 
-import Control.Lens ((^.))
 import Prelude hiding (log, exp, sqrt)
 
 import Drasil.Database (HasUID)
@@ -11,12 +10,10 @@ import Theory.Drasil (DataDefinition, ddE)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sentence.Combinators (definedIn', definedIn)
 
-import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC)
 import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
-import Drasil.GlassBR.LabelledContent (demandVsSDFig)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals
 
@@ -25,7 +22,7 @@ import Drasil.GlassBR.Unitals
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [hFromt, loadDFDD, glaTyFac, standOffDis, aspRat, eqTNTWDD, calofDemand]
+dataDefs = [hFromt, loadDFDD, glaTyFac, standOffDis, aspRat, eqTNTWDD]
 
 {--}
 
@@ -103,17 +100,6 @@ eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq
 eqTNTWDD :: DataDefinition
 eqTNTWDD = ddE eqTNTWQD [dRef astm2009] Nothing "eqTNTW" []
 
-{--}
-
-calofDemandEq :: Expr
-calofDemandEq = apply interpY [str "TSD.txt", sy standOffDist, sy eqTNTWeight]
-
-calofDemandQD :: SimpleQDef
-calofDemandQD = mkQuantDef demand calofDemandEq
-
-calofDemand :: DataDefinition
-calofDemand = ddE calofDemandQD [dRef astm2009] Nothing "calofDemand" [calofDemandDesc]
-
 -- Additional Notes --
 aGrtrThanB :: Sentence
 aGrtrThanB = ch plateLen `S.and_` ch plateWidth `S.are`
@@ -127,15 +113,6 @@ hsGlass = glassTypeHelper heatS
 
 glassTypeHelper :: CI -> Sentence
 glassTypeHelper t = short t `S.is` phrase t +:+. phrase glass
-
-calofDemandDesc :: Sentence
-calofDemandDesc =
-  foldlSent [ch demand `sC` EmptyS `S.or_` phrase demandq `sC` EmptyS `S.isThe`
-  (demandq ^. defn), S "obtained from", refS demandVsSDFig,
-  S "by interpolation using", phrase standOffDist, sParen (ch standOffDist)
-  `S.and_` ch eqTNTWeight, S "as" +:+. plural parameter, ch eqTNTWeight,
-  S "is defined in" +:+. refS eqTNTWDD, ch standOffDist `S.isThe`
-  phrase standOffDist, S "as defined in", refS standOffDis]
 
 hMin :: Sentence
 hMin = ch nomThick `S.is` S "a function that maps from the nominal thickness"

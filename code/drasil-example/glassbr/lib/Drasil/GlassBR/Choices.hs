@@ -1,5 +1,6 @@
 module Drasil.GlassBR.Choices where
 
+import Language.Drasil (mkQuantDef, SimpleQDef, ExprC(..), LiteralC(..))
 import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
@@ -8,6 +9,8 @@ import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
 import Utils.Drasil (RelativeFile, relativeFile)
 
 import Drasil.GlassBR.ModuleDefs (allMods)
+import Drasil.GlassBR.Unitals (aspectRatio, standOffDist, stressDistFac,
+  demand, eqTNTWeight, dimlessLoad, sdfTol, tolLoad, interpY, interpZ)
 
 choices :: Choices
 choices = defaultChoices {
@@ -20,8 +23,21 @@ choices = defaultChoices {
     [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Exception Exception,
   defaultConfigFiles = configFp,
-  extraMods = allMods
+  extraMods = allMods,
+  handWiredDefs = [strDisFacQD, demandQD, tolPreQD]
 }
+
+strDisFacQD :: SimpleQDef
+strDisFacQD = mkQuantDef stressDistFac
+  $ apply interpZ [str "SDF.txt", sy aspectRatio, sy dimlessLoad]
+
+demandQD :: SimpleQDef
+demandQD = mkQuantDef demand
+  $ apply interpY [str "TSD.txt", sy standOffDist, sy eqTNTWeight]
+
+tolPreQD :: SimpleQDef
+tolPreQD = mkQuantDef tolLoad
+  $ apply interpY [str "SDF.txt", sy aspectRatio, sy sdfTol]
 
 configFp :: [RelativeFile]
 configFp = map relativeFile ["SDF.txt", "TSD.txt"]

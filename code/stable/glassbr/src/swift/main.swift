@@ -150,34 +150,6 @@ do {
 } catch {
     throw "Error closing file."
 }
-var J: Double = try func_J(&inParams, q_hat)
-do {
-    outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-    try outfile.seekToEnd()
-} catch {
-    throw "Error opening file."
-}
-do {
-    try outfile.write(contentsOf: Data("var 'J' assigned ".utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.write(contentsOf: Data(String(J).utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.write(contentsOf: Data(" in module Control".utf8))
-    try outfile.write(contentsOf: Data("\n".utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.close()
-} catch {
-    throw "Error closing file."
-}
 var NFL: Double = try func_NFL(&inParams, q_hat_tol)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -192,6 +164,34 @@ do {
 }
 do {
     try outfile.write(contentsOf: Data(String(NFL).utf8))
+} catch {
+    throw "Error printing to file."
+}
+do {
+    try outfile.write(contentsOf: Data(" in module Control".utf8))
+    try outfile.write(contentsOf: Data("\n".utf8))
+} catch {
+    throw "Error printing to file."
+}
+do {
+    try outfile.close()
+} catch {
+    throw "Error closing file."
+}
+var J: Double = try func_J(&inParams, q_hat)
+do {
+    outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
+    try outfile.seekToEnd()
+} catch {
+    throw "Error opening file."
+}
+do {
+    try outfile.write(contentsOf: Data("var 'J' assigned ".utf8))
+} catch {
+    throw "Error printing to file."
+}
+do {
+    try outfile.write(contentsOf: Data(String(J).utf8))
 } catch {
     throw "Error printing to file."
 }

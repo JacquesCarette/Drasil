@@ -40,19 +40,19 @@ double func_q_hat(InputParameters &inParams, double q);
 */
 double func_q_hat_tol(InputParameters &inParams, double J_tol);
 
-/** \brief Calculates stress distribution factor (Function)
-    \param inParams structure holding the input values
-    \param q_hat dimensionless load
-    \return stress distribution factor (Function)
-*/
-double func_J(InputParameters &inParams, double q_hat);
-
 /** \brief Calculates non-factored load (Pa)
     \param inParams structure holding the input values
     \param q_hat_tol tolerable load
     \return non-factored load (Pa)
 */
 double func_NFL(InputParameters &inParams, double q_hat_tol);
+
+/** \brief Calculates stress distribution factor (Function)
+    \param inParams structure holding the input values
+    \param q_hat dimensionless load
+    \return stress distribution factor (Function)
+*/
+double func_J(InputParameters &inParams, double q_hat);
 
 /** \brief Calculates risk of failure
     \param inParams structure holding the input values

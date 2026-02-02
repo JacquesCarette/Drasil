@@ -2,22 +2,13 @@ digraph allvsall {
 	instance:assumpLDFC -> instance:assumpSV;
 	dataDefn:loadDurFactor -> instance:assumpSV;
 	dataDefn:loadDurFactor -> instance:assumpLDFC;
-	dataDefn:demandq -> dataDefn:stdOffDist;
-	dataDefn:demandq -> dataDefn:eqTNTChar;
 	theory:riskFun -> dataDefn:minThick;
 	theory:riskFun -> dataDefn:loadDurFactor;
-	theory:riskFun -> theory:stressDistFac;
-	theory:stressDistFac -> dataDefn:aR;
-	theory:stressDistFac -> theory:dimlessLoad;
 	theory:nFL -> instance:assumpSV;
 	theory:nFL -> dataDefn:minThick;
-	theory:nFL -> theory:tolLoad;
 	theory:dimlessLoad -> instance:assumpSV;
 	theory:dimlessLoad -> dataDefn:minThick;
 	theory:dimlessLoad -> dataDefn:glassTypeFac;
-	theory:dimlessLoad -> dataDefn:demandq;
-	theory:tolLoad -> dataDefn:aR;
-	theory:tolLoad -> theory:sdfTol;
 	theory:sdfTol -> instance:assumpSV;
 	theory:sdfTol -> dataDefn:minThick;
 	theory:sdfTol -> dataDefn:loadDurFactor;
@@ -26,7 +17,6 @@ digraph allvsall {
 	theory:lResistance -> theory:nFL;
 	theory:isSafePb -> theory:probBr;
 	theory:isSafePb -> theory:isSafeLR;
-	theory:isSafeLR -> dataDefn:demandq;
 	theory:isSafeLR -> theory:lResistance;
 	theory:isSafeLR -> theory:isSafePb;
 	instance:outputValsAndKnownValues -> instance:inputValues;
@@ -62,11 +52,10 @@ digraph allvsall {
 	dataDefn:stdOffDist	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:standOffDist"];
 	dataDefn:aR	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:aspectRatio"];
 	dataDefn:eqTNTChar	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:eqTNTW"];
-	dataDefn:demandq	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:calofDemand"];
 
 	subgraph DD {
 	rank="same"
-	{dataDefn:minThick, dataDefn:loadDurFactor, dataDefn:glassTypeFac, dataDefn:stdOffDist, dataDefn:aR, dataDefn:eqTNTChar, dataDefn:demandq}
+	{dataDefn:minThick, dataDefn:loadDurFactor, dataDefn:glassTypeFac, dataDefn:stdOffDist, dataDefn:aR, dataDefn:eqTNTChar}
 	}
 
 	theory:isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
@@ -78,10 +67,8 @@ digraph allvsall {
 	}
 
 	theory:riskFun	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
-	theory:stressDistFac	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:stressDistFac"];
 	theory:nFL	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nFL"];
 	theory:dimlessLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:dimlessLoad"];
-	theory:tolLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:tolLoad"];
 	theory:sdfTol	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:sdfTol"];
 	theory:probBr	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:probOfBreak"];
 	theory:lResistance	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calofCapacity"];
@@ -90,7 +77,7 @@ digraph allvsall {
 
 	subgraph IM {
 	rank="same"
-	{theory:riskFun, theory:stressDistFac, theory:nFL, theory:dimlessLoad, theory:tolLoad, theory:sdfTol, theory:probBr, theory:lResistance, theory:isSafePb, theory:isSafeLR}
+	{theory:riskFun, theory:nFL, theory:dimlessLoad, theory:sdfTol, theory:probBr, theory:lResistance, theory:isSafePb, theory:isSafeLR}
 	}
 
 	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

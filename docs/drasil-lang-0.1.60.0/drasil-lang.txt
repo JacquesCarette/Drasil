@@ -1542,6 +1542,7 @@ CodeFC :: CodeChunk -> CodeFuncChunk
 [_ccf] :: CodeFuncChunk -> CodeChunk
 ccf :: Iso' CodeFuncChunk CodeChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
+instance Drasil.Database.Chunk.HasChunkRefs Drasil.Code.CodeVar.CodeFuncChunk
 instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeFuncChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeFuncChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeFuncChunk
@@ -1553,6 +1554,7 @@ instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeFuncChunk
 instance Drasil.Code.Classes.Callable Drasil.Code.CodeVar.CodeFuncChunk
 instance GHC.Classes.Eq Drasil.Code.CodeVar.CodeFuncChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Drasil.Code.CodeVar.CodeFuncChunk
+instance Drasil.Database.Chunk.HasChunkRefs Drasil.Code.CodeVar.CodeVarChunk
 instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeVarChunk
@@ -1563,6 +1565,7 @@ instance Language.Drasil.Symbol.HasSymbol Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeVarChunk
 instance GHC.Classes.Eq Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Drasil.Code.CodeVar.CodeVarChunk
+instance Drasil.Database.Chunk.HasChunkRefs Drasil.Code.CodeVar.CodeChunk
 instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeChunk

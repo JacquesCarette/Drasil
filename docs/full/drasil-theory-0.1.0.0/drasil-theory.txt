@@ -66,6 +66,7 @@ data ConstraintSet e
 
 -- | Smart constructor for building ConstraintSets
 mkConstraintSet :: ConceptChunk -> NonEmpty e -> ConstraintSet e
+instance Drasil.Database.Chunk.HasChunkRefs (Theory.Drasil.ConstraintSet.ConstraintSet e)
 instance Drasil.Database.UID.HasUID (Theory.Drasil.ConstraintSet.ConstraintSet e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Theory.Drasil.ConstraintSet.ConstraintSet e)
 instance Language.Drasil.Chunk.NamedIdea.Idea (Theory.Drasil.ConstraintSet.ConstraintSet e)
@@ -194,6 +195,7 @@ makeASingleDE :: UnitalChunk -> ConstrConcept -> LHS -> Expr -> String -> NP -> 
 -- | Form well-formatted ODE equations which the ODE solvers can solve.
 formEquations :: [[Expr]] -> [Unknown] -> [Expr] -> ConstrConcept -> [Expr]
 instance Language.Drasil.WellTyped.RequiresChecking Theory.Drasil.DifferentialModel.DifferentialModel Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
+instance Drasil.Database.Chunk.HasChunkRefs Theory.Drasil.DifferentialModel.DifferentialModel
 instance Drasil.Database.UID.HasUID Theory.Drasil.DifferentialModel.DifferentialModel
 instance GHC.Classes.Eq Theory.Drasil.DifferentialModel.DifferentialModel
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.DifferentialModel.DifferentialModel
@@ -234,6 +236,7 @@ multiDefnGenQD :: MultiDefn e -> DefiningExpr e -> QDefinition e
 -- | Convert <a>MultiDefn</a>s into <a>QDefinition</a>s via a specific
 --   <a>DefiningExpr</a> (by <a>UID</a>).
 multiDefnGenQDByUID :: MultiDefn e -> UID -> QDefinition e
+instance Drasil.Database.Chunk.HasChunkRefs (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Drasil.Database.UID.HasUID (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Symbol.HasSymbol (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Theory.Drasil.MultiDefn.MultiDefn e)
@@ -362,6 +365,7 @@ getterMk :: forall e a. Getter DifferentialModel a -> Getter RelationConcept a -
 -- | Extract a list of <a>QDefinition</a>s from a list of
 --   <a>ModelKinds</a>.
 getEqModQds :: [ModelKind e] -> [QDefinition e]
+instance Drasil.Database.Chunk.HasChunkRefs (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Drasil.Database.UID.HasUID (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.Chunk.NamedIdea.Idea (Theory.Drasil.ModelKinds.ModelKinds e)
@@ -369,6 +373,7 @@ instance Language.Drasil.Classes.Definition (Theory.Drasil.ModelKinds.ModelKinds
 instance Language.Drasil.Classes.ConceptDomain (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.ExprClasses.Express e => Language.Drasil.ExprClasses.Express (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.WellTyped.RequiresChecking (Theory.Drasil.ModelKinds.ModelKinds Language.Drasil.Expr.Lang.Expr) Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
+instance Drasil.Database.Chunk.HasChunkRefs (Theory.Drasil.ModelKinds.ModelKind e)
 instance Drasil.Database.UID.HasUID (Theory.Drasil.ModelKinds.ModelKind e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Theory.Drasil.ModelKinds.ModelKind e)
 instance Language.Drasil.Chunk.NamedIdea.Idea (Theory.Drasil.ModelKinds.ModelKind e)
@@ -866,6 +871,5 @@ DomDefn :: [UID] -> Sentence -> DomDefn
 defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
 defResolve' :: ChunkDB -> UID -> DomDefn
 findAllConcInsts :: ChunkDB -> [ConceptInstance]
-findAllDefinedQuantities :: ChunkDB -> [DefinedQuantityDict]
 findAllCitations :: ChunkDB -> [Citation]
 findAllLabelledContent :: ChunkDB -> [LabelledContent]

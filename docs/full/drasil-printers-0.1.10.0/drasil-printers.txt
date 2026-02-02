@@ -1281,7 +1281,7 @@ header :: Doc -> Doc
 --   functions that sort the data from the printing information field into
 --   the required display formats (often <a>UID</a>s, terms, shortnames,
 --   definitions, etc.).
-mkTableFromLenses :: IsChunk a => PrintingInformation -> Proxy a -> String -> [PrintingInformation -> (String, a -> Doc)] -> Doc
+mkTableFromLenses :: TypeableChunk a => PrintingInformation -> Proxy a -> String -> [PrintingInformation -> (String, a -> Doc)] -> Doc
 openTerm :: NamedIdea a => PrintingInformation -> (String, a -> Doc)
 openSymbol :: HasSymbol a => PrintingInformation -> (String, a -> Doc)
 openDefSymbol :: DefinesQuantity s => PrintingInformation -> (String, s -> Doc)

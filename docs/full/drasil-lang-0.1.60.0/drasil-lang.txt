@@ -2389,11 +2389,6 @@ sentencePlural :: UID -> Sentence
 --   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
 sentenceShort :: UID -> Sentence
 
--- | Gets symbol form of <a>UID</a>.
---   
---   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
-sentenceSymb :: UID -> Sentence
-
 -- | Gets singular form of <a>UID</a>.
 --   
 --   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
@@ -4583,6 +4578,7 @@ data RelationConcept
 -- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
 --   (<a>NP</a>), definition (<a>Sentence</a>), and <tt>Relation</tt>.
 makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.Relation.RelationConcept
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Relation.RelationConcept
 instance GHC.Classes.Eq Language.Drasil.Chunk.Relation.RelationConcept
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Relation.RelationConcept
@@ -4693,6 +4689,7 @@ ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
 
 -- | Constructs a UnitalChunk from a <a>Concept</a> with <tt>Units</tt>.
 ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.Unital.UnitalChunk
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Unital.UnitalChunk
@@ -4733,6 +4730,7 @@ commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
 
 -- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
 prependAbrv :: CommonIdea c => c -> String -> String
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.CommonIdea.CI
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CommonIdea.CI
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CommonIdea.CI
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CommonIdea.CI
@@ -4779,6 +4777,7 @@ cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -
 
 -- | Similar to cuc', but does not include a unit.
 cucNoUnit' :: String -> NP -> String -> Symbol -> Space -> [ConstraintE] -> Expr -> ConstrConcept
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrConcept
@@ -4814,6 +4813,7 @@ uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [Constraint
 
 -- | Uncertainty quantity constraint (<a>uqc</a>) without a description.
 uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertQ
@@ -4996,6 +4996,7 @@ CodeFC :: CodeChunk -> CodeFuncChunk
 [_ccf] :: CodeFuncChunk -> CodeChunk
 ccf :: Iso' CodeFuncChunk CodeChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
+instance Drasil.Database.Chunk.HasChunkRefs Drasil.Code.CodeVar.CodeFuncChunk
 instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeFuncChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeFuncChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeFuncChunk
@@ -5007,6 +5008,7 @@ instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeFuncChunk
 instance Drasil.Code.Classes.Callable Drasil.Code.CodeVar.CodeFuncChunk
 instance GHC.Classes.Eq Drasil.Code.CodeVar.CodeFuncChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Drasil.Code.CodeVar.CodeFuncChunk
+instance Drasil.Database.Chunk.HasChunkRefs Drasil.Code.CodeVar.CodeVarChunk
 instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeVarChunk
@@ -5017,6 +5019,7 @@ instance Language.Drasil.Symbol.HasSymbol Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeVarChunk
 instance GHC.Classes.Eq Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Drasil.Code.CodeVar.CodeVarChunk
+instance Drasil.Database.Chunk.HasChunkRefs Drasil.Code.CodeVar.CodeChunk
 instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeChunk
@@ -5620,6 +5623,7 @@ type SimpleQDef = QDefinition Expr
 
 -- | Commonly used type for QDefinitions containing ModelExprs.
 type ModelQDef = QDefinition ModelExpr
+instance Drasil.Database.Chunk.HasChunkRefs (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Drasil.Database.UID.HasUID (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Chunk.NamedIdea.Idea (Language.Drasil.Chunk.Eq.QDefinition e)

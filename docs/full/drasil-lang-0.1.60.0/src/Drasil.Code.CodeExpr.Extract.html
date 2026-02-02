@@ -14,48 +14,48 @@
 </span><span id="line-14"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-type">eNames</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#CodeExpr"><span class="hs-identifier hs-type">CodeExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span>
 </span><span id="line-15"></span><span id="eNames"><span class="annot"><span class="annottext">eNames :: CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var hs-var">eNames</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392622"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392622"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393025"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393025"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392622"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><a href="#local-6989586621679393025"><span class="hs-identifier hs-var">l</span></a></span><span>
 </span><span id="line-16"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#AssocB"><span class="hs-identifier hs-type">AssocB</span></a></span><span> </span><span class="annot"><span class="annottext">AssocBoolOper
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392625"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392625"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393028"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393028"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392625"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><a href="#local-6989586621679393028"><span class="hs-identifier hs-var">l</span></a></span><span>
 </span><span id="line-17"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#AssocC"><span class="hs-identifier hs-type">AssocC</span></a></span><span> </span><span class="annot"><span class="annottext">AssocConcatOper
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392627"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392627"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393030"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393030"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392627"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-18"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#C"><span class="hs-identifier hs-type">C</span></a></span><span> </span><span id="local-6989586621679392629"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392629"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">)</span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392629"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679393030"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><span id="line-18"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#C"><span class="hs-identifier hs-type">C</span></a></span><span> </span><span id="local-6989586621679393032"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393032"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">)</span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393032"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-19"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Lit"><span class="hs-identifier hs-type">Lit</span></a></span><span class="hs-special">{</span><span class="hs-special">}</span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-20"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#FCall"><span class="hs-identifier hs-type">FCall</span></a></span><span> </span><span id="local-6989586621679392632"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392632"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679392633"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392633"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679392634"><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392634"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392632"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
+</span><span id="line-20"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#FCall"><span class="hs-identifier hs-type">FCall</span></a></span><span> </span><span id="local-6989586621679393035"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393035"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679393036"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393036"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679393037"><span class="annot"><span class="annottext">[(UID, CodeExpr)]
+</span><a href="#local-6989586621679393037"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393035"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392633"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393036"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">((UID, CodeExpr) -&gt; UID) -&gt; [(UID, CodeExpr)] -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">(UID, CodeExpr) -&gt; UID
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392634"><span class="hs-identifier hs-var">ns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393037"><span class="hs-identifier hs-var">ns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-21"></span><span>                              </span><span class="annot"><span class="annottext">((UID, CodeExpr) -&gt; [UID]) -&gt; [(UID, CodeExpr)] -&gt; [UID]
@@ -67,25 +67,25 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(UID, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392634"><span class="hs-identifier hs-var">ns</span></a></span><span>
-</span><span id="line-22"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#New"><span class="hs-identifier hs-type">New</span></a></span><span> </span><span id="local-6989586621679392639"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392639"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679392640"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392640"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679392641"><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392641"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392639"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393037"><span class="hs-identifier hs-var">ns</span></a></span><span>
+</span><span id="line-22"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#New"><span class="hs-identifier hs-type">New</span></a></span><span> </span><span id="local-6989586621679393042"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393042"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393043"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393043"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679393044"><span class="annot"><span class="annottext">[(UID, CodeExpr)]
+</span><a href="#local-6989586621679393044"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393042"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392640"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393043"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">((UID, CodeExpr) -&gt; UID) -&gt; [(UID, CodeExpr)] -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">(UID, CodeExpr) -&gt; UID
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392641"><span class="hs-identifier hs-var">ns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393044"><span class="hs-identifier hs-var">ns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-23"></span><span>                              </span><span class="annot"><span class="annottext">((UID, CodeExpr) -&gt; [UID]) -&gt; [(UID, CodeExpr)] -&gt; [UID]
@@ -97,29 +97,29 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(UID, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392641"><span class="hs-identifier hs-var">ns</span></a></span><span>
-</span><span id="line-24"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Message"><span class="hs-identifier hs-type">Message</span></a></span><span> </span><span id="local-6989586621679392643"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392643"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392644"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392644"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679392645"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392645"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679392646"><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392646"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392643"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393044"><span class="hs-identifier hs-var">ns</span></a></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Message"><span class="hs-identifier hs-type">Message</span></a></span><span> </span><span id="local-6989586621679393046"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393046"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393047"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393047"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679393048"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393048"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679393049"><span class="annot"><span class="annottext">[(UID, CodeExpr)]
+</span><a href="#local-6989586621679393049"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393046"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392644"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393047"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392645"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393048"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">((UID, CodeExpr) -&gt; UID) -&gt; [(UID, CodeExpr)] -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">(UID, CodeExpr) -&gt; UID
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392646"><span class="hs-identifier hs-var">ns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393049"><span class="hs-identifier hs-var">ns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-25"></span><span>                              </span><span class="annot"><span class="annottext">((UID, CodeExpr) -&gt; [UID]) -&gt; [(UID, CodeExpr)] -&gt; [UID]
@@ -131,15 +131,15 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(UID, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392646"><span class="hs-identifier hs-var">ns</span></a></span><span>
-</span><span id="line-26"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Field"><span class="hs-identifier hs-type">Field</span></a></span><span> </span><span id="local-6989586621679392648"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392648"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679392649"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392649"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392648"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392649"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679393049"><span class="hs-identifier hs-var">ns</span></a></span><span>
+</span><span id="line-26"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Field"><span class="hs-identifier hs-type">Field</span></a></span><span> </span><span id="local-6989586621679393051"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393051"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393052"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393052"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393051"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393052"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-27"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Case"><span class="hs-identifier hs-type">Case</span></a></span><span> </span><span class="annot"><span class="annottext">Completeness
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392651"><span class="annot"><span class="annottext">[(CodeExpr, CodeExpr)]
-</span><a href="#local-6989586621679392651"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((CodeExpr, CodeExpr) -&gt; [UID]) -&gt; [(CodeExpr, CodeExpr)] -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393054"><span class="annot"><span class="annottext">[(CodeExpr, CodeExpr)]
+</span><a href="#local-6989586621679393054"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((CodeExpr, CodeExpr) -&gt; [UID]) -&gt; [(CodeExpr, CodeExpr)] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID])
@@ -150,7 +150,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(CodeExpr, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(CodeExpr, CodeExpr)]
-</span><a href="#local-6989586621679392651"><span class="hs-identifier hs-var">ls</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393054"><span class="hs-identifier hs-var">ls</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">((CodeExpr, CodeExpr) -&gt; [UID]) -&gt; [(CodeExpr, CodeExpr)] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
@@ -163,168 +163,168 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(CodeExpr, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(CodeExpr, CodeExpr)]
-</span><a href="#local-6989586621679392651"><span class="hs-identifier hs-var">ls</span></a></span><span>
+</span><a href="#local-6989586621679393054"><span class="hs-identifier hs-var">ls</span></a></span><span>
 </span><span id="line-28"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-type">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392653"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392653"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393056"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393056"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392653"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><a href="#local-6989586621679393056"><span class="hs-identifier hs-var">u</span></a></span><span>
 </span><span id="line-29"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOpB"><span class="hs-identifier hs-type">UnaryOpB</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncB
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392655"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392655"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393058"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393058"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392655"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><a href="#local-6989586621679393058"><span class="hs-identifier hs-var">u</span></a></span><span>
 </span><span id="line-30"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOpVV"><span class="hs-identifier hs-type">UnaryOpVV</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVV
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392657"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392657"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393060"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393060"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392657"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><a href="#local-6989586621679393060"><span class="hs-identifier hs-var">u</span></a></span><span>
 </span><span id="line-31"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOpVN"><span class="hs-identifier hs-type">UnaryOpVN</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVN
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392659"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392659"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393062"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393062"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392659"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><a href="#local-6989586621679393062"><span class="hs-identifier hs-var">u</span></a></span><span>
 </span><span id="line-32"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#ArithBinaryOp"><span class="hs-identifier hs-type">ArithBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">ArithBinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392661"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392661"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392662"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392662"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393064"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393064"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393065"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393065"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392661"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393064"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392662"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393065"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-33"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#EqBinaryOp"><span class="hs-identifier hs-type">EqBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">EqBinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392664"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392664"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392665"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392665"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393067"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393067"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393068"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393068"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392664"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393067"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392665"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393068"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-34"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#LABinaryOp"><span class="hs-identifier hs-type">LABinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">LABinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392667"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392667"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392668"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392668"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393070"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393070"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393071"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393071"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392667"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393070"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392668"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393071"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-35"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#OrdBinaryOp"><span class="hs-identifier hs-type">OrdBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">OrdBinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392670"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392670"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392671"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392671"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393073"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393073"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393074"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393074"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392670"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393073"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392671"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393074"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-36"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#VVVBinaryOp"><span class="hs-identifier hs-type">VVVBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">VVVBinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392673"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392673"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392674"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392674"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393076"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393076"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393077"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393077"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392673"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393076"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392674"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393077"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-37"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#VVNBinaryOp"><span class="hs-identifier hs-type">VVNBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">VVNBinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392676"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392676"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392677"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392677"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393079"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393079"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393080"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393080"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392676"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393079"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392677"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393080"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-38"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#NVVBinaryOp"><span class="hs-identifier hs-type">NVVBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">NVVBinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392679"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392679"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392680"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392680"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393082"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393082"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393083"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393083"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392679"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393082"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392680"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393083"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-39"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#ESSBinaryOp"><span class="hs-identifier hs-type">ESSBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">ESSBinOp
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392682"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392682"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393085"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393085"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392682"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679393085"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-40"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#ESBBinaryOp"><span class="hs-identifier hs-type">ESBBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">ESBBinOp
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392684"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392684"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393087"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393087"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392684"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679393087"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-41"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Operator"><span class="hs-identifier hs-type">Operator</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">DiscreteDomainDesc CodeExpr CodeExpr
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392686"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392686"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393089"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393089"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392686"><span class="hs-identifier hs-var">e</span></a></span><span>
-</span><span id="line-42"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Matrix"><span class="hs-identifier hs-type">Matrix</span></a></span><span> </span><span id="local-6989586621679392688"><span class="annot"><span class="annottext">[[CodeExpr]]
-</span><a href="#local-6989586621679392688"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeExpr] -&gt; [UID]) -&gt; [[CodeExpr]] -&gt; [UID]
+</span><a href="#local-6989586621679393089"><span class="hs-identifier hs-var">e</span></a></span><span>
+</span><span id="line-42"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Matrix"><span class="hs-identifier hs-type">Matrix</span></a></span><span> </span><span id="local-6989586621679393091"><span class="annot"><span class="annottext">[[CodeExpr]]
+</span><a href="#local-6989586621679393091"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeExpr] -&gt; [UID]) -&gt; [[CodeExpr]] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[[CodeExpr]]
-</span><a href="#local-6989586621679392688"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><a href="#local-6989586621679393091"><span class="hs-identifier hs-var">a</span></a></span><span>
 </span><span id="line-43"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Set"><span class="hs-identifier hs-type">Set</span></a></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392690"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392690"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393093"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393093"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392690"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><a href="#local-6989586621679393093"><span class="hs-identifier hs-var">a</span></a></span><span>
 </span><span id="line-44"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Variable"><span class="hs-identifier hs-type">Variable</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392692"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392692"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393095"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393095"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392692"><span class="hs-identifier hs-var">e</span></a></span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#RealI"><span class="hs-identifier hs-type">RealI</span></a></span><span> </span><span id="local-6989586621679392694"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392694"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679392695"><span class="annot"><span class="annottext">RealInterval CodeExpr CodeExpr
-</span><a href="#local-6989586621679392695"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392694"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393095"><span class="hs-identifier hs-var">e</span></a></span><span>
+</span><span id="line-45"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#RealI"><span class="hs-identifier hs-type">RealI</span></a></span><span> </span><span id="local-6989586621679393097"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393097"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393098"><span class="annot"><span class="annottext">RealInterval CodeExpr CodeExpr
+</span><a href="#local-6989586621679393098"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393097"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">RealInterval CodeExpr CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI"><span class="hs-identifier hs-var">eNamesRI</span></a></span><span> </span><span class="annot"><span class="annottext">RealInterval CodeExpr CodeExpr
-</span><a href="#local-6989586621679392695"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393098"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-46"></span><span>
 </span><span id="line-47"></span><span class="annot"><span class="hs-comment">-- | Generic traversal of everything that could come from an interval to names (similar to 'eNames').</span></span><span>
 </span><span id="line-48"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI"><span class="hs-identifier hs-type">eNamesRI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Space.html#RealInterval"><span class="hs-identifier hs-type">RealInterval</span></a></span><span> </span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#CodeExpr"><span class="hs-identifier hs-type">CodeExpr</span></a></span><span> </span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#CodeExpr"><span class="hs-identifier hs-type">CodeExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span>
 </span><span id="line-49"></span><span id="eNamesRI"><span class="annot"><span class="annottext">eNamesRI :: RealInterval CodeExpr CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI"><span class="hs-identifier hs-var hs-var">eNamesRI</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Space.html#Bounded"><span class="hs-identifier hs-type">Bounded</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679392697"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392697"><span class="hs-identifier hs-var">il</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679392698"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392698"><span class="hs-identifier hs-var">iu</span></a></span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679393100"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393100"><span class="hs-identifier hs-var">il</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679393101"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393101"><span class="hs-identifier hs-var">iu</span></a></span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392697"><span class="hs-identifier hs-var">il</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393100"><span class="hs-identifier hs-var">il</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392698"><span class="hs-identifier hs-var">iu</span></a></span><span>
+</span><a href="#local-6989586621679393101"><span class="hs-identifier hs-var">iu</span></a></span><span>
 </span><span id="line-50"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI"><span class="hs-identifier hs-var">eNamesRI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Space.html#UpTo"><span class="hs-identifier hs-type">UpTo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679392700"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392700"><span class="hs-identifier hs-var">iu</span></a></span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679393103"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393103"><span class="hs-identifier hs-var">iu</span></a></span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392700"><span class="hs-identifier hs-var">iu</span></a></span><span>
+</span><a href="#local-6989586621679393103"><span class="hs-identifier hs-var">iu</span></a></span><span>
 </span><span id="line-51"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI"><span class="hs-identifier hs-var">eNamesRI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Space.html#UpFrom"><span class="hs-identifier hs-type">UpFrom</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679392702"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392702"><span class="hs-identifier hs-var">il</span></a></span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679393105"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393105"><span class="hs-identifier hs-var">il</span></a></span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames"><span class="hs-identifier hs-var">eNames</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392702"><span class="hs-identifier hs-var">il</span></a></span><span>
+</span><a href="#local-6989586621679393105"><span class="hs-identifier hs-var">il</span></a></span><span>
 </span><span id="line-52"></span><span>
 </span><span id="line-53"></span><span class="hs-comment">-- | Generic traverse of all positions that could lead to 'eNames' without</span><span>
 </span><span id="line-54"></span><span class="hs-comment">-- functions.  FIXME : this should really be done via post-facto filtering, but</span><span>
@@ -332,45 +332,45 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-56"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-type">eNames'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#CodeExpr"><span class="hs-identifier hs-type">CodeExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span>
 </span><span id="line-57"></span><span id="eNames%27"><span class="annot"><span class="annottext">eNames' :: CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var hs-var">eNames'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392704"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392704"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393107"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393107"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392704"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><a href="#local-6989586621679393107"><span class="hs-identifier hs-var">l</span></a></span><span>
 </span><span id="line-58"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#AssocB"><span class="hs-identifier hs-type">AssocB</span></a></span><span> </span><span class="annot"><span class="annottext">AssocBoolOper
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392705"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392705"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393108"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393108"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392705"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><a href="#local-6989586621679393108"><span class="hs-identifier hs-var">l</span></a></span><span>
 </span><span id="line-59"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#AssocC"><span class="hs-identifier hs-type">AssocC</span></a></span><span> </span><span class="annot"><span class="annottext">AssocConcatOper
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392706"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392706"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393109"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393109"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392706"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-60"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#C"><span class="hs-identifier hs-type">C</span></a></span><span> </span><span id="local-6989586621679392707"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392707"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">)</span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392707"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679393109"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><span id="line-60"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#C"><span class="hs-identifier hs-type">C</span></a></span><span> </span><span id="local-6989586621679393110"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393110"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">)</span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393110"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-61"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Lit"><span class="hs-identifier hs-type">Lit</span></a></span><span class="hs-special">{</span><span class="hs-special">}</span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-62"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#FCall"><span class="hs-identifier hs-type">FCall</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392708"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392708"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679392709"><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392709"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393111"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393111"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679393112"><span class="annot"><span class="annottext">[(UID, CodeExpr)]
+</span><a href="#local-6989586621679393112"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392708"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393111"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">((UID, CodeExpr) -&gt; UID) -&gt; [(UID, CodeExpr)] -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">(UID, CodeExpr) -&gt; UID
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392709"><span class="hs-identifier hs-var">ns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393112"><span class="hs-identifier hs-var">ns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-63"></span><span>                               </span><span class="annot"><span class="annottext">((UID, CodeExpr) -&gt; [UID]) -&gt; [(UID, CodeExpr)] -&gt; [UID]
@@ -382,22 +382,22 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">(UID, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392709"><span class="hs-identifier hs-var">ns</span></a></span><span>
+</span><a href="#local-6989586621679393112"><span class="hs-identifier hs-var">ns</span></a></span><span>
 </span><span id="line-64"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#New"><span class="hs-identifier hs-type">New</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392710"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392710"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679392711"><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392711"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393113"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393113"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679393114"><span class="annot"><span class="annottext">[(UID, CodeExpr)]
+</span><a href="#local-6989586621679393114"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392710"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393113"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">((UID, CodeExpr) -&gt; UID) -&gt; [(UID, CodeExpr)] -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">(UID, CodeExpr) -&gt; UID
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392711"><span class="hs-identifier hs-var">ns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393114"><span class="hs-identifier hs-var">ns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-65"></span><span>                               </span><span class="annot"><span class="annottext">((UID, CodeExpr) -&gt; [UID]) -&gt; [(UID, CodeExpr)] -&gt; [UID]
@@ -409,26 +409,26 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">(UID, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392711"><span class="hs-identifier hs-var">ns</span></a></span><span>
-</span><span id="line-66"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Message"><span class="hs-identifier hs-type">Message</span></a></span><span> </span><span id="local-6989586621679392712"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392712"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392713"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392713"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679392714"><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392714"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392712"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393114"><span class="hs-identifier hs-var">ns</span></a></span><span>
+</span><span id="line-66"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Message"><span class="hs-identifier hs-type">Message</span></a></span><span> </span><span id="local-6989586621679393115"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393115"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393116"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393116"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679393117"><span class="annot"><span class="annottext">[(UID, CodeExpr)]
+</span><a href="#local-6989586621679393117"><span class="hs-identifier hs-var">ns</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393115"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392713"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393116"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">((UID, CodeExpr) -&gt; UID) -&gt; [(UID, CodeExpr)] -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">(UID, CodeExpr) -&gt; UID
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392714"><span class="hs-identifier hs-var">ns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393117"><span class="hs-identifier hs-var">ns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-67"></span><span>                               </span><span class="annot"><span class="annottext">((UID, CodeExpr) -&gt; [UID]) -&gt; [(UID, CodeExpr)] -&gt; [UID]
@@ -440,15 +440,15 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">(UID, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, CodeExpr)]
-</span><a href="#local-6989586621679392714"><span class="hs-identifier hs-var">ns</span></a></span><span>
-</span><span id="line-68"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Field"><span class="hs-identifier hs-type">Field</span></a></span><span> </span><span id="local-6989586621679392715"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392715"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679392716"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392716"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392715"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392716"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679393117"><span class="hs-identifier hs-var">ns</span></a></span><span>
+</span><span id="line-68"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Field"><span class="hs-identifier hs-type">Field</span></a></span><span> </span><span id="local-6989586621679393118"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393118"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393119"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393119"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393118"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393119"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-69"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Case"><span class="hs-identifier hs-type">Case</span></a></span><span> </span><span class="annot"><span class="annottext">Completeness
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392717"><span class="annot"><span class="annottext">[(CodeExpr, CodeExpr)]
-</span><a href="#local-6989586621679392717"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((CodeExpr, CodeExpr) -&gt; [UID]) -&gt; [(CodeExpr, CodeExpr)] -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393120"><span class="annot"><span class="annottext">[(CodeExpr, CodeExpr)]
+</span><a href="#local-6989586621679393120"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((CodeExpr, CodeExpr) -&gt; [UID]) -&gt; [(CodeExpr, CodeExpr)] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID])
@@ -459,7 +459,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(CodeExpr, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(CodeExpr, CodeExpr)]
-</span><a href="#local-6989586621679392717"><span class="hs-identifier hs-var">ls</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393120"><span class="hs-identifier hs-var">ls</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-70"></span><span>                               </span><span class="annot"><span class="annottext">((CodeExpr, CodeExpr) -&gt; [UID]) -&gt; [(CodeExpr, CodeExpr)] -&gt; [UID]
@@ -473,172 +473,172 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(CodeExpr, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(CodeExpr, CodeExpr)]
-</span><a href="#local-6989586621679392717"><span class="hs-identifier hs-var">ls</span></a></span><span>
+</span><a href="#local-6989586621679393120"><span class="hs-identifier hs-var">ls</span></a></span><span>
 </span><span id="line-71"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-type">UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392718"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392718"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393121"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393121"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392718"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><a href="#local-6989586621679393121"><span class="hs-identifier hs-var">u</span></a></span><span>
 </span><span id="line-72"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOpB"><span class="hs-identifier hs-type">UnaryOpB</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncB
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392719"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392719"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393122"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393122"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392719"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><a href="#local-6989586621679393122"><span class="hs-identifier hs-var">u</span></a></span><span>
 </span><span id="line-73"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOpVV"><span class="hs-identifier hs-type">UnaryOpVV</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVV
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392720"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392720"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393123"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393123"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392720"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><a href="#local-6989586621679393123"><span class="hs-identifier hs-var">u</span></a></span><span>
 </span><span id="line-74"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#UnaryOpVN"><span class="hs-identifier hs-type">UnaryOpVN</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVN
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392721"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392721"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393124"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393124"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392721"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><a href="#local-6989586621679393124"><span class="hs-identifier hs-var">u</span></a></span><span>
 </span><span id="line-75"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#ArithBinaryOp"><span class="hs-identifier hs-type">ArithBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">ArithBinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392722"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392722"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392723"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392723"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393125"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393125"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393126"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393126"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392722"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393125"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392723"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393126"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-76"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#EqBinaryOp"><span class="hs-identifier hs-type">EqBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">EqBinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392724"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392724"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392725"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392725"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393127"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393127"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393128"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393128"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392724"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393127"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392725"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393128"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-77"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#LABinaryOp"><span class="hs-identifier hs-type">LABinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">LABinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392726"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392726"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392727"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392727"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393129"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393129"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393130"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393130"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392726"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393129"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392727"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393130"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-78"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#OrdBinaryOp"><span class="hs-identifier hs-type">OrdBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">OrdBinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392728"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392728"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392729"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392729"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393131"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393131"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393132"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393132"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392728"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393131"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392729"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393132"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-79"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#VVVBinaryOp"><span class="hs-identifier hs-type">VVVBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">VVVBinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392730"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392730"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392731"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392731"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393133"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393133"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393134"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393134"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392730"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393133"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392731"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393134"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-80"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#VVNBinaryOp"><span class="hs-identifier hs-type">VVNBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">VVNBinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392732"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392732"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392733"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392733"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393135"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393135"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393136"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393136"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392732"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393135"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392733"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393136"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-81"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#NVVBinaryOp"><span class="hs-identifier hs-type">NVVBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">NVVBinOp
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392734"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392734"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679392735"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392735"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393137"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393137"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393138"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393138"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392734"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393137"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392735"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393138"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-82"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#ESSBinaryOp"><span class="hs-identifier hs-type">ESSBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">ESSBinOp
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392736"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392736"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393139"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393139"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392736"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679393139"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-83"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#ESBBinaryOp"><span class="hs-identifier hs-type">ESBBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">ESBBinOp
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392737"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392737"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393140"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393140"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392737"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679393140"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-84"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Operator"><span class="hs-identifier hs-type">Operator</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">DiscreteDomainDesc CodeExpr CodeExpr
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392738"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392738"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393141"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393141"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392738"><span class="hs-identifier hs-var">e</span></a></span><span>
-</span><span id="line-85"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Matrix"><span class="hs-identifier hs-type">Matrix</span></a></span><span> </span><span id="local-6989586621679392739"><span class="annot"><span class="annottext">[[CodeExpr]]
-</span><a href="#local-6989586621679392739"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeExpr] -&gt; [UID]) -&gt; [[CodeExpr]] -&gt; [UID]
+</span><a href="#local-6989586621679393141"><span class="hs-identifier hs-var">e</span></a></span><span>
+</span><span id="line-85"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Matrix"><span class="hs-identifier hs-type">Matrix</span></a></span><span> </span><span id="local-6989586621679393142"><span class="annot"><span class="annottext">[[CodeExpr]]
+</span><a href="#local-6989586621679393142"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeExpr] -&gt; [UID]) -&gt; [[CodeExpr]] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[[CodeExpr]]
-</span><a href="#local-6989586621679392739"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><a href="#local-6989586621679393142"><span class="hs-identifier hs-var">a</span></a></span><span>
 </span><span id="line-86"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Set"><span class="hs-identifier hs-type">Set</span></a></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392740"><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392740"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393143"><span class="annot"><span class="annottext">[CodeExpr]
+</span><a href="#local-6989586621679393143"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeExpr -&gt; [UID]) -&gt; [CodeExpr] -&gt; [UID]
 forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeExpr]
-</span><a href="#local-6989586621679392740"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><a href="#local-6989586621679393143"><span class="hs-identifier hs-var">a</span></a></span><span>
 </span><span id="line-87"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#Variable"><span class="hs-identifier hs-type">Variable</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679392741"><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392741"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679393144"><span class="annot"><span class="annottext">CodeExpr
+</span><a href="#local-6989586621679393144"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr
-</span><a href="#local-6989586621679392741"><span class="hs-identifier hs-var">e</span></a></span><span>
-</span><span id="line-88"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#RealI"><span class="hs-identifier hs-type">RealI</span></a></span><span> </span><span id="local-6989586621679392742"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392742"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679392743"><span class="annot"><span class="annottext">RealInterval CodeExpr CodeExpr
-</span><a href="#local-6989586621679392743"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679392742"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393144"><span class="hs-identifier hs-var">e</span></a></span><span>
+</span><span id="line-88"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#RealI"><span class="hs-identifier hs-type">RealI</span></a></span><span> </span><span id="local-6989586621679393145"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393145"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393146"><span class="annot"><span class="annottext">RealInterval CodeExpr CodeExpr
+</span><a href="#local-6989586621679393146"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679393145"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">RealInterval CodeExpr CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI%27"><span class="hs-identifier hs-var">eNamesRI'</span></a></span><span> </span><span class="annot"><span class="annottext">RealInterval CodeExpr CodeExpr
-</span><a href="#local-6989586621679392743"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679393146"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-89"></span><span>
 </span><span id="line-90"></span><span class="annot"><span class="hs-comment">-- | Generic traversal of everything that could come from an interval to names without functions (similar to 'eNames'').</span></span><span>
 </span><span id="line-91"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI%27"><span class="hs-identifier hs-type">eNamesRI'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Space.html#RealInterval"><span class="hs-identifier hs-type">RealInterval</span></a></span><span> </span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#CodeExpr"><span class="hs-identifier hs-type">CodeExpr</span></a></span><span> </span><span class="annot"><a href="Drasil.Code.CodeExpr.Lang.html#CodeExpr"><span class="hs-identifier hs-type">CodeExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span>
 </span><span id="line-92"></span><span id="eNamesRI%27"><span class="annot"><span class="annottext">eNamesRI' :: RealInterval CodeExpr CodeExpr -&gt; [UID]
-</span><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI%27"><span class="hs-identifier hs-var hs-var">eNamesRI'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Space.html#Bounded"><span class="hs-identifier hs-type">Bounded</span></a></span><span> </span><span id="local-6989586621679392744"><span class="annot"><span class="annottext">(Inclusive, CodeExpr)
-</span><a href="#local-6989586621679392744"><span class="hs-identifier hs-var">il</span></a></span></span><span> </span><span id="local-6989586621679392745"><span class="annot"><span class="annottext">(Inclusive, CodeExpr)
-</span><a href="#local-6989586621679392745"><span class="hs-identifier hs-var">iu</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI%27"><span class="hs-identifier hs-var hs-var">eNamesRI'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Space.html#Bounded"><span class="hs-identifier hs-type">Bounded</span></a></span><span> </span><span id="local-6989586621679393147"><span class="annot"><span class="annottext">(Inclusive, CodeExpr)
+</span><a href="#local-6989586621679393147"><span class="hs-identifier hs-var">il</span></a></span></span><span> </span><span id="local-6989586621679393148"><span class="annot"><span class="annottext">(Inclusive, CodeExpr)
+</span><a href="#local-6989586621679393148"><span class="hs-identifier hs-var">iu</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Inclusive, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, CodeExpr)
-</span><a href="#local-6989586621679392744"><span class="hs-identifier hs-var">il</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679393147"><span class="hs-identifier hs-var">il</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Inclusive, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, CodeExpr)
-</span><a href="#local-6989586621679392745"><span class="hs-identifier hs-var">iu</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-93"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI%27"><span class="hs-identifier hs-var">eNamesRI'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Space.html#UpTo"><span class="hs-identifier hs-type">UpTo</span></a></span><span> </span><span id="local-6989586621679392746"><span class="annot"><span class="annottext">(Inclusive, CodeExpr)
-</span><a href="#local-6989586621679392746"><span class="hs-identifier hs-var">iu</span></a></span></span><span class="hs-special">)</span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><a href="#local-6989586621679393148"><span class="hs-identifier hs-var">iu</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-93"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI%27"><span class="hs-identifier hs-var">eNamesRI'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Space.html#UpTo"><span class="hs-identifier hs-type">UpTo</span></a></span><span> </span><span id="local-6989586621679393149"><span class="annot"><span class="annottext">(Inclusive, CodeExpr)
+</span><a href="#local-6989586621679393149"><span class="hs-identifier hs-var">iu</span></a></span></span><span class="hs-special">)</span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Inclusive, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, CodeExpr)
-</span><a href="#local-6989586621679392746"><span class="hs-identifier hs-var">iu</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-94"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI%27"><span class="hs-identifier hs-var">eNamesRI'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Space.html#UpFrom"><span class="hs-identifier hs-type">UpFrom</span></a></span><span> </span><span id="local-6989586621679392747"><span class="annot"><span class="annottext">(Inclusive, CodeExpr)
-</span><a href="#local-6989586621679392747"><span class="hs-identifier hs-var">il</span></a></span></span><span class="hs-special">)</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
+</span><a href="#local-6989586621679393149"><span class="hs-identifier hs-var">iu</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-94"></span><span class="annot"><a href="Drasil.Code.CodeExpr.Extract.html#eNamesRI%27"><span class="hs-identifier hs-var">eNamesRI'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Space.html#UpFrom"><span class="hs-identifier hs-type">UpFrom</span></a></span><span> </span><span id="local-6989586621679393150"><span class="annot"><span class="annottext">(Inclusive, CodeExpr)
+</span><a href="#local-6989586621679393150"><span class="hs-identifier hs-var">il</span></a></span></span><span class="hs-special">)</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; [UID]
 </span><a href="Drasil.Code.CodeExpr.Extract.html#eNames%27"><span class="hs-identifier hs-var">eNames'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Inclusive, CodeExpr) -&gt; CodeExpr
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, CodeExpr)
-</span><a href="#local-6989586621679392747"><span class="hs-identifier hs-var">il</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679393150"><span class="hs-identifier hs-var">il</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-95"></span><span>
 </span><span id="line-96"></span><span class="hs-comment">---------------------------------------------------------------------------</span><span>
 </span><span id="line-97"></span><span class="hs-comment">-- And now implement the exported traversals all in terms of the above</span><span>

@@ -1,0 +1,4 @@
+digraph typeablechunka{
+TypeableChunka	[shape=oval, color=red2, label="TypeableChunka"];
+TypeableChunka -> IsChunkaTypeablea;
+}

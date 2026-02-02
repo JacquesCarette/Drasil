@@ -18,7 +18,18 @@ module Drasil.Database
 data Chunk
 
 -- | Constraint for anything that may be considered a valid chunk type.
-type IsChunk a = (HasUID a, HasChunkRefs a, Typeable a)
+type IsChunk a = (HasUID a, HasChunkRefs a)
+
+-- | Constraint for anything that may be considered a valid chunk type, and
+--   is also <a>Typeable</a>. Type-ability is necessary for
+--   storing/retrieving chunks in/from the <tt>ChunkDB</tt>.
+--   
+--   <a>TypeableChunk</a> is meant to be a purely <i>internal</i> concept;
+--   users of Drasil should only ever need to use <a>IsChunk</a>.
+--   <a>Typeable</a> is automatically derived by GHC, but can cause issues
+--   with type inference if used directly in user code, especially when
+--   involving parameterized chunk types.
+type TypeableChunk a = (IsChunk a, Typeable a)
 
 -- | The majority of chunks will relate other chunks in some way. In other
 --   words, the majority of our chunks *depend* on others.
@@ -29,7 +40,7 @@ chunkRefs :: HasChunkRefs a => a -> Set UID
 
 -- | Create a <a>Chunk</a>, ensuring that <a>Chunk</a>s are never placed
 --   within <a>Chunk</a>s.
-mkChunk :: IsChunk a => a -> Chunk
+mkChunk :: TypeableChunk a => a -> Chunk
 
 -- | <a>Open</a> chunks, casting them to a specific type.
 unChunk :: Typeable a => Chunk -> Maybe a
@@ -45,7 +56,7 @@ empty :: ChunkDB
 
 -- | Create a <a>ChunkDB</a> from a list of chunks. This will insert all
 --   chunks into the database from the list, from left to right.
-fromList :: IsChunk a => [a] -> ChunkDB
+fromList :: TypeableChunk a => [a] -> ChunkDB
 
 -- | Query the <a>ChunkDB</a> for all registered chunks (by their
 --   <a>UID</a>s).
@@ -73,7 +84,7 @@ find :: Typeable a => UID -> ChunkDB -> Maybe a
 findOrErr :: forall a. Typeable a => UID -> ChunkDB -> a
 
 -- | Find all chunks of a specific type in the <a>ChunkDB</a>.
-findAll :: forall a. IsChunk a => ChunkDB -> [a]
+findAll :: forall a. TypeableChunk a => ChunkDB -> [a]
 
 -- | Find all chunks of a specific type in the <a>ChunkDB</a>, returning
 --   their <a>UID</a>s rather than the chunks themselves.
@@ -92,15 +103,15 @@ findTypeOf :: UID -> ChunkDB -> Maybe TypeRep
 -- | Insert a chunk into the <a>ChunkDB</a> if it is sensible to do so
 --   (i.e., does not depend on itself, is not a <a>ChunkDB</a>, and does
 --   not overwrite another chunk).
-insert :: IsChunk a => a -> ChunkDB -> ChunkDB
+insert :: TypeableChunk a => a -> ChunkDB -> ChunkDB
 
 -- | Insert a list of chunks into a <a>ChunkDB</a>.
-insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
+insertAll :: TypeableChunk a => [a] -> ChunkDB -> ChunkDB
 
 -- | Insert 11 lists of <i>unique</i> chunk types into a <a>ChunkDB</a>,
 --   assuming the input <a>ChunkDB</a> does not already contain any of the
 --   chunks from the chunk lists.
-insertAllOutOfOrder11 :: (IsChunk a, IsChunk b, IsChunk c, IsChunk d, IsChunk e, IsChunk f, IsChunk g, IsChunk h, IsChunk i, IsChunk j, IsChunk k) => ChunkDB -> [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [g] -> [h] -> [i] -> [j] -> [k] -> ChunkDB
+insertAllOutOfOrder11 :: (TypeableChunk a, TypeableChunk b, TypeableChunk c, TypeableChunk d, TypeableChunk e, TypeableChunk f, TypeableChunk g, TypeableChunk h, TypeableChunk i, TypeableChunk j, TypeableChunk k) => ChunkDB -> [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [g] -> [h] -> [i] -> [j] -> [k] -> ChunkDB
 type ChunkType = String
 
 -- | A dumped representation of a <a>ChunkDB</a>, mapping chunk types
@@ -203,23 +214,23 @@ showUID :: HasUID a => a -> String
 data UIDRef typ
 
 -- | Create a <a>UIDRef</a> to a chunk.
-hide :: IsChunk t => t -> UIDRef t
+hide :: TypeableChunk t => t -> UIDRef t
 
 -- | Find a chunk by a <a>UIDRef</a>.
-unhide :: IsChunk t => UIDRef t -> ChunkDB -> Maybe t
+unhide :: TypeableChunk t => UIDRef t -> ChunkDB -> Maybe t
 
 -- | Find a chunk by a <a>UIDRef</a>, erroring if not found.
-unhideOrErr :: IsChunk t => UIDRef t -> ChunkDB -> t
+unhideOrErr :: TypeableChunk t => UIDRef t -> ChunkDB -> t
 
 -- | A variant of <a>UIDRef</a> without type information about the chunk
 --   being referred to, effectively treating chunks as being "unityped."
 data UnitypedUIDRef
 
 -- | Create a <a>UnitypedUIDRef</a> to a chunk.
-hideUni :: IsChunk t => t -> UnitypedUIDRef
+hideUni :: TypeableChunk t => t -> UnitypedUIDRef
 
 -- | Find a chunk by its <a>UnitypedUIDRef</a>.
-unhideUni :: IsChunk t => UnitypedUIDRef -> ChunkDB -> Maybe t
+unhideUni :: TypeableChunk t => UnitypedUIDRef -> ChunkDB -> Maybe t
 
 -- | Find a chunk by its <a>UnitypedUIDRef</a>, erroring if not found.
-unhideUniOrErr :: IsChunk t => UnitypedUIDRef -> ChunkDB -> t
+unhideUniOrErr :: TypeableChunk t => UnitypedUIDRef -> ChunkDB -> t

@@ -125,6 +125,7 @@ NA :: DefinedQuantityDict -> NamedArgument
 
 -- | Smart constructor for <a>NamedArgument</a> .
 narg :: (Quantity q, MayHaveUnit q, Concept q) => q -> NamedArgument
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.NamedArgument.NamedArgument
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.NamedArgument.NamedArgument
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.NamedArgument.NamedArgument
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.NamedArgument.NamedArgument
@@ -156,6 +157,7 @@ pcAuto :: CodeIdea c => c -> ParameterChunk
 
 -- | Constructs a pass-by-value parameter.
 pcVal :: CodeIdea c => c -> ParameterChunk
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Parameter.ParameterChunk
@@ -588,6 +590,7 @@ qtov :: CanGenCode e => QDefinition e -> CodeDefinition
 odeDef :: ODEInfo -> CodeDefinition
 auxExprs :: Lens' CodeDefinition [CodeExpr]
 defType :: Lens' CodeDefinition DefinitionType
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeDefinition.CodeDefinition
@@ -1706,21 +1709,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aMdd
-oldCodeSpec :: HasOldCodeSpec c_aMdd => Lens' c_aMdd OldCodeSpec
-authorsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd People
-cMapO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [RelativeFile]
-constMapO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd ConstantMap
-constantsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Const]
-derivedInputsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Derived]
-execOrderO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Def]
-extInputsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Input]
-inputsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Input]
-modsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Mod]
-outputsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Output]
-pNameO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd Name
-systemdbO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd ChunkDB
+class HasOldCodeSpec c_aMlJ
+oldCodeSpec :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ OldCodeSpec
+authorsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ People
+cMapO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [RelativeFile]
+constMapO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ ConstantMap
+constantsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Const]
+derivedInputsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Derived]
+execOrderO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Def]
+extInputsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Input]
+inputsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Input]
+modsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Mod]
+outputsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Output]
+pNameO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ Name
+systemdbO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -2934,21 +2937,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aMdd
-oldCodeSpec :: HasOldCodeSpec c_aMdd => Lens' c_aMdd OldCodeSpec
-authorsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd People
-cMapO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [RelativeFile]
-constMapO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd ConstantMap
-constantsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Const]
-derivedInputsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Derived]
-execOrderO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Def]
-extInputsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Input]
-inputsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Input]
-modsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Mod]
-outputsO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd [Output]
-pNameO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd Name
-systemdbO :: HasOldCodeSpec c_aMdd => Lens' c_aMdd ChunkDB
+class HasOldCodeSpec c_aMlJ
+oldCodeSpec :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ OldCodeSpec
+authorsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ People
+cMapO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [RelativeFile]
+constMapO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ ConstantMap
+constantsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Const]
+derivedInputsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Derived]
+execOrderO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Def]
+extInputsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Input]
+inputsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Input]
+modsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Mod]
+outputsO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ [Output]
+pNameO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ Name
+systemdbO :: HasOldCodeSpec c_aMlJ => Lens' c_aMlJ ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

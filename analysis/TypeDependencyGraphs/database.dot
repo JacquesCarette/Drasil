@@ -2,13 +2,17 @@ digraph alltypes {
 	subgraph cunkh {
 		subgraph chunk{
 		Chunk	[shape=oval, color=darkviolet, label="Chunk"];
-		Chunk -> IsChunk;
+		Chunk -> TypeableChunk;
 		Chunk -> a;
 		Chunk -> Chunk;
 		}
 		subgraph ischunka{
 		IsChunka	[shape=oval, color=red2, label="IsChunka"];
-		IsChunka -> HasUIDaHasChunkRefsaTypeablea;
+		IsChunka -> HasUIDaHasChunkRefsa;
+		}
+		subgraph typeablechunka{
+		TypeableChunka	[shape=oval, color=red2, label="TypeableChunka"];
+		TypeableChunka -> IsChunkaTypeablea;
 		}
 	}
 	subgraph cunkdbh {

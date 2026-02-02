@@ -1,4 +1,4 @@
 digraph ischunka{
 IsChunka	[shape=oval, color=red2, label="IsChunka"];
-IsChunka -> HasUIDaHasChunkRefsaTypeablea;
+IsChunka -> HasUIDaHasChunkRefsa;
 }

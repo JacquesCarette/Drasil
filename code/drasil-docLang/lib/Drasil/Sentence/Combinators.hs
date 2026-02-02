@@ -23,13 +23,14 @@ import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.List (transpose)
 
+import Drasil.Database (IsChunk)
 import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs) , UnitDefn, MayHaveUnit(..)
   , UnitalChunk , HasUnitSymbol(usymb), Quantity, Concept, Definition(defn), NamedIdea(..)
   , HasShortName(..) , short, atStart, titleize, phrase, plural , Section , ItemType(..), ListType(Bullet)
   , ModelExpr , refS, namedRef
   , Sentence(S, Percent, (:+:), Sy, EmptyS), eS
   , ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent, fromSource, fterms
-  , foldlList, SepType(Comma), FoldType(List), foldlSent , Referable)
+  , foldlList, SepType(Comma), FoldType(List), foldlSent , Referable, HasSymbol)
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
 
 -- Ideally this would create a reference to the equation too.
@@ -65,7 +66,7 @@ definedIn'' q =  S "defined" `S.in_` refS q
 
 -- | Takes a 'Symbol' and its 'Reference' (does not append a period at the
 -- end!). Outputs as "@symbol@ is defined in @source@".
-definedIn''' :: (Quantity q, Referable r, HasShortName r) => q -> r -> Sentence
+definedIn''' :: (IsChunk q, HasSymbol q, Referable r, HasShortName r) => q -> r -> Sentence
 definedIn''' q src = ch q `S.is` S "defined in" +:+ refS src
 
 -- | Zip helper function enumerates abbreviations and zips it with list of 'ItemType':

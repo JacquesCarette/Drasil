@@ -11,8 +11,9 @@ module Language.Drasil.Chunk.NamedIdea (
 
 import Control.Lens ((^.), makeLenses, Lens')
 
-import Drasil.Database (mkUid, UID, HasUID(..), declareHasChunkRefs, Generically(..), IsChunk)
-import Language.Drasil.NounPhrase.Types (NP)
+import Drasil.Database (mkUid, UID, HasUID(..), declareHasChunkRefs,
+  Generically(..), IsChunk)
+import Language.Drasil.NounPhrase.Core (NP)
 
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as being worthy
 -- of naming.

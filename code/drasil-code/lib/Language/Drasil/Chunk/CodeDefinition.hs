@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.CodeDefinition (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (HasUID (..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..))
 import Language.Drasil
 
 import Drasil.Code.CodeExpr.Development (CodeExpr, expr, CanGenCode(..))
@@ -22,6 +22,9 @@ data CodeDefinition = CD { _cchunk   :: CodeChunk
                          , _defType  :: DefinitionType
                          }
 makeLenses ''CodeDefinition
+
+instance HasChunkRefs CodeDefinition where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeDefinition'.
 instance HasUID           CodeDefinition where uid = cchunk . uid

@@ -1111,7 +1111,7 @@ lNegInf :: Symbol
 
 
 -- | Basic data types for noun phrases.
-module Language.Drasil.NounPhrase.Types
+module Language.Drasil.NounPhrase.Core
 
 -- | Capitalization rules.
 data CapitalizationRule
@@ -1122,8 +1122,8 @@ CapFirst :: CapitalizationRule
 -- | Capitalize the first letter of each word.
 CapWords :: CapitalizationRule
 
--- | Replace the noun phrase with the given 'NPStruct. Used for custom
---   capitalization.
+-- | Replace the noun phrase with the given <a>NPStruct</a>. Used for
+--   custom capitalization.
 Replace :: NPStruct -> CapitalizationRule
 CapNothing :: CapitalizationRule
 
@@ -1145,7 +1145,7 @@ CommonNoun :: String -> PluralRule -> CapitalizationRule -> NP
 --   are for sentenceCase / titleCase respectively
 Phrase :: NPStruct -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
 
--- | Synonym for 'NPStruct typically used for plural forms.
+-- | Synonym for <a>NPStruct</a> typically used for plural forms.
 type PluralForm = NPStruct
 
 -- | Pluralization rules.
@@ -1173,7 +1173,7 @@ S :: String -> NPStruct
 (:-:) :: NPStruct -> NPStruct -> NPStruct
 (:+:) :: NPStruct -> NPStruct -> NPStruct
 P :: Symbol -> NPStruct
-instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.NounPhrase.Types.NP
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.NounPhrase.Core.NP
 
 module Language.Drasil.NounPhrase
 class NounPhrase n
@@ -1352,8 +1352,8 @@ CapFirst :: CapitalizationRule
 -- | Capitalize the first letter of each word.
 CapWords :: CapitalizationRule
 
--- | Replace the noun phrase with the given 'NPStruct. Used for custom
---   capitalization.
+-- | Replace the noun phrase with the given <a>NPStruct</a>. Used for
+--   custom capitalization.
 Replace :: NPStruct -> CapitalizationRule
 CapNothing :: CapitalizationRule
 
@@ -1382,7 +1382,7 @@ S :: String -> NPStruct
 (:-:) :: NPStruct -> NPStruct -> NPStruct
 (:+:) :: NPStruct -> NPStruct -> NPStruct
 P :: Symbol -> NPStruct
-instance Language.Drasil.NounPhrase.NounPhrase Language.Drasil.NounPhrase.Types.NP
+instance Language.Drasil.NounPhrase.NounPhrase Language.Drasil.NounPhrase.Core.NP
 
 
 -- | Defines various NounPhrase-level combinators. These hold more
@@ -7171,8 +7171,8 @@ CapFirst :: CapitalizationRule
 -- | Capitalize the first letter of each word.
 CapWords :: CapitalizationRule
 
--- | Replace the noun phrase with the given 'NPStruct. Used for custom
---   capitalization.
+-- | Replace the noun phrase with the given <a>NPStruct</a>. Used for
+--   custom capitalization.
 Replace :: NPStruct -> CapitalizationRule
 CapNothing :: CapitalizationRule
 

@@ -3571,8 +3571,8 @@ CapFirst :: CapitalizationRule
 -- | Capitalize the first letter of each word.
 CapWords :: CapitalizationRule
 
--- | Replace the noun phrase with the given 'NPStruct. Used for custom
---   capitalization.
+-- | Replace the noun phrase with the given <a>NPStruct</a>. Used for
+--   custom capitalization.
 Replace :: NPStruct -> CapitalizationRule
 CapNothing :: CapitalizationRule
 

@@ -477,7 +477,7 @@ digraph alltypes {
 	}
 	subgraph combinators {
 	}
-	subgraph types {
+	subgraph core {
 		subgraph npstruct{
 		NPStruct	[shape=oval, color=darkviolet, label="NPStruct"];
 		NPStruct -> String;

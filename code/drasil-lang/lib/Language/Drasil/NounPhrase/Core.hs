@@ -1,5 +1,5 @@
 -- | Basic data types for noun phrases.
-module Language.Drasil.NounPhrase.Types (
+module Language.Drasil.NounPhrase.Core (
   -- * Types
   CapitalizationRule(..), NP(..),
   PluralForm, PluralRule(..),
@@ -18,7 +18,7 @@ data NPStruct =
   | NPStruct :+: NPStruct -- a space
   | P Symbol
 
--- | Synonym for 'NPStruct typically used for plural forms.
+-- | Synonym for 'NPStruct' typically used for plural forms.
 type PluralForm = NPStruct
 
 -- | Capitalization rules.
@@ -26,7 +26,7 @@ data CapitalizationRule =
     CapFirst -- ^ Capitalize the first letter of the first word only.
   | CapWords -- ^ Capitalize the first letter of each word.
   | Replace NPStruct -- ^ Replace the noun phrase with the given
-                     -- 'NPStruct. Used for custom capitalization.
+                     -- 'NPStruct'. Used for custom capitalization.
   | CapNothing    -- some parts of speech don't capitalize at all but still a full phrase
 
 -- | Pluralization rules.

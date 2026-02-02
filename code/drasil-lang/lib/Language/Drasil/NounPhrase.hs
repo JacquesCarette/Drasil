@@ -20,7 +20,7 @@ module Language.Drasil.NounPhrase (
 
 import Data.Char (isLatin1, isLetter, toLower, toUpper)
 
-import Language.Drasil.NounPhrase.Types -- uses whole module
+import Language.Drasil.NounPhrase.Core -- uses whole module
 
 --Linguistically, nounphrase might not be the best name (yet!), but once
 -- it is fleshed out and/or we do more with it, it will likely be a good fit

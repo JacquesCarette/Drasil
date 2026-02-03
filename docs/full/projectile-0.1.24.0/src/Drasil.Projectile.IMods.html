@@ -221,7 +221,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;we want to find the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -229,7 +229,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">,</span><span>
 </span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -282,7 +282,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Dividing by&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
@@ -312,7 +312,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Solving for&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -344,7 +344,7 @@ PExpr
 </span><a href="Drasil.Projectile.Expressions.html#iSpeed"><span class="hs-identifier hs-var">E.iSpeed</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;we can replace&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">iyVel</span></span><span class="hs-special">]</span><span>
 </span><span id="line-68"></span><span>
@@ -539,14 +539,14 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;we want to find the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">xPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-98"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -586,7 +586,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier hs-var">launSpeed</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;we can replace&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">ixVel</span></span><span class="hs-special">]</span><span>
 </span><span id="line-101"></span><span id="landPosDerivSent4"><span class="annot"><span class="annottext">landPosDerivSent4 :: Sentence
@@ -741,7 +741,7 @@ r -&gt; Sentence
 </span><span id="line-125"></span><span>
 </span><span id="line-126"></span><span id="gravitationalAccelConstNote"><span class="annot"><span class="annottext">gravitationalAccelConstNote :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#gravitationalAccelConstNote"><span class="hs-identifier hs-var hs-var">gravitationalAccelConstNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span>
@@ -798,7 +798,7 @@ r -&gt; Sentence
 </span><span id="line-131"></span><span>
 </span><span id="line-132"></span><span id="landPosNote"><span class="annot"><span class="annottext">landPosNote :: Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosNote"><span class="hs-identifier hs-var hs-var">landPosNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence

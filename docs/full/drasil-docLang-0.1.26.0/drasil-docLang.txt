@@ -603,7 +603,7 @@ definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
 -- | Takes a <tt>Symbol</tt> and its <tt>Reference</tt> (does not append a
 --   period at the end!). Outputs as "<tt>symbol</tt> is defined in
 --   <tt>source</tt>".
-definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
+definedIn''' :: (IsChunk q, HasSymbol q, Referable r, HasShortName r) => q -> r -> Sentence
 
 -- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
 --   as a <a>Sentence</a>: "From <tt>source</tt> we can replace

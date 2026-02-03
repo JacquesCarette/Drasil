@@ -406,7 +406,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#effNormStress"><span class="hs-identifier hs-var">effNormStress</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-96"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#effNormStress"><span class="hs-identifier hs-var">effNormStress</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.onThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -435,12 +435,12 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier hs-var">shrStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;versus&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#effNormStress"><span class="hs-identifier hs-var">effNormStress</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-100"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -483,12 +483,12 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SSP.Unitals.html#effCohesion"><span class="hs-identifier hs-var">effCohesion</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-104"></span><span>  </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SSP.Unitals.html#effCohesion"><span class="hs-identifier hs-var">effCohesion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;represents the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier hs-var">shrStress</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -596,7 +596,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.SSP.TMods.html#effStressDesc"><span class="hs-identifier hs-var hs-var">effStressDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#totNormStress"><span class="hs-identifier hs-var">totNormStress</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; DataDefinition -&gt; Sentence
 forall q r.
-(HasSymbol q, HasUID q, Referable r, HasShortName r) =&gt;
+(IsChunk q, HasSymbol q, Referable r, HasShortName r) =&gt;
 q -&gt; r -&gt; Sentence
 </span><span class="hs-operator hs-var">`definedIn'''`</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SSP.DataDefs.html#normStressDD"><span class="hs-identifier hs-var">normStressDD</span></a></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span>

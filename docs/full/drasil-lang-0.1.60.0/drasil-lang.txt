@@ -1539,7 +1539,7 @@ data IdeaDict
 
 -- | A NamedIdea is a <a>term</a> that we've identified (has a <a>UID</a>)
 --   as being worthy of naming.
-class HasUID c => NamedIdea c
+class IsChunk c => NamedIdea c
 
 -- | Lens to the term (a noun phrase).
 term :: NamedIdea c => Lens' c NP
@@ -2364,7 +2364,7 @@ capSent :: Sentence -> Sentence
 headSent :: Int -> Sentence -> Sentence
 
 -- | Gets a symbol and places it in a <a>Sentence</a>.
-ch :: (HasUID c, HasSymbol c) => c -> Sentence
+ch :: (IsChunk c, HasSymbol c) => c -> Sentence
 eS :: ModelExpr -> Sentence
 eS' :: Express t => t -> Sentence
 
@@ -3840,7 +3840,7 @@ module Language.Drasil.Classes
 
 -- | A NamedIdea is a <a>term</a> that we've identified (has a <a>UID</a>)
 --   as being worthy of naming.
-class HasUID c => NamedIdea c
+class IsChunk c => NamedIdea c
 
 -- | Lens to the term (a noun phrase).
 term :: NamedIdea c => Lens' c NP
@@ -5939,7 +5939,7 @@ symbol :: HasSymbol c => c -> Stage -> Symbol
 
 -- | A NamedIdea is a <a>term</a> that we've identified (has a <a>UID</a>)
 --   as being worthy of naming.
-class HasUID c => NamedIdea c
+class IsChunk c => NamedIdea c
 
 -- | Lens to the term (a noun phrase).
 term :: NamedIdea c => Lens' c NP
@@ -7025,7 +7025,7 @@ capSent :: Sentence -> Sentence
 headSent :: Int -> Sentence -> Sentence
 
 -- | Gets a symbol and places it in a <a>Sentence</a>.
-ch :: (HasUID c, HasSymbol c) => c -> Sentence
+ch :: (IsChunk c, HasSymbol c) => c -> Sentence
 eS :: ModelExpr -> Sentence
 eS' :: Express t => t -> Sentence
 

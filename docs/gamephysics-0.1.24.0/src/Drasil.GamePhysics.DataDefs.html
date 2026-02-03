@@ -466,7 +466,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.linearVelocity</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-208"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#velB"><span class="hs-identifier hs-var">velB</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -484,7 +484,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.linearVelocity</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#velO"><span class="hs-identifier hs-var">velO</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -678,7 +678,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-259"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;B relative to that body&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#initRelVel"><span class="hs-identifier hs-var">initRelVel</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.isThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence

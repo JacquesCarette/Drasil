@@ -41,11 +41,11 @@ module Drasil.GlassBR.MetaConcepts
 progName :: CI
 
 module Drasil.GlassBR.References
-astm2009 :: Citation
-astm2016 :: Citation
-astm2012 :: Citation
-beasonEtAl1998 :: Citation
 citations :: BibRef
+astm2009 :: Citation
+astm2012 :: Citation
+astm2016 :: Citation
+beasonEtAl1998 :: Citation
 
 module Drasil.GlassBR.Units
 sFlawPU :: UnitDefn
@@ -231,7 +231,7 @@ calofDemand :: DataDefinition
 aGrtrThanB :: Sentence
 arRef :: Sentence
 hRef :: Sentence
-stdVals :: (HasSymbol s, HasUID s) => [s] -> Sentence
+stdVals :: (IsChunk s, HasSymbol s) => [s] -> Sentence
 
 module Drasil.GlassBR.IMods
 symb :: [UnitalChunk]

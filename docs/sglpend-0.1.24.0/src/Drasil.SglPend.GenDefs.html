@@ -583,11 +583,11 @@ forall e.
 DefinedQuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><a href="#local-6989586621679062853"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679062981"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679062855"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-150"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679062853"><span class="annot"><span class="annottext">quant :: DefinedQuantityDict
-</span><a href="#local-6989586621679062853"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679062983"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-150"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679062981"><span class="annot"><span class="annottext">quant :: DefinedQuantityDict
+</span><a href="#local-6989586621679062981"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 -&gt; (Stage -&gt; Symbol)
 -&gt; Space
 -&gt; Maybe UnitDefn
@@ -611,8 +611,8 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-153"></span><span>          </span><span id="local-6989586621679062855"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679062855"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
+</span><span id="line-153"></span><span>          </span><span id="local-6989586621679062983"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
+</span><a href="#local-6989586621679062983"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
 forall a. HasCallStack =&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-154"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
@@ -695,11 +695,11 @@ forall e.
 DefinedQuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><a href="#local-6989586621679062874"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679063002"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679062875"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-170"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679062874"><span class="annot"><span class="annottext">quant :: DefinedQuantityDict
-</span><a href="#local-6989586621679062874"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679063003"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-170"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679063002"><span class="annot"><span class="annottext">quant :: DefinedQuantityDict
+</span><a href="#local-6989586621679063002"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 -&gt; (Stage -&gt; Symbol)
 -&gt; Space
 -&gt; Maybe UnitDefn
@@ -723,8 +723,8 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-173"></span><span>          </span><span id="local-6989586621679062875"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679062875"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
+</span><span id="line-173"></span><span>          </span><span id="local-6989586621679063003"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
+</span><a href="#local-6989586621679063003"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
 forall a. HasCallStack =&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-174"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
@@ -912,7 +912,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.the_ofTheC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;string&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPend.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-207"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -964,7 +964,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Substituting for&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">momentOfInertia</span></span><span>
 </span><span id="line-214"></span><span id="angFrequencyDerivSent5"><span class="annot"><span class="annottext">angFrequencyDerivSent5 :: Sentence
@@ -972,11 +972,11 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Crossing out&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">mass</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPend.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -997,14 +997,14 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;sin&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPend.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;to&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPend.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span>
 </span><span id="line-216"></span><span id="angFrequencyDerivSent7"><span class="annot"><span class="annottext">angFrequencyDerivSent7 :: Sentence

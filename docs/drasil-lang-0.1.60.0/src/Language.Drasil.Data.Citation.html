@@ -53,8 +53,8 @@
 </span><span id="line-53"></span><span>               </span><span class="hs-glyph">|</span><span> </span><span id="Year"><span class="annot"><a href="Language.Drasil.Data.Citation.html#Year"><span class="hs-identifier hs-var">Year</span></a></span></span><span>         </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
 </span><span id="line-54"></span><span>
 </span><span id="line-55"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasChunkRefs</span></span><span> </span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-56"></span><span>  </span><span id="local-6989586621679381691"><span class="annot"><span class="annottext">chunkRefs :: CiteField -&gt; Set UID
-</span><a href="#local-6989586621679381691"><span class="hs-identifier hs-var hs-var hs-var hs-var">chunkRefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Set UID -&gt; CiteField -&gt; Set UID
+</span><span id="line-56"></span><span>  </span><span id="local-6989586621679382594"><span class="annot"><span class="annottext">chunkRefs :: CiteField -&gt; Set UID
+</span><a href="#local-6989586621679382594"><span class="hs-identifier hs-var hs-var hs-var hs-var">chunkRefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Set UID -&gt; CiteField -&gt; Set UID
 forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">Set UID
 forall a. Monoid a =&gt; a
@@ -62,9 +62,9 @@ forall a. Monoid a =&gt; a
 </span><span id="line-57"></span><span>  </span><span class="hs-pragma">{-# INLINABLE</span><span> </span><span class="annot"><span class="hs-pragma hs-type">chunkRefs</span></span><span> </span><span class="hs-pragma">#-}</span><span>
 </span><span id="line-58"></span><span>
 </span><span id="line-59"></span><span class="annot"><span class="hs-comment">-- | 'Citation's should have a fields ('CiteField').</span></span><span>
-</span><span id="line-60"></span><span class="hs-keyword">class</span><span> </span><span id="HasFields"><span class="annot"><a href="Language.Drasil.Data.Citation.html#HasFields"><span class="hs-identifier hs-var">HasFields</span></a></span></span><span> </span><span id="local-6989586621679381625"><span class="annot"><a href="#local-6989586621679381625"><span class="hs-identifier hs-type">c</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-60"></span><span class="hs-keyword">class</span><span> </span><span id="HasFields"><span class="annot"><a href="Language.Drasil.Data.Citation.html#HasFields"><span class="hs-identifier hs-var">HasFields</span></a></span></span><span> </span><span id="local-6989586621679382528"><span class="annot"><a href="#local-6989586621679382528"><span class="hs-identifier hs-type">c</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-61"></span><span>  </span><span class="hs-comment">-- | Provides a 'Lens' to 'CiteField's.</span><span>
-</span><span id="line-62"></span><span>  </span><span id="getFields"><span class="annot"><a href="Language.Drasil.Data.Citation.html#getFields"><span class="hs-identifier hs-type">getFields</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Lens'</span></span><span> </span><span class="annot"><a href="#local-6989586621679381625"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-62"></span><span>  </span><span id="getFields"><span class="annot"><a href="Language.Drasil.Data.Citation.html#getFields"><span class="hs-identifier hs-type">getFields</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Lens'</span></span><span> </span><span class="annot"><a href="#local-6989586621679382528"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-63"></span><span>
 </span><span id="line-64"></span><span class="annot"><span class="hs-comment">-- | How something is published. Necessary for URLs to work properly.</span></span><span>
 </span><span id="line-65"></span><span class="hs-keyword">data</span><span> </span><span id="HP"><span class="annot"><a href="Language.Drasil.Data.Citation.html#HP"><span class="hs-identifier hs-var">HP</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="URL"><span class="annot"><a href="Language.Drasil.Data.Citation.html#URL"><span class="hs-identifier hs-var">URL</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
@@ -87,7 +87,7 @@ forall a. Monoid a =&gt; a
 </span><span id="line-82"></span><span>                  </span><span class="hs-glyph">|</span><span> </span><span id="Unpublished"><span class="annot"><a href="Language.Drasil.Data.Citation.html#Unpublished"><span class="hs-identifier hs-var">Unpublished</span></a></span></span><span>
 </span><span id="line-83"></span><span>
 </span><span id="line-84"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasChunkRefs</span></span><span> </span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CitationKind"><span class="hs-identifier hs-type">CitationKind</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-85"></span><span>  </span><span id="local-6989586621679381713"><span class="annot"><span class="annottext">chunkRefs :: CitationKind -&gt; Set UID
+</span><span id="line-85"></span><span>  </span><span id="local-6989586621679382616"><span class="annot"><span class="annottext">chunkRefs :: CitationKind -&gt; Set UID
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">chunkRefs</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Set UID -&gt; CitationKind -&gt; Set UID
 forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">Set UID
@@ -189,162 +189,162 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-129"></span><span>
 </span><span id="line-130"></span><span class="hs-comment">-- | Orders two authors. If given two of the exact same authors, year, and</span><span>
 </span><span id="line-131"></span><span class="hs-comment">-- title, returns an error.</span><span>
-</span><span id="line-132"></span><span id="local-6989586621679381612"><span class="annot"><a href="Language.Drasil.Data.Citation.html#compareAuthYearTitle"><span class="hs-identifier hs-type">compareAuthYearTitle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Data.Citation.html#HasFields"><span class="hs-identifier hs-type">HasFields</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679381612"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679381612"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679381612"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Ordering</span></span></span><span>
+</span><span id="line-132"></span><span id="local-6989586621679382515"><span class="annot"><a href="Language.Drasil.Data.Citation.html#compareAuthYearTitle"><span class="hs-identifier hs-type">compareAuthYearTitle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Data.Citation.html#HasFields"><span class="hs-identifier hs-type">HasFields</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679382515"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679382515"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679382515"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Ordering</span></span></span><span>
 </span><span id="line-133"></span><span id="compareAuthYearTitle"><span class="annot"><span class="annottext">compareAuthYearTitle :: forall c. HasFields c =&gt; c -&gt; c -&gt; Ordering
-</span><a href="Language.Drasil.Data.Citation.html#compareAuthYearTitle"><span class="hs-identifier hs-var hs-var">compareAuthYearTitle</span></a></span></span><span> </span><span id="local-6989586621679381726"><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679381726"><span class="hs-identifier hs-var">c1</span></a></span></span><span> </span><span id="local-6989586621679381727"><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679381727"><span class="hs-identifier hs-var">c2</span></a></span></span><span>
+</span><a href="Language.Drasil.Data.Citation.html#compareAuthYearTitle"><span class="hs-identifier hs-var hs-var">compareAuthYearTitle</span></a></span></span><span> </span><span id="local-6989586621679382629"><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679382629"><span class="hs-identifier hs-var">c1</span></a></span></span><span> </span><span id="local-6989586621679382630"><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679382630"><span class="hs-identifier hs-var">c2</span></a></span></span><span>
 </span><span id="line-134"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Ordering
-</span><a href="#local-6989586621679381728"><span class="hs-identifier hs-var">cp</span></a></span><span> </span><span class="annot"><span class="annottext">Ordering -&gt; Ordering -&gt; Bool
+</span><a href="#local-6989586621679382631"><span class="hs-identifier hs-var">cp</span></a></span><span> </span><span class="annot"><span class="annottext">Ordering -&gt; Ordering -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">/=</span></span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Ordering
-</span><a href="#local-6989586621679381728"><span class="hs-identifier hs-var">cp</span></a></span><span>
+</span><a href="#local-6989586621679382631"><span class="hs-identifier hs-var">cp</span></a></span><span>
 </span><span id="line-135"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679381730"><span class="hs-identifier hs-var">y1</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679382633"><span class="hs-identifier hs-var">y1</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">/=</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679381731"><span class="hs-identifier hs-var">y2</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679381730"><span class="hs-identifier hs-var">y1</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Ordering
+</span><a href="#local-6989586621679382634"><span class="hs-identifier hs-var">y2</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679382633"><span class="hs-identifier hs-var">y1</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Ordering
 forall a. Ord a =&gt; a -&gt; a -&gt; Ordering
 </span><span class="hs-operator hs-var">`compare`</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679381731"><span class="hs-identifier hs-var">y2</span></a></span><span>
+</span><a href="#local-6989586621679382634"><span class="hs-identifier hs-var">y2</span></a></span><span>
 </span><span id="line-136"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679381733"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Ordering
+</span><a href="#local-6989586621679382636"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Ordering
 forall a. Ord a =&gt; a -&gt; a -&gt; Ordering
 </span><span class="hs-operator hs-var">`compare`</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679381734"><span class="hs-identifier hs-var">t2</span></a></span><span>
+</span><a href="#local-6989586621679382637"><span class="hs-identifier hs-var">t2</span></a></span><span>
 </span><span id="line-137"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-138"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679381736"><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679381736"><span class="hs-identifier hs-var">a1</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679381730"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679381730"><span class="hs-identifier hs-var">y1</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679381733"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679381733"><span class="hs-identifier hs-var">t1</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; (People, Int, String)
+</span><span id="line-138"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679382639"><span class="annot"><span class="annottext">People
+</span><a href="#local-6989586621679382639"><span class="hs-identifier hs-var">a1</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679382633"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679382633"><span class="hs-identifier hs-var">y1</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679382636"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679382636"><span class="hs-identifier hs-var">t1</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; (People, Int, String)
 forall c. HasFields c =&gt; c -&gt; (People, Int, String)
 </span><a href="Language.Drasil.Data.Citation.html#getAuthorYearTitle"><span class="hs-identifier hs-var">getAuthorYearTitle</span></a></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679381726"><span class="hs-identifier hs-var">c1</span></a></span><span>
-</span><span id="line-139"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679381739"><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679381739"><span class="hs-identifier hs-var">a2</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679381731"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679381731"><span class="hs-identifier hs-var">y2</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679381734"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679381734"><span class="hs-identifier hs-var">t2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; (People, Int, String)
+</span><a href="#local-6989586621679382629"><span class="hs-identifier hs-var">c1</span></a></span><span>
+</span><span id="line-139"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679382642"><span class="annot"><span class="annottext">People
+</span><a href="#local-6989586621679382642"><span class="hs-identifier hs-var">a2</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679382634"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679382634"><span class="hs-identifier hs-var">y2</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679382637"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679382637"><span class="hs-identifier hs-var">t2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c -&gt; (People, Int, String)
 forall c. HasFields c =&gt; c -&gt; (People, Int, String)
 </span><a href="Language.Drasil.Data.Citation.html#getAuthorYearTitle"><span class="hs-identifier hs-var">getAuthorYearTitle</span></a></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679381727"><span class="hs-identifier hs-var">c2</span></a></span><span>
+</span><a href="#local-6989586621679382630"><span class="hs-identifier hs-var">c2</span></a></span><span>
 </span><span id="line-140"></span><span>
-</span><span id="line-141"></span><span>    </span><span id="local-6989586621679381728"><span class="annot"><span class="annottext">cp :: Ordering
-</span><a href="#local-6989586621679381728"><span class="hs-identifier hs-var hs-var">cp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People -&gt; People -&gt; Ordering
+</span><span id="line-141"></span><span>    </span><span id="local-6989586621679382631"><span class="annot"><span class="annottext">cp :: Ordering
+</span><a href="#local-6989586621679382631"><span class="hs-identifier hs-var hs-var">cp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People -&gt; People -&gt; Ordering
 </span><a href="Language.Drasil.People.html#comparePeople"><span class="hs-identifier hs-var">comparePeople</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679381736"><span class="hs-identifier hs-var">a1</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679381739"><span class="hs-identifier hs-var">a2</span></a></span><span>
+</span><a href="#local-6989586621679382639"><span class="hs-identifier hs-var">a1</span></a></span><span> </span><span class="annot"><span class="annottext">People
+</span><a href="#local-6989586621679382642"><span class="hs-identifier hs-var">a2</span></a></span><span>
 </span><span id="line-142"></span><span>
 </span><span id="line-143"></span><span class="hs-comment">-- | Search for the Author, Year, and Title of a Citation-like data type, and</span><span>
 </span><span id="line-144"></span><span class="hs-comment">-- error out if it doesn't have them.</span><span>
-</span><span id="line-145"></span><span id="local-6989586621679381618"><span class="annot"><a href="Language.Drasil.Data.Citation.html#getAuthorYearTitle"><span class="hs-identifier hs-type">getAuthorYearTitle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Data.Citation.html#HasFields"><span class="hs-identifier hs-type">HasFields</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679381618"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679381618"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.People.html#People"><span class="hs-identifier hs-type">People</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">)</span></span><span>
+</span><span id="line-145"></span><span id="local-6989586621679382521"><span class="annot"><a href="Language.Drasil.Data.Citation.html#getAuthorYearTitle"><span class="hs-identifier hs-type">getAuthorYearTitle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Data.Citation.html#HasFields"><span class="hs-identifier hs-type">HasFields</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679382521"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679382521"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.People.html#People"><span class="hs-identifier hs-type">People</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">)</span></span><span>
 </span><span id="line-146"></span><span id="getAuthorYearTitle"><span class="annot"><span class="annottext">getAuthorYearTitle :: forall c. HasFields c =&gt; c -&gt; (People, Int, String)
-</span><a href="Language.Drasil.Data.Citation.html#getAuthorYearTitle"><span class="hs-identifier hs-var hs-var">getAuthorYearTitle</span></a></span></span><span> </span><span id="local-6989586621679381741"><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679381741"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679381742"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679381743"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679381744"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span>
+</span><a href="Language.Drasil.Data.Citation.html#getAuthorYearTitle"><span class="hs-identifier hs-var hs-var">getAuthorYearTitle</span></a></span></span><span> </span><span id="local-6989586621679382644"><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679382644"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People
+</span><a href="#local-6989586621679382645"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679382646"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679382647"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-147"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-148"></span><span>    </span><span id="local-6989586621679381748"><span class="annot"><span class="annottext">fs :: [CiteField]
-</span><a href="#local-6989586621679381748"><span class="hs-identifier hs-var hs-var">fs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679381741"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">c -&gt; Getting [CiteField] c [CiteField] -&gt; [CiteField]
+</span><span id="line-148"></span><span>    </span><span id="local-6989586621679382651"><span class="annot"><span class="annottext">fs :: [CiteField]
+</span><a href="#local-6989586621679382651"><span class="hs-identifier hs-var hs-var">fs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679382644"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">c -&gt; Getting [CiteField] c [CiteField] -&gt; [CiteField]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [CiteField] c [CiteField]
 forall c. HasFields c =&gt; Lens' c [CiteField]
 Lens' c [CiteField]
 </span><a href="Language.Drasil.Data.Citation.html#getFields"><span class="hs-identifier hs-var">getFields</span></a></span><span>
 </span><span id="line-149"></span><span>
-</span><span id="line-150"></span><span>    </span><span id="local-6989586621679381749"><span class="annot"><span class="annottext">justAuthor :: CiteField -&gt; Maybe People
-</span><a href="#local-6989586621679381749"><span class="hs-identifier hs-var hs-var">justAuthor</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#Author"><span class="hs-identifier hs-type">Author</span></a></span><span> </span><span id="local-6989586621679381750"><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679381750"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People -&gt; Maybe People
+</span><span id="line-150"></span><span>    </span><span id="local-6989586621679382652"><span class="annot"><span class="annottext">justAuthor :: CiteField -&gt; Maybe People
+</span><a href="#local-6989586621679382652"><span class="hs-identifier hs-var hs-var">justAuthor</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#Author"><span class="hs-identifier hs-type">Author</span></a></span><span> </span><span id="local-6989586621679382653"><span class="annot"><span class="annottext">People
+</span><a href="#local-6989586621679382653"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People -&gt; Maybe People
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679381750"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-151"></span><span>    </span><span class="annot"><a href="#local-6989586621679381749"><span class="hs-identifier hs-var">justAuthor</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField
+</span><a href="#local-6989586621679382653"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-151"></span><span>    </span><span class="annot"><a href="#local-6989586621679382652"><span class="hs-identifier hs-var">justAuthor</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField
 </span><span class="hs-identifier">_</span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe People
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
 </span><span id="line-152"></span><span>
-</span><span id="line-153"></span><span>    </span><span id="local-6989586621679381751"><span class="annot"><span class="annottext">as :: [People]
-</span><a href="#local-6989586621679381751"><span class="hs-keyword hs-var hs-var">as</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CiteField -&gt; Maybe People) -&gt; [CiteField] -&gt; [People]
+</span><span id="line-153"></span><span>    </span><span id="local-6989586621679382654"><span class="annot"><span class="annottext">as :: [People]
+</span><a href="#local-6989586621679382654"><span class="hs-keyword hs-var hs-var">as</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CiteField -&gt; Maybe People) -&gt; [CiteField] -&gt; [People]
 forall a b. (a -&gt; Maybe b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">mapMaybe</span></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; Maybe People
-</span><a href="#local-6989586621679381749"><span class="hs-identifier hs-var">justAuthor</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679381748"><span class="hs-identifier hs-var">fs</span></a></span><span>
-</span><span id="line-154"></span><span>    </span><span id="local-6989586621679381742"><span class="annot"><span class="annottext">a :: People
-</span><a href="#local-6989586621679381742"><span class="hs-identifier hs-var hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><a href="#local-6989586621679382652"><span class="hs-identifier hs-var">justAuthor</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679382651"><span class="hs-identifier hs-var">fs</span></a></span><span>
+</span><span id="line-154"></span><span>    </span><span id="local-6989586621679382645"><span class="annot"><span class="annottext">a :: People
+</span><a href="#local-6989586621679382645"><span class="hs-identifier hs-var hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
 </span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[People] -&gt; Bool
 forall a. [a] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">[People]
-</span><a href="#local-6989586621679381751"><span class="hs-keyword hs-var">as</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">[People] -&gt; People
+</span><a href="#local-6989586621679382654"><span class="hs-keyword hs-var">as</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">[People] -&gt; People
 forall a. HasCallStack =&gt; [a] -&gt; a
 </span><span class="hs-identifier hs-var">head</span></span><span> </span><span class="annot"><span class="annottext">[People]
-</span><a href="#local-6989586621679381751"><span class="hs-keyword hs-var">as</span></a></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String -&gt; People
+</span><a href="#local-6989586621679382654"><span class="hs-keyword hs-var">as</span></a></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String -&gt; People
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;No author found&quot;</span></span><span>
 </span><span id="line-155"></span><span>
-</span><span id="line-156"></span><span>    </span><span id="local-6989586621679381762"><span class="annot"><span class="annottext">justYear :: CiteField -&gt; Maybe Int
-</span><a href="#local-6989586621679381762"><span class="hs-identifier hs-var hs-var">justYear</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#Year"><span class="hs-identifier hs-type">Year</span></a></span><span> </span><span id="local-6989586621679381763"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679381763"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Maybe Int
+</span><span id="line-156"></span><span>    </span><span id="local-6989586621679382665"><span class="annot"><span class="annottext">justYear :: CiteField -&gt; Maybe Int
+</span><a href="#local-6989586621679382665"><span class="hs-identifier hs-var hs-var">justYear</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#Year"><span class="hs-identifier hs-type">Year</span></a></span><span> </span><span id="local-6989586621679382666"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679382666"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Maybe Int
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679381763"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-157"></span><span>    </span><span class="annot"><a href="#local-6989586621679381762"><span class="hs-identifier hs-var">justYear</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField
+</span><a href="#local-6989586621679382666"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-157"></span><span>    </span><span class="annot"><a href="#local-6989586621679382665"><span class="hs-identifier hs-var">justYear</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField
 </span><span class="hs-identifier">_</span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Int
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
 </span><span id="line-158"></span><span>
-</span><span id="line-159"></span><span>    </span><span id="local-6989586621679381764"><span class="annot"><span class="annottext">ys :: [Int]
-</span><a href="#local-6989586621679381764"><span class="hs-identifier hs-var hs-var">ys</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CiteField -&gt; Maybe Int) -&gt; [CiteField] -&gt; [Int]
+</span><span id="line-159"></span><span>    </span><span id="local-6989586621679382667"><span class="annot"><span class="annottext">ys :: [Int]
+</span><a href="#local-6989586621679382667"><span class="hs-identifier hs-var hs-var">ys</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CiteField -&gt; Maybe Int) -&gt; [CiteField] -&gt; [Int]
 forall a b. (a -&gt; Maybe b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">mapMaybe</span></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; Maybe Int
-</span><a href="#local-6989586621679381762"><span class="hs-identifier hs-var">justYear</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679381748"><span class="hs-identifier hs-var">fs</span></a></span><span>
-</span><span id="line-160"></span><span>    </span><span id="local-6989586621679381743"><span class="annot"><span class="annottext">y :: Int
-</span><a href="#local-6989586621679381743"><span class="hs-identifier hs-var hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><a href="#local-6989586621679382665"><span class="hs-identifier hs-var">justYear</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679382651"><span class="hs-identifier hs-var">fs</span></a></span><span>
+</span><span id="line-160"></span><span>    </span><span id="local-6989586621679382646"><span class="annot"><span class="annottext">y :: Int
+</span><a href="#local-6989586621679382646"><span class="hs-identifier hs-var hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
 </span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Int] -&gt; Bool
 forall a. [a] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679381764"><span class="hs-identifier hs-var">ys</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; Int
+</span><a href="#local-6989586621679382667"><span class="hs-identifier hs-var">ys</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; Int
 forall a. HasCallStack =&gt; [a] -&gt; a
 </span><span class="hs-identifier hs-var">head</span></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679381764"><span class="hs-identifier hs-var">ys</span></a></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String -&gt; Int
+</span><a href="#local-6989586621679382667"><span class="hs-identifier hs-var">ys</span></a></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String -&gt; Int
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;No year found&quot;</span></span><span>
 </span><span id="line-161"></span><span>
-</span><span id="line-162"></span><span>    </span><span id="local-6989586621679381770"><span class="annot"><span class="annottext">justTitle :: CiteField -&gt; Maybe String
-</span><a href="#local-6989586621679381770"><span class="hs-identifier hs-var hs-var">justTitle</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#Title"><span class="hs-identifier hs-type">Title</span></a></span><span> </span><span id="local-6989586621679381771"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679381771"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Maybe String
+</span><span id="line-162"></span><span>    </span><span id="local-6989586621679382673"><span class="annot"><span class="annottext">justTitle :: CiteField -&gt; Maybe String
+</span><a href="#local-6989586621679382673"><span class="hs-identifier hs-var hs-var">justTitle</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#Title"><span class="hs-identifier hs-type">Title</span></a></span><span> </span><span id="local-6989586621679382674"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679382674"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Maybe String
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679381771"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-163"></span><span>    </span><span class="annot"><a href="#local-6989586621679381770"><span class="hs-identifier hs-var">justTitle</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField
+</span><a href="#local-6989586621679382674"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-163"></span><span>    </span><span class="annot"><a href="#local-6989586621679382673"><span class="hs-identifier hs-var">justTitle</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField
 </span><span class="hs-identifier">_</span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe String
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
 </span><span id="line-164"></span><span>
-</span><span id="line-165"></span><span>    </span><span id="local-6989586621679381772"><span class="annot"><span class="annottext">ts :: [String]
-</span><a href="#local-6989586621679381772"><span class="hs-identifier hs-var hs-var">ts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CiteField -&gt; Maybe String) -&gt; [CiteField] -&gt; [String]
+</span><span id="line-165"></span><span>    </span><span id="local-6989586621679382675"><span class="annot"><span class="annottext">ts :: [String]
+</span><a href="#local-6989586621679382675"><span class="hs-identifier hs-var hs-var">ts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CiteField -&gt; Maybe String) -&gt; [CiteField] -&gt; [String]
 forall a b. (a -&gt; Maybe b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">mapMaybe</span></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; Maybe String
-</span><a href="#local-6989586621679381770"><span class="hs-identifier hs-var">justTitle</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679381748"><span class="hs-identifier hs-var">fs</span></a></span><span>
-</span><span id="line-166"></span><span>    </span><span id="local-6989586621679381744"><span class="annot"><span class="annottext">t :: String
-</span><a href="#local-6989586621679381744"><span class="hs-identifier hs-var hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><a href="#local-6989586621679382673"><span class="hs-identifier hs-var">justTitle</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679382651"><span class="hs-identifier hs-var">fs</span></a></span><span>
+</span><span id="line-166"></span><span>    </span><span id="local-6989586621679382647"><span class="annot"><span class="annottext">t :: String
+</span><a href="#local-6989586621679382647"><span class="hs-identifier hs-var hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
 </span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[String] -&gt; Bool
 forall a. [a] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679381772"><span class="hs-identifier hs-var">ts</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; String
+</span><a href="#local-6989586621679382675"><span class="hs-identifier hs-var">ts</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; String
 forall a. HasCallStack =&gt; [a] -&gt; a
 </span><span class="hs-identifier hs-var">head</span></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679381772"><span class="hs-identifier hs-var">ts</span></a></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String -&gt; String
+</span><a href="#local-6989586621679382675"><span class="hs-identifier hs-var">ts</span></a></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String -&gt; String
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;No title found&quot;</span></span><span>

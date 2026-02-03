@@ -3,7 +3,7 @@
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Prelude</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">exp</span></span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Database</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">HasUID</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Database</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">IsChunk</span></span><span class="hs-special">)</span><span>
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">definedIn'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">definedIn</span></span><span class="hs-special">)</span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Development</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">D</span></span><span>
@@ -388,7 +388,7 @@ r -&gt; DecRef
 </span><span class="hs-string">&quot;stressDistFac&quot;</span></span><span>
 </span><span id="line-65"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; LabelledContent -&gt; Sentence
 forall s f.
-(HasUID s, HasSymbol s, Referable f, HasShortName f) =&gt;
+(IsChunk s, HasSymbol s, Referable f, HasShortName f) =&gt;
 s -&gt; f -&gt; Sentence
 </span><a href="Drasil.GlassBR.IMods.html#interpolating"><span class="hs-identifier hs-var">interpolating</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.GlassBR.Unitals.html#stressDistFac"><span class="hs-identifier hs-var">stressDistFac</span></a></span><span> </span><span class="annot"><span class="annottext">LabelledContent
@@ -495,7 +495,7 @@ r -&gt; DecRef
 </span><span class="hs-string">&quot;nFL&quot;</span></span><span>
 </span><span id="line-81"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GlassBR.IMods.html#qHtTlTolRef"><span class="hs-identifier hs-var">qHtTlTolRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[UnitalChunk] -&gt; Sentence
-forall s. (HasSymbol s, HasUID s) =&gt; [s] -&gt; Sentence
+forall s. (IsChunk s, HasSymbol s) =&gt; [s] -&gt; Sentence
 </span><a href="Drasil.GlassBR.DataDefs.html#stdVals"><span class="hs-identifier hs-var">stdVals</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#modElas"><span class="hs-identifier hs-var">modElas</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GlassBR.DataDefs.html#hRef"><span class="hs-identifier hs-var">hRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
@@ -635,7 +635,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-string">&quot;dimlessLoad&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GlassBR.IMods.html#qRef"><span class="hs-identifier hs-var">qRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GlassBR.DataDefs.html#aGrtrThanB"><span class="hs-identifier hs-var">aGrtrThanB</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[UnitalChunk] -&gt; Sentence
-forall s. (HasSymbol s, HasUID s) =&gt; [s] -&gt; Sentence
+forall s. (IsChunk s, HasSymbol s) =&gt; [s] -&gt; Sentence
 </span><a href="Drasil.GlassBR.DataDefs.html#stdVals"><span class="hs-identifier hs-var">stdVals</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#modElas"><span class="hs-identifier hs-var">modElas</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GlassBR.DataDefs.html#hRef"><span class="hs-identifier hs-var">hRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
@@ -757,7 +757,7 @@ r -&gt; DecRef
 </span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;tolLoad&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; LabelledContent -&gt; Sentence
 forall s f.
-(HasUID s, HasSymbol s, Referable f, HasShortName f) =&gt;
+(IsChunk s, HasSymbol s, Referable f, HasShortName f) =&gt;
 s -&gt; f -&gt; Sentence
 </span><a href="Drasil.GlassBR.IMods.html#interpolating"><span class="hs-identifier hs-var">interpolating</span></a></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#tolLoad"><span class="hs-identifier hs-var">tolLoad</span></a></span><span> </span><span class="annot"><span class="annottext">LabelledContent
@@ -879,7 +879,7 @@ r -&gt; DecRef
 </span><span class="hs-string">&quot;sdfTol&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GlassBR.IMods.html#pbTolUsr"><span class="hs-identifier hs-var">pbTolUsr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GlassBR.DataDefs.html#aGrtrThanB"><span class="hs-identifier hs-var">aGrtrThanB</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[UnitalChunk] -&gt; Sentence
-forall s. (HasSymbol s, HasUID s) =&gt; [s] -&gt; Sentence
+forall s. (IsChunk s, HasSymbol s) =&gt; [s] -&gt; Sentence
 </span><a href="Drasil.GlassBR.DataDefs.html#stdVals"><span class="hs-identifier hs-var">stdVals</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#sflawParamM"><span class="hs-identifier hs-var">sflawParamM</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-127"></span><span>      </span><span class="annot"><span class="annottext">UnitalChunk
@@ -1346,15 +1346,15 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-176"></span><span>
 </span><span id="line-177"></span><span class="annot"><a href="Drasil.GlassBR.IMods.html#iModDesc"><span class="hs-identifier hs-type">iModDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-178"></span><span id="iModDesc"><span class="annot"><span class="annottext">iModDesc :: DefinedQuantityDict -&gt; Sentence -&gt; Sentence
-</span><a href="Drasil.GlassBR.IMods.html#iModDesc"><span class="hs-identifier hs-var hs-var">iModDesc</span></a></span></span><span> </span><span id="local-6989586621679084015"><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><a href="#local-6989586621679084015"><span class="hs-identifier hs-var">main</span></a></span></span><span> </span><span id="local-6989586621679084016"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679084016"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.GlassBR.IMods.html#iModDesc"><span class="hs-identifier hs-var hs-var">iModDesc</span></a></span></span><span> </span><span id="local-6989586621679084175"><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="#local-6989586621679084175"><span class="hs-identifier hs-var">main</span></a></span></span><span> </span><span id="local-6989586621679084176"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679084176"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;If&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><a href="#local-6989586621679084015"><span class="hs-identifier hs-var">main</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679084175"><span class="hs-identifier hs-var">main</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the glass is&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -1362,7 +1362,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span id="line-179"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;considered safe&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679084016"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679084176"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.are`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;either both True or both False&quot;</span></span><span class="hs-special">]</span><span>
@@ -1405,7 +1405,7 @@ r -&gt; Sentence
 </span><span id="line-188"></span><span class="annot"><a href="Drasil.GlassBR.IMods.html#lrCap"><span class="hs-identifier hs-type">lrCap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-189"></span><span id="lrCap"><span class="annot"><span class="annottext">lrCap :: Sentence
 </span><a href="Drasil.GlassBR.IMods.html#lrCap"><span class="hs-identifier hs-var hs-var">lrCap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#lRe"><span class="hs-identifier hs-var">lRe</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -1415,7 +1415,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span id="line-191"></span><span class="annot"><a href="Drasil.GlassBR.IMods.html#pbTolUsr"><span class="hs-identifier hs-type">pbTolUsr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-192"></span><span id="pbTolUsr"><span class="annot"><span class="annottext">pbTolUsr :: Sentence
 </span><a href="Drasil.GlassBR.IMods.html#pbTolUsr"><span class="hs-identifier hs-var hs-var">pbTolUsr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#pbTol"><span class="hs-identifier hs-var">pbTol</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -1429,7 +1429,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-194"></span><span class="annot"><a href="Drasil.GlassBR.IMods.html#qRef"><span class="hs-identifier hs-type">qRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-195"></span><span id="qRef"><span class="annot"><span class="annottext">qRef :: Sentence
 </span><a href="Drasil.GlassBR.IMods.html#qRef"><span class="hs-identifier hs-var hs-var">qRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#demand"><span class="hs-identifier hs-var">demand</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.isThe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -1455,7 +1455,7 @@ r -&gt; Sentence
 </span><a href="Drasil.GlassBR.IMods.html#iModDesc"><span class="hs-identifier hs-var">iModDesc</span></a></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#isSafeLR"><span class="hs-identifier hs-var">isSafeLR</span></a></span><span>
 </span><span id="line-199"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#isSafePb"><span class="hs-identifier hs-var">isSafePb</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
@@ -1463,7 +1463,7 @@ forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.GlassBR.IMods.html#pbIsSafe"><span class="hs-identifier hs-var">pbIsSafe</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#isSafeLR"><span class="hs-identifier hs-var">isSafeLR</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-200"></span><span>
@@ -1473,11 +1473,11 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><a href="Drasil.GlassBR.IMods.html#iModDesc"><span class="hs-identifier hs-var">iModDesc</span></a></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#isSafePb"><span class="hs-identifier hs-var">isSafePb</span></a></span><span>
 </span><span id="line-203"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#isSafePb"><span class="hs-identifier hs-var">isSafePb</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#isSafeLR"><span class="hs-identifier hs-var">isSafeLR</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
@@ -1554,17 +1554,17 @@ r -&gt; Sentence
 </span><a href="Drasil.GlassBR.IMods.html#risk"><span class="hs-identifier hs-var">risk</span></a></span><span>
 </span><span id="line-216"></span><span>
 </span><span id="line-217"></span><span class="hs-comment">-- Helper --</span><span>
-</span><span id="line-218"></span><span id="local-6989586621679083298"><span id="local-6989586621679083299"><span class="annot"><a href="Drasil.GlassBR.IMods.html#interpolating"><span class="hs-identifier hs-type">interpolating</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679083298"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span> </span><span class="annot"><a href="#local-6989586621679083298"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Referable</span></span><span> </span><span class="annot"><a href="#local-6989586621679083299"><span class="hs-identifier hs-type">f</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasShortName</span></span><span> </span><span class="annot"><a href="#local-6989586621679083299"><span class="hs-identifier hs-type">f</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679083298"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679083299"><span class="hs-identifier hs-type">f</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span></span><span>
+</span><span id="line-218"></span><span id="local-6989586621679083446"><span id="local-6989586621679083448"><span class="annot"><a href="Drasil.GlassBR.IMods.html#interpolating"><span class="hs-identifier hs-type">interpolating</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">IsChunk</span></span><span> </span><span class="annot"><a href="#local-6989586621679083446"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span> </span><span class="annot"><a href="#local-6989586621679083446"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Referable</span></span><span> </span><span class="annot"><a href="#local-6989586621679083448"><span class="hs-identifier hs-type">f</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasShortName</span></span><span> </span><span class="annot"><a href="#local-6989586621679083448"><span class="hs-identifier hs-type">f</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679083446"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679083448"><span class="hs-identifier hs-type">f</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span></span><span>
 </span><span id="line-219"></span><span id="interpolating"><span class="annot"><span class="annottext">interpolating :: forall s f.
-(HasUID s, HasSymbol s, Referable f, HasShortName f) =&gt;
+(IsChunk s, HasSymbol s, Referable f, HasShortName f) =&gt;
 s -&gt; f -&gt; Sentence
-</span><a href="Drasil.GlassBR.IMods.html#interpolating"><span class="hs-identifier hs-var hs-var">interpolating</span></a></span></span><span> </span><span id="local-6989586621679084049"><span class="annot"><span class="annottext">s
-</span><a href="#local-6989586621679084049"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679084050"><span class="annot"><span class="annottext">f
-</span><a href="#local-6989586621679084050"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.GlassBR.IMods.html#interpolating"><span class="hs-identifier hs-var hs-var">interpolating</span></a></span></span><span> </span><span id="local-6989586621679084209"><span class="annot"><span class="annottext">s
+</span><a href="#local-6989586621679084209"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679084210"><span class="annot"><span class="annottext">f
+</span><a href="#local-6989586621679084210"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">s -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">s
-</span><a href="#local-6989586621679084049"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679084209"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;obtained by interpolating from&quot;</span></span><span class="hs-special">,</span><span>
@@ -1579,5 +1579,5 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">f
-</span><a href="#local-6989586621679084050"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679084210"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-221"></span></pre></body></html>

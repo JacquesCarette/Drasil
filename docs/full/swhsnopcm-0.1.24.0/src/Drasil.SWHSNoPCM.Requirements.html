@@ -103,7 +103,7 @@ forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHSNoPCM.Requirements.html#findMass"><span class="hs-identifier hs-var">findMass</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-52"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition
 </span><span class="hs-identifier hs-var">balanceDecayRate</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 -&gt; Getting DefinedQuantityDict DataDefinition DefinedQuantityDict

@@ -26,11 +26,12 @@ import Data.List (transpose)
 import Drasil.Database (IsChunk)
 import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs) , UnitDefn, MayHaveUnit(..)
   , UnitalChunk , HasUnitSymbol(usymb), Quantity, Concept, Definition(defn), NamedIdea(..)
+  , HasSymbol
   , HasShortName(..) , short, atStart, titleize, phrase, plural , Section , ItemType(..), ListType(Bullet)
   , ModelExpr , refS, namedRef
   , Sentence(S, Percent, (:+:), Sy, EmptyS), eS
   , ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent, fromSource, fterms
-  , foldlList, SepType(Comma), FoldType(List), foldlSent , Referable, HasSymbol)
+  , foldlList, SepType(Comma), FoldType(List), foldlSent , Referable)
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
 
 -- Ideally this would create a reference to the equation too.

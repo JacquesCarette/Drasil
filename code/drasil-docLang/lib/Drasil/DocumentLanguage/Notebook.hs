@@ -13,7 +13,7 @@ import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
 import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, example,
   appendix, review, reference, summary)
-import Drasil.ExtractNotebook (citeDBLsn)
+import Drasil.ExtractLsnDesc (citeDBLsn)
 
 -- | Creates a notebook from a lesson description and system information.
 mkNb :: LsnDesc -> (IdeaDict -> CI -> Sentence) -> System -> Document

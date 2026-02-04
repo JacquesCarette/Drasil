@@ -3,7 +3,7 @@ module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) wher
 import Control.Lens ((^.))
 import Prelude hiding (exp)
 
-import Drasil.Database (HasUID)
+import Drasil.Database (IsChunk)
 import Drasil.Sentence.Combinators (definedIn', definedIn)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
@@ -215,6 +215,6 @@ qHtTlTolRef = definedIn  tolPre
 riskRef     = definedIn  risk
 
 -- Helper --
-interpolating :: (HasUID s, HasSymbol s, Referable f, HasShortName f) => s -> f -> Sentence
+interpolating :: (IsChunk s, HasSymbol s, Referable f, HasShortName f) => s -> f -> Sentence
 interpolating s f = foldlSent [ch s `S.is` S "obtained by interpolating from",
   plural datum, S "shown" `S.in_` refS f]

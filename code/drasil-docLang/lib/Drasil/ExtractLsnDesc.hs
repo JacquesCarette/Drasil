@@ -1,5 +1,5 @@
 -- | Defines functions to extract citation references from Notebook documents.
-module Drasil.ExtractLsnDesc (citeDBLsn) where
+module Drasil.ExtractLsnDesc (lsnPlanCites) where
 
 import Control.Lens ((^.))
 import qualified Data.Set as S
@@ -36,5 +36,5 @@ contRefs = S.unions . map lnames . getContList
 -- | Extract bibliography entries for a notebook based on the lesson
 -- description. Scans the notebook for citation references and looks them up in
 -- the database.
-citeDBLsn :: System -> LsnDesc -> BibRef
-citeDBLsn si = resolveBibliography (si ^. systemdb) . lsnDecCites
+lsnPlanCites :: System -> LsnDesc -> BibRef
+lsnPlanCites si = resolveBibliography (si ^. systemdb) . lsnDecCites

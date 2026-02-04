@@ -47,6 +47,12 @@ concpt a m = map (definition . defResolve' m) $ S.toList (sdep a)
 concpt' :: ModelExpr -> ChunkDB -> [Sentence]
 concpt' a m = map (definition . defResolve' m) $ meDep a
 
+-- | Given a 'ChunkDB' and a set of 'UID's, looks up the corresponding
+-- 'Citation's and returns them sorted by author, year, and title.
+--
+-- FIXME: This function assumes that all 'UID's in the set correspond to
+-- 'Citation's in the database. If a 'UID' does not correspond to a 'Citation',
+-- it is simply ignored. This should rather rely on a set of 'UIDRef Citation's.
 resolveBibliography :: ChunkDB -> S.Set UID -> [Citation]
 resolveBibliography db uids = sortBy compareAuthYearTitle cites
   where

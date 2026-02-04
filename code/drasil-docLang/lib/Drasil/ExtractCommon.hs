@@ -1,11 +1,18 @@
 module Drasil.ExtractCommon (
   sentToExp, egetCon,
-  getCon', getContList
+  getCon', getContList, contRefs
 ) where
 
 import Control.Lens((^.))
+import qualified Data.Set as S
 
+import Drasil.Database (UID)
 import Language.Drasil hiding (getCitations, Manual, Verb)
+import Language.Drasil.Development (lnames)
+
+-- | Extracts reference 'UID's from 'Content's.
+contRefs :: HasContents a => [a] -> S.Set UID
+contRefs = S.unions . map lnames . getContList
 
 -- | Converts a 'Sentence' into a list of expressions. If the 'Sentence' cant be
 -- translated, returns an empty list.

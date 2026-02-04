@@ -6,12 +6,11 @@ import qualified Data.Set as S
 
 import Drasil.Database (UID)
 import Language.Drasil
-import Language.Drasil.Development (lnames)
 import Drasil.System (System, HasSystem (systemdb))
 
 import Drasil.GetChunks (resolveBibliography)
 import Drasil.DocumentLanguage.Notebook.Core
-import Drasil.ExtractCommon (getContList)
+import Drasil.ExtractCommon (contRefs)
 
 -- | Extracts citation reference 'UID's from a lesson description. This gets all
 -- 'UID's that appear in 'Ref' constructors within sentences.
@@ -28,10 +27,6 @@ lsnChapCites (Example (ExampleProg cs)) = contRefs cs
 lsnChapCites (Smmry (SmmryProg cs)) = contRefs cs
 lsnChapCites BibSec = mempty
 lsnChapCites (Apndx (ApndxProg cs)) = contRefs cs
-
--- | Extracts reference 'UID's from 'Content's.
-contRefs :: [Contents] -> S.Set UID
-contRefs = S.unions . map lnames . getContList
 
 -- | Extract bibliography entries for a notebook based on the lesson
 -- description. Scans the notebook for citation references and looks them up in

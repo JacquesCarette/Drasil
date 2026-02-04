@@ -1,5 +1,5 @@
 module Drasil.ExtractCommon (
-  sentToExp, getCon', getCon, getCont, getContList, getLC
+  sentToExp, getCon', getCon, getCont, getContList
 ) where
 
 import Control.Lens((^.))
@@ -16,6 +16,15 @@ sentToExp _ = []
 -- | Extracts 'Sentence's from something that has contents.
 getCon' :: HasContents a => a -> [Sentence]
 getCon' = getCon . (^. accessContents)
+
+-- | Extracts reference 'UID's from 'Content's.
+getCont :: Contents -> [Sentence]
+getCont (UlC (UnlblC rc)) = getCon rc
+getCont (LlC lc) = getCon (lc ^. accessContents)
+
+-- | Extracts 'Sentence's from a list of 'Contents'.
+getContList :: [Contents] -> [Sentence]
+getContList = concatMap getCon'
 
 -- | Extracts 'Sentence's from raw content.
 getCon :: RawContent -> [Sentence]
@@ -76,16 +85,3 @@ getLP (t, it, _) = t : getIL it
 getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
-
--- | Extracts reference 'UID's from 'Content's.
-getCont :: Contents -> [Sentence]
-getCont (UlC (UnlblC rc)) = getCon rc
-getCont (LlC lc) = getCon (lc ^. accessContents)
-
--- | Extracts 'Sentence's from a list of 'Contents'.
-getContList :: [Contents] -> [Sentence]
-getContList = concatMap getCon'
-
--- | Extracts 'Sentence's from 'LabelledContent'.
-getLC :: LabelledContent -> [Sentence]
-getLC = getCon . (^. accessContents)

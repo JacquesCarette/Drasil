@@ -1,5 +1,6 @@
 module Drasil.ExtractCommon (
-  sentToExp, getCon', getContList
+  sentToExp, egetCon,
+  getCon', getContList
 ) where
 
 import Control.Lens((^.))
@@ -12,6 +13,17 @@ sentToExp :: Sentence -> [ModelExpr]
 sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2
 sentToExp (E e) = [e]
 sentToExp _ = []
+
+-- | Extracts expressions from something that has contents.
+egetCon :: HasContents a => a -> [ModelExpr]
+egetCon = go . (^. accessContents)
+  where
+    -- | Extracts expressions from raw contents.
+    go :: RawContent -> [ModelExpr]
+    go (EqnBlock e) = [e]
+    go (Defini _ []) = []
+    go (Defini dt (hd:tl)) = concatMap egetCon (snd hd) ++ go (Defini dt tl)
+    go _ = []
 
 -- | Extracts 'Sentence's from something that has contents.
 getCon' :: HasContents a => a -> [Sentence]

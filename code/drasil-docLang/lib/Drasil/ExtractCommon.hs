@@ -18,7 +18,7 @@ getCon' :: HasContents a => a -> [Sentence]
 getCon' = getCon . (^. accessContents)
 
 -- | Extracts 'Sentence's from a list of 'Contents'.
-getContList :: [Contents] -> [Sentence]
+getContList :: HasContents a => [a] -> [Sentence]
 getContList = concatMap getCon'
 
 -- | Extracts 'Sentence's from raw content.

@@ -103,7 +103,7 @@ egetCon _ = []
 
 -- | Creates a 'Sentence' plate.
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
-sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatMap getSec) $
+sentencePlate f = appendPlate (secConPlate (f . getContList) $ f . concatMap getSec) $
   preorderFold $ purePlate {
     introSec = Constant . f <$> \(IntroProg s1 s2 s3) -> [s1, s2] ++ concatMap getIntroSub s3,
     introSub = Constant . f <$> \case
@@ -131,7 +131,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (Constraints s _) -> [s]
       (CorrSolnPpties _ cs) -> getContList cs,
     reqSub = Constant . f <$> \case
-      (FReqsSub c lcs) -> def c ++ concatMap getCon' lcs
+      (FReqsSub c lcs) -> def c ++ getContList lcs
       (NonFReqsSub c) -> def c,
     lcsSec = Constant . f <$> \(LCsProg c) -> def c,
     ucsSec = Constant . f <$> \(UCsProg c) -> def c,

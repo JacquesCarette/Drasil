@@ -9,7 +9,6 @@ module Drasil.ExtractDocDesc (
 import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
-import Data.List (sortBy)
 import qualified Data.Set as S
 
 import Drasil.Database (UID)
@@ -19,7 +18,7 @@ import Drasil.System (System, HasSystem(systemdb))
 import Theory.Drasil
 
 import Drasil.DocumentLanguage.Core hiding (System)
-import Drasil.GetChunks (lookupCitations)
+import Drasil.GetChunks (resolveBibliography)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 import Drasil.ExtractCommon (sentToExp, getCon', getContList, egetCon)
 
@@ -170,11 +169,11 @@ getSecCon (Con c) = getCon' c
 -- | Extracts citation reference 'UID's from generated sections. This is needed
 -- because some sentences (like orgOfDocIntro) are only created when DocDesc is
 -- converted to Sections during mkSections.
-getCitationsFromSections :: [Section] -> [UID]
-getCitationsFromSections = concatMap (S.toList . lnames) . concatMap getSec
+getCitationsFromSections :: [Section] -> S.Set UID
+getCitationsFromSections ss = S.unions $ map (S.unions . map lnames . getSec) ss
 
 -- | Extract bibliography entries from generated sections. This version extracts
 -- from fully expanded Sections, capturing citations that are only created
 -- during document generation (like those in orgOfDocIntro).
 citeDBFromSections :: System -> [Section] -> BibRef
-citeDBFromSections si secs = sortBy compareAuthYearTitle $ lookupCitations (si ^. systemdb) (getCitationsFromSections secs)
+citeDBFromSections si = resolveBibliography (si ^. systemdb) . getCitationsFromSections

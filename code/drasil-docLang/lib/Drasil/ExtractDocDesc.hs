@@ -3,9 +3,7 @@
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
 module Drasil.ExtractDocDesc (
   getDocDesc, egetDocDesc,
-  sentencePlate,
-  getSec,
-  getCitationsFromSections, citeDBFromSections
+  citeDBFromSections
 ) where
 
 import Control.Lens((^.))

@@ -12,7 +12,7 @@ import Drasil.System (System, HasSystem (systemdb))
 
 import Drasil.GetChunks (lookupCitations)
 import Drasil.DocumentLanguage.Notebook.Core
-import Drasil.ExtractCommon (getCont)
+import Drasil.ExtractCommon (getContList)
 
 -- | Extracts citation reference 'UID's from a lesson description. This gets all
 -- 'UID's that appear in 'Ref' constructors within sentences.
@@ -21,18 +21,18 @@ lsnDecCites = concatMap lsnChapCites
 
 -- | Extracts citation reference 'UID's from a lesson chapter.
 lsnChapCites :: LsnChapter -> [UID]
-lsnChapCites (Intro (IntrodProg cs)) = concatMap contRefs cs
-lsnChapCites (LearnObj (LrnObjProg cs)) = concatMap contRefs cs
-lsnChapCites (Review (ReviewProg cs)) = concatMap contRefs cs
-lsnChapCites (CaseProb (CaseProbProg cs)) = concatMap contRefs cs
-lsnChapCites (Example (ExampleProg cs)) = concatMap contRefs cs
-lsnChapCites (Smmry (SmmryProg cs)) = concatMap contRefs cs
+lsnChapCites (Intro (IntrodProg cs)) = contRefs cs
+lsnChapCites (LearnObj (LrnObjProg cs)) = contRefs cs
+lsnChapCites (Review (ReviewProg cs)) = contRefs cs
+lsnChapCites (CaseProb (CaseProbProg cs)) = contRefs cs
+lsnChapCites (Example (ExampleProg cs)) = contRefs cs
+lsnChapCites (Smmry (SmmryProg cs)) = contRefs cs
 lsnChapCites BibSec = []
-lsnChapCites (Apndx (ApndxProg cs)) = concatMap contRefs cs
+lsnChapCites (Apndx (ApndxProg cs)) = contRefs cs
 
 -- | Extracts reference 'UID's from 'Content's.
-contRefs :: Contents -> [UID]
-contRefs = S.toList . S.unions . map lnames . getCont
+contRefs :: [Contents] -> [UID]
+contRefs = S.toList . S.unions . map lnames . getContList
 
 -- | Extract bibliography entries for a notebook based on the lesson
 -- description. Scans the notebook for citation references and looks them up in

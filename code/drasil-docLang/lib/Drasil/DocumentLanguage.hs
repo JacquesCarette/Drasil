@@ -8,7 +8,6 @@
 module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 
 import Control.Lens ((^.), set)
-import Data.Containers.ListUtils (nubOrdOn)
 import Data.Function (on)
 import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe, fromMaybe)
@@ -83,7 +82,7 @@ mkDoc si srsDecl headingComb =
       -- well as 'Citation's.
       sections = mkSections si dd Nothing
       -- Extract all referenced 'Citations' from the pre-generated artifact.
-      refdCites = nubOrdOn (^. uid) $ citeDBFromSections si sections
+      refdCites = citeDBFromSections si sections
       -- Injects "traceability" maps into the 'ChunkDB' and adds missing
       -- 'LabelledContent' (the generated traceability-related tables).
       si' = buildTraceMaps dd $ fillReferences sections refdCites si

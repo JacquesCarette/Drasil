@@ -2,7 +2,7 @@
 -- 'UID' and dereference the chunk it refers to.
 module Drasil.GetChunks (
   ccss, ccss', combine, vars,
-  lookupCitations, resolveBibliography
+  resolveBibliography
 ) where
 
 import Data.List (nub, sortBy)
@@ -46,10 +46,6 @@ concpt a m = map (definition . defResolve' m) $ S.toList (sdep a)
 -- | Gets a list of concepts ('ConceptChunk') from an expression in order to print.
 concpt' :: ModelExpr -> ChunkDB -> [Sentence]
 concpt' a m = map (definition . defResolve' m) $ meDep a
-
--- | Look up citation chunks from the database using their UIDs.
-lookupCitations :: ChunkDB -> [UID] -> [Citation]
-lookupCitations db uids = mapMaybe (`find` db) (nub uids)
 
 resolveBibliography :: ChunkDB -> S.Set UID -> [Citation]
 resolveBibliography db uids = sortBy compareAuthYearTitle cites

@@ -31,22 +31,7 @@ sentToExp EmptyS = []
 
 -- | Extracts expressions from something that has contents.
 egetCon :: HasContents a => a -> [ModelExpr]
-egetCon = go . (^. accessContents)
-  where
-    -- | Extracts expressions from raw contents.
-    go :: RawContent -> [ModelExpr]
-    go (EqnBlock e) = [e]
-    go (Defini _ []) = []
-    go (Defini dt (hd:tl)) = concatMap egetCon (snd hd) ++ go (Defini dt tl)
-    go (Table ss sss t _) = concatMap sentToExp (t:ss ++ concat sss)
-    go (Paragraph s) = sentToExp s
-    go (DerivBlock h d) = sentToExp h ++ concatMap go d
-    go (Enumeration lst) = concatMap sentToExp $ getLT lst
-    go Figure{} = []
-    go Bib{} = []
-    go (Graph sss _ _ l) = let (ls, rs) = unzip sss
-                           in sentToExp l ++ concatMap sentToExp ls ++ concatMap sentToExp rs
-    go (CodeBlock _) = []
+egetCon = concatMap sentToExp . getCon
 
 -- | Extracts 'Sentence's from something that has contents.
 getCon :: HasContents a => a -> [Sentence]
@@ -56,8 +41,8 @@ getCon = go . (^. accessContents)
     go :: RawContent -> [Sentence]
     go (Table s1 s2 t _)   = t : s1 ++ concat s2
     go (Paragraph s)       = [s]
-    go EqnBlock{}          = []
-    go CodeBlock{}         = []
+    go (EqnBlock e)        = [eS e]
+    go (CodeBlock e)       = [eS' e]
     go (DerivBlock h d)    = h : concatMap go d
     go (Enumeration lst)   = getLT lst
     go (Figure l _ _ _)    = [l]

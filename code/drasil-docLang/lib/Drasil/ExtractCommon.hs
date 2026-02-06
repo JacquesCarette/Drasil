@@ -38,38 +38,37 @@ extractMExprs = concatMap sentToExp . extractSents
 extractSents :: HasContents a => a -> [Sentence]
 extractSents = go . (^. accessContents)
   where
-    -- | Extracts 'Sentence's from raw content.
+    -- | Extracts 'Sentence's from 'RawContent'.
     go :: RawContent -> [Sentence]
     go (Table s1 s2 t _)   = t : s1 ++ concat s2
     go (Paragraph s)       = [s]
     go (EqnBlock e)        = [eS e]
     go (CodeBlock e)       = [eS' e]
     go (DerivBlock h d)    = h : concatMap go d
-    go (Enumeration lst)   = getLT lst
+    go (Enumeration lst)   = goList lst
     go (Figure l _ _ _)    = [l]
     go (Bib _)             = []
     go (Graph sss _ _ l)   = let (ls, rs) = unzip sss
                               in l : ls ++ rs
     go (Defini _ ics)      = concatMap (concatMap extractSents . snd) ics
+  
+    -- | Extracts 'Sentence's from lists.
+    goList :: ListType -> [Sentence]
+    goList (Bullet it)      = concatMap (goItems . fst) it
+    goList (Numeric it)     = concatMap (goItems . fst) it
+    goList (Simple lp)      = concatMap goListTitle lp
+    goList (Desc lp)        = concatMap goListTitle lp
+    goList (Definitions lp) = concatMap goListTitle lp
+
+    -- | Extracts 'Sentence's from list headers.
+    goListTitle :: ListTuple -> [Sentence]
+    goListTitle (t, it, _) = t : goItems it
+
+    -- | Extract 'Sentence's from 'ItemType's and their nested 'ListType's.
+    goItems :: ItemType -> [Sentence]
+    goItems (Flat s) = [s]
+    goItems (Nested h lt) = h : goList lt
 
 -- | Extracts 'Sentence's from a list of 'Contents'.
 extractSents' :: HasContents a => [a] -> [Sentence]
 extractSents' = concatMap extractSents
-
--- | Translates different types of lists into a 'Sentence' form.
-getLT :: ListType -> [Sentence]
-getLT (Bullet it)      = concatMap (getIL . fst) it
-getLT (Numeric it)     = concatMap (getIL . fst) it
-getLT (Simple lp)      = concatMap getLP lp
-getLT (Desc lp)        = concatMap getLP lp
-getLT (Definitions lp) = concatMap getLP lp
-
--- | Translates a 'ListTuple' into 'Sentence's.
-getLP :: ListTuple -> [Sentence]
-getLP (t, it, _) = t : getIL it
-
--- | Flattens out an ItemType into 'Sentence's. Headers for 'Nested' items are
--- prepended to its contents.
-getIL :: ItemType -> [Sentence]
-getIL (Flat s) = [s]
-getIL (Nested h lt) = h : getLT lt

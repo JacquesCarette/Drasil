@@ -1,6 +1,6 @@
 module Drasil.ExtractCommon (
   sentToExp, egetCon,
-  getCon, getContList, contRefs
+  extractSents, getContList, contRefs
 ) where
 
 import Control.Lens((^.))
@@ -31,11 +31,11 @@ sentToExp EmptyS = []
 
 -- | Extracts expressions from something that has contents.
 egetCon :: HasContents a => a -> [ModelExpr]
-egetCon = concatMap sentToExp . getCon
+egetCon = concatMap sentToExp . extractSents
 
 -- | Extracts 'Sentence's from something that has contents.
-getCon :: HasContents a => a -> [Sentence]
-getCon = go . (^. accessContents)
+extractSents :: HasContents a => a -> [Sentence]
+extractSents = go . (^. accessContents)
   where
     -- | Extracts 'Sentence's from raw content.
     go :: RawContent -> [Sentence]
@@ -49,11 +49,11 @@ getCon = go . (^. accessContents)
     go (Bib _)             = []
     go (Graph sss _ _ l)   = let (ls, rs) = unzip sss
                               in l : ls ++ rs
-    go (Defini _ ics)      = concatMap (concatMap getCon . snd) ics
+    go (Defini _ ics)      = concatMap (concatMap extractSents . snd) ics
 
 -- | Extracts 'Sentence's from a list of 'Contents'.
 getContList :: HasContents a => [a] -> [Sentence]
-getContList = concatMap getCon
+getContList = concatMap extractSents
 
 -- | Translates different types of lists into a 'Sentence' form.
 getLT :: ListType -> [Sentence]

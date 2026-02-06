@@ -20,7 +20,7 @@ import Theory.Drasil
 import Drasil.DocumentLanguage.Core hiding (System)
 import Drasil.GetChunks (resolveBibliography)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Drasil.ExtractCommon (sentToExp, getCon, getContList, egetCon)
+import Drasil.ExtractCommon (sentToExp, extractSents, getContList, egetCon)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -104,7 +104,7 @@ sentencePlate f = appendPlate (secConPlate (f . getContList) $ f . concatMap get
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs
       (TermsAndDefs (Just s) cs) -> s : def cs
-      (PhySysDesc _ s lc cs) -> s ++ getCon lc ++ getContList cs
+      (PhySysDesc _ s lc cs) -> s ++ extractSents lc ++ getContList cs
       (Goals s c) -> s ++ def c,
     scsSub = Constant . f <$> \case
       (Assumptions c) -> def c
@@ -146,7 +146,7 @@ sentencePlate f = appendPlate (secConPlate (f . getContList) $ f . concatMap get
 
     getPDSub :: PDSub -> [Sentence]
     getPDSub (TermsAndDefs ms c) = def c ++ maybe [] pure ms
-    getPDSub (PhySysDesc _ s lc cs) = s ++ getCon lc ++ getContList cs
+    getPDSub (PhySysDesc _ s lc cs) = s ++ extractSents lc ++ getContList cs
     getPDSub (Goals s c) = s ++ def c
 
 -- | Extracts 'Sentence's from a document description.
@@ -164,7 +164,7 @@ getSec (Section t sc _ ) = t : concatMap getSecCon sc
 -- | Extracts 'Sentence's from section contents.
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
-getSecCon (Con c) = getCon c
+getSecCon (Con c) = extractSents c
 
 -- | Extracts citation reference 'UID's from generated sections. This is needed
 -- because some sentences (like orgOfDocIntro) are only created when DocDesc is

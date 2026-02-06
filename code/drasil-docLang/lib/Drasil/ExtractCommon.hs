@@ -43,7 +43,7 @@ egetCon = go . (^. accessContents)
     go (DerivBlock h d) = sentToExp h ++ concatMap go d
     go (Enumeration lst) = concatMap sentToExp $ getLT lst
     go Figure{} = []
-    go (Bib bref) = concatMap sentToExp $ getBib bref
+    go Bib{} = []
     go (Graph sss _ _ l) = let (ls, rs) = unzip sss
                            in sentToExp l ++ concatMap sentToExp ls ++ concatMap sentToExp rs
     go (CodeBlock _) = []
@@ -65,38 +65,10 @@ getCon CodeBlock{}         = []
 getCon (DerivBlock h d)    = h : concatMap getCon d
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _ _)    = [l]
-getCon (Bib bref)          = getBib bref
+getCon (Bib _)             = []
 getCon (Graph sss _ _ l)   = let (ls, rs) = unzip sss
                              in l : ls ++ rs
 getCon (Defini _ ics)      = concatMap (concatMap getCon' . snd) ics
-
--- | Get the bibliography from something that has a field.
-getBib :: (HasFields c) => [c] -> [Sentence]
-getBib a = map getField $ concatMap (^. getFields) a
-
--- | Unwraps a 'CiteField' into a 'Sentence'.
-getField :: CiteField -> Sentence
-getField (Address s) = S s
-getField Author{} = EmptyS
-getField (BookTitle s) = S s
-getField Chapter{} = EmptyS
-getField Edition{} = EmptyS
-getField Editor{} = EmptyS
-getField HowPublished{} = EmptyS
-getField (Institution s) = S s
-getField (Journal s) = S s
-getField Month{} = EmptyS
-getField (Note s) = S s
-getField Number{} = EmptyS
-getField (Organization s) = S s
-getField Pages{} = EmptyS
-getField (Publisher s) = S s
-getField (School s) = S s
-getField (Series s) = S s
-getField (Title s) = S s
-getField (Type s) = S s
-getField Volume{} = EmptyS
-getField Year{} = EmptyS
 
 -- | Translates different types of lists into a 'Sentence' form.
 getLT :: ListType -> [Sentence]

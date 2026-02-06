@@ -1,5 +1,5 @@
 module Drasil.ExtractCommon (
-  sentToExp, egetCon,
+  sentToExp, extractMExprs,
   extractSents, getContList, contRefs
 ) where
 
@@ -29,9 +29,9 @@ sentToExp (Quote s) = sentToExp s
 sentToExp Percent = []
 sentToExp EmptyS = []
 
--- | Extracts expressions from something that has contents.
-egetCon :: HasContents a => a -> [ModelExpr]
-egetCon = concatMap sentToExp . extractSents
+-- | Extracts 'ModelExpr's from something that 'HasContents'.
+extractMExprs :: HasContents a => a -> [ModelExpr]
+extractMExprs = concatMap sentToExp . extractSents
 
 -- | Extracts 'Sentence's from something that 'HasContents'.
 extractSents :: HasContents a => a -> [Sentence]

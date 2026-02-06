@@ -20,7 +20,7 @@ import Theory.Drasil
 import Drasil.DocumentLanguage.Core hiding (System)
 import Drasil.GetChunks (resolveBibliography)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Drasil.ExtractCommon (sentToExp, extractSents, getContList, egetCon)
+import Drasil.ExtractCommon (sentToExp, extractSents, getContList, extractMExprs)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -52,7 +52,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
 
 -- | Creates a section plate for expressions.
 exprPlate :: DLPlate (Constant [ModelExpr])
-exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (concatMap egetCon)
+exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (concatMap extractMExprs)
   (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
   scsSub = Constant <$> \case
     (TMs _ _ t)   -> goTM t
@@ -85,7 +85,7 @@ egetSec (Section _ sc _ ) = concatMap egetSecCon sc
 -- | Extracts expressions from section contents.
 egetSecCon :: SecCons -> [ModelExpr]
 egetSecCon (Sub s) = egetSec s
-egetSecCon (Con c) = egetCon c
+egetSecCon (Con c) = extractMExprs c
 
 -- | Creates a 'Sentence' plate.
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)

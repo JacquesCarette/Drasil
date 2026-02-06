@@ -14,12 +14,20 @@ import Language.Drasil.Development (lnames)
 contRefs :: HasContents a => [a] -> S.Set UID
 contRefs = S.unions . map lnames . getContList
 
--- | Converts a 'Sentence' into a list of expressions. If the 'Sentence' cant be
--- translated, returns an empty list.
+-- | Extracts all 'ModelExpr's mentioned in a 'Sentence'.
 sentToExp :: Sentence -> [ModelExpr]
 sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2
 sentToExp (E e) = [e]
-sentToExp _ = []
+sentToExp Ch{} = []
+sentToExp SyCh{} = []
+sentToExp Sy{} = []
+sentToExp NP{} = []
+sentToExp S{} = []
+sentToExp P{} = []
+sentToExp (Ref _ s _) = sentToExp s
+sentToExp (Quote s) = sentToExp s
+sentToExp Percent = []
+sentToExp EmptyS = []
 
 -- | Extracts expressions from something that has contents.
 egetCon :: HasContents a => a -> [ModelExpr]

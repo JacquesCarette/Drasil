@@ -1,11 +1,11 @@
 -- | Defines the underlying data types used in the package extension.
 module Language.Drasil.Code.FileData (FileAndContents(filePath, fileDoc),
-  fileAndContents, fileDataToFileAndContents, PackageData(packageProg,
+  fileAndContents, hasPathAndDocToFileAndContents, PackageData(packageProg,
   packageAux), packageData
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
-import qualified Drasil.GOOL as G (FileData(..), ModData(..))
+import Utils.Drasil (HasPathAndDoc(..))
 
 -- | The underlying data type for auxiliary files in all renderers.
 data FileAndContents = FileAndContents {filePath :: FilePath, fileDoc :: Doc}
@@ -14,8 +14,12 @@ data FileAndContents = FileAndContents {filePath :: FilePath, fileDoc :: Doc}
 fileAndContents :: FilePath -> Doc -> FileAndContents
 fileAndContents = FileAndContents
 
-fileDataToFileAndContents :: G.FileData -> FileAndContents
-fileDataToFileAndContents file = fileAndContents (G.filePath file) ((G.modDoc . G.fileMod) file)
+instance HasPathAndDoc FileAndContents where
+  getPath = filePath
+  getDoc = fileDoc
+
+hasPathAndDocToFileAndContents :: (HasPathAndDoc a) => a -> FileAndContents
+hasPathAndDocToFileAndContents file = fileAndContents (getPath file) (getDoc file)
 
 -- | The underlying data type for packages in all renderers.
 data PackageData a = PackD {packageProg :: a, packageAux :: [FileAndContents]}

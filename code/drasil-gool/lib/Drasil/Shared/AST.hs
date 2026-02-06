@@ -16,6 +16,7 @@ import Drasil.Shared.CodeType (CodeType)
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
+import Utils.Drasil (HasPathAndDoc(..))
 
 -- For how statement endings are printed
 data Terminator = Semi | Empty
@@ -60,6 +61,10 @@ data FileData = FileD {filePath :: FilePath, fileMod :: ModData}
 
 fileD :: FilePath -> ModData -> FileData
 fileD = FileD
+
+instance HasPathAndDoc FileData where
+  getPath = filePath
+  getDoc = modDoc . fileMod
 
 -- Replace a FileData's ModData with a new ModData
 updateFileMod :: ModData -> FileData -> FileData

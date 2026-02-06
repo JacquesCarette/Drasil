@@ -27,6 +27,9 @@ module Utils.Drasil (
 
   -- ** Strings
   toPlainName, repUnd,
+
+  -- ** TypeClasses
+  HasPathAndDoc(..)
 ) where
 
 import Utils.Drasil.Directory
@@ -36,3 +39,4 @@ import Utils.Drasil.English
 import Utils.Drasil.FilePath
 import Utils.Drasil.Lists
 import Utils.Drasil.Strings
+import Utils.Drasil.TypeClasses

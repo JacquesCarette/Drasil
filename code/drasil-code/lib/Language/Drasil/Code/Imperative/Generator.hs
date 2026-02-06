@@ -45,7 +45,7 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   makeSds, AuxiliarySym(..), package)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Code.FileData (PackageData(..), FileAndContents(..),
-  fileAndContents, fileDataToFileAndContents)
+  fileAndContents, hasPathAndDocToFileAndContents)
 import Language.Drasil.Code.FileNames(sampleInputName)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -129,7 +129,9 @@ generateCode l unReprProg unReprPack g = do
       aux
         | l == Python = fileAndContents "__init__.py" mempty : baseAux
         | otherwise   = baseAux
-      packageFiles = map fileDataToFileAndContents (progMods $ packageProg $ unReprPack pckg) ++ aux
+      packageFiles = map
+        hasPathAndDocToFileAndContents (progMods $ packageProg $ unReprPack pckg)
+        ++ aux
   traverse_ (\file -> createFile (filePath file) (fileDoc file)) packageFiles
   setCurrentDirectory workingDir
 
@@ -241,7 +243,9 @@ generateCodeProc l unReprProg unReprPack g = do
   let (pckg, ds) = runState (genPackageProc unReprProg) g
       baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
           not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
-      packageFiles = map fileDataToFileAndContents (progMods (packageProg $ unReprPack pckg)) ++ baseAux
+      packageFiles = map
+        hasPathAndDocToFileAndContents (progMods (packageProg $ unReprPack pckg))
+        ++ baseAux
   traverse_ (\file -> createFile (filePath file) (fileDoc file)) packageFiles
   setCurrentDirectory workingDir
 

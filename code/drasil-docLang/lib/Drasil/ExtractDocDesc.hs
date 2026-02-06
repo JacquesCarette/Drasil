@@ -20,7 +20,7 @@ import Theory.Drasil
 import Drasil.DocumentLanguage.Core hiding (System)
 import Drasil.GetChunks (resolveBibliography)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Drasil.ExtractCommon (sentToExp, extractSents, getContList, extractMExprs)
+import Drasil.ExtractCommon (sentToExp, extractSents, extractSents', extractMExprs)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -89,7 +89,7 @@ egetSecCon (Con c) = extractMExprs c
 
 -- | Creates a 'Sentence' plate.
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
-sentencePlate f = appendPlate (secConPlate (f . getContList) $ f . concatMap getSec) $
+sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap getSec) $
   preorderFold $ purePlate {
     introSec = Constant . f <$> \(IntroProg s1 s2 s3) -> [s1, s2] ++ concatMap getIntroSub s3,
     introSub = Constant . f <$> \case
@@ -104,7 +104,7 @@ sentencePlate f = appendPlate (secConPlate (f . getContList) $ f . concatMap get
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs
       (TermsAndDefs (Just s) cs) -> s : def cs
-      (PhySysDesc _ s lc cs) -> s ++ extractSents lc ++ getContList cs
+      (PhySysDesc _ s lc cs) -> s ++ extractSents lc ++ extractSents' cs
       (Goals s c) -> s ++ def c,
     scsSub = Constant . f <$> \case
       (Assumptions c) -> def c
@@ -115,9 +115,9 @@ sentencePlate f = appendPlate (secConPlate (f . getContList) $ f . concatMap get
       (GDs s _ d _) -> s ++ def d ++ der d ++ notes d
       (IMs s _ d _) -> s ++ der d ++ notes d
       (Constraints s _) -> [s]
-      (CorrSolnPpties _ cs) -> getContList cs,
+      (CorrSolnPpties _ cs) -> extractSents' cs,
     reqSub = Constant . f <$> \case
-      (FReqsSub c lcs) -> def c ++ getContList lcs
+      (FReqsSub c lcs) -> def c ++ extractSents' lcs
       (NonFReqsSub c) -> def c,
     lcsSec = Constant . f <$> \(LCsProg c) -> def c,
     ucsSec = Constant . f <$> \(UCsProg c) -> def c,
@@ -146,7 +146,7 @@ sentencePlate f = appendPlate (secConPlate (f . getContList) $ f . concatMap get
 
     getPDSub :: PDSub -> [Sentence]
     getPDSub (TermsAndDefs ms c) = def c ++ maybe [] pure ms
-    getPDSub (PhySysDesc _ s lc cs) = s ++ extractSents lc ++ getContList cs
+    getPDSub (PhySysDesc _ s lc cs) = s ++ extractSents lc ++ extractSents' cs
     getPDSub (Goals s c) = s ++ def c
 
 -- | Extracts 'Sentence's from a document description.

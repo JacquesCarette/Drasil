@@ -1,6 +1,6 @@
 module Drasil.ExtractCommon (
   sentToExp, extractMExprs,
-  extractSents, getContList, contRefs
+  extractSents, extractSents', contRefs
 ) where
 
 import Control.Lens((^.))
@@ -12,7 +12,7 @@ import Language.Drasil.Development (lnames)
 
 -- | Extracts reference 'UID's from 'Content's.
 contRefs :: HasContents a => [a] -> S.Set UID
-contRefs = S.unions . map lnames . getContList
+contRefs = S.unions . map lnames . extractSents'
 
 -- | Extracts all 'ModelExpr's mentioned in a 'Sentence'.
 sentToExp :: Sentence -> [ModelExpr]
@@ -52,8 +52,8 @@ extractSents = go . (^. accessContents)
     go (Defini _ ics)      = concatMap (concatMap extractSents . snd) ics
 
 -- | Extracts 'Sentence's from a list of 'Contents'.
-getContList :: HasContents a => [a] -> [Sentence]
-getContList = concatMap extractSents
+extractSents' :: HasContents a => [a] -> [Sentence]
+extractSents' = concatMap extractSents
 
 -- | Translates different types of lists into a 'Sentence' form.
 getLT :: ListType -> [Sentence]

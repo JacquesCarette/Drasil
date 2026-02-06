@@ -7,7 +7,7 @@ module Drasil.GetChunks (
 
 import Data.List (nub, sortBy)
 import Data.Maybe (mapMaybe)
-import qualified Data.Set as S
+import qualified Data.Set as Set
 
 import Language.Drasil
 import Language.Drasil.Development (sdep)
@@ -21,7 +21,7 @@ vars e m = map (`findOrErr` m) $ meDep e
 
 -- | Gets a list of quantities ('DefinedQuantityDict') from a 'Sentence' in order to print.
 vars' :: Sentence -> ChunkDB -> [DefinedQuantityDict]
-vars' a m = map (`findOrErr` m) $ S.toList (sdep a)
+vars' a m = map (`findOrErr` m) $ Set.toList (sdep a)
 
 -- | Combines the functions of 'vars' and 'concpt' to create a list of 'DefinedQuantityDict's from a 'Sentence'.
 combine :: Sentence -> ChunkDB -> [DefinedQuantityDict]
@@ -41,7 +41,7 @@ ccss' s e c = nub $ concatMap (`vars'` c) s ++ concatMap (`vars` c) e
 
 -- | Gets a list of concepts ('ConceptChunk') from a 'Sentence' in order to print.
 concpt :: Sentence -> ChunkDB -> [Sentence]
-concpt a m = map (definition . defResolve' m) $ S.toList (sdep a)
+concpt a m = map (definition . defResolve' m) $ Set.toList (sdep a)
 
 -- | Gets a list of concepts ('ConceptChunk') from an expression in order to print.
 concpt' :: ModelExpr -> ChunkDB -> [Sentence]
@@ -53,7 +53,7 @@ concpt' a m = map (definition . defResolve' m) $ meDep a
 -- FIXME: This function assumes that all 'UID's in the set correspond to
 -- 'Citation's in the database. If a 'UID' does not correspond to a 'Citation',
 -- it is simply ignored. This should rather rely on a set of 'UIDRef Citation's.
-resolveBibliography :: ChunkDB -> S.Set UID -> [Citation]
+resolveBibliography :: ChunkDB -> Set.Set UID -> [Citation]
 resolveBibliography db uids = sortBy compareAuthYearTitle cites
   where
-    cites = mapMaybe (`find` db) (S.toList uids)
+    cites = mapMaybe (`find` db) (Set.toList uids)

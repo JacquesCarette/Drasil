@@ -1,6 +1,6 @@
 module Drasil.ExtractCommon (
   sentToExp, egetCon,
-  getCon', getContList, contRefs
+  getCon, getContList, contRefs
 ) where
 
 import Control.Lens((^.))
@@ -49,26 +49,26 @@ egetCon = go . (^. accessContents)
     go (CodeBlock _) = []
 
 -- | Extracts 'Sentence's from something that has contents.
-getCon' :: HasContents a => a -> [Sentence]
-getCon' = getCon . (^. accessContents)
+getCon :: HasContents a => a -> [Sentence]
+getCon = go . (^. accessContents)
+  where
+    -- | Extracts 'Sentence's from raw content.
+    go :: RawContent -> [Sentence]
+    go (Table s1 s2 t _)   = t : s1 ++ concat s2
+    go (Paragraph s)       = [s]
+    go EqnBlock{}          = []
+    go CodeBlock{}         = []
+    go (DerivBlock h d)    = h : concatMap go d
+    go (Enumeration lst)   = getLT lst
+    go (Figure l _ _ _)    = [l]
+    go (Bib _)             = []
+    go (Graph sss _ _ l)   = let (ls, rs) = unzip sss
+                              in l : ls ++ rs
+    go (Defini _ ics)      = concatMap (concatMap getCon . snd) ics
 
 -- | Extracts 'Sentence's from a list of 'Contents'.
 getContList :: HasContents a => [a] -> [Sentence]
-getContList = concatMap getCon'
-
--- | Extracts 'Sentence's from raw content.
-getCon :: RawContent -> [Sentence]
-getCon (Table s1 s2 t _)   = t : s1 ++ concat s2
-getCon (Paragraph s)       = [s]
-getCon EqnBlock{}          = []
-getCon CodeBlock{}         = []
-getCon (DerivBlock h d)    = h : concatMap getCon d
-getCon (Enumeration lst)   = getLT lst
-getCon (Figure l _ _ _)    = [l]
-getCon (Bib _)             = []
-getCon (Graph sss _ _ l)   = let (ls, rs) = unzip sss
-                             in l : ls ++ rs
-getCon (Defini _ ics)      = concatMap (concatMap getCon' . snd) ics
+getContList = concatMap getCon
 
 -- | Translates different types of lists into a 'Sentence' form.
 getLT :: ListType -> [Sentence]

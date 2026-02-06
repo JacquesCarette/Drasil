@@ -38,7 +38,15 @@ egetCon = go . (^. accessContents)
     go (EqnBlock e) = [e]
     go (Defini _ []) = []
     go (Defini dt (hd:tl)) = concatMap egetCon (snd hd) ++ go (Defini dt tl)
-    go _ = []
+    go (Table ss sss t _) = concatMap sentToExp (t:ss ++ concat sss)
+    go (Paragraph s) = sentToExp s
+    go (DerivBlock h d) = sentToExp h ++ concatMap go d
+    go (Enumeration lst) = concatMap sentToExp $ getLT lst
+    go Figure{} = []
+    go (Bib bref) = concatMap sentToExp $ getBib bref
+    go (Graph sss _ _ l) = let (ls, rs) = unzip sss
+                           in sentToExp l ++ concatMap sentToExp ls ++ concatMap sentToExp rs
+    go (CodeBlock _) = []
 
 -- | Extracts 'Sentence's from something that has contents.
 getCon' :: HasContents a => a -> [Sentence]

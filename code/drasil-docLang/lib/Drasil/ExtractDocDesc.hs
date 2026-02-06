@@ -3,7 +3,7 @@
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
 module Drasil.ExtractDocDesc (
   getDocDesc, egetDocDesc,
-  citeDBFromSections
+  extractDocBib
 ) where
 
 import Control.Lens((^.))
@@ -11,7 +11,6 @@ import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 import qualified Data.Set as S
 
-import Drasil.Database (UID)
 import Language.Drasil hiding (getCitations, Manual, Verb)
 import Language.Drasil.Development (lnames)
 import Drasil.System (System, HasSystem(systemdb))
@@ -166,14 +165,10 @@ getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
 getSecCon (Con c) = extractSents c
 
--- | Extracts citation reference 'UID's from generated sections. This is needed
--- because some sentences (like orgOfDocIntro) are only created when DocDesc is
--- converted to Sections during mkSections.
-getCitationsFromSections :: [Section] -> S.Set UID
-getCitationsFromSections ss = S.unions $ map (S.unions . map lnames . getSec) ss
-
 -- | Extract bibliography entries from generated sections. This version extracts
 -- from fully expanded Sections, capturing citations that are only created
 -- during document generation (like those in orgOfDocIntro).
-citeDBFromSections :: System -> [Section] -> BibRef
-citeDBFromSections si = resolveBibliography (si ^. systemdb) . getCitationsFromSections
+extractDocBib :: System -> [Section] -> BibRef
+extractDocBib si = resolveBibliography (si ^. systemdb) . extractAllSecRefs
+  where
+    extractAllSecRefs = S.unions . map (S.unions . map lnames . getSec)

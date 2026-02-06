@@ -13,7 +13,7 @@ import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
 import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, example,
   appendix, review, reference, summary)
-import Drasil.ExtractLsnDesc (lsnPlanCites)
+import Drasil.ExtractLsnDesc (extractLsnPlanBib)
 
 -- | Creates a notebook from a lesson description and system information.
 mkNb :: LsnDesc -> (IdeaDict -> CI -> Sentence) -> System -> Document
@@ -32,7 +32,7 @@ mkSections si dd = map doit dd
     doit (CaseProb cp) = mkCaseProb cp
     doit (Example e)   = mkExample e
     doit (Smmry s)     = mkSmmry s
-    doit BibSec        = mkBib (lsnPlanCites si dd)
+    doit BibSec        = mkBib (extractLsnPlanBib si dd)
     doit (Apndx a)     = mkAppndx a
 
 -- | Helper for making the 'Introduction' section.

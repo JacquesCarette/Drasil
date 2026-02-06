@@ -10,7 +10,7 @@ import Drasil.System (System, HasSystem (systemdb))
 
 import Drasil.GetChunks (resolveBibliography)
 import Drasil.DocumentLanguage.Notebook.Core
-import Drasil.ExtractCommon (contRefs)
+import Drasil.ExtractCommon (extractChRefs)
 
 -- | Extracts citation reference 'UID's from a lesson description. This gets all
 -- 'UID's that appear in 'Ref' constructors within sentences.
@@ -19,14 +19,14 @@ lsnDecCites d = S.unions $ map lsnChapCites d
 
 -- | Extracts citation reference 'UID's from a lesson chapter.
 lsnChapCites :: LsnChapter -> S.Set UID
-lsnChapCites (Intro (IntrodProg cs)) = contRefs cs
-lsnChapCites (LearnObj (LrnObjProg cs)) = contRefs cs
-lsnChapCites (Review (ReviewProg cs)) = contRefs cs
-lsnChapCites (CaseProb (CaseProbProg cs)) = contRefs cs
-lsnChapCites (Example (ExampleProg cs)) = contRefs cs
-lsnChapCites (Smmry (SmmryProg cs)) = contRefs cs
+lsnChapCites (Intro (IntrodProg cs)) = extractChRefs cs
+lsnChapCites (LearnObj (LrnObjProg cs)) = extractChRefs cs
+lsnChapCites (Review (ReviewProg cs)) = extractChRefs cs
+lsnChapCites (CaseProb (CaseProbProg cs)) = extractChRefs cs
+lsnChapCites (Example (ExampleProg cs)) = extractChRefs cs
+lsnChapCites (Smmry (SmmryProg cs)) = extractChRefs cs
 lsnChapCites BibSec = mempty
-lsnChapCites (Apndx (ApndxProg cs)) = contRefs cs
+lsnChapCites (Apndx (ApndxProg cs)) = extractChRefs cs
 
 -- | Extract bibliography entries for a notebook based on the lesson
 -- description. Scans the notebook for citation references and looks them up in

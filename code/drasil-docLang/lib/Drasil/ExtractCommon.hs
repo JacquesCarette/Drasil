@@ -1,6 +1,7 @@
 module Drasil.ExtractCommon (
   sentToExp, extractMExprs,
-  extractSents, extractSents', contRefs
+  extractSents, extractSents',
+  extractChRefs
 ) where
 
 import Control.Lens((^.))
@@ -10,9 +11,9 @@ import Drasil.Database (UID)
 import Language.Drasil hiding (getCitations, Manual, Verb)
 import Language.Drasil.Development (lnames)
 
--- | Extracts reference 'UID's from 'Content's.
-contRefs :: HasContents a => [a] -> S.Set UID
-contRefs = S.unions . map lnames . extractSents'
+-- | Extracts all referenced 'UID's from things that have 'RawContent's.
+extractChRefs :: HasContents a => [a] -> S.Set UID
+extractChRefs = S.unions . map lnames . extractSents'
 
 -- | Extracts all 'ModelExpr's mentioned in a 'Sentence'.
 sentToExp :: Sentence -> [ModelExpr]

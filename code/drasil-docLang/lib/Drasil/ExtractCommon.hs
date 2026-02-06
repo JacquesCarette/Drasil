@@ -33,7 +33,7 @@ sentToExp EmptyS = []
 egetCon :: HasContents a => a -> [ModelExpr]
 egetCon = concatMap sentToExp . extractSents
 
--- | Extracts 'Sentence's from something that has contents.
+-- | Extracts 'Sentence's from something that 'HasContents'.
 extractSents :: HasContents a => a -> [Sentence]
 extractSents = go . (^. accessContents)
   where

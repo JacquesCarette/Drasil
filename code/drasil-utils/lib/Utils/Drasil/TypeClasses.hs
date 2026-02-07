@@ -1,9 +1,8 @@
+{-# LANGUAGE FunctionalDependencies #-}
 module Utils.Drasil.TypeClasses (
   HasPathAndDoc(..)
 ) where
 
-import Text.PrettyPrint.HughesPJ (Doc)
-
-class HasPathAndDoc a where
+class HasPathAndDoc a b | a -> b where
   getPath :: a -> FilePath
-  getDoc :: a -> Doc
+  getDoc :: a -> b

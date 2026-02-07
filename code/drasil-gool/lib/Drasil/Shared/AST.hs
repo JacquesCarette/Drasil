@@ -1,3 +1,4 @@
+{-# LANGUAGE MultiParamTypeClasses #-}
 module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   ScopeData(..), sd, QualifiedName, qualName, FileType(..), isSource,
   Binding(..), onBinding, BindData(bind, bindDoc), bd, FileData(filePath,
@@ -62,7 +63,7 @@ data FileData = FileD {filePath :: FilePath, fileMod :: ModData}
 fileD :: FilePath -> ModData -> FileData
 fileD = FileD
 
-instance HasPathAndDoc FileData where
+instance HasPathAndDoc FileData Doc where
   getPath = filePath
   getDoc = modDoc . fileMod
 

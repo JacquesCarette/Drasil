@@ -10,7 +10,7 @@ import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList, catMaybes)
 import Data.Foldable (traverse_)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
-import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
+import Text.PrettyPrint.HughesPJ (isEmpty, vcat, render)
 
 import Language.Drasil
 import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
@@ -132,7 +132,7 @@ generateCode l unReprProg unReprPack g = do
       packageFiles = map
         hasPathAndDocToFileAndContents (progMods $ packageProg $ unReprPack pckg)
         ++ aux
-  traverse_ (\file -> createFile (filePath file) (fileDoc file)) packageFiles
+  traverse_ (\file -> createFile (filePath file) (render $ fileDoc file)) packageFiles
   setCurrentDirectory workingDir
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
@@ -246,7 +246,7 @@ generateCodeProc l unReprProg unReprPack g = do
       packageFiles = map
         hasPathAndDocToFileAndContents (progMods (packageProg $ unReprPack pckg))
         ++ baseAux
-  traverse_ (\file -> createFile (filePath file) (fileDoc file)) packageFiles
+  traverse_ (\file -> createFile (filePath file) (render $ fileDoc file)) packageFiles
   setCurrentDirectory workingDir
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen

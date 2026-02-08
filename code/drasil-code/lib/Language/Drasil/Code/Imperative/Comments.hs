@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.Comments (
   getComment, getCommentBrief
 ) where
 
-import Control.Monad.State (get)
+import Control.Monad.State.Strict (get)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), colon, empty, parens, render)
 

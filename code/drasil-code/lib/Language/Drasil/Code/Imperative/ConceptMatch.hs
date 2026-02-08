@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.ConceptMatch (
 
 import Prelude hiding (pi)
 import qualified Data.Map as Map (mapWithKey)
-import Control.Monad.State (State, modify)
+import Control.Monad.State.Strict (State, modify')
 
 import Drasil.Database (UID)
 import Language.Drasil (Sentence(S), (+:+), (+:+.))
@@ -25,7 +25,7 @@ chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch $ map
         chooseConcept' _ [] = error $ "Empty list of CodeConcepts in the " ++
           "ConceptMatchMap"
         chooseConcept' uid (c:_) = do
-            modify (++ [S "Code Concept" +:+ S (show uid) +:+ S "selected as" +:+. showChs c])
+            modify' (++ [S "Code Concept" +:+ S (show uid) +:+ S "selected as" +:+. showChs c])
             return c
 
 -- | Translates a 'CodeConcept' into GOOL.

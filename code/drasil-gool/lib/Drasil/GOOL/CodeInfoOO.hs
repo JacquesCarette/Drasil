@@ -25,12 +25,12 @@ import Drasil.Shared.AST (VisibilityTag(..), qualName)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn,
+  lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modify'Return,
   setClassName, getClassName, setModuleName, getModuleName, addClass,
   updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall,
   callMapTransClosure, updateMEMWithCalls)
 
-import Control.Monad.State (State, modify)
+import Control.Monad.State.Strict (State, modify')
 import qualified Control.Monad.State as S (get)
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (fromMaybe)
@@ -57,7 +57,7 @@ instance ProgramSym CodeInfoOO where
   type Program CodeInfoOO = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
-    modify (updateMEMWithCalls . callMapTransClosure)
+    modify' (updateMEMWithCalls . callMapTransClosure)
     s <- S.get
     toState $ toCode s
 
@@ -333,10 +333,10 @@ instance IOStatement CodeInfoOO where
   getFileInput v _ = zoom lensMStoVS $ execute1 v
   discardFileInput = zoom lensMStoVS . execute1
 
-  openFileR _ v = modify (addException FileNotFound) >>
+  openFileR _ v = modify' (addException FileNotFound) >>
     execute1 (zoom lensMStoVS v)
-  openFileW _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
-  openFileA _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
+  openFileW _ v = modify' (addException IO) >> execute1 (zoom lensMStoVS v)
+  openFileA _ v = modify' (addException IO) >> execute1 (zoom lensMStoVS v)
   closeFile     = zoom lensMStoVS . execute1
 
   getFileInputLine v _ = zoom lensMStoVS $ execute1 v
@@ -371,7 +371,7 @@ instance ControlStatement CodeInfoOO where
 
   returnStmt = zoom lensMStoVS . execute1
 
-  throw _ = modifyReturn (addException Standard) (toCode ())
+  throw _ = modify'Return (addException Standard) (toCode ())
 
   ifCond = evalConds
   switch v cs b = do
@@ -434,7 +434,7 @@ instance OOMethodSym CodeInfoOO where
     mapM_ (zoom lensMStoVS . snd) il
     _ <- b
     cn <- getClassName
-    modify (updateCallMap cn . updateMethodExcMap cn)
+    modify' (updateCallMap cn . updateMethodExcMap cn)
     noInfo
 
   inOutMethod    n _ _ _ _ _   = updateMEMandCM n
@@ -452,12 +452,12 @@ instance ClassSym CodeInfoOO where
     n <- zoom lensCStoFS getModuleName
     implementingClass n [] [] cs ms
   extraClass n _ _ cs ms = do
-    modify (setClassName n)
+    modify' (setClassName n)
     mapM_ (zoom lensCStoMS) cs
     mapM_ (zoom lensCStoMS) ms
     noInfo
   implementingClass n _ _ cs ms = do
-    modify (addClass n . setClassName n)
+    modify' (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) cs
     mapM_ (zoom lensCStoMS) ms
     noInfo
@@ -469,10 +469,10 @@ instance ClassSym CodeInfoOO where
 instance ModuleSym CodeInfoOO where
   type Module CodeInfoOO = ()
   buildModule n _ funcs classes = do
-    modify (setModuleName n)
+    modify' (setModuleName n)
     mapM_ (zoom lensFStoCS) classes
     mapM_ (zoom lensFStoMS) funcs
-    modifyReturn (updateClassMap n) (toCode ())
+    modify'Return (updateClassMap n) (toCode ())
 
 -- Helpers
 
@@ -485,7 +485,7 @@ noInfoType = toState $ toCode ""
 updateMEMandCM :: String -> MSBody CodeInfoOO -> SMethod CodeInfoOO
 updateMEMandCM n b = do
   _ <- b
-  modify (updateCallMap n . updateMethodExcMap n)
+  modify' (updateCallMap n . updateMethodExcMap n)
   noInfo
 
 evalConds :: [(SValue CodeInfoOO, MSBody CodeInfoOO)] -> MSBody CodeInfoOO ->
@@ -499,7 +499,7 @@ evalConds cs def = do
 addCurrModCall :: String -> SValue CodeInfoOO
 addCurrModCall n = do
   mn <- zoom lensVStoFS getModuleName
-  modify (addCall (qualName mn n))
+  modify' (addCall (qualName mn n))
   noInfo
 
 addCurrModConstructorCall :: VSType CodeInfoOO -> SValue CodeInfoOO
@@ -509,7 +509,7 @@ addCurrModConstructorCall ot = do
   addCurrModCall tp
 
 addExternalCall :: String -> String -> SValue CodeInfoOO
-addExternalCall l n = modify (addCall (qualName l n)) >> noInfo
+addExternalCall l n = modify' (addCall (qualName l n)) >> noInfo
 
 addExternalConstructorCall :: String -> VSType CodeInfoOO -> SValue CodeInfoOO
 addExternalConstructorCall l ot = do

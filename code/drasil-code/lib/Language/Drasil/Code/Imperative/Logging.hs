@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.Logging (
 ) where
 
 import Control.Lens.Zoom (zoom)
-import Control.Monad.State (get)
+import Control.Monad.State.Strict (get)
 
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Choices (Logging(..))

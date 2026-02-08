@@ -82,7 +82,7 @@ import Drasil.Shared.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
 
 import Prelude hiding (print,sin,cos,tan,(<>))
 import Data.Maybe (fromMaybe, maybeToList)
-import Control.Monad.State (modify)
+import Control.Monad.State.Strict (modify')
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
@@ -482,8 +482,8 @@ param :: (CommonRenderSym r) => (r (Variable r) -> Doc) -> SVariable r ->
 param f v' = do
   v <- zoom lensMStoVS v'
   let n = variableName v
-  modify $ addParameter n
-  modify $ useVarName n
+  modify' $ addParameter n
+  modify' $ useVarName n
   paramFromData v' $ f v
 
 method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Permanence r) -> VSType r
@@ -539,7 +539,7 @@ commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
 -- Modules --
 
 modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
-modFromData n f d = modify (setModuleName n) >> onStateValue f d
+modFromData n f d = modify' (setModuleName n) >> onStateValue f d
 
 -- Files --
 
@@ -571,7 +571,7 @@ fileFromData :: (OORenderSym r) => (FilePath -> r (Module r) -> r (File r))
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'
-  modify (\s -> if isEmpty (RC.module' mdl)
+  modify' (\s -> if isEmpty (RC.module' mdl)
     then s
     else over lensFStoGS (addFile (s ^. currFileType) fpath) $
       -- If this is the main source file, set it as the main module in the state

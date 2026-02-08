@@ -94,7 +94,7 @@ import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
-import Control.Monad.State (modify)
+import Control.Monad.State.Strict (modify')
 import Data.List (intercalate, sort)
 import Data.Char (toUpper, isUpper, isLower)
 import qualified Data.Map as Map (lookup)
@@ -126,7 +126,7 @@ instance ProgramSym PythonCode where
   type Program PythonCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
-    modify revFiles
+    modify' revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym PythonCode
@@ -135,7 +135,7 @@ instance OORenderSym PythonCode
 instance FileSym PythonCode where
   type File PythonCode = FileData
   fileDoc m = do
-    modify (setFileType Combined)
+    modify' (setFileType Combined)
     G.fileDoc pyExt top bottom m
 
   docMod = CP.doxMod pyExt
@@ -272,7 +272,7 @@ instance VariableSym PythonCode where
   type Variable PythonCode = VarData
   var          = G.var
   constant n   = var $ toConstName n
-  extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
+  extVar l n t = modify' (addModuleImportVS l) >> CS.extVar l n t
   arrayElem i  = G.arrayElem (litInt i)
 
 instance OOVariableSym PythonCode where
@@ -280,7 +280,7 @@ instance OOVariableSym PythonCode where
                           else G.staticVar n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVar = CP.classVar R.classVar
-  extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify .
+  extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify' .
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $
     CP.classVar pyClassVar (toState t) v) c getClassMap
   objVar = G.objVar
@@ -331,7 +331,7 @@ instance OOVariableValue PythonCode
 instance CommandLineArgs PythonCode where
   arg n = G.arg (litInt $ n+1) argsList
   argsList = do
-    modify (addLangImportVS pySys)
+    modify' (addLangImportVS pySys)
     G.argsList $ pySys `access` argv
   argExists = CP.argExists
 
@@ -385,10 +385,10 @@ instance ValueExpression PythonCode where
 
   funcAppMixedArgs = G.funcAppMixedArgs
   extFuncAppMixedArgs l n t ps ns = do
-    modify (addModuleImportVS l)
+    modify' (addModuleImportVS l)
     CS.extFuncAppMixedArgs l n t ps ns
   libFuncAppMixedArgs l n t ps ns = do
-    modify (addLibImportVS l)
+    modify' (addLibImportVS l)
     CS.extFuncAppMixedArgs l n t ps ns
 
   lambda = G.lambda pyLambda
@@ -399,10 +399,10 @@ instance OOValueExpression PythonCode where
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l tp ps ns = do
-    modify (addModuleImportVS l)
+    modify' (addModuleImportVS l)
     pyExtNewObjMixedArgs l tp ps ns
   libNewObjMixedArgs l tp ps ns = do
-    modify (addLibImportVS l)
+    modify' (addLibImportVS l)
     pyExtNewObjMixedArgs l tp ps ns
 
 instance RenderValue PythonCode where
@@ -568,7 +568,7 @@ instance OODeclStatement PythonCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v scp vs = do
-    modify (addModuleImport lib)
+    modify' (addModuleImport lib)
     varDecDef v scp (extNewObj lib (onStateValue variableType v) vs)
 
 instance IOStatement PythonCode where
@@ -706,12 +706,12 @@ instance RenderMethod PythonCode where
 
 instance OORenderMethod PythonCode where
   intMethod m n _ _ _ ps b = do
-    modify (if m then setCurrMain else id)
+    modify' (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
     pms <- sequence ps
     toCode . mthd . pyMethod n sl pms <$> b
   intFunc m n _ _ _ ps b = do
-    modify (if m then setCurrMain else id)
+    modify' (if m then setCurrMain else id)
     bd <- b
     pms <- sequence ps
     pure $ toCode $ mthd $ pyFunction n pms bd
@@ -911,7 +911,7 @@ pyCeilOp :: (Monad r) => VSOp r
 pyCeilOp = mathFunc R.ceil
 
 addmathImport :: VS a -> VS a
-addmathImport = (>>) $ modify (addLangImportVS pyMath)
+addmathImport = (>>) $ modify' (addLangImportVS pyMath)
 
 mathFunc :: (Monad r) => String -> VSOp r
 mathFunc = addmathImport . unOpPrec . access pyMath

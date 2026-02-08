@@ -95,7 +95,7 @@ import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe, isNothing)
 import Data.Functor ((<&>))
 import Control.Lens.Zoom (zoom)
-import Control.Monad.State (modify)
+import Control.Monad.State.Strict (modify')
 import Data.List (intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), empty, brackets, vcat,
   quotes, doubleQuotes, parens, equals, colon)
@@ -120,7 +120,7 @@ instance ProgramSym JuliaCode where
   type Program JuliaCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
-    modify revFiles
+    modify' revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym JuliaCode
@@ -129,7 +129,7 @@ instance ProcRenderSym JuliaCode
 instance FileSym JuliaCode where
   type File JuliaCode = FileData
   fileDoc m = do
-    modify (setFileType Combined)
+    modify' (setFileType Combined)
     A.fileDoc jlExt m
   docMod = A.docMod jlExt
 
@@ -266,7 +266,7 @@ instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
   var = G.var
   constant = var
-  extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
+  extVar l n t = modify' (addModuleImportVS l) >> CS.extVar l n t
   arrayElem i = A.arrayElem (litInt i)
 
 instance VariableElim JuliaCode where
@@ -363,10 +363,10 @@ instance ValueExpression JuliaCode where
 
   funcAppMixedArgs = G.funcAppMixedArgs
   extFuncAppMixedArgs l n t ps ns = do
-    modify (addModuleImportVS l)
+    modify' (addModuleImportVS l)
     CS.extFuncAppMixedArgs l n t ps ns
   libFuncAppMixedArgs l n t ps ns = do
-    modify (addLibImportVS l)
+    modify' (addLibImportVS l)
     CS.extFuncAppMixedArgs l n t ps ns
 
   lambda = G.lambda jlLambda
@@ -729,8 +729,8 @@ jlConstDecDef v' scp def' = do
   let scpData = scopeData scp
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
-  modify $ useVarName $ variableName v
-  modify $ setVarScope (variableName v) scpData
+  modify' $ useVarName $ variableName v
+  modify' $ setVarScope (variableName v) scpData
   let decDoc = if scopeTag scpData == Global then R.constDec' else empty
   mkStmt $ decDoc <+> RC.variable v <+> equals <+> RC.value def
 

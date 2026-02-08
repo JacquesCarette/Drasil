@@ -15,7 +15,7 @@ import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 import Control.Lens.Zoom (zoom)
 import Drasil.Shared.State
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Control.Monad.State (modify)
+import Control.Monad.State.Strict (modify')
 import qualified Drasil.Shared.RendererClassesCommon as S
 
 -- Swift and Julia --
@@ -70,8 +70,8 @@ varDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> Maybe (SValue 
   -> MSStatement r
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v
-  modify $ useVarName (variableName v')
-  modify $ setVarScope (variableName v') (scopeData scp)
+  modify' $ useVarName (variableName v')
+  modify' $ setVarScope (variableName v') (scopeData scp)
   def e
   where
     def Nothing = IC.emptyStmt

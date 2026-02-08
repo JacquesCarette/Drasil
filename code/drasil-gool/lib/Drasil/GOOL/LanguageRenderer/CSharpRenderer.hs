@@ -97,14 +97,14 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on2StateWrapped, onCodeList, onStateList)
-import Drasil.Shared.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
+import Drasil.Shared.State (VS, lensGStoFS, lensMStoVS, modify'Return, revFiles,
   addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain,
   useVarName, genLoopIndex, setVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
-import Control.Monad.State (modify)
+import Control.Monad.State.Strict (modify')
 import Data.Composition ((.:))
 import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
@@ -134,7 +134,7 @@ instance ProgramSym CSharpCode where
   type Program CSharpCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
-    modify revFiles
+    modify' revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym CSharpCode
@@ -143,7 +143,7 @@ instance OORenderSym CSharpCode
 instance FileSym CSharpCode where
   type File CSharpCode = FileData
   fileDoc m = do
-    modify (setFileType Combined)
+    modify' (setFileType Combined)
     G.fileDoc csExt top bottom m
 
   docMod = CP.doxMod csExt
@@ -206,11 +206,11 @@ instance TypeSym CSharpCode where
   infile = csInfileType
   outfile = csOutfileType
   listType t = do
-    modify (addLangImportVS csGeneric)
+    modify' (addLangImportVS csGeneric)
     C.listType csList t
   arrayType = CP.arrayType
   setType t = do
-    modify (addLangImportVS csGeneric)
+    modify' (addLangImportVS csGeneric)
     C.setType csSet t
   listInnerType = G.listInnerType
   funcType = csFuncType
@@ -607,7 +607,7 @@ instance ControlStatement CSharpCode where
   returnStmt = G.returnStmt Semi
 
   throw msg = do
-    modify (addLangImport csSystem)
+    modify' (addLangImport csSystem)
     G.throw csThrowDoc Semi msg
 
   ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
@@ -623,7 +623,7 @@ instance ControlStatement CSharpCode where
   tryCatch = G.tryCatch csTryCatch
 
   assert condition errorMessage = do
-    modify (addLangImport csDiagnostics)
+    modify' (addLangImport csDiagnostics)
     cond <- zoom lensMStoVS condition
     errMsg <- zoom lensMStoVS errorMessage
     mkStmtNoEnd (csAssert cond errMsg)
@@ -694,7 +694,7 @@ instance RenderMethod CSharpCode where
 
 instance OORenderMethod CSharpCode where
   intMethod m n s p t ps b = do
-    modify (if m then setCurrMain else id)
+    modify' (if m then setCurrMain else id)
     tp <- t
     pms <- sequence ps
     toCode . mthd . R.method n s p tp pms <$> b
@@ -753,7 +753,7 @@ instance BlockCommentElim CSharpCode where
   blockComment' = unCSC
 
 addSystemImport :: VS a -> VS a
-addSystemImport = (>>) $ modify (addLangImportVS csSystem)
+addSystemImport = (>>) $ modify' (addLangImportVS csSystem)
 
 csName, csVersion :: String
 csName = "C#"
@@ -819,11 +819,11 @@ csUnaryMath :: (Monad r) => String -> VSOp r
 csUnaryMath = addSystemImport . unOpPrec . mathFunc
 
 csInfileType :: (CommonRenderSym r) => VSType r
-csInfileType = join $ modifyReturn (addLangImportVS csIO) $
+csInfileType = join $ modify'Return (addLangImportVS csIO) $
   typeFromData InFile csReader (text csReader)
 
 csOutfileType :: (CommonRenderSym r) => VSType r
-csOutfileType = join $ modifyReturn (addLangImportVS csIO) $
+csOutfileType = join $ modify'Return (addLangImportVS csIO) $
   typeFromData OutFile csWriter (text csWriter)
 
 csLitList :: (CommonRenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r]
@@ -876,13 +876,13 @@ csFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
   [SVariable r] -> MSBody r -> MSStatement r
 csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
-  modify $ useVarName $ variableName vr
-  modify $ setVarScope (variableName vr) (scopeData scp)
+  modify' $ useVarName $ variableName vr
+  modify' $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   t <- zoom lensMStoVS $ funcType (map (pure . variableType) pms)
     (pure $ variableType vr)
   b <- bod
-  modify (addLangImport csSystem)
+  modify' (addLangImport csSystem)
   mkStmt $ RC.type' t <+> text (variableName vr) <+> equals <+>
     parens (variableList pms) <+> csLambdaSep <+> bodyStart $$
     indent (RC.body b) $$ bodyEnd

@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 ) where
 
 import Control.Lens ((^.))
-import Control.Monad.State (get)
+import Control.Monad.State.Strict (get)
 import Data.List (nub, (\\), delete)
 import Data.Map (member, notMember)
 import qualified Data.Map as Map (lookup)

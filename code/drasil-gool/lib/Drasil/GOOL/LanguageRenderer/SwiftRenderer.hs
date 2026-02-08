@@ -107,7 +107,7 @@ import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
-import Control.Monad.State (modify)
+import Control.Monad.State.Strict (modify')
 import Data.Composition ((.:))
 import Data.List (intercalate, sort)
 import Data.Map (findWithDefault)
@@ -138,7 +138,7 @@ instance ProgramSym SwiftCode where
   type Program SwiftCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
-    modify revFiles
+    modify' revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym SwiftCode
@@ -147,7 +147,7 @@ instance OORenderSym SwiftCode
 instance FileSym SwiftCode where
   type File SwiftCode = FileData
   fileDoc m = do
-    modify (setFileType Combined)
+    modify' (setFileType Combined)
     G.fileDoc swiftExt top bottom m
 
   docMod = CP.docMod' swiftExt
@@ -589,10 +589,10 @@ instance IOStatement SwiftCode where
   getFileInput _ v = do
     wi <- getWordIndex
     li <- getLineIndex
-    modify incrementWord
+    modify' incrementWord
     v &= swiftInput v
       (listAccess (listAccess swiftContentsVal (litInt li)) (litInt wi))
-  discardFileInput _ = modify incrementWord >> emptyStmt
+  discardFileInput _ = modify' incrementWord >> emptyStmt
 
   openFileR v pth = do
     v' <- zoom lensMStoVS v
@@ -610,12 +610,12 @@ instance IOStatement SwiftCode where
     let scp = convScope scpData
     wi <- getWordIndex
     li <- getLineIndex
-    modify incrementLine
+    modify' incrementLine
     slc <- listSlice swiftLineVar (listAccess swiftContentsVal (litInt li))
       (Just $ litInt wi) Nothing Nothing
     multi [varDec swiftLineVar scp, mkStmtNoEnd $ RC.block slc,
       v &= swiftJoinedFunc ' ' swiftLineVal]
-  discardFileLine _ = modify incrementLine >> emptyStmt
+  discardFileLine _ = modify' incrementLine >> emptyStmt
   getFileInputAll _ v = do
     li <- getLineIndex
     let l = var "l" (listType string)
@@ -648,7 +648,7 @@ instance ControlStatement SwiftCode where
   returnStmt = G.returnStmt Empty
 
   throw msg = do
-    modify setThrowUsed
+    modify' setThrowUsed
     G.throw swiftThrowDoc Empty msg
 
   ifCond = G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
@@ -774,7 +774,7 @@ instance ClassElim SwiftCode where
 instance ModuleSym SwiftCode where
   type Module SwiftCode = ModData
   buildModule n is fs cs = do
-    modify (setModuleName n) -- This needs to be set before the functions/
+    modify' (setModuleName n) -- This needs to be set before the functions/
                              -- classes are evaluated. CP.buildModule will
                              -- reset it to the proper name.
     fns <- mapM (zoom lensFStoMS) fs
@@ -807,10 +807,10 @@ instance BlockCommentElim SwiftCode where
   blockComment' = unSC
 
 addMathImport :: VS a -> VS a
-addMathImport = (>>) $ modify (addLangImportVS swiftMath)
+addMathImport = (>>) $ modify' (addLangImportVS swiftMath)
 
 addFoundationImport :: VS a -> VS a
-addFoundationImport = (>>) $ modify (addLangImportVS swiftFoundation)
+addFoundationImport = (>>) $ modify' (addLangImportVS swiftFoundation)
 
 swiftName, swiftVersion :: String
 swiftName = "Swift"
@@ -1133,7 +1133,7 @@ swiftCloseFile f' = do
   f <- zoom lensMStoVS f'
   -- How I've currently implemented file-reading, files don't need to be
   -- "closed", so InFile case is (correctly) just an empty stmt
-  let swClose InFile = modify resetIndices >> emptyStmt
+  let swClose InFile = modify' resetIndices >> emptyStmt
       swClose OutFile = tryCatch (oneLiner $ valStmt $ swiftTryVal $
           objMethodCallNoParams void (pure f) swiftClose)
         (oneLiner $ throw "Error closing file.")
@@ -1151,8 +1151,8 @@ swiftVarDec :: Doc -> SVariable SwiftCode -> SwiftCode (Scope SwiftCode)
   -> MSStatement SwiftCode
 swiftVarDec dec v' scp = do
   v <- zoom lensMStoVS v'
-  modify $ useVarName (variableName v)
-  modify $ setVarScope (variableName v) (scopeData scp)
+  modify' $ useVarName (variableName v)
+  modify' $ setVarScope (variableName v) (scopeData scp)
   let bind Static = static :: SwiftCode (Permanence SwiftCode)
       bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
       p = bind $ variableBind v
@@ -1162,8 +1162,8 @@ swiftVarDec dec v' scp = do
 swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode (Scope SwiftCode) -> MSStatement SwiftCode
 swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
-  modify $ useVarName (variableName v)
-  modify $ setVarScope (variableName v) (scopeData scp)
+  modify' $ useVarName (variableName v)
+  modify' $ setVarScope (variableName v) (scopeData scp)
   let bind Static = static :: SwiftCode (Permanence SwiftCode)
       bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
       p = bind $ variableBind v
@@ -1240,7 +1240,7 @@ swiftStringError = do
   errdef <- getErrorDefined
   str <- zoom lensMStoVS (string :: VSType SwiftCode)
   if tu && not errdef then do
-    modify setErrorDefined
+    modify' setErrorDefined
     pure (swiftExtension <+> RC.type' str <> swiftConforms <+> swiftError <+> bodyStart <> bodyEnd)
   else pure empty
 

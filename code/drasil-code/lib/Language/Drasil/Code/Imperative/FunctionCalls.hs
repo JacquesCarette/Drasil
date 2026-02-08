@@ -8,7 +8,7 @@ import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Applicative ((<|>))
-import Control.Monad.State (get)
+import Control.Monad.State.Strict (get)
 
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppProc, fAppInOut,
   fAppInOutProc)

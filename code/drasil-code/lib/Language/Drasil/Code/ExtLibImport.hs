@@ -7,7 +7,7 @@ module Language.Drasil.Code.ExtLibImport (ExtLibState(..), auxMods, defs,
 import Prelude hiding ((!!))
 import Control.Lens (makeLenses, (^.), over)
 import Control.Monad (zipWithM)
-import Control.Monad.State (State, execState, get, modify)
+import Control.Monad.State.Strict (State, execState, get, modify')
 import Data.List (nub, partition)
 import Data.List.NonEmpty (NonEmpty(..), (!!), toList)
 import Data.Maybe (isJust)
@@ -137,7 +137,7 @@ genExtLibCall [] [] = return ()
 genExtLibCall (sg:el) (SGF n sgf:elc) = let s = sg!!n in
   if length s /= length sgf then error stepNumberMismatch else do
     fs <- zipWithM genStep s sgf
-    modify (addSteps fs)
+    modify' (addSteps fs)
     genExtLibCall el elc
 genExtLibCall _ _ = error stepNumberMismatch
 
@@ -160,7 +160,7 @@ genFIVal (FI (r:|rs) ft f as _) (FIF afs) = do
   args <- genArguments as afs
   let isNamed = isJust . fst
       (nas, ars) = partition isNamed args
-  modify (addImports rs . addModExport (codeName f, r))
+  modify' (addImports rs . addModExport (codeName f, r))
   return $ getCallFunc ft f (map snd ars) (map (\(n, e) ->
     maybe (error "defective isNamed") (,e) n) nas)
   where getCallFunc Function = applyWithNamedArgs
@@ -183,21 +183,21 @@ genArguments as (UserDefinedArgF n e:afs) = fmap ((n,e):) (genArguments as afs)
 genArguments (Arg n (Basic _ Nothing):as) (BasicF e:afs) = fmap ((n,e):)
   (genArguments as afs)
 genArguments (Arg n (Basic _ (Just v)):as) (BasicF e:afs) = do
-  modify (addDef e v)
+  modify' (addDef e v)
   fmap ((n, sy v):) (genArguments as afs)
 genArguments (Arg n (Fn c ps s):as) (FnF pfs sf:afs) = do
   let prms = genParameters ps pfs
   st <- genStep s sf
-  modify (addFuncDef c prms [st])
+  modify' (addFuncDef c prms [st])
   fmap ((n, sy c):) (genArguments as afs)
 genArguments (Arg n (Class rs desc o ctor ci):as) (ClassF svs cif:afs) = do
   (c, is) <- genClassInfo o ctor an desc svs ci cif
-  modify (addMod (packmodRequires an desc (rs ++ is) [c] []))
+  modify' (addMod (packmodRequires an desc (rs ++ is) [c] []))
   fmap ((n, sy o):) (genArguments as afs)
   where an = getActorName (o ^. typ)
 genArguments (Arg n (Record (rq:|rqs) rn r fs):as) (RecordF es:afs) =
   if length fs /= length es then error recordFieldsMismatch else do
-    modify (addFieldAsgs r fs es . addDef (new rn []) r .
+    modify' (addFieldAsgs r fs es . addDef (new rn []) r .
       addModExport (codeName rn, rq) . addImports rqs)
     fmap ((n, sy r):) (genArguments as afs)
 genArguments [] [] = return []
@@ -221,7 +221,7 @@ genClassInfo o c n desc svs ci cif = let
     if length mis /= length mifs then error methodInfoNumberMismatch else do
       cs <- zipWithM (genMethodInfo o c) ctrIs ctrIFs
       ms <- zipWithM (genMethodInfo o c) mthIs mthIFs
-      modify (if any isConstructor mis then id else addDef (new c []) o)
+      modify' (if any isConstructor mis then id else addDef (new c []) o)
       return (f desc svs (map fst cs) (map fst ms), concatMap snd ms)
   where genCI (Regular mis') (RegularF mifs') = (mis', mifs', classDef n)
         genCI (Implements intn mis') (ImplementsF mifs') = (mis', mifs',
@@ -237,7 +237,7 @@ genMethodInfo :: CodeVarChunk -> CodeFuncChunk -> MethodInfo ->
 genMethodInfo o c (CI desc ps ss) (CIF pfs is sfs) = do
   let prms = genParameters ps pfs
   (fs, newS) <- withLocalState $ zipWithM genStep ss sfs
-  modify (addDef (new c (map sy prms)) o)
+  modify' (addDef (new c (map sy prms)) o)
   return (ctorDef (codeName c) desc prms is (newS ^. defs ++ fs),
     newS ^. imports)
 genMethodInfo _ _ (MI m desc ps rDesc ss) (MIF pfs sfs) = do
@@ -272,10 +272,10 @@ maybeGenAssg (Just Return)  = FRet
 withLocalState :: State ExtLibState a -> State ExtLibState (a, ExtLibState)
 withLocalState st = do
   s <- get
-  modify refreshLocal
+  modify' refreshLocal
   st' <- st
   newS <- get
-  modify (returnLocal s)
+  modify' (returnLocal s)
   return (st', newS)
 
 -- Error messages

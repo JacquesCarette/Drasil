@@ -80,7 +80,7 @@ import Drasil.Shared.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
 
 import Prelude hiding (print,pi,(<>))
 import Data.List (sort, intercalate)
-import Control.Monad.State (get, modify)
+import Control.Monad.State.Strict (get, modify')
 import Control.Lens ((^.))
 import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
@@ -164,7 +164,7 @@ intClass :: (OORenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc ->
   Doc) -> Label -> r (Visibility r) -> r ParentSpec -> [CSStateVar r] ->
   [SMethod r]-> [SMethod r] -> CS (r Doc)
 intClass f n s i svrs cstrs mths = do
-  modify (setClassName n)
+  modify' (setClassName n)
   svs <- onStateList (R.stateVarList . map RC.stateVar) svrs
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) (cstrs ++ mths))
   return $ onCodeValue (\p -> f n p (RC.visibility s) svs ms) i
@@ -207,8 +207,8 @@ arrayDec :: (CommonRenderSym r) => SValue r -> SVariable r -> r (Scope r)
 arrayDec n vr scp = do
   sz <- zoom lensMStoVS n
   v <- zoom lensMStoVS vr
-  modify $ useVarName $ variableName v
-  modify $ setVarScope (variableName v) (scopeData scp)
+  modify' $ useVarName $ variableName v
+  modify' $ setVarScope (variableName v) (scopeData scp)
   let tp = variableType v
   innerTp <- zoom lensMStoVS $ listInnerType $ return tp
   mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new' <+>
@@ -298,8 +298,8 @@ constDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> SValue r
 constDecDef vr' scp v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
-  modify $ useVarName $ variableName vr
-  modify $ setVarScope (variableName vr) (scopeData scp)
+  modify' $ useVarName $ variableName vr
+  modify' $ setVarScope (variableName vr) (scopeData scp)
   mkStmt (R.constDecDef vr v)
 
 docInOutFunc :: (CommonRenderSym r) => ([SVariable r] -> [SVariable r] ->
@@ -433,12 +433,12 @@ funcDecDef :: (OORenderSym r) => SVariable r -> r (Scope r) -> [SVariable r] ->
   MSBody r -> MSStatement r
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
-  modify $ useVarName $ variableName vr
-  modify $ setVarScope (variableName vr) (scopeData scp)
+  modify' $ useVarName $ variableName vr
+  modify' $ setVarScope (variableName vr) (scopeData scp)
   s <- get
   f <- function (variableName vr) private (return $ variableType vr)
     (map IC.param ps) b
-  modify (L.set currParameters (s ^. currParameters))
+  modify' (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RC.method f
 
 inOutCall :: (CommonRenderSym r) => (Label -> VSType r -> [SValue r] -> SValue r) ->
@@ -454,9 +454,9 @@ forLoopError l = "Classic for loops not available in " ++ l ++ ", use " ++
 
 mainBody :: (CommonRenderSym r) => MSBody r -> SMethod r
 mainBody b = do
-  modify setCurrMain
+  modify' setCurrMain
   bod <- b
-  modify (setMainDoc $ RC.body bod)
+  modify' (setMainDoc $ RC.body bod)
   mthdFromData Pub empty
 
 inOutFunc :: (CommonRenderSym r) => (VSType r -> [MSParameter r] -> MSBody r ->

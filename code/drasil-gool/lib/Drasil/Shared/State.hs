@@ -10,7 +10,7 @@ module Drasil.Shared.State (
   -- Initial states
   initialState, initialFS,
   -- State helpers
-  modifyReturn, modifyReturnFunc, modifyReturnList,
+  modify'Return, modify'ReturnFunc, modify'ReturnList,
   -- State modifiers
   revFiles, addFile, addCombinedHeaderSource, addHeader, addSource,
   addProgNameToPaths, setMainMod, addLangImport, addLangImportVS,
@@ -40,7 +40,7 @@ import Drasil.Shared.CodeType (ClassName)
 import Utils.Drasil (nubSort)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2, both, at)
-import Control.Monad.State (State, modify, gets)
+import Control.Monad.State.Strict (State, modify', gets)
 import Data.Char (isDigit)
 import Data.List (nub)
 import Data.Foldable (foldl')
@@ -283,22 +283,22 @@ initialVS = VS {
 ------- State Patterns -------
 -------------------------------
 
-modifyReturn :: (s -> s) -> a -> State s a
-modifyReturn sf v = do
-  modify sf
+modify'Return :: (s -> s) -> a -> State s a
+modify'Return sf v = do
+  modify' sf
   return v
 
-modifyReturnFunc :: (b -> s -> s) -> (b -> a) -> State s b -> State s a
-modifyReturnFunc sf vf st = do
+modify'ReturnFunc :: (b -> s -> s) -> (b -> a) -> State s b -> State s a
+modify'ReturnFunc sf vf st = do
   v <- st
-  modify $ sf v
+  modify' $ sf v
   return $ vf v
 
-modifyReturnList :: [State s b] -> (s -> s) ->
+modify'ReturnList :: [State s b] -> (s -> s) ->
   ([b] -> a) -> State s a
-modifyReturnList l sf vf = do
+modify'ReturnList l sf vf = do
   v <- sequence l
-  modify sf
+  modify' sf
   return $ vf v
 
 -------------------------------
@@ -588,7 +588,7 @@ bumpVarName :: (String, Maybe Int) -> MS String
 bumpVarName (n,c) = do
   count <- gets (^. (varNames . at n))
   let suffix = maybe count (flip fmap count . max) c
-  modify $ set (varNames . at n) $ Just $ maybe 0 (+1) suffix
+  modify' $ set (varNames . at n) $ Just $ maybe 0 (+1) suffix
   return $ maybe n ((n ++) . show) count
 
 setVarScope :: String -> ScopeData -> MethodState -> MethodState

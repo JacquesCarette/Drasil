@@ -43,7 +43,7 @@ import Drasil.Shared.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName
 
 import Prelude hiding (break,(<>))
 import Control.Applicative ((<|>))
-import Control.Monad.State (modify)
+import Control.Monad.State.Strict (modify')
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, vcat, semi,
   equals, empty)
@@ -121,11 +121,11 @@ inlineIf c' v1' v2' = do
   where prec cd = valuePrec cd <|> Just 0
 
 libFuncAppMixedArgs :: (CommonRenderSym r) => Library -> MixedCall r
-libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >>
+libFuncAppMixedArgs l n t vs ns = modify' (addLibImportVS l) >>
   IC.funcAppMixedArgs n t vs ns
 
 libNewObjMixedArgs :: (OORenderSym r) => Library -> MixedCtorCall r
-libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
+libNewObjMixedArgs l tp vs ns = modify' (addLibImportVS l) >>
   IG.newObjMixedArgs tp vs ns
 
 -- Functions --
@@ -149,8 +149,8 @@ varDec :: (OORenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc ->
   SVariable r -> r (Scope r) -> MSStatement r
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
-  modify $ useVarName (variableName v)
-  modify $ setVarScope (variableName v) (scopeData scp)
+  modify' $ useVarName (variableName v)
+  modify' $ setVarScope (variableName v) (scopeData scp)
   mkStmt (RC.perm (bind $ variableBind v)
     <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <>
     RC.variable v))

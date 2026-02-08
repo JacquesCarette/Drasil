@@ -96,7 +96,7 @@ import Drasil.Shared.Helpers (emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateWrapped)
 import Drasil.Shared.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS,
-  lensVStoMS, modifyReturn, modifyReturnList, revFiles, addProgNameToPaths,
+  lensVStoMS, modify'Return, modify'ReturnList, revFiles, addProgNameToPaths,
   addLangImport, addLangImportVS, addExceptionImports, getModuleName,
   setFileType, getClassName, setCurrMain, setOutputsDeclared,
   isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions, useVarName,
@@ -105,7 +105,7 @@ import Drasil.Shared.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS,
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
-import Control.Monad.State (modify)
+import Control.Monad.State.Strict (modify')
 import Data.Composition ((.:))
 import qualified Data.Map as Map (lookup)
 import Data.List (nub, intercalate, sort)
@@ -134,7 +134,7 @@ instance OOProg JavaCode
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
-  prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
+  prog n st fs = modify'ReturnList (map (zoom lensGStoFS) fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n
     endStatement)))
 
@@ -144,7 +144,7 @@ instance OORenderSym JavaCode
 instance FileSym JavaCode where
   type File JavaCode = FileData
   fileDoc m = do
-    modify (setFileType Combined)
+    modify' (setFileType Combined)
     G.fileDoc jExt top bottom m
 
   docMod = CP.doxMod jExt
@@ -326,7 +326,7 @@ instance Literal JavaCode where
   litSet = CP.litSet (text jSetOf <>) parens
 
   litList t es = do
-    zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport
+    zoom lensVStoMS $ modify' (if null es then id else addLangImport $ utilImport
       jArrays)
     newObj (listType t) [jAsListFunc t es | not (null es)]
 
@@ -394,7 +394,7 @@ instance ValueExpression JavaCode where
     G.funcAppMixedArgs n t vs ns
   extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
-    modify (maybe id addExceptions (Map.lookup (qualName l n) mem))
+    modify' (maybe id addExceptions (Map.lookup (qualName l n) mem))
     CS.extFuncAppMixedArgs l n t vs ns
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
 
@@ -412,12 +412,12 @@ instance OOValueExpression JavaCode where
     t <- ot
     mem <- getMethodExcMap
     let tp = getTypeString t
-    modify (maybe id addExceptions (Map.lookup (qualName l tp) mem))
+    modify' (maybe id addExceptions (Map.lookup (qualName l tp) mem))
     newObjMixedArgs (toState t) vs ns
   libNewObjMixedArgs = C.libNewObjMixedArgs
 
 instance RenderValue JavaCode where
-  inputFunc = modify (addLangImportVS $ utilImport jScanner) >> mkStateVal
+  inputFunc = modify' (addLangImportVS $ utilImport jScanner) >> mkStateVal
     (obj jScanner) (parens $ new' <+> jScanner' <> parens (jSystem jStdIn))
   printFunc = mkStateVal void (jSystem (jStdOut `access` printLabel))
   printLnFunc = mkStateVal void (jSystem (jStdOut `access` jPrintLn))
@@ -444,7 +444,7 @@ instance InternalValueExp JavaCode where
     ob <- o
     mem <- getMethodExcMap
     let tp = getTypeString (valueType ob)
-    modify (maybe id addExceptions (Map.lookup (qualName tp f) mem))
+    modify' (maybe id addExceptions (Map.lookup (qualName tp f) mem))
     G.objMethodCall f t o ps ns
 
 instance FunctionSym JavaCode where
@@ -606,7 +606,7 @@ instance IOStatement JavaCode where
 
 instance StringStatement JavaCode where
   stringSplit d vnew s = do
-    modify (addLangImport $ utilImport jArrays)
+    modify' (addLangImport $ utilImport jArrays)
     ss <- zoom lensMStoVS $
       jStringSplit vnew (jAsListFunc string [s $. jSplitFunc d])
     mkStmt ss
@@ -723,7 +723,7 @@ instance OORenderMethod JavaCode where
     mn <- zoom lensMStoFS getModuleName
     let excs = map (unJC . toConcreteExc) $ maybe es (nub . (++ es))
           (Map.lookup (qualName mn n) mem)
-    modify ((if m then setCurrMain else id) . addExceptionImports excs)
+    modify' ((if m then setCurrMain else id) . addExceptionImports excs)
     pure $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
   intFunc = C.intFunc
   destructor _ = error $ CP.destructorError jName
@@ -797,12 +797,12 @@ jBoolType = typeFromData Boolean jBool (text jBool)
 jInfileType :: (CommonRenderSym r) => VSType r
 jInfileType = do
   tpf <- typeFromData InFile jScanner jScanner'
-  modifyReturn (addLangImportVS $ utilImport jScanner) tpf
+  modify'Return (addLangImportVS $ utilImport jScanner) tpf
 
 jOutfileType :: (CommonRenderSym r) => VSType r
 jOutfileType = do
   tpf <- typeFromData OutFile jPrintWriter (text jPrintWriter)
-  modifyReturn (addLangImportVS $ ioImport jPrintWriter) tpf
+  modify'Return (addLangImportVS $ ioImport jPrintWriter) tpf
 
 jExtends, jImplements, jFinal, jScanner', jLambdaSep :: Doc
 jExtends = text "extends"
@@ -868,7 +868,7 @@ jUnaryMath = unOpPrec . mathFunc
 
 jListType :: (CommonRenderSym r) => VSType r -> VSType r
 jListType t = do
-  modify (addLangImportVS $ utilImport arrayList)
+  modify' (addLangImportVS $ utilImport arrayList)
   t >>= (jListType' . getType)
   where jListType' Integer = typeFromData (List Integer)
           lstInt (text lstInt)
@@ -881,7 +881,7 @@ jListType t = do
 
 jSetType :: (OORenderSym r) => VSType r -> VSType r
 jSetType t = do
-  modify (addLangImportVS $ utilImport "Set")
+  modify' (addLangImportVS $ utilImport "Set")
   t >>= (jSetType' . getType)
   where jSetType' Integer = typeFromData (Set Integer)
           stInt (text stInt)
@@ -898,12 +898,12 @@ jArrayType = arrayType (obj jObject)
 jFileType :: (OORenderSym r) => VSType r
 jFileType = do
   tpf <- obj jFile
-  modifyReturn (addLangImportVS $ ioImport jFile) tpf
+  modify'Return (addLangImportVS $ ioImport jFile) tpf
 
 jFileWriterType :: (OORenderSym r) => VSType r
 jFileWriterType = do
   tpf <- obj jFileWriter
-  modifyReturn (addLangImportVS $ ioImport jFileWriter) tpf
+  modify'Return (addLangImportVS $ ioImport jFileWriter) tpf
 
 jAsListFunc :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
 jAsListFunc t = funcApp jAsList (listType t)
@@ -963,8 +963,8 @@ jConstDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> SValue r
 jConstDecDef v' scp def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
-  modify $ useVarName $ variableName v
-  modify $ setVarScope (variableName v) (scopeData scp)
+  modify' $ useVarName $ variableName v
+  modify' $ setVarScope (variableName v) (scopeData scp)
   mkStmt $ jFinal <+> RC.type' (variableType v) <+>
     RC.variable v <+> equals <+> RC.value def
 
@@ -972,8 +972,8 @@ jFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
   [SVariable r] -> MSBody r -> MSStatement r
 jFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
-  modify $ useVarName $ variableName vr
-  modify $ setVarScope (variableName vr) (scopeData scp)
+  modify' $ useVarName $ variableName vr
+  modify' $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
   mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
@@ -1060,7 +1060,7 @@ jInOutCall f n ins outs both = fCall rets
   where rets = both ++ outs
         fCall [x] = assign x $ f n (onStateValue variableType x)
           (map valueOf both ++ ins)
-        fCall xs = isOutputsDeclared >>= (\odec -> modify setOutputsDeclared >>
+        fCall xs = isOutputsDeclared >>= (\odec -> modify' setOutputsDeclared >>
           multi ((if odec then assign else (`varDecDef` local)) outputs
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs))
 
@@ -1113,7 +1113,7 @@ addCallExcsCurrMod :: String -> VS ()
 addCallExcsCurrMod n = do
   cm <- zoom lensVStoFS getModuleName
   mem <- getMethodExcMap
-  modify (maybe id addExceptions (Map.lookup (qualName cm n) mem))
+  modify' (maybe id addExceptions (Map.lookup (qualName cm n) mem))
 
 addConstructorCallExcsCurrMod :: (CommonRenderSym r) => VSType r ->
   (VSType r -> SValue r) -> SValue r
@@ -1122,5 +1122,5 @@ addConstructorCallExcsCurrMod ot f = do
   cm <- zoom lensVStoFS getModuleName
   mem <- getMethodExcMap
   let tp = getTypeString t
-  modify (maybe id addExceptions (Map.lookup (qualName cm tp) mem))
+  modify' (maybe id addExceptions (Map.lookup (qualName cm tp) mem))
   f (pure t)

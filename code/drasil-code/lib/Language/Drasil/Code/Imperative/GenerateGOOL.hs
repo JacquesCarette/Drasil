@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
 import Data.Bifunctor (second)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
-import Control.Monad.State (get, modify)
+import Control.Monad.State.Strict (get, modify')
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (List)
@@ -40,7 +40,7 @@ genModuleWithImports :: (OOProg r) => Name -> Description -> [Import] ->
   GenState (OO.SFile r)
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
-  modify (\s -> s { currentModule = n })
+  modify' (\s -> s { currentModule = n })
   let as = map name (codeSpec g ^. authorsO )
   cs <- sequence maybeCs
   ms <- sequence maybeMs
@@ -85,10 +85,10 @@ mkClass :: (OOProg r) => ClassType -> Name -> Maybe Name -> Description ->
   GenState (SClass r)
 mkClass s n l desc vs cstrs mths = do
   g <- get
-  modify (\ds -> ds {currentClass = n})
+  modify' (\ds -> ds {currentClass = n})
   cs <- cstrs
   ms <- mths
-  modify (\ds -> ds {currentClass = ""})
+  modify' (\ds -> ds {currentClass = ""})
   let getFunc Primary = getFunc' l
       getFunc Auxiliary = extraClass n Nothing
       getFunc' Nothing = buildClass Nothing
@@ -177,7 +177,7 @@ genModuleWithImportsProc :: (ProcProg r) => Name -> Description -> [Import] ->
   [GenState (Maybe (SMethod r))] -> GenState (Proc.SFile r)
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
-  modify (\s -> s { currentModule = n })
+  modify' (\s -> s { currentModule = n })
   let as = map name (codeSpec g ^. authorsO )
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` commented g                   = Proc.docMod desc watermark as (date g)

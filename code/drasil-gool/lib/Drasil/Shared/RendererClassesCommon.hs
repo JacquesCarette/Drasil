@@ -27,7 +27,7 @@ import Drasil.Shared.CodeType (CodeType)
 import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData)
 import Drasil.Shared.State (MS, VS)
 
-import Control.Monad.State (State)
+import Control.Monad.State.Strict (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 class (AssignStatement r, DeclStatement r, IOStatement r,

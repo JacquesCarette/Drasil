@@ -17,7 +17,7 @@ import qualified Language.Drasil.GOOL as D (filePath)
 import Utils.Drasil (createDirIfMissing)
 
 import Text.PrettyPrint.HughesPJ (Doc, render)
-import Control.Monad.State (evalState, runState)
+import Control.Monad.State.Strict (evalState, runState)
 import Control.Lens ((^.))
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import System.FilePath.Posix (takeDirectory)

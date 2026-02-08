@@ -2,7 +2,7 @@ module Language.Drasil.Code.Imperative.SpaceMatch (
   chooseSpace
 ) where
 
-import Control.Monad.State (modify)
+import Control.Monad.State.Strict (modify')
 import Text.PrettyPrint.HughesPJ (Doc, text)
 
 import Drasil.GOOL (CodeType(..))
@@ -15,16 +15,16 @@ import Language.Drasil.Code.Lang (Lang(..))
 
 -- | Concretizes the 'spaceMatch' in 'Choices' to a 'MatchedSpace' based on target language.
 chooseSpace :: Lang -> Choices -> MatchedSpaces
-chooseSpace lng chs = \s -> selectType lng s (spaceMatch (maps chs) s)
+chooseSpace lng chs sp = selectType lng sp (spaceMatch (maps chs) sp)
         -- Floats unavailable in Python
   where selectType :: Lang -> Space -> [CodeType] -> GenState CodeType
         selectType Python s (Float:ts) = do
-          modify (addLoggedSpace s Float .
+          modify' (addLoggedSpace s Float .
             addToDesignLog s Float (incompatibleType Python s Float))
           selectType Python s ts
         -- In all other cases, just select first choice
         selectType _ s (t:_) = do
-          modify (addLoggedSpace s t .
+          modify' (addLoggedSpace s t .
             addToDesignLog s t (successLog s t))
           return t
         selectType l s [] = error $ "Chosen CodeType matches for Space " ++

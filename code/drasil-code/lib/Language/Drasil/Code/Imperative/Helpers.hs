@@ -2,7 +2,7 @@ module Language.Drasil.Code.Imperative.Helpers (
   liftS, convScope
 ) where
 
-import Control.Monad.State (State)
+import Control.Monad.State.Strict (State)
 
 import Drasil.GOOL (SharedProg, ScopeSym(..))
 

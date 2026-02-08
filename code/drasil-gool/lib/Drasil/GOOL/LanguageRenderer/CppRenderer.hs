@@ -102,7 +102,7 @@ import Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vibcat,
   on2StateLists, on2StateWrapped)
 import Drasil.Shared.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoMS, lensCStoVS, lensMStoCS, lensCStoFS, lensMStoVS, lensVStoMS,
-  modifyReturn, revFiles, addLangImport, addLangImportVS, getLangImports,
+  modify'Return, revFiles, addLangImport, addLangImportVS, getLangImports,
   getLibImports, addModuleImportVS, getModuleImports, addHeaderLangImport,
   getHeaderLangImports, addHeaderModImport, getHeaderLibImports,
   getHeaderModImports, addDefine, getDefines, addHeaderDefine,
@@ -115,7 +115,7 @@ import Drasil.Shared.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
-import Control.Monad.State (State, modify)
+import Control.Monad.State.Strict (State, modify')
 import Data.Composition ((.:))
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
@@ -151,7 +151,7 @@ instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
     let fm = map pfst m
         sm = map (hdrToSrc . psnd) m
     p1 <- prog n st $ map pure sm ++ map pure fm
-    modify revFiles
+    modify' revFiles
     pure $ pair p1 (toCode emptyProg)
 
 instance (Pair p) => CommonRenderSym (p CppSrcCode CppHdrCode)
@@ -804,13 +804,13 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   type Class (p CppSrcCode CppHdrCode) = Doc
   buildClass p vs cs fs = do
     n <- zoom lensCStoFS getModuleName
-    modify (setClassName n)
+    modify' (setClassName n)
     pair3Lists (buildClass p) (buildClass p) vs (map (zoom lensCStoMS) cs)
       (map (zoom lensCStoMS) fs)
-  extraClass n p vs cs fs = modify (setClassName n) >> pair3Lists
+  extraClass n p vs cs fs = modify' (setClassName n) >> pair3Lists
     (extraClass n p) (extraClass n p)
     vs (map (zoom lensCStoMS) cs) (map (zoom lensCStoMS) fs)
-  implementingClass n is vs cs fs = modify (setClassName n) >> pair3Lists
+  implementingClass n is vs cs fs = modify' (setClassName n) >> pair3Lists
     (implementingClass n is) (implementingClass n is)
     vs (map (zoom lensCStoMS) cs) (map (zoom lensCStoMS) fs)
 
@@ -832,7 +832,7 @@ instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
   buildModule n is ms cs = do
-    modify (setModuleName n)
+    modify' (setModuleName n)
     pair2Lists (buildModule n is) (buildModule n is)
       (map (zoom lensFStoMS) ms) (map (zoom lensFStoCS) cs)
 
@@ -1056,7 +1056,7 @@ instance OORenderSym CppSrcCode
 instance FileSym CppSrcCode where
   type File CppSrcCode = FileData
   fileDoc m = do
-    modify (setFileType Source)
+    modify' (setFileType Source)
     G.fileDoc cppSrcExt top bottom m
 
   docMod = CP.doxMod cppSrcExt
@@ -1118,19 +1118,19 @@ instance TypeSym CppSrcCode where
   double = C.double
   char = C.char
   string = do
-    modify (addUsing cppString . addLangImportVS cppString)
+    modify' (addUsing cppString . addLangImportVS cppString)
     CP.string
   infile = do
-    modify (addUsing cppInfile)
+    modify' (addUsing cppInfile)
     cppInfileType
   outfile = do
-    modify (addUsing cppOutfile)
+    modify' (addUsing cppOutfile)
     cppOutfileType
   listType t = do
-    modify (addUsing vector . addLangImportVS vector)
+    modify' (addUsing vector . addLangImportVS vector)
     C.listType vector t
   setType t = do
-    modify (addUsing cppSet . addLangImportVS cppSet)
+    modify' (addUsing cppSet . addLangImportVS cppSet)
     C.setType cppSet t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
@@ -1141,7 +1141,7 @@ instance OOTypeSym CppSrcCode where
   obj n = do
     cn <- zoom lensVStoMS getClassName
     if cn == n then G.obj n else
-      getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS)
+      getClassMap >>= (\cm -> maybe id ((>>) . modify' . addModuleImportVS)
         (Map.lookup n cm) (G.obj n))
 
 instance TypeElim CppSrcCode where
@@ -1209,7 +1209,7 @@ instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
   var          = G.var
   constant     = var
-  extVar l n t = modify (addModuleImportVS l) >> var n t
+  extVar l n t = modify' (addModuleImportVS l) >> var n t
   arrayElem i  = G.arrayElem (litInt i)
 
 instance OOVariableSym CppSrcCode where
@@ -1225,7 +1225,7 @@ instance OOVariableSym CppSrcCode where
   extClassVar c v = do
     t <- c
     cm <- getClassMap
-    maybe id ((>>) . modify . addModuleImportVS)
+    maybe id ((>>) . modify' . addModuleImportVS)
       (Map.lookup (getTypeString t) cm) $ classVar (pure t) v
   objVar = G.objVar
   objVarSelf v' = do
@@ -1269,7 +1269,7 @@ instance Literal CppSrcCode where
 
 instance MathConstant CppSrcCode where
   pi = do
-    modify (addDefine mathDefines)
+    modify' (addDefine mathDefines)
     addMathHImport (mkStateVal double cppPi)
 
 instance VariableValue CppSrcCode where
@@ -1326,7 +1326,7 @@ instance ValueExpression CppSrcCode where
 
   funcAppMixedArgs = G.funcAppMixedArgs
   extFuncAppMixedArgs l n t vs ns = do
-    modify (addModuleImportVS l)
+    modify' (addModuleImportVS l)
     funcAppMixedArgs n t vs ns
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
 
@@ -1338,7 +1338,7 @@ instance OOValueExpression CppSrcCode where
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs ptrAccess' self
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l t vs ns = do
-    modify (addModuleImportVS l)
+    modify' (addModuleImportVS l)
     newObjMixedArgs t vs ns
   libNewObjMixedArgs = C.libNewObjMixedArgs
 
@@ -1488,8 +1488,8 @@ instance DeclStatement CppSrcCode where
     let sz' = litInt n :: SValue CppSrcCode
     sz <- zoom lensMStoVS sz'
     v <- zoom lensMStoVS vr
-    modify $ useVarName $ variableName v
-    modify $ setVarScope (variableName v) (scopeData scp)
+    modify' $ useVarName $ variableName v
+    modify' $ setVarScope (variableName v) (scopeData scp)
     mkStmt $ RC.type' (variableType v) <+> RC.variable v <>
       brackets (RC.value sz)
   arrayDecDef vr scp vals = do
@@ -1551,7 +1551,7 @@ instance StringStatement CppSrcCode where
         l_word = "word"
         var_word = var l_word string
         v_word = valueOf var_word
-    modify (addLangImport sstream) >> multi [
+    modify' (addLangImport sstream) >> multi [
         valStmt $ valueOf vnew $. clearFunc,
         varDec var_ss scp,
         valStmt $ strFunc v_ss s,
@@ -1675,11 +1675,11 @@ instance RenderMethod CppSrcCode where
 
 instance OORenderMethod CppSrcCode where
   intMethod m n s _ t ps b = do
-    modify (if m then setCurrMain else id)
+    modify' (if m then setCurrMain else id)
     c <- getClassName
     cppsIntFunc (cppsMethod [] n c) s t ps b
   intFunc m n s _ t ps b = do
-    modify (if m then setCurrMainFunc m . setCurrMain else id)
+    modify' (if m then setCurrMainFunc m . setCurrMain else id)
     cppsIntFunc (cppsFunction n) s t ps b
   destructor vs =
     let i = var "i" int
@@ -1714,7 +1714,7 @@ instance ClassSym CppSrcCode where
 
 instance RenderClass CppSrcCode where
   intClass n _ _ vs cs fs = do
-    modify (setClassName n)
+    modify' (setClassName n)
     on2StateLists cppsClass vs (map (zoom lensCStoMS) $ cs ++ fs ++ [destructor vs])
 
   inherit n = onCodeValue (cppInherit n . fst) public
@@ -1784,7 +1784,7 @@ instance OORenderSym CppHdrCode
 instance FileSym CppHdrCode where
   type File CppHdrCode = FileData
   fileDoc m = do
-    modify (setFileType Header)
+    modify' (setFileType Header)
     G.fileDoc cppHdrExt top bottom m
 
   docMod = CP.doxMod cppHdrExt
@@ -1845,19 +1845,19 @@ instance TypeSym CppHdrCode where
   double = C.double
   char = C.char
   string = do
-    modify (addHeaderUsing cppString . addHeaderLangImport cppString)
+    modify' (addHeaderUsing cppString . addHeaderLangImport cppString)
     CP.string
   infile = do
-    modify (addHeaderUsing cppInfile)
+    modify' (addHeaderUsing cppInfile)
     cppInfileType
   outfile = do
-    modify (addHeaderUsing cppOutfile)
+    modify' (addHeaderUsing cppOutfile)
     cppOutfileType
   listType t = do
-    modify (addHeaderUsing vector . addHeaderLangImport vector)
+    modify' (addHeaderUsing vector . addHeaderLangImport vector)
     C.listType vector t
   setType t = do
-    modify (addHeaderUsing cppSet . addHeaderLangImport cppSet)
+    modify' (addHeaderUsing cppSet . addHeaderLangImport cppSet)
     C.setType cppSet t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
@@ -1865,7 +1865,7 @@ instance TypeSym CppHdrCode where
   void = C.void
 
 instance OOTypeSym CppHdrCode where
-  obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport)
+  obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify' . addHeaderModImport)
     (Map.lookup n cm) $ G.obj n)
 
 instance TypeElim CppHdrCode where
@@ -1980,7 +1980,7 @@ instance Literal CppHdrCode where
 
 instance MathConstant CppHdrCode where
   pi = do
-    modify (addHeaderDefine mathDefines . addHeaderLangImport mathh)
+    modify' (addHeaderDefine mathDefines . addHeaderLangImport mathh)
     mkStateVal double cppPi
 
 instance VariableValue CppHdrCode where
@@ -2300,7 +2300,7 @@ instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
   docMain = mainFunction
   function = G.function
-  mainFunction _ = modifyReturn (setVisibility Pub) $ toCode $ mthd Pub empty
+  mainFunction _ = modify'Return (setVisibility Pub) $ toCode $ mthd Pub empty
   docFunc = CP.doxFunc
 
   inOutFunc n s = cpphInOut (function n s)
@@ -2324,7 +2324,7 @@ instance RenderMethod CppHdrCode where
 
 instance OORenderMethod CppHdrCode where
   intMethod _ n s _ t ps _ = do
-    modify (setVisibility (snd $ unCPPHC s))
+    modify' (setVisibility (snd $ unCPPHC s))
     tp <- t
     pms <- sequence ps
     pure $ toCode $ mthd (snd $ unCPPHC s) $ cpphMethod n tp pms
@@ -2365,7 +2365,7 @@ instance ClassSym CppHdrCode where
 
 instance RenderClass CppHdrCode where
   intClass n _ i vs cstrs mths = do
-    modify (setClassName n)
+    modify' (setClassName n)
     vars <- sequence vs
     funcs <- sequence fs
     pure $ cpphClass n i vars funcs public private
@@ -2433,40 +2433,40 @@ mthd = MthD
 
 addAlgorithmImport :: MS a -> MS a
 addAlgorithmImport v = do
-  modify (addLangImport algorithm)
+  modify' (addLangImport algorithm)
   v
 
 addAlgorithmImportVS :: VS a -> VS a
 addAlgorithmImportVS v = do
-  modify (addLangImportVS algorithm)
+  modify' (addLangImportVS algorithm)
   v
 
 addFStreamImport :: a -> VS a
-addFStreamImport = modifyReturn (addLangImportVS fstream)
+addFStreamImport = modify'Return (addLangImportVS fstream)
 
 addIOStreamImport :: VS a -> VS a
 addIOStreamImport v = do
-  modify (addLangImportVS iostream)
+  modify' (addLangImportVS iostream)
   v
 
 addMathHImport :: VS a -> VS a
 addMathHImport v = do
-  modify (addLangImportVS mathh)
+  modify' (addLangImportVS mathh)
   v
 
 addLimitsImport :: MS a -> MS a
 addLimitsImport v = do
-  modify (addLangImport limits)
+  modify' (addLangImport limits)
   v
 
 addCAssertImport :: MS a -> MS a
 addCAssertImport v = do
-  modify (addLangImport cassert)
+  modify' (addLangImport cassert)
   v
 
 iterator :: CommonRenderSym r => VSType r -> VSType r
 iterator t = do
-    modify (addLangImportVS cppIterator)
+    modify' (addLangImportVS cppIterator)
     cppIterType $ listType t
 
 iterBegin :: SValue CppSrcCode -> SValue CppSrcCode
@@ -2731,8 +2731,8 @@ cppFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
   [SVariable r] -> MSBody r -> MSStatement r
 cppFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
-  modify $ useVarName $ variableName vr
-  modify $ setVarScope (variableName vr) (scopeData scp)
+  modify' $ useVarName $ variableName vr
+  modify' $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
   mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
@@ -2797,7 +2797,7 @@ cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $
 cppConstructor :: [MSParameter CppSrcCode] -> NamedArgs CppSrcCode ->
   MSBody CppSrcCode -> SMethod CppSrcCode
 cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals
-  bod -> if null is then CP.constructor n ps is b else modify (setVisibility Pub) >>
+  bod -> if null is then CP.constructor n ps is b else modify' (setVisibility Pub) >>
   toState (toCode $ mthd Pub (cppsMethod (zipWith (\ivar ival -> RC.variable
   ivar <> parens (RC.value ival)) ivars ivals) n n tp pms bod))) <$> construct
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom
@@ -2815,7 +2815,7 @@ cppsIntFunc :: (CppSrcCode (Type CppSrcCode) ->
   -> CppSrcCode (Visibility CppSrcCode) -> MSMthdType CppSrcCode ->
   [MSParameter CppSrcCode] -> MSBody CppSrcCode -> SMethod CppSrcCode
 cppsIntFunc f s t ps b = do
-  modify (setVisibility (snd $ unCPPSC s))
+  modify' (setVisibility (snd $ unCPPSC s))
   tp <- t
   pms <- sequence ps
   toCode . mthd (snd $ unCPPSC s) . f tp pms <$> b

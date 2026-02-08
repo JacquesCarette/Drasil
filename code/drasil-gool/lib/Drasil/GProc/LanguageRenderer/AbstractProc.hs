@@ -29,7 +29,7 @@ import Drasil.Shared.State (FS, lensFStoGS, lensFStoMS, lensMStoVS, getModuleNam
   currParameters, setVarScope)
 
 import Prelude hiding ((<>))
-import Control.Monad.State (get, modify)
+import Control.Monad.State.Strict (get, modify')
 import Control.Lens ((^.), over)
 import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
@@ -49,7 +49,7 @@ fileFromData :: (ProcRenderSym r) => (FilePath -> r (Module r) -> r (File r))
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'
-  modify (\s -> if isEmpty (RCP.module' mdl)
+  modify' (\s -> if isEmpty (RCP.module' mdl)
     then s
     else over lensFStoGS (addFile (s ^. currFileType) fpath) $
       -- If this is the main source file, set it as the main module in the state
@@ -75,7 +75,7 @@ docMod e d wm a dt fl = RCP.commentedMod fl (RCC.docComment $ CP.modDoc' d wm a 
   addExt e <$> getModuleName)
 
 modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
-modFromData n f d = modify (setModuleName n) >> onStateValue f d
+modFromData n f d = modify' (setModuleName n) >> onStateValue f d
 
 listInnerType :: (ProcRenderSym r) => VSType r -> VSType r
 listInnerType t = t >>= (convType . getInnerType . getType)
@@ -93,12 +93,12 @@ funcDecDef :: (ProcRenderSym r) => SVariable r -> r (Scope r) -> [SVariable r]
   -> MSBody r -> MSStatement r
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
-  modify $ useVarName $ variableName vr
-  modify $ setVarScope (variableName vr) (RCC.scopeData scp)
+  modify' $ useVarName $ variableName vr
+  modify' $ setVarScope (variableName vr) (RCC.scopeData scp)
   s <- get
   f <- IC.function (variableName vr) private (return $ variableType vr)
     (map IC.param ps) b
-  modify (L.set currParameters (s ^. currParameters))
+  modify' (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RCC.method f
 
 function :: (ProcRenderSym r) => Label -> r (Visibility r) -> VSType r ->

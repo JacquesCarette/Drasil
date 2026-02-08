@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.DrasilState (
 ) where
 
 import Control.Lens ((^.), makeLenses, over)
-import Control.Monad.State (State, gets)
+import Control.Monad.State.Strict (State, gets)
 import Data.List (nub)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Set (Set)

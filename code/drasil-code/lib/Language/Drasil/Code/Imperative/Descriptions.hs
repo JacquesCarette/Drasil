@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.Descriptions (
 ) where
 
 import Control.Lens ((^.))
-import Control.Monad.State (get)
+import Control.Monad.State.Strict (get)
 import Data.Map (member)
 import qualified Data.Map as Map (filter, lookup, null)
 import Data.Maybe (mapMaybe)

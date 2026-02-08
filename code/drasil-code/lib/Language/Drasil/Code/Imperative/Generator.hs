@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.Generator (
 ) where
 
 import Control.Lens ((^.))
-import Control.Monad.State (get, evalState, runState)
+import Control.Monad.State.Strict (get, evalState, runState)
 import qualified Data.Set as Set (fromList)
 import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList, catMaybes)

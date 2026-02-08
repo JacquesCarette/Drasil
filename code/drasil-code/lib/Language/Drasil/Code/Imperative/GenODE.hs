@@ -2,7 +2,7 @@ module Language.Drasil.Code.Imperative.GenODE (
   chooseODELib
 ) where
 
-import Control.Monad.State (State, modify)
+import Control.Monad.State.Strict (State, modify')
 
 import Language.Drasil (Sentence(..), (+:+.))
 
@@ -32,11 +32,11 @@ chooseODELib l (Just ode) = chooseODELib' (odeLib ode) (odeLib ode)
           "compatible with " ++ show l
         chooseODELib' prefLibList (o:os) = if l `elem` compatibleLangs o
           then do
-            modify (++ [firstChoiceODELib prefLibList o])
+            modify' (++ [firstChoiceODELib prefLibList o])
             return (libPath o, map (\ode' -> (codeName $ odeDef ode',
               genExternalLibraryCall (libSpec o) $ libCall o ode')) $ odeInfo ode,
                 (libName o, libVers o))
-          else modify (++ [incompatibleLib l o]) >> chooseODELib' prefLibList os
+          else modify' (++ [incompatibleLib l o]) >> chooseODELib' prefLibList os
 
 -- | Defines a design log message based on an incompatibility between the given
 -- 'Lang' and chosen 'ODELibPckg'.

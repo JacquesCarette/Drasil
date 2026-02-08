@@ -21,11 +21,11 @@ import Drasil.Shared.AST (VisibilityTag(..), qualName)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoMS, lensMStoVS,
-  lensVStoFS, modifyReturn, setModuleName, getModuleName, updateClassMap,
+  lensVStoFS, modify'Return, setModuleName, getModuleName, updateClassMap,
   addException, updateMethodExcMap, updateCallMap, addCall, callMapTransClosure,
   updateMEMWithCalls)
 
-import Control.Monad.State (State, modify)
+import Control.Monad.State.Strict (State, modify')
 import qualified Control.Monad.State as S (get)
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (fromMaybe)
@@ -53,7 +53,7 @@ instance ProgramSym CodeInfoProc where
   type Program CodeInfoProc = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
-    modify (updateMEMWithCalls . callMapTransClosure)
+    modify' (updateMEMWithCalls . callMapTransClosure)
     s <- S.get
     toState $ toCode s
 
@@ -281,10 +281,10 @@ instance IOStatement CodeInfoProc where
   getFileInput v _ = zoom lensMStoVS $ execute1 v
   discardFileInput = zoom lensMStoVS . execute1
 
-  openFileR _ v = modify (addException FileNotFound) >>
+  openFileR _ v = modify' (addException FileNotFound) >>
     execute1 (zoom lensMStoVS v)
-  openFileW _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
-  openFileA _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
+  openFileW _ v = modify' (addException IO) >> execute1 (zoom lensMStoVS v)
+  openFileA _ v = modify' (addException IO) >> execute1 (zoom lensMStoVS v)
   closeFile     = zoom lensMStoVS . execute1
 
   getFileInputLine v _ = zoom lensMStoVS $ execute1 v
@@ -314,7 +314,7 @@ instance ControlStatement CodeInfoProc where
 
   returnStmt = zoom lensMStoVS . execute1
 
-  throw _ = modifyReturn (addException Standard) (toCode ())
+  throw _ = modify'Return (addException Standard) (toCode ())
 
   ifCond = evalConds
   switch v cs b = do
@@ -363,9 +363,9 @@ instance MethodSym CodeInfoProc where
 instance ModuleSym CodeInfoProc where
   type Module CodeInfoProc = ()
   buildModule n _ funcs = do
-    modify (setModuleName n)
+    modify' (setModuleName n)
     mapM_ (zoom lensFStoMS) funcs
-    modifyReturn (updateClassMap n) (toCode ())
+    modify'Return (updateClassMap n) (toCode ())
 
 -- Helpers
 
@@ -378,7 +378,7 @@ noInfoType = toState $ toCode ""
 updateMEMandCM :: String -> MSBody CodeInfoProc -> SMethod CodeInfoProc
 updateMEMandCM n b = do
   _ <- b
-  modify (updateCallMap n . updateMethodExcMap n)
+  modify' (updateCallMap n . updateMethodExcMap n)
   noInfo
 
 evalConds :: [(SValue CodeInfoProc, MSBody CodeInfoProc)] -> MSBody CodeInfoProc ->
@@ -392,11 +392,11 @@ evalConds cs def = do
 addCurrModCall :: String -> SValue CodeInfoProc
 addCurrModCall n = do
   mn <- zoom lensVStoFS getModuleName
-  modify (addCall (qualName mn n))
+  modify' (addCall (qualName mn n))
   noInfo
 
 addExternalCall :: String -> String -> SValue CodeInfoProc
-addExternalCall l n = modify (addCall (qualName l n)) >> noInfo
+addExternalCall l n = modify' (addCall (qualName l n)) >> noInfo
 
 execute1 :: State a (CodeInfoProc ()) -> State a (CodeInfoProc ())
 execute1 s = do

@@ -12,7 +12,7 @@ import qualified Drasil.Shared.CodeType as C (CodeType(..))
 import Prelude hiding ((<>))
 import Control.Applicative (liftA3)
 import Control.Monad (liftM2, liftM3)
-import Control.Monad.State (State)
+import Control.Monad.State.Strict (State)
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes,
   (<>), empty, isEmpty)

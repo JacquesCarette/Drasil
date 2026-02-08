@@ -1,39 +1,56 @@
 \chapter{Drasil}
 \label{c:drasil}
-%
-%\ds{**Section Roadmap:
-%    -- This is where the real meat of Drasil is discussed (implementation 
-%details)
-%    -- Intro to our knowledge-capture mechanisms
-%      - Chunks/hierarchy
-%      - Break down each with examples from the case studies.
-%      - Look for 'interesting' examples (synonyms, acronyms, complexity, etc.)
-%    -- Intro to the DSL
-%      - Captured knowledge is useless without the transformations/rendering 
-%engine
-%      - DSL for each \sf{}}
 
-In this chapter, we introduce the Drasil framework and its implementation 
-details, including knowledge-capture mechanisms, the domain specific 
-languages (DSLs) used throughout, and how these components are integrated 
-in a human-usable way to generate \sfs{}. The name Drasil, derived from Norse 
+Drasil is a framework designed to address the challenges of generating 
+consistent, traceable, and maintainable scientific software artifacts from a 
+single source of domain knowledge. The name ``Drasil" is derived from Norse 
 Mythology's world tree Yggdrasil whose branches spread across the 
-many realms, reflects how our framework spans the many domains and contexts 
-relevant to software generation.
+many realms and reflects how our framework spans the many domains and contexts 
+relevant to software generation. In this chapter, we provide a guided tour of 
+Drasil's architecture and implementation, focusing on how knowledge is 
+captured, organized, and operationalized to produce both documentation and 
+executable code. 
+
+We begin by motivating the need for Drasil and outlining its core principles. 
+Next, we delve into the mechanisms for capturing and classifying knowledge, 
+introducing the concept of "chunks" and their role in building a reusable 
+knowledge base. We then describe how this knowledge is structured into recipes 
+that specify the content and organization of generated artifacts. The chapter 
+continues with a detailed look at Drasil's generation and rendering pipeline, 
+illustrating how abstract representations are transformed into concrete 
+outputs. Finally, we discuss the iterative refinement process that underpins 
+Drasil's development and summarize the key takeaways for our approach to 
+software generation.
+
+Throughout, our aim is to show not just what Drasil does, but why each 
+component is necessary and how the pieces fit together to support reliable, 
+maintainable software.
       
 \section{Drasil in a nutshell}
 
-Manually writing and maintaining a full range of \sfs{} is redundant, tedious, 
-and often leads to divergent \sfs{}. Drasil is a purpose-built framework 
-created to tackle these problems. \ds{Add something here about what Drasil is 
-before the isn't}
+This section provides a high-level overview of Drasil's motivation and 
+approach, setting the stage for the technical details that follow. To 
+understand why Drasil is needed, consider the challenges of manually writing 
+and maintaining a full range of \sfs{}: the process is redundant, tedious, and 
+often leads to divergent \sfs{}. Drasil is a purpose-built framework created to 
+tackle these problems. It is designed to generate a wide range of \sfs{} from a 
+single, unified source of domain knowledge. By capturing the essential 
+concepts, relationships, and requirements of a software system as reusable, 
+well-typed ``chunks,'' Drasil enables the automatic production of consistent, 
+traceable, and maintainable artifacts tailored to different stakeholders. The 
+framework emphasizes reducing manual duplication, ensuring traceability, and 
+supporting long-lived, well-understood domains where frequent maintenance or 
+evolution is expected. 
 
-Unlike documentation generators like Doxygen, Javadoc, and Pandoc
-which take a code-centric view of the problem and rely on manual redundancy -- 
+Unlike documentation generators like Doxygen, Javadoc, and Sphinx
+that take a code-centric view of the problem and rely on manual redundancy -- 
 i.e. natural-language explanations written as specially delimited
 comments which can then be weaved into API documentation alongside code -- 
 Drasil takes a knowledge-centric, redundancy-limiting, fully traceable, 
-single-source approach to generating \sfs{}.
+single-source approach to generating \sfs{}. The framework builds up knowledge 
+\emph{as needed} to solve concrete problems rather than attempting to encode 
+all possible information from the start, allowing it to be flexible and 
+adaptable to different domains and contexts early in its development.
 
 However, Drasil is not, nor is it intended to be, a panacea for all the woes of 
 software development. Even the seemingly well-defined problems of unnecessary 
@@ -77,11 +94,37 @@ capture in more depth in Section~\ref{sec:kc}.
 \section{Our Ingredients: Organizing and Capturing Knowledge}
 \label{sec:kc}
 
-For Drasil to function as intended, we need a means of capturing and organizing 
-the underlying knowledge of the software systems we are trying to build 
-alongside common knowledge that would be relevant across our entire target 
-domain of SC software. This knowledge capture method must also be robust enough 
-to be operationalized by a multi-faceted generation framework.
+Before we can generate useful software artifacts, we must first capture and 
+organize the underlying domain knowledge in a form that is both reusable and 
+operational. To illustrate what this entails, consider a concrete example from 
+the domain of scientific computing: Newton's Second Law of 
+motion~\cite{Newton1687}. To use this law in both documentation and code, we 
+need to capture several distinct pieces of knowledge:
+
+\begin{itemize}
+    \item The name (or label) for the law (``Newton's Second Law'').
+    \item A natural language definition (``the net force on a body at any 
+    instant of time is equal to the body's acceleration multiplied by its 
+    mass'').
+    \item The mathematical relationship ($F = ma$).
+    \item The symbolic representation (in this case is identical to the 
+    equation).
+    \item The definitions and symbols for each variable ($F$, $m$, $a$).
+    \item The units associated with each quantity (newtons, kilograms, metres 
+    per second squared).
+\end{itemize}
+
+Capturing all of this information in a way that is reusable, extensible, and 
+traceable is non-trivial. We need a knowledge capture method robust enough to 
+represent not only the specific information needed for the software systems we 
+are building, but also common knowledge relevant across the entire target 
+domain of SC software.
+
+To address this, Drasil introduces a set of mechanisms for representing and 
+structuring knowledge, centered around the concept of ``chunks'' and the 
+progressive refinement of knowledge structures. By understanding these building 
+blocks, the reader will be equipped to follow how Drasil supports traceability 
+and reuse throughout the software generation process.
 
 Before we can design a knowledge capture mechanism, we must first define what 
 exactly we believe we need to capture. It is nearly impossible to consider 
@@ -94,13 +137,19 @@ from our general process for developing the Drasil framework.
 \subsection{Capturing Knowledge via Chunks}
 \label{sec:kcChunk}
 
-We begin by borrowing and re-purposing the \emph{chunk} term from Literate 
-Programming (LP) and use it to create a simplified, extensible, and ever 
-expanding hierarchy  of chunks based on the requirements for capturing a single 
-piece of knowledge. Our base chunk, \codeH{NamedChunk} is defined in 
-Figure~\ref{fig:namedchunk} and can be thought of as any uniquely identifiable 
-term. It is composed of a \codeH{UID}, or unique identifier, and a 
-\codeH{NP}, or noun phrase, representing the term.
+Having identified some of the kinds of information we need to 
+capture\textemdash{}names/labels, definitions, symbols, units, and equations 
+(as illustrated by our Newton's Second Law example)\textemdash{}we now turn to 
+the mechanism Drasil uses to represent this knowledge in a reusable and 
+extensible way. To address these requirements, we borrow and re-purpose the 
+\emph{chunk} term from Literate Programming (LP), creating a simplified, 
+extensible, and ever-expanding hierarchy of chunks based on the needs for 
+capturing individual pieces of knowledge.
+
+Our base chunk, \codeH{NamedChunk} is defined in Figure~\ref{fig:namedchunk} 
+and can be thought of as any uniquely identifiable term. It is composed of a 
+\codeH{UID}, or unique identifier, and a \codeH{NP}, or noun phrase, 
+representing the term.
 
 \fig{
 \lstinputlisting[language=Haskell, firstline=33, lastline=43, 
@@ -145,8 +194,18 @@ which can be generated from the Drasil source code or found online at
 
 \subsection{Chunk Combinatorics}
 \label{sec:chunky}
-\ds{Would we call our chunk hierarchy a DSL? Or would the DSL be more along the 
-lines of Expr and Sentence which make up our chunks?}
+
+The flexibility and extensibility of Drasil's knowledge capture comes not just 
+from the variety of chunk types, but from the ways in which chunks can be 
+constructed, referenced, and composed. In this section, we explore how 
+extending our chunk hierarchy multiplies the possible combinations and 
+relationships between chunks, and how this enables us to build richer knowledge 
+structures. This approach is essential for reducing duplication and supporting 
+traceability, as it allows definitions and relationships to be constructed from 
+reusable components. To facilitate this, we introduce a Domain Specific 
+Language (DSL) for constructing and combining English-language sentences 
+(\codeH{Sentence}) which lets us define terms and their relationships in a 
+flexible, compositional way.
 
 Even with extremely simple chunks we have seen the need for multiple chunk 
 types and a number of ways to construct instances of those types. The more we 
@@ -174,11 +233,6 @@ the combinator (\codeH{+:+}) to concatenate the sentences. Note that
 definitions) and so doesn't require the sentence constructor (\codeH{S}) around 
 its definition.
 
-\ds{\sout{Should I work in something about how we use lenses in here, as all 
-complex chunks are instances of the simpler chunks they've been built from? Or 
-is that getting too into the Haskell-specific details?} I've written something 
-below}
-
 We also make opportunistic use of composable accessors (commonly known in the 
 Haskell ecosystem as ``lenses") to help manage complexity when combining and 
 projecting chunks. Conceptually, these are lightweight, composable getters and 
@@ -197,24 +251,23 @@ ones.
 numbers=none]{code/Physics.hs}
 }{Projecting knowledge into a chunk's definition}{fig:acceleration}
 
-Looking back at our examples of the types of knowledge we are interested in 
-from Figure~\ref{fig:gbrddq} we can see that the simple chunks we've defined so 
-far do not even start to cover the full spectrum of our needs. We can see a lot 
-of information missing such as a symbolic representation ($\hat{q}$) and 
-equation ($\hat{q} = \frac{q(ab)^2}{Eh^4\text{GTF}}$). As that is a relatively
-complex example, we will start by looking at something far simpler: Newton's 
-2nd Law of motion\citep{Newton1687} which, roughly translated, states ``the net 
-force on a body at any instant of time is equal to the body's acceleration 
-multiplied by its mass or, equivalently, the rate at which the body's momentum 
-is changing with time"  or as most physics students recognize it $F=ma$ 
-provided we have definitions for $F$, $m$, and $a$.
+As seen in our earlier case studies (see, for example, 
+Figure~\ref{fig:gbrddq}), the types of knowledge we need to capture often go 
+well beyond simple names and definitions. Those examples highlighted the need 
+for symbolic representations, equations, units, and explicit relationships 
+between concepts. While our motivating example of Newton's Second Law ($F=ma$) 
+covers some of these aspects, it also reveals gaps in our current chunk 
+definitions—particularly when it comes to capturing all relevant properties in 
+a reusable, traceable way.
 
-To understand what exactly is missing, let us look at how we achieve an 
-operational definition of \emph{Force} as a chunk in Drasil. To start, we can 
-see we need a symbolic representation ($F$) and some way to define an equation. 
-Also, each of force, mass, and acceleration are measured in some form of units 
-($N$, $kg$, and $m/s^2$ respectively) which we will likely care to capture and 
-keep track of. 
+For a better sense of what, exactly, we are missing, let us build on our 
+Newton's Second Law example and determine how we achieve an operational 
+definition of \emph{Force} as a chunk in Drasil. To fully represent force, we 
+need not only a name and definition, but also a symbolic representation ($F$), 
+a mathematical equation ($F=ma$), and associated units ($N$). Likewise, mass 
+and acceleration require their own symbols ($m$, $a$), definitions, and units 
+($kg$, $m/s^2$). This illustrates the necessity for chunk types that can encode 
+all these facets in a reusable and traceable manner.
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={91-92}, 
@@ -259,21 +312,31 @@ firstnumber=21]{code/SI_Units.hs}
 firstnumber=11]{code/PhysicsUnits.hs}
 }{Examples of chunks for units derived from other SI Unit chunks}{fig:accelU}
 
-Now we approach the terms mass and acceleration in a similar manner. We capture 
-each as a \codeH{ConceptChunk} (see Figure~\ref{fig:acceleration} for a 
-reminder of how we captured acceleration's definition relative to velocity and 
-thus relative to position). Then construct a \codeH{UnitalChunk} for each. 
-Acceleration can be seen in Figure~\ref{fig:forceUC} and mass has a similar 
-\codeH{UnitalChunk} that uses the \codeH{metre UnitDefn} chunk. More 
-interestingly, the units for acceleration are derived from other units, and can 
-be seen in Figure~\ref{fig:accelU} with some additional derived unit types 
-(taken from \codeH{Data.Drasil.Units.Physics}).
+Now we approach the terms mass and acceleration in a similar manner. To 
+clarify, for each physical quantity we wish to represent in Drasil (such as 
+mass or acceleration), we follow a two-step process. First, we define a 
+\codeH{ConceptChunk} for the term, which captures its name and a natural 
+language definition. For example, the concept of acceleration is defined in 
+relation to velocity and position, as shown earlier in 
+Figure~\ref{fig:acceleration}. Second, we create a \codeH{UnitalChunk} for each 
+quantity, which extends the concept by associating it with a specific symbol 
+(such as $a$ for acceleration or $m$ for mass) and its units of measurement 
+(for example, metres per second squared for acceleration, or kilograms for 
+mass). 
+
+This approach ensures that each quantity is not only described in words but is 
+also fully specified for use in both documentation and code generation. For 
+instance, acceleration's units are derived from other SI units, and this 
+relationship is captured explicitly in Drasil (see Figure~\ref{fig:accelU}). By 
+systematically defining both the conceptual meaning and the quantitative 
+properties of each term, Drasil enables consistent reuse and traceability 
+throughout the generated artifacts.
 
 Now we have almost everything we need to finish our definition of Newton's 
 second law. Everything thus far has been defined in natural language using our 
 \codeH{Sentence} DSL, but it is not well-suited to the one piece we are 
-currently missing: a way to define expressions relating chunks in a universal 
-\ds{language agnostic?} (mathematics) context \ds{/representation}.
+currently missing: a way to define expressions relating chunks in a language 
+agnostic (mathematics) representation.
 
 \subsection{Relating Chunks via Expressions}
 \label{sec:expr}
@@ -353,52 +416,48 @@ example, how would we go from chunks to \sfs{}? Look forward to that in
 Section~\ref{sec:recipes}.
 
 \subsection{Chunk Classification}
-%\ds{Prev title: ``Chunk Summary" and comment: I kind 
-%of want to skip this section, though I can
-%also understand keeping it. It does feel a little too ``in the weeds" to go 
-%through the whole Chunk Hierarchy, but I do think it's worthwhile to include
-%the kinds of things we can capture. Maybe a brief ``We've touched on Blah, and 
-%we've also determined we need to be able to capture `blerb, flerb, and 
-%gerb'"(Constraints or something).}
-
-\ds{I've modified this section to not only be called something different, but 
-to get into the weeds a bit on chunk classification, so we can show the high 
-level ``Class of chunk has this property" instead of ``Here are all our chunk 
-datatypes"}
 
 In the previous sections, we used the idea of ``chunks" of knowledge as our 
 building blocks. They range in complexity from simple single terms, to complex 
 relationships between expressions and overarching conceptual frameworks. Each 
-chunk is useful for a particular encoding, and complex chunks are built from 
-simpler, more fundamental chunks. With all of the complexities of mixing and 
-matching chunks, we have developed a need for a way to determine which chunks 
-expose the same types of knowledge (and how they differ). Not only would such a 
-system ease our ability to develop new chunks, by avoiding repetition and 
-ensuring the new chunk is uniquely suited to its purpose, but it 
-also aids in our understanding of which chunks are suited to capture what types 
-of knowledge.
+chunk is defined by a collection of structural properties, or fields, such as a 
+unique identifier, name, symbol, unit, or space. This ``atomic" information is 
+generally encoded in simpler, more fundamental chunks. Complex chunks are 
+constructed by combining these simpler chunks into more elaborate structures, 
+which we can think of in terms of ``molecules'' compared to the ``atoms" of 
+basic chunks. With the increasing complexity and variety of chunk types, it 
+becomes important to classify chunks based on their specific contents and the 
+kinds of knowledge they encode and can project. This classification system not 
+only helps avoid repetition and ensures each chunk is uniquely suited to its 
+purpose, but also clarifies which chunks are best suited to capture particular 
+types of domain knowledge.
 
 We have developed a classification system for chunks grouping them based on 
-the properties they encode. For example, all chunks encoding things that are 
-measured with units would be instances of the \codeH{Unitary} type. Chunks that 
-capture quantities, whether Unitary or not, 
-would be instances of the \codeH{Quantity} type. As we simplify, we end up 
-determining what qualifies something as a chunk in the first place. That is, 
-what is the root property that \emph{all} chunks must have to be considered a 
-chunk? That is the \codeH{HasUID} classification, which essentially states that 
-a given chunk of knowledge can be referred to by some unique identifier. For a 
-more intuitive example, the \codeH{NamedIdea} classification is used 
-for chunks that encode knowledge represented by given terms such as ``force", 
-``computer", ``priority", and so on.
+the properties we can project. For example, all chunks encoding things that are 
+measured with units would be instances of the \codeH{Unitary} type\footnote{
+  It is important to note that these classifications are based on the ability 
+  to project certain information. In the codebase we often use lenses to access 
+  or manipulate these fields, as they may be projected from component chunks 
+  rather than being directly stored in the chunk itself.
+}. Chunks that capture quantities, whether Unitary or not, would be instances 
+of the \codeH{Quantity} type. As we simplify, we end up determining what 
+qualifies something as a chunk in the first place. That is, what is the root 
+property that \emph{all} chunks must have to be considered a chunk? That is the 
+\codeH{HasUID} classification, which essentially states that a given chunk of 
+knowledge can be referred to by some unique identifier. For a more intuitive 
+example, the \codeH{NamedIdea} classification is used for chunks that encode 
+knowledge represented by given terms such as ``force", ``computer", 
+``priority", and so on.
 
 Figure~\ref{fig:chunkClasses} and Figure~\ref{fig:chunksClassified} show a 
 subset of the different ways we classify chunks and some example chunk types 
 and how they would be classified, respectively. Note there is a one to many 
 relationship between a given chunk and its classifications. As you can see, the 
 \codeH{UnitalChunk} and \codeH{DefinedQuantityDict} are very closely related in 
-that they both contain their own \codeH{NamedIdea}, \codeH{Space}, 
-\codeH{Symbol}, and \codeH{Quantity}, however, the \codeH{UnitalChunk} is also 
-classified as \codeH{Unitary} as it \emph{must} have a unit associated with it.
+that they both project their own \codeH{NamedIdea}, related \codeH{Space}, 
+\codeH{Symbol}, and \mbox{\codeH{Quantity},} however, the \codeH{UnitalChunk} 
+is also classified as \codeH{Unitary} as it \emph{must} have a unit associated 
+with it.
 
 \fig{\begin{center}
 \includegraphics[width=\linewidth]{figures/ChunkClasses.png}
@@ -407,9 +466,9 @@ the encoded property relationships}{fig:chunkClasses}
 
 \fig{\begin{center}
 \includegraphics[width=0.75\linewidth]{figures/ChunkClassified.png}
-\end{center}}{A subset of Drasil's chunks showing how different chunks may belong to 
-multiple classifications \ds{with specific conceptual 
-properties}}{fig:chunksClassified}
+\end{center}}{A subset of Drasil's chunks showing how chunks may 
+belong to multiple classifications based on the underlying knowledge they 
+project.}{fig:chunksClassified}
 
 We now have a compact, well-typed vocabulary for representing domain knowledge: 
 chunks and classifications give us named concepts, quantities, units, and 
@@ -458,9 +517,6 @@ example in the case of punch cards, punched cards). Regardless, we would define
 the underlying knowledge once in our chunks, and use the recipe DSL to select 
 the representation.
 
-\ds{A little repetitive above, but wanted to really hammer in what recipes are 
-for.}
-
 As our case studies are following templates for our \sfs{}, they give us a 
 solid foundation with which to write our recipes. We already know how the 
 knowledge should be organized, greatly simplifying how we can begin structuring 
@@ -506,19 +562,18 @@ studies (\gb{}).
 
 The recipe for the \gb{} SRS can be seen in Figure~\ref{fig:glassBRSRSRecipe}.
 This should look familiar, as it follows a similar structure to the \smithea{} 
-template table of contents\ds{Link to the ToC figure or embed here}. We use a 
-number of helper functions and data types 
-to condense and collect the chunks we require and avoid writing any generic 
-boilerplate text. The structure of the document can be rearranged to an extent, 
-in that we can add, remove, or reorder sections at will by simply moving them 
-around within the \codeH{SRSDecl}. We can also make choices regarding the 
-display of certain types of information in the final, generated \sf{}. For 
-example, we alluded to vector representations earlier 
-(Section~\ref{sec:chunky}) which we currently can display using either bold
+template table of contents (Figure~\ref{fig:SRSToC}). We use a number of helper 
+functions and data types to condense and collect the chunks we require and 
+avoid writing any generic boilerplate text. The structure of the document can 
+be rearranged to an extent, in that we can add, remove, or reorder sections at 
+will by simply moving them around within the \codeH{SRSDecl}. We can also make 
+choices regarding the display of certain types of information in the final, 
+generated \sf{}. For example, we alluded to vector representations earlier 
+(Section~\ref{sec:chunky}) which we currently can display using either bold 
 typeface or italics. This choice must be made using the \codeH{TypogConvention} 
-datatype which lists the choices made (ex. 
-\codeH{TypogConvention[Vector Bold]}) and is used by a relevant portion of the 
-SRS recipe if vectors are included in the \sf{}. Our \gb{} example does not 
+datatype which lists the choices made 
+(ex. \codeH{TypogConvention[Vector Bold]}) and is used by a relevant portion of 
+the SRS recipe if vectors are included in the \sf{}. Our \gb{} example does not 
 make use of this convention, however the \gp{} case study does.
 
 As for the chunks necessary for generating the \sf{}, each section includes 
@@ -538,11 +593,6 @@ Table~\ref{tab:siBreakdown}, but it should be noted that some of the defined
 properties are only there for convenience (and/or remain only until the next 
 refinement pass) as they are derived from other chunks with the use of 
 helper functions and could be inferred.
-
-\ds{TODO: I might remove the table and just add comments to the code block 
-similar to 
-what's in the next section. It seems like that might be easier for readers to 
-reference}
 
 \begin{table}[]
 \caption{System information object breakdown - every property is represented by 
@@ -857,11 +907,12 @@ reusable knowledge representations and the diverse forms required for practical
 use (ex. \LaTeX{}, HTML, PDF, or source code in various programming 
 languages).Drasil achieves this through a set of dedicated \emph{printers} and, 
 for code, through the use of the Generic Object-Oriented Language 
-(GOOL)\cite{??} library. Each printer is designed to interpret the structured 
-data produced by the recipe and knowledge projection stages and emit output in 
-the desired format, handling both content and layout\footnote{To some respect, 
-depending on the desired output format. For instance, \LaTeX handles the 
-majority of the finished \sf{}'s layout where Drasil generates the content}.
+(GOOL)\cite{Beyak, Costabile, McLachlan}. Each printer is designed to 
+interpret the structured data produced by the recipe and knowledge projection 
+stages and emit output in the desired format, handling both content and 
+layout\footnote{To some respect, depending on the desired output format. For 
+instance, \LaTeX handles the majority of the finished \sf{}'s layout where 
+Drasil generates the content}.
 
 \subsubsection{Document Rendering: Printers and Output Engines}
 For documentation artifacts (such as SRS or Module Guide), Drasil provides 
@@ -891,15 +942,7 @@ Figure~\ref{fig:genTeX} shows the entry point to this process.
 rendering}{fig:genTeX}
 
 \subsubsection{Code Rendering: GOOL and Target Language Emission}
-For executable code artifacts, Drasil uses GOOL\cite{??} as an intermediate 
-layer. GOOL provides a collection of type-safe combinators and abstractions for 
-representing object-oriented and procedural constructs in a language-agnostic 
-manner. The code recipe (ex. a \codeH{CodeSpec}) is first translated into a 
-GOOL abstract syntax tree (AST), which is then emitted as source code in one or 
-more target languages. For brevity we will not get into the implementation 
-details regarding Drasil's use of GOOL, as those have been covered in other 
-works \cite{??} \ds{Someone else's thesis covered this yeah? I don't want to 
-make it sound like I wrote this part, but still want to give an overview}.
+For executable code artifacts, Drasil uses GOOL~\cite{Beyak, Costabile, McLachlan} as an intermediate layer. GOOL provides a collection of type-safe combinators and abstractions for representing object-oriented and procedural constructs in a language-agnostic manner. The code recipe (ex. a \codeH{CodeSpec}) is first translated into a GOOL abstract syntax tree (AST), which is then emitted as source code in one or more target languages. For brevity we will not get into the implementation details regarding Drasil's use of GOOL, as those have been covered in other works \cite{Beyak, Costabile, McLachlan}.
 
 In brief, the code emission process follows a straightforward translation 
 process: The code recipe and its referenced chunks are traversed to construct a 

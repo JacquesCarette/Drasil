@@ -51,9 +51,6 @@ module Drasil.DocLang (
   -- ** Specific System Description
   -- Drasil.Sections.SpecificSystemDescription
   auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl,
-  -- * Document Extraction Function
-  -- Drasil.ExtractDocDesc
-  getDocDesc, egetDocDesc,
   -- * References
   -- Drasil.SRS.References
   secRefs
@@ -86,7 +83,6 @@ import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDat
 import Drasil.Sections.TableOfSymbols (tsymb, tsymb'')
 import Drasil.Sections.TableOfUnits (unitTableRef, tunit, tunit',tunitNone)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 import Drasil.DocLang.References (secRefs)
 -- Commented out modules aren't used - uncomment if this changes

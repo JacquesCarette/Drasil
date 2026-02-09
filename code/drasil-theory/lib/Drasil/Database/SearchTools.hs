@@ -62,8 +62,5 @@ defResolve' = defResolve DomDefn
 findAllConcInsts :: ChunkDB -> [ConceptInstance]
 findAllConcInsts = findAll
 
-findAllCitations :: ChunkDB -> [Citation]
-findAllCitations = findAll
-
 findAllLabelledContent :: ChunkDB -> [LabelledContent]
 findAllLabelledContent = findAll

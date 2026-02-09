@@ -1,17 +1,19 @@
 -- | Utilities to get grab certain chunks (from 'Expr', 'Sentence', etc) by
 -- 'UID' and dereference the chunk it refers to.
-module Drasil.GetChunks (ccss, ccss', combine, vars, citeDB) where
+module Drasil.GetChunks (
+  ccss, ccss', combine, vars,
+  resolveBibliography
+) where
 
-import Control.Lens ((^.))
 import Data.List (nub, sortBy)
+import Data.Maybe (mapMaybe)
 import qualified Data.Set as Set
 
 import Language.Drasil
-import Language.Drasil.Development
+import Language.Drasil.Development (sdep)
 import Language.Drasil.ModelExpr.Development (meDep)
-import Drasil.Database (ChunkDB, findOrErr)
-import Drasil.Database.SearchTools (defResolve', DomDefn(definition), findAllCitations)
-import Drasil.System (System, systemdb)
+import Drasil.Database (ChunkDB, findOrErr, find, UID)
+import Drasil.Database.SearchTools (defResolve', DomDefn(definition))
 
 -- | Gets a list of quantities ('DefinedQuantityDict') from an equation in order to print.
 vars :: ModelExpr -> ChunkDB -> [DefinedQuantityDict]
@@ -45,6 +47,13 @@ concpt a m = map (definition . defResolve' m) $ Set.toList (sdep a)
 concpt' :: ModelExpr -> ChunkDB -> [Sentence]
 concpt' a m = map (definition . defResolve' m) $ meDep a
 
--- | Extract bibliography entries for a system.
-citeDB :: System -> BibRef
-citeDB si = sortBy compareAuthYearTitle $ findAllCitations (si ^. systemdb)
+-- | Given a 'ChunkDB' and a set of 'UID's, looks up the corresponding
+-- 'Citation's and returns them sorted by author, year, and title.
+--
+-- FIXME: This function assumes that all 'UID's in the set correspond to
+-- 'Citation's in the database. If a 'UID' does not correspond to a 'Citation',
+-- it is simply ignored. This should rather rely on a set of 'UIDRef Citation's.
+resolveBibliography :: ChunkDB -> Set.Set UID -> [Citation]
+resolveBibliography db uids = sortBy compareAuthYearTitle cites
+  where
+    cites = mapMaybe (`find` db) (Set.toList uids)

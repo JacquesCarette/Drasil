@@ -56,6 +56,11 @@ capitalize :: String -> String
 -- | Comma separated list with "and" before final item.
 stringList :: [String] -> String
 
+module Utils.Drasil.FileIO
+
+-- | Write a String to a given <a>FilePath</a>.
+createFile :: FilePath -> String -> IO ()
+
 module Utils.Drasil.FilePath
 
 -- | A valid, relative file path with an extension in canonical form.
@@ -126,6 +131,11 @@ toPlainName :: String -> String
 -- | Replace underscores in a string with periods (<tt>.</tt>).
 repUnd :: String -> String
 
+module Utils.Drasil.TypeClasses
+class HasPathAndDoc a b | a -> b
+getPath :: HasPathAndDoc a b => a -> FilePath
+getDoc :: HasPathAndDoc a b => a -> b
+
 
 -- | Gather Drasil's utility functions and re-export for easy use.
 module Utils.Drasil
@@ -138,6 +148,9 @@ module Utils.Drasil
 --   directory regardless of whether it exists or not, potentially leading
 --   to an error that appears in `make debug` logs.
 createDirIfMissing :: Bool -> FilePath -> IO ()
+
+-- | Write a String to a given <a>FilePath</a>.
+createFile :: FilePath -> String -> IO ()
 
 -- | Creates a blank document with no text.
 blank :: Doc
@@ -226,3 +239,6 @@ toPlainName :: String -> String
 
 -- | Replace underscores in a string with periods (<tt>.</tt>).
 repUnd :: String -> String
+class HasPathAndDoc a b | a -> b
+getPath :: HasPathAndDoc a b => a -> FilePath
+getDoc :: HasPathAndDoc a b => a -> b

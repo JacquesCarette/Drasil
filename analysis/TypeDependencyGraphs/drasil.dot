@@ -600,13 +600,6 @@ digraph alltypes {
 		Lang	[shape=oval, color=darkviolet, label="Lang"];
 		}
 	}
-	subgraph packagefiles {
-		subgraph packagefiles{
-		PackageFiles	[shape=oval, color=darkgreen, label="PackageFiles"];
-		PackageFiles -> FilePath;
-		PackageFiles -> Doc;
-		}
-	}
 	subgraph odeinfo {
 		subgraph odeinfo{
 		ODEInfo	[shape=oval, color=cyan3, label="ODEInfo"];
@@ -4372,6 +4365,8 @@ digraph alltypes {
 	}
 	subgraph englihs {
 	}
+	subgraph fileio {
+	}
 	subgraph filepath {
 		subgraph relativefile{
 		RelativeFile	[shape=oval, color=darkgreen, label="RelativeFile"];
@@ -4381,6 +4376,8 @@ digraph alltypes {
 	subgraph litss {
 	}
 	subgraph strings {
+	}
+	subgraph typeclasess {
 	}
 	subgraph drails {
 	}

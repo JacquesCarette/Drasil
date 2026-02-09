@@ -22,6 +22,9 @@ module Utils.Drasil
 --   to an error that appears in `make debug` logs.
 createDirIfMissing :: Bool -> FilePath -> IO ()
 
+-- | Write a String to a given <a>FilePath</a>.
+createFile :: FilePath -> String -> IO ()
+
 -- | Creates a blank document with no text.
 blank :: Doc
 
@@ -109,3 +112,6 @@ toPlainName :: String -> String
 
 -- | Replace underscores in a string with periods (<tt>.</tt>).
 repUnd :: String -> String
+class HasPathAndDoc a b | a -> b
+getPath :: HasPathAndDoc a b => a -> FilePath
+getDoc :: HasPathAndDoc a b => a -> b

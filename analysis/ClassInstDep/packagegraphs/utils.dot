@@ -1,3 +1,4 @@
 digraph utils{
 RelativeFile	[shape=oval, color=turquoise4, label="RelativeFile"];
+HasPathAndDoc	[shape=oval, color=magenta, label="HasPathAndDoc"];
 }

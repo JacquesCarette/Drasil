@@ -12,23 +12,23 @@
 </span><span id="line-12"></span><span class="annot"><span class="hs-comment">-- | Creates the directory for output, gathers all individual graph output functions and calls them.</span></span><span>
 </span><span id="line-13"></span><span class="annot"><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#outputDot"><span class="hs-identifier hs-type">outputDot</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GraphInfo</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-14"></span><span id="outputDot"><span class="annot"><span class="annottext">outputDot :: FilePath -&gt; GraphInfo -&gt; IO ()
-</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#outputDot"><span class="hs-identifier hs-var hs-var">outputDot</span></a></span></span><span> </span><span id="local-6989586621679101786"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101786"><span class="hs-identifier hs-var">outputFilePath</span></a></span></span><span> </span><span id="local-6989586621679101787"><span class="annot"><span class="annottext">GraphInfo
-</span><a href="#local-6989586621679101787"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#outputDot"><span class="hs-identifier hs-var hs-var">outputDot</span></a></span></span><span> </span><span id="local-6989586621679101808"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101808"><span class="hs-identifier hs-var">outputFilePath</span></a></span></span><span> </span><span id="local-6989586621679101809"><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679101809"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-15"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">createDirIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101786"><span class="hs-identifier hs-var">outputFilePath</span></a></span><span>
+</span><a href="#local-6989586621679101808"><span class="hs-identifier hs-var">outputFilePath</span></a></span><span>
 </span><span id="line-16"></span><span>    </span><span class="annot"><span class="annottext">FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101786"><span class="hs-identifier hs-var">outputFilePath</span></a></span><span>
+</span><a href="#local-6989586621679101808"><span class="hs-identifier hs-var">outputFilePath</span></a></span><span>
 </span><span id="line-17"></span><span>    </span><span class="annot"><span class="annottext">GraphInfo
 -&gt; FilePath
 -&gt; (GraphInfo -&gt; [(UID, [UID])])
 -&gt; [GraphInfo -&gt; NodeFamily]
 -&gt; IO ()
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkOutput"><span class="hs-identifier hs-var">mkOutput</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
-</span><a href="#local-6989586621679101787"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101809"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;avsa&quot;</span></span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
 </span><span class="hs-identifier hs-var">edgesAvsA</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
 </span><span class="hs-identifier hs-var">assumpNF</span></span><span class="hs-special">]</span><span>
@@ -38,7 +38,7 @@
 -&gt; [GraphInfo -&gt; NodeFamily]
 -&gt; IO ()
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkOutput"><span class="hs-identifier hs-var">mkOutput</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
-</span><a href="#local-6989586621679101787"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101809"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;avsall&quot;</span></span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
 </span><span class="hs-identifier hs-var">edgesAvsAll</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
 </span><span class="hs-identifier hs-var">assumpNF</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
@@ -54,7 +54,7 @@
 -&gt; [GraphInfo -&gt; NodeFamily]
 -&gt; IO ()
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkOutput"><span class="hs-identifier hs-var">mkOutput</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
-</span><a href="#local-6989586621679101787"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101809"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;refvsref&quot;</span></span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
 </span><span class="hs-identifier hs-var">edgesRefvsRef</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
 </span><span class="hs-identifier hs-var">ddNF</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
@@ -67,7 +67,7 @@
 -&gt; [GraphInfo -&gt; NodeFamily]
 -&gt; IO ()
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkOutput"><span class="hs-identifier hs-var">mkOutput</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
-</span><a href="#local-6989586621679101787"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101809"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;allvsr&quot;</span></span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
 </span><span class="hs-identifier hs-var">edgesAllvsR</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
 </span><span class="hs-identifier hs-var">assumpNF</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
@@ -83,7 +83,7 @@
 -&gt; [GraphInfo -&gt; NodeFamily]
 -&gt; IO ()
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkOutput"><span class="hs-identifier hs-var">mkOutput</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
-</span><a href="#local-6989586621679101787"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101809"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;allvsall&quot;</span></span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
 </span><span class="hs-identifier hs-var">edgesAllvsAll</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
 </span><span class="hs-identifier hs-var">assumpNF</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
@@ -104,68 +104,68 @@
 -&gt; (GraphInfo -&gt; [(UID, [UID])])
 -&gt; [GraphInfo -&gt; NodeFamily]
 -&gt; IO ()
-</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkOutput"><span class="hs-identifier hs-var hs-var">mkOutput</span></a></span></span><span> </span><span id="local-6989586621679101802"><span class="annot"><span class="annottext">GraphInfo
-</span><a href="#local-6989586621679101802"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span id="local-6989586621679101803"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101803"><span class="hs-identifier hs-var">ttl</span></a></span></span><span> </span><span id="local-6989586621679101804"><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
-</span><a href="#local-6989586621679101804"><span class="hs-identifier hs-var">getDirections</span></a></span></span><span> </span><span id="local-6989586621679101805"><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
-</span><a href="#local-6989586621679101805"><span class="hs-identifier hs-var">getLabels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-28"></span><span>    </span><span id="local-6989586621679101806"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101806"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; IOMode -&gt; IO Handle
+</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkOutput"><span class="hs-identifier hs-var hs-var">mkOutput</span></a></span></span><span> </span><span id="local-6989586621679101824"><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679101824"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span id="local-6989586621679101825"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101825"><span class="hs-identifier hs-var">ttl</span></a></span></span><span> </span><span id="local-6989586621679101826"><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="#local-6989586621679101826"><span class="hs-identifier hs-var">getDirections</span></a></span></span><span> </span><span id="local-6989586621679101827"><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679101827"><span class="hs-identifier hs-var">getLabels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-28"></span><span>    </span><span id="local-6989586621679101828"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679101828"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; IOMode -&gt; IO Handle
 </span><span class="hs-identifier hs-var">openFile</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101803"><span class="hs-identifier hs-var">ttl</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679101825"><span class="hs-identifier hs-var">ttl</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;.dot&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IOMode
 </span><span class="hs-identifier hs-var">WriteMode</span></span><span>
 </span><span id="line-29"></span><span>    </span><span class="annot"><span class="annottext">Handle -&gt; FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101806"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; IO ()) -&gt; FilePath -&gt; IO ()
+</span><a href="#local-6989586621679101828"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; IO ()) -&gt; FilePath -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;digraph &quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101803"><span class="hs-identifier hs-var">ttl</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679101825"><span class="hs-identifier hs-var">ttl</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot; {&quot;</span></span><span>
-</span><span id="line-30"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679101807"><span class="annot"><span class="annottext">labels :: [NodeFamily]
-</span><a href="#local-6989586621679101807"><span class="hs-identifier hs-var hs-var">labels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [GraphInfo -&gt; NodeFamily] -&gt; [NodeFamily]
+</span><span id="line-30"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679101829"><span class="annot"><span class="annottext">labels :: [NodeFamily]
+</span><a href="#local-6989586621679101829"><span class="hs-identifier hs-var hs-var">labels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [GraphInfo -&gt; NodeFamily] -&gt; [NodeFamily]
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#filterAndGI"><span class="hs-identifier hs-var">filterAndGI</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
-</span><a href="#local-6989586621679101802"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
-</span><a href="#local-6989586621679101805"><span class="hs-identifier hs-var">getLabels</span></a></span><span>
+</span><a href="#local-6989586621679101824"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679101827"><span class="hs-identifier hs-var">getLabels</span></a></span><span>
 </span><span id="line-31"></span><span>    </span><span class="annot"><span class="annottext">Handle -&gt; [(UID, [UID])] -&gt; [NodeFamily] -&gt; IO ()
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#outputSub"><span class="hs-identifier hs-var">outputSub</span></a></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101806"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
-</span><a href="#local-6989586621679101804"><span class="hs-identifier hs-var">getDirections</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
-</span><a href="#local-6989586621679101802"><span class="hs-identifier hs-var">gi</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[NodeFamily]
-</span><a href="#local-6989586621679101807"><span class="hs-identifier hs-var">labels</span></a></span><span>
+</span><a href="#local-6989586621679101828"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="#local-6989586621679101826"><span class="hs-identifier hs-var">getDirections</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679101824"><span class="hs-identifier hs-var">gi</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[NodeFamily]
+</span><a href="#local-6989586621679101829"><span class="hs-identifier hs-var">labels</span></a></span><span>
 </span><span id="line-32"></span><span>    </span><span class="annot"><span class="annottext">Handle -&gt; FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101806"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101828"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;}&quot;</span></span><span>
 </span><span id="line-33"></span><span>    </span><span class="annot"><span class="annottext">Handle -&gt; IO ()
 </span><span class="hs-identifier hs-var">hClose</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101806"><span class="hs-identifier hs-var">handle</span></a></span><span>
+</span><a href="#local-6989586621679101828"><span class="hs-identifier hs-var">handle</span></a></span><span>
 </span><span id="line-34"></span><span>
 </span><span id="line-35"></span><span class="annot"><span class="hs-comment">-- | Graph output helper. Takes in the file handle, edges, and node families.</span></span><span>
 </span><span id="line-36"></span><span class="annot"><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#outputSub"><span class="hs-identifier hs-type">outputSub</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Handle</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">NodeFamily</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-37"></span><span id="outputSub"><span class="annot"><span class="annottext">outputSub :: Handle -&gt; [(UID, [UID])] -&gt; [NodeFamily] -&gt; IO ()
-</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#outputSub"><span class="hs-identifier hs-var hs-var">outputSub</span></a></span></span><span> </span><span id="local-6989586621679101810"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101810"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span id="local-6989586621679101811"><span class="annot"><span class="annottext">[(UID, [UID])]
-</span><a href="#local-6989586621679101811"><span class="hs-identifier hs-var">edges</span></a></span></span><span> </span><span id="local-6989586621679101812"><span class="annot"><span class="annottext">[NodeFamily]
-</span><a href="#local-6989586621679101812"><span class="hs-identifier hs-var">nodes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#outputSub"><span class="hs-identifier hs-var hs-var">outputSub</span></a></span></span><span> </span><span id="local-6989586621679101832"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679101832"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span id="local-6989586621679101833"><span class="annot"><span class="annottext">[(UID, [UID])]
+</span><a href="#local-6989586621679101833"><span class="hs-identifier hs-var">edges</span></a></span></span><span> </span><span id="local-6989586621679101834"><span class="annot"><span class="annottext">[NodeFamily]
+</span><a href="#local-6989586621679101834"><span class="hs-identifier hs-var">nodes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-38"></span><span>    </span><span class="annot"><span class="annottext">((UID, [UID]) -&gt; IO ()) -&gt; [(UID, [UID])] -&gt; IO ()
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Foldable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m ()
 </span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Handle -&gt; (UID, [UID]) -&gt; IO ()
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkDirections"><span class="hs-identifier hs-var">mkDirections</span></a></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101810"><span class="hs-identifier hs-var">handle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, [UID])]
-</span><a href="#local-6989586621679101811"><span class="hs-identifier hs-var">edges</span></a></span><span>
+</span><a href="#local-6989586621679101832"><span class="hs-identifier hs-var">handle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, [UID])]
+</span><a href="#local-6989586621679101833"><span class="hs-identifier hs-var">edges</span></a></span><span>
 </span><span id="line-39"></span><span>    </span><span class="annot"><span class="annottext">Handle -&gt; FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101810"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101832"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;\n&quot;</span></span><span>
 </span><span id="line-40"></span><span>    </span><span class="annot"><span class="annottext">(NodeFamily -&gt; IO ()) -&gt; [NodeFamily] -&gt; IO ()
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
@@ -173,32 +173,32 @@ forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (a -&gt; m b) -&gt; t a -&gt; m ()
 </span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Handle -&gt; NodeFamily -&gt; IO ()
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkNodes"><span class="hs-identifier hs-var">mkNodes</span></a></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101810"><span class="hs-identifier hs-var">handle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[NodeFamily]
-</span><a href="#local-6989586621679101812"><span class="hs-identifier hs-var">nodes</span></a></span><span>
+</span><a href="#local-6989586621679101832"><span class="hs-identifier hs-var">handle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[NodeFamily]
+</span><a href="#local-6989586621679101834"><span class="hs-identifier hs-var">nodes</span></a></span><span>
 </span><span id="line-41"></span><span>
 </span><span id="line-42"></span><span class="annot"><span class="hs-comment">-- | Prints graph edges (directions) onto a given file handle.</span></span><span>
 </span><span id="line-43"></span><span class="annot"><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkDirections"><span class="hs-identifier hs-type">mkDirections</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Handle</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-44"></span><span id="mkDirections"><span class="annot"><span class="annottext">mkDirections :: Handle -&gt; (UID, [UID]) -&gt; IO ()
-</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkDirections"><span class="hs-identifier hs-var hs-var">mkDirections</span></a></span></span><span> </span><span id="local-6989586621679101816"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101816"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span id="local-6989586621679101817"><span class="annot"><span class="annottext">(UID, [UID])
-</span><a href="#local-6989586621679101817"><span class="hs-identifier hs-var">ls</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkDirections"><span class="hs-identifier hs-var hs-var">mkDirections</span></a></span></span><span> </span><span id="local-6989586621679101838"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679101838"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span id="local-6989586621679101839"><span class="annot"><span class="annottext">(UID, [UID])
+</span><a href="#local-6989586621679101839"><span class="hs-identifier hs-var">ls</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-45"></span><span>    </span><span class="annot"><span class="annottext">(FilePath -&gt; IO ()) -&gt; [FilePath] -&gt; IO ()
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Foldable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m ()
 </span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Handle -&gt; FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101816"><span class="hs-identifier hs-var">handle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([FilePath] -&gt; IO ()) -&gt; [FilePath] -&gt; IO ()
+</span><a href="#local-6989586621679101838"><span class="hs-identifier hs-var">handle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([FilePath] -&gt; IO ()) -&gt; [FilePath] -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; [FilePath] -&gt; [FilePath]
-</span><a href="#local-6989586621679101818"><span class="hs-identifier hs-var">makeEdgesSub</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; FilePath
+</span><a href="#local-6989586621679101840"><span class="hs-identifier hs-var">makeEdgesSub</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; FilePath
 forall a. Show a =&gt; a -&gt; FilePath
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; FilePath) -&gt; UID -&gt; FilePath
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(UID, [UID]) -&gt; UID
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">(UID, [UID])
-</span><a href="#local-6989586621679101817"><span class="hs-identifier hs-var">ls</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(FilePath -&gt; Bool) -&gt; [FilePath] -&gt; [FilePath]
+</span><a href="#local-6989586621679101839"><span class="hs-identifier hs-var">ls</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(FilePath -&gt; Bool) -&gt; [FilePath] -&gt; [FilePath]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
 </span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; (FilePath -&gt; Bool) -&gt; FilePath -&gt; Bool
@@ -217,58 +217,58 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(UID, [UID]) -&gt; [UID]
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">(UID, [UID])
-</span><a href="#local-6989586621679101817"><span class="hs-identifier hs-var">ls</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679101839"><span class="hs-identifier hs-var">ls</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-46"></span><span>    </span><span class="hs-keyword">where</span><span>
 </span><span id="line-47"></span><span>       </span><span class="hs-comment">-- Creates an edge between a type and its dependency (indented for subgraphs)</span><span>
-</span><span id="line-48"></span><span>        </span><span class="annot"><a href="#local-6989586621679101818"><span class="hs-identifier hs-type">makeEdgesSub</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
-</span><span id="line-49"></span><span>        </span><span id="local-6989586621679101818"><span class="annot"><span class="annottext">makeEdgesSub :: FilePath -&gt; [FilePath] -&gt; [FilePath]
-</span><a href="#local-6989586621679101818"><span class="hs-identifier hs-var hs-var">makeEdgesSub</span></a></span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><span id="line-48"></span><span>        </span><span class="annot"><a href="#local-6989586621679101840"><span class="hs-identifier hs-type">makeEdgesSub</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
+</span><span id="line-49"></span><span>        </span><span id="local-6989586621679101840"><span class="annot"><span class="annottext">makeEdgesSub :: FilePath -&gt; [FilePath] -&gt; [FilePath]
+</span><a href="#local-6989586621679101840"><span class="hs-identifier hs-var hs-var">makeEdgesSub</span></a></span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-50"></span><span>        </span><span class="annot"><a href="#local-6989586621679101818"><span class="hs-identifier hs-var">makeEdgesSub</span></a></span><span> </span><span id="local-6989586621679101825"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101825"><span class="hs-identifier hs-var">nm</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679101826"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101826"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679101827"><span class="annot"><span class="annottext">[FilePath]
-</span><a href="#local-6989586621679101827"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath
+</span><span id="line-50"></span><span>        </span><span class="annot"><a href="#local-6989586621679101840"><span class="hs-identifier hs-var">makeEdgesSub</span></a></span><span> </span><span id="local-6989586621679101847"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101847"><span class="hs-identifier hs-var">nm</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679101848"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101848"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679101849"><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679101849"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;\t&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#filterInvalidChars"><span class="hs-identifier hs-var">filterInvalidChars</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101825"><span class="hs-identifier hs-var">nm</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679101847"><span class="hs-identifier hs-var">nm</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot; -&gt; &quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#filterInvalidChars"><span class="hs-identifier hs-var">filterInvalidChars</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101826"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679101848"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;;&quot;</span></span><span class="hs-special">)</span><span class="annot"><span class="annottext">FilePath -&gt; [FilePath] -&gt; [FilePath]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; [FilePath] -&gt; [FilePath]
-</span><a href="#local-6989586621679101818"><span class="hs-identifier hs-var">makeEdgesSub</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101825"><span class="hs-identifier hs-var">nm</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath]
-</span><a href="#local-6989586621679101827"><span class="hs-identifier hs-var">cs</span></a></span><span>
+</span><a href="#local-6989586621679101840"><span class="hs-identifier hs-var">makeEdgesSub</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101847"><span class="hs-identifier hs-var">nm</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679101849"><span class="hs-identifier hs-var">cs</span></a></span><span>
 </span><span id="line-51"></span><span>
 </span><span id="line-52"></span><span class="annot"><span class="hs-comment">-- | Prints graph nodes (labels) onto a given file handle.</span></span><span>
 </span><span id="line-53"></span><span class="annot"><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkNodes"><span class="hs-identifier hs-type">mkNodes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Handle</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NodeFamily</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-54"></span><span id="mkNodes"><span class="annot"><span class="annottext">mkNodes :: Handle -&gt; NodeFamily -&gt; IO ()
-</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkNodes"><span class="hs-identifier hs-var hs-var">mkNodes</span></a></span></span><span> </span><span id="local-6989586621679101829"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101829"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">NF</span></span><span class="hs-special">{</span><span class="annot"><span class="annottext">nodeUIDs :: NodeFamily -&gt; [UID]
-</span><span class="hs-identifier hs-var">nodeUIDs</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101832"><span class="annot"><span class="annottext">[UID]
-</span><a href="#local-6989586621679101832"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nodeLabels :: NodeFamily -&gt; [FilePath]
-</span><span class="hs-identifier hs-var">nodeLabels</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101834"><span class="annot"><span class="annottext">[FilePath]
-</span><a href="#local-6989586621679101834"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfLabel :: NodeFamily -&gt; FilePath
-</span><span class="hs-identifier hs-var">nfLabel</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101836"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101836"><span class="hs-identifier hs-var">lbl</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfColour :: NodeFamily -&gt; FilePath
-</span><span class="hs-identifier hs-var">nfColour</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101838"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101838"><span class="hs-identifier hs-var">col</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkNodes"><span class="hs-identifier hs-var hs-var">mkNodes</span></a></span></span><span> </span><span id="local-6989586621679101851"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679101851"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">NF</span></span><span class="hs-special">{</span><span class="annot"><span class="annottext">nodeUIDs :: NodeFamily -&gt; [UID]
+</span><span class="hs-identifier hs-var">nodeUIDs</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101854"><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679101854"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nodeLabels :: NodeFamily -&gt; [FilePath]
+</span><span class="hs-identifier hs-var">nodeLabels</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101856"><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679101856"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfLabel :: NodeFamily -&gt; FilePath
+</span><span class="hs-identifier hs-var">nfLabel</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101858"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101858"><span class="hs-identifier hs-var">lbl</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfColour :: NodeFamily -&gt; FilePath
+</span><span class="hs-identifier hs-var">nfColour</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101860"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101860"><span class="hs-identifier hs-var">col</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-55"></span><span>    </span><span class="annot"><span class="annottext">((FilePath, FilePath) -&gt; IO ()) -&gt; [(FilePath, FilePath)] -&gt; IO ()
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Foldable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m ()
 </span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Handle -&gt; FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101829"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; IO ())
+</span><a href="#local-6989586621679101851"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; IO ())
 -&gt; ((FilePath, FilePath) -&gt; FilePath)
 -&gt; (FilePath, FilePath)
 -&gt; IO ()
@@ -277,14 +277,14 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 -&gt; (FilePath, FilePath) -&gt; FilePath
 forall a b c. (a -&gt; b -&gt; c) -&gt; (a, b) -&gt; c
 </span><span class="hs-identifier hs-var">uncurry</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath -&gt; FilePath
-</span><a href="#local-6989586621679101840"><span class="hs-identifier hs-var">makeNodesSub</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101838"><span class="hs-identifier hs-var">col</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([(FilePath, FilePath)] -&gt; IO ())
+</span><a href="#local-6989586621679101862"><span class="hs-identifier hs-var">makeNodesSub</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101860"><span class="hs-identifier hs-var">col</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([(FilePath, FilePath)] -&gt; IO ())
 -&gt; [(FilePath, FilePath)] -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[FilePath] -&gt; [FilePath] -&gt; [(FilePath, FilePath)]
 forall a b. [a] -&gt; [b] -&gt; [(a, b)]
 </span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="annot"><span class="annottext">[FilePath]
-</span><a href="#local-6989586621679101834"><span class="hs-identifier hs-var">ls</span></a></span><span> </span><span class="annot"><span class="annottext">([FilePath] -&gt; [(FilePath, FilePath)])
+</span><a href="#local-6989586621679101856"><span class="hs-identifier hs-var">ls</span></a></span><span> </span><span class="annot"><span class="annottext">([FilePath] -&gt; [(FilePath, FilePath)])
 -&gt; [FilePath] -&gt; [(FilePath, FilePath)]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; FilePath) -&gt; [UID] -&gt; [FilePath]
@@ -292,37 +292,37 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; FilePath
 forall a. Show a =&gt; a -&gt; FilePath
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">[UID]
-</span><a href="#local-6989586621679101832"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><a href="#local-6989586621679101854"><span class="hs-identifier hs-var">u</span></a></span><span>
 </span><span id="line-56"></span><span>    </span><span class="annot"><span class="annottext">Handle -&gt; FilePath -&gt; [UID] -&gt; IO ()
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkSubgraph"><span class="hs-identifier hs-var">mkSubgraph</span></a></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101829"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101836"><span class="hs-identifier hs-var">lbl</span></a></span><span> </span><span class="annot"><span class="annottext">[UID]
-</span><a href="#local-6989586621679101832"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><a href="#local-6989586621679101851"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101858"><span class="hs-identifier hs-var">lbl</span></a></span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679101854"><span class="hs-identifier hs-var">u</span></a></span><span>
 </span><span id="line-57"></span><span>    </span><span class="hs-keyword">where</span><span>
 </span><span id="line-58"></span><span>        </span><span class="hs-comment">-- Creates a node based on the kind of datatype (indented for subgraphs)</span><span>
-</span><span id="line-59"></span><span>        </span><span class="annot"><a href="#local-6989586621679101840"><span class="hs-identifier hs-type">makeNodesSub</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Colour</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-60"></span><span>        </span><span id="local-6989586621679101840"><span class="annot"><span class="annottext">makeNodesSub :: FilePath -&gt; FilePath -&gt; FilePath -&gt; FilePath
-</span><a href="#local-6989586621679101840"><span class="hs-identifier hs-var hs-var">makeNodesSub</span></a></span></span><span> </span><span id="local-6989586621679101842"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101842"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679101843"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101843"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679101844"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101844"><span class="hs-identifier hs-var">nm</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><span id="line-59"></span><span>        </span><span class="annot"><a href="#local-6989586621679101862"><span class="hs-identifier hs-type">makeNodesSub</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Colour</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-60"></span><span>        </span><span id="local-6989586621679101862"><span class="annot"><span class="annottext">makeNodesSub :: FilePath -&gt; FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679101862"><span class="hs-identifier hs-var hs-var">makeNodesSub</span></a></span></span><span> </span><span id="local-6989586621679101864"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101864"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679101865"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101865"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679101866"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101866"><span class="hs-identifier hs-var">nm</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;\t&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath
 </span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#filterInvalidChars"><span class="hs-identifier hs-var">filterInvalidChars</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101844"><span class="hs-identifier hs-var">nm</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679101866"><span class="hs-identifier hs-var">nm</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;\t[shape=box, color=black, style=filled, fillcolor=&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101842"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679101864"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;, label=\&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101843"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679101865"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;\&quot;];&quot;</span></span><span>
@@ -330,15 +330,15 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-62"></span><span class="annot"><span class="hs-comment">-- | Helper that only makes a subgraph if there are elements in the subgraph. Otherwise, it returns nothing.</span></span><span>
 </span><span id="line-63"></span><span class="annot"><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkSubgraph"><span class="hs-identifier hs-type">mkSubgraph</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Handle</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Label</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-64"></span><span id="mkSubgraph"><span class="annot"><span class="annottext">mkSubgraph :: Handle -&gt; FilePath -&gt; [UID] -&gt; IO ()
-</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkSubgraph"><span class="hs-identifier hs-var hs-var">mkSubgraph</span></a></span></span><span> </span><span id="local-6989586621679101845"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101845"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span id="local-6989586621679101846"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101846"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679101847"><span class="annot"><span class="annottext">[UID]
-</span><a href="#local-6989586621679101847"><span class="hs-identifier hs-var">u</span></a></span></span><span>
+</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#mkSubgraph"><span class="hs-identifier hs-var hs-var">mkSubgraph</span></a></span></span><span> </span><span id="local-6989586621679101867"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679101867"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span id="local-6989586621679101868"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101868"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679101869"><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679101869"><span class="hs-identifier hs-var">u</span></a></span></span><span>
 </span><span id="line-65"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Bool
 forall a. [a] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101846"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">() -&gt; IO ()
+</span><a href="#local-6989586621679101868"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">() -&gt; IO ()
 forall a. a -&gt; IO a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">()
@@ -348,23 +348,23 @@ forall a. Monoid a =&gt; a
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-67"></span><span>             </span><span class="annot"><span class="annottext">Handle -&gt; FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101845"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; IO ()) -&gt; FilePath -&gt; IO ()
+</span><a href="#local-6989586621679101867"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; IO ()) -&gt; FilePath -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;\n\tsubgraph &quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101846"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679101868"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot; {&quot;</span></span><span>
 </span><span id="line-68"></span><span>             </span><span class="annot"><span class="annottext">Handle -&gt; FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101845"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101867"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;\trank=\&quot;same\&quot;&quot;</span></span><span>
 </span><span id="line-69"></span><span>             </span><span class="annot"><span class="annottext">Handle -&gt; FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101845"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; IO ()) -&gt; FilePath -&gt; IO ()
+</span><a href="#local-6989586621679101867"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; IO ()) -&gt; FilePath -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;\t{&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
@@ -380,32 +380,32 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; FilePath
 forall a. Show a =&gt; a -&gt; FilePath
 </span><span class="hs-identifier hs-var">show</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[UID]
-</span><a href="#local-6989586621679101847"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679101869"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;}&quot;</span></span><span>
 </span><span id="line-70"></span><span>             </span><span class="annot"><span class="annottext">Handle -&gt; FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101845"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679101867"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;\t}\n&quot;</span></span><span>
 </span><span id="line-71"></span><span>
 </span><span id="line-72"></span><span class="annot"><span class="hs-comment">-- | Gets graph labels.</span></span><span>
 </span><span id="line-73"></span><span class="annot"><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#filterAndGI"><span class="hs-identifier hs-type">filterAndGI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GraphInfo</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">GraphInfo</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NodeFamily</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">NodeFamily</span></span><span class="hs-special">]</span><span>
 </span><span id="line-74"></span><span id="filterAndGI"><span class="annot"><span class="annottext">filterAndGI :: GraphInfo -&gt; [GraphInfo -&gt; NodeFamily] -&gt; [NodeFamily]
-</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#filterAndGI"><span class="hs-identifier hs-var hs-var">filterAndGI</span></a></span></span><span> </span><span id="local-6989586621679101848"><span class="annot"><span class="annottext">GraphInfo
-</span><a href="#local-6989586621679101848"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span id="local-6989586621679101849"><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
-</span><a href="#local-6989586621679101849"><span class="hs-identifier hs-var">toNodes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[NodeFamily]
-</span><a href="#local-6989586621679101850"><span class="hs-identifier hs-var">labels</span></a></span><span>
+</span><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#filterAndGI"><span class="hs-identifier hs-var hs-var">filterAndGI</span></a></span></span><span> </span><span id="local-6989586621679101870"><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679101870"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span id="local-6989586621679101871"><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679101871"><span class="hs-identifier hs-var">toNodes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[NodeFamily]
+</span><a href="#local-6989586621679101872"><span class="hs-identifier hs-var">labels</span></a></span><span>
 </span><span id="line-75"></span><span>    </span><span class="hs-keyword">where</span><span>
-</span><span id="line-76"></span><span>        </span><span id="local-6989586621679101850"><span class="annot"><span class="annottext">labels :: [NodeFamily]
-</span><a href="#local-6989586621679101850"><span class="hs-identifier hs-var hs-var">labels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((GraphInfo -&gt; NodeFamily) -&gt; NodeFamily)
+</span><span id="line-76"></span><span>        </span><span id="local-6989586621679101872"><span class="annot"><span class="annottext">labels :: [NodeFamily]
+</span><a href="#local-6989586621679101872"><span class="hs-identifier hs-var hs-var">labels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((GraphInfo -&gt; NodeFamily) -&gt; NodeFamily)
 -&gt; [GraphInfo -&gt; NodeFamily] -&gt; [NodeFamily]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(GraphInfo -&gt; NodeFamily) -&gt; GraphInfo -&gt; NodeFamily
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">GraphInfo
-</span><a href="#local-6989586621679101848"><span class="hs-identifier hs-var">gi</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
-</span><a href="#local-6989586621679101849"><span class="hs-identifier hs-var">toNodes</span></a></span><span>
+</span><a href="#local-6989586621679101870"><span class="hs-identifier hs-var">gi</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679101871"><span class="hs-identifier hs-var">toNodes</span></a></span><span>
 </span><span id="line-77"></span><span>
 </span><span id="line-78"></span><span class="annot"><span class="hs-comment">-- | Helper to remove invalid characters.</span></span><span>
 </span><span id="line-79"></span><span class="annot"><a href="Drasil.Generator.SRS.TraceabilityGraphs.html#filterInvalidChars"><span class="hs-identifier hs-type">filterInvalidChars</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
@@ -415,9 +415,9 @@ forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; FilePath -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`notElem`</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679101852"><span class="hs-identifier hs-var">invalidChars</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679101874"><span class="hs-identifier hs-var">invalidChars</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-81"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-82"></span><span>    </span><span id="local-6989586621679101852"><span class="annot"><span class="annottext">invalidChars :: FilePath
-</span><a href="#local-6989586621679101852"><span class="hs-identifier hs-var hs-var">invalidChars</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><span id="line-82"></span><span>    </span><span id="local-6989586621679101874"><span class="annot"><span class="annottext">invalidChars :: FilePath
+</span><a href="#local-6989586621679101874"><span class="hs-identifier hs-var hs-var">invalidChars</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;^[]!} (){-&gt;,$&quot;</span></span><span>
 </span><span id="line-83"></span></pre></body></html>

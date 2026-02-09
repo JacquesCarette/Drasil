@@ -536,13 +536,6 @@ digraph alltypes {
 		Lang	[shape=oval, color=darkviolet, label="Lang"];
 		}
 	}
-	subgraph packagefiles {
-		subgraph packagefiles{
-		PackageFiles	[shape=oval, color=darkgreen, label="PackageFiles"];
-		PackageFiles -> FilePath;
-		PackageFiles -> Doc;
-		}
-	}
 	subgraph odeinfo {
 		subgraph odeinfo{
 		ODEInfo	[shape=oval, color=cyan3, label="ODEInfo"];

@@ -1,5 +1,0 @@
-digraph packagefiles{
-PackageFiles	[shape=oval, color=darkgreen, label="PackageFiles"];
-PackageFiles -> FilePath;
-PackageFiles -> Doc;
-}

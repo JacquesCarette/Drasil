@@ -5781,6 +5781,18 @@
 <ellipse fill="none" stroke="#00868b" cx="19801.95" cy="-90" rx="50.09" ry="18"/>
 <text text-anchor="middle" x="19801.95" y="-86.3" font-family="Times,serif" font-size="14.00">FileData</text>
 </g>
+<!-- HasPathAndDoc -->
+<g id="node152" class="node">
+<title>HasPathAndDoc</title>
+<ellipse fill="none" stroke="pink" cx="19801.95" cy="-18" rx="85.29" ry="18"/>
+<text text-anchor="middle" x="19801.95" y="-14.3" font-family="Times,serif" font-size="14.00">HasPathAndDoc</text>
+</g>
+<!-- FileData&#45;&gt;HasPathAndDoc -->
+<g id="edge935" class="edge">
+<title>FileData&#45;&gt;HasPathAndDoc</title>
+<path fill="none" stroke="black" d="M19801.95,-71.7C19801.95,-63.98 19801.95,-54.71 19801.95,-46.11"/>
+<polygon fill="black" stroke="black" points="19805.45,-46.1 19801.95,-36.1 19798.45,-46.1 19805.45,-46.1"/>
+</g>
 <!-- FuncData -->
 <g id="node20" class="node">
 <title>FuncData</title>
@@ -5902,7 +5914,7 @@
 <text text-anchor="middle" x="22541.95" y="-86.3" font-family="Times,serif" font-size="14.00">ValueState</text>
 </g>
 <!-- p_CppSrcCode_CppHdrCode -->
-<g id="node152" class="node">
+<g id="node153" class="node">
 <title>p_CppSrcCode_CppHdrCode</title>
 <ellipse fill="none" stroke="black" cx="9593.95" cy="-90" rx="142.97" ry="18"/>
 <text text-anchor="middle" x="9593.95" y="-86.3" font-family="Times,serif" font-size="14.00">p_CppSrcCode_CppHdrCode</text>
@@ -6520,7 +6532,7 @@
 <polygon fill="black" stroke="black" points="11019.27,-35.88 11028.7,-31.04 11018.31,-28.95 11019.27,-35.88"/>
 </g>
 <!-- _p -->
-<g id="node153" class="node">
+<g id="node154" class="node">
 <title>_p</title>
 <ellipse fill="none" stroke="black" cx="595.95" cy="-90" rx="27" ry="18"/>
 <text text-anchor="middle" x="595.95" y="-86.3" font-family="Times,serif" font-size="14.00">_p</text>

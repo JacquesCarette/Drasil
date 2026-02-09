@@ -119,6 +119,7 @@ instance GHC.Classes.Eq Drasil.Shared.AST.VisibilityTag
 instance GHC.Classes.Ord Drasil.Shared.AST.QualifiedName
 instance GHC.Classes.Eq Drasil.Shared.AST.QualifiedName
 instance GHC.Classes.Eq Drasil.Shared.AST.ScopeTag
+instance Utils.Drasil.TypeClasses.HasPathAndDoc Drasil.Shared.AST.FileData Text.PrettyPrint.HughesPJ.Doc
 
 module Drasil.Shared.Helpers
 angles :: Doc -> Doc

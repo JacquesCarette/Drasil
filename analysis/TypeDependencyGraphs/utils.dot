@@ -9,6 +9,8 @@ digraph alltypes {
 	}
 	subgraph englihs {
 	}
+	subgraph fileio {
+	}
 	subgraph filepath {
 		subgraph relativefile{
 		RelativeFile	[shape=oval, color=darkgreen, label="RelativeFile"];
@@ -18,6 +20,8 @@ digraph alltypes {
 	subgraph litss {
 	}
 	subgraph strings {
+	}
+	subgraph typeclasess {
 	}
 	subgraph drails {
 	}

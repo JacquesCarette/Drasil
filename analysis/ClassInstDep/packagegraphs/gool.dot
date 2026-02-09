@@ -768,6 +768,7 @@ VisibilitySym	[shape=oval, color=pink, label="VisibilitySym"];
 ParameterSym	[shape=oval, color=pink, label="ParameterSym"];
 MethodSym	[shape=oval, color=pink, label="MethodSym"];
 ModuleSym	[shape=oval, color=pink, label="ModuleSym"];
+HasPathAndDoc	[shape=oval, color=pink, label="HasPathAndDoc"];
 OOProg	[shape=oval, color=magenta, label="OOProg"];
 ProgramSym	[shape=oval, color=magenta, label="ProgramSym"];
 FileSym	[shape=oval, color=magenta, label="FileSym"];
@@ -1817,4 +1818,5 @@ CodeInfoProc -> VisibilitySym;
 CodeInfoProc -> ParameterSym;
 CodeInfoProc -> MethodSym;
 CodeInfoProc -> ModuleSym;
+FileData -> HasPathAndDoc;
 }

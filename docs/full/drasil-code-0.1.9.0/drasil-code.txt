@@ -310,12 +310,14 @@ data FileAndContents
 
 -- | Constructor for auxiliary files.
 fileAndContents :: FilePath -> Doc -> FileAndContents
+hasPathAndDocToFileAndContents :: HasPathAndDoc a Doc => a -> FileAndContents
 
 -- | The underlying data type for packages in all renderers.
 data PackageData a
 
 -- | Constructor for package data.
 packageData :: a -> [FileAndContents] -> PackageData a
+instance Utils.Drasil.TypeClasses.HasPathAndDoc Language.Drasil.Code.FileData.FileAndContents Text.PrettyPrint.HughesPJ.Doc
 
 module Language.Drasil.Code.FileNames
 
@@ -490,20 +492,6 @@ Swift :: Lang
 Julia :: Lang
 instance GHC.Show.Show Language.Drasil.Code.Lang.Lang
 instance GHC.Classes.Eq Language.Drasil.Code.Lang.Lang
-
-
--- | Contains the high-level functionality to create <a>PackageFiles</a>
---   and then produce the actual generated package files.
-module Language.Drasil.Code.PackageFiles
-
--- | Converts <a>FileData</a> (<a>FilePath</a>s with module data) and
---   <a>FileAndContents</a> (<a>FilePath</a>s with auxiliary document
---   information) into <a>PackageFiles</a> (a unified format for all file
---   types)
-consolidatePackageFiles :: [FileData] -> [FileAndContents] -> PackageFiles
-
--- | Outputs the requested 'Package Files' into system files.
-createPackageFiles :: PackageFiles -> IO ()
 
 
 -- | Defines a structure to contain scientifically-relevant information
@@ -1709,21 +1697,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aMnt
-oldCodeSpec :: HasOldCodeSpec c_aMnt => Lens' c_aMnt OldCodeSpec
-authorsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt People
-cMapO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [RelativeFile]
-constMapO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt ConstantMap
-constantsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Const]
-derivedInputsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Derived]
-execOrderO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Def]
-extInputsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Input]
-inputsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Input]
-modsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Mod]
-outputsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Output]
-pNameO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt Name
-systemdbO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt ChunkDB
+class HasOldCodeSpec c_aMen
+oldCodeSpec :: HasOldCodeSpec c_aMen => Lens' c_aMen OldCodeSpec
+authorsO :: HasOldCodeSpec c_aMen => Lens' c_aMen People
+cMapO :: HasOldCodeSpec c_aMen => Lens' c_aMen ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aMen => Lens' c_aMen [RelativeFile]
+constMapO :: HasOldCodeSpec c_aMen => Lens' c_aMen ConstantMap
+constantsO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Const]
+derivedInputsO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Derived]
+execOrderO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Def]
+extInputsO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Input]
+inputsO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Input]
+modsO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Mod]
+outputsO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Output]
+pNameO :: HasOldCodeSpec c_aMen => Lens' c_aMen Name
+systemdbO :: HasOldCodeSpec c_aMen => Lens' c_aMen ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -2937,21 +2925,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aMnt
-oldCodeSpec :: HasOldCodeSpec c_aMnt => Lens' c_aMnt OldCodeSpec
-authorsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt People
-cMapO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [RelativeFile]
-constMapO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt ConstantMap
-constantsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Const]
-derivedInputsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Derived]
-execOrderO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Def]
-extInputsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Input]
-inputsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Input]
-modsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Mod]
-outputsO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt [Output]
-pNameO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt Name
-systemdbO :: HasOldCodeSpec c_aMnt => Lens' c_aMnt ChunkDB
+class HasOldCodeSpec c_aMen
+oldCodeSpec :: HasOldCodeSpec c_aMen => Lens' c_aMen OldCodeSpec
+authorsO :: HasOldCodeSpec c_aMen => Lens' c_aMen People
+cMapO :: HasOldCodeSpec c_aMen => Lens' c_aMen ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aMen => Lens' c_aMen [RelativeFile]
+constMapO :: HasOldCodeSpec c_aMen => Lens' c_aMen ConstantMap
+constantsO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Const]
+derivedInputsO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Derived]
+execOrderO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Def]
+extInputsO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Input]
+inputsO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Input]
+modsO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Mod]
+outputsO :: HasOldCodeSpec c_aMen => Lens' c_aMen [Output]
+pNameO :: HasOldCodeSpec c_aMen => Lens' c_aMen Name
+systemdbO :: HasOldCodeSpec c_aMen => Lens' c_aMen ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

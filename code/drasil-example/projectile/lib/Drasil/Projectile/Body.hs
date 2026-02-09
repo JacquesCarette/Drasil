@@ -158,7 +158,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   [mass] ++ defs ++ [distance, motion, gravity, collision, rectilinear,
-  positionVec]
+  positionVec, cartesian]
 
 symbMap :: ChunkDB
 symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])

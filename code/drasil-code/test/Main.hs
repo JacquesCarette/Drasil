@@ -11,8 +11,8 @@ import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
 
 import Language.Drasil.Code (ImplementationType(..), makeSds)
 import Language.Drasil.GOOL (AuxiliarySym(..), package,
-  fileDataToFileAndContents, PackageData(..), pattern PackageData, unPP, unJP,
-  unCSP, unCPPP, unSP, unJLP)
+  hasPathAndDocToFileAndContents, PackageData(..), pattern PackageData,
+  unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import qualified Language.Drasil.GOOL as D (filePath, FileAndContents(..))
 
 import Utils.Drasil (createDirIfMissing)
@@ -68,7 +68,8 @@ genCode :: [PackageData ProgData] -> IO()
 genCode files =
   createCodeFiles $ files >>= \(PackageData prog aux) ->
     let label = progName prog
-        modCode = progMods prog <&> \modFileData -> (label, fileDataToFileAndContents modFileData)
+        modCode = progMods prog <&> \modFileData ->
+          (label, hasPathAndDocToFileAndContents modFileData)
         auxCode = aux <&> (label,)
     in modCode ++ auxCode
 

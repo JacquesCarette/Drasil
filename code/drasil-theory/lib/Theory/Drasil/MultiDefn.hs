@@ -15,7 +15,7 @@ import Control.Lens (makeLenses, view, (^.))
 import Data.List (union)
 import qualified Data.List.NonEmpty as NE
 
-import Drasil.Database (UID, HasUID(..), mkUid, showUID)
+import Drasil.Database (UID, HasUID(..), mkUid, showUID, HasChunkRefs(..))
 import Language.Drasil hiding (DefiningExpr)
 
 -- | 'DefiningExpr' are the data that make up a (quantity) definition, namely
@@ -57,6 +57,9 @@ data MultiDefn e = MultiDefn{
 }
 
 makeLenses ''MultiDefn
+
+instance HasChunkRefs (MultiDefn e) where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 instance HasUID           (MultiDefn e) where uid     = rUid
 instance HasSymbol        (MultiDefn e) where symbol  = symbol . (^. qd)

@@ -8,13 +8,13 @@ module Language.Drasil.Chunk.Relation (
 
 import Control.Lens (makeLenses, (^.), view)
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..))
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
 import Language.Drasil.Classes (Express(..),
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.NounPhrase.Types (NP)
+import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
 
 -- | For a concept ('ConceptChunk') that also has a 'Relation' ('ModelExpr') attached.
@@ -24,6 +24,9 @@ data RelationConcept = RC { _conc :: ConceptChunk
                           , _rel  :: ModelExpr
                           }
 makeLenses ''RelationConcept
+
+instance HasChunkRefs RelationConcept where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'RelationConcept'.
 instance HasUID        RelationConcept where uid = conc . uid

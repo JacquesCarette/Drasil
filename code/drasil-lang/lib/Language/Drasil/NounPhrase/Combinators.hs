@@ -40,7 +40,7 @@ import Language.Drasil.NounPhrase
       CapitalizationRule(CapWords, CapFirst, CapNothing),
       NounPhrase(phraseNP, pluralNP),
       nounPhrase'', surroundNPStruct)
-import Language.Drasil.NounPhrase.Types (NPStruct((:+:),S,P))
+import Language.Drasil.NounPhrase.Core (NPStruct((:+:),S,P))
 
 --Maybe move these to a separate Drasil.NounPhrase section
 -- | Helper function that places a 'String' in between two 'NP's. Plural case is

@@ -4,7 +4,7 @@ module Drasil.Code.CodeVar where
 
 import Control.Lens ((^.), view, makeLenses, Lens')
 
-import Drasil.Database (HasUID(uid), (+++))
+import Drasil.Database (HasUID(uid), (+++), HasChunkRefs(..))
 
 import Drasil.Code.Classes (Callable)
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
@@ -41,6 +41,9 @@ data CodeChunk = CodeC { _qc  :: DefinedQuantityDict
                        }
 makeLenses ''CodeChunk
 
+instance HasChunkRefs CodeChunk where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+
 -- | Finds the 'UID' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance HasUID        CodeChunk where uid = qc . uid
 -- | Finds the term ('NP') of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
@@ -68,6 +71,9 @@ data CodeVarChunk = CodeVC {_ccv :: CodeChunk,
                             _obv :: Maybe CodeChunk}
 makeLenses ''CodeVarChunk
 
+instance HasChunkRefs CodeVarChunk where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance HasUID        CodeVarChunk where uid = ccv . uid
 -- | Finds the term ('NP') of the 'CodeChunk' used to make the 'CodeVarChunk'.
@@ -92,6 +98,9 @@ instance MayHaveUnit   CodeVarChunk where getUnit = getUnit . view ccv
 -- | Chunk representing a function.
 newtype CodeFuncChunk = CodeFC {_ccf :: CodeChunk}
 makeLenses ''CodeFuncChunk
+
+instance HasChunkRefs CodeFuncChunk where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance HasUID        CodeFuncChunk where uid = ccf . uid

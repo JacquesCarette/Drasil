@@ -13,13 +13,13 @@ module Language.Drasil.Chunk.CommonIdea (
 
 import Control.Lens (makeLenses, (^.), view)
 
-import Drasil.Database (UID, HasUID(uid))
+import Drasil.Database (UID, HasUID(uid), HasChunkRefs(..))
 import Utils.Drasil (repUnd)
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nc)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
-import Language.Drasil.NounPhrase.Types (NP)
+import Language.Drasil.NounPhrase.Core (NP)
 
 -- | The common idea (with 'NounPhrase') data type. It must have a 'UID',
 -- 'NounPhrase' for its term, an abbreviation ('String'), and a domain (['UID']).
@@ -29,6 +29,9 @@ import Language.Drasil.NounPhrase.Types (NP)
 -- Ex. The term "Operating System" has the abbreviation "OS" and comes from the domain of computer science.
 data CI = CI { _nc' :: IdeaDict, _ab :: String, cdom' :: [UID]}
 makeLenses ''CI
+
+instance HasChunkRefs CI where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds 'UID' of the 'IdeaDict' used to make the 'CI'.
 instance HasUID        CI where uid  = nc' . uid

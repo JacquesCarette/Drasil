@@ -3,7 +3,7 @@ module Drasil.SSP.References where
 import Language.Drasil
 
 import Data.Drasil.Citations (jnlCGJ, koothoor2013, parnasClements1986,
- smithEtAl2007, smithLai2005, smithKoothoor2016)
+ smithEtAl2007, smithLai2005, smithKoothoor2016, hibbeler2004)
 import Data.Drasil.People (bKarchewski, cfLee, dgFredlund, dStolle, dyZhu,
   grChen, jKrahn, pGuo, pjCleall, qhQian, ssLing, tltZhan, yCLi, ymChen,
   rHuston, hJosephs, nrMorgenstern, vePrice)
@@ -11,7 +11,7 @@ import Data.Drasil.People (bKarchewski, cfLee, dgFredlund, dStolle, dyZhu,
 citations :: BibRef
 citations = [chen2005, parnasClements1986, koothoor2013, fredlund1977,
              smithEtAl2007, smithLai2005, smithKoothoor2016, li2010,
-             karchewski2012, huston2008, morgenstern1965]
+             karchewski2012, huston2008, morgenstern1965, hibbeler2004]
 
 chen2005, fredlund1977, li2010, karchewski2012, huston2008,
   morgenstern1965 :: Citation

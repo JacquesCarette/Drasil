@@ -11,6 +11,7 @@ module Language.Drasil.Chunk.Concept.Core(
 import Control.Lens (makeLenses, (^.), view)
 
 import Drasil.Database (HasChunkRefs(..), UID, HasUID(..))
+import qualified Data.Set as Set
 
 import Language.Drasil.ShortName (HasShortName(..), ShortName)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
@@ -37,7 +38,12 @@ data ConceptChunk = ConDict { _idea :: IdeaDict -- ^ Contains the idea of the co
 makeLenses ''ConceptChunk
 
 instance HasChunkRefs ConceptChunk where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs c = Set.unions
+    [ chunkRefs (c ^. idea)
+    , chunkRefs (c ^. defn')
+    , Set.fromList (cdom c)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)

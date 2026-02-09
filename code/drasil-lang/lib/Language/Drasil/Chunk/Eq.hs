@@ -15,7 +15,7 @@ module Language.Drasil.Chunk.Eq (
 ) where
 
 import Control.Lens ((^.), view, lens, Lens', to)
-import Drasil.Database (UID, HasUID(..))
+import Drasil.Database (UID, HasUID(..), HasChunkRefs(..))
 
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
@@ -31,7 +31,7 @@ import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import qualified Language.Drasil.ModelExpr.Lang as M (ModelExpr(C))
-import Language.Drasil.NounPhrase.Types (NP)
+import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
@@ -48,6 +48,9 @@ qdInputs = lens (\(QD _ ins _) -> ins) (\(QD qua _ e) ins' -> QD qua ins' e)
 
 qdExpr :: Lens' (QDefinition e) e
 qdExpr = lens (\(QD _ _ e) -> e) (\(QD qua ins _) e' -> QD qua ins e')
+
+instance HasChunkRefs (QDefinition e) where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 instance HasUID          (QDefinition e) where uid = qdQua . uid
 instance NamedIdea       (QDefinition e) where term = qdQua . term

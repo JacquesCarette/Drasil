@@ -6,6 +6,7 @@ module Drasil.Generator.BaseChunkDB (
 import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder11)
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
   DefinedQuantityDict, UnitDefn, LabelledContent)
+import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Education (educon)
@@ -70,6 +71,9 @@ basisConceptChunks =
   --              in the basis.
   [algorithm, errMsg, program] ++ srsDomains ++ mathcon
 
+basisCitations :: [Citation]
+basisCitations = [cartesianWiki, lineSource, pointSource]
+
 -- | The basis chunk database, which contains the basic idea dicts, concept chunks,
 --  and units that are used in all of the case studies. This database is then added
 -- to all of the new chunk databases created using the cdb constructor.
@@ -79,6 +83,7 @@ basisCDB =
   $ insertAll basisConceptChunks
   $ insertAll basisSymbols
   $ insertAll basisIdeaDicts
+  $ insertAll basisCitations
     empty
 
 -- | Create a `ChunkDB` containing all knowledge (chunks) required to generate

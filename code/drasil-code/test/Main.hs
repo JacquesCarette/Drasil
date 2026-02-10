@@ -104,5 +104,5 @@ jlClasses unRepr unRepr' = zipWith
 -- | Creates the requested 'Code' by producing files.
 createCodeFiles :: [(Label, D.FileAndContents)] -> IO ()
 createCodeFiles = traverse_ $ \(name, file) -> do
-  let path = name </> D.filePath file
+  let path = name </> D.filePath file -- FIXME [Brandon Bosman, Feb. 10, 2026]: make GOOL allow us to add name to path internally
   createFile path (render $ D.fileDoc file)

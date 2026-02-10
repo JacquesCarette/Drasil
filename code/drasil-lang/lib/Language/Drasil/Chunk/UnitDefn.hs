@@ -28,7 +28,7 @@ import Drasil.Database (HasChunkRefs(..), UID, HasUID(..), mkUid)
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
-import Language.Drasil.NounPhrase (cn,cn',NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (cn,cn',NP)
 import Language.Drasil.Symbol (Symbol(Label))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift),
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))

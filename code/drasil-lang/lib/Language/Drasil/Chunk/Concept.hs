@@ -15,7 +15,7 @@ import Language.Drasil.Classes (Idea, Definition(defn), ConceptDomain(cdom), Con
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Chunk.NamedIdea(mkIdea,nw, nc)
-import Language.Drasil.NounPhrase (NP, pn)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
 
 --FIXME: Temporary ConceptDomain tag hacking to not break everything.

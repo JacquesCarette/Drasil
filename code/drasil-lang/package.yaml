@@ -46,6 +46,7 @@ library:
   - Language.Drasil.Expr.Development
   - Language.Drasil.Literal.Development
   - Language.Drasil.ModelExpr.Development
+  - Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators
   - Language.Drasil.NounPhrase.Combinators
   - Language.Drasil.Sentence.Combinators
   - Language.Drasil.ShortHands

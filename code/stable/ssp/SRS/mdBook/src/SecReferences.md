@@ -48,14 +48,10 @@
 
 [12]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." *Reliable Computing, Special Issue on Reliable Engineering Computation*, vol. 13, no. 1, February, 2007. <https://doi.org/10.1007/s11155-006-9020-7>. pp. 83&ndash;107.
 
-<div id="lineSource"></div>
-
-[13]: The Editors of Encyclopaedia Britannica. *Line*. June, 2019. <https://www.britannica.com/science/line-mathematics>.
-
 <div id="cartesianWiki"></div>
 
-[14]: Wikipedia Contributors. *Cartesian coordinate system*. June, 2019. <https://en.wikipedia.org/wiki/Cartesian_coordinate_system>.
+[13]: Wikipedia Contributors. *Cartesian coordinate system*. June, 2019. <https://en.wikipedia.org/wiki/Cartesian_coordinate_system>.
 
 <div id="li2010"></div>
 
-[15]: Yu-Chao, Li, Yun-Min, Chen, Zhan, Tony L. T., Sao-Sheng, Ling, and Cleall, Peter John. "An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm." *Canadian Geotechnical Journal*, vol. 47, no. 7, June, 2010. pp. 806&ndash;820. Print.
+[14]: Yu-Chao, Li, Yun-Min, Chen, Zhan, Tony L. T., Sao-Sheng, Ling, and Cleall, Peter John. "An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm." *Canadian Geotechnical Journal*, vol. 47, no. 7, June, 2010. pp. 806&ndash;820. Print.

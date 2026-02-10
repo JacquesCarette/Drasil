@@ -23,6 +23,7 @@ import Control.Lens ((^.))
 import Data.Functor ((<&>))
 import Data.Foldable (traverse_)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
+import System.FilePath ((</>))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 import HelloWorld (helloWorldOO, helloWorldProc)
@@ -103,5 +104,5 @@ jlClasses unRepr unRepr' = zipWith
 -- | Creates the requested 'Code' by producing files.
 createCodeFiles :: [(Label, D.FileAndContents)] -> IO ()
 createCodeFiles = traverse_ $ \(name, file) -> do
-  let path = name ++ "/" ++ D.filePath file
+  let path = name </> D.filePath file
   createFile path (render $ D.fileDoc file)

@@ -15,7 +15,7 @@ import Language.Drasil.GOOL (AuxiliarySym(..), package,
   unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import qualified Language.Drasil.GOOL as D (filePath, FileAndContents(..))
 
-import Utils.Drasil (createDirIfMissing)
+import Utils.Drasil (createDirIfMissing, createFile)
 
 import Text.PrettyPrint.HughesPJ (render)
 import Control.Monad.State (evalState, runState)
@@ -23,8 +23,6 @@ import Control.Lens ((^.))
 import Data.Functor ((<&>))
 import Data.Foldable (traverse_)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
-import System.FilePath.Posix (takeDirectory)
-import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 import HelloWorld (helloWorldOO, helloWorldProc)
@@ -104,17 +102,6 @@ jlClasses unRepr unRepr' = zipWith
 
 -- | Creates the requested 'Code' by producing files.
 createCodeFiles :: [(Label, D.FileAndContents)] -> IO ()
-createCodeFiles = traverse_ createCodeFile
-
--- | Helper that creates the file and renders code.
-createCodeFile :: (Label, D.FileAndContents) -> IO ()
-createCodeFile (n, file) = do
-  let path = D.filePath file
-      code = D.fileDoc file
-  createDirIfMissing False n
-  setCurrentDirectory n
-  createDirIfMissing True (takeDirectory path)
-  h <- openFile path WriteMode
-  hPutStrLn h (render code)
-  hClose h
-  setCurrentDirectory ".."
+createCodeFiles = traverse_ $ \(name, file) -> do
+  let path = name ++ "/" ++ D.filePath file
+  createFile path (render $ D.fileDoc file)

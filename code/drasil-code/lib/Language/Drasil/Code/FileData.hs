@@ -2,11 +2,9 @@
 {-# LANGUAGE FlexibleContexts #-}
 -- | Defines the underlying data types used in the package extension.
 module Language.Drasil.Code.FileData (FileAndContents(filePath, fileDoc),
-  fileAndContents, hasPathAndDocToFileAndContents, PackageData(packageProg,
-  packageAux), packageData
-) where
+  fileAndContents, hasPathAndDocToFileAndContents) where
 
-import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
+import Text.PrettyPrint.HughesPJ (Doc)
 import Utils.Drasil (HasPathAndDoc(..))
 
 -- | The underlying data type for auxiliary files in all renderers.
@@ -22,10 +20,3 @@ instance HasPathAndDoc FileAndContents Doc where
 
 hasPathAndDocToFileAndContents :: (HasPathAndDoc a Doc) => a -> FileAndContents
 hasPathAndDocToFileAndContents file = fileAndContents (getPath file) (getDoc file)
-
--- | The underlying data type for packages in all renderers.
-data PackageData a = PackD {packageProg :: a, packageAux :: [FileAndContents]}
-
--- | Constructor for package data.
-packageData :: a -> [FileAndContents] -> PackageData a
-packageData p as = PackD p (filter (not . isEmpty . fileDoc) as)

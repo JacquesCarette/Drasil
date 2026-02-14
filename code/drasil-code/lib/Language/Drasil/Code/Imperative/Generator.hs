@@ -41,11 +41,12 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
-  makeSds, AuxiliarySym(..), package)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (makeSds,
+  AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
-import Language.Drasil.Code.FileData (PackageData(..), FileAndContents(..),
-  fileAndContents, hasPathAndDocToFileAndContents)
+import Language.Drasil.Code.FileData (FileAndContents(..), fileAndContents,
+  hasPathAndDocToFileAndContents)
+import Language.Drasil.Code.PackageData (PackageData(..), package)
 import Language.Drasil.Code.FileNames(sampleInputName)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))

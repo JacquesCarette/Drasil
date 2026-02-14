@@ -98,12 +98,12 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">srsDomains</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk] -&gt; [ConceptChunk] -&gt; [ConceptChunk]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
-</span><a href="#local-6989586621679099903"><span class="hs-identifier hs-var">basisMathConcepts</span></a></span><span>
+</span><a href="#local-6989586621679099905"><span class="hs-identifier hs-var">basisMathConcepts</span></a></span><span>
 </span><span id="line-72"></span><span>  </span><span class="hs-keyword">where</span><span>
 </span><span id="line-73"></span><span>    </span><span class="hs-comment">-- These concepts carry citation refs in their definitions and should be</span><span>
 </span><span id="line-74"></span><span>    </span><span class="hs-comment">-- provided explicitly by case studies that use them.</span><span>
-</span><span id="line-75"></span><span>    </span><span id="local-6989586621679099903"><span class="annot"><span class="annottext">basisMathConcepts :: [ConceptChunk]
-</span><a href="#local-6989586621679099903"><span class="hs-identifier hs-var hs-var">basisMathConcepts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; Bool) -&gt; [ConceptChunk] -&gt; [ConceptChunk]
+</span><span id="line-75"></span><span>    </span><span id="local-6989586621679099905"><span class="annot"><span class="annottext">basisMathConcepts :: [ConceptChunk]
+</span><a href="#local-6989586621679099905"><span class="hs-identifier hs-var hs-var">basisMathConcepts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; Bool) -&gt; [ConceptChunk] -&gt; [ConceptChunk]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; [ConceptChunk] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool

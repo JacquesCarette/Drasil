@@ -18,24 +18,24 @@
 </span><span id="line-18"></span><span class="annot"><span class="hs-comment">-- | Generate a &quot;website&quot; (HTML file) softifact.</span></span><span>
 </span><span id="line-19"></span><span class="annot"><a href="Drasil.Generator.Website.html#exportWebsite"><span class="hs-identifier hs-type">exportWebsite</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Generator.Formats.html#Filename"><span class="hs-identifier hs-type">Filename</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-20"></span><span id="exportWebsite"><span class="annot"><span class="annottext">exportWebsite :: System -&gt; Document -&gt; Filename -&gt; IO ()
-</span><a href="Drasil.Generator.Website.html#exportWebsite"><span class="hs-identifier hs-var hs-var">exportWebsite</span></a></span></span><span> </span><span id="local-6989586621679101895"><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679101895"><span class="hs-identifier hs-var">syst</span></a></span></span><span> </span><span id="local-6989586621679101896"><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679101896"><span class="hs-identifier hs-var">doc</span></a></span></span><span> </span><span id="local-6989586621679101897"><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679101897"><span class="hs-identifier hs-var">fileName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-21"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679101904"><span class="annot"><span class="annottext">printSetting :: PrintingInformation
-</span><a href="#local-6989586621679101904"><span class="hs-identifier hs-var hs-var">printSetting</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="Drasil.Generator.Website.html#exportWebsite"><span class="hs-identifier hs-var hs-var">exportWebsite</span></a></span></span><span> </span><span id="local-6989586621679101897"><span class="annot"><span class="annottext">System
+</span><a href="#local-6989586621679101897"><span class="hs-identifier hs-var">syst</span></a></span></span><span> </span><span id="local-6989586621679101898"><span class="annot"><span class="annottext">Document
+</span><a href="#local-6989586621679101898"><span class="hs-identifier hs-var">doc</span></a></span></span><span> </span><span id="local-6989586621679101899"><span class="annot"><span class="annottext">Filename
+</span><a href="#local-6989586621679101899"><span class="hs-identifier hs-var">fileName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-21"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679101906"><span class="annot"><span class="annottext">printSetting :: PrintingInformation
+</span><a href="#local-6989586621679101906"><span class="hs-identifier hs-var hs-var">printSetting</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Map UID Reference
 -&gt; Stage
 -&gt; PrintingConfiguration
 -&gt; PrintingInformation
 </span><span class="hs-identifier hs-var">piSys</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679101895"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">System -&gt; Getting ChunkDB System ChunkDB -&gt; ChunkDB
+</span><a href="#local-6989586621679101897"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">System -&gt; Getting ChunkDB System ChunkDB -&gt; ChunkDB
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB System ChunkDB
 forall c. HasSystem c =&gt; Lens' c ChunkDB
 Lens' System ChunkDB
 </span><span class="hs-identifier hs-var">systemdb</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679101895"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">System
+</span><a href="#local-6989586621679101897"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">System
 -&gt; Getting (Map UID Reference) System (Map UID Reference)
 -&gt; Map UID Reference
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -45,74 +45,74 @@ Lens' System (Map UID Reference)
 </span><span class="hs-identifier hs-var">refTable</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Stage
 </span><span class="hs-identifier hs-var">Equational</span></span><span> </span><span class="annot"><span class="annottext">PrintingConfiguration
 </span><span class="hs-identifier hs-var">defaultConfiguration</span></span><span>
-</span><span id="line-22"></span><span>      </span><span id="local-6989586621679101905"><span class="annot"><span class="annottext">dir :: Filename
-</span><a href="#local-6989586621679101905"><span class="hs-identifier hs-var hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename
+</span><span id="line-22"></span><span>      </span><span id="local-6989586621679101907"><span class="annot"><span class="annottext">dir :: Filename
+</span><a href="#local-6989586621679101907"><span class="hs-identifier hs-var hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;Website/HTML&quot;</span></span><span>
-</span><span id="line-23"></span><span>      </span><span id="local-6989586621679101906"><span class="annot"><span class="annottext">pd :: Document
-</span><a href="#local-6989586621679101906"><span class="hs-identifier hs-var hs-var">pd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Document -&gt; Document
+</span><span id="line-23"></span><span>      </span><span id="local-6989586621679101908"><span class="annot"><span class="annottext">pd :: Document
+</span><a href="#local-6989586621679101908"><span class="hs-identifier hs-var hs-var">pd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Document -&gt; Document
 </span><span class="hs-identifier hs-var">makeDocument</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679101904"><span class="hs-identifier hs-var">printSetting</span></a></span><span> </span><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679101896"><span class="hs-identifier hs-var">doc</span></a></span><span>
+</span><a href="#local-6989586621679101906"><span class="hs-identifier hs-var">printSetting</span></a></span><span> </span><span class="annot"><span class="annottext">Document
+</span><a href="#local-6989586621679101898"><span class="hs-identifier hs-var">doc</span></a></span><span>
 </span><span id="line-24"></span><span>
 </span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; Filename -&gt; IO ()
 </span><span class="hs-identifier hs-var">createDirIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679101905"><span class="hs-identifier hs-var">dir</span></a></span><span>
+</span><a href="#local-6989586621679101907"><span class="hs-identifier hs-var">dir</span></a></span><span>
 </span><span id="line-26"></span><span>
-</span><span id="line-27"></span><span>  </span><span id="local-6989586621679101907"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101907"><span class="hs-identifier hs-var">outh</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; IOMode -&gt; IO Handle
+</span><span id="line-27"></span><span>  </span><span id="local-6989586621679101909"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679101909"><span class="hs-identifier hs-var">outh</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; IOMode -&gt; IO Handle
 </span><span class="hs-identifier hs-var">openFile</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679101905"><span class="hs-identifier hs-var">dir</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
+</span><a href="#local-6989586621679101907"><span class="hs-identifier hs-var">dir</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;/&quot;</span></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679101897"><span class="hs-identifier hs-var">fileName</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
+</span><a href="#local-6989586621679101899"><span class="hs-identifier hs-var">fileName</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;.html&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IOMode
 </span><span class="hs-identifier hs-var">WriteMode</span></span><span>
 </span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; Filename -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101907"><span class="hs-identifier hs-var">outh</span></a></span><span> </span><span class="annot"><span class="annottext">(Filename -&gt; IO ()) -&gt; Filename -&gt; IO ()
+</span><a href="#local-6989586621679101909"><span class="hs-identifier hs-var">outh</span></a></span><span> </span><span class="annot"><span class="annottext">(Filename -&gt; IO ()) -&gt; Filename -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Filename
 </span><span class="hs-identifier hs-var">render</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Filename) -&gt; Doc -&gt; Filename
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Document -&gt; Doc
 </span><span class="hs-identifier hs-var">genHTML</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679101897"><span class="hs-identifier hs-var">fileName</span></a></span><span> </span><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679101906"><span class="hs-identifier hs-var">pd</span></a></span><span>
+</span><a href="#local-6989586621679101899"><span class="hs-identifier hs-var">fileName</span></a></span><span> </span><span class="annot"><span class="annottext">Document
+</span><a href="#local-6989586621679101908"><span class="hs-identifier hs-var">pd</span></a></span><span>
 </span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; IO ()
 </span><span class="hs-identifier hs-var">hClose</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101907"><span class="hs-identifier hs-var">outh</span></a></span><span>
+</span><a href="#local-6989586621679101909"><span class="hs-identifier hs-var">outh</span></a></span><span>
 </span><span id="line-30"></span><span>
-</span><span id="line-31"></span><span>  </span><span id="local-6989586621679101908"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101908"><span class="hs-identifier hs-var">outh2</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; IOMode -&gt; IO Handle
+</span><span id="line-31"></span><span>  </span><span id="local-6989586621679101910"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679101910"><span class="hs-identifier hs-var">outh2</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; IOMode -&gt; IO Handle
 </span><span class="hs-identifier hs-var">openFile</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679101905"><span class="hs-identifier hs-var">dir</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
+</span><a href="#local-6989586621679101907"><span class="hs-identifier hs-var">dir</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;/&quot;</span></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679101897"><span class="hs-identifier hs-var">fileName</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
+</span><a href="#local-6989586621679101899"><span class="hs-identifier hs-var">fileName</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;.css&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IOMode
 </span><span class="hs-identifier hs-var">WriteMode</span></span><span>
 </span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; Filename -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101908"><span class="hs-identifier hs-var">outh2</span></a></span><span> </span><span class="annot"><span class="annottext">(Filename -&gt; IO ()) -&gt; Filename -&gt; IO ()
+</span><a href="#local-6989586621679101910"><span class="hs-identifier hs-var">outh2</span></a></span><span> </span><span class="annot"><span class="annottext">(Filename -&gt; IO ()) -&gt; Filename -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Filename
 </span><span class="hs-identifier hs-var">render</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Filename) -&gt; Doc -&gt; Filename
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Document -&gt; Doc
 </span><span class="hs-identifier hs-var">makeCSS</span></span><span> </span><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679101896"><span class="hs-identifier hs-var">doc</span></a></span><span>
+</span><a href="#local-6989586621679101898"><span class="hs-identifier hs-var">doc</span></a></span><span>
 </span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; IO ()
 </span><span class="hs-identifier hs-var">hClose</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679101908"><span class="hs-identifier hs-var">outh2</span></a></span><span>
+</span><a href="#local-6989586621679101910"><span class="hs-identifier hs-var">outh2</span></a></span><span>
 </span><span id="line-34"></span></pre></body></html>

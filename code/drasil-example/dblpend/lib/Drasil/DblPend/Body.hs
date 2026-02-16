@@ -129,7 +129,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
-  gravitationalConst, gravity] ++
+  gravitationalConst, gravity, cartesian] ++
   -- UnitalChunks
   [cw len]
 

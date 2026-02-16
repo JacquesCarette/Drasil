@@ -61,7 +61,7 @@ main = do
   setCurrentDirectory workingDir
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
-genCode :: [PackageData ProgData] -> IO()
+genCode :: [PackageData] -> IO()
 genCode files = createCodeFiles (concatMap (\p -> replicate (length (progMods
   (packageProg p)) + length (packageAux p)) (progName $ packageProg p)) files) $
     makeCode (map (progMods . packageProg) files) (map packageAux files)
@@ -71,7 +71,7 @@ genCode files = createCodeFiles (concatMap (\p -> replicate (length (progMods
 -- (CodeInfo and a renderer) each time this function is called
 -- | Gathers the GOOL file tests and prepares them for rendering
 classes :: (OOProg r, AuxiliarySym r', Monad r') => (r (OO.Program r) -> ProgData) ->
-  (r' (PackageData ProgData) -> PackageData ProgData) -> [PackageData ProgData]
+  (r' PackageData -> PackageData) -> [PackageData]
 classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
@@ -84,7 +84,7 @@ classes unRepr unRepr' = zipWith
 
 -- Classes that Julia is currently able to render
 jlClasses :: (ProcProg r, AuxiliarySym r', Monad r') => (r (Proc.Program r) -> ProgData) ->
-  (r' (PackageData ProgData) -> PackageData ProgData) -> [PackageData ProgData]
+  (r' PackageData -> PackageData) -> [PackageData]
 jlClasses unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'

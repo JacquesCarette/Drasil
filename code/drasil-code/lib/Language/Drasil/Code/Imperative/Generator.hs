@@ -118,7 +118,7 @@ generator l dt sd chs cs = DrasilState {
 -- be generated in.
 generateCode :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
   Lang -> (progRepr (OO.Program progRepr) -> ProgData) ->
-  (packRepr (PackageData ProgData) -> PackageData ProgData) ->
+  (packRepr PackageData -> PackageData) ->
   DrasilState -> IO ()
 generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
@@ -144,7 +144,7 @@ generateCode l unReprProg unReprPack g = do
 -- used by the language renderer.
 genPackage :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
   (progRepr (OO.Program progRepr) -> ProgData) ->
-  GenState (packRepr (PackageData ProgData))
+  GenState (packRepr PackageData)
 genPackage unRepr = do
   g <- get
   ci <- genProgram
@@ -235,7 +235,7 @@ genModules = do
 -- be generated in.
 generateCodeProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
   Lang -> (progRepr (Proc.Program progRepr) -> ProgData) ->
-  (packRepr (PackageData ProgData) -> PackageData ProgData) ->
+  (packRepr PackageData -> PackageData) ->
   DrasilState -> IO ()
 generateCodeProc l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
@@ -258,7 +258,7 @@ generateCodeProc l unReprProg unReprPack g = do
 -- used by the language renderer.
 genPackageProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
   (progRepr (Proc.Program progRepr) -> ProgData) ->
-  GenState (packRepr (PackageData ProgData))
+  GenState (packRepr PackageData)
 genPackageProc unRepr = do
   g <- get
   ci <- genProgramProc

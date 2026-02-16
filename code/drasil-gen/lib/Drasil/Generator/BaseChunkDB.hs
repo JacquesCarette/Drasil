@@ -1,11 +1,12 @@
 module Drasil.Generator.BaseChunkDB (
   -- * Base ChunkDB for all case studies
-  cdb
+  cdb,
+  cdbWithRefs
 ) where
 
 import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder11)
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
-  DefinedQuantityDict, UnitDefn, LabelledContent)
+  DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Education (educon)
@@ -91,3 +92,10 @@ cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
     [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
     [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
 cdb = insertAllOutOfOrder11 basisCDB
+
+-- | Variant of 'cdb' that pre-registers reference chunks before mass insertion.
+cdbWithRefs :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] ->
+    [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] ->
+    [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] ->
+    [LabelledContent] -> ChunkDB
+cdbWithRefs refs = insertAllOutOfOrder11 (insertAll refs basisCDB)

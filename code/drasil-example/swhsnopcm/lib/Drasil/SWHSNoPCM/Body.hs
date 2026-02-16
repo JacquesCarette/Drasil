@@ -8,8 +8,8 @@ import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
-import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Drasil.Generator (cdb)
+import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
+import Drasil.Generator (cdbWithRefs)
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Documentation as Doc (material_)
@@ -163,9 +163,13 @@ conceptChunks =
   map cw [surArea, area]
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
+symbMap = cdbWithRefs cdbRefs
+  symbols ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations
   (labelledContent ++ funcReqsTables)
+
+cdbRefs :: [Reference]
+cdbRefs = SRS.sectionReferences
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

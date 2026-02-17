@@ -127,15 +127,15 @@ generateCode l unReprProg unReprPack g = do
   createDirIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackage unReprProg) g
-      (PackageData prog dossier) = unReprPack pckg
-      baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
-          not $ isEmpty $ ds ^. designLog] ++ dossier
-      aux
-        | l == Python = fileAndContents "__init__.py" mempty : baseAux
-        | otherwise   = baseAux
+      (PackageData prog progDossier) = unReprPack pckg
+      baseDossier = [fileAndContents "designLog.txt" (ds ^. designLog) |
+          not $ isEmpty $ ds ^. designLog] ++ progDossier
+      dossier
+        | l == Python = fileAndContents "__init__.py" mempty : baseDossier
+        | otherwise   = baseDossier
       packageFiles = map
         hasPathAndDocToFileAndContents (progMods prog)
-        ++ aux
+        ++ dossier
   traverse_ (\file -> createFile (filePath file) (render $ fileDoc file)) packageFiles
   setCurrentDirectory workingDir
 
@@ -245,12 +245,12 @@ generateCodeProc l unReprProg unReprPack g = do
   createDirIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackageProc unReprProg) g
-      (PackageData prog dossier) = unReprPack pckg
-      baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
-          not $ isEmpty $ ds ^. designLog] ++ dossier
+      (PackageData prog progDossier) = unReprPack pckg
+      dossier = [fileAndContents "designLog.txt" (ds ^. designLog) |
+          not $ isEmpty $ ds ^. designLog] ++ progDossier
       packageFiles = map
         hasPathAndDocToFileAndContents (progMods prog)
-        ++ baseAux
+        ++ dossier
   traverse_ (\file -> createFile (filePath file) (render $ fileDoc file)) packageFiles
   setCurrentDirectory workingDir
 

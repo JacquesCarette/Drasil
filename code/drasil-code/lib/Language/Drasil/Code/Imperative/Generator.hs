@@ -128,11 +128,10 @@ generateCode l unReprProg unReprPack g = do
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackage unReprProg) g
       (PackageData prog progDossier) = unReprPack pckg
-      baseDossier = [fileAndContents "designLog.txt" (ds ^. designLog) |
-          not $ isEmpty $ ds ^. designLog] ++ progDossier
-      dossier
-        | l == Python = fileAndContents "__init__.py" mempty : baseDossier
-        | otherwise   = baseDossier
+      designLogFile = [fileAndContents "designLog.txt" (ds ^. designLog) |
+                        not $ isEmpty $ ds ^. designLog]
+      initFile = [fileAndContents "__init__.py" mempty | l == Python]
+      dossier = progDossier ++ designLogFile ++ initFile
       packageFiles = map
         hasPathAndDocToFileAndContents (progMods prog)
         ++ dossier
@@ -246,8 +245,9 @@ generateCodeProc l unReprProg unReprPack g = do
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackageProc unReprProg) g
       (PackageData prog progDossier) = unReprPack pckg
-      dossier = [fileAndContents "designLog.txt" (ds ^. designLog) |
-          not $ isEmpty $ ds ^. designLog] ++ progDossier
+      designLogFile = [fileAndContents "designLog.txt" (ds ^. designLog) |
+                        not $ isEmpty $ ds ^. designLog]
+      dossier =  progDossier ++ designLogFile
       packageFiles = map
         hasPathAndDocToFileAndContents (progMods prog)
         ++ dossier

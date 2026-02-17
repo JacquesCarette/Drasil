@@ -6,7 +6,7 @@ import Language.Drasil hiding (organization)
 import qualified Language.Drasil.Development as D
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,

@@ -1,7 +1,7 @@
 module Drasil.SWHSNoPCM.MetaConcepts (progName) where
 
 import Language.Drasil
-import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import Drasil.Metadata (materialEng)
 
 progName :: CI

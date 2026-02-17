@@ -2,7 +2,7 @@ module Drasil.GlassBR.Unitals where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.NounPhrase.Combinators (parensNP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators (parensNP)
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 

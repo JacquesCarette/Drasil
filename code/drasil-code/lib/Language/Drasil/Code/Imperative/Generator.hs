@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternSynonyms #-}
 -- | Defines generation functions for SCS code packages.
 module Language.Drasil.Code.Imperative.Generator (
   generator, generateCode, generateCodeProc
@@ -46,7 +47,8 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (makeSds,
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Code.FileData (FileAndContents(..), fileAndContents,
   hasPathAndDocToFileAndContents)
-import Language.Drasil.Code.PackageData (PackageData(..), package)
+import Language.Drasil.Code.PackageData (PackageData(..), pattern PackageData,
+  package)
 import Language.Drasil.Code.FileNames(sampleInputName)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -125,13 +127,14 @@ generateCode l unReprProg unReprPack g = do
   createDirIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackage unReprProg) g
+      (PackageData prog dossier) = unReprPack pckg
       baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
-          not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
+          not $ isEmpty $ ds ^. designLog] ++ dossier
       aux
         | l == Python = fileAndContents "__init__.py" mempty : baseAux
         | otherwise   = baseAux
       packageFiles = map
-        hasPathAndDocToFileAndContents (progMods $ packageProg $ unReprPack pckg)
+        hasPathAndDocToFileAndContents (progMods prog)
         ++ aux
   traverse_ (\file -> createFile (filePath file) (render $ fileDoc file)) packageFiles
   setCurrentDirectory workingDir
@@ -242,10 +245,11 @@ generateCodeProc l unReprProg unReprPack g = do
   createDirIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackageProc unReprProg) g
+      (PackageData prog dossier) = unReprPack pckg
       baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
-          not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
+          not $ isEmpty $ ds ^. designLog] ++ dossier
       packageFiles = map
-        hasPathAndDocToFileAndContents (progMods (packageProg $ unReprPack pckg))
+        hasPathAndDocToFileAndContents (progMods prog)
         ++ baseAux
   traverse_ (\file -> createFile (filePath file) (render $ fileDoc file)) packageFiles
   setCurrentDirectory workingDir

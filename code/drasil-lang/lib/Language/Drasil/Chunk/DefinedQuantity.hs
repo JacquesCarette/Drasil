@@ -13,6 +13,7 @@ module Language.Drasil.Chunk.DefinedQuantity (
 import Control.Lens ((^.), makeLenses, view, Getter)
 
 import Drasil.Database (HasChunkRefs(..), HasUID(..))
+import qualified Data.Set as Set
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
@@ -42,7 +43,11 @@ class DefinesQuantity d where
   defLhs :: Getter d DefinedQuantityDict
 
 instance HasChunkRefs DefinedQuantityDict where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs d = Set.unions
+    [ chunkRefs (d ^. con)
+    , chunkRefs (d ^. unit')
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance HasUID        DefinedQuantityDict where uid = con . uid

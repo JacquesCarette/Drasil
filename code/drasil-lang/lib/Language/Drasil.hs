@@ -309,7 +309,7 @@ import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , organization, publisher, school, series, title, typeField
   , chapter, edition, number, volume, year, month, pages
   , compareAuthYearTitle)
-import Language.Drasil.NounPhrase
+import Language.Drasil.NaturalLanguage.English.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,

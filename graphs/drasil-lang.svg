@@ -6,1076 +6,1076 @@
 <!-- Title: G Pages: 1 -->
 <svg width="432pt" height="288pt"
  viewBox="0.00 0.00 431.59 288.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(0.12 0.12) rotate(0) translate(4 2362)">
+<g id="graph0" class="graph" transform="scale(0.12 0.12) rotate(0) translate(4 2356)">
 <title>G</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-2362 3541.62,-2362 3541.62,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-2356 3532.62,-2356 3532.62,4 -4,4"/>
 <!-- u8 -->
 <g id="node1" class="node">
 <title>u8</title>
-<ellipse fill="#bbffbb" stroke="black" cx="795.84" cy="-2199" rx="113.98" ry="18"/>
-<text text-anchor="middle" x="795.84" y="-2195.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr</text>
+<ellipse fill="#bbffbb" stroke="black" cx="795.84" cy="-2193" rx="113.98" ry="18"/>
+<text text-anchor="middle" x="795.84" y="-2189.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr</text>
 </g>
 <!-- u7 -->
 <g id="node4" class="node">
 <title>u7</title>
-<ellipse fill="#ffffbb" stroke="black" cx="886.84" cy="-2071" rx="140.28" ry="18"/>
-<text text-anchor="middle" x="886.84" y="-2067.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr.Class</text>
+<ellipse fill="#ffffbb" stroke="black" cx="886.84" cy="-2066" rx="140.28" ry="18"/>
+<text text-anchor="middle" x="886.84" y="-2062.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr.Class</text>
 </g>
 <!-- u8&#45;&gt;u7 -->
 <g id="edge19" class="edge">
 <title>u8&#45;&gt;u7</title>
-<path fill="none" stroke="black" d="M808.11,-2181.01C823.65,-2159.5 850.55,-2122.25 868.52,-2097.37"/>
-<polygon fill="black" stroke="black" points="871.45,-2099.28 874.47,-2089.13 865.78,-2095.18 871.45,-2099.28"/>
+<path fill="none" stroke="black" d="M808.3,-2174.88C823.8,-2153.59 850.4,-2117.05 868.3,-2092.47"/>
+<polygon fill="black" stroke="black" points="871.18,-2094.46 874.23,-2084.31 865.52,-2090.34 871.18,-2094.46"/>
 </g>
 <!-- u4 -->
 <g id="node7" class="node">
 <title>u4</title>
-<ellipse fill="#ffffbb" stroke="black" cx="554.84" cy="-1944" rx="152.97" ry="18"/>
-<text text-anchor="middle" x="554.84" y="-1940.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr.Convert</text>
+<ellipse fill="#ffffbb" stroke="black" cx="554.84" cy="-1939" rx="152.97" ry="18"/>
+<text text-anchor="middle" x="554.84" y="-1935.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr.Convert</text>
 </g>
 <!-- u8&#45;&gt;u4 -->
 <g id="edge18" class="edge">
 <title>u8&#45;&gt;u4</title>
-<path fill="none" stroke="black" d="M787.13,-2181.01C771.98,-2152.48 738.64,-2094.01 699.84,-2053 667.34,-2018.65 622.89,-1987.34 591.79,-1967.37"/>
-<polygon fill="black" stroke="black" points="593.32,-1964.2 583,-1961.8 589.58,-1970.11 593.32,-1964.2"/>
+<path fill="none" stroke="black" d="M786.86,-2174.68C771.55,-2146.18 738.31,-2088.53 699.84,-2048 667.29,-2013.71 622.84,-1982.38 591.77,-1962.4"/>
+<polygon fill="black" stroke="black" points="593.3,-1959.23 582.98,-1956.82 589.55,-1965.14 593.3,-1959.23"/>
 </g>
 <!-- u1 -->
 <g id="node2" class="node">
 <title>u1</title>
-<ellipse fill="#bbffbb" stroke="black" cx="886.84" cy="-1944" rx="106.68" ry="18"/>
-<text text-anchor="middle" x="886.84" y="-1940.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeVar</text>
+<ellipse fill="#bbffbb" stroke="black" cx="886.84" cy="-1939" rx="106.68" ry="18"/>
+<text text-anchor="middle" x="886.84" y="-1935.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeVar</text>
 </g>
 <!-- u0 -->
 <g id="node3" class="node">
 <title>u0</title>
-<ellipse fill="#bbffbb" stroke="black" cx="1234.84" cy="-669" rx="102.88" ry="18"/>
-<text text-anchor="middle" x="1234.84" y="-665.3" font-family="Times,serif" font-size="14.00">Drasil.Code.Classes</text>
+<ellipse fill="#bbffbb" stroke="black" cx="1599.84" cy="-667" rx="102.88" ry="18"/>
+<text text-anchor="middle" x="1599.84" y="-663.3" font-family="Times,serif" font-size="14.00">Drasil.Code.Classes</text>
 </g>
 <!-- u1&#45;&gt;u0 -->
 <g id="edge2" class="edge">
 <title>u1&#45;&gt;u0</title>
-<path fill="none" stroke="black" d="M884.8,-1925.98C877.18,-1861.86 850.84,-1634.75 850.84,-1562 850.84,-1562 850.84,-1562 850.84,-923 850.84,-851.45 869.12,-826.27 922.84,-779 985.65,-723.73 1078.14,-696.05 1146.12,-682.48"/>
-<polygon fill="black" stroke="black" points="1146.81,-685.91 1155.96,-680.57 1145.48,-679.03 1146.81,-685.91"/>
+<path fill="none" stroke="black" d="M884.75,-1920.59C877.06,-1856.04 850.84,-1630.4 850.84,-1558 850.84,-1558 850.84,-1558 850.84,-921 850.84,-849.45 865.16,-819.35 922.84,-777 1011.52,-711.88 1325.11,-683.97 1492.57,-673.49"/>
+<polygon fill="black" stroke="black" points="1492.88,-676.97 1502.65,-672.87 1492.45,-669.99 1492.88,-676.97"/>
 </g>
 <!-- u5 -->
 <g id="node6" class="node">
 <title>u5</title>
-<ellipse fill="#ffffbb" stroke="black" cx="720.84" cy="-1816" rx="138.38" ry="18"/>
-<text text-anchor="middle" x="720.84" y="-1812.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr.Lang</text>
+<ellipse fill="#ffffbb" stroke="black" cx="720.84" cy="-1812" rx="138.38" ry="18"/>
+<text text-anchor="middle" x="720.84" y="-1808.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr.Lang</text>
 </g>
 <!-- u1&#45;&gt;u5 -->
 <g id="edge3" class="edge">
 <title>u1&#45;&gt;u5</title>
-<path fill="none" stroke="black" d="M864.79,-1926.27C835.65,-1904.15 784.15,-1865.06 751.3,-1840.12"/>
-<polygon fill="black" stroke="black" points="753.05,-1837.06 742.97,-1833.8 748.82,-1842.63 753.05,-1837.06"/>
+<path fill="none" stroke="black" d="M864.45,-1921.14C835.28,-1899.18 784.17,-1860.69 751.44,-1836.04"/>
+<polygon fill="black" stroke="black" points="753.23,-1833.01 743.13,-1829.79 749.02,-1838.6 753.23,-1833.01"/>
 </g>
-<!-- u57 -->
-<g id="node34" class="node">
-<title>u57</title>
-<ellipse fill="#bbffff" stroke="black" cx="1373.84" cy="-1816" rx="198.47" ry="18"/>
-<text text-anchor="middle" x="1373.84" y="-1812.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.DefinedQuantity</text>
+<!-- u56 -->
+<g id="node33" class="node">
+<title>u56</title>
+<ellipse fill="#bbffff" stroke="black" cx="1312.84" cy="-1812" rx="198.47" ry="18"/>
+<text text-anchor="middle" x="1312.84" y="-1808.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.DefinedQuantity</text>
 </g>
-<!-- u1&#45;&gt;u57 -->
+<!-- u1&#45;&gt;u56 -->
 <g id="edge4" class="edge">
-<title>u1&#45;&gt;u57</title>
-<path fill="none" stroke="black" d="M942.7,-1928.55C1031.23,-1905.64 1203.71,-1861.02 1301.55,-1835.7"/>
-<polygon fill="black" stroke="black" points="1302.55,-1839.06 1311.36,-1833.17 1300.8,-1832.28 1302.55,-1839.06"/>
+<title>u1&#45;&gt;u56</title>
+<path fill="none" stroke="black" d="M937.8,-1923.05C1015.13,-1900.36 1162.08,-1857.24 1247.27,-1832.24"/>
+<polygon fill="black" stroke="black" points="1248.48,-1835.53 1257.09,-1829.36 1246.51,-1828.81 1248.48,-1835.53"/>
 </g>
 <!-- u18 -->
-<g id="node23" class="node">
+<g id="node22" class="node">
 <title>u18</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="1716.84" cy="-159" rx="124.28" ry="18"/>
-<text text-anchor="middle" x="1716.84" y="-155.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Symbol</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="1710.84" cy="-159" rx="124.28" ry="18"/>
+<text text-anchor="middle" x="1710.84" y="-155.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Symbol</text>
 </g>
 <!-- u0&#45;&gt;u18 -->
 <g id="edge1" class="edge">
 <title>u0&#45;&gt;u18</title>
-<path fill="none" stroke="black" d="M1261.62,-651.51C1334.56,-605.37 1539.14,-467.65 1656.84,-305 1683.41,-268.28 1700.79,-218.04 1709.7,-187.37"/>
-<polygon fill="black" stroke="black" points="1713.16,-187.96 1712.49,-177.39 1706.42,-186.07 1713.16,-187.96"/>
+<path fill="none" stroke="black" d="M1603.59,-648.87C1619.93,-574.4 1684.88,-278.33 1704.92,-186.98"/>
+<polygon fill="black" stroke="black" points="1708.36,-187.64 1707.08,-177.12 1701.52,-186.14 1708.36,-187.64"/>
 </g>
 <!-- u7&#45;&gt;u1 -->
 <g id="edge17" class="edge">
 <title>u7&#45;&gt;u1</title>
-<path fill="none" stroke="black" d="M886.84,-2052.88C886.84,-2032.15 886.84,-1996.95 886.84,-1972.42"/>
-<polygon fill="black" stroke="black" points="890.34,-1972.31 886.84,-1962.31 883.34,-1972.31 890.34,-1972.31"/>
+<path fill="none" stroke="black" d="M886.84,-2047.88C886.84,-2027.15 886.84,-1991.95 886.84,-1967.42"/>
+<polygon fill="black" stroke="black" points="890.34,-1967.31 886.84,-1957.31 883.34,-1967.31 890.34,-1967.31"/>
 </g>
 <!-- u6 -->
 <g id="node5" class="node">
 <title>u6</title>
-<ellipse fill="#ffffbb" stroke="black" cx="540.84" cy="-2071" rx="150.27" ry="18"/>
-<text text-anchor="middle" x="540.84" y="-2067.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr.Extract</text>
+<ellipse fill="#ffffbb" stroke="black" cx="540.84" cy="-2066" rx="150.27" ry="18"/>
+<text text-anchor="middle" x="540.84" y="-2062.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr.Extract</text>
 </g>
 <!-- u6&#45;&gt;u5 -->
 <g id="edge16" class="edge">
 <title>u6&#45;&gt;u5</title>
-<path fill="none" stroke="black" d="M591.7,-2054.05C633.39,-2038.02 689.75,-2008.87 716.84,-1962 737.91,-1925.53 733.15,-1874.81 727.32,-1844.03"/>
-<polygon fill="black" stroke="black" points="730.71,-1843.12 725.26,-1834.04 723.85,-1844.54 730.71,-1843.12"/>
+<path fill="none" stroke="black" d="M591.7,-2049.05C633.38,-2033.02 689.75,-2003.87 716.84,-1957 737.66,-1920.97 733.11,-1870.95 727.37,-1840.34"/>
+<polygon fill="black" stroke="black" points="730.76,-1839.47 725.32,-1830.38 723.9,-1840.88 730.76,-1839.47"/>
 </g>
 <!-- u32 -->
-<g id="node49" class="node">
+<g id="node48" class="node">
 <title>u32</title>
-<ellipse fill="#ff7777" stroke="black" cx="1371.84" cy="-1689" rx="139.18" ry="18"/>
-<text text-anchor="middle" x="1371.84" y="-1685.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Expr.Class</text>
+<ellipse fill="#ff7777" stroke="black" cx="1371.84" cy="-1685" rx="139.18" ry="18"/>
+<text text-anchor="middle" x="1371.84" y="-1681.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Expr.Class</text>
 </g>
 <!-- u5&#45;&gt;u32 -->
 <g id="edge15" class="edge">
 <title>u5&#45;&gt;u32</title>
-<path fill="none" stroke="black" d="M794.88,-1800.78C916.8,-1777.37 1159.06,-1730.86 1287.44,-1706.21"/>
-<polygon fill="black" stroke="black" points="1288.45,-1709.58 1297.61,-1704.25 1287.13,-1702.7 1288.45,-1709.58"/>
+<path fill="none" stroke="black" d="M794.88,-1796.78C916.8,-1773.37 1159.06,-1726.86 1287.44,-1702.21"/>
+<polygon fill="black" stroke="black" points="1288.45,-1705.58 1297.61,-1700.25 1287.13,-1698.7 1288.45,-1705.58"/>
 </g>
 <!-- u4&#45;&gt;u5 -->
 <g id="edge11" class="edge">
 <title>u4&#45;&gt;u5</title>
-<path fill="none" stroke="black" d="M577.22,-1926.01C606.39,-1903.87 657.51,-1865.07 690.23,-1840.23"/>
-<polygon fill="black" stroke="black" points="692.69,-1842.76 698.54,-1833.92 688.46,-1837.18 692.69,-1842.76"/>
+<path fill="none" stroke="black" d="M577.22,-1921.14C606.39,-1899.18 657.51,-1860.69 690.23,-1836.04"/>
+<polygon fill="black" stroke="black" points="692.66,-1838.6 698.54,-1829.79 688.45,-1833.01 692.66,-1838.6"/>
 </g>
 <!-- u33 -->
-<g id="node21" class="node">
+<g id="node20" class="node">
 <title>u33</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="683.84" cy="-1179" rx="139.18" ry="18"/>
-<text text-anchor="middle" x="683.84" y="-1175.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Constraint</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="683.84" cy="-1176" rx="139.18" ry="18"/>
+<text text-anchor="middle" x="683.84" y="-1172.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Constraint</text>
 </g>
 <!-- u4&#45;&gt;u33 -->
 <g id="edge13" class="edge">
 <title>u4&#45;&gt;u33</title>
-<path fill="none" stroke="black" d="M554.84,-1925.82C554.84,-1884.95 554.84,-1778.73 554.84,-1690 554.84,-1690 554.84,-1690 554.84,-1433 554.84,-1340.59 623.98,-1247.89 661.02,-1204.85"/>
-<polygon fill="black" stroke="black" points="663.8,-1206.99 667.76,-1197.16 658.54,-1202.37 663.8,-1206.99"/>
+<path fill="none" stroke="black" d="M554.84,-1920.89C554.84,-1880.18 554.84,-1774.38 554.84,-1686 554.84,-1686 554.84,-1686 554.84,-1429 554.84,-1336.88 623.98,-1244.58 661.02,-1201.73"/>
+<polygon fill="black" stroke="black" points="663.78,-1203.9 667.76,-1194.08 658.53,-1199.27 663.78,-1203.9"/>
 </g>
 <!-- u29 -->
-<g id="node52" class="node">
+<g id="node51" class="node">
 <title>u29</title>
-<ellipse fill="#ff7777" stroke="black" cx="275.84" cy="-924" rx="175.47" ry="18"/>
-<text text-anchor="middle" x="275.84" y="-920.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Expr.Development</text>
+<ellipse fill="#ff7777" stroke="black" cx="275.84" cy="-922" rx="175.47" ry="18"/>
+<text text-anchor="middle" x="275.84" y="-918.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Expr.Development</text>
 </g>
 <!-- u4&#45;&gt;u29 -->
 <g id="edge12" class="edge">
 <title>u4&#45;&gt;u29</title>
-<path fill="none" stroke="black" d="M544.74,-1925.89C532.84,-1904.95 513.36,-1868.06 502.84,-1834 449.86,-1662.54 440.84,-1614.46 440.84,-1435 440.84,-1435 440.84,-1435 440.84,-1178 440.84,-1079.85 352.63,-989.98 305.2,-948.75"/>
-<polygon fill="black" stroke="black" points="307.28,-945.92 297.41,-942.09 302.74,-951.24 307.28,-945.92"/>
+<path fill="none" stroke="black" d="M544.52,-1920.69C532.6,-1899.89 513.28,-1863.58 502.84,-1830 449.56,-1658.63 440.84,-1610.46 440.84,-1431 440.84,-1431 440.84,-1431 440.84,-1175 440.84,-1077.12 352.63,-987.66 305.2,-946.63"/>
+<polygon fill="black" stroke="black" points="307.29,-943.81 297.41,-940 302.76,-949.14 307.29,-943.81"/>
 </g>
 <!-- u38 -->
-<g id="node57" class="node">
+<g id="node56" class="node">
 <title>u38</title>
-<ellipse fill="#ff77ff" stroke="black" cx="1129.84" cy="-542" rx="184.67" ry="18"/>
-<text text-anchor="middle" x="1129.84" y="-538.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Literal.Development</text>
+<ellipse fill="#ff77ff" stroke="black" cx="1072.84" cy="-540" rx="184.67" ry="18"/>
+<text text-anchor="middle" x="1072.84" y="-536.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Literal.Development</text>
 </g>
 <!-- u4&#45;&gt;u38 -->
 <g id="edge14" class="edge">
 <title>u4&#45;&gt;u38</title>
-<path fill="none" stroke="black" d="M550.48,-1925.95C540.5,-1885.37 516.84,-1779.72 516.84,-1690 516.84,-1690 516.84,-1690 516.84,-1305 516.84,-1019.94 684.89,-983.15 883.84,-779 961.74,-699.07 1058.36,-608.83 1103.85,-566.85"/>
-<polygon fill="black" stroke="black" points="1106.24,-569.41 1111.22,-560.06 1101.49,-564.26 1106.24,-569.41"/>
+<path fill="none" stroke="black" d="M550.4,-1920.72C540.38,-1880.08 516.84,-1775.15 516.84,-1686 516.84,-1686 516.84,-1686 516.84,-1302 516.84,-1237.45 509.3,-1216.85 535.84,-1158 660.09,-882.49 948.89,-638.63 1042.77,-564.22"/>
+<polygon fill="black" stroke="black" points="1045.04,-566.89 1050.73,-557.95 1040.71,-561.39 1045.04,-566.89"/>
 </g>
 <!-- u3 -->
 <g id="node8" class="node">
 <title>u3</title>
-<ellipse fill="#ffffbb" stroke="black" cx="463.84" cy="-2199" rx="176.57" ry="18"/>
-<text text-anchor="middle" x="463.84" y="-2195.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr.Development</text>
+<ellipse fill="#ffffbb" stroke="black" cx="463.84" cy="-2193" rx="176.57" ry="18"/>
+<text text-anchor="middle" x="463.84" y="-2189.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr.Development</text>
 </g>
 <!-- u3&#45;&gt;u7 -->
 <g id="edge10" class="edge">
 <title>u3&#45;&gt;u7</title>
-<path fill="none" stroke="black" d="M518.27,-2181.79C596.75,-2158.41 741.32,-2115.34 824.16,-2090.67"/>
-<polygon fill="black" stroke="black" points="825.36,-2093.97 833.94,-2087.76 823.36,-2087.26 825.36,-2093.97"/>
+<path fill="none" stroke="black" d="M518.7,-2175.79C597.22,-2152.59 741.25,-2110.02 823.96,-2085.58"/>
+<polygon fill="black" stroke="black" points="825.14,-2088.88 833.73,-2082.69 823.15,-2082.17 825.14,-2088.88"/>
 </g>
 <!-- u3&#45;&gt;u6 -->
 <g id="edge9" class="edge">
 <title>u3&#45;&gt;u6</title>
-<path fill="none" stroke="black" d="M474.22,-2181.01C487.31,-2159.59 509.93,-2122.57 525.14,-2097.69"/>
-<polygon fill="black" stroke="black" points="528.14,-2099.48 530.37,-2089.13 522.17,-2095.83 528.14,-2099.48"/>
+<path fill="none" stroke="black" d="M474.38,-2174.88C487.38,-2153.77 509.61,-2117.69 524.75,-2093.11"/>
+<polygon fill="black" stroke="black" points="527.91,-2094.66 530.17,-2084.31 521.95,-2090.99 527.91,-2094.66"/>
 </g>
 <!-- u3&#45;&gt;u4 -->
 <g id="edge8" class="edge">
 <title>u3&#45;&gt;u4</title>
-<path fill="none" stroke="black" d="M441.9,-2181.09C409.68,-2154.08 356.03,-2099.54 381.84,-2053 405.84,-2009.71 455.22,-1981.5 495.1,-1964.8"/>
-<polygon fill="black" stroke="black" points="496.53,-1968 504.49,-1961.01 493.9,-1961.51 496.53,-1968"/>
+<path fill="none" stroke="black" d="M441.67,-2175C409.47,-2148.14 356.23,-2094.17 381.84,-2048 405.84,-2004.71 455.22,-1976.5 495.1,-1959.8"/>
+<polygon fill="black" stroke="black" points="496.53,-1963 504.49,-1956.01 493.9,-1956.51 496.53,-1963"/>
 </g>
 <!-- u2 -->
 <g id="node9" class="node">
 <title>u2</title>
-<ellipse fill="#ffffbb" stroke="black" cx="214.84" cy="-1944" rx="168.97" ry="18"/>
-<text text-anchor="middle" x="214.84" y="-1940.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr.Precedence</text>
+<ellipse fill="#ffffbb" stroke="black" cx="214.84" cy="-1939" rx="168.97" ry="18"/>
+<text text-anchor="middle" x="214.84" y="-1935.3" font-family="Times,serif" font-size="14.00">Drasil.Code.CodeExpr.Precedence</text>
 </g>
 <!-- u3&#45;&gt;u2 -->
 <g id="edge7" class="edge">
 <title>u3&#45;&gt;u2</title>
-<path fill="none" stroke="black" d="M447.11,-2181.01C403.97,-2137.17 288.78,-2020.13 238.67,-1969.22"/>
-<polygon fill="black" stroke="black" points="241,-1966.59 231.49,-1961.92 236.01,-1971.5 241,-1966.59"/>
+<path fill="none" stroke="black" d="M447.11,-2175.07C404.07,-2131.51 289.33,-2015.39 239.03,-1964.49"/>
+<polygon fill="black" stroke="black" points="241.33,-1961.84 231.82,-1957.18 236.36,-1966.76 241.33,-1961.84"/>
 </g>
 <!-- u2&#45;&gt;u5 -->
 <g id="edge5" class="edge">
 <title>u2&#45;&gt;u5</title>
-<path fill="none" stroke="black" d="M277.9,-1927.3C372.54,-1903.73 550.74,-1859.36 649.83,-1834.68"/>
-<polygon fill="black" stroke="black" points="650.89,-1838.02 659.75,-1832.21 649.2,-1831.23 650.89,-1838.02"/>
+<path fill="none" stroke="black" d="M278.41,-1922.3C373.1,-1898.9 550.63,-1855.05 649.59,-1830.6"/>
+<polygon fill="black" stroke="black" points="650.63,-1833.95 659.5,-1828.15 648.95,-1827.15 650.63,-1833.95"/>
 </g>
 <!-- u28 -->
-<g id="node53" class="node">
+<g id="node52" class="node">
 <title>u28</title>
-<ellipse fill="#ff7777" stroke="black" cx="483.84" cy="-797" rx="167.87" ry="18"/>
-<text text-anchor="middle" x="483.84" y="-793.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Expr.Precedence</text>
+<ellipse fill="#ff7777" stroke="black" cx="483.84" cy="-795" rx="167.87" ry="18"/>
+<text text-anchor="middle" x="483.84" y="-791.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Expr.Precedence</text>
 </g>
 <!-- u2&#45;&gt;u28 -->
 <g id="edge6" class="edge">
 <title>u2&#45;&gt;u28</title>
-<path fill="none" stroke="black" d="M231.75,-1925.82C290.02,-1864.73 478.84,-1650.19 478.84,-1435 478.84,-1435 478.84,-1435 478.84,-1051 478.84,-968.84 481.5,-871.71 482.94,-825.32"/>
-<polygon fill="black" stroke="black" points="486.45,-825.28 483.26,-815.18 479.45,-825.06 486.45,-825.28"/>
+<path fill="none" stroke="black" d="M231.75,-1920.86C290.02,-1859.92 478.84,-1645.85 478.84,-1431 478.84,-1431 478.84,-1431 478.84,-1048 478.84,-966.17 481.5,-869.42 482.94,-823.21"/>
+<polygon fill="black" stroke="black" points="486.44,-823.21 483.26,-813.11 479.45,-822.99 486.44,-823.21"/>
 </g>
 <!-- u68 -->
 <g id="node10" class="node">
 <title>u68</title>
-<ellipse fill="#bbbbff" stroke="black" cx="2546.84" cy="-2326" rx="87.18" ry="18"/>
-<text text-anchor="middle" x="2546.84" y="-2322.3" font-family="Times,serif" font-size="14.00">Language.Drasil</text>
+<ellipse fill="#bbbbff" stroke="black" cx="2450.84" cy="-2320" rx="87.18" ry="18"/>
+<text text-anchor="middle" x="2450.84" y="-2316.3" font-family="Times,serif" font-size="14.00">Language.Drasil</text>
 </g>
-<!-- u62 -->
+<!-- u64 -->
 <g id="node14" class="node">
-<title>u62</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="3037.84" cy="-2199" rx="137.28" ry="18"/>
-<text text-anchor="middle" x="3037.84" y="-2195.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Document</text>
+<title>u64</title>
+<ellipse fill="#ffbbbb" stroke="black" cx="2984.84" cy="-2193" rx="137.28" ry="18"/>
+<text text-anchor="middle" x="2984.84" y="-2189.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Document</text>
 </g>
-<!-- u68&#45;&gt;u62 -->
+<!-- u68&#45;&gt;u64 -->
 <g id="edge109" class="edge">
-<title>u68&#45;&gt;u62</title>
-<path fill="none" stroke="black" d="M2599.38,-2311.62C2688.36,-2288.97 2868.67,-2243.07 2968.11,-2217.75"/>
-<polygon fill="black" stroke="black" points="2969.23,-2221.08 2978.06,-2215.22 2967.51,-2214.29 2969.23,-2221.08"/>
+<title>u68&#45;&gt;u64</title>
+<path fill="none" stroke="black" d="M2506.22,-2306.04C2602.99,-2283.38 2802.82,-2236.61 2911.15,-2211.25"/>
+<polygon fill="black" stroke="black" points="2912.08,-2214.63 2921.02,-2208.94 2910.48,-2207.81 2912.08,-2214.63"/>
 </g>
 <!-- u19 -->
-<g id="node22" class="node">
+<g id="node21" class="node">
 <title>u19</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="2869.84" cy="-1561" rx="184.67" ry="18"/>
-<text text-anchor="middle" x="2869.84" y="-1557.3" font-family="Times,serif" font-size="14.00">Language.Drasil.DecoratedReference</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="2852.84" cy="-1685" rx="184.67" ry="18"/>
+<text text-anchor="middle" x="2852.84" y="-1681.3" font-family="Times,serif" font-size="14.00">Language.Drasil.DecoratedReference</text>
 </g>
 <!-- u68&#45;&gt;u19 -->
 <g id="edge101" class="edge">
 <title>u68&#45;&gt;u19</title>
-<path fill="none" stroke="black" d="M2590.4,-2310.29C2671.58,-2279.8 2837.84,-2201.54 2837.84,-2072 2837.84,-2072 2837.84,-2072 2837.84,-1815 2837.84,-1732.03 2854.99,-1634.96 2864.18,-1588.89"/>
-<polygon fill="black" stroke="black" points="2867.61,-1589.58 2866.17,-1579.08 2860.75,-1588.19 2867.61,-1589.58"/>
+<path fill="none" stroke="black" d="M2498.09,-2304.73C2543.69,-2288.72 2611.82,-2258.58 2653.84,-2211 2699.18,-2159.65 2708.84,-2135.51 2708.84,-2067 2708.84,-2067 2708.84,-2067 2708.84,-1938 2708.84,-1843.6 2785.95,-1752.41 2827.32,-1710.29"/>
+<polygon fill="black" stroke="black" points="2830,-1712.55 2834.6,-1703 2825.05,-1707.6 2830,-1712.55"/>
 </g>
-<!-- u56 -->
-<g id="node35" class="node">
-<title>u56</title>
-<ellipse fill="#bbffff" stroke="black" cx="2546.84" cy="-2071" rx="161.37" ry="18"/>
-<text text-anchor="middle" x="2546.84" y="-2067.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Relation</text>
+<!-- u55 -->
+<g id="node34" class="node">
+<title>u55</title>
+<ellipse fill="#bbffff" stroke="black" cx="2450.84" cy="-2066" rx="161.37" ry="18"/>
+<text text-anchor="middle" x="2450.84" y="-2062.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Relation</text>
 </g>
-<!-- u68&#45;&gt;u56 -->
+<!-- u68&#45;&gt;u55 -->
 <g id="edge108" class="edge">
-<title>u68&#45;&gt;u56</title>
-<path fill="none" stroke="black" d="M2546.84,-2307.61C2546.84,-2264.36 2546.84,-2151.65 2546.84,-2099.37"/>
-<polygon fill="black" stroke="black" points="2550.34,-2099.18 2546.84,-2089.18 2543.34,-2099.18 2550.34,-2099.18"/>
+<title>u68&#45;&gt;u55</title>
+<path fill="none" stroke="black" d="M2450.84,-2301.68C2450.84,-2258.6 2450.84,-2146.33 2450.84,-2094.26"/>
+<polygon fill="black" stroke="black" points="2454.34,-2094.11 2450.84,-2084.11 2447.34,-2094.11 2454.34,-2094.11"/>
 </g>
-<!-- u54 -->
-<g id="node37" class="node">
-<title>u54</title>
-<ellipse fill="#bbffff" stroke="black" cx="1373.84" cy="-1944" rx="135.38" ry="18"/>
-<text text-anchor="middle" x="1373.84" y="-1940.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Eq</text>
+<!-- u53 -->
+<g id="node36" class="node">
+<title>u53</title>
+<ellipse fill="#bbffff" stroke="black" cx="1312.84" cy="-1939" rx="135.38" ry="18"/>
+<text text-anchor="middle" x="1312.84" y="-1935.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Eq</text>
 </g>
-<!-- u68&#45;&gt;u54 -->
+<!-- u68&#45;&gt;u53 -->
 <g id="edge107" class="edge">
-<title>u68&#45;&gt;u54</title>
-<path fill="none" stroke="black" d="M2460.41,-2323.69C2253.64,-2319.22 1736.59,-2299.85 1587.84,-2217 1483.85,-2159.08 1412.65,-2027.92 1385.77,-1971.56"/>
-<polygon fill="black" stroke="black" points="1388.82,-1969.82 1381.4,-1962.24 1382.48,-1972.78 1388.82,-1969.82"/>
+<title>u68&#45;&gt;u53</title>
+<path fill="none" stroke="black" d="M2364.39,-2317.31C2162.74,-2312.05 1667.56,-2291.12 1524.84,-2211 1421.65,-2153.07 1351.21,-2022.51 1324.63,-1966.42"/>
+<polygon fill="black" stroke="black" points="1327.71,-1964.75 1320.32,-1957.16 1321.36,-1967.7 1327.71,-1964.75"/>
 </g>
-<!-- u52 -->
-<g id="node39" class="node">
-<title>u52</title>
-<ellipse fill="#bbffff" stroke="black" cx="1711.84" cy="-1689" rx="183.07" ry="18"/>
-<text text-anchor="middle" x="1711.84" y="-1685.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.CommonIdea</text>
+<!-- u51 -->
+<g id="node38" class="node">
+<title>u51</title>
+<ellipse fill="#bbffff" stroke="black" cx="1537.84" cy="-1557" rx="183.07" ry="18"/>
+<text text-anchor="middle" x="1537.84" y="-1553.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.CommonIdea</text>
 </g>
-<!-- u68&#45;&gt;u52 -->
+<!-- u68&#45;&gt;u51 -->
 <g id="edge106" class="edge">
-<title>u68&#45;&gt;u52</title>
-<path fill="none" stroke="black" d="M2463.8,-2320.55C2233.21,-2305.93 1601.84,-2249.7 1601.84,-2072 1601.84,-2072 1601.84,-2072 1601.84,-1943 1601.84,-1878 1594.62,-1857.47 1620.84,-1798 1635.37,-1765.03 1663.21,-1734.33 1684.28,-1714.15"/>
-<polygon fill="black" stroke="black" points="1686.79,-1716.59 1691.7,-1707.21 1682.01,-1711.48 1686.79,-1716.59"/>
+<title>u68&#45;&gt;u51</title>
+<path fill="none" stroke="black" d="M2368.7,-2313.91C2144.52,-2297.78 1538.84,-2238.35 1538.84,-2067 1538.84,-2067 1538.84,-2067 1538.84,-1811 1538.84,-1728.86 1538.3,-1631.72 1538.02,-1585.32"/>
+<polygon fill="black" stroke="black" points="1541.51,-1585.16 1537.95,-1575.18 1534.51,-1585.2 1541.51,-1585.16"/>
 </g>
-<!-- u48 -->
-<g id="node41" class="node">
-<title>u48</title>
-<ellipse fill="#bbffff" stroke="black" cx="2221.84" cy="-2199" rx="209.06" ry="18"/>
-<text text-anchor="middle" x="2221.84" y="-2195.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.UncertainQuantity</text>
+<!-- u47 -->
+<g id="node40" class="node">
+<title>u47</title>
+<ellipse fill="#bbffff" stroke="black" cx="2125.84" cy="-2193" rx="209.06" ry="18"/>
+<text text-anchor="middle" x="2125.84" y="-2189.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.UncertainQuantity</text>
 </g>
-<!-- u68&#45;&gt;u48 -->
+<!-- u68&#45;&gt;u47 -->
 <g id="edge105" class="edge">
-<title>u68&#45;&gt;u48</title>
-<path fill="none" stroke="black" d="M2507.63,-2309.92C2449.42,-2287.53 2340,-2245.45 2274.74,-2220.35"/>
-<polygon fill="black" stroke="black" points="2275.64,-2216.95 2265.05,-2216.62 2273.13,-2223.48 2275.64,-2216.95"/>
+<title>u68&#45;&gt;u47</title>
+<path fill="none" stroke="black" d="M2411.63,-2303.92C2353.42,-2281.53 2244,-2239.45 2178.74,-2214.35"/>
+<polygon fill="black" stroke="black" points="2179.64,-2210.95 2169.05,-2210.62 2177.13,-2217.48 2179.64,-2210.95"/>
 </g>
-<!-- u45 -->
+<!-- u44 -->
 <g id="node66" class="node">
-<title>u45</title>
-<ellipse fill="#3333ff" stroke="black" cx="1784.84" cy="-1816" rx="155.17" ry="18"/>
-<text text-anchor="middle" x="1784.84" y="-1812.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Sentence.Fold</text>
+<title>u44</title>
+<ellipse fill="#ff3333" stroke="black" cx="1721.84" cy="-1812" rx="155.17" ry="18"/>
+<text text-anchor="middle" x="1721.84" y="-1808.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Sentence.Fold</text>
 </g>
-<!-- u68&#45;&gt;u45 -->
+<!-- u68&#45;&gt;u44 -->
 <g id="edge104" class="edge">
-<title>u68&#45;&gt;u45</title>
-<path fill="none" stroke="black" d="M2472.19,-2316.63C2280.58,-2293.36 1780.23,-2220.81 1691.84,-2089 1637.46,-2007.92 1720.48,-1891.94 1762.68,-1841.73"/>
-<polygon fill="black" stroke="black" points="1765.47,-1843.85 1769.31,-1833.98 1760.15,-1839.3 1765.47,-1843.85"/>
+<title>u68&#45;&gt;u44</title>
+<path fill="none" stroke="black" d="M2376.21,-2310.71C2184.64,-2287.65 1684.39,-2215.65 1595.84,-2084 1539.23,-1999.85 1642.52,-1886.21 1694.54,-1837.18"/>
+<polygon fill="black" stroke="black" points="1697.16,-1839.51 1702.11,-1830.15 1692.4,-1834.38 1697.16,-1839.51"/>
 </g>
-<!-- u43 -->
+<!-- u42 -->
 <g id="node68" class="node">
-<title>u43</title>
-<ellipse fill="#3333ff" stroke="black" cx="2479.84" cy="-1561" rx="187.67" ry="18"/>
-<text text-anchor="middle" x="2479.84" y="-1557.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Sentence.Generators</text>
+<title>u42</title>
+<ellipse fill="#ff3333" stroke="black" cx="2581.84" cy="-1557" rx="187.67" ry="18"/>
+<text text-anchor="middle" x="2581.84" y="-1553.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Sentence.Generators</text>
 </g>
-<!-- u68&#45;&gt;u43 -->
+<!-- u68&#45;&gt;u42 -->
 <g id="edge103" class="edge">
-<title>u68&#45;&gt;u43</title>
-<path fill="none" stroke="black" d="M2571.55,-2308.64C2622.78,-2272.54 2735.84,-2180.56 2735.84,-2072 2735.84,-2072 2735.84,-2072 2735.84,-1815 2735.84,-1699.5 2602.37,-1618.89 2528.18,-1583"/>
-<polygon fill="black" stroke="black" points="2529.53,-1579.77 2519,-1578.64 2526.53,-1586.09 2529.53,-1579.77"/>
+<title>u68&#45;&gt;u42</title>
+<path fill="none" stroke="black" d="M2475.55,-2302.73C2526.78,-2266.81 2639.84,-2175.28 2639.84,-2067 2639.84,-2067 2639.84,-2067 2639.84,-1811 2639.84,-1726.58 2608.78,-1630.24 2592.12,-1584.62"/>
+<polygon fill="black" stroke="black" points="2595.37,-1583.32 2588.6,-1575.17 2588.81,-1585.76 2595.37,-1583.32"/>
 </g>
 <!-- u20 -->
 <g id="node69" class="node">
 <title>u20</title>
-<ellipse fill="#ff3333" stroke="black" cx="3373.84" cy="-2199" rx="163.57" ry="18"/>
-<text text-anchor="middle" x="3373.84" y="-2195.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Symbol.Helpers</text>
+<ellipse fill="#77bbff" stroke="black" cx="3364.84" cy="-2193" rx="163.57" ry="18"/>
+<text text-anchor="middle" x="3364.84" y="-2189.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Symbol.Helpers</text>
 </g>
 <!-- u68&#45;&gt;u20 -->
 <g id="edge102" class="edge">
 <title>u68&#45;&gt;u20</title>
-<path fill="none" stroke="black" d="M2614.87,-2314.72C2759.96,-2292.79 3100.49,-2241.32 3271.73,-2215.43"/>
-<polygon fill="black" stroke="black" points="3272.39,-2218.87 3281.76,-2213.92 3271.35,-2211.95 3272.39,-2218.87"/>
+<path fill="none" stroke="black" d="M2521.42,-2309.35C2680.31,-2287.62 3066.95,-2234.74 3256.48,-2208.82"/>
+<polygon fill="black" stroke="black" points="3257.03,-2212.28 3266.47,-2207.45 3256.08,-2205.34 3257.03,-2212.28"/>
 </g>
 <!-- u67 -->
 <g id="node11" class="node">
 <title>u67</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="2972.84" cy="-1179" rx="120.48" ry="18"/>
-<text text-anchor="middle" x="2972.84" y="-1175.3" font-family="Times,serif" font-size="14.00">Language.Drasil.People</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="2944.84" cy="-1176" rx="120.48" ry="18"/>
+<text text-anchor="middle" x="2944.84" y="-1172.3" font-family="Times,serif" font-size="14.00">Language.Drasil.People</text>
 </g>
-<!-- u64 -->
+<!-- u66 -->
 <g id="node12" class="node">
-<title>u64</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="1509.84" cy="-287" rx="137.58" ry="18"/>
-<text text-anchor="middle" x="1509.84" y="-283.3" font-family="Times,serif" font-size="14.00">Language.Drasil.WellTyped</text>
-</g>
-<!-- u63 -->
-<g id="node13" class="node">
-<title>u63</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="3373.84" cy="-2326" rx="145.67" ry="18"/>
-<text text-anchor="middle" x="3373.84" y="-2322.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ShortHands</text>
-</g>
-<!-- u63&#45;&gt;u20 -->
-<g id="edge98" class="edge">
-<title>u63&#45;&gt;u20</title>
-<path fill="none" stroke="black" d="M3373.84,-2307.88C3373.84,-2287.15 3373.84,-2251.95 3373.84,-2227.42"/>
-<polygon fill="black" stroke="black" points="3377.34,-2227.31 3373.84,-2217.31 3370.34,-2227.31 3377.34,-2227.31"/>
-</g>
-<!-- u36 -->
-<g id="node48" class="node">
-<title>u36</title>
-<ellipse fill="#7777ff" stroke="black" cx="3233.84" cy="-1561" rx="161.67" ry="18"/>
-<text text-anchor="middle" x="3233.84" y="-1557.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Document.Core</text>
-</g>
-<!-- u62&#45;&gt;u36 -->
-<g id="edge97" class="edge">
-<title>u62&#45;&gt;u36</title>
-<path fill="none" stroke="black" d="M3049.54,-2180.78C3075.34,-2141.09 3134.84,-2039.32 3134.84,-1945 3134.84,-1945 3134.84,-1945 3134.84,-1815 3134.84,-1726.53 3187.99,-1631.87 3216.4,-1587.6"/>
-<polygon fill="black" stroke="black" points="3219.36,-1589.47 3221.9,-1579.18 3213.5,-1585.64 3219.36,-1589.47"/>
-</g>
-<!-- u61 -->
-<g id="node15" class="node">
-<title>u61</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="1967.84" cy="-1052" rx="147.57" ry="18"/>
-<text text-anchor="middle" x="1967.84" y="-1048.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ExprClasses</text>
-</g>
-<!-- u24 -->
-<g id="node61" class="node">
-<title>u24</title>
-<ellipse fill="#33ff33" stroke="black" cx="1955.84" cy="-924" rx="180.07" ry="18"/>
-<text text-anchor="middle" x="1955.84" y="-920.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ModelExpr.Convert</text>
-</g>
-<!-- u61&#45;&gt;u24 -->
-<g id="edge96" class="edge">
-<title>u61&#45;&gt;u24</title>
-<path fill="none" stroke="black" d="M1966.19,-1033.74C1964.19,-1012.73 1960.79,-976.97 1958.43,-952.23"/>
-<polygon fill="black" stroke="black" points="1961.89,-951.67 1957.46,-942.05 1954.92,-952.33 1961.89,-951.67"/>
-</g>
-<!-- u46 -->
-<g id="node16" class="node">
-<title>u46</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="976.84" cy="-287" rx="124.28" ry="18"/>
-<text text-anchor="middle" x="976.84" y="-283.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Display</text>
-</g>
-<!-- u46&#45;&gt;u18 -->
-<g id="edge71" class="edge">
-<title>u46&#45;&gt;u18</title>
-<path fill="none" stroke="black" d="M1053.94,-272.87C1192.66,-249.25 1483.45,-199.74 1629.38,-174.89"/>
-<polygon fill="black" stroke="black" points="1630.36,-178.27 1639.63,-173.15 1629.19,-171.37 1630.36,-178.27"/>
-</g>
-<!-- u42 -->
-<g id="node17" class="node">
-<title>u42</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="1274.84" cy="-1179" rx="146.77" ry="18"/>
-<text text-anchor="middle" x="1274.84" y="-1175.3" font-family="Times,serif" font-size="14.00">Language.Drasil.NounPhrase</text>
+<title>u66</title>
+<ellipse fill="#ffbbbb" stroke="black" cx="1460.84" cy="-286" rx="137.58" ry="18"/>
+<text text-anchor="middle" x="1460.84" y="-282.3" font-family="Times,serif" font-size="14.00">Language.Drasil.WellTyped</text>
 </g>
 <!-- u65 -->
-<g id="node65" class="node">
+<g id="node13" class="node">
 <title>u65</title>
-<ellipse fill="#bbff77" stroke="black" cx="1591.84" cy="-1052" rx="171.67" ry="18"/>
-<text text-anchor="middle" x="1591.84" y="-1048.3" font-family="Times,serif" font-size="14.00">Language.Drasil.NounPhrase.Core</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="3364.84" cy="-2320" rx="145.67" ry="18"/>
+<text text-anchor="middle" x="3364.84" y="-2316.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ShortHands</text>
 </g>
-<!-- u42&#45;&gt;u65 -->
-<g id="edge63" class="edge">
-<title>u42&#45;&gt;u65</title>
-<path fill="none" stroke="black" d="M1316.28,-1161.66C1373.79,-1138.98 1477.75,-1097.99 1540.22,-1073.35"/>
-<polygon fill="black" stroke="black" points="1541.86,-1076.47 1549.88,-1069.54 1539.29,-1069.96 1541.86,-1076.47"/>
+<!-- u65&#45;&gt;u20 -->
+<g id="edge100" class="edge">
+<title>u65&#45;&gt;u20</title>
+<path fill="none" stroke="black" d="M3364.84,-2301.88C3364.84,-2281.15 3364.84,-2245.95 3364.84,-2221.42"/>
+<polygon fill="black" stroke="black" points="3368.34,-2221.31 3364.84,-2211.31 3361.34,-2221.31 3368.34,-2221.31"/>
+</g>
+<!-- u36 -->
+<g id="node47" class="node">
+<title>u36</title>
+<ellipse fill="#7777ff" stroke="black" cx="3065.84" cy="-1557" rx="161.67" ry="18"/>
+<text text-anchor="middle" x="3065.84" y="-1553.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Document.Core</text>
+</g>
+<!-- u64&#45;&gt;u36 -->
+<g id="edge99" class="edge">
+<title>u64&#45;&gt;u36</title>
+<path fill="none" stroke="black" d="M2994.45,-2174.89C3015.9,-2135.04 3065.84,-2032.37 3065.84,-1940 3065.84,-1940 3065.84,-1940 3065.84,-1811 3065.84,-1728.86 3065.84,-1631.72 3065.84,-1585.32"/>
+<polygon fill="black" stroke="black" points="3069.34,-1585.18 3065.84,-1575.18 3062.34,-1585.18 3069.34,-1585.18"/>
+</g>
+<!-- u60 -->
+<g id="node15" class="node">
+<title>u60</title>
+<ellipse fill="#ffbbbb" stroke="black" cx="2172.84" cy="-1049" rx="147.57" ry="18"/>
+<text text-anchor="middle" x="2172.84" y="-1045.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ExprClasses</text>
+</g>
+<!-- u24 -->
+<g id="node60" class="node">
+<title>u24</title>
+<ellipse fill="#33ff33" stroke="black" cx="2048.84" cy="-922" rx="180.07" ry="18"/>
+<text text-anchor="middle" x="2048.84" y="-918.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ModelExpr.Convert</text>
+</g>
+<!-- u60&#45;&gt;u24 -->
+<g id="edge95" class="edge">
+<title>u60&#45;&gt;u24</title>
+<path fill="none" stroke="black" d="M2155.86,-1030.88C2134.46,-1009.31 2097.53,-972.09 2073.15,-947.51"/>
+<polygon fill="black" stroke="black" points="2075.54,-944.95 2066.01,-940.31 2070.57,-949.88 2075.54,-944.95"/>
+</g>
+<!-- u45 -->
+<g id="node16" class="node">
+<title>u45</title>
+<ellipse fill="#ffbbbb" stroke="black" cx="927.84" cy="-286" rx="124.28" ry="18"/>
+<text text-anchor="middle" x="927.84" y="-282.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Display</text>
+</g>
+<!-- u45&#45;&gt;u18 -->
+<g id="edge70" class="edge">
+<title>u45&#45;&gt;u18</title>
+<path fill="none" stroke="black" d="M1007.95,-272.21C1154.98,-248.74 1466.89,-198.94 1620.92,-174.35"/>
+<polygon fill="black" stroke="black" points="1621.51,-177.8 1630.83,-172.77 1620.41,-170.89 1621.51,-177.8"/>
 </g>
 <!-- u41 -->
-<g id="node18" class="node">
+<g id="node17" class="node">
 <title>u41</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="1960.84" cy="-1179" rx="132.68" ry="18"/>
-<text text-anchor="middle" x="1960.84" y="-1175.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Sentence</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="2137.84" cy="-1176" rx="132.68" ry="18"/>
+<text text-anchor="middle" x="2137.84" y="-1172.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Sentence</text>
 </g>
-<!-- u41&#45;&gt;u61 -->
+<!-- u41&#45;&gt;u60 -->
 <g id="edge61" class="edge">
-<title>u41&#45;&gt;u61</title>
-<path fill="none" stroke="black" d="M1961.8,-1160.88C1962.96,-1140.15 1964.93,-1104.95 1966.3,-1080.42"/>
-<polygon fill="black" stroke="black" points="1969.8,-1080.49 1966.87,-1070.31 1962.81,-1080.1 1969.8,-1080.49"/>
+<title>u41&#45;&gt;u60</title>
+<path fill="none" stroke="black" d="M2142.63,-1157.88C2148.46,-1137.05 2158.38,-1101.64 2165.25,-1077.09"/>
+<polygon fill="black" stroke="black" points="2168.66,-1077.89 2167.99,-1067.31 2161.92,-1076 2168.66,-1077.89"/>
 </g>
 <!-- u15 -->
-<g id="node26" class="node">
+<g id="node25" class="node">
 <title>u15</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="2036.84" cy="-414" rx="133.48" ry="18"/>
-<text text-anchor="middle" x="2036.84" y="-410.3" font-family="Times,serif" font-size="14.00">Language.Drasil.UnitLang</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="2128.84" cy="-413" rx="133.48" ry="18"/>
+<text text-anchor="middle" x="2128.84" y="-409.3" font-family="Times,serif" font-size="14.00">Language.Drasil.UnitLang</text>
 </g>
 <!-- u41&#45;&gt;u15 -->
 <g id="edge59" class="edge">
 <title>u41&#45;&gt;u15</title>
-<path fill="none" stroke="black" d="M2001.03,-1161.67C2038.56,-1144.37 2093.39,-1113.53 2124.84,-1070 2163.92,-1015.9 2163.84,-991.73 2163.84,-925 2163.84,-925 2163.84,-925 2163.84,-668 2163.84,-575.66 2095.42,-482.58 2059.02,-439.59"/>
-<polygon fill="black" stroke="black" points="2061.59,-437.2 2052.41,-431.91 2056.29,-441.77 2061.59,-437.2"/>
+<path fill="none" stroke="black" d="M2191.91,-1159.54C2236.49,-1143.81 2297.48,-1114.83 2329.84,-1067 2366.01,-1013.53 2348.84,-987.55 2348.84,-923 2348.84,-923 2348.84,-923 2348.84,-666 2348.84,-557.78 2232.28,-473.59 2168.84,-435.79"/>
+<polygon fill="black" stroke="black" points="2170.29,-432.58 2159.89,-430.55 2166.75,-438.62 2170.29,-432.58"/>
 </g>
 <!-- u26 -->
-<g id="node59" class="node">
+<g id="node58" class="node">
 <title>u26</title>
-<ellipse fill="#33ff33" stroke="black" cx="1542.84" cy="-924" rx="177.37" ry="18"/>
-<text text-anchor="middle" x="1542.84" y="-920.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ModelExpr.Extract</text>
+<ellipse fill="#33ff33" stroke="black" cx="1542.84" cy="-922" rx="177.37" ry="18"/>
+<text text-anchor="middle" x="1542.84" y="-918.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ModelExpr.Extract</text>
 </g>
 <!-- u41&#45;&gt;u26 -->
 <g id="edge60" class="edge">
 <title>u41&#45;&gt;u26</title>
-<path fill="none" stroke="black" d="M1935.39,-1161.22C1904.92,-1140.78 1852.74,-1104.67 1810.84,-1070 1792.91,-1055.17 1792.03,-1047.15 1772.84,-1034 1716.95,-995.73 1645.53,-964.21 1597.22,-945.08"/>
-<polygon fill="black" stroke="black" points="1598.46,-941.81 1587.87,-941.42 1595.91,-948.33 1598.46,-941.81"/>
+<path fill="none" stroke="black" d="M2118.22,-1157.99C2093.96,-1136.88 2051.51,-1099.67 2015.84,-1067 1998.68,-1051.29 1998.24,-1042.17 1977.84,-1031 1881.95,-978.51 1760.3,-951.1 1670.05,-937.06"/>
+<polygon fill="black" stroke="black" points="1670.44,-933.58 1660.03,-935.54 1669.39,-940.5 1670.44,-933.58"/>
 </g>
-<!-- u41&#45;&gt;u65 -->
+<!-- u62 -->
+<g id="node65" class="node">
+<title>u62</title>
+<ellipse fill="#3333ff" stroke="black" cx="1674.84" cy="-1049" rx="293.55" ry="18"/>
+<text text-anchor="middle" x="1674.84" y="-1045.3" font-family="Times,serif" font-size="14.00">Language.Drasil.NaturalLanguage.English.NounPhrase.Core</text>
+</g>
+<!-- u41&#45;&gt;u62 -->
 <g id="edge62" class="edge">
-<title>u41&#45;&gt;u65</title>
-<path fill="none" stroke="black" d="M1913.73,-1162.04C1846.32,-1139.21 1722.48,-1097.25 1649.62,-1072.58"/>
-<polygon fill="black" stroke="black" points="1650.72,-1069.25 1640.13,-1069.36 1648.48,-1075.88 1650.72,-1069.25"/>
+<title>u41&#45;&gt;u62</title>
+<path fill="none" stroke="black" d="M2081.06,-1159.67C1996.72,-1136.9 1838.41,-1094.16 1746.3,-1069.29"/>
+<polygon fill="black" stroke="black" points="1747.07,-1065.87 1736.5,-1066.65 1745.24,-1072.63 1747.07,-1065.87"/>
 </g>
 <!-- u35 -->
-<g id="node19" class="node">
+<g id="node18" class="node">
 <title>u35</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="1620.84" cy="-1306" rx="124.58" ry="18"/>
-<text text-anchor="middle" x="1620.84" y="-1302.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Classes</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="1797.84" cy="-1303" rx="124.58" ry="18"/>
+<text text-anchor="middle" x="1797.84" y="-1299.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Classes</text>
 </g>
 <!-- u35&#45;&gt;u41 -->
 <g id="edge48" class="edge">
 <title>u35&#45;&gt;u41</title>
-<path fill="none" stroke="black" d="M1664.24,-1289.04C1726.35,-1266.21 1840.47,-1224.25 1907.6,-1199.57"/>
-<polygon fill="black" stroke="black" points="1908.97,-1202.8 1917.15,-1196.06 1906.56,-1196.23 1908.97,-1202.8"/>
+<path fill="none" stroke="black" d="M1841.24,-1286.04C1903.35,-1263.21 2017.47,-1221.25 2084.6,-1196.57"/>
+<polygon fill="black" stroke="black" points="2085.97,-1199.8 2094.15,-1193.06 2083.56,-1193.23 2085.97,-1199.8"/>
 </g>
 <!-- u35&#45;&gt;u33 -->
 <g id="edge47" class="edge">
 <title>u35&#45;&gt;u33</title>
-<path fill="none" stroke="black" d="M1532.69,-1293.24C1358.78,-1270.04 972.35,-1218.49 786.96,-1193.76"/>
-<polygon fill="black" stroke="black" points="787.31,-1190.27 776.93,-1192.42 786.38,-1197.21 787.31,-1190.27"/>
+<path fill="none" stroke="black" d="M1708.12,-1290.41C1693.33,-1288.56 1678.16,-1286.7 1663.84,-1285 1351.04,-1247.93 981.55,-1208.35 798.51,-1189.02"/>
+<polygon fill="black" stroke="black" points="798.64,-1185.51 788.33,-1187.95 797.91,-1192.48 798.64,-1185.51"/>
 </g>
-<!-- u55 -->
-<g id="node36" class="node">
-<title>u55</title>
-<ellipse fill="#bbffff" stroke="black" cx="1620.84" cy="-1179" rx="175.47" ry="18"/>
-<text text-anchor="middle" x="1620.84" y="-1175.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.NamedIdea</text>
+<!-- u54 -->
+<g id="node35" class="node">
+<title>u54</title>
+<ellipse fill="#bbffff" stroke="black" cx="1797.84" cy="-1176" rx="175.47" ry="18"/>
+<text text-anchor="middle" x="1797.84" y="-1172.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.NamedIdea</text>
 </g>
-<!-- u35&#45;&gt;u55 -->
+<!-- u35&#45;&gt;u54 -->
 <g id="edge49" class="edge">
-<title>u35&#45;&gt;u55</title>
-<path fill="none" stroke="black" d="M1620.84,-1287.88C1620.84,-1267.15 1620.84,-1231.95 1620.84,-1207.42"/>
-<polygon fill="black" stroke="black" points="1624.34,-1207.31 1620.84,-1197.31 1617.34,-1207.31 1624.34,-1207.31"/>
+<title>u35&#45;&gt;u54</title>
+<path fill="none" stroke="black" d="M1797.84,-1284.88C1797.84,-1264.15 1797.84,-1228.95 1797.84,-1204.42"/>
+<polygon fill="black" stroke="black" points="1801.34,-1204.31 1797.84,-1194.31 1794.34,-1204.31 1801.34,-1204.31"/>
 </g>
 <!-- u34 -->
-<g id="node20" class="node">
+<g id="node19" class="node">
 <title>u34</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="1582.84" cy="-32" rx="121.58" ry="18"/>
-<text text-anchor="middle" x="1582.84" y="-28.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Stages</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="1576.84" cy="-32" rx="121.58" ry="18"/>
+<text text-anchor="middle" x="1576.84" y="-28.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Stages</text>
 </g>
 <!-- u30 -->
-<g id="node51" class="node">
+<g id="node50" class="node">
 <title>u30</title>
-<ellipse fill="#ff7777" stroke="black" cx="552.84" cy="-669" rx="137.28" ry="18"/>
-<text text-anchor="middle" x="552.84" y="-665.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Expr.Lang</text>
+<ellipse fill="#ff7777" stroke="black" cx="552.84" cy="-667" rx="137.28" ry="18"/>
+<text text-anchor="middle" x="552.84" y="-663.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Expr.Lang</text>
 </g>
 <!-- u33&#45;&gt;u30 -->
 <g id="edge46" class="edge">
 <title>u33&#45;&gt;u30</title>
-<path fill="none" stroke="black" d="M687,-1160.66C696.62,-1103.2 721.41,-914.95 660.84,-779 644.96,-743.37 611.9,-712.83 586.52,-693.22"/>
-<polygon fill="black" stroke="black" points="588.34,-690.21 578.24,-687 584.13,-695.81 588.34,-690.21"/>
+<path fill="none" stroke="black" d="M686.98,-1157.7C696.58,-1100.39 721.27,-912.6 660.84,-777 644.96,-741.37 611.9,-710.83 586.52,-691.22"/>
+<polygon fill="black" stroke="black" points="588.34,-688.21 578.24,-685 584.13,-693.81 588.34,-688.21"/>
 </g>
 <!-- u14 -->
-<g id="node27" class="node">
+<g id="node26" class="node">
 <title>u14</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="2922.84" cy="-1434" rx="136.48" ry="18"/>
-<text text-anchor="middle" x="2922.84" y="-1430.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Reference</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="2894.84" cy="-1430" rx="136.48" ry="18"/>
+<text text-anchor="middle" x="2894.84" y="-1426.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Reference</text>
 </g>
 <!-- u19&#45;&gt;u14 -->
 <g id="edge30" class="edge">
 <title>u19&#45;&gt;u14</title>
-<path fill="none" stroke="black" d="M2877.1,-1542.88C2885.97,-1521.96 2901.08,-1486.32 2911.49,-1461.76"/>
-<polygon fill="black" stroke="black" points="2914.81,-1462.89 2915.5,-1452.31 2908.37,-1460.15 2914.81,-1462.89"/>
+<path fill="none" stroke="black" d="M2855.72,-1666.61C2862.9,-1623.36 2881.61,-1510.65 2890.29,-1458.37"/>
+<polygon fill="black" stroke="black" points="2893.8,-1458.62 2891.99,-1448.18 2886.89,-1457.47 2893.8,-1458.62"/>
 </g>
 <!-- u18&#45;&gt;u34 -->
 <g id="edge29" class="edge">
 <title>u18&#45;&gt;u34</title>
-<path fill="none" stroke="black" d="M1698.76,-141.14C1675.49,-119.43 1634.89,-81.55 1608.44,-56.88"/>
-<polygon fill="black" stroke="black" points="1610.75,-54.25 1601.05,-49.99 1605.98,-59.37 1610.75,-54.25"/>
+<path fill="none" stroke="black" d="M1692.76,-141.14C1669.49,-119.43 1628.89,-81.55 1602.44,-56.88"/>
+<polygon fill="black" stroke="black" points="1604.75,-54.25 1595.05,-49.99 1599.98,-59.37 1604.75,-54.25"/>
 </g>
 <!-- u17 -->
-<g id="node24" class="node">
+<g id="node23" class="node">
 <title>u17</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="1850.84" cy="-32" rx="128.08" ry="18"/>
-<text text-anchor="middle" x="1850.84" y="-28.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Unicode</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="1844.84" cy="-32" rx="128.08" ry="18"/>
+<text text-anchor="middle" x="1844.84" y="-28.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Unicode</text>
 </g>
 <!-- u18&#45;&gt;u17 -->
 <g id="edge28" class="edge">
 <title>u18&#45;&gt;u17</title>
-<path fill="none" stroke="black" d="M1734.91,-141.14C1758.19,-119.43 1798.79,-81.55 1825.24,-56.88"/>
-<polygon fill="black" stroke="black" points="1827.7,-59.37 1832.62,-49.99 1822.92,-54.25 1827.7,-59.37"/>
+<path fill="none" stroke="black" d="M1728.91,-141.14C1752.19,-119.43 1792.79,-81.55 1819.24,-56.88"/>
+<polygon fill="black" stroke="black" points="1821.7,-59.37 1826.62,-49.99 1816.92,-54.25 1821.7,-59.37"/>
 </g>
 <!-- u16 -->
-<g id="node25" class="node">
+<g id="node24" class="node">
 <title>u16</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="2601.84" cy="-1306" rx="142.97" ry="18"/>
-<text text-anchor="middle" x="2601.84" y="-1302.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ShortName</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="2573.84" cy="-1303" rx="142.97" ry="18"/>
+<text text-anchor="middle" x="2573.84" y="-1299.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ShortName</text>
 </g>
 <!-- u16&#45;&gt;u41 -->
 <g id="edge27" class="edge">
 <title>u16&#45;&gt;u41</title>
-<path fill="none" stroke="black" d="M2527.68,-1290.54C2407.04,-1267.01 2169.12,-1220.62 2043.31,-1196.08"/>
-<polygon fill="black" stroke="black" points="2043.83,-1192.62 2033.34,-1194.14 2042.49,-1199.49 2043.83,-1192.62"/>
+<path fill="none" stroke="black" d="M2519.06,-1286.3C2438.32,-1263.15 2287.68,-1219.96 2201.92,-1195.37"/>
+<polygon fill="black" stroke="black" points="2202.63,-1191.93 2192.05,-1192.54 2200.7,-1198.66 2202.63,-1191.93"/>
 </g>
 <!-- u15&#45;&gt;u18 -->
 <g id="edge26" class="edge">
 <title>u15&#45;&gt;u18</title>
-<path fill="none" stroke="black" d="M2015.59,-396.2C1960.02,-352.27 1810.23,-233.84 1746.35,-183.33"/>
-<polygon fill="black" stroke="black" points="1748.3,-180.41 1738.28,-176.96 1743.96,-185.9 1748.3,-180.41"/>
+<path fill="none" stroke="black" d="M2101.09,-395.27C2027.87,-351.13 1829.48,-231.53 1747.28,-181.97"/>
+<polygon fill="black" stroke="black" points="1748.68,-178.72 1738.3,-176.56 1745.06,-184.72 1748.68,-178.72"/>
 </g>
 <!-- u14&#45;&gt;u16 -->
 <g id="edge24" class="edge">
 <title>u14&#45;&gt;u16</title>
-<path fill="none" stroke="black" d="M2881.53,-1416.79C2822.98,-1393.8 2715.96,-1351.8 2652.63,-1326.94"/>
-<polygon fill="black" stroke="black" points="2653.83,-1323.65 2643.24,-1323.25 2651.27,-1330.16 2653.83,-1323.65"/>
+<path fill="none" stroke="black" d="M2853.2,-1412.79C2794.71,-1390.01 2688.3,-1348.57 2625.04,-1323.94"/>
+<polygon fill="black" stroke="black" points="2626.24,-1320.65 2615.65,-1320.28 2623.7,-1327.17 2626.24,-1320.65"/>
 </g>
 <!-- u21 -->
-<g id="node54" class="node">
+<g id="node53" class="node">
 <title>u21</title>
-<ellipse fill="#77ffff" stroke="black" cx="2922.84" cy="-1306" rx="140.28" ry="18"/>
-<text text-anchor="middle" x="2922.84" y="-1302.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Label.Type</text>
+<ellipse fill="#77ffff" stroke="black" cx="2894.84" cy="-1303" rx="140.28" ry="18"/>
+<text text-anchor="middle" x="2894.84" y="-1299.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Label.Type</text>
 </g>
 <!-- u14&#45;&gt;u21 -->
 <g id="edge25" class="edge">
 <title>u14&#45;&gt;u21</title>
-<path fill="none" stroke="black" d="M2922.84,-1415.74C2922.84,-1394.73 2922.84,-1358.97 2922.84,-1334.23"/>
-<polygon fill="black" stroke="black" points="2926.34,-1334.05 2922.84,-1324.05 2919.34,-1334.05 2926.34,-1334.05"/>
+<path fill="none" stroke="black" d="M2894.84,-1411.88C2894.84,-1391.15 2894.84,-1355.95 2894.84,-1331.42"/>
+<polygon fill="black" stroke="black" points="2898.34,-1331.31 2894.84,-1321.31 2891.34,-1331.31 2898.34,-1331.31"/>
 </g>
 <!-- u13 -->
-<g id="node28" class="node">
+<g id="node27" class="node">
 <title>u13</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="1236.84" cy="-287" rx="117.78" ry="18"/>
-<text text-anchor="middle" x="1236.84" y="-283.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Space</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="1187.84" cy="-286" rx="117.78" ry="18"/>
+<text text-anchor="middle" x="1187.84" y="-282.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Space</text>
 </g>
 <!-- u13&#45;&gt;u18 -->
 <g id="edge23" class="edge">
 <title>u13&#45;&gt;u18</title>
-<path fill="none" stroke="black" d="M1293.31,-271.18C1382.23,-247.83 1554.52,-202.61 1649.66,-177.63"/>
-<polygon fill="black" stroke="black" points="1650.68,-180.99 1659.46,-175.06 1648.9,-174.22 1650.68,-180.99"/>
+<path fill="none" stroke="black" d="M1248.34,-270.54C1345.5,-247.32 1535.88,-201.82 1639.51,-177.05"/>
+<polygon fill="black" stroke="black" points="1640.35,-180.45 1649.26,-174.72 1638.72,-173.64 1640.35,-180.45"/>
 </g>
 <!-- u12 -->
-<g id="node29" class="node">
+<g id="node28" class="node">
 <title>u12</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="2227.84" cy="-1434" rx="151.37" ry="18"/>
-<text text-anchor="middle" x="2227.84" y="-1430.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Development</text>
+<ellipse fill="#ffbbbb" stroke="black" cx="2199.84" cy="-1430" rx="151.37" ry="18"/>
+<text text-anchor="middle" x="2199.84" y="-1426.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Development</text>
 </g>
 <!-- u37 -->
-<g id="node47" class="node">
+<g id="node46" class="node">
 <title>u37</title>
-<ellipse fill="#ffff77" stroke="black" cx="1960.84" cy="-1306" rx="196.87" ry="18"/>
-<text text-anchor="middle" x="1960.84" y="-1302.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Development.Sentence</text>
+<ellipse fill="#ffff77" stroke="black" cx="2137.84" cy="-1303" rx="196.87" ry="18"/>
+<text text-anchor="middle" x="2137.84" y="-1299.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Development.Sentence</text>
 </g>
 <!-- u12&#45;&gt;u37 -->
 <g id="edge22" class="edge">
 <title>u12&#45;&gt;u37</title>
-<path fill="none" stroke="black" d="M2192.66,-1416.4C2144.57,-1393.7 2058.28,-1352.98 2005.63,-1328.14"/>
-<polygon fill="black" stroke="black" points="2007.06,-1324.94 1996.52,-1323.84 2004.07,-1331.27 2007.06,-1324.94"/>
+<path fill="none" stroke="black" d="M2191.35,-1411.88C2180.92,-1390.87 2163.13,-1355 2150.95,-1330.44"/>
+<polygon fill="black" stroke="black" points="2154,-1328.72 2146.42,-1321.31 2147.73,-1331.83 2154,-1328.72"/>
 </g>
 <!-- u9 -->
-<g id="node30" class="node">
+<g id="node29" class="node">
 <title>u9</title>
-<ellipse fill="#ffbbbb" stroke="black" cx="2221.84" cy="-2071" rx="145.67" ry="18"/>
-<text text-anchor="middle" x="2221.84" y="-2067.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Uncertainty</text>
-</g>
-<!-- u60 -->
-<g id="node31" class="node">
-<title>u60</title>
-<ellipse fill="#bbffff" stroke="black" cx="2115.84" cy="-1816" rx="157.87" ry="18"/>
-<text text-anchor="middle" x="2115.84" y="-1812.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Unitary</text>
-</g>
-<!-- u53 -->
-<g id="node38" class="node">
-<title>u53</title>
-<ellipse fill="#bbffff" stroke="black" cx="2115.84" cy="-1689" rx="165.17" ry="18"/>
-<text text-anchor="middle" x="2115.84" y="-1685.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.UnitDefn</text>
-</g>
-<!-- u60&#45;&gt;u53 -->
-<g id="edge95" class="edge">
-<title>u60&#45;&gt;u53</title>
-<path fill="none" stroke="black" d="M2115.84,-1797.88C2115.84,-1777.15 2115.84,-1741.95 2115.84,-1717.42"/>
-<polygon fill="black" stroke="black" points="2119.34,-1717.31 2115.84,-1707.31 2112.34,-1717.31 2119.34,-1717.31"/>
+<ellipse fill="#ffbbbb" stroke="black" cx="2125.84" cy="-2066" rx="145.67" ry="18"/>
+<text text-anchor="middle" x="2125.84" y="-2062.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Uncertainty</text>
 </g>
 <!-- u59 -->
-<g id="node32" class="node">
+<g id="node30" class="node">
 <title>u59</title>
-<ellipse fill="#bbffff" stroke="black" cx="1879.84" cy="-2071" rx="178.97" ry="18"/>
-<text text-anchor="middle" x="1879.84" y="-2067.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Constrained</text>
+<ellipse fill="#bbffff" stroke="black" cx="2052.84" cy="-1812" rx="157.87" ry="18"/>
+<text text-anchor="middle" x="2052.84" y="-1808.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Unitary</text>
 </g>
-<!-- u47 -->
-<g id="node42" class="node">
-<title>u47</title>
-<ellipse fill="#bbffff" stroke="black" cx="1879.84" cy="-1944" rx="151.37" ry="18"/>
-<text text-anchor="middle" x="1879.84" y="-1940.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Unital</text>
+<!-- u52 -->
+<g id="node37" class="node">
+<title>u52</title>
+<ellipse fill="#bbffff" stroke="black" cx="2052.84" cy="-1685" rx="165.17" ry="18"/>
+<text text-anchor="middle" x="2052.84" y="-1681.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.UnitDefn</text>
 </g>
-<!-- u59&#45;&gt;u47 -->
+<!-- u59&#45;&gt;u52 -->
 <g id="edge94" class="edge">
-<title>u59&#45;&gt;u47</title>
-<path fill="none" stroke="black" d="M1879.84,-2052.88C1879.84,-2032.15 1879.84,-1996.95 1879.84,-1972.42"/>
-<polygon fill="black" stroke="black" points="1883.34,-1972.31 1879.84,-1962.31 1876.34,-1972.31 1883.34,-1972.31"/>
+<title>u59&#45;&gt;u52</title>
+<path fill="none" stroke="black" d="M2052.84,-1793.88C2052.84,-1773.15 2052.84,-1737.95 2052.84,-1713.42"/>
+<polygon fill="black" stroke="black" points="2056.34,-1713.31 2052.84,-1703.31 2049.34,-1713.31 2056.34,-1713.31"/>
 </g>
 <!-- u58 -->
-<g id="node33" class="node">
+<g id="node31" class="node">
 <title>u58</title>
-<ellipse fill="#bbffff" stroke="black" cx="2113.84" cy="-1561" rx="160.57" ry="18"/>
-<text text-anchor="middle" x="2113.84" y="-1557.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Concept</text>
+<ellipse fill="#bbffff" stroke="black" cx="1783.84" cy="-2066" rx="178.97" ry="18"/>
+<text text-anchor="middle" x="1783.84" y="-2062.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Constrained</text>
 </g>
-<!-- u58&#45;&gt;u42 -->
-<g id="edge92" class="edge">
-<title>u58&#45;&gt;u42</title>
-<path fill="none" stroke="black" d="M1959.19,-1556.06C1671.61,-1547.14 1077.97,-1520.54 1015.84,-1452 984.13,-1417.02 984.84,-1367.28 1050.84,-1288 1089.16,-1241.96 1151.74,-1214.1 1201.03,-1198.24"/>
-<polygon fill="black" stroke="black" points="1202.2,-1201.54 1210.7,-1195.23 1200.11,-1194.86 1202.2,-1201.54"/>
+<!-- u46 -->
+<g id="node41" class="node">
+<title>u46</title>
+<ellipse fill="#bbffff" stroke="black" cx="1783.84" cy="-1939" rx="151.37" ry="18"/>
+<text text-anchor="middle" x="1783.84" y="-1935.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Unital</text>
 </g>
-<!-- u49 -->
-<g id="node44" class="node">
-<title>u49</title>
-<ellipse fill="#ffbbff" stroke="black" cx="2582.84" cy="-1434" rx="185.47" ry="18"/>
-<text text-anchor="middle" x="2582.84" y="-1430.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Concept.Core</text>
-</g>
-<!-- u58&#45;&gt;u49 -->
+<!-- u58&#45;&gt;u46 -->
 <g id="edge93" class="edge">
-<title>u58&#45;&gt;u49</title>
-<path fill="none" stroke="black" d="M2173.24,-1544.17C2259.8,-1521.1 2420.33,-1478.31 2512.63,-1453.71"/>
-<polygon fill="black" stroke="black" points="2513.68,-1457.05 2522.44,-1451.1 2511.87,-1450.29 2513.68,-1457.05"/>
+<title>u58&#45;&gt;u46</title>
+<path fill="none" stroke="black" d="M1783.84,-2047.88C1783.84,-2027.15 1783.84,-1991.95 1783.84,-1967.42"/>
+<polygon fill="black" stroke="black" points="1787.34,-1967.31 1783.84,-1957.31 1780.34,-1967.31 1787.34,-1967.31"/>
 </g>
-<!-- u57&#45;&gt;u53 -->
+<!-- u57 -->
+<g id="node32" class="node">
+<title>u57</title>
+<ellipse fill="#bbffff" stroke="black" cx="2106.84" cy="-1557" rx="160.57" ry="18"/>
+<text text-anchor="middle" x="2106.84" y="-1553.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Concept</text>
+</g>
+<!-- u48 -->
+<g id="node43" class="node">
+<title>u48</title>
+<ellipse fill="#ffbbff" stroke="black" cx="2554.84" cy="-1430" rx="185.47" ry="18"/>
+<text text-anchor="middle" x="2554.84" y="-1426.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Concept.Core</text>
+</g>
+<!-- u57&#45;&gt;u48 -->
 <g id="edge91" class="edge">
-<title>u57&#45;&gt;u53</title>
-<path fill="none" stroke="black" d="M1463.34,-1799.92C1604.02,-1776.22 1875.72,-1730.45 2020.14,-1706.12"/>
-<polygon fill="black" stroke="black" points="2021.04,-1709.52 2030.32,-1704.41 2019.87,-1702.62 2021.04,-1709.52"/>
+<title>u57&#45;&gt;u48</title>
+<path fill="none" stroke="black" d="M2164.03,-1540.04C2246.6,-1517 2398.91,-1474.51 2487.03,-1449.92"/>
+<polygon fill="black" stroke="black" points="2488.23,-1453.22 2496.92,-1447.16 2486.35,-1446.48 2488.23,-1453.22"/>
 </g>
-<!-- u57&#45;&gt;u32 -->
+<!-- u61 -->
+<g id="node63" class="node">
+<title>u61</title>
+<ellipse fill="#bbff77" stroke="black" cx="1329.84" cy="-1176" rx="268.35" ry="18"/>
+<text text-anchor="middle" x="1329.84" y="-1172.3" font-family="Times,serif" font-size="14.00">Language.Drasil.NaturalLanguage.English.NounPhrase</text>
+</g>
+<!-- u57&#45;&gt;u61 -->
+<g id="edge92" class="edge">
+<title>u57&#45;&gt;u61</title>
+<path fill="none" stroke="black" d="M1969.78,-1547.57C1678.38,-1529.01 1021.03,-1483.41 987.84,-1448 938.28,-1395.13 940.9,-1343.38 983.84,-1285 1013.2,-1245.08 1137.41,-1213.4 1228.64,-1194.93"/>
+<polygon fill="black" stroke="black" points="1229.36,-1198.35 1238.48,-1192.96 1227.99,-1191.49 1229.36,-1198.35"/>
+</g>
+<!-- u56&#45;&gt;u52 -->
 <g id="edge90" class="edge">
-<title>u57&#45;&gt;u32</title>
-<path fill="none" stroke="black" d="M1373.56,-1797.88C1373.23,-1777.15 1372.67,-1741.95 1372.28,-1717.42"/>
-<polygon fill="black" stroke="black" points="1375.77,-1717.26 1372.11,-1707.31 1368.77,-1717.37 1375.77,-1717.26"/>
+<title>u56&#45;&gt;u52</title>
+<path fill="none" stroke="black" d="M1402.1,-1795.92C1542.31,-1772.24 1813,-1726.51 1957.11,-1702.17"/>
+<polygon fill="black" stroke="black" points="1957.99,-1705.57 1967.26,-1700.45 1956.82,-1698.67 1957.99,-1705.57"/>
 </g>
-<!-- u56&#45;&gt;u58 -->
+<!-- u56&#45;&gt;u32 -->
 <g id="edge89" class="edge">
-<title>u56&#45;&gt;u58</title>
-<path fill="none" stroke="black" d="M2539.27,-2052.96C2512.47,-1994.03 2416.8,-1795.73 2289.84,-1671 2251.43,-1633.27 2197.7,-1602.37 2159.74,-1583.23"/>
-<polygon fill="black" stroke="black" points="2160.96,-1579.93 2150.45,-1578.62 2157.85,-1586.2 2160.96,-1579.93"/>
+<title>u56&#45;&gt;u32</title>
+<path fill="none" stroke="black" d="M1320.92,-1793.88C1330.84,-1772.87 1347.76,-1737 1359.36,-1712.44"/>
+<polygon fill="black" stroke="black" points="1362.56,-1713.85 1363.67,-1703.31 1356.23,-1710.86 1362.56,-1713.85"/>
 </g>
-<!-- u55&#45;&gt;u65 -->
+<!-- u55&#45;&gt;u57 -->
 <g id="edge88" class="edge">
-<title>u55&#45;&gt;u65</title>
-<path fill="none" stroke="black" d="M1616.87,-1160.88C1612.03,-1140.05 1603.82,-1104.64 1598.12,-1080.09"/>
-<polygon fill="black" stroke="black" points="1601.52,-1079.26 1595.85,-1070.31 1594.7,-1080.85 1601.52,-1079.26"/>
+<title>u55&#45;&gt;u57</title>
+<path fill="none" stroke="black" d="M2443.62,-2047.9C2418.87,-1990.42 2333.1,-1800.3 2226.84,-1667 2200.4,-1633.84 2163.51,-1601.95 2137.63,-1581.32"/>
+<polygon fill="black" stroke="black" points="2139.66,-1578.47 2129.64,-1575.04 2135.33,-1583.97 2139.66,-1578.47"/>
 </g>
-<!-- u54&#45;&gt;u57 -->
+<!-- u54&#45;&gt;u62 -->
 <g id="edge87" class="edge">
-<title>u54&#45;&gt;u57</title>
-<path fill="none" stroke="black" d="M1373.84,-1925.74C1373.84,-1904.73 1373.84,-1868.97 1373.84,-1844.23"/>
-<polygon fill="black" stroke="black" points="1377.34,-1844.05 1373.84,-1834.05 1370.34,-1844.05 1377.34,-1844.05"/>
+<title>u54&#45;&gt;u62</title>
+<path fill="none" stroke="black" d="M1780.99,-1157.88C1759.77,-1136.31 1723.14,-1099.09 1698.95,-1074.51"/>
+<polygon fill="black" stroke="black" points="1701.38,-1071.99 1691.87,-1067.31 1696.39,-1076.9 1701.38,-1071.99"/>
+</g>
+<!-- u53&#45;&gt;u56 -->
+<g id="edge86" class="edge">
+<title>u53&#45;&gt;u56</title>
+<path fill="none" stroke="black" d="M1312.84,-1920.88C1312.84,-1900.15 1312.84,-1864.95 1312.84,-1840.42"/>
+<polygon fill="black" stroke="black" points="1316.34,-1840.31 1312.84,-1830.31 1309.34,-1840.31 1316.34,-1840.31"/>
 </g>
 <!-- u27 -->
-<g id="node58" class="node">
+<g id="node57" class="node">
 <title>u27</title>
-<ellipse fill="#33ff33" stroke="black" cx="1046.84" cy="-1689" rx="167.87" ry="18"/>
-<text text-anchor="middle" x="1046.84" y="-1685.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ModelExpr.Class</text>
+<ellipse fill="#33ff33" stroke="black" cx="1046.84" cy="-1685" rx="167.87" ry="18"/>
+<text text-anchor="middle" x="1046.84" y="-1681.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ModelExpr.Class</text>
 </g>
-<!-- u54&#45;&gt;u27 -->
-<g id="edge86" class="edge">
-<title>u54&#45;&gt;u27</title>
-<path fill="none" stroke="black" d="M1332.1,-1926.79C1288.15,-1908.45 1218.3,-1875.65 1166.84,-1834 1123.78,-1799.16 1084.93,-1746.99 1063.73,-1715.94"/>
-<polygon fill="black" stroke="black" points="1066.47,-1713.74 1057.98,-1707.4 1060.66,-1717.65 1066.47,-1713.74"/>
-</g>
-<!-- u53&#45;&gt;u58 -->
+<!-- u53&#45;&gt;u27 -->
 <g id="edge85" class="edge">
-<title>u53&#45;&gt;u58</title>
-<path fill="none" stroke="black" d="M2115.56,-1670.74C2115.23,-1649.73 2114.66,-1613.97 2114.27,-1589.23"/>
-<polygon fill="black" stroke="black" points="2117.77,-1588.99 2114.11,-1579.05 2110.77,-1589.1 2117.77,-1588.99"/>
+<title>u53&#45;&gt;u27</title>
+<path fill="none" stroke="black" d="M1260.92,-1922.35C1214.7,-1906.03 1148.04,-1876.27 1105.84,-1830 1075.09,-1796.28 1059.23,-1744.37 1052,-1712.95"/>
+<polygon fill="black" stroke="black" points="1055.41,-1712.17 1049.87,-1703.14 1048.57,-1713.65 1055.41,-1712.17"/>
 </g>
-<!-- u52&#45;&gt;u35 -->
+<!-- u52&#45;&gt;u57 -->
 <g id="edge84" class="edge">
-<title>u52&#45;&gt;u35</title>
-<path fill="none" stroke="black" d="M1700.52,-1670.91C1676.38,-1633.29 1620.43,-1539.71 1600.84,-1452 1591.76,-1411.36 1602.5,-1363.33 1611.4,-1334.03"/>
-<polygon fill="black" stroke="black" points="1614.86,-1334.72 1614.56,-1324.13 1608.19,-1332.59 1614.86,-1334.72"/>
+<title>u52&#45;&gt;u57</title>
+<path fill="none" stroke="black" d="M2060.12,-1667.01C2069.22,-1645.78 2084.88,-1609.22 2095.54,-1584.35"/>
+<polygon fill="black" stroke="black" points="2098.77,-1585.7 2099.5,-1575.13 2092.34,-1582.94 2098.77,-1585.7"/>
 </g>
-<!-- u51 -->
-<g id="node40" class="node">
-<title>u51</title>
-<ellipse fill="#bbffff" stroke="black" cx="3236.84" cy="-1434" rx="159.47" ry="18"/>
-<text text-anchor="middle" x="3236.84" y="-1430.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Citation</text>
-</g>
-<!-- u51&#45;&gt;u16 -->
-<g id="edge82" class="edge">
-<title>u51&#45;&gt;u16</title>
-<path fill="none" stroke="black" d="M3161.81,-1418.11C3042.31,-1394.4 2809.54,-1348.21 2685.07,-1323.52"/>
-<polygon fill="black" stroke="black" points="2685.69,-1320.07 2675.2,-1321.56 2684.33,-1326.94 2685.69,-1320.07"/>
-</g>
-<!-- u10 -->
-<g id="node46" class="node">
-<title>u10</title>
-<ellipse fill="#77ff77" stroke="black" cx="3236.84" cy="-1306" rx="151.37" ry="18"/>
-<text text-anchor="middle" x="3236.84" y="-1302.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Data.Citation</text>
-</g>
-<!-- u51&#45;&gt;u10 -->
-<g id="edge81" class="edge">
-<title>u51&#45;&gt;u10</title>
-<path fill="none" stroke="black" d="M3236.84,-1415.74C3236.84,-1394.73 3236.84,-1358.97 3236.84,-1334.23"/>
-<polygon fill="black" stroke="black" points="3240.34,-1334.05 3236.84,-1324.05 3233.34,-1334.05 3240.34,-1334.05"/>
-</g>
-<!-- u51&#45;&gt;u21 -->
+<!-- u51&#45;&gt;u35 -->
 <g id="edge83" class="edge">
-<title>u51&#45;&gt;u21</title>
-<path fill="none" stroke="black" d="M3195.79,-1416.53C3138.51,-1393.54 3034.7,-1351.89 2972.94,-1327.1"/>
-<polygon fill="black" stroke="black" points="2973.98,-1323.75 2963.4,-1323.28 2971.38,-1330.25 2973.98,-1323.75"/>
-</g>
-<!-- u48&#45;&gt;u9 -->
-<g id="edge74" class="edge">
-<title>u48&#45;&gt;u9</title>
-<path fill="none" stroke="black" d="M2221.84,-2180.74C2221.84,-2159.73 2221.84,-2123.97 2221.84,-2099.23"/>
-<polygon fill="black" stroke="black" points="2225.34,-2099.05 2221.84,-2089.05 2218.34,-2099.05 2225.34,-2099.05"/>
-</g>
-<!-- u48&#45;&gt;u59 -->
-<g id="edge75" class="edge">
-<title>u48&#45;&gt;u59</title>
-<path fill="none" stroke="black" d="M2176.77,-2181.4C2114.19,-2158.34 2001.11,-2116.68 1934.01,-2091.96"/>
-<polygon fill="black" stroke="black" points="1935.05,-2088.61 1924.46,-2088.44 1932.63,-2095.18 1935.05,-2088.61"/>
-</g>
-<!-- u47&#45;&gt;u60 -->
-<g id="edge73" class="edge">
-<title>u47&#45;&gt;u60</title>
-<path fill="none" stroke="black" d="M1911.18,-1926.27C1953.49,-1903.68 2028.95,-1863.39 2075.47,-1838.55"/>
-<polygon fill="black" stroke="black" points="2077.2,-1841.6 2084.37,-1833.8 2073.9,-1835.42 2077.2,-1841.6"/>
-</g>
-<!-- u47&#45;&gt;u57 -->
-<g id="edge72" class="edge">
-<title>u47&#45;&gt;u57</title>
-<path fill="none" stroke="black" d="M1817.79,-1927.55C1724.44,-1904.31 1548.18,-1860.41 1448.12,-1835.5"/>
-<polygon fill="black" stroke="black" points="1448.94,-1832.09 1438.39,-1833.07 1447.25,-1838.89 1448.94,-1832.09"/>
+<title>u51&#45;&gt;u35</title>
+<path fill="none" stroke="black" d="M1535.74,-1538.93C1533.11,-1509.78 1532,-1449.87 1560.84,-1412 1598.36,-1362.72 1663.58,-1335.26 1716.11,-1320.37"/>
+<polygon fill="black" stroke="black" points="1717.04,-1323.75 1725.76,-1317.74 1715.2,-1317 1717.04,-1323.75"/>
 </g>
 <!-- u50 -->
-<g id="node43" class="node">
+<g id="node39" class="node">
 <title>u50</title>
-<ellipse fill="#ffbbff" stroke="black" cx="1280.84" cy="-1434" rx="256.15" ry="18"/>
-<text text-anchor="middle" x="1280.84" y="-1430.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Concept.NamedCombinators</text>
+<ellipse fill="#bbffff" stroke="black" cx="3208.84" cy="-1430" rx="159.47" ry="18"/>
+<text text-anchor="middle" x="3208.84" y="-1426.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Citation</text>
 </g>
-<!-- u50&#45;&gt;u35 -->
-<g id="edge79" class="edge">
-<title>u50&#45;&gt;u35</title>
-<path fill="none" stroke="black" d="M1325.99,-1416.27C1388.74,-1393.01 1502.09,-1351.01 1568.48,-1326.4"/>
-<polygon fill="black" stroke="black" points="1569.76,-1329.66 1577.92,-1322.91 1567.32,-1323.1 1569.76,-1329.66"/>
+<!-- u50&#45;&gt;u16 -->
+<g id="edge81" class="edge">
+<title>u50&#45;&gt;u16</title>
+<path fill="none" stroke="black" d="M3133.19,-1414.11C3013.59,-1390.57 2781.71,-1344.92 2657.38,-1320.45"/>
+<polygon fill="black" stroke="black" points="2658.01,-1317 2647.52,-1318.5 2656.65,-1323.87 2658.01,-1317"/>
 </g>
-<!-- u66 -->
-<g id="node64" class="node">
-<title>u66</title>
-<ellipse fill="#bbff77" stroke="black" cx="1268.84" cy="-1306" rx="209.06" ry="18"/>
-<text text-anchor="middle" x="1268.84" y="-1302.3" font-family="Times,serif" font-size="14.00">Language.Drasil.NounPhrase.Combinators</text>
+<!-- u10 -->
+<g id="node45" class="node">
+<title>u10</title>
+<ellipse fill="#77ff77" stroke="black" cx="3208.84" cy="-1303" rx="151.37" ry="18"/>
+<text text-anchor="middle" x="3208.84" y="-1299.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Data.Citation</text>
 </g>
-<!-- u50&#45;&gt;u66 -->
+<!-- u50&#45;&gt;u10 -->
 <g id="edge80" class="edge">
-<title>u50&#45;&gt;u66</title>
-<path fill="none" stroke="black" d="M1279.19,-1415.74C1277.19,-1394.73 1273.79,-1358.97 1271.43,-1334.23"/>
-<polygon fill="black" stroke="black" points="1274.89,-1333.67 1270.46,-1324.05 1267.92,-1334.33 1274.89,-1333.67"/>
+<title>u50&#45;&gt;u10</title>
+<path fill="none" stroke="black" d="M3208.84,-1411.88C3208.84,-1391.15 3208.84,-1355.95 3208.84,-1331.42"/>
+<polygon fill="black" stroke="black" points="3212.34,-1331.31 3208.84,-1321.31 3205.34,-1331.31 3212.34,-1331.31"/>
+</g>
+<!-- u50&#45;&gt;u21 -->
+<g id="edge82" class="edge">
+<title>u50&#45;&gt;u21</title>
+<path fill="none" stroke="black" d="M3167.46,-1412.53C3110.24,-1389.75 3007.03,-1348.66 2945.33,-1324.1"/>
+<polygon fill="black" stroke="black" points="2946.39,-1320.75 2935.8,-1320.31 2943.8,-1327.26 2946.39,-1320.75"/>
+</g>
+<!-- u47&#45;&gt;u9 -->
+<g id="edge73" class="edge">
+<title>u47&#45;&gt;u9</title>
+<path fill="none" stroke="black" d="M2125.84,-2174.88C2125.84,-2154.15 2125.84,-2118.95 2125.84,-2094.42"/>
+<polygon fill="black" stroke="black" points="2129.34,-2094.31 2125.84,-2084.31 2122.34,-2094.31 2129.34,-2094.31"/>
+</g>
+<!-- u47&#45;&gt;u58 -->
+<g id="edge74" class="edge">
+<title>u47&#45;&gt;u58</title>
+<path fill="none" stroke="black" d="M2080.42,-2175.4C2017.9,-2152.55 1905.47,-2111.46 1838.44,-2086.96"/>
+<polygon fill="black" stroke="black" points="1839.49,-2083.61 1828.89,-2083.47 1837.09,-2090.19 1839.49,-2083.61"/>
+</g>
+<!-- u46&#45;&gt;u59 -->
+<g id="edge72" class="edge">
+<title>u46&#45;&gt;u59</title>
+<path fill="none" stroke="black" d="M1819.56,-1921.4C1868.09,-1898.85 1954.88,-1858.52 2007.81,-1833.92"/>
+<polygon fill="black" stroke="black" points="2009.37,-1837.06 2016.97,-1829.67 2006.42,-1830.71 2009.37,-1837.06"/>
+</g>
+<!-- u46&#45;&gt;u56 -->
+<g id="edge71" class="edge">
+<title>u46&#45;&gt;u56</title>
+<path fill="none" stroke="black" d="M1724.66,-1922.3C1637.89,-1899.27 1476.39,-1856.41 1383.5,-1831.75"/>
+<polygon fill="black" stroke="black" points="1384.19,-1828.32 1373.63,-1829.13 1382.4,-1835.08 1384.19,-1828.32"/>
+</g>
+<!-- u49 -->
+<g id="node42" class="node">
+<title>u49</title>
+<ellipse fill="#ffbbff" stroke="black" cx="1252.84" cy="-1430" rx="256.15" ry="18"/>
+<text text-anchor="middle" x="1252.84" y="-1426.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Chunk.Concept.NamedCombinators</text>
 </g>
 <!-- u49&#45;&gt;u35 -->
 <g id="edge78" class="edge">
 <title>u49&#45;&gt;u35</title>
-<path fill="none" stroke="black" d="M2477.13,-1419.16C2289.83,-1394.62 1902.27,-1343.86 1719.85,-1319.97"/>
-<polygon fill="black" stroke="black" points="1720.1,-1316.47 1709.73,-1318.64 1719.19,-1323.41 1720.1,-1316.47"/>
+<path fill="none" stroke="black" d="M1324.09,-1412.66C1427.79,-1388.87 1619.34,-1344.94 1724.31,-1320.86"/>
+<polygon fill="black" stroke="black" points="1725.23,-1324.24 1734.19,-1318.6 1723.66,-1317.42 1725.23,-1324.24"/>
 </g>
-<!-- u49&#45;&gt;u16 -->
-<g id="edge76" class="edge">
-<title>u49&#45;&gt;u16</title>
-<path fill="none" stroke="black" d="M2585.44,-1415.74C2588.61,-1394.73 2594,-1358.97 2597.73,-1334.23"/>
-<polygon fill="black" stroke="black" points="2601.24,-1334.46 2599.27,-1324.05 2594.31,-1333.41 2601.24,-1334.46"/>
+<!-- u63 -->
+<g id="node64" class="node">
+<title>u63</title>
+<ellipse fill="#3333ff" stroke="black" cx="1323.84" cy="-1303" rx="330.64" ry="18"/>
+<text text-anchor="middle" x="1323.84" y="-1299.3" font-family="Times,serif" font-size="14.00">Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators</text>
 </g>
-<!-- u49&#45;&gt;u21 -->
+<!-- u49&#45;&gt;u63 -->
+<g id="edge79" class="edge">
+<title>u49&#45;&gt;u63</title>
+<path fill="none" stroke="black" d="M1262.56,-1411.88C1274.55,-1390.77 1295.05,-1354.69 1309.01,-1330.11"/>
+<polygon fill="black" stroke="black" points="1312.11,-1331.74 1314,-1321.31 1306.02,-1328.28 1312.11,-1331.74"/>
+</g>
+<!-- u48&#45;&gt;u35 -->
 <g id="edge77" class="edge">
-<title>u49&#45;&gt;u21</title>
-<path fill="none" stroke="black" d="M2627.64,-1416.4C2690.11,-1393.25 2803.21,-1351.33 2869.81,-1326.65"/>
-<polygon fill="black" stroke="black" points="2871.12,-1329.9 2879.28,-1323.14 2868.69,-1323.33 2871.12,-1329.9"/>
+<title>u48&#45;&gt;u35</title>
+<path fill="none" stroke="black" d="M2465.4,-1414.23C2319.54,-1390.15 2032.17,-1342.69 1886.69,-1318.67"/>
+<polygon fill="black" stroke="black" points="1886.9,-1315.16 1876.47,-1316.98 1885.76,-1322.07 1886.9,-1315.16"/>
+</g>
+<!-- u48&#45;&gt;u16 -->
+<g id="edge75" class="edge">
+<title>u48&#45;&gt;u16</title>
+<path fill="none" stroke="black" d="M2557.44,-1411.88C2560.59,-1391.15 2565.94,-1355.95 2569.67,-1331.42"/>
+<polygon fill="black" stroke="black" points="2573.16,-1331.73 2571.21,-1321.31 2566.24,-1330.67 2573.16,-1331.73"/>
+</g>
+<!-- u48&#45;&gt;u21 -->
+<g id="edge76" class="edge">
+<title>u48&#45;&gt;u21</title>
+<path fill="none" stroke="black" d="M2599.64,-1412.53C2662.02,-1389.59 2774.89,-1348.1 2841.53,-1323.6"/>
+<polygon fill="black" stroke="black" points="2842.84,-1326.85 2851.02,-1320.11 2840.42,-1320.28 2842.84,-1326.85"/>
 </g>
 <!-- u11 -->
-<g id="node45" class="node">
+<g id="node44" class="node">
 <title>u11</title>
-<ellipse fill="#77ff77" stroke="black" cx="3247.84" cy="-1179" rx="136.48" ry="18"/>
-<text text-anchor="middle" x="3247.84" y="-1175.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Data.Date</text>
+<ellipse fill="#77ff77" stroke="black" cx="3219.84" cy="-1176" rx="136.48" ry="18"/>
+<text text-anchor="middle" x="3219.84" y="-1172.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Data.Date</text>
 </g>
 <!-- u10&#45;&gt;u67 -->
 <g id="edge21" class="edge">
 <title>u10&#45;&gt;u67</title>
-<path fill="none" stroke="black" d="M3201.78,-1288.4C3153.98,-1265.77 3068.38,-1225.24 3016.48,-1200.67"/>
-<polygon fill="black" stroke="black" points="3017.74,-1197.39 3007.2,-1196.27 3014.74,-1203.71 3017.74,-1197.39"/>
+<path fill="none" stroke="black" d="M3173.78,-1285.4C3125.98,-1262.77 3040.38,-1222.24 2988.48,-1197.67"/>
+<polygon fill="black" stroke="black" points="2989.74,-1194.39 2979.2,-1193.27 2986.74,-1200.71 2989.74,-1194.39"/>
 </g>
 <!-- u10&#45;&gt;u11 -->
 <g id="edge20" class="edge">
 <title>u10&#45;&gt;u11</title>
-<path fill="none" stroke="black" d="M3238.34,-1287.88C3240.17,-1267.15 3243.26,-1231.95 3245.42,-1207.42"/>
-<polygon fill="black" stroke="black" points="3248.92,-1207.58 3246.31,-1197.31 3241.95,-1206.97 3248.92,-1207.58"/>
-</g>
-<!-- u37&#45;&gt;u42 -->
-<g id="edge53" class="edge">
-<title>u37&#45;&gt;u42</title>
-<path fill="none" stroke="black" d="M1876.72,-1289.67C1746.22,-1265.89 1496.19,-1220.33 1363.17,-1196.1"/>
-<polygon fill="black" stroke="black" points="1363.48,-1192.6 1353.02,-1194.25 1362.23,-1199.48 1363.48,-1192.6"/>
+<path fill="none" stroke="black" d="M3210.34,-1284.88C3212.17,-1264.15 3215.26,-1228.95 3217.42,-1204.42"/>
+<polygon fill="black" stroke="black" points="3220.92,-1204.58 3218.31,-1194.31 3213.95,-1203.97 3220.92,-1204.58"/>
 </g>
 <!-- u37&#45;&gt;u41 -->
 <g id="edge52" class="edge">
 <title>u37&#45;&gt;u41</title>
-<path fill="none" stroke="black" d="M1960.84,-1287.88C1960.84,-1267.15 1960.84,-1231.95 1960.84,-1207.42"/>
-<polygon fill="black" stroke="black" points="1964.34,-1207.31 1960.84,-1197.31 1957.34,-1207.31 1964.34,-1207.31"/>
+<path fill="none" stroke="black" d="M2137.84,-1284.88C2137.84,-1264.15 2137.84,-1228.95 2137.84,-1204.42"/>
+<polygon fill="black" stroke="black" points="2141.34,-1204.31 2137.84,-1194.31 2134.34,-1204.31 2141.34,-1204.31"/>
 </g>
-<!-- u37&#45;&gt;u55 -->
+<!-- u37&#45;&gt;u54 -->
+<g id="edge53" class="edge">
+<title>u37&#45;&gt;u54</title>
+<path fill="none" stroke="black" d="M2092.69,-1285.4C2030.53,-1262.55 1918.76,-1221.46 1852.12,-1196.96"/>
+<polygon fill="black" stroke="black" points="1853.22,-1193.63 1842.63,-1193.47 1850.81,-1200.2 1853.22,-1193.63"/>
+</g>
+<!-- u37&#45;&gt;u61 -->
 <g id="edge54" class="edge">
-<title>u37&#45;&gt;u55</title>
-<path fill="none" stroke="black" d="M1915.69,-1288.4C1853.53,-1265.55 1741.76,-1224.46 1675.12,-1199.96"/>
-<polygon fill="black" stroke="black" points="1676.22,-1196.63 1665.63,-1196.47 1673.81,-1203.2 1676.22,-1196.63"/>
+<title>u37&#45;&gt;u61</title>
+<path fill="none" stroke="black" d="M2042.37,-1287.23C1892.2,-1264 1601.48,-1219.02 1441.73,-1194.31"/>
+<polygon fill="black" stroke="black" points="1441.81,-1190.78 1431.39,-1192.71 1440.74,-1197.7 1441.81,-1190.78"/>
 </g>
 <!-- u36&#45;&gt;u14 -->
 <g id="edge50" class="edge">
 <title>u36&#45;&gt;u14</title>
-<path fill="none" stroke="black" d="M3192.86,-1543.53C3136.18,-1520.75 3033.96,-1479.66 2972.85,-1455.1"/>
-<polygon fill="black" stroke="black" points="2973.99,-1451.79 2963.41,-1451.31 2971.38,-1458.28 2973.99,-1451.79"/>
+<path fill="none" stroke="black" d="M3042.77,-1539.14C3012.6,-1517.09 2959.63,-1478.36 2925.93,-1453.73"/>
+<polygon fill="black" stroke="black" points="2927.94,-1450.87 2917.81,-1447.79 2923.81,-1456.52 2927.94,-1450.87"/>
 </g>
-<!-- u36&#45;&gt;u51 -->
+<!-- u36&#45;&gt;u50 -->
 <g id="edge51" class="edge">
-<title>u36&#45;&gt;u51</title>
-<path fill="none" stroke="black" d="M3234.25,-1542.88C3234.75,-1522.15 3235.59,-1486.95 3236.18,-1462.42"/>
-<polygon fill="black" stroke="black" points="3239.68,-1462.39 3236.42,-1452.31 3232.68,-1462.23 3239.68,-1462.39"/>
+<title>u36&#45;&gt;u50</title>
+<path fill="none" stroke="black" d="M3085.42,-1538.88C3110.34,-1517.09 3153.53,-1479.35 3181.64,-1454.77"/>
+<polygon fill="black" stroke="black" points="3184.26,-1457.13 3189.49,-1447.91 3179.66,-1451.86 3184.26,-1457.13"/>
 </g>
 <!-- u25 -->
-<g id="node60" class="node">
+<g id="node59" class="node">
 <title>u25</title>
-<ellipse fill="#33ff33" stroke="black" cx="1097.84" cy="-797" rx="165.97" ry="18"/>
-<text text-anchor="middle" x="1097.84" y="-793.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ModelExpr.Lang</text>
+<ellipse fill="#33ff33" stroke="black" cx="1097.84" cy="-795" rx="165.97" ry="18"/>
+<text text-anchor="middle" x="1097.84" y="-791.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ModelExpr.Lang</text>
 </g>
 <!-- u32&#45;&gt;u25 -->
 <g id="edge45" class="edge">
 <title>u32&#45;&gt;u25</title>
-<path fill="none" stroke="black" d="M1274.45,-1676.14C1143.49,-1654.14 926.84,-1593.74 926.84,-1435 926.84,-1435 926.84,-1435 926.84,-1051 926.84,-986 912.33,-961.69 945.84,-906 969.81,-866.15 1014.75,-837.02 1049.57,-819.12"/>
-<polygon fill="black" stroke="black" points="1051.25,-822.19 1058.64,-814.59 1048.13,-815.93 1051.25,-822.19"/>
+<path fill="none" stroke="black" d="M1274.45,-1672.14C1143.49,-1650.14 926.84,-1589.74 926.84,-1431 926.84,-1431 926.84,-1431 926.84,-1048 926.84,-983.45 912.53,-959.3 945.84,-904 969.83,-864.16 1014.76,-835.02 1049.58,-817.12"/>
+<polygon fill="black" stroke="black" points="1051.26,-820.19 1058.65,-812.6 1048.14,-813.93 1051.26,-820.19"/>
 </g>
 <!-- u31 -->
-<g id="node50" class="node">
+<g id="node49" class="node">
 <title>u31</title>
-<ellipse fill="#ff7777" stroke="black" cx="148.84" cy="-797" rx="148.67" ry="18"/>
-<text text-anchor="middle" x="148.84" y="-793.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Expr.Extract</text>
+<ellipse fill="#ff7777" stroke="black" cx="148.84" cy="-795" rx="148.67" ry="18"/>
+<text text-anchor="middle" x="148.84" y="-791.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Expr.Extract</text>
 </g>
 <!-- u31&#45;&gt;u30 -->
 <g id="edge44" class="edge">
 <title>u31&#45;&gt;u30</title>
-<path fill="none" stroke="black" d="M200,-780.04C274.53,-756.8 412.69,-713.71 492.21,-688.91"/>
-<polygon fill="black" stroke="black" points="493.58,-692.15 502.09,-685.83 491.5,-685.46 493.58,-692.15"/>
+<path fill="none" stroke="black" d="M200,-778.04C274.53,-754.8 412.69,-711.71 492.21,-686.91"/>
+<polygon fill="black" stroke="black" points="493.58,-690.15 502.09,-683.83 491.5,-683.46 493.58,-690.15"/>
 </g>
 <!-- u40 -->
-<g id="node55" class="node">
+<g id="node54" class="node">
 <title>u40</title>
-<ellipse fill="#ff77ff" stroke="black" cx="733.84" cy="-542" rx="148.37" ry="18"/>
-<text text-anchor="middle" x="733.84" y="-538.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Literal.Class</text>
+<ellipse fill="#ff77ff" stroke="black" cx="687.84" cy="-540" rx="148.37" ry="18"/>
+<text text-anchor="middle" x="687.84" y="-536.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Literal.Class</text>
 </g>
 <!-- u30&#45;&gt;u40 -->
 <g id="edge43" class="edge">
 <title>u30&#45;&gt;u40</title>
-<path fill="none" stroke="black" d="M577.25,-651.14C609.18,-629.09 665.26,-590.36 700.92,-565.73"/>
-<polygon fill="black" stroke="black" points="703.29,-568.35 709.52,-559.79 699.31,-562.59 703.29,-568.35"/>
+<path fill="none" stroke="black" d="M571.04,-649.14C594.49,-627.43 635.4,-589.55 662.04,-564.88"/>
+<polygon fill="black" stroke="black" points="664.53,-567.35 669.49,-557.99 659.77,-562.22 664.53,-567.35"/>
 </g>
 <!-- u29&#45;&gt;u31 -->
 <g id="edge42" class="edge">
 <title>u29&#45;&gt;u31</title>
-<path fill="none" stroke="black" d="M258.44,-905.88C236.4,-884.19 198.29,-846.67 173.31,-822.09"/>
-<polygon fill="black" stroke="black" points="175.6,-819.43 166.02,-814.91 170.69,-824.42 175.6,-819.43"/>
+<path fill="none" stroke="black" d="M258.44,-903.88C236.4,-882.19 198.29,-844.67 173.31,-820.09"/>
+<polygon fill="black" stroke="black" points="175.6,-817.43 166.02,-812.91 170.69,-822.42 175.6,-817.43"/>
 </g>
 <!-- u29&#45;&gt;u28 -->
 <g id="edge41" class="edge">
 <title>u29&#45;&gt;u28</title>
-<path fill="none" stroke="black" d="M303.89,-906.14C340.98,-883.85 406.4,-844.54 447.31,-819.95"/>
-<polygon fill="black" stroke="black" points="449.13,-822.94 455.9,-814.79 445.52,-816.94 449.13,-822.94"/>
+<path fill="none" stroke="black" d="M303.89,-904.14C340.98,-881.85 406.4,-842.54 447.31,-817.95"/>
+<polygon fill="black" stroke="black" points="449.13,-820.94 455.9,-812.79 445.52,-814.94 449.13,-820.94"/>
 </g>
 <!-- u28&#45;&gt;u30 -->
 <g id="edge40" class="edge">
 <title>u28&#45;&gt;u30</title>
-<path fill="none" stroke="black" d="M493.14,-779.01C504.82,-757.68 524.96,-720.9 538.59,-696.02"/>
-<polygon fill="black" stroke="black" points="541.72,-697.58 543.46,-687.13 535.59,-694.22 541.72,-697.58"/>
+<path fill="none" stroke="black" d="M493.14,-777.01C504.82,-755.68 524.96,-718.9 538.59,-694.02"/>
+<polygon fill="black" stroke="black" points="541.72,-695.58 543.46,-685.13 535.59,-692.22 541.72,-695.58"/>
 </g>
 <!-- u39 -->
-<g id="node56" class="node">
+<g id="node55" class="node">
 <title>u39</title>
-<ellipse fill="#ff77ff" stroke="black" cx="1220.84" cy="-414" rx="146.47" ry="18"/>
-<text text-anchor="middle" x="1220.84" y="-410.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Literal.Lang</text>
+<ellipse fill="#ff77ff" stroke="black" cx="1139.84" cy="-413" rx="146.47" ry="18"/>
+<text text-anchor="middle" x="1139.84" y="-409.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Literal.Lang</text>
 </g>
 <!-- u40&#45;&gt;u39 -->
 <g id="edge58" class="edge">
 <title>u40&#45;&gt;u39</title>
-<path fill="none" stroke="black" d="M794.04,-525.42C884.61,-501.99 1055.5,-457.78 1151.27,-433"/>
-<polygon fill="black" stroke="black" points="1152.35,-436.34 1161.15,-430.44 1150.59,-429.56 1152.35,-436.34"/>
+<path fill="none" stroke="black" d="M744.63,-523.3C828.38,-500.13 984.7,-456.9 1073.58,-432.32"/>
+<polygon fill="black" stroke="black" points="1074.58,-435.68 1083.28,-429.64 1072.71,-428.93 1074.58,-435.68"/>
 </g>
-<!-- u39&#45;&gt;u64 -->
+<!-- u39&#45;&gt;u66 -->
 <g id="edge57" class="edge">
-<title>u39&#45;&gt;u64</title>
-<path fill="none" stroke="black" d="M1258.92,-396.53C1311.22,-373.91 1405.27,-333.23 1462.18,-308.61"/>
-<polygon fill="black" stroke="black" points="1463.88,-311.69 1471.67,-304.51 1461.11,-305.26 1463.88,-311.69"/>
+<title>u39&#45;&gt;u66</title>
+<path fill="none" stroke="black" d="M1181.8,-395.66C1240.4,-372.84 1346.62,-331.48 1409.75,-306.89"/>
+<polygon fill="black" stroke="black" points="1411.07,-310.14 1419.12,-303.25 1408.53,-303.61 1411.07,-310.14"/>
 </g>
 <!-- u39&#45;&gt;u13 -->
 <g id="edge56" class="edge">
 <title>u39&#45;&gt;u13</title>
-<path fill="none" stroke="black" d="M1223.03,-395.88C1225.68,-375.15 1230.19,-339.95 1233.33,-315.42"/>
-<polygon fill="black" stroke="black" points="1236.82,-315.68 1234.62,-305.31 1229.88,-314.79 1236.82,-315.68"/>
+<path fill="none" stroke="black" d="M1146.41,-394.88C1154.44,-373.96 1168.13,-338.32 1177.56,-313.76"/>
+<polygon fill="black" stroke="black" points="1180.87,-314.9 1181.19,-304.31 1174.34,-312.39 1180.87,-314.9"/>
 </g>
 <!-- u38&#45;&gt;u39 -->
 <g id="edge55" class="edge">
 <title>u38&#45;&gt;u39</title>
-<path fill="none" stroke="black" d="M1142.11,-524.01C1157.65,-502.5 1184.55,-465.25 1202.52,-440.37"/>
-<polygon fill="black" stroke="black" points="1205.45,-442.28 1208.47,-432.13 1199.78,-438.18 1205.45,-442.28"/>
+<path fill="none" stroke="black" d="M1082.01,-521.88C1093.28,-500.87 1112.5,-465 1125.67,-440.44"/>
+<polygon fill="black" stroke="black" points="1128.92,-441.78 1130.56,-431.31 1122.75,-438.47 1128.92,-441.78"/>
 </g>
 <!-- u27&#45;&gt;u25 -->
 <g id="edge39" class="edge">
 <title>u27&#45;&gt;u25</title>
-<path fill="none" stroke="black" d="M1014.9,-1671.18C983.55,-1652.89 937.02,-1620.61 912.84,-1579 880.23,-1522.91 888.84,-1499.88 888.84,-1435 888.84,-1435 888.84,-1435 888.84,-1051 888.84,-985.68 875.78,-959.79 912.84,-906 942.39,-863.1 995,-834.81 1036.58,-817.99"/>
-<polygon fill="black" stroke="black" points="1038.05,-821.17 1046.08,-814.26 1035.49,-814.65 1038.05,-821.17"/>
+<path fill="none" stroke="black" d="M1014.9,-1667.18C983.55,-1648.89 937.02,-1616.61 912.84,-1575 880.23,-1518.91 888.84,-1495.88 888.84,-1431 888.84,-1431 888.84,-1431 888.84,-1048 888.84,-983.12 876,-957.41 912.84,-904 942.42,-861.11 995.02,-832.82 1036.59,-816"/>
+<polygon fill="black" stroke="black" points="1038.06,-819.18 1046.09,-812.27 1035.5,-812.66 1038.06,-819.18"/>
 </g>
 <!-- u26&#45;&gt;u25 -->
 <g id="edge38" class="edge">
 <title>u26&#45;&gt;u25</title>
-<path fill="none" stroke="black" d="M1485.57,-906.91C1403.18,-883.77 1251.55,-841.18 1164.32,-816.68"/>
-<polygon fill="black" stroke="black" points="1165.1,-813.26 1154.53,-813.93 1163.21,-820 1165.1,-813.26"/>
+<path fill="none" stroke="black" d="M1485.57,-904.91C1403.18,-881.77 1251.55,-839.18 1164.32,-814.68"/>
+<polygon fill="black" stroke="black" points="1165.1,-811.26 1154.53,-811.93 1163.21,-818 1165.1,-811.26"/>
 </g>
 <!-- u25&#45;&gt;u30 -->
 <g id="edge37" class="edge">
 <title>u25&#45;&gt;u30</title>
-<path fill="none" stroke="black" d="M1030.74,-780.49C928.48,-756.85 734.3,-711.95 627.63,-687.29"/>
-<polygon fill="black" stroke="black" points="628.12,-683.81 617.59,-684.97 626.54,-690.63 628.12,-683.81"/>
+<path fill="none" stroke="black" d="M1030.74,-778.49C928.48,-754.85 734.3,-709.95 627.63,-685.29"/>
+<polygon fill="black" stroke="black" points="628.12,-681.81 617.59,-682.97 626.54,-688.63 628.12,-681.81"/>
 </g>
 <!-- u24&#45;&gt;u25 -->
 <g id="edge36" class="edge">
 <title>u24&#45;&gt;u25</title>
-<path fill="none" stroke="black" d="M1858.67,-908.84C1696.03,-885.15 1370.1,-837.67 1202.56,-813.26"/>
-<polygon fill="black" stroke="black" points="1202.9,-809.77 1192.5,-811.79 1201.89,-816.7 1202.9,-809.77"/>
+<path fill="none" stroke="black" d="M1944.34,-907.27C1763.59,-883.51 1394.18,-834.95 1208.94,-810.6"/>
+<polygon fill="black" stroke="black" points="1209.28,-807.12 1198.91,-809.28 1208.37,-814.06 1209.28,-807.12"/>
 </g>
 <!-- u23 -->
-<g id="node62" class="node">
+<g id="node61" class="node">
 <title>u23</title>
-<ellipse fill="#33ff33" stroke="black" cx="1176.84" cy="-1052" rx="204.16" ry="18"/>
-<text text-anchor="middle" x="1176.84" y="-1048.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ModelExpr.Development</text>
+<ellipse fill="#33ff33" stroke="black" cx="1158.84" cy="-1049" rx="204.16" ry="18"/>
+<text text-anchor="middle" x="1158.84" y="-1045.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ModelExpr.Development</text>
 </g>
 <!-- u23&#45;&gt;u26 -->
 <g id="edge35" class="edge">
 <title>u23&#45;&gt;u26</title>
-<path fill="none" stroke="black" d="M1225.06,-1034.4C1292.17,-1011.29 1413.55,-969.51 1485.3,-944.81"/>
-<polygon fill="black" stroke="black" points="1486.77,-948 1495.09,-941.44 1484.49,-941.38 1486.77,-948"/>
+<path fill="none" stroke="black" d="M1209.43,-1031.53C1279.99,-1008.56 1407.71,-966.99 1482.93,-942.5"/>
+<polygon fill="black" stroke="black" points="1484.31,-945.73 1492.74,-939.31 1482.15,-939.08 1484.31,-945.73"/>
 </g>
 <!-- u22 -->
-<g id="node63" class="node">
+<g id="node62" class="node">
 <title>u22</title>
-<ellipse fill="#33ff33" stroke="black" cx="1150.84" cy="-924" rx="196.07" ry="18"/>
-<text text-anchor="middle" x="1150.84" y="-920.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ModelExpr.Precedence</text>
+<ellipse fill="#33ff33" stroke="black" cx="1150.84" cy="-922" rx="196.07" ry="18"/>
+<text text-anchor="middle" x="1150.84" y="-918.3" font-family="Times,serif" font-size="14.00">Language.Drasil.ModelExpr.Precedence</text>
 </g>
 <!-- u23&#45;&gt;u22 -->
 <g id="edge34" class="edge">
 <title>u23&#45;&gt;u22</title>
-<path fill="none" stroke="black" d="M1173.28,-1033.74C1168.92,-1012.63 1161.49,-976.65 1156.39,-951.89"/>
-<polygon fill="black" stroke="black" points="1159.8,-951.13 1154.35,-942.05 1152.95,-952.55 1159.8,-951.13"/>
+<path fill="none" stroke="black" d="M1157.74,-1030.88C1156.41,-1010.15 1154.16,-974.95 1152.59,-950.42"/>
+<polygon fill="black" stroke="black" points="1156.08,-950.07 1151.94,-940.31 1149.09,-950.52 1156.08,-950.07"/>
 </g>
 <!-- u22&#45;&gt;u28 -->
 <g id="edge33" class="edge">
 <title>u22&#45;&gt;u28</title>
-<path fill="none" stroke="black" d="M1068.72,-907.61C942.89,-884.03 703.36,-839.14 573.28,-814.76"/>
-<polygon fill="black" stroke="black" points="573.82,-811.3 563.34,-812.9 572.53,-818.18 573.82,-811.3"/>
+<path fill="none" stroke="black" d="M1068.72,-905.61C942.89,-882.03 703.36,-837.14 573.28,-812.76"/>
+<polygon fill="black" stroke="black" points="573.82,-809.3 563.34,-810.9 572.53,-816.18 573.82,-809.3"/>
 </g>
 <!-- u22&#45;&gt;u25 -->
 <g id="edge32" class="edge">
 <title>u22&#45;&gt;u25</title>
-<path fill="none" stroke="black" d="M1143.58,-905.88C1134.71,-884.96 1119.6,-849.32 1109.18,-824.76"/>
-<polygon fill="black" stroke="black" points="1112.3,-823.15 1105.18,-815.31 1105.86,-825.89 1112.3,-823.15"/>
+<path fill="none" stroke="black" d="M1143.58,-903.88C1134.71,-882.96 1119.6,-847.32 1109.18,-822.76"/>
+<polygon fill="black" stroke="black" points="1112.3,-821.15 1105.18,-813.31 1105.86,-823.89 1112.3,-821.15"/>
 </g>
-<!-- u66&#45;&gt;u42 -->
-<g id="edge100" class="edge">
-<title>u66&#45;&gt;u42</title>
-<path fill="none" stroke="black" d="M1269.66,-1287.88C1270.65,-1267.15 1272.34,-1231.95 1273.52,-1207.42"/>
-<polygon fill="black" stroke="black" points="1277.02,-1207.47 1274.01,-1197.31 1270.03,-1207.13 1277.02,-1207.47"/>
+<!-- u61&#45;&gt;u62 -->
+<g id="edge96" class="edge">
+<title>u61&#45;&gt;u62</title>
+<path fill="none" stroke="black" d="M1376.37,-1158.14C1439.3,-1135.34 1551.42,-1094.72 1618.88,-1070.27"/>
+<polygon fill="black" stroke="black" points="1620.29,-1073.49 1628.5,-1066.79 1617.9,-1066.91 1620.29,-1073.49"/>
 </g>
-<!-- u65&#45;&gt;u18 -->
-<g id="edge99" class="edge">
-<title>u65&#45;&gt;u18</title>
-<path fill="none" stroke="black" d="M1625.38,-1034.2C1657.65,-1016.12 1704.96,-984.19 1728.84,-942 1760.63,-885.82 1747.84,-862.55 1747.84,-798 1747.84,-798 1747.84,-798 1747.84,-413 1747.84,-330.25 1731.29,-233.39 1722.38,-187.19"/>
-<polygon fill="black" stroke="black" points="1725.76,-186.23 1720.39,-177.09 1718.89,-187.58 1725.76,-186.23"/>
+<!-- u63&#45;&gt;u61 -->
+<g id="edge98" class="edge">
+<title>u63&#45;&gt;u61</title>
+<path fill="none" stroke="black" d="M1324.66,-1284.88C1325.65,-1264.15 1327.34,-1228.95 1328.52,-1204.42"/>
+<polygon fill="black" stroke="black" points="1332.02,-1204.47 1329.01,-1194.31 1325.03,-1204.13 1332.02,-1204.47"/>
 </g>
-<!-- u45&#45;&gt;u32 -->
-<g id="edge69" class="edge">
-<title>u45&#45;&gt;u32</title>
-<path fill="none" stroke="black" d="M1732.11,-1799.04C1655.73,-1775.93 1514.61,-1733.21 1433.51,-1708.67"/>
-<polygon fill="black" stroke="black" points="1434.51,-1705.31 1423.92,-1705.76 1432.48,-1712.01 1434.51,-1705.31"/>
+<!-- u62&#45;&gt;u18 -->
+<g id="edge97" class="edge">
+<title>u62&#45;&gt;u18</title>
+<path fill="none" stroke="black" d="M1685.71,-1030.79C1698.25,-1010.09 1718.45,-973.87 1728.84,-940 1747.75,-878.28 1747.84,-860.55 1747.84,-796 1747.84,-796 1747.84,-796 1747.84,-412 1747.84,-329.34 1728.11,-233.03 1717.46,-187.08"/>
+<polygon fill="black" stroke="black" points="1720.86,-186.22 1715.15,-177.29 1714.04,-187.82 1720.86,-186.22"/>
 </g>
-<!-- u44 -->
-<g id="node67" class="node">
-<title>u44</title>
-<ellipse fill="#3333ff" stroke="black" cx="1825.84" cy="-1434" rx="194.97" ry="18"/>
-<text text-anchor="middle" x="1825.84" y="-1430.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Sentence.Combinators</text>
-</g>
-<!-- u45&#45;&gt;u44 -->
-<g id="edge70" class="edge">
-<title>u45&#45;&gt;u44</title>
-<path fill="none" stroke="black" d="M1814.59,-1798.22C1843.53,-1780 1885.7,-1747.94 1903.84,-1707 1942.23,-1620.31 1878.41,-1509.75 1844.66,-1460.57"/>
-<polygon fill="black" stroke="black" points="1847.35,-1458.3 1838.75,-1452.12 1841.62,-1462.32 1847.35,-1458.3"/>
-</g>
-<!-- u44&#45;&gt;u35 -->
-<g id="edge67" class="edge">
-<title>u44&#45;&gt;u35</title>
-<path fill="none" stroke="black" d="M1798.19,-1416.01C1761.61,-1393.53 1697.07,-1353.86 1656.76,-1329.08"/>
-<polygon fill="black" stroke="black" points="1658.4,-1325.98 1648.05,-1323.72 1654.73,-1331.94 1658.4,-1325.98"/>
-</g>
-<!-- u44&#45;&gt;u37 -->
+<!-- u44&#45;&gt;u32 -->
 <g id="edge68" class="edge">
-<title>u44&#45;&gt;u37</title>
-<path fill="none" stroke="black" d="M1844.04,-1416.01C1867.49,-1394.12 1908.4,-1355.94 1935.04,-1331.07"/>
-<polygon fill="black" stroke="black" points="1937.56,-1333.51 1942.49,-1324.13 1932.79,-1328.39 1937.56,-1333.51"/>
+<title>u44&#45;&gt;u32</title>
+<path fill="none" stroke="black" d="M1676.08,-1794.66C1611.88,-1771.73 1495.26,-1730.08 1426.55,-1705.54"/>
+<polygon fill="black" stroke="black" points="1427.37,-1702.12 1416.77,-1702.05 1425.01,-1708.71 1427.37,-1702.12"/>
+</g>
+<!-- u43 -->
+<g id="node67" class="node">
+<title>u43</title>
+<ellipse fill="#ff3333" stroke="black" cx="1797.84" cy="-1430" rx="194.97" ry="18"/>
+<text text-anchor="middle" x="1797.84" y="-1426.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Sentence.Combinators</text>
+</g>
+<!-- u44&#45;&gt;u43 -->
+<g id="edge69" class="edge">
+<title>u44&#45;&gt;u43</title>
+<path fill="none" stroke="black" d="M1725.3,-1793.68C1737.37,-1733.35 1777.63,-1532.03 1792.37,-1458.33"/>
+<polygon fill="black" stroke="black" points="1795.82,-1458.91 1794.35,-1448.42 1788.96,-1457.54 1795.82,-1458.91"/>
 </g>
 <!-- u43&#45;&gt;u35 -->
-<g id="edge65" class="edge">
+<g id="edge66" class="edge">
 <title>u43&#45;&gt;u35</title>
-<path fill="none" stroke="black" d="M2348.89,-1548.05C2114.59,-1526.04 1645.72,-1478.89 1621.84,-1452 1593.33,-1419.9 1602.36,-1366.22 1611.57,-1333.96"/>
-<polygon fill="black" stroke="black" points="1614.94,-1334.87 1614.51,-1324.29 1608.25,-1332.83 1614.94,-1334.87"/>
-</g>
-<!-- u43&#45;&gt;u14 -->
-<g id="edge64" class="edge">
-<title>u43&#45;&gt;u14</title>
-<path fill="none" stroke="black" d="M2537.3,-1543.79C2619.91,-1520.47 2771.8,-1477.62 2858.22,-1453.23"/>
-<polygon fill="black" stroke="black" points="2859.24,-1456.58 2867.91,-1450.5 2857.34,-1449.84 2859.24,-1456.58"/>
+<path fill="none" stroke="black" d="M1797.84,-1411.88C1797.84,-1391.15 1797.84,-1355.95 1797.84,-1331.42"/>
+<polygon fill="black" stroke="black" points="1801.34,-1331.31 1797.84,-1321.31 1794.34,-1331.31 1801.34,-1331.31"/>
 </g>
 <!-- u43&#45;&gt;u37 -->
-<g id="edge66" class="edge">
+<g id="edge67" class="edge">
 <title>u43&#45;&gt;u37</title>
-<path fill="none" stroke="black" d="M2347.52,-1548.18C2261.75,-1535.28 2150.93,-1508.32 2067.84,-1452 2044.38,-1436.1 2000.54,-1370.1 1976.91,-1332.86"/>
-<polygon fill="black" stroke="black" points="1979.66,-1330.66 1971.37,-1324.06 1973.74,-1334.39 1979.66,-1330.66"/>
+<path fill="none" stroke="black" d="M1842.99,-1412.4C1905.05,-1389.58 2016.61,-1348.57 2083.27,-1324.06"/>
+<polygon fill="black" stroke="black" points="2084.59,-1327.3 2092.77,-1320.57 2082.18,-1320.73 2084.59,-1327.3"/>
+</g>
+<!-- u42&#45;&gt;u35 -->
+<g id="edge64" class="edge">
+<title>u42&#45;&gt;u35</title>
+<path fill="none" stroke="black" d="M2438.39,-1545.35C2171.2,-1524.82 1621.68,-1479.05 1593.84,-1448 1543.81,-1392.21 1654.35,-1346.11 1731.43,-1322.05"/>
+<polygon fill="black" stroke="black" points="1732.58,-1325.35 1741.12,-1319.08 1730.53,-1318.66 1732.58,-1325.35"/>
+</g>
+<!-- u42&#45;&gt;u14 -->
+<g id="edge63" class="edge">
+<title>u42&#45;&gt;u14</title>
+<path fill="none" stroke="black" d="M2623.4,-1539.4C2680.54,-1516.58 2783.24,-1475.57 2844.61,-1451.06"/>
+<polygon fill="black" stroke="black" points="2846.11,-1454.23 2854.1,-1447.27 2843.51,-1447.73 2846.11,-1454.23"/>
+</g>
+<!-- u42&#45;&gt;u37 -->
+<g id="edge65" class="edge">
+<title>u42&#45;&gt;u37</title>
+<path fill="none" stroke="black" d="M2428.2,-1546.63C2285.58,-1534.35 2088.22,-1506.97 2039.84,-1448 2006.62,-1407.51 2063.19,-1355.9 2103.27,-1326.75"/>
+<polygon fill="black" stroke="black" points="2105.41,-1329.52 2111.54,-1320.88 2101.36,-1323.82 2105.41,-1329.52"/>
 </g>
 <!-- u20&#45;&gt;u18 -->
 <g id="edge31" class="edge">
 <title>u20&#45;&gt;u18</title>
-<path fill="none" stroke="black" d="M3379.67,-2180.75C3392.86,-2140.16 3423.84,-2035.22 3423.84,-1945 3423.84,-1945 3423.84,-1945 3423.84,-413 3423.84,-253.35 2240.31,-184.16 1844.23,-165.47"/>
-<polygon fill="black" stroke="black" points="1844.32,-161.97 1834.17,-165 1843.99,-168.96 1844.32,-161.97"/>
+<path fill="none" stroke="black" d="M3368.39,-2174.98C3376.54,-2134.46 3395.84,-2029.04 3395.84,-1940 3395.84,-1940 3395.84,-1940 3395.84,-412 3395.84,-254.55 2230.18,-184.68 1837.9,-165.63"/>
+<polygon fill="black" stroke="black" points="1837.81,-162.12 1827.65,-165.13 1837.47,-169.11 1837.81,-162.12"/>
 </g>
 </g>
 </svg>

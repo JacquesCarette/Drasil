@@ -428,21 +428,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aM6B
-oldCodeSpec :: HasOldCodeSpec c_aM6B => Lens' c_aM6B OldCodeSpec
-authorsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B People
-cMapO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [RelativeFile]
-constMapO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B ConstantMap
-constantsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Const]
-derivedInputsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Derived]
-execOrderO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Def]
-extInputsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Input]
-inputsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Input]
-modsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Mod]
-outputsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Output]
-pNameO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B Name
-systemdbO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B ChunkDB
+class HasOldCodeSpec c_aM6K
+oldCodeSpec :: HasOldCodeSpec c_aM6K => Lens' c_aM6K OldCodeSpec
+authorsO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K People
+cMapO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K [RelativeFile]
+constMapO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K ConstantMap
+constantsO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K [Const]
+derivedInputsO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K [Derived]
+execOrderO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K [Def]
+extInputsO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K [Input]
+inputsO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K [Input]
+modsO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K [Mod]
+outputsO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K [Output]
+pNameO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K Name
+systemdbO :: HasOldCodeSpec c_aM6K => Lens' c_aM6K ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

@@ -463,7 +463,7 @@ lNegInf :: Symbol
 --   This module should be used as a qualified import (usually as
 --   <tt>NP</tt>), as many function names clash with those in Concepts.hs
 --   and Sentence.hs.
-module Language.Drasil.NounPhrase.Combinators
+module Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators
 
 -- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
 --   Plural case is <tt>(phraseNP t1) :+: S s :+: (pluralNP t2)</tt>.

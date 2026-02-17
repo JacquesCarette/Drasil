@@ -1111,7 +1111,7 @@ lNegInf :: Symbol
 
 
 -- | Basic data types for noun phrases.
-module Language.Drasil.NounPhrase.Core
+module Language.Drasil.NaturalLanguage.English.NounPhrase.Core
 
 -- | Capitalization rules.
 data CapitalizationRule
@@ -1173,9 +1173,9 @@ S :: String -> NPStruct
 (:-:) :: NPStruct -> NPStruct -> NPStruct
 (:+:) :: NPStruct -> NPStruct -> NPStruct
 P :: Symbol -> NPStruct
-instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.NounPhrase.Core.NP
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.NaturalLanguage.English.NounPhrase.Core.NP
 
-module Language.Drasil.NounPhrase
+module Language.Drasil.NaturalLanguage.English.NounPhrase
 class NounPhrase n
 
 -- | Retrieves singular form of term. Ex. "the quick brown fox".
@@ -1382,7 +1382,7 @@ S :: String -> NPStruct
 (:-:) :: NPStruct -> NPStruct -> NPStruct
 (:+:) :: NPStruct -> NPStruct -> NPStruct
 P :: Symbol -> NPStruct
-instance Language.Drasil.NounPhrase.NounPhrase Language.Drasil.NounPhrase.Core.NP
+instance Language.Drasil.NaturalLanguage.English.NounPhrase.NounPhrase Language.Drasil.NaturalLanguage.English.NounPhrase.Core.NP
 
 
 -- | Defines various NounPhrase-level combinators. These hold more
@@ -1404,7 +1404,7 @@ instance Language.Drasil.NounPhrase.NounPhrase Language.Drasil.NounPhrase.Core.N
 --   This module should be used as a qualified import (usually as
 --   <tt>NP</tt>), as many function names clash with those in Concepts.hs
 --   and Sentence.hs.
-module Language.Drasil.NounPhrase.Combinators
+module Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators
 
 -- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
 --   Plural case is <tt>(phraseNP t1) :+: S s :+: (pluralNP t2)</tt>.

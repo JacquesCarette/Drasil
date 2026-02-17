@@ -3571,6 +3571,16 @@ digraph alltypes {
 		PluralForm -> NPStruct;
 		}
 	}
+	subgraph nounpraehs {
+		subgraph capitalization{
+		Capitalization	[shape=oval, color=red2, label="Capitalization"];
+		Capitalization -> NPStruct;
+		}
+		subgraph pluralstring{
+		PluralString	[shape=oval, color=red2, label="PluralString"];
+		PluralString -> String;
+		}
+	}
 	subgraph combinators {
 	}
 	subgraph fold {
@@ -3669,16 +3679,6 @@ digraph alltypes {
 		}
 	}
 	subgraph exprclasess {
-	}
-	subgraph nounpraehs {
-		subgraph capitalization{
-		Capitalization	[shape=oval, color=red2, label="Capitalization"];
-		Capitalization -> NPStruct;
-		}
-		subgraph pluralstring{
-		PluralString	[shape=oval, color=red2, label="PluralString"];
-		PluralString -> String;
-		}
 	}
 	subgraph people {
 		subgraph person{

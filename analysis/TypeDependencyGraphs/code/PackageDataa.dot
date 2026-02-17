@@ -1,5 +1,0 @@
-digraph packagedataa{
-PackageDataa	[shape=oval, color=cyan3, label="PackageDataa"];
-PackageDataa -> a;
-PackageDataa -> FileAndContents;
-}

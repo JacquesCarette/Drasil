@@ -57,15 +57,15 @@ readMe :: AuxiliarySym r => ReadMeInfo -> r FileAndContents
 optimizeDox :: AuxiliarySym r => r Doc
 makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState -> ProgData -> r FileAndContents
 auxHelperDoc :: AuxiliarySym r => r Doc -> Doc
-package :: Monad r => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
+package :: Monad r => ProgData -> [r FileAndContents] -> r PackageData
 
 -- | The underlying data type for auxiliary files in all renderers.
 data FileAndContents
 hasPathAndDocToFileAndContents :: HasPathAndDoc a Doc => a -> FileAndContents
 
 -- | The underlying data type for packages in all renderers.
-data PackageData a
-pattern PackageData :: a -> [FileAndContents] -> PackageData a
+data PackageData
+pattern PackageData :: ProgData -> [FileAndContents] -> PackageData
 unPP :: PythonProject a -> a
 unJP :: JavaProject a -> a
 unCSP :: CSharpProject a -> a
@@ -86,12 +86,12 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCode :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (PackageData ProgData) -> PackageData ProgData) -> DrasilState -> IO ()
+generateCode :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr PackageData -> PackageData) -> DrasilState -> IO ()
 
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCodeProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (PackageData ProgData) -> PackageData ProgData) -> DrasilState -> IO ()
+generateCodeProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr PackageData -> PackageData) -> DrasilState -> IO ()
 
 -- | Reads data from a file and converts the values to <a>Expr</a>s. The
 --   file must be formatted according to the <a>DataDesc'</a> passed as a
@@ -428,21 +428,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aMcs
-oldCodeSpec :: HasOldCodeSpec c_aMcs => Lens' c_aMcs OldCodeSpec
-authorsO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs People
-cMapO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs [RelativeFile]
-constMapO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs ConstantMap
-constantsO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs [Const]
-derivedInputsO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs [Derived]
-execOrderO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs [Def]
-extInputsO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs [Input]
-inputsO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs [Input]
-modsO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs [Mod]
-outputsO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs [Output]
-pNameO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs Name
-systemdbO :: HasOldCodeSpec c_aMcs => Lens' c_aMcs ChunkDB
+class HasOldCodeSpec c_aM6B
+oldCodeSpec :: HasOldCodeSpec c_aM6B => Lens' c_aM6B OldCodeSpec
+authorsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B People
+cMapO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [RelativeFile]
+constMapO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B ConstantMap
+constantsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Const]
+derivedInputsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Derived]
+execOrderO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Def]
+extInputsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Input]
+inputsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Input]
+modsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Mod]
+outputsO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B [Output]
+pNameO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B Name
+systemdbO :: HasOldCodeSpec c_aM6B => Lens' c_aM6B ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

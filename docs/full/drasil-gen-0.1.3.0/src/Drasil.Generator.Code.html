@@ -32,92 +32,92 @@
 </span><span id="line-32"></span><span class="annot"><span class="hs-comment">-- | Internal: Generate an ICO-style executable softifact.</span></span><span>
 </span><span id="line-33"></span><span class="annot"><a href="Drasil.Generator.Code.html#exportCode"><span class="hs-identifier hs-type">exportCode</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-34"></span><span id="exportCode"><span class="annot"><span class="annottext">exportCode :: System -&gt; Choices -&gt; IO ()
-</span><a href="Drasil.Generator.Code.html#exportCode"><span class="hs-identifier hs-var hs-var">exportCode</span></a></span></span><span> </span><span id="local-6989586621679100478"><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679100478"><span class="hs-identifier hs-var">syst</span></a></span></span><span> </span><span id="local-6989586621679100479"><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679100479"><span class="hs-identifier hs-var">chcs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-35"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679100480"><span class="annot"><span class="annottext">code :: CodeSpec
-</span><a href="#local-6989586621679100480"><span class="hs-identifier hs-var hs-var">code</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">System -&gt; Choices -&gt; CodeSpec
+</span><a href="Drasil.Generator.Code.html#exportCode"><span class="hs-identifier hs-var hs-var">exportCode</span></a></span></span><span> </span><span id="local-6989586621679100469"><span class="annot"><span class="annottext">System
+</span><a href="#local-6989586621679100469"><span class="hs-identifier hs-var">syst</span></a></span></span><span> </span><span id="local-6989586621679100470"><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679100470"><span class="hs-identifier hs-var">chcs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-35"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679100471"><span class="annot"><span class="annottext">code :: CodeSpec
+</span><a href="#local-6989586621679100471"><span class="hs-identifier hs-var hs-var">code</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">System -&gt; Choices -&gt; CodeSpec
 </span><span class="hs-identifier hs-var">codeSpec</span></span><span> </span><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679100478"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679100479"><span class="hs-identifier hs-var">chcs</span></a></span><span>
+</span><a href="#local-6989586621679100469"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679100470"><span class="hs-identifier hs-var">chcs</span></a></span><span>
 </span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">Choices -&gt; CodeSpec -&gt; IO ()
 </span><a href="Drasil.Generator.Code.html#genCode"><span class="hs-identifier hs-var">genCode</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679100479"><span class="hs-identifier hs-var">chcs</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
-</span><a href="#local-6989586621679100480"><span class="hs-identifier hs-var">code</span></a></span><span>
+</span><a href="#local-6989586621679100470"><span class="hs-identifier hs-var">chcs</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
+</span><a href="#local-6989586621679100471"><span class="hs-identifier hs-var">code</span></a></span><span>
 </span><span id="line-37"></span><span>
 </span><span id="line-38"></span><span class="annot"><span class="hs-comment">-- | Internal: Generate a zoo of ICO-style executable softifact.</span></span><span>
 </span><span id="line-39"></span><span class="annot"><a href="Drasil.Generator.Code.html#exportCodeZoo"><span class="hs-identifier hs-type">exportCodeZoo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-40"></span><span id="exportCodeZoo"><span class="annot"><span class="annottext">exportCodeZoo :: System -&gt; [Choices] -&gt; IO ()
-</span><a href="Drasil.Generator.Code.html#exportCodeZoo"><span class="hs-identifier hs-var hs-var">exportCodeZoo</span></a></span></span><span> </span><span id="local-6989586621679100482"><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679100482"><span class="hs-identifier hs-var">syst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Choices -&gt; IO ()) -&gt; [Choices] -&gt; IO ()
+</span><a href="Drasil.Generator.Code.html#exportCodeZoo"><span class="hs-identifier hs-var hs-var">exportCodeZoo</span></a></span></span><span> </span><span id="local-6989586621679100473"><span class="annot"><span class="annottext">System
+</span><a href="#local-6989586621679100473"><span class="hs-identifier hs-var">syst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Choices -&gt; IO ()) -&gt; [Choices] -&gt; IO ()
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Foldable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m ()
 </span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="annot"><span class="annottext">((Choices -&gt; IO ()) -&gt; [Choices] -&gt; IO ())
 -&gt; (Choices -&gt; IO ()) -&gt; [Choices] -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679100484"><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679100484"><span class="hs-identifier hs-var">chcs</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-41"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679100488"><span class="annot"><span class="annottext">dir :: [Char]
-</span><a href="#local-6989586621679100488"><span class="hs-identifier hs-var hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Char -&gt; Char) -&gt; [Char] -&gt; [Char]
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679100475"><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679100475"><span class="hs-identifier hs-var">chcs</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-41"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679100479"><span class="annot"><span class="annottext">dir :: [Char]
+</span><a href="#local-6989586621679100479"><span class="hs-identifier hs-var hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Char -&gt; Char) -&gt; [Char] -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char
 </span><span class="hs-identifier hs-var">toLower</span></span><span> </span><span class="annot"><span class="annottext">([Char] -&gt; [Char]) -&gt; [Char] -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Choices -&gt; [Char]
 </span><a href="Drasil.Generator.Code.html#codedDirName"><span class="hs-identifier hs-var">codedDirName</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679100482"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">System -&gt; Getting [Char] System [Char] -&gt; [Char]
+</span><a href="#local-6989586621679100473"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">System -&gt; Getting [Char] System [Char] -&gt; [Char]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [Char] System [Char]
 forall c. HasSystem c =&gt; Lens' c [Char]
 Lens' System [Char]
 </span><span class="hs-identifier hs-var">programName</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679100484"><span class="hs-identifier hs-var">chcs</span></a></span><span>
-</span><span id="line-42"></span><span>  </span><span id="local-6989586621679100489"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679100489"><span class="hs-identifier hs-var">workingDir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Char]
+</span><a href="#local-6989586621679100475"><span class="hs-identifier hs-var">chcs</span></a></span><span>
+</span><span id="line-42"></span><span>  </span><span id="local-6989586621679100480"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679100480"><span class="hs-identifier hs-var">workingDir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Char]
 </span><span class="hs-identifier hs-var">getCurrentDirectory</span></span><span>
 </span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; [Char] -&gt; IO ()
 </span><span class="hs-identifier hs-var">createDirIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679100488"><span class="hs-identifier hs-var">dir</span></a></span><span>
+</span><a href="#local-6989586621679100479"><span class="hs-identifier hs-var">dir</span></a></span><span>
 </span><span id="line-44"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; IO ()
 </span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679100488"><span class="hs-identifier hs-var">dir</span></a></span><span>
+</span><a href="#local-6989586621679100479"><span class="hs-identifier hs-var">dir</span></a></span><span>
 </span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">System -&gt; Choices -&gt; IO ()
 </span><a href="Drasil.Generator.Code.html#exportCode"><span class="hs-identifier hs-var">exportCode</span></a></span><span> </span><span class="annot"><span class="annottext">System
-</span><a href="#local-6989586621679100482"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679100484"><span class="hs-identifier hs-var">chcs</span></a></span><span>
+</span><a href="#local-6989586621679100473"><span class="hs-identifier hs-var">syst</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679100475"><span class="hs-identifier hs-var">chcs</span></a></span><span>
 </span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; IO ()
 </span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679100489"><span class="hs-identifier hs-var">workingDir</span></a></span><span>
+</span><a href="#local-6989586621679100480"><span class="hs-identifier hs-var">workingDir</span></a></span><span>
 </span><span id="line-47"></span><span>
 </span><span id="line-48"></span><span class="annot"><span class="hs-comment">-- | Calls the code generator.</span></span><span>
 </span><span id="line-49"></span><span class="annot"><a href="Drasil.Generator.Code.html#genCode"><span class="hs-identifier hs-type">genCode</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeSpec</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-50"></span><span id="genCode"><span class="annot"><span class="annottext">genCode :: Choices -&gt; CodeSpec -&gt; IO ()
-</span><a href="Drasil.Generator.Code.html#genCode"><span class="hs-identifier hs-var hs-var">genCode</span></a></span></span><span> </span><span id="local-6989586621679100490"><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679100490"><span class="hs-identifier hs-var">chs</span></a></span></span><span> </span><span id="local-6989586621679100491"><span class="annot"><span class="annottext">CodeSpec
-</span><a href="#local-6989586621679100491"><span class="hs-identifier hs-var">spec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-51"></span><span>  </span><span id="local-6989586621679100492"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679100492"><span class="hs-identifier hs-var">workingDir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Char]
+</span><a href="Drasil.Generator.Code.html#genCode"><span class="hs-identifier hs-var hs-var">genCode</span></a></span></span><span> </span><span id="local-6989586621679100481"><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679100481"><span class="hs-identifier hs-var">chs</span></a></span></span><span> </span><span id="local-6989586621679100482"><span class="annot"><span class="annottext">CodeSpec
+</span><a href="#local-6989586621679100482"><span class="hs-identifier hs-var">spec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-51"></span><span>  </span><span id="local-6989586621679100483"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679100483"><span class="hs-identifier hs-var">workingDir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Char]
 </span><span class="hs-identifier hs-var">getCurrentDirectory</span></span><span>
-</span><span id="line-52"></span><span>  </span><span id="local-6989586621679100493"><span class="annot"><span class="annottext">UTCTime
-</span><a href="#local-6989586621679100493"><span class="hs-identifier hs-var">time</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO UTCTime
+</span><span id="line-52"></span><span>  </span><span id="local-6989586621679100484"><span class="annot"><span class="annottext">UTCTime
+</span><a href="#local-6989586621679100484"><span class="hs-identifier hs-var">time</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO UTCTime
 </span><span class="hs-identifier hs-var">getCurrentTime</span></span><span>
-</span><span id="line-53"></span><span>  </span><span id="local-6989586621679100494"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679100494"><span class="hs-identifier hs-var">sampData</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Expr] -&gt; ([Char] -&gt; IO [Expr]) -&gt; Maybe [Char] -&gt; IO [Expr]
+</span><span id="line-53"></span><span>  </span><span id="local-6989586621679100485"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679100485"><span class="hs-identifier hs-var">sampData</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Expr] -&gt; ([Char] -&gt; IO [Expr]) -&gt; Maybe [Char] -&gt; IO [Expr]
 forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
 </span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Expr] -&gt; IO [Expr]
 forall a. a -&gt; IO a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
-</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679100496"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679100496"><span class="hs-identifier hs-var">sd</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; DataDesc' -&gt; IO [Expr]
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679100487"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679100487"><span class="hs-identifier hs-var">sd</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; DataDesc' -&gt; IO [Expr]
 </span><span class="hs-identifier hs-var">readWithDataDesc</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679100496"><span class="hs-identifier hs-var">sd</span></a></span><span> </span><span class="annot"><span class="annottext">(DataDesc' -&gt; IO [Expr]) -&gt; DataDesc' -&gt; IO [Expr]
+</span><a href="#local-6989586621679100487"><span class="hs-identifier hs-var">sd</span></a></span><span> </span><span class="annot"><span class="annottext">(DataDesc' -&gt; IO [Expr]) -&gt; DataDesc' -&gt; IO [Expr]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; DataDesc'
 </span><span class="hs-identifier hs-var">sampleInputDD</span></span><span>
 </span><span id="line-54"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeSpec
-</span><a href="#local-6989586621679100491"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
+</span><a href="#local-6989586621679100482"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
 -&gt; Getting [CodeVarChunk] CodeSpec [CodeVarChunk] -&gt; [CodeVarChunk]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [CodeVarChunk] CodeSpec [CodeVarChunk]
@@ -125,7 +125,7 @@ forall c. HasOldCodeSpec c =&gt; Lens' c [CodeVarChunk]
 Lens' CodeSpec [CodeVarChunk]
 </span><span class="hs-identifier hs-var">extInputsO</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Choices -&gt; Maybe [Char]
 </span><span class="hs-identifier hs-var">getSampleData</span></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679100490"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679100481"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; [Char] -&gt; IO ()
 </span><span class="hs-identifier hs-var">createDirIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">[Char]
@@ -133,202 +133,202 @@ Lens' CodeSpec [CodeVarChunk]
 </span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; IO ()
 </span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;src&quot;</span></span><span>
-</span><span id="line-57"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679100535"><span class="annot"><span class="annottext">genLangCode :: Lang -&gt; IO ()
-</span><a href="#local-6989586621679100535"><span class="hs-identifier hs-var hs-var">genLangCode</span></a></span></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><span id="line-57"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679100526"><span class="annot"><span class="annottext">genLangCode :: Lang -&gt; IO ()
+</span><a href="#local-6989586621679100526"><span class="hs-identifier hs-var hs-var">genLangCode</span></a></span></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Java</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (JavaCode (Program JavaCode) -&gt; ProgData)
--&gt; (JavaProject (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (JavaProject PackageData -&gt; PackageData)
 -&gt; IO ()
 forall {progRepr :: * -&gt; *} {packRepr :: * -&gt; *}.
 (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =&gt;
 Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
--&gt; (packRepr (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (packRepr PackageData -&gt; PackageData)
 -&gt; IO ()
-</span><a href="#local-6989586621679100536"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679100527"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Java</span></span><span> </span><span class="annot"><span class="annottext">JavaCode ProgData -&gt; ProgData
 JavaCode (Program JavaCode) -&gt; ProgData
 forall a. JavaCode a -&gt; a
-</span><span class="hs-identifier hs-var">unJC</span></span><span> </span><span class="annot"><span class="annottext">JavaProject (PackageData ProgData) -&gt; PackageData ProgData
+</span><span class="hs-identifier hs-var">unJC</span></span><span> </span><span class="annot"><span class="annottext">JavaProject PackageData -&gt; PackageData
 forall a. JavaProject a -&gt; a
 </span><span class="hs-identifier hs-var">unJP</span></span><span>
-</span><span id="line-58"></span><span>      </span><span class="annot"><a href="#local-6989586621679100535"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><span id="line-58"></span><span>      </span><span class="annot"><a href="#local-6989586621679100526"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Python</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (PythonCode (Program PythonCode) -&gt; ProgData)
--&gt; (PythonProject (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (PythonProject PackageData -&gt; PackageData)
 -&gt; IO ()
 forall {progRepr :: * -&gt; *} {packRepr :: * -&gt; *}.
 (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =&gt;
 Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
--&gt; (packRepr (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (packRepr PackageData -&gt; PackageData)
 -&gt; IO ()
-</span><a href="#local-6989586621679100536"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679100527"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Python</span></span><span> </span><span class="annot"><span class="annottext">PythonCode ProgData -&gt; ProgData
 PythonCode (Program PythonCode) -&gt; ProgData
 forall a. PythonCode a -&gt; a
-</span><span class="hs-identifier hs-var">unPC</span></span><span> </span><span class="annot"><span class="annottext">PythonProject (PackageData ProgData) -&gt; PackageData ProgData
+</span><span class="hs-identifier hs-var">unPC</span></span><span> </span><span class="annot"><span class="annottext">PythonProject PackageData -&gt; PackageData
 forall a. PythonProject a -&gt; a
 </span><span class="hs-identifier hs-var">unPP</span></span><span>
-</span><span id="line-59"></span><span>      </span><span class="annot"><a href="#local-6989586621679100535"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><span id="line-59"></span><span>      </span><span class="annot"><a href="#local-6989586621679100526"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">CSharp</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (CSharpCode (Program CSharpCode) -&gt; ProgData)
--&gt; (CSharpProject (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (CSharpProject PackageData -&gt; PackageData)
 -&gt; IO ()
 forall {progRepr :: * -&gt; *} {packRepr :: * -&gt; *}.
 (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =&gt;
 Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
--&gt; (packRepr (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (packRepr PackageData -&gt; PackageData)
 -&gt; IO ()
-</span><a href="#local-6989586621679100536"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679100527"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">CSharp</span></span><span> </span><span class="annot"><span class="annottext">CSharpCode ProgData -&gt; ProgData
 CSharpCode (Program CSharpCode) -&gt; ProgData
 forall a. CSharpCode a -&gt; a
-</span><span class="hs-identifier hs-var">unCSC</span></span><span> </span><span class="annot"><span class="annottext">CSharpProject (PackageData ProgData) -&gt; PackageData ProgData
+</span><span class="hs-identifier hs-var">unCSC</span></span><span> </span><span class="annot"><span class="annottext">CSharpProject PackageData -&gt; PackageData
 forall a. CSharpProject a -&gt; a
 </span><span class="hs-identifier hs-var">unCSP</span></span><span>
-</span><span id="line-60"></span><span>      </span><span class="annot"><a href="#local-6989586621679100535"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><span id="line-60"></span><span>      </span><span class="annot"><a href="#local-6989586621679100526"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Cpp</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (CppCode
       CppSrcCode CppHdrCode (Program (CppCode CppSrcCode CppHdrCode))
     -&gt; ProgData)
--&gt; (CppProject (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (CppProject PackageData -&gt; PackageData)
 -&gt; IO ()
 forall {progRepr :: * -&gt; *} {packRepr :: * -&gt; *}.
 (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =&gt;
 Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
--&gt; (packRepr (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (packRepr PackageData -&gt; PackageData)
 -&gt; IO ()
-</span><a href="#local-6989586621679100536"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679100527"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Cpp</span></span><span> </span><span class="annot"><span class="annottext">CppCode CppSrcCode CppHdrCode ProgData -&gt; ProgData
 CppCode
   CppSrcCode CppHdrCode (Program (CppCode CppSrcCode CppHdrCode))
 -&gt; ProgData
 forall a. CppCode CppSrcCode CppHdrCode a -&gt; a
-</span><span class="hs-identifier hs-var">unCPPC</span></span><span> </span><span class="annot"><span class="annottext">CppProject (PackageData ProgData) -&gt; PackageData ProgData
+</span><span class="hs-identifier hs-var">unCPPC</span></span><span> </span><span class="annot"><span class="annottext">CppProject PackageData -&gt; PackageData
 forall a. CppProject a -&gt; a
 </span><span class="hs-identifier hs-var">unCPPP</span></span><span>
-</span><span id="line-61"></span><span>      </span><span class="annot"><a href="#local-6989586621679100535"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><span id="line-61"></span><span>      </span><span class="annot"><a href="#local-6989586621679100526"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Swift</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (SwiftCode (Program SwiftCode) -&gt; ProgData)
--&gt; (SwiftProject (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (SwiftProject PackageData -&gt; PackageData)
 -&gt; IO ()
 forall {progRepr :: * -&gt; *} {packRepr :: * -&gt; *}.
 (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =&gt;
 Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
--&gt; (packRepr (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (packRepr PackageData -&gt; PackageData)
 -&gt; IO ()
-</span><a href="#local-6989586621679100536"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679100527"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Swift</span></span><span> </span><span class="annot"><span class="annottext">SwiftCode ProgData -&gt; ProgData
 SwiftCode (Program SwiftCode) -&gt; ProgData
 forall a. SwiftCode a -&gt; a
-</span><span class="hs-identifier hs-var">unSC</span></span><span> </span><span class="annot"><span class="annottext">SwiftProject (PackageData ProgData) -&gt; PackageData ProgData
+</span><span class="hs-identifier hs-var">unSC</span></span><span> </span><span class="annot"><span class="annottext">SwiftProject PackageData -&gt; PackageData
 forall a. SwiftProject a -&gt; a
 </span><span class="hs-identifier hs-var">unSP</span></span><span>
-</span><span id="line-62"></span><span>      </span><span class="annot"><a href="#local-6989586621679100535"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><span id="line-62"></span><span>      </span><span class="annot"><a href="#local-6989586621679100526"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Julia</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (JuliaCode (Program JuliaCode) -&gt; ProgData)
--&gt; (JuliaProject (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (JuliaProject PackageData -&gt; PackageData)
 -&gt; IO ()
 forall {progRepr :: * -&gt; *} {packRepr :: * -&gt; *}.
 (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) =&gt;
 Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
--&gt; (packRepr (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (packRepr PackageData -&gt; PackageData)
 -&gt; IO ()
-</span><a href="#local-6989586621679100537"><span class="hs-identifier hs-var">genCallProc</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679100528"><span class="hs-identifier hs-var">genCallProc</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Julia</span></span><span> </span><span class="annot"><span class="annottext">JuliaCode ProgData -&gt; ProgData
 JuliaCode (Program JuliaCode) -&gt; ProgData
 forall a. JuliaCode a -&gt; a
-</span><span class="hs-identifier hs-var">unJLC</span></span><span> </span><span class="annot"><span class="annottext">JuliaProject (PackageData ProgData) -&gt; PackageData ProgData
+</span><span class="hs-identifier hs-var">unJLC</span></span><span> </span><span class="annot"><span class="annottext">JuliaProject PackageData -&gt; PackageData
 forall a. JuliaProject a -&gt; a
 </span><span class="hs-identifier hs-var">unJLP</span></span><span>
-</span><span id="line-63"></span><span>      </span><span id="local-6989586621679100536"><span class="annot"><span class="annottext">genCall :: Lang
+</span><span id="line-63"></span><span>      </span><span id="local-6989586621679100527"><span class="annot"><span class="annottext">genCall :: Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
--&gt; (packRepr (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (packRepr PackageData -&gt; PackageData)
 -&gt; IO ()
-</span><a href="#local-6989586621679100536"><span class="hs-identifier hs-var hs-var">genCall</span></a></span></span><span> </span><span id="local-6989586621679100891"><span class="annot"><span class="annottext">Lang
-</span><a href="#local-6989586621679100891"><span class="hs-identifier hs-var">lng</span></a></span></span><span> </span><span id="local-6989586621679100892"><span class="annot"><span class="annottext">progRepr (Program progRepr) -&gt; ProgData
-</span><a href="#local-6989586621679100892"><span class="hs-identifier hs-var">unProgRepr</span></a></span></span><span> </span><span id="local-6989586621679100893"><span class="annot"><span class="annottext">packRepr (PackageData ProgData) -&gt; PackageData ProgData
-</span><a href="#local-6989586621679100893"><span class="hs-identifier hs-var">unPackRepr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679100527"><span class="hs-identifier hs-var hs-var">genCall</span></a></span></span><span> </span><span id="local-6989586621679100882"><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679100882"><span class="hs-identifier hs-var">lng</span></a></span></span><span> </span><span id="local-6989586621679100883"><span class="annot"><span class="annottext">progRepr (Program progRepr) -&gt; ProgData
+</span><a href="#local-6989586621679100883"><span class="hs-identifier hs-var">unProgRepr</span></a></span></span><span> </span><span id="local-6989586621679100884"><span class="annot"><span class="annottext">packRepr PackageData -&gt; PackageData
+</span><a href="#local-6989586621679100884"><span class="hs-identifier hs-var">unPackRepr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
--&gt; (packRepr (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (packRepr PackageData -&gt; PackageData)
 -&gt; DrasilState
 -&gt; IO ()
 forall (progRepr :: * -&gt; *) (packRepr :: * -&gt; *).
 (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =&gt;
 Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
--&gt; (packRepr (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (packRepr PackageData -&gt; PackageData)
 -&gt; DrasilState
 -&gt; IO ()
 </span><span class="hs-identifier hs-var">generateCode</span></span><span> </span><span class="annot"><span class="annottext">Lang
-</span><a href="#local-6989586621679100891"><span class="hs-identifier hs-var">lng</span></a></span><span> </span><span class="annot"><span class="annottext">progRepr (Program progRepr) -&gt; ProgData
-</span><a href="#local-6989586621679100892"><span class="hs-identifier hs-var">unProgRepr</span></a></span><span>
-</span><span id="line-64"></span><span>        </span><span class="annot"><span class="annottext">packRepr (PackageData ProgData) -&gt; PackageData ProgData
-</span><a href="#local-6989586621679100893"><span class="hs-identifier hs-var">unPackRepr</span></a></span><span> </span><span class="annot"><span class="annottext">(DrasilState -&gt; IO ()) -&gt; DrasilState -&gt; IO ()
+</span><a href="#local-6989586621679100882"><span class="hs-identifier hs-var">lng</span></a></span><span> </span><span class="annot"><span class="annottext">progRepr (Program progRepr) -&gt; ProgData
+</span><a href="#local-6989586621679100883"><span class="hs-identifier hs-var">unProgRepr</span></a></span><span>
+</span><span id="line-64"></span><span>        </span><span class="annot"><span class="annottext">packRepr PackageData -&gt; PackageData
+</span><a href="#local-6989586621679100884"><span class="hs-identifier hs-var">unPackRepr</span></a></span><span> </span><span class="annot"><span class="annottext">(DrasilState -&gt; IO ()) -&gt; DrasilState -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lang -&gt; [Char] -&gt; [Expr] -&gt; Choices -&gt; CodeSpec -&gt; DrasilState
 </span><span class="hs-identifier hs-var">generator</span></span><span> </span><span class="annot"><span class="annottext">Lang
-</span><a href="#local-6989586621679100891"><span class="hs-identifier hs-var">lng</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Day -&gt; [Char]
+</span><a href="#local-6989586621679100882"><span class="hs-identifier hs-var">lng</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Day -&gt; [Char]
 </span><span class="hs-identifier hs-var">showGregorian</span></span><span> </span><span class="annot"><span class="annottext">(Day -&gt; [Char]) -&gt; Day -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UTCTime -&gt; Day
 </span><span class="hs-identifier hs-var">utctDay</span></span><span> </span><span class="annot"><span class="annottext">UTCTime
-</span><a href="#local-6989586621679100493"><span class="hs-identifier hs-var">time</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679100494"><span class="hs-identifier hs-var">sampData</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679100490"><span class="hs-identifier hs-var">chs</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
-</span><a href="#local-6989586621679100491"><span class="hs-identifier hs-var">spec</span></a></span><span>
-</span><span id="line-65"></span><span>      </span><span id="local-6989586621679100537"><span class="annot"><span class="annottext">genCallProc :: Lang
+</span><a href="#local-6989586621679100484"><span class="hs-identifier hs-var">time</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679100485"><span class="hs-identifier hs-var">sampData</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679100481"><span class="hs-identifier hs-var">chs</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
+</span><a href="#local-6989586621679100482"><span class="hs-identifier hs-var">spec</span></a></span><span>
+</span><span id="line-65"></span><span>      </span><span id="local-6989586621679100528"><span class="annot"><span class="annottext">genCallProc :: Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
--&gt; (packRepr (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (packRepr PackageData -&gt; PackageData)
 -&gt; IO ()
-</span><a href="#local-6989586621679100537"><span class="hs-identifier hs-var hs-var">genCallProc</span></a></span></span><span> </span><span id="local-6989586621679101095"><span class="annot"><span class="annottext">Lang
-</span><a href="#local-6989586621679101095"><span class="hs-identifier hs-var">lng</span></a></span></span><span> </span><span id="local-6989586621679101096"><span class="annot"><span class="annottext">progRepr (Program progRepr) -&gt; ProgData
-</span><a href="#local-6989586621679101096"><span class="hs-identifier hs-var">unProgRepr</span></a></span></span><span> </span><span id="local-6989586621679101097"><span class="annot"><span class="annottext">packRepr (PackageData ProgData) -&gt; PackageData ProgData
-</span><a href="#local-6989586621679101097"><span class="hs-identifier hs-var">unPackRepr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679100528"><span class="hs-identifier hs-var hs-var">genCallProc</span></a></span></span><span> </span><span id="local-6989586621679101086"><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679101086"><span class="hs-identifier hs-var">lng</span></a></span></span><span> </span><span id="local-6989586621679101087"><span class="annot"><span class="annottext">progRepr (Program progRepr) -&gt; ProgData
+</span><a href="#local-6989586621679101087"><span class="hs-identifier hs-var">unProgRepr</span></a></span></span><span> </span><span id="local-6989586621679101088"><span class="annot"><span class="annottext">packRepr PackageData -&gt; PackageData
+</span><a href="#local-6989586621679101088"><span class="hs-identifier hs-var">unPackRepr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
--&gt; (packRepr (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (packRepr PackageData -&gt; PackageData)
 -&gt; DrasilState
 -&gt; IO ()
 forall (progRepr :: * -&gt; *) (packRepr :: * -&gt; *).
 (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) =&gt;
 Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
--&gt; (packRepr (PackageData ProgData) -&gt; PackageData ProgData)
+-&gt; (packRepr PackageData -&gt; PackageData)
 -&gt; DrasilState
 -&gt; IO ()
 </span><span class="hs-identifier hs-var">generateCodeProc</span></span><span> </span><span class="annot"><span class="annottext">Lang
-</span><a href="#local-6989586621679101095"><span class="hs-identifier hs-var">lng</span></a></span><span> </span><span class="annot"><span class="annottext">progRepr (Program progRepr) -&gt; ProgData
-</span><a href="#local-6989586621679101096"><span class="hs-identifier hs-var">unProgRepr</span></a></span><span>
-</span><span id="line-66"></span><span>        </span><span class="annot"><span class="annottext">packRepr (PackageData ProgData) -&gt; PackageData ProgData
-</span><a href="#local-6989586621679101097"><span class="hs-identifier hs-var">unPackRepr</span></a></span><span> </span><span class="annot"><span class="annottext">(DrasilState -&gt; IO ()) -&gt; DrasilState -&gt; IO ()
+</span><a href="#local-6989586621679101086"><span class="hs-identifier hs-var">lng</span></a></span><span> </span><span class="annot"><span class="annottext">progRepr (Program progRepr) -&gt; ProgData
+</span><a href="#local-6989586621679101087"><span class="hs-identifier hs-var">unProgRepr</span></a></span><span>
+</span><span id="line-66"></span><span>        </span><span class="annot"><span class="annottext">packRepr PackageData -&gt; PackageData
+</span><a href="#local-6989586621679101088"><span class="hs-identifier hs-var">unPackRepr</span></a></span><span> </span><span class="annot"><span class="annottext">(DrasilState -&gt; IO ()) -&gt; DrasilState -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lang -&gt; [Char] -&gt; [Expr] -&gt; Choices -&gt; CodeSpec -&gt; DrasilState
 </span><span class="hs-identifier hs-var">generator</span></span><span> </span><span class="annot"><span class="annottext">Lang
-</span><a href="#local-6989586621679101095"><span class="hs-identifier hs-var">lng</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Day -&gt; [Char]
+</span><a href="#local-6989586621679101086"><span class="hs-identifier hs-var">lng</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Day -&gt; [Char]
 </span><span class="hs-identifier hs-var">showGregorian</span></span><span> </span><span class="annot"><span class="annottext">(Day -&gt; [Char]) -&gt; Day -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UTCTime -&gt; Day
 </span><span class="hs-identifier hs-var">utctDay</span></span><span> </span><span class="annot"><span class="annottext">UTCTime
-</span><a href="#local-6989586621679100493"><span class="hs-identifier hs-var">time</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679100494"><span class="hs-identifier hs-var">sampData</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679100490"><span class="hs-identifier hs-var">chs</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
-</span><a href="#local-6989586621679100491"><span class="hs-identifier hs-var">spec</span></a></span><span>
+</span><a href="#local-6989586621679100484"><span class="hs-identifier hs-var">time</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679100485"><span class="hs-identifier hs-var">sampData</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679100481"><span class="hs-identifier hs-var">chs</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
+</span><a href="#local-6989586621679100482"><span class="hs-identifier hs-var">spec</span></a></span><span>
 </span><span id="line-67"></span><span>  </span><span class="annot"><span class="annottext">(Lang -&gt; IO ()) -&gt; [Lang] -&gt; IO ()
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Foldable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m ()
 </span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="annot"><span class="annottext">Lang -&gt; IO ()
-</span><a href="#local-6989586621679100535"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Choices -&gt; [Lang]
+</span><a href="#local-6989586621679100526"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Choices -&gt; [Lang]
 </span><span class="hs-identifier hs-var">lang</span></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679100490"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679100481"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-68"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; IO ()
 </span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679100492"><span class="hs-identifier hs-var">workingDir</span></a></span><span>
+</span><a href="#local-6989586621679100483"><span class="hs-identifier hs-var">workingDir</span></a></span><span>
 </span><span id="line-69"></span><span>
 </span><span id="line-70"></span><span class="hs-comment">-- | Find name of folders created for a &quot;zoo&quot; of executable softifacts.</span><span>
 </span><span id="line-71"></span><span class="hs-comment">--</span><span>
@@ -336,35 +336,35 @@ forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 </span><span id="line-73"></span><span class="hs-comment">-- created.</span><span>
 </span><span id="line-74"></span><span class="annot"><a href="Drasil.Generator.Code.html#codedDirName"><span class="hs-identifier hs-type">codedDirName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-75"></span><span id="codedDirName"><span class="annot"><span class="annottext">codedDirName :: [Char] -&gt; Choices -&gt; [Char]
-</span><a href="Drasil.Generator.Code.html#codedDirName"><span class="hs-identifier hs-var hs-var">codedDirName</span></a></span></span><span> </span><span id="local-6989586621679101098"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679101098"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span> </span><span class="hs-special">{</span><span>
+</span><a href="Drasil.Generator.Code.html#codedDirName"><span class="hs-identifier hs-var hs-var">codedDirName</span></a></span></span><span> </span><span id="local-6989586621679101089"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679101089"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span> </span><span class="hs-special">{</span><span>
 </span><span id="line-76"></span><span>  </span><span class="annot"><span class="annottext">architecture :: Choices -&gt; Architecture
-</span><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101099"><span class="annot"><span class="annottext">Architecture
-</span><a href="#local-6989586621679101099"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101090"><span class="annot"><span class="annottext">Architecture
+</span><a href="#local-6989586621679101090"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-77"></span><span>  </span><span class="annot"><span class="annottext">optFeats :: Choices -&gt; OptionalFeatures
-</span><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101100"><span class="annot"><span class="annottext">OptionalFeatures
-</span><a href="#local-6989586621679101100"><span class="hs-identifier hs-var">o</span></a></span></span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101091"><span class="annot"><span class="annottext">OptionalFeatures
+</span><a href="#local-6989586621679101091"><span class="hs-identifier hs-var">o</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">dataInfo :: Choices -&gt; DataInfo
-</span><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101101"><span class="annot"><span class="annottext">DataInfo
-</span><a href="#local-6989586621679101101"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101092"><span class="annot"><span class="annottext">DataInfo
+</span><a href="#local-6989586621679101092"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">maps :: Choices -&gt; Maps
-</span><span class="hs-identifier hs-var">maps</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101102"><span class="annot"><span class="annottext">Maps
-</span><a href="#local-6989586621679101102"><span class="hs-identifier hs-var">m</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span class="hs-identifier hs-var">maps</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679101093"><span class="annot"><span class="annottext">Maps
+</span><a href="#local-6989586621679101093"><span class="hs-identifier hs-var">m</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-80"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; [Char]
 forall a. [a] -&gt; [[a]] -&gt; [a]
 </span><span class="hs-identifier hs-var">intercalate</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;_&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679101098"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Modularity -&gt; [Char]
+</span><a href="#local-6989586621679101089"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Modularity -&gt; [Char]
 </span><a href="Drasil.Generator.Code.html#codedMod"><span class="hs-identifier hs-var">codedMod</span></a></span><span> </span><span class="annot"><span class="annottext">(Modularity -&gt; [Char]) -&gt; Modularity -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Architecture -&gt; Modularity
 </span><span class="hs-identifier hs-var">modularity</span></span><span> </span><span class="annot"><span class="annottext">Architecture
-</span><a href="#local-6989586621679101099"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ImplementationType -&gt; [Char]
+</span><a href="#local-6989586621679101090"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ImplementationType -&gt; [Char]
 </span><a href="Drasil.Generator.Code.html#codedImpTp"><span class="hs-identifier hs-var">codedImpTp</span></a></span><span> </span><span class="annot"><span class="annottext">(ImplementationType -&gt; [Char]) -&gt; ImplementationType -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Architecture -&gt; ImplementationType
 </span><span class="hs-identifier hs-var">impType</span></span><span> </span><span class="annot"><span class="annottext">Architecture
-</span><a href="#local-6989586621679101099"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Logging] -&gt; [Char]
+</span><a href="#local-6989586621679101090"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Logging] -&gt; [Char]
 </span><a href="Drasil.Generator.Code.html#codedLog"><span class="hs-identifier hs-var">codedLog</span></a></span><span> </span><span class="annot"><span class="annottext">([Logging] -&gt; [Char]) -&gt; [Logging] -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">LogConfig -&gt; [Logging]
@@ -372,29 +372,29 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">OptionalFeatures -&gt; LogConfig
 </span><span class="hs-identifier hs-var">logConfig</span></span><span> </span><span class="annot"><span class="annottext">OptionalFeatures
-</span><a href="#local-6989586621679101100"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679101091"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-81"></span><span>    </span><span class="annot"><span class="annottext">Structure -&gt; [Char]
 </span><a href="Drasil.Generator.Code.html#codedStruct"><span class="hs-identifier hs-var">codedStruct</span></a></span><span> </span><span class="annot"><span class="annottext">(Structure -&gt; [Char]) -&gt; Structure -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataInfo -&gt; Structure
 </span><span class="hs-identifier hs-var">inputStructure</span></span><span> </span><span class="annot"><span class="annottext">DataInfo
-</span><a href="#local-6989586621679101101"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstantStructure -&gt; [Char]
+</span><a href="#local-6989586621679101092"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstantStructure -&gt; [Char]
 </span><a href="Drasil.Generator.Code.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="annot"><span class="annottext">(ConstantStructure -&gt; [Char]) -&gt; ConstantStructure -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataInfo -&gt; ConstantStructure
 </span><span class="hs-identifier hs-var">constStructure</span></span><span> </span><span class="annot"><span class="annottext">DataInfo
-</span><a href="#local-6989586621679101101"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679101092"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-82"></span><span>    </span><span class="annot"><span class="annottext">ConstantRepr -&gt; [Char]
 </span><a href="Drasil.Generator.Code.html#codedConRepr"><span class="hs-identifier hs-var">codedConRepr</span></a></span><span> </span><span class="annot"><span class="annottext">(ConstantRepr -&gt; [Char]) -&gt; ConstantRepr -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataInfo -&gt; ConstantRepr
 </span><span class="hs-identifier hs-var">constRepr</span></span><span> </span><span class="annot"><span class="annottext">DataInfo
-</span><a href="#local-6989586621679101101"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SpaceMatch -&gt; [Char]
+</span><a href="#local-6989586621679101092"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SpaceMatch -&gt; [Char]
 </span><a href="Drasil.Generator.Code.html#codedSpaceMatch"><span class="hs-identifier hs-var">codedSpaceMatch</span></a></span><span> </span><span class="annot"><span class="annottext">(SpaceMatch -&gt; [Char]) -&gt; SpaceMatch -&gt; [Char]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Maps -&gt; SpaceMatch
 </span><span class="hs-identifier hs-var">spaceMatch</span></span><span> </span><span class="annot"><span class="annottext">Maps
-</span><a href="#local-6989586621679101102"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679101093"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-83"></span><span>
 </span><span id="line-84"></span><span class="annot"><a href="Drasil.Generator.Code.html#codedMod"><span class="hs-identifier hs-type">codedMod</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Modularity</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-85"></span><span id="codedMod"><span class="annot"><span class="annottext">codedMod :: Modularity -&gt; [Char]
@@ -439,10 +439,10 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-102"></span><span class="annot"><a href="Drasil.Generator.Code.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="annot"><span class="annottext">ConstantStructure
 </span><span class="hs-identifier hs-var">WithInputs</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;WI&quot;</span></span><span>
-</span><span id="line-103"></span><span class="annot"><a href="Drasil.Generator.Code.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Store</span></span><span> </span><span id="local-6989586621679101119"><span class="annot"><span class="annottext">Structure
-</span><a href="#local-6989586621679101119"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; [Char]
+</span><span id="line-103"></span><span class="annot"><a href="Drasil.Generator.Code.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Store</span></span><span> </span><span id="local-6989586621679101110"><span class="annot"><span class="annottext">Structure
+</span><a href="#local-6989586621679101110"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; [Char]
 </span><a href="Drasil.Generator.Code.html#codedStruct"><span class="hs-identifier hs-var">codedStruct</span></a></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><a href="#local-6989586621679101119"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679101110"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-104"></span><span>
 </span><span id="line-105"></span><span class="annot"><a href="Drasil.Generator.Code.html#codedConRepr"><span class="hs-identifier hs-type">codedConRepr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstantRepr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-106"></span><span id="codedConRepr"><span class="annot"><span class="annottext">codedConRepr :: ConstantRepr -&gt; [Char]
@@ -455,9 +455,9 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-108"></span><span>
 </span><span id="line-109"></span><span class="annot"><a href="Drasil.Generator.Code.html#codedSpaceMatch"><span class="hs-identifier hs-type">codedSpaceMatch</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SpaceMatch</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-110"></span><span id="codedSpaceMatch"><span class="annot"><span class="annottext">codedSpaceMatch :: SpaceMatch -&gt; [Char]
-</span><a href="Drasil.Generator.Code.html#codedSpaceMatch"><span class="hs-identifier hs-var hs-var">codedSpaceMatch</span></a></span></span><span> </span><span id="local-6989586621679101122"><span class="annot"><span class="annottext">SpaceMatch
-</span><a href="#local-6989586621679101122"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">SpaceMatch
-</span><a href="#local-6989586621679101122"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="Drasil.Generator.Code.html#codedSpaceMatch"><span class="hs-identifier hs-var hs-var">codedSpaceMatch</span></a></span></span><span> </span><span id="local-6989586621679101113"><span class="annot"><span class="annottext">SpaceMatch
+</span><a href="#local-6989586621679101113"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">SpaceMatch
+</span><a href="#local-6989586621679101113"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-keyword">of</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeType
 </span><span class="hs-identifier hs-var">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CodeType
 </span><span class="hs-identifier hs-var">Float</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char]

@@ -587,17 +587,19 @@ digraph alltypes {
 		FileAndContents -> FilePath;
 		FileAndContents -> Doc;
 		}
-		subgraph packagedataa{
-		PackageDataa	[shape=oval, color=cyan3, label="PackageDataa"];
-		PackageDataa -> a;
-		PackageDataa -> FileAndContents;
-		}
 	}
 	subgraph filenames {
 	}
 	subgraph lang {
 		subgraph lang{
 		Lang	[shape=oval, color=darkviolet, label="Lang"];
+		}
+	}
+	subgraph packagedata {
+		subgraph packagedata{
+		PackageData	[shape=oval, color=cyan3, label="PackageData"];
+		PackageData -> ProgData;
+		PackageData -> FileAndContents;
 		}
 	}
 	subgraph odeinfo {

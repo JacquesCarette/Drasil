@@ -8,10 +8,11 @@ module Language.Drasil.GOOL (
   unPP, unJP, unCSP, unCPPP, unSP, unJLP
 ) where
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..),
-  package)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Code.FileData (FileAndContents(..),
-  hasPathAndDocToFileAndContents, PackageData(..), pattern PackageData)
+  hasPathAndDocToFileAndContents)
+import Language.Drasil.Code.PackageData (PackageData(..), pattern PackageData,
+  package)
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)

@@ -63,7 +63,7 @@ main = do
   setCurrentDirectory workingDir
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
-genCode :: [PackageData ProgData] -> IO()
+genCode :: [PackageData] -> IO()
 genCode files =
   createCodeFiles $ files >>= \(PackageData prog aux) ->
     let label = progName prog
@@ -73,7 +73,7 @@ genCode files =
     in modCode ++ auxCode
 
 classes :: (OOProg r, AuxiliarySym r', Monad r') => (r (OO.Program r) -> ProgData) ->
-  (r' (PackageData ProgData) -> PackageData ProgData) -> [PackageData ProgData]
+  (r' PackageData -> PackageData) -> [PackageData]
 classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
@@ -86,7 +86,7 @@ classes unRepr unRepr' = zipWith
 
 -- Classes that Julia is currently able to render
 jlClasses :: (ProcProg r, AuxiliarySym r', Monad r') => (r (Proc.Program r) -> ProgData) ->
-  (r' (PackageData ProgData) -> PackageData ProgData) -> [PackageData ProgData]
+  (r' PackageData -> PackageData) -> [PackageData]
 jlClasses unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'

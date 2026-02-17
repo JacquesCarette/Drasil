@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, PatternSynonyms #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 -- | Defines a package extension for GOOL, with functions for pairing a GOOL
 -- program with auxiliary, non-source-code files.
@@ -8,18 +8,17 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   -- Typeclasses
   AuxiliarySym(..),
   -- Functions
-  package, sampleInput, auxFromData
+  sampleInput, auxFromData
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (ProgData, onCodeList)
+import Drasil.GOOL (ProgData)
 import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
 import Language.Drasil.Code.DataDesc (DataDesc)
-import Language.Drasil.Code.FileData (FileAndContents(..), fileAndContents,
-  PackageData, pattern PackageData)
+import Language.Drasil.Code.FileData (FileAndContents(..), fileAndContents)
 import Language.Drasil.Code.FileNames (sampleInputName)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
@@ -55,9 +54,6 @@ class AuxiliarySym r where
     ProgData -> r FileAndContents
 
   auxHelperDoc :: r Doc -> Doc
-
-package :: (Monad r) => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
-package p = onCodeList (PackageData p)
 
 sampleInput :: (Applicative r) => PrintingInformation -> DataDesc -> [Expr] ->
   r FileAndContents

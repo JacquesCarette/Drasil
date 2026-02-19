@@ -10,7 +10,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
 import Utils.Drasil (blank)
 
 import Language.Drasil.Choices (Verbosity(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (SoftwareDossierState,
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierState,
   headers, mainMod)
 
 -- | A 'Doc' that holds optimized choices for configuring doxygen files.

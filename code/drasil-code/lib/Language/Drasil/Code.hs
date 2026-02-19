@@ -46,7 +46,7 @@ module Language.Drasil.Code (
 import Prelude hiding (break, print, return, log, exp)
 
 import Drasil.Code.CodeExpr (field)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (
   SoftwareDossierState, makeSds)
 import Language.Drasil.Code.Imperative.Generator (generator, generateCode,
   generateCodeProc)

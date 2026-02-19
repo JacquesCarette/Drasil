@@ -10,7 +10,7 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Drasil.GOOL (cppName, cppVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
@@ -33,7 +33,7 @@ instance Applicative CppProject where
 instance Monad CppProject where
   CPPP x >>= f = f x
 
-instance AuxiliarySym CppProject where
+instance SoftwareDossierSym CppProject where
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
     G.readMe rmi {
@@ -44,7 +44,7 @@ instance AuxiliarySym CppProject where
 
   makefile fs it cms = G.makefile (cppBuildConfig fs it) (G.noRunIfLib it cppRunnable) (G.docIfEnabled cms G.doxDocConfig)
 
-  auxHelperDoc = unCPPP
+  unReprDoc = unCPPP
 
 -- helpers
 -- | Create a build configuration for C++ files. Takes in 'FilePath's and the type of implementation.

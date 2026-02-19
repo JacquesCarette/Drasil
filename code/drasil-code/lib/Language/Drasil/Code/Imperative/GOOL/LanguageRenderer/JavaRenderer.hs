@@ -10,7 +10,7 @@ import Data.List (intercalate)
 import Drasil.GOOL (jName, jVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.SoftwareDossier.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
@@ -41,7 +41,7 @@ instance Applicative JavaProject where
 instance Monad JavaProject where
   JP x >>= f = f x
 
-instance AuxiliarySym JavaProject where
+instance SoftwareDossierSym JavaProject where
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
     G.readMe rmi {
@@ -53,7 +53,7 @@ instance AuxiliarySym JavaProject where
   makefile fs it cms = G.makefile (jBuildConfig fs it)
     (G.noRunIfLib it (jRunnable fs)) (G.docIfEnabled cms G.doxDocConfig)
 
-  auxHelperDoc = unJP
+  unReprDoc = unJP
 
 -- | Create a build configuration for Java files. Takes in 'FilePath's and the type of implementation.
 jBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

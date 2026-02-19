@@ -14,25 +14,25 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig, doxygenDocConfig)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.FileNames (doxConfigName, makefileName, readMeName)
-import Language.Drasil.SoftwareDossier.ClassInterface (
-    AuxiliarySym(auxHelperDoc), auxFromData, SoftwareDossierState)
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (
+    SoftwareDossierSym(unReprDoc), sdsFromData, SoftwareDossierState)
 import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..), makeReadMe)
 
 -- | Defines a Doxygen configuration file.
-doxConfig :: (AuxiliarySym r, Applicative r) => r Doc -> String ->
+doxConfig :: (SoftwareDossierSym r, Applicative r) => r Doc -> String ->
   SoftwareDossierState -> Verbosity -> r FileAndContents
-doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s
-  (auxHelperDoc opt) v)
+doxConfig opt pName s v = sdsFromData doxConfigName (makeDoxConfig pName s
+  (unReprDoc opt) v)
 
 -- | Defines a markdown file.
 readMe :: (Applicative r) => ReadMeInfo -> r FileAndContents
-readMe rmi= auxFromData readMeName (makeReadMe rmi)
+readMe rmi= sdsFromData readMeName (makeReadMe rmi)
 
 -- | Defines a Makefile.
 makefile :: (Applicative r) => Maybe BuildConfig -> Maybe Runnable ->
   Maybe DocConfig -> SoftwareDossierState -> ProgData -> r FileAndContents
-makefile bc r d s p = auxFromData makefileName (makeBuild d bc r s p)
+makefile bc r d s p = sdsFromData makefileName (makeBuild d bc r s p)
 
 -- | Changes a 'Runnable' to 'Nothing' if the user chose 'Library' for the 'ImplementationType'.
 noRunIfLib :: ImplementationType -> Maybe Runnable -> Maybe Runnable

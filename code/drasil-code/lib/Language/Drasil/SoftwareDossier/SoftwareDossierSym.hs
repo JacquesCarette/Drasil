@@ -2,13 +2,13 @@
 
 -- | Defines a package extension for GOOL, with functions for pairing a GOOL
 -- program with auxiliary, non-source-code files.
-module Language.Drasil.SoftwareDossier.ClassInterface (
+module Language.Drasil.SoftwareDossier.SoftwareDossierSym (
   -- DataTypes
   SoftwareDossierState, makeSds, headers, sources, mainMod,
   -- Typeclasses
-  AuxiliarySym(..),
+  SoftwareDossierSym(..),
   -- Functions
-  sampleInput, auxFromData
+  sampleInput, sdsFromData
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -44,7 +44,7 @@ makeSds headerFiles sourceFiles mainModule = Sds {
 -- | Members of this class must have a doxygen configuration, ReadMe file,
 -- omptimize doxygen document, information necessary for a makefile, and
 -- auxiliary helper documents
-class AuxiliarySym r where
+class SoftwareDossierSym r where
   doxConfig :: String -> SoftwareDossierState -> Verbosity -> r FileAndContents
   readMe ::  ReadMeInfo -> r FileAndContents
 
@@ -53,11 +53,11 @@ class AuxiliarySym r where
   makefile :: [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState ->
     ProgData -> r FileAndContents
 
-  auxHelperDoc :: r Doc -> Doc
+  unReprDoc :: r Doc -> Doc
 
 sampleInput :: (Applicative r) => PrintingInformation -> DataDesc -> [Expr] ->
   r FileAndContents
-sampleInput db d sd = auxFromData sampleInputName (makeInputFile db d sd)
+sampleInput db d sd = sdsFromData sampleInputName (makeInputFile db d sd)
 
-auxFromData :: Applicative r => FilePath -> Doc -> r FileAndContents
-auxFromData fp d = pure $ fileAndContents fp d
+sdsFromData :: Applicative r => FilePath -> Doc -> r FileAndContents
+sdsFromData fp d = pure $ fileAndContents fp d

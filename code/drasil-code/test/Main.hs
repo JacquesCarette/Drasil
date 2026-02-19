@@ -10,7 +10,7 @@ import Drasil.GProc (ProcProg, unJLC)
 import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
 
 import Language.Drasil.Code (ImplementationType(..), makeSds)
-import Language.Drasil.GOOL (AuxiliarySym(..), package,
+import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
   hasPathAndDocToFileAndContents, PackageData(..), pattern PackageData,
   unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import qualified Language.Drasil.GOOL as D (filePath, FileAndContents(..))
@@ -72,7 +72,7 @@ genCode files =
         auxCode = aux <&> (label,)
     in modCode ++ auxCode
 
-classes :: (OOProg r, AuxiliarySym r', Monad r') => (r (OO.Program r) -> ProgData) ->
+classes :: (OOProg r, SoftwareDossierSym r', Monad r') => (r (OO.Program r) -> ProgData) ->
   (r' PackageData -> PackageData) -> [PackageData]
 classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
@@ -85,7 +85,7 @@ classes unRepr unRepr' = zipWith
     fileTestsOO, vectorTestOO, nameGenTestOO])
 
 -- Classes that Julia is currently able to render
-jlClasses :: (ProcProg r, AuxiliarySym r', Monad r') => (r (Proc.Program r) -> ProgData) ->
+jlClasses :: (ProcProg r, SoftwareDossierSym r', Monad r') => (r (Proc.Program r) -> ProgData) ->
   (r' PackageData -> PackageData) -> [PackageData]
 jlClasses unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs

@@ -13,7 +13,7 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (List)
 import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.SoftwareDossier.ClassInterface (AuxiliarySym(..),
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..),
   SoftwareDossierState)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), AuxFile(..))
@@ -56,7 +56,7 @@ genModule :: (OOProg r) => Name -> Description ->
 genModule n desc = genModuleWithImports n desc []
 
 -- | Generates a Doxygen configuration file if the user has comments enabled.
-genDoxConfig :: (AuxiliarySym r) => SoftwareDossierState -> GenState (Maybe (r FileAndContents))
+genDoxConfig :: (SoftwareDossierSym r) => SoftwareDossierState -> GenState (Maybe (r FileAndContents))
 genDoxConfig s = do
   g <- get
   let n = codeSpec g ^. pNameO
@@ -65,14 +65,14 @@ genDoxConfig s = do
   return $ if not (null cms) then Just (doxConfig n s v) else Nothing
 
 -- | Generates a README file.
-genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState (Maybe (r FileAndContents))
+genReadMe :: (SoftwareDossierSym r) => ReadMeInfo -> GenState (Maybe (r FileAndContents))
 genReadMe rmi = do
   g <- get
   let n = codeSpec g ^. pNameO
   return $ getReadMe (auxiliaries g) rmi {caseName = n}
 
 -- | Helper for generating a README file.
-getReadMe :: (AuxiliarySym r) => [AuxFile] -> ReadMeInfo -> Maybe (r FileAndContents)
+getReadMe :: (SoftwareDossierSym r) => [AuxFile] -> ReadMeInfo -> Maybe (r FileAndContents)
 getReadMe auxl rmi = if ReadME `elem` auxl then Just (readMe rmi) else Nothing
 
 data ClassType = Primary | Auxiliary

@@ -7,8 +7,8 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Text.PrettyPrint.HughesPJ (empty)
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.SoftwareDossier.ClassInterface ( AuxiliarySym(..),
-  auxFromData)
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym ( SoftwareDossierSym(..),
+  sdsFromData)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
 import Drasil.GOOL (swiftName, swiftVersion)
@@ -32,8 +32,8 @@ instance Applicative SwiftProject where
 instance Monad SwiftProject where
   SP x >>= f = f x
 
-instance AuxiliarySym SwiftProject where
-  doxConfig _ _ _ = auxFromData "" empty
+instance SoftwareDossierSym SwiftProject where
+  doxConfig _ _ _ = sdsFromData "" empty
   readMe rmi = G.readMe rmi {
         langName = swiftName,
         langVersion = swiftVersion}
@@ -42,7 +42,7 @@ instance AuxiliarySym SwiftProject where
 
   makefile fs it cms = G.makefile (swiftBuildConfig fs it) (G.noRunIfLib it swiftRunnable) (G.docIfEnabled cms (DocConfig [] []))
 
-  auxHelperDoc = unSP
+  unReprDoc = unSP
 
 -- | Create a build configuration for Swift files. Takes in 'FilePath's and the type of implementation.
 swiftBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

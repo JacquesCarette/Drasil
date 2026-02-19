@@ -61,7 +61,7 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getInputFormatOuts, getCalcParams, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), genICName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (sampleInput)
+import Language.Drasil.SoftwareDossier.ClassInterface (sampleInput)
 import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar,
   DefiningCodeExpr(..))

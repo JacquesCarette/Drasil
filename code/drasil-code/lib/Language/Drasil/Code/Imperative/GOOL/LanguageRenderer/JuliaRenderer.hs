@@ -8,7 +8,7 @@ import Text.PrettyPrint.HughesPJ (empty)
 
 import Drasil.GProc (jlName, jlVersion)
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..), auxFromData)
+import Language.Drasil.SoftwareDossier.ClassInterface (AuxiliarySym(..), auxFromData)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as

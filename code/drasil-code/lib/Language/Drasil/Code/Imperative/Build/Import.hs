@@ -12,7 +12,7 @@ import Utils.Drasil (capitalize)
 import Language.Drasil.Code.Imperative.Build.AST (asFragment, DocConfig(..),
   BuildConfig(BuildConfig), BuildDependencies(..), Ext(..), includeExt,
   NameOpts, nameOpts, packSep, Runnable(Runnable), BuildName(..), RunType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (SoftwareDossierState,
+import Language.Drasil.SoftwareDossier.ClassInterface (SoftwareDossierState,
   headers, sources, mainMod)
 
 import Build.Drasil (Annotation, (+:+), genMake, makeS, MakeString, mkFile, mkRule,

@@ -13,7 +13,7 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (List)
 import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..),
+import Language.Drasil.SoftwareDossier.ClassInterface (AuxiliarySym(..),
   SoftwareDossierState)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), AuxFile(..))

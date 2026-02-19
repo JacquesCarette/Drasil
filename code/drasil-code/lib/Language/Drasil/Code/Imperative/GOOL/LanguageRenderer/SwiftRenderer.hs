@@ -7,7 +7,7 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Text.PrettyPrint.HughesPJ (empty)
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface ( AuxiliarySym(..),
+import Language.Drasil.SoftwareDossier.ClassInterface ( AuxiliarySym(..),
   auxFromData)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 

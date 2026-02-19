@@ -14,7 +14,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig, doxygenDocConfig)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.FileNames (doxConfigName, makefileName, readMeName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
+import Language.Drasil.SoftwareDossier.ClassInterface (
     AuxiliarySym(auxHelperDoc), auxFromData, SoftwareDossierState)
 import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..), makeReadMe)

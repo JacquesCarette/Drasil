@@ -8,7 +8,7 @@ module Language.Drasil.GOOL (
   unPP, unJP, unCSP, unCPPP, unSP, unJLP
 ) where
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.SoftwareDossier.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Code.FileData (FileAndContents(..),
   hasPathAndDocToFileAndContents)
 import Language.Drasil.Code.PackageData (PackageData(..), pattern PackageData,

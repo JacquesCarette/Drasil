@@ -7,7 +7,7 @@ import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 
 import Drasil.GOOL (pyName, pyVersion)
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.SoftwareDossier.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
 import qualified

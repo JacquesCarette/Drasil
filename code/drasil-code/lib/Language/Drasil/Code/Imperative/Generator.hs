@@ -42,7 +42,7 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (makeSds,
+import Language.Drasil.SoftwareDossier.ClassInterface (makeSds,
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Code.FileData (FileAndContents(..), fileAndContents,

@@ -10,7 +10,7 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Drasil.GOOL (cppName, cppVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.SoftwareDossier.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as

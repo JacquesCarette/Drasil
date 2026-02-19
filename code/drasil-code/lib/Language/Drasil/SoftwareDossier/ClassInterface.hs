@@ -2,7 +2,7 @@
 
 -- | Defines a package extension for GOOL, with functions for pairing a GOOL
 -- program with auxiliary, non-source-code files.
-module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
+module Language.Drasil.SoftwareDossier.ClassInterface (
   -- DataTypes
   SoftwareDossierState, makeSds, headers, sources, mainMod,
   -- Typeclasses

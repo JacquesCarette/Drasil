@@ -10,7 +10,7 @@ import Data.List (intercalate)
 import Drasil.GOOL (jName, jVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.SoftwareDossier.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as

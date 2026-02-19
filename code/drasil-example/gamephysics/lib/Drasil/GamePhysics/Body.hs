@@ -130,7 +130,7 @@ symbMap = cdbWithRefs cdbRefs
   tMods concIns citations labelledContent
 
 cdbRefs :: [Reference]
-cdbRefs = SRS.sectionReferences ++ [pymunk]
+cdbRefs = pymunk : SRS.sectionReferences
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

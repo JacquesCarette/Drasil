@@ -20,6 +20,7 @@ import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
 import Data.Deriving.Internal (interleave)
 
+import Utils.Drasil (FileAndContents)
 import Drasil.Database (HasUID(..))
 import Language.Drasil (Constraint(..), RealInterval(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl, PrintingInformation)
@@ -62,7 +63,6 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (sampleInput)
-import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar,
   DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),

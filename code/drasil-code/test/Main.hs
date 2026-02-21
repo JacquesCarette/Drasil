@@ -11,11 +11,12 @@ import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
 
 import Language.Drasil.Code (ImplementationType(..), makeSds)
 import Language.Drasil.GOOL (AuxiliarySym(..), package,
-  hasPathAndDocToFileAndContents, PackageData(..), pattern PackageData,
+  PackageData(..), pattern PackageData,
   unPP, unJP, unCSP, unCPPP, unSP, unJLP)
-import qualified Language.Drasil.GOOL as D (filePath, FileAndContents(..))
 
-import Utils.Drasil (createDirIfMissing, createFile)
+import Utils.Drasil (createDirIfMissing, createFile,
+  hasPathAndDocToFileAndContents)
+import qualified Utils.Drasil as U (FileAndContents(..))
 
 import Text.PrettyPrint.HughesPJ (render)
 import Control.Monad.State (evalState, runState)
@@ -102,7 +103,7 @@ jlClasses unRepr unRepr' = zipWith
 ------------------
 
 -- | Creates the requested 'Code' by producing files.
-createCodeFiles :: [(Label, D.FileAndContents)] -> IO ()
+createCodeFiles :: [(Label, U.FileAndContents)] -> IO ()
 createCodeFiles = traverse_ $ \(name, file) -> do
-  let path = name </> D.filePath file -- FIXME [Brandon Bosman, Feb. 10, 2026]: make GOOL allow us to add name to path internally
-  createFile path (render $ D.fileDoc file)
+  let path = name </> U.filePath file -- FIXME [Brandon Bosman, Feb. 10, 2026]: make GOOL allow us to add name to path internally
+  createFile path (render $ U.fileDoc file)

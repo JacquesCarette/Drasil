@@ -13,12 +13,12 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
+import Utils.Drasil (FileAndContents(..), fileAndContents)
 import Drasil.GOOL (ProgData)
 import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
 import Language.Drasil.Code.DataDesc (DataDesc)
-import Language.Drasil.Code.FileData (FileAndContents(..), fileAndContents)
 import Language.Drasil.Code.FileNames (sampleInputName)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)

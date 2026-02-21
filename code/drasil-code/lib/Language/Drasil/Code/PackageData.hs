@@ -3,7 +3,7 @@ module Language.Drasil.Code.PackageData (PackageData(packageProg, packageAux),
   pattern PackageData, package
 ) where
 
-import Language.Drasil.Code.FileData (FileAndContents(..))
+import Utils.Drasil (FileAndContents(..))
 import Text.PrettyPrint.HughesPJ (isEmpty)
 import Drasil.GOOL (ProgData, onCodeList)
 

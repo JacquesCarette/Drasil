@@ -29,7 +29,10 @@ module Utils.Drasil (
   toPlainName, repUnd,
 
   -- ** TypeClasses
-  HasPathAndDoc(..)
+  HasPathAndDoc(..),
+  
+  -- ** File representations
+  FileAndContents(..), fileAndContents, hasPathAndDocToFileAndContents
 ) where
 
 import Utils.Drasil.Directory
@@ -40,3 +43,4 @@ import Utils.Drasil.FilePath
 import Utils.Drasil.Lists
 import Utils.Drasil.Strings
 import Utils.Drasil.TypeClasses
+import Utils.Drasil.FileData

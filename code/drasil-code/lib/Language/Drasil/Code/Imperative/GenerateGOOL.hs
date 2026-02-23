@@ -25,7 +25,7 @@ import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
   FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..))
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
-import Utils.Drasil (FileAndContents)
+import Utils.Drasil.FileData (FileAndContents)
 import Drasil.Metadata (watermark)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))

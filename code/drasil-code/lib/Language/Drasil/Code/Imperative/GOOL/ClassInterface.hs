@@ -13,7 +13,7 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Utils.Drasil (FileAndContents(..), fileAndContents)
+import Utils.Drasil.FileData (FileAndContents(..), fileAndContents)
 import Drasil.GOOL (ProgData)
 import Language.Drasil.Printers (PrintingInformation)
 

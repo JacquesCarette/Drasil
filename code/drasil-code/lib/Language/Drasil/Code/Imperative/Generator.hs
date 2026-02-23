@@ -22,8 +22,9 @@ import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
 import Language.Drasil.Printing.Import (spec)
 import Drasil.System
-import Utils.Drasil (createDirIfMissing, createFile, FileAndContents(..),
-  fileAndContents, hasPathAndDocToFileAndContents)
+import Utils.Drasil (createDirIfMissing, createFile)
+import Utils.Drasil.FileData (FileAndContents(..), fileAndContents,
+  hasPathAndDocToFileAndContents)
 
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)

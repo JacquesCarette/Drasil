@@ -14,9 +14,9 @@ import Language.Drasil.GOOL (AuxiliarySym(..), package,
   PackageData(..), pattern PackageData,
   unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 
-import Utils.Drasil (createDirIfMissing, createFile,
+import Utils.Drasil (createDirIfMissing, createFile)
+import qualified Utils.Drasil.FileData as F (FileAndContents(..),
   hasPathAndDocToFileAndContents)
-import qualified Utils.Drasil as U (FileAndContents(..))
 
 import Text.PrettyPrint.HughesPJ (render)
 import Control.Monad.State (evalState, runState)
@@ -69,7 +69,7 @@ genCode files =
   createCodeFiles $ files >>= \(PackageData prog aux) ->
     let label = progName prog
         modCode = progMods prog <&> \modFileData ->
-          (label, hasPathAndDocToFileAndContents modFileData)
+          (label, F.hasPathAndDocToFileAndContents modFileData)
         auxCode = aux <&> (label,)
     in modCode ++ auxCode
 
@@ -103,7 +103,7 @@ jlClasses unRepr unRepr' = zipWith
 ------------------
 
 -- | Creates the requested 'Code' by producing files.
-createCodeFiles :: [(Label, U.FileAndContents)] -> IO ()
+createCodeFiles :: [(Label, F.FileAndContents)] -> IO ()
 createCodeFiles = traverse_ $ \(name, file) -> do
-  let path = name </> U.filePath file -- FIXME [Brandon Bosman, Feb. 10, 2026]: make GOOL allow us to add name to path internally
-  createFile path (render $ U.fileDoc file)
+  let path = name </> F.filePath file -- FIXME [Brandon Bosman, Feb. 10, 2026]: make GOOL allow us to add name to path internally
+  createFile path (render $ F.fileDoc file)

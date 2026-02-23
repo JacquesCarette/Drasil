@@ -43,6 +43,10 @@ instance ConceptDomain (DefiningExpr e) where cdom = (^. cd)
 
 instance Definition (DefiningExpr e) where defn = rvDesc
 
+instance HasChunkRefs (DefiningExpr e) where
+  chunkRefs de = chunkRefs (de ^. rvDesc)
+  {-# INLINABLE chunkRefs #-}
+
 -- | 'MultiDefn's are QDefinition factories, used for showing one or more ways
 --   we can define a QDefinition.
 data MultiDefn e = MultiDefn{
@@ -59,7 +63,12 @@ data MultiDefn e = MultiDefn{
 makeLenses ''MultiDefn
 
 instance HasChunkRefs (MultiDefn e) where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs md = mconcat
+    [ chunkRefs (md ^. qd)
+    , chunkRefs (md ^. rDesc)
+    , chunkRefs (NE.toList $ md ^. rvs)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 instance HasUID           (MultiDefn e) where uid     = rUid
 instance HasSymbol        (MultiDefn e) where symbol  = symbol . (^. qd)

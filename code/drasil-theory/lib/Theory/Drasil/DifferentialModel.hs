@@ -103,7 +103,12 @@ data ODESolverFormat = X'{
 }
 
 instance HasChunkRefs DifferentialModel where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs dm = mconcat
+    [ chunkRefs (dm ^. indepVar)
+    , chunkRefs (dm ^. depVar)
+    , chunkRefs (dm ^. dmconc)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DifferentialModel'.
 instance HasUID        DifferentialModel where uid = dmconc . uid

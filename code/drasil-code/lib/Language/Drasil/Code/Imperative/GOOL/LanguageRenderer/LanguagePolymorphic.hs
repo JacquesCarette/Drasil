@@ -13,7 +13,8 @@ import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig, doxygenDocConfig)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.FileNames (doxConfigName, makefileName, readMeName)
+import Language.Drasil.SoftwareDossier.FileNames (doxConfigName, makefileName,
+  readMeName)
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (
     SoftwareDossierSym(unReprDoc), sdsFromData, SoftwareDossierState)
 import Language.Drasil.Code.FileData (FileAndContents)

@@ -49,7 +49,7 @@ import Language.Drasil.Code.FileData (FileAndContents(..), fileAndContents,
   hasPathAndDocToFileAndContents)
 import Language.Drasil.Code.PackageData (PackageData(..), pattern PackageData,
   package)
-import Language.Drasil.Code.FileNames(sampleInputName)
+import Language.Drasil.SoftwareDossier.FileNames(sampleInputName)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),

@@ -30,7 +30,7 @@ module Utils.Drasil (
 
   -- ** TypeClasses
   HasPathAndDoc(..),
-  
+
   -- ** File representations
   FileAndContents(..), fileAndContents, hasPathAndDocToFileAndContents
 ) where

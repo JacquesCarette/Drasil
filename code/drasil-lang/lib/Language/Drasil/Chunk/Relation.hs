@@ -26,7 +26,8 @@ data RelationConcept = RC { _conc :: ConceptChunk
 makeLenses ''RelationConcept
 
 instance HasChunkRefs RelationConcept where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs r = chunkRefs (r ^. conc)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'RelationConcept'.
 instance HasUID        RelationConcept where uid = conc . uid

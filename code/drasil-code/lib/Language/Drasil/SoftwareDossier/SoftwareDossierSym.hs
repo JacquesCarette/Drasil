@@ -1,7 +1,8 @@
 {-# LANGUAGE TemplateHaskell #-}
 
--- | Defines a package extension for GOOL, with functions for pairing a GOOL
--- program with auxiliary, non-source-code files.
+-- | Defines a package extension for GOOL, with the relevant slice of GOOLState
+-- and functions for pairing a GOOL program with
+-- "Software Dossier" (i.e. non-source-code) files.
 module Language.Drasil.SoftwareDossier.SoftwareDossierSym (
   -- DataTypes
   SoftwareDossierState, makeSds, headers, sources, mainMod,

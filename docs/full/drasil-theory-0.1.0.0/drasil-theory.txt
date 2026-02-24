@@ -252,6 +252,7 @@ instance GHC.Classes.Eq (Theory.Drasil.MultiDefn.DefiningExpr e)
 instance Drasil.Database.UID.HasUID (Theory.Drasil.MultiDefn.DefiningExpr e)
 instance Language.Drasil.Classes.ConceptDomain (Theory.Drasil.MultiDefn.DefiningExpr e)
 instance Language.Drasil.Classes.Definition (Theory.Drasil.MultiDefn.DefiningExpr e)
+instance Drasil.Database.Chunk.HasChunkRefs (Theory.Drasil.MultiDefn.DefiningExpr e)
 
 
 -- | Defines types and functions for creating models.

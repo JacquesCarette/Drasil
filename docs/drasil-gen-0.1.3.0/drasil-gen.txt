@@ -15,6 +15,10 @@ module Drasil.Generator
 --   generate our SmithEtAl-esque SRS.
 cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
 
+-- | Variant of <a>cdb</a> that pre-registers reference chunks before mass
+--   insertion.
+cdbWithRefs :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
+
 -- | For debugging purposes, if the system has a <tt>DEBUG_ENV</tt>
 --   environment variable set to anything, we can dump the chunk maps in a
 --   system to the host system.

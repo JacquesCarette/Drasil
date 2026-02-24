@@ -259,6 +259,7 @@ ideaDicts :: [IdeaDict]
 conceptChunks :: [ConceptChunk]
 abbreviationsList :: [IdeaDict]
 symbMap :: ChunkDB
+cdbRefs :: [Reference]
 symbolsWCodeSymbols :: [DefinedQuantityDict]
 
 -- | Holds all references and links used in the document.

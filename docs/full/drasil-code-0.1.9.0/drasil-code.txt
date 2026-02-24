@@ -1698,21 +1698,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aM9z
-oldCodeSpec :: HasOldCodeSpec c_aM9z => Lens' c_aM9z OldCodeSpec
-authorsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z People
-cMapO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [RelativeFile]
-constMapO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z ConstantMap
-constantsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Const]
-derivedInputsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Derived]
-execOrderO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Def]
-extInputsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Input]
-inputsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Input]
-modsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Mod]
-outputsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Output]
-pNameO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z Name
-systemdbO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z ChunkDB
+class HasOldCodeSpec c_aM9N
+oldCodeSpec :: HasOldCodeSpec c_aM9N => Lens' c_aM9N OldCodeSpec
+authorsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N People
+cMapO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [RelativeFile]
+constMapO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N ConstantMap
+constantsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Const]
+derivedInputsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Derived]
+execOrderO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Def]
+extInputsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Input]
+inputsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Input]
+modsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Mod]
+outputsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Output]
+pNameO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N Name
+systemdbO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -1804,34 +1804,6 @@ module Language.Drasil.Code.Imperative.GenODE
 --   preference list (which can change), this facilitates the
 --   <a>firstChoiceODELib</a> check.
 chooseODELib :: Lang -> Maybe ODE -> State [Sentence] ODEGenInfo
-
-
--- | Defines a package extension for GOOL, with functions for pairing a
---   GOOL program with auxiliary, non-source-code files.
-module Language.Drasil.Code.Imperative.GOOL.ClassInterface
-data SoftwareDossierState
-makeSds :: [FilePath] -> [FilePath] -> Maybe FilePath -> SoftwareDossierState
-headers :: Lens' SoftwareDossierState [FilePath]
-sources :: Lens' SoftwareDossierState [FilePath]
-mainMod :: Lens' SoftwareDossierState (Maybe FilePath)
-
--- | Members of this class must have a doxygen configuration, ReadMe file,
---   omptimize doxygen document, information necessary for a makefile, and
---   auxiliary helper documents
-class AuxiliarySym r
-doxConfig :: AuxiliarySym r => String -> SoftwareDossierState -> Verbosity -> r FileAndContents
-readMe :: AuxiliarySym r => ReadMeInfo -> r FileAndContents
-optimizeDox :: AuxiliarySym r => r Doc
-makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState -> ProgData -> r FileAndContents
-auxHelperDoc :: AuxiliarySym r => r Doc -> Doc
-sampleInput :: Applicative r => PrintingInformation -> DataDesc -> [Expr] -> r FileAndContents
-auxFromData :: Applicative r => FilePath -> Doc -> r FileAndContents
-
-module Language.Drasil.Code.Imperative.Build.Import
-
--- | Creates a Makefile.
-makeBuild :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable -> SoftwareDossierState -> ProgData -> Doc
-instance Build.Drasil.Make.Import.RuleTransformer Language.Drasil.Code.Imperative.Build.Import.CodeHarness
 
 module Language.Drasil.Code.Imperative.DrasilState
 
@@ -1988,80 +1960,6 @@ liftS :: State a b -> State a [b]
 -- | Converts a <a>ScopeType</a> to a <a>Scope</a>
 convScope :: SharedProg r => ScopeType -> r (Scope r)
 
-module Language.Drasil.Code.Imperative.GenerateGOOL
-data ClassType
-Primary :: ClassType
-Auxiliary :: ClassType
-
--- | Defines a GOOL module. If the user chose <a>CommentMod</a>, the module
---   will have Doxygen comments. If the user did not choose
---   <a>CommentMod</a> but did choose <a>CommentFunc</a>, a module-level
---   Doxygen comment is still created, though it only documents the file
---   name, because without this Doxygen will not find the function-level
---   comments in the file.
-genModuleWithImports :: OOProg r => Name -> Description -> [Import] -> [GenState (Maybe (SMethod r))] -> [GenState (Maybe (SClass r))] -> GenState (SFile r)
-
--- | Defines a GOOL module. If the user chose <a>CommentMod</a>, the module
---   will have Doxygen comments. If the user did not choose
---   <a>CommentMod</a> but did choose <a>CommentFunc</a>, a module-level
---   Doxygen comment is still created, though it only documents the file
---   name, because without this Doxygen will not find the function-level
---   comments in the file.
-genModuleWithImportsProc :: ProcProg r => Name -> Description -> [Import] -> [GenState (Maybe (SMethod r))] -> GenState (SFile r)
-
--- | Generates a module for when imports do not need to be explicitly
---   stated.
-genModule :: OOProg r => Name -> Description -> [GenState (Maybe (SMethod r))] -> [GenState (Maybe (SClass r))] -> GenState (SFile r)
-
--- | Generates a module for when imports do not need to be explicitly
---   stated.
-genModuleProc :: ProcProg r => Name -> Description -> [GenState (Maybe (SMethod r))] -> GenState (SFile r)
-
--- | Generates a Doxygen configuration file if the user has comments
---   enabled.
-genDoxConfig :: AuxiliarySym r => SoftwareDossierState -> GenState (Maybe (r FileAndContents))
-
--- | Generates a README file.
-genReadMe :: AuxiliarySym r => ReadMeInfo -> GenState (Maybe (r FileAndContents))
-
--- | Generates a primary class.
-primaryClass :: OOProg r => Name -> Maybe Name -> Description -> [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)
-
--- | Generates an auxiliary class (for when a module contains multiple
---   classes).
-auxClass :: OOProg r => Name -> Maybe Name -> Description -> [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)
-
--- | Function call generator. The first parameter (<tt>m</tt>) is the
---   module where the function is defined. If <tt>m</tt> is not the current
---   module, use GOOL's function for calling functions from external
---   modules. If <tt>m</tt> is the current module and the function is in
---   export map, use GOOL's basic function for function applications. If
---   <tt>m</tt> is the current module and function is not exported, use
---   GOOL's function for calling a method on self. This assumes all private
---   methods are dynamic, which is true for this generator.
-fApp :: OOProg r => Name -> Name -> VSType r -> [SValue r] -> NamedArgs r -> GenState (SValue r)
-
--- | Function call generator. The first parameter (<tt>m</tt>) is the
---   module where the function is defined. If <tt>m</tt> is not the current
---   module, use GOOL's function for calling functions from external
---   modules. If <tt>m</tt> is the current module and the function is in
---   export map, use GOOL's basic function for function applications. If
---   <tt>m</tt> is the current module and function is not exported, use
---   GOOL's function for calling a method on self. This assumes all private
---   methods are dynamic, which is true for this generator.
-fAppProc :: SharedProg r => Name -> Name -> VSType r -> [SValue r] -> NamedArgs r -> GenState (SValue r)
-
--- | Logic similar to <a>fApp</a>, but the self case is not required here
---   (because constructor will never be private). Calls
---   <a>newObjMixedArgs</a>.
-ctorCall :: OOProg r => Name -> VSType r -> [SValue r] -> NamedArgs r -> GenState (SValue r)
-
--- | Logic similar to <a>fApp</a>, but for In/Out calls.
-fAppInOut :: OOProg r => Name -> Name -> [SValue r] -> [SVariable r] -> [SVariable r] -> GenState (MSStatement r)
-
--- | Logic similar to <a>fApp</a>, but for In/Out calls.
-fAppInOutProc :: SharedProg r => Name -> Name -> [SValue r] -> [SVariable r] -> [SVariable r] -> GenState (MSStatement r)
-
 
 -- | Contains functions for generating code comments that describe a chunk.
 module Language.Drasil.Code.Imperative.Comments
@@ -2070,155 +1968,6 @@ module Language.Drasil.Code.Imperative.Comments
 --   (if applicable), and unit (if applicable).
 getComment :: CodeIdea c => c -> GenState String
 getCommentBrief :: CodeIdea c => c -> GenState String
-
-module Language.Drasil.Code.Imperative.Doxygen.Import
-
--- | Renders a Doxygen configuration file.
---   
---   <ul>
---   <li>Sets the PROJECT_NAME field according to the given name.</li>
---   <li>Sets the INPUT field to the header files contained in the given
---   SoftwareDossierState.</li>
---   <li>Sets the OPTIMIZE_OUTPUT_JAVA field according to the
---   OptimizeChoice parameter.</li>
---   <li>Sets the QUIET field according to the given Verbosity.</li>
---   </ul>
-makeDoxConfig :: ProjName -> SoftwareDossierState -> OptimizeChoice -> Verbosity -> Doc
-
--- | Renderings of values commonly used in the configuration file.
-yes :: Doc
-
--- | Renderings of values commonly used in the configuration file.
-no :: Doc
-
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
-
--- | Defines a Doxygen configuration file.
-doxConfig :: (AuxiliarySym r, Applicative r) => r Doc -> String -> SoftwareDossierState -> Verbosity -> r FileAndContents
-
--- | Defines a markdown file.
-readMe :: Applicative r => ReadMeInfo -> r FileAndContents
-
--- | Defines a Makefile.
-makefile :: Applicative r => Maybe BuildConfig -> Maybe Runnable -> Maybe DocConfig -> SoftwareDossierState -> ProgData -> r FileAndContents
-
--- | Changes a <a>Runnable</a> to <a>Nothing</a> if the user chose
---   <a>Library</a> for the <a>ImplementationType</a>.
-noRunIfLib :: ImplementationType -> Maybe Runnable -> Maybe Runnable
-
--- | A DocConfig for Doxygen documentation.
-doxDocConfig :: DocConfig
-
--- | Returns Nothing if no comments are enabled.
-docIfEnabled :: [Comments] -> DocConfig -> Maybe DocConfig
-
-
--- | The logic to render Swift auxiliary files is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer
-
--- | Holds a Swift project.
-newtype SwiftProject a
-SP :: a -> SwiftProject a
-[unSP] :: SwiftProject a -> a
-instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
-instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
-instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
-instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
-
-
--- | The logic to render Python auxiliary files is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer
-
--- | Holds a Python project.
-newtype PythonProject a
-PP :: a -> PythonProject a
-[unPP] :: PythonProject a -> a
-instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
-instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
-instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
-instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
-
-
--- | The logic to render Julia auxiliary files is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer
-
--- | Holds a Julia project
-newtype JuliaProject a
-JLP :: a -> JuliaProject a
-[unJLP] :: JuliaProject a -> a
-instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
-instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
-instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
-instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
-
-
--- | The logic to render Java auxiliary files is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer
-
--- | Holds a Java project.
-newtype JavaProject a
-JP :: a -> JavaProject a
-[unJP] :: JavaProject a -> a
-instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
-instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
-instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
-instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
-
-
--- | The logic to render C++ auxiliary files is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer
-
--- | Holds a C++ project.
-newtype CppProject a
-CPPP :: a -> CppProject a
-[unCPPP] :: CppProject a -> a
-instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
-instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
-instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
-instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
-
-
--- | The logic to render C# auxiliary files is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer
-
--- | Holds a C# project.
-newtype CSharpProject a
-CSP :: a -> CSharpProject a
-[unCSP] :: CSharpProject a -> a
-instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
-instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
-instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
-instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
-
-
--- | Re-export code-related smart constructors for external code writing
---   and generation.
-module Language.Drasil.GOOL
-
--- | Members of this class must have a doxygen configuration, ReadMe file,
---   omptimize doxygen document, information necessary for a makefile, and
---   auxiliary helper documents
-class AuxiliarySym r
-doxConfig :: AuxiliarySym r => String -> SoftwareDossierState -> Verbosity -> r FileAndContents
-readMe :: AuxiliarySym r => ReadMeInfo -> r FileAndContents
-optimizeDox :: AuxiliarySym r => r Doc
-makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState -> ProgData -> r FileAndContents
-auxHelperDoc :: AuxiliarySym r => r Doc -> Doc
-package :: Monad r => ProgData -> [r FileAndContents] -> r PackageData
-
--- | The underlying data type for auxiliary files in all renderers.
-data FileAndContents
-hasPathAndDocToFileAndContents :: HasPathAndDoc a Doc => a -> FileAndContents
-
--- | The underlying data type for packages in all renderers.
-data PackageData
-pattern PackageData :: ProgData -> [FileAndContents] -> PackageData
-unPP :: PythonProject a -> a
-unJP :: JavaProject a -> a
-unCSP :: CSharpProject a -> a
-unCPPP :: CppProject a -> a
-unSP :: SwiftProject a -> a
-unJLP :: JuliaProject a -> a
 
 
 -- | Defines description generators for common SCS functions, classes, and
@@ -2311,6 +2060,103 @@ chooseConcept :: Choices -> State [Sentence] MatchedConceptMap
 
 -- | Translates a <a>CodeConcept</a> into GOOL.
 conceptToGOOL :: SharedProg r => CodeConcept -> SValue r
+
+
+-- | Defines a package extension for GOOL, with the relevant slice of
+--   GOOLState and functions for pairing a GOOL program with "Software
+--   Dossier" (i.e. non-source-code) files.
+module Language.Drasil.SoftwareDossier.SoftwareDossierSym
+data SoftwareDossierState
+makeSds :: [FilePath] -> [FilePath] -> Maybe FilePath -> SoftwareDossierState
+headers :: Lens' SoftwareDossierState [FilePath]
+sources :: Lens' SoftwareDossierState [FilePath]
+mainMod :: Lens' SoftwareDossierState (Maybe FilePath)
+
+-- | Members of this class must have a doxygen configuration, ReadMe file,
+--   omptimize doxygen document, information necessary for a makefile, and
+--   auxiliary helper documents
+class SoftwareDossierSym r
+doxConfig :: SoftwareDossierSym r => String -> SoftwareDossierState -> Verbosity -> r FileAndContents
+readMe :: SoftwareDossierSym r => ReadMeInfo -> r FileAndContents
+optimizeDox :: SoftwareDossierSym r => r Doc
+makefile :: SoftwareDossierSym r => [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState -> ProgData -> r FileAndContents
+unReprDoc :: SoftwareDossierSym r => r Doc -> Doc
+sampleInput :: Applicative r => PrintingInformation -> DataDesc -> [Expr] -> r FileAndContents
+sdsFromData :: Applicative r => FilePath -> Doc -> r FileAndContents
+
+module Language.Drasil.Code.Imperative.GenerateGOOL
+data ClassType
+Primary :: ClassType
+Auxiliary :: ClassType
+
+-- | Defines a GOOL module. If the user chose <a>CommentMod</a>, the module
+--   will have Doxygen comments. If the user did not choose
+--   <a>CommentMod</a> but did choose <a>CommentFunc</a>, a module-level
+--   Doxygen comment is still created, though it only documents the file
+--   name, because without this Doxygen will not find the function-level
+--   comments in the file.
+genModuleWithImports :: OOProg r => Name -> Description -> [Import] -> [GenState (Maybe (SMethod r))] -> [GenState (Maybe (SClass r))] -> GenState (SFile r)
+
+-- | Defines a GOOL module. If the user chose <a>CommentMod</a>, the module
+--   will have Doxygen comments. If the user did not choose
+--   <a>CommentMod</a> but did choose <a>CommentFunc</a>, a module-level
+--   Doxygen comment is still created, though it only documents the file
+--   name, because without this Doxygen will not find the function-level
+--   comments in the file.
+genModuleWithImportsProc :: ProcProg r => Name -> Description -> [Import] -> [GenState (Maybe (SMethod r))] -> GenState (SFile r)
+
+-- | Generates a module for when imports do not need to be explicitly
+--   stated.
+genModule :: OOProg r => Name -> Description -> [GenState (Maybe (SMethod r))] -> [GenState (Maybe (SClass r))] -> GenState (SFile r)
+
+-- | Generates a module for when imports do not need to be explicitly
+--   stated.
+genModuleProc :: ProcProg r => Name -> Description -> [GenState (Maybe (SMethod r))] -> GenState (SFile r)
+
+-- | Generates a Doxygen configuration file if the user has comments
+--   enabled.
+genDoxConfig :: SoftwareDossierSym r => SoftwareDossierState -> GenState (Maybe (r FileAndContents))
+
+-- | Generates a README file.
+genReadMe :: SoftwareDossierSym r => ReadMeInfo -> GenState (Maybe (r FileAndContents))
+
+-- | Generates a primary class.
+primaryClass :: OOProg r => Name -> Maybe Name -> Description -> [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)
+
+-- | Generates an auxiliary class (for when a module contains multiple
+--   classes).
+auxClass :: OOProg r => Name -> Maybe Name -> Description -> [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)
+
+-- | Function call generator. The first parameter (<tt>m</tt>) is the
+--   module where the function is defined. If <tt>m</tt> is not the current
+--   module, use GOOL's function for calling functions from external
+--   modules. If <tt>m</tt> is the current module and the function is in
+--   export map, use GOOL's basic function for function applications. If
+--   <tt>m</tt> is the current module and function is not exported, use
+--   GOOL's function for calling a method on self. This assumes all private
+--   methods are dynamic, which is true for this generator.
+fApp :: OOProg r => Name -> Name -> VSType r -> [SValue r] -> NamedArgs r -> GenState (SValue r)
+
+-- | Function call generator. The first parameter (<tt>m</tt>) is the
+--   module where the function is defined. If <tt>m</tt> is not the current
+--   module, use GOOL's function for calling functions from external
+--   modules. If <tt>m</tt> is the current module and the function is in
+--   export map, use GOOL's basic function for function applications. If
+--   <tt>m</tt> is the current module and function is not exported, use
+--   GOOL's function for calling a method on self. This assumes all private
+--   methods are dynamic, which is true for this generator.
+fAppProc :: SharedProg r => Name -> Name -> VSType r -> [SValue r] -> NamedArgs r -> GenState (SValue r)
+
+-- | Logic similar to <a>fApp</a>, but the self case is not required here
+--   (because constructor will never be private). Calls
+--   <a>newObjMixedArgs</a>.
+ctorCall :: OOProg r => Name -> VSType r -> [SValue r] -> NamedArgs r -> GenState (SValue r)
+
+-- | Logic similar to <a>fApp</a>, but for In/Out calls.
+fAppInOut :: OOProg r => Name -> Name -> [SValue r] -> [SVariable r] -> [SVariable r] -> GenState (MSStatement r)
+
+-- | Logic similar to <a>fApp</a>, but for In/Out calls.
+fAppInOutProc :: SharedProg r => Name -> Name -> [SValue r] -> [SVariable r] -> [SVariable r] -> GenState (MSStatement r)
 
 module Language.Drasil.Code.Imperative.Import
 
@@ -2565,12 +2411,167 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCode :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr PackageData -> PackageData) -> DrasilState -> IO ()
+generateCode :: (OOProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr PackageData -> PackageData) -> DrasilState -> IO ()
 
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCodeProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr PackageData -> PackageData) -> DrasilState -> IO ()
+generateCodeProc :: (ProcProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr PackageData -> PackageData) -> DrasilState -> IO ()
+
+module Language.Drasil.Code.Imperative.Doxygen.Import
+
+-- | Renders a Doxygen configuration file.
+--   
+--   <ul>
+--   <li>Sets the PROJECT_NAME field according to the given name.</li>
+--   <li>Sets the INPUT field to the header files contained in the given
+--   SoftwareDossierState.</li>
+--   <li>Sets the OPTIMIZE_OUTPUT_JAVA field according to the
+--   OptimizeChoice parameter.</li>
+--   <li>Sets the QUIET field according to the given Verbosity.</li>
+--   </ul>
+makeDoxConfig :: ProjName -> SoftwareDossierState -> OptimizeChoice -> Verbosity -> Doc
+
+-- | Renderings of values commonly used in the configuration file.
+yes :: Doc
+
+-- | Renderings of values commonly used in the configuration file.
+no :: Doc
+
+module Language.Drasil.Code.Imperative.Build.Import
+
+-- | Creates a Makefile.
+makeBuild :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable -> SoftwareDossierState -> ProgData -> Doc
+instance Build.Drasil.Make.Import.RuleTransformer Language.Drasil.Code.Imperative.Build.Import.CodeHarness
+
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
+
+-- | Defines a Doxygen configuration file.
+doxConfig :: (SoftwareDossierSym r, Applicative r) => r Doc -> String -> SoftwareDossierState -> Verbosity -> r FileAndContents
+
+-- | Defines a markdown file.
+readMe :: Applicative r => ReadMeInfo -> r FileAndContents
+
+-- | Defines a Makefile.
+makefile :: Applicative r => Maybe BuildConfig -> Maybe Runnable -> Maybe DocConfig -> SoftwareDossierState -> ProgData -> r FileAndContents
+
+-- | Changes a <a>Runnable</a> to <a>Nothing</a> if the user chose
+--   <a>Library</a> for the <a>ImplementationType</a>.
+noRunIfLib :: ImplementationType -> Maybe Runnable -> Maybe Runnable
+
+-- | A DocConfig for Doxygen documentation.
+doxDocConfig :: DocConfig
+
+-- | Returns Nothing if no comments are enabled.
+docIfEnabled :: [Comments] -> DocConfig -> Maybe DocConfig
+
+
+-- | The logic to render Swift auxiliary files is contained in this module
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer
+
+-- | Holds a Swift project.
+newtype SwiftProject a
+SP :: a -> SwiftProject a
+[unSP] :: SwiftProject a -> a
+instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
+instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
+instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
+instance Language.Drasil.SoftwareDossier.SoftwareDossierSym.SoftwareDossierSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer.SwiftProject
+
+
+-- | The logic to render Python auxiliary files is contained in this module
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer
+
+-- | Holds a Python project.
+newtype PythonProject a
+PP :: a -> PythonProject a
+[unPP] :: PythonProject a -> a
+instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
+instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
+instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
+instance Language.Drasil.SoftwareDossier.SoftwareDossierSym.SoftwareDossierSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
+
+
+-- | The logic to render Julia auxiliary files is contained in this module
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer
+
+-- | Holds a Julia project
+newtype JuliaProject a
+JLP :: a -> JuliaProject a
+[unJLP] :: JuliaProject a -> a
+instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
+instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
+instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
+instance Language.Drasil.SoftwareDossier.SoftwareDossierSym.SoftwareDossierSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
+
+
+-- | The logic to render Java auxiliary files is contained in this module
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer
+
+-- | Holds a Java project.
+newtype JavaProject a
+JP :: a -> JavaProject a
+[unJP] :: JavaProject a -> a
+instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
+instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
+instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
+instance Language.Drasil.SoftwareDossier.SoftwareDossierSym.SoftwareDossierSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer.JavaProject
+
+
+-- | The logic to render C++ auxiliary files is contained in this module
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer
+
+-- | Holds a C++ project.
+newtype CppProject a
+CPPP :: a -> CppProject a
+[unCPPP] :: CppProject a -> a
+instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
+instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
+instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
+instance Language.Drasil.SoftwareDossier.SoftwareDossierSym.SoftwareDossierSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer.CppProject
+
+
+-- | The logic to render C# auxiliary files is contained in this module
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer
+
+-- | Holds a C# project.
+newtype CSharpProject a
+CSP :: a -> CSharpProject a
+[unCSP] :: CSharpProject a -> a
+instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
+instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
+instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
+instance Language.Drasil.SoftwareDossier.SoftwareDossierSym.SoftwareDossierSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.CSharpProject
+
+
+-- | Re-export code-related smart constructors for external code writing
+--   and generation.
+module Language.Drasil.GOOL
+
+-- | Members of this class must have a doxygen configuration, ReadMe file,
+--   omptimize doxygen document, information necessary for a makefile, and
+--   auxiliary helper documents
+class SoftwareDossierSym r
+doxConfig :: SoftwareDossierSym r => String -> SoftwareDossierState -> Verbosity -> r FileAndContents
+readMe :: SoftwareDossierSym r => ReadMeInfo -> r FileAndContents
+optimizeDox :: SoftwareDossierSym r => r Doc
+makefile :: SoftwareDossierSym r => [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState -> ProgData -> r FileAndContents
+unReprDoc :: SoftwareDossierSym r => r Doc -> Doc
+package :: Monad r => ProgData -> [r FileAndContents] -> r PackageData
+
+-- | The underlying data type for auxiliary files in all renderers.
+data FileAndContents
+hasPathAndDocToFileAndContents :: HasPathAndDoc a Doc => a -> FileAndContents
+
+-- | The underlying data type for packages in all renderers.
+data PackageData
+pattern PackageData :: ProgData -> [FileAndContents] -> PackageData
+unPP :: PythonProject a -> a
+unJP :: JavaProject a -> a
+unCSP :: CSharpProject a -> a
+unCPPP :: CppProject a -> a
+unSP :: SwiftProject a -> a
+unJLP :: JuliaProject a -> a
 
 
 -- | Re-export code-related smart constructors for external code writing
@@ -2585,12 +2586,12 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCode :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr PackageData -> PackageData) -> DrasilState -> IO ()
+generateCode :: (OOProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr PackageData -> PackageData) -> DrasilState -> IO ()
 
 -- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
-generateCodeProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr PackageData -> PackageData) -> DrasilState -> IO ()
+generateCodeProc :: (ProcProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr PackageData -> PackageData) -> DrasilState -> IO ()
 
 -- | Reads data from a file and converts the values to <a>Expr</a>s. The
 --   file must be formatted according to the <a>DataDesc'</a> passed as a
@@ -2927,21 +2928,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aM9z
-oldCodeSpec :: HasOldCodeSpec c_aM9z => Lens' c_aM9z OldCodeSpec
-authorsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z People
-cMapO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [RelativeFile]
-constMapO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z ConstantMap
-constantsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Const]
-derivedInputsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Derived]
-execOrderO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Def]
-extInputsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Input]
-inputsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Input]
-modsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Mod]
-outputsO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z [Output]
-pNameO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z Name
-systemdbO :: HasOldCodeSpec c_aM9z => Lens' c_aM9z ChunkDB
+class HasOldCodeSpec c_aM9N
+oldCodeSpec :: HasOldCodeSpec c_aM9N => Lens' c_aM9N OldCodeSpec
+authorsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N People
+cMapO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [RelativeFile]
+constMapO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N ConstantMap
+constantsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Const]
+derivedInputsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Derived]
+execOrderO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Def]
+extInputsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Input]
+inputsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Input]
+modsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Mod]
+outputsO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N [Output]
+pNameO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N Name
+systemdbO :: HasOldCodeSpec c_aM9N => Lens' c_aM9N ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

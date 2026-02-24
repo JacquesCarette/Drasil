@@ -215,6 +215,7 @@ _DefiningExpr -> Eq;
 _DefiningExpr -> HasUID;
 _DefiningExpr -> ConceptDomain;
 _DefiningExpr -> Definition;
+_DefiningExpr -> HasChunkRefs;
 _MultiDefn -> HasChunkRefs;
 _MultiDefn -> HasUID;
 _MultiDefn -> HasSymbol;

@@ -207,13 +207,6 @@ digraph alltypes {
 		SwiftProjecta -> a;
 		}
 	}
-	subgraph clasinterfaces {
-		subgraph softwaredossierstate{
-		SoftwareDossierState	[shape=oval, color=cyan3, label="SoftwareDossierState"];
-		SoftwareDossierState -> FilePath;
-		SoftwareDossierState -> MaybeFilePath;
-		}
-	}
 	subgraph comments {
 	}
 	subgraph conceptmatch {
@@ -630,6 +623,13 @@ digraph alltypes {
 		ODELibPckg -> ODEInfoExternalLibraryCall;
 		ODELibPckg -> MaybeFilePath;
 		ODELibPckg -> Lang;
+		}
+	}
+	subgraph softwaredosiersyms {
+		subgraph softwaredossierstate{
+		SoftwareDossierState	[shape=oval, color=cyan3, label="SoftwareDossierState"];
+		SoftwareDossierState -> FilePath;
+		SoftwareDossierState -> MaybeFilePath;
 		}
 	}
 	subgraph coicehs {

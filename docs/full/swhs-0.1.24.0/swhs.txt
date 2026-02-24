@@ -330,6 +330,7 @@ motivation :: Sentence
 ideaDicts :: [IdeaDict]
 conceptChunks :: [ConceptChunk]
 symbMap :: ChunkDB
+cdbRefs :: [Reference]
 abbreviationsList :: [IdeaDict]
 
 -- | Holds all references and links used in the document.

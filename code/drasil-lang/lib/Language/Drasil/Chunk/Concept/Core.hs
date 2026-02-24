@@ -72,7 +72,12 @@ data ConceptInstance = ConInst { _ciuid :: UID
 makeLenses ''ConceptInstance
 
 instance HasChunkRefs ConceptInstance where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs c = Set.unions
+    [ chunkRefs (c ^. cc)
+    , chunkRefs (shortname c)
+    , Set.fromList (cdom c)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptInstance where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)

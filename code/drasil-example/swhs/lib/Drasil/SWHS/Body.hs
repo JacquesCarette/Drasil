@@ -5,8 +5,8 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import Drasil.Generator (cdbWithRefs)
+import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -89,8 +89,12 @@ conceptChunks =
   map cw [surArea, area]
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts conceptChunks [] SWHS.dataDefs insModel
+symbMap = cdbWithRefs cdbRefs
+  symbols ideaDicts conceptChunks [] SWHS.dataDefs insModel
   genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
+
+cdbRefs :: [Reference]
+cdbRefs = SRS.sectionReferences
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

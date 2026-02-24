@@ -39,7 +39,8 @@ data ConstrConcept = ConstrConcept { _defq    :: DefinedQuantityDict
 makeLenses ''ConstrConcept
 
 instance HasChunkRefs ConstrConcept where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs c = chunkRefs (c ^. defq)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds 'UID' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance HasUID        ConstrConcept where uid = defq . uid

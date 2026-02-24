@@ -129,7 +129,13 @@ othModel' :: RelationConcept -> ModelKind e
 othModel' rc = MK (OthModel rc) (modelNs $ rc ^. uid) (rc ^. term)
 
 instance HasChunkRefs (ModelKinds e) where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs (NewDEModel dm)            = chunkRefs dm
+  chunkRefs (DEModel rc)               = chunkRefs rc
+  chunkRefs (EquationalConstraints cs) = chunkRefs cs
+  chunkRefs (EquationalModel qd)       = chunkRefs qd
+  chunkRefs (EquationalRealm md)       = chunkRefs md
+  chunkRefs (OthModel rc)              = chunkRefs rc
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'ModelKinds'.
 instance HasUID        (ModelKinds e) where uid     = getterMk uid uid uid uid uid
@@ -158,7 +164,11 @@ instance RequiresChecking (ModelKinds Expr) Expr Space where
 -- OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
 instance HasChunkRefs (ModelKind e) where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs mkd = mconcat
+    [ chunkRefs (mkd ^. mk)
+    , chunkRefs (mkd ^. mkTerm)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'ModelKind'.
 instance HasUID        (ModelKind e) where uid     = mkUID

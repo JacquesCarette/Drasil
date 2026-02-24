@@ -3,8 +3,8 @@ module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import Drasil.Generator (cdbWithRefs)
+import qualified Drasil.DocLang.SRS as SRS (inModel, sectionReferences)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
 
@@ -114,7 +114,7 @@ conceptChunks =
   physicalcon ++ [linear, angular]
 
 symbMap :: ChunkDB
-symbMap = cdb
+symbMap = cdbWithRefs cdbRefs
   (map dqdWr physicscon ++ symbols ++
     [dqdWr mass, dqdWr posInf, dqdWr negInf] ++
     map dqdWr pidConstants)
@@ -128,6 +128,9 @@ symbMap = cdb
   conceptInstances
   citations
   (labelledContent ++ funcReqsTables)
+
+cdbRefs :: [Reference]
+cdbRefs = SRS.sectionReferences
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

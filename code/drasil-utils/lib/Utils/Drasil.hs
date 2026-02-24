@@ -29,7 +29,7 @@ module Utils.Drasil (
   toPlainName, repUnd,
 
   -- ** TypeClasses
-  HasPathAndDoc(..)
+  HasPathAndDoc(..),
 ) where
 
 import Utils.Drasil.Directory

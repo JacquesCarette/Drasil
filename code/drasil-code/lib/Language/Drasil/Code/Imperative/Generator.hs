@@ -23,6 +23,8 @@ import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainC
 import Language.Drasil.Printing.Import (spec)
 import Drasil.System
 import Utils.Drasil (createDirIfMissing, createFile)
+import Utils.Drasil.FileData (FileAndContents(..), fileAndContents,
+  hasPathAndDocToFileAndContents)
 
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
@@ -45,8 +47,6 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (makeSds,
   SoftwareDossierSym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
-import Language.Drasil.Code.FileData (FileAndContents(..), fileAndContents,
-  hasPathAndDocToFileAndContents)
 import Language.Drasil.Code.PackageData (PackageData(..), pattern PackageData,
   package)
 import Language.Drasil.Code.FileNames(sampleInputName)

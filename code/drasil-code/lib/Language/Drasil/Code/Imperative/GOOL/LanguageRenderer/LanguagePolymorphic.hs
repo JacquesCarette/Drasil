@@ -6,6 +6,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
+import Utils.Drasil.FileData (FileAndContents)
 import Drasil.GOOL (ProgData)
 
 import Language.Drasil.Choices (Comments, ImplementationType(..), Verbosity)
@@ -16,7 +17,6 @@ import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.FileNames (doxConfigName, makefileName, readMeName)
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (
     SoftwareDossierSym(unReprDoc), sdsFromData, SoftwareDossierState)
-import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..), makeReadMe)
 
 -- | Defines a Doxygen configuration file.

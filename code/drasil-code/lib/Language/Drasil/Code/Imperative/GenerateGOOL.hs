@@ -11,7 +11,6 @@ import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (List)
-import Language.Drasil.Code.FileData (FileAndContents)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..),
   SoftwareDossierState)
@@ -26,6 +25,7 @@ import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
   FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..))
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
+import Utils.Drasil.FileData (FileAndContents)
 import Drasil.Metadata (watermark)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))

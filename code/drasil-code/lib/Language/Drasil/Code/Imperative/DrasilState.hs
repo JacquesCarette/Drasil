@@ -1,8 +1,9 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
-  GenState, DrasilState(..), designLog, MatchedSpaces, ModExportMap,
-  ClassDefinitionMap, ScopeType(..), modExportMap, clsDefMap, addToDesignLog,
-  addLoggedSpace, genICName, lookupC
+  SoftwareDossierInfo(..),
+  GenState, DrasilState(..), softwareDossierInfo, designLog, MatchedSpaces,
+  ModExportMap, ClassDefinitionMap, ScopeType(..), modExportMap, clsDefMap,
+  addToDesignLog, addLoggedSpace, genICName, lookupC
 ) where
 
 import Control.Lens ((^.), makeLenses, over)
@@ -46,6 +47,12 @@ type ClassDefinitionMap = Map String String
 -- | Variable scope
 data ScopeType = Local | Global | MainFn
 
+data SoftwareDossierInfo = SoftwareDossierInfo {
+  doxOutput :: Verbosity,
+  auxiliaries :: [AuxFile],
+  sampleData :: [Expr]
+}
+
 -- | Abbreviation used throughout generator.
 type GenState = State DrasilState
 
@@ -64,12 +71,9 @@ data DrasilState = DrasilState {
   onSfwrC :: ConstraintBehaviour,
   onPhysC :: ConstraintBehaviour,
   commented :: [Comments],
-  doxOutput :: Verbosity,
   date :: String,
   logName :: String,
   logKind :: [Logging],
-  auxiliaries :: [AuxFile],
-  sampleData :: [Expr],
   dsICNames :: InternalConcept -> Name,
   -- Reference materials
   modules :: [Mod],
@@ -81,6 +85,7 @@ data DrasilState = DrasilState {
   clsMap :: ClassDefinitionMap,
   defSet :: Set Name,
   getVal :: Int,
+  _softwareDossierInfo :: SoftwareDossierInfo,
 
   -- Stateful
   currentModule :: String,

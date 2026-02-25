@@ -137,6 +137,18 @@ getPath :: HasPathAndDoc a b => a -> FilePath
 getDoc :: HasPathAndDoc a b => a -> b
 
 
+-- | Defines the underlying data types used in the package extension.
+module Utils.Drasil.FileData
+
+-- | The underlying data type for auxiliary files in all renderers.
+data FileAndContents
+
+-- | Constructor for auxiliary files.
+fileAndContents :: FilePath -> Doc -> FileAndContents
+hasPathAndDocToFileAndContents :: HasPathAndDoc a Doc => a -> FileAndContents
+instance Utils.Drasil.TypeClasses.HasPathAndDoc Utils.Drasil.FileData.FileAndContents Text.PrettyPrint.HughesPJ.Doc
+
+
 -- | Gather Drasil's utility functions and re-export for easy use.
 module Utils.Drasil
 

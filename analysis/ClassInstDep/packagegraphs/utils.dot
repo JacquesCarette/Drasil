@@ -1,4 +1,7 @@
 digraph utils{
+FileAndContents	[shape=oval, color=turquoise4, label="FileAndContents"];
 RelativeFile	[shape=oval, color=turquoise4, label="RelativeFile"];
+HasPathAndDoc	[shape=oval, color=pink, label="HasPathAndDoc"];
 HasPathAndDoc	[shape=oval, color=magenta, label="HasPathAndDoc"];
+FileAndContents -> HasPathAndDoc;
 }

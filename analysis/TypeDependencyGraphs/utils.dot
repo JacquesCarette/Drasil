@@ -9,6 +9,13 @@ digraph alltypes {
 	}
 	subgraph englihs {
 	}
+	subgraph filedata {
+		subgraph fileandcontents{
+		FileAndContents	[shape=oval, color=cyan3, label="FileAndContents"];
+		FileAndContents -> FilePath;
+		FileAndContents -> Doc;
+		}
+	}
 	subgraph fileio {
 	}
 	subgraph filepath {

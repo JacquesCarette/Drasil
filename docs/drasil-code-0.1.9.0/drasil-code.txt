@@ -59,10 +59,6 @@ makefile :: SoftwareDossierSym r => [FilePath] -> ImplementationType -> [Comment
 unReprDoc :: SoftwareDossierSym r => r Doc -> Doc
 package :: Monad r => ProgData -> [r FileAndContents] -> r PackageData
 
--- | The underlying data type for auxiliary files in all renderers.
-data FileAndContents
-hasPathAndDocToFileAndContents :: HasPathAndDoc a Doc => a -> FileAndContents
-
 -- | The underlying data type for packages in all renderers.
 data PackageData
 pattern PackageData :: ProgData -> [FileAndContents] -> PackageData
@@ -428,21 +424,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aM6X
-oldCodeSpec :: HasOldCodeSpec c_aM6X => Lens' c_aM6X OldCodeSpec
-authorsO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X People
-cMapO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X [RelativeFile]
-constMapO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X ConstantMap
-constantsO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X [Const]
-derivedInputsO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X [Derived]
-execOrderO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X [Def]
-extInputsO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X [Input]
-inputsO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X [Input]
-modsO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X [Mod]
-outputsO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X [Output]
-pNameO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X Name
-systemdbO :: HasOldCodeSpec c_aM6X => Lens' c_aM6X ChunkDB
+class HasOldCodeSpec c_aLZ8
+oldCodeSpec :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 People
+cMapO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 [RelativeFile]
+constMapO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 ConstantMap
+constantsO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 [Const]
+derivedInputsO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 [Derived]
+execOrderO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 [Def]
+extInputsO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 [Input]
+inputsO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 [Input]
+modsO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 [Mod]
+outputsO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 [Output]
+pNameO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 Name
+systemdbO :: HasOldCodeSpec c_aLZ8 => Lens' c_aLZ8 ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

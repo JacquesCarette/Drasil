@@ -574,8 +574,6 @@ digraph alltypes {
 		ExternalLibraryCall -> StepGroupFill;
 		}
 	}
-	subgraph filenames {
-	}
 	subgraph lang {
 		subgraph lang{
 		Lang	[shape=oval, color=darkviolet, label="Lang"];
@@ -617,6 +615,8 @@ digraph alltypes {
 		ODELibPckg -> MaybeFilePath;
 		ODELibPckg -> Lang;
 		}
+	}
+	subgraph filenames {
 	}
 	subgraph softwaredosiersyms {
 		subgraph softwaredossierstate{

@@ -301,28 +301,6 @@ getDataInputs :: Data -> [DataItem]
 -- | Helper that gets the data inputs from single-line or multi-line data.
 getPatternInputs :: LinePattern -> [DataItem]
 
-module Language.Drasil.Code.FileNames
-
--- | "doxConfig".
---   
---   Common syntax for several renderers.
-doxConfigName :: String
-
--- | "Makefile".
---   
---   Common syntax for several renderers.
-makefileName :: String
-
--- | "input.txt".
---   
---   Common syntax for several renderers.
-sampleInputName :: String
-
--- | "README.md".
---   
---   Common syntax for several renderers.
-readMeName :: String
-
 module Language.Drasil.Code.Imperative.Build.AST
 
 -- | Used to build commands. Type synonym of a <a>MakeString</a> for
@@ -1686,21 +1664,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aM1Y
-oldCodeSpec :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y OldCodeSpec
-authorsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y People
-cMapO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [RelativeFile]
-constMapO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y ConstantMap
-constantsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Const]
-derivedInputsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Derived]
-execOrderO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Def]
-extInputsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Input]
-inputsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Input]
-modsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Mod]
-outputsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Output]
-pNameO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y Name
-systemdbO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y ChunkDB
+class HasOldCodeSpec c_aM0z
+oldCodeSpec :: HasOldCodeSpec c_aM0z => Lens' c_aM0z OldCodeSpec
+authorsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z People
+cMapO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [RelativeFile]
+constMapO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z ConstantMap
+constantsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Const]
+derivedInputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Derived]
+execOrderO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Def]
+extInputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Input]
+inputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Input]
+modsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Mod]
+outputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Output]
+pNameO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z Name
+systemdbO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -2048,6 +2026,28 @@ chooseConcept :: Choices -> State [Sentence] MatchedConceptMap
 
 -- | Translates a <a>CodeConcept</a> into GOOL.
 conceptToGOOL :: SharedProg r => CodeConcept -> SValue r
+
+module Language.Drasil.SoftwareDossier.FileNames
+
+-- | "doxConfig".
+--   
+--   Common syntax for several renderers.
+doxConfigName :: String
+
+-- | "Makefile".
+--   
+--   Common syntax for several renderers.
+makefileName :: String
+
+-- | "input.txt".
+--   
+--   Common syntax for several renderers.
+sampleInputName :: String
+
+-- | "README.md".
+--   
+--   Common syntax for several renderers.
+readMeName :: String
 
 
 -- | Defines a package extension for GOOL, with the relevant slice of
@@ -2912,21 +2912,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aM1Y
-oldCodeSpec :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y OldCodeSpec
-authorsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y People
-cMapO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [RelativeFile]
-constMapO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y ConstantMap
-constantsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Const]
-derivedInputsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Derived]
-execOrderO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Def]
-extInputsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Input]
-inputsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Input]
-modsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Mod]
-outputsO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y [Output]
-pNameO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y Name
-systemdbO :: HasOldCodeSpec c_aM1Y => Lens' c_aM1Y ChunkDB
+class HasOldCodeSpec c_aM0z
+oldCodeSpec :: HasOldCodeSpec c_aM0z => Lens' c_aM0z OldCodeSpec
+authorsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z People
+cMapO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [RelativeFile]
+constMapO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z ConstantMap
+constantsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Const]
+derivedInputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Derived]
+execOrderO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Def]
+extInputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Input]
+inputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Input]
+modsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Mod]
+outputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Output]
+pNameO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z Name
+systemdbO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

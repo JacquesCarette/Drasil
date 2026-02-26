@@ -20,7 +20,7 @@ import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
 import Language.Drasil.Code.DataDesc (DataDesc)
-import Language.Drasil.Code.FileNames (sampleInputName)
+import Language.Drasil.SoftwareDossier.FileNames (sampleInputName)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))

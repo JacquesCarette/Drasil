@@ -1,9 +1,9 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
-  SoftwareDossierInfo(..),
-  GenState, DrasilState(..), softwareDossierInfo, designLog, MatchedSpaces,
-  ModExportMap, ClassDefinitionMap, ScopeType(..), modExportMap, clsDefMap,
-  addToDesignLog, addLoggedSpace, genICName, lookupC
+  GenState, DrasilState(..), SoftwareDossierInfo(..),
+  softwareDossierInfo, doxOutput, auxiliaries, sampleData, designLog,
+  MatchedSpaces, ModExportMap, ClassDefinitionMap, ScopeType(..), modExportMap,
+  clsDefMap, addToDesignLog, addLoggedSpace, genICName, lookupC
 ) where
 
 import Control.Lens ((^.), makeLenses, over)
@@ -48,9 +48,9 @@ type ClassDefinitionMap = Map String String
 data ScopeType = Local | Global | MainFn
 
 data SoftwareDossierInfo = SoftwareDossierInfo {
-  doxOutput :: Verbosity,
-  auxiliaries :: [AuxFile],
-  sampleData :: [Expr]
+  _doxOutput :: Verbosity,
+  _auxiliaries :: [AuxFile],
+  _sampleData :: [Expr]
 }
 
 -- | Abbreviation used throughout generator.
@@ -95,6 +95,15 @@ data DrasilState = DrasilState {
   currentScope :: ScopeType
 }
 makeLenses ''DrasilState
+
+doxOutput :: DrasilState -> Verbosity
+doxOutput ds = _doxOutput $ ds ^. softwareDossierInfo
+
+auxiliaries :: DrasilState -> [AuxFile]
+auxiliaries ds = _auxiliaries $ ds ^. softwareDossierInfo
+
+sampleData :: DrasilState -> [Expr]
+sampleData ds = _sampleData $ ds ^. softwareDossierInfo
 
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.

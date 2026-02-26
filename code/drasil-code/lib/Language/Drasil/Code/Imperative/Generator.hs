@@ -64,9 +64,9 @@ import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs cs = let
   sdsInfo = SoftwareDossierInfo {
-    doxOutput = doxVerbosity $ docConfig $ optFeats chs,
-    auxiliaries = auxFiles $ optFeats chs,
-    sampleData = sd
+    _doxOutput = doxVerbosity $ docConfig $ optFeats chs,
+    _auxiliaries = auxFiles $ optFeats chs,
+    _sampleData = sd
   }
   in DrasilState {
   -- constants

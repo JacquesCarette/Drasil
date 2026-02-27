@@ -118,7 +118,7 @@ conceptChunks =
   -- ConceptChunks
   softwarecon ++ [CP.angular, CP.linear, CP.rigidBody, CP.collision,
   CP.damping, CP.friction, CP.joint, CP.energy, CP.motion, CP.space,
-  CP.elasticity, CM.cartesian, CM.line, CM.point] ++
+  CP.elasticity] ++
   -- DefinedQuantityDicts
   map cw [normalVect, perpVect] ++
   -- UnitalChunks

@@ -7,12 +7,13 @@ module Drasil.Generator.BaseChunkDB (
 import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder11)
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
   DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
+import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Software (errMsg, program)
-import Data.Drasil.Concepts.Math (mathcon, cartesian, line, point)
+import Data.Drasil.Concepts.Math (mathcon)
 
 import Data.Drasil.SI_Units (siUnits)
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
@@ -69,11 +70,10 @@ basisConceptChunks =
   --  * mathcon - Math concepts. Math is widespread throughout all of the case studies
   --              and scientific computing software in general, so it is included
   --              in the basis.
-  [algorithm, errMsg, program] ++ srsDomains ++ basisMathConcepts
-  where
-    -- These concepts carry citation refs in their definitions and should be
-    -- provided explicitly by case studies that use them.
-    basisMathConcepts = filter (`notElem` [cartesian, line, point]) mathcon
+  [algorithm, errMsg, program] ++ srsDomains ++ mathcon
+
+basisCitations :: [Citation]
+basisCitations = [cartesianWiki, lineSource, pointSource]
 
 -- | The basis chunk database, which contains the basic idea dicts, concept chunks,
 --  and units that are used in all of the case studies. This database is then added
@@ -84,6 +84,7 @@ basisCDB =
   $ insertAll basisConceptChunks
   $ insertAll basisSymbols
   $ insertAll basisIdeaDicts
+  $ insertAll basisCitations
     empty
 
 -- | Create a `ChunkDB` containing all knowledge (chunks) required to generate

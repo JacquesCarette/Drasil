@@ -1,6 +1,6 @@
 module Drasil.Generator.CommonKnowledge (
   -- * Common Background Knowledge for Drasil's Science-focused Case Studies
-  cdb,
+  withCommonKnowledge,
   cdbWithRefs
 ) where
 
@@ -19,14 +19,17 @@ import Data.Drasil.SI_Units (siUnits)
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
 
--- | Create a `ChunkDB` containing all knowledge (chunks) required to generate
--- our SmithEtAl-esque SRS.
-cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
+-- | Create a `ChunkDB` containing background knowledge common to all of
+-- Drasil's existing case studies. This means knowledge related to the
+-- SmithEtAl-esque SRS, mathematics, physics, general science, basic software,
+-- and general documentation.
+withCommonKnowledge :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
     [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
     [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
-cdb = insertAllOutOfOrder11 basisCDB
+withCommonKnowledge = insertAllOutOfOrder11 basisCDB
 
--- | Variant of 'cdb' that pre-registers reference chunks before mass insertion.
+-- | Variant of 'withCommonKnowledge' that pre-registers reference chunks
+-- before mass insertion.
 cdbWithRefs :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] ->
     [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] ->

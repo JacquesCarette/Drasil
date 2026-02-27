@@ -37,7 +37,6 @@ data SoftwareDossierInfo = SoftwareDossierInfo {
   _auxiliaries :: [AuxFile],
   _sampleData :: [Expr]
 }
-makeLenses ''SoftwareDossierInfo
 
 makeSoftwareDossierInfo :: Verbosity -> [AuxFile] -> [Expr] -> SoftwareDossierInfo
 makeSoftwareDossierInfo = SoftwareDossierInfo
@@ -56,7 +55,6 @@ type ClassDefinitionMap = Map String String
 
 -- | Variable scope
 data ScopeType = Local | Global | MainFn
-
 
 -- | Abbreviation used throughout generator.
 type GenState = State DrasilState

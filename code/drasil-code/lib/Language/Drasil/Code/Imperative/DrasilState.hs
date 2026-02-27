@@ -1,9 +1,10 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
-  SoftwareDossierInfo, makeSoftwareDossierInfo, GenState, DrasilState(..),
-  softwareDossierInfo, doxOutput, auxiliaries, sampleData, designLog,
-  MatchedSpaces, ModExportMap, ClassDefinitionMap, ScopeType(..), modExportMap,
-  clsDefMap, addToDesignLog, addLoggedSpace, genICName, lookupC
+  SoftwareDossierInfo, makeSoftwareDossierInfo, doxOutput, auxiliaries,
+  sampleData, GenState, DrasilState(..), softwareDossierInfo, getDoxOutput,
+  getAuxiliaries, getSampleData, designLog, MatchedSpaces, ModExportMap,
+  ClassDefinitionMap, ScopeType(..), modExportMap, clsDefMap, addToDesignLog,
+  addLoggedSpace, genICName, lookupC
 ) where
 
 import Control.Lens ((^.), makeLenses, over)
@@ -37,6 +38,7 @@ data SoftwareDossierInfo = SoftwareDossierInfo {
   _auxiliaries :: [AuxFile],
   _sampleData :: [Expr]
 }
+makeLenses ''SoftwareDossierInfo
 
 makeSoftwareDossierInfo :: Verbosity -> [AuxFile] -> [Expr] -> SoftwareDossierInfo
 makeSoftwareDossierInfo = SoftwareDossierInfo
@@ -99,14 +101,14 @@ data DrasilState = DrasilState {
 }
 makeLenses ''DrasilState
 
-doxOutput :: DrasilState -> Verbosity
-doxOutput ds = _doxOutput $ ds ^. softwareDossierInfo
+getDoxOutput :: DrasilState -> Verbosity
+getDoxOutput ds = ds ^. (softwareDossierInfo . doxOutput)
 
-auxiliaries :: DrasilState -> [AuxFile]
-auxiliaries ds = _auxiliaries $ ds ^. softwareDossierInfo
+getAuxiliaries :: DrasilState -> [AuxFile]
+getAuxiliaries ds = ds ^. (softwareDossierInfo . auxiliaries)
 
-sampleData :: DrasilState -> [Expr]
-sampleData ds = _sampleData $ ds ^. softwareDossierInfo
+getSampleData :: DrasilState -> [Expr]
+getSampleData ds = ds ^. (softwareDossierInfo . sampleData)
 
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.

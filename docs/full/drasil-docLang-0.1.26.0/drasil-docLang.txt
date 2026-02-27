@@ -505,9 +505,27 @@ toSentence :: MayHaveUnit u => u -> Sentence
 -- | Similar to <a>toSentence</a>, except default value is "Unitless".
 toSentenceUnitless :: MayHaveUnit u => u -> Sentence
 
+module Drasil.ExtractCommon
+
+-- | Extracts all <a>ModelExpr</a>s mentioned in a <a>Sentence</a>.
+sentToExp :: Sentence -> [ModelExpr]
+
+-- | Extracts <a>ModelExpr</a>s from something that <a>HasContents</a>.
+extractMExprs :: HasContents a => a -> [ModelExpr]
+
+-- | Extracts <a>Sentence</a>s from something that <a>HasContents</a>.
+extractSents :: HasContents a => a -> [Sentence]
+
+-- | Extracts <a>Sentence</a>s from a list of <a>Contents</a>.
+extractSents' :: HasContents a => [a] -> [Sentence]
+
+-- | Extracts all referenced <a>UID</a>s from things that have
+--   <a>RawContent</a>s.
+extractChRefs :: HasContents a => [a] -> Set UID
+
 
 -- | Utilities to get grab certain chunks (from <a>Expr</a>,
---   <a>Sentence</a>, etc) by <tt>UID</tt> and dereference the chunk it
+--   <a>Sentence</a>, etc) by <a>UID</a> and dereference the chunk it
 --   refers to.
 module Drasil.GetChunks
 
@@ -529,8 +547,25 @@ combine :: Sentence -> ChunkDB -> [DefinedQuantityDict]
 --   equation in order to print.
 vars :: ModelExpr -> ChunkDB -> [DefinedQuantityDict]
 
--- | Extract bibliography entries for a system.
-citeDB :: System -> BibRef
+-- | Given a <a>ChunkDB</a> and a set of <a>UID</a>s, looks up the
+--   corresponding <a>Citation</a>s and returns them sorted by author,
+--   year, and title.
+--   
+--   FIXME: This function assumes that all <a>UID</a>s in the set
+--   correspond to <a>Citation</a>s in the database. If a <a>UID</a> does
+--   not correspond to a <a>Citation</a>, it is simply ignored. This should
+--   rather rely on a set of 'UIDRef Citation's.
+resolveBibliography :: ChunkDB -> Set UID -> [Citation]
+
+
+-- | Defines functions to extract citation references from Notebook
+--   documents.
+module Drasil.ExtractLsnDesc
+
+-- | Extract bibliography entries for a notebook based on the lesson
+--   description. Scans the notebook for citation references and looks them
+--   up in the database.
+extractLsnPlanBib :: System -> LsnDesc -> BibRef
 
 
 -- | Document language for lesson plan notebooks.
@@ -1685,15 +1720,23 @@ purpDoc :: CI -> Verbosity -> [Sentence]
 --   <a>Sentence</a>s and <a>Expr</a>s.
 module Drasil.ExtractDocDesc
 
--- | Extracts <a>Sentence</a>s from a document description.
+-- | FIXME: We want all Sentences from a document (not necessarily a
+--   document description), so we use this function. But
+--   <a>sentencePlate</a> does not include all <a>Sentence</a>s! Some only
+--   appear when rendering (at least, after <tt>mkSections</tt> is used on
+--   a <a>DocDesc</a> to create `[Section]`).
+--   
+--   Extracts <a>Sentence</a>s from a document description.
 getDocDesc :: DocDesc -> [Sentence]
 
 -- | Extracts expressions from the document description (<a>DocDesc</a>)
 --   and default <a>DLPlate</a>.
 egetDocDesc :: DocDesc -> [ModelExpr]
 
--- | Creates a <a>Sentence</a> plate.
-sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
+-- | Extract bibliography entries from generated sections. This version
+--   extracts from fully expanded Sections, capturing citations that are
+--   only created during document generation (like those in orgOfDocIntro).
+extractDocBib :: System -> [Section] -> BibRef
 
 
 -- | Collects references common to all SRS documents in one list for easy
@@ -2325,13 +2368,6 @@ inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, Ma
 
 -- | Creates the output Data Constraints Table.
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
-
--- | Extracts <a>Sentence</a>s from a document description.
-getDocDesc :: DocDesc -> [Sentence]
-
--- | Extracts expressions from the document description (<a>DocDesc</a>)
---   and default <a>DLPlate</a>.
-egetDocDesc :: DocDesc -> [ModelExpr]
 
 -- | All section references used in creating a Software Requirements
 --   Specification (SRS).

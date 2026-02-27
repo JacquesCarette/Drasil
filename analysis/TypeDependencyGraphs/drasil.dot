@@ -214,6 +214,12 @@ digraph alltypes {
 	subgraph decriptionss {
 	}
 	subgraph drailstates {
+		subgraph softwaredossierinfo{
+		SoftwareDossierInfo	[shape=oval, color=cyan3, label="SoftwareDossierInfo"];
+		SoftwareDossierInfo -> Verbosity;
+		SoftwareDossierInfo -> SoftwareDossierFile;
+		SoftwareDossierInfo -> Expr;
+		}
 		subgraph drasilstate{
 		DrasilState	[shape=oval, color=cyan3, label="DrasilState"];
 		DrasilState -> CodeSpec;
@@ -227,11 +233,8 @@ digraph alltypes {
 		DrasilState -> MatchedSpaces;
 		DrasilState -> ConstraintBehaviour;
 		DrasilState -> Comments;
-		DrasilState -> Verbosity;
 		DrasilState -> String;
 		DrasilState -> Logging;
-		DrasilState -> AuxFile;
-		DrasilState -> Expr;
 		DrasilState -> InternalConceptName;
 		DrasilState -> Mod;
 		DrasilState -> Name;
@@ -241,6 +244,7 @@ digraph alltypes {
 		DrasilState -> ClassDefinitionMap;
 		DrasilState -> SetName;
 		DrasilState -> Int;
+		DrasilState -> SoftwareDossierInfo;
 		DrasilState -> Doc;
 		DrasilState -> Space;
 		DrasilState -> ScopeType;
@@ -661,7 +665,7 @@ digraph alltypes {
 		OptionalFeatures	[shape=oval, color=cyan3, label="OptionalFeatures"];
 		OptionalFeatures -> DocConfig;
 		OptionalFeatures -> LogConfig;
-		OptionalFeatures -> AuxFile;
+		OptionalFeatures -> SoftwareDossierFile;
 		}
 		subgraph docconfig{
 		DocConfig	[shape=oval, color=cyan3, label="DocConfig"];
@@ -708,9 +712,9 @@ digraph alltypes {
 		subgraph logging{
 		Logging	[shape=oval, color=darkviolet, label="Logging"];
 		}
-		subgraph auxfile{
-		AuxFile	[shape=oval, color=darkviolet, label="AuxFile"];
-		AuxFile -> FilePath;
+		subgraph softwaredossierfile{
+		SoftwareDossierFile	[shape=oval, color=darkviolet, label="SoftwareDossierFile"];
+		SoftwareDossierFile -> FilePath;
 		}
 		subgraph constraintbehaviour{
 		ConstraintBehaviour	[shape=oval, color=darkviolet, label="ConstraintBehaviour"];
@@ -1385,7 +1389,11 @@ digraph alltypes {
 	}
 	subgraph documentlanguage {
 	}
+	subgraph extractcommon {
+	}
 	subgraph extractdocdecs {
+	}
+	subgraph extractlndescs {
 	}
 	subgraph getcunkhs {
 	}

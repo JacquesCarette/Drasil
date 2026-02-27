@@ -1,0 +1,4 @@
+digraph softwaredossierfile{
+SoftwareDossierFile	[shape=oval, color=darkviolet, label="SoftwareDossierFile"];
+SoftwareDossierFile -> FilePath;
+}

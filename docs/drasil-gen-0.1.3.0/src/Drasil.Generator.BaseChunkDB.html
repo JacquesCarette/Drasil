@@ -99,12 +99,12 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">srsDomains</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk] -&gt; [ConceptChunk] -&gt; [ConceptChunk]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
-</span><a href="#local-6989586621679100030"><span class="hs-identifier hs-var">basisMathConcepts</span></a></span><span>
+</span><a href="#local-6989586621679100049"><span class="hs-identifier hs-var">basisMathConcepts</span></a></span><span>
 </span><span id="line-73"></span><span>  </span><span class="hs-keyword">where</span><span>
 </span><span id="line-74"></span><span>    </span><span class="hs-comment">-- These concepts carry citation refs in their definitions and should be</span><span>
 </span><span id="line-75"></span><span>    </span><span class="hs-comment">-- provided explicitly by case studies that use them.</span><span>
-</span><span id="line-76"></span><span>    </span><span id="local-6989586621679100030"><span class="annot"><span class="annottext">basisMathConcepts :: [ConceptChunk]
-</span><a href="#local-6989586621679100030"><span class="hs-identifier hs-var hs-var">basisMathConcepts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; Bool) -&gt; [ConceptChunk] -&gt; [ConceptChunk]
+</span><span id="line-76"></span><span>    </span><span id="local-6989586621679100049"><span class="annot"><span class="annottext">basisMathConcepts :: [ConceptChunk]
+</span><a href="#local-6989586621679100049"><span class="hs-identifier hs-var hs-var">basisMathConcepts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; Bool) -&gt; [ConceptChunk] -&gt; [ConceptChunk]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; [ConceptChunk] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
@@ -214,8 +214,8 @@ ChunkDB
 -&gt; [Citation]
 -&gt; [LabelledContent]
 -&gt; ChunkDB
-</span><a href="Drasil.Generator.BaseChunkDB.html#cdbWithRefs"><span class="hs-identifier hs-var hs-var">cdbWithRefs</span></a></span></span><span> </span><span id="local-6989586621679100037"><span class="annot"><span class="annottext">[Reference]
-</span><a href="#local-6989586621679100037"><span class="hs-identifier hs-var">refs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="Drasil.Generator.BaseChunkDB.html#cdbWithRefs"><span class="hs-identifier hs-var hs-var">cdbWithRefs</span></a></span></span><span> </span><span id="local-6989586621679100056"><span class="annot"><span class="annottext">[Reference]
+</span><a href="#local-6989586621679100056"><span class="hs-identifier hs-var">refs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; [DefinedQuantityDict]
 -&gt; [IdeaDict]
 -&gt; [ConceptChunk]
@@ -249,6 +249,6 @@ ChunkDB
 </span><span class="hs-identifier hs-var">insertAllOutOfOrder11</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Reference] -&gt; ChunkDB -&gt; ChunkDB
 forall a. TypeableChunk a =&gt; [a] -&gt; ChunkDB -&gt; ChunkDB
 </span><span class="hs-identifier hs-var">insertAll</span></span><span> </span><span class="annot"><span class="annottext">[Reference]
-</span><a href="#local-6989586621679100037"><span class="hs-identifier hs-var">refs</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679100056"><span class="hs-identifier hs-var">refs</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.Generator.BaseChunkDB.html#basisCDB"><span class="hs-identifier hs-var">basisCDB</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-102"></span></pre></body></html>

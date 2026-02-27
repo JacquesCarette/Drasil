@@ -1,4 +1,0 @@
-digraph auxfile{
-AuxFile	[shape=oval, color=darkviolet, label="AuxFile"];
-AuxFile -> FilePath;
-}

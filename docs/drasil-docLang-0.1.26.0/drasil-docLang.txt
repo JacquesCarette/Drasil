@@ -1119,13 +1119,6 @@ inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, Ma
 -- | Creates the output Data Constraints Table.
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
 
--- | Extracts <a>Sentence</a>s from a document description.
-getDocDesc :: DocDesc -> [Sentence]
-
--- | Extracts expressions from the document description (<a>DocDesc</a>)
---   and default <a>DLPlate</a>.
-egetDocDesc :: DocDesc -> [ModelExpr]
-
 -- | All section references used in creating a Software Requirements
 --   Specification (SRS).
 secRefs :: [Reference]

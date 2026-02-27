@@ -252,16 +252,16 @@ LogConfig :: [Logging] -> FilePath -> LogConfig
 -- | Name of log file.
 [logFile] :: LogConfig -> FilePath
 data OptionalFeatures
-OptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
+OptFeats :: DocConfig -> LogConfig -> [SoftwareDossierFile] -> OptionalFeatures
 [docConfig] :: OptionalFeatures -> DocConfig
 [logConfig] :: OptionalFeatures -> LogConfig
 
 -- | Turns generation of different auxiliary (non-source-code) files on or
 --   off.
-[auxFiles] :: OptionalFeatures -> [AuxFile]
+[auxFiles] :: OptionalFeatures -> [SoftwareDossierFile]
 
 -- | Constructor to create a OptionalFeatures
-makeOptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
+makeOptFeats :: DocConfig -> LogConfig -> [SoftwareDossierFile] -> OptionalFeatures
 
 -- | External Library Options
 newtype ExtLib
@@ -348,9 +348,9 @@ matchSpaces :: [(Space, [CodeType])] -> SpaceMatch
 --   file, readme. To generate a sample input file compatible with the
 --   generated program, <a>FilePath</a> is the path to the user-provided
 --   file containing a sample set of input data.
-data AuxFile
-SampleInput :: FilePath -> AuxFile
-ReadME :: AuxFile
+data SoftwareDossierFile
+SampleInput :: FilePath -> SoftwareDossierFile
+ReadME :: SoftwareDossierFile
 
 -- | Gets the file path to a sample input data set from a <a>Choices</a>
 --   structure, if the user chose to generate a sample input file.
@@ -424,21 +424,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aLXJ
-oldCodeSpec :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ OldCodeSpec
-authorsO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ People
-cMapO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ [RelativeFile]
-constMapO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ ConstantMap
-constantsO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ [Const]
-derivedInputsO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ [Derived]
-execOrderO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ [Def]
-extInputsO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ [Input]
-inputsO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ [Input]
-modsO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ [Mod]
-outputsO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ [Output]
-pNameO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ Name
-systemdbO :: HasOldCodeSpec c_aLXJ => Lens' c_aLXJ ChunkDB
+class HasOldCodeSpec c_aLXI
+oldCodeSpec :: HasOldCodeSpec c_aLXI => Lens' c_aLXI OldCodeSpec
+authorsO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI People
+cMapO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI [RelativeFile]
+constMapO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI ConstantMap
+constantsO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI [Const]
+derivedInputsO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI [Derived]
+execOrderO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI [Def]
+extInputsO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI [Input]
+inputsO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI [Input]
+modsO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI [Mod]
+outputsO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI [Output]
+pNameO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI Name
+systemdbO :: HasOldCodeSpec c_aLXI => Lens' c_aLXI ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

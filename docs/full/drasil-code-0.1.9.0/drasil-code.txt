@@ -1408,16 +1408,16 @@ LogConfig :: [Logging] -> FilePath -> LogConfig
 -- | Constructor to create a LogConfig
 makeLogConfig :: [Logging] -> FilePath -> LogConfig
 data OptionalFeatures
-OptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
+OptFeats :: DocConfig -> LogConfig -> [SoftwareDossierFile] -> OptionalFeatures
 [docConfig] :: OptionalFeatures -> DocConfig
 [logConfig] :: OptionalFeatures -> LogConfig
 
 -- | Turns generation of different auxiliary (non-source-code) files on or
 --   off.
-[auxFiles] :: OptionalFeatures -> [AuxFile]
+[auxFiles] :: OptionalFeatures -> [SoftwareDossierFile]
 
 -- | Constructor to create a OptionalFeatures
-makeOptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
+makeOptFeats :: DocConfig -> LogConfig -> [SoftwareDossierFile] -> OptionalFeatures
 
 -- | External Library Options
 newtype ExtLib
@@ -1546,17 +1546,17 @@ LogVar :: Logging
 --   file, readme. To generate a sample input file compatible with the
 --   generated program, <a>FilePath</a> is the path to the user-provided
 --   file containing a sample set of input data.
-data AuxFile
-SampleInput :: FilePath -> AuxFile
-ReadME :: AuxFile
+data SoftwareDossierFile
+SampleInput :: FilePath -> SoftwareDossierFile
+ReadME :: SoftwareDossierFile
 
 -- | Gets the file path to a sample input data set from a <a>Choices</a>
 --   structure, if the user chose to generate a sample input file.
 getSampleData :: Choices -> Maybe FilePath
 
--- | Predicate that returns true if the list of <a>AuxFile</a>s includes a
---   <a>SampleInput</a>.
-hasSampleInput :: [AuxFile] -> Bool
+-- | Predicate that returns true if the list of <a>SoftwareDossierFile</a>s
+--   includes a <a>SampleInput</a>.
+hasSampleInput :: [SoftwareDossierFile] -> Bool
 
 -- | Default choices to be used as the base from which design
 --   specifications can be built.
@@ -1582,11 +1582,11 @@ Constants :: InternalConcept
 instance GHC.Classes.Eq Language.Drasil.Choices.CodeConcept
 instance GHC.Classes.Eq Language.Drasil.Choices.Comments
 instance GHC.Classes.Eq Language.Drasil.Choices.Logging
-instance GHC.Classes.Eq Language.Drasil.Choices.AuxFile
+instance GHC.Classes.Eq Language.Drasil.Choices.SoftwareDossierFile
 instance GHC.Classes.Ord Language.Drasil.Choices.InternalConcept
 instance GHC.Classes.Eq Language.Drasil.Choices.InternalConcept
 instance Language.Drasil.Choices.RenderChoices Language.Drasil.Choices.ConstraintBehaviour
-instance Language.Drasil.Choices.RenderChoices Language.Drasil.Choices.AuxFile
+instance Language.Drasil.Choices.RenderChoices Language.Drasil.Choices.SoftwareDossierFile
 instance Language.Drasil.Choices.RenderChoices Language.Drasil.Choices.Logging
 instance Language.Drasil.Choices.RenderChoices Language.Drasil.Choices.Visibility
 instance Language.Drasil.Choices.RenderChoices Language.Drasil.Choices.Verbosity
@@ -1664,21 +1664,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aM0z
-oldCodeSpec :: HasOldCodeSpec c_aM0z => Lens' c_aM0z OldCodeSpec
-authorsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z People
-cMapO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [RelativeFile]
-constMapO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z ConstantMap
-constantsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Const]
-derivedInputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Derived]
-execOrderO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Def]
-extInputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Input]
-inputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Input]
-modsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Mod]
-outputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Output]
-pNameO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z Name
-systemdbO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z ChunkDB
+class HasOldCodeSpec c_aM0y
+oldCodeSpec :: HasOldCodeSpec c_aM0y => Lens' c_aM0y OldCodeSpec
+authorsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y People
+cMapO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [RelativeFile]
+constMapO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y ConstantMap
+constantsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Const]
+derivedInputsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Derived]
+execOrderO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Def]
+extInputsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Input]
+inputsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Input]
+modsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Mod]
+outputsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Output]
+pNameO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y Name
+systemdbO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -1772,13 +1772,18 @@ module Language.Drasil.Code.Imperative.GenODE
 chooseODELib :: Lang -> Maybe ODE -> State [Sentence] ODEGenInfo
 
 module Language.Drasil.Code.Imperative.DrasilState
+data SoftwareDossierInfo
+makeSoftwareDossierInfo :: Verbosity -> [SoftwareDossierFile] -> [Expr] -> SoftwareDossierInfo
+doxOutput :: Lens' SoftwareDossierInfo Verbosity
+softwareDossierFiles :: Lens' SoftwareDossierInfo [SoftwareDossierFile]
+sampleData :: Lens' SoftwareDossierInfo [Expr]
 
 -- | Abbreviation used throughout generator.
 type GenState = State DrasilState
 
 -- | Private State, used to push these options around the generator.
 data DrasilState
-DrasilState :: CodeSpec -> PrintingInformation -> Modularity -> ImplementationType -> Structure -> ConstantStructure -> ConstantRepr -> MatchedConceptMap -> MatchedSpaces -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> Verbosity -> String -> String -> [Logging] -> [AuxFile] -> [Expr] -> (InternalConcept -> Name) -> [Mod] -> [(Name, Version)] -> ExtLibMap -> [FilePath] -> ModExportMap -> ModExportMap -> ClassDefinitionMap -> Set Name -> Int -> String -> String -> Doc -> [(Space, CodeType)] -> ScopeType -> DrasilState
+DrasilState :: CodeSpec -> PrintingInformation -> Modularity -> ImplementationType -> Structure -> ConstantStructure -> ConstantRepr -> MatchedConceptMap -> MatchedSpaces -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> String -> String -> [Logging] -> (InternalConcept -> Name) -> [Mod] -> [(Name, Version)] -> ExtLibMap -> [FilePath] -> ModExportMap -> ModExportMap -> ClassDefinitionMap -> Set Name -> Int -> SoftwareDossierInfo -> String -> String -> Doc -> [(Space, CodeType)] -> ScopeType -> DrasilState
 [codeSpec] :: DrasilState -> CodeSpec
 [printfo] :: DrasilState -> PrintingInformation
 [modular] :: DrasilState -> Modularity
@@ -1791,12 +1796,9 @@ DrasilState :: CodeSpec -> PrintingInformation -> Modularity -> ImplementationTy
 [onSfwrC] :: DrasilState -> ConstraintBehaviour
 [onPhysC] :: DrasilState -> ConstraintBehaviour
 [commented] :: DrasilState -> [Comments]
-[doxOutput] :: DrasilState -> Verbosity
 [date] :: DrasilState -> String
 [logName] :: DrasilState -> String
 [logKind] :: DrasilState -> [Logging]
-[auxiliaries] :: DrasilState -> [AuxFile]
-[sampleData] :: DrasilState -> [Expr]
 [dsICNames] :: DrasilState -> InternalConcept -> Name
 [modules] :: DrasilState -> [Mod]
 [extLibNames] :: DrasilState -> [(Name, Version)]
@@ -1807,11 +1809,16 @@ DrasilState :: CodeSpec -> PrintingInformation -> Modularity -> ImplementationTy
 [clsMap] :: DrasilState -> ClassDefinitionMap
 [defSet] :: DrasilState -> Set Name
 [getVal] :: DrasilState -> Int
+[_softwareDossierInfo] :: DrasilState -> SoftwareDossierInfo
 [currentModule] :: DrasilState -> String
 [currentClass] :: DrasilState -> String
 [_designLog] :: DrasilState -> Doc
 [_loggedSpaces] :: DrasilState -> [(Space, CodeType)]
 [currentScope] :: DrasilState -> ScopeType
+softwareDossierInfo :: Lens' DrasilState SoftwareDossierInfo
+getDoxOutput :: DrasilState -> Verbosity
+getSoftwareDossierFiles :: DrasilState -> [SoftwareDossierFile]
+getSampleData :: DrasilState -> [Expr]
 designLog :: Lens' DrasilState Doc
 
 -- | Type for the mapping between <a>Space</a>s and <a>CodeType</a>s.
@@ -2740,16 +2747,16 @@ LogConfig :: [Logging] -> FilePath -> LogConfig
 -- | Name of log file.
 [logFile] :: LogConfig -> FilePath
 data OptionalFeatures
-OptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
+OptFeats :: DocConfig -> LogConfig -> [SoftwareDossierFile] -> OptionalFeatures
 [docConfig] :: OptionalFeatures -> DocConfig
 [logConfig] :: OptionalFeatures -> LogConfig
 
 -- | Turns generation of different auxiliary (non-source-code) files on or
 --   off.
-[auxFiles] :: OptionalFeatures -> [AuxFile]
+[auxFiles] :: OptionalFeatures -> [SoftwareDossierFile]
 
 -- | Constructor to create a OptionalFeatures
-makeOptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
+makeOptFeats :: DocConfig -> LogConfig -> [SoftwareDossierFile] -> OptionalFeatures
 
 -- | External Library Options
 newtype ExtLib
@@ -2836,9 +2843,9 @@ matchSpaces :: [(Space, [CodeType])] -> SpaceMatch
 --   file, readme. To generate a sample input file compatible with the
 --   generated program, <a>FilePath</a> is the path to the user-provided
 --   file containing a sample set of input data.
-data AuxFile
-SampleInput :: FilePath -> AuxFile
-ReadME :: AuxFile
+data SoftwareDossierFile
+SampleInput :: FilePath -> SoftwareDossierFile
+ReadME :: SoftwareDossierFile
 
 -- | Gets the file path to a sample input data set from a <a>Choices</a>
 --   structure, if the user chose to generate a sample input file.
@@ -2912,21 +2919,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aM0z
-oldCodeSpec :: HasOldCodeSpec c_aM0z => Lens' c_aM0z OldCodeSpec
-authorsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z People
-cMapO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [RelativeFile]
-constMapO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z ConstantMap
-constantsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Const]
-derivedInputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Derived]
-execOrderO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Def]
-extInputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Input]
-inputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Input]
-modsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Mod]
-outputsO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z [Output]
-pNameO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z Name
-systemdbO :: HasOldCodeSpec c_aM0z => Lens' c_aM0z ChunkDB
+class HasOldCodeSpec c_aM0y
+oldCodeSpec :: HasOldCodeSpec c_aM0y => Lens' c_aM0y OldCodeSpec
+authorsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y People
+cMapO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [RelativeFile]
+constMapO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y ConstantMap
+constantsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Const]
+derivedInputsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Derived]
+execOrderO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Def]
+extInputsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Input]
+inputsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Input]
+modsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Mod]
+outputsO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y [Output]
+pNameO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y Name
+systemdbO :: HasOldCodeSpec c_aM0y => Lens' c_aM0y ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

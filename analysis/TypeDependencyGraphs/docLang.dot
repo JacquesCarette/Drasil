@@ -381,7 +381,11 @@ digraph alltypes {
 	}
 	subgraph documentlanguage {
 	}
+	subgraph extractcommon {
+	}
 	subgraph extractdocdecs {
+	}
+	subgraph extractlndescs {
 	}
 	subgraph getcunkhs {
 	}

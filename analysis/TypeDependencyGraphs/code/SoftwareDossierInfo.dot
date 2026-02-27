@@ -1,0 +1,6 @@
+digraph softwaredossierinfo{
+SoftwareDossierInfo	[shape=oval, color=cyan3, label="SoftwareDossierInfo"];
+SoftwareDossierInfo -> Verbosity;
+SoftwareDossierInfo -> SoftwareDossierFile;
+SoftwareDossierInfo -> Expr;
+}

@@ -2405,7 +2405,6 @@ lnames :: Sentence -> Set UID
 
 -- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
 lnames' :: [Sentence] -> [UID]
-sentenceRefs :: Sentence -> Set UID
 instance GHC.Base.Semigroup Language.Drasil.Sentence.Sentence
 instance GHC.Base.Monoid Language.Drasil.Sentence.Sentence
 instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Sentence.Sentence

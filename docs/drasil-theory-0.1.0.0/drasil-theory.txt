@@ -354,5 +354,4 @@ DomDefn :: [UID] -> Sentence -> DomDefn
 defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
 defResolve' :: ChunkDB -> UID -> DomDefn
 findAllConcInsts :: ChunkDB -> [ConceptInstance]
-findAllCitations :: ChunkDB -> [Citation]
 findAllLabelledContent :: ChunkDB -> [LabelledContent]

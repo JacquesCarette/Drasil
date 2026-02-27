@@ -1,8 +1,8 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
-  SoftwareDossierInfo, makeSoftwareDossierInfo, doxOutput, auxiliaries,
+  SoftwareDossierInfo, makeSoftwareDossierInfo, doxOutput, softwareDossierFiles,
   sampleData, GenState, DrasilState(..), softwareDossierInfo, getDoxOutput,
-  getAuxiliaries, getSampleData, designLog, MatchedSpaces, ModExportMap,
+  getSoftwareDossierFiles, getSampleData, designLog, MatchedSpaces, ModExportMap,
   ClassDefinitionMap, ScopeType(..), modExportMap, clsDefMap, addToDesignLog,
   addLoggedSpace, genICName, lookupC
 ) where
@@ -35,7 +35,7 @@ import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
 
 data SoftwareDossierInfo = SoftwareDossierInfo {
   _doxOutput :: Verbosity,
-  _auxiliaries :: [AuxFile],
+  _softwareDossierFiles :: [AuxFile],
   _sampleData :: [Expr]
 }
 makeLenses ''SoftwareDossierInfo
@@ -104,8 +104,8 @@ makeLenses ''DrasilState
 getDoxOutput :: DrasilState -> Verbosity
 getDoxOutput ds = ds ^. (softwareDossierInfo . doxOutput)
 
-getAuxiliaries :: DrasilState -> [AuxFile]
-getAuxiliaries ds = ds ^. (softwareDossierInfo . auxiliaries)
+getSoftwareDossierFiles :: DrasilState -> [AuxFile]
+getSoftwareDossierFiles ds = ds ^. (softwareDossierInfo . softwareDossierFiles)
 
 getSampleData :: DrasilState -> [Expr]
 getSampleData ds = ds ^. (softwareDossierInfo . sampleData)

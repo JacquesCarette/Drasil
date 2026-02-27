@@ -61,7 +61,7 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns,
   getInputFormatOuts, getCalcParams, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  ScopeType(..), genICName, getAuxiliaries, getSampleData)
+  ScopeType(..), genICName, getSoftwareDossierFiles, getSampleData)
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (sampleInput)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar,
   DefiningCodeExpr(..))
@@ -475,7 +475,7 @@ genSampleInput :: (Applicative r) => GenState (Maybe (r FileAndContents))
 genSampleInput = do
   g <- get
   dd <- genDataDesc
-  if hasSampleInput (getAuxiliaries g) then return . Just $ sampleInput
+  if hasSampleInput (getSoftwareDossierFiles g) then return . Just $ sampleInput
     (printfo g) dd (getSampleData g) else return Nothing
 
 ----- CONSTANTS -----

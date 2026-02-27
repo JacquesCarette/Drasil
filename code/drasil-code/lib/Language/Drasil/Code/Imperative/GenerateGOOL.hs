@@ -12,7 +12,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (List)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  getDoxOutput, getAuxiliaries)
+  getDoxOutput, getSoftwareDossierFiles)
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..),
   SoftwareDossierState)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
@@ -70,7 +70,7 @@ genReadMe :: (SoftwareDossierSym r) => ReadMeInfo -> GenState (Maybe (r FileAndC
 genReadMe rmi = do
   g <- get
   let n = codeSpec g ^. pNameO
-  return $ getReadMe (getAuxiliaries g) rmi {caseName = n}
+  return $ getReadMe (getSoftwareDossierFiles g) rmi {caseName = n}
 
 -- | Helper for generating a README file.
 getReadMe :: (SoftwareDossierSym r) => [AuxFile] -> ReadMeInfo -> Maybe (r FileAndContents)

@@ -19,6 +19,32 @@ import Data.Drasil.SI_Units (siUnits)
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
 
+-- | Create a `ChunkDB` containing all knowledge (chunks) required to generate
+-- our SmithEtAl-esque SRS.
+cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
+    [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
+    [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
+cdb = insertAllOutOfOrder11 basisCDB
+
+-- | Variant of 'cdb' that pre-registers reference chunks before mass insertion.
+cdbWithRefs :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] ->
+    [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] ->
+    [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] ->
+    [LabelledContent] -> ChunkDB
+cdbWithRefs refs = insertAllOutOfOrder11 (insertAll refs basisCDB)
+
+-- | The basis chunk database, which contains the basic idea dicts, concept chunks,
+--  and units that are used in all of the case studies. This database is then added
+-- to all of the new chunk databases created using the cdb constructor.
+basisCDB :: ChunkDB
+basisCDB =
+    insertAll siUnits
+  $ insertAll basisConceptChunks
+  $ insertAll basisSymbols
+  $ insertAll basisIdeaDicts
+  $ insertAll basisCitations
+    empty
+
 basisSymbols :: [DefinedQuantityDict]
 basisSymbols =
   -- | DefinedQuantityDicts
@@ -74,29 +100,3 @@ basisConceptChunks =
 
 basisCitations :: [Citation]
 basisCitations = [cartesianWiki, lineSource, pointSource]
-
--- | The basis chunk database, which contains the basic idea dicts, concept chunks,
---  and units that are used in all of the case studies. This database is then added
--- to all of the new chunk databases created using the cdb constructor.
-basisCDB :: ChunkDB
-basisCDB =
-    insertAll siUnits
-  $ insertAll basisConceptChunks
-  $ insertAll basisSymbols
-  $ insertAll basisIdeaDicts
-  $ insertAll basisCitations
-    empty
-
--- | Create a `ChunkDB` containing all knowledge (chunks) required to generate
--- our SmithEtAl-esque SRS.
-cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
-    [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
-    [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
-cdb = insertAllOutOfOrder11 basisCDB
-
--- | Variant of 'cdb' that pre-registers reference chunks before mass insertion.
-cdbWithRefs :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] ->
-    [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] ->
-    [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] ->
-    [LabelledContent] -> ChunkDB
-cdbWithRefs refs = insertAllOutOfOrder11 (insertAll refs basisCDB)

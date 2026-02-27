@@ -7,7 +7,7 @@ import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 
 import Drasil.GOOL (pyName, pyVersion)
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
 import qualified
@@ -30,7 +30,7 @@ instance Applicative PythonProject where
 instance Monad PythonProject where
   PP x >>= f = f x
 
-instance AuxiliarySym PythonProject where
+instance SoftwareDossierSym PythonProject where
   doxConfig = G.doxConfig optimizeDox
   readMe rmi =
     G.readMe rmi {
@@ -42,7 +42,7 @@ instance AuxiliarySym PythonProject where
   makefile _ it cms = G.makefile Nothing (G.noRunIfLib it pyRunnable)
     (G.docIfEnabled cms G.doxDocConfig)
 
-  auxHelperDoc = unPP
+  unReprDoc = unPP
 
 -- | Default runnable information for Python files.
 pyRunnable :: Maybe Runnable

@@ -5,12 +5,12 @@ import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator (cdbWithRefs)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.Metadata (inModel, software)
@@ -129,13 +129,16 @@ conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
-  gravitationalConst, gravity] ++
+  gravitationalConst, gravity, cartesian] ++
   -- UnitalChunks
   [cw len]
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts conceptChunks []
+symbMap = cdbWithRefs cdbRefs symbols ideaDicts conceptChunks []
   dataDefs iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
+
+cdbRefs :: [Reference]
+cdbRefs = SRS.sectionReferences
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

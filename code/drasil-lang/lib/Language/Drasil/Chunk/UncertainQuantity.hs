@@ -21,7 +21,7 @@ import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.Expr.Class (sy)
-import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Uncertainty
 
@@ -33,7 +33,8 @@ data UncertQ = UQ { _coco :: ConstrConcept , _unc'' :: Uncertainty }
 makeLenses ''UncertQ
 
 instance HasChunkRefs UncertQ where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs u = chunkRefs (u ^. coco)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Equal if 'UID's are equal.
 instance Eq             UncertQ where a == b = (a ^. uid) == (b ^. uid)

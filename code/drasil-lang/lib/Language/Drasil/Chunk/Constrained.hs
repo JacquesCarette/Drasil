@@ -21,7 +21,7 @@ import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Expr.Class (sy)
-import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage)
@@ -39,7 +39,8 @@ data ConstrConcept = ConstrConcept { _defq    :: DefinedQuantityDict
 makeLenses ''ConstrConcept
 
 instance HasChunkRefs ConstrConcept where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs c = chunkRefs (c ^. defq)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds 'UID' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance HasUID        ConstrConcept where uid = defq . uid

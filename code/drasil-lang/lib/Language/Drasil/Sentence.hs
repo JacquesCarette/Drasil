@@ -22,7 +22,7 @@ import Drasil.Database (HasChunkRefs(..), HasUID(..), UID, IsChunk)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ModelExpr.Extract (meNames)
-import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Symbol (HasSymbol, Symbol)
 

@@ -40,7 +40,14 @@ data InstanceModel = IM {
 makeLenses ''InstanceModel
 
 instance HasChunkRefs InstanceModel where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs imd = mconcat
+    [ chunkRefs (imd ^. mk)
+    , chunkRefs (map fst (imd ^. imInputs))
+    , chunkRefs (imd ^. imOutput . _1)
+    , chunkRefs (lb imd)
+    , chunkRefs (imd ^. notes)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of an 'InstanceModel'.
 instance HasUID             InstanceModel where uid = mk . uid

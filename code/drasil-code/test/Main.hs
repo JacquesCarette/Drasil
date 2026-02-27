@@ -1,27 +1,30 @@
+{-# LANGUAGE PatternSynonyms, TupleSections #-}
+
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
 
-import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC,
-  unCPPC, unSC, initialState, FileData(..), ProgData(..), ModData(..),
-  headers, sources, mainMod)
+import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC, unCPPC, unSC,
+  initialState, ProgData(..), headers, sources, mainMod)
 import qualified Drasil.GOOL as OO (unCI, ProgramSym(..))
 import Drasil.GProc (ProcProg, unJLC)
 import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
 
 import Language.Drasil.Code (ImplementationType(..), makeSds)
-import Language.Drasil.GOOL (AuxiliarySym(..), package,
-  FileAndContents(fileDoc), PackageData(..), unPP, unJP, unCSP, unCPPP, unSP,
-  unJLP)
-import qualified Language.Drasil.GOOL as D (filePath)
+import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
+  PackageData(..), pattern PackageData,
+  unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 
-import Utils.Drasil (createDirIfMissing)
+import Utils.Drasil (createDirIfMissing, createFile)
+import qualified Utils.Drasil.FileData as F (FileAndContents(..),
+  hasPathAndDocToFileAndContents)
 
-import Text.PrettyPrint.HughesPJ (Doc, render)
+import Text.PrettyPrint.HughesPJ (render)
 import Control.Monad.State (evalState, runState)
 import Control.Lens ((^.))
+import Data.Functor ((<&>))
+import Data.Foldable (traverse_)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
-import System.FilePath.Posix (takeDirectory)
-import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
+import System.FilePath ((</>))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 import HelloWorld (helloWorldOO, helloWorldProc)
@@ -61,17 +64,17 @@ main = do
   setCurrentDirectory workingDir
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
-genCode :: [PackageData ProgData] -> IO()
-genCode files = createCodeFiles (concatMap (\p -> replicate (length (progMods
-  (packageProg p)) + length (packageAux p)) (progName $ packageProg p)) files) $
-    makeCode (map (progMods . packageProg) files) (map packageAux files)
+genCode :: [PackageData] -> IO()
+genCode files =
+  createCodeFiles $ files >>= \(PackageData prog aux) ->
+    let label = progName prog
+        modCode = progMods prog <&> \modFileData ->
+          (label, F.hasPathAndDocToFileAndContents modFileData)
+        auxCode = aux <&> (label,)
+    in modCode ++ auxCode
 
--- Cannot assign the list of tests in a where clause and re-use it because the
--- "r" type variable needs to be instantiated to two different types
--- (CodeInfo and a renderer) each time this function is called
--- | Gathers the GOOL file tests and prepares them for rendering
-classes :: (OOProg r, AuxiliarySym r', Monad r') => (r (OO.Program r) -> ProgData) ->
-  (r' (PackageData ProgData) -> PackageData ProgData) -> [PackageData ProgData]
+classes :: (OOProg r, SoftwareDossierSym r', Monad r') => (r (OO.Program r) -> ProgData) ->
+  (r' PackageData -> PackageData) -> [PackageData]
 classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
@@ -83,8 +86,8 @@ classes unRepr unRepr' = zipWith
     fileTestsOO, vectorTestOO, nameGenTestOO])
 
 -- Classes that Julia is currently able to render
-jlClasses :: (ProcProg r, AuxiliarySym r', Monad r') => (r (Proc.Program r) -> ProgData) ->
-  (r' (PackageData ProgData) -> PackageData ProgData) -> [PackageData ProgData]
+jlClasses :: (ProcProg r, SoftwareDossierSym r', Monad r') => (r (Proc.Program r) -> ProgData) ->
+  (r' PackageData -> PackageData) -> [PackageData]
 jlClasses unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
@@ -95,31 +98,12 @@ jlClasses unRepr unRepr' = zipWith
   (map (Proc.unCI . (`evalState` initialState)) [helloWorldProc,
     fileTestsProc, vectorTestProc, nameGenTestProc])
 
--- | Formats code to be rendered.
-makeCode :: [[FileData]] -> [[FileAndContents]] -> [(FilePath, Doc)]
-makeCode files auxs = concat $ zipWith (++)
-  (map (map (\fd -> (filePath fd, modDoc $ fileMod fd))) files)
-  (map (map (\fileAndContents ->
-      (D.filePath fileAndContents, fileDoc fileAndContents))) auxs)
-
-  -- zip (map filePath files) (map (modDoc . fileMod) files)
-  -- ++ zip (map D.filePath auxs) (map fileDoc auxs)
-
 ------------------
 -- IO Functions --
 ------------------
 
 -- | Creates the requested 'Code' by producing files.
-createCodeFiles :: [Label] -> [(FilePath, Doc)] -> IO () -- [(FilePath, Doc)] -> IO ()
-createCodeFiles ns cs = mapM_ createCodeFile (zip ns cs)
-
--- | Helper that creates the file and renders code.
-createCodeFile :: (Label, (FilePath, Doc)) -> IO ()
-createCodeFile (n, (path, code)) = do
-    createDirIfMissing False n
-    setCurrentDirectory n
-    createDirIfMissing True (takeDirectory path)
-    h <- openFile path WriteMode
-    hPutStrLn h (render code)
-    hClose h
-    setCurrentDirectory ".."
+createCodeFiles :: [(Label, F.FileAndContents)] -> IO ()
+createCodeFiles = traverse_ $ \(name, file) -> do
+  let path = name </> F.filePath file -- FIXME [Brandon Bosman, Feb. 10, 2026]: make GOOL allow us to add name to path internally
+  createFile path (render $ F.fileDoc file)

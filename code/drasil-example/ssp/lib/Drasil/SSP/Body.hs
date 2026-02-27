@@ -6,15 +6,15 @@ import Prelude hiding (sin, cos, tan)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator (cdbWithRefs)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
-  genDefn, dataDefn, datCon)
+  genDefn, dataDefn, datCon, sectionReferences)
 import Drasil.Document.Contents (foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.Metadata (inModel, software)
@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   physical, physics, problem, softwareSys, symbol_,
   sysCont, system, type_, user, value, variable, datumConstraint)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
-import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon',
+import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon', cartesian, point,
   number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Quantities.PhysicalProperties (len)
@@ -134,15 +134,20 @@ conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   defs' ++ softwarecon ++ solidcon ++ physicalcon ++
-  [distance, friction, linear, velocity, gravity, stress, fbd, position] ++
+  [distance, friction, linear, velocity, gravity, stress, fbd, position,
+  cartesian, point] ++
   -- DefinedQuantityDicts
   [cw len] ++
   -- UnitalChunks
   map cw [time, surface]
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts conceptChunks
+symbMap = cdbWithRefs cdbRefs
+  symbols ideaDicts conceptChunks
   [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon
+
+cdbRefs :: [Reference]
+cdbRefs = SRS.sectionReferences
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

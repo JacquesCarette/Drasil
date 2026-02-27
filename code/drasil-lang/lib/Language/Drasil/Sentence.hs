@@ -11,7 +11,7 @@ module Language.Drasil.Sentence (
   (+:+), (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
   sentenceTerm,
-  sdep, shortdep, lnames, lnames', sentenceRefs
+  sdep, lnames, lnames', sentenceRefs
 ) where
 
 import Control.Lens ((^.))
@@ -171,35 +171,12 @@ getUIDs (Quote a)           = getUIDs a
 getUIDs (E a)               = meNames a
 getUIDs EmptyS              = []
 
--- | Generic traverse of all positions that could lead to /symbolic/ and /abbreviated/ 'UID's from 'Sentence's
--- but doesn't go into expressions.
-getUIDshort :: Sentence -> [UID]
-getUIDshort (Ch ShortStyle _ a) = [a]
-getUIDshort (Ch TermStyle _ _)  = []
-getUIDshort (Ch PluralTerm _ _) = []
-getUIDshort SyCh {}             = []
-getUIDshort Sy {}               = []
-getUIDshort NP {}               = []
-getUIDshort S {}                = []
-getUIDshort Percent             = []
-getUIDshort P {}                = []
-getUIDshort Ref {}              = []
-getUIDshort ((:+:) a b)         = getUIDshort a ++ getUIDshort b
-getUIDshort (Quote a)           = getUIDshort a
-getUIDshort E {}                = []
-getUIDshort EmptyS              = []
-
 -----------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
 -- | This is to collect /symbolic/ 'UID's that are printed out as a 'Symbol'.
 sdep :: Sentence -> Set.Set UID
 sdep = Set.fromList . getUIDs
 {-# INLINE sdep #-}
-
--- This is to collect symbolic 'UID's that are printed out as an /abbreviation/.
-shortdep :: Sentence -> Set.Set UID
-shortdep = Set.fromList . getUIDshort
-{-# INLINE shortdep #-}
 
 -- | Generic traverse of all positions that could lead to /reference/ 'UID's from 'Sentence's.
 lnames :: Sentence -> Set.Set UID
@@ -223,7 +200,7 @@ lnames' = concatMap (Set.toList . lnames)
 {-# INLINE lnames' #-}
 
 sentenceRefs :: Sentence -> Set.Set UID
-sentenceRefs sent = Set.unions [lnames sent, sdep sent, shortdep sent]
+sentenceRefs sent = Set.unions [lnames sent, sdep sent]
 {-# INLINE sentenceRefs #-}
 
 instance HasChunkRefs Sentence where

@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
-  SoftwareDossierInfo, makeSoftwareDossierInfo, GenState, DrasilState(..), 
+  SoftwareDossierInfo, makeSoftwareDossierInfo, GenState, DrasilState(..),
   softwareDossierInfo, doxOutput, auxiliaries, sampleData, designLog,
   MatchedSpaces, ModExportMap, ClassDefinitionMap, ScopeType(..), modExportMap,
   clsDefMap, addToDesignLog, addLoggedSpace, genICName, lookupC
@@ -32,6 +32,16 @@ import Language.Drasil.ICOSolutionSearch (Def)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
 
+data SoftwareDossierInfo = SoftwareDossierInfo {
+  _doxOutput :: Verbosity,
+  _auxiliaries :: [AuxFile],
+  _sampleData :: [Expr]
+}
+makeLenses ''SoftwareDossierInfo
+
+makeSoftwareDossierInfo :: Verbosity -> [AuxFile] -> [Expr] -> SoftwareDossierInfo
+makeSoftwareDossierInfo = SoftwareDossierInfo
+
 -- | Type for the mapping between 'Space's and 'CodeType's.
 type MatchedSpaces = Space -> GenState CodeType
 
@@ -47,14 +57,6 @@ type ClassDefinitionMap = Map String String
 -- | Variable scope
 data ScopeType = Local | Global | MainFn
 
-data SoftwareDossierInfo = SoftwareDossierInfo {
-  _doxOutput :: Verbosity,
-  _auxiliaries :: [AuxFile],
-  _sampleData :: [Expr]
-}
-
-makeSoftwareDossierInfo :: Verbosity -> [AuxFile] -> [Expr] -> SoftwareDossierInfo
-makeSoftwareDossierInfo = SoftwareDossierInfo
 
 -- | Abbreviation used throughout generator.
 type GenState = State DrasilState

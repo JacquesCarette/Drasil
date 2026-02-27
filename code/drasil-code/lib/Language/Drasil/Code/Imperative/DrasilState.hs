@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
-  GenState, DrasilState(..), SoftwareDossierInfo(..),
+  SoftwareDossierInfo, makeSoftwareDossierInfo, GenState, DrasilState(..), 
   softwareDossierInfo, doxOutput, auxiliaries, sampleData, designLog,
   MatchedSpaces, ModExportMap, ClassDefinitionMap, ScopeType(..), modExportMap,
   clsDefMap, addToDesignLog, addLoggedSpace, genICName, lookupC
@@ -52,6 +52,9 @@ data SoftwareDossierInfo = SoftwareDossierInfo {
   _auxiliaries :: [AuxFile],
   _sampleData :: [Expr]
 }
+
+makeSoftwareDossierInfo :: Verbosity -> [AuxFile] -> [Expr] -> SoftwareDossierInfo
+makeSoftwareDossierInfo = SoftwareDossierInfo
 
 -- | Abbreviation used throughout generator.
 type GenState = State DrasilState

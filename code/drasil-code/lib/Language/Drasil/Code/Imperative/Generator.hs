@@ -44,7 +44,7 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName,
-  SoftwareDossierInfo (..))
+  makeSoftwareDossierInfo)
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (makeSds,
   SoftwareDossierSym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
@@ -63,11 +63,8 @@ import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
 -- \['Expr'\] parameter is the sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs cs = let
-  sdsInfo = SoftwareDossierInfo {
-    _doxOutput = doxVerbosity $ docConfig $ optFeats chs,
-    _auxiliaries = auxFiles $ optFeats chs,
-    _sampleData = sd
-  }
+  sdsInfo = makeSoftwareDossierInfo
+    (doxVerbosity $ docConfig $ optFeats chs) (auxFiles $ optFeats chs) sd
   in DrasilState {
   -- constants
   codeSpec = cs,

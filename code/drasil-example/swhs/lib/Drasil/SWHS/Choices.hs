@@ -4,7 +4,7 @@ module Drasil.SWHS.Choices where
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
 --   Modularity(..), Structure(..), ConstantStructure(..),
---   ConstantRepr(..), matchConcepts, AuxFile(..),
+--   ConstantRepr(..), matchConcepts, SoftwareDossierFile(..),
 --   Visibility(..), defaultChoices)
 -- import Drasil.SWHS.Body (fullSI)
 

@@ -6,7 +6,7 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
   ConstantRepr(..), CodeConcept(..), matchConcepts, SpaceMatch,
-  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, makeArchit,
+  matchSpaces, SoftwareDossierFile(..), Visibility(..), defaultChoices, makeArchit,
   makeData, makeMaps, spaceToCodeType, makeConstraints,
   makeDocConfig, makeLogConfig, makeOptFeats)
 import Drasil.GOOL (CodeType(..))

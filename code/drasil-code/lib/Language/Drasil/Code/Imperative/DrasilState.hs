@@ -24,7 +24,7 @@ import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
-  AuxFile, Modularity(..), ImplementationType(..), Comments, Verbosity,
+  SoftwareDossierFile, Modularity(..), ImplementationType(..), Comments, Verbosity,
   MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging,
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
@@ -35,12 +35,12 @@ import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
 
 data SoftwareDossierInfo = SoftwareDossierInfo {
   _doxOutput :: Verbosity,
-  _softwareDossierFiles :: [AuxFile],
+  _softwareDossierFiles :: [SoftwareDossierFile],
   _sampleData :: [Expr]
 }
 makeLenses ''SoftwareDossierInfo
 
-makeSoftwareDossierInfo :: Verbosity -> [AuxFile] -> [Expr] -> SoftwareDossierInfo
+makeSoftwareDossierInfo :: Verbosity -> [SoftwareDossierFile] -> [Expr] -> SoftwareDossierInfo
 makeSoftwareDossierInfo = SoftwareDossierInfo
 
 -- | Type for the mapping between 'Space's and 'CodeType's.
@@ -104,7 +104,7 @@ makeLenses ''DrasilState
 getDoxOutput :: DrasilState -> Verbosity
 getDoxOutput ds = ds ^. (softwareDossierInfo . doxOutput)
 
-getSoftwareDossierFiles :: DrasilState -> [AuxFile]
+getSoftwareDossierFiles :: DrasilState -> [SoftwareDossierFile]
 getSoftwareDossierFiles ds = ds ^. (softwareDossierInfo . softwareDossierFiles)
 
 getSampleData :: DrasilState -> [Expr]

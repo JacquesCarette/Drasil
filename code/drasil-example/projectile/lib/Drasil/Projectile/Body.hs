@@ -3,9 +3,9 @@ module Drasil.Projectile.Body (si, mkSRS) where
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator (cdbWithRefs)
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Document.Contents (foldlSP, foldlSPCol)
@@ -158,12 +158,16 @@ conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   [mass] ++ defs ++ [distance, motion, gravity, collision, rectilinear,
-  positionVec]
+  positionVec, cartesian]
 
 symbMap :: ChunkDB
-symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
+symbMap = cdbWithRefs cdbRefs
+  (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
   dataDefs iMods genDefns tMods concIns citations
   (labelledContent ++ funcReqsTables)
+
+cdbRefs :: [Reference]
+cdbRefs = SRS.sectionReferences
 
 abbreviationsList  :: [IdeaDict]
 abbreviationsList  =

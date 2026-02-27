@@ -3,7 +3,7 @@ module Drasil.SWHS.Concepts where --all of this file is exported
 import Control.Lens ((^.))
 
 import Language.Drasil
-import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 
 import Drasil.Metadata (materialEng, dataDefn, genDefn, inModel, thModel,
   requirement, srs)

@@ -1,26 +1,26 @@
 {-# LANGUAGE TemplateHaskell #-}
 
--- | Defines a package extension for GOOL, with functions for pairing a GOOL
--- program with auxiliary, non-source-code files.
-module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
+-- | Defines a package extension for GOOL, with the relevant slice of GOOLState
+-- and functions for pairing a GOOL program with
+-- "Software Dossier" (i.e. non-source-code) files.
+module Language.Drasil.SoftwareDossier.SoftwareDossierSym (
   -- DataTypes
   SoftwareDossierState, makeSds, headers, sources, mainMod,
   -- Typeclasses
-  AuxiliarySym(..),
+  SoftwareDossierSym(..),
   -- Functions
-  package, sampleInput, auxFromData
+  sampleInput, sdsFromData
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL (ProgData, onCodeList)
+import Utils.Drasil.FileData (FileAndContents(..), fileAndContents)
+import Drasil.GOOL (ProgData)
 import Language.Drasil.Printers (PrintingInformation)
 
 import Language.Drasil (Expr)
 import Language.Drasil.Code.DataDesc (DataDesc)
-import Language.Drasil.Code.FileData (FileAndContents(..), PackageData,
-  fileAndContents, packageData)
-import Language.Drasil.Code.FileNames (sampleInputName)
+import Language.Drasil.SoftwareDossier.FileNames (sampleInputName)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
@@ -45,7 +45,7 @@ makeSds headerFiles sourceFiles mainModule = Sds {
 -- | Members of this class must have a doxygen configuration, ReadMe file,
 -- omptimize doxygen document, information necessary for a makefile, and
 -- auxiliary helper documents
-class AuxiliarySym r where
+class SoftwareDossierSym r where
   doxConfig :: String -> SoftwareDossierState -> Verbosity -> r FileAndContents
   readMe ::  ReadMeInfo -> r FileAndContents
 
@@ -54,14 +54,11 @@ class AuxiliarySym r where
   makefile :: [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState ->
     ProgData -> r FileAndContents
 
-  auxHelperDoc :: r Doc -> Doc
-
-package :: (Monad r) => ProgData -> [r FileAndContents] -> r (PackageData ProgData)
-package p = onCodeList (packageData p)
+  unReprDoc :: r Doc -> Doc
 
 sampleInput :: (Applicative r) => PrintingInformation -> DataDesc -> [Expr] ->
   r FileAndContents
-sampleInput db d sd = auxFromData sampleInputName (makeInputFile db d sd)
+sampleInput db d sd = sdsFromData sampleInputName (makeInputFile db d sd)
 
-auxFromData :: Applicative r => FilePath -> Doc -> r FileAndContents
-auxFromData fp d = pure $ fileAndContents fp d
+sdsFromData :: Applicative r => FilePath -> Doc -> r FileAndContents
+sdsFromData fp d = pure $ fileAndContents fp d

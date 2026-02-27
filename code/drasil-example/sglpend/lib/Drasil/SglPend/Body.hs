@@ -8,7 +8,7 @@ import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator (cdbWithRefs)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -120,9 +120,13 @@ abbreviationsList =
   map nw symbols
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []
+symbMap = cdbWithRefs cdbRefs
+  (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []
   dataDefs iMods genDefns tMods concIns citations
   (labelledContent ++ funcReqsTables)
+
+cdbRefs :: [Reference]
+cdbRefs = SRS.sectionReferences
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

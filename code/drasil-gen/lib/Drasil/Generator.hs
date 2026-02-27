@@ -1,7 +1,7 @@
 module Drasil.Generator (
-  module Drasil.Generator.BaseChunkDB,
   module Drasil.Generator.ChunkDump,
   module Drasil.Generator.Code,
+  module Drasil.Generator.CommonKnowledge,
   module Drasil.Generator.Composed,
   module Drasil.Generator.Formats,
   module Drasil.Generator.LessonPlan,
@@ -10,9 +10,9 @@ module Drasil.Generator (
   module Drasil.Generator.Website
 ) where
 
-import Drasil.Generator.BaseChunkDB
 import Drasil.Generator.ChunkDump
 import Drasil.Generator.Code
+import Drasil.Generator.CommonKnowledge
 import Drasil.Generator.Composed
 import Drasil.Generator.Formats
 import Drasil.Generator.LessonPlan

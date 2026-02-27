@@ -1,5 +1,5 @@
-module Drasil.Generator.BaseChunkDB (
-  -- * Base ChunkDB for all case studies
+module Drasil.Generator.CommonKnowledge (
+  -- * Common Background Knowledge for Drasil's Science-focused Case Studies
   cdb,
   cdbWithRefs
 ) where

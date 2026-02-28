@@ -14,7 +14,7 @@ module Drasil.Database.ChunkDB (
   findTypeOf,
   insert, insertAll,
   -- * Temporary functions
-  insertAllOutOfOrder11,
+  insertAllOutOfOrder12,
 ) where
 
 import Control.Lens ((^.))
@@ -182,15 +182,15 @@ insertAll as cdb = foldl' (flip insert) cdb as
 -- | Insert 11 lists of /unique/ chunk types into a 'ChunkDB', assuming the
 -- input 'ChunkDB' does not already contain any of the chunks from the chunk
 -- lists.
-insertAllOutOfOrder11 ::
+insertAllOutOfOrder12 ::
   (TypeableChunk a, TypeableChunk b, TypeableChunk c, TypeableChunk d,
    TypeableChunk e, TypeableChunk f, TypeableChunk g, TypeableChunk h,
-   TypeableChunk i, TypeableChunk j, TypeableChunk k) =>
+   TypeableChunk i, TypeableChunk j, TypeableChunk k, TypeableChunk l) =>
    ChunkDB ->
    [a] -> [b] -> [c] -> [d] -> [e] ->
    [f] -> [g] -> [h] -> [i] -> [j] ->
-   [k] -> ChunkDB
-insertAllOutOfOrder11 strtr as bs cs ds es fs gs hs is js ks =
+   [k] -> [l] -> ChunkDB
+insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js ks ls =
   let
     -- Box all of our chunks
     as' = map mkChunk as
@@ -204,11 +204,12 @@ insertAllOutOfOrder11 strtr as bs cs ds es fs gs hs is js ks =
     is' = map mkChunk is
     js' = map mkChunk js
     ks' = map mkChunk ks
+    ls' = map mkChunk ls
 
     -- Put all of our chunks in a list of lists, with each list carrying a
     -- unique type of chunk, filtering out empty lists
     altogether = filter (not . null)
-                  [as', bs', cs', ds', es', fs', gs', hs', is', js', ks']
+                  [as', bs', cs', ds', es', fs', gs', hs', is', js', ks', ls']
     calt = concat altogether
 
     -- Calculate what chunks are depended on (i.e., UID -> Dependants)

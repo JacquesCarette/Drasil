@@ -1,10 +1,9 @@
 module Drasil.Generator.CommonKnowledge (
   -- * Common Background Knowledge for Drasil's Science-focused Case Studies
-  withCommonKnowledge,
-  cdbWithRefs
+  withCommonKnowledge
 ) where
 
-import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder11)
+import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder12)
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
   DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
@@ -14,8 +13,8 @@ import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Concepts.Math (mathcon)
-
 import Data.Drasil.SI_Units (siUnits)
+import qualified Drasil.DocLang.SRS as SRS
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
 
@@ -23,30 +22,27 @@ import Language.Drasil.Code (codeDQDs)
 -- Drasil's existing case studies. This means knowledge related to the
 -- SmithEtAl-esque SRS, mathematics, physics, general science, basic software,
 -- and general documentation.
-withCommonKnowledge :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
-    [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
-    [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
-withCommonKnowledge = insertAllOutOfOrder11 basisCDB
-
--- | Variant of 'withCommonKnowledge' that pre-registers reference chunks
--- before mass insertion.
-cdbWithRefs :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] ->
+withCommonKnowledge :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] ->
     [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] ->
     [LabelledContent] -> ChunkDB
-cdbWithRefs refs = insertAllOutOfOrder11 (insertAll refs basisCDB)
+withCommonKnowledge = insertAllOutOfOrder12 basisCDB
 
--- | The basis chunk database, which contains the basic idea dicts, concept chunks,
---  and units that are used in all of the case studies. This database is then added
--- to all of the new chunk databases created using the cdb constructor.
+-- | The 'basis' chunk database to all of Drasil's case studies, containing
+-- common background knowledge, including that related to the SRS, mathematics,
+-- physics, general science, basic software, and general documentation.
 basisCDB :: ChunkDB
 basisCDB =
-    insertAll siUnits
+    insertAll basisReferences
+  $ insertAll siUnits
   $ insertAll basisConceptChunks
   $ insertAll basisSymbols
   $ insertAll basisIdeaDicts
   $ insertAll basisCitations
     empty
+
+basisReferences :: [Reference]
+basisReferences = SRS.sectionReferences
 
 basisSymbols :: [DefinedQuantityDict]
 basisSymbols =

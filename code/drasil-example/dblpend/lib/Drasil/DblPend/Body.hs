@@ -5,7 +5,7 @@ import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
 import Drasil.SRSDocument
-import Drasil.Generator (cdbWithRefs)
+import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.System (SystemKind(Specification), mkSystem)
 
@@ -134,11 +134,8 @@ conceptChunks =
   [cw len]
 
 symbMap :: ChunkDB
-symbMap = cdbWithRefs cdbRefs symbols ideaDicts conceptChunks []
+symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks []
   dataDefs iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
-
-cdbRefs :: [Reference]
-cdbRefs = SRS.sectionReferences
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

@@ -3,8 +3,6 @@ digraph alltypes {
 	}
 	subgraph typececkh {
 	}
-	subgraph baecunkdbhs {
-	}
 	subgraph cunkdumph {
 		subgraph path{
 		Path	[shape=oval, color=red2, label="Path"];
@@ -16,6 +14,8 @@ digraph alltypes {
 		}
 	}
 	subgraph code {
+	}
+	subgraph commonknowledge {
 	}
 	subgraph compoeds {
 	}

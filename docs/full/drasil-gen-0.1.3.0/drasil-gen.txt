@@ -9,16 +9,6 @@
 @package drasil-gen
 @version 0.1.3.0
 
-module Drasil.Generator.BaseChunkDB
-
--- | Create a <a>ChunkDB</a> containing all knowledge (chunks) required to
---   generate our SmithEtAl-esque SRS.
-cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
-
--- | Variant of <a>cdb</a> that pre-registers reference chunks before mass
---   insertion.
-cdbWithRefs :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
-
 module Drasil.Generator.ChunkDump
 
 -- | For debugging purposes, if the system has a <tt>DEBUG_ENV</tt>
@@ -39,6 +29,18 @@ exportCodeZoo :: System -> [Choices] -> IO ()
 --   FIXME: This is a hack. The generation phase should emit what artifacts
 --   it created.
 codedDirName :: String -> Choices -> String
+
+module Drasil.Generator.CommonKnowledge
+
+-- | Create a <a>ChunkDB</a> containing background knowledge common to all
+--   of Drasil's existing case studies. This means knowledge related to the
+--   SmithEtAl-esque SRS, mathematics, physics, general science, basic
+--   software, and general documentation.
+withCommonKnowledge :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
+
+-- | Variant of <a>withCommonKnowledge</a> that pre-registers reference
+--   chunks before mass insertion.
+cdbWithRefs :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
 
 
 -- | Defines output formats for the different documents we can generate.

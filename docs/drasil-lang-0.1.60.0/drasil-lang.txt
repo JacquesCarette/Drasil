@@ -729,7 +729,6 @@ P :: Symbol -> NPStruct
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
 --   a <a>Symbol</a>.
 sdep :: Sentence -> Set UID
-shortdep :: Sentence -> Set UID
 
 -- | Generic traverse of all positions that could lead to <i>reference</i>
 --   <a>UID</a>s from <a>Sentence</a>s.

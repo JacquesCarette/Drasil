@@ -233,7 +233,7 @@ insertAll :: TypeableChunk a => [a] -> ChunkDB -> ChunkDB
 -- | Insert 11 lists of <i>unique</i> chunk types into a <a>ChunkDB</a>,
 --   assuming the input <a>ChunkDB</a> does not already contain any of the
 --   chunks from the chunk lists.
-insertAllOutOfOrder11 :: (TypeableChunk a, TypeableChunk b, TypeableChunk c, TypeableChunk d, TypeableChunk e, TypeableChunk f, TypeableChunk g, TypeableChunk h, TypeableChunk i, TypeableChunk j, TypeableChunk k) => ChunkDB -> [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [g] -> [h] -> [i] -> [j] -> [k] -> ChunkDB
+insertAllOutOfOrder12 :: (TypeableChunk a, TypeableChunk b, TypeableChunk c, TypeableChunk d, TypeableChunk e, TypeableChunk f, TypeableChunk g, TypeableChunk h, TypeableChunk i, TypeableChunk j, TypeableChunk k, TypeableChunk l) => ChunkDB -> [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [g] -> [h] -> [i] -> [j] -> [k] -> [l] -> ChunkDB
 
 module Drasil.Database.Dump
 type ChunkType = String

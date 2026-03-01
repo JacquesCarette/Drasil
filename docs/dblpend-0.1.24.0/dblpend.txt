@@ -239,7 +239,6 @@ ideaDicts :: [IdeaDict]
 abbreviationsList :: [IdeaDict]
 conceptChunks :: [ConceptChunk]
 symbMap :: ChunkDB
-cdbRefs :: [Reference]
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

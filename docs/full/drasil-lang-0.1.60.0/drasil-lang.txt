@@ -2165,23 +2165,6 @@ instance Language.Drasil.Literal.Class.LiteralC Language.Drasil.ModelExpr.Lang.M
 -- | Defines functions to find Chunk UIDs within <a>ModelExpr</a>s.
 module Language.Drasil.ModelExpr.Extract
 
--- | Generic traverse of all expressions that could lead to names.
-meNames :: ModelExpr -> [UID]
-
--- | Generic traversal of everything that could come from an interval to
---   names (similar to <a>meNames</a>).
-meNamesRI :: RealInterval ModelExpr ModelExpr -> [UID]
-
--- | Generic traverse of all positions that could lead to <a>meNames</a>
---   without functions. FIXME : this should really be done via post-facto
---   filtering, but right now the information needed to do this is not
---   available!
-meNames' :: ModelExpr -> [UID]
-
--- | Generic traversal of everything that could come from an interval to
---   names without functions (similar to <a>meNames'</a>).
-meNamesRI' :: RealInterval ModelExpr ModelExpr -> [UID]
-
 -- | Get dependencies from an equation.
 meDep :: ModelExpr -> [UID]
 
@@ -2397,7 +2380,6 @@ sentenceTerm :: UID -> Sentence
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
 --   a <a>Symbol</a>.
 sdep :: Sentence -> Set UID
-shortdep :: Sentence -> Set UID
 
 -- | Generic traverse of all positions that could lead to <i>reference</i>
 --   <a>UID</a>s from <a>Sentence</a>s.
@@ -2563,7 +2545,6 @@ P :: Symbol -> NPStruct
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
 --   a <a>Symbol</a>.
 sdep :: Sentence -> Set UID
-shortdep :: Sentence -> Set UID
 
 -- | Generic traverse of all positions that could lead to <i>reference</i>
 --   <a>UID</a>s from <a>Sentence</a>s.

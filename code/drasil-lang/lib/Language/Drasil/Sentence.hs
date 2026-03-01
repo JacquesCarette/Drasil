@@ -21,7 +21,7 @@ import Drasil.Database (HasChunkRefs(..), HasUID(..), UID, IsChunk)
 
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.ModelExpr.Extract (meNames)
+import Language.Drasil.ModelExpr.Extract (meDep)
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Symbol (HasSymbol, Symbol)
@@ -168,7 +168,7 @@ getUIDs Ref {}              = []
 getUIDs Percent             = []
 getUIDs ((:+:) a b)         = getUIDs a ++ getUIDs b
 getUIDs (Quote a)           = getUIDs a
-getUIDs (E a)               = meNames a
+getUIDs (E a)               = meDep a
 getUIDs EmptyS              = []
 
 -----------------------------------------------------------------------------

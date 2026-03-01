@@ -45,7 +45,7 @@ si = mkSystem
   allRefs
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge symbols ideaDicts conceptChunks [] [] [] [] [] [] [] []
+symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] [] [] [] [] [] [] []
 
 ideaDicts :: [IdeaDict]
 ideaDicts = nw projectileMotionLesson : concepts

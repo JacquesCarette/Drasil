@@ -55,4 +55,4 @@ ideaDicts =
   [nw progName]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge symbols ideaDicts [] [] dataDefs [] [] [] [] [] []
+symbMap = withCommonKnowledge [] symbols ideaDicts [] [] dataDefs [] [] [] [] [] []

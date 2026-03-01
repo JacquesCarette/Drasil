@@ -80,7 +80,7 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] (map nw [webName, phsChgMtrl, twoD] ++
+symbMap = withCommonKnowledge [] [] (map nw [webName, phsChgMtrl, twoD] ++
   map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast,
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce,
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [glaSlab, intrslce,

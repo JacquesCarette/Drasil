@@ -1,6 +1,8 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
-  GenState, DrasilState(..), designLog, MatchedSpaces, ModExportMap,
+  SoftwareDossierInfo, makeSoftwareDossierInfo, doxOutput, softwareDossierFiles,
+  sampleData, GenState, DrasilState(..), softwareDossierInfo, getDoxOutput,
+  getSoftwareDossierFiles, getSampleData, designLog, MatchedSpaces, ModExportMap,
   ClassDefinitionMap, ScopeType(..), modExportMap, clsDefMap, addToDesignLog,
   addLoggedSpace, genICName, lookupC
 ) where
@@ -22,7 +24,7 @@ import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
-  AuxFile, Modularity(..), ImplementationType(..), Comments, Verbosity,
+  SoftwareDossierFile, Modularity(..), ImplementationType(..), Comments, Verbosity,
   MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging,
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
@@ -30,6 +32,16 @@ import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
 import Language.Drasil.ICOSolutionSearch (Def)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
+
+data SoftwareDossierInfo = SoftwareDossierInfo {
+  _doxOutput :: Verbosity,
+  _softwareDossierFiles :: [SoftwareDossierFile],
+  _sampleData :: [Expr]
+}
+makeLenses ''SoftwareDossierInfo
+
+makeSoftwareDossierInfo :: Verbosity -> [SoftwareDossierFile] -> [Expr] -> SoftwareDossierInfo
+makeSoftwareDossierInfo = SoftwareDossierInfo
 
 -- | Type for the mapping between 'Space's and 'CodeType's.
 type MatchedSpaces = Space -> GenState CodeType
@@ -64,12 +76,9 @@ data DrasilState = DrasilState {
   onSfwrC :: ConstraintBehaviour,
   onPhysC :: ConstraintBehaviour,
   commented :: [Comments],
-  doxOutput :: Verbosity,
   date :: String,
   logName :: String,
   logKind :: [Logging],
-  auxiliaries :: [AuxFile],
-  sampleData :: [Expr],
   dsICNames :: InternalConcept -> Name,
   -- Reference materials
   modules :: [Mod],
@@ -81,6 +90,7 @@ data DrasilState = DrasilState {
   clsMap :: ClassDefinitionMap,
   defSet :: Set Name,
   getVal :: Int,
+  _softwareDossierInfo :: SoftwareDossierInfo,
 
   -- Stateful
   currentModule :: String,
@@ -90,6 +100,15 @@ data DrasilState = DrasilState {
   currentScope :: ScopeType
 }
 makeLenses ''DrasilState
+
+getDoxOutput :: DrasilState -> Verbosity
+getDoxOutput ds = ds ^. (softwareDossierInfo . doxOutput)
+
+getSoftwareDossierFiles :: DrasilState -> [SoftwareDossierFile]
+getSoftwareDossierFiles ds = ds ^. (softwareDossierInfo . softwareDossierFiles)
+
+getSampleData :: DrasilState -> [Expr]
+getSampleData ds = ds ^. (softwareDossierInfo . sampleData)
 
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.

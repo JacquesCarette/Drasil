@@ -1,22 +1,52 @@
-module Drasil.Generator.BaseChunkDB (
-  -- * Base ChunkDB for all case studies
-  cdb,
+module Drasil.Generator.CommonKnowledge (
+  -- * Common Background Knowledge for Drasil's Science-focused Case Studies
+  withCommonKnowledge,
   cdbWithRefs
 ) where
 
 import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder11)
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
   DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
+import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Software (errMsg, program)
-import Data.Drasil.Concepts.Math (mathcon, cartesian, line, point)
+import Data.Drasil.Concepts.Math (mathcon)
 
 import Data.Drasil.SI_Units (siUnits)
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
+
+-- | Create a `ChunkDB` containing background knowledge common to all of
+-- Drasil's existing case studies. This means knowledge related to the
+-- SmithEtAl-esque SRS, mathematics, physics, general science, basic software,
+-- and general documentation.
+withCommonKnowledge :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
+    [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
+    [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
+withCommonKnowledge = insertAllOutOfOrder11 basisCDB
+
+-- | Variant of 'withCommonKnowledge' that pre-registers reference chunks
+-- before mass insertion.
+cdbWithRefs :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] ->
+    [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] ->
+    [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] ->
+    [LabelledContent] -> ChunkDB
+cdbWithRefs refs = insertAllOutOfOrder11 (insertAll refs basisCDB)
+
+-- | The basis chunk database, which contains the basic idea dicts, concept chunks,
+--  and units that are used in all of the case studies. This database is then added
+-- to all of the new chunk databases created using the cdb constructor.
+basisCDB :: ChunkDB
+basisCDB =
+    insertAll siUnits
+  $ insertAll basisConceptChunks
+  $ insertAll basisSymbols
+  $ insertAll basisIdeaDicts
+  $ insertAll basisCitations
+    empty
 
 basisSymbols :: [DefinedQuantityDict]
 basisSymbols =
@@ -69,33 +99,7 @@ basisConceptChunks =
   --  * mathcon - Math concepts. Math is widespread throughout all of the case studies
   --              and scientific computing software in general, so it is included
   --              in the basis.
-  [algorithm, errMsg, program] ++ srsDomains ++ basisMathConcepts
-  where
-    -- These concepts carry citation refs in their definitions and should be
-    -- provided explicitly by case studies that use them.
-    basisMathConcepts = filter (`notElem` [cartesian, line, point]) mathcon
+  [algorithm, errMsg, program] ++ srsDomains ++ mathcon
 
--- | The basis chunk database, which contains the basic idea dicts, concept chunks,
---  and units that are used in all of the case studies. This database is then added
--- to all of the new chunk databases created using the cdb constructor.
-basisCDB :: ChunkDB
-basisCDB =
-    insertAll siUnits
-  $ insertAll basisConceptChunks
-  $ insertAll basisSymbols
-  $ insertAll basisIdeaDicts
-    empty
-
--- | Create a `ChunkDB` containing all knowledge (chunks) required to generate
--- our SmithEtAl-esque SRS.
-cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
-    [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
-    [ConceptInstance] -> [Citation] -> [LabelledContent] -> ChunkDB
-cdb = insertAllOutOfOrder11 basisCDB
-
--- | Variant of 'cdb' that pre-registers reference chunks before mass insertion.
-cdbWithRefs :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] ->
-    [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] ->
-    [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] ->
-    [LabelledContent] -> ChunkDB
-cdbWithRefs refs = insertAllOutOfOrder11 (insertAll refs basisCDB)
+basisCitations :: [Citation]
+basisCitations = [cartesianWiki, lineSource, pointSource]

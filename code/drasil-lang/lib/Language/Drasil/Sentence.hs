@@ -11,7 +11,7 @@ module Language.Drasil.Sentence (
   (+:+), (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
   sentenceTerm,
-  sdep, lnames, lnames', sentenceRefs
+  sdep, lnames, lnames'
 ) where
 
 import Control.Lens ((^.))
@@ -199,10 +199,6 @@ lnames' :: [Sentence] -> [UID]
 lnames' = concatMap (Set.toList . lnames)
 {-# INLINE lnames' #-}
 
-sentenceRefs :: Sentence -> Set.Set UID
-sentenceRefs sent = Set.unions [lnames sent, sdep sent]
-{-# INLINE sentenceRefs #-}
-
 instance HasChunkRefs Sentence where
-  chunkRefs = sentenceRefs
+  chunkRefs s = Set.unions [lnames s, sdep s]
   {-# INLINABLE chunkRefs #-}

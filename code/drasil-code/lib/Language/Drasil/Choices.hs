@@ -8,7 +8,7 @@ module Language.Drasil.Choices (
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
-  Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
+  Logging(..), SoftwareDossierFile(..), getSampleData, hasSampleInput, defaultChoices,
   choicesSent, showChs, InternalConcept(..)
 ) where
 
@@ -207,10 +207,10 @@ data OptionalFeatures = OptFeats{
   docConfig :: DocConfig,
   logConfig :: LogConfig,
   -- | Turns generation of different auxiliary (non-source-code) files on or off.
-  auxFiles :: [AuxFile]
+  auxFiles :: [SoftwareDossierFile]
 }
 -- | Constructor to create a OptionalFeatures
-makeOptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
+makeOptFeats :: DocConfig -> LogConfig -> [SoftwareDossierFile] -> OptionalFeatures
 makeOptFeats = OptFeats
 
 -- | Configuration for Doxygen documentation
@@ -281,12 +281,12 @@ instance RenderChoices Logging where
 -- | Currently we only support two kind of auxiliary files: sample input file, readme.
 -- To generate a sample input file compatible with the generated program,
 -- 'FilePath' is the path to the user-provided file containing a sample set of input data.
-data AuxFile = SampleInput FilePath
+data SoftwareDossierFile = SampleInput FilePath
              | ReadME
              deriving Eq
 
 -- | Renders options for auxiliary file generation.
-instance RenderChoices AuxFile where
+instance RenderChoices SoftwareDossierFile where
   showChs (SampleInput fp) = S "SampleInput" +:+ S fp
   showChs ReadME = S "ReadME"
 
@@ -298,8 +298,8 @@ getSampleData chs = getSampleData' (auxFiles $ optFeats chs)
         getSampleData' (SampleInput fp:_) = Just fp
         getSampleData' (_:xs) = getSampleData' xs
 
--- | Predicate that returns true if the list of 'AuxFile's includes a 'SampleInput'.
-hasSampleInput :: [AuxFile] -> Bool
+-- | Predicate that returns true if the list of 'SoftwareDossierFile's includes a 'SampleInput'.
+hasSampleInput :: [SoftwareDossierFile] -> Bool
 hasSampleInput [] = False
 hasSampleInput (SampleInput _:_) = True
 hasSampleInput (_:xs) = hasSampleInput xs

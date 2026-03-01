@@ -158,7 +158,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   [mass] ++ defs ++ [distance, motion, gravity, collision, rectilinear,
-  positionVec, cartesian]
+  positionVec]
 
 symbMap :: ChunkDB
 symbMap = cdbWithRefs cdbRefs

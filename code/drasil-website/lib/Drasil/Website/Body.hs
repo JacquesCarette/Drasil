@@ -7,7 +7,7 @@ module Drasil.Website.Body (
 import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB)
-import Drasil.Generator (cdb)
+import Drasil.Generator (withCommonKnowledge)
 import Drasil.System
 import Language.Drasil
 import Drasil.DocLang (findAllRefs)
@@ -80,12 +80,11 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, phsChgMtrl, twoD] ++
+symbMap = withCommonKnowledge [] (map nw [webName, phsChgMtrl, twoD] ++
   map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast,
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce,
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [glaSlab, intrslce,
-  slope, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] []
-  [] [] []
+  slope, factor]) [] [] [] [] [] [] [] [] []
 
 -- | Helper to get the system name as an 'IdeaDict' from 'System'.
 getSysName :: System -> IdeaDict

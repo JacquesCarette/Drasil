@@ -2,8 +2,6 @@ module Drasil.Projectile.Lesson.CaseProb (
   caseProbCont, caseProbSecs, figRefs
 ) where
 
-import Utils.Drasil (weave)
-
 import Data.Drasil.Concepts.Physics (motion, acceleration, velocity, force, time,
   constAccel, horizontalMotion, verticalMotion, gravity, position)
 import Data.Drasil.Units.Physics (accelU)
@@ -123,12 +121,11 @@ motionContextP2
        S "These equations can be applied for both the", phrase verticalMotion `S.andThe`
        phrase horizontalMotion :+: S ", as follows:"]
 
-hMintro, hMequations, hMconcl, vMintro, vMequations, vMconcl, summary :: Contents
+hMintro, hMconcl, vMintro, vMconcl, summary :: Contents
 hMintro = foldlSP_ [
             S "For", phrase projMotion +:+ S "the", phrase acceleration,
             S "in the horizontal direction is and equal to zero" +:+.
             sParen(eS (sy QP.xAccel $= exactDbl 0)), motionSent]
-hMequations = foldlSP_ $ weave [equationsSents, map eS horMotionEqns]
 hMconcl = foldlSP [
             S "Since the", phrase acceleration, S "in the" +:+ phrase xDir,
             sParen (eS (sy QP.xAccel)), S "is zero" `sC` S "the horizontal component of ", phrase velocity,
@@ -138,7 +135,6 @@ hMconcl = foldlSP [
 vMintro = foldlSP_ [
             S "Since the positive", phrase yAxis, S "is directed upward, the", phrase acceleration,
             S "in the vertical direction is" +:+. eS (sy QP.yAccel $= neg (sy QP.gravitationalAccel)), motionSent]
-vMequations = foldlSP_ $ weave [equationsSents, map eS verMotionEqns]
 vMconcl = foldlSP [
             S "Recall that the last equation can be formulated" `S.onThe` S "basis of eliminating the",
             phrase time +:+ eS (sy QP.time), S "between the first two equations" `sC` S "and therefore only ",
@@ -206,17 +202,6 @@ verMotionCont = foldlSP [S "In the vertical" `S.or_` P lY, phrase direction, S "
 stepFiveCont = foldlSP [S "Use the equations from Step 4" `sC` S "together with the known values from Step 2 to find the unknown values from Step 3." +:+.
   S "We can do this systematically by going through each equation and determining how many unknowns are in that equation",
   S "Any equations with one unknown can be used to solve for that unknown directly"]
-
-equationsSents :: [Sentence]
-equationsSents = [S "From Equation" +: refS lcrectVel,
-                  S "From Equation" +: refS lcrectPos,
-                  S "From Equation" +: refS lcrectNoTime]
-
-horMotionEqns :: [ModelExpr]
-horMotionEqns = [horizVel, horizPos, horizVel]
-
-verMotionEqns :: [ModelExpr]
-verMotionEqns = [vertVel, vertPos, vertNoTime]
 
 motionSent :: Sentence
 motionSent = S "This value can be substituted" `S.inThe` S "equations for" +:+ phrase constAccel +:

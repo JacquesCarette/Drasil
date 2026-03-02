@@ -3,7 +3,7 @@ module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
@@ -117,7 +117,7 @@ conceptChunks =
   physicalcon ++ [linear, angular]
 
 symbMap :: ChunkDB
-symbMap = cdb
+symbMap = withCommonKnowledge []
   (map dqdWr physicscon ++ symbols ++
     [dqdWr mass, dqdWr posInf, dqdWr negInf] ++
     map dqdWr pidConstants)

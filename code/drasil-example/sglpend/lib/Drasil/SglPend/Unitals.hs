@@ -4,7 +4,7 @@ import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, radian)

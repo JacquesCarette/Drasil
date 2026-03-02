@@ -8,7 +8,7 @@ module Theory.Drasil.Theory (
   -- * Constructors
   tm, tmNoRefs) where
 
-import Control.Lens (Lens', view, makeLenses)
+import Control.Lens (Lens', view, makeLenses, (^.))
 
 import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
@@ -64,7 +64,17 @@ data TheoryModel = TM
 makeLenses ''TheoryModel
 
 instance HasChunkRefs TheoryModel where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs tm' = mconcat
+    [ chunkRefs (tm' ^. mk)
+    , chunkRefs (tm' ^. vctx)
+    , chunkRefs (tm' ^. quan)
+    , chunkRefs (tm' ^. ops)
+    , chunkRefs (tm' ^. defq)
+    , chunkRefs (tm' ^. dfun)
+    , chunkRefs (lb tm')
+    , chunkRefs (tm' ^. notes)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of a 'TheoryModel'.
 instance HasUID             TheoryModel where uid = mk . uid

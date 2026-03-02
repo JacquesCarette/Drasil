@@ -11,21 +11,22 @@ List of refactorings that should be done to the code base.
 - [ ] move Utils.Drasil.Database.invert to (drasil-database)
 
 ## drasil-lang
-- [ ] move Drasil.Code to drasil-code
-- [ ] move Language.Drasil.Derivation to drasil-theory (PR #4583)
+- [x] move Language.Drasil.Derivation to drasil-theory (PR [#4583](../issues/4583))
 - [ ] move Language.Drasil.Document and .* to drasil-docLang
-- [ ] move Language.Drasil.NounPhrase to Language.Drasil.NaturalLanguage.English.NounPhrase
+- [x] move Language.Drasil.NounPhrase to Language.Drasil.NaturalLanguage.English.NounPhrase (PR [#4753](../issues/4753))
 - [ ] move Language.Drasil.Chunk.DifferentialModel to (drasil-theory) Theory.Drasil.DifferentialModel
 
 ## dasil-code
-- [ ] change Data.Drasil.ExternalLibraries.ODELibraries to not go via Language.Drasil.Code (PR #4582)
+- [x] change Data.Drasil.ExternalLibraries.ODELibraries to not go via Language.Drasil.Code (PR [#4582](../issues/4582))
 - [ ] move Language.Drasil.Code.Imperative.GOOL to drasil-GOOL
 
 ## drasil-gool
 - [ ] redesign L-values ([#4398](../issues/4398))
 - [ ] remove global `GOOLState` and replace with renderer-local state
+  - [#4678](../issues/4678) contributes to this
 - [ ] investigate RendererSym, and figure out what needs to be changed/removed (see [#4398](../issues/4398) and [#4404](../issues/4404))
 - [ ] resolve issues with some parts of GOOL living in drasil-code
+  - [#4678](../issues/4678) contributes to this
 - [ ] for list, set, etc. APIs, differentiate explicitly between pure and impure functions/methods.
 - [ ] investigate duplicate typeclasses between InterfaceX and RendererClassesX (e.g. NumericExpression and Unary/BinaryOpSym)
 - [ ] anything else in [#4404](../issues/4404)
@@ -46,6 +47,9 @@ List of refactorings that should be done to the code base.
 - [ ] move Data.Drasil.Theories to drasil-theory? drasil-theorydb?
 
 # Larger
+
+## drasil-lang
+- [ ] move Drasil.Code to drasil-code
 
 ## drasil-printers
 - [ ]  move the 'Import' functions out of here, and into proper polymorphic traversals (Plate?) at

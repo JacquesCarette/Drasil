@@ -6,7 +6,7 @@ import Control.Lens((^.))
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
-import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sentence.Combinators (eqN, unwrap, substitute, follows, fromSources)
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',

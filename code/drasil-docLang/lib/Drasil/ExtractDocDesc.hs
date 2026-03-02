@@ -4,18 +4,25 @@
 module Drasil.ExtractDocDesc (
   getDocDesc, egetDocDesc,
   sentencePlate,
-  getSec
+  getSec,
+  extractDocBib
 ) where
 
 import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
-
-import Drasil.DocumentLanguage.Core
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Language.Drasil hiding (Manual, Verb)
-import Theory.Drasil
 import Data.Maybe (maybeToList)
+import qualified Data.Set as S
+
+import Language.Drasil hiding (getCitations, Manual, Verb)
+import Language.Drasil.Development (lnames)
+import Drasil.System (System, HasSystem(systemdb))
+import Theory.Drasil
+
+import Drasil.DocumentLanguage.Core hiding (System)
+import Drasil.ExtractCommon (sentToExp, extractSents, extractSents', extractMExprs)
+import Drasil.GetChunks (resolveBibliography)
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -47,7 +54,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
 
 -- | Creates a section plate for expressions.
 exprPlate :: DLPlate (Constant [ModelExpr])
-exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (concatMap egetCon')
+exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (concatMap extractMExprs)
   (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
   scsSub = Constant <$> \case
     (TMs _ _ t)   -> goTM t
@@ -65,12 +72,6 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
                            ++ go (map (^. defnExpr) (x ^. defined_quant ++ x ^. defined_fun))
                            ++ goTM (x ^. valid_context))
 
--- | Converts a 'Sentence' into a list of expressions. If the 'Sentence' cant be translated, returns an empty list.
-sentToExp :: Sentence -> [ModelExpr]
-sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2
-sentToExp (E e) = [e]
-sentToExp _ = []
-
 -- | Helper that extracts a list of some type from the 'DLPlate' and 'DocDesc'.
 fmGetDocDesc :: DLPlate (Constant [a]) -> DocDesc -> [a]
 fmGetDocDesc p = concatMap (foldFor docSec p)
@@ -86,22 +87,11 @@ egetSec (Section _ sc _ ) = concatMap egetSecCon sc
 -- | Extracts expressions from section contents.
 egetSecCon :: SecCons -> [ModelExpr]
 egetSecCon (Sub s) = egetSec s
-egetSecCon (Con c) = egetCon' c
-
--- | Extracts expressions from something that has contents.
-egetCon' :: HasContents a => a -> [ModelExpr]
-egetCon' = egetCon . (^. accessContents)
-
--- | Extracts expressions from raw contents.
-egetCon :: RawContent -> [ModelExpr]
-egetCon (EqnBlock e) = [e]
-egetCon (Defini _ []) = []
-egetCon (Defini dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Defini dt tl)
-egetCon _ = []
+egetSecCon (Con c) = extractMExprs c
 
 -- | Creates a 'Sentence' plate.
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
-sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatMap getSec) $
+sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap getSec) $
   preorderFold $ purePlate {
     introSec = Constant . f <$> \(IntroProg s1 s2 s3) -> [s1, s2] ++ concatMap getIntroSub s3,
     introSub = Constant . f <$> \case
@@ -116,7 +106,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs
       (TermsAndDefs (Just s) cs) -> s : def cs
-      (PhySysDesc _ s lc cs) -> s ++ getLC lc ++ getC cs
+      (PhySysDesc _ s lc cs) -> s ++ extractSents lc ++ extractSents' cs
       (Goals s c) -> s ++ def c,
     scsSub = Constant . f <$> \case
       (Assumptions c) -> def c
@@ -127,9 +117,9 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (GDs s _ d _) -> s ++ def d ++ der d ++ notes d
       (IMs s _ d _) -> s ++ der d ++ notes d
       (Constraints s _) -> [s]
-      (CorrSolnPpties _ cs) -> getC cs,
+      (CorrSolnPpties _ cs) -> extractSents' cs,
     reqSub = Constant . f <$> \case
-      (FReqsSub c lcs) -> def c ++ concatMap getLC lcs
+      (FReqsSub c lcs) -> def c ++ extractSents' lcs
       (NonFReqsSub c) -> def c,
     lcsSec = Constant . f <$> \(LCsProg c) -> def c,
     ucsSec = Constant . f <$> \(UCsProg c) -> def c,
@@ -158,14 +148,8 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
 
     getPDSub :: PDSub -> [Sentence]
     getPDSub (TermsAndDefs ms c) = def c ++ maybe [] pure ms
-    getPDSub (PhySysDesc _ s lc cs) = s ++ getLC lc ++ getC cs
+    getPDSub (PhySysDesc _ s lc cs) = s ++ extractSents lc ++ extractSents' cs
     getPDSub (Goals s c) = s ++ def c
-
-    getC :: [Contents] -> [Sentence]
-    getC = concatMap getCon'
-
-    getLC :: LabelledContent -> [Sentence]
-    getLC = getCon . (^. accessContents)
 
 -- | Extracts 'Sentence's from a document description.
 getDocDesc :: DocDesc -> [Sentence]
@@ -182,80 +166,12 @@ getSec (Section t sc _ ) = t : concatMap getSecCon sc
 -- | Extracts 'Sentence's from section contents.
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
-getSecCon (Con c) = getCon' c
+getSecCon (Con c) = extractSents c
 
--- | Extracts 'Sentence's from something that has contents.
-getCon' :: HasContents a => a -> [Sentence]
-getCon' = getCon . (^. accessContents)
-
--- | Extracts 'Sentence's from raw content.
-getCon :: RawContent -> [Sentence]
-getCon (Table s1 s2 t _)   = t : s1 ++ concat s2
-getCon (Paragraph s)       = [s]
-getCon EqnBlock{}          = []
-getCon CodeBlock{}         = []
-getCon (DerivBlock h d)    = h : concatMap getCon d
-getCon (Enumeration lst)   = getLT lst
-getCon (Figure l _ _ _)    = [l]
-getCon (Bib bref)          = getBib bref
-getCon (Graph sss _ _ l)   = let (ls, rs) = unzip sss
-                             in l : ls ++ rs
-getCon (Defini _ ics)      = concatMap (concatMap getCon' . snd) ics
-
--- | Get the bibliography from something that has a field.
-getBib :: (HasFields c) => [c] -> [Sentence]
-getBib a = map getField $ concatMap (^. getFields) a
-
--- | Unwraps a 'CiteField' into a 'Sentence'.
-getField :: CiteField -> Sentence
-getField (Address s) = S s
-getField Author{} = EmptyS
-getField (BookTitle s) = S s
-getField Chapter{} = EmptyS
-getField Edition{} = EmptyS
-getField Editor{} = EmptyS
-getField HowPublished{} = EmptyS
-getField (Institution s) = S s
-getField (Journal s) = S s
-getField Month{} = EmptyS
-getField (Note s) = S s
-getField Number{} = EmptyS
-getField (Organization s) = S s
-getField Pages{} = EmptyS
-getField (Publisher s) = S s
-getField (School s) = S s
-getField (Series s) = S s
-getField (Title s) = S s
-getField (Type s) = S s
-getField Volume{} = EmptyS
-getField Year{} = EmptyS
-
--- | Translates different types of lists into a 'Sentence' form.
-getLT :: ListType -> [Sentence]
-getLT (Bullet it)      = concatMap (getIL . fst) it
-getLT (Numeric it)     = concatMap (getIL . fst) it
-getLT (Simple lp)      = concatMap getLP lp
-getLT (Desc lp)        = concatMap getLP lp
-getLT (Definitions lp) = concatMap getLP lp
-
--- | Translates a 'ListTuple' into 'Sentence's.
-getLP :: ListTuple -> [Sentence]
-getLP (t, it, _) = t : getIL it
-
--- | Flattens out an ItemType into 'Sentence's. Headers for 'Nested' items are prepended to its contents.
-getIL :: ItemType -> [Sentence]
-getIL (Flat s) = [s]
-getIL (Nested h lt) = h : getLT lt
-
--- ciPlate is not currently used.
--- | A common idea plate.
--- ciPlate :: DLPlate (Constant [CI])
--- ciPlate = preorderFold $ purePlate {
---   introSub = Constant <$> \case
---     (IOrgSec _ ci _ _) -> [ci]
---     _ -> [],
---   stkSub = Constant <$> \case
---    (Client ci _) -> [ci]
---    (Cstmr ci) -> [ci],
---    auxConsSec = Constant <$> \(AuxConsProg ci _) -> [ci]
--- }
+-- | Extract bibliography entries from generated sections. This version extracts
+-- from fully expanded Sections, capturing citations that are only created
+-- during document generation (like those in orgOfDocIntro).
+extractDocBib :: System -> [Section] -> BibRef
+extractDocBib si = resolveBibliography (si ^. systemdb) . extractAllSecRefs
+  where
+    extractAllSecRefs = S.unions . map (S.unions . map lnames . getSec)

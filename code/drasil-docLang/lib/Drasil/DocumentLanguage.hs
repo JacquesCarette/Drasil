@@ -10,8 +10,9 @@ module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy)
-import Data.Maybe (maybeToList, mapMaybe, isJust)
+import Data.Maybe (maybeToList, mapMaybe, isJust, fromMaybe)
 import qualified Data.Map as Map (keys)
+import qualified Data.Set as Set
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import qualified Drasil.DocDecl as DD
@@ -25,7 +26,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
 import Drasil.Document.Contents(mkEnumSimpleD, foldlSP)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, getSec)
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, getSec, extractDocBib)
 import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil
@@ -33,12 +34,11 @@ import Language.Drasil.Display (compsy)
 import Utils.Drasil (splitAtAll, mergeAll)
 
 import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
-import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
-  findAllInstMods, findAllTheoryMods, findAllConcInsts, TermAbbr, shortForm,
-  termResolve', findAllLabelledContent)
+import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent,
+  TermAbbr, shortForm, termResolve')
 
 import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem(..))
-import Drasil.GetChunks (ccss, ccss', citeDB)
+import Drasil.GetChunks (ccss, ccss')
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC)
@@ -72,7 +72,7 @@ import Drasil.Metadata (software, dataDefn, genDefn, inModel, thModel, requireme
 import Data.Drasil.Concepts.Documentation (likelyChg, section_, unlikelyChg, assumption, goalStmt, refName, refBy)
 import qualified Data.Map.Strict as M
 
-import Language.Drasil.Development (shortdep)
+import Language.Drasil.Development (sdep)
 
 -- * Main Function
 
@@ -81,21 +81,23 @@ import Language.Drasil.Development (shortdep)
 mkDoc :: System -> SRSDecl -> (IdeaDict -> CI -> Sentence) -> (Document, System)
 mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
-      sections = mkSections si dd
-      -- Above this line, the content to be generated in the SRS artifact is
-      -- pre-generated (missing content involving 'Reference's and
-      -- 'LabelledContent' for potential traceability graphs). The below line
-      -- injects "traceability" maps into the 'ChunkDB' and adds missing
+      -- /Pre-generate/ the SRS artifact. It is missing content involving
+      -- 'Reference's and 'LabelledContent' for potential traceability graphs as
+      -- well as 'Citation's.
+      sections = mkSections si dd Nothing
+      -- Extract all referenced 'Citations' from the pre-generated artifact.
+      refdCites = extractDocBib si sections
+      -- Injects "traceability" maps into the 'ChunkDB' and adds missing
       -- 'LabelledContent' (the generated traceability-related tables).
-      si' = buildTraceMaps dd $ fillReferences sections si
-      -- Now, the 'real generation' of the SRS artifact can begin, with the
+      si' = buildTraceMaps dd $ fillReferences sections refdCites si
+      -- Now, the /real generation/ of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
-      -- 'Reference's).
+      -- 'Reference's) and the true list of bibliography entries known.
       heading = whatsTheBigIdea si `headingComb` (si' ^. sysName)
       authorsList = foldlList Comma List $ map (S . name) $ si ^. authors
       toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl
-      sections' = mkSections si' dd'
+      sections' = mkSections si' dd' (Just refdCites)
   in (Document heading authorsList toc sections', si')
 
 -- * Functions to Fill 'ChunkDB'
@@ -132,19 +134,18 @@ buildTraceMaps sd si
     containsTraceSec []                    = False
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: [Section] -> System -> System
-fillReferences allSections si = si2
+fillReferences :: [Section] -> [Citation] -> System -> System
+fillReferences allSections cites si = si2
   where
     -- get old chunk database + ref database
     chkdb = si ^. systemdb
-    cites = citeDB si
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    ddefs   = findAllDataDefns chkdb
-    gdefs   = findAllGenDefns chkdb
-    imods   = findAllInstMods chkdb
-    tmods   = findAllTheoryMods chkdb
+    ddefs   = si ^. dataDefns
+    gdefs   = si ^. genDefns
+    imods   = si ^. instModels
+    tmods   = si ^. theoryModels
     concIns = findAllConcInsts chkdb
     lblCon  = findAllLabelledContent chkdb
     newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $ refsFromSRS
@@ -179,8 +180,8 @@ getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 -- * Section Creator Functions
 
 -- | Helper for creating the different document sections.
-mkSections :: System -> DocDesc -> [Section]
-mkSections si dd =
+mkSections :: System -> DocDesc -> Maybe BibRef -> [Section]
+mkSections si dd mbib =
   let
     splitByTAandA :: [[DocSection]]
     refSecPlans :: [DocSection]
@@ -205,7 +206,7 @@ mkSections si dd =
     doit (StkhldrSec sts)     = mkStkhldrSec sts
     doit (SSDSec ss)          = mkSSDSec si ss
     doit (AuxConstntSec acs)  = mkAuxConsSec acs
-    doit Bibliography         = mkBib (citeDB si)
+    doit Bibliography         = mkBib $ fromMaybe [] mbib
     doit (GSDSec gs')         = mkGSDSec gs'
     doit (ReqrmntSec r)       = mkReqrmntSec r
     doit (LCsSec lc)          = mkLCsSec lc
@@ -254,7 +255,7 @@ collectDocumentAbbreviations renderedSecs cdb =
   where
     -- Terms found in the document using the list of `Sentence`s extracted from
     -- the sections.
-    foundInDoc = concatMap shortdep $ concatMap getSec renderedSecs
+    foundInDoc = concatMap (Set.toList . sdep) $ concatMap getSec renderedSecs
     -- Terms that could not be found in `Sentence`s, but are important to
     -- include in the table of abbreviations and acronyms.
     missingFromDocHACK = map (^. uid) [assumption, dataDefn, genDefn, goalStmt,

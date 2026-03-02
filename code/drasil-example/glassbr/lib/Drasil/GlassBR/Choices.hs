@@ -3,7 +3,7 @@ module Drasil.GlassBR.Choices where
 import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
-  ConstantRepr(..), AuxFile(..), Visibility(..), makeArchit,
+  ConstantRepr(..), SoftwareDossierFile(..), Visibility(..), makeArchit,
   makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats)
 import Utils.Drasil (RelativeFile, relativeFile)
 

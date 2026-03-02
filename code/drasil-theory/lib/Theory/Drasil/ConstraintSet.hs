@@ -18,7 +18,7 @@ import Control.Lens (makeLenses, (^.))
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..))
 
 -- | 'ConstraintSet's are sets of invariants that always hold for underlying domains.
 data ConstraintSet e = CL {
@@ -27,6 +27,10 @@ data ConstraintSet e = CL {
 }
 
 makeLenses ''ConstraintSet
+
+instance HasChunkRefs (ConstraintSet e) where
+  chunkRefs cs = chunkRefs (cs ^. con)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'ConstraintSet'.
 instance HasUID        (ConstraintSet e) where uid  = con . uid

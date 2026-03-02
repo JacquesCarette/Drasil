@@ -5,12 +5,12 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
-import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Drasil.System (SystemKind(Specification), mkSystem)
@@ -89,8 +89,8 @@ conceptChunks =
   map cw [surArea, area]
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts conceptChunks [] SWHS.dataDefs insModel
-  genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
+symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] SWHS.dataDefs
+  insModel genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

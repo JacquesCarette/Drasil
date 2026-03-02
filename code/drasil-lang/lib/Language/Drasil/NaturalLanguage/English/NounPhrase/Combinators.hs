@@ -11,7 +11,7 @@
 --
 -- This module should be used as a qualified import (usually as @NP@),
 -- as many function names clash with those in Concepts.hs and Sentence.hs.
-module Language.Drasil.NounPhrase.Combinators (
+module Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators (
   -- * General Combinator Helper Functions
   insertString, prependString, insertStringOp, insertStringGen,
   -- * Prepositions
@@ -35,12 +35,12 @@ module Language.Drasil.NounPhrase.Combinators (
   NPStruct((:+:), S, P)
 ) where
 
-import Language.Drasil.NounPhrase
+import Language.Drasil.NaturalLanguage.English.NounPhrase
     ( NP,
       CapitalizationRule(CapWords, CapFirst, CapNothing),
       NounPhrase(phraseNP, pluralNP),
       nounPhrase'', surroundNPStruct)
-import Language.Drasil.NounPhrase.Core (NPStruct((:+:),S,P))
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct((:+:),S,P))
 
 --Maybe move these to a separate Drasil.NounPhrase section
 -- | Helper function that places a 'String' in between two 'NP's. Plural case is

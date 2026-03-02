@@ -10,10 +10,9 @@ import Data.Either (isLeft, lefts)
 import Data.List (partition)
 import qualified Data.Map.Strict as M
 
-import Drasil.Database (UID, HasUID(..))
-import Drasil.Database.SearchTools (findAllDefinedQuantities)
+import Drasil.Database (UID, HasUID(..), ChunkDB, findAll)
 import Language.Drasil (Expr, Space, temporaryIndent, HasSpace(typ),
-  RequiresChecking(..), TypeError, Typed(check))
+  RequiresChecking(..), TypeError, Typed(check), DefinedQuantityDict)
 import Drasil.System (System, HasSystem (instModels, dataDefns, systemdb))
 
 -- Note: this should be externally configurable wrt verbosity!
@@ -74,3 +73,6 @@ typeCheckSI sys = do
     -- TODO: When we want to have Drasil panic on type-errors, use the following code:
     -- add back import: Control.Monad (when)
     -- when (any isRight formattedChkd) $ error "Type errors occurred, please check your expressions and adjust accordingly"
+
+findAllDefinedQuantities :: ChunkDB -> [DefinedQuantityDict]
+findAllDefinedQuantities = findAll

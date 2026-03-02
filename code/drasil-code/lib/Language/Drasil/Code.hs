@@ -1,6 +1,5 @@
 -- | Re-export code-related smart constructors for external code writing and generation.
 module Language.Drasil.Code (
-  makeCode, createCodeFiles,
   generator, generateCode, generateCodeProc,
   readWithDataDesc, sampleInputDD,
   Choices(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), makeArchit,
@@ -8,7 +7,7 @@ module Language.Drasil.Code (
   makeConstraints, makeODE, makeDocConfig, makeLogConfig, LogConfig(..),
   OptionalFeatures(..), makeOptFeats, ExtLib(..), ImplementationType(..), Logging(..),
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..),
-  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..),
+  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, SoftwareDossierFile(..),
   getSampleData, Visibility(..), defaultChoices, CodeSpec(..), OldCodeSpec(..), codeSpec,
   HasOldCodeSpec(..), funcUID, asVC, ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar,
   privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod,
@@ -35,8 +34,7 @@ module Language.Drasil.Code (
   returnExprListFill, fixedStatementFill, fixedStatementFill', initSolWithValFill,
   Lang(..),
   CodeChunk, CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, ccObjVar,
-  listToArray,
-  field,
+  listToArray, field, SoftwareDossierState, makeSds,
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..),
   ODELibPckg(..), mkODELib, mkODELibNoPath,
   -- Language.Drasil.Chunk.NamedArgument
@@ -48,12 +46,13 @@ module Language.Drasil.Code (
 import Prelude hiding (break, print, return, log, exp)
 
 import Drasil.Code.CodeExpr (field)
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (
+  SoftwareDossierState, makeSds)
 import Language.Drasil.Code.Imperative.Generator (generator, generateCode,
   generateCodeProc)
 import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc,
   sampleInputDD)
 
-import Language.Drasil.Code.Code (makeCode, createCodeFiles)
 import Language.Drasil.Code.DataDesc (junkLine, multiLine, repeated, singleLine,
   singleton)
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
@@ -82,7 +81,7 @@ import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   ConstraintBehaviour(..), ImplementationType(..), Logging(..), Modularity(..),
   Structure(..), ConstantStructure(..), ConstantRepr(..), CodeConcept(..),
-  matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), getSampleData,
+  matchConcepts, SpaceMatch, matchSpaces, SoftwareDossierFile(..), getSampleData,
   Visibility(..), defaultChoices, makeArchit, Architecture(..), DataInfo(..),
   makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints, makeODE,
   makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),

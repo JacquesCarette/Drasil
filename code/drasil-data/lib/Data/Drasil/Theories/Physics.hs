@@ -6,7 +6,7 @@ import Utils.Drasil (weave)
 import Theory.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Citations (velocityWiki, accelerationWiki)
+import Data.Drasil.Citations (velocityWiki, accelerationWiki, hibbeler2004)
 import Data.Drasil.Concepts.Documentation (component, material_, value, constant)
 import Data.Drasil.Concepts.Math (cartesian, equation, vector)
 import Data.Drasil.Concepts.Physics (gravity, twoD, rigidBody)
@@ -25,9 +25,9 @@ physicsTMs = [newtonSL]
 -- * Newton's Second Law of Motion
 
 newtonSL :: TheoryModel
-newtonSL = tmNoRefs (equationalModelU "newtonSL" newtonSLQD)
+newtonSL = tm (equationalModelU "newtonSL" newtonSLQD)
   [dqdWr QP.force, dqdWr QPP.mass, dqdWr QP.acceleration] ([] :: [ConceptChunk])
-  [newtonSLQD] [] [] "NewtonSecLawMot" [newtonSLDesc]
+  [newtonSLQD] [] [] [dRef hibbeler2004] "NewtonSecLawMot" [newtonSLDesc]
 
 -- * Weight
 
@@ -123,9 +123,10 @@ vecMag = ddENoRefs vecMagQD Nothing "vecMag" [magNote]
 -- * Newton's Second Law of Rotational Motion
 
 newtonSLR :: TheoryModel
-newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
+newtonSLR = tm (equationalModelU "newtonSLR" newtonSLRQD)
   [dqdWr QP.torque, dqdWr QP.momentOfInertia, dqdWr QP.angularAccel]
-  ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
+  ([] :: [ConceptChunk]) [newtonSLRQD] [] [] [dRef hibbeler2004]
+  "NewtonSecLawRotMot" newtonSLRNotes
 
 newtonSLRQD :: ModelQDef
 newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr

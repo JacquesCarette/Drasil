@@ -8,7 +8,8 @@ module Language.Drasil.Chunk.Unital (
 
 import Control.Lens (makeLenses, view, (^.))
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..))
+import qualified Data.Set as Set
 
 import Language.Drasil.Chunk.Concept (dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
@@ -18,7 +19,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), TempHasUnit(findUnit),  UnitDefn, unitWrapper)
 import Language.Drasil.Expr.Class (sy)
-import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Stages (Stage)
@@ -32,6 +33,13 @@ data UnitalChunk = UC { _defq' :: DefinedQuantityDict
                       , _uni :: UnitDefn
                       }
 makeLenses ''UnitalChunk
+
+instance HasChunkRefs UnitalChunk where
+  chunkRefs u = Set.unions
+    [ chunkRefs (u ^. defq')
+    , chunkRefs (u ^. uni)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds 'UID' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance HasUID        UnitalChunk where uid = defq' . uid

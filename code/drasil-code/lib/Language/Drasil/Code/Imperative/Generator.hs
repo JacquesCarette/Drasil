@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternSynonyms #-}
 -- | Defines generation functions for SCS code packages.
 module Language.Drasil.Code.Imperative.Generator (
   generator, generateCode, generateCodeProc
@@ -8,11 +9,12 @@ import Control.Monad.State (get, evalState, runState)
 import qualified Data.Set as Set (fromList)
 import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList, catMaybes)
+import Data.Foldable (traverse_)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
-import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
+import Text.PrettyPrint.HughesPJ (isEmpty, vcat, render)
 
 import Language.Drasil
-import Drasil.GOOL (OOProg, VisibilityTag(..),
+import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
   ProgData(..), initialState)
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
@@ -20,9 +22,10 @@ import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
 import Language.Drasil.Printing.Import (spec)
 import Drasil.System
-import Utils.Drasil (createDirIfMissing)
+import Utils.Drasil (createDirIfMissing, createFile)
+import Utils.Drasil.FileData (FileAndContents(..), fileAndContents,
+  hasPathAndDocToFileAndContents)
 
-import Language.Drasil.Code.Code (createCodeFiles, makeCode)
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
@@ -40,12 +43,14 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genCalcFuncProc, genOutputFormat, genOutputFormatProc, genOutputMod,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..),
-  package)
+  ScopeType(..), designLog, modExportMap, clsDefMap, genICName,
+  makeSoftwareDossierInfo)
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (makeSds,
+  SoftwareDossierSym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
-import Language.Drasil.Code.FileData (PackageData(..), fileAndContents)
-import Language.Drasil.Code.FileNames(sampleInputName)
+import Language.Drasil.Code.PackageData (PackageData(..), pattern PackageData,
+  package)
+import Language.Drasil.SoftwareDossier.FileNames(sampleInputName)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
@@ -57,7 +62,10 @@ import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
 -- 'String' parameter is a string representing the date.
 -- \['Expr'\] parameter is the sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
-generator l dt sd chs cs = DrasilState {
+generator l dt sd chs cs = let
+  sdsInfo = makeSoftwareDossierInfo
+    (doxVerbosity $ docConfig $ optFeats chs) (auxFiles $ optFeats chs) sd
+  in DrasilState {
   -- constants
   codeSpec = cs,
   printfo = pinfo,
@@ -71,12 +79,9 @@ generator l dt sd chs cs = DrasilState {
   onSfwrC = onSfwrConstraint $ srsConstraints chs,
   onPhysC = onPhysConstraint $ srsConstraints chs,
   commented = comments $ docConfig $ optFeats chs,
-  doxOutput = doxVerbosity $ docConfig $ optFeats chs,
   date = showDate $ dates $ docConfig $ optFeats chs,
   logKind  = logging $ logConfig $ optFeats chs,
   logName = logFile $ logConfig $ optFeats chs,
-  auxiliaries = auxFiles $ optFeats chs,
-  sampleData = sd,
   dsICNames = icNames chs,
   modules = modules',
   extLibNames = nms,
@@ -87,6 +92,7 @@ generator l dt sd chs cs = DrasilState {
   clsMap = cdm,
   defSet = Set.fromList $ keys mem ++ keys cdm,
   getVal = folderVal chs,
+  _softwareDossierInfo = sdsInfo,
   -- stateful
   currentModule = "",
   currentClass = "",
@@ -114,22 +120,24 @@ generator l dt sd chs cs = DrasilState {
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
 -- be generated in.
-generateCode :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
+generateCode :: (OOProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) =>
   Lang -> (progRepr (OO.Program progRepr) -> ProgData) ->
-  (packRepr (PackageData ProgData) -> PackageData ProgData) ->
+  (packRepr PackageData -> PackageData) ->
   DrasilState -> IO ()
 generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackage unReprProg) g
-      baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
-          not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
-      aux
-        | l == Python = fileAndContents "__init__.py" mempty : baseAux
-        | otherwise   = baseAux
-      code = makeCode (progMods $ packageProg $ unReprPack pckg) aux
-  createCodeFiles code
+      (PackageData prog progDossier) = unReprPack pckg
+      designLogFile = [fileAndContents "designLog.txt" (ds ^. designLog) |
+                        not $ isEmpty $ ds ^. designLog]
+      initFile = [fileAndContents "__init__.py" mempty | l == Python]
+      dossier = progDossier ++ designLogFile ++ initFile
+      packageFiles = map
+        hasPathAndDocToFileAndContents (progMods prog)
+        ++ dossier
+  traverse_ (\file -> createFile (filePath file) (render $ fileDoc file)) packageFiles
   setCurrentDirectory workingDir
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
@@ -138,17 +146,18 @@ generateCode l unReprProg unReprPack g = do
 -- package will be generated in.
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
-genPackage :: (OOProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
+genPackage :: (OOProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) =>
   (progRepr (OO.Program progRepr) -> ProgData) ->
-  GenState (packRepr (PackageData ProgData))
+  GenState (packRepr PackageData)
 genPackage unRepr = do
   g <- get
   ci <- genProgram
   p <- genProgram
   let info = OO.unCI $ evalState ci initialState
       (reprPD, s) = runState p info
+      fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
-      m = makefile (libPaths g) (implType g) (commented g) s pd
+      m = makefile (libPaths g) (implType g) (commented g) fileInfoState pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
@@ -158,7 +167,7 @@ genPackage unRepr = do
       mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
       scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
-  d <- genDoxConfig s
+  d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
         langName = "",
         langVersion = "",
@@ -228,19 +237,23 @@ genModules = do
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
 -- be generated in.
-generateCodeProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
+generateCodeProc :: (ProcProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) =>
   Lang -> (progRepr (Proc.Program progRepr) -> ProgData) ->
-  (packRepr (PackageData ProgData) -> PackageData ProgData) ->
+  (packRepr PackageData -> PackageData) ->
   DrasilState -> IO ()
 generateCodeProc l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackageProc unReprProg) g
-      baseAux = [fileAndContents "designLog.txt" (ds ^. designLog) |
-          not $ isEmpty $ ds ^. designLog] ++ packageAux (unReprPack pckg)
-      code = makeCode (progMods $ packageProg $ unReprPack pckg) baseAux
-  createCodeFiles code
+      (PackageData prog progDossier) = unReprPack pckg
+      designLogFile = [fileAndContents "designLog.txt" (ds ^. designLog) |
+                        not $ isEmpty $ ds ^. designLog]
+      dossier =  progDossier ++ designLogFile
+      packageFiles = map
+        hasPathAndDocToFileAndContents (progMods prog)
+        ++ dossier
+  traverse_ (\file -> createFile (filePath file) (render $ fileDoc file)) packageFiles
   setCurrentDirectory workingDir
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
@@ -249,17 +262,18 @@ generateCodeProc l unReprProg unReprPack g = do
 -- package will be generated in.
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
-genPackageProc :: (ProcProg progRepr, AuxiliarySym packRepr, Monad packRepr) =>
+genPackageProc :: (ProcProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) =>
   (progRepr (Proc.Program progRepr) -> ProgData) ->
-  GenState (packRepr (PackageData ProgData))
+  GenState (packRepr PackageData)
 genPackageProc unRepr = do
   g <- get
   ci <- genProgramProc
   p <- genProgramProc
   let info = Proc.unCI $ evalState ci initialState
       (reprPD, s) = runState p info
+      fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
-      m = makefile (libPaths g) (implType g) (commented g) s pd
+      m = makefile (libPaths g) (implType g) (commented g) fileInfoState pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
@@ -268,7 +282,7 @@ genPackageProc unRepr = do
       mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
       scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
-  d <- genDoxConfig s
+  d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
         langName = "",
         langVersion = "",

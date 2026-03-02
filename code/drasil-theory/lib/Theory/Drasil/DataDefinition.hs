@@ -63,7 +63,12 @@ ddPkt lpkt = lens g s
     s (DDME qd pkt) a' = DDME qd (pkt & lpkt .~ a')
 
 instance HasChunkRefs DataDefinition where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs dd = mconcat
+    [ either chunkRefs chunkRefs (qdFromDD dd)
+    , chunkRefs (dd ^. ddPkt pktSN)
+    , chunkRefs (dd ^. ddPkt pktSS)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of a 'DataDefinition where'.
 instance HasUID             DataDefinition where uid = ddPkt pktUID

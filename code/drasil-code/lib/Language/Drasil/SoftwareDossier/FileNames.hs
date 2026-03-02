@@ -1,4 +1,4 @@
-module Language.Drasil.Code.FileNames (
+module Language.Drasil.SoftwareDossier.FileNames (
   -- * Common Syntax
   doxConfigName, makefileName, sampleInputName, readMeName
 ) where

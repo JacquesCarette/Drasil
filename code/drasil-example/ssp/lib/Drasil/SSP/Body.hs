@@ -6,7 +6,7 @@ import Prelude hiding (sin, cos, tan)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 import Drasil.Document.Contents (foldlSP, foldlSPCol)
@@ -14,7 +14,7 @@ import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.Metadata (inModel, software)
@@ -141,8 +141,8 @@ conceptChunks =
   map cw [time, surface]
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts conceptChunks
-  [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon
+symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [degree]
+  dataDefs iMods generalDefinitions tMods concIns citations labCon
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

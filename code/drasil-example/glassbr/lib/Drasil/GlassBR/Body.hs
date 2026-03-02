@@ -9,7 +9,7 @@ import qualified Language.Drasil.Development as D
 import Drasil.Metadata as M (dataDefn, inModel, thModel, software)
 import Drasil.SRSDocument
 import Drasil.DocLang (auxSpecSent, termDefnF')
-import Drasil.Generator (cdb)
+import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Code (Mod(..), asVC)
@@ -131,7 +131,7 @@ conceptChunks =
   map cw mathquants
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsWCodeSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
+symbMap = withCommonKnowledge [] symbolsWCodeSymbols ideaDicts conceptChunks []
   GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]

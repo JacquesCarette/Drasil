@@ -1,4 +1,6 @@
-module Drasil.Projectile.Lesson.CaseProb where
+module Drasil.Projectile.Lesson.CaseProb (
+  caseProbCont, caseProbSecs, figRefs
+) where
 
 import Utils.Drasil (weave)
 
@@ -20,18 +22,82 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (s_2)
 
 caseProbCont :: [Contents]
-caseProbCont = [projMotionHead, motionContextP1, LlC figCSandA, motionContextP2,
-  horMotionHead, hMintro, horizMotionEqn1, horizMotionEqn2, horizMotionEqn3, hMconcl,
-  verMotionHead, vMintro, vertMotionEqn1, vertMotionEqn2, vertMotionEqn3, vMconcl, summaryHead, summary,
-  procforAnlsHead, procforAnls, stepOneHead, stepOneCont, stepTwoHead, stepTwoCont, stepThreeHead, stepThreeCont,
-  stepFourHead, stepFourCont, stepFourOneHead, horizMotionEqn1, horizMotionEqn1Sent, horizMotionEqn2, stepFourTwoHead,
-  verMotionCont, vertMotionEqn1, vertMotionEqn2, vertMotionEqn3, stepFiveHead, stepFiveCont]
+caseProbCont = []
 
-projMotionHead, horMotionHead, verMotionHead, summaryHead :: Contents
-projMotionHead = foldlSP_ [headSent 1 (S "Motion of a Projectile")]
-horMotionHead  = foldlSP_ [headSent 2 (S "Horizontal Motion")]
-verMotionHead  = foldlSP_ [headSent 2 (S "Vertical Motion")]
-summaryHead    = foldlSP_ [headSent 2 (S "Summary")]
+caseProbSecs :: [Section]
+caseProbSecs = [motProjSec]
+
+motProjSec :: Section
+motProjSec = section (S "Motion of a Projectile")
+  [motionContextP1, LlC figCSandA, motionContextP2]
+  [horizMotSec, vertMotSec, summarySec]
+  (makeSecRef "motProj" (S "MotProj"))
+
+horizMotSec :: Section
+horizMotSec = section (S "Horizontal Motion")
+  [hMintro, horizMotionEqn1, horizMotionEqn2, horizMotionEqn3, hMconcl]
+  []
+  (makeSecRef "horizMot" $ S "HorizMot")
+
+vertMotSec :: Section
+vertMotSec = section (S "Vertical Motion")
+  [vMintro, vertMotionEqn1, vertMotionEqn2, vertMotionEqn3, vMconcl]
+  []
+  (makeSecRef "vertMot" $ S "VertMot")
+
+summarySec :: Section
+summarySec = section (S "Summary")
+  [summary]
+  [procAlyss]
+  (makeSecRef "summary" $ S "Smry")
+
+procAlyss :: Section
+procAlyss = section (S "Procedure for Analysis")
+  [procforAnls]
+  [step1Sec, step2Sec, step3Sec, step4Sec, step5Sec]
+  (makeSecRef "analysisProc" $ S "AnalysisProc")
+
+step1Sec :: Section
+step1Sec = section (S "Step 1: Coordinate System")
+  [stepOneCont]
+  []
+  (makeSecRef "step5" $ S "S5")
+
+step2Sec :: Section
+step2Sec = section (S "Step 2: Identify Knowns")
+  [stepTwoCont]
+  []
+  (makeSecRef "step5" $ S "S5")
+
+step3Sec :: Section
+step3Sec = section (S "Step 3: Identify Unknowns")
+  [stepThreeCont]
+  []
+  (makeSecRef "step5" $ S "S5")
+
+step4Sec :: Section
+step4Sec = section (S "Step 4: Kinematic Equations")
+  [stepFourCont]
+  [step41Sec, step42Sec]
+  (makeSecRef "step5" $ S "S5")
+
+step41Sec :: Section
+step41Sec = section (S "Step 4.1: Horizontal Motion")
+  [horizMotionEqn1, horizMotionEqn1Sent, horizMotionEqn2]
+  []
+  (makeSecRef "step4.1" $ S "S4.1")
+
+step42Sec :: Section
+step42Sec = section (S "Step 4.2: Vertical Motion")
+  [verMotionCont, vertMotionEqn1, vertMotionEqn2, vertMotionEqn3]
+  []
+  (makeSecRef "step4.2" $ S "S4.2")
+
+step5Sec :: Section
+step5Sec = section (S "Step 5: Solve for Unknowns")
+  [stepFiveCont]
+  []
+  (makeSecRef "step5" $ S "S5")
 
 motionContextP1, motionContextP2 :: Contents
 motionContextP1
@@ -89,16 +155,6 @@ summary = foldlSP [S "In addition to knowing that the horizontal component" `S.o
 
 procforAnls :: Contents
 procforAnls = foldlSP [S "Free-flight", phrase projMotion, S "problems can be solved using the following", phrase procedure]
-
-procforAnlsHead, stepOneHead, stepTwoHead, stepThreeHead, stepFourHead, stepFourOneHead, stepFourTwoHead, stepFiveHead :: Contents
-procforAnlsHead = foldlSP_ [headSent 2 (S "Procedure for Analysis")]
-stepOneHead     = foldlSP_ [headSent 3 (S "Step 1: Coordinate System")]
-stepTwoHead     = foldlSP_ [headSent 3 (S "Step 2: Identify Knowns")]
-stepThreeHead   = foldlSP_ [headSent 3 (S "Step 3: Identify Unknowns")]
-stepFourHead    = foldlSP_ [headSent 3 (S "Step 4: Kinematic Equations")]
-stepFourOneHead = foldlSP_ [headSent 4 (S "Step 4.1: Horizontal Motion")]
-stepFourTwoHead = foldlSP_ [headSent 4 (S "Step 4.2: Vertical Motion")]
-stepFiveHead    = foldlSP_ [headSent 3 (S "Step 5: Solve for Unknowns")]
 
 stepOneCont, stepTwoCont, stepThreeCont, stepFourCont, horizMotionEqn1, horizMotionEqn1Sent, horizMotionEqn2, horizMotionEqn3,
   vertMotionEqn1, vertMotionEqn2, vertMotionEqn3, verMotionCont, stepFiveCont :: Contents

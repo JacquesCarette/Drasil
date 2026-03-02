@@ -72,7 +72,7 @@ import Drasil.Metadata (software, dataDefn, genDefn, inModel, thModel, requireme
 import Data.Drasil.Concepts.Documentation (likelyChg, section_, unlikelyChg, assumption, goalStmt, refName, refBy)
 import qualified Data.Map.Strict as M
 
-import Language.Drasil.Development (sdep)
+import Language.Drasil.Development (shortdep)
 
 -- * Main Function
 
@@ -255,7 +255,7 @@ collectDocumentAbbreviations renderedSecs cdb =
   where
     -- Terms found in the document using the list of `Sentence`s extracted from
     -- the sections.
-    foundInDoc = concatMap (Set.toList . sdep) $ concatMap getSec renderedSecs
+    foundInDoc = concatMap (Set.toList . shortdep) $ concatMap getSec renderedSecs
     -- Terms that could not be found in `Sentence`s, but are important to
     -- include in the table of abbreviations and acronyms.
     missingFromDocHACK = map (^. uid) [assumption, dataDefn, genDefn, goalStmt,

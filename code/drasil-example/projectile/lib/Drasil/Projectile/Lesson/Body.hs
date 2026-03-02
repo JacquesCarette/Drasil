@@ -28,10 +28,10 @@ import Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo)
 
 nbDecl :: LsnDesc
 nbDecl = [
-    LearnObj $ LrnObjProg [learnObjContext],
-    Review $ ReviewProg reviewContent,
-    CaseProb $ CaseProbProg caseProbCont,
-    Example $ ExampleProg exampleContent,
+    LearnObj $ LrnObjProg [learnObjContext] [],
+    Review $ ReviewProg reviewContent [],
+    CaseProb $ CaseProbProg caseProbCont [],
+    Example $ ExampleProg exampleContent [],
     BibSec
   ]
 

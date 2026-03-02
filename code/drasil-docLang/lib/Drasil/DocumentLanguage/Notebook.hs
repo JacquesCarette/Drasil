@@ -37,27 +37,27 @@ mkSections si dd = map doit dd
 
 -- | Helper for making the 'Introduction' section.
 mkIntro :: Intro -> Section
-mkIntro (IntrodProg i) = Lsn.intro i []
+mkIntro (IntrodProg i ss) = Lsn.intro i ss
 
 -- | Helper for making the 'Learning Objectives' section.
 mkLearnObj :: LearnObj -> Section
-mkLearnObj (LrnObjProg cs) = Lsn.learnObj cs []
+mkLearnObj (LrnObjProg cs ss) = Lsn.learnObj cs ss
 
 -- | Helper for making the 'Review' section.
 mkReview :: Review -> Section
-mkReview (ReviewProg r) = Lsn.review r []
+mkReview (ReviewProg r ss) = Lsn.review r ss
 
 -- | Helper for making the 'Case Problem' section.
 mkCaseProb :: CaseProb -> Section
-mkCaseProb (CaseProbProg cp) = Lsn.caseProb cp []
+mkCaseProb (CaseProbProg cp ss) = Lsn.caseProb cp ss
 
 -- | Helper for making the 'Example' section.
 mkExample:: Example -> Section
-mkExample (ExampleProg cs) = Lsn.example cs []
+mkExample (ExampleProg cs ss) = Lsn.example cs ss
 
 -- | Helper for making the 'Summary' section.
 mkSmmry :: Smmry -> Section
-mkSmmry (SmmryProg cs) = Lsn.summary cs []
+mkSmmry (SmmryProg cs ss) = Lsn.summary cs ss
 
 -- | Helper for making the 'Bibliography' section.
 mkBib :: BibRef -> Section
@@ -65,4 +65,4 @@ mkBib bib = Lsn.reference [UlC $ ulcc (Bib bib)] []
 
 -- | Helper for making the 'Appendix' section.
 mkAppndx :: Apndx -> Section
-mkAppndx (ApndxProg cs) = Lsn.appendix cs []
+mkAppndx (ApndxProg cs ss) = Lsn.appendix cs ss

@@ -21,25 +21,25 @@ data LsnChapter = Intro Intro
 -- TODO: Work on detail structure of Lesson Plan
 
 -- ** Introduction
-newtype Intro = IntrodProg [Contents]
+data Intro = IntrodProg [Contents] [Section]
 
 -- ** Learning Objectives
-newtype LearnObj = LrnObjProg [Contents]
+data LearnObj = LrnObjProg [Contents] [Section]
 
 -- ** Review Chapter
-newtype Review = ReviewProg [Contents]
+data Review = ReviewProg [Contents] [Section]
 
 -- ** A Case Problem
-newtype CaseProb = CaseProbProg [Contents]
+data CaseProb = CaseProbProg [Contents] [Section]
 
 -- ** Examples of the lesson
-newtype Example = ExampleProg [Contents]
+data Example = ExampleProg [Contents] [Section]
 
 -- ** Summary
-newtype Smmry = SmmryProg [Contents]
+data Smmry = SmmryProg [Contents] [Section]
 
 -- ** Appendix
-newtype Apndx = ApndxProg [Contents]
+data Apndx = ApndxProg [Contents] [Section]
 
 -- * Multiplate Definition and Type
 
@@ -65,12 +65,12 @@ instance Multiplate DLPlate where
     lc (Apndx x) = Apndx <$> apndx p x
     lc BibSec = pure BibSec
 
-    introd (IntrodProg con) = pure $ IntrodProg con
-    lrnObj (LrnObjProg con) = pure $ LrnObjProg con
-    rvw (ReviewProg con) = pure $ ReviewProg con
-    csProb (CaseProbProg con) = pure $ CaseProbProg con
-    exmp (ExampleProg con) = pure $ ExampleProg con
-    smry (SmmryProg con) = pure $ SmmryProg con
-    aps (ApndxProg con) = pure $ ApndxProg con
+    introd (IntrodProg con secs) = pure $ IntrodProg con secs
+    lrnObj (LrnObjProg con secs) = pure $ LrnObjProg con secs
+    rvw (ReviewProg con secs) = pure $ ReviewProg con secs
+    csProb (CaseProbProg con secs) = pure $ CaseProbProg con secs
+    exmp (ExampleProg con secs) = pure $ ExampleProg con secs
+    smry (SmmryProg con secs) = pure $ SmmryProg con secs
+    aps (ApndxProg con secs) = pure $ ApndxProg con secs
   mkPlate b = DLPlate (b lsnChap) (b intro) (b learnObj) (b review)
     (b caseProb) (b example) (b smmry) (b apndx)

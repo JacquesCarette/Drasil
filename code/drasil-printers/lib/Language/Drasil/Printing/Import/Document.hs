@@ -78,7 +78,7 @@ createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]
 createLayout sm = map (sec sm 0)
 
 createLayout' :: PrintingInformation -> [Section] -> [T.LayoutObj]
-createLayout' sm = map (cel sm 0)
+createLayout' sm = concatMap (cel sm 0)
 
 -- | Helper for extracting subsections into their own sections.
 extractSubS :: Int -> Section -> [(T.Depth, Section)]
@@ -110,16 +110,22 @@ sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used 
   (T.Header depth (spec sm titleLb) refr :
    map (layout sm depth) contents) refr
 
-cel :: PrintingInformation -> Int -> Section -> T.LayoutObj
+cel :: PrintingInformation -> Int -> Section -> [T.LayoutObj]
 cel sm depth x@(Section titleLb contents _) =
   let refr = P.S (refAdd x) in
-  T.Cell (T.Header depth (spec sm titleLb) refr :
-   map (layout sm depth) contents)
+  T.Cell [T.Header depth (spec sm titleLb) refr] :
+   map (T.Cell . layout' sm depth) contents
 
 -- | Helper for translating sections into a printable representation of layout objects ('T.LayoutObj').
 layout :: PrintingInformation -> Int -> SecCons -> T.LayoutObj
 layout sm currDepth (Sub s) = sec sm (currDepth+1) s
 layout sm _         (Con c) = lay sm c
+
+-- | Helper for translating sections into a printable representation of layout
+-- objects ('T.LayoutObj').
+layout' :: PrintingInformation -> Int -> SecCons -> [T.LayoutObj]
+layout' sm currDepth (Sub s) = cel sm (currDepth+1) s
+layout' sm _         (Con c) = [lay sm c]
 
 -- | Helper that translates 'Contents' to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'layout'.

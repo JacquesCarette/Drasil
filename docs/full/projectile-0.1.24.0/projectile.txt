@@ -157,10 +157,8 @@ summaryHead :: Contents
 motionContextP1 :: Contents
 motionContextP2 :: Contents
 hMintro :: Contents
-hMequations :: Contents
 hMconcl :: Contents
 vMintro :: Contents
-vMequations :: Contents
 vMconcl :: Contents
 summary :: Contents
 procforAnls :: Contents
@@ -185,9 +183,6 @@ vertMotionEqn2 :: Contents
 vertMotionEqn3 :: Contents
 verMotionCont :: Contents
 stepFiveCont :: Contents
-equationsSents :: [Sentence]
-horMotionEqns :: [ModelExpr]
-verMotionEqns :: [ModelExpr]
 motionSent :: Sentence
 figRefs :: [Reference]
 foot :: UnitDefn

@@ -24,7 +24,8 @@ data CodeDefinition = CD { _cchunk   :: CodeChunk
 makeLenses ''CodeDefinition
 
 instance HasChunkRefs CodeDefinition where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs cd = chunkRefs (cd ^. cchunk)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeDefinition'.
 instance HasUID           CodeDefinition where uid = cchunk . uid

@@ -21,7 +21,8 @@ newtype NamedArgument = NA {_qtd :: DefinedQuantityDict}
 makeLenses ''NamedArgument
 
 instance HasChunkRefs NamedArgument where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs na = chunkRefs (na ^. qtd)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'DefinedQuantityDict' used to make the 'NamedArgument'.
 instance HasUID         NamedArgument where uid = qtd . uid

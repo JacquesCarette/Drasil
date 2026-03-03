@@ -235,7 +235,7 @@ so that we have partially automated algorithm selection.
 
 ## Correct-by-Construction READMEs
 
-From [@JaquesCarette](https://github.com/JacquesCarette) in [#4763](../issues/4763): "The paper Linting Style and Substance in READMEs is about post-facto finding issues in READMEs. But we can 'turn it around' into designing a DSL (internal to Drasil) for writing READMEs that would by construction assuredly satisfy many of the items that their LintMe looks for."
+From [@JaquesCarette](https://github.com/JacquesCarette) in [#4763](../issues/4763): "The paper [Linting Style and Substance in READMEs](https://arxiv.org/pdf/2603.00331) is about post-facto finding issues in READMEs. But we can 'turn it around' into designing a DSL (internal to Drasil) for writing READMEs that would by construction assuredly satisfy many of the items that their LintMe looks for."
 
 Essentially, this paper comes up with a set of metrics for what a "good" README should be like, which is in some ways the hardest part of creating a "good" README. We can take those metrics and apply them to our generators so that our generated READMEs automatically do well under that test.
 

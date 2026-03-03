@@ -3,10 +3,10 @@
 module Drasil.Sections.TraceabilityMandGs (
   -- * Main Functions
   generateTraceTable, traceMatAssumpAssump, traceMatAssumpOther,
-  traceMatRefinement, traceMatOtherReq, traceMatStandard,
+  traceMatAssumpOtherUID, traceMatRefinement, traceMatOtherReq, traceMatStandard,
   -- * Helpers
   tvAssumps, tvDataDefns, tvGenDefns, tvTheoryModels,
-  tvInsModels, tvGoals, tvReqs, tvChanges
+  tvInsModels, tvGoals, tvReqs, tvChanges, tvLikelyChgs, tvUnlikelyChgs
 ) where
 
 import Control.Lens((^.))
@@ -17,10 +17,10 @@ import Drasil.DocumentLanguage.Definitions (TraceViewCat)
 import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
   traceMReferrers, traceView, traceViewCC)
 import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
-  goalStmt, goalStmtDom, reqDom, item, section_, likelyChg,
-  unlikelyChg)
+  goalStmt, goalStmtDom, reqDom, item, section_, likelyChg, likeChgDom,
+  unlikelyChg, unlikeChgDom)
 import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, requirement)
-import Drasil.Database (mkUid)
+import Drasil.Database (mkUid, UID)
 import Drasil.System (System, HasSystem(..))
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
@@ -68,19 +68,40 @@ tvReqs = traceViewCC reqDom
 tvChanges :: TraceViewCat
 tvChanges = traceViewCC chgProbDom
 
+-- | Traceability viewing likely changes only. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
+tvLikelyChgs :: TraceViewCat
+tvLikelyChgs = traceViewCC likeChgDom
+
+-- | Traceability viewing unlikely changes only. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
+tvUnlikelyChgs :: TraceViewCat
+tvUnlikelyChgs = traceViewCC unlikeChgDom
+
 -- | Assumptions on the assumptions of a traceability matrix.
 traceMatAssumpAssump :: TraceConfig
 traceMatAssumpAssump = TraceConfig (mkUid "TraceMatAvsA") [plural assumption
   +:+ S "on each other"] (titleize' assumption +:+
   S "and Other" +:+ titleize' assumption ) [tvAssumps] [tvAssumps]
 
--- | Other assumptions of the traceability matrix
-traceMatAssumpOther :: TraceConfig
-traceMatAssumpOther = TraceConfig (mkUid "TraceMatAvsAll") [plural dataDefn,
-  plural thModel, plural genDefn, plural inModel, plural requirement,
-  plural likelyChg, D.toSent $ pluralNP (unlikelyChg `NC.onThePP` assumption)]
+-- | UID for the 'traceMatAssumpOther' traceability matrix.
+traceMatAssumpOtherUID :: UID
+traceMatAssumpOtherUID = mkUid "TraceMatAvsAll"
+
+-- | Other assumptions of the traceability matrix.
+-- Conditionally includes likely and unlikely changes in the description
+-- based on whether any exist in the system.
+traceMatAssumpOther :: System -> TraceConfig
+traceMatAssumpOther si = TraceConfig traceMatAssumpOtherUID
+  ([plural dataDefn, plural thModel, plural genDefn, plural inModel, plural requirement]
+   ++ lcLabel ++ ucLabel)
   (titleize' assumption +:+ S "and Other" +:+ titleize' item) [tvAssumps]
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvChanges]
+  where
+    lcLabel = case traceMReferrers (`tvLikelyChgs` si) si of
+      [] -> []
+      _  -> [plural likelyChg]
+    ucLabel = case traceMReferrers (`tvUnlikelyChgs` si) si of
+      [] -> []
+      _  -> [D.toSent $ pluralNP (unlikelyChg `NC.onThePP` assumption)]
 
 -- | Refinement of the traceability matrix.
 traceMatRefinement :: TraceConfig
@@ -108,5 +129,5 @@ traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
 
 -- | Contains traceability matrix assumptions, other assumptions, refinement, and other requirements.
 traceMatStandard :: System -> [TraceConfig]
-traceMatStandard s = map ($ s) [const traceMatAssumpAssump, const traceMatAssumpOther, const traceMatRefinement,
+traceMatStandard s = map ($ s) [const traceMatAssumpAssump, traceMatAssumpOther, const traceMatRefinement,
   traceMatOtherReq]

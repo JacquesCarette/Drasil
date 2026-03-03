@@ -8,7 +8,7 @@ import Drasil.DocumentLanguage.Core (getTraceConfigUID)
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccRef)
 import Drasil.Sections.TableOfSymbols (symbTableRef)
 import Drasil.Sections.TableOfUnits (unitTableRef)
-import Drasil.Sections.TraceabilityMandGs (traceMatAssumpAssump, traceMatAssumpOther, traceMatRefinement)
+import Drasil.Sections.TraceabilityMandGs (traceMatAssumpAssump, traceMatAssumpOtherUID, traceMatRefinement)
 import Drasil.Sections.Requirements (reqInputsRef)
 import Drasil.Sections.AuxiliaryConstants (tableOfConstantsRef)
 import Drasil.Sections.SpecificSystemDescription (tInDataCstRef, tOutDataCstRef)
@@ -18,4 +18,5 @@ secRefs :: [Reference]
 secRefs = sectionReferences ++ [tableAbbAccRef, reqInputsRef, symbTableRef,
   unitTableRef, tableOfConstantsRef, tInDataCstRef, tOutDataCstRef]
   ++ map (ref.makeTabRef'.getTraceConfigUID) [traceMatAssumpAssump, -- can this be deleted?
-  traceMatAssumpOther, traceMatRefinement]
+    traceMatRefinement]
+  ++ [ref $ makeTabRef' traceMatAssumpOtherUID]

@@ -60,21 +60,24 @@ off the shelf solutions
 
 -- TODO: Use DLPlate for this.
 -- | Finds all possible sections and subsections to make a Table of Contents.
-toToC :: DocSection -> ItemType
-toToC TableOfContents      = mktToCSec
-toToC (RefSec rs)          = mktRefSec rs
-toToC (IntroSec i)         = mktIntroSec i
-toToC (StkhldrSec sts)     = mktStkhldrSec sts
-toToC (GSDSec gs')         = mktGSDSec gs'
-toToC (SSDSec ss)          = mktSSDSec ss
-toToC (ReqrmntSec r)       = mktReqrmntSec r
-toToC (LCsSec lc)          = mktLCsSec lc
-toToC (UCsSec ulcs)        = mktUCsSec ulcs
-toToC (TraceabilitySec t)  = mktTraceabilitySec t
-toToC (AuxConstntSec acs)  = mktAuxConsSec acs
-toToC Bibliography         = mktBib
-toToC (AppndxSec a)        = mktAppndxSec a
-toToC (OffShelfSolnsSec o) = mktOffShelfSolnSec o
+-- Returns 'Nothing' for sections that should be omitted (e.g., empty changes sections).
+toToC :: DocSection -> Maybe ItemType
+toToC TableOfContents          = Just mktToCSec
+toToC (RefSec rs)              = Just $ mktRefSec rs
+toToC (IntroSec i)             = Just $ mktIntroSec i
+toToC (StkhldrSec sts)         = Just $ mktStkhldrSec sts
+toToC (GSDSec gs')             = Just $ mktGSDSec gs'
+toToC (SSDSec ss)              = Just $ mktSSDSec ss
+toToC (ReqrmntSec r)           = Just $ mktReqrmntSec r
+toToC (LCsSec (LCsProg []))    = Nothing  -- omit empty likely changes section
+toToC (LCsSec lc)              = Just $ mktLCsSec lc
+toToC (UCsSec (UCsProg []))    = Nothing  -- omit empty unlikely changes section
+toToC (UCsSec ulcs)            = Just $ mktUCsSec ulcs
+toToC (TraceabilitySec t)      = Just $ mktTraceabilitySec t
+toToC (AuxConstntSec acs)      = Just $ mktAuxConsSec acs
+toToC Bibliography             = Just mktBib
+toToC (AppndxSec a)            = Just $ mktAppndxSec a
+toToC (OffShelfSolnsSec o)     = Just $ mktOffShelfSolnSec o
 
 mkHeaderItem :: Sentence -> [Sentence] -> ItemType
 mkHeaderItem hdr itm = Nested hdr $ Bullet $ map (\x -> (Flat x, Nothing)) itm

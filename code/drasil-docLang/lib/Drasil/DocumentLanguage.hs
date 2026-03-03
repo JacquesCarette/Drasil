@@ -177,29 +177,31 @@ getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 
 -- | Helper for creating the different document sections.
 mkSections :: System -> DocDesc -> Maybe BibRef -> [Section]
-mkSections si dd mbib = map doit dd
+mkSections si dd mbib = mapMaybe doit dd
   where
-    doit :: DocSection -> Section
-    doit TableOfContents      = mkToC dd
-    doit (RefSec rs)          = mkRefSec si dd rs
-    doit (IntroSec is)        = mkIntroSec si is
-    doit (StkhldrSec sts)     = mkStkhldrSec sts
-    doit (SSDSec ss)          = mkSSDSec si ss
-    doit (AuxConstntSec acs)  = mkAuxConsSec acs
-    doit Bibliography         = mkBib $ fromMaybe [] mbib
-    doit (GSDSec gs')         = mkGSDSec gs'
-    doit (ReqrmntSec r)       = mkReqrmntSec r
-    doit (LCsSec lc)          = mkLCsSec lc
-    doit (UCsSec ulcs)        = mkUCsSec ulcs
-    doit (TraceabilitySec t)  = mkTraceabilitySec t si
-    doit (AppndxSec a)        = mkAppndxSec a
-    doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
+    doit :: DocSection -> Maybe Section
+    doit (LCsSec (LCsProg []))  = Nothing  -- suppress empty likely changes section
+    doit (UCsSec (UCsProg []))  = Nothing  -- suppress empty unlikely changes section
+    doit TableOfContents        = Just $ mkToC dd
+    doit (RefSec rs)            = Just $ mkRefSec si dd rs
+    doit (IntroSec is)          = Just $ mkIntroSec si is
+    doit (StkhldrSec sts)       = Just $ mkStkhldrSec sts
+    doit (SSDSec ss)            = Just $ mkSSDSec si ss
+    doit (AuxConstntSec acs)    = Just $ mkAuxConsSec acs
+    doit Bibliography           = Just $ mkBib $ fromMaybe [] mbib
+    doit (GSDSec gs')           = Just $ mkGSDSec gs'
+    doit (ReqrmntSec r)         = Just $ mkReqrmntSec r
+    doit (LCsSec lc)            = Just $ mkLCsSec lc
+    doit (UCsSec ulcs)          = Just $ mkUCsSec ulcs
+    doit (TraceabilitySec t)    = Just $ mkTraceabilitySec t si
+    doit (AppndxSec a)          = Just $ mkAppndxSec a
+    doit (OffShelfSolnsSec o)   = Just $ mkOffShelfSolnSec o
 
 -- ** Table of Contents
 
 -- | Helper for making the Table of Contents section.
 mkToC :: DocDesc -> Section
-mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothing) . toToC) dd] []
+mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ mapMaybe (fmap (, Nothing) . toToC) dd] []
   where
     intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
 

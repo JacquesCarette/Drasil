@@ -31,8 +31,6 @@ An outline of all sections included in this SRS is recorded here for easy refere
 - [Requirements](./SecRequirements.md#Sec:Requirements)
   - [Functional Requirements](./SecFRs.md#Sec:FRs)
   - [Non-Functional Requirements](./SecNFRs.md#Sec:NFRs)
-- [Likely Changes](./SecLCs.md#Sec:LCs)
-- [Unlikely Changes](./SecUCs.md#Sec:UCs)
 - [Traceability Matrices and Graphs](./SecTraceMatrices.md#Sec:TraceMatrices)
 - [Values of Auxiliary Constants](./SecAuxConstants.md#Sec:AuxConstants)
 - [References](./SecReferences.md#Sec:References)

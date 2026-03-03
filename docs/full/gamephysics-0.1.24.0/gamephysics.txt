@@ -51,9 +51,7 @@ progName :: CI
 
 module Drasil.GamePhysics.References
 chaslesWiki :: Citation
-jfBeucheIntro :: Citation
 parnas1978 :: Citation
-sciComp2013 :: Citation
 citations :: BibRef
 uriReferences :: [Reference]
 accelGravitySrc :: Reference

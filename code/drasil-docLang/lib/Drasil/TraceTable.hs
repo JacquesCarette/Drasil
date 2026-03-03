@@ -5,6 +5,7 @@ module Drasil.TraceTable where
 import Control.Lens ((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (foldFor, preorderFold, purePlate)
+import Data.List.NonEmpty (toList)
 import qualified Data.Map.Strict as M
 
 import Drasil.Database (UID, HasUID(..))
@@ -31,8 +32,8 @@ dependencyPlate = preorderFold $ purePlate {
   reqSub = Constant . getDependenciesOf [defs] <$> \case
     (FReqsSub c _) -> c
     (NonFReqsSub c) -> c,
-  lcsSec = Constant . getDependenciesOf [defs] <$> \(LCsProg c) -> c,
-  ucsSec = Constant . getDependenciesOf [defs] <$> \(UCsProg c) -> c
+  lcsSec = Constant . getDependenciesOf [defs] <$> \(LCsProg c) -> toList c,
+  ucsSec = Constant . getDependenciesOf [defs] <$> \(UCsProg c) -> toList c
 } where
   getDependenciesOf :: HasUID a => [a -> [Sentence]] -> [a] -> [(UID, [UID])]
   getDependenciesOf fs = map (\x -> (x ^. uid, concatMap (lnames' . ($ x)) fs))

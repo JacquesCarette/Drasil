@@ -11,7 +11,7 @@ module Language.Drasil.Sentence (
   (+:+), (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
   sentenceTerm,
-  sdep, shortdep, lnames, lnames', sentenceRefs
+  sdep, lnames, lnames'
 ) where
 
 import Control.Lens ((^.))
@@ -21,7 +21,7 @@ import Drasil.Database (HasChunkRefs(..), HasUID(..), UID, IsChunk)
 
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.ModelExpr.Extract (meNames)
+import Language.Drasil.ModelExpr.Extract (meDep)
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Symbol (HasSymbol, Symbol)
@@ -168,26 +168,8 @@ getUIDs Ref {}              = []
 getUIDs Percent             = []
 getUIDs ((:+:) a b)         = getUIDs a ++ getUIDs b
 getUIDs (Quote a)           = getUIDs a
-getUIDs (E a)               = meNames a
+getUIDs (E a)               = meDep a
 getUIDs EmptyS              = []
-
--- | Generic traverse of all positions that could lead to /symbolic/ and /abbreviated/ 'UID's from 'Sentence's
--- but doesn't go into expressions.
-getUIDshort :: Sentence -> [UID]
-getUIDshort (Ch ShortStyle _ a) = [a]
-getUIDshort (Ch TermStyle _ _)  = []
-getUIDshort (Ch PluralTerm _ _) = []
-getUIDshort SyCh {}             = []
-getUIDshort Sy {}               = []
-getUIDshort NP {}               = []
-getUIDshort S {}                = []
-getUIDshort Percent             = []
-getUIDshort P {}                = []
-getUIDshort Ref {}              = []
-getUIDshort ((:+:) a b)         = getUIDshort a ++ getUIDshort b
-getUIDshort (Quote a)           = getUIDshort a
-getUIDshort E {}                = []
-getUIDshort EmptyS              = []
 
 -----------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
@@ -195,11 +177,6 @@ getUIDshort EmptyS              = []
 sdep :: Sentence -> Set.Set UID
 sdep = Set.fromList . getUIDs
 {-# INLINE sdep #-}
-
--- This is to collect symbolic 'UID's that are printed out as an /abbreviation/.
-shortdep :: Sentence -> Set.Set UID
-shortdep = Set.fromList . getUIDshort
-{-# INLINE shortdep #-}
 
 -- | Generic traverse of all positions that could lead to /reference/ 'UID's from 'Sentence's.
 lnames :: Sentence -> Set.Set UID
@@ -222,10 +199,6 @@ lnames' :: [Sentence] -> [UID]
 lnames' = concatMap (Set.toList . lnames)
 {-# INLINE lnames' #-}
 
-sentenceRefs :: Sentence -> Set.Set UID
-sentenceRefs sent = Set.unions [lnames sent, sdep sent, shortdep sent]
-{-# INLINE sentenceRefs #-}
-
 instance HasChunkRefs Sentence where
-  chunkRefs = sentenceRefs
+  chunkRefs s = Set.unions [lnames s, sdep s]
   {-# INLINABLE chunkRefs #-}

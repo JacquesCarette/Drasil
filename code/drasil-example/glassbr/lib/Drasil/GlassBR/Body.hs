@@ -9,8 +9,8 @@ import qualified Language.Drasil.Development as D
 import Drasil.Metadata as M (dataDefn, inModel, thModel, software)
 import Drasil.SRSDocument
 import Drasil.DocLang (auxSpecSent, termDefnF')
-import Drasil.Generator (cdbWithRefs)
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel, sectionReferences)
+import Drasil.Generator (withCommonKnowledge)
+import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -136,12 +136,8 @@ abbreviationsList =
   map nw acronyms
 
 symbMap :: ChunkDB
-symbMap = cdbWithRefs cdbRefs
-  symbolsWCodeSymbols ideaDicts conceptChunks ([] :: [UnitDefn])
+symbMap = withCommonKnowledge [] symbolsWCodeSymbols ideaDicts conceptChunks []
   GB.dataDefs iMods [] tMods concIns citations labCon
-
-cdbRefs :: [Reference]
-cdbRefs = SRS.sectionReferences
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]
 symbolsWCodeSymbols = map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)

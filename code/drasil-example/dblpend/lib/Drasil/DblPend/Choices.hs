@@ -3,7 +3,7 @@ module Drasil.DblPend.Choices where
 import Language.Drasil.Code (Choices(..), Comments(..), ExtLib(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..),
-  AuxFile(..), Visibility(..), defaultChoices, makeArchit, makeData,
+  SoftwareDossierFile(..), Visibility(..), defaultChoices, makeArchit, makeData,
   makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg,
   apacheODEPckg, odeintPckg)

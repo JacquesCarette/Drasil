@@ -10,7 +10,7 @@ import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
 import Drasil.DocLang (tunitNone)
-import Drasil.Generator (cdbWithRefs)
+import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -87,14 +87,11 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = [] :: [ConceptChunk]
 
 symbMap :: ChunkDB
-symbMap = cdbWithRefs cdbRefs
+symbMap = withCommonKnowledge []
   ([] :: [DefinedQuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   citations ([] :: [LabelledContent])
-
-cdbRefs :: [Reference]
-cdbRefs = SRS.sectionReferences
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,

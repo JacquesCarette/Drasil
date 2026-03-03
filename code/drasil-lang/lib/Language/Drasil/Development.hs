@@ -8,7 +8,7 @@ module Language.Drasil.Development (
   -- * NounPhrase.Core
   , NPStruct(S, (:+:), (:-:), P)
   -- Sentence.Extract
-  , sdep, shortdep, lnames, lnames'
+  , sdep, lnames, lnames'
   -- * UID
   , showUID
 ) where
@@ -16,5 +16,5 @@ module Language.Drasil.Development (
 import Language.Drasil.Development.Sentence (toSent)
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NounPhrase(..))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct(..))
-import Language.Drasil.Sentence (sdep, shortdep, lnames, lnames')
+import Language.Drasil.Sentence (sdep, lnames, lnames')
 import Drasil.Database (showUID)

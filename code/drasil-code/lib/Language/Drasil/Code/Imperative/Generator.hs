@@ -43,7 +43,8 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genCalcFuncProc, genOutputFormat, genOutputFormatProc, genOutputMod,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
+  ScopeType(..), designLog, modExportMap, clsDefMap, genICName,
+  makeSoftwareDossierInfo)
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (makeSds,
   SoftwareDossierSym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
@@ -61,7 +62,10 @@ import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
 -- 'String' parameter is a string representing the date.
 -- \['Expr'\] parameter is the sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
-generator l dt sd chs cs = DrasilState {
+generator l dt sd chs cs = let
+  sdsInfo = makeSoftwareDossierInfo
+    (doxVerbosity $ docConfig $ optFeats chs) (auxFiles $ optFeats chs) sd
+  in DrasilState {
   -- constants
   codeSpec = cs,
   printfo = pinfo,
@@ -75,12 +79,9 @@ generator l dt sd chs cs = DrasilState {
   onSfwrC = onSfwrConstraint $ srsConstraints chs,
   onPhysC = onPhysConstraint $ srsConstraints chs,
   commented = comments $ docConfig $ optFeats chs,
-  doxOutput = doxVerbosity $ docConfig $ optFeats chs,
   date = showDate $ dates $ docConfig $ optFeats chs,
   logKind  = logging $ logConfig $ optFeats chs,
   logName = logFile $ logConfig $ optFeats chs,
-  auxiliaries = auxFiles $ optFeats chs,
-  sampleData = sd,
   dsICNames = icNames chs,
   modules = modules',
   extLibNames = nms,
@@ -91,6 +92,7 @@ generator l dt sd chs cs = DrasilState {
   clsMap = cdm,
   defSet = Set.fromList $ keys mem ++ keys cdm,
   getVal = folderVal chs,
+  _softwareDossierInfo = sdsInfo,
   -- stateful
   currentModule = "",
   currentClass = "",

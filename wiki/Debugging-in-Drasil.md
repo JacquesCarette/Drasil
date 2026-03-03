@@ -92,6 +92,8 @@ Looking around the surrounding code (which will not be added to the snippet abov
 
 ### *Now, what is the `ChunkDB`?*
 
+_Disclaimer:_ This document was created before work was completed for [#2873](https://github.com/JacquesCarette/Drasil/issues/2873). Please read that issue for a more up-to-date discussion of what a `ChunkDB` is. This document should only be used to learn about _debugging in Drasil_, not about Drasil necessarily. As an exercise, you may choose to update this page by performing the discussed analysis!
+
 Using a similar `grep` to the above (searching with `ChunkDB`), we find the type declaration in `code/drasil-database/Database/Drasil/ChunkDB.hs`:
 ```Haskell
  -- | Our chunk databases. \Must contain all maps needed in an example.\ 

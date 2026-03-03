@@ -54,17 +54,8 @@ The [Chunk](Chunks) Log generator is a method of debugging some common problems 
 The procedure for creating such a printer was as follows:
 1. Gather all the information within the examples package. If the example is already generating SRS files, then this step should be done. Specifically, the information is usually gathered in the [`System`](https://jacquescarette.github.io/Drasil/docs/full/drasil-database-0.1.1.0/Database-Drasil.html#t:SystemInformation) type (found in each example's `Body.hs` file).
 2. Extract the chunk database from that information. We usually want the database under `_sysinfodb`, as opposed to `_usedinfodb` since it is currently used only for the table of symbols in the SRS documents.
-3. Extract the necessary fields from that database (of type [`ChunkDB`](https://jacquescarette.github.io/Drasil/docs/full/drasil-database-0.1.1.0/Database-Drasil.html#t:ChunkDB)) using [lenses](Lenses). These are often in the form of [`Maps`](https://hackage.haskell.org/package/containers-0.4.0.0/docs/Data-Map.html#t:Map) and can be accessed through the [`assocs`](https://hackage.haskell.org/package/containers-0.4.0.0/docs/Data-Map.html#v:assocs) function. For example, extracting all UIDs of concept-related chunks (chunks with a definition) could be done with the following:
-    ```Haskell
-    getConceptUIDs :: ChunkDB -> [UID]
-    getConceptUIDs db = map fst $ Map.assocs $ defTable db
-    ```
-    Getting the chunks themselves requires a small augmentation:
-    ```Haskell
-    getConceptUIDs :: ChunkDB -> [ConceptChunk]
-    getConceptUIDs db = map (fst.snd) $ Map.assocs $ defTable db
-    ```
-4. Decide what information is useful from the chunk types, and extract it from the list of that chunk type given from the `Maps` found in step 3.
+3. Extract the necessary fields from that database (of type [`ChunkDB`](https://jacquescarette.github.io/Drasil/docs/full/drasil-database-0.1.1.0/Database-Drasil.html#t:ChunkDB)) using [lenses](Lenses). These are often in the form of [`Maps`](https://hackage.haskell.org/package/containers-0.4.0.0/docs/Data-Map.html#t:Map) and can be accessed through the [`assocs`](https://hackage.haskell.org/package/containers-0.4.0.0/docs/Data-Map.html#v:assocs) function. For example, extracting all UIDs of concept-related chunks (chunks with a definition) could be done with the following: `findAll db :: ChunkDB -> [ConceptChunk]`, where `db :: ChunkDB`.
+4. Decide what information is useful from the chunk types, and extract it.
 5. Now that you have all your information organized, we can start on the actual printer. For this, I used the [HughesPJ PrettyPrint](https://hackage.haskell.org/package/pretty-1.1.3.6/docs/Text-PrettyPrint.html) package to match the style of the other Drasil printers.
 6. Here, decide on what values or pieces of information you want your printer functions to take. They should match up with the same values that you decided upon in step 4. Then create a function that converts those pieces of information into what you want. For this specific example, I created a table that outputs the chunk [UID](https://jacquescarette.github.io/Drasil/docs/full/drasil-lang-0.1.60.0/Language-Drasil.html#t:UID), [term](https://jacquescarette.github.io/Drasil/docs/full/drasil-lang-0.1.60.0/Language-Drasil.html#v:term), and anything else that was worth printing (like definitions, titles, shortnames, reference addresses, etc.):
     ```Haskell
@@ -88,11 +79,11 @@ The procedure for creating such a printer was as follows:
     ```Haskell
     -- | Makes a table with all concepts in the SRS.
     mkTableConcepts :: PrintingInformation -> Doc
-    mkTableConcepts pinfo = mkTableFromLenses pinfo defTable
-      "Concepts" "UID" "Term" "Definition"
-        (text . view uid)
-          (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
-            (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
+    mkTableConcepts pinfo = mkTableFromLenses
+      pinfo
+      (Proxy @ConceptChunk)
+      "Concepts"
+      [openTerm]
     ```
 8. Once everything is formatted nicely in the [`Doc`](https://hackage.haskell.org/package/pretty-1.1.3.6/docs/Text-PrettyPrint.html#t:Doc) type, just [`render`](https://hackage.haskell.org/package/pretty-1.1.3.6/docs/Text-PrettyPrint.html#v:render) it in the `drasil-gen` package.
 

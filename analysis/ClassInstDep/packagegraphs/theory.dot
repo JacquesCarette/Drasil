@@ -15,7 +15,6 @@ ModelKinds	[shape=oval, color=turquoise4, label="ModelKinds"];
 ModelKind	[shape=oval, color=turquoise4, label="ModelKind"];
 DefiningExpr	[shape=oval, color=turquoise4, label="DefiningExpr"];
 MultiDefn	[shape=oval, color=turquoise4, label="MultiDefn"];
-SpaceDefn	[shape=oval, color=turquoise4, label="SpaceDefn"];
 TheoryModel	[shape=oval, color=turquoise4, label="TheoryModel"];
 HasChunkRefs	[shape=oval, color=pink, label="HasChunkRefs"];
 HasUID	[shape=oval, color=pink, label="HasUID"];

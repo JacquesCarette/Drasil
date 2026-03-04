@@ -2,7 +2,6 @@ digraph theorymodel{
 TheoryModel	[shape=oval, color=cyan3, label="TheoryModel"];
 TheoryModel -> ModelKindModelExpr;
 TheoryModel -> TheoryModel;
-TheoryModel -> SpaceDefn;
 TheoryModel -> DefinedQuantityDict;
 TheoryModel -> ConceptChunk;
 TheoryModel -> ModelQDef;

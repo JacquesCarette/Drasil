@@ -477,7 +477,6 @@ module Theory.Drasil.Theory
 --   quantities, operations, invariants, etc.
 class Theory t
 valid_context :: Theory t => Lens' t [TheoryModel]
-spaces :: Theory t => Lens' t [SpaceDefn]
 quantities :: Theory t => Lens' t [DefinedQuantityDict]
 operations :: Theory t => Lens' t [ConceptChunk]
 defined_quant :: Theory t => Lens' t [ModelQDef]
@@ -490,15 +489,15 @@ defined_fun :: Theory t => Lens' t [ModelQDef]
 --   <li>tUid - a UID,</li>
 --   <li>con - a ConceptChunk,</li>
 --   <li>vctx - definition context (<a>TheoryModel</a>s),</li>
---   <li>spc - type definitions (<a>SpaceDefn</a>s),</li>
+--   <li>spc - type definitions (<tt>SpaceDefn</tt>s),</li>
 --   <li>quan - quantities (<a>DefinedQuantityDict</a>s),</li>
 --   <li>ops - operations (<a>ConceptChunk</a>s),</li>
 --   <li>defq - definitions (<a>QDefinition</a>s),</li>
 --   <li>invs - invariants (<a>ModelExpr</a>s),</li>
 --   <li>dfun - defined functions (<a>QDefinition</a>s),</li>
 --   <li>ref - accompanying references (<a>DecRef</a>s),</li>
---   <li>lb - a label (<a>SpaceDefn</a>),</li>
---   <li>ra - reference address (<a>SpaceDefn</a>),</li>
+--   <li>lb - a label (<tt>SpaceDefn</tt>),</li>
+--   <li>ra - reference address (<tt>SpaceDefn</tt>),</li>
 --   <li>notes - additional notes (<a>Sentence</a>s).</li>
 --   </ul>
 --   
@@ -738,7 +737,6 @@ getEqModQdsFromIm :: [InstanceModel] -> [SimpleQDef]
 --   quantities, operations, invariants, etc.
 class Theory t
 valid_context :: Theory t => Lens' t [TheoryModel]
-spaces :: Theory t => Lens' t [SpaceDefn]
 quantities :: Theory t => Lens' t [DefinedQuantityDict]
 operations :: Theory t => Lens' t [ConceptChunk]
 defined_quant :: Theory t => Lens' t [ModelQDef]
@@ -751,15 +749,15 @@ defined_fun :: Theory t => Lens' t [ModelQDef]
 --   <li>tUid - a UID,</li>
 --   <li>con - a ConceptChunk,</li>
 --   <li>vctx - definition context (<a>TheoryModel</a>s),</li>
---   <li>spc - type definitions (<a>SpaceDefn</a>s),</li>
+--   <li>spc - type definitions (<tt>SpaceDefn</tt>s),</li>
 --   <li>quan - quantities (<a>DefinedQuantityDict</a>s),</li>
 --   <li>ops - operations (<a>ConceptChunk</a>s),</li>
 --   <li>defq - definitions (<a>QDefinition</a>s),</li>
 --   <li>invs - invariants (<a>ModelExpr</a>s),</li>
 --   <li>dfun - defined functions (<a>QDefinition</a>s),</li>
 --   <li>ref - accompanying references (<a>DecRef</a>s),</li>
---   <li>lb - a label (<a>SpaceDefn</a>),</li>
---   <li>ra - reference address (<a>SpaceDefn</a>),</li>
+--   <li>lb - a label (<tt>SpaceDefn</tt>),</li>
+--   <li>ra - reference address (<tt>SpaceDefn</tt>),</li>
 --   <li>notes - additional notes (<a>Sentence</a>s).</li>
 --   </ul>
 --   

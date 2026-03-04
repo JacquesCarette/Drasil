@@ -11,6 +11,7 @@ module Drasil.DocumentLanguage.Definitions (
   helperRefs, helpToRefField) where
 
 import Control.Lens ((^.))
+import Data.Foldable (Foldable(..))
 import Data.List (nub)
 import Data.Maybe (mapMaybe)
 
@@ -103,9 +104,9 @@ nonEmpty _   f xs = f xs
 -- | Create the fields for a model from a relation concept (used by 'tmodel').
 mkTMField :: TheoryModel -> System -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
-mkTMField t _ l@DefiningEquation fs = (show l, [unlbldExpr $ express t]) : fs
-mkTMField t m l@(Description v u) fs = (show l,
-    buildDescription v u (express t) m []) : fs
+mkTMField t _ l@DefiningEquation fs = (show l, toList $ unlbldExpr <$> mexpress t) : fs
+mkTMField t m l@(Description v u) fs = (show l, toList $
+  foldr' (\x -> buildDescription v u x m) mempty $ mexpress t) : fs
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getDecRefs) : fs
 mkTMField t _ l@Notes fs =
@@ -140,7 +141,7 @@ mkDDField :: DataDefinition -> System -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, [mkParagraph $ atStart d]) : fs
 mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb $ d ^. defLhs]) : fs
 mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless $ d ^. defLhs]) : fs
-mkDDField d _ l@DefiningEquation fs = (show l, [unlbldExpr $ express d]) : fs
+mkDDField d _ l@DefiningEquation fs = (show l, toList $ unlbldExpr <$> mexpress d) : fs
 mkDDField d m l@(Description v u) fs = (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkDDField d _ l@Source fs = (show l, helperSources $ d ^. getDecRefs) : fs
@@ -148,16 +149,18 @@ mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs
 mkDDField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
   "for data definitions"
 
--- | Creates the description field for 'Contents' (if necessary) using the given verbosity and
--- including or ignoring units for a model/general definition.
+-- | Creates the description field for 'Contents' (if necessary) using the given
+-- verbosity and including or ignoring units for a model/general definition.
 buildDescription :: Verbosity -> InclUnits -> ModelExpr -> System -> [Contents] ->
   [Contents]
 buildDescription Succinct _ _ _ _ = []
 buildDescription Verbose u e m cs = (UlC . ulcc .
   Enumeration . Definitions . descPairs u $ vars e $ _systemdb m) : cs
 
--- | Similar to 'buildDescription' except it takes a 'DataDefinition' that is included as the 'firstPair'' in ['Contents'] (independent of verbosity).
--- The 'Verbose' case also includes more details about the 'DataDefinition' expressions.
+-- | Similar to 'buildDescription' except it takes a 'DataDefinition' that is
+-- included as the 'firstPair'' in ['Contents'] (independent of verbosity). The
+-- 'Verbose' case also includes more details about the 'DataDefinition'
+-- expressions.
 buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> System ->
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
@@ -170,7 +173,7 @@ mkGDField :: GenDefn -> System -> Field -> ModRow -> ModRow
 mkGDField g _ l@Label fs = (show l, [mkParagraph $ atStart g]) : fs
 mkGDField g _ l@Units fs =
   maybe fs (\udef -> (show l, [mkParagraph . Sy $ usymb udef]) : fs) (getUnit g)
-mkGDField g _ l@DefiningEquation fs = (show l, [unlbldExpr $ express g]) : fs
+mkGDField g _ l@DefiningEquation fs = (show l, toList $ unlbldExpr <$> mexpress g) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   buildDescription v u (express g) m []) : fs
 mkGDField g m l@RefBy fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
@@ -181,7 +184,7 @@ mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 -- | Create the fields for an instance model from an 'InstanceModel' chunk.
 mkIMField :: InstanceModel -> System -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, [mkParagraph $ atStart i]) : fs
-mkIMField i _ l@DefiningEquation fs = (show l, [unlbldExpr $ express i]) : fs
+mkIMField i _ l@DefiningEquation fs = (show l, toList $ unlbldExpr <$> mexpress i) : fs
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [express i]) : fs
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in

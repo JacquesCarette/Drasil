@@ -112,7 +112,7 @@ instance HasShortName       TheoryModel where shortname = lb
 instance HasRefAddress      TheoryModel where getRefAdd l = RP (prepend $ abrv l) (ra l)
 -- | Finds the idea of a 'TheoryModel' (abbreviation).
 instance CommonIdea         TheoryModel where abrv _ = abrv thModel
-instance Express            TheoryModel where express = express . (^. mk)
+instance Express            TheoryModel where mexpress = mexpress . (^. mk)
 -- | Finds the reference address of a 'TheoryModel'.
 instance Referable TheoryModel where
   refAdd      = ra

@@ -20,14 +20,11 @@ import Theory.Drasil.ModelKinds
 -- spaces, quantities, operations, invariants, etc.
 class Theory t where
   valid_context :: Lens' t [TheoryModel]
-  spaces        :: Lens' t [SpaceDefn]
   quantities    :: Lens' t [DefinedQuantityDict]
   operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
   defined_quant :: Lens' t [ModelQDef]
   invariants    :: Lens' t [ModelExpr]
   defined_fun   :: Lens' t [ModelQDef]
-
-data SpaceDefn -- FIXME: This should be defined.
 
 -- | A TheoryModel is a collection of:
 --
@@ -50,7 +47,6 @@ data SpaceDefn -- FIXME: This should be defined.
 data TheoryModel = TM
   { _mk    :: ModelKind ModelExpr
   , _vctx  :: [TheoryModel]
-  , _spc   :: [SpaceDefn]
   , _quan  :: [DefinedQuantityDict]
   , _ops   :: [ConceptChunk]
   , _defq  :: [ModelQDef]
@@ -100,7 +96,6 @@ instance HasAdditionalNotes TheoryModel where getNotes = notes
 -- | Finds the aspects of the 'Theory' behind the 'TheoryModel'.
 instance Theory             TheoryModel where
   valid_context = vctx
-  spaces        = spc
   quantities    = quan
   operations    = ops
   defined_quant = defq
@@ -130,7 +125,7 @@ tm :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -
     String -> [Sentence] -> TheoryModel
 tm mkind _ _ _  _   _   [] _   = error $ "Source field of " ++ showUID mkind ++ " is empty"
 tm mkind q c dq inv dfn r  lbe =
-  TM mkind [] [] (map dqdWr q) (map cw c) dq inv dfn r (shortname' $ S lbe)
+  TM mkind [] (map dqdWr q) (map cw c) dq inv dfn r (shortname' $ S lbe)
       (prependAbrv thModel lbe)
 
 -- | Constructor for theory models. Uses the shortname of the reference address.
@@ -138,5 +133,5 @@ tmNoRefs :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind Model
     [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] ->
     String -> [Sentence] -> TheoryModel
 tmNoRefs mkind q c dq inv dfn lbe =
-  TM mkind [] [] (map dqdWr q) (map cw c) dq inv dfn [] (shortname' $ S lbe)
+  TM mkind [] (map dqdWr q) (map cw c) dq inv dfn [] (shortname' $ S lbe)
       (prependAbrv thModel lbe)

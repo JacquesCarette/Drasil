@@ -100,15 +100,12 @@ nonEmpty :: b -> ([a] -> b) -> [a] -> b
 nonEmpty def _ [] = def
 nonEmpty _   f xs = f xs
 
-tmDispExprs :: TheoryModel -> [ModelExpr]
-tmDispExprs t = map express (t ^. defined_quant) ++ t ^. invariants
-
 -- | Create the fields for a model from a relation concept (used by 'tmodel').
 mkTMField :: TheoryModel -> System -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
 mkTMField t _ l@DefiningEquation fs = (show l, [unlbldExpr $ express t]) : fs
 mkTMField t m l@(Description v u) fs = (show l,
-  foldr ((\x -> buildDescription v u x m) . express) [] $ tmDispExprs t) : fs
+    buildDescription v u (express t) m []) : fs
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getDecRefs) : fs
 mkTMField t _ l@Notes fs =

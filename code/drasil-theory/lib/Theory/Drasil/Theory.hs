@@ -62,11 +62,6 @@ makeLenses ''TheoryModel
 instance HasChunkRefs TheoryModel where
   chunkRefs tm' = mconcat
     [ chunkRefs (tm' ^. mk)
-    , chunkRefs (tm' ^. vctx)
-    , chunkRefs (tm' ^. quan)
-    , chunkRefs (tm' ^. ops)
-    , chunkRefs (tm' ^. defq)
-    , chunkRefs (tm' ^. dfun)
     , chunkRefs (lb tm')
     , chunkRefs (tm' ^. notes)
     ]

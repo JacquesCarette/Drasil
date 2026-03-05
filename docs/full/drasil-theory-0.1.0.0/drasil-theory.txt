@@ -524,6 +524,7 @@ instance Theory.Drasil.Theory.Theory Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.ShortName.HasShortName Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Label.Type.HasRefAddress Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.CommonIdea Theory.Drasil.Theory.TheoryModel
+instance Language.Drasil.ExprClasses.Express Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Label.Type.Referable Theory.Drasil.Theory.TheoryModel
 
 

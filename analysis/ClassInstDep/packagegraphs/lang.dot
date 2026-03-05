@@ -500,6 +500,8 @@ Section -> HasRefAddress;
 Literal -> Express;
 Expr -> Express;
 ModelExpr -> Express;
+_t_ -> Express;
+NE_NonEmpty_t -> Express;
 Person -> HasName;
 Reference -> HasChunkRefs;
 Reference -> Eq;

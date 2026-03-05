@@ -119,6 +119,7 @@ HasAdditionalNotes	[shape=oval, color=pink, label="HasAdditionalNotes"];
 HasShortName	[shape=oval, color=pink, label="HasShortName"];
 HasRefAddress	[shape=oval, color=pink, label="HasRefAddress"];
 CommonIdea	[shape=oval, color=pink, label="CommonIdea"];
+Express	[shape=oval, color=pink, label="Express"];
 Referable	[shape=oval, color=pink, label="Referable"];
 MayHaveDerivation	[shape=oval, color=magenta, label="MayHaveDerivation"];
 HasInputs	[shape=oval, color=magenta, label="HasInputs"];
@@ -240,5 +241,6 @@ TheoryModel -> Theory;
 TheoryModel -> HasShortName;
 TheoryModel -> HasRefAddress;
 TheoryModel -> CommonIdea;
+TheoryModel -> Express;
 TheoryModel -> Referable;
 }

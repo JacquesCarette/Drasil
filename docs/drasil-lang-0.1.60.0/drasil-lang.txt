@@ -704,43 +704,6 @@ data Literal
 [Perc] :: Integer -> Integer -> Literal
 
 
--- | Developing the expression language in Drasil. Re-export many things to
---   simplify external use.
-module Language.Drasil.Development
-
--- | Translate from NPStruct to Sentence
-toSent :: NPStruct -> Sentence
-class NounPhrase n
-
--- | Retrieves singular form of term. Ex. "the quick brown fox".
-phraseNP :: NounPhrase n => n -> NPStruct
-
--- | Retrieves plural form of term. Ex. "the quick brown foxes".
-pluralNP :: NounPhrase n => n -> PluralForm
-
--- | Essentially a subset of <tt>Sentence</tt> that contains only the parts
---   that make sense for a NounPhrase
-data NPStruct
-S :: String -> NPStruct
-(:-:) :: NPStruct -> NPStruct -> NPStruct
-(:+:) :: NPStruct -> NPStruct -> NPStruct
-P :: Symbol -> NPStruct
-
--- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <a>Symbol</a>.
-sdep :: Sentence -> Set UID
-
--- | Generic traverse of all positions that could lead to <i>reference</i>
---   <a>UID</a>s from <a>Sentence</a>s.
-lnames :: Sentence -> Set UID
-
--- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
-lnames' :: [Sentence] -> [UID]
-
--- | Get something's <a>UID</a> as a <a>Value</a>.
-showUID :: HasUID a => a -> String
-
-
 -- | Re-export functions and types related to <a>ModelExpr</a>
 module Language.Drasil.ModelExpr.Development
 
@@ -1190,6 +1153,43 @@ precC :: AssocConcatOper -> Int
 
 -- | eprec - <a>Expression</a> precedence.
 eprec :: Expr -> Int
+
+
+-- | Developing the expression language in Drasil. Re-export many things to
+--   simplify external use.
+module Language.Drasil.Development
+
+-- | Translate from NPStruct to Sentence
+toSent :: NPStruct -> Sentence
+class NounPhrase n
+
+-- | Retrieves singular form of term. Ex. "the quick brown fox".
+phraseNP :: NounPhrase n => n -> NPStruct
+
+-- | Retrieves plural form of term. Ex. "the quick brown foxes".
+pluralNP :: NounPhrase n => n -> PluralForm
+
+-- | Essentially a subset of <tt>Sentence</tt> that contains only the parts
+--   that make sense for a NounPhrase
+data NPStruct
+S :: String -> NPStruct
+(:-:) :: NPStruct -> NPStruct -> NPStruct
+(:+:) :: NPStruct -> NPStruct -> NPStruct
+P :: Symbol -> NPStruct
+
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <a>Symbol</a>.
+sdep :: Sentence -> Set UID
+
+-- | Generic traverse of all positions that could lead to <i>reference</i>
+--   <a>UID</a>s from <a>Sentence</a>s.
+lnames :: Sentence -> Set UID
+
+-- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
+lnames' :: [Sentence] -> [UID]
+
+-- | Get something's <a>UID</a> as a <a>Value</a>.
+showUID :: HasUID a => a -> String
 
 
 -- | Defines various sentence level combinators that may be based in
@@ -2431,9 +2431,14 @@ class DefiningExpr c
 --   meaning.
 defnExpr :: DefiningExpr c => Lens' (c e) e
 
--- | Data that can be expressed using <a>ModelExpr</a>.
+-- | Express something axiomatically.
 class Express c
+
+-- | Express something as a single fact.
 express :: Express c => c -> ModelExpr
+
+-- | Express something as a series of facts.
+mexpress :: Express c => c -> NonEmpty ModelExpr
 
 -- | Members must have a reference address.
 class HasRefAddress b

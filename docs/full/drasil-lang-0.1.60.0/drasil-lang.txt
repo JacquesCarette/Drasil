@@ -2230,505 +2230,6 @@ prodAll :: ModelExprC r => Symbol -> r -> r
 instance Language.Drasil.ModelExpr.Class.ModelExprC Language.Drasil.ModelExpr.Lang.ModelExpr
 
 
--- | Defines classes for use with Drasil's expression language.
-module Language.Drasil.ExprClasses
-
--- | Data that can be expressed using <a>ModelExpr</a>.
-class Express c
-express :: Express c => c -> ModelExpr
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Literal.Lang.Literal
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Expr.Lang.Expr
-instance Language.Drasil.ExprClasses.Express Language.Drasil.ModelExpr.Lang.ModelExpr
-
-
--- | Contains Sentences and helpers functions.
-module Language.Drasil.Sentence
-
--- | For writing <a>Sentence</a>s via combining smaller elements.
---   <a>Sentence</a>s are made up of some known vocabulary of things:
---   
---   <ul>
---   <li>units (their visual representation)</li>
---   <li>words (via <a>String</a>s)</li>
---   <li>special characters</li>
---   <li>accented letters</li>
---   <li>references to specific layout objects</li>
---   </ul>
-data Sentence
-
--- | Ch looks up the term for a given <a>UID</a> and displays the term with
---   a given <a>SentenceStyle</a> and <tt>CapitalizationRule</tt>. This
---   allows Sentences to hold plural forms of <tt>NamedIdea</tt>s.
-[Ch] :: SentenceStyle -> TermCapitalization -> UID -> Sentence
-
--- | A branch of Ch dedicated to SymbolStyle only.
-[SyCh] :: UID -> Sentence
-
--- | Converts a unit symbol into a usable Sentence form.
-[Sy] :: USymb -> Sentence
-
--- | Directly embeds a <a>Sentence</a>
-[NP] :: NP -> Sentence
-
--- | Constructor for <a>String</a>s, used often for descriptions in Chunks.
-[S] :: String -> Sentence
-
--- | Converts the graphical representation of a symbol into a usable
---   Sentence form.
-[P] :: Symbol -> Sentence
-
--- | Lifts an expression into a Sentence.
-[E] :: ModelExpr -> Sentence
-
--- | Takes a <a>UID</a> to a reference, a display name (<a>Sentence</a>),
---   and any additional reference display information (<a>RefInfo</a>).
---   Resolves the reference later (similar to Ch).
-[Ref] :: UID -> Sentence -> RefInfo -> Sentence
-
--- | Adds quotation marks around a Sentence.
-[Quote] :: Sentence -> Sentence
-
--- | Used for a % symbol.
-[Percent] :: Sentence
-
--- | Direct concatenation of two Sentences (no implicit spaces!).
-[:+:] :: Sentence -> Sentence -> Sentence
-
--- | Empty Sentence.
-[EmptyS] :: Sentence
-infixr 5 :+:
-
--- | Used in <a>Ch</a> constructor to determine the state of a term (can
---   record whether something is in plural form, a singular term, or in
---   short form).
-data SentenceStyle
-PluralTerm :: SentenceStyle
-TermStyle :: SentenceStyle
-ShortStyle :: SentenceStyle
-
--- | Holds any extra information needed for a <tt>Reference</tt>, be it an
---   equation, pages, a note, or nothing.
-data RefInfo
-None :: RefInfo
-Equation :: [Int] -> RefInfo
-Page :: [Int] -> RefInfo
-RefNote :: String -> RefInfo
-
--- | Used in <a>Ch</a> constructor to determine the capitalization of a
---   term. CapF is for capitalizing the first word from the <a>UID</a> of
---   the given term. CapW is for capitalizing all words from the <a>UID</a>
---   of the given term. Mirrors <tt>CapFirst</tt> and <tt>CapWords</tt>
---   from <tt>CapitalizationRule</tt>.
-data TermCapitalization
-CapF :: TermCapitalization
-CapW :: TermCapitalization
-NoCap :: TermCapitalization
-
--- | Helper for concatenating two <a>Sentence</a>s with a space between
---   them.
-(+:+) :: Sentence -> Sentence -> Sentence
-
--- | Helper which concatenates two <a>Sentence</a>s using <a>+:+</a> and
---   appends a period.
-(+:+.) :: Sentence -> Sentence -> Sentence
-
--- | Helper which concatenates two sentences using <a>+:+</a> and appends a
---   colon.
-(+:) :: Sentence -> Sentence -> Sentence
-
--- | Helper which appends a period to the end of a <a>Sentence</a> (used
---   often as a post-fix operator).
-(!.) :: Sentence -> Sentence
-
--- | Capitalizes a Sentence.
-capSent :: Sentence -> Sentence
-
--- | Helper which creates a Header with size s of the <a>Sentence</a>.
-headSent :: Int -> Sentence -> Sentence
-
--- | Gets a symbol and places it in a <a>Sentence</a>.
-ch :: (IsChunk c, HasSymbol c) => c -> Sentence
-eS :: ModelExpr -> Sentence
-eS' :: Express t => t -> Sentence
-
--- | Helper for concatenating two <a>Sentence</a>s with a comma and space
---   between them.
-sC :: Sentence -> Sentence -> Sentence
-
--- | Helper for concatenating two <a>Sentence</a>s with a space-surrounded
---   dash between them.
-sDash :: Sentence -> Sentence -> Sentence
-
--- | Helper for wrapping <a>Sentence</a>s in parentheses.
-sParen :: Sentence -> Sentence
-
--- | Gets plural term of <a>UID</a>.
---   
---   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
-sentencePlural :: UID -> Sentence
-
--- | Gets short form of <a>UID</a>.
---   
---   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
-sentenceShort :: UID -> Sentence
-
--- | Gets singular form of <a>UID</a>.
---   
---   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
-sentenceTerm :: UID -> Sentence
-
--- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <a>Symbol</a>.
-sdep :: Sentence -> Set UID
-
--- | Generic traverse of all positions that could lead to <i>reference</i>
---   <a>UID</a>s from <a>Sentence</a>s.
-lnames :: Sentence -> Set UID
-
--- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
-lnames' :: [Sentence] -> [UID]
-instance GHC.Base.Semigroup Language.Drasil.Sentence.Sentence
-instance GHC.Base.Monoid Language.Drasil.Sentence.Sentence
-instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Sentence.Sentence
-
-
--- | Short names are used for displaying references.
-module Language.Drasil.ShortName
-
--- | Used for holding the short form of a name (as a <a>Sentence</a> with a
---   wrapper).
-newtype ShortName
-ShortNm :: Sentence -> ShortName
-
--- | A <a>ShortName</a> is the text to be displayed for a link.
---   
---   Used for referencing within a document that can include symbols and
---   whatnot if required. Visible in the typeset documents (pdf).
-class HasShortName s
-shortname :: HasShortName s => s -> ShortName
-
--- | Pulls the short form (as a <a>Sentence</a>) out of a <a>ShortName</a>.
-getSentSN :: ShortName -> Sentence
-
--- | Smart constructor for making a <a>Sentence</a> into a
---   <a>ShortName</a>.
-shortname' :: Sentence -> ShortName
-instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.ShortName.ShortName
-
-
--- | Defines a type used to hold referencing information.
-module Language.Drasil.Reference
-
--- | A Reference contains the identifier (<a>UID</a>), a reference address
---   (<a>LblType</a>), a human-readable shortname (<a>ShortName</a>), and
---   any extra information about the reference (<a>RefInfo</a>).
-data Reference
-Reference :: UID -> LblType -> ShortName -> Reference
-
--- | A class that contains a list of <a>Reference</a>s.
-class HasReference c
-
--- | Provides a <tt>Lens</tt> to the <a>Reference</a>s.
-getReferences :: HasReference c => Lens' c [Reference]
-
--- | Projector function that creates a <a>Reference</a> from something
---   <tt>Referable</tt>.
-ref :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Reference
-
--- | Takes the reference <a>UID</a> and wraps it into a <a>Sentence</a>.
-refS :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence
-
--- | Takes a <a>Reference</a> with a name to be displayed and wraps it into
---   a <a>Sentence</a>. Does not overwrite the shortname contained in the
---   reference, but will only display as the given <a>Sentence</a>.
-namedRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence -> Sentence
-
--- | Takes a <a>Reference</a> with additional display info. Uses the
---   internal shortname for its display name.
-complexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sentence
-
--- | Takes a <a>Reference</a> with a name to be displayed and any
---   additional information and wraps it into a <a>Sentence</a>. Does not
---   overwrite the shortname contained in the reference, but will only
---   display as the given <a>Sentence</a> along with the given
---   <a>RefInfo</a>.
-namedComplexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
-instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Reference.Reference
-instance GHC.Classes.Eq Language.Drasil.Reference.Reference
-instance Drasil.Database.UID.HasUID Language.Drasil.Reference.Reference
-instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Reference.Reference
-instance Language.Drasil.ShortName.HasShortName Language.Drasil.Reference.Reference
-
-
--- | Various helpers for building Sentences from other bits. Really ought
---   to be moved out to (likely) docLang, but is here for now.
-module Language.Drasil.Development.Sentence
-
--- | Helper for getting the phrase from a <a>NamedIdea</a> using it's UID.
-phrase :: NamedIdea n => n -> Sentence
-
--- | Helper for getting the plural of a phrase from a <a>NamedIdea</a>.
-plural :: NamedIdea n => n -> Sentence
-
--- | Singular possesive function
---   
---   Helper for getting the possesive cases from the term of a
---   <a>NamedIdea</a>.
-phrasePoss :: NamedIdea n => n -> Sentence
-
--- | Plural possesive function
---   
---   Helper for getting the possesive cases from the term of a
---   <a>NamedIdea</a>.
-pluralPoss :: NamedIdea n => n -> Sentence
-
--- | Singular sentence case.
---   
---   Helper function for getting the sentence case of a noun phrase from a
---   <a>NamedIdea</a>.
-atStart :: NamedIdea n => n -> Sentence
-
--- | Plural sentence case.
---   
---   Helper function for getting the sentence case of a noun phrase from a
---   <a>NamedIdea</a>.
-atStart' :: NamedIdea n => n -> Sentence
-
--- | Singular title case.
---   
---   Helper function for getting the title case of a noun phrase from a
---   <a>NamedIdea</a>.
-titleize :: NamedIdea n => n -> Sentence
-
--- | Plural title case.
---   
---   Helper function for getting the title case of a noun phrase from a
---   <a>NamedIdea</a>.
-titleize' :: NamedIdea n => n -> Sentence
-
--- | Translate from NPStruct to Sentence
-toSent :: NPStruct -> Sentence
-
--- | Get short form (if it exists), else get term of an <a>Idea</a>. Uses
---   the UID of the <a>Idea</a> in a <tt>Ch</tt> Sentence constructor to
---   get the short form using getA. getA may return Nothing, in which case
---   lookupS uses the term, where lookupS is the main helper for looking up
---   the short form of a <tt>Ch</tt> Sentence.
-short :: Idea c => c -> Sentence
-
--- | Introduce a noun phrase and its (parenthesized) abbreviation.
-introduceAbb :: Idea n => n -> Sentence
-
-
--- | Developing the expression language in Drasil. Re-export many things to
---   simplify external use.
-module Language.Drasil.Development
-
--- | Translate from NPStruct to Sentence
-toSent :: NPStruct -> Sentence
-class NounPhrase n
-
--- | Retrieves singular form of term. Ex. "the quick brown fox".
-phraseNP :: NounPhrase n => n -> NPStruct
-
--- | Retrieves plural form of term. Ex. "the quick brown foxes".
-pluralNP :: NounPhrase n => n -> PluralForm
-
--- | Essentially a subset of <tt>Sentence</tt> that contains only the parts
---   that make sense for a NounPhrase
-data NPStruct
-S :: String -> NPStruct
-(:-:) :: NPStruct -> NPStruct -> NPStruct
-(:+:) :: NPStruct -> NPStruct -> NPStruct
-P :: Symbol -> NPStruct
-
--- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <a>Symbol</a>.
-sdep :: Sentence -> Set UID
-
--- | Generic traverse of all positions that could lead to <i>reference</i>
---   <a>UID</a>s from <a>Sentence</a>s.
-lnames :: Sentence -> Set UID
-
--- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
-lnames' :: [Sentence] -> [UID]
-
--- | Get something's <a>UID</a> as a <a>Value</a>.
-showUID :: HasUID a => a -> String
-
-
--- | References that have extra information.
-module Language.Drasil.DecoratedReference
-
--- | For holding a <a>Reference</a> that is decorated with extra
---   information (ex. page numbers, equation sources, etc.).
-data DecRef
-DR :: Reference -> RefInfo -> DecRef
-[_rf] :: DecRef -> Reference
-[refInfo] :: DecRef -> RefInfo
-
--- | A class that contains a list of decorated references (<a>DecRef</a>s).
-class HasDecRef c
-
--- | Provides a <tt>Lens</tt> to the <a>DecRef</a>s.
-getDecRefs :: HasDecRef c => Lens' c [DecRef]
-
--- | Same as <a>ref</a>, but for <a>DecRef</a> instead of <a>Reference</a>.
-dRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> DecRef
-
--- | For creating a decorated reference (<a>DecRef</a>) with extra
---   reference information (<a>RefInfo</a>).
-dRefInfo :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> DecRef
-instance GHC.Classes.Eq Language.Drasil.DecoratedReference.DecRef
-instance Drasil.Database.UID.HasUID Language.Drasil.DecoratedReference.DecRef
-instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.DecoratedReference.DecRef
-instance Language.Drasil.ShortName.HasShortName Language.Drasil.DecoratedReference.DecRef
-
-
--- | Defines the chunk type to hold citations.
-module Language.Drasil.Chunk.Citation
-
--- | All citations require a unique identifier used by the Drasil chunk. We
---   will re-use the <a>UID</a> part as an EntryID (<a>String</a>) used for
---   creating reference links. Finally we will have the reference
---   information (<a>CitationKind</a>, <a>CiteField</a>s, and a
---   <a>ShortName</a>).
---   
---   Ex. A reference to a thesis paper like Koothoor's "Document driven
---   approach to certifying scientific computing software" would include
---   the affiliated university, publishing year, and city.
-data Citation
-
--- | A list of <a>Citation</a>s.
-type BibRef = [Citation]
-
--- | A <a>String</a> that should contain no spaces.
-type EntryID = String
-
--- | Some documents, as well as some pieces of knowledge, have citations.
-class HasCitation c
-
--- | Provides a <tt>Lens</tt> to the citations.
-getCitations :: HasCitation c => Lens' c [Citation]
-citeID :: Lens' Citation UID
-citeKind :: Lens' Citation CitationKind
-
--- | Article citation requires author(s), title, journal, year. Optional
---   fields can be: volume, number, pages, month, and note. Implicitly uses
---   the EntryID as the chunk id.
-cArticle :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Book citation by author.
---   
---   Book citation requires author or editor, title, publisher, year.
---   Optional fields can be volume or number, series, address, edition,
---   month, and note. Implicitly uses the EntryID as the chunk id.
-cBookA :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Book citation by editor.
---   
---   Book citation requires author or editor, title, publisher, year.
---   Optional fields can be volume or number, series, address, edition,
---   month, and note. Implicitly uses the EntryID as the chunk id.
-cBookE :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Booklet citation requires title. Optional fields can be author, how
---   published, address, month, year, note. Implicitly uses the EntryID as
---   the chunk id.
-cBooklet :: String -> [CiteField] -> String -> Citation
-
--- | InBook citation by author.
---   
---   InBook citation requires author or editor, title, chapter and/or
---   pages, publisher, year. Optional fields can be volume or number,
---   series, type, address, edition, month, and note. Implicitly uses the
---   EntryID as the chunk id. This smart constructor includes both chapter
---   and page numbers.
-cInBookACP :: People -> String -> Int -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
-
--- | InBook citation by editor.
---   
---   InBook citation requires author or editor, title, chapter and/or
---   pages, publisher, year. Optional fields can be volume or number,
---   series, type, address, edition, month, and note. Implicitly uses the
---   EntryID as the chunk id. This smart constructor includes both chapter
---   and page numbers.
-cInBookECP :: People -> String -> Int -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Otherwise identical to <a>cInBookACP</a>.
---   
---   InBook citation excluding page numbers.
-cInBookAC :: People -> String -> Int -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Otherwise identical to <a>cInBookECP</a>.
---   
---   InBook citation excluding page numbers.
-cInBookEC :: People -> String -> Int -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Otherwise identical to <a>cInBookACP</a>.
---   
---   InBook citation excluding chapter.
-cInBookAP :: People -> String -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Otherwise identical to <a>cInBookECP</a>.
---   
---   InBook citation excluding chapter.
-cInBookEP :: People -> String -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
-
--- | InCollection citation requires author, title, bookTitle, publisher,
---   year. Optional fields can be editor, volume or number, series, type,
---   chapter, pages, address, edition, month, and note. Implicitly uses the
---   EntryID as the chunk id.
-cInCollection :: People -> String -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | InProceedings citation requires author, title, bookTitle, year.
---   Optional fields can be editor, volume or number, series, pages,
---   address, month, organization, publisher, and note. Implicitly uses the
---   EntryID as the chunk id.
-cInProceedings :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Manual (technical documentation) citation requires title. Optional
---   fields can be author, organization, address, edition, month, year, and
---   note. Implicitly uses the EntryID as the chunk id.
-cManual :: String -> [CiteField] -> String -> Citation
-
--- | Master's Thesis citation requires author, title, school, and year.
---   Optional fields can be type, address, month, and note. Implicitly uses
---   the EntryID as the chunk id.
-cMThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Misc citation requires nothing. Optional fields can be author, title,
---   howpublished, month, year, and note. Implicitly uses the EntryID as
---   the chunk id.
-cMisc :: [CiteField] -> String -> Citation
-
--- | PhD Thesis citation requires author, title, school, and year. Optional
---   fields can be type, address, month, and note. Implicitly uses the
---   EntryID as the chunk id.
-cPhDThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Proceedings citation requires title and year. Optional fields can be
---   editor, volume or number, series, address, publisher, note, month, and
---   organization. Implicitly uses the EntryID as the chunk id.
-cProceedings :: String -> Int -> [CiteField] -> String -> Citation
-
--- | Technical Report citation requires author, title, institution, and
---   year. Optional fields can be type, number, address, month, and note.
---   Implicitly uses the EntryID as the chunk id.
-cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Unpublished citation requires author, title, and note. Optional fields
---   can be month and year. Implicitly uses the EntryID as the chunk id.
-cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.ShortName.HasShortName Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Data.Citation.HasFields Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Label.Type.Referable Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Chunk.Citation.Citation
-instance GHC.Generics.Generic Language.Drasil.Chunk.Citation.Citation
-instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.Citation.Citation
-
-
 -- | Defines operator precedence.
 module Language.Drasil.Expr.Precedence
 
@@ -3490,6 +2991,512 @@ instance Language.Drasil.Expr.Class.ExprC Language.Drasil.Expr.Lang.Expr
 instance Language.Drasil.Expr.Class.ExprC Language.Drasil.ModelExpr.Lang.ModelExpr
 
 
+-- | Defines classes for use with Drasil's expression language.
+module Language.Drasil.ExprClasses
+
+-- | Express something axiomatically.
+class Express c
+
+-- | Express something as a single fact.
+express :: Express c => c -> ModelExpr
+
+-- | Express something as a series of facts.
+mexpress :: Express c => c -> NonEmpty ModelExpr
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Literal.Lang.Literal
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Expr.Lang.Expr
+instance Language.Drasil.ExprClasses.Express Language.Drasil.ModelExpr.Lang.ModelExpr
+instance Language.Drasil.ExprClasses.Express t => Language.Drasil.ExprClasses.Express [t]
+instance Language.Drasil.ExprClasses.Express t => Language.Drasil.ExprClasses.Express (GHC.Base.NonEmpty t)
+
+
+-- | Contains Sentences and helpers functions.
+module Language.Drasil.Sentence
+
+-- | For writing <a>Sentence</a>s via combining smaller elements.
+--   <a>Sentence</a>s are made up of some known vocabulary of things:
+--   
+--   <ul>
+--   <li>units (their visual representation)</li>
+--   <li>words (via <a>String</a>s)</li>
+--   <li>special characters</li>
+--   <li>accented letters</li>
+--   <li>references to specific layout objects</li>
+--   </ul>
+data Sentence
+
+-- | Ch looks up the term for a given <a>UID</a> and displays the term with
+--   a given <a>SentenceStyle</a> and <tt>CapitalizationRule</tt>. This
+--   allows Sentences to hold plural forms of <tt>NamedIdea</tt>s.
+[Ch] :: SentenceStyle -> TermCapitalization -> UID -> Sentence
+
+-- | A branch of Ch dedicated to SymbolStyle only.
+[SyCh] :: UID -> Sentence
+
+-- | Converts a unit symbol into a usable Sentence form.
+[Sy] :: USymb -> Sentence
+
+-- | Directly embeds a <a>Sentence</a>
+[NP] :: NP -> Sentence
+
+-- | Constructor for <a>String</a>s, used often for descriptions in Chunks.
+[S] :: String -> Sentence
+
+-- | Converts the graphical representation of a symbol into a usable
+--   Sentence form.
+[P] :: Symbol -> Sentence
+
+-- | Lifts an expression into a Sentence.
+[E] :: ModelExpr -> Sentence
+
+-- | Takes a <a>UID</a> to a reference, a display name (<a>Sentence</a>),
+--   and any additional reference display information (<a>RefInfo</a>).
+--   Resolves the reference later (similar to Ch).
+[Ref] :: UID -> Sentence -> RefInfo -> Sentence
+
+-- | Adds quotation marks around a Sentence.
+[Quote] :: Sentence -> Sentence
+
+-- | Used for a % symbol.
+[Percent] :: Sentence
+
+-- | Direct concatenation of two Sentences (no implicit spaces!).
+[:+:] :: Sentence -> Sentence -> Sentence
+
+-- | Empty Sentence.
+[EmptyS] :: Sentence
+infixr 5 :+:
+
+-- | Used in <a>Ch</a> constructor to determine the state of a term (can
+--   record whether something is in plural form, a singular term, or in
+--   short form).
+data SentenceStyle
+PluralTerm :: SentenceStyle
+TermStyle :: SentenceStyle
+ShortStyle :: SentenceStyle
+
+-- | Holds any extra information needed for a <tt>Reference</tt>, be it an
+--   equation, pages, a note, or nothing.
+data RefInfo
+None :: RefInfo
+Equation :: [Int] -> RefInfo
+Page :: [Int] -> RefInfo
+RefNote :: String -> RefInfo
+
+-- | Used in <a>Ch</a> constructor to determine the capitalization of a
+--   term. CapF is for capitalizing the first word from the <a>UID</a> of
+--   the given term. CapW is for capitalizing all words from the <a>UID</a>
+--   of the given term. Mirrors <tt>CapFirst</tt> and <tt>CapWords</tt>
+--   from <tt>CapitalizationRule</tt>.
+data TermCapitalization
+CapF :: TermCapitalization
+CapW :: TermCapitalization
+NoCap :: TermCapitalization
+
+-- | Helper for concatenating two <a>Sentence</a>s with a space between
+--   them.
+(+:+) :: Sentence -> Sentence -> Sentence
+
+-- | Helper which concatenates two <a>Sentence</a>s using <a>+:+</a> and
+--   appends a period.
+(+:+.) :: Sentence -> Sentence -> Sentence
+
+-- | Helper which concatenates two sentences using <a>+:+</a> and appends a
+--   colon.
+(+:) :: Sentence -> Sentence -> Sentence
+
+-- | Helper which appends a period to the end of a <a>Sentence</a> (used
+--   often as a post-fix operator).
+(!.) :: Sentence -> Sentence
+
+-- | Capitalizes a Sentence.
+capSent :: Sentence -> Sentence
+
+-- | Helper which creates a Header with size s of the <a>Sentence</a>.
+headSent :: Int -> Sentence -> Sentence
+
+-- | Gets a symbol and places it in a <a>Sentence</a>.
+ch :: (IsChunk c, HasSymbol c) => c -> Sentence
+eS :: ModelExpr -> Sentence
+eS' :: Express t => t -> Sentence
+
+-- | Helper for concatenating two <a>Sentence</a>s with a comma and space
+--   between them.
+sC :: Sentence -> Sentence -> Sentence
+
+-- | Helper for concatenating two <a>Sentence</a>s with a space-surrounded
+--   dash between them.
+sDash :: Sentence -> Sentence -> Sentence
+
+-- | Helper for wrapping <a>Sentence</a>s in parentheses.
+sParen :: Sentence -> Sentence
+
+-- | Gets plural term of <a>UID</a>.
+--   
+--   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
+sentencePlural :: UID -> Sentence
+
+-- | Gets short form of <a>UID</a>.
+--   
+--   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
+sentenceShort :: UID -> Sentence
+
+-- | Gets singular form of <a>UID</a>.
+--   
+--   Smart constructors for turning a <a>UID</a> into a <a>Sentence</a>.
+sentenceTerm :: UID -> Sentence
+
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <a>Symbol</a>.
+sdep :: Sentence -> Set UID
+
+-- | Generic traverse of all positions that could lead to <i>reference</i>
+--   <a>UID</a>s from <a>Sentence</a>s.
+lnames :: Sentence -> Set UID
+
+-- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
+lnames' :: [Sentence] -> [UID]
+instance GHC.Base.Semigroup Language.Drasil.Sentence.Sentence
+instance GHC.Base.Monoid Language.Drasil.Sentence.Sentence
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Sentence.Sentence
+
+
+-- | Short names are used for displaying references.
+module Language.Drasil.ShortName
+
+-- | Used for holding the short form of a name (as a <a>Sentence</a> with a
+--   wrapper).
+newtype ShortName
+ShortNm :: Sentence -> ShortName
+
+-- | A <a>ShortName</a> is the text to be displayed for a link.
+--   
+--   Used for referencing within a document that can include symbols and
+--   whatnot if required. Visible in the typeset documents (pdf).
+class HasShortName s
+shortname :: HasShortName s => s -> ShortName
+
+-- | Pulls the short form (as a <a>Sentence</a>) out of a <a>ShortName</a>.
+getSentSN :: ShortName -> Sentence
+
+-- | Smart constructor for making a <a>Sentence</a> into a
+--   <a>ShortName</a>.
+shortname' :: Sentence -> ShortName
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.ShortName.ShortName
+
+
+-- | Defines a type used to hold referencing information.
+module Language.Drasil.Reference
+
+-- | A Reference contains the identifier (<a>UID</a>), a reference address
+--   (<a>LblType</a>), a human-readable shortname (<a>ShortName</a>), and
+--   any extra information about the reference (<a>RefInfo</a>).
+data Reference
+Reference :: UID -> LblType -> ShortName -> Reference
+
+-- | A class that contains a list of <a>Reference</a>s.
+class HasReference c
+
+-- | Provides a <tt>Lens</tt> to the <a>Reference</a>s.
+getReferences :: HasReference c => Lens' c [Reference]
+
+-- | Projector function that creates a <a>Reference</a> from something
+--   <tt>Referable</tt>.
+ref :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Reference
+
+-- | Takes the reference <a>UID</a> and wraps it into a <a>Sentence</a>.
+refS :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence
+
+-- | Takes a <a>Reference</a> with a name to be displayed and wraps it into
+--   a <a>Sentence</a>. Does not overwrite the shortname contained in the
+--   reference, but will only display as the given <a>Sentence</a>.
+namedRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence -> Sentence
+
+-- | Takes a <a>Reference</a> with additional display info. Uses the
+--   internal shortname for its display name.
+complexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sentence
+
+-- | Takes a <a>Reference</a> with a name to be displayed and any
+--   additional information and wraps it into a <a>Sentence</a>. Does not
+--   overwrite the shortname contained in the reference, but will only
+--   display as the given <a>Sentence</a> along with the given
+--   <a>RefInfo</a>.
+namedComplexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Reference.Reference
+instance GHC.Classes.Eq Language.Drasil.Reference.Reference
+instance Drasil.Database.UID.HasUID Language.Drasil.Reference.Reference
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Reference.Reference
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Reference.Reference
+
+
+-- | Various helpers for building Sentences from other bits. Really ought
+--   to be moved out to (likely) docLang, but is here for now.
+module Language.Drasil.Development.Sentence
+
+-- | Helper for getting the phrase from a <a>NamedIdea</a> using it's UID.
+phrase :: NamedIdea n => n -> Sentence
+
+-- | Helper for getting the plural of a phrase from a <a>NamedIdea</a>.
+plural :: NamedIdea n => n -> Sentence
+
+-- | Singular possesive function
+--   
+--   Helper for getting the possesive cases from the term of a
+--   <a>NamedIdea</a>.
+phrasePoss :: NamedIdea n => n -> Sentence
+
+-- | Plural possesive function
+--   
+--   Helper for getting the possesive cases from the term of a
+--   <a>NamedIdea</a>.
+pluralPoss :: NamedIdea n => n -> Sentence
+
+-- | Singular sentence case.
+--   
+--   Helper function for getting the sentence case of a noun phrase from a
+--   <a>NamedIdea</a>.
+atStart :: NamedIdea n => n -> Sentence
+
+-- | Plural sentence case.
+--   
+--   Helper function for getting the sentence case of a noun phrase from a
+--   <a>NamedIdea</a>.
+atStart' :: NamedIdea n => n -> Sentence
+
+-- | Singular title case.
+--   
+--   Helper function for getting the title case of a noun phrase from a
+--   <a>NamedIdea</a>.
+titleize :: NamedIdea n => n -> Sentence
+
+-- | Plural title case.
+--   
+--   Helper function for getting the title case of a noun phrase from a
+--   <a>NamedIdea</a>.
+titleize' :: NamedIdea n => n -> Sentence
+
+-- | Translate from NPStruct to Sentence
+toSent :: NPStruct -> Sentence
+
+-- | Get short form (if it exists), else get term of an <a>Idea</a>. Uses
+--   the UID of the <a>Idea</a> in a <tt>Ch</tt> Sentence constructor to
+--   get the short form using getA. getA may return Nothing, in which case
+--   lookupS uses the term, where lookupS is the main helper for looking up
+--   the short form of a <tt>Ch</tt> Sentence.
+short :: Idea c => c -> Sentence
+
+-- | Introduce a noun phrase and its (parenthesized) abbreviation.
+introduceAbb :: Idea n => n -> Sentence
+
+
+-- | Developing the expression language in Drasil. Re-export many things to
+--   simplify external use.
+module Language.Drasil.Development
+
+-- | Translate from NPStruct to Sentence
+toSent :: NPStruct -> Sentence
+class NounPhrase n
+
+-- | Retrieves singular form of term. Ex. "the quick brown fox".
+phraseNP :: NounPhrase n => n -> NPStruct
+
+-- | Retrieves plural form of term. Ex. "the quick brown foxes".
+pluralNP :: NounPhrase n => n -> PluralForm
+
+-- | Essentially a subset of <tt>Sentence</tt> that contains only the parts
+--   that make sense for a NounPhrase
+data NPStruct
+S :: String -> NPStruct
+(:-:) :: NPStruct -> NPStruct -> NPStruct
+(:+:) :: NPStruct -> NPStruct -> NPStruct
+P :: Symbol -> NPStruct
+
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <a>Symbol</a>.
+sdep :: Sentence -> Set UID
+
+-- | Generic traverse of all positions that could lead to <i>reference</i>
+--   <a>UID</a>s from <a>Sentence</a>s.
+lnames :: Sentence -> Set UID
+
+-- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
+lnames' :: [Sentence] -> [UID]
+
+-- | Get something's <a>UID</a> as a <a>Value</a>.
+showUID :: HasUID a => a -> String
+
+
+-- | References that have extra information.
+module Language.Drasil.DecoratedReference
+
+-- | For holding a <a>Reference</a> that is decorated with extra
+--   information (ex. page numbers, equation sources, etc.).
+data DecRef
+DR :: Reference -> RefInfo -> DecRef
+[_rf] :: DecRef -> Reference
+[refInfo] :: DecRef -> RefInfo
+
+-- | A class that contains a list of decorated references (<a>DecRef</a>s).
+class HasDecRef c
+
+-- | Provides a <tt>Lens</tt> to the <a>DecRef</a>s.
+getDecRefs :: HasDecRef c => Lens' c [DecRef]
+
+-- | Same as <a>ref</a>, but for <a>DecRef</a> instead of <a>Reference</a>.
+dRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> DecRef
+
+-- | For creating a decorated reference (<a>DecRef</a>) with extra
+--   reference information (<a>RefInfo</a>).
+dRefInfo :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> DecRef
+instance GHC.Classes.Eq Language.Drasil.DecoratedReference.DecRef
+instance Drasil.Database.UID.HasUID Language.Drasil.DecoratedReference.DecRef
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.DecoratedReference.DecRef
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.DecoratedReference.DecRef
+
+
+-- | Defines the chunk type to hold citations.
+module Language.Drasil.Chunk.Citation
+
+-- | All citations require a unique identifier used by the Drasil chunk. We
+--   will re-use the <a>UID</a> part as an EntryID (<a>String</a>) used for
+--   creating reference links. Finally we will have the reference
+--   information (<a>CitationKind</a>, <a>CiteField</a>s, and a
+--   <a>ShortName</a>).
+--   
+--   Ex. A reference to a thesis paper like Koothoor's "Document driven
+--   approach to certifying scientific computing software" would include
+--   the affiliated university, publishing year, and city.
+data Citation
+
+-- | A list of <a>Citation</a>s.
+type BibRef = [Citation]
+
+-- | A <a>String</a> that should contain no spaces.
+type EntryID = String
+
+-- | Some documents, as well as some pieces of knowledge, have citations.
+class HasCitation c
+
+-- | Provides a <tt>Lens</tt> to the citations.
+getCitations :: HasCitation c => Lens' c [Citation]
+citeID :: Lens' Citation UID
+citeKind :: Lens' Citation CitationKind
+
+-- | Article citation requires author(s), title, journal, year. Optional
+--   fields can be: volume, number, pages, month, and note. Implicitly uses
+--   the EntryID as the chunk id.
+cArticle :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Book citation by author.
+--   
+--   Book citation requires author or editor, title, publisher, year.
+--   Optional fields can be volume or number, series, address, edition,
+--   month, and note. Implicitly uses the EntryID as the chunk id.
+cBookA :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Book citation by editor.
+--   
+--   Book citation requires author or editor, title, publisher, year.
+--   Optional fields can be volume or number, series, address, edition,
+--   month, and note. Implicitly uses the EntryID as the chunk id.
+cBookE :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Booklet citation requires title. Optional fields can be author, how
+--   published, address, month, year, note. Implicitly uses the EntryID as
+--   the chunk id.
+cBooklet :: String -> [CiteField] -> String -> Citation
+
+-- | InBook citation by author.
+--   
+--   InBook citation requires author or editor, title, chapter and/or
+--   pages, publisher, year. Optional fields can be volume or number,
+--   series, type, address, edition, month, and note. Implicitly uses the
+--   EntryID as the chunk id. This smart constructor includes both chapter
+--   and page numbers.
+cInBookACP :: People -> String -> Int -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | InBook citation by editor.
+--   
+--   InBook citation requires author or editor, title, chapter and/or
+--   pages, publisher, year. Optional fields can be volume or number,
+--   series, type, address, edition, month, and note. Implicitly uses the
+--   EntryID as the chunk id. This smart constructor includes both chapter
+--   and page numbers.
+cInBookECP :: People -> String -> Int -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Otherwise identical to <a>cInBookACP</a>.
+--   
+--   InBook citation excluding page numbers.
+cInBookAC :: People -> String -> Int -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Otherwise identical to <a>cInBookECP</a>.
+--   
+--   InBook citation excluding page numbers.
+cInBookEC :: People -> String -> Int -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Otherwise identical to <a>cInBookACP</a>.
+--   
+--   InBook citation excluding chapter.
+cInBookAP :: People -> String -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Otherwise identical to <a>cInBookECP</a>.
+--   
+--   InBook citation excluding chapter.
+cInBookEP :: People -> String -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | InCollection citation requires author, title, bookTitle, publisher,
+--   year. Optional fields can be editor, volume or number, series, type,
+--   chapter, pages, address, edition, month, and note. Implicitly uses the
+--   EntryID as the chunk id.
+cInCollection :: People -> String -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | InProceedings citation requires author, title, bookTitle, year.
+--   Optional fields can be editor, volume or number, series, pages,
+--   address, month, organization, publisher, and note. Implicitly uses the
+--   EntryID as the chunk id.
+cInProceedings :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Manual (technical documentation) citation requires title. Optional
+--   fields can be author, organization, address, edition, month, year, and
+--   note. Implicitly uses the EntryID as the chunk id.
+cManual :: String -> [CiteField] -> String -> Citation
+
+-- | Master's Thesis citation requires author, title, school, and year.
+--   Optional fields can be type, address, month, and note. Implicitly uses
+--   the EntryID as the chunk id.
+cMThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Misc citation requires nothing. Optional fields can be author, title,
+--   howpublished, month, year, and note. Implicitly uses the EntryID as
+--   the chunk id.
+cMisc :: [CiteField] -> String -> Citation
+
+-- | PhD Thesis citation requires author, title, school, and year. Optional
+--   fields can be type, address, month, and note. Implicitly uses the
+--   EntryID as the chunk id.
+cPhDThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Proceedings citation requires title and year. Optional fields can be
+--   editor, volume or number, series, address, publisher, note, month, and
+--   organization. Implicitly uses the EntryID as the chunk id.
+cProceedings :: String -> Int -> [CiteField] -> String -> Citation
+
+-- | Technical Report citation requires author, title, institution, and
+--   year. Optional fields can be type, number, address, month, and note.
+--   Implicitly uses the EntryID as the chunk id.
+cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Unpublished citation requires author, title, and note. Optional fields
+--   can be month and year. Implicitly uses the EntryID as the chunk id.
+cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Data.Citation.HasFields Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Label.Type.Referable Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Chunk.Citation.Citation
+instance GHC.Generics.Generic Language.Drasil.Chunk.Citation.Citation
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.Citation.Citation
+
+
 -- | Contains types and functions common to aspects of generating
 --   documents.
 module Language.Drasil.Document.Core
@@ -3909,9 +3916,14 @@ class UnitEq u
 -- | Provides the <tt>Lens</tt> to a unit definition.
 uniteq :: UnitEq u => Lens' u UDefn
 
--- | Data that can be expressed using <a>ModelExpr</a>.
+-- | Express something axiomatically.
 class Express c
+
+-- | Express something as a single fact.
 express :: Express c => c -> ModelExpr
+
+-- | Express something as a series of facts.
+mexpress :: Express c => c -> NonEmpty ModelExpr
 class DefiningExpr c
 
 -- | Provides a <tt>Lens</tt> to the expression. TODO: Well, technically,
@@ -6012,9 +6024,14 @@ class DefiningExpr c
 --   meaning.
 defnExpr :: DefiningExpr c => Lens' (c e) e
 
--- | Data that can be expressed using <a>ModelExpr</a>.
+-- | Express something axiomatically.
 class Express c
+
+-- | Express something as a single fact.
 express :: Express c => c -> ModelExpr
+
+-- | Express something as a series of facts.
+mexpress :: Express c => c -> NonEmpty ModelExpr
 
 -- | Members must have a reference address.
 class HasRefAddress b

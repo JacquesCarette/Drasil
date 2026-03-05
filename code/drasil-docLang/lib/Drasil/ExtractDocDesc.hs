@@ -14,7 +14,7 @@ import qualified Data.Set as S
 import Language.Drasil hiding (getCitations, Manual, Verb)
 import Language.Drasil.Development (lnames)
 import Drasil.System (System, HasSystem(systemdb))
-import Theory.Drasil
+import Theory.Drasil (Derivation(..), MayHaveDerivation(..), Theory(valid_context, operations, defined_quant))
 
 import Drasil.DocumentLanguage.Core hiding (System)
 import Drasil.GetChunks (resolveBibliography)
@@ -54,7 +54,7 @@ exprPlate :: DLPlate (Constant [ModelExpr])
 exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (concatMap extractMExprs)
   (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
   scsSub = Constant <$> \case
-    (TMs _ _ t)   -> goTM t
+    (TMs _ _ t)   -> go t
     (DDs _ _ d _) -> go d
     (GDs _ _ g _) -> go g
     (IMs _ _ i _) -> go i
@@ -63,11 +63,6 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
   }) where
       go :: Express a => [a] -> [ModelExpr]
       go = map express
-      goTM :: [TheoryModel] -> [ModelExpr]
-      goTM = concatMap (\x -> go (x ^. defined_quant)
-                           ++ x ^. invariants
-                           ++ go (map (^. defnExpr) (x ^. defined_quant ++ x ^. defined_fun))
-                           ++ goTM (x ^. valid_context))
 
 -- | Helper that extracts a list of some type from the 'DLPlate' and 'DocDesc'.
 fmGetDocDesc :: DLPlate (Constant [a]) -> DocDesc -> [a]

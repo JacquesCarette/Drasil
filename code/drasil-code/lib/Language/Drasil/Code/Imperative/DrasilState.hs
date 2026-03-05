@@ -4,7 +4,10 @@ module Language.Drasil.Code.Imperative.DrasilState (
   sampleData, GenState, DrasilState(..), softwareDossierInfo, getDoxOutput,
   getSoftwareDossierFiles, getSampleData, designLog, MatchedSpaces, ModExportMap,
   ClassDefinitionMap, ScopeType(..), modExportMap, clsDefMap, addToDesignLog,
-  addLoggedSpace, genICName, lookupC
+  addLoggedSpace, ChoicesInfo(..), genICName, lookupC, getModular, getImplType,
+  getInStruct, getConStruct, getConRepr, getConcMatches, getSpaceMatches,
+  getOnSfwrC, getOnPhysC, getCommented, getDate, getLogName, getLogKind,
+  getDsICNames
 ) where
 
 import Control.Lens ((^.), makeLenses, over)
@@ -43,6 +46,23 @@ makeLenses ''SoftwareDossierInfo
 makeSoftwareDossierInfo :: Verbosity -> [SoftwareDossierFile] -> [Expr] -> SoftwareDossierInfo
 makeSoftwareDossierInfo = SoftwareDossierInfo
 
+data ChoicesInfo = ChoicesInfo {
+  modular :: Modularity,
+  implType :: ImplementationType,
+  inStruct :: Structure,
+  conStruct :: ConstantStructure,
+  conRepr :: ConstantRepr,
+  concMatches :: MatchedConceptMap,
+  spaceMatches :: MatchedSpaces,
+  onSfwrC :: ConstraintBehaviour,
+  onPhysC :: ConstraintBehaviour,
+  commented :: [Comments],
+  date :: String,
+  logName :: String,
+  logKind :: [Logging],
+  dsICNames :: InternalConcept -> Name
+}
+
 -- | Type for the mapping between 'Space's and 'CodeType's.
 type MatchedSpaces = Space -> GenState CodeType
 
@@ -66,20 +86,7 @@ data DrasilState = DrasilState {
   codeSpec :: CodeSpec,
   printfo :: PrintingInformation,
   -- Choices
-  modular :: Modularity,
-  implType :: ImplementationType,
-  inStruct :: Structure,
-  conStruct :: ConstantStructure,
-  conRepr :: ConstantRepr,
-  concMatches :: MatchedConceptMap,
-  spaceMatches :: MatchedSpaces,
-  onSfwrC :: ConstraintBehaviour,
-  onPhysC :: ConstraintBehaviour,
-  commented :: [Comments],
-  date :: String,
-  logName :: String,
-  logKind :: [Logging],
-  dsICNames :: InternalConcept -> Name,
+  choices :: ChoicesInfo,
   -- Reference materials
   modules :: [Mod],
   extLibNames :: [(Name,Version)],
@@ -109,6 +116,48 @@ getSoftwareDossierFiles ds = ds ^. (softwareDossierInfo . softwareDossierFiles)
 
 getSampleData :: DrasilState -> [Expr]
 getSampleData ds = ds ^. (softwareDossierInfo . sampleData)
+
+getModular :: DrasilState -> Modularity
+getModular ds = modular $ choices ds
+
+getImplType :: DrasilState -> ImplementationType
+getImplType ds = implType $ choices ds
+
+getInStruct :: DrasilState -> Structure
+getInStruct ds = inStruct $ choices ds
+
+getConStruct :: DrasilState -> ConstantStructure
+getConStruct ds = conStruct $ choices ds
+
+getConRepr :: DrasilState -> ConstantRepr
+getConRepr ds = conRepr $ choices ds
+
+getConcMatches :: DrasilState -> MatchedConceptMap
+getConcMatches ds = concMatches $ choices ds
+
+getSpaceMatches :: DrasilState -> MatchedSpaces
+getSpaceMatches ds = spaceMatches $ choices ds
+
+getOnSfwrC :: DrasilState -> ConstraintBehaviour
+getOnSfwrC ds = onSfwrC $ choices ds
+
+getOnPhysC :: DrasilState -> ConstraintBehaviour
+getOnPhysC ds = onPhysC $ choices ds
+
+getCommented :: DrasilState -> [Comments]
+getCommented ds = commented $ choices ds
+
+getDate :: DrasilState -> String
+getDate ds = date $ choices ds
+
+getLogName :: DrasilState -> String
+getLogName ds = logName $ choices ds
+
+getLogKind :: DrasilState -> [Logging]
+getLogKind ds = logKind $ choices ds
+
+getDsICNames :: DrasilState -> InternalConcept -> Name
+getDsICNames ds = dsICNames $ choices ds
 
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.
@@ -311,7 +360,7 @@ getExpOutput n chs _ = [(icNames chs WriteOutput, oMod $ modularity $ architectu
 
 -- | Get InternalConcept name using DrasilState
 genICName :: InternalConcept -> GenState Name
-genICName ic = gets (`dsICNames` ic)
+genICName ic = gets (`getDsICNames` ic)
 
 -- | Gets the 'DefinedQuantityDict' corresponding to a 'UID'.
 lookupC :: DrasilState -> UID -> DefinedQuantityDict

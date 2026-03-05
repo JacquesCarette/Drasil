@@ -5,7 +5,8 @@ module Language.Drasil.Code.Imperative.Logging (
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (get)
 
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
+  getLogKind, getLogName)
 import Language.Drasil.Choices (Logging(..))
 
 import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
@@ -18,7 +19,7 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
 maybeLog :: (SharedProg r) => SVariable r -> GenState [MSStatement r]
 maybeLog v = do
   g <- get
-  sequence [loggedVar v | LogVar `elem` logKind g]
+  sequence [loggedVar v | LogVar `elem` getLogKind g]
 
 -- | Generates a statement that logs the name of the given variable, its current
 -- value, and the current module name.
@@ -26,7 +27,7 @@ loggedVar :: (SharedProg r) => SVariable r -> GenState (MSStatement r)
 loggedVar v = do
   g <- get
   return $ multi [
-    openFileA varLogFile (litString $ logName g),
+    openFileA varLogFile (litString $ getLogName g),
     zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("var '" ++
       variableName v' ++ "' assigned ")),
     printFile valLogFile (valueOf v),
@@ -41,7 +42,7 @@ logBody :: (SharedProg r) => Label -> [SVariable r] -> [MSBlock r] ->
   GenState (MSBody r)
 logBody n vars b = do
   g <- get
-  return $ body $ [loggedMethod (logName g) n vars | LogFunc `elem` logKind g] ++ b
+  return $ body $ [loggedMethod (getLogName g) n vars | LogFunc `elem` getLogKind g] ++ b
 
 -- | Generates a block that logs, to the given 'FilePath', the name of a function,
 -- and the names and values of the passed list of variables. Intended to be

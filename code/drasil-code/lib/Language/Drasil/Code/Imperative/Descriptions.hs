@@ -21,7 +21,7 @@ import Utils.Drasil (stringList)
 import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  genICName)
+  genICName, getImplType, getInStruct)
 import Language.Drasil.Choices (ImplementationType(..), Structure(..),
   InternalConcept(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
@@ -43,7 +43,7 @@ unmodularDesc = do
   let implTypeStr Program = "program"
       implTypeStr Library = "library"
   return $ show $ sentenceDoc OneLine $ spec (printfo g) $ capSent $
-    foldlSent ([S "a", S (implTypeStr (implType g)), S "to"] ++ codeSpec g ^. purpose)
+    foldlSent ([S "a", S (implTypeStr (getImplType g)), S "to"] ++ codeSpec g ^. purpose)
 
 -- | Returns description of what is contained in the Input Parameters module.
 -- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the
@@ -55,7 +55,7 @@ inputParametersDesc = do
   ifDesc <- inputFormatDesc
   dvDesc <- derivedValuesDesc
   icDesc <- inputConstraintsDesc
-  let st = inStruct g
+  let st = getInStruct g
       ipDesc = inDesc st ++ [ifDesc, dvDesc, icDesc]
       inDesc Bundled = ["the structure for holding input values"]
       inDesc Unbundled = [""]

@@ -61,7 +61,9 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns,
   getInputFormatOuts, getCalcParams, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  ScopeType(..), genICName, getSoftwareDossierFiles, getSampleData)
+  ScopeType(..), genICName, getSoftwareDossierFiles, getSampleData,
+  getCommented, getImplType, getLogKind, getConRepr, getConStruct, getInStruct,
+  getOnSfwrC, getOnPhysC)
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (sampleInput)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar,
   DefiningCodeExpr(..))
@@ -105,14 +107,14 @@ genMainFunc = do
           ics <- genAllInputCalls
           varDef <- mapM genCalcCall (codeSpec g ^. execOrderO)
           wo <- genOutputCall
-          return $ Just $ (if CommentFunc `elem` commented g then docMain else
-            mainFunction) $ bodyStatements $ initLogFileVar (logKind g) mainFn
+          return $ Just $ (if CommentFunc `elem` getCommented g then docMain else
+            mainFunction) $ bodyStatements $ initLogFileVar (getLogKind g) mainFn
             ++ varDecDef v_filename mainFn (arg 0)
             : logInFile
             -- Constants must be declared before inputs because some derived
             -- input definitions or input constraints may use the constants
             ++ catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
-    mainFunc $ implType g
+    mainFunc $ getImplType g
 
 -- | If there are no inputs, the 'inParams' object still needs to be declared
 -- if inputs are 'Bundled', constants are stored 'WithInputs', and constant
@@ -132,8 +134,8 @@ getInputDecl = do
   cps <- mapM mkVal constrParams
   cname <- genICName InputParameters
   let getDecl ([],[]) = constIns (partition (flip member (eMap g) .
-        codeName) (map quantvar $ codeSpec g ^. constantsO)) (conRepr g)
-        (conStruct g)
+        codeName) (map quantvar $ codeSpec g ^. constantsO)) (getConRepr g)
+        (getConStruct g)
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map (`varDec` scp) vars
@@ -166,7 +168,7 @@ initConsts = do
   cname <- genICName Constants
   let cs = codeSpec g ^. constantsO
       getDecl (Store Unbundled) _ = declVars
-      getDecl (Store Bundled) _ = gets (declObj cs . conRepr)
+      getDecl (Store Bundled) _ = gets (declObj cs . getConRepr)
       getDecl WithInputs Unbundled = declVars
       getDecl WithInputs Bundled = return Nothing
       getDecl Inline _ = return Nothing
@@ -175,14 +177,14 @@ initConsts = do
         vals <- mapM (convExpr . (^. codeExpr)) cs
         logs <- mapM maybeLog vars
         return $ Just $ multi $
-          zipWith (\vr -> defFunc (conRepr g) vr scp) vars vals ++ concat logs
+          zipWith (\vr -> defFunc (getConRepr g) vr scp) vars vals ++ concat logs
       defFunc Var = varDecDef
       defFunc Const = constDecDef
       declObj [] _ = Nothing
       declObj (c:_) Var = Just $ (if currentModule g == eMap g ! codeName c
         then objDecNewNoParams else extObjDecNewNoParams cname) v_consts scp
       declObj _ Const = Nothing
-  getDecl (conStruct g) (inStruct g)
+  getDecl (getConStruct g) (getInStruct g)
 
 -- | Generates a statement to declare the variable representing the log file,
 -- if the user chose to turn on logs for variable assignments.
@@ -245,7 +247,7 @@ genInputClass scp = do
         vals <- mapM (convExpr . (^. codeExpr)) csts
         inputVars <- mapM (\x -> fmap (pubDVar .
           var (codeName x) . convTypeOO) (codeType x)) inps
-        constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g)
+        constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (getConRepr g)
           (var (codeName c) (convTypeOO t)) vl) (codeType c))
           csts vals
         let getFunc Primary = primaryClass
@@ -331,7 +333,7 @@ sfwrCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] ->
   GenState [MSStatement r]
 sfwrCBody cs = do
   g <- get
-  let cb = onSfwrC g
+  let cb = getOnSfwrC g
   chooseConstr cb cs
 
 -- | Generates input constraints code block for checking physical constraints.
@@ -339,7 +341,7 @@ physCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] ->
   GenState [MSStatement r]
 physCBody cs = do
   g <- get
-  let cb = onPhysC g
+  let cb = getOnPhysC g
   chooseConstr cb cs
 
 -- | Generates conditional statements for checking constraints, where the
@@ -503,7 +505,7 @@ genConstClass scp = do
         vals <- mapM (convExpr . (^. codeExpr)) vs
         vars <- mapM (\x -> fmap (var (codeName x) . convTypeOO)
           (codeType x)) vs
-        let constVars = zipWith (constVarFunc (conRepr g)) vars vals
+        let constVars = zipWith (constVarFunc (getConRepr g)) vars vals
             getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
             f = getFunc scp
@@ -651,14 +653,14 @@ genMainFuncProc = do
           ics <- genAllInputCallsProc
           varDef <- mapM genCalcCallProc (codeSpec g ^. execOrderO)
           wo <- genOutputCallProc
-          return $ Just $ (if CommentFunc `elem` commented g then docMain else
-            mainFunction) $ bodyStatements $ initLogFileVar (logKind g) mainFn
+          return $ Just $ (if CommentFunc `elem` getCommented g then docMain else
+            mainFunction) $ bodyStatements $ initLogFileVar (getLogKind g) mainFn
             ++ varDecDef v_filename mainFn (arg 0)
             : logInFile
             -- Constants must be declared before inputs because some derived
             -- input definitions or input constraints may use the constants
             ++ catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
-    mainFunc $ implType g
+    mainFunc $ getImplType g
 
 -- | If constants are 'Unbundled', declare them individually using 'varDecDef' if
 -- representation is 'Var' and 'constDecDef' if representation is 'Const'.
@@ -684,10 +686,10 @@ initConstsProc = do
         vals <- mapM (convExprProc . (^. codeExpr)) cs
         logs <- mapM maybeLog vars
         return $ Just $ multi $
-          zipWith (\vr -> defFunc (conRepr g) vr scp) vars vals ++ concat logs
+          zipWith (\vr -> defFunc (getConRepr g) vr scp) vars vals ++ concat logs
       defFunc Var = varDecDef
       defFunc Const = constDecDef
-  getDecl (conStruct g) (inStruct g)
+  getDecl (getConStruct g) (getInStruct g)
 
 -- | Checks if a class is needed to store constants, i.e. if constants are
 -- mapped to the constants class in the class definition map.
@@ -897,7 +899,7 @@ sfwrCBodyProc :: (SharedProg r) => [(CodeVarChunk, [ConstraintCE])] ->
   GenState [MSStatement r]
 sfwrCBodyProc cs = do
   g <- get
-  let cb = onSfwrC g
+  let cb = getOnSfwrC g
   chooseConstrProc cb cs
 
 -- | Generates input constraints code block for checking physical constraints.
@@ -905,7 +907,7 @@ physCBodyProc :: (SharedProg r) => [(CodeVarChunk, [ConstraintCE])] ->
   GenState [MSStatement r]
 physCBodyProc cs = do
   g <- get
-  let cb = onPhysC g
+  let cb = getOnPhysC g
   chooseConstrProc cb cs
 
 -- | Generates conditional statements for checking constraints, where the

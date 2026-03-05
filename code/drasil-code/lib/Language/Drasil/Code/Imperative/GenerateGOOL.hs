@@ -12,7 +12,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (List)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  getDoxOutput, getSoftwareDossierFiles)
+  getDoxOutput, getSoftwareDossierFiles, getCommented, getDate)
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..),
   SoftwareDossierState)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
@@ -45,8 +45,8 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   let as = map name (codeSpec g ^. authorsO )
   cs <- sequence maybeCs
   ms <- sequence maybeMs
-  let commMod | CommentMod `elem` commented g                   = OO.docMod desc watermark as (date g)
-              | CommentFunc `elem` commented g && not (null ms) = OO.docMod "" watermark [] ""
+  let commMod | CommentMod `elem` getCommented g                   = OO.docMod desc watermark as (getDate g)
+              | CommentFunc `elem` getCommented g && not (null ms) = OO.docMod "" watermark [] ""
               | otherwise                                       = id
   return $ commMod $ OO.fileDoc $ OO.buildModule n is (catMaybes ms) (catMaybes cs)
 
@@ -61,7 +61,7 @@ genDoxConfig :: (SoftwareDossierSym r) => SoftwareDossierState -> GenState (Mayb
 genDoxConfig s = do
   g <- get
   let n = codeSpec g ^. pNameO
-      cms = commented g
+      cms = getCommented g
       v = getDoxOutput g
   return $ if not (null cms) then Just (doxConfig n s v) else Nothing
 
@@ -95,7 +95,7 @@ mkClass s n l desc vs cstrs mths = do
       getFunc' Nothing = buildClass Nothing
       getFunc' (Just intfc) = implementingClass n [intfc]
       c = getFunc s vs cs ms
-  return $ if CommentClass `elem` commented g
+  return $ if CommentClass `elem` getCommented g
     then docClass desc c
     else c
 
@@ -181,8 +181,8 @@ genModuleWithImportsProc n desc is maybeMs = do
   modify (\s -> s { currentModule = n })
   let as = map name (codeSpec g ^. authorsO )
   ms <- sequence maybeMs
-  let commMod | CommentMod `elem` commented g                   = Proc.docMod desc watermark as (date g)
-              | CommentFunc `elem` commented g && not (null ms) = Proc.docMod "" watermark [] ""
+  let commMod | CommentMod `elem` getCommented g                   = Proc.docMod desc watermark as (getDate g)
+              | CommentFunc `elem` getCommented g && not (null ms) = Proc.docMod "" watermark [] ""
               | otherwise                                       = id
   return $ commMod $ Proc.fileDoc $ Proc.buildModule n is (catMaybes ms)
 

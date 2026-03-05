@@ -43,8 +43,8 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genCalcFuncProc, genOutputFormat, genOutputFormatProc, genOutputMod,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  ScopeType(..), designLog, modExportMap, clsDefMap, genICName,
-  makeSoftwareDossierInfo)
+  ScopeType(..), ChoicesInfo(..), designLog, modExportMap, clsDefMap, genICName,
+  makeSoftwareDossierInfo, getCommented, getImplType, getModular)
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (makeSds,
   SoftwareDossierSym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
@@ -69,20 +69,22 @@ generator l dt sd chs cs = let
   -- constants
   codeSpec = cs,
   printfo = pinfo,
-  modular = modularity $ architecture chs,
-  inStruct = inputStructure $ dataInfo chs,
-  conStruct = constStructure $ dataInfo chs,
-  conRepr = constRepr $ dataInfo chs,
-  concMatches = mcm,
-  spaceMatches = chooseSpace l chs,
-  implType = impType $ architecture chs,
-  onSfwrC = onSfwrConstraint $ srsConstraints chs,
-  onPhysC = onPhysConstraint $ srsConstraints chs,
-  commented = comments $ docConfig $ optFeats chs,
-  date = showDate $ dates $ docConfig $ optFeats chs,
-  logKind  = logging $ logConfig $ optFeats chs,
-  logName = logFile $ logConfig $ optFeats chs,
-  dsICNames = icNames chs,
+  choices = ChoicesInfo {
+    modular = modularity $ architecture chs,
+    inStruct = inputStructure $ dataInfo chs,
+    conStruct = constStructure $ dataInfo chs,
+    conRepr = constRepr $ dataInfo chs,
+    concMatches = mcm,
+    spaceMatches = chooseSpace l chs,
+    implType = impType $ architecture chs,
+    onSfwrC = onSfwrConstraint $ srsConstraints chs,
+    onPhysC = onPhysConstraint $ srsConstraints chs,
+    commented = comments $ docConfig $ optFeats chs,
+    date = showDate $ dates $ docConfig $ optFeats chs,
+    logKind  = logging $ logConfig $ optFeats chs,
+    logName = logFile $ logConfig $ optFeats chs,
+    dsICNames = icNames chs
+  },
   modules = modules',
   extLibNames = nms,
   extLibMap = fromList elmap,
@@ -157,7 +159,7 @@ genPackage unRepr = do
       (reprPD, s) = runState p info
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
-      m = makefile (libPaths g) (implType g) (commented g) fileInfoState pd
+      m = makefile (libPaths g) (getImplType g) (getCommented g) fileInfoState pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
@@ -172,7 +174,7 @@ genPackage unRepr = do
         langName = "",
         langVersion = "",
         invalidOS = Nothing,
-        implementType = implType g,
+        implementType = getImplType g,
         extLibNV = extLibNames g,
         extLibFP = libPaths g,
         contributors = as,
@@ -190,7 +192,7 @@ genPackage unRepr = do
 genProgram :: (OOProg r) => GenState (OO.GSProgram r)
 genProgram = do
   g <- get
-  ms <- chooseModules $ modular g
+  ms <- chooseModules $ getModular g
   let n = codeSpec g ^. pNameO
   let p = show $ sentenceDoc OneLine $ spec (printfo g) $ foldlSent $ codeSpec g ^. purpose
   return $ OO.prog n p ms
@@ -273,7 +275,7 @@ genPackageProc unRepr = do
       (reprPD, s) = runState p info
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
-      m = makefile (libPaths g) (implType g) (commented g) fileInfoState pd
+      m = makefile (libPaths g) (getImplType g) (getCommented g) fileInfoState pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
@@ -287,7 +289,7 @@ genPackageProc unRepr = do
         langName = "",
         langVersion = "",
         invalidOS = Nothing,
-        implementType = implType g,
+        implementType = getImplType g,
         extLibNV = extLibNames g,
         extLibFP = libPaths g,
         contributors = as,
@@ -305,7 +307,7 @@ genPackageProc unRepr = do
 genProgramProc :: (ProcProg r) => GenState (Proc.GSProgram r)
 genProgramProc = do
   g <- get
-  ms <- chooseModulesProc $ modular g
+  ms <- chooseModulesProc $ getModular g
   let n = codeSpec g ^. pNameO
   let p = show $ sentenceDoc OneLine $ spec (printfo g) $ foldlSent $ codeSpec g ^. purpose
   return $ Proc.prog n p ms

@@ -19,7 +19,7 @@ import Language.Drasil.Choices (Structure(..), ConstantStructure(..),
   ConstantRepr(..), InternalConcept(..))
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  genICName)
+  genICName, getConcMatches, getInStruct, getConStruct, getConRepr)
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..), constraintvars, getConstraints)
 import Language.Drasil.Mod (Name)
 
@@ -123,10 +123,10 @@ getParams n pt cs' = do
       cnsnts = map quantvar $ s ^. constantsO
       inpVars = filter (`elem` ins) cs
       conVars = filter (`elem` cnsnts) cs
-      csSubIns = filter ((`notMember` concMatches g) . (^. uid))
+      csSubIns = filter ((`notMember` getConcMatches g) . (^. uid))
         (cs \\ (ins ++ cnsnts))
-  inVs <- getInputVars n pt (inStruct g) Var inpVars
-  conVs <- getConstVars n pt (conStruct g) (conRepr g) conVars
+  inVs <- getInputVars n pt (getInStruct g) Var inpVars
+  conVs <- getConstVars n pt (getConStruct g) (getConRepr g) conVars
   return $ nub $ inVs ++ conVs ++ csSubIns
 
 -- | If the passed list of input variables is empty, then return empty list.
@@ -175,5 +175,5 @@ getConstVars _ pt (Store Bundled) Var _ = return [quantvar consts | isIn pt]
 getConstVars _ _ (Store Bundled) Const _ = return []
 getConstVars n pt WithInputs cr cs = do
   g <- get
-  getInputVars n pt (inStruct g) cr cs
+  getInputVars n pt (getInStruct g) cr cs
 getConstVars _ _ Inline _ _ = return []

@@ -1,29 +1,18 @@
 {-# Language TemplateHaskell, RankNTypes #-}
 -- | Defines types and functions for Theoretical Models.
 module Theory.Drasil.Theory (
-  -- * Class
-  Theory(..),
-  -- * Type
+  -- * Types
   TheoryModel,
   -- * Constructors
   tm, tmNoRefs) where
 
-import Control.Lens (Lens', view, makeLenses, (^.))
+import Control.Lens (view, makeLenses, (^.))
 
 import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
 import Drasil.Metadata (thModel)
 
 import Theory.Drasil.ModelKinds
-
--- | Theories are the basis for building models with context,
--- spaces, quantities, operations, invariants, etc.
-class Theory t where
-  valid_context :: Lens' t [TheoryModel]
-  quantities    :: Lens' t [DefinedQuantityDict]
-  operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
-  defined_quant :: Lens' t [ModelQDef]
-  defined_fun   :: Lens' t [ModelQDef]
 
 -- | A TheoryModel is a collection of:
 --
@@ -45,11 +34,6 @@ class Theory t where
 -- spaces (spc) are ever defined.
 data TheoryModel = TM
   { _mk    :: ModelKind ModelExpr
-  , _vctx  :: [TheoryModel]
-  , _quan  :: [DefinedQuantityDict]
-  , _ops   :: [ConceptChunk]
-  , _defq  :: [ModelQDef]
-  , _dfun  :: [ModelQDef]
   , _rf    :: [DecRef]
   ,  lb    :: ShortName
   ,  ra    :: String
@@ -86,13 +70,6 @@ instance HasAdditionalNotes TheoryModel where getNotes = notes
 --       If we need "more than 1 ModelKind" in the TheoryModel, we may need to create
 --       a "stacked model" that allows for composing them.
 
--- | Finds the aspects of the 'Theory' behind the 'TheoryModel'.
-instance Theory             TheoryModel where
-  valid_context = vctx
-  quantities    = quan
-  operations    = ops
-  defined_quant = defq
-  defined_fun   = dfun
 -- | Finds the 'ShortName' of the 'TheoryModel'.
 instance HasShortName       TheoryModel where shortname = lb
 -- | Finds the reference address of the 'TheoryModel'.
@@ -112,18 +89,10 @@ instance Referable TheoryModel where
 -- This should likely be re-arranged somehow. Especially since since of the arguments
 -- have the same type!
 -- | Constructor for theory models. Must have a source. Uses the shortname of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr ->
-    [q] -> [c] -> [ModelQDef] -> [ModelQDef] -> [DecRef] ->
-    String -> [Sentence] -> TheoryModel
-tm mkind _ _ _  _   [] _   = error $ "Source field of " ++ showUID mkind ++ " is empty"
-tm mkind q c dq dfn r  lbe =
-  TM mkind [] (map dqdWr q) (map cw c) dq dfn r (shortname' $ S lbe)
-      (prependAbrv thModel lbe)
+tm :: ModelKind ModelExpr -> [DecRef] -> String -> [Sentence] -> TheoryModel
+tm mkind [] _   = error $ "Source field of " ++ showUID mkind ++ " is empty"
+tm mkind r  lbe = TM mkind r (shortname' $ S lbe) (prependAbrv thModel lbe)
 
 -- | Constructor for theory models. Uses the shortname of the reference address.
-tmNoRefs :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr ->
-    [q] -> [c] -> [ModelQDef] -> [ModelQDef] ->
-    String -> [Sentence] -> TheoryModel
-tmNoRefs mkind q c dq dfn lbe =
-  TM mkind [] (map dqdWr q) (map cw c) dq dfn [] (shortname' $ S lbe)
-      (prependAbrv thModel lbe)
+tmNoRefs :: ModelKind ModelExpr -> String -> [Sentence] -> TheoryModel
+tmNoRefs mkind lbe = TM mkind [] (shortname' $ S lbe) (prependAbrv thModel lbe)

@@ -25,15 +25,8 @@ theoreticalModels :: [TheoryModel]
 theoreticalModels = [tmLaplace, tmInvLaplace, tmSOSystem]
 
 tmLaplace :: TheoryModel
-tmLaplace
-  = tm (othModel' laplaceRC)
-      ([] :: [DefinedQuantityDict])
-      ([] :: [ConceptChunk])
-      []
-      []
-      [dRef laplaceWiki]
-      "laplaceTransform"
-      [laplaceDesc]
+tmLaplace =
+  tm (othModel' laplaceRC) [dRef laplaceWiki] "laplaceTransform" [laplaceDesc]
 
 laplaceRC :: RelationConcept
 laplaceRC = makeRC "laplaceRC" (cn' "Laplace Transform") EmptyS laplaceRel
@@ -55,15 +48,8 @@ laplaceDesc
 --------
 
 tmInvLaplace :: TheoryModel
-tmInvLaplace
-  = tm (othModel' invlaplaceRC)
-      ([] :: [DefinedQuantityDict])
-      ([] :: [ConceptChunk])
-      []
-      []
-      [dRef laplaceWiki]
-      "invLaplaceTransform"
-      [invLaplaceDesc]
+tmInvLaplace = tm (othModel' invlaplaceRC) [dRef laplaceWiki]
+  "invLaplaceTransform" [invLaplaceDesc]
 
 invlaplaceRC :: RelationConcept
 invlaplaceRC
@@ -83,15 +69,8 @@ invLaplaceDesc
 --------
 
 tmSOSystem :: TheoryModel
-tmSOSystem
-  = tm (othModel' tmSOSystemRC)
-      ([] :: [DefinedQuantityDict])
-      ([] :: [ConceptChunk])
-      []
-      []
-      [dRef abbasi2015]
-      "tmSOSystem"
-      [soSystemDesc]
+tmSOSystem =
+  tm (othModel' tmSOSystemRC) [dRef abbasi2015] "tmSOSystem" [soSystemDesc]
 
 tmSOSystemRC :: RelationConcept
 tmSOSystemRC

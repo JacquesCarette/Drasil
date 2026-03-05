@@ -20,10 +20,8 @@ tMods = [pbIsSafe, lrIsSafe]
 -- glass_concept = []
 
 lrIsSafe :: TheoryModel
-lrIsSafe = tm (equationalModel' lrIsSafeQD)
-   ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
-   [lrIsSafeQD] [] [dRef astm2009]
-   "isSafeLoad" [lrIsSafeDesc]
+lrIsSafe =
+  tm (equationalModel' lrIsSafeQD) [dRef astm2009] "isSafeLoad" [lrIsSafeDesc]
 
 lrIsSafeQD :: ModelQDef
 lrIsSafeQD = mkQuantDef' isSafeLoad (nounPhraseSP "Safety Load") lrIsSafeExpr
@@ -35,10 +33,8 @@ lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc isSafeLoad
 
 pbIsSafe :: TheoryModel
-pbIsSafe = tm (equationalModel' pbIsSafeQD)
-  ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
-  [pbIsSafeQD] [] [dRef astm2009]
-  "isSafeProb" [pbIsSafeDesc]
+pbIsSafe =
+  tm (equationalModel' pbIsSafeQD) [dRef astm2009] "isSafeProb" [pbIsSafeDesc]
 
 pbIsSafeQD :: ModelQDef
 pbIsSafeQD = mkQuantDef' isSafeProb (nounPhraseSP "Safety Probability") pbIsSafeExpr

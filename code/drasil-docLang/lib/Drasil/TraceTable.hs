@@ -10,7 +10,7 @@ import qualified Data.Map.Strict as M
 import Drasil.Database (UID, HasUID(..))
 import Language.Drasil
 import Language.Drasil.Development (lnames')
-import Theory.Drasil (Theory(..), MayHaveDerivation(derivations), Derivation(..))
+import Theory.Drasil (MayHaveDerivation(derivations), Derivation(..))
 
 import Drasil.DocumentLanguage.Core
 
@@ -22,8 +22,7 @@ dependencyPlate = preorderFold $ purePlate {
     _ -> [],
   scsSub = Constant <$> \case
     (Assumptions a) -> getDependenciesOf [defs] a
-    (TMs _ _ t)     -> getDependenciesOf [\x -> map (^. defn) (x ^. defined_quant) ++
-      map (^. defn) (x ^. operations), notes] t
+    (TMs _ _ t)   -> getDependenciesOf [defs, notes] t
     (DDs _ _ d _) -> getDependenciesOf [derivs, notes] d
     (GDs _ _ g _) -> getDependenciesOf [defs, derivs, notes] g
     (IMs _ _ i _) -> getDependenciesOf [derivs, notes] i

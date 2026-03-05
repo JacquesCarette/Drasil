@@ -23,7 +23,6 @@ class Theory t where
   quantities    :: Lens' t [DefinedQuantityDict]
   operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
   defined_quant :: Lens' t [ModelQDef]
-  invariants    :: Lens' t [ModelExpr]
   defined_fun   :: Lens' t [ModelQDef]
 
 -- | A TheoryModel is a collection of:
@@ -50,7 +49,6 @@ data TheoryModel = TM
   , _quan  :: [DefinedQuantityDict]
   , _ops   :: [ConceptChunk]
   , _defq  :: [ModelQDef]
-  , _invs  :: [ModelExpr]
   , _dfun  :: [ModelQDef]
   , _rf    :: [DecRef]
   ,  lb    :: ShortName
@@ -99,7 +97,6 @@ instance Theory             TheoryModel where
   quantities    = quan
   operations    = ops
   defined_quant = defq
-  invariants    = invs
   defined_fun   = dfun
 -- | Finds the 'ShortName' of the 'TheoryModel'.
 instance HasShortName       TheoryModel where shortname = lb
@@ -121,18 +118,17 @@ instance Referable TheoryModel where
 -- have the same type!
 -- | Constructor for theory models. Must have a source. Uses the shortname of the reference address.
 tm :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr ->
-    [q] -> [c] -> [ModelQDef] ->
-    [ModelExpr] -> [ModelQDef] -> [DecRef] ->
+    [q] -> [c] -> [ModelQDef] -> [ModelQDef] -> [DecRef] ->
     String -> [Sentence] -> TheoryModel
-tm mkind _ _ _  _   _   [] _   = error $ "Source field of " ++ showUID mkind ++ " is empty"
-tm mkind q c dq inv dfn r  lbe =
-  TM mkind [] (map dqdWr q) (map cw c) dq inv dfn r (shortname' $ S lbe)
+tm mkind _ _ _  _   [] _   = error $ "Source field of " ++ showUID mkind ++ " is empty"
+tm mkind q c dq dfn r  lbe =
+  TM mkind [] (map dqdWr q) (map cw c) dq dfn r (shortname' $ S lbe)
       (prependAbrv thModel lbe)
 
 -- | Constructor for theory models. Uses the shortname of the reference address.
 tmNoRefs :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr ->
-    [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] ->
+    [q] -> [c] -> [ModelQDef] -> [ModelQDef] ->
     String -> [Sentence] -> TheoryModel
-tmNoRefs mkind q c dq inv dfn lbe =
-  TM mkind [] (map dqdWr q) (map cw c) dq inv dfn [] (shortname' $ S lbe)
+tmNoRefs mkind q c dq dfn lbe =
+  TM mkind [] (map dqdWr q) (map cw c) dq dfn [] (shortname' $ S lbe)
       (prependAbrv thModel lbe)

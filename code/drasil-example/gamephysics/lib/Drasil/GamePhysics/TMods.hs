@@ -29,7 +29,7 @@ tMods = [newtonSL, newtonTL, newtonLUG, newtonSLR]
 
 newtonTL :: TheoryModel
 newtonTL = tmNoRefs (equationalModel' newtonTLQD) [dqdWr force_1, dqdWr force_2]
-  ([] :: [ConceptChunk]) [newtonTLQD] [] [] "NewtonThirdLawMot" [newtonTLNote]
+  ([] :: [ConceptChunk]) [newtonTLQD] [] "NewtonThirdLawMot" [newtonTLNote]
 
 newtonTLQD :: ModelQDef
 newtonTLQD = mkQuantDef' force_1 (nounPhraseSP "Newton's third law of motion") newtonTLExpr
@@ -56,7 +56,7 @@ newtonLUG :: TheoryModel
 newtonLUG = tmNoRefs newtonLUGModel
   [dqdWr force, dqdWr gravitationalConst, dqdWr mass_1, dqdWr mass_2,
   dqdWr dispNorm, dqdWr dVect, dqdWr distMass] ([] :: [ConceptChunk])
-  [] [express newtonLUGModel] [] "UniversalGravLaw" newtonLUGNotes
+  [] [] "UniversalGravLaw" newtonLUGNotes
 
 newtonForceQuant :: DefinedQuantityDict
 newtonForceQuant = dqd' (dccA "force" (nounPhraseSP "Newton's law of universal gravitation")
@@ -81,7 +81,7 @@ newtonLUGNotes = [foldlSent
 newtonSLR :: TheoryModel
 newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
   [dqdWr torque, dqdWr momentOfInertia, dqdWr angularAccel]
-  ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
+  ([] :: [ConceptChunk]) [newtonSLRQD] [] "NewtonSecLawRotMot" newtonSLRNotes
 
 newtonSLRQD :: ModelQDef
 newtonSLRQD = mkQuantDef' torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr

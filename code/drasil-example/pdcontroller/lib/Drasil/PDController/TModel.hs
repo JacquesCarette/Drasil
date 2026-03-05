@@ -30,7 +30,6 @@ tmLaplace
       ([] :: [DefinedQuantityDict])
       ([] :: [ConceptChunk])
       []
-      [express laplaceRel]
       []
       [dRef laplaceWiki]
       "laplaceTransform"
@@ -61,7 +60,6 @@ tmInvLaplace
       ([] :: [DefinedQuantityDict])
       ([] :: [ConceptChunk])
       []
-      [express invLaplaceRel]
       []
       [dRef laplaceWiki]
       "invLaplaceTransform"
@@ -90,7 +88,6 @@ tmSOSystem
       ([] :: [DefinedQuantityDict])
       ([] :: [ConceptChunk])
       []
-      [express soSystemRel]
       []
       [dRef abbasi2015]
       "tmSOSystem"

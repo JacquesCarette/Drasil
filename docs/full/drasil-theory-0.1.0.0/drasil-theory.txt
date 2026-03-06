@@ -480,7 +480,6 @@ valid_context :: Theory t => Lens' t [TheoryModel]
 quantities :: Theory t => Lens' t [DefinedQuantityDict]
 operations :: Theory t => Lens' t [ConceptChunk]
 defined_quant :: Theory t => Lens' t [ModelQDef]
-invariants :: Theory t => Lens' t [ModelExpr]
 defined_fun :: Theory t => Lens' t [ModelQDef]
 
 -- | A TheoryModel is a collection of:
@@ -507,11 +506,11 @@ data TheoryModel
 
 -- | Constructor for theory models. Must have a source. Uses the shortname
 --   of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> [DecRef] -> String -> [Sentence] -> TheoryModel
+tm :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelQDef] -> [DecRef] -> String -> [Sentence] -> TheoryModel
 
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.
-tmNoRefs :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> String -> [Sentence] -> TheoryModel
+tmNoRefs :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelQDef] -> String -> [Sentence] -> TheoryModel
 instance Drasil.Database.Chunk.HasChunkRefs Theory.Drasil.Theory.TheoryModel
 instance Drasil.Database.UID.HasUID Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.Theory.TheoryModel
@@ -741,7 +740,6 @@ valid_context :: Theory t => Lens' t [TheoryModel]
 quantities :: Theory t => Lens' t [DefinedQuantityDict]
 operations :: Theory t => Lens' t [ConceptChunk]
 defined_quant :: Theory t => Lens' t [ModelQDef]
-invariants :: Theory t => Lens' t [ModelExpr]
 defined_fun :: Theory t => Lens' t [ModelQDef]
 
 -- | A TheoryModel is a collection of:
@@ -768,11 +766,11 @@ data TheoryModel
 
 -- | Constructor for theory models. Must have a source. Uses the shortname
 --   of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> [DecRef] -> String -> [Sentence] -> TheoryModel
+tm :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelQDef] -> [DecRef] -> String -> [Sentence] -> TheoryModel
 
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.
-tmNoRefs :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> String -> [Sentence] -> TheoryModel
+tmNoRefs :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelQDef] -> String -> [Sentence] -> TheoryModel
 
 -- | Describe the structural content of a system of linear ODEs with six
 --   necessary fields

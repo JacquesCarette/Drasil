@@ -160,7 +160,6 @@ digraph alltypes {
 		TheoryModel -> DefinedQuantityDict;
 		TheoryModel -> ConceptChunk;
 		TheoryModel -> ModelQDef;
-		TheoryModel -> ModelExpr;
 		TheoryModel -> DecRef;
 		TheoryModel -> ShortName;
 		TheoryModel -> String;

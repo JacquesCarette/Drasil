@@ -47,7 +47,6 @@
 -&gt; [DefinedQuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [ModelQDef]
--&gt; [ModelExpr]
 -&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
@@ -59,7 +58,6 @@ ModelKind ModelExpr
 -&gt; [q]
 -&gt; [c]
 -&gt; [ModelQDef]
--&gt; [ModelExpr]
 -&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
@@ -72,7 +70,7 @@ forall e. String -&gt; QDefinition e -&gt; ModelKind e
 </span><a href="Drasil.SSP.TMods.html#factOfSafetyQD"><span class="hs-identifier hs-var">factOfSafetyQD</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-40"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-41"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelQDef
-</span><a href="Drasil.SSP.TMods.html#factOfSafetyQD"><span class="hs-identifier hs-var">factOfSafetyQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+</span><a href="Drasil.SSP.TMods.html#factOfSafetyQD"><span class="hs-identifier hs-var">factOfSafetyQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
@@ -115,7 +113,6 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 -&gt; [DefinedQuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [ModelQDef]
--&gt; [ModelExpr]
 -&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
@@ -127,7 +124,6 @@ ModelKind ModelExpr
 -&gt; [q]
 -&gt; [c]
 -&gt; [ModelQDef]
--&gt; [ModelExpr]
 -&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
@@ -138,12 +134,7 @@ forall e. ConstraintSet e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalConstraints'</span></span><span> </span><span class="annot"><span class="annottext">ConstraintSet ModelExpr
 </span><a href="Drasil.SSP.TMods.html#equilibriumCS"><span class="hs-identifier hs-var">equilibriumCS</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-54"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-55"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(ModelExpr -&gt; ModelExpr) -&gt; [ModelExpr] -&gt; [ModelExpr]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall c. Express c =&gt; c -&gt; ModelExpr
-</span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="Drasil.SSP.TMods.html#equilibriumRels"><span class="hs-identifier hs-var">equilibriumRels</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+</span><span id="line-55"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
@@ -290,7 +281,6 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 -&gt; [DefinedQuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [ModelQDef]
--&gt; [ModelExpr]
 -&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
@@ -302,7 +292,6 @@ ModelKind ModelExpr
 -&gt; [q]
 -&gt; [c]
 -&gt; [ModelQDef]
--&gt; [ModelExpr]
 -&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
@@ -316,7 +305,7 @@ forall e. String -&gt; QDefinition e -&gt; ModelKind e
 </span><span id="line-81"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-82"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-83"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelQDef
-</span><a href="Drasil.SSP.TMods.html#mcShrStrgthQD"><span class="hs-identifier hs-var">mcShrStrgthQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+</span><a href="Drasil.SSP.TMods.html#mcShrStrgthQD"><span class="hs-identifier hs-var">mcShrStrgthQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
@@ -506,7 +495,6 @@ forall c. (IsChunk c, HasSymbol c) =&gt; c -&gt; Sentence
 -&gt; [DefinedQuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [ModelQDef]
--&gt; [ModelExpr]
 -&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
@@ -518,7 +506,6 @@ ModelKind ModelExpr
 -&gt; [q]
 -&gt; [c]
 -&gt; [ModelQDef]
--&gt; [ModelExpr]
 -&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
@@ -532,7 +519,7 @@ forall e. String -&gt; QDefinition e -&gt; ModelKind e
 </span><span id="line-111"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-112"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-113"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelQDef
-</span><a href="Drasil.SSP.TMods.html#effStressQD"><span class="hs-identifier hs-var">effStressQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+</span><a href="Drasil.SSP.TMods.html#effStressQD"><span class="hs-identifier hs-var">effStressQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef

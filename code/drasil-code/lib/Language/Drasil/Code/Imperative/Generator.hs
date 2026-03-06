@@ -43,8 +43,8 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genCalcFuncProc, genOutputFormat, genOutputFormatProc, genOutputMod,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  ScopeType(..), ChoicesInfo(..), designLog, modExportMap, clsDefMap, genICName,
-  makeSoftwareDossierInfo, getCommented, getImplType, getModular)
+  ScopeType(..), designLog, modExportMap, clsDefMap, genICName,
+  makeSoftwareDossierInfo, makeChoicesInfo, getCommented, getImplType, getModular)
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (makeSds,
   SoftwareDossierSym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
@@ -69,22 +69,22 @@ generator l dt sd chs cs = let
   -- constants
   codeSpec = cs,
   printfo = pinfo,
-  choices = ChoicesInfo {
-    modular = modularity $ architecture chs,
-    inStruct = inputStructure $ dataInfo chs,
-    conStruct = constStructure $ dataInfo chs,
-    conRepr = constRepr $ dataInfo chs,
-    concMatches = mcm,
-    spaceMatches = chooseSpace l chs,
-    implType = impType $ architecture chs,
-    onSfwrC = onSfwrConstraint $ srsConstraints chs,
-    onPhysC = onPhysConstraint $ srsConstraints chs,
-    commented = comments $ docConfig $ optFeats chs,
-    date = showDate $ dates $ docConfig $ optFeats chs,
-    logKind  = logging $ logConfig $ optFeats chs,
-    logName = logFile $ logConfig $ optFeats chs,
-    dsICNames = icNames chs
-  },
+  choices = makeChoicesInfo
+    (modularity $ architecture chs)
+    (impType $ architecture chs)
+    (inputStructure $ dataInfo chs)
+    (constStructure $ dataInfo chs)
+    (constRepr $ dataInfo chs)
+    mcm
+    (chooseSpace l chs)
+    (onSfwrConstraint $ srsConstraints chs)
+    (onPhysConstraint $ srsConstraints chs)
+    (comments $ docConfig $ optFeats chs)
+    (showDate $ dates $ docConfig $ optFeats chs)
+    (logFile $ logConfig $ optFeats chs)
+    (logging $ logConfig $ optFeats chs)
+    (icNames chs)
+  ,
   modules = modules',
   extLibNames = nms,
   extLibMap = fromList elmap,

@@ -1,13 +1,13 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
   SoftwareDossierInfo, makeSoftwareDossierInfo, doxOutput, softwareDossierFiles,
-  sampleData, GenState, DrasilState(..), softwareDossierInfo, getDoxOutput,
-  getSoftwareDossierFiles, getSampleData, designLog, MatchedSpaces, ModExportMap,
-  ClassDefinitionMap, ScopeType(..), modExportMap, clsDefMap, addToDesignLog,
-  addLoggedSpace, ChoicesInfo(..), genICName, lookupC, getModular, getImplType,
-  getInStruct, getConStruct, getConRepr, getConcMatches, getSpaceMatches,
-  getOnSfwrC, getOnPhysC, getCommented, getDate, getLogName, getLogKind,
-  getDsICNames
+  sampleData, ChoicesInfo, makeChoicesInfo, GenState, DrasilState(..),
+  softwareDossierInfo, getDoxOutput, getSoftwareDossierFiles, getSampleData,
+  designLog, MatchedSpaces, ModExportMap, ClassDefinitionMap, ScopeType(..),
+  modExportMap, clsDefMap, addToDesignLog, addLoggedSpace, genICName, lookupC,
+  getModular, getImplType, getInStruct, getConStruct, getConRepr,
+  getConcMatches, getSpaceMatches, getOnSfwrC, getOnPhysC, getCommented,
+  getDate, getLogName, getLogKind, getDsICNames
 ) where
 
 import Control.Lens ((^.), makeLenses, over)
@@ -62,6 +62,11 @@ data ChoicesInfo = ChoicesInfo {
   logKind :: [Logging],
   dsICNames :: InternalConcept -> Name
 }
+
+makeChoicesInfo :: Modularity -> ImplementationType -> Structure -> ConstantStructure -> ConstantRepr -> MatchedConceptMap
+  -> MatchedSpaces -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> String
+  -> String -> [Logging] -> (InternalConcept -> Name) -> ChoicesInfo
+makeChoicesInfo = ChoicesInfo
 
 -- | Type for the mapping between 'Space's and 'CodeType's.
 type MatchedSpaces = Space -> GenState CodeType

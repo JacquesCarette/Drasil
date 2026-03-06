@@ -65,10 +65,6 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs cs = let
   sdsInfo = makeSoftwareDossierInfo
     (doxVerbosity $ docConfig $ optFeats chs) (auxFiles $ optFeats chs) sd
-  in DrasilState {
-  -- constants
-  codeSpec = cs,
-  printfo = pinfo,
   choices = makeChoicesInfo
     (modularity $ architecture chs)
     (impType $ architecture chs)
@@ -84,7 +80,11 @@ generator l dt sd chs cs = let
     (logFile $ logConfig $ optFeats chs)
     (logging $ logConfig $ optFeats chs)
     (icNames chs)
-  ,
+  in DrasilState {
+  -- constants
+  codeSpec = cs,
+  printfo = pinfo,
+  _choices = choices,
   modules = modules',
   extLibNames = nms,
   extLibMap = fromList elmap,

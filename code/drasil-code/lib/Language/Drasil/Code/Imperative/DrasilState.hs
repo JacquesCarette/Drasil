@@ -41,26 +41,25 @@ data SoftwareDossierInfo = SoftwareDossierInfo {
   _softwareDossierFiles :: [SoftwareDossierFile],
   _sampleData :: [Expr]
 }
-makeLenses ''SoftwareDossierInfo
 
 makeSoftwareDossierInfo :: Verbosity -> [SoftwareDossierFile] -> [Expr] -> SoftwareDossierInfo
 makeSoftwareDossierInfo = SoftwareDossierInfo
 
 data ChoicesInfo = ChoicesInfo {
-  modular :: Modularity,
-  implType :: ImplementationType,
-  inStruct :: Structure,
-  conStruct :: ConstantStructure,
-  conRepr :: ConstantRepr,
-  concMatches :: MatchedConceptMap,
-  spaceMatches :: MatchedSpaces,
-  onSfwrC :: ConstraintBehaviour,
-  onPhysC :: ConstraintBehaviour,
-  commented :: [Comments],
-  date :: String,
-  logName :: String,
-  logKind :: [Logging],
-  dsICNames :: InternalConcept -> Name
+  _modular :: Modularity,
+  _implType :: ImplementationType,
+  _inStruct :: Structure,
+  _conStruct :: ConstantStructure,
+  _conRepr :: ConstantRepr,
+  _concMatches :: MatchedConceptMap,
+  _spaceMatches :: MatchedSpaces,
+  _onSfwrC :: ConstraintBehaviour,
+  _onPhysC :: ConstraintBehaviour,
+  _commented :: [Comments],
+  _date :: String,
+  _logName :: String,
+  _logKind :: [Logging],
+  _dsICNames :: InternalConcept -> Name
 }
 
 makeChoicesInfo :: Modularity -> ImplementationType -> Structure -> ConstantStructure -> ConstantRepr -> MatchedConceptMap
@@ -91,7 +90,7 @@ data DrasilState = DrasilState {
   codeSpec :: CodeSpec,
   printfo :: PrintingInformation,
   -- Choices
-  choices :: ChoicesInfo,
+  _choices :: ChoicesInfo,
   -- Reference materials
   modules :: [Mod],
   extLibNames :: [(Name,Version)],
@@ -111,6 +110,8 @@ data DrasilState = DrasilState {
   _loggedSpaces :: [(Space, CodeType)],
   currentScope :: ScopeType
 }
+makeLenses ''SoftwareDossierInfo
+makeLenses ''ChoicesInfo
 makeLenses ''DrasilState
 
 getDoxOutput :: DrasilState -> Verbosity
@@ -123,46 +124,46 @@ getSampleData :: DrasilState -> [Expr]
 getSampleData ds = ds ^. (softwareDossierInfo . sampleData)
 
 getModular :: DrasilState -> Modularity
-getModular ds = modular $ choices ds
+getModular ds = ds ^. (choices . modular)
 
 getImplType :: DrasilState -> ImplementationType
-getImplType ds = implType $ choices ds
+getImplType ds = ds ^. (choices . implType)
 
 getInStruct :: DrasilState -> Structure
-getInStruct ds = inStruct $ choices ds
+getInStruct ds = ds ^. (choices . inStruct)
 
 getConStruct :: DrasilState -> ConstantStructure
-getConStruct ds = conStruct $ choices ds
+getConStruct ds = ds ^. (choices . conStruct)
 
 getConRepr :: DrasilState -> ConstantRepr
-getConRepr ds = conRepr $ choices ds
+getConRepr ds = ds ^. (choices . conRepr)
 
 getConcMatches :: DrasilState -> MatchedConceptMap
-getConcMatches ds = concMatches $ choices ds
+getConcMatches ds = ds ^. (choices . concMatches)
 
 getSpaceMatches :: DrasilState -> MatchedSpaces
-getSpaceMatches ds = spaceMatches $ choices ds
+getSpaceMatches ds = ds ^. (choices . spaceMatches)
 
 getOnSfwrC :: DrasilState -> ConstraintBehaviour
-getOnSfwrC ds = onSfwrC $ choices ds
+getOnSfwrC ds = ds ^. (choices . onSfwrC)
 
 getOnPhysC :: DrasilState -> ConstraintBehaviour
-getOnPhysC ds = onPhysC $ choices ds
+getOnPhysC ds = ds ^. (choices . onPhysC)
 
 getCommented :: DrasilState -> [Comments]
-getCommented ds = commented $ choices ds
+getCommented ds = ds ^. (choices . commented)
 
 getDate :: DrasilState -> String
-getDate ds = date $ choices ds
+getDate ds = ds ^. (choices . date)
 
 getLogName :: DrasilState -> String
-getLogName ds = logName $ choices ds
+getLogName ds = ds ^. (choices . logName)
 
 getLogKind :: DrasilState -> [Logging]
-getLogKind ds = logKind $ choices ds
+getLogKind ds = ds ^. (choices . logKind)
 
 getDsICNames :: DrasilState -> InternalConcept -> Name
-getDsICNames ds = dsICNames $ choices ds
+getDsICNames ds = ds ^. (choices . dsICNames)
 
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.

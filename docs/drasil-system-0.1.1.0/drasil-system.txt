@@ -23,25 +23,25 @@ Specification :: SystemKind
 RunnableSoftware :: SystemKind
 Notebook :: SystemKind
 Website :: SystemKind
-class HasSystem c_a8d3
-system :: HasSystem c_a8d3 => Lens' c_a8d3 System
-authors :: HasSystem c_a8d3 => Lens' c_a8d3 People
-background :: HasSystem c_a8d3 => Lens' c_a8d3 Background
-constants :: HasSystem c_a8d3 => Lens' c_a8d3 [ConstQDef]
-dataDefns :: HasSystem c_a8d3 => Lens' c_a8d3 [DataDefinition]
-genDefns :: HasSystem c_a8d3 => Lens' c_a8d3 [GenDefn]
-instModels :: HasSystem c_a8d3 => Lens' c_a8d3 [InstanceModel]
-kind :: HasSystem c_a8d3 => Lens' c_a8d3 SystemKind
-motivation :: HasSystem c_a8d3 => Lens' c_a8d3 Motivation
-programName :: HasSystem c_a8d3 => Lens' c_a8d3 String
-purpose :: HasSystem c_a8d3 => Lens' c_a8d3 Purpose
-refTable :: HasSystem c_a8d3 => Lens' c_a8d3 (Map UID Reference)
-refbyTable :: HasSystem c_a8d3 => Lens' c_a8d3 (Map UID [UID])
-scope :: HasSystem c_a8d3 => Lens' c_a8d3 Scope
-sysName :: HasSystem c_a8d3 => Lens' c_a8d3 CI
-systemdb :: HasSystem c_a8d3 => Lens' c_a8d3 ChunkDB
-theoryModels :: HasSystem c_a8d3 => Lens' c_a8d3 [TheoryModel]
-traceTable :: HasSystem c_a8d3 => Lens' c_a8d3 (Map UID [UID])
+class HasSystem c_a8cG
+system :: HasSystem c_a8cG => Lens' c_a8cG System
+authors :: HasSystem c_a8cG => Lens' c_a8cG People
+background :: HasSystem c_a8cG => Lens' c_a8cG Background
+constants :: HasSystem c_a8cG => Lens' c_a8cG [ConstQDef]
+dataDefns :: HasSystem c_a8cG => Lens' c_a8cG [DataDefinition]
+genDefns :: HasSystem c_a8cG => Lens' c_a8cG [GenDefn]
+instModels :: HasSystem c_a8cG => Lens' c_a8cG [InstanceModel]
+kind :: HasSystem c_a8cG => Lens' c_a8cG SystemKind
+motivation :: HasSystem c_a8cG => Lens' c_a8cG Motivation
+programName :: HasSystem c_a8cG => Lens' c_a8cG String
+purpose :: HasSystem c_a8cG => Lens' c_a8cG Purpose
+refTable :: HasSystem c_a8cG => Lens' c_a8cG (Map UID Reference)
+refbyTable :: HasSystem c_a8cG => Lens' c_a8cG (Map UID [UID])
+scope :: HasSystem c_a8cG => Lens' c_a8cG Scope
+sysName :: HasSystem c_a8cG => Lens' c_a8cG CI
+systemdb :: HasSystem c_a8cG => Lens' c_a8cG ChunkDB
+theoryModels :: HasSystem c_a8cG => Lens' c_a8cG [TheoryModel]
+traceTable :: HasSystem c_a8cG => Lens' c_a8cG (Map UID [UID])
 whatsTheBigIdea :: System -> IdeaDict
 mkSystem :: (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] -> System
 

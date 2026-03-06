@@ -156,10 +156,6 @@ digraph alltypes {
 		subgraph theorymodel{
 		TheoryModel	[shape=oval, color=cyan3, label="TheoryModel"];
 		TheoryModel -> ModelKindModelExpr;
-		TheoryModel -> TheoryModel;
-		TheoryModel -> DefinedQuantityDict;
-		TheoryModel -> ConceptChunk;
-		TheoryModel -> ModelQDef;
 		TheoryModel -> DecRef;
 		TheoryModel -> ShortName;
 		TheoryModel -> String;

@@ -216,15 +216,6 @@ qwC :: (Quantity q, MayHaveUnit q, Concept q) => q -> RealInterval Expr Expr -> 
 -- | Grab all related <a>QDefinition</a>s from a list of instance models.
 getEqModQdsFromIm :: [InstanceModel] -> [SimpleQDef]
 
--- | Theories are the basis for building models with context, spaces,
---   quantities, operations, invariants, etc.
-class Theory t
-valid_context :: Theory t => Lens' t [TheoryModel]
-quantities :: Theory t => Lens' t [DefinedQuantityDict]
-operations :: Theory t => Lens' t [ConceptChunk]
-defined_quant :: Theory t => Lens' t [ModelQDef]
-defined_fun :: Theory t => Lens' t [ModelQDef]
-
 -- | A TheoryModel is a collection of:
 --   
 --   <ul>
@@ -249,11 +240,11 @@ data TheoryModel
 
 -- | Constructor for theory models. Must have a source. Uses the shortname
 --   of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelQDef] -> [DecRef] -> String -> [Sentence] -> TheoryModel
+tm :: ModelKind ModelExpr -> [DecRef] -> String -> [Sentence] -> TheoryModel
 
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.
-tmNoRefs :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelQDef] -> String -> [Sentence] -> TheoryModel
+tmNoRefs :: ModelKind ModelExpr -> String -> [Sentence] -> TheoryModel
 
 -- | Describe the structural content of a system of linear ODEs with six
 --   necessary fields

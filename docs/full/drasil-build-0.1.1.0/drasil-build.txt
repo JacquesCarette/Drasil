@@ -67,6 +67,21 @@ mkImplicitVar :: VarName -> MakeString
 
 -- | Constructor for <a>Free</a> variables.
 mkFreeVar :: VarName -> MakeString
+
+-- | Extracts the variable name from a Makefile variable.
+varName :: MVar -> String
+
+-- | Extracts information for Windows OS from a variable.
+win :: MVar -> String
+
+-- | Extracts information for Mac OS from a variable.
+mac :: MVar -> String
+
+-- | Extracts information for Linux OS from a variable.
+linux :: MVar -> String
+
+-- | Checks if a variable is OS dependent.
+isOsVar :: MVar -> Bool
 instance GHC.Classes.Eq Build.Drasil.Make.MakeString.MVar
 instance GHC.Base.Semigroup Build.Drasil.Make.MakeString.MakeString
 instance GHC.Base.Monoid Build.Drasil.Make.MakeString.MakeString
@@ -142,15 +157,6 @@ module Build.Drasil.Make.Helpers
 -- | Assignment operator ("=").
 ($=) :: MVar -> String -> Doc
 
--- | Extracts information for Windows OS from a variable.
-win :: MVar -> String
-
--- | Extracts information for Mac OS from a variable.
-mac :: MVar -> String
-
--- | Extracts information for Linux OS from a variable.
-linux :: MVar -> String
-
 -- | Defines variables dependent on OS.
 defineOsVars :: (MVar -> String) -> [MVar] -> Doc
 
@@ -161,17 +167,11 @@ osDefinitions :: [MVar] -> Doc
 --   the same definition.
 uniqueVars :: [MVar] -> [MVar]
 
--- | Extracts the variable name from a Makefile variable.
-varName :: MVar -> String
-
 -- | Extracts variables from a Makefile rule.
 extractVars :: Rule -> [MVar]
 
 -- | Gets one or more variables from a MakeString.
 getVars :: MakeString -> [MVar]
-
--- | Checks if a variable is OS dependent.
-isOsVar :: MVar -> Bool
 
 -- | Helper for prepending common features to a Makefile.
 addCommonFeatures :: [Rule] -> Doc -> Doc

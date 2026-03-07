@@ -28,6 +28,7 @@ library:
   source-dirs: lib
   exposed-modules:
   - Theory.Drasil
+  - Drasil.Database.SearchTools
   when:
   - condition: false
     other-modules: Paths_drasil_theory

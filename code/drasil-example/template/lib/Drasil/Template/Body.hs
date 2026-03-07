@@ -9,7 +9,7 @@ import Drasil.System (SystemKind(Specification), mkSystem)
 import Language.Drasil
 import Drasil.SRSDocument
 import Drasil.DocLang (tunitNone)
-import Drasil.Generator (cdb)
+import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -87,7 +87,8 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = [] :: [ConceptChunk]
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [DefinedQuantityDict]) ideaDicts conceptChunks
+symbMap = withCommonKnowledge []
+  ([] :: [DefinedQuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   citations ([] :: [LabelledContent])

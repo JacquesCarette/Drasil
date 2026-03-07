@@ -23,8 +23,7 @@ import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.List (transpose)
 
-import Drasil.Database (HasUID)
-
+import Drasil.Database (IsChunk)
 import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs) , UnitDefn, MayHaveUnit(..)
   , UnitalChunk , HasUnitSymbol(usymb), Quantity, Concept, Definition(defn), NamedIdea(..)
   , HasSymbol
@@ -66,8 +65,9 @@ definedIn' q info = ch (q ^. defLhs) `S.is` S "defined" `S.in_` refS q +:+. info
 definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
 definedIn'' q =  S "defined" `S.in_` refS q
 
--- | Takes a 'Symbol' and its 'Reference' (does not append a period at the end!). Outputs as "@symbol@ is defined in @source@".
-definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
+-- | Takes a 'Symbol' and its 'Reference' (does not append a period at the
+-- end!). Outputs as "@symbol@ is defined in @source@".
+definedIn''' :: (IsChunk q, HasSymbol q, Referable r, HasShortName r) => q -> r -> Sentence
 definedIn''' q src = ch q `S.is` S "defined in" +:+ refS src
 
 -- | Zip helper function enumerates abbreviations and zips it with list of 'ItemType':

@@ -1,6 +1,6 @@
 module Drasil.PDController.Choices where
 
-import Language.Drasil.Code (AuxFile(..), Choices(..), Comments(..),
+import Language.Drasil.Code (SoftwareDossierFile(..), Choices(..), Comments(..),
   ConstantRepr(..), ConstantStructure(..), ConstraintBehaviour(..),
   ImplementationType(..), Lang(..), Modularity(..), Structure(..),
   Verbosity(..), Visibility(..), defaultChoices, makeArchit, makeData,

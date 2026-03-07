@@ -1,12 +1,15 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
-  GenState, DrasilState(..), designLog, MatchedSpaces, ModExportMap,
-  ClassDefinitionMap, ScopeType(..), modExportMap, clsDefMap, addToDesignLog,
-  addLoggedSpace, genICName, lookupC
+  SoftwareDossierInfo, makeSoftwareDossierInfo, doxOutput, softwareDossierFiles,
+  sampleData, ChoicesInfo, HasChoices(..), makeChoicesInfo, GenState,
+  DrasilState(..), softwareDossierInfo, getDoxOutput, getSoftwareDossierFiles,
+  getSampleData, designLog, MatchedSpaces, ModExportMap, ClassDefinitionMap,
+  ScopeType(..), modExportMap, clsDefMap, addToDesignLog, addLoggedSpace,
+  genICName, lookupC,
 ) where
 
-import Control.Lens ((^.), makeLenses, over)
-import Control.Monad.State (State, gets)
+import Control.Lens ((^.), makeLenses, over, Lens')
+import Control.Monad.State (State, MonadState (get))
 import Data.List (nub)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Set (Set)
@@ -22,7 +25,7 @@ import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
-  AuxFile, Modularity(..), ImplementationType(..), Comments, Verbosity,
+  SoftwareDossierFile, Modularity(..), ImplementationType(..), Comments, Verbosity,
   MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging,
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
@@ -30,6 +33,37 @@ import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
 import Language.Drasil.ICOSolutionSearch (Def)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
+
+data SoftwareDossierInfo = SoftwareDossierInfo {
+  _doxOutput :: Verbosity,
+  _softwareDossierFiles :: [SoftwareDossierFile],
+  _sampleData :: [Expr]
+}
+
+makeSoftwareDossierInfo :: Verbosity -> [SoftwareDossierFile] -> [Expr] -> SoftwareDossierInfo
+makeSoftwareDossierInfo = SoftwareDossierInfo
+
+data ChoicesInfo = ChoicesInfo {
+  _getModular :: Modularity,
+  _getImplType :: ImplementationType,
+  _getInStruct :: Structure,
+  _getConStruct :: ConstantStructure,
+  _getConRepr :: ConstantRepr,
+  _getConcMatches :: MatchedConceptMap,
+  _getSpaceMatches :: MatchedSpaces,
+  _getOnSfwrC :: ConstraintBehaviour,
+  _getOnPhysC :: ConstraintBehaviour,
+  _getCommented :: [Comments],
+  _getDate :: String,
+  _getLogName :: String,
+  _getLogKind :: [Logging],
+  _getDsICNames :: InternalConcept -> Name
+}
+
+makeChoicesInfo :: Modularity -> ImplementationType -> Structure -> ConstantStructure -> ConstantRepr -> MatchedConceptMap
+  -> MatchedSpaces -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> String
+  -> String -> [Logging] -> (InternalConcept -> Name) -> ChoicesInfo
+makeChoicesInfo = ChoicesInfo
 
 -- | Type for the mapping between 'Space's and 'CodeType's.
 type MatchedSpaces = Space -> GenState CodeType
@@ -54,23 +88,7 @@ data DrasilState = DrasilState {
   codeSpec :: CodeSpec,
   printfo :: PrintingInformation,
   -- Choices
-  modular :: Modularity,
-  implType :: ImplementationType,
-  inStruct :: Structure,
-  conStruct :: ConstantStructure,
-  conRepr :: ConstantRepr,
-  concMatches :: MatchedConceptMap,
-  spaceMatches :: MatchedSpaces,
-  onSfwrC :: ConstraintBehaviour,
-  onPhysC :: ConstraintBehaviour,
-  commented :: [Comments],
-  doxOutput :: Verbosity,
-  date :: String,
-  logName :: String,
-  logKind :: [Logging],
-  auxiliaries :: [AuxFile],
-  sampleData :: [Expr],
-  dsICNames :: InternalConcept -> Name,
+  _choices :: ChoicesInfo,
   -- Reference materials
   modules :: [Mod],
   extLibNames :: [(Name,Version)],
@@ -81,6 +99,7 @@ data DrasilState = DrasilState {
   clsMap :: ClassDefinitionMap,
   defSet :: Set Name,
   getVal :: Int,
+  _softwareDossierInfo :: SoftwareDossierInfo,
 
   -- Stateful
   currentModule :: String,
@@ -89,7 +108,66 @@ data DrasilState = DrasilState {
   _loggedSpaces :: [(Space, CodeType)],
   currentScope :: ScopeType
 }
+makeLenses ''SoftwareDossierInfo
+makeLenses ''ChoicesInfo
 makeLenses ''DrasilState
+
+getDoxOutput :: DrasilState -> Verbosity
+getDoxOutput ds = ds ^. (softwareDossierInfo . doxOutput)
+
+getSoftwareDossierFiles :: DrasilState -> [SoftwareDossierFile]
+getSoftwareDossierFiles ds = ds ^. (softwareDossierInfo . softwareDossierFiles)
+
+getSampleData :: DrasilState -> [Expr]
+getSampleData ds = ds ^. (softwareDossierInfo . sampleData)
+
+class HasChoices a where
+  modular :: Lens' a Modularity
+  implType :: Lens' a ImplementationType
+  inStruct :: Lens' a Structure
+  conStruct :: Lens' a ConstantStructure
+  conRepr :: Lens' a ConstantRepr
+  concMatches :: Lens' a MatchedConceptMap
+  spaceMatches :: Lens' a MatchedSpaces
+  onSfwrC :: Lens' a ConstraintBehaviour
+  onPhysC :: Lens' a ConstraintBehaviour
+  commented :: Lens' a [Comments]
+  date :: Lens' a String
+  logName :: Lens' a String
+  logKind :: Lens' a [Logging]
+  dsICNames :: Lens' a (InternalConcept -> Name)
+
+instance HasChoices ChoicesInfo where
+  modular = getModular
+  implType = getImplType
+  inStruct = getInStruct
+  conStruct = getConStruct
+  conRepr = getConRepr
+  concMatches = getConcMatches
+  spaceMatches = getSpaceMatches
+  onSfwrC = getOnSfwrC
+  onPhysC = getOnPhysC
+  commented = getCommented
+  date = getDate
+  logName = getLogName
+  logKind = getLogKind
+  dsICNames = getDsICNames
+
+instance HasChoices DrasilState where
+  modular = choices . modular
+  implType = choices . implType
+  inStruct = choices . inStruct
+  conStruct = choices . conStruct
+  conRepr = choices . conRepr
+  concMatches = choices . concMatches
+  spaceMatches = choices . spaceMatches
+  onSfwrC = choices . onSfwrC
+  onPhysC = choices . onPhysC
+  commented = choices . commented
+  date = choices . date
+  logName = choices . logName
+  logKind = choices . logKind
+  dsICNames = choices . dsICNames
 
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.
@@ -292,7 +370,9 @@ getExpOutput n chs _ = [(icNames chs WriteOutput, oMod $ modularity $ architectu
 
 -- | Get InternalConcept name using DrasilState
 genICName :: InternalConcept -> GenState Name
-genICName ic = gets (`dsICNames` ic)
+genICName ic = do
+  ds <- get
+  return $ (ds ^. dsICNames) ic
 
 -- | Gets the 'DefinedQuantityDict' corresponding to a 'UID'.
 lookupC :: DrasilState -> UID -> DefinedQuantityDict

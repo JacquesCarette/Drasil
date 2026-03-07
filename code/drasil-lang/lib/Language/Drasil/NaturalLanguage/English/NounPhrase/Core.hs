@@ -1,10 +1,12 @@
 -- | Basic data types for noun phrases.
-module Language.Drasil.NounPhrase.Types (
+module Language.Drasil.NaturalLanguage.English.NounPhrase.Core (
   -- * Types
   CapitalizationRule(..), NP(..),
   PluralForm, PluralRule(..),
   NPStruct(S,(:-:),(:+:),P)
 ) where
+
+import Drasil.Database (HasChunkRefs(..))
 
 import Language.Drasil.Symbol (Symbol)
 
@@ -16,7 +18,7 @@ data NPStruct =
   | NPStruct :+: NPStruct -- a space
   | P Symbol
 
--- | Synonym for 'NPStruct typically used for plural forms.
+-- | Synonym for 'NPStruct' typically used for plural forms.
 type PluralForm = NPStruct
 
 -- | Capitalization rules.
@@ -24,7 +26,7 @@ data CapitalizationRule =
     CapFirst -- ^ Capitalize the first letter of the first word only.
   | CapWords -- ^ Capitalize the first letter of each word.
   | Replace NPStruct -- ^ Replace the noun phrase with the given
-                     -- 'NPStruct. Used for custom capitalization.
+                     -- 'NPStruct'. Used for custom capitalization.
   | CapNothing    -- some parts of speech don't capitalize at all but still a full phrase
 
 -- | Pluralization rules.
@@ -47,3 +49,9 @@ data NP =
   --them directly. FIXME: If the singular/plural phrase has special (replace)
   --capitalization, one of the two cannot be capitalized right now.
   --The two capitalization rules are for sentenceCase / titleCase respectively
+
+-- | Gather the chunk references mentioned within an 'NP'.
+instance HasChunkRefs NP where
+    -- NPStruct only contains Strings and Symbols, so it cannot embed UID refs.
+    chunkRefs _ = mempty
+    {-# INLINABLE chunkRefs #-}

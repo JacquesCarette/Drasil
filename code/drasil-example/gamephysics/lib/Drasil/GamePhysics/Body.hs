@@ -2,7 +2,7 @@ module Drasil.GamePhysics.Body where
 
 import Language.Drasil hiding (organization, section)
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -125,8 +125,8 @@ conceptChunks =
   [cw surface]
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts conceptChunks [] dataDefs iMods generalDefns
-  tMods concIns citations labelledContent
+symbMap = withCommonKnowledge allRefs symbols ideaDicts conceptChunks []
+  dataDefs iMods generalDefns tMods concIns citations labelledContent
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

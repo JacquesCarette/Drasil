@@ -18,7 +18,7 @@ import Control.Lens (makeLenses, (^.))
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..))
 
 -- | 'ConstraintSet's are sets of invariants that always hold for underlying domains.
 data ConstraintSet e = CL {
@@ -27,6 +27,10 @@ data ConstraintSet e = CL {
 }
 
 makeLenses ''ConstraintSet
+
+instance HasChunkRefs (ConstraintSet e) where
+  chunkRefs cs = chunkRefs (cs ^. con)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'ConstraintSet'.
 instance HasUID        (ConstraintSet e) where uid  = con . uid
@@ -41,7 +45,7 @@ instance ConceptDomain (ConstraintSet e) where cdom = cdom . (^. con)
 -- | The complete 'ModelExpr' of a ConstraintSet is the logical conjunction of
 --   all the underlying relations (e.g., `a $&& b $&& ... $&& z`).
 instance Express e => Express (ConstraintSet e) where
-  express = foldr1 ($&&) . map express . NE.toList . (^. invs)
+  mexpress = mexpress . (^. invs)
 -- | Exposes all relations and an expectation of the type of a relation (Bool)
 instance RequiresChecking (ConstraintSet Expr) Expr Space where
   requiredChecks cs = map (,Boolean) $ NE.toList (cs ^. invs)

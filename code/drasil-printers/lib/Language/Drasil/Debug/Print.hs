@@ -11,7 +11,7 @@ import qualified Data.Map as Map
 import Data.Typeable (Proxy (Proxy))
 import Text.PrettyPrint.HughesPJ
 
-import Drasil.Database (UID, showUID, IsChunk, findAll)
+import Drasil.Database (UID, showUID, TypeableChunk, findAll)
 import Language.Drasil
 import Theory.Drasil
 
@@ -58,7 +58,7 @@ header d = text (replicate 100 '-') $$ d $$ text (replicate 100 '-')
 -- data from the printing information field into the required display formats
 -- (often 'UID's, terms, shortnames, definitions, etc.).
 mkTableFromLenses
-  :: IsChunk a => PrintingInformation
+  :: (TypeableChunk a) => PrintingInformation
   -> Proxy a -- Data is unused, but necessary for type constraint resolution.
   -> String
   -> [PrintingInformation -> (String, a -> Doc)]

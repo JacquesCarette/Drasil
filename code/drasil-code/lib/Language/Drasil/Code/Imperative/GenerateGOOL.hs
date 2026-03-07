@@ -11,21 +11,22 @@ import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (List)
-import Language.Drasil.Code.FileData (FileAndContents)
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
+  getDoxOutput, getSoftwareDossierFiles, HasChoices(..))
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..),
+  SoftwareDossierState)
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
-import Language.Drasil.Choices (Comments(..), AuxFile(..))
+import Language.Drasil.Choices (Comments(..), SoftwareDossierFile(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
 
 import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
   CSStateVar, SClass, NamedArgs, SharedProg, OOProg, TypeElim(..),
   ValueSym(..), Argument(..), ValueExpression(..), OOValueExpression(..),
-  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..),
-  GOOLState)
+  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..))
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
+import Utils.Drasil.FileData (FileAndContents)
 import Drasil.Metadata (watermark)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))
@@ -44,9 +45,9 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   let as = map name (codeSpec g ^. authorsO )
   cs <- sequence maybeCs
   ms <- sequence maybeMs
-  let commMod | CommentMod `elem` commented g                   = OO.docMod desc watermark as (date g)
-              | CommentFunc `elem` commented g && not (null ms) = OO.docMod "" watermark [] ""
-              | otherwise                                       = id
+  let commMod | CommentMod `elem` g ^. commented                   = OO.docMod desc watermark as (g ^. date)
+              | CommentFunc `elem` g ^. commented && not (null ms) = OO.docMod "" watermark [] ""
+              | otherwise                                          = id
   return $ commMod $ OO.fileDoc $ OO.buildModule n is (catMaybes ms) (catMaybes cs)
 
 -- | Generates a module for when imports do not need to be explicitly stated.
@@ -56,23 +57,23 @@ genModule :: (OOProg r) => Name -> Description ->
 genModule n desc = genModuleWithImports n desc []
 
 -- | Generates a Doxygen configuration file if the user has comments enabled.
-genDoxConfig :: (AuxiliarySym r) => GOOLState -> GenState (Maybe (r FileAndContents))
+genDoxConfig :: (SoftwareDossierSym r) => SoftwareDossierState -> GenState (Maybe (r FileAndContents))
 genDoxConfig s = do
   g <- get
   let n = codeSpec g ^. pNameO
-      cms = commented g
-      v = doxOutput g
+      cms = g ^. commented
+      v = getDoxOutput g
   return $ if not (null cms) then Just (doxConfig n s v) else Nothing
 
 -- | Generates a README file.
-genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState (Maybe (r FileAndContents))
+genReadMe :: (SoftwareDossierSym r) => ReadMeInfo -> GenState (Maybe (r FileAndContents))
 genReadMe rmi = do
   g <- get
   let n = codeSpec g ^. pNameO
-  return $ getReadMe (auxiliaries g) rmi {caseName = n}
+  return $ getReadMe (getSoftwareDossierFiles g) rmi {caseName = n}
 
 -- | Helper for generating a README file.
-getReadMe :: (AuxiliarySym r) => [AuxFile] -> ReadMeInfo -> Maybe (r FileAndContents)
+getReadMe :: (SoftwareDossierSym r) => [SoftwareDossierFile] -> ReadMeInfo -> Maybe (r FileAndContents)
 getReadMe auxl rmi = if ReadME `elem` auxl then Just (readMe rmi) else Nothing
 
 data ClassType = Primary | Auxiliary
@@ -94,7 +95,7 @@ mkClass s n l desc vs cstrs mths = do
       getFunc' Nothing = buildClass Nothing
       getFunc' (Just intfc) = implementingClass n [intfc]
       c = getFunc s vs cs ms
-  return $ if CommentClass `elem` commented g
+  return $ if CommentClass `elem` g ^. commented
     then docClass desc c
     else c
 
@@ -180,9 +181,9 @@ genModuleWithImportsProc n desc is maybeMs = do
   modify (\s -> s { currentModule = n })
   let as = map name (codeSpec g ^. authorsO )
   ms <- sequence maybeMs
-  let commMod | CommentMod `elem` commented g                   = Proc.docMod desc watermark as (date g)
-              | CommentFunc `elem` commented g && not (null ms) = Proc.docMod "" watermark [] ""
-              | otherwise                                       = id
+  let commMod | CommentMod `elem` g ^. commented                   = Proc.docMod desc watermark as (g ^. date)
+              | CommentFunc `elem` g ^. commented && not (null ms) = Proc.docMod "" watermark [] ""
+              | otherwise                                          = id
   return $ commMod $ Proc.fileDoc $ Proc.buildModule n is (catMaybes ms)
 
 -- | Generates a module for when imports do not need to be explicitly stated.

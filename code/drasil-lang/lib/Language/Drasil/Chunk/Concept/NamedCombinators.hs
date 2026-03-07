@@ -42,12 +42,12 @@ import Drasil.Database ((+++!))
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, ncUID)
 import Language.Drasil.Classes (Idea, NamedIdea(..))
-import Language.Drasil.NounPhrase (NP, CapitalizationRule(CapWords, Replace,
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, CapitalizationRule(CapWords, Replace,
   CapFirst), NounPhrase(phraseNP, pluralNP), nounPhrase'', compoundPhrase,
   compoundPhrase'', compoundPhrase''')
-import Language.Drasil.NounPhrase.Core (NPStruct(S,(:+:)))
-import qualified Language.Drasil.NounPhrase as D (NounPhrase(pluralNP, phraseNP))
-import qualified Language.Drasil.NounPhrase.Combinators as NP (
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct(S,(:+:)))
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase as D (NounPhrase(pluralNP, phraseNP))
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP (
   insertString, insertStringOp, insertStringGen)
 
 -- not exported

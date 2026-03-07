@@ -19,7 +19,7 @@ module Language.Drasil.Classes (
   , IsUnit(udefn, getUnits)
   , UnitEq(uniteq)
     -- ** Expr and expressions
-  , Express(express)
+  , Express(express, mexpress)
   , DefiningExpr(defnExpr)
   ) where
 
@@ -34,7 +34,7 @@ import Language.Drasil.Chunk.NamedIdea (Idea(..), NamedIdea(..))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.UnitLang (UDefn, USymb)
 import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.ExprClasses (Express(express))
+import Language.Drasil.ExprClasses (Express(express, mexpress))
 import Language.Drasil.Space (HasSpace)
 import Language.Drasil.Sentence (Sentence)
 

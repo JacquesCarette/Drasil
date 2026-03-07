@@ -3,9 +3,9 @@ module Drasil.Projectile.Body (si, mkSRS) where
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Document.Contents (foldlSP, foldlSPCol)
@@ -161,9 +161,8 @@ conceptChunks =
   positionVec]
 
 symbMap :: ChunkDB
-symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
-  dataDefs iMods genDefns tMods concIns citations
-  (labelledContent ++ funcReqsTables)
+symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] dataDefs
+  iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
 
 abbreviationsList  :: [IdeaDict]
 abbreviationsList  =
@@ -272,7 +271,7 @@ physSystParts = map (!.)
 -- Various gathered data that should be automated --
 ----------------------------------------------------
 symbols :: [DefinedQuantityDict]
-symbols = unitalQuants ++ map dqdWr [gravitationalAccelConst, tol] ++
+symbols = pi_ : unitalQuants ++ map dqdWr [gravitationalAccelConst, tol] ++
   map dqdWr [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,

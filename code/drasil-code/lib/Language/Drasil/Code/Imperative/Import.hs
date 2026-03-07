@@ -31,7 +31,7 @@ import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
 import Language.Drasil.Code.Imperative.Helpers (convScope)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  ScopeType(..), genICName, lookupC)
+  ScopeType(..), genICName, lookupC, HasChoices(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
   quantvar, quantfunc, ccObjVar, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
@@ -75,7 +75,7 @@ codeType c = spaceCodeType (c ^. typ)
 spaceCodeType :: Space -> GenState CodeType
 spaceCodeType s = do
   g <- get
-  spaceMatches g s
+  (g ^. spaceMatches) s
 
 -- | If 'UID' for the variable is matched to a concept, call 'conceptToGOOL' to get
 -- the GOOL code for the concept, and return.
@@ -90,10 +90,10 @@ value u s t = do
       mm = cs ^. constMapO
       constDef = do
         cd <- Map.lookup u mm
-        maybeInline (conStruct g) cd
+        maybeInline (g ^. conStruct) cd
       maybeInline Inline m = Just m
       maybeInline _ _ = Nothing
-      cm = concMatches g
+      cm = g ^. concMatches
       cdCncpt = Map.lookup u cm
   val <- maybe (valueOf <$> variable s t) (convExpr . (^. codeExpr)) constDef
   return $ maybe val conceptToGOOL cdCncpt
@@ -111,10 +111,10 @@ variable s t = do
       defFunc Var = var
       defFunc Const = staticConst
   if s `elem` map codeName (cs ^. inputsO)
-    then inputVariable (inStruct g) Var (var s t)
+    then inputVariable (g ^. inStruct) Var (var s t)
     else if s `elem` map codeName (cs ^. constantsO)
-      then constVariable (conStruct g) (conRepr g)
-              ((defFunc $ conRepr g) s t)
+      then constVariable (g ^. conStruct) (g ^. conRepr)
+              ((defFunc $ g ^. conRepr) s t)
       else return $ var s t
 
 -- | If 'Unbundled' inputs, just return variable as-is.
@@ -155,7 +155,7 @@ constVariable (Store Bundled) Const v = do
   classVariable cs v
 constVariable WithInputs cr v = do
   g <- get
-  inputVariable (inStruct g) cr v
+  inputVariable (g ^. inStruct) cr v
 constVariable Inline _ _ = error $ "mkVar called on a constant, but user " ++
   "chose to Inline constants. Generator has a bug."
 
@@ -262,7 +262,7 @@ genMethod f n desc p r b = do
   bod <- logBody n vars b
   let fn = f ps bod
   pComms <- mapM getCommentBrief p
-  return $ if CommentFunc `elem` commented g
+  return $ if CommentFunc `elem` g ^. commented
     then docFunc desc pComms r fn else fn
 
 -- | Generates a function or method defined by its inputs and outputs.
@@ -288,7 +288,7 @@ genInOutFunc f docf n desc ins' outs' b = do
   pComms <- mapM getCommentBrief ins
   oComms <- mapM getCommentBrief outs
   bComms <- mapM getCommentBrief both
-  return $ if CommentFunc `elem` commented g
+  return $ if CommentFunc `elem` g ^. commented
     then docf desc (zip pComms inVs) (zip oComms outVs) (zip
     bComms bothVs) bod else f inVs outVs bothVs bod
 
@@ -775,10 +775,10 @@ valueProc u s t = do
       mm = cs ^. constMapO
       constDef = do
         cd <- Map.lookup u mm
-        maybeInline (conStruct g) cd
+        maybeInline (g ^. conStruct) cd
       maybeInline Inline m = Just m
       maybeInline _ _ = Nothing
-      cm = concMatches g
+      cm = g ^. concMatches
       cdCncpt = Map.lookup u cm
   val <- maybe (valueOf <$> variableProc s t)
                 (convExprProc . (^. codeExpr)) constDef
@@ -797,10 +797,10 @@ variableProc s t = do
       defFunc Var = var
       defFunc Const = constant -- This might be wrong
   if s `elem` map codeName (cs ^. inputsO)
-    then inputVariableProc (inStruct g) Var (var s t)
+    then inputVariableProc (g ^. inStruct) Var (var s t)
     else if s `elem` map codeName (cs ^. constantsO)
-      then constVariableProc (conStruct g) (conRepr g)
-              ((defFunc $ conRepr g) s t)
+      then constVariableProc (g ^. conStruct) (g ^. conRepr)
+              ((defFunc $ g ^. conRepr) s t)
       else return $ var s t
 
 -- | If 'Unbundled' inputs, just return variable as-is.
@@ -823,7 +823,7 @@ constVariableProc (Store Unbundled) _ v = return v
 constVariableProc (Store Bundled) _ _ = error "constVariableProc: Procedural renderers do not support bundled constants"
 constVariableProc WithInputs cr v = do
   g <- get
-  inputVariableProc (inStruct g) cr v
+  inputVariableProc (g ^. inStruct) cr v
 constVariableProc Inline _ _ = error $ "mkVar called on a constant, but user " ++
   "chose to Inline constants. Generator has a bug."
 
@@ -887,7 +887,7 @@ genMethodProc f n desc p r b = do
   bod <- logBody n vars b
   let fn = f ps bod
   pComms <- mapM getCommentBrief p
-  return $ if CommentFunc `elem` commented g
+  return $ if CommentFunc `elem` (g ^. commented)
     then docFunc desc pComms r fn else fn
 
 -- | Converts a 'Func' (from the Mod AST) to GOOL.
@@ -1243,7 +1243,7 @@ genInOutFuncProc f docf n desc ins' outs' b = do
   pComms <- mapM getCommentBrief ins
   oComms <- mapM getCommentBrief outs
   bComms <- mapM getCommentBrief both
-  return $ if CommentFunc `elem` commented g
+  return $ if CommentFunc `elem` g ^. commented
     then docf desc (zip pComms inVs) (zip oComms outVs) (zip
     bComms bothVs) bod else f inVs outVs bothVs bod
 

@@ -20,6 +20,7 @@ import Utils.Drasil (weave)
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpLCCCW, assumpLCCWP,
   assumpTPCAV, assumpDWPCoV, assumpSHECoV, assumpTHCCoT)
 import Drasil.SWHS.Concepts (coil, gaussDiv, phaseChangeMaterial)
+import Drasil.SWHS.References (lightstone2012)
 import Drasil.SWHS.TMods (consThermE, nwtnCooling)
 import Drasil.SWHS.Unitals (coilHTC, htFluxC, htFluxIn, htFluxOut, htFluxP,
   inSA, outSA, pcmHTC, tempC, tempPCM, tempW, thFluxVect, volHtGen)
@@ -68,7 +69,7 @@ htFluxWaterFromCoilExpr = sy coilHTC $* (sy tempC $- apply1 tempW time)
 
 htFluxPCMFromWater :: GenDefn
 htFluxPCMFromWater = gd (equationalModel' htFluxPCMFromWaterQD) (getUnit htFluxP) Nothing
-  [dRef koothoor2013] "htFluxPCMFromWater"
+  [dRef lightstone2012] "htFluxPCMFromWater"
   [newtonLawNote htFluxP assumpLCCWP phaseChangeMaterial]
 
 htFluxPCMFromWaterQD :: ModelQDef

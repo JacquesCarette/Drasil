@@ -8,22 +8,24 @@ module Language.Drasil.Choices (
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
-  Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
+  Logging(..), SoftwareDossierFile(..), getSampleData, hasSampleInput, defaultChoices,
   choicesSent, showChs, InternalConcept(..)
 ) where
 
 import Control.Lens ((^.))
 import Data.Map (Map)
 import qualified Data.Map as Map
+import Data.List.NonEmpty (toList)
 
 import Drasil.Database (UID, HasUID (..))
-import Drasil.GOOL (CodeType)
-import Language.Drasil hiding (None)
+import Drasil.GOOL (CodeType(..))
+import Language.Drasil (SimpleQDef, Sentence(..), Space, DefinedQuantityDict,
+  foldlSent_, (+:+), (+:+.))
+import qualified Language.Drasil as S (Space(..))
 import Utils.Drasil (RelativeFile)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
 
-import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg (libDummyQuants))
@@ -205,10 +207,10 @@ data OptionalFeatures = OptFeats{
   docConfig :: DocConfig,
   logConfig :: LogConfig,
   -- | Turns generation of different auxiliary (non-source-code) files on or off.
-  auxFiles :: [AuxFile]
+  auxFiles :: [SoftwareDossierFile]
 }
 -- | Constructor to create a OptionalFeatures
-makeOptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
+makeOptFeats :: DocConfig -> LogConfig -> [SoftwareDossierFile] -> OptionalFeatures
 makeOptFeats = OptFeats
 
 -- | Configuration for Doxygen documentation
@@ -279,12 +281,12 @@ instance RenderChoices Logging where
 -- | Currently we only support two kind of auxiliary files: sample input file, readme.
 -- To generate a sample input file compatible with the generated program,
 -- 'FilePath' is the path to the user-provided file containing a sample set of input data.
-data AuxFile = SampleInput FilePath
+data SoftwareDossierFile = SampleInput FilePath
              | ReadME
              deriving Eq
 
 -- | Renders options for auxiliary file generation.
-instance RenderChoices AuxFile where
+instance RenderChoices SoftwareDossierFile where
   showChs (SampleInput fp) = S "SampleInput" +:+ S fp
   showChs ReadME = S "ReadME"
 
@@ -296,8 +298,8 @@ getSampleData chs = getSampleData' (auxFiles $ optFeats chs)
         getSampleData' (SampleInput fp:_) = Just fp
         getSampleData' (_:xs) = getSampleData' xs
 
--- | Predicate that returns true if the list of 'AuxFile's includes a 'SampleInput'.
-hasSampleInput :: [AuxFile] -> Bool
+-- | Predicate that returns true if the list of 'SoftwareDossierFile's includes a 'SampleInput'.
+hasSampleInput :: [SoftwareDossierFile] -> Bool
 hasSampleInput [] = False
 hasSampleInput (SampleInput _:_) = True
 hasSampleInput (_:xs) = hasSampleInput xs
@@ -366,6 +368,25 @@ defaultChoices = Choices {
   extraMods = [],
   handWiredDefs = []
 }
+
+-- | Default mapping between 'Space' and 'CodeType'.
+spaceToCodeType :: S.Space -> [CodeType]
+spaceToCodeType S.Integer        = [Integer]
+spaceToCodeType S.Natural        = [Integer]
+spaceToCodeType S.Real           = [Double, Float]
+spaceToCodeType S.Rational       = [Double, Float]
+spaceToCodeType S.Boolean        = [Boolean]
+spaceToCodeType S.Char           = [Char]
+spaceToCodeType S.String         = [String]
+spaceToCodeType (S.Vect s)       = map List (spaceToCodeType s)
+spaceToCodeType (S.Matrix _ _ s) = map (List . List) (spaceToCodeType s)
+spaceToCodeType (S.Set s)        = map List (spaceToCodeType s)
+spaceToCodeType (S.Array s)      = map Array (spaceToCodeType s)
+spaceToCodeType (S.Actor s)      = [Object s]
+spaceToCodeType S.Void           = [Void]
+spaceToCodeType (S.Function i t) = [Func is ts | is <- ins, ts <- trgs]
+    where trgs = spaceToCodeType t
+          ins  = map spaceToCodeType (toList i)
 
 -- | Renders 'Choices' as 'Sentence's.
 choicesSent :: Choices -> [Sentence]

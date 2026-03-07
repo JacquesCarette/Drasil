@@ -28,7 +28,7 @@ import Drasil.Database (HasChunkRefs(..), UID, HasUID(..), mkUid)
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
-import Language.Drasil.NounPhrase (cn,cn',NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (cn,cn',NP)
 import Language.Drasil.Symbol (Symbol(Label))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift),
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))
@@ -46,7 +46,8 @@ data UnitDefn = UD { _vc :: ConceptChunk
 makeLenses ''UnitDefn
 
 instance HasChunkRefs UnitDefn where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs ud = chunkRefs (ud ^. vc)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds 'UID' of the 'ConceptChunk' used to make the 'UnitDefn'.
 instance HasUID        UnitDefn where uid = vc . uid

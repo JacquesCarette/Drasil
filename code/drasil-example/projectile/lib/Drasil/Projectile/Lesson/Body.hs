@@ -3,7 +3,7 @@ module Drasil.Projectile.Lesson.Body where
 import Data.List (nub)
 import Language.Drasil hiding (Notebook)
 import Drasil.Database (ChunkDB)
-import Drasil.Generator (cdb)
+import Drasil.Generator (withCommonKnowledge)
 import Drasil.System (System, mkSystem, SystemKind(Notebook))
 
 -- TODO: Add export parameters in a module
@@ -45,7 +45,7 @@ si = mkSystem
   allRefs
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts conceptChunks ([] :: [UnitDefn]) [] [] [] [] [] [] []
+symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] [] [] [] [] [] [] []
 
 ideaDicts :: [IdeaDict]
 ideaDicts = nw projectileMotionLesson : concepts

@@ -1,12 +1,4 @@
 digraph allvsall {
 
 
-	dataDefn:htTransCladFuel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:htTransCladFuel"];
-	dataDefn:htTransCladCool	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:htTransCladCool"];
-
-	subgraph DD {
-	rank="same"
-	{dataDefn:htTransCladFuel, dataDefn:htTransCladCool}
-	}
-
 }

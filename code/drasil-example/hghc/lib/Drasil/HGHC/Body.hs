@@ -2,7 +2,7 @@ module Drasil.HGHC.Body (si, mkSRS) where
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Drasil.Generator (withCommonKnowledge)
 import Drasil.System (mkSystem, SystemKind(Specification))
 
 import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
@@ -55,5 +55,4 @@ ideaDicts =
   [nw progName]
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) dataDefs [] [] [] [] [] []
+symbMap = withCommonKnowledge [] symbols ideaDicts [] [] dataDefs [] [] [] [] [] []

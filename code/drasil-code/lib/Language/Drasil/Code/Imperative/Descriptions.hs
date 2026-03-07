@@ -42,8 +42,8 @@ unmodularDesc = do
   g <- get
   let implTypeStr Program = "program"
       implTypeStr Library = "library"
-  return $ show $ sentenceDoc OneLine $ spec (printfo g) $ capSent $ foldlSent 
-    ([S "a", S (implTypeStr (g ^. implType)), S "to"] ++ codeSpec g ^. purpose)
+  return $ show $ sentenceDoc OneLine $ spec (printfo g) $ capSent $ foldlSent
+      ([S "a", S (implTypeStr (g ^. implType)), S "to"] ++ codeSpec g ^. purpose)
 
 -- | Returns description of what is contained in the Input Parameters module.
 -- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the

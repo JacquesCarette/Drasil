@@ -106,7 +106,7 @@ genMainFunc = do
           ics <- genAllInputCalls
           varDef <- mapM genCalcCall (codeSpec g ^. execOrderO)
           wo <- genOutputCall
-          return $ Just $ 
+          return $ Just $
             (if CommentFunc `elem` g ^. commented
               then docMain
               else mainFunction)
@@ -657,7 +657,7 @@ genMainFuncProc = do
           wo <- genOutputCallProc
           return $ Just $
             (if CommentFunc `elem` g ^. commented
-              then docMain 
+              then docMain
               else mainFunction)
             $ bodyStatements $ initLogFileVar (g ^. logKind) mainFn
               ++ varDecDef v_filename mainFn (arg 0)

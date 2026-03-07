@@ -1,21 +1,19 @@
 {-# LANGUAGE GADTs, TemplateHaskell, RankNTypes #-}
 -- | Define types and functions related to creating a system information database.
 
--- Changes to System should be reflected in the 'Creating Your Project
--- in Drasil' tutorial found on the wiki:
+-- Changes to System should be reflected in the 'Creating Your Project in
+-- Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 module Drasil.System (
   -- * System
   -- ** Types
   System(..), SystemKind(..),
+  Purpose, Background, Scope, Motivation,
   -- ** Lenses
   HasSystem(..),
   -- ** Functions
   whatsTheBigIdea, mkSystem,
-  -- * Reference Database
-  -- ** Types
-  Purpose, Background, Scope, Motivation,
-  -- * Hacks
+  -- ** Hacks
   refbyLookup, traceLookup
 ) where
 
@@ -33,19 +31,23 @@ import Utils.Drasil (toPlainName)
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
--- | Project Example background information, used in the 'What' section of README.
+-- | Project Example background information, used in the 'What' section of
+-- README.
 type Background = [Sentence]
 -- | Project Example scope.
 type Scope = [Sentence]
 -- | Project Example motivation.
 type Motivation = [Sentence]
 
+-- | Enumeration of /kinds/ of 'System's we can encode.
 data SystemKind =
     Specification
   | RunnableSoftware
   | Notebook
   | Website
 
+-- | Probe what kind of 'System' one is. For example, does it represent a
+-- (Problem) specification, runnable software, a 'notebook', or a website?
 whatsTheBigIdea :: System -> IdeaDict
 whatsTheBigIdea si = whatKind' (_kind si)
   where
@@ -58,10 +60,6 @@ whatsTheBigIdea si = whatKind' (_kind si)
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
 data System where
---FIXME:
---There should be a way to remove redundant "Quantity" constraint.
--- I'm thinking for getting concepts that are also quantities, we could
--- use a lookup of some sort from their internal (Drasil) ids.
  SI :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
@@ -79,10 +77,10 @@ data System where
   , _instModels   :: [InstanceModel]
   , _inputs       :: [h]
   , _outputs      :: [i]
-  , _constraints  :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
+  , _constraints  :: [j]
   , _constants    :: [ConstQDef]
   , _systemdb     :: ChunkDB
-    -- FIXME: Hacks to be removed once 'Reference's are rebuilt.
+  -- FIXME: Hacks to be removed once 'Reference's are rebuilt.
   , _refTable     :: M.Map UID Reference
   , _refbyTable   :: M.Map UID [UID]
   , _traceTable   :: M.Map UID [UID]
@@ -90,6 +88,7 @@ data System where
 
 makeClassy ''System
 
+-- | Build a 'System'.
 mkSystem :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
@@ -104,8 +103,10 @@ mkSystem nm sk ppl prps bkgrd scp motive tms gds dds ims hs is js cqds db refs
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
     progName = toPlainName $ filter (not . isSpace) $ abrv nm
 
+-- | Find what chunks reference a specific chunk.
 refbyLookup :: UID -> System -> [UID]
 refbyLookup u = fromMaybe [] . M.lookup u . (^. refbyTable)
 
+-- | Find what chunks a specific one references.
 traceLookup :: UID -> System -> [UID]
 traceLookup u = fromMaybe [] . M.lookup u . (^. traceTable)

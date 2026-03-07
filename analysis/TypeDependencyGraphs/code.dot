@@ -156,22 +156,26 @@ digraph alltypes {
 		SoftwareDossierInfo -> SoftwareDossierFile;
 		SoftwareDossierInfo -> Expr;
 		}
+		subgraph choicesinfo{
+		ChoicesInfo	[shape=oval, color=cyan3, label="ChoicesInfo"];
+		ChoicesInfo -> Modularity;
+		ChoicesInfo -> ImplementationType;
+		ChoicesInfo -> Structure;
+		ChoicesInfo -> ConstantStructure;
+		ChoicesInfo -> ConstantRepr;
+		ChoicesInfo -> MatchedConceptMap;
+		ChoicesInfo -> MatchedSpaces;
+		ChoicesInfo -> ConstraintBehaviour;
+		ChoicesInfo -> Comments;
+		ChoicesInfo -> String;
+		ChoicesInfo -> Logging;
+		ChoicesInfo -> InternalConceptName;
+		}
 		subgraph drasilstate{
 		DrasilState	[shape=oval, color=cyan3, label="DrasilState"];
 		DrasilState -> CodeSpec;
 		DrasilState -> PrintingInformation;
-		DrasilState -> Modularity;
-		DrasilState -> ImplementationType;
-		DrasilState -> Structure;
-		DrasilState -> ConstantStructure;
-		DrasilState -> ConstantRepr;
-		DrasilState -> MatchedConceptMap;
-		DrasilState -> MatchedSpaces;
-		DrasilState -> ConstraintBehaviour;
-		DrasilState -> Comments;
-		DrasilState -> String;
-		DrasilState -> Logging;
-		DrasilState -> InternalConceptName;
+		DrasilState -> ChoicesInfo;
 		DrasilState -> Mod;
 		DrasilState -> Name;
 		DrasilState -> ExtLibMap;
@@ -181,6 +185,7 @@ digraph alltypes {
 		DrasilState -> SetName;
 		DrasilState -> Int;
 		DrasilState -> SoftwareDossierInfo;
+		DrasilState -> String;
 		DrasilState -> Doc;
 		DrasilState -> Space;
 		DrasilState -> ScopeType;

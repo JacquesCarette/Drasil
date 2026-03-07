@@ -1,0 +1,15 @@
+digraph choicesinfo{
+ChoicesInfo	[shape=oval, color=cyan3, label="ChoicesInfo"];
+ChoicesInfo -> Modularity;
+ChoicesInfo -> ImplementationType;
+ChoicesInfo -> Structure;
+ChoicesInfo -> ConstantStructure;
+ChoicesInfo -> ConstantRepr;
+ChoicesInfo -> MatchedConceptMap;
+ChoicesInfo -> MatchedSpaces;
+ChoicesInfo -> ConstraintBehaviour;
+ChoicesInfo -> Comments;
+ChoicesInfo -> String;
+ChoicesInfo -> Logging;
+ChoicesInfo -> InternalConceptName;
+}

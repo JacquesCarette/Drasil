@@ -1,5 +1,13 @@
 -- | Defines types and functions for generating Makefiles.
-module Build.Drasil.Make.MakeString where
+module Build.Drasil.Make.MakeString (
+  MakeString(..), MVar,
+  (+:+),
+  renderMS, renderVar,
+  makeS,
+  mkWindowsVar, mkOSVar, mkImplicitVar, mkFreeVar,
+  varName,
+  win, mac, linux, isOsVar
+) where
 
 -- * Types
 

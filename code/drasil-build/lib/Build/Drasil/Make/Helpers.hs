@@ -1,5 +1,8 @@
 -- | Helper functions for creating Makefiles.
-module Build.Drasil.Make.Helpers where
+module Build.Drasil.Make.Helpers (
+  addCommonFeatures,
+  tab, msIndent
+) where
 
 import Build.Drasil.Make.AST (Command(C), Rule(R))
 import Build.Drasil.Make.MakeString (MakeString(..), MVar, varName, win, mac,

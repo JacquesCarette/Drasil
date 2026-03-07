@@ -18,11 +18,26 @@ module Drasil.System
 --   system to be used in artifact generation.
 data System
 [SI] :: (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> String -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
+
+-- | Enumeration of <i>kinds</i> of <a>System</a>s we can encode.
 data SystemKind
 Specification :: SystemKind
 RunnableSoftware :: SystemKind
 Notebook :: SystemKind
 Website :: SystemKind
+
+-- | Project Example purpose.
+type Purpose = [Sentence]
+
+-- | Project Example background information, used in the <tt>What</tt>
+--   section of README.
+type Background = [Sentence]
+
+-- | Project Example scope.
+type Scope = [Sentence]
+
+-- | Project Example motivation.
+type Motivation = [Sentence]
 class HasSystem c_a8e4
 system :: HasSystem c_a8e4 => Lens' c_a8e4 System
 authors :: HasSystem c_a8e4 => Lens' c_a8e4 People
@@ -42,21 +57,18 @@ sysName :: HasSystem c_a8e4 => Lens' c_a8e4 CI
 systemdb :: HasSystem c_a8e4 => Lens' c_a8e4 ChunkDB
 theoryModels :: HasSystem c_a8e4 => Lens' c_a8e4 [TheoryModel]
 traceTable :: HasSystem c_a8e4 => Lens' c_a8e4 (Map UID [UID])
+
+-- | Probe what kind of <a>System</a> one is. For example, does it
+--   represent a (Problem) specification, runnable software, a
+--   <a>notebook</a>, or a website?
 whatsTheBigIdea :: System -> IdeaDict
+
+-- | Build a <a>System</a>.
 mkSystem :: (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] -> System
 
--- | Project Example purpose.
-type Purpose = [Sentence]
-
--- | Project Example background information, used in the <tt>What</tt>
---   section of README.
-type Background = [Sentence]
-
--- | Project Example scope.
-type Scope = [Sentence]
-
--- | Project Example motivation.
-type Motivation = [Sentence]
+-- | Find what chunks reference a specific chunk.
 refbyLookup :: UID -> System -> [UID]
+
+-- | Find what chunks a specific one references.
 traceLookup :: UID -> System -> [UID]
 instance Drasil.System.HasSystem Drasil.System.System

@@ -12,12 +12,6 @@
 
 -- | Defines types and functions for generating Makefiles.
 module Build.Drasil.Make.MakeString
-
--- | Type synonym for variable names.
-type VarName = String
-
--- | Type synonym for variable values.
-type VarVal = String
 data MakeString
 
 -- | A string for Makefiles.
@@ -31,16 +25,6 @@ Mc :: MakeString -> MakeString -> MakeString
 
 -- | For creating Makefile variables.
 data MVar
-
--- | Operating System specific variable. Holds information for Windows,
---   Mac, and Linux systems.
-Os :: VarName -> VarVal -> VarVal -> VarVal -> MVar
-
--- | Implicit OS.
-Implicit :: VarName -> MVar
-
--- | Independent of OS.
-Free :: VarName -> MVar
 
 -- | Concatenates two <a>MakeString</a>s with a space in between.
 (+:+) :: MakeString -> MakeString -> MakeString
@@ -147,31 +131,9 @@ makeRule :: RuleTransformer c => c -> [Rule]
 -- | Creates a Makefile (calls <a>makeRules</a>).
 toMake :: RuleTransformer c => [c] -> Makefile
 
--- | Helper for creating make rules for different document types.
-makeRules :: RuleTransformer c => [c] -> [Rule]
-
 
 -- | Helper functions for creating Makefiles.
 module Build.Drasil.Make.Helpers
-
--- | Assignment operator ("=").
-($=) :: MVar -> String -> Doc
-
--- | Defines variables dependent on OS.
-defineOsVars :: (MVar -> String) -> [MVar] -> Doc
-
--- | Helper for rendering OS-specific variables.
-osDefinitions :: [MVar] -> Doc
-
--- | Deduplicates a list of variables and ensures duplicate variables have
---   the same definition.
-uniqueVars :: [MVar] -> [MVar]
-
--- | Extracts variables from a Makefile rule.
-extractVars :: Rule -> [MVar]
-
--- | Gets one or more variables from a MakeString.
-getVars :: MakeString -> [MVar]
 
 -- | Helper for prepending common features to a Makefile.
 addCommonFeatures :: [Rule] -> Doc -> Doc
@@ -188,31 +150,6 @@ module Build.Drasil.Make.Print
 
 -- | Generates the makefile by calling <a>build</a> after <a>toMake</a>.
 genMake :: RuleTransformer c => [c] -> Doc
-
--- | Renders the makefile rules.
-build :: Makefile -> Doc
-
--- | Renders specific makefile rules. Called by <a>build</a>.
-printRule :: Rule -> Doc
-
--- | Renders a makefile comment
-printComment :: String -> Doc
-wrapSettings :: WrapSettings
-
--- | Renders multiple comments
-printComments :: Annotation -> Doc
-
--- | Gathers all rules to abstract targets and tags them as phony.
-printPhony :: [Rule] -> Doc
-
--- | Renders targets with their dependencies.
-printTarget :: Target -> Dependencies -> Doc
-
--- | Renders a makefile command.
-printCmd :: Command -> Doc
-
--- | Renders multiple commands.
-printCmds :: [Command] -> Doc
 
 
 -- | Re-export all contents in drasil-build for external use.

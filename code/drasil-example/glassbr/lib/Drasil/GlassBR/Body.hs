@@ -6,8 +6,6 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
 import qualified Language.Drasil.Development as D
 
-import Drasil.Metadata.TheoryConcepts as M (dataDefn, inModel, thModel)
-import Drasil.Metadata.Documentation as M (software)
 import Drasil.SRSDocument
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import Drasil.Generator (cdb)
@@ -24,7 +22,7 @@ import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   characteristic, company, condition, dataConst, datum,
   environment, input_, interface, model, physical, problem, product_,
-  softwareConstraint, softwareSys, standard, sysCont,
+  software, softwareConstraint, softwareSys, standard, sysCont,
   system, term_, user, value, variable, reference, definition)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, mathcon')
@@ -32,6 +30,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, material
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability, softwarecon)
+import Data.Drasil.Concepts.Theory as M (dataDefn, inModel, thModel)
 import Data.Drasil.Quantities.Math (mathquants, mathunitals)
 import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 
@@ -67,7 +66,7 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
   IntroSec $
-    IntroProg (startIntro M.software blstRskInvWGlassSlab progName)
+    IntroProg (startIntro software blstRskInvWGlassSlab progName)
       (short progName)
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
@@ -250,7 +249,7 @@ orgOfDocIntroEnd = foldlSent_ [D.toSent (atStartNP' (the dataDefn)) `S.are`
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
-   S "A circle represents an external entity outside the" +:+ phrase M.software
+   S "A circle represents an external entity outside the" +:+ phrase software
    `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", (sParen (short progName) !.),
    S "Arrows are used to show the data flow between the" +:+ D.toSent (phraseNP (system
@@ -268,9 +267,9 @@ sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
   D.toSent (phraseNP (glaSlab `and_` blastTy)) `sC` S "ensuring no errors" `S.inThe` plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+. D.toSent (pluralNP (combineNINI input_ variable)),
   S "Ensure required" +:+
-  namedRef (SRS.assumpt [] []) (D.toSent $ pluralNP (combineNINI M.software assumption))
+  namedRef (SRS.assumpt [] []) (D.toSent $ pluralNP (combineNINI software assumption))
     +:+ S "are appropriate for any particular" +:+
-    phrase problem +:+ S "input to the" +:+. phrase M.software]
+    phrase problem +:+ S "input to the" +:+. phrase software]
 
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+

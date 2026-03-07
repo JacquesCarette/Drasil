@@ -14,9 +14,9 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.Metadata.Domains (softEng, documentc)
 import qualified Drasil.Metadata.Documentation as Doc
-  (introduction, learnObj, requirement, srs)
+  (introduction, learnObj, requirement, software, srs)
 import Drasil.Metadata.Documentation
-  (softwareReq, software, specification, notebook)
+  (softwareReq, specification, notebook)
 import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Data.Drasil.Concepts.Math (graph, unit_)
@@ -278,7 +278,7 @@ designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
   userCharacteristic, coordinateSystem, datumConstraint, inDatumConstraint,
   outDatumConstraint, functionalRequirement, nonfunctionalRequirement, safetyReq,
-  softwareConstraint, softwareDoc, softwareSys, softwareVerif,
+  software, softwareConstraint, softwareDoc, softwareSys, softwareVerif,
   softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution,
   physicalSim, productUC, useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: IdeaDict
 
@@ -319,6 +319,7 @@ useCaseTable                 = compoundNC useCase table_
 userCharacteristic           = compoundNC user characteristic
 userInput                    = compoundNC user input_
 vavPlan                      = compoundNC vav plan
+software                     = Doc.software
 
 -- * Domains
 

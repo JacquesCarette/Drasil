@@ -10,18 +10,17 @@ import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
 
-import Drasil.Metadata.TheoryConcepts (dataDefn, inModel)
-import Drasil.Metadata.Documentation (software)
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
   object, physical, physicalSim, physics, problem, product_, project,
-  quantity, realtime, section_, simulation, softwareSys,
+  quantity, realtime, section_, simulation, software, softwareSys,
   system, systemConstraint, sysCont, task, user,
   property, problemDescription)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
+import Data.Drasil.Concepts.Theory (dataDefn, inModel)
 import Data.Drasil.People (alex, luthfi, olu)
 import Data.Drasil.Software.Products (openSource, videoGame)
 

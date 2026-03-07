@@ -3,7 +3,6 @@ module Drasil.SglPend.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
-import Drasil.Metadata.TheoryConcepts (inModel)
 import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
@@ -18,6 +17,7 @@ import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Math (mathcon')
 import Data.Drasil.Concepts.Physics (physicCon', motion, pendulum, angular, displacement, iPos, gravitationalConst, gravity, rigidBody, weight, shm)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
+import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Theories.Physics (newtonSLR)
 

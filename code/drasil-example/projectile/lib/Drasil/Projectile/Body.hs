@@ -12,11 +12,9 @@ import Drasil.Document.Contents (foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 import Drasil.System (SystemKind(Specification), mkSystem)
 
-import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Drasil.Metadata.Documentation (software)
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics,
-  problem, assumption, goalStmt, physSyst, sysCont, user,
+  problem, assumption, goalStmt, physSyst, sysCont, user, software,
   refBy, refName, typUnc, example, softwareSys, system, environment,
   product_, interface, condition, physical, datum, input_, softwareConstraint,
   output_, endUser, requirement, srs)
@@ -26,6 +24,7 @@ import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon',
   rectilinear, oneD, twoD, motion, distance, collision, positionVec)
 import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,

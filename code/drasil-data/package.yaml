@@ -42,6 +42,7 @@ library:
   - Data.Drasil.Concepts.Software
   - Data.Drasil.Concepts.Math
   - Data.Drasil.Concepts.SolidMechanics
+  - Data.Drasil.Concepts.Theory
   - Data.Drasil.Equations.Defining.Physics
   - Data.Drasil.Quantities.Thermodynamics
   - Data.Drasil.Quantities.PhysicalProperties

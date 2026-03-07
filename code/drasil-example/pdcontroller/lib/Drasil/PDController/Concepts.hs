@@ -1,10 +1,10 @@
 module Drasil.PDController.Concepts where
 
-import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation
        (assumption, goalStmt, physSyst, refBy, refName, requirement, srs, typUnc)
+import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
 
 acronyms :: [CI]
 acronyms

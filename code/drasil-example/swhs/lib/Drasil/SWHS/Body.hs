@@ -16,17 +16,16 @@ import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Drasil.System (SystemKind(Specification), mkSystem)
 import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSP_, foldlSPCol)
 
-import Drasil.Metadata.TheoryConcepts (inModel)
-import Drasil.Metadata.Documentation (software)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,
-  output_, physical, physics, property, quantity, softwareSys,
+  output_, physical, physics, property, quantity, software, softwareSys,
   solution, sysCont, system, user, value, variable)
 import Data.Drasil.Concepts.Education (calculus, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (program, softwarecon)
+import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans, htFlux,
   htTransTheo, lawConsEnergy, thermalAnalysis, thermalConduction, thermalEnergy,
   thermocon)

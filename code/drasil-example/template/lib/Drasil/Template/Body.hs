@@ -6,7 +6,6 @@
 module Drasil.Template.Body (mkSRS, si) where
 
 import Drasil.System (SystemKind(Specification), mkSystem)
-import Drasil.Metadata.TheoryConcepts (inModel)
 import Language.Drasil
 import Drasil.SRSDocument
 import Drasil.DocLang (tunitNone)
@@ -15,6 +14,7 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Citations
+import Data.Drasil.Concepts.Theory (inModel)
 import Drasil.DocumentLanguage.TraceabilityGraph
 
 mkSRS :: SRSDecl

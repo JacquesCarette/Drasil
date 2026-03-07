@@ -6,7 +6,6 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SystemKind(Specification), mkSystem)
 
-import Drasil.Metadata.TheoryConcepts (inModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Drasil.Generator (cdb)
@@ -17,6 +16,7 @@ import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (physicCon', energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (softwarecon)
+import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
 

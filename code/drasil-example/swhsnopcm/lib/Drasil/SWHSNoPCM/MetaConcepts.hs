@@ -2,7 +2,7 @@ module Drasil.SWHSNoPCM.MetaConcepts (progName) where
 
 import Language.Drasil
 import qualified Language.Drasil.NounPhrase.Combinators as NP
-import Drasil.Metadata.Domains (materialEng)
+import Data.Drasil.Domains (materialEng)
 
 progName :: CI
 progName = commonIdeaWithDict "swhsNoPCM"

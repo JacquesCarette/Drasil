@@ -7,7 +7,7 @@ module Drasil.Database.UIDRef (
 import Control.Lens ((^.))
 import Data.Maybe (fromMaybe)
 
-import Drasil.Database.Chunk (TypeableChunk, HasChunkRefs (..))
+import Drasil.Database.Chunk (TypeableChunk, HasChunkRefs (..), IsChunk)
 import Drasil.Database.ChunkDB (ChunkDB, find)
 import Drasil.Database.UID (HasUID(..), UID)
 import qualified Data.Set as S (singleton)
@@ -23,7 +23,7 @@ instance HasChunkRefs (UIDRef t) where
   {-# INLINABLE chunkRefs #-}
 
 -- | Create a 'UIDRef' to a chunk.
-hide :: TypeableChunk t => t -> UIDRef t
+hide :: IsChunk t => t -> UIDRef t
 hide = UIDRef . (^. uid)
 
 -- | Find a chunk by a 'UIDRef'.
@@ -44,7 +44,7 @@ instance HasChunkRefs UnitypedUIDRef where
   {-# INLINABLE chunkRefs #-}
 
 -- | Create a 'UnitypedUIDRef' to a chunk.
-hideUni :: TypeableChunk t => t -> UnitypedUIDRef
+hideUni :: IsChunk t => t -> UnitypedUIDRef
 hideUni = UnitypedUIDRef . (^. uid)
 
 -- | Find a chunk by its 'UnitypedUIDRef'.

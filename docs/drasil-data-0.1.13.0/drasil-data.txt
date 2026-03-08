@@ -10,10 +10,38 @@
 @version 0.1.13.0
 
 
+-- | Re-export contents of Drasil.Metadata.TheoryConcepts
+module Data.Drasil.Concepts.Theory
+
+
 -- | Defines common constraints for use in Drasil.
 module Data.Drasil.Constraints
 gtZeroConstr :: ConstraintE
 probConstr :: ConstraintE
+
+
+-- | Defines Domains where concepts live
+module Data.Drasil.Domains
+
+-- | For ideas, concepts, or terms related to Civil Engineering.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
+civilEng :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Material Engineering.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
+materialEng :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Mathematics.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
+mathematics :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Physics.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
+physics :: IdeaDict
 
 
 -- | Define people for use in Drasil. Used often in authors and citations.
@@ -211,6 +239,8 @@ typUnc :: CI
 sec :: CI
 refBy :: CI
 refName :: CI
+requirement :: CI
+srs :: CI
 abbreviation :: IdeaDict
 acronym :: IdeaDict
 analysis :: IdeaDict
@@ -383,6 +413,7 @@ outDatumConstraint :: IdeaDict
 functionalRequirement :: IdeaDict
 nonfunctionalRequirement :: IdeaDict
 safetyReq :: IdeaDict
+software :: IdeaDict
 softwareConstraint :: IdeaDict
 softwareDoc :: IdeaDict
 softwareSys :: IdeaDict

@@ -5,87 +5,69 @@
  -->
 <!-- Title: G Pages: 1 -->
 <svg width="431pt" height="288pt"
- viewBox="0.00 0.00 430.88 288.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(0.33 0.33) rotate(0) translate(4 864.67)">
+ viewBox="0.00 0.00 431.10 288.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.26 0.26) rotate(0) translate(4 1092.67)">
 <title>G</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-864.67 1295.62,-864.67 1295.62,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-1092.67 1637.58,-1092.67 1637.58,4 -4,4"/>
 <!-- u0 -->
 <g id="node1" class="node">
 <title>u0</title>
-<ellipse fill="#bbffbb" stroke="black" cx="642.38" cy="-775" rx="85.59" ry="18"/>
-<text text-anchor="middle" x="642.38" y="-771.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata</text>
-</g>
-<!-- u5 -->
-<g id="node3" class="node">
-<title>u5</title>
-<ellipse fill="#ffffbb" stroke="black" cx="179.38" cy="-430" rx="179.27" ry="18"/>
-<text text-anchor="middle" x="179.38" y="-426.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.SupportedSoftware</text>
-</g>
-<!-- u0&#45;&gt;u5 -->
-<g id="edge4" class="edge">
-<title>u0&#45;&gt;u5</title>
-<path fill="none" stroke="black" d="M620.05,-757.46C544.44,-701.44 297.95,-518.84 210.5,-454.05"/>
-<polygon fill="black" stroke="black" points="212.43,-451.12 202.31,-447.98 208.26,-456.75 212.43,-451.12"/>
+<ellipse fill="#bbffbb" stroke="black" cx="116.34" cy="-907" rx="85.59" ry="18"/>
+<text text-anchor="middle" x="116.34" y="-903.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata</text>
 </g>
 <!-- u4 -->
 <g id="node4" class="node">
 <title>u4</title>
-<ellipse fill="#ffffbb" stroke="black" cx="493.38" cy="-430" rx="116.18" ry="18"/>
-<text text-anchor="middle" x="493.38" y="-426.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.Drasil</text>
+<ellipse fill="#ffffbb" stroke="black" cx="116.34" cy="-181" rx="116.18" ry="18"/>
+<text text-anchor="middle" x="116.34" y="-177.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.Drasil</text>
 </g>
 <!-- u0&#45;&gt;u4 -->
-<g id="edge3" class="edge">
-<title>u0&#45;&gt;u4</title>
-<path fill="none" stroke="black" d="M635,-756.99C610.87,-701.45 534.26,-525.09 504.94,-457.61"/>
-<polygon fill="black" stroke="black" points="508.01,-455.89 500.82,-448.11 501.59,-458.68 508.01,-455.89"/>
-</g>
-<!-- u3 -->
-<g id="node5" class="node">
-<title>u3</title>
-<ellipse fill="#ffffbb" stroke="black" cx="791.38" cy="-430" rx="163.57" ry="18"/>
-<text text-anchor="middle" x="791.38" y="-426.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.TheoryConcepts</text>
-</g>
-<!-- u0&#45;&gt;u3 -->
-<g id="edge2" class="edge">
-<title>u0&#45;&gt;u3</title>
-<path fill="none" stroke="black" d="M649.77,-756.99C673.9,-701.45 750.51,-525.09 779.82,-457.61"/>
-<polygon fill="black" stroke="black" points="783.18,-458.68 783.95,-448.11 776.76,-455.89 783.18,-458.68"/>
-</g>
-<!-- u2 -->
-<g id="node6" class="node">
-<title>u2</title>
-<ellipse fill="#ffffbb" stroke="black" cx="1132.38" cy="-430" rx="159.47" ry="18"/>
-<text text-anchor="middle" x="1132.38" y="-426.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.Documentation</text>
-</g>
-<!-- u0&#45;&gt;u2 -->
 <g id="edge1" class="edge">
-<title>u0&#45;&gt;u2</title>
-<path fill="none" stroke="black" d="M666.02,-757.46C746.12,-701.39 1007.43,-518.47 1099.73,-453.86"/>
-<polygon fill="black" stroke="black" points="1101.94,-456.58 1108.12,-447.98 1097.92,-450.85 1101.94,-456.58"/>
+<title>u0&#45;&gt;u4</title>
+<path fill="none" stroke="black" d="M116.34,-888.82C116.34,-793.29 116.34,-327.63 116.34,-209.36"/>
+<polygon fill="black" stroke="black" points="119.84,-209.02 116.34,-199.02 112.84,-209.02 119.84,-209.02"/>
 </g>
 <!-- u6 -->
 <g id="node2" class="node">
 <title>u6</title>
-<ellipse fill="#ffffbb" stroke="black" cx="923.38" cy="-775" rx="177.37" ry="18"/>
-<text text-anchor="middle" x="923.38" y="-771.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.TraceabilityGraphs</text>
+<ellipse fill="#ffffbb" stroke="black" cx="397.34" cy="-907" rx="177.37" ry="18"/>
+<text text-anchor="middle" x="397.34" y="-903.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.TraceabilityGraphs</text>
+</g>
+<!-- u5 -->
+<g id="node3" class="node">
+<title>u5</title>
+<ellipse fill="#ffffbb" stroke="black" cx="772.34" cy="-907" rx="179.27" ry="18"/>
+<text text-anchor="middle" x="772.34" y="-903.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.SupportedSoftware</text>
+</g>
+<!-- u3 -->
+<g id="node5" class="node">
+<title>u3</title>
+<ellipse fill="#ffffbb" stroke="black" cx="1133.34" cy="-907" rx="163.57" ry="18"/>
+<text text-anchor="middle" x="1133.34" y="-903.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.TheoryConcepts</text>
 </g>
 <!-- u1 -->
 <g id="node7" class="node">
 <title>u1</title>
-<ellipse fill="#ffffbb" stroke="black" cx="961.38" cy="-86" rx="129.18" ry="18"/>
-<text text-anchor="middle" x="961.38" y="-82.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.Domains</text>
+<ellipse fill="#ffffbb" stroke="black" cx="1303.34" cy="-181" rx="129.18" ry="18"/>
+<text text-anchor="middle" x="1303.34" y="-177.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.Domains</text>
 </g>
 <!-- u3&#45;&gt;u1 -->
-<g id="edge6" class="edge">
+<g id="edge3" class="edge">
 <title>u3&#45;&gt;u1</title>
-<path fill="none" stroke="black" d="M800.05,-411.57C827.91,-355.52 915.3,-179.71 948.45,-113.01"/>
-<polygon fill="black" stroke="black" points="951.62,-114.5 952.94,-103.99 945.35,-111.39 951.62,-114.5"/>
+<path fill="none" stroke="black" d="M1137.37,-888.82C1159.83,-793.19 1269.37,-326.69 1297,-209"/>
+<polygon fill="black" stroke="black" points="1300.46,-209.56 1299.34,-199.02 1293.65,-207.96 1300.46,-209.56"/>
+</g>
+<!-- u2 -->
+<g id="node6" class="node">
+<title>u2</title>
+<ellipse fill="#ffffbb" stroke="black" cx="1474.34" cy="-907" rx="159.47" ry="18"/>
+<text text-anchor="middle" x="1474.34" y="-903.3" font-family="Times,serif" font-size="14.00">Drasil.Metadata.Documentation</text>
 </g>
 <!-- u2&#45;&gt;u1 -->
-<g id="edge5" class="edge">
+<g id="edge2" class="edge">
 <title>u2&#45;&gt;u1</title>
-<path fill="none" stroke="black" d="M1123.67,-411.57C1095.65,-355.52 1007.74,-179.71 974.39,-113.01"/>
-<polygon fill="black" stroke="black" points="977.48,-111.37 969.88,-103.99 971.22,-114.5 977.48,-111.37"/>
+<path fill="none" stroke="black" d="M1470.28,-888.82C1447.7,-793.19 1337.51,-326.69 1309.72,-209"/>
+<polygon fill="black" stroke="black" points="1313.07,-207.95 1307.36,-199.02 1306.25,-209.56 1313.07,-207.95"/>
 </g>
 </g>
 </svg>

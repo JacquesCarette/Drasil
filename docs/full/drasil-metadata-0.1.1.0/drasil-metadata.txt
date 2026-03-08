@@ -2,7 +2,7 @@
 -- See Hoogle, http://www.haskell.org/hoogle/
 
 
--- | Meta-data sub-package fro Drasil
+-- | Meta-data sub-package for Drasil
 --   
 --   Please see the README on GitHub at
 --   <a>https://github.com/JacquesCarette/Drasil#readme</a>
@@ -65,6 +65,8 @@ software :: IdeaDict
 requirement :: CI
 softwareReq :: IdeaDict
 specification :: IdeaDict
+introduction :: IdeaDict
+learnObj :: CI
 
 module Drasil.Metadata.Drasil
 
@@ -81,6 +83,11 @@ instance GHC.Show.Show Drasil.Metadata.Drasil.DrasilMeta
 instance GHC.Generics.Generic Drasil.Metadata.Drasil.DrasilMeta
 instance Data.Aeson.Types.ToJSON.ToJSON Drasil.Metadata.Drasil.DrasilMeta
 instance Data.Aeson.Types.FromJSON.FromJSON Drasil.Metadata.Drasil.DrasilMeta
+
+module Drasil.Metadata
+
+-- | Drasil's watermark for generated files.
+watermark :: String
 
 
 -- | Categories of software that Drasil can generate.
@@ -115,14 +122,6 @@ inModel :: CI
 --   These are internal-to-Drasil common ideas, and need to be defined at
 --   the same time as theories.
 thModel :: CI
-
-module Drasil.Metadata
-
--- | Drasil metadata.
-drasilMeta :: DrasilMeta
-
--- | Drasil's watermark for generated files.
-watermark :: String
 
 module Drasil.Metadata.TraceabilityGraphs
 

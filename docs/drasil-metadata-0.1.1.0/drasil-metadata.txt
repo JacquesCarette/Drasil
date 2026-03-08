@@ -2,20 +2,16 @@
 -- See Hoogle, http://www.haskell.org/hoogle/
 
 
--- | Meta-data sub-package fro Drasil
+-- | Meta-data sub-package for Drasil
 --   
 --   Please see the README on GitHub at
 --   <a>https://github.com/JacquesCarette/Drasil#readme</a>
 @package drasil-metadata
 @version 0.1.1.0
 
-module Drasil.Metadata
 
--- | Drasil metadata.
-drasilMeta :: DrasilMeta
-
--- | Drasil's watermark for generated files.
-watermark :: String
+-- | Defines domains of knowledge for use in Drasil.
+module Drasil.Metadata.Domains
 
 -- | For ideas, concepts, or terms related to Computer Science.
 --   
@@ -61,8 +57,47 @@ documentc :: IdeaDict
 --   
 --   Various domains that are used in Drasil. May have an abbreviation.
 knowledgemng :: IdeaDict
+
+module Drasil.Metadata.Documentation
+srs :: CI
+notebook :: CI
+software :: IdeaDict
+requirement :: CI
+softwareReq :: IdeaDict
+specification :: IdeaDict
+introduction :: IdeaDict
+learnObj :: CI
+
+module Drasil.Metadata.Drasil
+
+-- | Basic Drasil metadata.
+newtype DrasilMeta
+DrasilMeta :: String -> DrasilMeta
+[version] :: DrasilMeta -> String
+
+-- | Prepare a Template Haskell expression that reads Drasil's metadata
+--   from a local JSON file.
+drasilMetaCfg :: Q Exp
+instance Language.Haskell.TH.Syntax.Lift Drasil.Metadata.Drasil.DrasilMeta
+instance GHC.Show.Show Drasil.Metadata.Drasil.DrasilMeta
+instance GHC.Generics.Generic Drasil.Metadata.Drasil.DrasilMeta
+instance Data.Aeson.Types.ToJSON.ToJSON Drasil.Metadata.Drasil.DrasilMeta
+instance Data.Aeson.Types.FromJSON.FromJSON Drasil.Metadata.Drasil.DrasilMeta
+
+module Drasil.Metadata
+
+-- | Drasil's watermark for generated files.
+watermark :: String
+
+
+-- | Categories of software that Drasil can generate.
+module Drasil.Metadata.SupportedSoftware
 runnableSoftware :: IdeaDict
 website :: IdeaDict
+
+
+-- | Theory related Drasil concepts, used across Drasil.
+module Drasil.Metadata.TheoryConcepts
 
 -- | Data definition.
 --   
@@ -87,12 +122,6 @@ inModel :: CI
 --   These are internal-to-Drasil common ideas, and need to be defined at
 --   the same time as theories.
 thModel :: CI
-srs :: CI
-notebook :: CI
-software :: IdeaDict
-requirement :: CI
-softwareReq :: IdeaDict
-specification :: IdeaDict
 
 module Drasil.Metadata.TraceabilityGraphs
 

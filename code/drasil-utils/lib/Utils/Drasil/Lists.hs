@@ -1,5 +1,11 @@
 -- | Functions for working with lists.
-module Utils.Drasil.Lists where
+module Utils.Drasil.Lists (
+  replaceAll,
+  subsetOf, nubSort,
+  weave,
+  foldle, foldle1,
+  toColumn, mkTable
+) where
 
 import Data.List (sort, transpose)
 

@@ -26,7 +26,8 @@ import Drasil.Database (UID, HasUID(..), ChunkDB)
 import Language.Drasil (Quantity, MayHaveUnit, Sentence, Concept,
   Reference, People, IdeaDict, CI, Constrained, ConstQDef, nw, abrv)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
-import Drasil.Metadata (runnableSoftware, website, srs, notebook)
+import Drasil.Metadata.SupportedSoftware (runnableSoftware, website)
+import Drasil.Metadata.Documentation (srs, notebook)
 import Utils.Drasil (toPlainName)
 
 -- | Project Example purpose.

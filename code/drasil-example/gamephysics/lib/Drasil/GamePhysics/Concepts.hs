@@ -2,13 +2,13 @@ module Drasil.GamePhysics.Concepts (centreMass, threeD, twoD, acronyms) where
 
 import Language.Drasil
 
-import Drasil.Metadata (physics, dataDefn, genDefn, inModel, thModel, srs,
-  requirement)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
-  refBy, refName, typUnc, unlikelyChg)
+  refBy, refName, requirement, srs, typUnc, unlikelyChg)
+import Data.Drasil.Domains (physics)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Physics (threeD, twoD)
+import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
 
 import Control.Lens ((^.))
 

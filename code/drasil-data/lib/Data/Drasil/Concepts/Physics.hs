@@ -6,7 +6,7 @@ import Language.Drasil hiding (space)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Drasil.Metadata (mathematics, physics)
+import Drasil.Metadata.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
 import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir, point, axis, cartesian)
 import Control.Lens((^.)) --need for parametrization hack

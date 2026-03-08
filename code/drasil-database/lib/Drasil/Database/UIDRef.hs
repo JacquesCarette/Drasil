@@ -1,7 +1,7 @@
 module Drasil.Database.UIDRef (
   -- * 'UID' References
-  UIDRef, hide, unhide, unhideOrErr,
-  UnitypedUIDRef, hideUni, unhideUni, unhideUniOrErr
+  UIDRef, hide, unhide, unhideOrErr, raw,
+  UnitypedUIDRef, hideUni, unhideUni, unhideUniOrErr, rawUni
 ) where
 
 import Control.Lens ((^.))
@@ -34,6 +34,10 @@ unhide (UIDRef u) = find u
 unhideOrErr :: TypeableChunk t => UIDRef t -> ChunkDB -> t
 unhideOrErr tu cdb = fromMaybe (error "Typed UID dereference failed.") (unhide tu cdb)
 
+-- | Get the raw 'UID' from a 'UIDRef'.
+raw :: UIDRef t -> UID
+raw (UIDRef u) = u
+
 -- | A variant of 'UIDRef' without type information about the chunk being
 -- referred to, effectively treating chunks as being "unityped."
 newtype UnitypedUIDRef = UnitypedUIDRef UID
@@ -54,3 +58,7 @@ unhideUni (UnitypedUIDRef u) = find u
 -- | Find a chunk by its 'UnitypedUIDRef', erroring if not found.
 unhideUniOrErr :: TypeableChunk t => UnitypedUIDRef -> ChunkDB -> t
 unhideUniOrErr tu cdb = fromMaybe (error "Untyped UID dereference failed.") (unhideUni tu cdb)
+
+-- | Get the raw 'UID' from a 'UnitypedUIDRef'.
+rawUni :: UnitypedUIDRef -> UID
+rawUni (UnitypedUIDRef u) = u

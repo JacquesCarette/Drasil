@@ -24,16 +24,16 @@ nubSort = nubOrd . sort
 weave :: [[a]] -> [a]
 weave = concat . transpose
 
--- | Fold helper function that applies f to all but the last element, applies g to
--- last element and the accumulator.
+-- | Fold that applies @f@ to all but the last element and @g@ to the last
+-- element and the accumulator given an initial value, @z@.
 foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
 foldle _ _ z []     = z
 foldle _ g z [x]    = g z x
 foldle f g z [x,y]  = g (f z x) y
 foldle f g z (x:xs) = foldle f g (f z x) xs
 
--- | Fold helper function that applies f to all but last element, applies g to last
--- element and accumulator without starting value, does not work for empty list.
+-- | Fold that applies @f@ to all but last element and @g@ to the last element
+-- and accumulator, without a starting value. Does not work on empty lists.
 foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
 foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
 foldle1 _ _ [x]      = x

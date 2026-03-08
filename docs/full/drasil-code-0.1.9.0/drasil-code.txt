@@ -1664,21 +1664,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aM1w
-oldCodeSpec :: HasOldCodeSpec c_aM1w => Lens' c_aM1w OldCodeSpec
-authorsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w People
-cMapO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [RelativeFile]
-constMapO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w ConstantMap
-constantsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Const]
-derivedInputsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Derived]
-execOrderO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Def]
-extInputsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Input]
-inputsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Input]
-modsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Mod]
-outputsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Output]
-pNameO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w Name
-systemdbO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w ChunkDB
+class HasOldCodeSpec c_aM2a
+oldCodeSpec :: HasOldCodeSpec c_aM2a => Lens' c_aM2a OldCodeSpec
+authorsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a People
+cMapO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [RelativeFile]
+constMapO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a ConstantMap
+constantsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Const]
+derivedInputsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Derived]
+execOrderO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Def]
+extInputsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Input]
+inputsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Input]
+modsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Mod]
+outputsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Output]
+pNameO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a Name
+systemdbO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -2925,21 +2925,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> CodeSpec
-class HasOldCodeSpec c_aM1w
-oldCodeSpec :: HasOldCodeSpec c_aM1w => Lens' c_aM1w OldCodeSpec
-authorsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w People
-cMapO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [RelativeFile]
-constMapO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w ConstantMap
-constantsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Const]
-derivedInputsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Derived]
-execOrderO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Def]
-extInputsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Input]
-inputsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Input]
-modsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Mod]
-outputsO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w [Output]
-pNameO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w Name
-systemdbO :: HasOldCodeSpec c_aM1w => Lens' c_aM1w ChunkDB
+class HasOldCodeSpec c_aM2a
+oldCodeSpec :: HasOldCodeSpec c_aM2a => Lens' c_aM2a OldCodeSpec
+authorsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a People
+cMapO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [RelativeFile]
+constMapO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a ConstantMap
+constantsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Const]
+derivedInputsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Derived]
+execOrderO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Def]
+extInputsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Input]
+inputsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Input]
+modsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Mod]
+outputsO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a [Output]
+pNameO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a Name
+systemdbO :: HasOldCodeSpec c_aM2a => Lens' c_aM2a ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

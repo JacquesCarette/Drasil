@@ -3730,6 +3730,12 @@ digraph alltypes {
 		Sentence -> TermCapitalization;
 		Sentence -> UID;
 		Sentence -> Sentence;
+		Sentence -> IsChunk;
+		Sentence -> t;
+		Sentence -> Idea;
+		Sentence -> HasSpace;
+		Sentence -> HasSymbol;
+		Sentence -> UIDRef;
 		Sentence -> USymb;
 		Sentence -> NP;
 		Sentence -> String;

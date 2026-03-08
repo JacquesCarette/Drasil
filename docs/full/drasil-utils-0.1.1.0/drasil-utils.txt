@@ -91,13 +91,14 @@ nubSort :: Ord a => [a] -> [a]
 --   [a,d,b,e,c,f]</tt>.
 weave :: [[a]] -> [a]
 
--- | Fold helper function that applies f to all but the last element,
---   applies g to last element and the accumulator.
+-- | Fold that applies <tt>f</tt> to all but the last element and
+--   <tt>g</tt> to the last element and the accumulator given an initial
+--   value, <tt>z</tt>.
 foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
 
--- | Fold helper function that applies f to all but last element, applies g
---   to last element and accumulator without starting value, does not work
---   for empty list.
+-- | Fold that applies <tt>f</tt> to all but last element and <tt>g</tt> to
+--   the last element and accumulator, without a starting value. Does not
+--   work on empty lists.
 foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
 
 -- | Convert "row" of elements into "column" of elements.
@@ -149,108 +150,5 @@ hasPathAndDocToFileAndContents :: HasPathAndDoc a Doc => a -> FileAndContents
 instance Utils.Drasil.TypeClasses.HasPathAndDoc Utils.Drasil.FileData.FileAndContents Text.PrettyPrint.HughesPJ.Doc
 
 
--- | Gather Drasil's utility functions and re-export for easy use.
+-- | Re-exports all utilities.
 module Utils.Drasil
-
--- | Creates a directory if it does not already exist (optionally with all
---   missing parent directories).
---   
---   Implementation uses doesPathExist to check if the directory exists
---   rather than createDirectoryIfMissing True, which would create the
---   directory regardless of whether it exists or not, potentially leading
---   to an error that appears in `make debug` logs.
-createDirIfMissing :: Bool -> FilePath -> IO ()
-
--- | Write a String to a given <a>FilePath</a>.
-createFile :: FilePath -> String -> IO ()
-
--- | Creates a blank document with no text.
-blank :: Doc
-
--- | Indents a document (by 4 spaces).
-indent :: Doc -> Doc
-
--- | Indents a list of Docs and combines into one Doc.
-indentList :: [Doc] -> Doc
-
--- | Filter blank <a>Doc</a>s from a list.
-filterEmpty :: [Doc] -> [Doc]
-
--- | Merge a list of <a>String</a>s into a <a>Doc</a> format:
---   
---   e.g., `listToDoc [a,b,c,...] ~= a, b, c, ...`
-listToDoc :: [String] -> Doc
-
--- | Separates document sections.
-type Separator = Doc
-contSep :: Separator
-
--- | String capitalization.
-capitalize :: String -> String
-
--- | Comma separated list with "and" before final item.
-stringList :: [String] -> String
-
--- | A valid, relative file path with an extension in canonical form.
-data RelativeFile
-
--- | Create a <a>RelativeFile</a> given a <a>String</a> that must be in
---   canonical form, be a valid file path, contain a file extension, and be
---   relative (not absolute); otherwise, an error is raised.
-relativeFile :: String -> RelativeFile
-relFileToStr :: RelativeFile -> String
-
--- | Replaces all elements of a target list that belong to a provided "bad"
---   input list.
-replaceAll :: Eq a => [a] -> a -> [a] -> [a]
-
--- | Checks if the first set is a subset of the second.
-subsetOf :: Eq a => [a] -> [a] -> Bool
-
--- | Sort a list, removing all duplicates
-nubSort :: Ord a => [a] -> [a]
-
--- | Interweaves two lists together <tt>[[a,b,c],[d,e,f]] -&gt;
---   [a,d,b,e,c,f]</tt>.
-weave :: [[a]] -> [a]
-
--- | Fold helper function that applies f to all but the last element,
---   applies g to last element and the accumulator.
-foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
-
--- | Fold helper function that applies f to all but last element, applies g
---   to last element and accumulator without starting value, does not work
---   for empty list.
-foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
-
--- | Convert "row" of elements into "column" of elements.
-toColumn :: [a] -> [[a]]
-
--- | Create a table body (not including header row) by applying the given
---   functions to the column elements of the table rows (in order). The
---   first argument is a list of functions to be applied (one per column).
---   This essentially creates the rows. The second argument is a list of
---   elements apply the functions to.
---   
---   For example, <tt>mkTable [id, *5] [1,2,3]</tt> should produce a table:
---   
---   <pre>
---   | 1 |  5 |
---   | 2 | 10 |
---   | 3 | 15 |
---   </pre>
-mkTable :: [a -> b] -> [a] -> [[b]]
-
--- | Replace occurences of special characters
---   (<tt>",~`-=!</tt>#$%^&amp;*+[]\;'/|"&lt;&gt;? "<tt>) with underscores
---   (</tt>"_"@).
---   
---   TODO: This can probably become a bit more comprehensive, anything
---   other than a-z, A-Z, or 0-9 could probably be replaced.
-toPlainName :: String -> String
-
--- | Replace underscores in a string with periods (<tt>.</tt>).
-repUnd :: String -> String
-class HasPathAndDoc a b | a -> b
-getPath :: HasPathAndDoc a b => a -> FilePath
-getDoc :: HasPathAndDoc a b => a -> b

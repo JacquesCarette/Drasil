@@ -1037,6 +1037,17 @@ processExpo :: Int -> (Int, Int)
 lookupC :: Stage -> ChunkDB -> UID -> Symbol
 lookupC' :: PrintingInformation -> UID -> Symbol
 
+-- | Look up a symbol given a chunk database and a <a>UID</a> associated
+--   with the symbol. Hack: Always uses <a>DefinedQuantityDict</a> as the
+--   chunk type to look up, despite that not being the _actual type_ of the
+--   chunk being looked up.
+--   
+--   Note: It is because of this function that that the
+--   `-Wno-redundant-constraints` OPTIONS_GHC pragma is at the top of the
+--   file. This is because we technically don't use <tt>t</tt> at all in
+--   the output expression. It can technically be anything!
+lookupSymb :: (IsChunk t, HasSymbol t) => PrintingInformation -> UIDRef t -> Symbol
+
 -- | Look up a term given a chunk database and a <a>UID</a> associated with
 --   the term. Also specifies capitalization
 lookupT :: PrintingInformation -> UID -> TermCapitalization -> Sentence

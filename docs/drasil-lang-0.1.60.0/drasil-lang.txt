@@ -3344,7 +3344,7 @@ data Sentence
 [Ch] :: SentenceStyle -> TermCapitalization -> UID -> Sentence
 
 -- | A branch of Ch dedicated to SymbolStyle only.
-[SyCh] :: UID -> Sentence
+[SyCh] :: (IsChunk t, Idea t, HasSpace t, HasSymbol t) => UIDRef t -> Sentence
 
 -- | Converts a unit symbol into a usable Sentence form.
 [Sy] :: USymb -> Sentence
@@ -3429,7 +3429,7 @@ capSent :: Sentence -> Sentence
 headSent :: Int -> Sentence -> Sentence
 
 -- | Gets a symbol and places it in a <a>Sentence</a>.
-ch :: (IsChunk c, HasSymbol c) => c -> Sentence
+ch :: (IsChunk t, Idea t, HasSpace t, HasSymbol t) => t -> Sentence
 eS :: ModelExpr -> Sentence
 eS' :: Express t => t -> Sentence
 

@@ -231,7 +231,7 @@ calofDemand :: DataDefinition
 aGrtrThanB :: Sentence
 arRef :: Sentence
 hRef :: Sentence
-stdVals :: (IsChunk s, HasSymbol s) => [s] -> Sentence
+stdVals :: Quantity s => [s] -> Sentence
 
 module Drasil.GlassBR.IMods
 symb :: [UnitalChunk]

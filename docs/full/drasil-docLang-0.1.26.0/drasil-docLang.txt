@@ -623,8 +623,9 @@ module Drasil.Sentence.Combinators
 -- | Output is of the form "<tt>reference - sentence</tt>".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
 
--- | Takes a <a>HasSymbol</a> that is also <a>Referable</a> and outputs as
---   a <a>Sentence</a>: "<tt>symbol</tt> is defined in <tt>reference</tt>."
+-- | Takes a <tt>HasSymbol</tt> that is also <a>Referable</a> and outputs
+--   as a <a>Sentence</a>: "<tt>symbol</tt> is defined in
+--   <tt>reference</tt>."
 definedIn :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence
 
 -- | Same as <a>definedIn</a>, but allows for additional information to be
@@ -632,13 +633,13 @@ definedIn :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence
 definedIn' :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence -> Sentence
 
 -- | Takes a <a>Referable</a> and outputs as a <a>Sentence</a> "defined in
---   <tt>reference</tt>" (no <a>HasSymbol</a>).
+--   <tt>reference</tt>" (no <tt>HasSymbol</tt>).
 definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
 
 -- | Takes a <tt>Symbol</tt> and its <tt>Reference</tt> (does not append a
 --   period at the end!). Outputs as "<tt>symbol</tt> is defined in
 --   <tt>source</tt>".
-definedIn''' :: (IsChunk q, HasSymbol q, Referable r, HasShortName r) => q -> r -> Sentence
+definedIn''' :: (Quantity q, Referable r, HasShortName r) => q -> r -> Sentence
 
 -- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
 --   as a <a>Sentence</a>: "From <tt>source</tt> we can replace

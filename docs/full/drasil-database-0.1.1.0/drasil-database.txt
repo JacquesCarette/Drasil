@@ -251,7 +251,7 @@ module Drasil.Database.UIDRef
 data UIDRef typ
 
 -- | Create a <a>UIDRef</a> to a chunk.
-hide :: TypeableChunk t => t -> UIDRef t
+hide :: IsChunk t => t -> UIDRef t
 
 -- | Find a chunk by a <a>UIDRef</a>.
 unhide :: TypeableChunk t => UIDRef t -> ChunkDB -> Maybe t
@@ -259,18 +259,24 @@ unhide :: TypeableChunk t => UIDRef t -> ChunkDB -> Maybe t
 -- | Find a chunk by a <a>UIDRef</a>, erroring if not found.
 unhideOrErr :: TypeableChunk t => UIDRef t -> ChunkDB -> t
 
+-- | Get the raw <a>UID</a> from a <a>UIDRef</a>.
+raw :: UIDRef t -> UID
+
 -- | A variant of <a>UIDRef</a> without type information about the chunk
 --   being referred to, effectively treating chunks as being "unityped."
 data UnitypedUIDRef
 
 -- | Create a <a>UnitypedUIDRef</a> to a chunk.
-hideUni :: TypeableChunk t => t -> UnitypedUIDRef
+hideUni :: IsChunk t => t -> UnitypedUIDRef
 
 -- | Find a chunk by its <a>UnitypedUIDRef</a>.
 unhideUni :: TypeableChunk t => UnitypedUIDRef -> ChunkDB -> Maybe t
 
 -- | Find a chunk by its <a>UnitypedUIDRef</a>, erroring if not found.
 unhideUniOrErr :: TypeableChunk t => UnitypedUIDRef -> ChunkDB -> t
+
+-- | Get the raw <a>UID</a> from a <a>UnitypedUIDRef</a>.
+rawUni :: UnitypedUIDRef -> UID
 instance Drasil.Database.Chunk.HasChunkRefs Drasil.Database.UIDRef.UnitypedUIDRef
 instance Drasil.Database.Chunk.HasChunkRefs (Drasil.Database.UIDRef.UIDRef t)
 

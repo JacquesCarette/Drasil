@@ -22,7 +22,7 @@ hasPathAndDocToFileAndContents :: HasPathAndDoc a Doc => a -> FileAndContents
 instance Utils.Drasil.TypeClasses.HasPathAndDoc Utils.Drasil.FileData.FileAndContents Text.PrettyPrint.HughesPJ.Doc
 
 
--- | Gather Drasil's utility functions and re-export for easy use.
+-- | Re-exports all utilities.
 module Utils.Drasil
 
 -- | Creates a directory if it does not already exist (optionally with all
@@ -34,9 +34,6 @@ module Utils.Drasil
 --   to an error that appears in `make debug` logs.
 createDirIfMissing :: Bool -> FilePath -> IO ()
 
--- | Write a String to a given <a>FilePath</a>.
-createFile :: FilePath -> String -> IO ()
-
 -- | Creates a blank document with no text.
 blank :: Doc
 
@@ -45,6 +42,7 @@ indent :: Doc -> Doc
 
 -- | Indents a list of Docs and combines into one Doc.
 indentList :: [Doc] -> Doc
+contSep :: Separator
 
 -- | Filter blank <a>Doc</a>s from a list.
 filterEmpty :: [Doc] -> [Doc]
@@ -56,13 +54,15 @@ listToDoc :: [String] -> Doc
 
 -- | Separates document sections.
 type Separator = Doc
-contSep :: Separator
 
 -- | String capitalization.
 capitalize :: String -> String
 
 -- | Comma separated list with "and" before final item.
 stringList :: [String] -> String
+
+-- | Write a String to a given <a>FilePath</a>.
+createFile :: FilePath -> String -> IO ()
 
 -- | A valid, relative file path with an extension in canonical form.
 data RelativeFile
@@ -87,13 +87,14 @@ nubSort :: Ord a => [a] -> [a]
 --   [a,d,b,e,c,f]</tt>.
 weave :: [[a]] -> [a]
 
--- | Fold helper function that applies f to all but the last element,
---   applies g to last element and the accumulator.
+-- | Fold that applies <tt>f</tt> to all but the last element and
+--   <tt>g</tt> to the last element and the accumulator given an initial
+--   value, <tt>z</tt>.
 foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
 
--- | Fold helper function that applies f to all but last element, applies g
---   to last element and accumulator without starting value, does not work
---   for empty list.
+-- | Fold that applies <tt>f</tt> to all but last element and <tt>g</tt> to
+--   the last element and accumulator, without a starting value. Does not
+--   work on empty lists.
 foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
 
 -- | Convert "row" of elements into "column" of elements.

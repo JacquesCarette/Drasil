@@ -10,7 +10,6 @@ packages:
 - ../../drasil-gen
 - ../../drasil-gool
 - ../../drasil-lang
-- ../../drasil-metadata
 - ../../drasil-printers
 - ../../drasil-theory
 - ../../drasil-utils

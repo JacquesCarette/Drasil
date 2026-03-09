@@ -2,7 +2,8 @@ module Drasil.DocLang.Notebook where
 
 import Language.Drasil
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (introduction, learnObj, caseProb,
+import qualified Data.Drasil.Concepts.Documentation as Doc (caseProb,
+  introduction, learnObj,
   prpsOfDoc, review, summary, example, appendix, reference)
 
 --  Notebook constructor.

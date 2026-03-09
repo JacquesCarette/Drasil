@@ -19,7 +19,8 @@ data ParameterChunk = PC {_pcc :: CodeChunk
 makeLenses ''ParameterChunk
 
 instance HasChunkRefs ParameterChunk where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs pc = chunkRefs (pc ^. pcc)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'ParameterChunk'.
 instance HasUID      ParameterChunk where uid = pcc . uid

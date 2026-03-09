@@ -17,15 +17,15 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.Metadata (inModel, software)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, effect, endUser, environment, input_, interest, loss, method_,
-  physical, physics, problem, softwareSys, symbol_,
+  physical, physics, problem, software, softwareSys, symbol_,
   sysCont, system, type_, user, value, variable, datumConstraint)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon',
   number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
+import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
   strain, stress, time, twoD, physicCon', distance, friction, linear, velocity, position, threeD)

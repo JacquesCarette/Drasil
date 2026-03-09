@@ -63,7 +63,7 @@ import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
-import Drasil.Metadata as Doc (software)
+import Drasil.Metadata.Documentation as Doc (software)
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   unlikelyChg)
 import qualified Data.Map.Strict as M

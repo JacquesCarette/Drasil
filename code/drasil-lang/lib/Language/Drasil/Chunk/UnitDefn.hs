@@ -46,7 +46,8 @@ data UnitDefn = UD { _vc :: ConceptChunk
 makeLenses ''UnitDefn
 
 instance HasChunkRefs UnitDefn where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs ud = chunkRefs (ud ^. vc)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds 'UID' of the 'ConceptChunk' used to make the 'UnitDefn'.
 instance HasUID        UnitDefn where uid = vc . uid

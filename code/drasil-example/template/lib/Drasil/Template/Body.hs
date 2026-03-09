@@ -62,8 +62,6 @@ mkSRS = [TableOfContents,
        FReqsSub []
      , NonFReqsSub
     ],
-  LCsSec,
-  UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
      AuxConsProg progName [],

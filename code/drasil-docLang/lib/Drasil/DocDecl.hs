@@ -104,12 +104,7 @@ data ReqsSub where
 
 -- | Creates the document description (translates 'SRSDecl' into a more usable form for generating documents).
 mkDocDesc :: System -> SRSDecl -> DocDesc
-mkDocDesc sys@SI{_systemdb = db} = map sec . filter validSec where
-  validSec :: DocSection -> Bool
-  validSec LCsSec = not $ null $ fromConcInsDB likeChgDom
-  validSec UCsSec = not $ null $ fromConcInsDB unlikeChgDom
-  validSec _ = True
-
+mkDocDesc sys@SI{_systemdb = db} = map sec where
   sec :: DocSection -> DL.DocSection
   sec TableOfContents = DL.TableOfContents
   sec (RefSec r) = DL.RefSec r
@@ -118,8 +113,12 @@ mkDocDesc sys@SI{_systemdb = db} = map sec . filter validSec where
   sec (GSDSec g) = DL.GSDSec g
   sec (SSDSec (SSDProg s)) = DL.SSDSec $ DL.SSDProg $ map ssdSec s
   sec (ReqrmntSec (ReqsProg r)) = DL.ReqrmntSec $ DL.ReqsProg $ map reqSec r
-  sec LCsSec = DL.LCsSec $ DL.LCsProg $ fromList $ fromConcInsDB likeChgDom
-  sec UCsSec = DL.UCsSec $ DL.UCsProg $ fromList $ fromConcInsDB unlikeChgDom
+  sec LCsSec = case fromConcInsDB likeChgDom of
+    [] -> error "Missing likely changes"
+    xs -> DL.LCsSec $ DL.LCsProg $ fromList xs
+  sec UCsSec = case fromConcInsDB unlikeChgDom of
+    [] -> error "Missing unlikely changes"
+    xs -> DL.UCsSec $ DL.UCsProg $ fromList xs
   sec (TraceabilitySec t) = DL.TraceabilitySec t
   sec (AuxConstntSec a) = DL.AuxConstntSec a
   sec Bibliography = DL.Bibliography

@@ -23,8 +23,7 @@ import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
   nonFuncReqDom, likeChgDom, unlikeChgDom)
 
 import Control.Lens((^.))
-import Data.List.NonEmpty (nonEmpty)
-import Data.Maybe (mapMaybe)
+import Data.List.NonEmpty (fromList)
 
 -- * Types
 
@@ -105,22 +104,27 @@ data ReqsSub where
 
 -- | Creates the document description (translates 'SRSDecl' into a more usable form for generating documents).
 mkDocDesc :: System -> SRSDecl -> DocDesc
-mkDocDesc sys@SI{_systemdb = db} = mapMaybe sec where
-  sec :: DocSection -> Maybe DL.DocSection
-  sec TableOfContents = Just DL.TableOfContents
-  sec (RefSec r) = Just $ DL.RefSec r
-  sec (IntroSec i) = Just $ DL.IntroSec i
-  sec (StkhldrSec s) = Just $ DL.StkhldrSec s
-  sec (GSDSec g) = Just $ DL.GSDSec g
-  sec (SSDSec (SSDProg s)) = Just $ DL.SSDSec $ DL.SSDProg $ map ssdSec s
-  sec (ReqrmntSec (ReqsProg r)) = Just $ DL.ReqrmntSec $ DL.ReqsProg $ map reqSec r
-  sec LCsSec = DL.LCsSec . DL.LCsProg <$> nonEmpty (fromConcInsDB likeChgDom)
-  sec UCsSec = DL.UCsSec . DL.UCsProg <$> nonEmpty (fromConcInsDB unlikeChgDom)
-  sec (TraceabilitySec t) = Just $ DL.TraceabilitySec t
-  sec (AuxConstntSec a) = Just $ DL.AuxConstntSec a
-  sec Bibliography = Just DL.Bibliography
-  sec (AppndxSec a) = Just $ DL.AppndxSec a
-  sec (OffShelfSolnsSec e) = Just $ DL.OffShelfSolnsSec e
+mkDocDesc sys@SI{_systemdb = db} = map sec . filter validSec where
+  validSec :: DocSection -> Bool
+  validSec LCsSec = not $ null $ fromConcInsDB likeChgDom
+  validSec UCsSec = not $ null $ fromConcInsDB unlikeChgDom
+  validSec _ = True
+
+  sec :: DocSection -> DL.DocSection
+  sec TableOfContents = DL.TableOfContents
+  sec (RefSec r) = DL.RefSec r
+  sec (IntroSec i) = DL.IntroSec i
+  sec (StkhldrSec s) = DL.StkhldrSec s
+  sec (GSDSec g) = DL.GSDSec g
+  sec (SSDSec (SSDProg s)) = DL.SSDSec $ DL.SSDProg $ map ssdSec s
+  sec (ReqrmntSec (ReqsProg r)) = DL.ReqrmntSec $ DL.ReqsProg $ map reqSec r
+  sec LCsSec = DL.LCsSec $ DL.LCsProg $ fromList $ fromConcInsDB likeChgDom
+  sec UCsSec = DL.UCsSec $ DL.UCsProg $ fromList $ fromConcInsDB unlikeChgDom
+  sec (TraceabilitySec t) = DL.TraceabilitySec t
+  sec (AuxConstntSec a) = DL.AuxConstntSec a
+  sec Bibliography = DL.Bibliography
+  sec (AppndxSec a) = DL.AppndxSec a
+  sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e
 
   reqSec :: ReqsSub -> DL.ReqsSub
   reqSec (FReqsSub t) = DL.FReqsSub (fromConcInsDB funcReqDom) t

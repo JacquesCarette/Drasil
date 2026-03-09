@@ -106,7 +106,7 @@ nonfuncReqs = [performance, correctness, usability, understandability, maintaina
 performance :: ConceptInstance
 performance = cic "performance" (foldlSent [
   S "The execution time" `S.for` S "collision detection" `S.and_` S "collision resolution shall be",
-  S "comparable to an existing 2D physics library" `S.onThe` S "market (e.g. Pymunk)"
+  S "within 1 percent of the execution time of the Pymunk 2D physics library"
   ]) "Performance" nonFuncReqDom
 
 correctness :: ConceptInstance

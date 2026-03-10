@@ -9,6 +9,7 @@ packages:
 - drasil-data
 - drasil-database
 - drasil-docLang
+- drasil-example/bss
 - drasil-example/dblpend
 - drasil-example/sglpend
 - drasil-example/gamephysics

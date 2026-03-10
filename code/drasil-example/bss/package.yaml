@@ -1,0 +1,53 @@
+name:                bss
+version:             0.1.24.0
+author:              "Xinlu Yan"
+maintainer:          "Jacques Carette"
+synopsis:            A framework for code and document generation for scientific software - Binary Star System Example
+github:              JacquesCarette/Drasil
+homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+language: Haskell2010
+default-extensions:
+- StrictData
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- lens
+- directory
+- drasil-code
+- drasil-data
+- drasil-database
+- drasil-docLang
+- drasil-gen
+- drasil-gool
+- drasil-lang
+- drasil-printers
+- drasil-system
+- drasil-theory
+- drasil-utils
+
+library:
+  source-dirs: lib
+  when:
+  - condition: false
+    other-modules: Paths_bss
+
+executables:
+  bss:
+    main: Main
+    source-dirs: app
+    ghc-options:
+    - -threaded
+    - -O2
+    dependencies:
+    - bss
+    when:
+    - condition: false
+      other-modules: Paths_bss

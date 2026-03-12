@@ -472,10 +472,10 @@ newtype Intro
 IntrodProg :: [Contents] -> Intro
 newtype LearnObj
 LrnObjProg :: [Contents] -> LearnObj
-newtype Review
-ReviewProg :: [Contents] -> Review
-newtype CaseProb
-CaseProbProg :: [Contents] -> CaseProb
+data Review
+ReviewProg :: [Contents] -> [Section] -> Review
+data CaseProb
+CaseProbProg :: [Contents] -> [Section] -> CaseProb
 newtype Example
 ExampleProg :: [Contents] -> Example
 newtype Smmry
@@ -556,41 +556,6 @@ vars :: ModelExpr -> ChunkDB -> [DefinedQuantityDict]
 --   not correspond to a <a>Citation</a>, it is simply ignored. This should
 --   rather rely on a set of 'UIDRef Citation's.
 resolveBibliography :: ChunkDB -> Set UID -> [Citation]
-
-
--- | Defines functions to extract citation references from Notebook
---   documents.
-module Drasil.ExtractLsnDesc
-
--- | Extract bibliography entries for a notebook based on the lesson
---   description. Scans the notebook for citation references and looks them
---   up in the database.
-extractLsnPlanBib :: System -> LsnDesc -> BibRef
-
-
--- | Document language for lesson plan notebooks.
-module Drasil.DocumentLanguage.Notebook
-
--- | Creates a notebook from a lesson description and system information.
-mkNb :: LsnDesc -> (IdeaDict -> CI -> Sentence) -> System -> Document
-type LsnDesc = [LsnChapter]
-data LsnChapter
-Intro :: Intro -> LsnChapter
-LearnObj :: LearnObj -> LsnChapter
-Review :: Review -> LsnChapter
-CaseProb :: CaseProb -> LsnChapter
-Example :: Example -> LsnChapter
-Smmry :: Smmry -> LsnChapter
-BibSec :: LsnChapter
-Apndx :: Apndx -> LsnChapter
-newtype LearnObj
-LrnObjProg :: [Contents] -> LearnObj
-newtype Review
-ReviewProg :: [Contents] -> Review
-newtype CaseProb
-CaseProbProg :: [Contents] -> CaseProb
-newtype Example
-ExampleProg :: [Contents] -> Example
 
 
 -- | Defines functions used in the Reference Material section.
@@ -1734,10 +1699,48 @@ getDocDesc :: DocDesc -> [Sentence]
 --   and default <a>DLPlate</a>.
 egetDocDesc :: DocDesc -> [ModelExpr]
 
+-- | Extracts <a>Sentence</a>s from a <a>Section</a>.
+getSec :: Section -> [Sentence]
+
 -- | Extract bibliography entries from generated sections. This version
 --   extracts from fully expanded Sections, capturing citations that are
 --   only created during document generation (like those in orgOfDocIntro).
 extractDocBib :: System -> [Section] -> BibRef
+
+
+-- | Defines functions to extract citation references from Notebook
+--   documents.
+module Drasil.ExtractLsnDesc
+
+-- | Extract bibliography entries for a notebook based on the lesson
+--   description. Scans the notebook for citation references and looks them
+--   up in the database.
+extractLsnPlanBib :: System -> LsnDesc -> BibRef
+
+
+-- | Document language for lesson plan notebooks.
+module Drasil.DocumentLanguage.Notebook
+
+-- | Creates a notebook from a lesson description and system information.
+mkNb :: LsnDesc -> (IdeaDict -> CI -> Sentence) -> System -> Document
+type LsnDesc = [LsnChapter]
+data LsnChapter
+Intro :: Intro -> LsnChapter
+LearnObj :: LearnObj -> LsnChapter
+Review :: Review -> LsnChapter
+CaseProb :: CaseProb -> LsnChapter
+Example :: Example -> LsnChapter
+Smmry :: Smmry -> LsnChapter
+BibSec :: LsnChapter
+Apndx :: Apndx -> LsnChapter
+newtype LearnObj
+LrnObjProg :: [Contents] -> LearnObj
+data Review
+ReviewProg :: [Contents] -> [Section] -> Review
+data CaseProb
+CaseProbProg :: [Contents] -> [Section] -> CaseProb
+newtype Example
+ExampleProg :: [Contents] -> Example
 
 
 -- | Collects references common to all SRS documents in one list for easy

@@ -380,31 +380,6 @@ toSentence :: MayHaveUnit u => u -> Sentence
 toSentenceUnitless :: MayHaveUnit u => u -> Sentence
 
 
--- | Document language for lesson plan notebooks.
-module Drasil.DocumentLanguage.Notebook
-
--- | Creates a notebook from a lesson description and system information.
-mkNb :: LsnDesc -> (IdeaDict -> CI -> Sentence) -> System -> Document
-type LsnDesc = [LsnChapter]
-data LsnChapter
-Intro :: Intro -> LsnChapter
-LearnObj :: LearnObj -> LsnChapter
-Review :: Review -> LsnChapter
-CaseProb :: CaseProb -> LsnChapter
-Example :: Example -> LsnChapter
-Smmry :: Smmry -> LsnChapter
-BibSec :: LsnChapter
-Apndx :: Apndx -> LsnChapter
-newtype LearnObj
-LrnObjProg :: [Contents] -> LearnObj
-newtype Review
-ReviewProg :: [Contents] -> Review
-newtype CaseProb
-CaseProbProg :: [Contents] -> CaseProb
-newtype Example
-ExampleProg :: [Contents] -> Example
-
-
 -- | Miscellaneous utility functions for use in various parts of document
 --   creation, but focused mainly on the <a>Sentence</a> level
 module Drasil.Sentence.Combinators
@@ -652,6 +627,31 @@ mkGraphInfo :: System -> GraphInfo
 
 -- | Traceability graphs reference path.
 resourcePath :: String
+
+
+-- | Document language for lesson plan notebooks.
+module Drasil.DocumentLanguage.Notebook
+
+-- | Creates a notebook from a lesson description and system information.
+mkNb :: LsnDesc -> (IdeaDict -> CI -> Sentence) -> System -> Document
+type LsnDesc = [LsnChapter]
+data LsnChapter
+Intro :: Intro -> LsnChapter
+LearnObj :: LearnObj -> LsnChapter
+Review :: Review -> LsnChapter
+CaseProb :: CaseProb -> LsnChapter
+Example :: Example -> LsnChapter
+Smmry :: Smmry -> LsnChapter
+BibSec :: LsnChapter
+Apndx :: Apndx -> LsnChapter
+newtype LearnObj
+LrnObjProg :: [Contents] -> LearnObj
+data Review
+ReviewProg :: [Contents] -> [Section] -> Review
+data CaseProb
+CaseProbProg :: [Contents] -> [Section] -> CaseProb
+newtype Example
+ExampleProg :: [Contents] -> Example
 
 
 -- | Re-export document language types and functions for easy use in other

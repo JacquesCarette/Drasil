@@ -18,6 +18,16 @@ digraph alltypes {
 		LsnChapter -> Smmry;
 		LsnChapter -> Apndx;
 		}
+		subgraph review{
+		Review	[shape=oval, color=darkviolet, label="Review"];
+		Review -> Contents;
+		Review -> Section;
+		}
+		subgraph caseprob{
+		CaseProb	[shape=oval, color=darkviolet, label="CaseProb"];
+		CaseProb -> Contents;
+		CaseProb -> Section;
+		}
 		subgraph apndx{
 		Apndx	[shape=oval, color=darkgreen, label="Apndx"];
 		}
@@ -28,14 +38,6 @@ digraph alltypes {
 		subgraph learnobj{
 		LearnObj	[shape=oval, color=darkgreen, label="LearnObj"];
 		LearnObj -> Contents;
-		}
-		subgraph review{
-		Review	[shape=oval, color=darkgreen, label="Review"];
-		Review -> Contents;
-		}
-		subgraph caseprob{
-		CaseProb	[shape=oval, color=darkgreen, label="CaseProb"];
-		CaseProb -> Contents;
 		}
 		subgraph example{
 		Example	[shape=oval, color=darkgreen, label="Example"];

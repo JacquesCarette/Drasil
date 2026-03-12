@@ -1,10 +1,10 @@
 digraph docLang{
 LsnChapter	[shape=oval, color=turquoise4, label="LsnChapter"];
+Review	[shape=oval, color=turquoise4, label="Review"];
+CaseProb	[shape=oval, color=turquoise4, label="CaseProb"];
 DLPlate	[shape=oval, color=turquoise4, label="DLPlate"];
 Intro	[shape=oval, color=turquoise4, label="Intro"];
 LearnObj	[shape=oval, color=turquoise4, label="LearnObj"];
-Review	[shape=oval, color=turquoise4, label="Review"];
-CaseProb	[shape=oval, color=turquoise4, label="CaseProb"];
 Example	[shape=oval, color=turquoise4, label="Example"];
 Smmry	[shape=oval, color=turquoise4, label="Smmry"];
 Apndx	[shape=oval, color=turquoise4, label="Apndx"];

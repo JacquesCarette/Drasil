@@ -1,4 +1,5 @@
 digraph caseprob{
-CaseProb	[shape=oval, color=darkgreen, label="CaseProb"];
+CaseProb	[shape=oval, color=darkviolet, label="CaseProb"];
 CaseProb -> Contents;
+CaseProb -> Section;
 }

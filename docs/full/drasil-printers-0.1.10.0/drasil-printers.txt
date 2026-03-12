@@ -1210,11 +1210,15 @@ file :: PrintingInformation -> (Depth, Section) -> File
 
 -- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Int -> Section -> LayoutObj
-cel :: PrintingInformation -> Int -> Section -> LayoutObj
+cel :: PrintingInformation -> Int -> Section -> [LayoutObj]
 
 -- | Helper for translating sections into a printable representation of
 --   layout objects (<a>LayoutObj</a>).
 layout :: PrintingInformation -> Int -> SecCons -> LayoutObj
+
+-- | Helper for translating sections into a printable representation of
+--   layout objects (<a>LayoutObj</a>).
+layout' :: PrintingInformation -> Int -> SecCons -> [LayoutObj]
 
 -- | Helper that translates <a>Contents</a> to a printable representation
 --   of <a>LayoutObj</a>. Called internally by <a>layout</a>.

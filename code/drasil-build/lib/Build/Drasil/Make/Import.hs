@@ -1,5 +1,7 @@
 -- | Defines classes and constructors for Makefile generators.
-module Build.Drasil.Make.Import where
+module Build.Drasil.Make.Import (
+  RuleTransformer(..), toMake
+) where
 
 import Build.Drasil.Make.AST (Makefile(M), Rule)
 

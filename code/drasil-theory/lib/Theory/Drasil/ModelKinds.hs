@@ -149,7 +149,7 @@ instance Definition    (ModelKinds e) where defn    = lensMk defn defn defn defn
 instance ConceptDomain (ModelKinds e) where cdom    = elimMk (to cdom) (to cdom) (to cdom) (to cdom) (to cdom)
 -- | Rewrites the underlying model using 'ModelExpr'
 instance Express e => Express (ModelKinds e) where
-  express = elimMk (to express) (to express) (to express) (to express) (to express)
+  mexpress = elimMk (to mexpress) (to mexpress) (to mexpress) (to mexpress) (to mexpress)
 -- | Expose all expressions that need to be type-checked for theories that need
 --   expose 'Expr's.
 instance RequiresChecking (ModelKinds Expr) Expr Space where
@@ -182,7 +182,7 @@ instance Definition    (ModelKind e) where defn    = mk . defn
 instance ConceptDomain (ModelKind e) where cdom    = cdom . (^. mk)
 -- | Rewrites the underlying model using 'ModelExpr'
 instance Express e => Express (ModelKind e) where
-  express = express . (^. mk)
+  mexpress = mexpress . (^. mk)
 -- | Expose all expressions that need to be type-checked for theories that need
 --   expose 'Expr's.
 instance RequiresChecking (ModelKind Expr) Expr Space where

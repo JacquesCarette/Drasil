@@ -60,7 +60,7 @@ module Language.Drasil (
   , HasAdditionalNotes(getNotes)
   , IsUnit(getUnits)
   , DefiningExpr(defnExpr)
-  , Express(express)
+  , Express(..)
   -- *** References
   -- Language.Drasil.Symbol
   , HasRefAddress(getRefAdd)
@@ -260,6 +260,7 @@ import Language.Drasil.Expr.Class (ExprC(..),
   frac, recip_, square, half, oneHalf, oneThird, apply1, apply2,
   m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet, PExpr)
 import Language.Drasil.Expr.Lang (Expr, Completeness, Relation)
+import Language.Drasil.ExprClasses (Express(..))
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
@@ -277,7 +278,7 @@ import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
-  HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity, Express(..))
+  HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity)
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
     Citation, EntryID, BibRef

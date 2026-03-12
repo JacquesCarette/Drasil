@@ -42,7 +42,8 @@ data CodeChunk = CodeC { _qc  :: DefinedQuantityDict
 makeLenses ''CodeChunk
 
 instance HasChunkRefs CodeChunk where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs cc = chunkRefs (cc ^. qc)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance HasUID        CodeChunk where uid = qc . uid
@@ -72,7 +73,11 @@ data CodeVarChunk = CodeVC {_ccv :: CodeChunk,
 makeLenses ''CodeVarChunk
 
 instance HasChunkRefs CodeVarChunk where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs cvc = mconcat
+    [ chunkRefs (cvc ^. ccv)
+    , chunkRefs (cvc ^. obv)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance HasUID        CodeVarChunk where uid = ccv . uid
@@ -100,7 +105,8 @@ newtype CodeFuncChunk = CodeFC {_ccf :: CodeChunk}
 makeLenses ''CodeFuncChunk
 
 instance HasChunkRefs CodeFuncChunk where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs cfc = chunkRefs (cfc ^. ccf)
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance HasUID        CodeFuncChunk where uid = ccf . uid

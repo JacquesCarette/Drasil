@@ -3,7 +3,7 @@ module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Metadata (srs)
+import Drasil.Metadata.Documentation (srs)
 
 import Data.Drasil.Concepts.Computation (algorithm, dataStruct, inParam)
 import Data.Drasil.Concepts.Documentation (input_, physical, physicalConstraint,

@@ -1,13 +1,13 @@
 module Drasil.Database.UIDRef (
   -- * 'UID' References
-  UIDRef, hide, unhide, unhideOrErr,
-  UnitypedUIDRef, hideUni, unhideUni, unhideUniOrErr
+  UIDRef, hide, unhide, unhideOrErr, raw,
+  UnitypedUIDRef, hideUni, unhideUni, unhideUniOrErr, rawUni
 ) where
 
 import Control.Lens ((^.))
 import Data.Maybe (fromMaybe)
 
-import Drasil.Database.Chunk (TypeableChunk, HasChunkRefs (..))
+import Drasil.Database.Chunk (TypeableChunk, HasChunkRefs (..), IsChunk)
 import Drasil.Database.ChunkDB (ChunkDB, find)
 import Drasil.Database.UID (HasUID(..), UID)
 import qualified Data.Set as S (singleton)
@@ -23,7 +23,7 @@ instance HasChunkRefs (UIDRef t) where
   {-# INLINABLE chunkRefs #-}
 
 -- | Create a 'UIDRef' to a chunk.
-hide :: TypeableChunk t => t -> UIDRef t
+hide :: IsChunk t => t -> UIDRef t
 hide = UIDRef . (^. uid)
 
 -- | Find a chunk by a 'UIDRef'.
@@ -33,6 +33,10 @@ unhide (UIDRef u) = find u
 -- | Find a chunk by a 'UIDRef', erroring if not found.
 unhideOrErr :: TypeableChunk t => UIDRef t -> ChunkDB -> t
 unhideOrErr tu cdb = fromMaybe (error "Typed UID dereference failed.") (unhide tu cdb)
+
+-- | Get the raw 'UID' from a 'UIDRef'.
+raw :: UIDRef t -> UID
+raw (UIDRef u) = u
 
 -- | A variant of 'UIDRef' without type information about the chunk being
 -- referred to, effectively treating chunks as being "unityped."
@@ -44,7 +48,7 @@ instance HasChunkRefs UnitypedUIDRef where
   {-# INLINABLE chunkRefs #-}
 
 -- | Create a 'UnitypedUIDRef' to a chunk.
-hideUni :: TypeableChunk t => t -> UnitypedUIDRef
+hideUni :: IsChunk t => t -> UnitypedUIDRef
 hideUni = UnitypedUIDRef . (^. uid)
 
 -- | Find a chunk by its 'UnitypedUIDRef'.
@@ -54,3 +58,7 @@ unhideUni (UnitypedUIDRef u) = find u
 -- | Find a chunk by its 'UnitypedUIDRef', erroring if not found.
 unhideUniOrErr :: TypeableChunk t => UnitypedUIDRef -> ChunkDB -> t
 unhideUniOrErr tu cdb = fromMaybe (error "Untyped UID dereference failed.") (unhideUni tu cdb)
+
+-- | Get the raw 'UID' from a 'UnitypedUIDRef'.
+rawUni :: UnitypedUIDRef -> UID
+rawUni (UnitypedUIDRef u) = u

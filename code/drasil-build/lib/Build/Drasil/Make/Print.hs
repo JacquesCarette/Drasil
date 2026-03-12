@@ -1,5 +1,5 @@
 -- | Defines printers for generating Makefiles.
-module Build.Drasil.Make.Print where
+module Build.Drasil.Make.Print (genMake) where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), ($$), hsep, vcat)

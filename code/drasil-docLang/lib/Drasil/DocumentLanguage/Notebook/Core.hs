@@ -27,10 +27,10 @@ newtype Intro = IntrodProg [Contents]
 newtype LearnObj = LrnObjProg [Contents]
 
 -- ** Review Chapter
-newtype Review = ReviewProg [Contents]
+data Review = ReviewProg [Contents] [Section]
 
 -- ** A Case Problem
-newtype CaseProb = CaseProbProg [Contents]
+data CaseProb = CaseProbProg [Contents] [Section]
 
 -- ** Examples of the lesson
 newtype Example = ExampleProg [Contents]
@@ -67,8 +67,8 @@ instance Multiplate DLPlate where
 
     introd (IntrodProg con) = pure $ IntrodProg con
     lrnObj (LrnObjProg con) = pure $ LrnObjProg con
-    rvw (ReviewProg con) = pure $ ReviewProg con
-    csProb (CaseProbProg con) = pure $ CaseProbProg con
+    rvw (ReviewProg con secs) = pure $ ReviewProg con secs
+    csProb (CaseProbProg con secs) = pure $ CaseProbProg con secs
     exmp (ExampleProg con) = pure $ ExampleProg con
     smry (SmmryProg con) = pure $ SmmryProg con
     aps (ApndxProg con) = pure $ ApndxProg con

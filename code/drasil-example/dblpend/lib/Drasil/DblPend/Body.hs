@@ -13,20 +13,21 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.Metadata (inModel, software)
 import Data.Drasil.People (dong)
 import Data.Drasil.Concepts.Computation (inDatum)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
+
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
-  physical, sysCont, softwareConstraint, softwareSys,
+  physical, software, sysCont, softwareConstraint, softwareSys,
   system, user, analysis)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
 import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon', pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
-import Data.Drasil.Quantities.PhysicalProperties (len)
+import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 import Drasil.Document.Contents (foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)

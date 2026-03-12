@@ -8,14 +8,15 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.ShortHands (lX,lY)
 
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, requirement, srs)
 import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,
-  likelyChg, physSyst, property, refBy, refName, safety, typUnc, unlikelyChg)
+  likelyChg, physSyst, property, refBy, refName, requirement, safety, srs,
+  typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Education (mechanics)
 import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, len)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,shearRes)
+import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
 
 ----Acronyms-----
 acronyms :: [CI]

@@ -1,5 +1,7 @@
--- Contains a function that removes special characters from a string.
-module Utils.Drasil.Strings where
+-- Contains a function that removes special characters from strings.
+module Utils.Drasil.Strings (
+  toPlainName, repUnd
+) where
 
 import Utils.Drasil.Lists (replaceAll)
 

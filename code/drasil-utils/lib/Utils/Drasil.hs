@@ -1,41 +1,19 @@
--- | Gather Drasil's utility functions and re-export for easy use.
+-- | Re-exports all utilities.
 module Utils.Drasil (
-  -- * Directory
-  -- | From "Utils.Drasil.Directory".
-  createDirIfMissing,
-
-  -- * File IO
-  -- | From "Utils.Drasil.FileIO".
-  createFile,
-
-  -- * Documents
-  -- | From "Utils.Drasil.Document".
-  blank, indent, indentList, filterEmpty, listToDoc,
-  Separator, contSep,
-
-  -- * Language
-  -- | From "Utils.Drasil.English".
-  capitalize, stringList,
-
-  -- * FilePath
-  -- | From "Utils.Drasil.FilePath"
-  RelativeFile, relativeFile, relFileToStr,
-
-  -- * Lists
-  -- | From "Utils.Drasil.Lists". General functions involving lists.
-  replaceAll, subsetOf, nubSort, weave, foldle, foldle1, toColumn, mkTable,
-
-  -- ** Strings
-  toPlainName, repUnd,
-
-  -- ** TypeClasses
-  HasPathAndDoc(..),
+  module Utils.Drasil.Directory,
+  module Utils.Drasil.Document,
+  module Utils.Drasil.English,
+  module Utils.Drasil.FileIO,
+  module Utils.Drasil.FilePath,
+  module Utils.Drasil.Lists,
+  module Utils.Drasil.Strings,
+  module Utils.Drasil.TypeClasses
 ) where
 
 import Utils.Drasil.Directory
-import Utils.Drasil.FileIO
 import Utils.Drasil.Document
 import Utils.Drasil.English
+import Utils.Drasil.FileIO
 import Utils.Drasil.FilePath
 import Utils.Drasil.Lists
 import Utils.Drasil.Strings

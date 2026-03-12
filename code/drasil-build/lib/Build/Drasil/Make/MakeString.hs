@@ -1,5 +1,13 @@
 -- | Defines types and functions for generating Makefiles.
-module Build.Drasil.Make.MakeString where
+module Build.Drasil.Make.MakeString (
+  MakeString(..), MVar,
+  (+:+),
+  renderMS, renderVar,
+  makeS,
+  mkWindowsVar, mkOSVar, mkImplicitVar, mkFreeVar,
+  varName,
+  win, mac, linux, isOsVar
+) where
 
 -- * Types
 
@@ -63,3 +71,29 @@ mkImplicitVar = Mv . Implicit
 -- | Constructor for 'Free' variables.
 mkFreeVar :: VarName -> MakeString
 mkFreeVar = Mv . Free
+
+-- | Extracts the variable name from a Makefile variable.
+varName :: MVar -> String
+varName (Free s) = s
+varName (Implicit s) = s
+varName (Os s _ _ _) = s
+
+-- | Extracts information for Windows OS from a variable.
+win :: MVar -> String
+win (Os _ w _ _) = w
+win _ = error "Expected Os Variable"
+
+-- | Extracts information for Mac OS from a variable.
+mac :: MVar -> String
+mac (Os _ _ m _) = m
+mac _ = error "Expected Os Variable"
+
+-- | Extracts information for Linux OS from a variable.
+linux :: MVar -> String
+linux (Os _ _ _ l) = l
+linux _ = error "Expected Os Variable"
+
+-- | Checks if a variable is OS dependent.
+isOsVar :: MVar -> Bool
+isOsVar Os{} = True
+isOsVar _ = False

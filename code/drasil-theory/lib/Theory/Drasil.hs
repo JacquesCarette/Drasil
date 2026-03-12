@@ -31,7 +31,7 @@ module Theory.Drasil (
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
   , qwUC, qwC, getEqModQdsFromIm
   -- * Theory Models
-  , Theory(..), TheoryModel
+  , TheoryModel
   , tm, tmNoRefs
   -- * Differential Models
   , DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..)
@@ -65,4 +65,4 @@ import Theory.Drasil.InstanceModel (InstanceModel,
 import Theory.Drasil.MultiDefn (MultiDefn, DefiningExpr,
   mkDefiningExpr, mkMultiDefn,
   mkMultiDefnForQuant, multiDefnGenQD, multiDefnGenQDByUID)
-import Theory.Drasil.Theory (tm, tmNoRefs, Theory(..), TheoryModel)
+import Theory.Drasil.Theory (tm, tmNoRefs, TheoryModel)

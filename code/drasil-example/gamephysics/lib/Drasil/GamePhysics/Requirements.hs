@@ -11,6 +11,8 @@ import Drasil.DocLang (mkMaintainableNFR)
 import Data.Drasil.Concepts.Documentation as Doc (body, funcReqDom, input_,
   nonFuncReqDom, output_, physicalConstraint, physicalSim, property, solutionCharSpec)
 
+import Drasil.Sentence.Combinators (addPercent)
+
 import qualified Data.Drasil.Concepts.Physics as CP (collision, elasticity,
   friction, rigidBody, space)
 import qualified Data.Drasil.Concepts.Math as CM (surface)
@@ -106,7 +108,8 @@ nonfuncReqs = [performance, correctness, usability, understandability, maintaina
 performance :: ConceptInstance
 performance = cic "performance" (foldlSent [
   S "The execution time" `S.for` S "collision detection" `S.and_` S "collision resolution shall be",
-  S "within 1 percent of the execution time of the Pymunk 2D physics library"
+  S "within" +:+ addPercent (1 :: Int) +:+
+    S "of the execution time of the Pymunk 2D physics library"
   ]) "Performance" nonFuncReqDom
 
 correctness :: ConceptInstance

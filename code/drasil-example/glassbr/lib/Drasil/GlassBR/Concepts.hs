@@ -4,8 +4,8 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
-  physSyst, response, refBy, refName, type_, typUnc, unlikelyChg)
-import Drasil.Metadata (dataDefn, inModel, thModel, requirement, srs)
+  physSyst, response, refBy, refName, requirement, srs, type_, typUnc, unlikelyChg)
+import Data.Drasil.Concepts.Theory (dataDefn, inModel, thModel)
 
 {--}
 idglass :: IdeaDict

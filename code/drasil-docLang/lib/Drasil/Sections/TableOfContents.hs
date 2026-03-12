@@ -5,7 +5,8 @@ module Drasil.Sections.TableOfContents (toToC) where
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Core
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, requirement)
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata.Documentation (requirement)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D

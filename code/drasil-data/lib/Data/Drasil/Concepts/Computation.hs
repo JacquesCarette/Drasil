@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_,
   quantity, type_, value, variable)
 import Data.Drasil.Concepts.Math (parameter)
-import Drasil.Metadata (compScience)
+import Drasil.Metadata.Domains (compScience)
 
 algorithm, absTolerance, relTolerance:: ConceptChunk
 algorithm = dcc "algorithm" (cn' "algorithm")

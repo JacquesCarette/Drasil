@@ -1,50 +1,30 @@
 on:
-  pull_request:
+  push:
     branches: main
-    paths: [code/**, .github/workflows/Build.yaml]
+    paths: [code/**, .github/workflows/Deploy.yaml]
   workflow_dispatch:
-name: Build
+name: Deploy
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: deploy
   cancel-in-progress: true
 defaults:
   run:
     shell: bash
     working-directory: code
 jobs:
-  build:
-    name: "Build & Test"
+  deploy:
+    name: "Build, Test & Deploy"
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v6
-
-      - name: "Search changes for applicable tests"
-        uses: dorny/paths-filter@v3
-        id: changes
-        with:
-          filters: |
-            tex:
-              - 'code/stable/**/*.tex'
-            md:
-              - code/stable/**/*.md
-              - code/stable/**/book.toml
 
       - name: "Update apt package list"
         run: |
           sudo apt-get update
 
-      - name: "Install core system requirements"
+      - name: "Install system requirements"
         run: |
-          sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz g++ default-jdk mono-devel
-
-      - name: "Install TeX requirements"
-        if: ${{ steps.changes.outputs.tex == 'true' }}
-        run: |
-          sudo apt-get install -y --fix-missing fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-luatex
-
-      - name: "Install mdBook"
-        if: ${{ steps.changes.outputs.md == 'true' }}
-        run: |
+          sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-luatex g++ default-jdk mono-devel inkscape
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
           cargo install mdbook
 
@@ -90,20 +70,51 @@ jobs:
 
       - name: "Compile generated TeX artifacts"
         run: make -j tex SUMMARIZE_TEX=yes
-        if: ${{ steps.changes.outputs.tex == 'true' }}
 
       - name: "Compile generated software artifacts"
         run: make gool
 
-      - name: "Generate Haddock docs (as test)"
-        run: make docs
+      - name: "Create Doxygen for generated software artifacts"
+        run: make doxygen
+
+      - name: "Generate Haddock docs (full + std)"
+        run: FULL=1 make docs
+
+      - name: "Generate module dependency graphs"
+        run: make graphs
+
+      - name: "Analyze Drasil code"
+        run: make analysis
+
+      - name: "Convert analysis graphs into dot and circo SVGs"
+        run: make convertAnalyzed
+
+      - name: "Build trace graphs"
+        run: make tracegraphs
 
       - name: "Build mdBook Examples"
         run: make mdbook_build
-        if: ${{ steps.changes.outputs.md == 'true' }}
+
+      - name: "Extract HTML copies of Jupyter Notebooks"
+        run: |
+          pip install jupyterlab
+          make jupyter_html
 
       - name: "Build website generator"
         run: make website
 
       - name: "Test Built Website against Stable Version"
         run: make test_website NOISY=yes
+
+      - name: "Prepare full website deployment environment"
+        run: make deploy_lite
+
+      - name: "Deploy 🚀"
+        uses: JamesIves/github-pages-deploy-action@v4.8.0
+        with:
+          git-config-name: ${{ secrets.BOT_NAME }}
+          git-config-email: ${{ secrets.BOT_EMAIL }}
+          token: ${{ secrets.BOT_TOKEN }}
+          branch: gh-pages
+          folder: code/deploy
+          commit-message: "${{ secrets.BOT_NAME }} deploy of main@${{ github.sha }}"

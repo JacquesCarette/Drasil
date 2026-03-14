@@ -7,20 +7,21 @@ import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel, requirement, srs)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
-  refBy, refName, typUnc)
-import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
-import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
+  refBy, refName, requirement, srs, typUnc)
+import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, time)
 import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.Concepts.Math as CM (angle, xDir, yDir)
+import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
+import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
+import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
+import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
+
 import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject, horizontalPos,
   verticalPos, horizontalVel, verticalVel, horizontalAccel, verticalAccel)
-import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
-import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
 
 symbols:: [DefinedQuantityDict]
 symbols = map dqdWr unitalChunks ++ [dqdWr pendDisAngle] ++ map dqdWr constants

@@ -12,8 +12,12 @@ import Language.Drasil hiding (organization, year, label, variable)
 import Language.Drasil.Development (NPStruct)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Drasil.Metadata (documentc, notebook, softEng, dataDefn, genDefn, inModel, thModel,
-  softwareReq, software, specification, requirement, srs)
+import Drasil.Metadata.Domains (softEng, documentc)
+import qualified Drasil.Metadata.Documentation as Doc
+  (introduction, learnObj, requirement, software, srs)
+import Drasil.Metadata.Documentation
+  (softwareReq, specification, notebook)
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Data.Drasil.Concepts.Math (graph, unit_)
 
@@ -57,7 +61,9 @@ doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
   unlikelyChg, notebook, refBy, refName]
 
 assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst,
-  mg, mis, typUnc, sec, refBy, refName :: CI
+  mg, mis, typUnc, sec, refBy, refName,
+  -- re-exports
+  requirement, srs :: CI
 
 -- * Common Ideas
 
@@ -68,8 +74,8 @@ assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")               
 desSpec     = commonIdeaWithDict "desSpec"     (combineNINI design specification)                    "DS"      [softEng]
 goalStmt    = commonIdeaWithDict "goalStmt"    (combineNINI goal statement)                          "GS"      [softEng]
 dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
+learnObj    = Doc.learnObj
 likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
-learnObj    = commonIdeaWithDict "learnObj"    (cn' "learning objective")                            "LO"      [documentc]
 unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
 physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
 mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
@@ -78,6 +84,8 @@ typUnc      = commonIdeaWithDict "typUnc"      (cnIES "typical uncertainty")    
 sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
 refBy       = commonIdeaWithDict "refBy"       (cn  "referenced by")                                 "RefBy"   [documentc]
 refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]
+requirement = Doc.requirement
+srs         = Doc.srs
 
 ---------------------------------------------------------------------
 
@@ -157,7 +165,7 @@ interface       = nc "interface"      (cn'    "interface"          )
 input_          = nc "input"          (cn'    "input"              )
 instance_       = nc "instance"       (cn'    "instance"           )
 intReader       = nc "intReader"      (cn'    "intended reader"    )
-introduction    = nc "introduction"   (cn'    "introduction"       )
+introduction    = Doc.introduction
 issue           = nc "issue"          (cn'    "issue"              )
 item            = nc "item"           (cn'    "item"               )
 label           = nc "label"          (cn'    "label"              )
@@ -270,7 +278,7 @@ designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
   userCharacteristic, coordinateSystem, datumConstraint, inDatumConstraint,
   outDatumConstraint, functionalRequirement, nonfunctionalRequirement, safetyReq,
-  softwareConstraint, softwareDoc, softwareSys, softwareVerif,
+  software, softwareConstraint, softwareDoc, softwareSys, softwareVerif,
   softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution,
   physicalSim, productUC, useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: IdeaDict
 
@@ -311,6 +319,7 @@ useCaseTable                 = compoundNC useCase table_
 userCharacteristic           = compoundNC user characteristic
 userInput                    = compoundNC user input_
 vavPlan                      = compoundNC vav plan
+software                     = Doc.software
 
 -- * Domains
 

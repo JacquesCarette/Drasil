@@ -28,7 +28,6 @@ dependencies:
 - drasil-gen
 - drasil-gool
 - drasil-lang
-- drasil-metadata
 - drasil-printers
 - drasil-system
 - drasil-theory

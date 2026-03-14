@@ -1,7 +1,6 @@
 module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
 import Language.Drasil
-import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
@@ -12,6 +11,7 @@ import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
+import Data.Drasil.Concepts.Theory (dataDefn)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Math (posInf, negInf)
 

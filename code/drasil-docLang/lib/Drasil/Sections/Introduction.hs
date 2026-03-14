@@ -17,7 +17,8 @@ import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 import Drasil.Sentence.Combinators (refineChain)
 import Drasil.Document.Contents (foldlSP, foldlSP_)
 
-import Drasil.Metadata (requirement, srs, inModel, thModel)
+import Drasil.Metadata.TheoryConcepts (inModel, thModel)
+import Drasil.Metadata.Documentation (requirement, srs)
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation (assumption, characteristic, decision,
   definition, desSpec, design, designDoc, document, documentation, environment,

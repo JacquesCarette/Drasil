@@ -44,7 +44,8 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption
   scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription,
   stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
   tOfCont, tOfSymb, tOfUnit, userCharacteristic, refMat, abbAcc)
-import qualified Drasil.Metadata as M (dataDefn, genDefn, inModel, thModel, requirement)
+import qualified Drasil.Metadata.TheoryConcepts as M (dataDefn, genDefn, inModel, thModel)
+import qualified Drasil.Metadata.Documentation as M (requirement)
 
 import Control.Lens ((^.), view)
 

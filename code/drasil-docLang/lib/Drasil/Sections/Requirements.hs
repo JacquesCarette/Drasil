@@ -25,7 +25,7 @@ import qualified Language.Drasil.Development as D
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import Theory.Drasil (HasOutput(output))
 
-import Drasil.Metadata (software)
+import Drasil.Metadata.Documentation (software)
 import Data.Drasil.Concepts.Documentation (description, funcReqDom, nonFuncReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, output_, section_,
   symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis, likelyChg)

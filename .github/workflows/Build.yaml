@@ -40,7 +40,7 @@ jobs:
       - name: "Install TeX requirements"
         if: ${{ steps.changes.outputs.tex == 'true' }}
         run: |
-          sudo apt-get install -y --fix-missing fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-luatex
+          sudo apt-get install -y --fix-missing fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-luatex inkscape
 
       - name: "Install mdBook"
         if: ${{ steps.changes.outputs.md == 'true' }}

@@ -14,7 +14,7 @@ List of refactorings that should be done to the code base.
 - [x] move Language.Drasil.Derivation to drasil-theory (PR [#4583](../issues/4583))
 - [ ] move Language.Drasil.Document and .* to drasil-docLang
 - [x] move Language.Drasil.NounPhrase to Language.Drasil.NaturalLanguage.English.NounPhrase (PR [#4753](../issues/4753))
-- [ ] move Language.Drasil.Chunk.DifferentialModel to (drasil-theory) Theory.Drasil.DifferentialModel
+- [x] move Language.Drasil.Chunk.DifferentialModel to (drasil-theory) Theory.Drasil.DifferentialModel (PR [#4590](../issues/4590))
 
 ## dasil-code
 - [x] change Data.Drasil.ExternalLibraries.ODELibraries to not go via Language.Drasil.Code (PR [#4582](../issues/4582))

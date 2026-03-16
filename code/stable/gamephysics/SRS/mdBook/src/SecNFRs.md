@@ -4,7 +4,7 @@ This section provides the non-functional requirements, the qualities that the so
 
 <div id="performance"></div>
 
-Performance: The execution time for collision detection and collision resolution shall be comparable to an existing 2D physics library on the market (e.g. Pymunk).
+Performance: The execution time for collision detection and collision resolution shall be within 1\\(\\%\\) of the execution time of the Pymunk 2D physics library.
 
 <div id="correctness"></div>
 

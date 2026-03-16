@@ -105,14 +105,9 @@ image f (Just c) wp =
   nbformat $ img $ [("src", f), ("alt", c)] ++ [("width", text $ show wp ++ "%") | wp /= 100]]
 
 h :: Int -> Doc
-h n       | n < 1 = error "Illegal header (too small)"
-          | n > 4 = error "Illegal header (too large)"
-          | otherwise = text (hash n)
-              where hash 1 = "# "
-                    hash 2 = "## "
-                    hash 3 = "### "
-                    hash 4 = "#### "
-                    hash _ = "Illegal header"
+h n | n < 1 = error "Illegal header (too small)"
+    | n > 6 = error "Illegal header (too large)"
+    | otherwise = text (replicate n '#' ++ " ")
 
 -- | Curly braces.
 br :: Doc -> Doc

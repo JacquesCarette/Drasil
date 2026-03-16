@@ -45,11 +45,11 @@ mkLearnObj (LrnObjProg cs) = Lsn.learnObj cs []
 
 -- | Helper for making the 'Review' section.
 mkReview :: Review -> Section
-mkReview (ReviewProg r) = Lsn.review r []
+mkReview (ReviewProg r ss) = Lsn.review r ss
 
 -- | Helper for making the 'Case Problem' section.
 mkCaseProb :: CaseProb -> Section
-mkCaseProb (CaseProbProg cp) = Lsn.caseProb cp []
+mkCaseProb (CaseProbProg cp ss) = Lsn.caseProb cp ss
 
 -- | Helper for making the 'Example' section.
 mkExample:: Example -> Section

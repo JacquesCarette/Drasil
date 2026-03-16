@@ -8,14 +8,15 @@ import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import qualified Drasil.DocLang.SRS as SRS
-import Data.Drasil.Citations
 import Data.Drasil.Concepts.Theory (inModel)
 import Drasil.DocumentLanguage.TraceabilityGraph ()
 
 import Drasil.BinaryStar.MetaConcepts (progName)
 import Drasil.BinaryStar.Concepts (concepts, defs)
+import Drasil.BinaryStar.LabelledContent (labelledContent, figBSS, sysCtxFig1)
+import Drasil.BinaryStar.References (citations)
 import Drasil.BinaryStar.Unitals (symbols, acronyms, inputs, outputs,
-  inConstraints, outConstraints, constants, unitalChunks)
+  inConstraints, outConstraints, constants, mass_1, mass_2)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -34,7 +35,7 @@ mkSRS = [TableOfContents,
     ],
   GSDSec $
     GSDProg
-      [ SysCntxt [],
+      [ SysCntxt [LlC sysCtxFig1],
         UsrChars [],
         SystCons [] []
         ],
@@ -42,7 +43,7 @@ mkSRS = [TableOfContents,
     SSDProg
       [ SSDProblem $ PDProg EmptyS []
       [ TermsAndDefs Nothing defs
-      , PhySysDesc progName [] figBSS []
+      , PhySysDesc progName physSystParts figBSS []
       , Goals []
       ]
       , SSDSolChSpec $ SCSProg
@@ -96,18 +97,13 @@ symbMap = withCommonKnowledge []
   symbols ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  citations ([] :: [LabelledContent])
+  citations labelledContent
 
-citations :: BibRef
-citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,
-             smithKoothoor2016]
-
-figBSS :: LabelledContent
-figBSS = llccFig "bssPhysSys" $ figWithWidth EmptyS
-  (bssResourcePath ++ "bss.png") 60
-
-bssResourcePath :: String
-bssResourcePath = "../../../../datafiles/bss/"
+physSystParts :: [Sentence]
+physSystParts = map (!.)
+  [S "The first star with mass" +:+ ch mass_1,
+   S "The second star with mass" +:+ ch mass_2,
+   S "The gravitational interaction between the two stars"]
 
 authorName :: Person
 authorName = person "Xinlu" "Yan"

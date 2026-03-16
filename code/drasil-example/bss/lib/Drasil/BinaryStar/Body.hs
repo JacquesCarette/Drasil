@@ -3,7 +3,7 @@ module Drasil.BinaryStar.Body (mkSRS, si) where
 import Drasil.System (SystemKind(Specification), mkSystem)
 import Language.Drasil
 import Drasil.SRSDocument
-import Drasil.DocLang (tunitNone)
+import Drasil.DocLang ()
 import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
@@ -14,13 +14,16 @@ import Drasil.DocumentLanguage.TraceabilityGraph ()
 
 import Drasil.BinaryStar.MetaConcepts (progName)
 import Drasil.BinaryStar.Concepts (concepts, defs)
+import Drasil.BinaryStar.Unitals (symbols, acronyms, inputs, outputs,
+  inConstraints, outConstraints, constants, unitalChunks)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $
   RefProg intro
-    [ tunitNone []
-    , tsymb []
+    [ TUnits
+    , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
+    , TAandA abbreviationsList
     ],
   IntroSec $
   IntroProg introBlurb (phrase progName)
@@ -48,8 +51,8 @@ mkSRS = [TableOfContents,
         , GDs [] [] HideDerivation
         , DDs [] [] HideDerivation
         , IMs [] [] HideDerivation
-        , Constraints EmptyS ([] :: [UncertQ])
-        , CorrSolnPpties ([] :: [UncertQ]) []
+        , Constraints EmptyS inConstraints
+        , CorrSolnPpties outConstraints []
         ]
       ],
   ReqrmntSec $ ReqsProg
@@ -75,9 +78,12 @@ si = mkSystem
   progName Specification [authorName]
   [] [] [] []
   ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef])
+  inputs outputs ([] :: [ConstrConcept]) constants
   symbMap
   []
+
+abbreviationsList :: [IdeaDict]
+abbreviationsList = map nw symbols ++ nw progName : map nw acronyms
 
 ideaDicts :: [IdeaDict]
 ideaDicts = nw progName : concepts
@@ -87,7 +93,7 @@ conceptChunks = defs
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
-  ([] :: [DefinedQuantityDict]) ideaDicts conceptChunks
+  symbols ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   citations ([] :: [LabelledContent])

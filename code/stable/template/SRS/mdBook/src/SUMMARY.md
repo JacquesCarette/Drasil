@@ -28,8 +28,6 @@
 - [Requirements](./SecRequirements.md)
   - [Functional Requirements](./SecFRs.md)
   - [Non-Functional Requirements](./SecNFRs.md)
-- [Likely Changes](./SecLCs.md)
-- [Unlikely Changes](./SecUCs.md)
 - [Traceability Matrices and Graphs](./SecTraceMatrices.md)
 - [Values of Auxiliary Constants](./SecAuxConstants.md)
 - [References](./SecReferences.md)

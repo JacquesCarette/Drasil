@@ -3,6 +3,7 @@
 module Drasil.DocumentLanguage.Core where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
+import Data.List.NonEmpty (NonEmpty)
 
 import Drasil.Database (UID)
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
@@ -209,12 +210,12 @@ data ReqsSub where
 -- ** Likely Changes Section
 
 -- | Likely Changes section.
-newtype LCsSec = LCsProg [ConceptInstance]
+newtype LCsSec = LCsProg (NonEmpty ConceptInstance)
 
 -- ** Unlikely Changes Section
 
 -- | Unlikely Changes section.
-newtype UCsSec = UCsProg [ConceptInstance]
+newtype UCsSec = UCsProg (NonEmpty ConceptInstance)
 
 -- ** Traceability Section
 

@@ -62,20 +62,20 @@ off the shelf solutions
 -- TODO: Use DLPlate for this.
 -- | Finds all possible sections and subsections to make a Table of Contents.
 toToC :: DocSection -> ItemType
-toToC TableOfContents      = mktToCSec
-toToC (RefSec rs)          = mktRefSec rs
-toToC (IntroSec i)         = mktIntroSec i
-toToC (StkhldrSec sts)     = mktStkhldrSec sts
-toToC (GSDSec gs')         = mktGSDSec gs'
-toToC (SSDSec ss)          = mktSSDSec ss
-toToC (ReqrmntSec r)       = mktReqrmntSec r
-toToC (LCsSec lc)          = mktLCsSec lc
-toToC (UCsSec ulcs)        = mktUCsSec ulcs
-toToC (TraceabilitySec t)  = mktTraceabilitySec t
-toToC (AuxConstntSec acs)  = mktAuxConsSec acs
-toToC Bibliography         = mktBib
-toToC (AppndxSec a)        = mktAppndxSec a
-toToC (OffShelfSolnsSec o) = mktOffShelfSolnSec o
+toToC TableOfContents          = mktToCSec
+toToC (RefSec rs)              = mktRefSec rs
+toToC (IntroSec i)             = mktIntroSec i
+toToC (StkhldrSec sts)         = mktStkhldrSec sts
+toToC (GSDSec gs')             = mktGSDSec gs'
+toToC (SSDSec ss)              = mktSSDSec ss
+toToC (ReqrmntSec r)           = mktReqrmntSec r
+toToC (LCsSec lc)              = mktLCsSec lc
+toToC (UCsSec ulcs)            = mktUCsSec ulcs
+toToC (TraceabilitySec t)      = mktTraceabilitySec t
+toToC (AuxConstntSec acs)      = mktAuxConsSec acs
+toToC Bibliography             = mktBib
+toToC (AppndxSec a)            = mktAppndxSec a
+toToC (OffShelfSolnsSec o)     = mktOffShelfSolnSec o
 
 mkHeaderItem :: Sentence -> [Sentence] -> ItemType
 mkHeaderItem hdr itm = Nested hdr $ Bullet $ map (\x -> (Flat x, Nothing)) itm

@@ -1,4 +1,3 @@
-{-# Language TupleSections #-}
 ---------------------------------------------------------------------------
 -- | Start the process of moving away from Document as the main internal
 -- representation of information, to something more informative.
@@ -10,6 +9,7 @@ module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy)
+import Data.List.NonEmpty (toList)
 import Data.Maybe (maybeToList, mapMaybe, fromMaybe)
 import qualified Data.Map as Map (keys)
 
@@ -63,8 +63,6 @@ import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
-import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
-
 import Drasil.Metadata.Documentation as Doc (software)
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   unlikelyChg)
@@ -180,26 +178,26 @@ mkSections :: System -> DocDesc -> Maybe BibRef -> [Section]
 mkSections si dd mbib = map doit dd
   where
     doit :: DocSection -> Section
-    doit TableOfContents      = mkToC dd
-    doit (RefSec rs)          = mkRefSec si dd rs
-    doit (IntroSec is)        = mkIntroSec si is
-    doit (StkhldrSec sts)     = mkStkhldrSec sts
-    doit (SSDSec ss)          = mkSSDSec si ss
-    doit (AuxConstntSec acs)  = mkAuxConsSec acs
-    doit Bibliography         = mkBib $ fromMaybe [] mbib
-    doit (GSDSec gs')         = mkGSDSec gs'
-    doit (ReqrmntSec r)       = mkReqrmntSec r
-    doit (LCsSec lc)          = mkLCsSec lc
-    doit (UCsSec ulcs)        = mkUCsSec ulcs
-    doit (TraceabilitySec t)  = mkTraceabilitySec t si
-    doit (AppndxSec a)        = mkAppndxSec a
-    doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
+    doit TableOfContents        = mkToC dd
+    doit (RefSec rs)            = mkRefSec si dd rs
+    doit (IntroSec is)          = mkIntroSec si is
+    doit (StkhldrSec sts)       = mkStkhldrSec sts
+    doit (SSDSec ss)            = mkSSDSec si ss
+    doit (AuxConstntSec acs)    = mkAuxConsSec acs
+    doit Bibliography           = mkBib $ fromMaybe [] mbib
+    doit (GSDSec gs')           = mkGSDSec gs'
+    doit (ReqrmntSec r)         = mkReqrmntSec r
+    doit (LCsSec lc)            = mkLCsSec lc
+    doit (UCsSec ulcs)          = mkUCsSec ulcs
+    doit (TraceabilitySec t)    = mkTraceabilitySec t si
+    doit (AppndxSec a)          = mkAppndxSec a
+    doit (OffShelfSolnsSec o)   = mkOffShelfSolnSec o
 
 -- ** Table of Contents
 
 -- | Helper for making the Table of Contents section.
 mkToC :: DocDesc -> Section
-mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothing) . toToC) dd] []
+mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map (\x -> (toToC x, Nothing)) dd] []
   where
     intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
 
@@ -344,18 +342,17 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg (introChgs Doc.likelyChg c: mkEnumSimpleD c) []
+mkLCsSec (LCsProg c) = SRS.likeChg (introChgs Doc.likelyChg : mkEnumSimpleD (toList c)) []
 
 -- ** Unlikely Changes
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs Doc.unlikelyChg  c : mkEnumSimpleD c) []
+mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs Doc.unlikelyChg : mkEnumSimpleD (toList c)) []
 
 -- | Intro paragraph for likely and unlikely changes
-introChgs :: NamedIdea n => n -> [ConceptInstance] -> Contents
-introChgs xs [] = mkParagraph $ emptySectSentPlu [xs]
-introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
+introChgs :: NamedIdea n => n -> Contents
+introChgs xs = foldlSP [S "This", phrase Doc.section_, S "lists the",
   plural xs, S "to be made to the", phrase Doc.software]
 
 -- ** Traceability

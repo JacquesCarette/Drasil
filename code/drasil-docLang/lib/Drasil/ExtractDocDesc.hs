@@ -9,6 +9,7 @@ module Drasil.ExtractDocDesc (
 import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
+import Data.List.NonEmpty (toList)
 import qualified Data.Set as S
 
 import Language.Drasil hiding (getCitations, Manual, Verb)
@@ -111,8 +112,8 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     reqSub = Constant . f <$> \case
       (FReqsSub c lcs) -> def c ++ extractSents' lcs
       (NonFReqsSub c) -> def c,
-    lcsSec = Constant . f <$> \(LCsProg c) -> def c,
-    ucsSec = Constant . f <$> \(UCsProg c) -> def c,
+    lcsSec = Constant . f <$> \(LCsProg c) -> def (toList c),
+    ucsSec = Constant . f <$> \(UCsProg c) -> def (toList c),
     traceSec = Constant . f <$> \(TraceabilityProg progs) ->
       concatMap (\(TraceConfig _ ls s _ _) -> s : ls) progs,
     auxConsSec = Constant . f <$> \(AuxConsProg _ qdef) -> def qdef

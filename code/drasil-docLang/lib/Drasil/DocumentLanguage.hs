@@ -1,4 +1,4 @@
-{-# Language TupleSections, LambdaCase #-}
+{-# Language TupleSections #-}
 ---------------------------------------------------------------------------
 -- | Start the process of moving away from Document as the main internal
 -- representation of information, to something more informative.
@@ -8,6 +8,7 @@
 module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 
 import Control.Lens ((^.), set)
+import Data.Either (rights)
 import Data.Function (on)
 import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe, isJust, fromMaybe)
@@ -31,7 +32,6 @@ import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil
 import Language.Drasil.Display (compsy)
-import Utils.Drasil (splitAtAll, mergeAll)
 
 import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent,
@@ -182,39 +182,37 @@ getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 
 -- | Helper for creating the different document sections.
 mkSections :: System -> DocDesc -> Maybe BibRef -> [Section]
-mkSections si dd mbib =
-  let
-    splitByTAandA :: [[DocSection]]
-    refSecPlans :: [DocSection]
-    (splitByTAandA, refSecPlans) = splitAtAll (\case {RefSec _ -> True; _ -> False}) dd
-
-    splitSecs :: [[Section]]
-    splitSecs = map (map doit) splitByTAandA
-
-    refSecs :: [Section]
-    refSecs = map
-      (\case {
-          RefSec rs -> mkRefSec si dd rs $ concat splitSecs;
-          _         -> error "A non-RefSec got captured in the RefSecs list!"})
-      refSecPlans
-  in
-    mergeAll splitSecs refSecs
+mkSections si dd mbib = map (either renderRefSec id) partialRender
   where
-    doit :: DocSection -> Section
-    doit TableOfContents      = mkToC dd
-    doit (RefSec _)           = error "RefSecs should have been filtered out!"
-    doit (IntroSec is)        = mkIntroSec si is
-    doit (StkhldrSec sts)     = mkStkhldrSec sts
-    doit (SSDSec ss)          = mkSSDSec si ss
-    doit (AuxConstntSec acs)  = mkAuxConsSec acs
-    doit Bibliography         = mkBib $ fromMaybe [] mbib
-    doit (GSDSec gs')         = mkGSDSec gs'
-    doit (ReqrmntSec r)       = mkReqrmntSec r
-    doit (LCsSec lc)          = mkLCsSec lc
-    doit (UCsSec ulcs)        = mkUCsSec ulcs
-    doit (TraceabilitySec t)  = mkTraceabilitySec t si
-    doit (AppndxSec a)        = mkAppndxSec a
-    doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
+    delayRenderRefSec :: DocSection -> Either RefSec Section
+    delayRenderRefSec (RefSec rs) = Left rs
+    delayRenderRefSec x           = Right (render x)
+
+    partialRender :: [Either RefSec Section]
+    partialRender = map delayRenderRefSec dd
+
+    nonRefSecs :: [Section]
+    nonRefSecs = rights partialRender
+
+    renderRefSec :: RefSec -> Section
+    renderRefSec rs = mkRefSec si dd rs nonRefSecs
+
+    render :: DocSection -> Section
+    render TableOfContents      = mkToC dd
+    render (IntroSec is)        = mkIntroSec si is
+    render (StkhldrSec sts)     = mkStkhldrSec sts
+    render (SSDSec ss)          = mkSSDSec si ss
+    render (AuxConstntSec acs)  = mkAuxConsSec acs
+    render Bibliography         = mkBib $ fromMaybe [] mbib
+    render (GSDSec gs')         = mkGSDSec gs'
+    render (ReqrmntSec r)       = mkReqrmntSec r
+    render (LCsSec lc)          = mkLCsSec lc
+    render (UCsSec ulcs)        = mkUCsSec ulcs
+    render (TraceabilitySec t)  = mkTraceabilitySec t si
+    render (AppndxSec a)        = mkAppndxSec a
+    render (OffShelfSolnsSec o) = mkOffShelfSolnSec o
+    render (RefSec _)           = error
+      "mkSections passed `render` a `RefSec` in partial-render phase!"
 
 -- ** Table of Contents
 

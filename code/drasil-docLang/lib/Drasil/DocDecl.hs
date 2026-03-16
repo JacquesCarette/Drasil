@@ -113,11 +113,13 @@ mkDocDesc sys@SI{_systemdb = db} = map sec where
   sec (GSDSec g) = DL.GSDSec g
   sec (SSDSec (SSDProg s)) = DL.SSDSec $ DL.SSDProg $ map ssdSec s
   sec (ReqrmntSec (ReqsProg r)) = DL.ReqrmntSec $ DL.ReqsProg $ map reqSec r
+  -- sec LCsSec = DL.LCsSec $ DL.LCsProg $ fromConcInsDB likeChgDom
   sec LCsSec = case fromConcInsDB likeChgDom of
-    [] -> error "Missing likely changes"
+    [] -> error "LCsSec was included in the SRS declaration but no likely changes were defined"
     xs -> DL.LCsSec $ DL.LCsProg $ fromList xs
+  -- sec UCsSec = DL.UCsSec $ DL.UCsProg $ fromConcInsDB unlikeChgDom
   sec UCsSec = case fromConcInsDB unlikeChgDom of
-    [] -> error "Missing unlikely changes"
+    [] -> error "UCsSec was included in the SRS declaration but no unlikely changes were defined"
     xs -> DL.UCsSec $ DL.UCsProg $ fromList xs
   sec (TraceabilitySec t) = DL.TraceabilitySec t
   sec (AuxConstntSec a) = DL.AuxConstntSec a

@@ -13,6 +13,7 @@ import Data.Drasil.Concepts.Theory (inModel)
 import Drasil.DocumentLanguage.TraceabilityGraph ()
 
 import Drasil.BinaryStar.MetaConcepts (progName)
+import Drasil.BinaryStar.Concepts (concepts, defs)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -37,7 +38,7 @@ mkSRS = [TableOfContents,
   SSDSec $
     SSDProg
       [ SSDProblem $ PDProg EmptyS []
-      [ TermsAndDefs Nothing ([] :: [ConceptChunk])
+      [ TermsAndDefs Nothing defs
       , PhySysDesc progName [] figBSS []
       , Goals []
       ]
@@ -79,11 +80,10 @@ si = mkSystem
   []
 
 ideaDicts :: [IdeaDict]
-ideaDicts =
-  [nw progName]
+ideaDicts = nw progName : concepts
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = [] :: [ConceptChunk]
+conceptChunks = defs
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []

@@ -27,8 +27,11 @@ symbols:: [DefinedQuantityDict]
 symbols = map dqdWr unitalChunks ++ [dqdWr pendDisAngle] ++ map dqdWr constants
 
 acronyms :: [CI]
-acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, refBy, refName, srs, thModel, typUnc, ode]
+acronyms = ode : sharedAcronyms
+
+sharedAcronyms :: [CI]
+sharedAcronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
+  physSyst, requirement, refBy, refName, srs, thModel, typUnc]
 
 inputs :: [DefinedQuantityDict]
 inputs = map dqdWr [lenRod_1, lenRod_2, massObj_1, massObj_2]

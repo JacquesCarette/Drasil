@@ -17,6 +17,9 @@ import Drasil.BinaryStar.LabelledContent (labelledContent, figBSS, sysCtxFig1)
 import Drasil.BinaryStar.References (citations)
 import Drasil.BinaryStar.Unitals (symbols, acronyms, inputs, outputs,
   inConstraints, outConstraints, constants, mass_1, mass_2)
+import Drasil.BinaryStar.Assumptions (assumptions)
+import Drasil.BinaryStar.Goals (goals, goalsInputs)
+import Drasil.BinaryStar.Requirements (funcReqs, funcReqsTables, nonFuncReqs)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -44,7 +47,7 @@ mkSRS = [TableOfContents,
       [ SSDProblem $ PDProg EmptyS []
       [ TermsAndDefs Nothing defs
       , PhySysDesc progName physSystParts figBSS []
-      , Goals []
+      , Goals goalsInputs
       ]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -58,7 +61,7 @@ mkSRS = [TableOfContents,
       ],
   ReqrmntSec $ ReqsProg
     [
-       FReqsSub []
+       FReqsSub funcReqsTables
      , NonFReqsSub
     ],
   LCsSec,
@@ -96,8 +99,11 @@ symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
   symbols ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  citations labelledContent
+  ([] :: [GenDefn]) ([] :: [TheoryModel]) concIns
+  citations (labelledContent ++ funcReqsTables)
+
+concIns :: [ConceptInstance]
+concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 
 physSystParts :: [Sentence]
 physSystParts = map (!.)

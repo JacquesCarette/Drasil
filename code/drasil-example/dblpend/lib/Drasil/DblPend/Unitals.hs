@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, time)
 import Data.Drasil.Concepts.Physics (twoD)
-import Data.Drasil.Concepts.Math as CM (angle, xDir, yDir)
+import Data.Drasil.Concepts.Math as CM (angle, xDir, yDir, ode)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
@@ -28,7 +28,7 @@ symbols = map dqdWr unitalChunks ++ [dqdWr pendDisAngle] ++ map dqdWr constants
 
 acronyms :: [CI]
 acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, refBy, refName, srs, thModel, typUnc]
+  physSyst, requirement, refBy, refName, srs, thModel, typUnc, ode]
 
 inputs :: [DefinedQuantityDict]
 inputs = map dqdWr [lenRod_1, lenRod_2, massObj_1, massObj_2]

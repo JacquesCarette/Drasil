@@ -143,50 +143,12 @@ eqnRefs :: [Reference]
 
 module Drasil.Projectile.Lesson.Review
 reviewContent :: [Contents]
-reviewHead :: Contents
-reviewContextP1 :: Contents
-reviewEqns :: Contents
-reviewContextP2 :: Contents
+reviewSecs :: [Section]
 
 module Drasil.Projectile.Lesson.CaseProb
 caseProbCont :: [Contents]
-projMotionHead :: Contents
-horMotionHead :: Contents
-verMotionHead :: Contents
-summaryHead :: Contents
-motionContextP1 :: Contents
-motionContextP2 :: Contents
-hMintro :: Contents
-hMconcl :: Contents
-vMintro :: Contents
-vMconcl :: Contents
-summary :: Contents
-procforAnls :: Contents
-procforAnlsHead :: Contents
-stepOneHead :: Contents
-stepTwoHead :: Contents
-stepThreeHead :: Contents
-stepFourHead :: Contents
-stepFourOneHead :: Contents
-stepFourTwoHead :: Contents
-stepFiveHead :: Contents
-stepOneCont :: Contents
-stepTwoCont :: Contents
-stepThreeCont :: Contents
-stepFourCont :: Contents
-horizMotionEqn1 :: Contents
-horizMotionEqn1Sent :: Contents
-horizMotionEqn2 :: Contents
-horizMotionEqn3 :: Contents
-vertMotionEqn1 :: Contents
-vertMotionEqn2 :: Contents
-vertMotionEqn3 :: Contents
-verMotionCont :: Contents
-stepFiveCont :: Contents
-motionSent :: Sentence
+caseProbSecs :: [Section]
 figRefs :: [Reference]
-foot :: UnitDefn
-accelinftU :: UnitDefn
 
 module Drasil.Projectile.Lesson.Body
 nbDecl :: LsnDesc

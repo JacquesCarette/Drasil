@@ -124,7 +124,7 @@ abbreviationsList =
   -- DefinedQuantityDict abbreviations
   map nw symbols ++
   -- Other acronyms/abbreviations
-  nw progName : map nw acronyms
+  map nw acronyms
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

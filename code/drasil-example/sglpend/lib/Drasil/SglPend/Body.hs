@@ -115,7 +115,7 @@ conceptChunks =
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
   -- CIs
-  nw progName : map nw acronyms ++
+  map nw acronyms ++
   -- QuantityDicts
   map nw symbols
 

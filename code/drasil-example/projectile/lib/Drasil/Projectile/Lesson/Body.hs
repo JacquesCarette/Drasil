@@ -22,15 +22,15 @@ import Drasil.Projectile.Concepts (concepts)
 import Drasil.Projectile.Expressions (eqnRefs)
 
 import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
-import Drasil.Projectile.Lesson.Review (reviewContent)
-import Drasil.Projectile.Lesson.CaseProb (caseProbCont, figRefs)
+import Drasil.Projectile.Lesson.Review (reviewContent, reviewSecs)
+import Drasil.Projectile.Lesson.CaseProb (caseProbCont, caseProbSecs, figRefs)
 import Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo)
 
 nbDecl :: LsnDesc
 nbDecl = [
     LearnObj $ LrnObjProg [learnObjContext],
-    Review $ ReviewProg reviewContent [],
-    CaseProb $ CaseProbProg caseProbCont [],
+    Review $ ReviewProg reviewContent reviewSecs,
+    CaseProb $ CaseProbProg caseProbCont caseProbSecs,
     Example $ ExampleProg exampleContent,
     BibSec
   ]

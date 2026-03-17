@@ -12,7 +12,6 @@
 |GD          |General Definition                 |
 |GS          |Goal Statement                     |
 |GTF         |Glass Type Factor                  |
-|GlassBR     |GlassBR                            |
 |HS          |Heat Strengthened                  |
 |IG          |Insulating Glass                   |
 |IM          |Instance Model                     |

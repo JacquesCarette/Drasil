@@ -10,7 +10,6 @@
 |DD          |Data Definition                    |
 |GD          |General Definition                 |
 |GS          |Goal Statement                     |
-|GamePhysics |GamePhysics                        |
 |IM          |Instance Model                     |
 |LC          |Likely Change                      |
 |ODE         |Ordinary Differential Equation     |

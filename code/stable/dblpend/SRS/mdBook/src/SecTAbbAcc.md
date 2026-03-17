@@ -7,7 +7,6 @@
 |2D          |Two-Dimensional                    |
 |A           |Assumption                         |
 |DD          |Data Definition                    |
-|DblPend     |Double Pendulum                    |
 |GD          |General Definition                 |
 |GS          |Goal Statement                     |
 |IM          |Instance Model                     |

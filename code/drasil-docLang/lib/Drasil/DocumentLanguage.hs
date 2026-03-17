@@ -10,7 +10,7 @@ module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 import Control.Lens ((^.), set)
 import Data.Either (rights)
 import Data.Function (on)
-import Data.List (nub, sortBy)
+import Data.List (nub, sortBy, (\\))
 import Data.Maybe (maybeToList, mapMaybe, isJust, fromMaybe)
 import qualified Data.Map as Map (keys)
 import qualified Data.Set as Set
@@ -243,13 +243,13 @@ mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
 
-    mkSubRef SI {_systemdb = cdb} TAandA =
+    mkSubRef s@SI {_systemdb = cdb} TAandA =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations renderedSecs cdb]
+        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations s renderedSecs cdb]
         []
 
-collectDocumentAbbreviations :: [Section] -> ChunkDB -> [TermAbbr]
-collectDocumentAbbreviations renderedSecs cdb =
+collectDocumentAbbreviations :: System -> [Section] -> ChunkDB -> [TermAbbr]
+collectDocumentAbbreviations s renderedSecs cdb =
   filter (isJust . shortForm) allTerms
   where
     -- Terms found in the document using the list of `Sentence`s extracted from
@@ -259,7 +259,9 @@ collectDocumentAbbreviations renderedSecs cdb =
     -- include in the table of abbreviations and acronyms.
     missingFromDocHACK = map (^. uid) [assumption, dataDefn, genDefn, goalStmt,
       inModel, requirement, thModel, refName, refBy]
-    allTerms = map (termResolve' cdb) $ nub (foundInDoc ++ missingFromDocHACK)
+    -- Filter out the system name and duplicates
+    filtered = nub (foundInDoc ++ missingFromDocHACK) \\ [s ^. sysName . uid]
+    allTerms = map (termResolve' cdb) filtered
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>

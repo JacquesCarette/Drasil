@@ -43,20 +43,62 @@
 
 \titlepage
 
+% Thank Dr. Torngren (TURNgren) for invitation to join research meeting and the opportunity to speak
+% Talk is about work in progress; I welcome feedback and discussion
+% I will talk about Drasil, a generative framework for scientific software, and how we are working to add assurance case generation to Drasil
+% scope is scientific computing software, but ideas would work for any well-understood software
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 \begin{frame}
 
+\frametitle{Favorite Thing About Stockholm -- Fika!}
+
+% \begin{enumerate}
+% \item Public transportation
+% \item Safe feeling walking around the city
+% \item Great dinners (\href{https://paganini.nu/} {Ristorante Paganini}, \href{https://www.krogguiden.se/restauranger/view/xiang-yue} {Xiang Yue}, \href{https://www.supper.nu/stockholm} {Supper})
+% \item \href{https://tgt11.com/en/index.html?utm_source=google&utm_medium=cpc&utm_campaign=22020607672&gad_source=1&gad_campaignid=22016779082&gbraid=0AAAAADnuKU0qzms4rEx0ePOePCmMBK7kr&gclid=CjwKCAjwjtTNBhB0EiwAuswYhgdKEJiRTKsTD3MZyS_3rStQXaU3w5i6YGRWompmLwPLk6adt5hnYhoCgRYQAvD_BwE} {TGT11} (guitar store)
+% \item Museums (Vasa, ABBA, Royal Palace, ...)
+% \item Fika!
+% \end{enumerate}
+
+\includegraphics[width=1.0\textwidth]{./figures/Fika.pdf}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
 \frametitle{Toward a Generative Framework for Safe Scientific Software}
 
+\begin{enumerate}
+\item Drasil -- a gen framework for well-understood software
+\item AC for computational medicine
+\item Adding ACs to Drasil (work in progress)
 \begin{itemize}
-\item \textbf{Goal} -- Improve quality of SCS
+  \item Additional knowledge
+  \item Additional infrastructure
+\end{itemize}
+\end{enumerate}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{A Generative Framework for Scientific Software}
+
+\begin{itemize}
+\item \textbf{Goal} -- Improve qualities (e.g., safety, reliability, maintainability) of SS
 \item \textbf{Idea}
   \begin{itemize}
   \item Adapt ideas from SE
-  \item Document requirements, design, verification, etc.
+  \item Document requirements, design, verification, AC, etc.
     \begin{itemize}
     \item Good -- improves quality
     \item Bad -- too much work, inevitable change, too hard to maintain
@@ -319,13 +361,13 @@ tolStrDisFacEq = ln (ln (recip_ (exactDbl 1 $- sy pbTol))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
+% \begin{frame}
 
-%\frametitle{Input Knowledge}
+% %\frametitle{Input Knowledge}
 
-\includegraphics[width=0.95\textwidth]{./figures/DrasilInputs.pdf}
+% \includegraphics[width=0.95\textwidth]{./figures/DrasilInputs.pdf}
 
-\end{frame}
+% \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -339,16 +381,17 @@ tolStrDisFacEq = ln (ln (recip_ (exactDbl 1 $- sy pbTol))
 
 \begin{frame}
 
-\frametitle{Improve Software Qualities}
+\frametitle{What Drasil Can Currently Do}
 
 \begin{itemize}
-\item Capture best practices
-\item Explore alternatives  
-\item Traceability
-\item Reproducibility
-\item Sustainability  
-\item Certifiability
-\item Reusability
+  \item Explicit relations, LHS = ...
+  \item Systems of higher-order ODEs
+  \item Knowledge on rigid body mechanics, heat transfer
+  \item SRS (LaTeX, html, MD books)
+  \item Code (Python, C++, C sharp, Java, Swift), Jupyter notebooks
+  \item README files, Makefile
+  \item Doxygen comments
+  \item Infrastructure for knowledge about people
 \end{itemize}
 
 \end{frame}
@@ -357,29 +400,193 @@ tolStrDisFacEq = ln (ln (recip_ (exactDbl 1 $- sy pbTol))
 
 \begin{frame}
 
+\frametitle{Advantages of AC Generation}
+
+\begin{itemize}
+  \item Build AC and software together
+  \item Facilitates change
+  \item Traceability
+  \item Reuse of common knowledge
+  \item Design space exploration
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\hoffset=-.4in
+\begin{frame}[plain, fragile]
+
+\frametitle{AC Example for Computational Medicine}
+
+\begin{center}
+\includegraphics[scale=0.27]{./figures/AGR_Screenshot.pdf}
+\end{center}
+% how determine how to invest time - what is required
+\end{frame}
+%\hoffset=0in
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\hoffset=-.3in
+\begin{frame}[plain, fragile]
+
+%\frametitle{Top Level Argument}
+
+\begin{center}
+\includegraphics[scale=0.2]{./figures/Top_Level.png}
+\end{center}
+% argument for SRS - need to know that model is valid
+% argument for code - need to know that code matches the model
+% central role of assumptions, scope decisions, modelling decisions
+% generation of testing code
+\end{frame}
+%\hoffset=0in
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% %\hoffset=-.68in
+% \begin{frame}[plain, fragile]
+
+% %\frametitle{Evidence}
+
+% %\begin{center}
+% %\hspace{-0.7in}
+% \includegraphics[scale=0.21]{./figures/GSN_GI.png}
+% %\end{center}
+
+% %\citep{SmithAndLin2024_arXiv}
+% \end{frame}
+% %\hoffset=0in
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Required Additions to Drasil for ACs}
+
+\begin{itemize}
+  \item Additional Knowledge
+  \begin{itemize}
+    \item Generation of GSN diagrams
+    \item Reviewer reports
+    \item Test case generation
+  \end{itemize}
+  \item Additional infrastructure
+  \begin{itemize}
+    \item Rationale/evidence for decisions and assumptions
+    \item Theories and theory refinement
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Projectile Motion Example}
+
+\hspace{-0.5in}
+\includegraphics[scale=0.6]{./figures/Launch.jpg}
+~\\
+\href{https://github.com/smiths/caseStudies/blob/master/CaseStudies/projectile/projectileSRS_RefinedTheories/Projectile_SRS.pdf} {(WIP) SRS.pdf}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[allowframebreaks]
+
+\frametitle{Validity of Model}
+%comment on rationale
+\begin{itemize}
+\item Scope Decisions
+\begin{itemize}
+  \item Orientation of projectile ignored
+  \item Only kinematic equations (no forces)
+\end{itemize}
+\item Modelling Decisions
+\begin{itemize}
+  \item Cartesian coordinate system
+  \item $y$ axis opposite to gravity
+  \item Launcher at origin
+  \item Target on $x$ axis
+  \item Positive $x$ direction from launcher to target
+  \item Time starts at zero
+  \item Launch velocity is positive
+  \item Magnitude and angle rep.\ for initial velocity
+\end{itemize}
+\item Data constraints
+\begin{itemize}
+  \item Inputs
+  \begin{itemize}
+  \item $p_\text{target} > 0$
+  \item $v_\text{launch} > 0$
+  \item $0 < \theta < \frac{\pi}{2}$ 
+  \item 
+  \end{itemize}
+  \item Outputs
+  \begin{itemize}
+  \item $p_\text{land} > 0$
+  \item $d_\text{offset} > -p_\text{target}$
+  \item $t_\text{flight} > 0$
+  \end{itemize}
+\end{itemize}
+
+\item Helper Assumptions
+\begin{itemize}
+  \item The motion of the particle is one dimensional
+  \item The acceleration is constant
+\end{itemize}
+\item Generic Assumptions
+\begin{itemize}
+  \item The variables only depend on two dimensions
+  \item The acceleration is constant in the $x$ direction
+  \item The acceleration is constant in the $y$ direction
+  \item The acceleration is due to gravity
+\end{itemize}
+\item Projectile Specific Assumptions
+\begin{itemize}
+  \item The acceleration in the $x$-direction is zero
+  \item The constant acceleration in the $y$-direction is due to gravity
+  \item The constant acceleration in the $y$-direction is $-9.8$ m/s$^2$
+  \item There are no obstructions to impede the projectile's motion
+  \item The surface of the planet is flat (no curvature)
+\end{itemize}
+\item Rationale Assumptions
+\begin{itemize}
+  \item Only care about the motion of the centre of mass of the projectile
+  \item Distance is small enough that curvature can be neglected
+  \item Air drag is neglected
+  \item The rotation of the planet is neglected
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
 \frametitle{Concluding Remarks}
 
 \begin{itemize}
-\item What Drasil can currently do
-  \begin{itemize}
-  \item Explicit relations, LHS = ...
-  \item Linear first order ODEs
-  \item Knowledge on rigid body mechanics, heat transfer
-  \item SRS (LaTeX, html), code (Python, C++, C sharp, Java, Swift), README, Makefile
-  \end{itemize}
-\item Future additions
-  \begin{itemize}
-  \item More scientific knowledge: medical imaging, chemistry, more mechanics,
-    etc.
-  \item More computational knowledge: external libraries, linear systems
-    solvers, higher order ODEs, root finding, etc.
-  \item More document knowledge: Teaching lessons, academic papers, assurance
-    cases, etc.
-%  \item Sequences 
-  \item Jupyter notebooks
-  \item \href{https://github.com/JacquesCarette/Drasil/issues} {GitHub Issues}
-  \end{itemize}
-
+\item Generate assurance cases for models, numerical algorithms and code implementation
+\item Add ACs to Drasil
+\item Modelling decisions/assumptions
+\begin{itemize}
+  \item Scope decisions
+  \item Modelling decisions
+  \item Data constraints
+  \item Assumptions
+\end{itemize}
+\item Justify model via an AC
+\begin{itemize}
+  \item Rationale
+  \item Evidence (possibly via generation of test cases)
+\end{itemize}
+\item Justify numerical algorithm via an AC
+\item Little theories, theory refinement
+\item Propagation of modelling decisions/assumptions through theories
+\item Measure and regenerate
 \end{itemize}
 
 \end{frame}

@@ -57,8 +57,8 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, learnObj, mg, mis, notebook, physSyst, requirement, srs, thModel, typUnc,
-  unlikelyChg]
+  likelyChg, learnObj, mg, mis, notebook, physSyst, refBy, requirement, srs,
+  thModel, typUnc, unlikelyChg]
 
 assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst,
   mg, mis, typUnc, sec, refBy, refName,
@@ -344,4 +344,3 @@ refNameDom    = ccs (mkIdea "refNameDom"    (refName ^. term)                  $
 srsDomains :: [ConceptChunk]
 srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom,
   assumpDom, chgProbDom, likeChgDom, unlikeChgDom, refByDom, refNameDom]
-

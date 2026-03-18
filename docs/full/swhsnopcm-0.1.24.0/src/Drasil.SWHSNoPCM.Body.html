@@ -658,12 +658,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-170"></span><span id="abbreviationsList"><span class="annot"><span class="annottext">abbreviationsList :: [IdeaDict]
 </span><a href="Drasil.SWHSNoPCM.Body.html#abbreviationsList"><span class="hs-identifier hs-var hs-var">abbreviationsList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-171"></span><span>  </span><span class="hs-comment">-- CIs</span><span>
-</span><span id="line-172"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
-forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="Drasil.SWHSNoPCM.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; [IdeaDict] -&gt; [IdeaDict]
-forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(CI -&gt; IdeaDict) -&gt; [CI] -&gt; [IdeaDict]
+</span><span id="line-172"></span><span>  </span><span class="annot"><span class="annottext">(CI -&gt; IdeaDict) -&gt; [CI] -&gt; [IdeaDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
@@ -711,11 +706,11 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-187"></span><span>
 </span><span id="line-188"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Body.html#introEnd"><span class="hs-identifier hs-type">introEnd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-189"></span><span id="introEnd"><span class="annot"><span class="annottext">introEnd :: Sentence -&gt; CI -&gt; Sentence
-</span><a href="Drasil.SWHSNoPCM.Body.html#introEnd"><span class="hs-identifier hs-var hs-var">introEnd</span></a></span></span><span> </span><span id="local-6989586621679072072"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679072072"><span class="hs-identifier hs-var">progSent</span></a></span></span><span> </span><span id="local-6989586621679072073"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679072073"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.SWHSNoPCM.Body.html#introEnd"><span class="hs-identifier hs-var hs-var">introEnd</span></a></span></span><span> </span><span id="local-6989586621679072066"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679072066"><span class="hs-identifier hs-var">progSent</span></a></span></span><span> </span><span id="local-6989586621679072067"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679072067"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679072072"><span class="hs-identifier hs-var">progSent</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679072066"><span class="hs-identifier hs-var">progSent</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The developed program&quot;</span></span><span class="hs-special">,</span><span>
@@ -724,11 +719,11 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-string">&quot;will be referred to as&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679072073"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="#local-6989586621679072067"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679072073"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679072067"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-191"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;based on the original&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence

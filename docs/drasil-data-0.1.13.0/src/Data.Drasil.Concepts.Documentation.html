@@ -261,11 +261,12 @@
 </span><a href="Data.Drasil.Concepts.Documentation.html#mis"><span class="hs-identifier hs-var">mis</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">notebook</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#physSyst"><span class="hs-identifier hs-var">physSyst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Data.Drasil.Concepts.Documentation.html#refBy"><span class="hs-identifier hs-var">refBy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#requirement"><span class="hs-identifier hs-var">requirement</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="Data.Drasil.Concepts.Documentation.html#srs"><span class="hs-identifier hs-var">srs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="Data.Drasil.Concepts.Documentation.html#typUnc"><span class="hs-identifier hs-var">typUnc</span></a></span><span class="hs-special">,</span><span>
+</span><a href="Data.Drasil.Concepts.Documentation.html#srs"><span class="hs-identifier hs-var">srs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-61"></span><span>  </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Data.Drasil.Concepts.Documentation.html#typUnc"><span class="hs-identifier hs-var">typUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#unlikelyChg"><span class="hs-identifier hs-var">unlikelyChg</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-62"></span><span>
 </span><span id="line-63"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#assumption"><span class="hs-identifier hs-type">assumption</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#desSpec"><span class="hs-identifier hs-type">desSpec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#goalStmt"><span class="hs-identifier hs-type">goalStmt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#dataConst"><span class="hs-identifier hs-type">dataConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#likelyChg"><span class="hs-identifier hs-type">likelyChg</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#learnObj"><span class="hs-identifier hs-type">learnObj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#unlikelyChg"><span class="hs-identifier hs-type">unlikelyChg</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#physSyst"><span class="hs-identifier hs-type">physSyst</span></a></span><span class="hs-special">,</span><span>
@@ -1365,20 +1366,20 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d.
 (NamedIdea c, NamedIdea d) =&gt;
 (c -&gt; NPStruct) -&gt; (d -&gt; NPStruct) -&gt; c -&gt; d -&gt; NP
-</span><span class="hs-identifier hs-var">and_TGen</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679054078"><span class="annot"><span class="annottext">IdeaDict
-</span><a href="#local-6989586621679054078"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+</span><span class="hs-identifier hs-var">and_TGen</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679054079"><span class="annot"><span class="annottext">IdeaDict
+</span><a href="#local-6989586621679054079"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">NP -&gt; NPStruct
 forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">titleizeNP'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
-</span><a href="#local-6989586621679054078"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Getting NP IdeaDict NP -&gt; NP
+</span><a href="#local-6989586621679054079"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Getting NP IdeaDict NP -&gt; NP
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP IdeaDict NP
 forall c. NamedIdea c =&gt; Lens' c NP
 Lens' IdeaDict NP
-</span><span class="hs-identifier hs-var">term</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679054081"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679054081"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">NP -&gt; NPStruct
+</span><span class="hs-identifier hs-var">term</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679054082"><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679054082"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">NP -&gt; NPStruct
 forall n. NounPhrase n =&gt; n -&gt; NPStruct
 </span><span class="hs-identifier hs-var">titleizeNP'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679054081"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Getting NP ConceptChunk NP -&gt; NP
+</span><a href="#local-6989586621679054082"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Getting NP ConceptChunk NP -&gt; NP
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP ConceptChunk NP
 forall c. NamedIdea c =&gt; Lens' c NP
@@ -1397,8 +1398,8 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span id="line-270"></span><span>
 </span><span id="line-271"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#scpOfTheProj"><span class="hs-identifier hs-type">scpOfTheProj</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NPStruct</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
 </span><span id="line-272"></span><span id="scpOfTheProj"><span class="annot"><span class="annottext">scpOfTheProj :: (IdeaDict -&gt; NPStruct) -&gt; IdeaDict
-</span><a href="Data.Drasil.Concepts.Documentation.html#scpOfTheProj"><span class="hs-identifier hs-var hs-var">scpOfTheProj</span></a></span></span><span> </span><span id="local-6989586621679054083"><span class="annot"><span class="annottext">IdeaDict -&gt; NPStruct
-</span><a href="#local-6989586621679054083"><span class="hs-identifier hs-var">oper</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
+</span><a href="Data.Drasil.Concepts.Documentation.html#scpOfTheProj"><span class="hs-identifier hs-var hs-var">scpOfTheProj</span></a></span></span><span> </span><span id="local-6989586621679054084"><span class="annot"><span class="annottext">IdeaDict -&gt; NPStruct
+</span><a href="#local-6989586621679054084"><span class="hs-identifier hs-var">oper</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;scpOfTheProj&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#scope"><span class="hs-identifier hs-var">scope</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; NP -&gt; NP
@@ -1406,7 +1407,7 @@ forall c. NamedIdea c =&gt; c -&gt; NP -&gt; NP
 </span><span class="hs-operator hs-var">`of_NINP`</span></span><span> </span><span class="annot"><span class="annottext">(IdeaDict -&gt; NPStruct) -&gt; IdeaDict -&gt; NP
 forall t. (t -&gt; NPStruct) -&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">theGen</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; NPStruct
-</span><a href="#local-6989586621679054083"><span class="hs-identifier hs-var">oper</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
+</span><a href="#local-6989586621679054084"><span class="hs-identifier hs-var">oper</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#project"><span class="hs-identifier hs-var">project</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- reasonable hack?</span><span>
 </span><span id="line-273"></span><span>
 </span><span id="line-274"></span><span class="annot"><span class="hs-comment">-- ** Compound Chunks</span></span><span>
@@ -1875,5 +1876,4 @@ forall c. Concept c =&gt; c -&gt; ConceptChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#unlikeChgDom"><span class="hs-identifier hs-var">unlikeChgDom</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#refByDom"><span class="hs-identifier hs-var">refByDom</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#refNameDom"><span class="hs-identifier hs-var">refNameDom</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-347"></span><span>
-</span><span id="line-348"></span></pre></body></html>
+</span><span id="line-347"></span></pre></body></html>

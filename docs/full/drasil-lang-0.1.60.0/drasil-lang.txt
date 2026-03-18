@@ -3287,6 +3287,9 @@ short :: Idea c => c -> Sentence
 -- | Introduce a noun phrase and its (parenthesized) abbreviation.
 introduceAbb :: Idea n => n -> Sentence
 
+-- | Introduce a plural noun phrase and its (parenthesized) abbreviation.
+introduceAbbPlrl :: Idea n => n -> Sentence
+
 
 -- | Developing the expression language in Drasil. Re-export many things to
 --   simplify external use.
@@ -7253,6 +7256,9 @@ nounPhraseSent :: NPStruct -> NP
 
 -- | Introduce a noun phrase and its (parenthesized) abbreviation.
 introduceAbb :: Idea n => n -> Sentence
+
+-- | Introduce a plural noun phrase and its (parenthesized) abbreviation.
+introduceAbbPlrl :: Idea n => n -> Sentence
 
 -- | Helper for getting the phrase from a <a>NamedIdea</a> using it's UID.
 phrase :: NamedIdea n => n -> Sentence

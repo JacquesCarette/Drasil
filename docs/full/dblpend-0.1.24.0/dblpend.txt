@@ -60,6 +60,7 @@ smithKoothoor2016 :: Citation
 module Drasil.DblPend.Unitals
 symbols :: [DefinedQuantityDict]
 acronyms :: [CI]
+sharedAcronyms :: [CI]
 inputs :: [DefinedQuantityDict]
 outputs :: [DefinedQuantityDict]
 constants :: [ConstQDef]

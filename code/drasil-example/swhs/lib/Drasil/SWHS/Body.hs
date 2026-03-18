@@ -489,7 +489,7 @@ propsDeriv = [
   propCorSolDeriv4,
   propCorSolDeriv5 equation progName rightSide]
 
-propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk ->
+propCorSolDeriv1 :: (Idea b, Idea h) => ConceptChunk -> b -> UnitalChunk ->
   ConceptChunk -> CI -> GenDefn -> GenDefn -> h -> ConceptChunk -> Contents
 propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht =
   foldlSPCol [D.toSent (atStartNP (a_ corSol)), S "must exhibit" +:+.
@@ -511,7 +511,7 @@ propCorSolDeriv2 = unlbldExpr
   (sy pcmHTC $* sy pcmSA $* (apply1 tempW time $-
   apply1 tempPCM time)))
 
-propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
+propCorSolDeriv3 :: Idea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
 propCorSolDeriv3 epcm en pcmat wa =
   foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
   phrase en, phrase input_ `S.toThe` short pcmat,

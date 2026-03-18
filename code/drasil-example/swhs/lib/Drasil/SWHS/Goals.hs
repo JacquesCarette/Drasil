@@ -27,6 +27,6 @@ pcmEnergyGS :: ConceptInstance
 pcmEnergyGS = cic "pcmEnergyGS" (goalState pcmE) "Predict-PCM-Energy"
   goalStmtDom
 
-goalState :: NamedIdea varTerm => varTerm -> Sentence
+goalState :: Idea varTerm => varTerm -> Sentence
 goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
   S "over", phrase time]

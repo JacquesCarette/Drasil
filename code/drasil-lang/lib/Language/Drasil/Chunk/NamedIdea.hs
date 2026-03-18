@@ -14,10 +14,11 @@ import Control.Lens ((^.), makeLenses, Lens')
 import Drasil.Database (mkUid, UID, HasUID(..), declareHasChunkRefs,
   Generically(..), IsChunk)
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
+import Data.Typeable (Typeable)
 
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as being worthy
 -- of naming.
-class IsChunk c => NamedIdea c where
+class (Typeable c, IsChunk c) => NamedIdea c where
   -- | Lens to the term (a noun phrase).
   term :: Lens' c NP
 

@@ -37,6 +37,7 @@ import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.WellTyped (RequiresChecking(..))
+import Data.Typeable (Typeable)
 
 data QDefinition e where
   QD :: DefinedQuantityDict -> [UID] -> e -> QDefinition e
@@ -58,13 +59,13 @@ instance HasChunkRefs (QDefinition e) where
   {-# INLINABLE chunkRefs #-}
 
 instance HasUID          (QDefinition e) where uid = qdQua . uid
-instance NamedIdea       (QDefinition e) where term = qdQua . term
-instance Idea            (QDefinition e) where getA = getA . (^. qdQua)
+instance Typeable e => NamedIdea       (QDefinition e) where term = qdQua . term
+instance Typeable e => Idea            (QDefinition e) where getA = getA . (^. qdQua)
 instance DefinesQuantity (QDefinition e) where defLhs = qdQua . to dqdWr
 instance HasSpace        (QDefinition e) where typ = qdQua . typ
 instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qdQua)
 instance Definition      (QDefinition e) where defn = qdQua . defn
-instance Quantity        (QDefinition e) where
+instance Typeable e => Quantity        (QDefinition e) where
 instance Eq              (QDefinition e) where a == b = a ^. uid == b ^. uid
 instance MayHaveUnit     (QDefinition e) where getUnit = getUnit . view qdQua
 instance DefiningExpr     QDefinition    where defnExpr = qdExpr

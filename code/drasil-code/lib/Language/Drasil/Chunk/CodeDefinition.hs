@@ -4,6 +4,7 @@ module Language.Drasil.Chunk.CodeDefinition (
 ) where
 
 import Control.Lens ((^.), makeLenses, view)
+import Data.Typeable (Typeable)
 
 import Drasil.Database (HasUID(..), HasChunkRefs(..))
 import Language.Drasil
@@ -68,7 +69,7 @@ qtoc :: (Quantity (q Expr), MayHaveUnit (q Expr), DefiningExpr q, Concept (q Exp
 qtoc q = CD (codeChunk $ quantfunc q) (expr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a variable.
-qtov :: CanGenCode e => QDefinition e -> CodeDefinition
+qtov :: (Typeable e, CanGenCode e) => QDefinition e -> CodeDefinition
 qtov q = CD (codeChunk $ quantvar q) (toCodeExpr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' for an ODE.

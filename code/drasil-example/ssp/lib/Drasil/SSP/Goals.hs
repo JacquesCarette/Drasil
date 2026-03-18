@@ -34,6 +34,6 @@ identifyCritAndFS :: Sentence
 identifyCritAndFS = S "Identify the" +:+ phrase crtSlpSrf `S.andThe`
   S "corresponding" +:+. phrase fsConcept
 
-determineF :: (NamedIdea a) => a -> Sentence
+determineF :: (Idea a) => a -> Sentence
 determineF what = S "Determine the" +:+ phrase what +:+
   S "between each pair of vertical" +:+. D.toSent (pluralNP (slice `ofThePS` slope))

@@ -5,11 +5,11 @@ module Language.Drasil.Printing.Import.Helpers where
 import Control.Lens ((^.))
 import Data.Char (toUpper)
 
-import Drasil.Database (UID, ChunkDB, findOrErr, UIDRef, IsChunk, raw)
+import Drasil.Database (UID, ChunkDB, findOrErr, UIDRef, IsChunk, raw, unhideOrErr, TypeableChunk)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S),
   Symbol, TermCapitalization(..), titleizeNP, titleizeNP', HasSymbol,
-  atStartNP, atStartNP', NP, DefinedQuantityDict)
+  atStartNP, atStartNP', NP, DefinedQuantityDict, Idea (..), NamedIdea(..))
 import Language.Drasil.Development (toSent)
 
 import qualified Language.Drasil.Printing.AST as P
@@ -79,14 +79,27 @@ lookupSymb pinfo u = sytyF (pinfo ^. stg) (findOrErr (raw u) (pinfo ^. sysdb) ::
 lookupT :: PrintingInformation -> UID -> TermCapitalization -> Sentence
 lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' (sm ^. sysdb) c
 
+lookupT' :: (TypeableChunk t, Idea t) => PrintingInformation -> UIDRef t -> TermCapitalization -> Sentence
+lookupT' sm ur tCap = resolveCapT tCap $ c ^. term
+  where c = unhideOrErr ur (sm ^. sysdb)
+
 -- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
 lookupS :: PrintingInformation -> UID -> TermCapitalization -> Sentence
 lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= capHelper sCap
   where l = termResolve' (sm ^. sysdb) c
 
+lookupS' :: (TypeableChunk t, Idea t) => PrintingInformation -> UIDRef t -> TermCapitalization -> Sentence
+lookupS' sm ur sCap = maybe (resolveCapT sCap $ c ^. term) S $ getA c >>= capHelper sCap
+  where c = unhideOrErr ur (sm ^. sysdb)
+
 -- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
 lookupP :: PrintingInformation -> UID -> TermCapitalization -> Sentence
 lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' (sm ^. sysdb) c
+
+-- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
+lookupP' :: (TypeableChunk t, Idea t) => PrintingInformation -> UIDRef t -> TermCapitalization -> Sentence
+lookupP' sm ur pCap = resolveCapP pCap $ c ^. term
+  where c = unhideOrErr ur (sm ^. sysdb)
 
 -- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
 resolveCapT :: TermCapitalization -> (NP -> Sentence)

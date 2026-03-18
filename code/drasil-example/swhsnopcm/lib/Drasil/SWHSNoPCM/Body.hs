@@ -169,7 +169,7 @@ symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] NoPCM.dataDe
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
   -- CIs
-  nw progName : map nw acronyms ++
+  map nw acronyms ++
   -- DefinedQuantityDicts
   map nw symbols
 

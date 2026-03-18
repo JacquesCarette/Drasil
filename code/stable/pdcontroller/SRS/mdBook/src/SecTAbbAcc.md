@@ -9,6 +9,7 @@
 |GD          |General Definition                 |
 |GS          |Goal Statement                     |
 |IM          |Instance Model                     |
+|ODE         |Ordinary Differential Equation     |
 |P           |proportional                       |
 |PD          |proportional derivative            |
 |PID         |proportional integral derivative   |

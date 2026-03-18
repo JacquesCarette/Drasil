@@ -271,7 +271,7 @@ momEqlDesc = foldlSent [S "This", phrase equation, S "satisfies",
   surfAngle `definedIn'''` angleB]]
 
 momEqlDeriv :: Derivation
-momEqlDeriv = mkDerivNoHeader (weave [momEqlDerivSentences, momEqlDerivEqns])
+momEqlDeriv = mkDerivNoHeader (weave momEqlDerivSentences momEqlDerivEqns)
 
 momEqlDerivSentences :: [Sentence]
 momEqlDerivSentences = map foldlSentCol [momEqlDerivTorqueSentence,
@@ -486,7 +486,7 @@ sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the",
   sParen (refS assumpSLH), baseWthX `definedIn'''` lengthB]
 
 sliceWghtDeriv :: Derivation
-sliceWghtDeriv = mkDerivNoHeader (weave [sliceWghtDerivSentences, sliceWghtDerivEqns])
+sliceWghtDeriv = mkDerivNoHeader (weave sliceWghtDerivSentences sliceWghtDerivEqns)
 
 sliceWghtDerivEqns :: [Sentence]
 sliceWghtDerivEqns = map eS [sliceWghtDerivSatCaseWeightEqn,
@@ -609,7 +609,7 @@ bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   baseLngth `definedIn'''` lengthLb]
 
 bsWtrFDeriv :: Derivation
-bsWtrFDeriv = mkDerivNoHeader (weave [bsWtrFDerivSentences, bsWtrFDerivEqns] ++
+bsWtrFDeriv = mkDerivNoHeader (weave bsWtrFDerivSentences bsWtrFDerivEqns ++
   bsWtrFDerivEndSentence)
 
 bsWtrFDerivEqns :: [Sentence]
@@ -692,7 +692,7 @@ srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   surfLngth `definedIn'''` lengthLs]
 
 srfWtrFDeriv :: Derivation
-srfWtrFDeriv = mkDerivNoHeader (weave [srfWtrFDerivSentences, srfWtrFDerivEqns] ++
+srfWtrFDeriv = mkDerivNoHeader (weave srfWtrFDerivSentences srfWtrFDerivEqns ++
   srfWtrFDerivEndSentence)
 
 srfWtrFDerivEqns :: [Sentence]

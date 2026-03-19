@@ -43,7 +43,7 @@ velXQD_1 = mkQuantDef' xVel_1 (the xComp `NP.of_` (velocity `ofThe` firstObject)
 -- lable and equation
 
 velXDeriv_1 :: Derivation
-velXDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` velocity))) (weave [velXDerivSents_1, velXDerivEqns_1])
+velXDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` velocity))) (weave velXDerivSents_1 velXDerivEqns_1)
 -- title paragraph and weave the explained words and refined equation
 
 velXDerivSents_1 :: [Sentence]
@@ -71,7 +71,7 @@ velYQD_1 :: ModelQDef
 velYQD_1 = mkQuantDef' yVel_1 (the yComp `NP.of_` (velocity `ofThe` firstObject)) E.velYExpr_1
 
 velYDeriv_1 :: Derivation
-velYDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` velocity))) (weave [velYDerivSents_1, velYDerivEqns_1])
+velYDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` velocity))) (weave velYDerivSents_1 velYDerivEqns_1)
 
 velYDerivSents_1 :: [Sentence]
 velYDerivSents_1 = [velDerivSent1, velYDerivSent2_1, velDerivSent3, velDerivSent4, velDerivSent5]
@@ -92,7 +92,7 @@ velXQD_2 :: ModelQDef
 velXQD_2 = mkQuantDef' xVel_2 (the xComp `NP.of_` (velocity `ofThe` secondObject)) E.velXExpr_2
 
 velXDeriv_2 :: Derivation
-velXDeriv_2 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` velocity))) (weave [velXDerivSents_2, velXDerivEqns_2])
+velXDeriv_2 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` velocity))) (weave velXDerivSents_2 velXDerivEqns_2)
 
 velXDerivSents_2 :: [Sentence]
 velXDerivSents_2 = [velDerivSent1, velXDerivSent2_2, velDerivSent3, velDerivSent4]
@@ -113,7 +113,7 @@ velYQD_2 :: ModelQDef
 velYQD_2 = mkQuantDef' yVel_2 (the yComp `NP.of_` (velocity `ofThe` secondObject)) E.velYExpr_2
 
 velYDeriv_2 :: Derivation
-velYDeriv_2 = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` velocity))) (weave [velYDerivSents_2, velYDerivEqns_2])
+velYDeriv_2 = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` velocity))) (weave velYDerivSents_2 velYDerivEqns_2)
 
 velYDerivSents_2 :: [Sentence]
 velYDerivSents_2 = [velDerivSent1,velYDerivSent2_2,velDerivSent3,velDerivSent5]
@@ -134,7 +134,7 @@ accelXQD_1 :: ModelQDef
 accelXQD_1 = mkQuantDef' xAccel_1 (the xComp `NP.of_` (acceleration `ofThe` firstObject)) E.accelXExpr_1
 
 accelXDeriv_1:: Derivation
-accelXDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelXDerivSents_1, accelXDerivEqns_1])
+accelXDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` acceleration))) (weave accelXDerivSents_1 accelXDerivEqns_1)
 
 accelXDerivSents_1:: [Sentence]
 accelXDerivSents_1 = [accelDerivSent1, accelXDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5]
@@ -160,7 +160,7 @@ accelYQD_1 :: ModelQDef
 accelYQD_1 = mkQuantDef' yAccel_1 (the yComp `NP.of_` (acceleration `ofThe` firstObject)) E.accelYExpr_1
 
 accelYDeriv_1:: Derivation
-accelYDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelYDerivSents_1, accelYDerivEqns_1])
+accelYDeriv_1 = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` acceleration))) (weave accelYDerivSents_1 accelYDerivEqns_1)
 
 accelYDerivSents_1 :: [Sentence]
 accelYDerivSents_1 = [accelDerivSent1, accelYDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5]
@@ -181,7 +181,7 @@ accelXQD_2 :: ModelQDef
 accelXQD_2 = mkQuantDef' xAccel_2 (the xComp `NP.of_` (acceleration `ofThe` secondObject)) E.accelXExpr_2
 
 accelXDeriv_2 :: Derivation
-accelXDeriv_2 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelXDerivSents_2, accelXDerivEqns_2])
+accelXDeriv_2 = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` acceleration))) (weave accelXDerivSents_2 accelXDerivEqns_2)
 
 accelXDerivSents_2 :: [Sentence]
 accelXDerivSents_2 = [accelDerivSent1, accelXDerivSent2_2, accelDerivSent3, accelDerivSent4]
@@ -202,7 +202,7 @@ accelYQD_2 :: ModelQDef
 accelYQD_2 = mkQuantDef' yAccel_2 (the yComp `NP.of_` (acceleration `ofThe` secondObject)) E.accelYExpr_2
 
 accelYDeriv_2 :: Derivation
-accelYDeriv_2 = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelYDerivSents_2, accelYDerivEqns_2])
+accelYDeriv_2 = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` acceleration))) (weave accelYDerivSents_2 accelYDerivEqns_2)
 
 accelYDerivSents_2 :: [Sentence]
 accelYDerivSents_2 = [accelDerivSent1, accelYDerivSent2_2, accelDerivSent3, accelDerivSent4]

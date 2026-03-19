@@ -76,7 +76,7 @@ balWtrNotes = map foldlSent [
 ----------------------------------------------
 eBalanceOnWtrDeriv :: Derivation
 eBalanceOnWtrDeriv = mkDerivName (D.toSent (phraseNP (the energy)) +:+ S "balance on water")
-  (weave [eBalanceOnWtrDerivSentences, map eS eBalanceOnWtrDerivEqns])
+  (weave eBalanceOnWtrDerivSentences $ map eS eBalanceOnWtrDerivEqns)
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+ ch coilSA) EmptyS assumpNIHGBW,

@@ -48,7 +48,7 @@ velocityIXQD = mkQuantDef' xVel (the xComp `NP.of_` (velocity `ofThe` pendulum))
 
 velocityIXDeriv :: Derivation
 velocityIXDeriv = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` velocity)))
-  (weave [velocityIXDerivSents, velocityIXDerivEqns])
+  (weave velocityIXDerivSents velocityIXDerivEqns)
 
 velocityIXDerivSents :: [Sentence]
 velocityIXDerivSents = [velocityDerivSent1, velocityIXDerivSent2, velocityDerivSent3,
@@ -75,7 +75,7 @@ velocityIYQD = mkQuantDef' yVel (the yComp `NP.of_` (velocity `ofThe` pendulum))
 
 velocityIYDeriv :: Derivation
 velocityIYDeriv = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` velocity)))
-  (weave [velocityIYDerivSents, velocityIYDerivEqns])
+  (weave velocityIYDerivSents velocityIYDerivEqns)
 
 velocityIYDerivSents :: [Sentence]
 velocityIYDerivSents = [velocityDerivSent1, velocityIYDerivSent2, velocityDerivSent3,
@@ -98,7 +98,7 @@ accelerationIXQD = mkQuantDef' xAccel (the xComp `NP.of_` (acceleration `ofThe` 
 
 accelerationIXDeriv :: Derivation
 accelerationIXDeriv = mkDerivName (D.toSent $ phraseNP (NP.the (xComp `of_` acceleration)))
-  (weave [accelerationIXDerivSents, accelerationIXDerivEqns])
+  (weave accelerationIXDerivSents accelerationIXDerivEqns)
 
 accelerationIXDerivSents :: [Sentence]
 accelerationIXDerivSents = [accelerationDerivSent1, accelerationIXDerivSent2, accelerationDerivSent3,
@@ -127,7 +127,7 @@ accelerationIYQD = mkQuantDef' yAccel (the yComp `NP.of_` (acceleration `ofThe` 
 
 accelerationIYDeriv :: Derivation
 accelerationIYDeriv = mkDerivName (D.toSent $ phraseNP (NP.the (yComp `of_` acceleration)))
-  (weave [accelerationIYDerivSents, accelerationIYDerivEqns])
+  (weave accelerationIYDerivSents accelerationIYDerivEqns)
 
 accelerationIYDerivSents :: [Sentence]
 accelerationIYDerivSents = [accelerationDerivSent1, accelerationIYDerivSent2, accelerationDerivSent3,
@@ -191,7 +191,7 @@ angFrequencyQD = mkQuantDef' angularFrequency (angularFrequency `the_ofThe` pend
 
 angFrequencyDeriv :: Derivation
 angFrequencyDeriv = mkDerivName (D.toSent $ phraseNP (angularFrequency `the_ofThe` pendulum))
-  (weave [angFrequencyDerivSents, map eS D.angFrequencyDerivEqns])
+  (weave angFrequencyDerivSents $ map eS D.angFrequencyDerivEqns)
 
 angFrequencyDerivSents :: [Sentence]
 angFrequencyDerivSents = [angFrequencyDerivSent1, angFrequencyDerivSent2, angFrequencyDerivSent3,
@@ -231,7 +231,7 @@ periodPendQD = mkQuantDef' period (NP.the (period `ofThe` pendulum)) $ express E
 
 periodPendDeriv :: Derivation
 periodPendDeriv = mkDerivName (D.toSent $ phraseNP (NP.the (period `ofThe` pendulum)))
-  (weave [periodPendDerivSents, map eS D.periodPendDerivEqns])
+  (weave periodPendDerivSents $ map eS D.periodPendDerivEqns)
 
 periodPendDerivSents :: [Sentence]
 periodPendDerivSents = [periodPendDerivSent1, periodPendDerivSent2]

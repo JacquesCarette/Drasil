@@ -5,11 +5,14 @@ import Language.Drasil
 import Drasil.SRSDocument
 import Drasil.DocLang ()
 import Drasil.Generator (withCommonKnowledge)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Theory.Drasil (GenDefn)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Math (ode)
+import Data.Drasil.Quantities.Physics (velocity, position, acceleration,
+  force, gravitationalConst, time)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Drasil.DocumentLanguage.TraceabilityGraph ()
 
 import Drasil.BinaryStar.MetaConcepts (progName)
@@ -23,6 +26,7 @@ import Drasil.BinaryStar.Goals (goals, goalsInputs)
 import Drasil.BinaryStar.Requirements (funcReqs, funcReqsTables, nonFuncReqs)
 import Drasil.BinaryStar.DataDefs (dataDefs)
 import Drasil.BinaryStar.IMods (iMods)
+import Drasil.BinaryStar.TMods (tMods)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -84,7 +88,7 @@ si :: System
 si = mkSystem
   progName Specification [authorName]
   [] [] [] []
-  ([] :: [TheoryModel]) ([] :: [GenDefn]) dataDefs iMods
+  tMods ([] :: [GenDefn]) dataDefs iMods
   inputs outputs ([] :: [ConstrConcept]) constants
   symbMap
   []
@@ -102,7 +106,7 @@ symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
   symbols ideaDicts conceptChunks
   ([] :: [UnitDefn]) dataDefs iMods
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) concIns
+  ([] :: [GenDefn]) tMods concIns
   citations (labelledContent ++ funcReqsTables)
 
 concIns :: [ConceptInstance]

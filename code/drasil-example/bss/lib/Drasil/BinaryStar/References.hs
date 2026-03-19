@@ -3,8 +3,8 @@ module Drasil.BinaryStar.References (citations, koothoor2013,
 
 import Language.Drasil (BibRef)
 import Data.Drasil.Citations (parnasClements1986, koothoor2013,
-  smithEtAl2007, smithLai2005, smithKoothoor2016)
+  smithEtAl2007, smithLai2005, smithKoothoor2016, hibbeler2004)
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,
-             smithKoothoor2016]
+             smithKoothoor2016, hibbeler2004]

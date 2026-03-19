@@ -9,6 +9,7 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Theory (inModel)
+import Data.Drasil.Concepts.Math (ode)
 import Drasil.DocumentLanguage.TraceabilityGraph ()
 
 import Drasil.BinaryStar.MetaConcepts (progName)
@@ -20,6 +21,8 @@ import Drasil.BinaryStar.Unitals (symbols, acronyms, inputs, outputs,
 import Drasil.BinaryStar.Assumptions (assumptions)
 import Drasil.BinaryStar.Goals (goals, goalsInputs)
 import Drasil.BinaryStar.Requirements (funcReqs, funcReqsTables, nonFuncReqs)
+import Drasil.BinaryStar.DataDefs (dataDefs)
+import Drasil.BinaryStar.IMods (iMods)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -51,10 +54,10 @@ mkSRS = [TableOfContents,
       ]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] []
-        , GDs [] [] HideDerivation
-        , DDs [] [] HideDerivation
-        , IMs [] [] HideDerivation
+        , TMs [] (Label : stdFields)
+        , GDs [] ([Label, Units] ++ stdFields) HideDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) HideDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
         , Constraints EmptyS inConstraints
         , CorrSolnPpties outConstraints []
         ]
@@ -81,7 +84,7 @@ si :: System
 si = mkSystem
   progName Specification [authorName]
   [] [] [] []
-  ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
+  ([] :: [TheoryModel]) ([] :: [GenDefn]) dataDefs iMods
   inputs outputs ([] :: [ConstrConcept]) constants
   symbMap
   []
@@ -90,7 +93,7 @@ abbreviationsList :: [IdeaDict]
 abbreviationsList = map nw symbols ++ nw progName : map nw acronyms
 
 ideaDicts :: [IdeaDict]
-ideaDicts = nw progName : concepts
+ideaDicts = nw progName : nw ode : concepts
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = defs
@@ -98,7 +101,7 @@ conceptChunks = defs
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
   symbols ideaDicts conceptChunks
-  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
+  ([] :: [UnitDefn]) dataDefs iMods
   ([] :: [GenDefn]) ([] :: [TheoryModel]) concIns
   citations (labelledContent ++ funcReqsTables)
 
@@ -110,6 +113,9 @@ physSystParts = map (!.)
   [S "The first star with mass" +:+ ch mass_1,
    S "The second star with mass" +:+ ch mass_2,
    S "The gravitational interaction between the two stars"]
+
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 authorName :: Person
 authorName = person "Xinlu" "Yan"

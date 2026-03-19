@@ -15,7 +15,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (position, velocity,
   acceleration, gravitationalAccel, force, time)
 import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.Concepts.Math (xDir, yDir)
-import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
+import Data.Drasil.Quantities.Physics (gravitationalConst, gravitationalConstValue)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.SI_Units (metre, kilogram, second)
 import Data.Drasil.Units.Physics (velU, accelU)
@@ -50,9 +50,7 @@ outputs = map dqdWr [xPos_1, yPos_1, xPos_2, yPos_2]
 
 -- | Constants
 constants :: [ConstQDef]
-constants = [gravitationalAccelConst]
--- TODO: G (gravitational constant) is not gravitationalAccelConst (g).
--- Need to define G = 6.674e-11 m³/(kg·s²) as a new constant.
+constants = [gravitationalConstValue]
 
 ---------------------------------------------------------
 -- Unital chunks (physical quantities with symbols & units)

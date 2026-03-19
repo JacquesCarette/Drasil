@@ -1,21 +1,10 @@
-module Drasil.BinaryStar.DataDefs (dataDefs, sepDistDD) where
+module Drasil.BinaryStar.DataDefs (dataDefs) where
 
-import Language.Drasil
-import Theory.Drasil (DataDefinition, ddENoRefs)
+import Theory.Drasil (DataDefinition)
 
-import Drasil.BinaryStar.Expressions (sepDistExpr)
-import Drasil.BinaryStar.Unitals (sepDist)
-
+-- | The hand-written SRS defines DD1 as the gravitational constant G,
+-- which in Drasil is handled as a constant (gravitationalConstValue)
+-- in Unitals.hs rather than a DataDefinition.
+-- The separation distance formula is in TM6 (relPosTM).
 dataDefs :: [DataDefinition]
-dataDefs = [sepDistDD]
-
----------------------------------------------------------
--- DD: Separation distance
--- r₁₂ = sqrt((x₁ - x₂)² + (y₁ - y₂)²)
----------------------------------------------------------
-sepDistDD :: DataDefinition
-sepDistDD = ddENoRefs sepDistQD Nothing "sepDistDD"
-  [S "The separation distance between the two stars"]
-
-sepDistQD :: SimpleQDef
-sepDistQD = mkQuantDef sepDist sepDistExpr
+dataDefs = []

@@ -85,7 +85,7 @@ nubSort :: Ord a => [a] -> [a]
 
 -- | Interweaves two lists together <tt>[[a,b,c],[d,e,f]] -&gt;
 --   [a,d,b,e,c,f]</tt>.
-weave :: [[a]] -> [a]
+weave :: [a] -> [a] -> [a]
 
 -- | Fold that applies <tt>f</tt> to all but the last element and
 --   <tt>g</tt> to the last element and the accumulator given an initial

@@ -118,11 +118,11 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var">QP.weight</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Derivation) -&gt; [Sentence] -&gt; Derivation
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
-forall a. [[a]] -&gt; [a]
-</span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="Data.Drasil.Theories.Physics.html#weightDerivSentences"><span class="hs-identifier hs-var">weightDerivSentences</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="Data.Drasil.Theories.Physics.html#weightDerivEqns"><span class="hs-identifier hs-var">weightDerivEqns</span></a></span><span class="hs-special">]</span><span>
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Data.Drasil.Theories.Physics.html#weightDerivSentences"><span class="hs-identifier hs-var">weightDerivSentences</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Data.Drasil.Theories.Physics.html#weightDerivEqns"><span class="hs-identifier hs-var">weightDerivEqns</span></a></span><span>
 </span><span id="line-46"></span><span>
 </span><span id="line-47"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#weightDerivSentences"><span class="hs-identifier hs-type">weightDerivSentences</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#weightDerivEqns"><span class="hs-identifier hs-type">weightDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-48"></span><span id="weightDerivSentences"><span class="annot"><span class="annottext">weightDerivSentences :: [Sentence]
@@ -521,7 +521,7 @@ c -&gt; NP -&gt; e -&gt; QDefinition e
 forall r. ExprC r =&gt; r
 </span><a href="Data.Drasil.Theories.Physics.html#newtonSLRExpr"><span class="hs-identifier hs-var">newtonSLRExpr</span></a></span><span>
 </span><span id="line-130"></span><span>
-</span><span id="line-131"></span><span id="local-6989586621679056025"><span class="annot"><a href="Data.Drasil.Theories.Physics.html#newtonSLRExpr"><span class="hs-identifier hs-type">newtonSLRExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679056025"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679056025"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-131"></span><span id="local-6989586621679056024"><span class="annot"><a href="Data.Drasil.Theories.Physics.html#newtonSLRExpr"><span class="hs-identifier hs-type">newtonSLRExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679056024"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679056024"><span class="hs-identifier hs-type">r</span></a></span></span><span>
 </span><span id="line-132"></span><span id="newtonSLRExpr"><span class="annot"><span class="annottext">newtonSLRExpr :: forall r. ExprC r =&gt; r
 </span><a href="Data.Drasil.Theories.Physics.html#newtonSLRExpr"><span class="hs-identifier hs-var hs-var">newtonSLRExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; r

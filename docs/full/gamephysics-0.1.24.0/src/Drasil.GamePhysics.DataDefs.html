@@ -584,14 +584,16 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QP.impulseV</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
-forall a. [[a]] -&gt; [a]
-</span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="Drasil.GamePhysics.DataDefs.html#impulseVDerivSentences"><span class="hs-identifier hs-var">impulseVDerivSentences</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
+</span><span class="hs-identifier hs-var">QP.impulseV</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.GamePhysics.DataDefs.html#impulseVDerivSentences"><span class="hs-identifier hs-var">impulseVDerivSentences</span></a></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; [Sentence]) -&gt; [Sentence] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="Drasil.GamePhysics.Derivations.html#impulseVDerivEqns"><span class="hs-identifier hs-var">impulseVDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><a href="Drasil.GamePhysics.Derivations.html#impulseVDerivEqns"><span class="hs-identifier hs-var">impulseVDerivEqns</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-231"></span><span>
 </span><span id="line-232"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#impulseVDerivSentences"><span class="hs-identifier hs-type">impulseVDerivSentences</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-233"></span><span id="impulseVDerivSentences"><span class="annot"><span class="annottext">impulseVDerivSentences :: [Sentence]

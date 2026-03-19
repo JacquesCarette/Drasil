@@ -130,11 +130,11 @@ forall a. a -&gt; Maybe a
 </span><span id="line-53"></span><span>    </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">tempW</span></span><span>
 </span><span id="line-54"></span><span>    </span><span class="annot"><span class="annottext">[[Expr]]
-</span><a href="#local-6989586621679070997"><span class="hs-identifier hs-var">coeffs</span></a></span><span>
+</span><a href="#local-6989586621679070995"><span class="hs-identifier hs-var">coeffs</span></a></span><span>
 </span><span id="line-55"></span><span>    </span><span class="annot"><span class="annottext">[Unknown]
-</span><a href="#local-6989586621679070998"><span class="hs-identifier hs-var">unknowns</span></a></span><span>
+</span><a href="#local-6989586621679070996"><span class="hs-identifier hs-var">unknowns</span></a></span><span>
 </span><span id="line-56"></span><span>    </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679070999"><span class="hs-identifier hs-var">constants</span></a></span><span>
+</span><a href="#local-6989586621679070997"><span class="hs-identifier hs-var">constants</span></a></span><span>
 </span><span id="line-57"></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;eBalanceOnWtrRC&quot;</span></span><span>
 </span><span id="line-58"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -153,8 +153,8 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. Definition c =&gt; Lens' c Sentence
 Lens' ConstrConcept Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span>
-</span><span id="line-60"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679070997"><span class="annot"><span class="annottext">coeffs :: [[Expr]]
-</span><a href="#local-6989586621679070997"><span class="hs-identifier hs-var hs-var">coeffs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Unknown -&gt; Expr
+</span><span id="line-60"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679070995"><span class="annot"><span class="annottext">coeffs :: [[Expr]]
+</span><a href="#local-6989586621679070995"><span class="hs-identifier hs-var hs-var">coeffs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Unknown -&gt; Expr
 forall r. LiteralC r =&gt; Unknown -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Unknown
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
@@ -164,12 +164,12 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">tauW</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-61"></span><span>          </span><span id="local-6989586621679070998"><span class="annot"><span class="annottext">unknowns :: [Unknown]
-</span><a href="#local-6989586621679070998"><span class="hs-identifier hs-var hs-var">unknowns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Unknown
+</span><span id="line-61"></span><span>          </span><span id="local-6989586621679070996"><span class="annot"><span class="annottext">unknowns :: [Unknown]
+</span><a href="#local-6989586621679070996"><span class="hs-identifier hs-var hs-var">unknowns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Unknown
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Unknown
 </span><span class="hs-number">0</span></span><span class="hs-special">]</span><span>
-</span><span id="line-62"></span><span>          </span><span id="local-6989586621679070999"><span class="annot"><span class="annottext">constants :: [Expr]
-</span><a href="#local-6989586621679070999"><span class="hs-identifier hs-var hs-var">constants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr -&gt; Expr
+</span><span id="line-62"></span><span>          </span><span id="local-6989586621679070997"><span class="annot"><span class="annottext">constants :: [Expr]
+</span><a href="#local-6989586621679070997"><span class="hs-identifier hs-var hs-var">constants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr -&gt; Expr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
@@ -318,14 +318,16 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;balance on water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-79"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
-forall a. [[a]] -&gt; [a]
-</span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="Drasil.SWHSNoPCM.IMods.html#eBalanceOnWtrDerivSentences"><span class="hs-identifier hs-var">eBalanceOnWtrDerivSentences</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
+</span><span id="line-79"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.SWHSNoPCM.IMods.html#eBalanceOnWtrDerivSentences"><span class="hs-identifier hs-var">eBalanceOnWtrDerivSentences</span></a></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; [Sentence]) -&gt; [Sentence] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqns"><span class="hs-identifier hs-var">eBalanceOnWtrDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqns"><span class="hs-identifier hs-var">eBalanceOnWtrDerivEqns</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-80"></span><span>
 </span><span id="line-81"></span><span class="annot"><a href="Drasil.SWHSNoPCM.IMods.html#eBalanceOnWtrDerivSentences"><span class="hs-identifier hs-type">eBalanceOnWtrDerivSentences</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-82"></span><span id="eBalanceOnWtrDerivSentences"><span class="annot"><span class="annottext">eBalanceOnWtrDerivSentences :: [Sentence]

@@ -11,7 +11,7 @@ import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Quantities.Physics (velocity, position, acceleration,
-  force, gravitationalConst, time)
+  energy, force, gravitationalConst, time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Drasil.DocumentLanguage.TraceabilityGraph ()
 
@@ -20,8 +20,10 @@ import Drasil.BinaryStar.Concepts (concepts, defs)
 import Drasil.BinaryStar.LabelledContent (labelledContent, figBSS, sysCtxFig1)
 import Drasil.BinaryStar.References (citations)
 import Drasil.BinaryStar.Unitals (symbols, acronyms, inputs, outputs,
-  inConstraints, outConstraints, constants, mass_1, mass_2)
-import Drasil.BinaryStar.Assumptions (assumptions)
+  inConstraints, outConstraints, constants, mass_1, mass_2,
+  xVel_1, yVel_1, xVel_2, yVel_2, sepDist)
+import Drasil.Document.Contents (unlbldExpr, foldlSP)
+import Drasil.BinaryStar.Assumptions (assumptions, isolated, constantMass)
 import Drasil.BinaryStar.Goals (goals, goalsInputs)
 import Drasil.BinaryStar.Requirements (funcReqs, funcReqsTables, nonFuncReqs)
 import Drasil.BinaryStar.DataDefs (dataDefs)
@@ -63,7 +65,7 @@ mkSRS = [TableOfContents,
         , DDs [] ([Label, Symbol, Units] ++ stdFields) HideDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
         , Constraints EmptyS inConstraints
-        , CorrSolnPpties outConstraints []
+        , CorrSolnPpties outConstraints corrSolnProps
         ]
       ],
   ReqrmntSec $ ReqsProg
@@ -123,3 +125,27 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 authorName :: Person
 authorName = person "Xinlu" "Yan"
+
+---------------------------------------------------------
+-- Properties of a Correct Solution
+-- Total mechanical energy must be conserved.
+---------------------------------------------------------
+corrSolnProps :: [Contents]
+corrSolnProps = [corrSolnDesc, corrSolnEqn]
+
+corrSolnDesc :: Contents
+corrSolnDesc = foldlSP
+  [S "The total mechanical energy of the system must remain",
+   S "constant over time (up to numerical tolerance),",
+   S "since the system is isolated", sParen (refS isolated),
+   S "and masses are constant", sParen (refS constantMass)]
+
+corrSolnEqn :: Contents
+corrSolnEqn = unlbldExpr energyExpr
+
+-- E = const
+energyExpr :: ModelExpr
+energyExpr = sy energy $=
+  half (sy mass_1 $* (square (sy xVel_1) $+ square (sy yVel_1)))
+  $+ half (sy mass_2 $* (square (sy xVel_2) $+ square (sy yVel_2)))
+  $- (sy gravitationalConst $* sy mass_1 $* sy mass_2 $/ sy sepDist)

@@ -202,7 +202,7 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   namedRef r4 (plural genDefn)]
 
 -- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.
-datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =>
+datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, HasRationale c, MayHaveUnit c) =>
   Sentence -> [c] -> Section
 datConF _ [] = SRS.datCon [mkParagraph $ emptySectSentPlu [datumConstraint]] []
 datConF t c  = SRS.datCon [dataConstraintParagraph t, LlC $ inDataConstTbl c] []
@@ -256,16 +256,22 @@ mkDataConstraintTable col rf lab = llccTab' rf $ uncurry Table
   (mkTableFromColumns col) lab True
 
 -- | Creates the input Data Constraints Table.
-inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =>
+-- If any quantity has a rationale, a Rationale column is included.
+inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, HasRationale c, MayHaveUnit c) =>
   [c] -> LabelledContent
-inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qlst),
-            (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
-            (titleize' softwareConstraint, map fmtSfwr $ sortBySymbol qlst),
-            (S "Typical Value", map (\q -> fmtU (eS $ express $ getRVal q) q) $ sortBySymbol qlst),
-            (short typUnc, map (\q -> typUncr (uncVal q, uncPrec q)) $ sortBySymbol qlst)]
+inDataConstTbl qlst = mkDataConstraintTable (baseCols ++ rationaleCols ++ uncertCols)
             (inDatumConstraint ^. uid) $ titleize' inDatumConstraint
   where
+    sorted = sortBySymbol qlst
     getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ showUID c) (c ^. reasVal)
+    baseCols = [(S "Var", map ch sorted),
+                (titleize' physicalConstraint, map fmtPhys sorted),
+                (titleize' softwareConstraint, map fmtSfwr sorted),
+                (S "Typical Value", map (\q -> fmtU (eS $ express $ getRVal q) q) sorted)]
+    uncertCols = [(short typUnc, map (\q -> typUncr (uncVal q, uncPrec q)) sorted)]
+    hasAnyRationale = any (\q -> isJust (q ^. rationale)) sorted
+    rationaleCols = [(S "Rationale", map (\q -> fromMaybe EmptyS (q ^. rationale)) sorted) |
+      hasAnyRationale]
 
 -- | Creates the output Data Constraints Table.
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent

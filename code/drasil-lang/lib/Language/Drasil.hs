@@ -56,6 +56,7 @@ module Language.Drasil (
   , HasUnitSymbol(usymb)
   , Quantity
   , HasReasVal(reasVal)
+  , HasRationale(rationale)
   , Constrained(constraints)
   , HasAdditionalNotes(getNotes)
   , IsUnit(getUnits)
@@ -109,10 +110,10 @@ module Language.Drasil (
   , physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
   -- Language.Drasil.Chunk.Constrained
   , ConstrConcept(..)
-  , constrained', cuc', cuc'', cucNoUnit', constrainedNRV'
+  , constrained', constrainedWithRationale, cuc', cuc'', cucNoUnit', constrainedNRV'
   , cnstrw'
   -- Language.Drasil.Chunk.UncertainQuantity
-  , UncertQ, uq, uqc, uqcND
+  , UncertQ, uq, uqc, uqcND, uqDirect
   -- Language.Drasil.Uncertainty
   , Uncertainty, uncty, HasUncertainty(..)
   , defaultUncrt, uncVal, uncPrec, exact
@@ -274,7 +275,7 @@ import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
-  HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity)
+  HasReasVal(reasVal), HasRationale(rationale), DefiningExpr(defnExpr), Quantity)
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
     Citation, EntryID, BibRef

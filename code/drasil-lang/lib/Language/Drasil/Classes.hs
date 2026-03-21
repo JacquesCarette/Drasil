@@ -13,6 +13,7 @@ module Language.Drasil.Classes (
   , Quantity
   , HasUnitSymbol(usymb)
   , HasReasVal(reasVal)
+  , HasRationale(rationale)
   , Constrained(constraints)
   , HasAdditionalNotes(getNotes)
     -- the unsorted rest
@@ -85,6 +86,11 @@ class Constrained c where
 class HasReasVal c where
   -- | Provides a 'Lens' to the possible reasonable value.
   reasVal     :: Lens' c (Maybe Expr)
+
+-- | A chunk that may have a rationale explaining why a value or constraint was chosen.
+class HasRationale c where
+  -- | Provides a 'Lens' to the possible rationale 'Sentence'.
+  rationale   :: Lens' c (Maybe Sentence)
 
 -- | A Quantity is an 'Idea' with a 'Space' and a 'Symbol'.
 -- In theory, it should also restrict to being a part of 'MayHaveUnit', but that causes

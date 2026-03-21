@@ -187,7 +187,7 @@ data SCSSub where
   -- | Instance Models.
   IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   -- | Constraints.
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, HasRationale c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
   --                  Sentence -> [LabelledContent] Fields  -> [UncertainWrapper] -> [ConstrainedChunk] -> SCSSub --FIXME: temporary definition?
   --FIXME: Work in Progress ^
   -- | Properties of a correct solution.

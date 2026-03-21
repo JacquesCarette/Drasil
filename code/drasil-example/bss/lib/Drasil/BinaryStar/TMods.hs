@@ -9,11 +9,13 @@ import qualified Data.List.NonEmpty as NE
 
 import Data.Drasil.Quantities.Physics (position, force, gravitationalConst)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
+import Data.Drasil.Concepts.Math (xDir, yDir)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
 import Drasil.BinaryStar.Unitals (mass_1, mass_2, sepDist,
   xPos_1, yPos_1, xPos_2, yPos_2,
-  xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0)
+  xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0,
+  index, numbBodies)
 import Drasil.BinaryStar.Assumptions (inertialFrame, newtonianGravity,
   nonzeroSeparation, planar)
 
@@ -34,8 +36,13 @@ centerOfMassTM = tmNoRefs (equationalConstraints' centerOfMassCS)
 
 centerOfMassRels :: [ModelExpr]
 centerOfMassRels =
-  [ (sy mass_1 $* sy xPos_1_0) $+ (sy mass_2 $* sy xPos_2_0) $= int 0
-  , (sy mass_1 $* sy yPos_1_0) $+ (sy mass_2 $* sy yPos_2_0) $= int 0
+  [ -- General n-body COM constraint
+    defsum (eqSymb index) (int 1) (sy numbBodies)
+      (idx (sy mass) (sy index) $* idx (sy position) (sy index)) $= int 0
+  , -- n=2 specialization (x-component)
+    (sy mass_1 $* sy xPos_1_0) $+ (sy mass_2 $* sy xPos_2_0) $= int 0
+  , -- n=2 specialization (y-component)
+    (sy mass_1 $* sy yPos_1_0) $+ (sy mass_2 $* sy yPos_2_0) $= int 0
   ]
 
 centerOfMassCS :: ConstraintSet ModelExpr
@@ -47,13 +54,17 @@ centerOfMassCS = mkConstraintSet
 
 centerOfMassNote :: Sentence
 centerOfMassNote = foldlSent
-  [S "In the center-of-mass reference frame",
+  [S "The first equation gives the general center-of-mass constraint",
+   S "for a system of", ch numbBodies, S "point", plural mass `sC`
+   S "where", ch index, S "indexes each body.",
+   S "In the center-of-mass reference frame",
    sParen (refS inertialFrame) `sC`
-   S "the initial",
-   plural position, S "of the two stars must satisfy",
-   S "the constraint that the weighted sum of", plural position,
-   S "is zero, where the weights are the", plural mass,
-   S "of each star"]
+   S "the origin is chosen so that the mass-weighted sum of",
+   plural position, S "vanishes.",
+   S "The remaining equations specialize to the binary case",
+   S "(n = 2), decomposing the vector constraint into",
+   phrase xDir `S.and_` phrase yDir,
+   S "components of the initial", plural position]
 
 ---------------------------------------------------------
 -- TM5: Newton's Law of Universal Gravitation

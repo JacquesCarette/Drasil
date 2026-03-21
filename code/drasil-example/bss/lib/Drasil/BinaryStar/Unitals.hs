@@ -36,6 +36,7 @@ symbols = map dqdWr [mass_1, mass_2, xPos_1, yPos_1, xPos_2, yPos_2,
   massMin, massMax, rMax, vMax, tMax]
   ++ map dqdWr [QP.velocity, QP.position, QP.acceleration, QP.force, QP.time,
      QP.energy, gravitationalConst, QPP.mass]
+  ++ [index, numbBodies]
   ++ map dqdWr constants
 
 -- | Acronyms for the Abbreviations table
@@ -227,6 +228,22 @@ label2 = Integ 2
 label0 = Integ 0
 labelx = label "x"
 labely = label "y"
+
+---------------------------------------------------------
+-- Summation index quantities (for general COM formula)
+---------------------------------------------------------
+
+-- | Summation index variable i
+index :: DefinedQuantityDict
+index = dqd' (dcc "index" (nounPhraseSP "index")
+  "a number representing a single body")
+  (const lI) Integer Nothing
+
+-- | Number of bodies n
+numbBodies :: DefinedQuantityDict
+numbBodies = dqd' (dcc "n" (nounPhraseSP "number of bodies")
+  "the number of point masses in the system")
+  (const lN) Integer Nothing
 
 ---------------------------------------------------------
 -- Specification Parameters (Table: Specification Parameter Values)

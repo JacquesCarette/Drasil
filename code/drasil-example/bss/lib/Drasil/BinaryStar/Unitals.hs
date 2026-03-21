@@ -33,7 +33,7 @@ symbols = map dqdWr [mass_1, mass_2, xPos_1, yPos_1, xPos_2, yPos_2,
   xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0,
   xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0,
   tFinal, sepDist,
-  massMin, massMax, rMax, vMax, tMin, tMax]
+  massMin, massMax, rMax, vMax, tMax]
   ++ map dqdWr [QP.velocity, QP.position, QP.acceleration, QP.force, QP.time,
      QP.energy, gravitationalConst, QPP.mass]
   ++ map dqdWr constants
@@ -233,7 +233,7 @@ labely = label "y"
 -- These define the software constraint bounds.
 ---------------------------------------------------------
 
-massMin, massMax, rMax, vMax, tMin, tMax :: UnitalChunk
+massMin, massMax, rMax, vMax, tMax :: UnitalChunk
 
 massMin = uc' "m_min" (nounPhraseSP "minimum stellar mass (hydrogen burning limit, 0.05 solar masses)")
   (S "lower bound for stellar mass; below this threshold objects cannot sustain hydrogen fusion")
@@ -251,10 +251,6 @@ vMax = uc' "v_max" (nounPhraseSP "maximum initial speed (non-relativistic limit,
   (S "upper bound for initial velocity magnitude; ensures classical mechanics remains valid")
   (sub lV (label "max")) Real velU
 
-tMin = uc' "t_min" (nounPhraseSP "minimum simulation time (17 minutes)")
-  (S "lower bound for simulation duration; shortest timescale for meaningful orbital dynamics")
-  (sub lT (label "min")) Real second
-
 tMax = uc' "t_max" (nounPhraseSP "maximum simulation time (317 years)")
   (S "upper bound for simulation duration; limits numerical error accumulation over long integrations")
   (sub lT (label "max")) Real second
@@ -266,7 +262,6 @@ specParamValues =
   , mkQuantDef massMax (dbl 1.0e32)   -- approx.50 M_sun
   , mkQuantDef rMax    (dbl 1.0e13)   -- approx.67 AU
   , mkQuantDef vMax    (dbl 1.0e6)    -- approx.0.3% c
-  , mkQuantDef tMin    (dbl 1.0e3)    -- approx.17 min
   , mkQuantDef tMax    (dbl 1.0e10)   -- approx.317 yr
   ]
 
@@ -332,11 +327,11 @@ yVelCon_2_0 = constrainedWithRationale yVel_2_0
   (dbl (-1.125e4))
   (S "derived from COM constraint")
 
--- | Time constraint: physical (>= 0) + software (t_min <= t <= t_max)
+-- | Time constraint: physical (>= 0) + software (t <= t_max)
 tFinalCon :: ConstrConcept
 tFinalCon = constrainedWithRationale tFinal
   [physRange $ UpFrom (Inc, exactDbl 0),
-   sfwrRange $ Bounded (Inc, sy tMin) (Inc, sy tMax)]
+   sfwrRange $ UpTo (Inc, sy tMax)]
   (dbl 1.0e5)
   (S "short integration window")
 

@@ -235,39 +235,39 @@ labely = label "y"
 
 massMin, massMax, rMax, vMax, tMin, tMax :: UnitalChunk
 
-massMin = uc' "m_min" (nounPhraseSP "minimum stellar mass")
-  (S "lower bound for stellar mass (approximately 0.05 solar masses)")
+massMin = uc' "m_min" (nounPhraseSP "minimum stellar mass (hydrogen burning limit, 0.05 solar masses)")
+  (S "lower bound for stellar mass; below this threshold objects cannot sustain hydrogen fusion")
   (sub lM (label "min")) Real kilogram
 
-massMax = uc' "m_max" (nounPhraseSP "maximum stellar mass")
-  (S "upper bound for stellar mass (approximately 50 solar masses)")
+massMax = uc' "m_max" (nounPhraseSP "maximum stellar mass (massive star upper bound, 50 solar masses)")
+  (S "upper bound for stellar mass; beyond this range radiation effects violate the point-mass assumption")
   (sub lM (label "max")) Real kilogram
 
-rMax = uc' "r_max" (nounPhraseSP "maximum initial distance")
-  (S "upper bound for initial position magnitude (covers wide binary separations)")
+rMax = uc' "r_max" (nounPhraseSP "maximum initial distance from origin (67 AU)")
+  (S "upper bound for each star's initial distance from the center of mass")
   (sub lR (label "max")) Real metre
 
-vMax = uc' "v_max" (nounPhraseSP "maximum initial speed")
-  (S "upper bound for initial velocity magnitude (below relativistic threshold)")
+vMax = uc' "v_max" (nounPhraseSP "maximum initial speed (non-relativistic limit, 0.003c)")
+  (S "upper bound for initial velocity magnitude; ensures classical mechanics remains valid")
   (sub lV (label "max")) Real velU
 
-tMin = uc' "t_min" (nounPhraseSP "minimum simulation time")
-  (S "lower bound for simulation duration")
+tMin = uc' "t_min" (nounPhraseSP "minimum simulation time (17 minutes)")
+  (S "lower bound for simulation duration; shortest timescale for meaningful orbital dynamics")
   (sub lT (label "min")) Real second
 
-tMax = uc' "t_max" (nounPhraseSP "maximum simulation time")
-  (S "upper bound for simulation duration")
+tMax = uc' "t_max" (nounPhraseSP "maximum simulation time (317 years)")
+  (S "upper bound for simulation duration; limits numerical error accumulation over long integrations")
   (sub lT (label "max")) Real second
 
 -- | Spec parameter values
 specParamValues :: [ConstQDef]
 specParamValues =
-  [ mkQuantDef massMin (dbl 1.0e29)   -- ~0.05 M_sun
-  , mkQuantDef massMax (dbl 1.0e32)   -- ~50 M_sun
-  , mkQuantDef rMax    (dbl 1.0e13)   -- ~67 AU
-  , mkQuantDef vMax    (dbl 1.0e6)    -- ~0.3% c
-  , mkQuantDef tMin    (dbl 1.0e3)    -- ~17 min
-  , mkQuantDef tMax    (dbl 1.0e10)   -- ~317 yr
+  [ mkQuantDef massMin (dbl 1.0e29)   -- approx.0.05 M_sun
+  , mkQuantDef massMax (dbl 1.0e32)   -- approx.50 M_sun
+  , mkQuantDef rMax    (dbl 1.0e13)   -- approx.67 AU
+  , mkQuantDef vMax    (dbl 1.0e6)    -- approx.0.3% c
+  , mkQuantDef tMin    (dbl 1.0e3)    -- approx.17 min
+  , mkQuantDef tMax    (dbl 1.0e10)   -- approx.317 yr
   ]
 
 ---------------------------------------------------------

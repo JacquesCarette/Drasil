@@ -77,7 +77,7 @@ mkSRS = [TableOfContents,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [],
+     AuxConsProg progName constants,
   Bibliography]
 
 introBlurb :: Sentence

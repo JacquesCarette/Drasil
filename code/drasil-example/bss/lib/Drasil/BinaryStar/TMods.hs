@@ -4,6 +4,7 @@ import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 import Theory.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Data.List.NonEmpty as NE
 
 import Data.Drasil.Quantities.Physics (velocity, position, acceleration,
   force, time, gravitationalConst)
@@ -11,13 +12,46 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Theories.Physics (newtonSL)
 
 import Drasil.BinaryStar.Unitals (mass_1, mass_2, sepDist,
-  xPos_1, yPos_1, xPos_2, yPos_2)
+  xPos_1, yPos_1, xPos_2, yPos_2,
+  xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0)
 
 tMods :: [TheoryModel]
-tMods = [newtonSL, velocityTM, accelTM, gravLawTM, relPosTM]
--- TM1 (Center-of-Mass) omitted for now: Drasil doesn't easily support
--- summation notation. Can be added later.
+tMods = [centerOfMassTM, newtonSL, velocityTM, accelTM, gravLawTM, relPosTM]
 -- TM4 (Newton's Second Law) is reused from drasil-data as newtonSL.
+
+---------------------------------------------------------
+-- TM1: Center-of-Mass Constraint (n=2 specialization)
+-- In the COM reference frame (Assumption A7), the initial
+-- positions must satisfy:
+--   m₁·x₁₀ + m₂·x₂₀ = 0
+--   m₁·y₁₀ + m₂·y₂₀ = 0
+-- This uses ConstraintSet (like SSP's equilibrium TM)
+-- to express relational invariants across multiple variables.
+---------------------------------------------------------
+centerOfMassTM :: TheoryModel
+centerOfMassTM = tmNoRefs (equationalConstraints' centerOfMassCS)
+  "centerOfMass" [centerOfMassNote]
+
+centerOfMassRels :: [ModelExpr]
+centerOfMassRels =
+  [ (sy mass_1 $* sy xPos_1_0) $+ (sy mass_2 $* sy xPos_2_0) $= int 0
+  , (sy mass_1 $* sy yPos_1_0) $+ (sy mass_2 $* sy yPos_2_0) $= int 0
+  ]
+
+centerOfMassCS :: ConstraintSet ModelExpr
+centerOfMassCS = mkConstraintSet
+  (dccWDS "centerOfMassCS"
+    (nounPhraseSP "center-of-mass constraint")
+    centerOfMassNote) $
+  NE.fromList centerOfMassRels
+
+centerOfMassNote :: Sentence
+centerOfMassNote = foldlSent
+  [S "In the center-of-mass reference frame, the initial",
+   plural position, S "of the two stars must satisfy",
+   S "the constraint that the weighted sum of", plural position,
+   S "is zero, where the weights are the", plural mass,
+   S "of each star"]
 
 ---------------------------------------------------------
 -- TM2: Velocity  v(t) = dr(t)/dt
@@ -100,7 +134,10 @@ relPosExpr = sqrt (square (sy xPos_1 $- sy xPos_2)
 
 relPosNote :: Sentence
 relPosNote = foldlSent
-  [ch sepDist `S.isThe`
-   S "separation distance between the two stars, computed from their",
+  [S "The relative", phrase position, S "vector is defined as",
+   S "the difference of the two star", plural position,
+   S "(i.e., r12 = r1 - r2).", ch sepDist `S.isThe`
+   S "corresponding separation distance (the magnitude of the relative",
+   phrase position, S "vector), computed from the",
    phrase position, S "coordinates",
    ch xPos_1 `sC` ch yPos_1 `sC` ch xPos_2 `sC` ch yPos_2]

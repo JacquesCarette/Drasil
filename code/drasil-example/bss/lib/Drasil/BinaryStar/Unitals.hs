@@ -276,73 +276,84 @@ specParamValues =
 
 -- | Mass constraints: physical (> 0) + software (m_min <= m <= m_max)
 massCon_1, massCon_2 :: ConstrConcept
-massCon_1 = constrained' mass_1
+massCon_1 = constrainedWithRationale mass_1
   [gtZeroConstr,
    sfwrRange $ Bounded (Inc, sy massMin) (Inc, sy massMax)]
   (dbl 2.0e30)
+  (S "approximately 1 solar mass")
 
-massCon_2 = constrained' mass_2
+massCon_2 = constrainedWithRationale mass_2
   [gtZeroConstr,
    sfwrRange $ Bounded (Inc, sy massMin) (Inc, sy massMax)]
   (dbl 1.6e30)
+  (S "approximately 0.8 solar masses")
 
 -- | Initial position constraints: software (|x| <= r_max)
 xPosCon_1_0, yPosCon_1_0, xPosCon_2_0, yPosCon_2_0 :: ConstrConcept
-xPosCon_1_0 = constrained' xPos_1_0
+xPosCon_1_0 = constrainedWithRationale xPos_1_0
   [sfwrRange $ Bounded (Inc, neg (sy rMax)) (Inc, sy rMax)]
   (dbl 7.5e10)
+  (S "approximately 0.5 AU; satisfies COM constraint with star 2")
 
-yPosCon_1_0 = constrained' yPos_1_0
+yPosCon_1_0 = constrainedWithRationale yPos_1_0
   [sfwrRange $ Bounded (Inc, neg (sy rMax)) (Inc, sy rMax)]
   (dbl 0)
+  (S "stars initially on the x-axis")
 
-xPosCon_2_0 = constrained' xPos_2_0
+xPosCon_2_0 = constrainedWithRationale xPos_2_0
   [sfwrRange $ Bounded (Inc, neg (sy rMax)) (Inc, sy rMax)]
-  (dbl (-7.5e10))
+  (dbl (-9.375e10))
+  (S "derived from COM constraint")
 
-yPosCon_2_0 = constrained' yPos_2_0
+yPosCon_2_0 = constrainedWithRationale yPos_2_0
   [sfwrRange $ Bounded (Inc, neg (sy rMax)) (Inc, sy rMax)]
   (dbl 0)
+  (S "stars initially on the x-axis")
 
 -- | Initial velocity constraints: software (|v| <= v_max)
 xVelCon_1_0, yVelCon_1_0, xVelCon_2_0, yVelCon_2_0 :: ConstrConcept
-xVelCon_1_0 = constrained' xVel_1_0
+xVelCon_1_0 = constrainedWithRationale xVel_1_0
   [sfwrRange $ Bounded (Inc, neg (sy vMax)) (Inc, sy vMax)]
-  (dbl 0)
+  (dbl 2.0e3)
+  (S "non-zero x-velocity produces a general elliptical orbit")
 
-yVelCon_1_0 = constrained' yVel_1_0
+yVelCon_1_0 = constrainedWithRationale yVel_1_0
   [sfwrRange $ Bounded (Inc, neg (sy vMax)) (Inc, sy vMax)]
-  (dbl 1.0e4)
+  (dbl 9.0e3)
+  (S "yields a bound orbit for the typical masses and separation")
 
-xVelCon_2_0 = constrained' xVel_2_0
+xVelCon_2_0 = constrainedWithRationale xVel_2_0
   [sfwrRange $ Bounded (Inc, neg (sy vMax)) (Inc, sy vMax)]
-  (dbl 0)
+  (dbl (-2.5e3))
+  (S "derived from COM constraint")
 
-yVelCon_2_0 = constrained' yVel_2_0
+yVelCon_2_0 = constrainedWithRationale yVel_2_0
   [sfwrRange $ Bounded (Inc, neg (sy vMax)) (Inc, sy vMax)]
-  (dbl (-1.0e4))
+  (dbl (-1.125e4))
+  (S "derived from COM constraint")
 
 -- | Time constraint: physical (>= 0) + software (t_min <= t <= t_max)
 tFinalCon :: ConstrConcept
-tFinalCon = constrained' tFinal
+tFinalCon = constrainedWithRationale tFinal
   [physRange $ UpFrom (Inc, exactDbl 0),
    sfwrRange $ Bounded (Inc, sy tMin) (Inc, sy tMax)]
-  (dbl 3.15e7)
+  (dbl 1.0e5)
+  (S "short integration window")
 
 -- | Input constraints with uncertainty
 inConstraints :: [UncertQ]
 inConstraints =
-  [ uq massCon_1   (uncty 0.05 Nothing)   -- 5%
-  , uq massCon_2   (uncty 0.05 Nothing)   -- 5%
-  , uq xPosCon_1_0 (uncty 0.01 Nothing)   -- 1%
-  , uq yPosCon_1_0 (uncty 0.01 Nothing)   -- 1%
-  , uq xPosCon_2_0 (uncty 0.01 Nothing)   -- 1%
-  , uq yPosCon_2_0 (uncty 0.01 Nothing)   -- 1%
-  , uq xVelCon_1_0 (uncty 0.05 Nothing)   -- 5%
-  , uq yVelCon_1_0 (uncty 0.05 Nothing)   -- 5%
-  , uq xVelCon_2_0 (uncty 0.05 Nothing)   -- 5%
-  , uq yVelCon_2_0 (uncty 0.05 Nothing)   -- 5%
-  , uq tFinalCon   exact                   -- no uncertainty
+  [ uqDirect massCon_1   (uncty 0.05 Nothing)   -- 5%
+  , uqDirect massCon_2   (uncty 0.05 Nothing)   -- 5%
+  , uqDirect xPosCon_1_0 (uncty 0.01 Nothing)   -- 1%
+  , uqDirect yPosCon_1_0 (uncty 0.01 Nothing)   -- 1%
+  , uqDirect xPosCon_2_0 (uncty 0.01 Nothing)   -- 1%
+  , uqDirect yPosCon_2_0 (uncty 0.01 Nothing)   -- 1%
+  , uqDirect xVelCon_1_0 (uncty 0.05 Nothing)   -- 5%
+  , uqDirect yVelCon_1_0 (uncty 0.05 Nothing)   -- 5%
+  , uqDirect xVelCon_2_0 (uncty 0.05 Nothing)   -- 5%
+  , uqDirect yVelCon_2_0 (uncty 0.05 Nothing)   -- 5%
+  , uqDirect tFinalCon   exact                   -- no uncertainty
   ]
 
 -- | Output constraints (positions have no specific bounds)

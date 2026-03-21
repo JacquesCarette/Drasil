@@ -13,6 +13,7 @@ import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Drasil.BinaryStar.Unitals (inputs, xPos_1, yPos_1, xPos_2, yPos_2)
+import Drasil.BinaryStar.IMods (accelIM_X1, accelIM_Y1, accelIM_X2, accelIM_Y2)
 
 ---------------------------------------------------------
 -- Functional Requirements
@@ -42,7 +43,9 @@ verifyInptVals = cic "verifyInptVals"
 
 calcPositions = cic "calcPositions"
   (S "Calculate the positions of both stars over the simulation interval" +:+
-   S "by solving the instance models" !.)
+   S "by solving" +:+
+   refS accelIM_X1 `sC` refS accelIM_Y1 `sC`
+   refS accelIM_X2 `S.and_` refS accelIM_Y2 !.)
   "Calculate-Positions" funcReqDom
 
 verifyOutput = cic "verifyOutput"
@@ -52,7 +55,10 @@ verifyOutput = cic "verifyOutput"
 
 outputValues = cic "outputValues"
   (atStart output_ +:+
-   ch xPos_1 `sC` ch yPos_1 `sC` ch xPos_2 `S.and_` ch yPos_2 !.)
+   ch xPos_1 `sC` ch yPos_1 `sC` ch xPos_2 `S.and_` ch yPos_2 +:+
+   S "from" +:+
+   refS accelIM_X1 `sC` refS accelIM_Y1 `sC`
+   refS accelIM_X2 `S.and_` refS accelIM_Y2 !.)
   "Output-Values" funcReqDom
 
 ---------------------------------------------------------

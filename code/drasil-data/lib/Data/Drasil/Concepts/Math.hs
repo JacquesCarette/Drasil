@@ -6,6 +6,7 @@ import qualified Language.Drasil as D
 import Language.Drasil.Development (NPStruct(P, S, (:-:)))
 import Language.Drasil.ShortHands (lX, lY, lZ)
 import Drasil.Metadata.Domains (mathematics)
+import qualified Drasil.Metadata.Concepts.Math as Math (graph, unit_)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -51,7 +52,7 @@ equation     = dcc "equation"     (cn' "equation")                "A statement t
 euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the system of geometry corresponding to the geometry of ordinary" ++
                                                                   "experience")
 gradient     = dcc "gradient"     (cn' "gradient")                "degree of steepness of a graph at any point"
-graph        = dcc "graph"        (cn' "graph")                   "A diagram showing the relation between variable quantities"
+graph        = Math.graph
 laplaceTransform = dcc "laplaceTransform" (cn' "laplace transform") ("An integral transform that converts a function of a real variable t " ++
                                                                      "(often time) to a function of a complex variable s (complex frequency)")
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
@@ -79,7 +80,7 @@ rate         = dcc "rate"         (cn' "rate")                   "Ratio that com
 rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen"
 shape        = dcc "shape"        (cn' "shape")                  "The outline of an area or figure"
 surface      = dcc "surface"      (cn' "surface")                "The outer or topmost boundary of an object"
-unit_        = dcc "unit"         (cn' "unit")                   "Identity element"
+unit_        = Math.unit_
 vector       = dcc "vector"       (cn' "vector")                 "Object with magnitude and direction"
 
 xAxis = dcc "xAxis" (nounPhraseSent $ P lX :-: S "-axis") "the primary axis of a system of coordinates"

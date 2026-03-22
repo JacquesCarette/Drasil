@@ -14,12 +14,9 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.Metadata.Domains (softEng, documentc)
 import qualified Drasil.Metadata.Documentation as Doc
-  (introduction, learnObj, requirement, software, srs)
 import Drasil.Metadata.Documentation
   (softwareReq, specification, notebook)
 import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-
-import Data.Drasil.Concepts.Math (graph, unit_)
 
 -- | Collects all documentation-related named chunks (not concept-level yet).
 doccon :: [IdeaDict]
@@ -70,14 +67,14 @@ assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, phys
 ------------------------------------------------------------------------------------------------------------------------------
 -- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain
 ------------------------------------------------------------------------------------------------------------------------------
-assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                    "A"       [softEng]
+assumption  = Doc.assumption
 desSpec     = commonIdeaWithDict "desSpec"     (combineNINI design specification)                    "DS"      [softEng]
-goalStmt    = commonIdeaWithDict "goalStmt"    (combineNINI goal statement)                          "GS"      [softEng]
+goalStmt    = Doc.goalStmt
 dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
 learnObj    = Doc.learnObj
-likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
-unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
-physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
+likelyChg   = Doc.likelyChg
+unlikelyChg = Doc.unlikelyChg
+physSyst    = Doc.physSyst
 mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
 mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
 typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                           "Uncert." [softEng]
@@ -110,15 +107,15 @@ abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_,
   theory, traceyGraph, traceyMatrix, type_, uncertainty, user, useCase, validation,
   value, variable, video, verification, year :: IdeaDict
 
-abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
-acronym         = nc "acronym"        (cn'    "acronym"            )
+abbreviation    = Doc.abbreviation
+acronym         = Doc.acronym
 analysis        = nc "analysis"       (cnIS   "analysis"           )
-appendix        = nc "appendix"       (cnICES "appendix"           )
+appendix        = Doc.appendix
 aspect          = nc "aspect"         (cn'    "aspect"             )
 body            = nc "body"           (cnIES  "body"               )
-characteristic  = nc "characteristic" (cn'    "characteristic"     )
+characteristic  = Doc.characteristic
 class_          = nc "class"          (cn'''  "class"              )
-client          = nc "client"         (cn'    "client"             )
+client          = Doc.client
 code            = nc "code"           (cn     "code"               )
 column          = nc "column"         (cn'    "column"             ) --general enough to be in Documentation?
 company         = nc "company"        (cnIES  "company"            )
@@ -129,15 +126,15 @@ connection      = nc "connection"     (cn'    "connection"         )
 constant        = nc "constant"       (cn'    "constant"           )
 constraint      = nc "constraint"     (cn'    "constraint"         )
 consumer        = nc "consumer"       (cn'    "consumer"           )
-content         = nc "content"        (cn'    "content"            )
-context         = nc "context"        (cn'    "context"            )
+content         = Doc.content
+context         = Doc.context
 coordinate      = nc "coordinate"     (cn'    "coordinate"         )
-customer        = nc "customer"       (cn'    "customer"           )
-datum           = nc "datum"          (cnUM   "datum"              )
+customer        = Doc.customer
+datum           = Doc.datum
 decision        = nc "decision"       (cn'    "decision"           )
-definition      = nc "definition"     (cn'    "definition"         )
+definition      = Doc.definition
 dependency      = nc "dependency"     (cnIES  "dependency"         )
-description     = nc "description"    (cn'    "description"        )
+description     = Doc.description
 design          = nc "design"         (cn'    "design"             )
 document        = nc "document"       (cn'    "document"           )
 documentation   = nc "documentation"  (cn'    "documentation"      )
@@ -152,19 +149,19 @@ figure          = nc "figure"         (cn'    "figure"             )
 first           = nc "first"          (cn'    "first"              ) --Does it make sense for this to be here?
 form            = nc "form"           (cn'    "form"               )
 full            = nc "full"           (cn'    "full"               ) --FIXME: Adjective
-functional      = nc "functional"     (cn'    "functional"         ) --FIXME: Adjective
+functional      = Doc.functional
 game            = nc "game"           (cn'    "game"               )
-general         = nc "general"        (cn'    "general"            ) --FIXME: Adjective
-goal            = nc "goal"           (cn'    "goal"               )
+general         = Doc.general
+goal            = Doc.goal
 guide           = nc "guide"          (cn'    "guide"              )
 implementation  = nc "implementation" (cn'    "implementation"     )
-individual      = nc "individual"     (cn'    "individual"         )
+individual      = Doc.individual
 information     = nc "information"    (cn     "information"        )
 interest        = nc "interest"       (cn'    "interest"           )
 interface       = nc "interface"      (cn'    "interface"          )
 input_          = nc "input"          (cn'    "input"              )
 instance_       = nc "instance"       (cn'    "instance"           )
-intReader       = nc "intReader"      (cn'    "intended reader"    )
+intReader       = Doc.intReader
 introduction    = Doc.introduction
 issue           = nc "issue"          (cn'    "issue"              )
 item            = nc "item"           (cn'    "item"               )
@@ -180,27 +177,27 @@ method_         = nc "method"         (cn'    "method"             )
 module_         = nc "module"         (cn'    "module"             )
 model           = nc "model"          (cn'    "model"              )
 name_           = nc "name"           (cn'    "name"               )
-nonfunctional   = nc "non-functional" (cn'    "non-functional"     ) --FIXME: Adjective
+nonfunctional   = Doc.nonfunctional
 object          = nc "object"         (cn'    "object"             )
-offShelf        = nc "Off-the-Shelf"  (cn'    "Off-the-Shelf"      )
+offShelf        = Doc.offShelf
 open            = nc "open"           (cn'    "open"               )
-organization    = nc "organization"   (cn'    "organization"       )
+organization    = Doc.organization
 output_         = nc "output"         (cn'    "output"             )
 physics         = nc "physics"        (cn'    "physics"            )
 physical        = nc "physical"       (cn'    "physical"           ) --FIXME: Adjective
 plan            = nc "plan"           (cn'    "plan"               )
 practice        = nc "practice"       (cn'    "practice"           )
 priority        = nc "priority"       (cnIES  "priority"           )
-problem         = nc "problem"        (cn'    "problem"            )
+problem         = Doc.problem
 procedure       = nc "procedure"      (cn'    "procedure"          )
-product_        = nc "product"        (cn'    "product"            )
-project         = nc "project"        (cn'    "project"            )
-property        = nc "property"       (cnIES  "property"           )
-purpose         = nc "purpose"        (cn'    "purpose"            )
+product_        = Doc.product_
+project         = Doc.project
+property        = Doc.property
+purpose         = Doc.purpose
 quantity        = nc "quantity"       (cnIES  "quantity"           ) --general enough to be in documentaion.hs?
 realtime        = nc "real-time"      (cn'    "real-time"          )
 review          = nc "review"         (cn'    "review"             )
-reference       = nc "reference"      (cn'    "reference"          )
+reference       = Doc.reference
 response        = nc "response"       (cn'    "response"           )
 result          = nc "result"         (cn'    "result"             )
 reviewer        = nc "reviewer"       (cn'    "reviewer"           )
@@ -211,26 +208,26 @@ section_        = nc "section"        (cn'    "section"            )
 scenario        = nc "scenario"       (cn'    "scenario"           )
 source          = nc "source"         (cn'    "source"             )
 simulation      = nc "simulation"     (cn'    "simulation"         )
-solution        = nc "solution"       (cn'    "solution"           )
+solution        = Doc.solution
 summary         = nc "summary"        (cnIES  "summary"            )
-specific        = nc "specific"       (cn'    "specific"           ) --FIXME: Adjective
-stakeholder     = nc "stakeholder"    (cn'    "stakeholder"        )
+specific        = Doc.specific
+stakeholder     = Doc.stakeholder
 standard        = nc "standard"       (cn'    "standard"           )
-statement       = nc "statement"      (cn'    "statement"          )
-symbol_         = nc "symbol"         (cn'    "symbol"             )
-system          = nc "system"         (cn'    "system"             )
-table_          = nc "table"          (cn'    "table"              )
+statement       = Doc.statement
+symbol_         = Doc.symbol_
+system          = Doc.system
+table_          = Doc.table_
 task            = nc "task"           (cn'    "task"               )
 template        = nc "template"       (cn'    "template"           )
 term_           = nc "term"           (cn'    "term"               )
-terminology     = nc "terminology"    (cnIES  "terminology"        )
+terminology     = Doc.terminology
 theory          = nc "theory"         (cnIES  "theory"             )
 traceyGraph     = nc "traceyGraph"    (cn'    "traceability graph" )
-traceyMatrix    = nc "traceyMatrix"   (cnICES "traceability matrix")
+traceyMatrix    = Doc.traceyMatrix
 type_           = nc "type"           (cn'    "type"               )
 uncertainty     = nc "uncertainty"    (cnIES  "uncertainty"        )
-user            = nc "user"           (cn'    "user"               )
-useCase         = nc "useCase"        (cn'    "use case"           )
+user            = Doc.user
+useCase         = Doc.useCase
 validation      = nc "validation"     (cn'    "validation"         )
 value           = nc "value"          (cn'    "value"              )
 variable        = nc "variable"       (cn'    "variable"           )
@@ -245,31 +242,31 @@ abbAcc, caseProb, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls
   refMat, reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
   termAndDef, traceyMandG, vav, tOfCont :: IdeaDict
 
-abbAcc              = nc "TAbbAcc"            (abbreviation `and_PP` acronym)
+abbAcc              = Doc.abbAcc
 caseProb            = nc "caseProb"           (cn' "case problem")
-consVals            = nc "consVals"           (cn "values of auxiliary constants")
-corSol              = nc "corSol"             (cn' "correct solution")
-charOfIR            = nc "charOfIR"           (characteristic `of_PS` intReader)
+consVals            = Doc.consVals
+corSol              = Doc.corSol
+charOfIR            = Doc.charOfIR
 methAndAnls         = nc "methAndAnls"        (method_ `and_` analysis)
-orgOfDoc            = nc "orgOfDoc"           (organization `of_` document)
+orgOfDoc            = Doc.orgOfDoc
 procForAnls         = nc "procForAnls"        (procedure `for` analysis)
-propOfCorSol        = nc "propOfCorSol"       (property `ofAPS` corSol)
-prpsOfDoc           = nc "prpsOfDoc"          (purpose `of_` document)
+propOfCorSol        = Doc.propOfCorSol
+prpsOfDoc           = Doc.prpsOfDoc
 refMat              = nc "refMat"             (cn' "reference material")
 reqInput            = nc "ReqInputs"          (cn' "required input")
-scpOfReq            = nc "scpOfReq"           (scope `of_` requirement)
+scpOfReq            = Doc.scpOfReq
 tAuxConsts          = nc "TAuxConsts"         (cn' "auxiliary constant")
-termAndDef          = nc "termAndDef"         (terminology `and_` definition)
-tOfCont             = nc "tOfCont"            (table_ `of_` content)
-tOfSymb             = nc "tOfSymb"            (table_ `of_` symbol_)
-tOfUnit             = nc "tOfUnit"            (table_ `of_` unit_)
+termAndDef          = Doc.termAndDef
+tOfCont             = Doc.tOfCont
+tOfSymb             = Doc.tOfSymb
+tOfUnit             = Doc.tOfUnit
 inDatumConstraint   = nc "InDataConstraints"  (cn' "input data constraint") -- should be moved below
 outDatumConstraint  = nc "OutDataConstraints" (cn' "output data constraint")
-traceyMandG         = nc "traceyMandG"        (and_TGen (\t -> titleizeNP' (t ^. term)) (\t -> titleizeNP' (t ^. term)) traceyMatrix graph)
+traceyMandG         = Doc.traceyMandG
 vav                 = nc "vav"                (verification `and_` validation)
 
 scpOfTheProj :: (IdeaDict -> NPStruct) -> IdeaDict
-scpOfTheProj oper = nc "scpOfTheProj" (scope `of_NINP` theGen oper project) -- reasonable hack?
+scpOfTheProj = Doc.scpOfTheProj
 
 -- ** Compound Chunks
 
@@ -283,40 +280,40 @@ designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   physicalSim, productUC, useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: IdeaDict
 
 coordinateSystem             = compoundNC coordinate system
-datumConstraint              = compoundNCPP datum constraint
+datumConstraint              = Doc.datumConstraint
 designDoc                    = compoundNC design document
 fullForm                     = compoundNC full form
-functionalRequirement        = compoundNC functional requirement
-generalSystemDescription     = compoundNC general systemdescription
+functionalRequirement        = Doc.functionalRequirement
+generalSystemDescription     = Doc.generalSystemDescription
 moduleInterface              = compoundNC module_ interface
-indPRCase                    = compoundNC individual productUC
+indPRCase                    = Doc.indPRCase
 --inDatumConstraint            = compoundNC input_ datumConstraint -- may be used later, but they break stable for now
 --outDatumConstraint           = compoundNC output_ datumConstraint
-nonfunctionalRequirement     = compoundNC nonfunctional requirement
-offShelfSolution             = compoundNC offShelf solution
+nonfunctionalRequirement     = Doc.nonfunctionalRequirement
+offShelfSolution             = Doc.offShelfSolution
 physicalConstraint           = compoundNC physical constraint
 physicalProperty             = compoundNC physical property
 physicalSim                  = compoundNC physical simulation
-physicalSystem               = compoundNC physical system
-problemDescription           = compoundNC problem description
+physicalSystem               = Doc.physicalSystem
+problemDescription           = Doc.problemDescription
 problemIntro                 = compoundNC problem introduction
-prodUCTable                  = compoundNC productUC table_
-productUC                    = compoundNC product_ useCase
+prodUCTable                  = Doc.prodUCTable
+productUC                    = Doc.productUC
 safetyReq                    = compoundNC safety requirement
 softwareConstraint           = compoundNC software constraint
 softwareDoc                  = compoundNC software documentation
 softwareSys                  = compoundNC software system
 softwareVAV                  = compoundNC software vav
 softwareVerif                = compoundNC software verification
-solutionCharSpec             = compoundNCPSPP solutionCharacteristic specification
-solutionCharacteristic       = compoundNC solution characteristic
-specificsystemdescription    = compoundNC specific systemdescription
-sysCont                      = compoundNC system context
+solutionCharSpec             = Doc.solutionCharSpec
+solutionCharacteristic       = Doc.solutionCharacteristic
+specificsystemdescription    = Doc.specificsystemdescription
+sysCont                      = Doc.sysCont
 systemConstraint             = compoundNC system constraint
-systemdescription            = compoundNC system description
+systemdescription            = Doc.systemdescription
 uncertCol                    = compoundNC uncertainty column
 useCaseTable                 = compoundNC useCase table_
-userCharacteristic           = compoundNC user characteristic
+userCharacteristic           = Doc.userCharacteristic
 userInput                    = compoundNC user input_
 vavPlan                      = compoundNC vav plan
 software                     = Doc.software

@@ -19,6 +19,7 @@ dependencies:
 - template-haskell
 - drasil-database
 - drasil-lang
+- lens
 
 ghc-options:
 - -Wall
@@ -28,6 +29,7 @@ library:
   source-dirs: lib
   exposed-modules:
   - Drasil.Metadata
+  - Drasil.Metadata.Concepts.Math
   - Drasil.Metadata.Documentation
   - Drasil.Metadata.Domains
   - Drasil.Metadata.Drasil

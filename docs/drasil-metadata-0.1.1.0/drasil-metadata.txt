@@ -9,6 +9,10 @@
 @package drasil-metadata
 @version 0.1.1.0
 
+module Drasil.Metadata.Concepts.Math
+graph :: ConceptChunk
+unit_ :: ConceptChunk
+
 
 -- | Defines domains of knowledge for use in Drasil.
 module Drasil.Metadata.Domains
@@ -59,14 +63,91 @@ documentc :: IdeaDict
 knowledgemng :: IdeaDict
 
 module Drasil.Metadata.Documentation
-srs :: CI
-notebook :: CI
-software :: IdeaDict
-requirement :: CI
-softwareReq :: IdeaDict
-specification :: IdeaDict
+abbAcc :: IdeaDict
+abbreviation :: IdeaDict
+acronym :: IdeaDict
+appendix :: IdeaDict
+assumption :: CI
+charOfIR :: IdeaDict
+characteristic :: IdeaDict
+client :: IdeaDict
+consVals :: IdeaDict
+constraint :: IdeaDict
+content :: IdeaDict
+context :: IdeaDict
+corSol :: IdeaDict
+customer :: IdeaDict
+datum :: IdeaDict
+datumConstraint :: IdeaDict
+definition :: IdeaDict
+description :: IdeaDict
+document :: IdeaDict
+functional :: IdeaDict
+functionalRequirement :: IdeaDict
+general :: IdeaDict
+generalSystemDescription :: IdeaDict
+goal :: IdeaDict
+goalStmt :: CI
+individual :: IdeaDict
+indPRCase :: IdeaDict
 introduction :: IdeaDict
+intReader :: IdeaDict
 learnObj :: CI
+likelyChg :: CI
+nonfunctional :: IdeaDict
+nonfunctionalRequirement :: IdeaDict
+notebook :: CI
+offShelf :: IdeaDict
+offShelfSolution :: IdeaDict
+organization :: IdeaDict
+orgOfDoc :: IdeaDict
+physical :: IdeaDict
+physSyst :: CI
+physicalSystem :: IdeaDict
+product_ :: IdeaDict
+productUC :: IdeaDict
+prodUCTable :: IdeaDict
+problem :: IdeaDict
+problemDescription :: IdeaDict
+project :: IdeaDict
+property :: IdeaDict
+propOfCorSol :: IdeaDict
+prpsOfDoc :: IdeaDict
+purpose :: IdeaDict
+reference :: IdeaDict
+refMat :: IdeaDict
+requirement :: CI
+scope :: IdeaDict
+scpOfTheProj :: (IdeaDict -> NPStruct) -> IdeaDict
+scpOfReq :: IdeaDict
+software :: IdeaDict
+softwareReq :: IdeaDict
+solution :: IdeaDict
+solutionCharSpec :: IdeaDict
+solutionCharacteristic :: IdeaDict
+specific :: IdeaDict
+specification :: IdeaDict
+specificsystemdescription :: IdeaDict
+srs :: CI
+stakeholder :: IdeaDict
+statement :: IdeaDict
+symbol_ :: IdeaDict
+system :: IdeaDict
+systemConstraint :: IdeaDict
+sysCont :: IdeaDict
+systemdescription :: IdeaDict
+table_ :: IdeaDict
+terminology :: IdeaDict
+termAndDef :: IdeaDict
+tOfCont :: IdeaDict
+tOfSymb :: IdeaDict
+tOfUnit :: IdeaDict
+traceyMandG :: IdeaDict
+traceyMatrix :: IdeaDict
+unlikelyChg :: CI
+useCase :: IdeaDict
+user :: IdeaDict
+userCharacteristic :: IdeaDict
 
 module Drasil.Metadata.Drasil
 

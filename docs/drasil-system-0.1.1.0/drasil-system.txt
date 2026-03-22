@@ -38,25 +38,25 @@ type Scope = [Sentence]
 
 -- | Project Example motivation.
 type Motivation = [Sentence]
-class HasSystem c_a8d5
-system :: HasSystem c_a8d5 => Lens' c_a8d5 System
-authors :: HasSystem c_a8d5 => Lens' c_a8d5 People
-background :: HasSystem c_a8d5 => Lens' c_a8d5 Background
-constants :: HasSystem c_a8d5 => Lens' c_a8d5 [ConstQDef]
-dataDefns :: HasSystem c_a8d5 => Lens' c_a8d5 [DataDefinition]
-genDefns :: HasSystem c_a8d5 => Lens' c_a8d5 [GenDefn]
-instModels :: HasSystem c_a8d5 => Lens' c_a8d5 [InstanceModel]
-kind :: HasSystem c_a8d5 => Lens' c_a8d5 SystemKind
-motivation :: HasSystem c_a8d5 => Lens' c_a8d5 Motivation
-programName :: HasSystem c_a8d5 => Lens' c_a8d5 String
-purpose :: HasSystem c_a8d5 => Lens' c_a8d5 Purpose
-refTable :: HasSystem c_a8d5 => Lens' c_a8d5 (Map UID Reference)
-refbyTable :: HasSystem c_a8d5 => Lens' c_a8d5 (Map UID [UID])
-scope :: HasSystem c_a8d5 => Lens' c_a8d5 Scope
-sysName :: HasSystem c_a8d5 => Lens' c_a8d5 CI
-systemdb :: HasSystem c_a8d5 => Lens' c_a8d5 ChunkDB
-theoryModels :: HasSystem c_a8d5 => Lens' c_a8d5 [TheoryModel]
-traceTable :: HasSystem c_a8d5 => Lens' c_a8d5 (Map UID [UID])
+class HasSystem c_a8kA
+system :: HasSystem c_a8kA => Lens' c_a8kA System
+authors :: HasSystem c_a8kA => Lens' c_a8kA People
+background :: HasSystem c_a8kA => Lens' c_a8kA Background
+constants :: HasSystem c_a8kA => Lens' c_a8kA [ConstQDef]
+dataDefns :: HasSystem c_a8kA => Lens' c_a8kA [DataDefinition]
+genDefns :: HasSystem c_a8kA => Lens' c_a8kA [GenDefn]
+instModels :: HasSystem c_a8kA => Lens' c_a8kA [InstanceModel]
+kind :: HasSystem c_a8kA => Lens' c_a8kA SystemKind
+motivation :: HasSystem c_a8kA => Lens' c_a8kA Motivation
+programName :: HasSystem c_a8kA => Lens' c_a8kA String
+purpose :: HasSystem c_a8kA => Lens' c_a8kA Purpose
+refTable :: HasSystem c_a8kA => Lens' c_a8kA (Map UID Reference)
+refbyTable :: HasSystem c_a8kA => Lens' c_a8kA (Map UID [UID])
+scope :: HasSystem c_a8kA => Lens' c_a8kA Scope
+sysName :: HasSystem c_a8kA => Lens' c_a8kA CI
+systemdb :: HasSystem c_a8kA => Lens' c_a8kA ChunkDB
+theoryModels :: HasSystem c_a8kA => Lens' c_a8kA [TheoryModel]
+traceTable :: HasSystem c_a8kA => Lens' c_a8kA (Map UID [UID])
 
 -- | Probe what kind of <a>System</a> one is. For example, does it
 --   represent a (Problem) specification, runnable software, a

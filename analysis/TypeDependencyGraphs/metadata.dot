@@ -1,4 +1,6 @@
 digraph alltypes {
+	subgraph math {
+	}
 	subgraph documentation {
 	}
 	subgraph domains {

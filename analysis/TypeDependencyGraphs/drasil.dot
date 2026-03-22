@@ -3846,6 +3846,8 @@ digraph alltypes {
 	}
 	subgraph drails {
 	}
+	subgraph math {
+	}
 	subgraph documentation {
 	}
 	subgraph domains {

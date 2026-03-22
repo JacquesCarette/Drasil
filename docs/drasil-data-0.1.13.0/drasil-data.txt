@@ -10,209 +10,6 @@
 @version 0.1.13.0
 
 
--- | Re-export contents of Drasil.Metadata.TheoryConcepts
-module Data.Drasil.Concepts.Theory
-
-
--- | Defines common constraints for use in Drasil.
-module Data.Drasil.Constraints
-gtZeroConstr :: ConstraintE
-probConstr :: ConstraintE
-
-
--- | Defines Domains where concepts live
-module Data.Drasil.Domains
-
--- | For ideas, concepts, or terms related to Civil Engineering.
---   
---   Various domains that are used in Drasil. May have an abbreviation.
-civilEng :: IdeaDict
-
--- | For ideas, concepts, or terms related to Material Engineering.
---   
---   Various domains that are used in Drasil. May have an abbreviation.
-materialEng :: IdeaDict
-
--- | For ideas, concepts, or terms related to Mathematics.
---   
---   Various domains that are used in Drasil. May have an abbreviation.
-mathematics :: IdeaDict
-
--- | For ideas, concepts, or terms related to Physics.
---   
---   Various domains that are used in Drasil. May have an abbreviation.
-physics :: IdeaDict
-
-
--- | Define people for use in Drasil. Used often in authors and citations.
-module Data.Drasil.People
-spencerSmith :: Person
-henryFrankis :: Person
-nKoothoor :: Person
-dParnas :: Person
-daAruliah :: Person
-gWilson :: Person
-cTitus :: Person
-kdHuff :: Person
-nChueHong :: Person
-mDavis :: Person
-rGuy :: Person
-shdHaddock :: Person
-imMitchell :: Person
-mdPlumblet :: Person
-bWaugh :: Person
-epWhite :: Person
-pWilson :: Person
-pcClements :: Person
-luthfi :: Person
-alex :: Person
-nikitha :: Person
-thulasi :: Person
-brooks :: Person
-mLightstone :: Person
-lLai :: Person
-pjAgerfalk :: Person
-nKraiem :: Person
-jRalyte :: Person
-jBueche :: Person
-fIncropera :: Person
-dDewitt :: Person
-tBergman :: Person
-aLavine :: Person
-jRobertson :: Person
-sRobertson :: Person
-wlBeason :: Person
-tlKohutek :: Person
-jmBracci :: Person
-qhQian :: Person
-dyZhu :: Person
-cfLee :: Person
-grChen :: Person
-dgFredlund :: Person
-jKrahn :: Person
-dStolle :: Person
-yCLi :: Person
-ymChen :: Person
-tltZhan :: Person
-ssLing :: Person
-pjCleall :: Person
-pGuo :: Person
-mCampidelli :: Person
-dmWiess :: Person
-sPalmer :: Person
-scottSmith :: Person
-bKarchewski :: Person
-rHuston :: Person
-hJosephs :: Person
-nrMorgenstern :: Person
-vePrice :: Person
-samCrawford :: Person
-rcHibbeler :: Person
-olu :: Person
-rodPierce :: Person
-dong :: Person
-rKhedri :: Person
-wikiAuthors :: Person
-
-
--- | Defines citations used in Drasil.
-module Data.Drasil.Citations
-campidelli :: Citation
-koothoor2013 :: Citation
-parnas1972 :: Citation
-parnasClements1984 :: Citation
-parnasClements1986 :: Citation
-rbrtsn2012 :: Citation
-smithLai2005 :: Citation
-lineSource :: Citation
-pointSource :: Citation
-smithEtAl2007 :: Citation
-smithKoothoor2016 :: Citation
-hibbeler2004 :: Citation
-dampingSource :: Citation
-accelerationWiki :: Citation
-velocityWiki :: Citation
-cartesianWiki :: Citation
-laplaceWiki :: Citation
-pidWiki :: Citation
-jnlCGJ :: String
-
-
--- | Defines concepts used in the field of math.
-module Data.Drasil.Concepts.Math
-
--- | Collects all math-related concepts.
-mathcon :: [ConceptChunk]
-
--- | Collects all math-related common ideas (like a concept, but with no
---   definition).
-mathcon' :: [CI]
-amplitude :: ConceptChunk
-angle :: ConceptChunk
-area :: ConceptChunk
-axis :: ConceptChunk
-calculation :: ConceptChunk
-cartesian :: ConceptChunk
-centre :: ConceptChunk
-change :: ConceptChunk
-component :: ConceptChunk
-constraint :: ConceptChunk
-diameter :: ConceptChunk
-direction :: ConceptChunk
-equation :: ConceptChunk
-euclidN :: ConceptChunk
-euclidSpace :: ConceptChunk
-gradient :: ConceptChunk
-graph :: ConceptChunk
-laplaceTransform :: ConceptChunk
-law :: ConceptChunk
-line :: ConceptChunk
-matrix :: ConceptChunk
-norm :: ConceptChunk
-normal :: ConceptChunk
-normalV :: ConceptChunk
-number :: ConceptChunk
-orient :: ConceptChunk
-origin :: ConceptChunk
-parameter :: ConceptChunk
-perp :: ConceptChunk
-perpV :: ConceptChunk
-pi_ :: ConceptChunk
-negInf :: ConceptChunk
-posInf :: ConceptChunk
-positive :: ConceptChunk
-negative :: ConceptChunk
-point :: ConceptChunk
-probability :: ConceptChunk
-rOfChng :: ConceptChunk
-rate :: ConceptChunk
-rightHand :: ConceptChunk
-shape :: ConceptChunk
-surArea :: ConceptChunk
-surface :: ConceptChunk
-unitV :: ConceptChunk
-unit_ :: ConceptChunk
-vector :: ConceptChunk
-xAxis :: ConceptChunk
-xCoord :: ConceptChunk
-xComp :: ConceptChunk
-xDir :: ConceptChunk
-yAxis :: ConceptChunk
-yCoord :: ConceptChunk
-yComp :: ConceptChunk
-yDir :: ConceptChunk
-zAxis :: ConceptChunk
-zCoord :: ConceptChunk
-zComp :: ConceptChunk
-zDir :: ConceptChunk
-iAngle :: ConceptChunk
-de :: CI
-leftSide :: CI
-ode :: CI
-pde :: CI
-rightSide :: CI
-
-
 -- | Defines concepts used to create documentation.
 module Data.Drasil.Concepts.Documentation
 
@@ -445,6 +242,209 @@ refNameDom :: ConceptChunk
 
 -- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]
+
+
+-- | Re-export contents of Drasil.Metadata.TheoryConcepts
+module Data.Drasil.Concepts.Theory
+
+
+-- | Defines common constraints for use in Drasil.
+module Data.Drasil.Constraints
+gtZeroConstr :: ConstraintE
+probConstr :: ConstraintE
+
+
+-- | Defines Domains where concepts live
+module Data.Drasil.Domains
+
+-- | For ideas, concepts, or terms related to Civil Engineering.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
+civilEng :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Material Engineering.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
+materialEng :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Mathematics.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
+mathematics :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Physics.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
+physics :: IdeaDict
+
+
+-- | Define people for use in Drasil. Used often in authors and citations.
+module Data.Drasil.People
+spencerSmith :: Person
+henryFrankis :: Person
+nKoothoor :: Person
+dParnas :: Person
+daAruliah :: Person
+gWilson :: Person
+cTitus :: Person
+kdHuff :: Person
+nChueHong :: Person
+mDavis :: Person
+rGuy :: Person
+shdHaddock :: Person
+imMitchell :: Person
+mdPlumblet :: Person
+bWaugh :: Person
+epWhite :: Person
+pWilson :: Person
+pcClements :: Person
+luthfi :: Person
+alex :: Person
+nikitha :: Person
+thulasi :: Person
+brooks :: Person
+mLightstone :: Person
+lLai :: Person
+pjAgerfalk :: Person
+nKraiem :: Person
+jRalyte :: Person
+jBueche :: Person
+fIncropera :: Person
+dDewitt :: Person
+tBergman :: Person
+aLavine :: Person
+jRobertson :: Person
+sRobertson :: Person
+wlBeason :: Person
+tlKohutek :: Person
+jmBracci :: Person
+qhQian :: Person
+dyZhu :: Person
+cfLee :: Person
+grChen :: Person
+dgFredlund :: Person
+jKrahn :: Person
+dStolle :: Person
+yCLi :: Person
+ymChen :: Person
+tltZhan :: Person
+ssLing :: Person
+pjCleall :: Person
+pGuo :: Person
+mCampidelli :: Person
+dmWiess :: Person
+sPalmer :: Person
+scottSmith :: Person
+bKarchewski :: Person
+rHuston :: Person
+hJosephs :: Person
+nrMorgenstern :: Person
+vePrice :: Person
+samCrawford :: Person
+rcHibbeler :: Person
+olu :: Person
+rodPierce :: Person
+dong :: Person
+rKhedri :: Person
+wikiAuthors :: Person
+
+
+-- | Defines citations used in Drasil.
+module Data.Drasil.Citations
+campidelli :: Citation
+koothoor2013 :: Citation
+parnas1972 :: Citation
+parnasClements1984 :: Citation
+parnasClements1986 :: Citation
+rbrtsn2012 :: Citation
+smithLai2005 :: Citation
+lineSource :: Citation
+pointSource :: Citation
+smithEtAl2007 :: Citation
+smithKoothoor2016 :: Citation
+hibbeler2004 :: Citation
+dampingSource :: Citation
+accelerationWiki :: Citation
+velocityWiki :: Citation
+cartesianWiki :: Citation
+laplaceWiki :: Citation
+pidWiki :: Citation
+jnlCGJ :: String
+
+
+-- | Defines concepts used in the field of math.
+module Data.Drasil.Concepts.Math
+
+-- | Collects all math-related concepts.
+mathcon :: [ConceptChunk]
+
+-- | Collects all math-related common ideas (like a concept, but with no
+--   definition).
+mathcon' :: [CI]
+amplitude :: ConceptChunk
+angle :: ConceptChunk
+area :: ConceptChunk
+axis :: ConceptChunk
+calculation :: ConceptChunk
+cartesian :: ConceptChunk
+centre :: ConceptChunk
+change :: ConceptChunk
+component :: ConceptChunk
+constraint :: ConceptChunk
+diameter :: ConceptChunk
+direction :: ConceptChunk
+equation :: ConceptChunk
+euclidN :: ConceptChunk
+euclidSpace :: ConceptChunk
+gradient :: ConceptChunk
+graph :: ConceptChunk
+laplaceTransform :: ConceptChunk
+law :: ConceptChunk
+line :: ConceptChunk
+matrix :: ConceptChunk
+norm :: ConceptChunk
+normal :: ConceptChunk
+normalV :: ConceptChunk
+number :: ConceptChunk
+orient :: ConceptChunk
+origin :: ConceptChunk
+parameter :: ConceptChunk
+perp :: ConceptChunk
+perpV :: ConceptChunk
+pi_ :: ConceptChunk
+negInf :: ConceptChunk
+posInf :: ConceptChunk
+positive :: ConceptChunk
+negative :: ConceptChunk
+point :: ConceptChunk
+probability :: ConceptChunk
+rOfChng :: ConceptChunk
+rate :: ConceptChunk
+rightHand :: ConceptChunk
+shape :: ConceptChunk
+surArea :: ConceptChunk
+surface :: ConceptChunk
+unitV :: ConceptChunk
+unit_ :: ConceptChunk
+vector :: ConceptChunk
+xAxis :: ConceptChunk
+xCoord :: ConceptChunk
+xComp :: ConceptChunk
+xDir :: ConceptChunk
+yAxis :: ConceptChunk
+yCoord :: ConceptChunk
+yComp :: ConceptChunk
+yDir :: ConceptChunk
+zAxis :: ConceptChunk
+zCoord :: ConceptChunk
+zComp :: ConceptChunk
+zDir :: ConceptChunk
+iAngle :: ConceptChunk
+de :: CI
+leftSide :: CI
+ode :: CI
+pde :: CI
+rightSide :: CI
 
 
 -- | Defines concepts used to describe physical properties.

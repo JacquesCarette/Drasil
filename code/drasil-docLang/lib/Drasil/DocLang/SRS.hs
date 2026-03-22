@@ -36,16 +36,15 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
+import qualified Drasil.Metadata.TheoryConcepts as M (dataDefn, genDefn, inModel, thModel)
+import qualified Drasil.Metadata.Documentation as Doc (abbAcc, appendix, assumption,
   charOfIR, client, customer, consVals, datumConstraint, functionalRequirement,
   generalSystemDescription, goalStmt, indPRCase, introduction, likelyChg,
-  unlikelyChg, nonfunctionalRequirement, offShelfSolution, orgOfDoc, physSyst,
-  prodUCTable, problemDescription, propOfCorSol, prpsOfDoc, reference,
-  scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription,
-  stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
-  tOfCont, tOfSymb, tOfUnit, userCharacteristic, refMat, abbAcc)
-import qualified Drasil.Metadata.TheoryConcepts as M (dataDefn, genDefn, inModel, thModel)
-import qualified Drasil.Metadata.Documentation as M (requirement)
+  nonfunctionalRequirement, offShelfSolution, orgOfDoc, physSyst, prodUCTable,
+  problemDescription, propOfCorSol, prpsOfDoc, reference, refMat, requirement,
+  scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription, stakeholder,
+  sysCont, systemConstraint, termAndDef, terminology, traceyMandG, tOfCont,
+  tOfSymb, tOfUnit, unlikelyChg, userCharacteristic)
 
 import Control.Lens ((^.), view)
 
@@ -128,7 +127,7 @@ datCon        cs ss = section (titleize' Doc.datumConstraint)          cs ss dat
 propCorSol    cs ss = section (titleize' Doc.propOfCorSol)             cs ss corSolPropsLabel
 
 -- | Requirements section.
-require       cs ss = section (titleize' M.requirement)                cs ss requirementsLabel
+require       cs ss = section (titleize' Doc.requirement)              cs ss requirementsLabel
 -- | Non-Functional Requirements section.
 nonfuncReq    cs ss = section (titleize' Doc.nonfunctionalRequirement) cs ss nonfuncReqLabel
 -- | Functional Requirements section.
@@ -222,7 +221,7 @@ inModelLabel        = makeSecRef "IMs"              $ titleize' M.inModel
 datConLabel         = makeSecRef "DataConstraints"  $ titleize' Doc.datumConstraint
 corSolPropsLabel    = makeSecRef "CorSolProps"      $ titleize' Doc.propOfCorSol
 
-requirementsLabel   = makeSecRef "Requirements"     $ titleize' M.requirement
+requirementsLabel   = makeSecRef "Requirements"     $ titleize' Doc.requirement
 funcReqLabel        = makeSecRef "FRs"              $ titleize' Doc.functionalRequirement
 nonfuncReqLabel     = makeSecRef "NFRs"             $ titleize' Doc.nonfunctionalRequirement
 

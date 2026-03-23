@@ -90,7 +90,7 @@ newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
 
 rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
 rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ D.toSent (phraseNP (rOfChng `of_` temp)))
-  (weave [rocTempSimpDerivSent s a, map eS rocTempSimpDerivEqns])
+  (weave (rocTempSimpDerivSent s a) $ map eS rocTempSimpDerivEqns)
 
 rocTempSimpDerivSent :: Sentence -> [ConceptInstance] -> [Sentence]
 rocTempSimpDerivSent s a = map foldlSentCol [rocTempDerivInteg, rocTempDerivGauss,

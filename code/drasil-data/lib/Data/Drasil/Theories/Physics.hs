@@ -42,7 +42,7 @@ weightSrc = makeURI "weightSrc" "https://en.wikipedia.org/wiki/Weight" $
   shortname' $ S "Definition of Weight"
 
 weightDeriv :: Derivation
-weightDeriv = mkDerivName (phrase QP.weight) $ weave [weightDerivSentences, weightDerivEqns]
+weightDeriv = mkDerivName (phrase QP.weight) $ weave weightDerivSentences weightDerivEqns
 
 weightDerivSentences, weightDerivEqns :: [Sentence]
 weightDerivSentences = map foldlSentCol [weightDerivAccelSentence,

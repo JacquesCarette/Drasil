@@ -44,7 +44,7 @@ angularDisplacementFD = mkFuncDefByQ pendDisplacementAngle
   [time] angularDisplacementExpr
 
 angularDisplacementDeriv :: Derivation
-angularDisplacementDeriv = mkDerivName (phrase angularDisplacement) (weave [angularDisplacementDerivSents, map eS angularDisplacementDerivEqns])
+angularDisplacementDeriv = mkDerivName (phrase angularDisplacement) (weave angularDisplacementDerivSents $ map eS angularDisplacementDerivEqns)
 
 angularDisplacementDerivSents :: [Sentence]
 angularDisplacementDerivSents = [angularDisplacementDerivSent1, angularDisplacementDerivSent2, angularDisplacementDerivSent3,

@@ -7,7 +7,7 @@ module Utils.Drasil.Lists (
   toColumn, mkTable
 ) where
 
-import Data.List (sort, transpose)
+import Data.List (sort)
 
 import Data.Containers.ListUtils (nubOrd)
 
@@ -27,8 +27,9 @@ nubSort :: Ord a => [a] -> [a]
 nubSort = nubOrd . sort
 
 -- | Interweaves two lists together @[[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]@.
-weave :: [[a]] -> [a]
-weave = concat . transpose
+weave :: [a] -> [a] -> [a]
+weave [] ys = ys
+weave (x:xs) ys = x : weave ys xs
 
 -- | Fold that applies @f@ to all but the last element and @g@ to the last
 -- element and the accumulator given an initial value, @z@.

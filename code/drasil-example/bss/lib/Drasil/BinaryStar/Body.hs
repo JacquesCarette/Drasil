@@ -212,7 +212,7 @@ si = mkSystem
   progName Specification [authorName]
   [] [] [] []
   tMods ([] :: [GenDefn]) dataDefs iMods
-  inputs outputs ([] :: [ConstrConcept]) constants
+  inputs outputs inConstraints constants
   symbMap
   []
 

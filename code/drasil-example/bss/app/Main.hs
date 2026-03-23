@@ -2,11 +2,12 @@ module Main (main) where
 
 import GHC.IO.Encoding
 
-import Drasil.Generator (exportSmithEtAlSrs)
+import Drasil.Generator (exportSmithEtAlSrsWCode)
 
 import Drasil.BinaryStar.Body (mkSRS, si)
+import Drasil.BinaryStar.Choices (choices)
 
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  exportSmithEtAlSrs si mkSRS "BSS_SRS"
+  exportSmithEtAlSrsWCode si mkSRS "BSS_SRS" choices

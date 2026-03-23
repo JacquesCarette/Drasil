@@ -36,7 +36,7 @@ symbols = map dqdWr [mass_1, mass_2, xPos_1, yPos_1, xPos_2, yPos_2,
   massMin, massMax, rMax, vMax, tMax]
   ++ map dqdWr [QP.velocity, QP.position, QP.acceleration, QP.force, QP.time,
      QP.energy, gravitationalConst, QPP.mass]
-  ++ [index, numbBodies]
+  ++ [index, numbBodies, dqdWr bssStateVar]
   ++ map dqdWr constants
 
 -- | Acronyms for the Abbreviations table
@@ -51,7 +51,7 @@ inputs = map dqdWr [mass_1, mass_2, xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0,
 
 -- | Output variables (what the system calculates)
 outputs :: [DefinedQuantityDict]
-outputs = map dqdWr [xPos_1, yPos_1, xPos_2, yPos_2]
+outputs = [dqdWr bssStateVar]
 
 -- | Constants
 constants :: [ConstQDef]
@@ -100,20 +100,20 @@ mass_2 = uc' "m_2" (mass `ofThe` starTwo)
 
 xPos_1, yPos_1, xPos_2, yPos_2 :: UnitalChunk
 
-xPos_1 = uc' "x_1" (QP.position `ofThe` starOne)
-  (D.toSent (phraseNP (QP.position `the_ofThe` starOne)) `S.inThe` phrase xDir)
+xPos_1 = uc' "x_1" (nounPhraseSP "x-position of the first star")
+  (S "x-component of the" +:+ phrase QP.position `S.ofThe` phrase starOne)
   (sub lX label1) Real metre
 
-yPos_1 = uc' "y_1" (QP.position `ofThe` starOne)
-  (D.toSent (phraseNP (QP.position `the_ofThe` starOne)) `S.inThe` phrase yDir)
+yPos_1 = uc' "y_1" (nounPhraseSP "y-position of the first star")
+  (S "y-component of the" +:+ phrase QP.position `S.ofThe` phrase starOne)
   (sub lY label1) Real metre
 
-xPos_2 = uc' "x_2" (QP.position `ofThe` starTwo)
-  (D.toSent (phraseNP (QP.position `the_ofThe` starTwo)) `S.inThe` phrase xDir)
+xPos_2 = uc' "x_2" (nounPhraseSP "x-position of the second star")
+  (S "x-component of the" +:+ phrase QP.position `S.ofThe` phrase starTwo)
   (sub lX label2) Real metre
 
-yPos_2 = uc' "y_2" (QP.position `ofThe` starTwo)
-  (D.toSent (phraseNP (QP.position `the_ofThe` starTwo)) `S.inThe` phrase yDir)
+yPos_2 = uc' "y_2" (nounPhraseSP "y-position of the second star")
+  (S "y-component of the" +:+ phrase QP.position `S.ofThe` phrase starTwo)
   (sub lY label2) Real metre
 
 ---------------------------------------------------------
@@ -122,21 +122,21 @@ yPos_2 = uc' "y_2" (QP.position `ofThe` starTwo)
 
 xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0 :: UnitalChunk
 
-xPos_1_0 = uc' "x_1_0" (QP.position `ofThe` starOne)
-  (S "initial" +:+ D.toSent (phraseNP (QP.position `the_ofThe` starOne)) `S.inThe` phrase xDir)
-  (sub lX (Concat [label1, label0])) Real metre
+xPos_1_0 = uc' "x_1_0" (nounPhraseSP "initial x-position of the first star")
+  (S "initial x-component of the" +:+ phrase QP.position `S.ofThe` phrase starOne)
+  (sup (sub lX label1) label0) Real metre
 
-yPos_1_0 = uc' "y_1_0" (QP.position `ofThe` starOne)
-  (S "initial" +:+ D.toSent (phraseNP (QP.position `the_ofThe` starOne)) `S.inThe` phrase yDir)
-  (sub lY (Concat [label1, label0])) Real metre
+yPos_1_0 = uc' "y_1_0" (nounPhraseSP "initial y-position of the first star")
+  (S "initial y-component of the" +:+ phrase QP.position `S.ofThe` phrase starOne)
+  (sup (sub lY label1) label0) Real metre
 
-xPos_2_0 = uc' "x_2_0" (QP.position `ofThe` starTwo)
-  (S "initial" +:+ D.toSent (phraseNP (QP.position `the_ofThe` starTwo)) `S.inThe` phrase xDir)
-  (sub lX (Concat [label2, label0])) Real metre
+xPos_2_0 = uc' "x_2_0" (nounPhraseSP "initial x-position of the second star")
+  (S "initial x-component of the" +:+ phrase QP.position `S.ofThe` phrase starTwo)
+  (sup (sub lX label2) label0) Real metre
 
-yPos_2_0 = uc' "y_2_0" (QP.position `ofThe` starTwo)
-  (S "initial" +:+ D.toSent (phraseNP (QP.position `the_ofThe` starTwo)) `S.inThe` phrase yDir)
-  (sub lY (Concat [label2, label0])) Real metre
+yPos_2_0 = uc' "y_2_0" (nounPhraseSP "initial y-position of the second star")
+  (S "initial y-component of the" +:+ phrase QP.position `S.ofThe` phrase starTwo)
+  (sup (sub lY label2) label0) Real metre
 
 ---------------------------------------------------------
 -- Velocity quantities
@@ -144,20 +144,20 @@ yPos_2_0 = uc' "y_2_0" (QP.position `ofThe` starTwo)
 
 xVel_1, yVel_1, xVel_2, yVel_2 :: UnitalChunk
 
-xVel_1 = uc' "vx_1" (QP.velocity `ofThe` starOne)
-  (D.toSent (phraseNP (QP.velocity `the_ofThe` starOne)) `S.inThe` phrase xDir)
+xVel_1 = uc' "vx_1" (nounPhraseSP "x-velocity of the first star")
+  (S "x-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starOne)
   (sub lV (Concat [labelx, label1])) Real velU
 
-yVel_1 = uc' "vy_1" (QP.velocity `ofThe` starOne)
-  (D.toSent (phraseNP (QP.velocity `the_ofThe` starOne)) `S.inThe` phrase yDir)
+yVel_1 = uc' "vy_1" (nounPhraseSP "y-velocity of the first star")
+  (S "y-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starOne)
   (sub lV (Concat [labely, label1])) Real velU
 
-xVel_2 = uc' "vx_2" (QP.velocity `ofThe` starTwo)
-  (D.toSent (phraseNP (QP.velocity `the_ofThe` starTwo)) `S.inThe` phrase xDir)
+xVel_2 = uc' "vx_2" (nounPhraseSP "x-velocity of the second star")
+  (S "x-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starTwo)
   (sub lV (Concat [labelx, label2])) Real velU
 
-yVel_2 = uc' "vy_2" (QP.velocity `ofThe` starTwo)
-  (D.toSent (phraseNP (QP.velocity `the_ofThe` starTwo)) `S.inThe` phrase yDir)
+yVel_2 = uc' "vy_2" (nounPhraseSP "y-velocity of the second star")
+  (S "y-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starTwo)
   (sub lV (Concat [labely, label2])) Real velU
 
 ---------------------------------------------------------
@@ -166,21 +166,21 @@ yVel_2 = uc' "vy_2" (QP.velocity `ofThe` starTwo)
 
 xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0 :: UnitalChunk
 
-xVel_1_0 = uc' "vx_1_0" (QP.velocity `ofThe` starOne)
-  (S "initial" +:+ D.toSent (phraseNP (QP.velocity `the_ofThe` starOne)) `S.inThe` phrase xDir)
-  (sub lV (Concat [labelx, label1, label0])) Real velU
+xVel_1_0 = uc' "vx_1_0" (nounPhraseSP "initial x-velocity of the first star")
+  (S "initial x-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starOne)
+  (sup (sub lV (Concat [labelx, label1])) label0) Real velU
 
-yVel_1_0 = uc' "vy_1_0" (QP.velocity `ofThe` starOne)
-  (S "initial" +:+ D.toSent (phraseNP (QP.velocity `the_ofThe` starOne)) `S.inThe` phrase yDir)
-  (sub lV (Concat [labely, label1, label0])) Real velU
+yVel_1_0 = uc' "vy_1_0" (nounPhraseSP "initial y-velocity of the first star")
+  (S "initial y-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starOne)
+  (sup (sub lV (Concat [labely, label1])) label0) Real velU
 
-xVel_2_0 = uc' "vx_2_0" (QP.velocity `ofThe` starTwo)
-  (S "initial" +:+ D.toSent (phraseNP (QP.velocity `the_ofThe` starTwo)) `S.inThe` phrase xDir)
-  (sub lV (Concat [labelx, label2, label0])) Real velU
+xVel_2_0 = uc' "vx_2_0" (nounPhraseSP "initial x-velocity of the second star")
+  (S "initial x-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starTwo)
+  (sup (sub lV (Concat [labelx, label2])) label0) Real velU
 
-yVel_2_0 = uc' "vy_2_0" (QP.velocity `ofThe` starTwo)
-  (S "initial" +:+ D.toSent (phraseNP (QP.velocity `the_ofThe` starTwo)) `S.inThe` phrase yDir)
-  (sub lV (Concat [labely, label2, label0])) Real velU
+yVel_2_0 = uc' "vy_2_0" (nounPhraseSP "initial y-velocity of the second star")
+  (S "initial y-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starTwo)
+  (sup (sub lV (Concat [labely, label2])) label0) Real velU
 
 ---------------------------------------------------------
 -- Acceleration quantities
@@ -188,20 +188,20 @@ yVel_2_0 = uc' "vy_2_0" (QP.velocity `ofThe` starTwo)
 
 xAccel_1, yAccel_1, xAccel_2, yAccel_2 :: UnitalChunk
 
-xAccel_1 = uc' "ax_1" (QP.acceleration `ofThe` starOne)
-  (D.toSent (phraseNP (QP.acceleration `the_ofThe` starOne)) `S.inThe` phrase xDir)
+xAccel_1 = uc' "ax_1" (nounPhraseSP "x-acceleration of the first star")
+  (S "x-component of the" +:+ phrase QP.acceleration `S.ofThe` phrase starOne)
   (sub lA (Concat [labelx, label1])) Real accelU
 
-yAccel_1 = uc' "ay_1" (QP.acceleration `ofThe` starOne)
-  (D.toSent (phraseNP (QP.acceleration `the_ofThe` starOne)) `S.inThe` phrase yDir)
+yAccel_1 = uc' "ay_1" (nounPhraseSP "y-acceleration of the first star")
+  (S "y-component of the" +:+ phrase QP.acceleration `S.ofThe` phrase starOne)
   (sub lA (Concat [labely, label1])) Real accelU
 
-xAccel_2 = uc' "ax_2" (QP.acceleration `ofThe` starTwo)
-  (D.toSent (phraseNP (QP.acceleration `the_ofThe` starTwo)) `S.inThe` phrase xDir)
+xAccel_2 = uc' "ax_2" (nounPhraseSP "x-acceleration of the second star")
+  (S "x-component of the" +:+ phrase QP.acceleration `S.ofThe` phrase starTwo)
   (sub lA (Concat [labelx, label2])) Real accelU
 
-yAccel_2 = uc' "ay_2" (QP.acceleration `ofThe` starTwo)
-  (D.toSent (phraseNP (QP.acceleration `the_ofThe` starTwo)) `S.inThe` phrase yDir)
+yAccel_2 = uc' "ay_2" (nounPhraseSP "y-acceleration of the second star")
+  (S "y-component of the" +:+ phrase QP.acceleration `S.ofThe` phrase starTwo)
   (sub lA (Concat [labely, label2])) Real accelU
 
 ---------------------------------------------------------
@@ -246,29 +246,41 @@ numbBodies = dqd' (dcc "n" (nounPhraseSP "number of bodies")
   (const lN) Integer Nothing
 
 ---------------------------------------------------------
+-- ODE state vector (for code generation)
+---------------------------------------------------------
+
+-- | State vector: [x₁, y₁, x₂, y₂, vx₁, vy₁, vx₂, vy₂]
+bssStateVar :: ConstrConcept
+bssStateVar = cuc' "bssStateVar"
+  (nounPhraseSP "dependent variables")
+  "column vector of positions and velocities of the two stars"
+  lQ metre (Vect Real)
+  [] (exactDbl 0)
+
+---------------------------------------------------------
 -- Specification Parameters (Table: Specification Parameter Values)
 -- These define the software constraint bounds.
 ---------------------------------------------------------
 
 massMin, massMax, rMax, vMax, tMax :: UnitalChunk
 
-massMin = uc' "m_min" (nounPhraseSP "minimum stellar mass (hydrogen burning limit, 0.05 solar masses)")
+massMin = uc' "m_min" (nounPhraseSP "minimum stellar mass")
   (S "lower bound for stellar mass; below this threshold objects cannot sustain hydrogen fusion")
   (sub lM (label "min")) Real kilogram
 
-massMax = uc' "m_max" (nounPhraseSP "maximum stellar mass (massive star upper bound, 50 solar masses)")
+massMax = uc' "m_max" (nounPhraseSP "maximum stellar mass")
   (S "upper bound for stellar mass; beyond this range radiation effects violate the point-mass assumption")
   (sub lM (label "max")) Real kilogram
 
-rMax = uc' "r_max" (nounPhraseSP "maximum initial distance from origin (67 AU)")
+rMax = uc' "r_max" (nounPhraseSP "maximum initial distance from origin")
   (S "upper bound for each star's initial distance from the center of mass")
   (sub lR (label "max")) Real metre
 
-vMax = uc' "v_max" (nounPhraseSP "maximum initial speed (non-relativistic limit, 0.003c)")
+vMax = uc' "v_max" (nounPhraseSP "maximum initial speed")
   (S "upper bound for initial velocity magnitude; ensures classical mechanics remains valid")
   (sub lV (label "max")) Real velU
 
-tMax = uc' "t_max" (nounPhraseSP "maximum simulation time (317 years)")
+tMax = uc' "t_max" (nounPhraseSP "maximum simulation time")
   (S "upper bound for simulation duration; limits numerical error accumulation over long integrations")
   (sub lT (label "max")) Real second
 
@@ -368,6 +380,6 @@ inConstraints =
   , uqDirect tFinalCon   exact                   -- no uncertainty
   ]
 
--- | Output constraints (positions have no specific bounds)
+-- | Output constraints (none; bssStateVar has no physically meaningful bounds)
 outConstraints :: [UncertQ]
 outConstraints = []

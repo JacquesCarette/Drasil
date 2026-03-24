@@ -320,7 +320,6 @@ software                     = Doc.software
 
 -- * Domains
 
-
 goalStmtDom, assumpDom, reqDom, funcReqDom, nonFuncReqDom, chgProbDom,
   likeChgDom, unlikeChgDom, refByDom, refNameDom :: ConceptChunk
 assumpDom     = Doc.assumpDom

@@ -49,7 +49,6 @@ import Language.Drasil.Development (NPStruct)
 import Drasil.Metadata.Concepts.Math (graph, unit_)
 import Drasil.Metadata.Domains (documentc, softEng)
 
-
 softReqSpec :: NP
 softReqSpec = fterms compoundPhraseP1 softwareReq specification
 
@@ -248,4 +247,3 @@ unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")          
 
 scpOfTheProj :: (IdeaDict -> NPStruct) -> IdeaDict
 scpOfTheProj oper = nc "scpOfTheProj" (scope `of_NINP` theGen oper project) -- reasonable hack?
-

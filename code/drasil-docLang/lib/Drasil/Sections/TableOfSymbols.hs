@@ -6,7 +6,6 @@ import Data.List (nub, (\\))
 import Control.Lens (view)
 import Text.PrettyPrint.HughesPJ (text, render, vcat, (<+>)) -- FIXME
 
-
 -- Generic Drasil
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                              -- Vector - Name conflict (defined in file)
